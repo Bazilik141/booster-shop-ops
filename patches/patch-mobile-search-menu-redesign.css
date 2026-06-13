@@ -1,0 +1,293 @@
+/* =============================================================================
+   Booster Shop — Mobile Search + Header Menu Redesign
+   PATCH: append this file to boostershop-ds.css
+   or load it after boostershop-ds.css:
+     <link rel="stylesheet" href="catalog/view/stylesheet/patch-mobile-search-menu-redesign.css">
+
+   Covers:
+     B. Desktop burger + left slide-in menu
+     C. Ghost-links for Login/Account + Telegram (cart stays green)
+     A. Mobile search: tap-to-expand, live results in place, no /search redirect
+     D. Category promo cards: full-bleed logo panel
+   =========================================================================== */
+
+
+/* ============================================================
+   B — BURGER BUTTON
+   ============================================================ */
+
+.bs-burger {
+  width: 42px; height: 42px; flex: 0 0 auto;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: var(--bs-r-sm);
+  background: #fff; border: 1px solid var(--bs-line);
+  color: #374151; cursor: pointer; transition: background .15s;
+}
+.bs-burger:hover { background: var(--bs-bg); }
+
+
+/* ============================================================
+   B — SLIDE-IN MENU PANEL
+   ============================================================ */
+
+.bs-menu { position: fixed; inset: 0; z-index: 1000; }
+.bs-menu[hidden] { display: none; }
+
+.bs-menu__scrim {
+  position: absolute; inset: 0; background: rgba(17,24,39,.42);
+  opacity: 0; transition: opacity .22s;
+}
+.bs-menu.is-open .bs-menu__scrim { opacity: 1; }
+
+.bs-menu__panel {
+  position: absolute; top: 0; bottom: 0; left: 0;
+  width: 380px; max-width: 86vw;
+  background: #fff; display: flex; flex-direction: column;
+  box-shadow: 10px 0 50px rgba(17,24,39,.20);
+  transform: translateX(-104%);
+  transition: transform .3s cubic-bezier(.32,.72,0,1);
+}
+.bs-menu.is-open .bs-menu__panel { transform: translateX(0); }
+
+/* head */
+.bs-menu__head {
+  padding: 14px; background: var(--bs-bg);
+  border-bottom: 1px solid var(--bs-line); flex: 0 0 auto;
+}
+.bs-menu__brandrow {
+  display: flex; align-items: center; justify-content: space-between; height: 38px;
+}
+.bs-menu__brand {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 18px; font-weight: 900; letter-spacing: -0.035em;
+  color: var(--bs-pokemon); text-transform: uppercase; line-height: 1; text-decoration: none;
+}
+.bs-menu__close {
+  width: 34px; height: 34px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: #fff; border: 1px solid var(--bs-line);
+  border-radius: var(--bs-r-sm); color: var(--bs-ink-2); cursor: pointer;
+}
+.bs-menu__acct {
+  margin-top: 12px; height: 46px; display: flex; align-items: center; gap: 11px;
+  padding: 0 14px; background: #fff; border: 1px solid var(--bs-line);
+  border-radius: var(--bs-r-sm); text-decoration: none;
+}
+.bs-menu__acct-ic {
+  width: 28px; height: 28px; border-radius: 50%; flex: 0 0 auto;
+  background: var(--bs-blue-soft); color: var(--bs-blue);
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.bs-menu__acct-label { flex: 1; font-size: 14px; font-weight: 700; color: var(--bs-ink); }
+.bs-menu__chev { color: var(--bs-ink-4); display: inline-flex; flex: 0 0 auto; }
+.bs-menu__orders {
+  display: flex; align-items: center; gap: 11px; height: 40px;
+  padding: 0 14px; margin-top: 6px; text-decoration: none; border-radius: var(--bs-r-sm);
+}
+.bs-menu__orders:hover { background: #fff; }
+.bs-menu__orders-ic {
+  width: 28px; display: inline-flex; justify-content: center;
+  color: var(--bs-ink-3); flex: 0 0 auto;
+}
+.bs-menu__orders > span:last-child {
+  flex: 1; font-size: 13.5px; font-weight: 600; color: var(--bs-ink-2);
+}
+
+/* body */
+.bs-menu__body { flex: 1; overflow-y: auto; }
+.bs-menu__label {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 10.5px; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--bs-ink-4); padding: 12px 16px 6px;
+}
+.bs-menu__label--sep { margin-top: 6px; border-top: 1px solid var(--bs-line-2); padding-top: 16px; }
+
+.bs-menu__cat-row {
+  display: flex; align-items: center; gap: 12px; width: 100%; height: 48px;
+  padding: 0 18px; background: transparent; border: 0; cursor: pointer;
+  text-align: left; text-decoration: none; font: inherit; color: inherit;
+}
+.bs-menu__cat-row:hover { background: var(--bs-bg); }
+.bs-menu__dot { width: 9px; height: 9px; border-radius: 3px; flex: 0 0 auto; }
+.bs-menu__cat-name { flex: 1; font-size: 14.5px; font-weight: 600; color: var(--bs-ink); }
+.bs-menu__cat-row.is-sale .bs-menu__cat-name { color: var(--bs-danger); font-weight: 800; }
+.bs-menu__chev--acc { transition: transform .2s; }
+.bs-menu__cat.is-open .bs-menu__chev--acc { transform: rotate(90deg); }
+
+.bs-menu__subs { padding-bottom: 6px; }
+.bs-menu__subs[hidden] { display: none; }
+.bs-menu__sub {
+  display: block; padding: 9px 18px 9px 39px;
+  font-size: 13.5px; color: var(--bs-ink-2); text-decoration: none;
+}
+.bs-menu__sub:hover { color: var(--bs-ink); background: var(--bs-bg); }
+
+.bs-menu__info {
+  display: flex; align-items: center; gap: 12px; height: 46px;
+  padding: 0 18px; text-decoration: none;
+}
+.bs-menu__info:hover { background: var(--bs-bg); }
+.bs-menu__info svg { color: var(--bs-ink-3); flex: 0 0 auto; }
+.bs-menu__info span { flex: 1; font-size: 14px; font-weight: 500; color: var(--bs-ink-2); }
+
+/* foot */
+.bs-menu__foot { padding: 14px; border-top: 1px solid var(--bs-line); flex: 0 0 auto; }
+.bs-menu__tg {
+  display: flex; align-items: center; justify-content: center; gap: 8px; height: 44px;
+  background: var(--bs-blue-soft); color: var(--bs-blue);
+  border-radius: var(--bs-r-sm); font-size: 13.5px; font-weight: 700; text-decoration: none;
+}
+.bs-menu__tg:hover { background: #d8e4f8; }
+
+body.bs-menu-lock { overflow: hidden; }
+
+
+/* ============================================================
+   C — GHOST-LINKS  (Login/Account + Telegram; cart stays green)
+   ============================================================ */
+
+.bs-ghost {
+  display: inline-flex; align-items: center; gap: 7px; flex: 0 0 auto;
+  padding: 8px 10px; border-radius: var(--bs-r-sm);
+  background: transparent; border: 0; cursor: pointer;
+  color: var(--bs-blue); font: inherit; font-size: 13.5px; font-weight: 600;
+  text-decoration: none; white-space: nowrap; transition: background .15s, color .15s;
+}
+.bs-ghost:hover { background: var(--bs-bg); color: #16245C; }
+
+/* Fold ghost-links into burger on mobile */
+@media (max-width: 768px) {
+  .bs-ghost { display: none; }
+}
+
+
+/* ============================================================
+   A — MOBILE SEARCH: tap-to-expand, live results in place
+   ============================================================ */
+
+.bs-msearch { display: flex; align-items: center; gap: 8px; flex: 1; }
+
+.bs-msearch__back {
+  width: 30px; height: 42px; display: none;
+  align-items: center; justify-content: center;
+  background: transparent; border: 0; color: var(--bs-ink-2); cursor: pointer; flex: 0 0 auto;
+}
+.bs-msearch.is-open .bs-msearch__back { display: inline-flex; }
+
+.bs-msearch__field {
+  flex: 1; display: flex; align-items: center; gap: 8px; height: 42px;
+  padding: 0 12px; background: var(--bs-bg); border: 1.5px solid var(--bs-line);
+  border-radius: var(--bs-r-sm); cursor: text;
+  transition: border-color .15s, box-shadow .15s, background .15s;
+}
+.bs-msearch.is-open .bs-msearch__field {
+  background: #fff; border-color: var(--bs-blue);
+  box-shadow: 0 0 0 3px rgba(30,58,138,.10);
+}
+.bs-msearch__ic { color: var(--bs-ink-3); flex: 0 0 auto; }
+.bs-msearch.is-open .bs-msearch__ic { color: var(--bs-blue); }
+
+.bs-msearch__input {
+  flex: 1; min-width: 0; border: 0; background: transparent; outline: none;
+  font: inherit; font-size: 14.5px; color: var(--bs-ink);
+}
+.bs-msearch__input::placeholder { color: var(--bs-ink-4); }
+
+.bs-msearch__clear {
+  width: 24px; height: 24px; border: 0; border-radius: 50%;
+  background: var(--bs-line-2); color: var(--bs-ink-3); font-size: 11px;
+  cursor: pointer; flex: 0 0 auto;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+
+/* Dropdown — ps-live-search renders its results into #bs-msearch-results */
+.bs-msearch__results {
+  position: fixed; left: 0; right: 0; z-index: 60;
+  background: #fff; border-bottom: 1px solid var(--bs-line);
+  box-shadow: var(--bs-sh-pop);
+  max-height: calc(100vh - var(--bs-header-h, 112px));
+  overflow-y: auto;
+}
+.bs-msearch__results[hidden] { display: none; }
+
+/* Dimming scrim below results */
+.bs-msearch__scrim {
+  position: fixed; inset: var(--bs-header-h, 112px) 0 0;
+  z-index: 55; background: rgba(17,24,39,.32);
+}
+.bs-msearch__scrim[hidden] { display: none; }
+
+/* Desktop: no expand, inline behaviour as before */
+@media (min-width: 769px) {
+  .bs-msearch__back,
+  .bs-msearch__scrim { display: none !important; }
+}
+
+
+/* ============================================================
+   D — CATEGORY PROMO CARDS: full-bleed logo panel
+   ============================================================ */
+
+.bs-catcard {
+  position: relative; display: flex; height: 168px; overflow: hidden;
+  background: #fff; border: 1px solid var(--bs-line);
+  border-radius: var(--bs-r); box-shadow: var(--bs-sh-sm);
+  text-decoration: none; transition: box-shadow .18s;
+}
+.bs-catcard:hover { box-shadow: var(--bs-sh-pop); }
+
+/* Top accent bar — colour set via --accent per card */
+.bs-catcard::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: var(--accent, var(--bs-ink-3)); z-index: 2;
+}
+
+/* Logo panel */
+.bs-catcard__media {
+  flex: 0 0 168px; width: 168px; height: 168px;
+  background: var(--bs-bg); border-right: 1px solid var(--bs-line);
+}
+.bs-catcard__media img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+  display: block;
+}
+
+/* Text column */
+.bs-catcard__body {
+  flex: 1; min-width: 0; padding: 18px 20px; display: flex; flex-direction: column;
+}
+.bs-catcard__title { font-size: 18px; font-weight: 800; color: var(--bs-ink); letter-spacing: -0.01em; }
+.bs-catcard__desc {
+  font-size: 13.5px; line-height: 1.5; color: var(--bs-ink-3); margin-top: 6px;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.bs-catcard__more { margin-top: auto; padding-top: 10px; font-size: 13.5px; font-weight: 700; color: var(--bs-blue); }
+
+@media (max-width: 768px) {
+  .bs-catcard { height: 132px; }
+  .bs-catcard__media { flex-basis: 124px; width: 124px; height: 132px; }
+  .bs-catcard__desc { -webkit-line-clamp: 2; }
+}
+
+
+/* ============================================================
+   A — MOBILE: ps-live-search dropdown position override
+   На десктопі .ps-live-search-list = position:absolute (плагін).
+   На мобілі переводимо в fixed щоб виходив за межі flex-container.
+   ============================================================ */
+@media (max-width: 768px) {
+  .bs-msearch.is-open #ps-live-search.ps-live-search-list.show {
+    position: fixed;
+    top: var(--bs-header-h, 63px);
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-height: calc(100dvh - var(--bs-header-h, 63px));
+    overflow-y: auto;
+    border-radius: 0;
+    z-index: 60;
+    box-shadow: var(--bs-sh-pop);
+  }
+}

@@ -1,25 +1,45 @@
 # Booster Shop Ops
 
-Private working repo for Booster Shop operational history: PHP patches, Claude/Codex handoffs, diagnostics, rollback notes, and owner-approved implementation records.
+Private working repo for Booster Shop — PHP patches, Claude/Codex handoffs, plans, dashboard, diagnostics.
+
+## Structure
+
+- `handoffs/` — всі handoff-файли для Codex і Claude (HANDOFF-*.md, codex-handoff-*.md, ST-*, RD-*, TECH-*)
+- `patches/` — готові PHP/JS/CSS патчі після апруву власника
+- `plans/` — плани, аудити, roadmap-документи, контентні файли
+- `dashboard/` — booster-dashboard.html (локальний CRM-дашборд)
+- `diagnostics/` — діагностичні скрипти і звіти (read-only)
+- `templates/` — шаблони для handoff / Codex
 
 ## Rules
 
-- Do not commit hosting backups, secrets, DB dumps, raw customer data, browser profiles, or generated cache.
-- Keep hosting-ready PHP patch files self-contained and runnable from `~/public_html`.
-- Store current task status in Notion. This repo is history and review evidence, not the roadmap source of truth.
-- Google Sheets roadmap remains archival unless the owner explicitly asks for a Sheets update.
+- Не комітити: hosting backups, DB dumps, customer data, `.bak` файли, архіви `.tar.gz`/`.zip`
+- PHP патчі мають бути self-contained і запускатись з `~/public_html`
+- Notion roadmap = source of truth для статусів і пріоритетів
+- Цей репо = history + review evidence, не замінює Notion
 
-## Suggested Layout
+## Workflow
 
-- `patches/` - final PHP patches after owner approval.
-- `handoffs/` - Claude/Codex handoffs and acceptance criteria.
-- `diagnostics/` - read-only diagnostic scripts and captured sanitized outputs.
-- `templates/` - reusable Notion/Claude/Codex templates.
-
-## GitHub Setup
-
-After `gh auth login` succeeds, create a private remote:
-
-```bash
-gh repo create booster-shop-ops --private --source . --remote origin --push
 ```
+Claude (handoff) → Codex (патч у patches/) → git diff → git commit → git push → deploy via FTP
+```
+
+### Перед Codex-сесією
+```bash
+cd booster-shop-ops
+git status        # має бути чисто
+git pull          # синхронізуй останні зміни
+```
+
+### Після Codex-сесії
+```bash
+git diff                          # перевір що змінилось
+git add .
+git commit -m "Codex: TASK-ID короткий опис"
+git push origin master
+```
+
+## Гілки
+
+- `master` — основна, завжди стабільна
+- Для великих задач (checkout redesign, major refactor): окрема гілка → merge після QA

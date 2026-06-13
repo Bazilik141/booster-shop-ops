@@ -1,28 +1,6 @@
-# Secrets and local environment
-.env
-.env.*
-*.pem
-*.key
-*.sql
-*.sqlite
-*.sqlite3
-
-# Large hosting backups and archives
-*.tar
+*.bak*
 *.tar.gz
-*.tgz
 *.zip
-*.7z
-*.rar
-
-# Generated or noisy local state
-backups/
-cache/
-logs/
-node_modules/
+desktop.ini
+*.log
 .DS_Store
-Thumbs.db
-
-# Raw customer exports should be added only after manual review.
-customer-data/
-crm-exports/
