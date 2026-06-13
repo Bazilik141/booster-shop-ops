@@ -16,10 +16,11 @@ Purpose: Codex and Claude exchange work through THIS repo. Owner only approves
 The repo is the shared bus. Owner runs `bs-autosync.ps1` so the local clone
 auto-pulls; Claude then reads Codex output without manual git.
 
-## Branch policy
-- Default: commit patches + reports **directly to `master`** (no PR). Claude reviews
-  the file before deploy — that review is the real gate, so a PR adds little.
-- Big / high-risk tasks (checkout cutover, DB schema, url.php): use a branch + PR.
+## Branch / commit policy
+- Codex creates patch files in `patches/` (+ identical uploadable copy in `C:\Users\14bez\Downloads`) and reports in `diagnostics/`.
+- **Do NOT commit or push unless the owner explicitly asks.** Show `git diff` / a concise
+  summary and wait for Claude review + owner go. The owner performs the commit/push.
+- Risky tasks (checkout, payment, schema, DB, url.php cutover): propose a branch + PR, still wait for go.
 
 ## Patch conventions (PHP runner)
 Each patch = one self-contained runner in `patches/`, runnable from `~/public_html`:
