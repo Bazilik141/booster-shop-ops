@@ -1,0 +1,28 @@
+# Normalize all text files: store as LF in the repo, check out as LF.
+# Stops phantom CRLF/LF diffs between Windows, the autosync helper, and tooling.
+* text=auto eol=lf
+
+# Windows-only scripts keep CRLF (they run on the owner's machine).
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Shell scripts must stay LF.
+*.sh text eol=lf
+
+# Binary assets — never touch line endings.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.webp binary
+*.ico  binary
+*.svg  binary
+*.pdf  binary
+*.zip  binary
+*.gz   binary
+*.tar  binary
+*.woff  binary
+*.woff2 binary
+*.ttf  binary
+*.eot  binary
