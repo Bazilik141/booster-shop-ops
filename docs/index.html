@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Booster Shop — Dashboard</title>
+<style>
+:root {
+  --bg: #0f0f13;
+  --surface: #1a1a24;
+  --surface2: #22222f;
+  --border: #2a2a3d;
+  --text: #e8e8f0;
+  --muted: #7878a0;
+  --accent: #7c6fff;
+  --green: #22c55e;
+  --yellow: #f59e0b;
+  --red: #ef4444;
+  --orange: #f97316;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg); color: var(--text);
+  min-height: 100vh; display: flex; font-size: 14px;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  width: 220px; background: var(--surface); border-right: 1px solid var(--border);
+  padding: 0; flex-shrink: 0; display: flex; flex-direction: column;
+  position: sticky; top: 0; height: 100vh; overflow: hidden;
+}
+.logo {
+  padding: 20px; font-size: 15px; font-weight: 700;
+  border-bottom: 1px solid var(--border); letter-spacing: -0.3px;
+}
+.logo em { color: var(--accent); font-style: normal; }
+.nav-section { padding: 12px 0; flex: 1; overflow-y: auto; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 20px; cursor: pointer; color: var(--muted);
+  font-size: 13px; transition: all 0.12s; border-left: 2px solid transparent;
+  user-select: none;
+}
+.nav-item:hover { color: var(--text); background: var(--surface2); }
+.nav-item.active { color: var(--text); border-left-color: var(--accent); background: var(--surface2); font-weight: 500; }
+.nav-icon { width: 18px; text-align: center; font-size: 15px; }
+.sidebar-footer {
+  padding: 14px 20px; border-top: 1px solid var(--border);
+  font-size: 11px; color: var(--muted);
+}
+.refresh-link { color: var(--accent); cursor: pointer; text-decoration: none; }
+.refresh-link:hover { text-decoration: underline; }
+
+/* ── Main ── */
+.main { flex: 1; overflow-y: auto; padding: 28px 32px; min-width: 0; }
+.header { margin-bottom: 24px; }
+.page-title { font-size: 22px; font-weight: 700; letter-spacing: -0.4px; }
+.page-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+/* ── Error banner ── */
+.error-banner {
+  background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.25);
+  border-radius: 10px; padding: 14px 16px; color: var(--red);
+  font-size: 13px; margin-bottom: 20px; display: none;
+}
+.error-banner.show { display: block; }
+
+/* ── Metric cards ── */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 14px; margin-bottom: 22px; }
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 18px;
+}
+.card.c-green { border-color: rgba(34,197,94,.3); }
+.card.c-yellow { border-color: rgba(245,158,11,.3); }
+.card.c-red { border-color: rgba(239,68,68,.3); }
+.card.c-accent { border-color: rgba(124,111,255,.3); }
+.card-label { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 8px; }
+.card-value { font-size: 26px; font-weight: 700; line-height: 1; }
+.card-sub { font-size: 12px; color: var(--muted); margin-top: 7px; line-height: 1.35; }
+.card-sub b { color: var(--text); }
+
+/* ── Sections ── */
+.section {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 20px; margin-bottom: 18px;
+}
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.section-title { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.trend-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-bottom: 18px; }
+.trend-grid .section { margin-bottom: 0; min-width: 0; }
+.trend-profit { border-color: rgba(34,197,94,.28); }
+.trend-profit .section-title { color: #86efac; }
+.trend-chart { display: flex; align-items: flex-end; gap: 8px; height: 80px; padding: 4px 0; }
+.trend-labels { display: flex; gap: 8px; margin-top: 6px; }
+.trend-value { font-size:9px;color:#c7c8ff;line-height:1.15;text-align:center;min-height:20px;white-space:nowrap; }
+.trend-profit .trend-value { color:#bbf7d0; font-weight:600; }
+.trend-bar { width:100%;border-radius:3px;transition:height .3s;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden; }
+.trend-bar-label { position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;line-height:1;white-space:nowrap;pointer-events:none; }
+.trend-bar-label.current { color:#052e16;text-shadow:0 1px 0 rgba(255,255,255,.28); }
+.trend-bar-label.past { color:#bbf7d0;text-shadow:0 1px 2px rgba(0,0,0,.75); }
+.trend-bar-label.negative { color:#fff1f2;text-shadow:0 1px 2px rgba(0,0,0,.65); }
+
+/* ── Badges / Pills ── */
+.badge {
+  display: inline-block; padding: 2px 9px; border-radius: 99px;
+  font-size: 11px; font-weight: 600;
+}
+.b-red { background: rgba(239,68,68,.12); color: var(--red); }
+.b-yellow { background: rgba(245,158,11,.12); color: var(--yellow); }
+.b-green { background: rgba(34,197,94,.12); color: var(--green); }
+.b-accent { background: rgba(124,111,255,.12); color: var(--accent); }
+.b-muted { background: rgba(120,120,160,.12); color: var(--muted); }
+
+.pill {
+  display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 11px;
+}
+.p-ok { background: rgba(34,197,94,.1); color: var(--green); }
+.p-warn { background: rgba(245,158,11,.1); color: var(--yellow); }
+.p-err { background: rgba(239,68,68,.1); color: var(--red); }
+.p-blue { background: rgba(124,111,255,.1); color: var(--accent); }
+.p-muted { background: rgba(120,120,160,.1); color: var(--muted); }
+.rrc-price { display:inline-flex;flex-direction:column;gap:2px;min-width:76px;padding:5px 8px;border-radius:6px;border:1px solid transparent;line-height:1.1; }
+.rrc-price small { font-size:10px;font-weight:600;opacity:.86; }
+.rrc-strong { background:rgba(34,197,94,.18);border-color:rgba(34,197,94,.34);color:#86efac; }
+.rrc-good { background:rgba(74,222,128,.10);border-color:rgba(74,222,128,.22);color:#bbf7d0; }
+.rrc-warn { background:rgba(245,158,11,.13);border-color:rgba(245,158,11,.28);color:var(--yellow); }
+.rrc-bad { background:rgba(239,68,68,.14);border-color:rgba(239,68,68,.30);color:var(--red); }
+.rrc-unknown { background:rgba(120,120,160,.10);border-color:rgba(120,120,160,.18);color:var(--muted); }
+
+/* ── Tables ── */
+.tbl-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th {
+  text-align: left; padding: 8px 10px; color: var(--muted);
+  font-size: 10.5px; text-transform: uppercase; letter-spacing: .5px;
+  border-bottom: 1px solid var(--border); font-weight: 500; white-space: nowrap;
+}
+td { padding: 10px; border-bottom: 1px solid rgba(255,255,255,.04); vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--surface2); }
+.mono { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 11.5px; }
+.chip {
+  display: inline-block; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 5px; padding: 2px 7px; font-family: monospace; font-size: 11px;
+}
+.urg-терміново { color: var(--red); font-weight: 700; }
+.urg-висока { color: var(--orange); font-weight: 600; }
+.urg-середня { color: var(--yellow); }
+.urg-низька { color: var(--muted); }
+.issue-tag {
+  display: inline-block; font-size: 10px; padding: 1px 5px;
+  border-radius: 3px; background: rgba(239,68,68,.1); color: var(--red); margin: 1px;
+}
+.order-toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.order-toolbar button { padding: 7px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--muted); font-size: 12px; cursor: pointer; }
+.order-toolbar button.active { border-color: var(--accent); color: var(--text); background: rgba(124,111,255,.12); }
+.order-divider td { background: rgba(124,111,255,.10) !important; color: var(--muted); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+/* ── Pages ── */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ── Loading ── */
+.loading { text-align: center; padding: 40px; color: var(--muted); font-size: 13px; }
+.spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; margin-bottom: 10px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 800px) {
+  .sidebar { display: none; }
+  .main { padding: 16px; }
+  .grid2 { grid-template-columns: 1fr; }
+  .trend-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ SIDEBAR ══════════════════ -->
+<nav class="sidebar">
+  <div class="logo">🃏 Booster<em>Shop</em></div>
+  <div class="nav-section">
+    <div class="nav-item active" onclick="showPage('overview')">
+      <span class="nav-icon">📊</span> Огляд
+    </div>
+    <div class="nav-item" onclick="showPage('stock')">
+      <span class="nav-icon">📦</span> Склад
+    </div>
+    <div class="nav-item" onclick="showPage('consumables')">
+      <span class="nav-icon">🧾</span> Розхідники
+    </div>
+    <div class="nav-item" onclick="showPage('orders')">
+      <span class="nav-icon">🚚</span> Замовлення
+    </div>
+    <div class="nav-item" onclick="showPage('skus')">
+      <span class="nav-icon">🗂️</span> Товари
+    </div>
+    <div class="nav-item" onclick="showPage('clients')">
+      <span class="nav-icon">👥</span> Клієнти
+    </div>
+  </div>
+  <div class="sidebar-footer">
+    <div id="sidebarUpdated">—</div>
+    <a class="refresh-link" onclick="hardRefresh()">↻ Оновити дані</a>
+  </div>
+</nav>
+
+<!-- ══════════════════ MAIN ══════════════════ -->
+<main class="main">
+
+  <div id="errorBanner" class="error-banner"></div>
+
+  <!-- ─── OVERVIEW ─── -->
+  <div id="page-overview" class="page active">
+    <div class="header">
+      <div class="page-title">Огляд</div>
+      <div class="page-sub" id="overviewSub">Завантаження...</div>
+    </div>
+
+    <div class="cards" id="summaryCards">
+      <div class="card"><div class="loading"><div class="spinner"></div><br>Завантаження...</div></div>
+    </div>
+
+    <div class="section" id="channelSection" style="display:none">
+      <div class="section-header">
+        <span class="section-title">Продажі по каналах</span>
+        <span id="channelPeriodLabel" style="font-size:11px;color:var(--muted)">поточний місяць</span>
+      </div>
+      <div id="channelBars"></div>
+    </div>
+
+    <div class="trend-grid" id="trendGrid" style="display:none">
+      <div class="section" id="trendSection">
+        <div class="section-header">
+          <span class="section-title">Виручка — 6 місяців</span>
+        </div>
+        <div id="trendChart" class="trend-chart"></div>
+        <div id="trendLabels" class="trend-labels"></div>
+      </div>
+      <div class="section trend-profit" id="profitTrendSection">
+        <div class="section-header">
+          <span class="section-title">Чистий прибуток — 6 міс</span>
+        </div>
+        <div id="profitTrendChart" class="trend-chart"></div>
+        <div id="profitTrendLabels" class="trend-labels"></div>
+      </div>
+    </div>
+
+    <div class="section" id="topSkusSection" style="display:none">
+      <div class="section-header">
+        <span class="section-title">Топ-5 SKU — прибуток за 30 днів</span>
+      </div>
+      <div id="topSkusList"></div>
+    </div>
+
+    <div class="grid2">
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title">Активні замовлення</span>
+          <span class="badge b-yellow" id="pendingBadge">—</span>
+        </div>
+        <div id="pendingPreview"><div class="loading"><div class="spinner"></div></div></div>
+      </div>
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title">Потребують уваги</span>
+          <span class="badge b-red" id="alertsBadge">—</span>
+        </div>
+        <div id="alertsPreview"><div class="loading"><div class="spinner"></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── STOCK ─── -->
+  <div id="page-stock" class="page">
+    <div class="header">
+      <div class="page-title">Склад</div>
+      <div class="page-sub">Черга дій по SKU</div>
+    </div>
+    <div class="section">
+      <div style="margin-bottom:14px">
+        <input id="stockFilter" type="text" placeholder="🔍 Фільтр по SKU або назві…"
+          style="width:100%;padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none;transition:border-color .15s"
+          onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"/>
+      </div>
+      <div id="stockTable"><div class="loading"><div class="spinner"></div><br>Завантаження...</div></div>
+    </div>
+  </div>
+
+  <!-- ─── CONSUMABLES ─── -->
+  <div id="page-consumables" class="page">
+    <div class="header">
+      <div class="page-title">Розхідники</div>
+      <div class="page-sub">Остання закупка, залишки і покриття за витратою останніх 30 днів</div>
+    </div>
+    <div class="section">
+      <div style="margin-bottom:14px">
+        <input id="consumablesFilter" type="text" placeholder="🔍 Фільтр по назві або категорії…"
+          style="width:100%;padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none;transition:border-color .15s"
+          onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"/>
+      </div>
+      <div id="consumablesTable"><div class="loading"><div class="spinner"></div><br>Завантаження...</div></div>
+    </div>
+  </div>
+
+  <!-- ─── ORDERS ─── -->
+  <div id="page-orders" class="page">
+    <div class="header">
+      <div class="page-title">Замовлення</div>
+      <div class="page-sub" id="ordersSub">Активні спочатку, нижче завершені за 60 днів</div>
+    </div>
+    <div class="section">
+      <div class="order-toolbar">
+        <button id="ordersModeDefault" onclick="loadOrders('default')">Активні + 60 днів</button>
+        <button id="ordersModeActive" onclick="loadOrders('active')">Активні</button>
+        <button id="ordersModeCompleted" onclick="loadOrders('completed')">Завершені 60 днів</button>
+        <button id="ordersSortDate" onclick="toggleOrdersDateSort()">Дата ↓</button>
+      </div>
+      <div id="ordersTable"><div class="loading"><div class="spinner"></div><br>Завантаження...</div></div>
+    </div>
+  </div>
+
+  <!-- ─── SKUs ─── -->
+  <div id="page-skus" class="page">
+    <div class="header">
+      <div class="page-title">Товари</div>
+      <div class="page-sub">Всі активні SKU з залишками і статусами</div>
+    </div>
+    <div class="section">
+      <div style="margin-bottom:14px">
+        <input id="skuFilter" type="text" placeholder="🔍 Фільтр по SKU, назві або бренду…"
+          style="width:100%;padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none;transition:border-color .15s"
+          onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"/>
+      </div>
+      <div id="skuTable"><div class="loading"><div class="spinner"></div><br>Завантаження...</div></div>
+    </div>
+  </div>
+
+  <!-- ─── CLIENTS ─── -->
+  <div id="page-clients" class="page">
+    <div class="header">
+      <div class="page-title">Клієнти</div>
+      <div class="page-sub">Топ-10 за сумою покупок</div>
+    </div>
+    <div class="section">
+      <div style="display:flex;gap:8px;margin-bottom:14px">
+        <button id="clientsPeriodAll" onclick="loadClients('all_time')" style="padding:7px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:12px;cursor:pointer">Увесь час</button>
+        <button id="clientsPeriod60" onclick="loadClients('60d')" style="padding:7px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:12px;cursor:pointer">Останні 60 днів</button>
+      </div>
+      <div id="clientsTable"><div class="loading"><div class="spinner"></div><br>Завантаження...</div></div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ════════════ CONFIG ════════════
+const API = 'https://script.google.com/macros/s/AKfycbz2WIFlW7A-ta7HtewK-0wsklekB-HDIgCx3CF1JGfmPaRvs2UgI0qktcfhvKzPYDbX-A/exec';
+const TOKEN = 'bscrm_6dcae8d8b90f4c1ea5be1f0a5d2a1b7e';
+
+// ════════════ API ════════════
+async function call(action, extra = {}) {
+  const p = new URLSearchParams({ action, token: TOKEN, ...extra });
+  const r = await fetch(`${API}?${p}`, { redirect: 'follow' });
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  const d = await r.json();
+  if (!d.ok) throw new Error(d.error || 'API error');
+  return d;
+}
+
+// ════════════ STATE ════════════
+const cache = {};
+const loaded = {};
+const orderState = { mode: 'default', sort: 'date_desc' };
+
+function showError(msg) {
+  const el = document.getElementById('errorBanner');
+  el.innerHTML = `⚠ <b>Помилка завантаження даних:</b> ${msg}`;
+  el.classList.add('show');
+}
+function clearError() { document.getElementById('errorBanner').classList.remove('show'); }
+
+// ════════════ NAV ════════════
+const titles = { overview: 'Огляд', stock: 'Склад', consumables: 'Розхідники', orders: 'Замовлення', skus: 'Товари', clients: 'Клієнти' };
+
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if (!loaded[name]) { loaded[name] = true; loaders[name](); }
+}
+
+function hardRefresh() {
+  Object.keys(cache).forEach(k => delete cache[k]);
+  Object.keys(loaded).forEach(k => delete loaded[k]);
+  ['summaryCards','pendingPreview','alertsPreview','stockTable','consumablesTable','ordersTable','skuTable','clientsTable','topSkusList']
+    .forEach(id => { const el = document.getElementById(id); if(el) el.innerHTML = spin(); });
+  ['channelSection','trendGrid','topSkusSection'].forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
+  clearError();
+  const active = document.querySelector('.page.active');
+  const name = active ? active.id.replace('page-','') : 'overview';
+  loaded[name] = true; loaders[name]();
+}
+
+const spin = () => '<div class="loading"><div class="spinner"></div></div>';
+
+// ════════════ FORMATTERS ════════════
+const fmt   = n => n != null ? '₴' + Number(n).toLocaleString('uk-UA', {maximumFractionDigits:0}) : '—';
+const fmtP  = n => n != null ? Number(n).toFixed(1) + '%' : '—';
+const fmtMoney2 = n => n != null ? '₴' + Number(n).toLocaleString('uk-UA', {minimumFractionDigits:2, maximumFractionDigits:2}) : '—';
+const fmtQty = n => n != null ? Number(n).toLocaleString('uk-UA', {maximumFractionDigits:1}) : '—';
+const urgCls = u => 'urg-' + (u||'').toLowerCase();
+
+function deltaTag(current, prev) {
+  if (prev == null || !prev || current == null) return '';
+  const pct = ((Number(current) - Number(prev)) / Math.abs(Number(prev))) * 100;
+  const sign = pct >= 0 ? '+' : '';
+  const color = pct >= 0 ? 'var(--green)' : 'var(--red)';
+  return `<span style="font-size:11px;color:${color};font-weight:600;margin-left:6px">${sign}${pct.toFixed(1)}%</span>`;
+}
+
+function parseApiDate(value) {
+  const parts = String(value || '').slice(0, 10).split('-').map(Number);
+  if (parts.length !== 3 || parts.some(n => !Number.isFinite(n))) return null;
+  return new Date(parts[0], parts[1] - 1, parts[2]);
+}
+
+function mtdPeriodBounds(now = new Date()) {
+  const current = {
+    start: new Date(now.getFullYear(), now.getMonth(), 1),
+    end: new Date(now.getFullYear(), now.getMonth(), now.getDate()),
+  };
+  const previousMonthLastDay = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+  const previousDay = Math.min(now.getDate(), previousMonthLastDay);
+  const previous = {
+    start: new Date(now.getFullYear(), now.getMonth() - 1, 1),
+    end: new Date(now.getFullYear(), now.getMonth() - 1, previousDay),
+  };
+  return { current, previous };
+}
+
+function inDateRange(date, range) {
+  return date && date >= range.start && date <= range.end;
+}
+
+function isSalesOrder(order) {
+  return order && order.order_status !== 'Скасовано' && order.order_status !== 'Повернення';
+}
+
+function aggregateOrdersForRange(orders, range) {
+  return (orders || []).filter(order => isSalesOrder(order) && inDateRange(parseApiDate(order.date), range)).reduce((acc, order) => {
+    acc.orders += 1;
+    acc.revenue += Number(order.amount) || 0;
+    acc.profit += Number(order.profit) || 0;
+    return acc;
+  }, { orders: 0, revenue: 0, profit: 0 });
+}
+
+async function getAllOrders() {
+  if (!cache.ordersAll) cache.ordersAll = await call('orders', {status:'all', limit:500, sort:'date_desc'});
+  return cache.ordersAll;
+}
+
+async function monthToDateStats() {
+  const data = await getAllOrders();
+  const bounds = mtdPeriodBounds();
+  return {
+    current: aggregateOrdersForRange(data.orders || [], bounds.current),
+    previous: aggregateOrdersForRange(data.orders || [], bounds.previous),
+  };
+}
+
+function payPill(pay, ord) {
+  if (ord === 'Отримано')         return '<span class="pill p-ok">✓ Отримано</span>';
+  if (ord === 'Скасовано')        return '<span class="pill p-err">Скасовано</span>';
+  if (pay === 'Не оплачено' && ord === 'Відправлено')
+                                   return '<span class="pill p-warn">Відправлено · не опл.</span>';
+  if (pay === 'Не оплачено')      return '<span class="pill p-warn">Не оплачено</span>';
+  if (ord === 'Відправлено')      return '<span class="pill p-blue">Відправлено</span>';
+  return `<span class="pill p-muted">${ord||pay||'—'}</span>`;
+}
+
+function actionBadge(a) {
+  if (!a) return '—';
+  if (a.includes('Докупити'))           return '<span class="badge b-red">Докупити</span>';
+  if (a.includes('Пильнувати'))         return '<span class="badge b-yellow">Пильнувати</span>';
+  if (a.toLowerCase().includes('не просувати')) return '<span class="badge b-muted">Не просувати</span>';
+  if (a.includes('просувати'))          return '<span class="badge b-green">Просувати</span>';
+  return `<span class="badge b-muted">${a}</span>`;
+}
+
+function stockPill(s) {
+  if (s === 'ОК')    return '<span class="pill p-ok">ОК</span>';
+  if (s === 'Мало')  return '<span class="pill p-warn">Мало</span>';
+  if (s === 'Немає') return '<span class="pill p-err">Немає</span>';
+  return `<span class="pill p-muted">${s||'—'}</span>`;
+}
+
+function rrcPriceCell(price, margin) {
+  const value = Number(price) || 0;
+  if (!value) return '<span style="color:var(--muted)">—</span>';
+  const m = margin == null || margin === '' ? null : Number(margin);
+  const cls = m == null ? 'rrc-unknown' : m >= 35 ? 'rrc-strong' : m >= 25 ? 'rrc-good' : m >= 15 ? 'rrc-warn' : 'rrc-bad';
+  const label = m == null ? 'нема 60д' : fmtP(m);
+  return `<span class="rrc-price ${cls}"><b>${fmt(value)}</b><small>${label}</small></span>`;
+}
+
+function stockCoverageDaysRaw(stock, sold30d, sold60d) {
+  const stockN = Number(stock) || 0;
+  const sold30 = Number(sold30d) || 0;
+  const sold60 = Number(sold60d) || 0;
+  const rate = sold30 > 0 ? sold30 / 30 : (sold60 > 0 ? sold60 / 60 : 0);
+  if (stockN <= 0) return rate > 0 ? 0 : null;
+  if (rate <= 0) return Number.POSITIVE_INFINITY;
+  return Math.round(stockN / rate);
+}
+
+function dayCoverage(stock, sold30d, sold60d) {
+  const days = stockCoverageDaysRaw(stock, sold30d, sold60d);
+  if (days == null) return '<span style="color:var(--muted)">—</span>';
+  if (!Number.isFinite(days)) return '<span style="color:var(--muted)">∞</span>';
+  const cls = days < 7 ? 'var(--red)' : days < 21 ? 'var(--yellow)' : 'var(--green)';
+  return `<span style="color:${cls};font-weight:600">${days}</span>`;
+}
+
+function stockEstimatedMarginPct(row) {
+  const maxBuy = Number(row.max_buy_price) || 0;
+  if (maxBuy <= 0) return null;
+  const estimatedSale = maxBuy * 1.25;
+  return estimatedSale > 0 ? ((estimatedSale - maxBuy) / estimatedSale) * 100 : null;
+}
+
+function stockMarginInfo(row) {
+  const sold30 = Number(row.sold_30d) || 0;
+  const sold60 = Number(row.sold_60d) || 0;
+  const raw = row.margin_pct == null || row.margin_pct === '' ? null : Number(row.margin_pct);
+  if (sold30 <= 0 && sold60 <= 0) {
+    const estimated = stockEstimatedMarginPct(row);
+    if (estimated != null) return { pct: estimated, estimated: true };
+  }
+  if (raw == null || !Number.isFinite(raw)) return { pct: null, estimated: false };
+  return { pct: raw, estimated: false };
+}
+
+function stockMarginValue(row) {
+  const info = stockMarginInfo(row);
+  return info.pct == null ? -1 : info.pct;
+}
+
+function stockMarginColor(pct) {
+  if (pct >= 40) return 'var(--green)';
+  if (pct >= 35) return '#34d399';
+  if (pct >= 30) return '#a3e635';
+  if (pct >= 20) return 'var(--yellow)';
+  return 'var(--red)';
+}
+
+function stockMarginDisplay(row) {
+  const info = stockMarginInfo(row);
+  if (info.pct == null) return '<span style="color:var(--muted)">—</span>';
+  return `<span style="color:${stockMarginColor(info.pct)};font-weight:600">${fmtP(info.pct)}${info.estimated ? '*' : ''}</span>`;
+}
+
+function ttn4(ttn) {
+  if (!ttn || String(ttn).trim() === '') return '<span style="color:var(--muted)">NTTN</span>';
+  return '···' + String(ttn).replace(/\D/g,'').slice(-4);
+}
+
+function skuShort(name) {
+  if (!name) return '—';
+  const text = String(name).trim();
+  if (!text || /^\d{4}-\d{2}-\d{2}T/.test(text)) return '—';
+  const parts = text.split(' — ');
+  return parts.length > 1 ? parts.slice(1).join(' — ') : text;
+}
+
+function skuName(name, fallback) {
+  const short = skuShort(name);
+  return short === '—' ? (fallback || '—') : short;
+}
+
+const stockSortState = { field: 'urgency', dir: 'asc' };
+const stockNumericSorts = { stock: true, expected: true, sold30: true, sold60: true, coverage: true, maxBuy: true, margin: true };
+const stockDefaultSortDir = { sku: 'asc', name: 'asc', urgency: 'asc', action: 'asc', stock: 'desc', expected: 'desc', sold30: 'desc', sold60: 'desc', coverage: 'asc', maxBuy: 'desc', margin: 'desc' };
+
+
+function stockUrgencyRank(value) {
+  const text = String(value || '').trim();
+  const ranks = { 'Терміново': 1, 'Висока': 2, 'Середня': 3, 'Низька': 4 };
+  return ranks[text] || 9;
+}
+
+function stockActionRank(value) {
+  const text = String(value || '').toLowerCase();
+  if (text.includes('докуп')) return 1;
+  if (text.includes('пильн')) return 2;
+  if (text.includes('не просувати')) return 3;
+  if (text.includes('просувати')) return 4;
+  return 9;
+}
+
+function stockSortValue(row, field) {
+  if (field === 'sku') return String(row.sku || '').toLowerCase();
+  if (field === 'name') return skuName(row.name, row.sku).toLowerCase();
+  if (field === 'urgency') return stockUrgencyRank(row.urgency) + ' ' + String(row.urgency || row.stock_status || '').toLowerCase();
+  if (field === 'action') return stockActionRank(row.action || row.stock_status) + ' ' + String(row.action || row.stock_status || '').toLowerCase();
+  if (field === 'stock') return Number(row.stock) || 0;
+  if (field === 'expected') return Number(row.expected) || 0;
+  if (field === 'sold30') return Number(row.sold_30d) || 0;
+  if (field === 'sold60') return Number(row.sold_60d) || 0;
+  if (field === 'coverage') {
+    const days = stockCoverageDaysRaw(row.stock, row.sold_30d, row.sold_60d);
+    return days == null ? -1 : days;
+  }
+  if (field === 'maxBuy') return row.max_buy_price == null ? -1 : Number(row.max_buy_price) || 0;
+  if (field === 'margin') return stockMarginValue(row);
+  return '';
+}
+
+function stockSortMark(field) {
+  const active = stockSortState.field === field;
+  const arrow = active ? (stockSortState.dir === 'asc' ? '▲' : '▼') : '↕';
+  const color = active ? 'var(--red)' : 'var(--muted)';
+  return `<span style="color:${color};font-size:10px;margin-left:6px">${arrow}</span>`;
+}
+
+function stockTh(field, label) {
+  return `<th onclick="sortStock('${field}')" style="cursor:pointer;user-select:none;white-space:nowrap">${label}${stockSortMark(field)}</th>`;
+}
+
+function sortStock(field) {
+  if (stockSortState.field === field) {
+    stockSortState.dir = stockSortState.dir === 'asc' ? 'desc' : 'asc';
+  } else {
+    stockSortState.field = field;
+    stockSortState.dir = stockDefaultSortDir[field] || 'asc';
+  }
+  renderStockTable(false);
+}
+
+function applyStockFilter() {
+  const sf = document.getElementById('stockFilter');
+  const q = sf ? sf.value.toLowerCase() : '';
+  document.querySelectorAll('#stockTable table tr:not(:first-child)').forEach(tr => {
+    tr.style.display = tr.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+function renderStockTable(resetFilter) {
+  const rows = (cache.stockRows || []).slice();
+  const field = stockSortState.field;
+  const factor = stockSortState.dir === 'asc' ? 1 : -1;
+  rows.sort((a, b) => {
+    const av = stockSortValue(a, field);
+    const bv = stockSortValue(b, field);
+    let cmp;
+    if (stockNumericSorts[field]) {
+      cmp = (av === bv) ? 0 : (av > bv ? 1 : -1);
+    } else {
+      cmp = String(av).localeCompare(String(bv), 'uk', { numeric: true, sensitivity: 'base' });
+    }
+    if (cmp === 0) cmp = String(a.sku || '').localeCompare(String(b.sku || ''), 'uk', { numeric: true, sensitivity: 'base' });
+    return cmp * factor;
+  });
+
+  document.getElementById('stockTable').innerHTML = `<div class="tbl-wrap"><table>
+    <tr>
+      ${stockTh('sku', 'SKU')}${stockTh('name', 'Назва')}${stockTh('urgency', 'Терм.')}${stockTh('action', 'Дія')}
+      ${stockTh('stock', 'Залишок')}${stockTh('expected', 'Очікується')}${stockTh('sold30', '30д')}${stockTh('sold60', '60д')}${stockTh('coverage', 'Днів запасу')}
+      ${stockTh('maxBuy', 'Гранична')}${stockTh('margin', 'Маржа')}
+    </tr>
+    ${rows.map(r => `<tr>
+      <td><span class="chip mono">${r.sku}</span></td>
+      <td style="font-size:12px;max-width:240px;line-height:1.3">${skuName(r.name, r.sku)}</td>
+      <td class="${urgCls(r.urgency)}">${r.urgency || r.stock_status || '—'}</td>
+      <td>${r.action ? actionBadge(r.action) : stockPill(r.stock_status)}</td>
+      <td><b>${r.stock??'—'}</b></td>
+      <td>${r.expected??'—'}</td>
+      <td><b>${r.sold_30d??'—'}</b></td>
+      <td><b>${r.sold_60d??'—'}</b></td>
+      <td>${dayCoverage(r.stock, r.sold_30d, r.sold_60d)}</td>
+      <td>${r.max_buy_price != null ? fmt(r.max_buy_price) : '—'}</td>
+      <td>${stockMarginDisplay(r)}</td>
+    </tr>`).join('')}
+  </table></div>`;
+
+  const sf = document.getElementById('stockFilter');
+  if (sf) {
+    if (resetFilter) sf.value = '';
+    sf.oninput = applyStockFilter;
+    applyStockFilter();
+  }
+}
+
+// ════════════ OVERVIEW ════════════
+async function loadOverview() {
+  clearError();
+  // Summary cards
+  try {
+    const d = await call('summary');
+    cache.summary = d;
+    const s7 = d.sales_7d || {};
+    const s7Period = d.sales_7d_period || s7;
+    const s7PrevPeriod = d.sales_prev_month_7d_period || null;
+    const sm = d.sales_current_month || {};
+    const sp = d.sales_prev_month || null;
+    const st = d.stock || {};
+    const dq = d.data_quality || {};
+    const po = d.pending_orders || {};
+    let mtd = { current: d.sales_current_month || {}, previous: null };
+    let ordersData = cache.orders || { orders: [] };
+    let ordersForUnpaidOk = !!cache.orders;
+    if (!cache.orders) {
+      try {
+        ordersData = await call('orders', {status:'active', limit:100});
+        cache.orders = ordersData;
+        ordersForUnpaidOk = true;
+      } catch(e) {
+        console.warn('orders unpaid card:', e.message);
+      }
+    }
+    try {
+      mtd = await monthToDateStats();
+    } catch(e) {
+      console.warn('mtd card:', e.message);
+    }
+    const unpaids = (ordersData.orders || []).filter(r =>
+      r.order_status === 'Відправлено' && r.payment_status === 'Не оплачено'
+    );
+    const unpaidTotal = unpaids.reduce((s, r) => s + (Number(r.amount) || 0), 0);
+    const activePaidTotal = ordersForUnpaidOk ? (ordersData.orders || []).filter(r => r.payment_status !== 'Не оплачено').reduce((s, r) => s + (Number(r.amount) || 0), 0) : null;
+    const activeUnpaidTotal = ordersForUnpaidOk ? (ordersData.orders || []).filter(r => r.payment_status === 'Не оплачено').reduce((s, r) => s + (Number(r.amount) || 0), 0) : null;
+    const activeCount = ordersForUnpaidOk ? (ordersData.count || (ordersData.orders || []).length) : (po.count || 0);
+    const activeSub = ordersForUnpaidOk ? `Оплачено ${fmt(activePaidTotal)}<br>Не оплачено ${fmt(activeUnpaidTotal)}` : 'Немає даних';
+    const warehouseProfit = d.potential_profit_warehouse != null ? Number(d.potential_profit_warehouse) : null;
+
+    const cards = [
+      { label:'Місяць на сьогодні', value:(mtd.current.orders||0) + deltaTag(mtd.current.orders, mtd.previous?.orders), sub:`Виручка ${fmt(mtd.current.revenue)}${deltaTag(mtd.current.revenue, mtd.previous?.revenue)}<br>Прибуток ${fmt(mtd.current.profit)}${deltaTag(mtd.current.profit, mtd.previous?.profit)}` },
+      { label:'Активні замовл.',  value:activeCount,      sub:activeSub, cls: activeCount > 0 ? 'c-yellow' : '' },
+      { label:'Склад ОК / всього',value:`${st.ok||0} / ${st.total_sku||0}`, sub:`Мало: ${st.low||0} · Немає: ${st.out||0}` },
+      { label:'Докупити',         value:st.action_buy||0, sub:`Пильнувати: ${st.action_watch||0}`, cls:(st.action_buy||0)>0 ? 'c-red' : '' },
+      { label:'Потенційний прибуток складу', value:fmt(warehouseProfit), sub: warehouseProfit != null ? 'При продажу всього залишку' : 'Немає даних', cls: warehouseProfit > 0 ? 'c-accent' : '' },
+    ];
+
+    document.getElementById('summaryCards').innerHTML = cards.map(c =>
+      `<div class="card ${c.cls||''}">
+        <div class="card-label">${c.label}</div>
+        <div class="card-value">${c.value}</div>
+        ${c.sub ? `<div class="card-sub">${c.sub}</div>` : ''}
+      </div>`
+    ).join('');
+
+    const now = new Date().toLocaleTimeString('uk-UA', {hour:'2-digit',minute:'2-digit'});
+    document.getElementById('overviewSub').textContent = `Оновлено о ${now}`;
+    document.getElementById('sidebarUpdated').textContent = `Дані: ${now}`;
+  } catch(e) {
+    showError(e.message);
+    document.getElementById('summaryCards').innerHTML = '';
+  }
+
+  // Channel stats
+  try {
+    const ch = await call('channel_stats');
+    const channels = ch.channels || [];
+    if (channels.length) {
+      const maxRev = Math.max(...channels.map(c => c.revenue || 0));
+      const totalRev = channels.reduce((s, c) => s + (c.revenue || 0), 0);
+      document.getElementById('channelBars').innerHTML = channels.map(c => {
+        const pct = maxRev > 0 ? Math.round((c.revenue / maxRev) * 100) : 0;
+        const share = totalRev > 0 ? Math.round((c.revenue / totalRev) * 100) : 0;
+        return `
+          <div style="margin-bottom:12px">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:12px">
+              <span style="font-weight:500">${c.name}</span>
+              <span style="color:var(--muted)">${fmt(c.revenue)} · ${c.orders} зам. · маржа ${fmtP(c.margin_pct)}</span>
+            </div>
+            <div style="background:var(--surface2);border-radius:4px;height:6px;overflow:hidden">
+              <div style="background:var(--accent);height:100%;width:${pct}%;transition:width .4s;border-radius:4px"></div>
+            </div>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px">${share}% від виручки</div>
+          </div>`;
+      }).join('');
+      document.getElementById('channelSection').style.display = 'block';
+    }
+  } catch(e) {
+    console.warn('channel_stats:', e.message);
+  }
+
+  // Monthly trend
+  try {
+    const ms = cache.monthly || await call('monthly_summary', { months: 6 });
+    cache.monthly = ms;
+    const months = ms.months || [];
+    if (months.length) {
+      const renderMonthlyBars = (chartId, labelsId, field, accentColor, idleColor, idleBorder, labelFn) => {
+        const values = months.map(m => Number(m[field]) || 0);
+        const maxValue = Math.max(...values.map(v => Math.abs(v)));
+        document.getElementById(chartId).innerHTML = months.map((m, i) => {
+          const value = Number(m[field]) || 0;
+          const isCurrentMonth = i === months.length - 1;
+          const isNegative = value < 0;
+          const color = isNegative ? 'rgba(239,68,68,.72)' : (isCurrentMonth ? accentColor : idleColor);
+          const border = isNegative ? '1px solid rgba(239,68,68,.45)' : (isCurrentMonth ? `2px solid ${accentColor}` : `1px solid ${idleBorder}`);
+          const label = labelFn ? labelFn(m, value) : { top: fmt(value) };
+          const topLabel = typeof label === 'string' ? label : label.top;
+          const barLabel = typeof label === 'string' ? '' : label.bar;
+          const minHeight = barLabel ? 18 : 4;
+          const h = maxValue > 0 ? Math.max(minHeight, Math.round((Math.abs(value) / maxValue) * 68)) : minHeight;
+          const barLabelClass = isNegative ? 'trend-bar-label negative' : `trend-bar-label ${isCurrentMonth ? 'current' : 'past'}`;
+          return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0">
+            <span class="trend-value">${topLabel}</span>
+            <div class="trend-bar" style="height:${h}px;background:${color};border:${border}">
+              ${barLabel ? `<span class="${barLabelClass}">${barLabel}</span>` : ''}
+            </div>
+          </div>`;
+        }).join('');
+        document.getElementById(labelsId).innerHTML = months.map(m =>
+          `<div style="flex:1;text-align:center;font-size:10px;color:var(--muted);min-width:0">${m.label || m.month}</div>`
+        ).join('');
+      };
+
+      renderMonthlyBars('trendChart', 'trendLabels', 'revenue', 'var(--accent)', 'var(--surface2)', 'var(--border)');
+      renderMonthlyBars('profitTrendChart', 'profitTrendLabels', 'profit', 'var(--green)', 'rgba(34,197,94,.12)', 'rgba(34,197,94,.26)', (m, value) => {
+        const revenue = Number(m.revenue) || 0;
+        const explicit = m.margin_pct == null || m.margin_pct === '' ? null : Number(m.margin_pct);
+        const margin = explicit != null && Number.isFinite(explicit) ? explicit : (revenue ? value / revenue * 100 : null);
+        return { top: fmt(value), bar: fmtP(margin) };
+      });
+      document.getElementById('trendGrid').style.display = 'grid';
+    }
+    const repeatRate = ms.repeat_rate_pct;
+    const existingRepeatCard = document.getElementById('repeatRateCard');
+    if (existingRepeatCard) existingRepeatCard.remove();
+    if (repeatRate != null) {
+      const repeatCard = document.createElement('div');
+      repeatCard.id = 'repeatRateCard';
+      repeatCard.className = 'card' + (repeatRate >= 20 ? ' c-green' : '');
+      repeatCard.innerHTML = `
+        <div class="card-label">Повторні покупки</div>
+        <div class="card-value">${fmtP(repeatRate)}</div>
+        <div class="card-sub">за ідентифікованими клієнтами</div>`;
+      document.getElementById('summaryCards').appendChild(repeatCard);
+    }
+  } catch(e) {
+    console.warn('monthly_summary:', e.message);
+  }
+
+  // Top-5 SKUs by profit
+  try {
+    const ts = await call('sku_list', { sort: 'profit', limit: 5 });
+    const skus = (ts.skus || []).filter(s => s.profit_30d != null && Number(s.profit_30d) > 0);
+    if (skus.length) {
+      const maxProfit = Math.max(...skus.map(s => s.profit_30d || 0));
+      document.getElementById('topSkusList').innerHTML = skus.map((s, i) => {
+        const barW = maxProfit > 0 ? Math.round(((s.profit_30d || 0) / maxProfit) * 100) : 0;
+        return `
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+            <span style="color:var(--muted);font-size:12px;width:16px">${i + 1}</span>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${skuName(s.name, s.sku)}</div>
+              <div style="background:var(--surface2);border-radius:3px;height:4px;margin-top:4px">
+                <div style="background:var(--green);height:100%;width:${barW}%;border-radius:3px"></div>
+              </div>
+            </div>
+            <div style="text-align:right;flex-shrink:0">
+              <div style="font-size:13px;font-weight:700;color:var(--green)">${fmt(s.profit_30d)}</div>
+              <div style="font-size:10px;color:var(--muted)">${s.sold_30d || 0} шт</div>
+            </div>
+          </div>`;
+      }).join('');
+      document.getElementById('topSkusSection').style.display = 'block';
+    }
+  } catch(e) {
+    console.warn('top_skus:', e.message);
+  }
+
+  // Pending orders preview
+  try {
+    const d = cache.orders || await call('orders', {status:'active', limit:6});
+    cache.orders = d;
+    const o = d.orders || [];
+    const badge = document.getElementById('pendingBadge');
+    badge.textContent = d.count || 0;
+    badge.className = 'badge ' + ((d.count||0) > 0 ? 'b-yellow' : 'b-green');
+
+    if (!o.length) {
+      document.getElementById('pendingPreview').innerHTML = '<div style="color:var(--muted);padding:4px 0;font-size:13px">✅ Активних замовлень немає</div>';
+    } else {
+      document.getElementById('pendingPreview').innerHTML =
+        `<table><tr><th>Замовлення</th><th>Сума</th><th>Статус</th></tr>
+        ${o.slice(0,5).map(r =>
+          `<tr>
+            <td><span class="chip">${r.order_id}</span>
+              <span style="font-size:11px;color:var(--muted);margin-left:6px">${r.post||''} ${ttn4(r.ttn)}</span></td>
+            <td><b>${fmt(r.amount)}</b></td>
+            <td>${payPill(r.payment_status, r.order_status)}</td>
+          </tr>`
+        ).join('')}</table>`;
+    }
+  } catch(e) { document.getElementById('pendingPreview').innerHTML = `<div style="color:var(--muted)">—</div>`; }
+
+  // Stock alerts preview
+  try {
+    const d = cache.stock || await call('stock_alerts');
+    cache.stock = d;
+    const alerts = d.alerts || [];
+    const badge = document.getElementById('alertsBadge');
+    badge.textContent = d.count || 0;
+    badge.className = 'badge ' + ((d.count||0) > 0 ? 'b-red' : 'b-green');
+
+    const urgent = alerts.filter(a => a.urgency === 'Терміново' || a.urgency === 'Висока').slice(0,5);
+    if (!urgent.length) {
+      document.getElementById('alertsPreview').innerHTML = '<div style="color:var(--muted);padding:4px 0;font-size:13px">✅ Критичних немає</div>';
+    } else {
+      document.getElementById('alertsPreview').innerHTML =
+        `<table><tr><th>SKU</th><th>Дія</th><th>30д</th></tr>
+        ${urgent.map(a =>
+          `<tr>
+            <td style="font-size:12px">${skuName(a.name, a.sku)}</td>
+            <td>${actionBadge(a.action)}</td>
+            <td class="${urgCls(a.urgency)}">${a.sold_30d||0}</td>
+          </tr>`
+        ).join('')}</table>`;
+    }
+  } catch(e) { document.getElementById('alertsPreview').innerHTML = `<div style="color:var(--muted)">—</div>`; }
+}
+
+// ════════════ STOCK ════════════
+async function loadStock() {
+  clearError();
+  try {
+    const skuData = cache.skus || await call('sku_list');
+    cache.skus = skuData;
+    let stockData = cache.stock || null;
+    if (!stockData) {
+      try {
+        stockData = await call('stock_alerts');
+        cache.stock = stockData;
+      } catch(e) {
+        console.warn('stock_alerts merge:', e.message);
+      }
+    }
+    const alertBySku = {};
+    ((stockData && stockData.alerts) || []).forEach(r => { if (r.sku) alertBySku[r.sku] = r; });
+    const a = (skuData.skus || []).map(r => ({ ...r, ...(alertBySku[r.sku] || {}) }));
+    if (!a.length) {
+      document.getElementById('stockTable').innerHTML = '<div style="color:var(--muted);padding:20px">Немає даних складу</div>';
+      return;
+    }
+    cache.stockRows = a;
+    renderStockTable(true);
+  } catch(e) {
+    showError(e.message);
+    document.getElementById('stockTable').innerHTML = '';
+  }
+}
+// ════════════ CONSUMABLES ════════════
+function consumableDaysPill(days, daily) {
+  if (!daily) return '<span class="pill p-muted">нема витрат</span>';
+  const value = Number(days || 0);
+  const text = value > 999 ? '999+ дн.' : Math.round(value) + ' дн.';
+  if (value < 7) return `<span class="pill p-err">${text}</span>`;
+  if (value < 14) return `<span class="pill p-warn">${text}</span>`;
+  return `<span class="pill p-ok">${text}</span>`;
+}
+
+function consumableLastPurchase(r) {
+  if (!r || !r.last_purchase_date) return 'ціна з CRM';
+  const qty = r.last_purchase_qty ? ` · ${fmtQty(r.last_purchase_qty)} шт` : '';
+  return `ост. закупка ${r.last_purchase_date}${qty}`;
+}
+
+async function loadConsumables() {
+  clearError();
+  document.getElementById('consumablesTable').innerHTML = spin();
+  try {
+    const d = cache.consumables || await call('consumables', {days: 30});
+    cache.consumables = d;
+    const rows = d.consumables || [];
+    if (!rows.length) {
+      document.getElementById('consumablesTable').innerHTML = '<div style="color:var(--muted);padding:20px">Немає активних розхідників</div>';
+      return;
+    }
+    document.getElementById('consumablesTable').innerHTML = `<div class="tbl-wrap"><table>
+      <tr><th>Розхідник</th><th>Тип</th><th>Ціна/шт</th><th>На складі</th><th>В дорозі</th><th>Витрата 30д</th><th>Вистачить</th></tr>
+      ${rows.map(r => `<tr>
+        <td style="font-size:12px;max-width:240px;line-height:1.3">${r.name || '—'}</td>
+        <td><span class="chip">${r.category || '—'}</span></td>
+        <td><b>${fmtMoney2(r.unit_cost)}</b><div style="font-size:10px;color:var(--muted);margin-top:3px">${consumableLastPurchase(r)}</div></td>
+        <td><b>${fmtQty(r.stock)}</b></td>
+        <td>${fmtQty(r.incoming)}</td>
+        <td>${fmtQty(r.used_30d)}<div style="font-size:10px;color:var(--muted);margin-top:3px">${fmtQty(r.daily_usage)}/день</div></td>
+        <td>${consumableDaysPill(r.days_left, r.daily_usage)}</td>
+      </tr>`).join('')}
+    </table></div>`;
+    const filter = document.getElementById('consumablesFilter');
+    if (filter) {
+      filter.value = '';
+      filter.oninput = function() {
+        const q = this.value.toLowerCase();
+        document.querySelectorAll('#consumablesTable table tr:not(:first-child)').forEach(tr => {
+          tr.style.display = tr.textContent.toLowerCase().includes(q) ? '' : 'none';
+        });
+      };
+    }
+  } catch(e) {
+    showError(e.message);
+    document.getElementById('consumablesTable').innerHTML = '';
+  }
+}
+// ════════════ ORDERS ════════════
+function orderDateMs(order) {
+  const raw = String((order && order.date) || '').trim();
+  const value = raw ? Date.parse(raw + 'T00:00:00') : 0;
+  return Number.isFinite(value) ? value : 0;
+}
+
+function isCompletedOrder(order) {
+  return String((order && order.order_status) || '').trim() === 'Отримано';
+}
+
+function isOrderWithinDays(order, days) {
+  const t = orderDateMs(order);
+  if (!t) return false;
+  return t >= Date.now() - days * 86400000;
+}
+
+function sortOrderRows(rows) {
+  const dir = orderState.sort;
+  return (rows || []).slice().sort((a, b) => {
+    const diff = orderDateMs(a) - orderDateMs(b);
+    return dir === 'date_asc' ? diff : -diff;
+  });
+}
+
+function setOrdersControls() {
+  const labels = {
+    default: 'Активні спочатку, нижче завершені за 60 днів',
+    active: 'Тільки активні замовлення',
+    completed: 'Тільки завершені замовлення за 60 днів'
+  };
+  ['Default', 'Active', 'Completed'].forEach(name => {
+    const key = name === 'Default' ? 'default' : name.toLowerCase();
+    const btn = document.getElementById('ordersMode' + name);
+    if (btn) btn.classList.toggle('active', orderState.mode === key);
+  });
+  const sortBtn = document.getElementById('ordersSortDate');
+  if (sortBtn) {
+    sortBtn.textContent = orderState.sort === 'date_asc' ? 'Дата ↑' : 'Дата ↓';
+    sortBtn.classList.add('active');
+  }
+  const sub = document.getElementById('ordersSub');
+  if (sub) sub.textContent = labels[orderState.mode] || labels.default;
+}
+
+function toggleOrdersDateSort() {
+  orderState.sort = orderState.sort === 'date_desc' ? 'date_asc' : 'date_desc';
+  loadOrders(orderState.mode);
+}
+
+function renderOrderRows(rows) {
+  return sortOrderRows(rows).map(r => `<tr>
+        <td><span class="chip mono">${r.order_id}</span></td>
+        <td style="font-size:12px;color:var(--muted)">${r.date||'—'}</td>
+        <td style="font-size:12px">${r.source||'—'}</td>
+        <td class="mono" style="font-size:12px">${ttn4(r.ttn)}</td>
+        <td>${r.post||'—'}</td>
+        <td style="font-size:11px;color:var(--muted);max-width:160px">${(r.skus||[]).join(', ')}</td>
+        <td><b>${fmt(r.amount)}</b></td>
+        <td><b style="color:var(--green)">${r.profit != null ? fmt(r.profit) : '—'}</b></td>
+        <td>${payPill(r.payment_status, r.order_status)}</td>
+      </tr>`).join('');
+}
+
+function renderOrdersTable(activeRows, completedRows) {
+  const active = activeRows || [];
+  const completed = completedRows || [];
+  if (!active.length && !completed.length) {
+    document.getElementById('ordersTable').innerHTML = '<div style="color:var(--muted);padding:20px">Замовлень для цього фільтра немає</div>';
+    return;
+  }
+
+  let body = '';
+  if (orderState.mode !== 'completed') {
+    if (orderState.mode === 'default') body += `<tr class="order-divider"><td colspan="9">Активні · ${active.length}</td></tr>`;
+    body += renderOrderRows(active);
+  }
+  if (orderState.mode === 'default') {
+    body += `<tr class="order-divider"><td colspan="9">Завершені за 60 днів · ${completed.length}</td></tr>`;
+  }
+  if (orderState.mode !== 'active') body += renderOrderRows(completed);
+
+  document.getElementById('ordersTable').innerHTML = `<div class="tbl-wrap"><table>
+      <tr><th>Замовлення</th><th onclick="toggleOrdersDateSort()" style="cursor:pointer;user-select:none">Дата ${orderState.sort === 'date_asc' ? '↑' : '↓'}</th><th>Канал</th><th>ТТН</th><th>Пошта</th><th>SKU</th><th>Сума</th><th>Прибуток</th><th>Статус</th></tr>
+      ${body}
+    </table></div>`;
+}
+
+async function fetchCompletedOrders60() {
+  let data = await call('orders', {status:'completed', days:60, limit:500, sort:orderState.sort});
+  let rows = data.orders || [];
+  if (rows.some(r => !isCompletedOrder(r))) {
+    data = await call('orders', {status:'all', limit:500, sort:orderState.sort});
+    rows = data.orders || [];
+  }
+  return rows.filter(r => isCompletedOrder(r) && isOrderWithinDays(r, 60));
+}
+
+async function loadOrders(mode = orderState.mode) {
+  clearError();
+  orderState.mode = mode || 'default';
+  setOrdersControls();
+  document.getElementById('ordersTable').innerHTML = spin();
+  try {
+    const activePromise = orderState.mode !== 'completed'
+      ? call('orders', {status:'active', limit:200, sort:orderState.sort})
+      : Promise.resolve({orders: []});
+    const completedPromise = orderState.mode !== 'active'
+      ? fetchCompletedOrders60()
+      : Promise.resolve([]);
+    const [activeData, completedRows] = await Promise.all([activePromise, completedPromise]);
+    const activeRows = activeData.orders || [];
+    cache.orders = activeData;
+    renderOrdersTable(activeRows, completedRows);
+  } catch(e) {
+    showError(e.message);
+    document.getElementById('ordersTable').innerHTML = '';
+  }
+}
+// ════════════ SKUs ════════════
+async function loadSkus() {
+  clearError();
+  try {
+    const d = await call('sku_list');
+    cache.skus = d;
+    const s = d.skus || [];
+    document.getElementById('skuTable').innerHTML = `<div class="tbl-wrap"><table>
+      <tr><th>SKU</th><th>Назва</th><th>Бренд</th><th>Формат</th><th>РРЦ</th><th>Динамічна РРЦ</th><th>Залишок</th><th>Очікується</th><th>Статус</th><th>Проблеми</th></tr>
+      ${s.map(r => `<tr>
+        <td><span class="chip mono">${r.sku}</span></td>
+        <td style="font-size:12px;max-width:180px;line-height:1.3">${skuName(r.name, r.sku)}</td>
+        <td style="font-size:12px">${r.brand||'—'}</td>
+        <td style="font-size:12px">${r.format||'—'}</td>
+        <td>${rrcPriceCell(r.rrc ?? r.price_crm, r.current_rrc_margin_pct)}</td>
+        <td>${r.dynamic_rrc ? fmt(r.dynamic_rrc) : '<span style="color:var(--muted)">—</span>'}</td>
+        <td><b>${r.stock??'—'}</b></td>
+        <td>${r.expected??'—'}</td>
+        <td>${stockPill(r.stock_status)}</td>
+        <td>${(r.issues||[]).map(i=>`<span class="issue-tag">${i}</span>`).join('')||'—'}</td>
+      </tr>`).join('')}
+    </table></div>`;
+    const skf = document.getElementById('skuFilter');
+    if (skf) {
+      skf.value = '';
+      skf.oninput = function() {
+        const q = this.value.toLowerCase();
+        document.querySelectorAll('#skuTable table tr:not(:first-child)').forEach(tr => {
+          tr.style.display = tr.textContent.toLowerCase().includes(q) ? '' : 'none';
+        });
+      };
+    }
+  } catch(e) {
+    showError(e.message);
+    document.getElementById('skuTable').innerHTML = '';
+  }
+}
+
+// ════════════ CLIENTS ════════════
+function setClientsPeriodButtons(period) {
+  const all = document.getElementById('clientsPeriodAll');
+  const d60 = document.getElementById('clientsPeriod60');
+  [[all, 'all_time'], [d60, '60d']].forEach(([btn, key]) => {
+    if (!btn) return;
+    const active = key === period;
+    btn.style.borderColor = active ? 'var(--accent)' : 'var(--border)';
+    btn.style.color = active ? 'var(--text)' : 'var(--muted)';
+  });
+}
+
+async function loadClients(period = 'all_time') {
+  clearError();
+  cache.clientsPeriod = period;
+  setClientsPeriodButtons(period);
+  document.getElementById('clientsTable').innerHTML = spin();
+  try {
+    const params = { limit: 10 };
+    if (period === '60d') params.period = '60d';
+    const d = await call('ltv_report', params);
+    const clients = d.clients || [];
+    if (!clients.length) {
+      document.getElementById('clientsTable').innerHTML = '<div style="color:var(--muted);padding:20px">Немає даних</div>';
+      return;
+    }
+    document.getElementById('clientsTable').innerHTML = `<div class="tbl-wrap"><table>
+      <tr><th>#</th><th>Клієнт</th><th>Прізвище імʼя</th><th>Канал</th><th>Замовлень</th><th>Товарів</th><th>Загальна сума</th><th>Прибуток</th></tr>
+      ${clients.map((c, i) => `<tr>
+        <td style="color:var(--muted)">${i + 1}</td>
+        <td class="mono" style="font-size:12px">${c.display || '—'}</td>
+        <td style="font-size:12px">${c.name || '—'}</td>
+        <td style="font-size:12px">${c.channel || '—'}</td>
+        <td>${c.orders}</td>
+        <td>${c.units || '—'}</td>
+        <td><b>${fmt(c.ltv)}</b></td>
+        <td><b style="color:var(--green)">${c.profit != null ? fmt(c.profit) : '—'}</b></td>
+      </tr>`).join('')}
+    </table></div>`;
+  } catch(e) {
+    document.getElementById('clientsTable').innerHTML =
+      '<div style="color:var(--muted);padding:20px">⏳ Очікується деплой API (ltv_report)</div>';
+  }
+}
+
+// ════════════ LOADERS MAP ════════════
+const loaders = { overview: loadOverview, stock: loadStock, consumables: loadConsumables, orders: loadOrders, skus: loadSkus, clients: loadClients };
+
+// ════════════ INIT ════════════
+loaded.overview = true;
+loadOverview();
+</script>
+</body>
+</html>
+
+
