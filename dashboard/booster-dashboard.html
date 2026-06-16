@@ -177,38 +177,46 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
   border-radius: 8px; color: var(--muted); font-size: 12px; cursor: pointer;
 }
 .rm-filter.active { border-color: var(--accent); color: var(--text); background: rgba(124,111,255,.12); }
-.rm-group-title {
-  font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px;
-  color: var(--muted); margin: 22px 0 10px; padding-left: 2px;
-}
-.rm-group-title:first-child { margin-top: 0; }
-.rm-cards { display: flex; flex-direction: column; gap: 10px; }
-.rm-card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; padding: 16px 18px; display: flex; gap: 16px; align-items: flex-start;
-  transition: border-color .15s;
-}
-.rm-card:hover { border-color: rgba(124,111,255,.4); }
-.rm-card.s-active  { border-left: 3px solid #3b82f6; }
-.rm-card.s-done    { border-left: 3px solid var(--green); opacity: .72; }
-.rm-card.s-todo    { border-left: 3px solid var(--border); }
-.rm-card.s-blocked { border-left: 3px solid var(--red); }
-.rm-dot { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
-.rm-body { flex: 1; min-width: 0; }
-.rm-header { display: flex; align-items: flex-start; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
-.rm-id { font-family: 'SF Mono','Fira Code',monospace; font-size: 11px; color: var(--accent); flex-shrink: 0; }
-.rm-title { font-size: 14px; font-weight: 600; line-height: 1.3; }
-.rm-what { font-size: 12.5px; color: var(--text); margin-bottom: 5px; line-height: 1.45; }
-.rm-why  { font-size: 12px; color: var(--muted); margin-bottom: 8px; line-height: 1.4; }
-.rm-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-.rm-date { font-size: 11px; color: var(--muted); }
-.rm-note {
-  font-size: 11px; padding: 2px 8px; border-radius: 5px;
-  background: rgba(245,158,11,.1); color: var(--yellow); border: 1px solid rgba(245,158,11,.2);
-}
-.rm-tag-codex { font-size: 11px; padding: 2px 8px; border-radius: 5px; background: rgba(124,111,255,.1); color: var(--accent); }
-.rm-tag-manual { font-size: 11px; padding: 2px 8px; border-radius: 5px; background: rgba(120,120,160,.1); color: var(--muted); }
-.rm-empty { color: var(--muted); font-size: 13px; text-align: center; padding: 40px; }
+/* ── Roadmap ── */
+.rm-filter { padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:12px;cursor:pointer;transition:.15s; }
+.rm-filter.active { background:var(--accent);border-color:var(--accent);color:#fff; }
+.rm-flow { display:flex;flex-direction:column;gap:0; }
+.rm-lane { background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:10px; }
+.rm-lane-label { font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:12px; }
+.rm-lane-cards { display:flex;flex-direction:column;gap:8px; }
+.rm-connector { display:flex;align-items:center;padding:6px 0 6px 22px;margin-bottom:2px; }
+.rm-connector-label { font-size:11.5px;color:var(--muted);font-style:italic; }
+.rm-card { background:var(--surface2);border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:border-color .15s;overflow:hidden; }
+.rm-card:hover { border-color:rgba(124,111,255,.4); }
+.rm-card.s-active  { border-left:3px solid #3b82f6; }
+.rm-card.s-done    { border-left:3px solid var(--green);opacity:.72; }
+.rm-card.s-todo    { border-left:3px solid var(--border); }
+.rm-card-head { display:flex;align-items:flex-start;gap:10px;padding:12px 14px; }
+.rm-dot { font-size:16px;flex-shrink:0;margin-top:1px; }
+.rm-head-text { flex:1;min-width:0; }
+.rm-id { font-family:'SF Mono','Fira Code',monospace;font-size:10px;color:var(--accent);margin-bottom:2px; }
+.rm-title { font-size:13px;font-weight:600;line-height:1.3;color:var(--text); }
+.rm-head-right { display:flex;gap:5px;align-items:center;flex-shrink:0;flex-wrap:wrap; }
+.rm-chevron { font-size:10px;color:var(--muted);transition:transform .2s; }
+.rm-card.open .rm-chevron { transform:rotate(180deg); }
+.rm-card-body { display:none;padding:0 14px 14px;font-size:12.5px;line-height:1.5;color:var(--text);border-top:1px solid var(--border);margin-top:0;padding-top:12px; }
+.rm-card.open .rm-card-body { display:block; }
+.rm-card-body p { margin:0 0 8px; }
+.rm-subtasks { margin-top:10px; }
+.rm-sub { background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:6px; }
+.rm-sub.ss-active { border-left:2px solid #3b82f6; }
+.rm-sub.ss-done   { border-left:2px solid var(--green);opacity:.7; }
+.rm-sub-head { display:flex;gap:8px;align-items:center;margin-bottom:4px; }
+.rm-sub-id { font-family:'SF Mono','Fira Code',monospace;font-size:10px;color:var(--accent);flex-shrink:0; }
+.rm-sub-title { font-size:12px;font-weight:600;flex:1; }
+.rm-sub-status { font-size:13px; }
+.rm-sub-desc { font-size:11.5px;color:var(--muted);line-height:1.4; }
+.rm-tag { font-size:11px;padding:2px 7px;border-radius:5px;white-space:nowrap; }
+.rm-tag-high   { background:rgba(239,68,68,.1);color:#f87171; }
+.rm-tag-med    { background:rgba(245,158,11,.1);color:var(--yellow); }
+.rm-tag-codex  { background:rgba(124,111,255,.1);color:var(--accent); }
+.rm-tag-manual { background:rgba(120,120,160,.1);color:var(--muted); }
+.rm-tag-warn   { background:rgba(239,68,68,.08);color:#f87171;border:1px solid rgba(239,68,68,.2);font-size:11.5px;padding:3px 8px;border-radius:6px; }
 
 @media (max-width: 800px) {
   .sidebar { display: none; }
@@ -391,13 +399,9 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
       <div class="page-sub" id="roadmapSub">Актуальні задачі проекту</div>
     </div>
 
-    <!-- Фільтр по статусу -->
-    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px" id="roadmapFilters">
-      <button class="rm-filter active" data-f="all"    onclick="rmFilter(this,'all')">Всі</button>
-      <button class="rm-filter"        data-f="active" onclick="rmFilter(this,'active')">🔵 В роботі</button>
-      <button class="rm-filter"        data-f="todo"   onclick="rmFilter(this,'todo')">⚪ Заплановано</button>
-      <button class="rm-filter"        data-f="done"   onclick="rmFilter(this,'done')">🟢 Виконано</button>
-      <button class="rm-filter"        data-f="blocked"onclick="rmFilter(this,'blocked')">🔴 Заблоковано</button>
+    <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap">
+      <button class="rm-filter active" onclick="rmSetView(this,'flow')">🔗 Порядок виконання</button>
+      <button class="rm-filter" onclick="rmSetView(this,'list')">📋 Список</button>
     </div>
 
     <div id="roadmapBoard"></div>
@@ -1409,278 +1413,212 @@ async function loadClients(period = 'all_time') {
 }
 
 // ════════════ ROADMAP ════════════
-const ROADMAP = [
-  // ── В РОБОТІ ──
-  {
-    id: 'R-13.5 / ST-2b.5',
-    title: 'Checkout: coupon/First15 + agree + GA4',
-    status: 'active',
-    category: 'Checkout',
-    tool: 'Codex',
-    priority: 'High',
-    date: '2026-06-14',
-    what: 'Портуємо зі SimpleCheckout на стоковий OC4 чекаут: промокод, купон First15 (ліміт повторного використання), єдиний agree/oferta-чекбокс, GA4 без дублів.',
-    why: 'Без цих портів неможливо відкрити стоковий чекаут для клієнтів (cutover). Це останній гейт перед ST-2c.',
-    note: 'Handoff готовий. HIGH-RISK → обов\'язковий checkout smoke-test після патчу.'
-  },
-  {
-    id: 'ST-2c',
-    title: 'Реальна вартість доставки + cutover url.php',
-    status: 'active',
-    category: 'Checkout',
-    tool: 'Claude + Codex',
-    priority: 'High',
-    date: '—',
-    what: 'Переключаємо клієнтів зі SimpleCheckout на стоковий OC4 чекаут (видалення 5 рядків з url.php). Плюс реальна вартість доставки в totals (замість 0).',
-    why: 'Це фінальний cutover. Після нього — стабільний чекаут, SimpleCheckout можна відключити.',
-    note: 'Блокер: ST-2b.5 (coupon/First15/agree/GA4) має бути DONE перед cutover.'
-  },
-  {
-    id: 'ST-3.5',
-    title: 'TTN-кнопка в адмінці + авто-ТТН',
-    status: 'active',
-    category: 'Checkout / NP',
-    tool: 'Codex',
-    priority: 'High',
-    date: '—',
-    what: 'Фікс кнопки ТТН в адмінці OC 4.1.0.3 (неправильний якір), тест форми заявки НП, логіка зворотної доставки грошей.',
-    why: 'Без кнопки ТТН в адмінці не можна зручно відправляти замовлення через НП з панелі.',
-    note: 'Паралельно з 2b.5, не блокує cutover.'
-  },
-  // ── ЗАПЛАНОВАНО ──
-  {
-    id: 'ST-6',
-    title: 'Вимкнення SimpleCheckout після стабілізації',
-    status: 'todo',
-    category: 'Checkout',
-    tool: 'Manual',
-    priority: 'High',
-    date: '—',
-    what: 'Після стабільного періоду на стоковому чекауті — відключити SimpleCheckout (status=off в адмінці), потім видалити файли.',
-    why: 'Прибирає legacy-костилі, спрощує кодову базу.',
-    note: 'Блокується: ST-2c (cutover) + стабільний QA-період.'
-  },
-  {
-    id: 'CHECKOUT-001',
-    title: 'Гостьовий checkout: opt-in реєстрація',
-    status: 'todo',
-    category: 'Checkout / Account',
-    tool: 'Codex',
-    priority: 'High',
-    date: '—',
-    what: 'Опціональна реєстрація акаунта для гостя після успішного замовлення (необов\'язковий чекбокс).',
-    why: 'Збільшує базу зареєстрованих клієнтів без примусу; повторні покупки — простіше.',
-    note: 'Потребує технічного аудиту live-файлів перед хендоффом. HIGH-RISK (checkout/DB).'
-  },
-  {
-    id: 'RD-11',
-    title: 'Сторінка кошика: редизайн',
-    status: 'todo',
-    category: 'Redesign',
-    tool: 'Codex',
-    priority: 'High',
-    date: '—',
-    what: 'Редизайн сторінки cart.twig відповідно до дизайн-системи.',
-    why: 'Єдина ключова сторінка без DS-паритету після RD-10. Блокується R-13.5 (NP-модуль).',
-    note: 'Блокер: завершення checkout-черги (ST-2b.5 + 2c).'
-  },
-  {
-    id: 'RD-13 / R-13',
-    title: 'Mini-cart drawer: редизайн',
-    status: 'todo',
-    category: 'Redesign',
-    tool: 'Codex',
-    priority: 'Medium',
-    date: '—',
-    what: 'Редизайн mini-cart (drawer). Після RD-11.',
-    why: 'Завершує серію редизайну cart-флоу.',
-    note: ''
-  },
-  {
-    id: 'TECH-029',
-    title: 'Sitemap: аудит і фікс',
-    status: 'todo',
-    category: 'Technical SEO',
-    tool: 'Manual + Codex',
-    priority: 'High',
-    date: '2026-06-07',
-    what: 'Screaming Frog не знайшов жодного URL у sitemap. Перевірити GSC, згенерувати/виправити sitemap, додати Sitemap-директиву в robots.txt.',
-    why: 'Без sitemap Google не бачить товари → втрачаємо індексацію.',
-    note: 'Заблоковано іншими пріоритетами. Потрібна перевірка в GSC → Sitemaps після Deploy.'
-  },
-  {
-    id: 'TECH-012',
-    title: 'Canonical і дублікати URL',
-    status: 'todo',
-    category: 'Technical SEO',
-    tool: 'Codex',
-    priority: 'High',
-    date: '—',
-    what: 'Фікс manufacturer URLs у sitemap (?route=…), меню лінкує на index.php?route= замість SEO-URL.',
-    why: 'Дублі URL = розмиття ваги сторінки в Google, ризик потрапляння технічних URL в індекс.',
-    note: 'Stage: після стабільного sitemap (TECH-029).'
-  },
-  {
-    id: 'UX-009',
-    title: 'Search UX/UI: візуальні + функціональні покращення',
-    status: 'todo',
-    category: 'UX',
-    tool: 'Codex',
-    priority: 'Low',
-    date: '—',
-    what: 'Покращення пошукового блоку: зовнішній вигляд, підказки, mobile UX.',
-    why: 'Пошук — один із ключових шляхів до товару; поточний вигляд не відповідає DS.',
-    note: ''
-  },
-  {
-    id: 'AUTO-002',
-    title: 'Master automation dashboard',
-    status: 'todo',
-    category: 'CRM / Automation',
-    tool: 'Claude + Codex',
-    priority: 'Medium',
-    date: '—',
-    what: 'Центральний дашборд автоматизації: зведення статусів усіх автоматичних процесів.',
-    why: 'Дозволяє швидко бачити де щось не спрацювало без заходу в Sheets.',
-    note: ''
-  },
-  {
-    id: 'AUTO-TG-001',
-    title: 'Telegram-бот: CRM active orders',
-    status: 'todo',
-    category: 'CRM / Automation',
-    tool: 'Codex',
-    priority: 'Medium',
-    date: '—',
-    what: 'Telegram-бот для перегляду активних замовлень і сповіщень без відкриття дашборду.',
-    why: 'Швидкий доступ до CRM з мобільного без браузера.',
-    note: ''
-  },
-  // ── ВИКОНАНО (недавні) ──
-  {
-    id: 'ST-2b.4',
-    title: 'Draft-order корінь: confirm-gate + payment preview',
-    status: 'done',
-    category: 'Checkout',
-    tool: 'Codex',
-    priority: 'High',
-    date: '2026-06-14',
-    what: 'Знайдено і прибрано legacy confirm.confirm із партіалів → 0 чернеток при взаємодії; payment preview до адреси; кнопка disabled до готовності.',
-    why: 'Усунуто основний корінь draft-замовлень у БД.',
-    note: 'Owner QA passed. Smoke test OK.'
-  },
-  {
-    id: 'ST-2b.1–2b.3',
-    title: 'Checkout UX серія: defer confirm, success, summary',
-    status: 'done',
-    category: 'Checkout',
-    tool: 'Codex',
-    priority: 'High',
-    date: '2026-06-14',
-    what: '2b.1: confirm тільки при кліку «Оформити». 2b.2: Hutko-reload + fiscal-тексти + spacing. 2b.3: summary-панель завжди видима.',
-    why: 'Стабільний гостьовий флоу e2e без артефактів.',
-    note: 'Owner QA passed на всіх 3 патчах.'
-  },
-  {
-    id: 'RD-10',
-    title: 'Product page parity + sticky ATC mobile',
-    status: 'done',
-    category: 'Redesign',
-    tool: 'Codex',
-    priority: 'High',
-    date: '2026-06-11',
-    what: 'DS 2-col layout, gallery, price-block, spec-table, Telegram+OLX review cards, sticky add-to-cart (mobile), breadcrumb parity.',
-    why: 'Сторінка товару — головна конверсійна сторінка.',
-    note: 'Owner QA passed. Всі полірування (D2, D3) закриті.'
-  },
-  {
-    id: 'AUTO-API-001',
-    title: 'CRM JSON API (Apps Script buffer)',
-    status: 'done',
-    category: 'CRM / Automation',
-    tool: 'Codex',
-    priority: 'High',
-    date: '2026-06-03',
-    what: 'Легкий read-only JSON API поверх Google Sheets: summary, orders, stock_alerts, sku_list.',
-    why: 'Дозволяє Claude/Codex читати CRM без завантаження цілого Sheets-файлу.',
-    note: 'Verified by owner. Endpoints: summary, orders, stock_alerts, sku_list.'
-  },
-  {
-    id: 'ST-1',
-    title: 'NP склади: sync-фікс + cron',
-    status: 'done',
-    category: 'Checkout / NP',
-    tool: 'Codex',
-    priority: 'High',
-    date: '2026-06-12',
-    what: 'Виправлено rate-limit обрив при синку НП (було 13k відділень → тепер 52 159). Cron-команда налаштована.',
-    why: 'Застарілі відділення → клієнт не може обрати склад; критичний баг.',
-    note: 'Live deployed. Cron треба додати в cPanel-планувальник.'
-  }
-];
-
-const STATUS_META = {
-  active:  { dot: '🔵', label: 'В роботі',    cls: 's-active' },
-  todo:    { dot: '⚪', label: 'Заплановано', cls: 's-todo' },
-  done:    { dot: '🟢', label: 'Виконано',    cls: 's-done' },
-  blocked: { dot: '🔴', label: 'Заблоковано', cls: 's-blocked' }
-};
-const PRIORITY_COLOR = { High: 'var(--red)', Medium: 'var(--yellow)', Low: 'var(--muted)' };
-
-let _rmFilter = 'all';
-function rmFilter(btn, f) {
-  _rmFilter = f;
+let _rmView = 'flow';
+function rmSetView(btn, v) {
+  _rmView = v;
   document.querySelectorAll('.rm-filter').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   renderRoadmap();
 }
+function rmToggle(card) { card.classList.toggle('open'); }
 
-function renderRoadmap() {
-  const data = _rmFilter === 'all' ? ROADMAP : ROADMAP.filter(t => t.status === _rmFilter);
-  const groups = {};
-  data.forEach(t => {
-    const g = STATUS_META[t.status]?.label || t.status;
-    (groups[g] = groups[g] || []).push(t);
-  });
-  const order = ['В роботі', 'Заплановано', 'Заблоковано', 'Виконано'];
-  let html = '';
-  order.forEach(g => {
-    if (!groups[g]) return;
-    html += `<div class="rm-group-title">${g} (${groups[g].length})</div><div class="rm-cards">`;
-    groups[g].forEach(t => {
-      const m = STATUS_META[t.status] || {};
-      const toolCls = t.tool?.toLowerCase().includes('codex') ? 'rm-tag-codex' : 'rm-tag-manual';
-      html += `<div class="rm-card ${m.cls||''}">
-        <div class="rm-dot">${m.dot||'⬜'}</div>
-        <div class="rm-body">
-          <div class="rm-header">
-            <span class="rm-id">${t.id}</span>
-            <span class="rm-title">${t.title}</span>
-            <span style="font-size:11px;color:${PRIORITY_COLOR[t.priority]||'var(--muted)'};font-weight:600;margin-left:auto;flex-shrink:0">${t.priority||''}</span>
-          </div>
-          <div class="rm-what"><b>Що:</b> ${t.what}</div>
-          <div class="rm-why"><b>Навіщо:</b> ${t.why}</div>
-          <div class="rm-meta">
-            <span class="${toolCls}">${t.tool}</span>
-            <span class="rm-tag-manual" style="background:rgba(120,120,160,.08)">${t.category}</span>
-            ${t.date && t.date !== '—' ? `<span class="rm-date">📅 ${t.date}</span>` : ''}
-            ${t.note ? `<span class="rm-note">⚠ ${t.note}</span>` : ''}
-          </div>
-        </div>
-      </div>`;
-    });
-    html += '</div>';
-  });
-  if (!html) html = '<div class="rm-empty">Задач у цьому фільтрі немає</div>';
-  document.getElementById('roadmapBoard').innerHTML = html;
+const ROADMAP_FLOW = [
+  {
+    lane: '🔥 Зараз в роботі',
+    connector: null,
+    tasks: [
+      {
+        id: 'ST-2b.5', title: 'Промокоди, знижка First15 і GA4', status: 'active', tool: 'Codex', priority: 'High',
+        simple: 'Переносимо зі старого чекауту в новий: промокоди, знижку -15% для нових клієнтів і відстеження покупок без дублів.',
+        why: 'Без цього не можна відкрити новий чекаут для всіх клієнтів. Це останній крок перед переключенням.',
+        warn: 'HIGH-RISK — стосується оплати. Після патчу обов\'язковий smoke test.',
+        subtasks: [
+          { id: 'A', title: 'Промокоди', status: 'todo', desc: 'Поле вводу купона + кнопка «Застосувати/Скасувати». Сума оновлюється без перезавантаження сторінки.' },
+          { id: 'B', title: 'First15 — знижка -15% для нових', status: 'todo', desc: 'Автоматична знижка при першому замовленні. Захист щоб не можна було використати двічі.' },
+          { id: 'C', title: 'Погодження з офертою', status: 'todo', desc: 'Один чекбокс «Погоджуюсь з умовами» — обов\'язковий перед кнопкою «Оформити».' },
+          { id: 'D', title: 'GA4 без дублів', status: 'todo', desc: 'Подія покупки в Google Analytics відправляється рівно один раз, навіть якщо сторінка перезавантажується.' }
+        ]
+      },
+      {
+        id: 'ST-3.5', title: 'Кнопка ТТН в адмінці', status: 'active', tool: 'Codex', priority: 'High',
+        simple: 'В адмінці кнопка «Створити ТТН» не знаходить потрібний елемент на сторінці — виправляємо.',
+        why: 'Без цього не можна відправити замовлення через НП прямо з панелі адміна.',
+        warn: null,
+        subtasks: [
+          { id: '1', title: 'Фікс якоря кнопки', status: 'todo', desc: 'В OpenCart 4.1.0.3 змінилась назва елемента на сторінці. Патч оновлює пошук на правильну назву.' },
+          { id: '2', title: 'Тест форми заявки НП', status: 'todo', desc: 'Перевірити що форма відкривається і дані (адреса, вага) заповнюються коректно.' }
+        ]
+      }
+    ]
+  },
+  {
+    lane: '⏭ Наступне',
+    connector: 'розблоковується після ST-2b.5',
+    tasks: [
+      {
+        id: 'ST-2c', title: 'Переключення всіх клієнтів на новий чекаут', status: 'todo', tool: 'Claude + Codex', priority: 'High',
+        simple: 'Видалення 5 рядків з одного файлу — і всі клієнти йдуть на новий чекаут замість старого. Плюс реальна вартість доставки замість нуля.',
+        why: 'Це фінальна точка всієї checkout-серії. Після цього старий чекаут стає резервним.',
+        warn: 'HIGH-RISK. Rollback = повернути ті самі 5 рядків назад.',
+        subtasks: [
+          { id: '1', title: 'Реальна вартість доставки', status: 'todo', desc: 'Зараз в замовленні доставка = 0 грн. Після патчу — реальна ціна НП. Hutko списує суму без доставки (так і треба).' },
+          { id: '2', title: 'Cutover url.php', status: 'todo', desc: 'Прибираємо 5 рядків що перенаправляли на старий чекаут. Всі клієнти йдуть на новий.' }
+        ]
+      }
+    ]
+  },
+  {
+    lane: '📋 Після переключення',
+    connector: 'розблоковується після ST-2c',
+    tasks: [
+      {
+        id: 'ST-6', title: 'Вимкнення старого чекауту', status: 'todo', tool: 'Manual', priority: 'High',
+        simple: 'Після стабільної роботи нового чекауту — відключаємо старий SimpleCheckout в адмінці і прибираємо файли.',
+        why: 'Спрощує код, прибирає технічний борг що накопичився.',
+        warn: null, subtasks: []
+      },
+      {
+        id: 'CHECKOUT-001', title: 'Реєстрація акаунту при замовленні', status: 'todo', tool: 'Codex', priority: 'High',
+        simple: 'Гість оформляє замовлення і бачить необов\'язкову галочку «Зберегти акаунт». Якщо ставить — автоматично створюється особистий кабінет.',
+        why: 'Більше зареєстрованих клієнтів → легше робити повторні покупки, можна надсилати пропозиції.',
+        warn: 'Потрібен технічний аудит перед хендоффом. HIGH-RISK (checkout + база даних).', subtasks: []
+      },
+      {
+        id: 'RD-11', title: 'Редизайн сторінки кошика', status: 'todo', tool: 'Codex', priority: 'High',
+        simple: 'Перемальовуємо cart.twig під дизайн-систему. Остання головна сторінка без редизайну після сторінки товару.',
+        why: 'Єдина ключова сторінка що ще виглядає по-старому.',
+        warn: null, subtasks: []
+      }
+    ]
+  },
+  {
+    lane: '🔍 SEO / Технічне',
+    connector: null,
+    tasks: [
+      {
+        id: 'TECH-029', title: 'Sitemap — Google не бачить товари', status: 'todo', tool: 'Manual + Codex', priority: 'High',
+        simple: 'Sitemap виявився порожнім — Google не отримує список сторінок. Треба перевірити GSC і виправити.',
+        why: 'Без sitemap Google дізнається про нові товари тільки коли сам зайде — це може зайняти тижні.',
+        warn: null,
+        subtasks: [
+          { id: '1', title: 'Перевірити Google Search Console', status: 'todo', desc: 'Зайти в GSC → Sitemaps і подивитись: є sitemap, який його статус, скільки URL.' },
+          { id: '2', title: 'Виправити або згенерувати sitemap', status: 'todo', desc: 'Якщо sitemap є але порожній — знайти причину. Якщо нема — згенерувати через OpenCart або вручну.' },
+          { id: '3', title: 'Перевірити robots.txt', status: 'todo', desc: 'Переконатись що є рядок: Sitemap: https://boostershop.website/sitemap.xml' }
+        ]
+      },
+      {
+        id: 'TECH-012', title: 'Дублі URL в Google', status: 'todo', tool: 'Codex', priority: 'High',
+        simple: 'Меню веде на ?route=product/special, а підвал на /special — одна сторінка, але Google вважає їх двома різними.',
+        why: 'Дублі розмивають вагу сторінки в пошуку → гірше ранжування товарів.',
+        warn: 'Робити після TECH-029 (sitemap).', subtasks: []
+      }
+    ]
+  },
+  {
+    lane: '✅ Нещодавно виконано',
+    connector: null,
+    tasks: [
+      {
+        id: 'ST-2b.1–2b.4', title: 'Чекаут — серія UX-фіксів', status: 'done', tool: 'Codex', priority: 'High',
+        simple: 'Чотири патчи: замовлення створюється тільки при кліку «Оформити» (не раніше), success-сторінка коректна для всіх методів оплати, підсумок кошика завжди видно.',
+        why: 'Усунені зайві чернетки в БД і артефакти на success-сторінці. Owner QA пройдено.',
+        warn: null, subtasks: []
+      },
+      {
+        id: 'RD-10', title: 'Сторінка товару — редизайн', status: 'done', tool: 'Codex', priority: 'High',
+        simple: 'Нова сторінка товару: галерея, блок ціни, характеристики, відгуки через Telegram/OLX, липка кнопка «В кошик» на мобільному.',
+        why: 'Головна конверсійна сторінка сайту. Owner QA пройдено.',
+        warn: null, subtasks: []
+      },
+      {
+        id: 'ST-1', title: 'НП відділення: синк виправлено', status: 'done', tool: 'Codex', priority: 'High',
+        simple: 'Список відділень НП обривався через ліміт запитів — було 13 тис замість 52 тис. Виправлено, автооновлення налаштовано.',
+        why: 'Клієнт не міг знайти своє відділення і не міг оформити замовлення.',
+        warn: null, subtasks: []
+      }
+    ]
+  }
+];
 
-  const counts = {};
-  ROADMAP.forEach(t => counts[t.status] = (counts[t.status]||0) + 1);
-  document.getElementById('roadmapSub').textContent =
-    `🔵 В роботі: ${counts.active||0}  ·  ⚪ Заплановано: ${counts.todo||0}  ·  🟢 Виконано: ${counts.done||0}`;
+const SM = { active:'🔵', todo:'⚪', done:'🟢', blocked:'🔴' };
+const SC = { active:'s-active', todo:'s-todo', done:'s-done', blocked:'s-blocked' };
+const SSC = { active:'ss-active', todo:'ss-todo', done:'ss-done' };
+
+function rmCard(t) {
+  const subs = t.subtasks && t.subtasks.length ? `
+    <div class="rm-subtasks">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:6px">Підзадачі (${t.subtasks.length})</div>
+      ${t.subtasks.map(s=>`
+        <div class="rm-sub ${SSC[s.status]||''}">
+          <div class="rm-sub-head">
+            <span class="rm-sub-id">${t.id}-${s.id}</span>
+            <span class="rm-sub-title">${s.title}</span>
+            <span class="rm-sub-status">${SM[s.status]||''}</span>
+          </div>
+          <div class="rm-sub-desc">${s.desc}</div>
+        </div>`).join('')}
+    </div>` : '';
+  const hasbody = t.simple||t.why||t.warn||subs;
+  return `<div class="rm-card ${SC[t.status]||''}" onclick="rmToggle(this)">
+    <div class="rm-card-head">
+      <span class="rm-dot">${SM[t.status]||'⬜'}</span>
+      <div class="rm-head-text">
+        <div class="rm-id">${t.id}</div>
+        <div class="rm-title">${t.title}</div>
+      </div>
+      <div class="rm-head-right">
+        <span class="rm-tag ${t.priority==='High'?'rm-tag-high':t.priority==='Medium'?'rm-tag-med':'rm-tag-manual'}">${t.priority}</span>
+        <span class="rm-tag ${t.tool.toLowerCase().includes('codex')?'rm-tag-codex':'rm-tag-manual'}">${t.tool}</span>
+        ${hasbody?`<span class="rm-chevron">▼</span>`:''}
+      </div>
+    </div>
+    ${hasbody?`<div class="rm-card-body">
+      ${t.simple?`<p>${t.simple}</p>`:''}
+      ${t.why?`<p><b>Навіщо:</b> ${t.why}</p>`:''}
+      ${t.warn?`<p><span class="rm-tag rm-tag-warn">⚠ ${t.warn}</span></p>`:''}
+      ${subs}
+    </div>`:''}
+  </div>`;
 }
 
+function renderRoadmapFlow() {
+  let html = '<div class="rm-flow">';
+  ROADMAP_FLOW.forEach(lane => {
+    if (lane.connector) {
+      html += `<div class="rm-connector"><div class="rm-connector-label">➜ ${lane.connector}</div></div>`;
+    }
+    html += `<div class="rm-lane">
+      <div class="rm-lane-label">${lane.lane}</div>
+      <div class="rm-lane-cards">${lane.tasks.map(rmCard).join('')}</div>
+    </div>`;
+  });
+  html += '</div>';
+  document.getElementById('roadmapBoard').innerHTML = html;
+}
+
+function renderRoadmapList() {
+  const all = ROADMAP_FLOW.flatMap(l=>l.tasks);
+  const groups = {};
+  all.forEach(t => { (groups[t.status]=groups[t.status]||[]).push(t); });
+  const labels = { active:'🔵 В роботі', todo:'⚪ Заплановано', done:'🟢 Виконано' };
+  let html = '';
+  ['active','todo','done'].forEach(s => {
+    if (!groups[s]?.length) return;
+    html += `<div style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin:20px 0 8px">${labels[s]} (${groups[s].length})</div>`;
+    html += `<div style="display:flex;flex-direction:column;gap:8px">${groups[s].map(rmCard).join('')}</div>`;
+  });
+  document.getElementById('roadmapBoard').innerHTML = html;
+}
+
+function renderRoadmap() {
+  const all = ROADMAP_FLOW.flatMap(l=>l.tasks);
+  const cnt = s => all.filter(t=>t.status===s).length;
+  document.getElementById('roadmapSub').textContent =
+    `🔵 В роботі: ${cnt('active')}  ·  ⚪ Заплановано: ${cnt('todo')}  ·  🟢 Виконано: ${cnt('done')}`;
+  if (_rmView==='flow') renderRoadmapFlow(); else renderRoadmapList();
+}
 function loadRoadmap() { renderRoadmap(); }
+
 
 // ════════════ LOADERS MAP ════════════
 const loaders = { overview: loadOverview, stock: loadStock, consumables: loadConsumables, orders: loadOrders, skus: loadSkus, clients: loadClients, roadmap: loadRoadmap };
