@@ -225,12 +225,21 @@ tr:hover td { background: var(--surface2); }
       <div class="card"><div class="loading"><div class="spinner"></div><br>Завантаження...</div></div>
     </div>
 
-    <div class="section" id="channelSection" style="display:none">
-      <div class="section-header">
-        <span class="section-title">Продажі по каналах</span>
-        <span id="channelPeriodLabel" style="font-size:11px;color:var(--muted)">поточний місяць</span>
+    <div class="grid2">
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title">Активні замовлення</span>
+          <span class="badge b-yellow" id="pendingBadge">—</span>
+        </div>
+        <div id="pendingPreview"><div class="loading"><div class="spinner"></div></div></div>
       </div>
-      <div id="channelBars"></div>
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title">Потребують уваги</span>
+          <span class="badge b-red" id="alertsBadge">—</span>
+        </div>
+        <div id="alertsPreview"><div class="loading"><div class="spinner"></div></div></div>
+      </div>
     </div>
 
     <div class="trend-grid" id="trendGrid" style="display:none">
@@ -250,28 +259,19 @@ tr:hover td { background: var(--surface2); }
       </div>
     </div>
 
+    <div class="section" id="channelSection" style="display:none">
+      <div class="section-header">
+        <span class="section-title">Продажі по каналах</span>
+        <span id="channelPeriodLabel" style="font-size:11px;color:var(--muted)">поточний місяць</span>
+      </div>
+      <div id="channelBars"></div>
+    </div>
+
     <div class="section" id="topSkusSection" style="display:none">
       <div class="section-header">
         <span class="section-title">Топ-5 SKU — прибуток за 30 днів</span>
       </div>
       <div id="topSkusList"></div>
-    </div>
-
-    <div class="grid2">
-      <div class="section">
-        <div class="section-header">
-          <span class="section-title">Активні замовлення</span>
-          <span class="badge b-yellow" id="pendingBadge">—</span>
-        </div>
-        <div id="pendingPreview"><div class="loading"><div class="spinner"></div></div></div>
-      </div>
-      <div class="section">
-        <div class="section-header">
-          <span class="section-title">Потребують уваги</span>
-          <span class="badge b-red" id="alertsBadge">—</span>
-        </div>
-        <div id="alertsPreview"><div class="loading"><div class="spinner"></div></div></div>
-      </div>
     </div>
   </div>
 
@@ -935,28 +935,68 @@ async function loadOverview() {
     }
   } catch(e) { document.getElementById('pendingPreview').innerHTML = `<div style="color:var(--muted)">—</div>`; }
 
-  // Stock alerts preview
+  // ── Потребують уваги ──
   try {
     const d = await p_stock;
     cache.stock = d;
-    const alerts = d.alerts || [];
-    const badge = document.getElementById('alertsBadge');
-    badge.textContent = d.count || 0;
-    badge.className = 'badge ' + ((d.count||0) > 0 ? 'b-red' : 'b-green');
+    // Filter out assembled-on-demand MBX SKUs (always available, never out of stock)
+    const alerts = (d.alerts || []).filter(a => !String(a.sku || '').endsWith('-MBX'));
 
-    const urgent = alerts.filter(a => a.urgency === 'Терміново' || a.urgency === 'Висока').slice(0,5);
-    if (!urgent.length) {
-      document.getElementById('alertsPreview').innerHTML = '<div style="color:var(--muted);padding:4px 0;font-size:13px">✅ Критичних немає</div>';
-    } else {
+    const sections = [];
+
+    // 1. Відправлено, не оплачено — financial risk
+    const unpaids = ((cache.orders && cache.orders.orders) || []).filter(r =>
+      r.order_status === 'Відправлено' && r.payment_status === 'Не оплачено'
+    );
+    if (unpaids.length) {
+      const total = unpaids.reduce((s, r) => s + (Number(r.amount) || 0), 0);
+      sections.push({
+        color: 'var(--red)',
+        icon: '💸',
+        title: `${unpaids.length} відправлено · не оплачено · ${fmt(total)}`,
+        items: unpaids.slice(0, 3).map(r =>
+          `<span class="chip" style="font-size:10px">${r.order_id}</span> <span style="color:var(--text)">${fmt(r.amount)}</span>`)
+      });
+    }
+
+    // 2. Терміново докупити
+    const critical = alerts.filter(a => a.urgency === 'Терміново');
+    if (critical.length) {
+      sections.push({
+        color: 'var(--red)',
+        icon: '📦',
+        title: `${critical.length} SKU — Терміново докупити`,
+        items: critical.slice(0, 3).map(a =>
+          `${skuName(a.name, a.sku)} <span style="color:var(--muted)">${a.sold_30d != null ? a.sold_30d + ' / 30д' : ''}</span>`)
+      });
+    }
+
+    // 3. Пильнувати (Висока)
+    const high = alerts.filter(a => a.urgency === 'Висока');
+    if (high.length) {
+      sections.push({
+        color: 'var(--yellow)',
+        icon: '⚠',
+        title: `${high.length} SKU — Пильнувати`,
+        items: high.slice(0, 2).map(a => skuName(a.name, a.sku))
+      });
+    }
+
+    const totalAttention = unpaids.length + critical.length + high.length;
+    const badge = document.getElementById('alertsBadge');
+    badge.textContent = totalAttention;
+    badge.className = 'badge ' + (totalAttention > 0 ? 'b-red' : 'b-green');
+
+    if (!sections.length) {
       document.getElementById('alertsPreview').innerHTML =
-        `<table><tr><th>SKU</th><th>Дія</th><th>30д</th></tr>
-        ${urgent.map(a =>
-          `<tr>
-            <td style="font-size:12px">${skuName(a.name, a.sku)}</td>
-            <td>${actionBadge(a.action)}</td>
-            <td class="${urgCls(a.urgency)}">${a.sold_30d||0}</td>
-          </tr>`
-        ).join('')}</table>`;
+        '<div style="color:var(--muted);padding:4px 0;font-size:13px">✅ Все під контролем</div>';
+    } else {
+      document.getElementById('alertsPreview').innerHTML = sections.map((s, i) =>
+        `<div style="margin-bottom:${i < sections.length - 1 ? '12px;padding-bottom:12px;border-bottom:1px solid var(--border)' : '0'}">
+          <div style="font-size:12px;font-weight:600;color:${s.color};margin-bottom:5px">${s.icon} ${s.title}</div>
+          ${s.items.map(it => `<div style="font-size:11.5px;color:var(--muted);padding:1px 0 1px 18px">${it}</div>`).join('')}
+        </div>`
+      ).join('');
     }
   } catch(e) { document.getElementById('alertsPreview').innerHTML = `<div style="color:var(--muted)">—</div>`; }
 }
@@ -978,7 +1018,12 @@ async function loadStock() {
     }
     const alertBySku = {};
     ((stockData && stockData.alerts) || []).forEach(r => { if (r.sku) alertBySku[r.sku] = r; });
-    const a = (skuData.skus || []).map(r => ({ ...r, ...(alertBySku[r.sku] || {}) }));
+    // Preserve sold_30d/sold_60d from sku_list — stock_alerts can have null there (stale Черга_Складу)
+    // which would overwrite the correct values and make 30д column show '—' instead of 0
+    const a = (skuData.skus || []).map(r => {
+      const alert = alertBySku[r.sku] || {};
+      return { ...r, ...alert, sold_30d: r.sold_30d, sold_60d: r.sold_60d };
+    });
     if (!a.length) {
       document.getElementById('stockTable').innerHTML = '<div style="color:var(--muted);padding:20px">Немає даних складу</div>';
       return;
