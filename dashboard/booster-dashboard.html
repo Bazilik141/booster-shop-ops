@@ -360,7 +360,7 @@ tr:hover td { background: var(--surface2); }
 <script>
 // ════════════ CONFIG ════════════
 const API = 'https://script.google.com/macros/s/AKfycbz2WIFlW7A-ta7HtewK-0wsklekB-HDIgCx3CF1JGfmPaRvs2UgI0qktcfhvKzPYDbX-A/exec';
-const TOKEN = 'bscrm_6dcae8d8b90f4c1ea5be1f0a5d2a1b7e';
+const TOKEN = '8863161962:AAF9thvu0hZ2xcA-XJnm467hQzl5BLEkx8E1';
 
 // ════════════ API ════════════
 async function call(action, extra = {}) {
@@ -418,6 +418,19 @@ const fmtP  = n => n != null ? Number(n).toFixed(1) + '%' : '—';
 const fmtMoney2 = n => n != null ? '₴' + Number(n).toLocaleString('uk-UA', {minimumFractionDigits:2, maximumFractionDigits:2}) : '—';
 const fmtQty = n => n != null ? Number(n).toLocaleString('uk-UA', {maximumFractionDigits:1}) : '—';
 const urgCls = u => 'urg-' + (u||'').toLowerCase();
+
+function orderProfitPct(order) {
+  const amount = Number(order && order.amount);
+  const profit = Number(order && order.profit);
+  if (!Number.isFinite(amount) || amount === 0 || !Number.isFinite(profit)) return null;
+  return (profit / amount) * 100;
+}
+
+function profitPctCell(order) {
+  const pct = orderProfitPct(order);
+  const color = pct == null ? 'var(--muted)' : pct < 0 ? 'var(--red)' : 'var(--green)';
+  return `<b style="color:${color};white-space:nowrap">${fmtP(pct)}</b>`;
+}
 
 function deltaTag(current, prev) {
   if (prev == null || !prev || current == null) return '';
@@ -703,9 +716,18 @@ function renderStockTable(resetFilter) {
 // ════════════ OVERVIEW ════════════
 async function loadOverview() {
   clearError();
+  // Kick off ALL independent fetches simultaneously (none blocked on prior result)
+  const p_summary   = call('summary');
+  const p_orders    = cache.orders    ? Promise.resolve(cache.orders)    : call('orders', {status:'active', limit:100});
+  const p_ordersAll = cache.ordersAll ? Promise.resolve(cache.ordersAll) : call('orders', {status:'all', limit:500, sort:'date_desc'});
+  const p_channel   = call('channel_stats');
+  const p_monthly   = cache.monthly   ? Promise.resolve(cache.monthly)   : call('monthly_summary', { months: 6 });
+  const p_sku       = call('sku_list', { sort: 'profit', limit: 5 });
+  const p_stock     = cache.stock     ? Promise.resolve(cache.stock)     : call('stock_alerts');
+
   // Summary cards
   try {
-    const d = await call('summary');
+    const d = await p_summary;
     cache.summary = d;
     const s7 = d.sales_7d || {};
     const s7Period = d.sales_7d_period || s7;
@@ -716,19 +738,23 @@ async function loadOverview() {
     const dq = d.data_quality || {};
     const po = d.pending_orders || {};
     let mtd = { current: d.sales_current_month || {}, previous: null };
-    let ordersData = cache.orders || { orders: [] };
-    let ordersForUnpaidOk = !!cache.orders;
-    if (!cache.orders) {
-      try {
-        ordersData = await call('orders', {status:'active', limit:100});
-        cache.orders = ordersData;
-        ordersForUnpaidOk = true;
-      } catch(e) {
-        console.warn('orders unpaid card:', e.message);
-      }
+    let ordersData = { orders: [] };
+    let ordersForUnpaidOk = false;
+    try {
+      ordersData = await p_orders;
+      cache.orders = ordersData;
+      ordersForUnpaidOk = true;
+    } catch(e) {
+      console.warn('orders unpaid card:', e.message);
     }
     try {
-      mtd = await monthToDateStats();
+      const allOrders = await p_ordersAll;
+      cache.ordersAll = allOrders;
+      const bounds = mtdPeriodBounds();
+      mtd = {
+        current: aggregateOrdersForRange(allOrders.orders || [], bounds.current),
+        previous: aggregateOrdersForRange(allOrders.orders || [], bounds.previous)
+      };
     } catch(e) {
       console.warn('mtd card:', e.message);
     }
@@ -768,7 +794,7 @@ async function loadOverview() {
 
   // Channel stats
   try {
-    const ch = await call('channel_stats');
+    const ch = await p_channel;
     const channels = ch.channels || [];
     if (channels.length) {
       const maxRev = Math.max(...channels.map(c => c.revenue || 0));
@@ -796,7 +822,7 @@ async function loadOverview() {
 
   // Monthly trend
   try {
-    const ms = cache.monthly || await call('monthly_summary', { months: 6 });
+    const ms = await p_monthly;
     cache.monthly = ms;
     const months = ms.months || [];
     if (months.length) {
@@ -855,7 +881,7 @@ async function loadOverview() {
 
   // Top-5 SKUs by profit
   try {
-    const ts = await call('sku_list', { sort: 'profit', limit: 5 });
+    const ts = await p_sku;
     const skus = (ts.skus || []).filter(s => s.profit_30d != null && Number(s.profit_30d) > 0);
     if (skus.length) {
       const maxProfit = Math.max(...skus.map(s => s.profit_30d || 0));
@@ -884,7 +910,7 @@ async function loadOverview() {
 
   // Pending orders preview
   try {
-    const d = cache.orders || await call('orders', {status:'active', limit:6});
+    const d = cache.orders || await p_orders;
     cache.orders = d;
     const o = d.orders || [];
     const badge = document.getElementById('pendingBadge');
@@ -895,12 +921,14 @@ async function loadOverview() {
       document.getElementById('pendingPreview').innerHTML = '<div style="color:var(--muted);padding:4px 0;font-size:13px">✅ Активних замовлень немає</div>';
     } else {
       document.getElementById('pendingPreview').innerHTML =
-        `<table><tr><th>Замовлення</th><th>Сума</th><th>Статус</th></tr>
+        `<table><tr><th>Замовлення</th><th>Сума</th><th>Прибуток</th><th>Чистий прибуток %</th><th>Статус</th></tr>
         ${o.slice(0,5).map(r =>
           `<tr>
             <td><span class="chip">${r.order_id}</span>
               <span style="font-size:11px;color:var(--muted);margin-left:6px">${r.post||''} ${ttn4(r.ttn)}</span></td>
-            <td><b>${fmt(r.amount)}</b></td>
+            <td><b style="white-space:nowrap">${fmt(r.amount)}</b></td>
+            <td><b style="color:var(--green);white-space:nowrap">${r.profit != null ? fmt(r.profit) : '—'}</b></td>
+            <td>${profitPctCell(r)}</td>
             <td>${payPill(r.payment_status, r.order_status)}</td>
           </tr>`
         ).join('')}</table>`;
@@ -909,7 +937,7 @@ async function loadOverview() {
 
   // Stock alerts preview
   try {
-    const d = cache.stock || await call('stock_alerts');
+    const d = await p_stock;
     cache.stock = d;
     const alerts = d.alerts || [];
     const badge = document.getElementById('alertsBadge');
@@ -1076,6 +1104,7 @@ function renderOrderRows(rows) {
         <td style="font-size:11px;color:var(--muted);max-width:160px">${(r.skus||[]).join(', ')}</td>
         <td><b>${fmt(r.amount)}</b></td>
         <td><b style="color:var(--green)">${r.profit != null ? fmt(r.profit) : '—'}</b></td>
+        <td>${profitPctCell(r)}</td>
         <td>${payPill(r.payment_status, r.order_status)}</td>
       </tr>`).join('');
 }
@@ -1090,16 +1119,16 @@ function renderOrdersTable(activeRows, completedRows) {
 
   let body = '';
   if (orderState.mode !== 'completed') {
-    if (orderState.mode === 'default') body += `<tr class="order-divider"><td colspan="9">Активні · ${active.length}</td></tr>`;
+    if (orderState.mode === 'default') body += `<tr class="order-divider"><td colspan="10">Активні · ${active.length}</td></tr>`;
     body += renderOrderRows(active);
   }
   if (orderState.mode === 'default') {
-    body += `<tr class="order-divider"><td colspan="9">Завершені за 60 днів · ${completed.length}</td></tr>`;
+    body += `<tr class="order-divider"><td colspan="10">Завершені за 60 днів · ${completed.length}</td></tr>`;
   }
   if (orderState.mode !== 'active') body += renderOrderRows(completed);
 
   document.getElementById('ordersTable').innerHTML = `<div class="tbl-wrap"><table>
-      <tr><th>Замовлення</th><th onclick="toggleOrdersDateSort()" style="cursor:pointer;user-select:none">Дата ${orderState.sort === 'date_asc' ? '↑' : '↓'}</th><th>Канал</th><th>ТТН</th><th>Пошта</th><th>SKU</th><th>Сума</th><th>Прибуток</th><th>Статус</th></tr>
+      <tr><th>Замовлення</th><th onclick="toggleOrdersDateSort()" style="cursor:pointer;user-select:none">Дата ${orderState.sort === 'date_asc' ? '↑' : '↓'}</th><th>Канал</th><th>ТТН</th><th>Пошта</th><th>SKU</th><th>Сума</th><th>Прибуток</th><th>Чистий прибуток %</th><th>Статус</th></tr>
       ${body}
     </table></div>`;
 }
@@ -1227,5 +1256,3 @@ loadOverview();
 </script>
 </body>
 </html>
-
-
