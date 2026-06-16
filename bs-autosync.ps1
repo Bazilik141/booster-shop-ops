@@ -12,6 +12,12 @@ Write-Host "bs-autosync: watching '$repo' - pull every 60s (Ctrl+C to stop)" -Fo
 
 while ($true) {
     $ts = Get-Date -Format 'HH:mm:ss'
+    $lockFile = Join-Path $repo '.git\index.lock'
+    if (Test-Path $lockFile) {
+        Write-Host "[$ts] lock exists, skipping pull" -ForegroundColor DarkYellow
+        Start-Sleep -Seconds 10
+        continue
+    }
     try {
         $branch = (git -C $repo rev-parse --abbrev-ref HEAD).Trim()
         $out = git -C $repo pull --ff-only 2>&1
@@ -31,5 +37,5 @@ while ($true) {
         $err = $_.ToString()
         Write-Host "[$ts] pull error: $err" -ForegroundColor Yellow
     }
-    Start-Sleep -Seconds 60
+    Start-Sleep -Seconds 120
 }

@@ -8,9 +8,9 @@ Purpose: Codex and Claude exchange work through THIS repo. Owner only approves
   patches from the local clone. NO server access, NO GitHub-network access
   (cannot push/pull/deploy; reads only the local working tree + dropped backups).
 - **Codex** — implements patches (`patches/`) + execution reports (`diagnostics/`);
-  pushes to GitHub; also drops a patch copy in `C:\Users\14bez\Downloads` for owner
-  upload convenience. **No server access** (confirmed 2026-06-13: no SSH/FTP) — does
-  NOT pull live source and does NOT deploy.
+  drops a patch copy in `C:\Users\14bez\Downloads` for owner upload convenience;
+  commits/pushes **only when owner explicitly asks**. **No server access** (confirmed
+  2026-06-13: no SSH/FTP) — does NOT pull live source and does NOT deploy.
 - **Owner** — approves in chat; runs `php <patch>.php` on the server (the only prod gate).
 
 The repo is the shared bus. Owner runs `bs-autosync.ps1` so the local clone
