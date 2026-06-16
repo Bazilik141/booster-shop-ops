@@ -160,6 +160,7 @@ tr:hover td { background: var(--surface2); }
 .order-toolbar button { padding: 7px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--muted); font-size: 12px; cursor: pointer; }
 .order-toolbar button.active { border-color: var(--accent); color: var(--text); background: rgba(124,111,255,.12); }
 .order-divider td { background: rgba(124,111,255,.10) !important; color: var(--muted); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+tr.client-active td { background: rgba(124,111,255,.08) !important; }
 
 /* ── Pages ── */
 .page { display: none; }
@@ -376,6 +377,7 @@ async function call(action, extra = {}) {
 const cache = {};
 const loaded = {};
 const orderState = { mode: 'default', sort: 'date_desc' };
+let _clientsData = [];
 
 function showError(msg) {
   const el = document.getElementById('errorBanner');
@@ -722,8 +724,9 @@ async function loadOverview() {
   const p_ordersAll = cache.ordersAll ? Promise.resolve(cache.ordersAll) : call('orders', {status:'all', limit:500, sort:'date_desc'});
   const p_channel   = call('channel_stats');
   const p_monthly   = cache.monthly   ? Promise.resolve(cache.monthly)   : call('monthly_summary', { months: 6 });
-  const p_sku       = call('sku_list', { sort: 'profit', limit: 5 });
+  const p_sku       = cache.skus ? Promise.resolve(cache.skus) : call('sku_list', { sort: 'profit' });
   const p_stock     = cache.stock     ? Promise.resolve(cache.stock)     : call('stock_alerts');
+  const skuMetrics  = {};  // populated by top-5 section; used by alerts section for accurate sold_30d
 
   // Summary cards
   try {
@@ -771,8 +774,6 @@ async function loadOverview() {
     const cards = [
       { label:'Місяць на сьогодні', value:(mtd.current.orders||0) + deltaTag(mtd.current.orders, mtd.previous?.orders), sub:`Виручка ${fmt(mtd.current.revenue)}${deltaTag(mtd.current.revenue, mtd.previous?.revenue)}<br>Прибуток ${fmt(mtd.current.profit)}${deltaTag(mtd.current.profit, mtd.previous?.profit)}` },
       { label:'Активні замовл.',  value:activeCount,      sub:activeSub, cls: activeCount > 0 ? 'c-yellow' : '' },
-      { label:'Склад ОК / всього',value:`${st.ok||0} / ${st.total_sku||0}`, sub:`Мало: ${st.low||0} · Немає: ${st.out||0}` },
-      { label:'Докупити',         value:st.action_buy||0, sub:`Пильнувати: ${st.action_watch||0}`, cls:(st.action_buy||0)>0 ? 'c-red' : '' },
       { label:'Потенційний прибуток складу', value:fmt(warehouseProfit), sub: warehouseProfit != null ? 'При продажу всього залишку' : 'Немає даних', cls: warehouseProfit > 0 ? 'c-accent' : '' },
     ];
 
@@ -879,10 +880,12 @@ async function loadOverview() {
     console.warn('monthly_summary:', e.message);
   }
 
-  // Top-5 SKUs by profit
+  // Top-5 SKUs by profit (also populates skuMetrics for sold_30d cross-reference in alerts)
   try {
     const ts = await p_sku;
-    const skus = (ts.skus || []).filter(s => s.profit_30d != null && Number(s.profit_30d) > 0);
+    cache.skus = ts;
+    (ts.skus || []).forEach(r => { skuMetrics[r.sku] = r; });
+    const skus = (ts.skus || []).filter(s => s.profit_30d != null && Number(s.profit_30d) > 0).slice(0, 5);
     if (skus.length) {
       const maxProfit = Math.max(...skus.map(s => s.profit_30d || 0));
       document.getElementById('topSkusList').innerHTML = skus.map((s, i) => {
@@ -939,23 +942,26 @@ async function loadOverview() {
   try {
     const d = await p_stock;
     cache.stock = d;
-    // Filter out assembled-on-demand MBX SKUs (always available, never out of stock)
-    const alerts = (d.alerts || []).filter(a => !String(a.sku || '').endsWith('-MBX'));
+    // Exclude: assembled-on-demand MBX (stock=0 by design) + Outlet Mix (clearance, won't reorder)
+    const alerts = (d.alerts || []).filter(a =>
+      !String(a.sku || '').endsWith('-MBX') &&
+      !String(a.name || '').includes('Outlet Mix')
+    );
 
     const sections = [];
 
-    // 1. Відправлено, не оплачено — financial risk
-    const unpaids = ((cache.orders && cache.orders.orders) || []).filter(r =>
-      r.order_status === 'Відправлено' && r.payment_status === 'Не оплачено'
+    // 1. Відправлено 5+ днів тому — follow up on delivery
+    const now5dMs = Date.now() - 5 * 86400000;
+    const shipped5d = ((cache.orders && cache.orders.orders) || []).filter(r =>
+      r.order_status === 'Відправлено' && orderDateMs(r) > 0 && orderDateMs(r) <= now5dMs
     );
-    if (unpaids.length) {
-      const total = unpaids.reduce((s, r) => s + (Number(r.amount) || 0), 0);
+    if (shipped5d.length) {
       sections.push({
-        color: 'var(--red)',
-        icon: '💸',
-        title: `${unpaids.length} відправлено · не оплачено · ${fmt(total)}`,
-        items: unpaids.slice(0, 3).map(r =>
-          `<span class="chip" style="font-size:10px">${r.order_id}</span> <span style="color:var(--text)">${fmt(r.amount)}</span>`)
+        color: 'var(--yellow)',
+        icon: '📬',
+        title: `${shipped5d.length} відправлено 5+ днів — нагадати отримати`,
+        items: shipped5d.slice(0, 3).map(r =>
+          `<span class="chip" style="font-size:10px">${r.order_id}</span> ${ttn4(r.ttn)} <span style="color:var(--muted)">${r.date || ''}</span>`)
       });
     }
 
@@ -966,8 +972,11 @@ async function loadOverview() {
         color: 'var(--red)',
         icon: '📦',
         title: `${critical.length} SKU — Терміново докупити`,
-        items: critical.slice(0, 3).map(a =>
-          `${skuName(a.name, a.sku)} <span style="color:var(--muted)">${a.sold_30d != null ? a.sold_30d + ' / 30д' : ''}</span>`)
+        items: critical.slice(0, 3).map(a => {
+          const m = skuMetrics[a.sku];
+          const s30 = m != null ? m.sold_30d : a.sold_30d;
+          return `${skuName(a.name, a.sku)}${s30 != null ? ` <span style="color:var(--muted)">${s30} / 30д</span>` : ''}`;
+        })
       });
     }
 
@@ -982,7 +991,7 @@ async function loadOverview() {
       });
     }
 
-    const totalAttention = unpaids.length + critical.length + high.length;
+    const totalAttention = shipped5d.length + critical.length + high.length;
     const badge = document.getElementById('alertsBadge');
     badge.textContent = totalAttention;
     badge.className = 'badge ' + (totalAttention > 0 ? 'b-red' : 'b-green');
@@ -1228,7 +1237,7 @@ async function loadSkus() {
         <td><b>${r.stock??'—'}</b></td>
         <td>${r.expected??'—'}</td>
         <td>${stockPill(r.stock_status)}</td>
-        <td>${(r.issues||[]).map(i=>`<span class="issue-tag">${i}</span>`).join('')||'—'}</td>
+        <td>${(r.issues||[]).filter(i => i !== 'немає_ціни_opencart').map(i=>`<span class="issue-tag">${i}</span>`).join('')||'—'}</td>
       </tr>`).join('')}
     </table></div>`;
     const skf = document.getElementById('skuFilter');
@@ -1248,6 +1257,50 @@ async function loadSkus() {
 }
 
 // ════════════ CLIENTS ════════════
+function toggleClientDetail(row) {
+  const idx = parseInt(row.dataset.ci);
+  const client = _clientsData[idx];
+  const period = cache.clientsPeriod || 'all_time';
+  const existingDetail = row.nextElementSibling;
+  // Close any open detail rows
+  document.querySelectorAll('.client-detail-row').forEach(r => r.remove());
+  document.querySelectorAll('#clientsTable tbody tr[data-ci]').forEach(r => r.classList.remove('client-active'));
+  if (existingDetail && existingDetail.classList.contains('client-detail-row')) {
+    // Was open → toggled closed (already removed above)
+    return;
+  }
+  row.classList.add('client-active');
+  const avgCheck   = client.ltv > 0 && client.orders > 0 ? fmt(client.ltv / client.orders) : '—';
+  const avgProfit  = client.profit != null && client.orders > 0 ? fmt(client.profit / client.orders) : '—';
+  const marginPct  = client.ltv > 0 && client.profit != null ? fmtP((client.profit / client.ltv) * 100) : '—';
+  let freqHtml = '';
+  if (period === '60d' && client.orders > 0) {
+    const perMonth = (client.orders / 2).toFixed(1);
+    freqHtml = `<div>
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Частота</div>
+      <div style="font-weight:700;margin-top:4px">${perMonth} / міс</div>
+    </div>`;
+  }
+  const tr = document.createElement('tr');
+  tr.className = 'client-detail-row';
+  tr.innerHTML = `<td colspan="9" style="background:rgba(124,111,255,.07);padding:14px 24px;border-top:none">
+    <div style="display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start">
+      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Середній чек</div><div style="font-weight:700;margin-top:4px">${avgCheck}</div></div>
+      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Прибуток / замовл.</div><div style="font-weight:700;margin-top:4px;color:var(--green)">${avgProfit}</div></div>
+      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Маржа</div><div style="font-weight:700;margin-top:4px">${marginPct}</div></div>
+      ${freqHtml}
+      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Товарів разом</div><div style="font-weight:700;margin-top:4px">${client.units ?? '—'}</div></div>
+    </div>
+  </td>`;
+  row.after(tr);
+}
+
+function clientMarginColor(ltv, profit) {
+  if (!ltv || profit == null) return 'var(--muted)';
+  const m = profit / ltv;
+  return m >= 0.25 ? 'var(--green)' : m >= 0.15 ? 'var(--yellow)' : 'var(--red)';
+}
+
 function setClientsPeriodButtons(period) {
   const all = document.getElementById('clientsPeriodAll');
   const d60 = document.getElementById('clientsPeriod60');
@@ -1273,9 +1326,10 @@ async function loadClients(period = 'all_time') {
       document.getElementById('clientsTable').innerHTML = '<div style="color:var(--muted);padding:20px">Немає даних</div>';
       return;
     }
+    _clientsData = clients;
     document.getElementById('clientsTable').innerHTML = `<div class="tbl-wrap"><table>
-      <tr><th>#</th><th>Клієнт</th><th>Прізвище імʼя</th><th>Канал</th><th>Замовлень</th><th>Товарів</th><th>Загальна сума</th><th>Прибуток</th></tr>
-      ${clients.map((c, i) => `<tr>
+      <tr><th>#</th><th>Клієнт</th><th>Прізвище імʼя</th><th>Канал</th><th>Замовлень</th><th>Товарів</th><th>Загальна сума</th><th>Прибуток</th><th>Маржа %</th></tr>
+      ${clients.map((c, i) => `<tr data-ci="${i}" onclick="toggleClientDetail(this)" style="cursor:pointer">
         <td style="color:var(--muted)">${i + 1}</td>
         <td class="mono" style="font-size:12px">${c.display || '—'}</td>
         <td style="font-size:12px">${c.name || '—'}</td>
@@ -1284,6 +1338,7 @@ async function loadClients(period = 'all_time') {
         <td>${c.units || '—'}</td>
         <td><b>${fmt(c.ltv)}</b></td>
         <td><b style="color:var(--green)">${c.profit != null ? fmt(c.profit) : '—'}</b></td>
+        <td><b style="color:${clientMarginColor(c.ltv, c.profit)}">${c.ltv > 0 && c.profit != null ? fmtP((c.profit / c.ltv) * 100) : '—'}</b></td>
       </tr>`).join('')}
     </table></div>`;
   } catch(e) {
