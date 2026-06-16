@@ -171,6 +171,45 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
 .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; margin-bottom: 10px; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+/* ── Roadmap ── */
+.rm-filter {
+  padding: 6px 13px; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 8px; color: var(--muted); font-size: 12px; cursor: pointer;
+}
+.rm-filter.active { border-color: var(--accent); color: var(--text); background: rgba(124,111,255,.12); }
+.rm-group-title {
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px;
+  color: var(--muted); margin: 22px 0 10px; padding-left: 2px;
+}
+.rm-group-title:first-child { margin-top: 0; }
+.rm-cards { display: flex; flex-direction: column; gap: 10px; }
+.rm-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 18px; display: flex; gap: 16px; align-items: flex-start;
+  transition: border-color .15s;
+}
+.rm-card:hover { border-color: rgba(124,111,255,.4); }
+.rm-card.s-active  { border-left: 3px solid #3b82f6; }
+.rm-card.s-done    { border-left: 3px solid var(--green); opacity: .72; }
+.rm-card.s-todo    { border-left: 3px solid var(--border); }
+.rm-card.s-blocked { border-left: 3px solid var(--red); }
+.rm-dot { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.rm-body { flex: 1; min-width: 0; }
+.rm-header { display: flex; align-items: flex-start; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+.rm-id { font-family: 'SF Mono','Fira Code',monospace; font-size: 11px; color: var(--accent); flex-shrink: 0; }
+.rm-title { font-size: 14px; font-weight: 600; line-height: 1.3; }
+.rm-what { font-size: 12.5px; color: var(--text); margin-bottom: 5px; line-height: 1.45; }
+.rm-why  { font-size: 12px; color: var(--muted); margin-bottom: 8px; line-height: 1.4; }
+.rm-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.rm-date { font-size: 11px; color: var(--muted); }
+.rm-note {
+  font-size: 11px; padding: 2px 8px; border-radius: 5px;
+  background: rgba(245,158,11,.1); color: var(--yellow); border: 1px solid rgba(245,158,11,.2);
+}
+.rm-tag-codex { font-size: 11px; padding: 2px 8px; border-radius: 5px; background: rgba(124,111,255,.1); color: var(--accent); }
+.rm-tag-manual { font-size: 11px; padding: 2px 8px; border-radius: 5px; background: rgba(120,120,160,.1); color: var(--muted); }
+.rm-empty { color: var(--muted); font-size: 13px; text-align: center; padding: 40px; }
+
 @media (max-width: 800px) {
   .sidebar { display: none; }
   .main { padding: 16px; }
@@ -202,6 +241,9 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
     </div>
     <div class="nav-item" onclick="showPage('clients')">
       <span class="nav-icon">👥</span> Клієнти
+    </div>
+    <div class="nav-item" onclick="showPage('roadmap')">
+      <span class="nav-icon">🗺️</span> Роадмап
     </div>
   </div>
   <div class="sidebar-footer">
@@ -342,6 +384,25 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
   </div>
 
   <!-- ─── CLIENTS ─── -->
+  <!-- ─── ROADMAP ─── -->
+  <div id="page-roadmap" class="page">
+    <div class="header">
+      <div class="page-title">Роадмап</div>
+      <div class="page-sub" id="roadmapSub">Актуальні задачі проекту</div>
+    </div>
+
+    <!-- Фільтр по статусу -->
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px" id="roadmapFilters">
+      <button class="rm-filter active" data-f="all"    onclick="rmFilter(this,'all')">Всі</button>
+      <button class="rm-filter"        data-f="active" onclick="rmFilter(this,'active')">🔵 В роботі</button>
+      <button class="rm-filter"        data-f="todo"   onclick="rmFilter(this,'todo')">⚪ Заплановано</button>
+      <button class="rm-filter"        data-f="done"   onclick="rmFilter(this,'done')">🟢 Виконано</button>
+      <button class="rm-filter"        data-f="blocked"onclick="rmFilter(this,'blocked')">🔴 Заблоковано</button>
+    </div>
+
+    <div id="roadmapBoard"></div>
+  </div>
+
   <div id="page-clients" class="page">
     <div class="header">
       <div class="page-title">Клієнти</div>
@@ -390,7 +451,7 @@ function showError(msg) {
 function clearError() { document.getElementById('errorBanner').classList.remove('show'); }
 
 // ════════════ NAV ════════════
-const titles = { overview: 'Огляд', stock: 'Склад', consumables: 'Розхідники', orders: 'Замовлення', skus: 'Товари', clients: 'Клієнти' };
+const titles = { overview: 'Огляд', stock: 'Склад', consumables: 'Розхідники', orders: 'Замовлення', skus: 'Товари', clients: 'Клієнти', roadmap: 'Роадмап' };
 
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1347,8 +1408,282 @@ async function loadClients(period = 'all_time') {
   }
 }
 
+// ════════════ ROADMAP ════════════
+const ROADMAP = [
+  // ── В РОБОТІ ──
+  {
+    id: 'R-13.5 / ST-2b.5',
+    title: 'Checkout: coupon/First15 + agree + GA4',
+    status: 'active',
+    category: 'Checkout',
+    tool: 'Codex',
+    priority: 'High',
+    date: '2026-06-14',
+    what: 'Портуємо зі SimpleCheckout на стоковий OC4 чекаут: промокод, купон First15 (ліміт повторного використання), єдиний agree/oferta-чекбокс, GA4 без дублів.',
+    why: 'Без цих портів неможливо відкрити стоковий чекаут для клієнтів (cutover). Це останній гейт перед ST-2c.',
+    note: 'Handoff готовий. HIGH-RISK → обов\'язковий checkout smoke-test після патчу.'
+  },
+  {
+    id: 'ST-2c',
+    title: 'Реальна вартість доставки + cutover url.php',
+    status: 'active',
+    category: 'Checkout',
+    tool: 'Claude + Codex',
+    priority: 'High',
+    date: '—',
+    what: 'Переключаємо клієнтів зі SimpleCheckout на стоковий OC4 чекаут (видалення 5 рядків з url.php). Плюс реальна вартість доставки в totals (замість 0).',
+    why: 'Це фінальний cutover. Після нього — стабільний чекаут, SimpleCheckout можна відключити.',
+    note: 'Блокер: ST-2b.5 (coupon/First15/agree/GA4) має бути DONE перед cutover.'
+  },
+  {
+    id: 'ST-3.5',
+    title: 'TTN-кнопка в адмінці + авто-ТТН',
+    status: 'active',
+    category: 'Checkout / NP',
+    tool: 'Codex',
+    priority: 'High',
+    date: '—',
+    what: 'Фікс кнопки ТТН в адмінці OC 4.1.0.3 (неправильний якір), тест форми заявки НП, логіка зворотної доставки грошей.',
+    why: 'Без кнопки ТТН в адмінці не можна зручно відправляти замовлення через НП з панелі.',
+    note: 'Паралельно з 2b.5, не блокує cutover.'
+  },
+  // ── ЗАПЛАНОВАНО ──
+  {
+    id: 'ST-6',
+    title: 'Вимкнення SimpleCheckout після стабілізації',
+    status: 'todo',
+    category: 'Checkout',
+    tool: 'Manual',
+    priority: 'High',
+    date: '—',
+    what: 'Після стабільного періоду на стоковому чекауті — відключити SimpleCheckout (status=off в адмінці), потім видалити файли.',
+    why: 'Прибирає legacy-костилі, спрощує кодову базу.',
+    note: 'Блокується: ST-2c (cutover) + стабільний QA-період.'
+  },
+  {
+    id: 'CHECKOUT-001',
+    title: 'Гостьовий checkout: opt-in реєстрація',
+    status: 'todo',
+    category: 'Checkout / Account',
+    tool: 'Codex',
+    priority: 'High',
+    date: '—',
+    what: 'Опціональна реєстрація акаунта для гостя після успішного замовлення (необов\'язковий чекбокс).',
+    why: 'Збільшує базу зареєстрованих клієнтів без примусу; повторні покупки — простіше.',
+    note: 'Потребує технічного аудиту live-файлів перед хендоффом. HIGH-RISK (checkout/DB).'
+  },
+  {
+    id: 'RD-11',
+    title: 'Сторінка кошика: редизайн',
+    status: 'todo',
+    category: 'Redesign',
+    tool: 'Codex',
+    priority: 'High',
+    date: '—',
+    what: 'Редизайн сторінки cart.twig відповідно до дизайн-системи.',
+    why: 'Єдина ключова сторінка без DS-паритету після RD-10. Блокується R-13.5 (NP-модуль).',
+    note: 'Блокер: завершення checkout-черги (ST-2b.5 + 2c).'
+  },
+  {
+    id: 'RD-13 / R-13',
+    title: 'Mini-cart drawer: редизайн',
+    status: 'todo',
+    category: 'Redesign',
+    tool: 'Codex',
+    priority: 'Medium',
+    date: '—',
+    what: 'Редизайн mini-cart (drawer). Після RD-11.',
+    why: 'Завершує серію редизайну cart-флоу.',
+    note: ''
+  },
+  {
+    id: 'TECH-029',
+    title: 'Sitemap: аудит і фікс',
+    status: 'todo',
+    category: 'Technical SEO',
+    tool: 'Manual + Codex',
+    priority: 'High',
+    date: '2026-06-07',
+    what: 'Screaming Frog не знайшов жодного URL у sitemap. Перевірити GSC, згенерувати/виправити sitemap, додати Sitemap-директиву в robots.txt.',
+    why: 'Без sitemap Google не бачить товари → втрачаємо індексацію.',
+    note: 'Заблоковано іншими пріоритетами. Потрібна перевірка в GSC → Sitemaps після Deploy.'
+  },
+  {
+    id: 'TECH-012',
+    title: 'Canonical і дублікати URL',
+    status: 'todo',
+    category: 'Technical SEO',
+    tool: 'Codex',
+    priority: 'High',
+    date: '—',
+    what: 'Фікс manufacturer URLs у sitemap (?route=…), меню лінкує на index.php?route= замість SEO-URL.',
+    why: 'Дублі URL = розмиття ваги сторінки в Google, ризик потрапляння технічних URL в індекс.',
+    note: 'Stage: після стабільного sitemap (TECH-029).'
+  },
+  {
+    id: 'UX-009',
+    title: 'Search UX/UI: візуальні + функціональні покращення',
+    status: 'todo',
+    category: 'UX',
+    tool: 'Codex',
+    priority: 'Low',
+    date: '—',
+    what: 'Покращення пошукового блоку: зовнішній вигляд, підказки, mobile UX.',
+    why: 'Пошук — один із ключових шляхів до товару; поточний вигляд не відповідає DS.',
+    note: ''
+  },
+  {
+    id: 'AUTO-002',
+    title: 'Master automation dashboard',
+    status: 'todo',
+    category: 'CRM / Automation',
+    tool: 'Claude + Codex',
+    priority: 'Medium',
+    date: '—',
+    what: 'Центральний дашборд автоматизації: зведення статусів усіх автоматичних процесів.',
+    why: 'Дозволяє швидко бачити де щось не спрацювало без заходу в Sheets.',
+    note: ''
+  },
+  {
+    id: 'AUTO-TG-001',
+    title: 'Telegram-бот: CRM active orders',
+    status: 'todo',
+    category: 'CRM / Automation',
+    tool: 'Codex',
+    priority: 'Medium',
+    date: '—',
+    what: 'Telegram-бот для перегляду активних замовлень і сповіщень без відкриття дашборду.',
+    why: 'Швидкий доступ до CRM з мобільного без браузера.',
+    note: ''
+  },
+  // ── ВИКОНАНО (недавні) ──
+  {
+    id: 'ST-2b.4',
+    title: 'Draft-order корінь: confirm-gate + payment preview',
+    status: 'done',
+    category: 'Checkout',
+    tool: 'Codex',
+    priority: 'High',
+    date: '2026-06-14',
+    what: 'Знайдено і прибрано legacy confirm.confirm із партіалів → 0 чернеток при взаємодії; payment preview до адреси; кнопка disabled до готовності.',
+    why: 'Усунуто основний корінь draft-замовлень у БД.',
+    note: 'Owner QA passed. Smoke test OK.'
+  },
+  {
+    id: 'ST-2b.1–2b.3',
+    title: 'Checkout UX серія: defer confirm, success, summary',
+    status: 'done',
+    category: 'Checkout',
+    tool: 'Codex',
+    priority: 'High',
+    date: '2026-06-14',
+    what: '2b.1: confirm тільки при кліку «Оформити». 2b.2: Hutko-reload + fiscal-тексти + spacing. 2b.3: summary-панель завжди видима.',
+    why: 'Стабільний гостьовий флоу e2e без артефактів.',
+    note: 'Owner QA passed на всіх 3 патчах.'
+  },
+  {
+    id: 'RD-10',
+    title: 'Product page parity + sticky ATC mobile',
+    status: 'done',
+    category: 'Redesign',
+    tool: 'Codex',
+    priority: 'High',
+    date: '2026-06-11',
+    what: 'DS 2-col layout, gallery, price-block, spec-table, Telegram+OLX review cards, sticky add-to-cart (mobile), breadcrumb parity.',
+    why: 'Сторінка товару — головна конверсійна сторінка.',
+    note: 'Owner QA passed. Всі полірування (D2, D3) закриті.'
+  },
+  {
+    id: 'AUTO-API-001',
+    title: 'CRM JSON API (Apps Script buffer)',
+    status: 'done',
+    category: 'CRM / Automation',
+    tool: 'Codex',
+    priority: 'High',
+    date: '2026-06-03',
+    what: 'Легкий read-only JSON API поверх Google Sheets: summary, orders, stock_alerts, sku_list.',
+    why: 'Дозволяє Claude/Codex читати CRM без завантаження цілого Sheets-файлу.',
+    note: 'Verified by owner. Endpoints: summary, orders, stock_alerts, sku_list.'
+  },
+  {
+    id: 'ST-1',
+    title: 'NP склади: sync-фікс + cron',
+    status: 'done',
+    category: 'Checkout / NP',
+    tool: 'Codex',
+    priority: 'High',
+    date: '2026-06-12',
+    what: 'Виправлено rate-limit обрив при синку НП (було 13k відділень → тепер 52 159). Cron-команда налаштована.',
+    why: 'Застарілі відділення → клієнт не може обрати склад; критичний баг.',
+    note: 'Live deployed. Cron треба додати в cPanel-планувальник.'
+  }
+];
+
+const STATUS_META = {
+  active:  { dot: '🔵', label: 'В роботі',    cls: 's-active' },
+  todo:    { dot: '⚪', label: 'Заплановано', cls: 's-todo' },
+  done:    { dot: '🟢', label: 'Виконано',    cls: 's-done' },
+  blocked: { dot: '🔴', label: 'Заблоковано', cls: 's-blocked' }
+};
+const PRIORITY_COLOR = { High: 'var(--red)', Medium: 'var(--yellow)', Low: 'var(--muted)' };
+
+let _rmFilter = 'all';
+function rmFilter(btn, f) {
+  _rmFilter = f;
+  document.querySelectorAll('.rm-filter').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderRoadmap();
+}
+
+function renderRoadmap() {
+  const data = _rmFilter === 'all' ? ROADMAP : ROADMAP.filter(t => t.status === _rmFilter);
+  const groups = {};
+  data.forEach(t => {
+    const g = STATUS_META[t.status]?.label || t.status;
+    (groups[g] = groups[g] || []).push(t);
+  });
+  const order = ['В роботі', 'Заплановано', 'Заблоковано', 'Виконано'];
+  let html = '';
+  order.forEach(g => {
+    if (!groups[g]) return;
+    html += `<div class="rm-group-title">${g} (${groups[g].length})</div><div class="rm-cards">`;
+    groups[g].forEach(t => {
+      const m = STATUS_META[t.status] || {};
+      const toolCls = t.tool?.toLowerCase().includes('codex') ? 'rm-tag-codex' : 'rm-tag-manual';
+      html += `<div class="rm-card ${m.cls||''}">
+        <div class="rm-dot">${m.dot||'⬜'}</div>
+        <div class="rm-body">
+          <div class="rm-header">
+            <span class="rm-id">${t.id}</span>
+            <span class="rm-title">${t.title}</span>
+            <span style="font-size:11px;color:${PRIORITY_COLOR[t.priority]||'var(--muted)'};font-weight:600;margin-left:auto;flex-shrink:0">${t.priority||''}</span>
+          </div>
+          <div class="rm-what"><b>Що:</b> ${t.what}</div>
+          <div class="rm-why"><b>Навіщо:</b> ${t.why}</div>
+          <div class="rm-meta">
+            <span class="${toolCls}">${t.tool}</span>
+            <span class="rm-tag-manual" style="background:rgba(120,120,160,.08)">${t.category}</span>
+            ${t.date && t.date !== '—' ? `<span class="rm-date">📅 ${t.date}</span>` : ''}
+            ${t.note ? `<span class="rm-note">⚠ ${t.note}</span>` : ''}
+          </div>
+        </div>
+      </div>`;
+    });
+    html += '</div>';
+  });
+  if (!html) html = '<div class="rm-empty">Задач у цьому фільтрі немає</div>';
+  document.getElementById('roadmapBoard').innerHTML = html;
+
+  const counts = {};
+  ROADMAP.forEach(t => counts[t.status] = (counts[t.status]||0) + 1);
+  document.getElementById('roadmapSub').textContent =
+    `🔵 В роботі: ${counts.active||0}  ·  ⚪ Заплановано: ${counts.todo||0}  ·  🟢 Виконано: ${counts.done||0}`;
+}
+
+function loadRoadmap() { renderRoadmap(); }
+
 // ════════════ LOADERS MAP ════════════
-const loaders = { overview: loadOverview, stock: loadStock, consumables: loadConsumables, orders: loadOrders, skus: loadSkus, clients: loadClients };
+const loaders = { overview: loadOverview, stock: loadStock, consumables: loadConsumables, orders: loadOrders, skus: loadSkus, clients: loadClients, roadmap: loadRoadmap };
 
 // ════════════ INIT ════════════
 loaded.overview = true;
