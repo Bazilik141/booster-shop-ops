@@ -1095,12 +1095,12 @@ async function loadOverview() {
       });
     }
 
+    // ── Рендер блоку «Потребують уваги» ──
+    const totalAttentionItems = shipped5d.length + critical.length + high.length;
+
     const badge = document.getElementById('alertsBadge');
     badge.textContent = totalAttentionItems;
     badge.className = 'badge ' + (totalAttentionItems > 0 ? 'b-red' : 'b-green');
-
-    // ── Рендер блоку «Потребують уваги» ──
-    const totalAttentionItems = shipped5d.length + critical.length + high.length;
 
     if (!totalAttentionItems) {
       document.getElementById('alertsPreview').innerHTML =
