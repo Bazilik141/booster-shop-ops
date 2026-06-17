@@ -171,6 +171,20 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
 .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; margin-bottom: 10px; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+/* ── Alerts ── */
+.alert-section { margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid var(--border); }
+.alert-section:last-child { margin-bottom:0; padding-bottom:0; border-bottom:none; }
+.alert-section-label { font-size:11.5px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px; }
+.alert-row { display:flex; flex-direction:column; gap:2px; padding:6px 0; border-bottom:1px solid rgba(255,255,255,.04); }
+.alert-row:last-of-type { border-bottom:none; }
+.alert-row-urgent .alert-row-main .chip { border-color:rgba(239,68,68,.4); }
+.alert-row-main { display:flex; align-items:center; gap:8px; }
+.alert-amount { font-size:13px; font-weight:700; color:var(--text); }
+.alert-sku-name { font-size:12px; color:var(--text); flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.alert-row-sub { font-size:11px; color:var(--muted); padding-left:2px; }
+.alert-cta { margin-top:4px; padding:4px 10px; background:transparent; border:1px solid var(--border); border-radius:6px; color:var(--accent); font-size:11px; cursor:pointer; align-self:flex-start; transition:.15s; }
+.alert-cta:hover { background:rgba(124,111,255,.1); }
+.alert-cta-full { width:100%; margin-top:8px; text-align:center; }
 /* ── Roadmap ── */
 .rm-filter {
   padding: 6px 13px; background: var(--surface2); border: 1px solid var(--border);
@@ -383,7 +397,7 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
     </div>
     <div class="section">
       <div style="margin-bottom:14px">
-        <input id="skuFilter" type="text" placeholder="🔍 Фільтр по SKU, назві або бренду…"
+        <input id="skuFilter" type="text" placeholder="🔍 Фільтр по SKU або назві…"
           style="width:100%;padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none;transition:border-color .15s"
           onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"/>
       </div>
@@ -457,6 +471,14 @@ function clearError() { document.getElementById('errorBanner').classList.remove(
 // ════════════ NAV ════════════
 const titles = { overview: 'Огляд', stock: 'Склад', consumables: 'Розхідники', orders: 'Замовлення', skus: 'Товари', clients: 'Клієнти', roadmap: 'Роадмап' };
 
+function showPageByName(name, skipEvent) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  const nav = document.querySelector(`.nav-item[onclick*="'${name}'"]`);
+  if (nav) nav.classList.add('active');
+  if (!loaded[name]) { loaded[name] = true; if (loaders[name]) loaders[name](); }
+}
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -753,13 +775,14 @@ function renderStockTable(resetFilter) {
 
   document.getElementById('stockTable').innerHTML = `<div class="tbl-wrap"><table>
     <tr>
-      ${stockTh('sku', 'SKU')}${stockTh('name', 'Назва')}${stockTh('urgency', 'Терм.')}${stockTh('action', 'Дія')}
+      ${stockTh('sku', 'SKU')}${stockTh('name', 'Назва')}${stockTh('format', 'Формат')}${stockTh('urgency', 'Терм.')}${stockTh('action', 'Дія')}
       ${stockTh('stock', 'Залишок')}${stockTh('expected', 'Очікується')}${stockTh('sold30', '30д')}${stockTh('sold60', '60д')}${stockTh('coverage', 'Днів запасу')}
-      ${stockTh('maxBuy', 'Гранична')}${stockTh('margin', 'Маржа')}
+      ${stockTh('status', 'Статус')}${stockTh('issues', 'Проблеми')}
     </tr>
     ${rows.map(r => `<tr>
       <td><span class="chip mono">${r.sku}</span></td>
-      <td style="font-size:12px;max-width:240px;line-height:1.3">${skuName(r.name, r.sku)}</td>
+      <td style="font-size:12px;max-width:220px;line-height:1.3">${skuName(r.name, r.sku)}</td>
+      <td style="font-size:12px">${r.format||'—'}</td>
       <td class="${urgCls(r.urgency)}">${r.urgency || r.stock_status || '—'}</td>
       <td>${r.action ? actionBadge(r.action) : stockPill(r.stock_status)}</td>
       <td><b>${r.stock??'—'}</b></td>
@@ -767,8 +790,8 @@ function renderStockTable(resetFilter) {
       <td><b>${r.sold_30d??'—'}</b></td>
       <td><b>${r.sold_60d??'—'}</b></td>
       <td>${dayCoverage(r.stock, r.sold_30d, r.sold_60d)}</td>
-      <td>${r.max_buy_price != null ? fmt(r.max_buy_price) : '—'}</td>
-      <td>${stockMarginDisplay(r)}</td>
+      <td>${stockPill(r.stock_status)}</td>
+      <td>${(r.issues||[]).filter(i => i !== 'немає_ціни_opencart').map(i=>\`<span class="issue-tag">\${i}</span>\`).join('')||'—'}</td>
     </tr>`).join('')}
   </table></div>`;
 
@@ -835,11 +858,27 @@ async function loadOverview() {
     const activeCount = ordersForUnpaidOk ? (ordersData.count || (ordersData.orders || []).length) : (po.count || 0);
     const activeSub = ordersForUnpaidOk ? `Оплачено ${fmt(activePaidTotal)}<br>Не оплачено ${fmt(activeUnpaidTotal)}` : 'Немає даних';
     const warehouseProfit = d.potential_profit_warehouse != null ? Number(d.potential_profit_warehouse) : null;
+    const warehouseCost  = d.warehouse_cost          != null ? Number(d.warehouse_cost)          : null;
+    const assetCost      = d.asset_cost              != null ? Number(d.asset_cost)              : null;
+    const assetProfit    = d.asset_potential_profit  != null ? Number(d.asset_potential_profit)  : null;
+    // margin% = profit / (cost*1.05 + profit) * 100  (коригована собівартість = cost*1.05)
+    function calcMarginPct(profit, cost) {
+      if (profit == null || cost == null || cost <= 0) return null;
+      const rev = cost * 1.05 + profit;
+      return rev > 0 ? (profit / rev) * 100 : null;
+    }
+    const whMarginPct    = calcMarginPct(warehouseProfit, warehouseCost);
+    const assetMarginPct = calcMarginPct(assetProfit, assetCost);
 
     const cards = [
       { label:'Місяць на сьогодні', value:(mtd.current.orders||0) + deltaTag(mtd.current.orders, mtd.previous?.orders), sub:`Виручка ${fmt(mtd.current.revenue)}${deltaTag(mtd.current.revenue, mtd.previous?.revenue)}<br>Прибуток ${fmt(mtd.current.profit)}${deltaTag(mtd.current.profit, mtd.previous?.profit)}` },
-      { label:'Активні замовл.',  value:activeCount,      sub:activeSub, cls: activeCount > 0 ? 'c-yellow' : '' },
-      { label:'Потенційний прибуток складу', value:fmt(warehouseProfit), sub: warehouseProfit != null ? 'При продажу всього залишку' : 'Немає даних', cls: warehouseProfit > 0 ? 'c-accent' : '' },
+      { label:'Активні замовл.',  value:activeCount, sub:activeSub, cls: activeCount > 0 ? 'c-yellow' : '' },
+      { label:'Собівартість складу (UA)', value: warehouseCost != null ? fmt(warehouseCost) : '—', sub:'На складі в Україні', cls:'' },
+      { label:'Потенційний прибуток складу', value: warehouseProfit != null ? fmt(warehouseProfit) : '—',
+        sub: warehouseProfit != null ? `При продажу залишку${whMarginPct != null ? '<br>Маржа ' + fmtP(whMarginPct) : ''}` : '⏳ Потрібен Apps Script', cls: warehouseProfit > 0 ? 'c-accent' : '' },
+      { label:'Собівартість активів', value: assetCost != null ? fmt(assetCost) : '—', sub:'UA + в дорозі + JP + виграно', cls:'' },
+      { label:'Потенційний прибуток активів', value: assetProfit != null ? fmt(assetProfit) : '—',
+        sub: assetProfit != null ? `Всі нереалізовані залишки${assetMarginPct != null ? '<br>Маржа ' + fmtP(assetMarginPct) : ''}` : '⏳ Потрібен Apps Script', cls: assetProfit > 0 ? 'c-accent' : '' },
     ];
 
     document.getElementById('summaryCards').innerHTML = cards.map(c =>
@@ -1056,21 +1095,76 @@ async function loadOverview() {
       });
     }
 
-    const totalAttention = shipped5d.length + critical.length + high.length;
     const badge = document.getElementById('alertsBadge');
-    badge.textContent = totalAttention;
-    badge.className = 'badge ' + (totalAttention > 0 ? 'b-red' : 'b-green');
+    badge.textContent = totalAttentionItems;
+    badge.className = 'badge ' + (totalAttentionItems > 0 ? 'b-red' : 'b-green');
 
-    if (!sections.length) {
+    // ── Рендер блоку «Потребують уваги» ──
+    const totalAttentionItems = shipped5d.length + critical.length + high.length;
+
+    if (!totalAttentionItems) {
       document.getElementById('alertsPreview').innerHTML =
         '<div style="color:var(--muted);padding:4px 0;font-size:13px">✅ Все під контролем</div>';
     } else {
-      document.getElementById('alertsPreview').innerHTML = sections.map((s, i) =>
-        `<div style="margin-bottom:${i < sections.length - 1 ? '12px;padding-bottom:12px;border-bottom:1px solid var(--border)' : '0'}">
-          <div style="font-size:12px;font-weight:600;color:${s.color};margin-bottom:5px">${s.icon} ${s.title}</div>
-          ${s.items.map(it => `<div style="font-size:11.5px;color:var(--muted);padding:1px 0 1px 18px">${it}</div>`).join('')}
-        </div>`
-      ).join('');
+      let html = '';
+
+      // Замовлення — нагадати про отримання
+      if (shipped5d.length) {
+        html += `<div class="alert-section">
+          <div class="alert-section-label">📬 Замовлення — нагадати про отримання</div>
+          ${shipped5d.map(r => {
+            const ttnShort = r.ttn ? r.ttn.slice(-4) : '';
+            const carrier = r.post ? r.post.replace('Нова Пошта','НП').replace('Укрпошта','УП') : '';
+            const dateStr = r.date || '';
+            return `<div class="alert-row">
+              <div class="alert-row-main">
+                <span class="chip mono" style="font-size:10px">${r.order_id}</span>
+                <span class="alert-amount">₴${fmt(r.amount)}</span>
+              </div>
+              <div class="alert-row-sub">Відправлено ${dateStr}${ttnShort ? ` · …${ttnShort}` : ''}${carrier ? ` ${carrier}` : ''}</div>
+              <button class="alert-cta" onclick="event.stopPropagation();loadOrders('active')">Переглянути →</button>
+            </div>`;
+          }).join('')}
+        </div>`;
+      }
+
+      // Залишки — потрібна закупка
+      const urgentBuy = critical;
+      const watchBuy  = high;
+      const totalBuy  = urgentBuy.length + watchBuy.length;
+      if (totalBuy) {
+        // Скільки рядків можна показати у віджеті
+        const shownOrderRows = shipped5d.length;
+        const maxSkuRows = Math.max(2, 5 - shownOrderRows);
+        const urgentShow  = urgentBuy.slice(0, maxSkuRows);
+        const watchShow   = watchBuy.slice(0, Math.max(0, maxSkuRows - urgentShow.length));
+        const hiddenCount = totalBuy - urgentShow.length - watchShow.length;
+
+        html += `<div class="alert-section">
+          <div class="alert-section-label">📦 Залишки — потрібна закупка</div>
+          <div class="alert-row-sub" style="margin-bottom:6px">
+            Потрібна закупка <b>${totalBuy}</b> SKU${urgentBuy.length ? `, з них негайно <b style="color:var(--red)">${urgentBuy.length}</b>` : ''}
+          </div>
+          ${urgentShow.map(a => `<div class="alert-row alert-row-urgent">
+            <div class="alert-row-main">
+              <span class="chip mono" style="font-size:10px">${a.sku}</span>
+              <span class="alert-sku-name">${skuName(a.name, a.sku)}</span>
+            </div>
+            <div class="alert-row-sub">Залишок: <b>${a.stock ?? '—'}</b> · ${a.sold_30d != null ? a.sold_30d + ' за 30д' : ''}</div>
+          </div>`).join('')}
+          ${watchShow.map(a => `<div class="alert-row">
+            <div class="alert-row-main">
+              <span class="chip mono" style="font-size:10px">${a.sku}</span>
+              <span class="alert-sku-name">${skuName(a.name, a.sku)}</span>
+            </div>
+            <div class="alert-row-sub">Залишок: <b>${a.stock ?? '—'}</b> · ${a.sold_30d != null ? a.sold_30d + ' за 30д' : ''}</div>
+          </div>`).join('')}
+          ${hiddenCount > 0 ? `<div style="font-size:11px;color:var(--muted);margin-top:4px">+ ще ${hiddenCount} SKU</div>` : ''}
+          <button class="alert-cta alert-cta-full" onclick="showPageByName('skus', true)">Переглянути всі →</button>
+        </div>`;
+      }
+
+      document.getElementById('alertsPreview').innerHTML = html;
     }
   } catch(e) { document.getElementById('alertsPreview').innerHTML = `<div style="color:var(--muted)">—</div>`; }
 }
@@ -1291,18 +1385,20 @@ async function loadSkus() {
     cache.skus = d;
     const s = d.skus || [];
     document.getElementById('skuTable').innerHTML = `<div class="tbl-wrap"><table>
-      <tr><th>SKU</th><th>Назва</th><th>Бренд</th><th>Формат</th><th>РРЦ</th><th>Динамічна РРЦ</th><th>Залишок</th><th>Очікується</th><th>Статус</th><th>Проблеми</th></tr>
+      <tr><th>SKU</th><th>Назва</th><th>РРЦ</th><th>Дин. РРЦ</th><th>Гранична закупка</th><th>Маржа</th><th>30д</th><th>60д</th><th>Залишок</th><th>Очікується</th><th>Днів запасу</th><th>Терм.</th></tr>
       ${s.map(r => `<tr>
         <td><span class="chip mono">${r.sku}</span></td>
         <td style="font-size:12px;max-width:180px;line-height:1.3">${skuName(r.name, r.sku)}</td>
-        <td style="font-size:12px">${r.brand||'—'}</td>
-        <td style="font-size:12px">${r.format||'—'}</td>
         <td>${rrcPriceCell(r.rrc ?? r.price_crm, r.current_rrc_margin_pct)}</td>
         <td>${r.dynamic_rrc ? fmt(r.dynamic_rrc) : '<span style="color:var(--muted)">—</span>'}</td>
+        <td>${r.max_buy_price != null ? fmt(r.max_buy_price) : '—'}</td>
+        <td>${stockMarginDisplay(r)}</td>
+        <td><b>${r.sold_30d??'—'}</b></td>
+        <td><b>${r.sold_60d??'—'}</b></td>
         <td><b>${r.stock??'—'}</b></td>
         <td>${r.expected??'—'}</td>
-        <td>${stockPill(r.stock_status)}</td>
-        <td>${(r.issues||[]).filter(i => i !== 'немає_ціни_opencart').map(i=>`<span class="issue-tag">${i}</span>`).join('')||'—'}</td>
+        <td>${dayCoverage(r.stock, r.sold_30d, r.sold_60d)}</td>
+        <td class="${urgCls(r.urgency)}">${r.urgency||'—'}</td>
       </tr>`).join('')}
     </table></div>`;
     const skf = document.getElementById('skuFilter');
