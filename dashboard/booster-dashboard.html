@@ -791,7 +791,7 @@ function renderStockTable(resetFilter) {
       <td><b>${r.sold_60d??'—'}</b></td>
       <td>${dayCoverage(r.stock, r.sold_30d, r.sold_60d)}</td>
       <td>${stockPill(r.stock_status)}</td>
-      <td>${(r.issues||[]).filter(i => i !== 'немає_ціни_opencart').map(i=>\`<span class="issue-tag">\${i}</span>\`).join('')||'—'}</td>
+      <td>${(r.issues||[]).filter(i => i !== 'немає_ціни_opencart').map(i=>'<span class="issue-tag">'+i+'</span>').join('')||'—'}</td>
     </tr>`).join('')}
   </table></div>`;
 
