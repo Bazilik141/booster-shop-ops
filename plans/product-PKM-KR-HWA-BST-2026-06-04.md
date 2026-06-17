@@ -194,7 +194,7 @@ pokemon hot wind arena korean booster, heat wave arena sv9a korean, бустер
 
 ## ⚠️ Примітки
 
-- **SEO URL = SKU**: `PKM-KR-HWA-BST`
+- **SEO URL**: описовий формат, напр. `Pokemon-boosters-Hot-Wind-Arena` — НЕ артикул. Уточни реальний URL в OpenCart.
 - **Пов'язаний товар**: Бустер бокс Hot Wind Arena (ID=58) — додати як Related Product
 - **Категорія**: Бустери Pokémon (ID=61)
 - **Увага до боксу (ID=58)**: після публікації бустера — додати Chase Cards секцію і в опис боксу (ті самі 5 SAR-карт, але в контексті боксу)

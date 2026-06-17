@@ -1095,7 +1095,7 @@ magic the gathering adventures forgotten realms japanese booster, mtg afr jp set
 - [ ] **PKM-JP-SVEX-BLR**: перевірити наявність промо-карти у вашій партії
 - [ ] **YGO-JP-WPP5-BST**: Konami вже є в OpenCart (є QCAC) — OK
 - [ ] **MTG-JP-AFRS-BST**: додати Wizards of the Coast у Catalog → Manufacturers
-- [ ] Для ВСІХ: додати фото, встановити ціну, обрати категорію, перевірити SEO URL = SKU
+- [ ] Для ВСІХ: додати фото, встановити ціну, обрати категорію, встановити SEO URL (описовий формат: Pokemon-boosters-SetName / Pokemon-booster-box-SetName — НЕ артикул/SKU)
 - [ ] **Нові типи пакування**: «Blister / Special Card Set», «Mystery Box», «Sealed Booster Pack (Set)» — додати у OpenCart якщо ще немає
 
 ---

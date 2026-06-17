@@ -9,7 +9,7 @@ _Дата: 2026-06-14 | Готово для вставки в OpenCart Admin_
 |-----|---------|
 | PKM-JP-ABYSS-BST | Підтвердити: продаємо BST (1 пак поштучно) |
 | PKM-JP-ABYSS-BBX | Підтвердити наявність sealed display із shrink-wrap |
-| Обидва | Встановити ціну, додати фото, перевірити SEO URL = SKU |
+| Обидва | Встановити ціну, додати фото, встановити SEO URL (описовий формат — НЕ артикул) |
 | Обидва | Shadow Energy — уточнити назву для сайту: Shadow Energy / Shadow Dark Energy |
 
 ---
@@ -226,7 +226,7 @@ pokemon abyss eye japanese booster, abyss eye m5 бустер, mega darkrai ex, 
 
 ## ⚠️ Примітки BST
 
-- **SEO URL = SKU**: `PKM-JP-ABYSS-BST`
+- **SEO URL**: `Pokemon-boosters-Abyss-Eye` (описовий формат — НЕ артикул)
 - **Пов'язаний товар**: Бустер бокс PKM-JP-ABYSS-BBX — додати як Related Product
 - **Категорія**: Бустери Pokémon (перевірити ID в OpenCart)
 - **Ціни MUR у тексті не вказуємо** — тільки частоту (~1 на 45 боксів)
@@ -454,7 +454,7 @@ pokemon abyss eye booster box japanese, abyss eye дисплей бокс jp, me
 
 ## ⚠️ Примітки BBX
 
-- **SEO URL = SKU**: `PKM-JP-ABYSS-BBX`
+- **SEO URL**: `Pokemon-booster-box-Abyss-Eye` (описовий формат — НЕ артикул; уточни патерн для боксів за іншими BBX на сайті)
 - **Пов'язаний товар**: Бустер поштучно PKM-JP-ABYSS-BST — додати як Related Product
 - **Категорія**: Бустер бокси / Дисплеї Pokémon (перевірити ID в OpenCart)
 - **Pull rates**: Оцінки на основі M1–M4; не є гарантованими. Не вказуємо у % на сторінці
@@ -467,7 +467,7 @@ pokemon abyss eye booster box japanese, abyss eye дисплей бокс jp, me
 - [ ] **PKM-JP-ABYSS-BBX**: підтвердити shrink-wrap sealed display, 30 паків
 - [ ] Обидва: додати фото (пак окремо + бокс окремо)
 - [ ] Обидва: встановити ціну в гривнях
-- [ ] Обидва: SEO URL = SKU — перевірити в OpenCart
+- [ ] Обидва: SEO URL — описовий формат (Pokemon-boosters-Abyss-Eye / Pokemon-booster-box-Abyss-Eye), перевірити в OpenCart
 - [ ] Обидва: додати Related Product (бокс ↔ бустер)
 - [ ] BST → категорія «Бустери Pokémon»; BBX → «Бустер бокси Pokémon»
 - [ ] «The Pokémon Company» в Manufacturers — перевірити наявність в OpenCart
