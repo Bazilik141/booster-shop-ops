@@ -76,6 +76,16 @@ Live state comes from owner's **cPanel backup drop** into the `Booster Shop` fol
 checkout · payment · Hutko · Checkbox · fiscalization · Nova Poshta · order status ·
 Merchant feed · schema/JSON-LD · SEO (sitemap/robots/canonical/.htaccess) · CRM · DB
 
+## Token and context efficiency
+- For CRM and Google Sheets work, use the Apps Script API or narrow bounded ranges first. Request only the rows, columns, and cell fields needed for the current decision.
+- Do not export or read an entire workbook, large sheet, repository, backup tree, or session log when a targeted read can answer the question.
+- A full export or broad scan is allowed only when targeted reads cannot safely complete the task. Before starting one, tell the owner why it is required and that it may consume substantial weekly usage.
+- Do not repeat unchanged reads or verify an established fact through multiple equivalent tools.
+- Default verification budget for a scoped code change: one syntax/static check and one focused smoke-test pass. Add checks only for a new failure or a high-risk acceptance criterion.
+- Keep tool responses small with exact ranges, finite search bounds, minimal field masks, and short result limits.
+- Before structural edits to `Apps_Script_код`, read and preserve the complete affected function block. Avoid scattered row-index edits that can shift or split functions.
+- If recovery requires repeated retries, broad exports, or large diagnostic output, pause and report the cause and expected usage cost before continuing.
+
 ## OpenCart SEO URL rules
 - Format: `Pokemon-boosters-Set-Name`, `YuGiOh-boosters-Set-Name` (human-readable)
 - Box/display → use `booster-box` in URL; single packs → `boosters`
