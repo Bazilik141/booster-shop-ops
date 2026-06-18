@@ -16,17 +16,21 @@ dashboard/    local CRM HTML
 templates/    handoff + report templates
 ```
 
+## Environment
+- **Terminal (Claude Code CLI)** — installed and available. Use for: git operations (diff, commit, push), running bash scripts, FTP deploy triggers, any shell command that avoids round-trips through the sandbox. Prefer Terminal over sandbox bash when working with files in the repo or on the owner's machine.
+- **VS Code (Claude Code extension)** — installed and available. Use for: viewing/editing repo files directly, inspecting diffs after Codex patches, navigating multi-file context. Prefer VS Code over sandbox reads when reviewing Codex output or cross-referencing patches with source files.
+
 ## Roles & boundaries
 | Agent | Does | Does NOT |
 |-------|------|----------|
-| **Claude** | audit, SEO/UX strategy, handoffs, post-patch review | server access, push/pull, deploy |
+| **Claude** | audit, SEO/UX strategy, handoffs, post-patch review, git diff via Terminal | server access, deploy |
 | **Codex** | patches (`patches/`), reports (`diagnostics/`), commit/push **only when owner explicitly asks** | server access, deploy, auto-commit/push |
 | **Owner** | approves in chat, uploads + runs patch on server, triggers commits | — |
 
 ## Flow
 ```
 Claude handoff → Codex patch (patches/ + C:\Users\14bez\Downloads copy)
-→ Claude review (git diff) → Owner deploy (php patch.php in ~/public_html) → Owner QA
+→ Claude review (git diff via Terminal or VS Code) → Owner deploy (php patch.php in ~/public_html) → Owner QA
 ```
 
 ## Source of truth
