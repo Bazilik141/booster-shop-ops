@@ -232,11 +232,46 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
 .rm-tag-manual { background:rgba(120,120,160,.1);color:var(--muted); }
 .rm-tag-warn   { background:rgba(239,68,68,.08);color:#f87171;border:1px solid rgba(239,68,68,.2);font-size:11.5px;padding:3px 8px;border-radius:6px; }
 
+/* ── Write forms ── */
+.write-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px;align-items:start; }
+.write-section { background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;min-width:0; }
+.write-section h3 { margin:0 0 14px;font-size:15px; }
+.write-section.purchase { grid-column:span 2; }
+.write-form { display:grid;gap:11px; }
+.form-row { display:flex;flex-direction:column;gap:5px;min-width:0; }
+.form-row label { font-size:12px;color:var(--muted); }
+.form-row input,.form-row select { width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);font-size:13px;outline:none; }
+.form-row input:focus,.form-row select:focus { border-color:var(--accent); }
+.form-row select[size] { overflow-y:auto;padding:4px;min-height:116px; }
+.form-row select[size] option { padding:6px 8px;border-radius:4px; }
+.form-row select[size] option:checked { background:var(--accent);color:#fff; }
+.form-msg { font-size:13px;min-height:18px;line-height:1.35; }
+.form-msg.error { color:var(--red); }
+.form-msg.success { color:var(--green); }
+.btn-primary,.btn-secondary { border:none;border-radius:7px;cursor:pointer;font-weight:600;width:fit-content; }
+.btn-primary { background:var(--accent);color:#fff;padding:9px 18px;font-size:13px; }
+.btn-primary:hover { opacity:.88; }
+.btn-primary:disabled,.btn-secondary:disabled { opacity:.5;cursor:not-allowed; }
+.btn-secondary { background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:7px 14px;font-size:12px; }
+.btn-secondary:hover { border-color:var(--accent); }
+.form-actions { display:flex;gap:8px;align-items:center;flex-wrap:wrap; }
+.purchase-items { display:grid;gap:10px; }
+.purchase-item { border-top:1px solid var(--border);padding-top:12px;display:grid;gap:10px; }
+.purchase-item:first-child { border-top:none;padding-top:0; }
+.purchase-item-head { display:flex;align-items:center;justify-content:space-between;gap:10px; }
+.purchase-item-title { font-size:12px;font-weight:600;color:var(--muted); }
+.purchase-item-remove { background:transparent;border:0;color:var(--red);font-size:18px;line-height:1;cursor:pointer;padding:2px 5px; }
+.purchase-item-remove.hidden { visibility:hidden; }
+.purchase-cost-grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px; }
+
 @media (max-width: 800px) {
   .sidebar { display: none; }
   .main { padding: 16px; }
   .grid2 { grid-template-columns: 1fr; }
   .trend-grid { grid-template-columns: 1fr; }
+  .write-grid { grid-template-columns:1fr; }
+  .write-section.purchase { grid-column:auto; }
+  .purchase-cost-grid { grid-template-columns:1fr; }
 }
 </style>
 </head>
@@ -266,6 +301,9 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
     </div>
     <div class="nav-item" onclick="showPage('roadmap')">
       <span class="nav-icon">🗺️</span> Роадмап
+    </div>
+    <div class="nav-item" onclick="showPage('accounting')">
+      <span class="nav-icon">➕</span> Облік
     </div>
   </div>
   <div class="sidebar-footer">
@@ -435,6 +473,15 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
     </div>
   </div>
 
+  <!-- ACCOUNTING -->
+  <div id="page-accounting" class="page">
+    <div class="header">
+      <div class="page-title">Облік</div>
+      <div class="page-sub">Продажі, закупки та списання</div>
+    </div>
+    <div id="accountingContent"><div class="loading"><div class="spinner"></div><br>Завантаження...</div></div>
+  </div>
+
 </main>
 
 <script>
@@ -452,11 +499,25 @@ async function call(action, extra = {}) {
   return d;
 }
 
+async function callPost(payload) {
+  const r = await fetch(API, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ ...payload, token: TOKEN }),
+    redirect: 'follow'
+  });
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  const d = await r.json();
+  if (!d.ok) throw new Error(d.error || 'API error');
+  return d;
+}
+
 // ════════════ STATE ════════════
 const cache = {};
 const loaded = {};
 const orderState = { mode: 'default', sort: 'date_desc' };
 let _clientsData = [];
+const accountingState = { skus: [], purchaseSeq: 0 };
 
 function showError(msg) {
   const el = document.getElementById('errorBanner');
@@ -469,7 +530,7 @@ function showError(msg) {
 function clearError() { document.getElementById('errorBanner').classList.remove('show'); }
 
 // ════════════ NAV ════════════
-const titles = { overview: 'Огляд', stock: 'Склад', consumables: 'Розхідники', orders: 'Замовлення', skus: 'Товари', clients: 'Клієнти', roadmap: 'Роадмап' };
+const titles = { overview: 'Огляд', stock: 'Склад', consumables: 'Розхідники', orders: 'Замовлення', skus: 'Товари', clients: 'Клієнти', roadmap: 'Роадмап', accounting: 'Облік' };
 
 function showPageByName(name, skipEvent) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1113,7 +1174,7 @@ async function loadOverview() {
         html += `<div class="alert-section">
           <div class="alert-section-label">📬 Замовлення — нагадати про отримання</div>
           ${shipped5d.map(r => {
-            const ttnShort = r.ttn ? r.ttn.slice(-4) : '';
+            const ttnShort = r.ttn ? String(r.ttn).replace(/\D/g,'').slice(-4) : '';
             const carrier = r.post ? r.post.replace('Нова Пошта','НП').replace('Укрпошта','УП') : '';
             const dateStr = r.date || '';
             return `<div class="alert-row">
@@ -1552,6 +1613,30 @@ const ROADMAP_FLOW = [
     connector: 'розблоковується після ST-2b.5',
     tasks: [
       {
+        id: 'DASH-001', title: 'Огляд — три плитки без даних', status: 'todo', tool: 'Codex', priority: 'High',
+        simple: 'Собівартість складу (UA), Собівартість активів, Потенційний прибуток активів — показують «—». Apps Script summary endpoint не повертає warehouse_cost, asset_cost, asset_potential_profit. Codex додає три нові поля.',
+        why: 'Без цих даних власник не бачить реальну вартість запасів і потенційний прибуток від асетів.',
+        warn: null, subtasks: []
+      },
+      {
+        id: 'DASH-002', title: 'Огляд — блок «Потребують уваги» порожній', status: 'todo', tool: 'Claude', priority: 'High',
+        simple: 'Блок показує «—» замість списку алертів. Проблема в рендері або в даних від API.',
+        why: 'Власник не бачить критичні залишки і замовлення що потребують уваги.',
+        warn: null, subtasks: []
+      },
+      {
+        id: 'DASH-WRITE-004', title: 'Облік — редагування існуючих записів', status: 'todo', tool: 'Claude + Codex', priority: 'Medium',
+        simple: 'Зараз форма «Облік» дозволяє лише додавати нові записи. Потрібна можливість знайти і виправити існуючий рядок у Продажах, Закупках або Списанні.',
+        why: 'Помилки при введенні неминучі — без редагування доводиться йти в Google Sheets вручну.',
+        warn: null, subtasks: []
+      },
+      {
+        id: 'DASH-UX-001', title: 'Облік — UX/UI редизайн форм', status: 'todo', tool: 'Claude design', priority: 'Medium',
+        simple: 'Поточні форми функціональні але не зручні: немає підтвердження перед записом, немає history останніх дій, немає inline-валідації. Потрібен повноцінний UX-редизайн.',
+        why: 'Форма має замінити Google Sheets як основний інструмент — зручність критична.',
+        warn: null, subtasks: []
+      },
+      {
         id: 'ST-2c', title: 'Переключення всіх клієнтів на новий чекаут', status: 'todo', tool: 'Claude + Codex', priority: 'High',
         simple: 'Видалення 5 рядків з одного файлу — і всі клієнти йдуть на новий чекаут замість старого. Плюс реальна вартість доставки замість нуля.',
         why: 'Це фінальна точка всієї checkout-серії. Після цього старий чекаут стає резервним.',
@@ -1716,8 +1801,179 @@ function renderRoadmap() {
 function loadRoadmap() { renderRoadmap(); }
 
 
+// ════════════ ACCOUNTING ════════════
+
+function acSkuOptions(skus, selId, searchId) {
+  const sel = document.getElementById(selId);
+  const inp = document.getElementById(searchId);
+  function render(q) {
+    const filtered = q ? skus.filter(s =>
+      (s.name||'').toLowerCase().includes(q) || (s.sku||'').toLowerCase().includes(q)) : skus;
+    sel.innerHTML = filtered.map(s =>
+      '<option value="' + s.sku + '">' + (s.name ? s.name + ' (' + s.sku + ')' : s.sku) + '</option>'
+    ).join('');
+  }
+  render('');
+  if (inp) inp.oninput = function() { render(this.value.toLowerCase().trim()); };
+}
+
+async function loadAccounting() {
+  try {
+    if (!cache.skus) { const d = await call('sku_list'); cache.skus = d; }
+    const skus = (cache.skus.skus || []);
+    accountingState.skus = skus;
+    const today = new Date().toISOString().slice(0,10);
+
+    document.getElementById('accountingContent').innerHTML =
+      '<div class="write-grid">' +
+
+      '<div class="write-section">' +
+      '<h3>&#128176; Продаж</h3>' +
+      '<div class="write-form">' +
+      '<div class="form-row"><label>Пошук SKU</label><input type="text" id="saleSkuSearch" placeholder="Назва або SKU..."></div>' +
+      '<div class="form-row"><label>SKU *</label><select id="saleSkuSelect" size="5"></select></div>' +
+      '<div class="form-row"><label>Кількість *</label><input type="number" id="saleQty" min="1" value="1"></div>' +
+      '<div class="form-row"><label>Ціна (грн) *</label><input type="number" id="salePrice" min="0" step="0.01"></div>' +
+      '<div class="form-row"><label>Канал</label><select id="saleChannel"><option>Сайт</option><option>OLX</option><option>Instagram</option><option>Інше</option></select></div>' +
+      '<div class="form-row"><label>Order ID (опц.)</label><input type="text" id="saleOrderId" placeholder="MANUAL-001"></div>' +
+      '<div class="form-row"><label>Дата *</label><input type="date" id="saleDate" value="' + today + '"></div>' +
+      '<div class="form-actions"><button class="btn-primary" onclick="submitSale()">&#128190; Зберегти</button><div id="saleMsg" class="form-msg"></div></div>' +
+      '</div></div>' +
+
+      '<div class="write-section">' +
+      '<h3>&#128465; Списання</h3>' +
+      '<div class="write-form">' +
+      '<div class="form-row"><label>Пошук SKU</label><input type="text" id="woSkuSearch" placeholder="Назва або SKU..."></div>' +
+      '<div class="form-row"><label>SKU *</label><select id="woSkuSelect" size="5"></select></div>' +
+      '<div class="form-row"><label>Кількість *</label><input type="number" id="woQty" min="1" value="1"></div>' +
+      '<div class="form-row"><label>Причина *</label><input type="text" id="woReason" placeholder="Пошкоджено"></div>' +
+      '<div class="form-row"><label>Дата *</label><input type="date" id="woDate" value="' + today + '"></div>' +
+      '<div class="form-actions"><button class="btn-primary" onclick="submitWriteoff()">&#128190; Зберегти</button><div id="woMsg" class="form-msg"></div></div>' +
+      '</div></div>' +
+
+      '<div class="write-section purchase">' +
+      '<h3>&#128230; Закупка</h3>' +
+      '<div class="write-form">' +
+      '<div class="form-row"><label>Order Ref *</label><input type="text" id="purOrderRef" placeholder="ZM-12345"></div>' +
+      '<div class="form-row"><label>Постачальник</label><input type="text" id="purSupplier" value="ZenMarket"></div>' +
+      '<div class="form-row"><label>Дата доставки (опц.)</label><input type="date" id="purDate"></div>' +
+      '<div class="purchase-items" id="purchaseItems"></div>' +
+      '<div class="form-actions"><button class="btn-secondary" onclick="purAddItem()">&#10133; Додати SKU</button><button class="btn-primary" onclick="submitPurchase()">&#128190; Зберегти закупку</button><div id="purMsg" class="form-msg"></div></div>' +
+      '</div></div>' +
+
+      '</div>';
+
+    acSkuOptions(skus, 'saleSkuSelect', 'saleSkuSearch');
+    acSkuOptions(skus, 'woSkuSelect', 'woSkuSearch');
+    accountingState.purchaseSeq = 0;
+    purAddItem();
+  } catch(e) {
+    document.getElementById('accountingContent').innerHTML =
+      '<div style="color:var(--red)">Помилка: ' + e.message + '</div>';
+  }
+}
+
+function purAddItem() {
+  const seq = ++accountingState.purchaseSeq;
+  const id = 'pur' + seq;
+  const div = document.createElement('div');
+  div.className = 'purchase-item';
+  div.id = 'purItem' + seq;
+  div.innerHTML =
+    '<div class="purchase-item-head">' +
+      '<span class="purchase-item-title">SKU ' + seq + '</span>' +
+      '<button class="purchase-item-remove' + (seq === 1 ? ' hidden' : '') + '" onclick="purRemoveItem(' + seq + ')">&#215;</button>' +
+    '</div>' +
+    '<div class="form-row"><label>Пошук SKU</label><input type="text" id="' + id + 'Search" placeholder="Назва або SKU..."></div>' +
+    '<div class="form-row"><label>SKU *</label><select id="' + id + 'Select" size="4"></select></div>' +
+    '<div class="purchase-cost-grid">' +
+      '<div class="form-row"><label>Кількість *</label><input type="number" id="' + id + 'Qty" min="1" value="1"></div>' +
+      '<div class="form-row"><label>Ціна ПРРО *</label><input type="number" id="' + id + 'CostPrro" min="0" step="0.01"></div>' +
+      '<div class="form-row"><label>Ціна mgmt</label><input type="number" id="' + id + 'CostMgmt" min="0" step="0.01" placeholder="= ПРРО"></div>' +
+    '</div>';
+  document.getElementById('purchaseItems').appendChild(div);
+  acSkuOptions(accountingState.skus, id + 'Select', id + 'Search');
+}
+
+function purRemoveItem(seq) {
+  const el = document.getElementById('purItem' + seq);
+  if (el) el.remove();
+}
+
+function formMsg(id, text, type) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = text;
+  el.className = 'form-msg' + (type ? ' ' + type : '');
+}
+
+async function submitSale() {
+  const sku = document.getElementById('saleSkuSelect').value;
+  const qty = parseInt(document.getElementById('saleQty').value) || 0;
+  const price = parseFloat(document.getElementById('salePrice').value) || 0;
+  const channel = document.getElementById('saleChannel').value;
+  const orderIdEl = document.getElementById('saleOrderId').value.trim();
+  const order_id = orderIdEl || undefined;
+  const date = document.getElementById('saleDate').value;
+  if (!sku || !qty || !price || !date) {
+    formMsg('saleMsg', '⚠ Заповніть SKU, кількість, ціну та дату', 'error'); return;
+  }
+  formMsg('saleMsg', 'Збереження…', '');
+  try {
+    await callPost({ action: 'add_sale', date, channel, order_id, items: [{ sku, qty, price }] });
+    formMsg('saleMsg', '✅ Збережено', 'success');
+    delete cache.summary; delete cache.stock;
+    loaded.overview = false; loaded.stock = false;
+  } catch(e) { formMsg('saleMsg', '❌ ' + e.message, 'error'); }
+}
+
+async function submitWriteoff() {
+  const sku = document.getElementById('woSkuSelect').value;
+  const qty = parseInt(document.getElementById('woQty').value) || 0;
+  const reason = document.getElementById('woReason').value.trim();
+  const date = document.getElementById('woDate').value;
+  if (!sku || !qty || !reason || !date) {
+    formMsg('woMsg', '⚠ Заповніть всі поля', 'error'); return;
+  }
+  formMsg('woMsg', 'Збереження…', '');
+  try {
+    await callPost({ action: 'add_writeoff', date, reason, items: [{ sku, qty }] });
+    formMsg('woMsg', '✅ Збережено', 'success');
+    delete cache.summary; delete cache.stock;
+    loaded.overview = false; loaded.stock = false;
+  } catch(e) { formMsg('woMsg', '❌ ' + e.message, 'error'); }
+}
+
+async function submitPurchase() {
+  const order_ref = document.getElementById('purOrderRef').value.trim();
+  const supplier = document.getElementById('purSupplier').value.trim() || 'ZenMarket';
+  const dateVal = document.getElementById('purDate').value;
+  const date = dateVal || undefined;
+  if (!order_ref) { formMsg('purMsg', '⚠ Вкажіть Order Ref', 'error'); return; }
+  const items = [];
+  document.querySelectorAll('.purchase-item').forEach(function(div) {
+    const id = div.id.replace('purItem', 'pur');
+    const skuEl = document.getElementById(id + 'Select');
+    const qtyEl = document.getElementById(id + 'Qty');
+    const prroEl = document.getElementById(id + 'CostPrro');
+    const mgmtEl = document.getElementById(id + 'CostMgmt');
+    const sku = skuEl ? skuEl.value : '';
+    const qty = parseInt(qtyEl ? qtyEl.value : 0) || 0;
+    const cost_prro = parseFloat(prroEl ? prroEl.value : 0) || 0;
+    const mgmtVal = mgmtEl ? mgmtEl.value : '';
+    const cost_mgmt = mgmtVal ? parseFloat(mgmtVal) : cost_prro;
+    if (sku && qty > 0 && cost_prro >= 0) items.push({ sku, qty, cost_prro, cost_mgmt });
+  });
+  if (!items.length) { formMsg('purMsg', '⚠ Додайте хоча б один SKU', 'error'); return; }
+  formMsg('purMsg', 'Збереження…', '');
+  try {
+    await callPost({ action: 'add_purchase', order_ref, supplier, date, items });
+    formMsg('purMsg', '✅ Збережено (' + items.length + ' SKU)', 'success');
+  } catch(e) { formMsg('purMsg', '❌ ' + e.message, 'error'); }
+}
+
 // ════════════ LOADERS MAP ════════════
-const loaders = { overview: loadOverview, stock: loadStock, consumables: loadConsumables, orders: loadOrders, skus: loadSkus, clients: loadClients, roadmap: loadRoadmap };
+const loaders = { overview: loadOverview, stock: loadStock, consumables: loadConsumables, orders: loadOrders, skus: loadSkus, clients: loadClients, roadmap: loadRoadmap, accounting: loadAccounting };
 
 // ════════════ INIT ════════════
 loaded.overview = true;
