@@ -263,6 +263,25 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
 .purchase-item-remove { background:transparent;border:0;color:var(--red);font-size:18px;line-height:1;cursor:pointer;padding:2px 5px; }
 .purchase-item-remove.hidden { visibility:hidden; }
 .purchase-cost-grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px; }
+.records-section { margin-top:2rem; }
+.records-head { display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px; }
+.records-head h3 { margin:0;font-size:15px; }
+.records-tabs { display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px; }
+.rec-tab { padding:6px 16px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);border-radius:6px;cursor:pointer;font-size:13px; }
+.rec-tab.active { background:var(--accent);color:#fff;border-color:var(--accent); }
+.rec-pane { overflow-x:auto; }
+.rec-pane.hidden { display:none; }
+.rec-table { width:100%;border-collapse:collapse;font-size:12px; }
+.rec-table th { color:var(--muted);font-weight:500;text-align:left;padding:6px 8px;border-bottom:1px solid var(--border); }
+.rec-table td { padding:6px 8px;border-bottom:1px solid var(--border);white-space:nowrap; }
+.rec-table tr:hover td { background:var(--surface2);cursor:pointer; }
+.edit-row-form { margin-top:1rem;padding:1rem;background:var(--surface2);border:1px solid var(--border);border-radius:8px; }
+.edit-row-form h4 { margin:0 0 12px;font-size:14px; }
+.edit-row-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px; }
+.edit-row-form .form-row { margin-bottom:8px; }
+.records-message { font-size:12px;min-height:18px;color:var(--muted); }
+.records-message.success { color:var(--green); }
+.records-message.error { color:var(--red); }
 
 @media (max-width: 800px) {
   .sidebar { display: none; }
@@ -517,7 +536,13 @@ const cache = {};
 const loaded = {};
 const orderState = { mode: 'default', sort: 'date_desc' };
 let _clientsData = [];
-const accountingState = { skus: [], purchaseSeq: 0 };
+const accountingState = {
+  skus: [],
+  purchaseSeq: 0,
+  recent: { sales: [], purchases: [], writeoffs: [] },
+  recentLoaded: { sales: false, purchases: false, writeoffs: false },
+  edit: null
+};
 
 function showError(msg) {
   const el = document.getElementById('errorBanner');
@@ -1861,12 +1886,26 @@ async function loadAccounting() {
       '<div class="form-actions"><button class="btn-secondary" onclick="purAddItem()">&#10133; Додати SKU</button><button class="btn-primary" onclick="submitPurchase()">&#128190; Зберегти закупку</button><div id="purMsg" class="form-msg"></div></div>' +
       '</div></div>' +
 
+      '</div>' +
+      '<div class="records-section">' +
+        '<div class="records-head"><h3>Останні записи</h3><div id="recordsMsg" class="records-message"></div></div>' +
+        '<div class="records-tabs">' +
+          '<button class="rec-tab active" onclick="showRecTab(\'sales\',this)">Продажі</button>' +
+          '<button class="rec-tab" onclick="showRecTab(\'purchases\',this)">Закупки</button>' +
+          '<button class="rec-tab" onclick="showRecTab(\'writeoffs\',this)">Списання</button>' +
+        '</div>' +
+        '<div id="recTabSales" class="rec-pane active"><div class="loading"><div class="spinner"></div><br>Завантаження...</div></div>' +
+        '<div id="recTabPurchases" class="rec-pane hidden"></div>' +
+        '<div id="recTabWriteoffs" class="rec-pane hidden"></div>' +
       '</div>';
 
     acSkuOptions(skus, 'saleSkuSelect', 'saleSkuSearch');
     acSkuOptions(skus, 'woSkuSelect', 'woSkuSearch');
+    accountingState.recentLoaded = { sales: false, purchases: false, writeoffs: false };
+    accountingState.edit = null;
     accountingState.purchaseSeq = 0;
     purAddItem();
+    loadRecTab('sales');
   } catch(e) {
     document.getElementById('accountingContent').innerHTML =
       '<div style="color:var(--red)">Помилка: ' + e.message + '</div>';
@@ -1970,6 +2009,171 @@ async function submitPurchase() {
     await callPost({ action: 'add_purchase', order_ref, supplier, date, items });
     formMsg('purMsg', '✅ Збережено (' + items.length + ' SKU)', 'success');
   } catch(e) { formMsg('purMsg', '❌ ' + e.message, 'error'); }
+}
+
+function recEsc(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function recPaneId(name) {
+  return 'recTab' + name.charAt(0).toUpperCase() + name.slice(1);
+}
+
+function showRecTab(name, btn) {
+  document.querySelectorAll('.rec-tab').forEach(function(el) { el.classList.remove('active'); });
+  document.querySelectorAll('.rec-pane').forEach(function(el) { el.classList.add('hidden'); });
+  if (btn) btn.classList.add('active');
+  const pane = document.getElementById(recPaneId(name));
+  if (pane) pane.classList.remove('hidden');
+  accountingState.edit = null;
+  if (!accountingState.recentLoaded[name]) loadRecTab(name);
+}
+
+function recTableConfig(name) {
+  if (name === 'sales') return {
+    action: 'recent_sales',
+    columns: [['date','Дата'],['order_id','Замовлення'],['channel','Канал'],['sku','SKU'],['qty','К-сть'],['price','Ціна']]
+  };
+  if (name === 'purchases') return {
+    action: 'recent_purchases',
+    columns: [['date','Дата'],['order_ref','Order Ref'],['supplier','Постачальник'],['sku','SKU'],['qty','К-сть'],['cost_mgmt','Mgmt'],['status','Статус']]
+  };
+  return {
+    action: 'recent_writeoffs',
+    columns: [['date','Дата'],['sku','SKU'],['qty','К-сть'],['reason','Причина']]
+  };
+}
+
+async function loadRecTab(name, force) {
+  const pane = document.getElementById(recPaneId(name));
+  if (!pane) return;
+  if (!force && accountingState.recentLoaded[name]) {
+    renderRecTable(name);
+    return;
+  }
+  pane.innerHTML = '<div class="loading"><div class="spinner"></div><br>Завантаження...</div>';
+  try {
+    const cfg = recTableConfig(name);
+    const data = await call(cfg.action, { limit: 20 });
+    accountingState.recent[name] = data.rows || [];
+    accountingState.recentLoaded[name] = true;
+    renderRecTable(name);
+  } catch(e) {
+    pane.innerHTML = '<div class="records-message error">Помилка: ' + recEsc(e.message) + '</div>';
+  }
+}
+
+function renderRecTable(name) {
+  const pane = document.getElementById(recPaneId(name));
+  if (!pane) return;
+  const cfg = recTableConfig(name);
+  const rows = accountingState.recent[name] || [];
+  if (!rows.length) {
+    pane.innerHTML = '<div class="records-message">Записів немає.</div>';
+    return;
+  }
+  let html = '<table class="rec-table"><thead><tr>';
+  cfg.columns.forEach(function(col) { html += '<th>' + recEsc(col[1]) + '</th>'; });
+  html += '</tr></thead><tbody>';
+  rows.forEach(function(row) {
+    html += '<tr onclick="openEditRow(\'' + name + '\',' + Number(row.row_index) + ')">';
+    cfg.columns.forEach(function(col) { html += '<td>' + recEsc(row[col[0]]) + '</td>'; });
+    html += '</tr>';
+  });
+  html += '</tbody></table><div id="editRowForm' + name.charAt(0).toUpperCase() + name.slice(1) + '"></div>';
+  pane.innerHTML = html;
+}
+
+function recField(id, label, value, type, step) {
+  return '<div class="form-row"><label>' + recEsc(label) + '</label><input id="' + id + '" type="' +
+    (type || 'text') + '"' + (step ? ' step="' + step + '"' : '') + ' value="' + recEsc(value) + '"></div>';
+}
+
+function openEditRow(type, rowIndex) {
+  const row = (accountingState.recent[type] || []).find(function(item) {
+    return Number(item.row_index) === Number(rowIndex);
+  });
+  if (!row) return;
+  accountingState.edit = { type: type, row_index: Number(row.row_index) };
+  const host = document.getElementById('editRowForm' + type.charAt(0).toUpperCase() + type.slice(1));
+  if (!host) return;
+  let fields = '';
+  if (type === 'sales') {
+    fields += recField('editDate','Дата',row.date,'date');
+    fields += recField('editChannel','Канал',row.channel);
+    fields += recField('editOrderId','Order ID',row.order_id);
+    fields += recField('editSku','SKU',row.sku);
+    fields += recField('editQty','Кількість',row.qty,'number','1');
+    fields += recField('editPrice','Ціна',row.price,'number','0.01');
+    fields += recField('editNote','Примітка',row.note);
+  } else if (type === 'purchases') {
+    fields += recField('editDate','Дата доставки',row.date,'date');
+    fields += recField('editOrderRef','Order Ref',row.order_ref);
+    fields += recField('editSupplier','Постачальник',row.supplier);
+    fields += recField('editSku','SKU',row.sku);
+    fields += recField('editQty','Кількість',row.qty,'number','1');
+    fields += recField('editCostPrro','Собівартість ПРРО',row.cost_prro,'number','0.01');
+    fields += recField('editCostMgmt','Управлінська собівартість',row.cost_mgmt,'number','0.01');
+    fields += recField('editStatus','Статус',row.status);
+    fields += recField('editNote','Примітка',row.note);
+  } else {
+    fields += recField('editDate','Дата',row.date,'date');
+    fields += recField('editSku','SKU',row.sku);
+    fields += recField('editQty','Кількість',row.qty,'number','1');
+    fields += recField('editReason','Причина',row.reason);
+    fields += recField('editNote','Примітка',row.note);
+  }
+  host.innerHTML = '<div class="edit-row-form"><h4>Редагування рядка ' + Number(row.row_index) + '</h4>' +
+    '<div class="edit-row-grid">' + fields + '</div>' +
+    '<div class="form-actions"><button class="btn-primary" onclick="saveEditRow()">Зберегти</button>' +
+    '<button class="btn-secondary" onclick="closeEditRow()">Скасувати</button></div></div>';
+}
+
+function editValue(id) {
+  const el = document.getElementById(id);
+  return el ? el.value : '';
+}
+
+function closeEditRow() {
+  accountingState.edit = null;
+  document.querySelectorAll('[id^="editRowForm"]').forEach(function(host) { host.innerHTML = ''; });
+}
+
+async function saveEditRow() {
+  const edit = accountingState.edit;
+  if (!edit) return;
+  const actionMap = { sales: 'update_sale', purchases: 'update_purchase', writeoffs: 'update_writeoff' };
+  const payload = { action: actionMap[edit.type], row_index: edit.row_index };
+  if (edit.type === 'sales') {
+    payload.date = editValue('editDate'); payload.channel = editValue('editChannel');
+    payload.order_id = editValue('editOrderId'); payload.sku = editValue('editSku');
+    payload.qty = Number(editValue('editQty')); payload.price = Number(editValue('editPrice'));
+    payload.note = editValue('editNote');
+  } else if (edit.type === 'purchases') {
+    payload.date = editValue('editDate'); payload.order_ref = editValue('editOrderRef');
+    payload.supplier = editValue('editSupplier'); payload.sku = editValue('editSku');
+    payload.qty = Number(editValue('editQty')); payload.cost_prro = Number(editValue('editCostPrro'));
+    payload.cost_mgmt = Number(editValue('editCostMgmt')); payload.status = editValue('editStatus');
+    payload.note = editValue('editNote');
+  } else {
+    payload.date = editValue('editDate'); payload.sku = editValue('editSku');
+    payload.qty = Number(editValue('editQty')); payload.reason = editValue('editReason');
+    payload.note = editValue('editNote');
+  }
+  const msg = document.getElementById('recordsMsg');
+  if (msg) { msg.textContent = 'Збереження…'; msg.className = 'records-message'; }
+  try {
+    await callPost(payload);
+    if (msg) { msg.textContent = 'Зміни збережено'; msg.className = 'records-message success'; }
+    accountingState.edit = null;
+    delete cache.summary; delete cache.stock;
+    loaded.overview = false; loaded.stock = false;
+    await loadRecTab(edit.type, true);
+  } catch(e) {
+    if (msg) { msg.textContent = 'Помилка: ' + e.message; msg.className = 'records-message error'; }
+  }
 }
 
 // ════════════ LOADERS MAP ════════════
