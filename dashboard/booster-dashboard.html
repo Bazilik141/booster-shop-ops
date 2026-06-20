@@ -237,6 +237,7 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
 .write-section { background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;min-width:0; }
 .write-section h3 { margin:0 0 14px;font-size:15px; }
 .write-section.purchase { grid-column:span 2; }
+.write-section.wide { grid-column:1 / -1; }
 .write-form { display:grid;gap:11px; }
 .form-row { display:flex;flex-direction:column;gap:5px;min-width:0; }
 .form-row label { font-size:12px;color:var(--muted); }
@@ -263,6 +264,22 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
 .purchase-item-remove { background:transparent;border:0;color:var(--red);font-size:18px;line-height:1;cursor:pointer;padding:2px 5px; }
 .purchase-item-remove.hidden { visibility:hidden; }
 .purchase-cost-grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px; }
+.line-items { display:grid;gap:10px;margin-top:12px; }
+.line-item { border-top:1px solid var(--border);padding-top:12px;display:grid;gap:10px; }
+.line-item:first-child { border-top:none;padding-top:0; }
+.line-item-grid { display:grid;grid-template-columns:minmax(180px,2fr) repeat(3,minmax(100px,1fr));gap:10px;align-items:end; }
+.form-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px; }
+.form-section-title { margin:16px 0 8px;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px; }
+.lot-select-cell { width:34px;text-align:center; }
+.lot-fee-input { width:120px; }
+.selected-lots { display:grid;gap:8px;margin:12px 0; }
+.selected-lot { display:grid;grid-template-columns:minmax(180px,1fr) 150px;gap:10px;align-items:end;padding:10px;background:var(--surface);border:1px solid var(--border);border-radius:6px; }
+.field-hint { font-size:11px;color:var(--muted);margin-top:4px; }
+.parcel-list { display:grid;gap:12px;margin-top:18px; }
+.parcel-block { border:1px solid var(--accent);background:rgba(124,92,255,.08);border-radius:8px;overflow:hidden; }
+.parcel-head { display:flex;justify-content:space-between;gap:12px;padding:10px 12px;background:rgba(124,92,255,.14);font-size:12px;font-weight:700; }
+.parcel-block .rec-table { margin:0; }
+.parcel-block .rec-table tr:last-child td { border-bottom:0; }
 .records-section { margin-top:2rem; }
 .records-head { display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px; }
 .records-head h3 { margin:0;font-size:15px; }
@@ -290,7 +307,9 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
   .trend-grid { grid-template-columns: 1fr; }
   .write-grid { grid-template-columns:1fr; }
   .write-section.purchase { grid-column:auto; }
+  .write-section.wide { grid-column:auto; }
   .purchase-cost-grid { grid-template-columns:1fr; }
+  .line-item-grid,.selected-lot { grid-template-columns:1fr; }
 }
 </style>
 </head>
@@ -538,9 +557,13 @@ const orderState = { mode: 'default', sort: 'date_desc' };
 let _clientsData = [];
 const accountingState = {
   skus: [],
+  saleSeq: 0,
   purchaseSeq: 0,
-  recent: { sales: [], purchases: [], writeoffs: [] },
-  recentLoaded: { sales: false, purchases: false, writeoffs: false },
+  writeoffSeq: 0,
+  mysterySeq: 0,
+  selectedPurchaseLots: {},
+  recent: { sales: [], purchases: [] },
+  recentLoaded: { sales: false, purchases: false },
   edit: null
 };
 
@@ -1835,108 +1858,247 @@ function acSkuOptions(skus, selId, searchId) {
     const filtered = q ? skus.filter(s =>
       (s.name||'').toLowerCase().includes(q) || (s.sku||'').toLowerCase().includes(q)) : skus;
     sel.innerHTML = filtered.map(s =>
-      '<option value="' + s.sku + '">' + (s.name ? s.name + ' (' + s.sku + ')' : s.sku) + '</option>'
+      '<option value="' + s.sku + '">' + (s.name ? s.name + ' (' + s.sku + ')' : s.sku) +
+      ' | склад ' + Number(s.stock || 0) + '</option>'
     ).join('');
   }
   render('');
   if (inp) inp.oninput = function() { render(this.value.toLowerCase().trim()); };
 }
 
+function skuTcg_(sku) {
+  const value = String(sku || '').toUpperCase();
+  if (value.indexOf('PKM-') === 0) return 'PKM';
+  if (value.indexOf('OP-') === 0) return 'OP';
+  if (value.indexOf('YGO-') === 0) return 'YGO';
+  if (value.indexOf('MTG-') === 0) return 'MTG';
+  return '';
+}
+
+function activeMysteryTcg_() {
+  const selected = Array.from(document.querySelectorAll('#saleItems select[id$="Select"]'))
+    .map(function(el) { return el.value; })
+    .find(function(sku) { return /-MBX$/i.test(String(sku || '')); });
+  return skuTcg_(selected);
+}
+
+function acMysteryOptions(selId, searchId) {
+  const sel = document.getElementById(selId);
+  const inp = document.getElementById(searchId);
+  if (!sel) return;
+  function render() {
+    const tcg = activeMysteryTcg_();
+    const q = String(inp && inp.value || '').toLowerCase().trim();
+    const filtered = accountingState.skus.filter(function(item) {
+      const sku = String(item.sku || '');
+      const format = String(item.format || '').toLowerCase();
+      const matchesQuery = !q || String(item.name || '').toLowerCase().includes(q) || sku.toLowerCase().includes(q);
+      return tcg && skuTcg_(sku) === tcg && /-BST$/i.test(sku) &&
+        (format === 'booster' || !format) && Number(item.stock || 0) > 1 && matchesQuery;
+    });
+    sel.innerHTML = filtered.map(function(item) {
+      return '<option value="' + item.sku + '">' + (item.name || item.sku) +
+        ' (' + item.sku + ') | склад ' + Number(item.stock || 0) + '</option>';
+    }).join('');
+  }
+  render();
+  if (inp) inp.oninput = render;
+}
+
+function refreshMysteryOptions() {
+  document.querySelectorAll('#mysteryItems .line-item').forEach(function(div) {
+    const id = div.id.replace('mysteryItem','mystery');
+    acMysteryOptions(id + 'Select', id + 'Search');
+  });
+}
+
+const SALE_CHANNELS = ['OpenCart','Telegram','OLX','Monobazar','Вручну','Інше'];
+const PAYMENT_TYPES = ['Контроль оплати ФОП','Післяплата фіз','За реквізитами','Еквайринг'];
+const PAYMENT_STATUSES = ['Не оплачено','Оплачено','Повернення','Скасовано'];
+const ORDER_STATUSES = ['Нове','В обробці','Відправлено','Отримано','Скасовано','Повернення','Передзамовлення'];
+const POST_TYPES = ['НП','УП','Meest','Самовивіз','Інше'];
+const PURCHASE_STATUSES = ['В дорозі','На складі','Частково продано','Продано','Скасовано','На складі в Японії','Виграно'];
+const WRITEOFF_TYPES = ['Власне відкриття','Подарунок','Промо','Брак','Тест','Втрата','Інше'];
+const PACKAGING_TYPES = ['',"Мала м'яка 14х12 см",'Середня м\'яка 16х14 см','Велика пакет 17х30 см','Конверт Airpock 14х22 см','Інше'];
+
+function formSelect(id, options, value) {
+  let html = '<select id="' + id + '">';
+  options.forEach(function(option) {
+    html += '<option value="' + recEsc(option) + '"' + (option === value ? ' selected' : '') + '>' + recEsc(option) + '</option>';
+  });
+  return html + '</select>';
+}
+
 async function loadAccounting() {
   try {
     if (!cache.skus) { const d = await call('sku_list'); cache.skus = d; }
-    const skus = (cache.skus.skus || []);
-    accountingState.skus = skus;
+    accountingState.skus = cache.skus.skus || [];
     const today = new Date().toISOString().slice(0,10);
-
     document.getElementById('accountingContent').innerHTML =
       '<div class="write-grid">' +
-
-      '<div class="write-section">' +
-      '<h3>&#128176; Продаж</h3>' +
-      '<div class="write-form">' +
-      '<div class="form-row"><label>Пошук SKU</label><input type="text" id="saleSkuSearch" placeholder="Назва або SKU..."></div>' +
-      '<div class="form-row"><label>SKU *</label><select id="saleSkuSelect" size="5"></select></div>' +
-      '<div class="form-row"><label>Кількість *</label><input type="number" id="saleQty" min="1" value="1"></div>' +
-      '<div class="form-row"><label>Ціна (грн) *</label><input type="number" id="salePrice" min="0" step="0.01"></div>' +
-      '<div class="form-row"><label>Канал</label><select id="saleChannel"><option>Сайт</option><option>OLX</option><option>Instagram</option><option>Інше</option></select></div>' +
-      '<div class="form-row"><label>Order ID (опц.)</label><input type="text" id="saleOrderId" placeholder="MANUAL-001"></div>' +
-      '<div class="form-row"><label>Дата *</label><input type="date" id="saleDate" value="' + today + '"></div>' +
-      '<div class="form-actions"><button class="btn-primary" onclick="submitSale()">&#128190; Зберегти</button><div id="saleMsg" class="form-msg"></div></div>' +
-      '</div></div>' +
-
-      '<div class="write-section">' +
-      '<h3>&#128465; Списання</h3>' +
-      '<div class="write-form">' +
-      '<div class="form-row"><label>Пошук SKU</label><input type="text" id="woSkuSearch" placeholder="Назва або SKU..."></div>' +
-      '<div class="form-row"><label>SKU *</label><select id="woSkuSelect" size="5"></select></div>' +
-      '<div class="form-row"><label>Кількість *</label><input type="number" id="woQty" min="1" value="1"></div>' +
-      '<div class="form-row"><label>Причина *</label><input type="text" id="woReason" placeholder="Пошкоджено"></div>' +
-      '<div class="form-row"><label>Дата *</label><input type="date" id="woDate" value="' + today + '"></div>' +
-      '<div class="form-actions"><button class="btn-primary" onclick="submitWriteoff()">&#128190; Зберегти</button><div id="woMsg" class="form-msg"></div></div>' +
-      '</div></div>' +
-
-      '<div class="write-section purchase">' +
-      '<h3>&#128230; Закупка</h3>' +
-      '<div class="write-form">' +
-      '<div class="form-row"><label>Order Ref *</label><input type="text" id="purOrderRef" placeholder="ZM-12345"></div>' +
-      '<div class="form-row"><label>Постачальник</label><input type="text" id="purSupplier" value="ZenMarket"></div>' +
-      '<div class="form-row"><label>Дата доставки (опц.)</label><input type="date" id="purDate"></div>' +
-      '<div class="purchase-items" id="purchaseItems"></div>' +
-      '<div class="form-actions"><button class="btn-secondary" onclick="purAddItem()">&#10133; Додати SKU</button><button class="btn-primary" onclick="submitPurchase()">&#128190; Зберегти закупку</button><div id="purMsg" class="form-msg"></div></div>' +
-      '</div></div>' +
-
+        '<div class="write-section wide"><h3>&#128176; Внести продаж</h3><div class="write-form">' +
+          '<div class="form-grid">' +
+            '<div class="form-row"><label>Номер замовлення / операції</label><input id="saleOrderId" placeholder="генерується автоматично"></div>' +
+            '<div class="form-row"><label>Джерело</label>' + formSelect('saleChannel',SALE_CHANNELS,'Вручну') + '</div>' +
+            '<div class="form-row"><label>Дата продажу *</label><input type="date" id="saleDate" value="' + today + '"></div>' +
+            '<div class="form-row"><label>Телефон клієнта</label><input id="salePhone"></div>' +
+            '<div class="form-row"><label>ПІБ клієнта</label><input id="saleCustomer"></div>' +
+            '<div class="form-row"><label>Тип оплати</label>' + formSelect('salePaymentType',PAYMENT_TYPES,'За реквізитами') + '</div>' +
+            '<div class="form-row"><label>Знижка на чек, грн</label><input type="number" min="0" step="0.01" id="saleDiscount"></div>' +
+            '<div class="form-row"><label>Паковання</label>' + formSelect('salePackaging',PACKAGING_TYPES,'') + '</div>' +
+            '<div class="form-row"><label>Якщо Інше, грн</label><input type="number" min="0" step="0.01" id="saleCustomPackaging"></div>' +
+            '<div class="form-row"><label>Доставка за рахунок магазину</label><input type="number" min="0" step="0.01" id="saleShopDelivery"></div>' +
+            '<div class="form-row"><label>Статус оплати</label>' + formSelect('salePaymentStatus',PAYMENT_STATUSES,'Не оплачено') + '</div>' +
+            '<div class="form-row"><label>Статус замовлення</label>' + formSelect('saleOrderStatus',ORDER_STATUSES,'Нове') + '</div>' +
+            '<div class="form-row"><label>Пошта</label>' + formSelect('salePost',POST_TYPES,'НП') + '</div>' +
+            '<div class="form-row"><label>ТТН</label><input id="saleTtn"></div>' +
+            '<div class="form-row"><label>Примітка</label><input id="saleNote"></div>' +
+          '</div>' +
+          '<div class="form-section-title">Позиції продажу, до 10</div><div class="line-items" id="saleItems"></div>' +
+          '<div class="form-actions"><button class="btn-secondary" onclick="saleAddItem()">&#10133; Додати SKU</button></div>' +
+          '<div class="form-section-title">Склад містері-бокса, 5 бустерів на кожен MBX</div><div class="line-items" id="mysteryItems"></div>' +
+          '<div class="form-actions"><button class="btn-secondary" onclick="mysteryAddItem()">&#10133; Додати компонент</button>' +
+            '<button class="btn-primary" onclick="submitSale()">&#128190; Зберегти продаж</button><div id="saleMsg" class="form-msg"></div></div>' +
+        '</div></div>' +
+        '<div class="write-section purchase"><h3>&#128230; Внести закупку</h3><div class="write-form">' +
+          '<div class="form-grid">' +
+            '<div class="form-row"><label>ZenMarket Order № *</label><input id="purOrderRef"></div>' +
+            '<div class="form-row"><label>Загальна вартість лоту, грн *</label><input type="number" min="0" step="0.01" id="purTotalCost" oninput="recalcPurchaseCosts()"></div>' +
+            '<div class="form-row"><label>Статус</label>' + formSelect('purStatus',PURCHASE_STATUSES,'Виграно') + '</div>' +
+            '<div class="form-row"><label>Доставка / комісії по Японії, JPY</label><input type="number" min="0" step="0.01" id="purJapanFees"></div>' +
+            '<div class="form-row"><label>ZenMarket URL</label><input type="url" id="purOrderUrl"></div>' +
+            '<div class="form-row"><label>Примітка</label><input id="purNote"></div>' +
+          '</div>' +
+          '<div class="form-section-title">Позиції закупки, до 3</div><div class="purchase-items" id="purchaseItems"></div>' +
+          '<div class="form-actions"><button class="btn-secondary" onclick="purAddItem()">&#10133; Додати SKU</button>' +
+            '<button class="btn-primary" onclick="submitPurchase()">&#128190; Зберегти закупку</button><div id="purMsg" class="form-msg"></div></div>' +
+        '</div></div>' +
+        '<div class="write-section purchase"><h3>&#128465; Внести списання</h3><div class="write-form">' +
+          '<div class="form-grid">' +
+            '<div class="form-row"><label>Дата *</label><input type="date" id="woDate" value="' + today + '"></div>' +
+            '<div class="form-row"><label>Тип списання *</label>' + formSelect('woType',WRITEOFF_TYPES,'Власне відкриття') + '</div>' +
+            '<div class="form-row"><label>Причина *</label><input id="woReason"></div>' +
+            '<div class="form-row"><label>Примітка</label><input id="woNote"></div>' +
+            '<div class="form-row"><label>Очікувана кількість</label><input type="number" min="0" step="1" id="woExpectedQty"></div>' +
+          '</div>' +
+          '<div class="form-section-title">Позиції списання, до 10</div><div class="line-items" id="writeoffItems"></div>' +
+          '<div class="form-actions"><button class="btn-secondary" onclick="writeoffAddItem()">&#10133; Додати SKU</button>' +
+            '<button class="btn-primary" onclick="submitWriteoff()">&#128190; Зберегти списання</button><div id="woMsg" class="form-msg"></div></div>' +
+        '</div></div>' +
       '</div>' +
-      '<div class="records-section">' +
-        '<div class="records-head"><h3>Останні записи</h3><div id="recordsMsg" class="records-message"></div></div>' +
-        '<div class="records-tabs">' +
-          '<button class="rec-tab active" onclick="showRecTab(\'sales\',this)">Продажі</button>' +
-          '<button class="rec-tab" onclick="showRecTab(\'purchases\',this)">Закупки</button>' +
-          '<button class="rec-tab" onclick="showRecTab(\'writeoffs\',this)">Списання</button>' +
-        '</div>' +
+      '<div class="records-section"><div class="records-head"><h3>Оновлення записів</h3><div id="recordsMsg" class="records-message"></div></div>' +
+        '<div class="records-tabs"><button class="rec-tab active" onclick="showRecTab(\'sales\',this)">Продажі</button>' +
+          '<button class="rec-tab" onclick="showRecTab(\'purchases\',this)">Закупки</button></div>' +
         '<div id="recTabSales" class="rec-pane active"><div class="loading"><div class="spinner"></div><br>Завантаження...</div></div>' +
-        '<div id="recTabPurchases" class="rec-pane hidden"></div>' +
-        '<div id="recTabWriteoffs" class="rec-pane hidden"></div>' +
-      '</div>';
+        '<div id="recTabPurchases" class="rec-pane hidden"></div></div>';
 
-    acSkuOptions(skus, 'saleSkuSelect', 'saleSkuSearch');
-    acSkuOptions(skus, 'woSkuSelect', 'woSkuSearch');
-    accountingState.recentLoaded = { sales: false, purchases: false, writeoffs: false };
-    accountingState.edit = null;
+    accountingState.saleSeq = 0;
     accountingState.purchaseSeq = 0;
+    accountingState.writeoffSeq = 0;
+    accountingState.mysterySeq = 0;
+    accountingState.selectedPurchaseLots = {};
+    accountingState.recentLoaded = { sales: false, purchases: false };
+    accountingState.edit = null;
+    saleAddItem();
     purAddItem();
+    writeoffAddItem();
     loadRecTab('sales');
   } catch(e) {
-    document.getElementById('accountingContent').innerHTML =
-      '<div style="color:var(--red)">Помилка: ' + e.message + '</div>';
+    document.getElementById('accountingContent').innerHTML = '<div style="color:var(--red)">Помилка: ' + e.message + '</div>';
   }
 }
 
+function addSkuLine(kind, max, withPrice, withManualCost) {
+  const stateKey = kind === 'sale' ? 'saleSeq' : (kind === 'writeoff' ? 'writeoffSeq' : 'mysterySeq');
+  const containerId = kind === 'sale' ? 'saleItems' : (kind === 'writeoff' ? 'writeoffItems' : 'mysteryItems');
+  if (document.querySelectorAll('#' + containerId + ' .line-item').length >= max) return;
+  const seq = ++accountingState[stateKey];
+  const id = kind + seq;
+  const div = document.createElement('div');
+  div.className = 'line-item';
+  div.id = kind + 'Item' + seq;
+  div.innerHTML =
+    '<div class="purchase-item-head"><span class="purchase-item-title">SKU ' + seq + '</span>' +
+      '<button class="purchase-item-remove" onclick="removeLine(\'' + kind + '\',' + seq + ')">&#215;</button></div>' +
+    '<div class="form-row"><label>Пошук SKU</label><input id="' + id + 'Search" placeholder="Назва або SKU..."></div>' +
+    '<div class="line-item-grid"><div class="form-row"><label>SKU *</label><select id="' + id + 'Select" size="4"></select></div>' +
+      '<div class="form-row"><label>Кількість *</label><input type="number" min="1" step="1" value="1" id="' + id + 'Qty"></div>' +
+      (withPrice ? '<div class="form-row"><label>Ціна за одиницю *</label><input type="number" min="0" step="0.01" id="' + id + 'Price"></div>' : '') +
+      (withManualCost ? '<div class="form-row"><label>Ручна вартість, грн</label><input type="number" min="0" step="0.01" id="' + id + 'ManualCost"></div>' : '') +
+      '<div class="form-row"><label>Примітка рядка</label><input id="' + id + 'Note"></div></div>';
+  document.getElementById(containerId).appendChild(div);
+  acSkuOptions(accountingState.skus, id + 'Select', id + 'Search');
+  if (withPrice) {
+    const sel = document.getElementById(id + 'Select');
+    sel.onchange = function() {
+      const sku = accountingState.skus.find(function(item) { return item.sku === sel.value; });
+      const price = sku && (sku.rrc != null ? sku.rrc : sku.price);
+      if (price != null) document.getElementById(id + 'Price').value = price;
+      refreshMysteryOptions();
+    };
+    sel.onchange();
+  } else if (kind === 'mystery') {
+    acMysteryOptions(id + 'Select', id + 'Search');
+  }
+}
+
+function saleAddItem() { addSkuLine('sale',10,true,false); }
+function writeoffAddItem() { addSkuLine('writeoff',10,false,false); }
+function mysteryAddItem() { addSkuLine('mystery',10,false,false); }
+function removeLine(kind, seq) {
+  const el = document.getElementById(kind + 'Item' + seq);
+  if (el) el.remove();
+  if (kind === 'purchase') recalcPurchaseCosts();
+}
+
 function purAddItem() {
+  if (document.querySelectorAll('#purchaseItems .purchase-item').length >= 3) return;
   const seq = ++accountingState.purchaseSeq;
   const id = 'pur' + seq;
   const div = document.createElement('div');
   div.className = 'purchase-item';
   div.id = 'purItem' + seq;
   div.innerHTML =
-    '<div class="purchase-item-head">' +
-      '<span class="purchase-item-title">SKU ' + seq + '</span>' +
-      '<button class="purchase-item-remove' + (seq === 1 ? ' hidden' : '') + '" onclick="purRemoveItem(' + seq + ')">&#215;</button>' +
-    '</div>' +
-    '<div class="form-row"><label>Пошук SKU</label><input type="text" id="' + id + 'Search" placeholder="Назва або SKU..."></div>' +
+    '<div class="purchase-item-head"><span class="purchase-item-title">SKU ' + seq + '</span>' +
+      '<button class="purchase-item-remove" onclick="purRemoveItem(' + seq + ')">&#215;</button></div>' +
+    '<div class="form-row"><label>Пошук SKU</label><input id="' + id + 'Search" placeholder="Назва або SKU..."></div>' +
     '<div class="form-row"><label>SKU *</label><select id="' + id + 'Select" size="4"></select></div>' +
     '<div class="purchase-cost-grid">' +
-      '<div class="form-row"><label>Кількість *</label><input type="number" id="' + id + 'Qty" min="1" value="1"></div>' +
-      '<div class="form-row"><label>Ціна ПРРО *</label><input type="number" id="' + id + 'CostPrro" min="0" step="0.01"></div>' +
-      '<div class="form-row"><label>Ціна mgmt</label><input type="number" id="' + id + 'CostMgmt" min="0" step="0.01" placeholder="= ПРРО"></div>' +
-    '</div>';
+      '<div class="form-row"><label>Кількість *</label><input type="number" min="1" value="1" id="' + id + 'Qty" oninput="recalcPurchaseCosts()"></div>' +
+      '<div class="form-row"><label>Вартість рядка, грн</label><input type="number" id="' + id + 'LineCost" disabled></div>' +
+      '<div class="form-row"><label>Ручна вартість, грн</label><input type="number" min="0" step="0.01" id="' + id + 'ManualCost" oninput="recalcPurchaseCosts()"></div>' +
+    '</div><div class="form-row"><label>Примітка до рядка</label><input id="' + id + 'Note"></div>';
   document.getElementById('purchaseItems').appendChild(div);
   acSkuOptions(accountingState.skus, id + 'Select', id + 'Search');
+  recalcPurchaseCosts();
 }
 
 function purRemoveItem(seq) {
   const el = document.getElementById('purItem' + seq);
   if (el) el.remove();
+  recalcPurchaseCosts();
+}
+
+function recalcPurchaseCosts() {
+  const total = Number(editValue('purTotalCost')) || 0;
+  const rows = Array.from(document.querySelectorAll('#purchaseItems .purchase-item')).map(function(div) {
+    const id = div.id.replace('purItem','pur');
+    return { id: id, qty: Number(editValue(id + 'Qty')) || 0, manualText: editValue(id + 'ManualCost') };
+  });
+  const manualTotal = rows.reduce(function(sum,row) { return sum + (row.manualText === '' ? 0 : Number(row.manualText) || 0); },0);
+  const autoQty = rows.reduce(function(sum,row) { return sum + (row.manualText === '' ? row.qty : 0); },0);
+  let allocated = manualTotal;
+  rows.forEach(function(row,index) {
+    let cost = Number(row.manualText);
+    if (row.manualText === '') {
+      const autoRows = rows.filter(function(item) { return item.manualText === ''; });
+      const isLastAuto = autoRows[autoRows.length - 1] === row;
+      cost = autoQty > 0 ? (isLastAuto ? total - allocated : Math.round((total - manualTotal) * row.qty / autoQty * 100) / 100) : 0;
+      allocated = Math.round((allocated + cost) * 100) / 100;
+    }
+    const out = document.getElementById(row.id + 'LineCost');
+    if (out) out.value = isFinite(cost) ? Math.max(0,cost).toFixed(2) : '';
+  });
 }
 
 function formMsg(id, text, type) {
@@ -1946,69 +2108,87 @@ function formMsg(id, text, type) {
   el.className = 'form-msg' + (type ? ' ' + type : '');
 }
 
-async function submitSale() {
-  const sku = document.getElementById('saleSkuSelect').value;
-  const qty = parseInt(document.getElementById('saleQty').value) || 0;
-  const price = parseFloat(document.getElementById('salePrice').value) || 0;
-  const channel = document.getElementById('saleChannel').value;
-  const orderIdEl = document.getElementById('saleOrderId').value.trim();
-  const order_id = orderIdEl || undefined;
-  const date = document.getElementById('saleDate').value;
-  if (!sku || !qty || !price || !date) {
-    formMsg('saleMsg', '⚠ Заповніть SKU, кількість, ціну та дату', 'error'); return;
-  }
-  formMsg('saleMsg', 'Збереження…', '');
-  try {
-    await callPost({ action: 'add_sale', date, channel, order_id, items: [{ sku, qty, price }] });
-    formMsg('saleMsg', '✅ Збережено', 'success');
-    delete cache.summary; delete cache.stock;
-    loaded.overview = false; loaded.stock = false;
-  } catch(e) { formMsg('saleMsg', '❌ ' + e.message, 'error'); }
+function collectSkuLines(containerId, prefix, priceField) {
+  const items = [];
+  document.querySelectorAll('#' + containerId + ' .line-item').forEach(function(div) {
+    const id = div.id.replace(prefix + 'Item',prefix);
+    const sku = editValue(id + 'Select');
+    const qty = Number(editValue(id + 'Qty')) || 0;
+    const item = { sku: sku, qty: qty, note: editValue(id + 'Note') };
+    if (priceField) item.price = Number(editValue(id + 'Price'));
+    if (sku || qty || item.note) items.push(item);
+  });
+  return items;
 }
 
-async function submitWriteoff() {
-  const sku = document.getElementById('woSkuSelect').value;
-  const qty = parseInt(document.getElementById('woQty').value) || 0;
-  const reason = document.getElementById('woReason').value.trim();
-  const date = document.getElementById('woDate').value;
-  if (!sku || !qty || !reason || !date) {
-    formMsg('woMsg', '⚠ Заповніть всі поля', 'error'); return;
+async function submitSale() {
+  const items = collectSkuLines('saleItems','sale',true);
+  const mysteryComponents = collectSkuLines('mysteryItems','mystery',false);
+  const date = editValue('saleDate');
+  if (!date || !items.length || items.some(function(item) { return !item.sku || item.qty <= 0 || item.price < 0 || !isFinite(item.price); })) {
+    formMsg('saleMsg','⚠ Перевір дату та всі позиції продажу','error'); return;
   }
-  formMsg('woMsg', 'Збереження…', '');
+  formMsg('saleMsg','Збереження…','');
   try {
-    await callPost({ action: 'add_writeoff', date, reason, items: [{ sku, qty }] });
-    formMsg('woMsg', '✅ Збережено', 'success');
-    delete cache.summary; delete cache.stock;
-    loaded.overview = false; loaded.stock = false;
-  } catch(e) { formMsg('woMsg', '❌ ' + e.message, 'error'); }
+    await callPost({
+      action:'add_sale', order_id:editValue('saleOrderId') || undefined, channel:editValue('saleChannel'), date:date,
+      customer_phone:editValue('salePhone'), customer_name:editValue('saleCustomer'), payment_type:editValue('salePaymentType'),
+      discount:Number(editValue('saleDiscount')) || 0, packaging_type:editValue('salePackaging'),
+      custom_packaging_cost:editValue('saleCustomPackaging') === '' ? undefined : Number(editValue('saleCustomPackaging')),
+      shop_delivery:Number(editValue('saleShopDelivery')) || 0, payment_status:editValue('salePaymentStatus'),
+      order_status:editValue('saleOrderStatus'), post:editValue('salePost'), ttn:editValue('saleTtn'), note:editValue('saleNote'),
+      items:items, mystery_components:mysteryComponents
+    });
+    formMsg('saleMsg','✅ Продаж збережено','success');
+    invalidateAccountingCaches();
+  } catch(e) { formMsg('saleMsg','❌ ' + e.message,'error'); }
 }
 
 async function submitPurchase() {
-  const order_ref = document.getElementById('purOrderRef').value.trim();
-  const supplier = document.getElementById('purSupplier').value.trim() || 'ZenMarket';
-  const dateVal = document.getElementById('purDate').value;
-  const date = dateVal || undefined;
-  if (!order_ref) { formMsg('purMsg', '⚠ Вкажіть Order Ref', 'error'); return; }
+  const order_ref = editValue('purOrderRef').trim();
+  const totalCostText = editValue('purTotalCost');
+  const total_cost = Number(totalCostText);
   const items = [];
-  document.querySelectorAll('.purchase-item').forEach(function(div) {
-    const id = div.id.replace('purItem', 'pur');
-    const skuEl = document.getElementById(id + 'Select');
-    const qtyEl = document.getElementById(id + 'Qty');
-    const prroEl = document.getElementById(id + 'CostPrro');
-    const mgmtEl = document.getElementById(id + 'CostMgmt');
-    const sku = skuEl ? skuEl.value : '';
-    const qty = parseInt(qtyEl ? qtyEl.value : 0) || 0;
-    const cost_prro = parseFloat(prroEl ? prroEl.value : 0) || 0;
-    const mgmtVal = mgmtEl ? mgmtEl.value : '';
-    const cost_mgmt = mgmtVal ? parseFloat(mgmtVal) : cost_prro;
-    if (sku && qty > 0 && cost_prro >= 0) items.push({ sku, qty, cost_prro, cost_mgmt });
+  document.querySelectorAll('#purchaseItems .purchase-item').forEach(function(div) {
+    const id = div.id.replace('purItem','pur');
+    const manual = editValue(id + 'ManualCost');
+    items.push({ sku:editValue(id + 'Select'), qty:Number(editValue(id + 'Qty')) || 0,
+      manual_cost:manual === '' ? null : Number(manual), note:editValue(id + 'Note') });
   });
-  if (!items.length) { formMsg('purMsg', '⚠ Додайте хоча б один SKU', 'error'); return; }
-  formMsg('purMsg', 'Збереження…', '');
+  if (!order_ref || totalCostText === '' || !isFinite(total_cost) || total_cost < 0 || !items.length ||
+      items.some(function(item) { return !item.sku || item.qty <= 0; })) {
+    formMsg('purMsg','⚠ Перевір Order №, загальну вартість і позиції','error'); return;
+  }
+  formMsg('purMsg','Збереження…','');
   try {
-    await callPost({ action: 'add_purchase', order_ref, supplier, date, items });
-    formMsg('purMsg', '✅ Збережено (' + items.length + ' SKU)', 'success');
-  } catch(e) { formMsg('purMsg', '❌ ' + e.message, 'error'); }
+    await callPost({ action:'add_purchase', order_ref:order_ref, total_cost:total_cost,
+      japan_fees_jpy:Number(editValue('purJapanFees')) || 0, status:editValue('purStatus'),
+      order_url:editValue('purOrderUrl'), note:editValue('purNote'), items:items });
+    formMsg('purMsg','✅ Закупку збережено (' + items.length + ' SKU)','success');
+    invalidateAccountingCaches();
+  } catch(e) { formMsg('purMsg','❌ ' + e.message,'error'); }
+}
+
+async function submitWriteoff() {
+  const items = collectSkuLines('writeoffItems','writeoff',false);
+  const expected = editValue('woExpectedQty');
+  if (!editValue('woDate') || !editValue('woType') || !editValue('woReason').trim() || !items.length ||
+      items.some(function(item) { return !item.sku || item.qty <= 0; })) {
+    formMsg('woMsg','⚠ Перевір загальні поля та позиції списання','error'); return;
+  }
+  formMsg('woMsg','Збереження…','');
+  try {
+    await callPost({ action:'add_writeoff', date:editValue('woDate'), writeoff_type:editValue('woType'),
+      reason:editValue('woReason').trim(), note:editValue('woNote'),
+      expected_qty:expected === '' ? undefined : Number(expected), items:items });
+    formMsg('woMsg','✅ Списання збережено (' + items.length + ' SKU)','success');
+    invalidateAccountingCaches();
+  } catch(e) { formMsg('woMsg','❌ ' + e.message,'error'); }
+}
+
+function invalidateAccountingCaches() {
+  delete cache.summary; delete cache.stock;
+  loaded.overview = false; loaded.stock = false;
 }
 
 function recEsc(value) {
@@ -2034,15 +2214,11 @@ function showRecTab(name, btn) {
 function recTableConfig(name) {
   if (name === 'sales') return {
     action: 'recent_sales',
-    columns: [['date','Дата'],['order_id','Замовлення'],['channel','Канал'],['sku','SKU'],['qty','К-сть'],['price','Ціна']]
-  };
-  if (name === 'purchases') return {
-    action: 'recent_purchases',
-    columns: [['date','Дата'],['order_ref','Order Ref'],['supplier','Постачальник'],['sku','SKU'],['qty','К-сть'],['cost_mgmt','Mgmt'],['status','Статус']]
+    columns: [['ttn_display','ТТН / доставка'],['order_id','Замовлення'],['date','Дата'],['amount','Сума'],['payment_status','Оплата'],['order_status','Статус'],['payment_type','Тип оплати']]
   };
   return {
-    action: 'recent_writeoffs',
-    columns: [['date','Дата'],['sku','SKU'],['qty','К-сть'],['reason','Причина']]
+    action: 'recent_purchases',
+    columns: [['order_ref','Order Ref'],['sku','SKU'],['qty','К-сть'],['japan_fee_jpy','JP-комісія, JPY'],['status','Статус']]
   };
 }
 
@@ -2058,6 +2234,19 @@ async function loadRecTab(name, force) {
     const cfg = recTableConfig(name);
     const data = await call(cfg.action, { limit: 20 });
     accountingState.recent[name] = data.rows || [];
+    if (name === 'sales') {
+      accountingState.recent[name].forEach(function(row) {
+        const ttn = String(row.ttn || '').trim();
+        row.ttn_display = (ttn ? ttn.slice(-4) : 'NTTN') + ' · ' + (String(row.post || '').trim() || '—');
+      });
+    }
+    if (name === 'purchases') {
+      accountingState.recent[name].sort(function(a,b) {
+        const an = Number((String(a.order_ref || '').match(/\d+/) || [0])[0]);
+        const bn = Number((String(b.order_ref || '').match(/\d+/) || [0])[0]);
+        return an - bn || String(a.order_ref || '').localeCompare(String(b.order_ref || ''));
+      });
+    }
     accountingState.recentLoaded[name] = true;
     renderRecTable(name);
   } catch(e) {
@@ -2074,11 +2263,21 @@ function renderRecTable(name) {
     pane.innerHTML = '<div class="records-message">Записів немає.</div>';
     return;
   }
+  if (name === 'purchases') {
+    renderPurchaseTables_(pane, rows, cfg);
+    return;
+  }
   let html = '<table class="rec-table"><thead><tr>';
+  if (name === 'purchases') html += '<th class="lot-select-cell">✓</th>';
   cfg.columns.forEach(function(col) { html += '<th>' + recEsc(col[1]) + '</th>'; });
   html += '</tr></thead><tbody>';
   rows.forEach(function(row) {
-    html += '<tr onclick="openEditRow(\'' + name + '\',' + Number(row.row_index) + ')">';
+    html += '<tr' + (name === 'sales' ? ' onclick="openEditRow(\'sales\',' + Number(row.row_index) + ')"' : '') + '>';
+    if (name === 'purchases') {
+      const checked = accountingState.selectedPurchaseLots[row.row_index] ? ' checked' : '';
+      html += '<td class="lot-select-cell"><input type="checkbox" id="lotCheck' + Number(row.row_index) + '"' + checked +
+        ' onchange="togglePurchaseLot(' + Number(row.row_index) + ',this.checked)"></td>';
+    }
     cfg.columns.forEach(function(col) { html += '<td>' + recEsc(row[col[0]]) + '</td>'; });
     html += '</tr>';
   });
@@ -2086,9 +2285,59 @@ function renderRecTable(name) {
   pane.innerHTML = html;
 }
 
+function purchaseTableHtml_(rows, cfg) {
+  if (!rows.length) return '';
+  let html = '<table class="rec-table"><thead><tr><th class="lot-select-cell">✓</th>';
+  cfg.columns.forEach(function(col) { html += '<th>' + recEsc(col[1]) + '</th>'; });
+  html += '</tr></thead><tbody>';
+  rows.forEach(function(row) {
+    const checked = accountingState.selectedPurchaseLots[row.row_index] ? ' checked' : '';
+    html += '<tr><td class="lot-select-cell"><input type="checkbox" id="lotCheck' + Number(row.row_index) + '"' +
+      checked + ' onchange="togglePurchaseLot(' + Number(row.row_index) + ',this.checked)"></td>';
+    cfg.columns.forEach(function(col) { html += '<td>' + recEsc(row[col[0]]) + '</td>'; });
+    html += '</tr>';
+  });
+  return html + '</tbody></table>';
+}
+
+function renderPurchaseTables_(pane, rows, cfg) {
+  const regular = rows.filter(function(row) { return String(row.status) !== 'В дорозі'; });
+  const transit = rows.filter(function(row) { return String(row.status) === 'В дорозі'; });
+  let html = regular.length ? purchaseTableHtml_(regular,cfg) : '<div class="records-message">Лотів поза дорогою немає.</div>';
+  if (transit.length) {
+    const groups = {};
+    transit.forEach(function(row) {
+      const key = String(row.track_number || '').trim() || 'NTTN';
+      (groups[key] = groups[key] || []).push(row);
+    });
+    html += '<div class="form-section-title">В дорозі · посилки</div><div class="parcel-list">';
+    Object.keys(groups).forEach(function(track) {
+      html += '<div class="parcel-block"><div class="parcel-head"><span>Посилка ' +
+        recEsc(track === 'NTTN' ? 'без ТТН' : track) + '</span><span>' +
+        groups[track].length + ' лот.</span></div>' + purchaseTableHtml_(groups[track],cfg) + '</div>';
+    });
+    html += '</div>';
+  }
+  html += '<div id="editRowFormPurchases"></div>';
+  pane.innerHTML = html;
+  renderPurchaseBatchEditor();
+}
+
 function recField(id, label, value, type, step) {
   return '<div class="form-row"><label>' + recEsc(label) + '</label><input id="' + id + '" type="' +
     (type || 'text') + '"' + (step ? ' step="' + step + '"' : '') + ' value="' + recEsc(value) + '"></div>';
+}
+
+function recReadOnly(label, value) {
+  return '<div class="form-row"><label>' + recEsc(label) + '</label><input type="text" value="' + recEsc(value) + '" disabled></div>';
+}
+
+function recSelect(id, label, value, options) {
+  let html = '<div class="form-row"><label>' + recEsc(label) + '</label><select id="' + id + '">';
+  options.forEach(function(option) {
+    html += '<option value="' + recEsc(option) + '"' + (String(option) === String(value) ? ' selected' : '') + '>' + recEsc(option) + '</option>';
+  });
+  return html + '</select></div>';
 }
 
 function openEditRow(type, rowIndex) {
@@ -2096,36 +2345,26 @@ function openEditRow(type, rowIndex) {
     return Number(item.row_index) === Number(rowIndex);
   });
   if (!row) return;
-  accountingState.edit = { type: type, row_index: Number(row.row_index) };
+  if (type !== 'sales') return;
+  accountingState.edit = { type: type, key: row.order_id };
   const host = document.getElementById('editRowForm' + type.charAt(0).toUpperCase() + type.slice(1));
   if (!host) return;
   let fields = '';
   if (type === 'sales') {
-    fields += recField('editDate','Дата',row.date,'date');
-    fields += recField('editChannel','Канал',row.channel);
-    fields += recField('editOrderId','Order ID',row.order_id);
-    fields += recField('editSku','SKU',row.sku);
-    fields += recField('editQty','Кількість',row.qty,'number','1');
-    fields += recField('editPrice','Ціна',row.price,'number','0.01');
-    fields += recField('editNote','Примітка',row.note);
-  } else if (type === 'purchases') {
-    fields += recField('editDate','Дата доставки',row.date,'date');
-    fields += recField('editOrderRef','Order Ref',row.order_ref);
-    fields += recField('editSupplier','Постачальник',row.supplier);
-    fields += recField('editSku','SKU',row.sku);
-    fields += recField('editQty','Кількість',row.qty,'number','1');
-    fields += recField('editCostPrro','Собівартість ПРРО',row.cost_prro,'number','0.01');
-    fields += recField('editCostMgmt','Управлінська собівартість',row.cost_mgmt,'number','0.01');
-    fields += recField('editStatus','Статус',row.status);
-    fields += recField('editNote','Примітка',row.note);
-  } else {
-    fields += recField('editDate','Дата',row.date,'date');
-    fields += recField('editSku','SKU',row.sku);
-    fields += recField('editQty','Кількість',row.qty,'number','1');
-    fields += recField('editReason','Причина',row.reason);
+    fields += recReadOnly('ТТН / замовлення', (row.ttn ? 'ТТН ' + row.ttn + ' | ' : '') + row.order_id);
+    fields += recReadOnly('Поточний статус оплати', row.payment_status);
+    fields += recReadOnly('Тип оплати', row.payment_type);
+    fields += recReadOnly('Сума замовлення', fmt(row.amount));
+    fields += recSelect('editPaymentStatus','Новий статус оплати',row.payment_status,['Не оплачено','Оплачено','Повернення','Скасовано']);
+    fields += recReadOnly('Поточний статус замовлення', row.order_status);
+    fields += recSelect('editOrderStatus','Новий статус замовлення',row.order_status,['Нове','В обробці','Відправлено','Отримано','Скасовано','Повернення','Передзамовлення']);
+    fields += recField('editTtn','ТТН',row.ttn);
+    fields += recSelect('editPackagingType','Паковання',row.packaging_type,['',"Мала м'яка 14х12 см",'Середня м\'яка 16х14 см','Велика пакет 17х30 см','Конверт Airpock 14х22 см','Інше']);
+    fields += recField('editCustomPackaging','Якщо Інше, грн','','number','0.01');
+    fields += recField('editShopDelivery','Доставка за рахунок магазину',row.shop_delivery || '','number','0.01');
     fields += recField('editNote','Примітка',row.note);
   }
-  host.innerHTML = '<div class="edit-row-form"><h4>Редагування рядка ' + Number(row.row_index) + '</h4>' +
+  host.innerHTML = '<div class="edit-row-form"><h4>Оновити продаж ' + recEsc(row.order_id) + '</h4>' +
     '<div class="edit-row-grid">' + fields + '</div>' +
     '<div class="form-actions"><button class="btn-primary" onclick="saveEditRow()">Зберегти</button>' +
     '<button class="btn-secondary" onclick="closeEditRow()">Скасувати</button></div></div>';
@@ -2143,34 +2382,101 @@ function closeEditRow() {
 
 async function saveEditRow() {
   const edit = accountingState.edit;
-  if (!edit) return;
-  const actionMap = { sales: 'update_sale', purchases: 'update_purchase', writeoffs: 'update_writeoff' };
-  const payload = { action: actionMap[edit.type], row_index: edit.row_index };
-  if (edit.type === 'sales') {
-    payload.date = editValue('editDate'); payload.channel = editValue('editChannel');
-    payload.order_id = editValue('editOrderId'); payload.sku = editValue('editSku');
-    payload.qty = Number(editValue('editQty')); payload.price = Number(editValue('editPrice'));
-    payload.note = editValue('editNote');
-  } else if (edit.type === 'purchases') {
-    payload.date = editValue('editDate'); payload.order_ref = editValue('editOrderRef');
-    payload.supplier = editValue('editSupplier'); payload.sku = editValue('editSku');
-    payload.qty = Number(editValue('editQty')); payload.cost_prro = Number(editValue('editCostPrro'));
-    payload.cost_mgmt = Number(editValue('editCostMgmt')); payload.status = editValue('editStatus');
-    payload.note = editValue('editNote');
-  } else {
-    payload.date = editValue('editDate'); payload.sku = editValue('editSku');
-    payload.qty = Number(editValue('editQty')); payload.reason = editValue('editReason');
-    payload.note = editValue('editNote');
-  }
+  if (!edit || edit.type !== 'sales') return;
+  const payload = { action:'update_sale', order_id:edit.key, payment_status:editValue('editPaymentStatus'),
+    order_status:editValue('editOrderStatus'), ttn:editValue('editTtn'), packaging_type:editValue('editPackagingType'),
+    note:editValue('editNote') };
+  if (editValue('editCustomPackaging') !== '') payload.custom_packaging_cost = Number(editValue('editCustomPackaging'));
+  if (editValue('editShopDelivery') !== '') payload.shop_delivery = Number(editValue('editShopDelivery'));
   const msg = document.getElementById('recordsMsg');
   if (msg) { msg.textContent = 'Збереження…'; msg.className = 'records-message'; }
   try {
     await callPost(payload);
     if (msg) { msg.textContent = 'Зміни збережено'; msg.className = 'records-message success'; }
     accountingState.edit = null;
-    delete cache.summary; delete cache.stock;
-    loaded.overview = false; loaded.stock = false;
+    invalidateAccountingCaches();
     await loadRecTab(edit.type, true);
+  } catch(e) {
+    if (msg) { msg.textContent = 'Помилка: ' + e.message; msg.className = 'records-message error'; }
+  }
+}
+
+function togglePurchaseLot(rowIndex, checked) {
+  const row = (accountingState.recent.purchases || []).find(function(item) { return Number(item.row_index) === Number(rowIndex); });
+  if (!row) return;
+  if (checked && Object.keys(accountingState.selectedPurchaseLots).length >= 5) {
+    const checkbox = document.getElementById('lotCheck' + rowIndex);
+    if (checkbox) checkbox.checked = false;
+    const msg = document.getElementById('recordsMsg');
+    if (msg) { msg.textContent = 'Можна вибрати не більше 5 лотів'; msg.className = 'records-message error'; }
+    return;
+  }
+  if (checked) accountingState.selectedPurchaseLots[rowIndex] = row;
+  else delete accountingState.selectedPurchaseLots[rowIndex];
+  renderPurchaseBatchEditor();
+}
+
+function renderPurchaseBatchEditor() {
+  const host = document.getElementById('editRowFormPurchases');
+  if (!host) return;
+  const rows = Object.keys(accountingState.selectedPurchaseLots).map(function(key) { return accountingState.selectedPurchaseLots[key]; });
+  if (!rows.length) {
+    host.innerHTML = '<div class="records-message">Вибери від 1 до 5 лотів для спільного оновлення.</div>';
+    return;
+  }
+  let selected = '<div class="selected-lots">';
+  rows.forEach(function(row) {
+    selected += '<div class="selected-lot"><div><b>' + recEsc(row.order_ref) + '</b><div class="field-hint">' +
+      recEsc(row.lot_id + ' | ' + row.sku + ' | к-сть ' + row.qty + ' | ' + row.status) +
+      '</div></div><div class="form-row"><label>JP-комісія лоту, JPY</label><input class="lot-fee-input" type="number" min="0" step="0.01" id="lotFee' +
+      Number(row.row_index) + '"></div></div>';
+  });
+  selected += '</div>';
+  host.innerHTML = '<div class="edit-row-form"><h4>Оновити закупку: вибрано ' + rows.length + ' з 5</h4>' + selected +
+    '<div class="edit-row-grid">' +
+      recField('batchTrackNumber','Трек-номер','') +
+      recField('batchDate','Дата доставки в Україну','','date') +
+      recField('batchUkraineDeliveryJpy','Доставка в Україну, JPY','','number','0.01') +
+      recSelect('batchStatus','Статус','', [''].concat(PURCHASE_STATUSES)) +
+      recField('batchNote','Примітка','') +
+    '</div><div class="form-actions"><button class="btn-primary" onclick="savePurchaseBatch()">Зберегти для вибраних лотів</button>' +
+    '<button class="btn-secondary" onclick="clearPurchaseSelection()">Скасувати вибір</button></div></div>';
+}
+
+function clearPurchaseSelection() {
+  accountingState.selectedPurchaseLots = {};
+  renderRecTable('purchases');
+}
+
+async function savePurchaseBatch() {
+  const rows = Object.keys(accountingState.selectedPurchaseLots).map(function(key) { return accountingState.selectedPurchaseLots[key]; });
+  if (!rows.length || rows.length > 5) return;
+  const lots = rows.map(function(row) {
+    const fee = editValue('lotFee' + row.row_index);
+    const item = { lot_id:row.lot_id };
+    if (fee !== '') item.japan_fee_jpy = Number(fee);
+    return item;
+  });
+  const payload = { action:'update_purchase', lots:lots };
+  if (editValue('batchTrackNumber') !== '') payload.track_number = editValue('batchTrackNumber');
+  if (editValue('batchDate') !== '') payload.date = editValue('batchDate');
+  if (editValue('batchUkraineDeliveryJpy') !== '') payload.ukraine_delivery_jpy = Number(editValue('batchUkraineDeliveryJpy'));
+  if (editValue('batchStatus') !== '') payload.status = editValue('batchStatus');
+  if (editValue('batchNote') !== '') payload.note = editValue('batchNote');
+  const hasLotFee = lots.some(function(lot) { return Object.prototype.hasOwnProperty.call(lot,'japan_fee_jpy'); });
+  if (Object.keys(payload).length === 2 && !hasLotFee) {
+    const msg = document.getElementById('recordsMsg');
+    if (msg) { msg.textContent = 'Заповни хоча б одне поле для оновлення'; msg.className = 'records-message error'; }
+    return;
+  }
+  const msg = document.getElementById('recordsMsg');
+  if (msg) { msg.textContent = 'Збереження…'; msg.className = 'records-message'; }
+  try {
+    const result = await callPost(payload);
+    if (msg) { msg.textContent = 'Оновлено лотів: ' + (result.rows_updated || rows.length); msg.className = 'records-message success'; }
+    accountingState.selectedPurchaseLots = {};
+    invalidateAccountingCaches();
+    await loadRecTab('purchases',true);
   } catch(e) {
     if (msg) { msg.textContent = 'Помилка: ' + e.message; msg.className = 'records-message error'; }
   }
