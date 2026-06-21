@@ -12,9 +12,16 @@ handoffs/     task briefs (Claude → Codex scope boundary)
 patches/      PHP/JS/CSS runners (Codex output)
 plans/        roadmaps, audits, content plans
 diagnostics/  post-patch reports (Codex output, risky/handoff tasks only)
-dashboard/    local CRM HTML
+dashboard/    git copy of CRM HTML (for version history)
 templates/    handoff + report templates
 ```
+
+## Dashboard (booster-dashboard.html)
+- **Live working file:** `E:\Program Files\booster-dashboard.html` — edit THIS file directly
+- **Git copy:** `dashboard/booster-dashboard.html` in this repo — updated manually after edits
+- **Workflow:** edit `E:\Program Files\booster-dashboard.html` → copy to `dashboard/` → commit
+- Open in browser: `file:///E:/Program%20Files/booster-dashboard.html`
+- Do NOT edit `dashboard/booster-dashboard.html` directly — it is a copy, not the source
 
 ## Environment
 - **Terminal (Claude Code CLI)** — installed and available. Use for: git operations (diff, commit, push), running bash scripts, FTP deploy triggers, any shell command that avoids round-trips through the sandbox. Prefer Terminal over sandbox bash when working with files in the repo or on the owner's machine.
