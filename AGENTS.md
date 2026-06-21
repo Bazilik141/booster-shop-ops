@@ -1,4 +1,4 @@
-# AGENTS.md — Booster Shop ops rules (Claude + Codex)
+﻿# AGENTS.md — Booster Shop ops rules (Claude + Codex)
 # Canonical location: booster-shop-ops/AGENTS.md
 # If you find another AGENTS.md elsewhere, ignore it — this file wins.
 
@@ -6,44 +6,37 @@
 OpenCart e-commerce: boostershop.website (MTG, Pokemon, One Piece, Yu-Gi-Oh).
 Stack: OpenCart (Twig/PHP), custom checkout + NP integration, Google Apps Script CRM, Google Sheets.
 
+## Local paths (owner's machine)
+- **Repo (local):** `E:\Personal Files\booster-shop-ops\` <- primary working folder
+- **GitHub:** `https://github.com/Bazilik141/booster-shop-ops` (branch: master)
+- **Dashboard (live):** `E:\Personal Files\booster-dashboard.html` — edit THIS file directly
+- **Dashboard (git copy):** `dashboard/booster-dashboard.html` inside the repo — copy after edits, then commit
+- **Dashboard URL:** `file:///E:/Personal%20Files/booster-dashboard.html`
+
+Old paths retired — do not use:
+- `C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\`
+- `E:\Program Files\...`
+
+When Codex drops output files to the local machine, target:
+`E:\Personal Files\booster-shop-ops\<subfolder>\<filename>`
+
 ## Repo structure
-```
-handoffs/     task briefs (Claude → Codex scope boundary)
-patches/      PHP/JS/CSS runners (Codex output)
-plans/        roadmaps, audits, content plans
-diagnostics/  post-patch reports (Codex output, risky/handoff tasks only)
-dashboard/    git copy of CRM HTML (for version history)
-templates/    handoff + report templates
-```
-
-## Dashboard (booster-dashboard.html)
-- **Live working file:** `E:\Program Files\booster-dashboard.html` — edit THIS file directly
-- **Git copy:** `dashboard/booster-dashboard.html` in this repo — updated manually after edits
-- **Workflow:** edit `E:\Program Files\booster-dashboard.html` → copy to `dashboard/` → commit
-- Open in browser: `file:///E:/Program%20Files/booster-dashboard.html`
-- Do NOT edit `dashboard/booster-dashboard.html` directly — it is a copy, not the source
-
 ## Environment
-- **Terminal (Claude Code CLI)** — installed and available. Use for: git operations (diff, commit, push), running bash scripts, FTP deploy triggers, any shell command that avoids round-trips through the sandbox. Prefer Terminal over sandbox bash when working with files in the repo or on the owner's machine.
-- **VS Code (Claude Code extension)** — installed and available. Use for: viewing/editing repo files directly, inspecting diffs after Codex patches, navigating multi-file context. Prefer VS Code over sandbox reads when reviewing Codex output or cross-referencing patches with source files.
+- **Terminal (Claude Code CLI)** — installed. Use for: git operations, bash scripts, FTP deploy triggers.
+- **VS Code (Claude Code extension)** — installed. Use for: viewing/editing repo files, inspecting diffs.
 
 ## Roles & boundaries
 | Agent | Does | Does NOT |
 |-------|------|----------|
-| **Claude** | audit, SEO/UX strategy, handoffs, post-patch review, git diff via Terminal | server access, deploy |
-| **Codex** | patches (`patches/`), reports (`diagnostics/`), commit/push **only when owner explicitly asks** | server access, deploy, auto-commit/push |
+| **Claude** | audit, SEO/UX strategy, handoffs, post-patch review, git diff | server access, deploy |
+| **Codex** | patches (`patches/`), reports (`diagnostics/`), commit/push only when owner asks | server access, deploy, auto-commit/push |
 | **Owner** | approves in chat, uploads + runs patch on server, triggers commits | — |
 
 ## Flow
-```
-Claude handoff → Codex patch (patches/ + C:\Users\14bez\Downloads copy)
-→ Claude review (git diff via Terminal or VS Code) → Owner deploy (php patch.php in ~/public_html) → Owner QA
-```
-
 ## Source of truth
 - **Notion roadmap** — task status, priorities
 - **This repo** — implementation history, diffs, patch files
-- **Owner's cPanel backup drop** — live source for diagnosis (no server access)
+- **Owner cPanel backup drop** — live source for diagnosis (no server access)
 
 ## Commit / push policy
 - **Do NOT commit or push unless owner explicitly asks.** Show `git diff` summary and wait.
@@ -54,7 +47,7 @@ Claude handoff → Codex patch (patches/ + C:\Users\14bez\Downloads copy)
 ## Patch conventions (PHP runner)
 Each patch must:
 1. **File exists check** — fail with clear error if target file not found; never blind-edit
-2. **Anchor pre-check** — fail if anchor count ≠ expected
+2. **Anchor pre-check** — fail if anchor count != expected
 3. **Backup** to `_patch_backups/<patch>-<ts>/` before write
 4. **`php -l` gate** — restore-on-fail; no silent failures
 5. **Idempotent marker** — `already_applied=yes` on repeat run
@@ -62,11 +55,11 @@ Each patch must:
 7. **Self-delete** after success
 
 Naming: `patches/<TASK-ID>_<slug>_<YYYYMMDD>.php`
-Also drop identical copy to: `C:\Users\14bez\Downloads\<same filename>`
+Drop to: `E:\Personal Files\booster-shop-ops\patches\<same filename>`
 
 After patch is ready, respond with:
 - what it does (1-2 sentences)
-- `C:\Users\14bez\Downloads\<filename>` — path to upload
+- local path to the file
 - run command: `php <filename>` in `~/public_html`
 - one terminal block with the command
 
@@ -77,11 +70,10 @@ Template: `templates/codex-report-template.md`
 Naming: `diagnostics/<TASK-ID>_<slug>_report_<YYYYMMDD>.md`
 
 ## Live source (diagnosis input)
-Live state comes from owner's **cPanel backup drop** into the `Booster Shop` folder.
-- Always use the **newest backup** (check timestamp in filename)
+Live state comes from owner cPanel backup drop.
+- Always use the newest backup (check timestamp in filename)
 - If a needed file is missing from backup, ask owner to run:
   `tar -czf booster-debug-files.tar.gz path/to/file1 path/to/file2`
-  and drop the archive into the folder
 
 ## Risky zones — extra care + rollback + smoke test required
 checkout · payment · Hutko · Checkbox · fiscalization · Nova Poshta · order status ·
@@ -103,5 +95,4 @@ Merchant feed · schema/JSON-LD · SEO (sitemap/robots/canonical/.htaccess) · C
 - SKU/article goes ONLY into the SKU field, never into SEO URL
 
 ## Owner sync helpers
-`bs-autosync.ps1` — auto-pull every 120s (skips if index.lock present)
 `bspush` / `bsmain` / `bsreview` — PowerShell commit/push helpers
