@@ -213,8 +213,24 @@ Make.com flow:
 
 ---
 
-## 11. Наступна дія
+## 11. Статус реалізації (оновлено 21.06.2026)
 
-→ Прочитати і затвердити `tg-tone-of-voice.md`
-→ Зареєструватись на make.com + отримати Claude API key
-→ MKT-TG-002: базова інфра (Manual, ~1 год)
+### Що зроблено:
+- Make.com сценарій створено: RSS → Claude Sonnet → Telegram ✅
+- RSS: r/PokemonTCG працює, додати r/OnePieceTCG / r/magicTCG / r/yugioh
+- Claude: модель змінено на `claude-sonnet-4-6`, ToV v2 вставлено ✅
+- HTTP модуль для Reddit `.json` — **заблокований Cloudflare**, видалено
+- Поточне джерело тексту: `{{1.description}}` (RSS HTML, Claude обробляє)
+- Telegram: "Send a Text Message" — працює, фото не підключено ще
+
+### Проблема якості:
+RSS `description` містить скорочений текст без конкретних деталей → Claude узагальнює.
+Рішення: замінити HTTP модуль на альтернативний Reddit API (не прямий `.json`).
+
+### Наступна дія:
+→ Дослідити альтернативи для отримання повного тексту Reddit-поста:
+  - Pushshift API (архів Reddit)
+  - reddit.com/search.json або oauth Reddit API
+  - Reveddit або аналоги
+→ Підключити фото в Telegram (Send a Photo + Caption)
+→ Додати інші RSS джерела (One Piece, MTG, YGO)
