@@ -4,3 +4,6 @@
 desktop.ini
 *.log
 .DS_Store
+
+# AUTO-002: local secrets — never commit
+.env.review
