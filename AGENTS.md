@@ -1,4 +1,4 @@
-﻿# AGENTS.md — Booster Shop ops rules (Claude + Codex)
+# AGENTS.md — Booster Shop ops rules (Claude + Codex)
 # Canonical location: booster-shop-ops/AGENTS.md
 # If you find another AGENTS.md elsewhere, ignore it — this file wins.
 
@@ -7,7 +7,7 @@ OpenCart e-commerce: boostershop.website (MTG, Pokemon, One Piece, Yu-Gi-Oh).
 Stack: OpenCart (Twig/PHP), custom checkout + NP integration, Google Apps Script CRM, Google Sheets.
 
 ## Local paths (owner's machine)
-- **Repo (local):** `E:\Personal Files\booster-shop-ops\` <- primary working folder
+- **Repo (local):** `E:\Personal Files\booster-shop-ops\` ← primary working folder
 - **GitHub:** `https://github.com/Bazilik141/booster-shop-ops` (branch: master)
 - **Dashboard (live):** `E:\Personal Files\booster-dashboard.html` — edit THIS file directly
 - **Dashboard (git copy):** `dashboard/booster-dashboard.html` inside the repo — copy after edits, then commit
@@ -21,6 +21,15 @@ When Codex drops output files to the local machine, target:
 `E:\Personal Files\booster-shop-ops\<subfolder>\<filename>`
 
 ## Repo structure
+```
+handoffs/     task briefs (Claude → Codex scope boundary)
+patches/      PHP/JS/CSS runners (Codex output)
+plans/        roadmaps, audits, content plans
+diagnostics/  post-patch reports (Codex output, risky/handoff tasks only)
+dashboard/    git copy of booster-dashboard.html (version history only)
+templates/    handoff + report templates
+```
+
 ## Environment
 - **Terminal (Claude Code CLI)** — installed. Use for: git operations, bash scripts, FTP deploy triggers.
 - **VS Code (Claude Code extension)** — installed. Use for: viewing/editing repo files, inspecting diffs.
@@ -33,6 +42,11 @@ When Codex drops output files to the local machine, target:
 | **Owner** | approves in chat, uploads + runs patch on server, triggers commits | — |
 
 ## Flow
+```
+Claude handoff → Codex patch → drop to E:\Personal Files\booster-shop-ops\
+→ Claude review (git diff) → Owner deploy (php patch.php in ~/public_html) → Owner QA
+```
+
 ## Source of truth
 - **Notion roadmap** — task status, priorities
 - **This repo** — implementation history, diffs, patch files
@@ -70,8 +84,8 @@ Template: `templates/codex-report-template.md`
 Naming: `diagnostics/<TASK-ID>_<slug>_report_<YYYYMMDD>.md`
 
 ## Live source (diagnosis input)
-Live state comes from owner cPanel backup drop.
-- Always use the newest backup (check timestamp in filename)
+Live state comes from owner's **cPanel backup drop**.
+- Always use the **newest backup** (check timestamp in filename)
 - If a needed file is missing from backup, ask owner to run:
   `tar -czf booster-debug-files.tar.gz path/to/file1 path/to/file2`
 
@@ -80,14 +94,11 @@ checkout · payment · Hutko · Checkbox · fiscalization · Nova Poshta · orde
 Merchant feed · schema/JSON-LD · SEO (sitemap/robots/canonical/.htaccess) · CRM · DB
 
 ## Token and context efficiency
-- For CRM and Google Sheets work, use the Apps Script API or narrow bounded ranges first. Request only the rows, columns, and cell fields needed for the current decision.
-- Do not export or read an entire workbook, large sheet, repository, backup tree, or session log when a targeted read can answer the question.
-- A full export or broad scan is allowed only when targeted reads cannot safely complete the task. Before starting one, tell the owner why it is required and that it may consume substantial weekly usage.
-- Do not repeat unchanged reads or verify an established fact through multiple equivalent tools.
-- Default verification budget for a scoped code change: one syntax/static check and one focused smoke-test pass. Add checks only for a new failure or a high-risk acceptance criterion.
-- Keep tool responses small with exact ranges, finite search bounds, minimal field masks, and short result limits.
-- Before structural edits to `Apps_Script_код`, read and preserve the complete affected function block. Avoid scattered row-index edits that can shift or split functions.
-- If recovery requires repeated retries, broad exports, or large diagnostic output, pause and report the cause and expected usage cost before continuing.
+- For CRM and Google Sheets work, use the Apps Script API or narrow bounded ranges first.
+- Do not export or read an entire workbook, large sheet, or session log when a targeted read suffices.
+- A full export is allowed only when targeted reads cannot safely complete the task — tell the owner first.
+- Default verification budget: one syntax check + one smoke-test pass per scoped change.
+- Before structural edits to `Apps_Script_код`, read and preserve the complete affected function block.
 
 ## OpenCart SEO URL rules
 - Format: `Pokemon-boosters-Set-Name`, `YuGiOh-boosters-Set-Name` (human-readable)
