@@ -1633,15 +1633,13 @@ const ROADMAP_FLOW = [
     connector: null,
     tasks: [
       {
-        id: 'ST-2b.5', title: 'Промокоди, знижка First15 і GA4', status: 'active', tool: 'Codex', priority: 'High',
-        simple: 'Переносимо зі старого чекауту в новий: промокоди, знижку -15% для нових клієнтів і відстеження покупок без дублів.',
-        why: 'Без цього не можна відкрити новий чекаут для всіх клієнтів. Це останній крок перед переключенням.',
-        warn: 'HIGH-RISK — стосується оплати. Після патчу обов\'язковий smoke test.',
+        id: 'BRAND-OUTLET-001', title: 'Outlet Booster — фікс опису і SEO', status: 'active', tool: 'Codex', priority: 'High',
+        simple: 'Товар «Бустер Pokémon TCG: Outlet Mix (Японське видання)» slug Pokemon-Japanese-outlet-booster. Хендофф готовий. Потребує Codex-патчу і live-QA.',
+        why: 'Outlet-товар живий на сайті але опис і SEO-поля некоректні.',
+        warn: 'Не додавати в sitemap і Merchant feed.',
         subtasks: [
-          { id: 'A', title: 'Промокоди', status: 'todo', desc: 'Поле вводу купона + кнопка «Застосувати/Скасувати». Сума оновлюється без перезавантаження сторінки.' },
-          { id: 'B', title: 'First15 — знижка -15% для нових', status: 'todo', desc: 'Автоматична знижка при першому замовленні. Захист щоб не можна було використати двічі.' },
-          { id: 'C', title: 'Погодження з офертою', status: 'todo', desc: 'Один чекбокс «Погоджуюсь з умовами» — обов\'язковий перед кнопкою «Оформити».' },
-          { id: 'D', title: 'GA4 без дублів', status: 'todo', desc: 'Подія покупки в Google Analytics відправляється рівно один раз, навіть якщо сторінка перезавантажується.' }
+          { id: '1', title: 'Codex патч', status: 'todo', desc: 'Застосувати handoff_outlet_booster_FIX_2026-05-25.md' },
+          { id: '2', title: 'Live QA', status: 'todo', desc: 'Перевірити опис, H1, meta, FAQ на сторінці товару.' }
         ]
       },
       {
@@ -1658,8 +1656,30 @@ const ROADMAP_FLOW = [
   },
   {
     lane: '⏭ Наступне',
-    connector: 'розблоковується після ST-2b.5',
+    connector: null,
     tasks: [
+      {
+        id: 'CRM-002', title: 'CRM: Apps Script — multi-channel закупки', status: 'todo', tool: 'Codex', priority: 'High',
+        simple: 'Розширити apiAddPurchase_ для підтримки ZenMarket JP, Постачальник UA, інших каналів. Додати 2 колонки в Закупки, автогенерацію ref для UA, оновити статуси і apiSummary_.',
+        why: 'Закупки протекторів у Games 7 Days (UA) не вписуються в поточну форму — вона вимагає ZenMarket-номер і JPY.',
+        warn: 'Робити до CRM-001. Після деплою нової версії Apps Script — обов\'язково перевірити summary і recent_purchases.',
+        subtasks: [
+          { id: '1', title: 'Нові колонки в Закупки', status: 'todo', desc: 'Додати «Постачальник» і «Доставка UA, грн» в кінець таблиці.' },
+          { id: '2', title: 'apiAddPurchase_ — multi-channel', status: 'todo', desc: 'supplier_channel, ukraine_delivery_uah, автогенерація UA-ref.' },
+          { id: '3', title: 'apiSummary_ — нові статуси + backward compat', status: 'todo', desc: 'Замовлено/В дорозі/На складі UA/Скасовано. Старі статуси не ламати.' }
+        ]
+      },
+      {
+        id: 'CRM-001', title: 'CRM: Dashboard — форма мультиканальної закупки', status: 'todo', tool: 'Codex', priority: 'High',
+        simple: 'Адаптувати форму «Внести закупку» у дашборді: Постачальник/Канал select, умовні поля JPY/UAH, нові статуси, фільтр batch-update.',
+        why: 'UI зараз повністю заточений під ZenMarket. Для UA-постачальника форма некоректна.',
+        warn: 'Блокується CRM-002 — спочатку деплоїти Apps Script.',
+        subtasks: [
+          { id: '1', title: 'Supplier channel select + умовні поля', status: 'todo', desc: 'ZenMarket JP / Постачальник UA / Інший. JPY поле — тільки для JP.' },
+          { id: '2', title: 'Нові PURCHASE_STATUSES', status: 'todo', desc: 'Замовлено · В дорозі · На складі UA · Скасовано.' },
+          { id: '3', title: 'submitPurchase() + batch filter', status: 'todo', desc: 'Надсилати supplier_channel і ukraine_delivery_uah. Batch-update лише для JP лотів.' }
+        ]
+      },
       {
         id: 'DASH-001', title: 'Огляд — три плитки без даних', status: 'todo', tool: 'Codex', priority: 'High',
         simple: 'Собівартість складу (UA), Собівартість активів, Потенційний прибуток активів — показують «—». Apps Script summary endpoint не повертає warehouse_cost, asset_cost, asset_potential_profit. Codex додає три нові поля.',
@@ -1679,12 +1699,6 @@ const ROADMAP_FLOW = [
         warn: null, subtasks: []
       },
       {
-        id: 'DASH-UX-001', title: 'Облік — UX/UI редизайн форм', status: 'todo', tool: 'Claude design', priority: 'Medium',
-        simple: 'Поточні форми функціональні але не зручні: немає підтвердження перед записом, немає history останніх дій, немає inline-валідації. Потрібен повноцінний UX-редизайн.',
-        why: 'Форма має замінити Google Sheets як основний інструмент — зручність критична.',
-        warn: null, subtasks: []
-      },
-      {
         id: 'ST-2c', title: 'Переключення всіх клієнтів на новий чекаут', status: 'todo', tool: 'Claude + Codex', priority: 'High',
         simple: 'Видалення 5 рядків з одного файлу — і всі клієнти йдуть на новий чекаут замість старого. Плюс реальна вартість доставки замість нуля.',
         why: 'Це фінальна точка всієї checkout-серії. Після цього старий чекаут стає резервним.',
@@ -1697,7 +1711,7 @@ const ROADMAP_FLOW = [
     ]
   },
   {
-    lane: '📋 Після переключення',
+    lane: '📋 Після переключення чекауту',
     connector: 'розблоковується після ST-2c',
     tasks: [
       {
@@ -1725,21 +1739,10 @@ const ROADMAP_FLOW = [
     connector: null,
     tasks: [
       {
-        id: 'TECH-029', title: 'Sitemap — Google не бачить товари', status: 'todo', tool: 'Manual + Codex', priority: 'High',
-        simple: 'Sitemap виявився порожнім — Google не отримує список сторінок. Треба перевірити GSC і виправити.',
-        why: 'Без sitemap Google дізнається про нові товари тільки коли сам зайде — це може зайняти тижні.',
-        warn: null,
-        subtasks: [
-          { id: '1', title: 'Перевірити Google Search Console', status: 'todo', desc: 'Зайти в GSC → Sitemaps і подивитись: є sitemap, який його статус, скільки URL.' },
-          { id: '2', title: 'Виправити або згенерувати sitemap', status: 'todo', desc: 'Якщо sitemap є але порожній — знайти причину. Якщо нема — згенерувати через OpenCart або вручну.' },
-          { id: '3', title: 'Перевірити robots.txt', status: 'todo', desc: 'Переконатись що є рядок: Sitemap: https://boostershop.website/sitemap.xml' }
-        ]
-      },
-      {
         id: 'TECH-012', title: 'Дублі URL в Google', status: 'todo', tool: 'Codex', priority: 'High',
         simple: 'Меню веде на ?route=product/special, а підвал на /special — одна сторінка, але Google вважає їх двома різними.',
         why: 'Дублі розмивають вагу сторінки в пошуку → гірше ранжування товарів.',
-        warn: 'Робити після TECH-029 (sitemap).', subtasks: []
+        warn: null, subtasks: []
       }
     ]
   },
@@ -1747,6 +1750,12 @@ const ROADMAP_FLOW = [
     lane: '✅ Нещодавно виконано',
     connector: null,
     tasks: [
+      {
+        id: 'ST-2b.5', title: 'Промокоди, знижка First15 і GA4', status: 'done', tool: 'Codex', priority: 'High',
+        simple: 'Промокоди, знижка -15% для нових клієнтів (First15), погодження з офертою і GA4 без дублів — все залито і підтверджено live.',
+        why: 'Це останній крок перед переключенням чекауту. Owner QA пройдено.',
+        warn: null, subtasks: []
+      },
       {
         id: 'ST-2b.1–2b.4', title: 'Чекаут — серія UX-фіксів', status: 'done', tool: 'Codex', priority: 'High',
         simple: 'Чотири патчи: замовлення створюється тільки при кліку «Оформити» (не раніше), success-сторінка коректна для всіх методів оплати, підсумок кошика завжди видно.',
@@ -1764,12 +1773,18 @@ const ROADMAP_FLOW = [
         simple: 'Список відділень НП обривався через ліміт запитів — було 13 тис замість 52 тис. Виправлено, автооновлення налаштовано.',
         why: 'Клієнт не міг знайти своє відділення і не міг оформити замовлення.',
         warn: null, subtasks: []
+      },
+      {
+        id: 'TECH-029', title: 'Sitemap / GSC — watch only', status: 'done', tool: 'Manual', priority: 'High',
+        simple: 'Site-side повністю чистий. sitemap.xml валідний, robots.txt коректний. Google обробляє повільно — не чіпати sitemap, robots, .htaccess, redirects.',
+        why: 'Усі зміни на нашому боці зроблені. Залишається тільки моніторинг GSC.',
+        warn: null, subtasks: []
       }
     ]
   }
 ];
 
-const SM = { active:'🔵', todo:'⚪', done:'🟢', blocked:'🔴' };
+const SM = {const SM = { active:'🔵', todo:'⚪', done:'🟢', blocked:'🔴' };
 const SC = { active:'s-active', todo:'s-todo', done:'s-done', blocked:'s-blocked' };
 const SSC = { active:'ss-active', todo:'ss-todo', done:'ss-done' };
 
