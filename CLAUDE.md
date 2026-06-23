@@ -15,3 +15,19 @@ Use Terminal for git diff/commit/push and shell commands. Use VS Code for file i
 
 **For new tasks:** read the relevant handoff in `handoffs/` before writing patches or analysis.
 **For reviews:** read `diagnostics/<TASK-ID>_*_report_*.md` + `git diff` output.
+
+## Dashboard Roadmap Sync Rule
+
+**RULE:** Будь-яка зміна в Notion Roadmap (новий таск, зміна статусу) = оновлення `ROADMAP_FLOW`
+в активному дашборді в тому ж сеансі. Без окремого прохання власника.
+
+**Active dashboard:** `C:\Users\14bez\Downloads\Booster Shop\booster-dashboard.html`
+Sandbox path: `/sessions/.../mnt/Booster Shop/booster-dashboard.html`
+
+**Workflow:**
+1. Зробити зміну в Notion через MCP.
+2. Фетчнути актуальні задачі з Notion.
+3. Перегенерувати `ROADMAP_FLOW` в дашборді — писати напряму через bash у Booster Shop mount.
+
+**For Codex handoffs** that include roadmap changes: додавати крок
+"Оновити ROADMAP_FLOW в booster-dashboard.html" як останній пункт Required changes.
