@@ -47,38 +47,25 @@ URL: `https://www.notion.so/35c3f8572fc54a7896c8af0efd4cf8d4`
 **GitHub-інтеграція Notion:**
 Якщо в картці задачі є linked commit/PR — це підтверджує, що Codex вже виконував роботу по цій задачі. Перевіряти через `git log --oneline | grep -i "ST-3.5"` ще до Notion.
 
-## Notion: оновлення статусу рядка
+## Notion: статус і синхронізація
 
-**Database collection ID:** `5aef22c3-048d-4dde-a5b1-ad409de9301c`
-**View URL:** `https://www.notion.so/35c3f8572fc54a7896c8af0efd4cf8d4?v=eebb19b11cfb4066a8a3b1b097775818`
+**Канон — `ROADMAP_SOP.md`** (§1 джерело правди, §4 sync, §5 page_id-реєстр, §6 DoD). Коротко:
+- Статус-правда — Notion; дашборд `ROADMAP_FLOW` — дзеркало. ST-серія тепер теж у Notion (з 2026-06-24).
+- Bulk-read заблоковано планом → читати/писати per-картка: `notion-fetch` за page_id; `notion-update-page` (`update_properties`, напр. `"Status":"In progress"`).
+- page_id рядків (ST + часті не-ST) — `ROADMAP_SOP.md §5`. `notion-search` семантичний — шукати за назвою, не за ID.
 
-**Важливо: ST-серія відсутня в Notion.** ST-задачі відслідковуються ТІЛЬКИ в `ROADMAP_FLOW` дашборду (`booster-dashboard.html`). Notion містить DASH / CRM / AUTO / TECH / RD / UX серії.
-
-**Для ST-задач:** оновлювати статус тільки в `ROADMAP_FLOW` дашборду (bash або вручну).
-
-**Для інших серій (DASH/CRM/AUTO/TECH/RD/UX):**
-`notion-query-data-sources` (SQL) і `notion-query-database-view` — обидва вимагають Business plan.
-Єдиний варіант через MCP — якщо знаєш page_id рядка (URL відкритої картки в Notion):
-→ `notion-update-page` з `page_id`, `command: "update_properties"`, `"Status": "In progress"`
-Інакше — оновлювати вручну в браузері.
+Collection: `5aef22c3-048d-4dde-a5b1-ad409de9301c` · View: `?v=eebb19b11cfb4066a8a3b1b097775818`
 
 ## Швидкий індекс задач
 
-Файл `context-index.md` у корені репо — таблиця `ID → handoff-файл → статус`.
+Файл `context-index.md` у корені репо — мапа `ID → handoff → Notion page_id` (БЕЗ статусу; статус лише в Notion).
 Grep по ньому замість пошуку по всіх handoffs/.
 
 ## Dashboard Roadmap Sync Rule
 
-**RULE:** Будь-яка зміна в Notion Roadmap (новий таск, зміна статусу) = оновлення `ROADMAP_FLOW`
-в активному дашборді в тому ж сеансі. Без окремого прохання власника.
+**Канон — `ROADMAP_SOP.md` §3–4.** Notion = правда, дашборд = дзеркало; будь-яка зміна статусу — в ОБИДВА в тому ж сеансі (хто свіжіший за реальність — той і виграє), без окремого прохання власника.
 
-**Active dashboard:** `C:\Users\14bez\Downloads\Booster Shop\booster-dashboard.html`
-Sandbox path: `/sessions/.../mnt/Booster Shop/booster-dashboard.html`
+**Active dashboard:** `C:\Users\14bez\Downloads\Booster Shop\booster-dashboard.html` (sandbox: `/sessions/.../mnt/Booster Shop/booster-dashboard.html`)
+**Дзеркало в репо:** `dashboard/booster-dashboard.html` — копіювати активний → дзеркало → commit.
 
-**Workflow:**
-1. Зробити зміну в Notion через MCP.
-2. Фетчнути актуальні задачі з Notion.
-3. Перегенерувати `ROADMAP_FLOW` в дашборді — писати напряму через bash у Booster Shop mount.
-
-**For Codex handoffs** that include roadmap changes: додавати крок
-"Оновити ROADMAP_FLOW в booster-dashboard.html" як останній пункт Required changes.
+**Codex (roadmap-affecting патчі):** останній пункт Required changes = «оновити ROADMAP_FLOW в booster-dashboard.html». Notion Codex не чіпає — це Claude.

@@ -1633,16 +1633,6 @@ const ROADMAP_FLOW = [
     connector: null,
     tasks: [
       {
-        id: 'BRAND-OUTLET-001', title: 'Outlet Booster — фікс опису і SEO', status: 'active', tool: 'Codex', priority: 'High',
-        simple: 'Товар «Бустер Pokémon TCG: Outlet Mix (Японське видання)» slug Pokemon-Japanese-outlet-booster. Хендофф готовий. Потребує Codex-патчу і live-QA.',
-        why: 'Outlet-товар живий на сайті але опис і SEO-поля некоректні.',
-        warn: 'Не додавати в sitemap і Merchant feed.',
-        subtasks: [
-          { id: '1', title: 'Codex патч', status: 'todo', desc: 'Застосувати handoff_outlet_booster_FIX_2026-05-25.md' },
-          { id: '2', title: 'Live QA', status: 'todo', desc: 'Перевірити опис, H1, meta, FAQ на сторінці товару.' }
-        ]
-      },
-      {
         id: 'ST-3.5', title: 'Кнопка ТТН в адмінці', status: 'active', tool: 'Codex', priority: 'High',
         simple: 'В адмінці кнопка «Створити ТТН» не знаходить потрібний елемент на сторінці — виправляємо.',
         why: 'Без цього не можна відправити замовлення через НП прямо з панелі адміна.',
@@ -1681,23 +1671,19 @@ const ROADMAP_FLOW = [
         ]
       },
       {
-        id: 'DASH-001', title: 'Огляд — три плитки без даних', status: 'todo', tool: 'Codex', priority: 'High',
-        simple: 'Собівартість складу (UA), Собівартість активів, Потенційний прибуток активів — показують «—». Apps Script summary endpoint не повертає warehouse_cost, asset_cost, asset_potential_profit. Codex додає три нові поля.',
-        why: 'Без цих даних власник не бачить реальну вартість запасів і потенційний прибуток від асетів.',
-        warn: null, subtasks: []
+        id: 'CAT-002', title: 'Нова категорія «Аксесуари»', status: 'todo', tool: 'Manual + Codex', priority: 'Medium',
+        simple: 'Додати категорію «Аксесуари» до сайту: навігація, бургер-меню, головна. Прив\'язати 6 SKU (ACC-001..006). Також додати «Інші TCG».',
+        why: 'Аксесуари вже є в наявності (протектори, топлоадери, магнітні кейси), але недоступні на сайті через відсутність категорії.',
+        warn: 'Спочатку власник завантажує фото для ACC-001..006, потім Codex handoff.',
+        subtasks: [
+          { id: '1', title: 'Фото ACC-001..006', status: 'todo', desc: 'Власник завантажує фото в адмінку.' },
+          { id: '2', title: 'Категорія + навігація', status: 'todo', desc: 'Codex: категорія «Аксесуари» + «Інші TCG», топ-меню, бургер-меню, плитка на головній.' },
+          { id: '3', title: 'Прив\'язати 6 SKU', status: 'todo', desc: 'ACC-001..006 у категорію Аксесуари. Перевірити фото, ціни, slug.' }
+        ]
       },
-      {
-        id: 'DASH-002', title: 'Огляд — блок «Потребують уваги» порожній', status: 'todo', tool: 'Claude', priority: 'High',
-        simple: 'Блок показує «—» замість списку алертів. Проблема в рендері або в даних від API.',
-        why: 'Власник не бачить критичні залишки і замовлення що потребують уваги.',
-        warn: null, subtasks: []
-      },
-      {
-        id: 'DASH-WRITE-004', title: 'Облік — редагування існуючих записів', status: 'todo', tool: 'Claude + Codex', priority: 'Medium',
-        simple: 'Зараз форма «Облік» дозволяє лише додавати нові записи. Потрібна можливість знайти і виправити існуючий рядок у Продажах, Закупках або Списанні.',
-        why: 'Помилки при введенні неминучі — без редагування доводиться йти в Google Sheets вручну.',
-        warn: null, subtasks: []
-      },
+      
+      
+      
       {
         id: 'ST-2c', title: 'Переключення всіх клієнтів на новий чекаут', status: 'todo', tool: 'Claude + Codex', priority: 'High',
         simple: 'Видалення 5 рядків з одного файлу — і всі клієнти йдуть на новий чекаут замість старого. Плюс реальна вартість доставки замість нуля.',
@@ -1739,10 +1725,35 @@ const ROADMAP_FLOW = [
     connector: null,
     tasks: [
       {
+        id: 'TECH-005-DEEP', title: 'Sitemap GSC — Watch Only', status: 'active', tool: 'Manual', priority: 'High',
+        simple: 'Серверна частина закрита: sitemap-full.xml валідний (47 URL), cron 04:15, robots.txt чистий. Googlebot ще повільно обробляє. Індексація росте: ~38 проіндексованих. Не чіпати sitemap, robots, .htaccess, redirects.',
+        why: 'Google повільно переіндексовує після тривалої помилки. Будь-яка зміна може скинути прогрес.',
+        warn: 'НЕ ЧІПАТИ: sitemap.xml, robots.txt, .htaccess, redirects. Watch only.',
+        subtasks: []
+      },
+      {
         id: 'TECH-012', title: 'Дублі URL в Google', status: 'todo', tool: 'Codex', priority: 'High',
         simple: 'Меню веде на ?route=product/special, а підвал на /special — одна сторінка, але Google вважає їх двома різними.',
         why: 'Дублі розмивають вагу сторінки в пошуку → гірше ранжування товарів.',
-        warn: null, subtasks: []
+        warn: 'Гейт: дочекатись стабілізації sitemap у GSC (TECH-005-DEEP Watch Only).',
+        subtasks: []
+      }
+    ]
+  },
+  {
+    lane: '📝 Контент / Юридичне',
+    connector: null,
+    tasks: [
+      {
+        id: 'LEGAL-002', title: 'Публічна оферта + Обмін і повернення', status: 'active', tool: 'Claude + Manual', priority: 'Medium',
+        simple: 'Текст оферти і повернень готовий. Patch-r09fix-toc-offer-20260526-v3.php чекає власника. Потрібна юр. перевірка і реальні реквізити ФОП (ЄДРПОУ, IBAN).',
+        why: 'Публічна оферта — юридична захист для бізнесу. Зараз сторінки або застарілі або з плейсхолдерами.',
+        warn: 'Не публікувати з плейсхолдерними реквізитами ФОП. Юр. перевірка до публікації.',
+        subtasks: [
+          { id: '1', title: 'Запустити patch v3', status: 'todo', desc: 'Власник завантажує і запускає patch-r09fix-toc-offer-20260526-v3.php.' },
+          { id: '2', title: 'Замінити реквізити ФОП', status: 'todo', desc: 'ЄДРПОУ/РНОКПП, IBAN замість плейсхолдерів.' },
+          { id: '3', title: 'Юр. перевірка', status: 'todo', desc: 'ChatGPT + Gemini + власник перевіряють обидва тексти.' }
+        ]
       }
     ]
   },
@@ -1750,6 +1761,37 @@ const ROADMAP_FLOW = [
     lane: '✅ Нещодавно виконано',
     connector: null,
     tasks: [
+      {
+        id: 'DASH-001', title: 'Огляд — три плитки без даних', status: 'done', tool: 'Codex', priority: 'High',
+        simple: 'Собівартість складу (UA), Собівартість активів, Потенційний прибуток активів — показують «—». Apps Script summary endpoint не повертає warehouse_cost, asset_cost, asset_potential_profit. Codex додає три нові поля.',
+        why: 'Без цих даних власник не бачить реальну вартість запасів і потенційний прибуток від асетів.',
+        warn: null, subtasks: []
+      },
+      {
+        id: 'DASH-002', title: 'Огляд — блок «Потребують уваги» порожній', status: 'done', tool: 'Claude', priority: 'High',
+        simple: 'Блок показує «—» замість списку алертів. Проблема в рендері або в даних від API.',
+        why: 'Власник не бачить критичні залишки і замовлення що потребують уваги.',
+        warn: null, subtasks: []
+      },
+      {
+        id: 'DASH-WRITE-004', title: 'Облік — редагування існуючих записів', status: 'done', tool: 'Claude + Codex', priority: 'Medium',
+        simple: 'Зараз форма «Облік» дозволяє лише додавати нові записи. Потрібна можливість знайти і виправити існуючий рядок у Продажах, Закупках або Списанні.',
+        why: 'Помилки при введенні неминучі — без редагування доводиться йти в Google Sheets вручну.',
+        warn: null, subtasks: []
+      },
+      {
+        id: 'BRAND-OUTLET-001', title: 'Outlet Booster — опис і SEO', status: 'done', tool: 'Codex', priority: 'Medium',
+        simple: 'Товар «Бустер Pokémon TCG: Outlet Mix (Японське видання)» репозиціонований: опис, meta, FAQ, атрибути очищено. Outlet = легітимний дешевший канал, не low-pull.',
+        why: 'Описи не відповідали бренд-позиціонуванню. Owner QA пройдено 2026-05-26.',
+        warn: 'Не додавати в sitemap і Merchant feed.',
+        subtasks: []
+      },
+      {
+        id: 'RD-04', title: 'Картка товару — дизайн-система', status: 'done', tool: 'Codex', priority: 'High',
+        simple: 'thumb.twig повністю перероблений: квадратне фото 1:1, бейджі, price-ієрархія, стани (sale/preorder/out-of-stock), зелений CTA. Preorder-логіка для OP-10 коректна.',
+        why: 'Головний компонент каталогу. Owner QA пройдено 2026-06-01.',
+        warn: null, subtasks: []
+      },
       {
         id: 'ST-2b.5', title: 'Промокоди, знижка First15 і GA4', status: 'done', tool: 'Codex', priority: 'High',
         simple: 'Промокоди, знижка -15% для нових клієнтів (First15), погодження з офертою і GA4 без дублів — все залито і підтверджено live.',
@@ -1775,16 +1817,16 @@ const ROADMAP_FLOW = [
         warn: null, subtasks: []
       },
       {
-        id: 'TECH-029', title: 'Sitemap / GSC — watch only', status: 'done', tool: 'Manual', priority: 'High',
-        simple: 'Site-side повністю чистий. sitemap.xml валідний, robots.txt коректний. Google обробляє повільно — не чіпати sitemap, robots, .htaccess, redirects.',
-        why: 'Усі зміни на нашому боці зроблені. Залишається тільки моніторинг GSC.',
+        id: 'TECH-029', title: 'Sitemap / GSC — site-side закрито', status: 'done', tool: 'Manual', priority: 'High',
+        simple: 'Видалено застарілий .htaccess-блок, sitemap-full.xml статичний (47 URL), cron 04:15 щодня, robots.txt → sitemap-full.xml.',
+        why: 'Серверна частина повністю чиста. Google обробляє повільно — далі Watch Only (TECH-005-DEEP).',
         warn: null, subtasks: []
       }
     ]
   }
 ];
 
-const SM = {const SM = { active:'🔵', todo:'⚪', done:'🟢', blocked:'🔴' };
+const SM = { active:'🔵', todo:'⚪', done:'🟢', blocked:'🔴' };
 const SC = { active:'s-active', todo:'s-todo', done:'s-done', blocked:'s-blocked' };
 const SSC = { active:'ss-active', todo:'ss-todo', done:'ss-done' };
 
@@ -2505,4 +2547,4 @@ loaded.overview = true;
 loadOverview();
 </script>
 </body>
-</html>
+</html
