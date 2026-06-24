@@ -48,12 +48,15 @@ Claude handoff → Codex patch → drop to E:\Personal Files\booster-shop-ops\
 ```
 
 ## Source of truth
-- **Notion roadmap** — task status, priorities
+- **Notion roadmap** — task status, priorities (статус-канон). Дашборд `ROADMAP_FLOW` — дзеркало.
 - **This repo** — implementation history, diffs, patch files
 - **Owner cPanel backup drop** — live source for diagnosis (no server access)
+- **Roadmap governance** (статус / синхронізація / DoD / ролі) → **`ROADMAP_SOP.md`** (канон).
+  - Статус у Notion ставить Claude; Codex Notion НЕ чіпає. Codex оновлює `ROADMAP_FLOW` дашборда як останній крок roadmap-affecting патчу (Claude вписує це в handoff).
 
 ## Commit / push policy
 - **Do NOT commit or push unless owner explicitly asks.** Show `git diff` summary and wait.
+- Якщо owner просить закомітити: спершу `New-Item .autosync-pause` у корені (паузить autosync), після `push` — `Remove-Item .autosync-pause`. Деталі: `ROADMAP_SOP.md §4/§8`.
 - Risky tasks (checkout, payment, schema, DB, .htaccess): propose branch + PR, still wait.
 - Commit message format: `Codex: <TASK-ID> <short description>`
 - Do NOT commit: `.bak`, `.tar.gz`, `.zip`, `.log`, DB dumps, secrets/tokens.

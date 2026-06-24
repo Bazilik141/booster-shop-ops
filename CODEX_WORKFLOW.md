@@ -20,6 +20,7 @@ auto-pulls; Claude then reads Codex output without manual git.
 - Codex creates patch files in `patches/` (+ identical uploadable copy in `C:\Users\14bez\Downloads`) and reports in `diagnostics/`.
 - **Do NOT commit or push unless the owner explicitly asks.** Show `git diff` / a concise
   summary and wait for Claude review + owner go. The owner performs the commit/push.
+- Якщо owner просить закомітити саме Codex: спершу `New-Item .autosync-pause` (паузить autosync), після `push` — `Remove-Item .autosync-pause` (`ROADMAP_SOP.md §4/§8`).
 - Risky tasks (checkout, payment, schema, DB, url.php cutover): propose a branch + PR, still wait for go.
 
 ## Patch conventions (PHP runner)
@@ -53,5 +54,6 @@ latest backup. Keep dropping a fresh backup before deep checkout/DB diagnosis.
 Codex never deploys.
 
 ## Source of truth
-Notion roadmap = status & priorities. This repo = history + review evidence.
-After a patch lands + QA passes, update the Notion task.
+Notion roadmap = status & priorities (канон). Дашборд `ROADMAP_FLOW` = дзеркало. This repo = history + review evidence.
+Governance / синхронізація / DoD / ролі → **`ROADMAP_SOP.md`**.
+**Закриття задачі:** статус у Notion ставить Claude (Codex Notion НЕ чіпає); Codex оновлює `ROADMAP_FLOW` дашборда як останній крок roadmap-affecting патчу. Owner каже, кому закривати — той робить обидва місця.
