@@ -16,6 +16,17 @@ Use Terminal for git diff/commit/push and shell commands. Use VS Code for file i
 **For new tasks:** read the relevant handoff in `handoffs/` before writing patches or analysis.
 **For reviews:** read `diagnostics/<TASK-ID>_*_report_*.md` + `git diff` output.
 
+## Notion Lookup Protocol
+
+**Roadmap URL:** `https://www.notion.so/35c3f8572fc54a7896c8af0efd4cf8d4`
+
+**Знайти задачу по ID (напр. ST-3.5):**
+1. `notion-fetch` на URL роадмапу → парсити список задач зі сторінки.
+2. АБО `notion-query-database-view` з відомим database ID — якщо є фільтр по полю Name/Roadmap ID.
+3. **НЕ використовувати:** SQL (не підтримується на цьому плані), `notion-search` для пошуку по точному ID (семантичний, не матчить "ST-3.5").
+
+**Швидкий шлях без SQL:** `notion-fetch` → одразу видає весь вміст сторінки роадмапу, з якого можна витягти потрібний таск без додаткових запитів.
+
 ## Dashboard Roadmap Sync Rule
 
 **RULE:** Будь-яка зміна в Notion Roadmap (новий таск, зміна статусу) = оновлення `ROADMAP_FLOW`
