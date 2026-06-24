@@ -69,3 +69,5 @@ Grep по ньому замість пошуку по всіх handoffs/.
 **Дзеркало в репо:** `dashboard/booster-dashboard.html` — копіювати активний → дзеркало → commit.
 
 **Codex (roadmap-affecting патчі):** останній пункт Required changes = «оновити ROADMAP_FLOW в booster-dashboard.html». Notion Codex не чіпає — це Claude.
+
+**Commit-safety (autosync):** перед `git add`/`commit` створити `.autosync-pause` у корені репо, після `push` — видалити (паузить hardened `bs-autosync.ps1`, прибирає гонку за `.git/index`). Деталі — `ROADMAP_SOP.md §4/§8`.

@@ -8,3 +8,7 @@ desktop.ini
 # AUTO-002: local secrets — never commit
 .env.review
 scripts/.env
+
+# autosync runtime pause flag (local only)
+.autosync-pause
+*.tmp

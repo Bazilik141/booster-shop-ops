@@ -70,6 +70,8 @@ View: `?v=eebb19b11cfb4066a8a3b1b097775818`
 - Notion: `notion-update-page`, `command: "update_properties"`, напр. `{"Status": "In progress"}`.
 - Дашборд: правка `status:` у `ROADMAP_FLOW` активного файла → копія в репо-дзеркало → commit.
 
+**Commit-safety (autosync):** перед `git add`/`commit` агент створює `.autosync-pause` у корені репо, після `push` — видаляє. Це паузить hardened `bs-autosync.ps1` і прибирає гонку за `.git/index`. Якщо забув — hardened-autosync усе одно пропускає pull при брудному дереві та сам відновлює зламаний індекс (страхувальна сітка, не заміна паузі).
+
 **Хто свіжіший, той і виграє** (обидва мають зійтися до реальності):
 - Notion свіжіший за реальність дашборда → вирівняти дашборд під Notion.
 - Реальність (зроблено/змінено) випереджає Notion → оновити картку Notion, потім дашборд.
@@ -146,7 +148,7 @@ ST-серія (заведена в Notion 2026-06-24):
 
 - **Notion bulk-read через MCP заблокований** (`notion-query-data-sources` SQL і `notion-query-database-view` вимагають Business + Notion AI) → per-card workflow (§4–5). **АЛЕ** прямий Notion REST API через `NOTION_TOKEN` (`.env.review`, AUTO-002 / §4a) вміє query за точним `Roadmap ID` — коли токен налаштовано, це обходить ліміт і дає пошук за ID поза MCP.
 - **`notion-search` семантичний** — не матчить точні ID. Шукати за назвою.
-- **git `index.lock` / autosync:** `bs-autosync.ps1` періодично тримає лок → commit може падати. Якщо `fatal: index.lock File exists` — owner видаляє лок вручну і повторює commit. (Інфра-баг, не правило роадмапу — розібратися окремо.)
+- **git `index.lock` / autosync (вирішено 2026-06-24):** історично `bs-autosync.ps1` ганяв `git pull` паралельно з коммітами Claude → гонка за `.git/index` (завислий лок або `index corrupt`). Hardened-версія скрипта: пауза-сентинел `.autosync-pause`, прибирання застарілого локу (>120с, без активного git), авто-відновлення індексу (`del index; git reset`), skip-pull-when-dirty. Правило: агент ставить `.autosync-pause` перед git-операціями і прибирає після push. Аварійне ручне відновлення: `del .git\index.lock` → `del .git\index` → `git reset`.
 - **Дві копії дашборда:** активна (`Booster Shop/booster-dashboard.html`) і репо-дзеркало (`dashboard/booster-dashboard.html`) — після правок копіювати активну → дзеркало → commit.
 - **Path drift:** `AGENTS.md` вказує `E:\Personal Files\...` як робочий шлях; деякі сеанси монтуються зі старого `C:\Users\...\Downloads`. Тримати один шлях — окреме питання до owner.
 
