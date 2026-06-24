@@ -50,17 +50,17 @@ URL: `https://www.notion.so/35c3f8572fc54a7896c8af0efd4cf8d4`
 ## Notion: оновлення статусу рядка
 
 **Database collection ID:** `5aef22c3-048d-4dde-a5b1-ad409de9301c`
+**View URL:** `https://www.notion.so/35c3f8572fc54a7896c8af0efd4cf8d4?v=eebb19b11cfb4066a8a3b1b097775818`
 
-**View URL роадмапу:** *(власник повинен вставити — копіювати з браузера при відкритому роадмапі)*
-```
-https://www.notion.so/35c3f8572fc54a7896c8af0efd4cf8d4?v=TODO
-```
+**Важливо: ST-серія відсутня в Notion.** ST-задачі відслідковуються ТІЛЬКИ в `ROADMAP_FLOW` дашборду (`booster-dashboard.html`). Notion містить DASH / CRM / AUTO / TECH / RD / UX серії.
 
-**Алгоритм оновлення статусу:**
-1. `notion-query-database-view` з view URL → отримати рядки → знайти рядок з `Roadmap ID = "ST-X.X"` → взяти його `url`
-2. `notion-update-page` з `page_id` = url рядка, `command: "update_properties"`, `"Status": "In progress"` (або `"Done"`)
+**Для ST-задач:** оновлювати статус тільки в `ROADMAP_FLOW` дашборду (bash або вручну).
 
-**Без view URL:** оновлення статусу через API неможливе на поточному плані. Статус оновлювати вручну в браузері Notion.
+**Для інших серій (DASH/CRM/AUTO/TECH/RD/UX):**
+`notion-query-data-sources` (SQL) і `notion-query-database-view` — обидва вимагають Business plan.
+Єдиний варіант через MCP — якщо знаєш page_id рядка (URL відкритої картки в Notion):
+→ `notion-update-page` з `page_id`, `command: "update_properties"`, `"Status": "In progress"`
+Інакше — оновлювати вручну в браузері.
 
 ## Швидкий індекс задач
 

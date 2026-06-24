@@ -99,18 +99,12 @@ grep "ST-3.5" context-index.md
 
 ---
 
-## Notion: оновлення статусу через API
+## Notion vs Dashboard — де що трекається
 
-**Проблема:** на поточному плані Notion SQL (`notion-query-data-sources`) недоступний. `notion-search` — семантичний, не матчить "ST-3.5".
+**ST-серія (ST-0 … ST-7):** відсутня в Notion. Source of truth = `ROADMAP_FLOW` у `booster-dashboard.html`.
+**Інші серії (DASH/CRM/AUTO/TECH/RD/UX):** у Notion database `5aef22c3-048d-4dde-a5b1-ad409de9301c`.
 
-**Єдиний спосіб оновити статус рядка через MCP:**
-1. Мати view URL з параметром `?v=<viewId>` (скопіювати з браузера один раз)
-2. `notion-query-database-view` з цим URL → отримати `url` конкретного рядка
-3. `notion-update-page` з `page_id` = той url, `command: update_properties`, `Status: "In progress"`
-
-**View URL роадмапу:** *(вставити після отримання від власника)*
-```
-https://www.notion.so/35c3f8572fc54a7896c8af0efd4cf8d4?v=TODO
-```
-
-**Database collection ID:** `5aef22c3-048d-4dde-a5b1-ad409de9301c`
+**Notion view URL:** `https://www.notion.so/35c3f8572fc54a7896c8af0efd4cf8d4?v=eebb19b11cfb4066a8a3b1b097775818`
+**Notion API:** `notion-query-data-sources` і `notion-query-database-view` вимагають Business plan.
+Оновлення статусу через MCP — тільки якщо відомий page_id (URL картки в Notion) → `notion-update-page`.
+Інакше — вручну в браузері.
