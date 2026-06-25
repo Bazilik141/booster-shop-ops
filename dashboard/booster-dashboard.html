@@ -1649,18 +1649,18 @@ const ROADMAP_FLOW = [
     connector: null,
     tasks: [
       {
-        id: 'CRM-002', title: 'CRM: Apps Script — multi-channel закупки', status: 'todo', tool: 'Codex', priority: 'High',
+        id: 'CRM-002', title: 'CRM: Apps Script — multi-channel закупки', status: 'done', tool: 'Codex', priority: 'High',
         simple: 'Розширити apiAddPurchase_ для підтримки ZenMarket JP, Постачальник UA, інших каналів. Додати 2 колонки в Закупки, автогенерацію ref для UA, оновити статуси і apiSummary_.',
         why: 'Закупки протекторів у Games 7 Days (UA) не вписуються в поточну форму — вона вимагає ZenMarket-номер і JPY.',
         warn: 'Робити до CRM-001. Після деплою нової версії Apps Script — обов\'язково перевірити summary і recent_purchases.',
         subtasks: [
-          { id: '1', title: 'Нові колонки в Закупки', status: 'todo', desc: 'Додати «Постачальник» і «Доставка UA, грн» в кінець таблиці.' },
-          { id: '2', title: 'apiAddPurchase_ — multi-channel', status: 'todo', desc: 'supplier_channel, ukraine_delivery_uah, автогенерація UA-ref.' },
-          { id: '3', title: 'apiSummary_ — нові статуси + backward compat', status: 'todo', desc: 'Замовлено/В дорозі/На складі UA/Скасовано. Старі статуси не ламати.' }
+          { id: '1', title: 'Нові колонки в Закупки', status: 'done', desc: 'Додати «Постачальник» і «Доставка UA, грн» в кінець таблиці.' },
+          { id: '2', title: 'apiAddPurchase_ — multi-channel', status: 'done', desc: 'supplier_channel, ukraine_delivery_uah, автогенерація UA-ref.' },
+          { id: '3', title: 'apiSummary_ — нові статуси + backward compat', status: 'done', desc: 'Замовлено/В дорозі/На складі UA/Скасовано. Старі статуси не ламати.' }
         ]
       },
       {
-        id: 'CRM-001', title: 'CRM: Dashboard — форма мультиканальної закупки', status: 'todo', tool: 'Codex', priority: 'High',
+        id: 'CRM-001', title: 'CRM: Dashboard — форма мультиканальної закупки', status: 'done', tool: 'Codex', priority: 'High',
         simple: 'Адаптувати форму «Внести закупку» у дашборді: Постачальник/Канал select, умовні поля JPY/UAH, нові статуси, фільтр batch-update.',
         why: 'UI зараз повністю заточений під ZenMarket. Для UA-постачальника форма некоректна.',
         warn: 'Блокується CRM-002 — спочатку деплоїти Apps Script.',
