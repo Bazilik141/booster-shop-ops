@@ -7,18 +7,18 @@ OpenCart e-commerce: boostershop.website (MTG, Pokemon, One Piece, Yu-Gi-Oh).
 Stack: OpenCart (Twig/PHP), custom checkout + NP integration, Google Apps Script CRM, Google Sheets.
 
 ## Local paths (owner's machine)
-- **Repo (local):** `E:\Personal Files\booster-shop-ops\` ← primary working folder
+- **Repo (local):** `C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\` ← primary working folder
 - **GitHub:** `https://github.com/Bazilik141/booster-shop-ops` (branch: master)
-- **Dashboard (live):** `E:\Personal Files\booster-dashboard.html` — edit THIS file directly
+- **Dashboard (live):** `C:\Users\14bez\Downloads\Booster Shop\booster-dashboard.html` — edit THIS file directly
 - **Dashboard (git copy):** `dashboard/booster-dashboard.html` inside the repo — copy after edits, then commit
-- **Dashboard URL:** `file:///E:/Personal%20Files/booster-dashboard.html`
+- **Dashboard URL:** `file:///C:/Users/14bez/Downloads/Booster%20Shop/booster-dashboard.html`
 
 Old paths retired — do not use:
-- `C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\`
+- `E:\Personal Files\...`
 - `E:\Program Files\...`
 
 When Codex drops output files to the local machine, target:
-`E:\Personal Files\booster-shop-ops\<subfolder>\<filename>`
+`C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\<subfolder>\<filename>`
 
 ## Repo structure
 ```
@@ -43,7 +43,7 @@ templates/    handoff + report templates
 
 ## Flow
 ```
-Claude handoff → Codex patch → drop to E:\Personal Files\booster-shop-ops\
+Claude handoff → Codex patch → drop to C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\
 → Claude review (git diff) → Owner deploy (php patch.php in ~/public_html) → Owner QA
 ```
 
@@ -72,7 +72,7 @@ Each patch must:
 7. **Self-delete** after success
 
 Naming: `patches/<TASK-ID>_<slug>_<YYYYMMDD>.php`
-Drop to: `E:\Personal Files\booster-shop-ops\patches\<same filename>`
+Drop to: `C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\patches\<same filename>`
 
 After patch is ready, respond with:
 - what it does (1-2 sentences)

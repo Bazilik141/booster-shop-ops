@@ -99,6 +99,8 @@ ST-серія (заведена в Notion 2026-06-24):
 | Roadmap ID | Notion page_id |
 |---|---|
 | ST-3.5 | `3896bf20-bdb4-8174-8a50-fe3d19f8c9ba` |
+| ST-3.6 | `38a6bf20-bdb4-8184-917c-ef3f6c6ca1b1` |
+| ST-3.7 | `38a6bf20-bdb4-8153-8538-db353b2f6a34` |
 | ST-2c | `3896bf20-bdb4-8119-a13b-c1dc1e078328` |
 | ST-6 | `3896bf20-bdb4-81b0-8c67-cb4300ccba9f` |
 | ST-1 | `3896bf20-bdb4-819d-bb33-f1ddcc2dd0de` |
@@ -150,7 +152,7 @@ ST-серія (заведена в Notion 2026-06-24):
 - **`notion-search` семантичний** — не матчить точні ID. Шукати за назвою.
 - **git `index.lock` / autosync (вирішено 2026-06-24):** історично `bs-autosync.ps1` ганяв `git pull` паралельно з коммітами Claude → гонка за `.git/index` (завислий лок або `index corrupt`). Hardened-версія скрипта: пауза-сентинел `.autosync-pause`, прибирання застарілого локу (>120с, без активного git), авто-відновлення індексу (`del index; git reset`), skip-pull-when-dirty. Правило: агент ставить `.autosync-pause` перед git-операціями і прибирає після push. Аварійне ручне відновлення: `del .git\index.lock` → `del .git\index` → `git reset`.
 - **Дві копії дашборда:** активна (`Booster Shop/booster-dashboard.html`) і репо-дзеркало (`dashboard/booster-dashboard.html`) — після правок копіювати активну → дзеркало → commit.
-- **Path drift:** `AGENTS.md` вказує `E:\Personal Files\...` як робочий шлях; деякі сеанси монтуються зі старого `C:\Users\...\Downloads`. Тримати один шлях — окреме питання до owner.
+- **Path drift (вирішено 2026-06-25):** канонічний локальний шлях — `C:\Users\14bez\Downloads\Booster Shop`; `E:\Personal Files\...` вважається retired для нової роботи.
 
 ---
 
