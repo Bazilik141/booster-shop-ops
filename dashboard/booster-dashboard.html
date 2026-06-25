@@ -1622,12 +1622,12 @@ const ROADMAP_TASKS = [
     id: 'ST-2b.6', title: 'Баг: примарне замовлення Hutko при закритті браузера', status: 'todo', tool: 'Claude + Codex', priority: 'High',
     lastUpdated: '2026-06-25', blockedBy: [],
     simple: 'Плаваючий баг: закрити/відкрити браузер з відкритою вкладкою чекауту → створюється «Чернетка (системний)» з методом Hutko без реальної спроби оплати. Приклад: Замовлення №186.',
-    why: 'Підозра: два костилі — примусове мікрооновлення при blur поля доставки + авто-вибір Hutko при відкритті чекауту. Баг вилізав кілька разів після прибирання тимчасового рішення (order при виборі оплати).',
-    warn: 'Плаваючий баг — не відтворюється стабільно. Потрібен аудит JS lifecycle: beforeunload/pagehide, session restore, авто-вибір методу оплати при старті.',
+    why: 'Підозра: два костилі — мікрооновлення при blur поля доставки + авто-вибір Hutko при відкритті чекауту. Баг вилізав кілька разів після прибирання тимчасового рішення.',
+    warn: 'Плаваючий баг — не відтворюється стабільно. Потрібен аудит JS lifecycle: beforeunload/pagehide, session restore, авто-вибір методу оплати.',
     subtasks: [
-      { id: '1', title: 'Аудит JS lifecycle при закритті/відкритті вкладки', status: 'todo', desc: 'Перевірити beforeunload, pagehide, session restore handlers. Чи тригерить щось confirm.confirm при page restore?' },
-      { id: '2', title: 'Аудит авто-вибору Hutko при старті', status: 'todo', desc: 'Костиль авто-вибору Hutko при відкритті чекауту. Чи може він в поєднанні з мікрооновленням тригернути confirm.confirm?' },
-      { id: '3', title: 'Аудит мікрооновлення при blur доставки', status: 'todo', desc: 'Костиль: примусовий мікрооновлення при blur з поля доставки. Чи запускає він confirm.confirm у стані відновленої вкладки?' }
+      { id: '1', title: 'Аудит JS lifecycle при закритті/відкритті вкладки', status: 'todo', desc: 'Перевірити beforeunload, pagehide, session restore handlers.' },
+      { id: '2', title: 'Аудит авто-вибору Hutko при старті', status: 'todo', desc: 'Чи може костиль авто-вибору в поєднанні з мікрооновленням тригернути confirm.confirm?' },
+      { id: '3', title: 'Аудит мікрооновлення при blur доставки', status: 'todo', desc: 'Чи запускає він confirm.confirm у стані відновленої вкладки?' }
     ]
   },
   {
@@ -1637,7 +1637,7 @@ const ROADMAP_TASKS = [
     why: 'Фінальна точка всієї checkout-серії. Після цього старий чекаут стає резервним.',
     warn: 'HIGH-RISK. Rollback = повернути ті самі 5 рядків назад.',
     subtasks: [
-      { id: '1', title: 'Реальна вартість доставки', status: 'todo', desc: 'Зараз доставка = 0 грн. Після патчу — реальна ціна НП. Hutko списує суму без доставки.' },
+      { id: '1', title: 'Реальна вартість доставки', status: 'todo', desc: 'Зараз доставка = 0 грн. Після патчу — реальна ціна НП.' },
       { id: '2', title: 'Cutover url.php', status: 'todo', desc: 'Прибираємо 5 рядків що перенаправляли на старий чекаут.' }
     ]
   },
@@ -1657,12 +1657,12 @@ const ROADMAP_TASKS = [
   {
     id: 'CHECKOUT-001', title: 'Реєстрація акаунту при замовленні', status: 'todo', tool: 'Codex', priority: 'High',
     lastUpdated: '2026-06-06', blockedBy: ['ST-2c'],
-    simple: 'Гість оформляє замовлення і бачить необовʼязкову галочку «Зберегти акаунт» → автоматично створюється особистий кабінет.',
+    simple: 'Гість оформляє замовлення і бачить необов\'язкову галочку «Зберегти акаунт» → автоматично створюється особистий кабінет.',
     why: 'Більше зареєстрованих клієнтів → легше повторні покупки.',
     warn: 'HIGH-RISK (checkout + база даних). Потрібен технічний аудит перед хендоффом.', subtasks: []
   },
   { id: 'ST-3.5', title: 'Кнопка ТТН в адмінці', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-24', blockedBy: [],
-    simple: 'Кнопка/форма ТТН в адмінці відновлені; ТТН створюються в кабінеті НП. Фікс якоря, рендеру форми, крешу.', why: 'Відправка замовлень через НП прямо з адмінки.', warn: null, subtasks: [] },
+    simple: 'Кнопка ТТН в адмінці відновлена; ТТН створюються в кабінеті НП. Фікс якоря, рендеру форми, крешу.', why: 'Відправка замовлень через НП прямо з адмінки.', warn: null, subtasks: [] },
   { id: 'ST-3.6', title: 'COD «Контроль оплати» для ФОП', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-24', blockedBy: [],
     simple: 'ФОП+після оплата → AfterpaymentOnGoodsCost; картка/реквізити → без контролю; приватна особа → Після оплата.', why: 'НП не дозволяє Після оплату бізнес-відправникам.', warn: null, subtasks: [] },
   { id: 'ST-3.7', title: 'UK-локалізація форми накладної НП', status: 'done', tool: 'Codex', priority: 'Medium', lastUpdated: '2026-06-24', blockedBy: [],
@@ -1671,9 +1671,8 @@ const ROADMAP_TASKS = [
     simple: 'Список відділень обривався через ліміт запитів — 13 тис замість 52 тис. Виправлено, cron налаштовано.', why: 'Клієнт не міг знайти своє відділення і оформити замовлення.', warn: null, subtasks: [] },
   { id: 'ST-2b.5', title: 'Промокоди, знижка First15 і GA4', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-14', blockedBy: [],
     simple: 'Промокоди, знижка -15% для нових клієнтів (First15), погодження з офертою і GA4 без дублів — залито і підтверджено live.', why: 'Останній крок перед переключенням чекауту. Owner QA пройдено.', warn: null, subtasks: [] },
-  { id: 'ST-2b.1–2b.4', title: 'Чекаут — серія UX-фіксів', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-14', blockedBy: [],
+  { id: 'ST-2b.1-2b.4', title: 'Чекаут — серія UX-фіксів', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-14', blockedBy: [],
     simple: 'Чотири патчи: замовлення лише при «Оформити», success-сторінка коректна для всіх методів, підсумок кошика завжди видно.', why: 'Усунені зайві чернетки в БД і артефакти на success-сторінці. Owner QA пройдено.', warn: null, subtasks: [] },
-
   // ─── REDESIGN / RD ───
   {
     id: 'RD-11', title: 'Редизайн сторінки кошика', status: 'todo', tool: 'Codex', priority: 'High',
@@ -1682,69 +1681,49 @@ const ROADMAP_TASKS = [
     why: 'Єдина ключова сторінка що ще виглядає по-старому.',
     warn: 'Gate: R-13.5 (НП модуль) має бути завершений.', subtasks: []
   },
-  {
-    id: 'RD-12', title: 'Mini-cart drawer (desktop + mobile)', status: 'todo', tool: 'Codex', priority: 'High',
+  { id: 'RD-12', title: 'Mini-cart drawer (desktop + mobile)', status: 'todo', tool: 'Codex', priority: 'High',
     lastUpdated: '2026-05-30', blockedBy: ['RD-11'],
-    simple: 'Mini-cart як right-side drawer 380px/100%. Thumb, qty ±1, subtotal sticky, 2 CTA (продовжити / оформити).',
-    why: 'DS-паритет міні-кошика.', warn: null, subtasks: []
-  },
-  {
-    id: 'RD-13', title: 'Checkout reskin ⚠️ HIGH-RISK', status: 'todo', tool: 'Codex', priority: 'High',
+    simple: 'Mini-cart як right-side drawer 380px/100%. Thumb, qty, subtotal sticky, 2 CTA.',
+    why: 'DS-паритет міні-кошика.', warn: null, subtasks: [] },
+  { id: 'RD-13', title: 'Checkout reskin HIGH-RISK', status: 'todo', tool: 'Codex', priority: 'High',
     lastUpdated: '2026-05-30', blockedBy: ['RD-11', 'RD-12'],
-    simple: 'Checkout як «тиха форма» секціями-картками. Тільки markup/CSS — payment/Hutko/NP логіку НЕ чіпати.',
+    simple: 'Checkout як тиха форма секціями-картками. Тільки markup/CSS — payment/Hutko/NP логіку не чіпати.',
     why: 'DS-паритет фінальної конверсійної сторінки.',
-    warn: '⚠️ HIGH-RISK. Обовʼязковий bs-checkout-smoke. Робити ОСТАННІМ.', subtasks: []
-  },
-  {
-    id: 'RD-14', title: 'Checkout success — DS-паритет', status: 'todo', tool: 'Codex', priority: 'Medium',
+    warn: 'HIGH-RISK. Обов\'язковий bs-checkout-smoke. Робити ОСТАННІМ.', subtasks: [] },
+  { id: 'RD-14', title: 'Checkout success — DS-паритет', status: 'todo', tool: 'Codex', priority: 'Medium',
     lastUpdated: '2026-05-30', blockedBy: [],
     simple: 'DS-картка підтвердження, коректна OC4-структура, наступні кроки/контакти на success-сторінці.',
-    why: 'Чиста success-сторінка за reference.', warn: null, subtasks: []
-  },
-  {
-    id: 'RD-15', title: 'Checkout failure — DS-паритет', status: 'todo', tool: 'Codex', priority: 'Medium',
+    why: 'Чиста success-сторінка за reference.', warn: null, subtasks: [] },
+  { id: 'RD-15', title: 'Checkout failure — DS-паритет', status: 'todo', tool: 'Codex', priority: 'Medium',
     lastUpdated: '2026-05-30', blockedBy: [],
     simple: 'Центрування, зрозуміле повідомлення + дія (повторити оплату / підтримка Telegram).',
-    why: 'Чиста failure-сторінка за reference.', warn: null, subtasks: []
-  },
-  {
-    id: 'RD-16', title: 'Account hub + особисті дані', status: 'todo', tool: 'Codex', priority: 'Medium',
+    why: 'Чиста failure-сторінка за reference.', warn: null, subtasks: [] },
+  { id: 'RD-16', title: 'Account hub + особисті дані', status: 'todo', tool: 'Codex', priority: 'Medium',
     lastUpdated: '2026-05-30', blockedBy: [],
     simple: 'DS-shell кабінету: nav/sidebar розділів + сторінка особистих даних як card-форма.',
-    why: 'Єдиний DS-shell для всіх account-сторінок. Блокує RD-17/19/20.', warn: null, subtasks: []
-  },
-  {
-    id: 'RD-17', title: 'Адреси кабінету (список + форма)', status: 'todo', tool: 'Codex', priority: 'Medium',
+    why: 'Єдиний DS-shell для всіх account-сторінок. Блокує RD-17/19/20.', warn: null, subtasks: [] },
+  { id: 'RD-17', title: 'Адреси кабінету (список + форма)', status: 'todo', tool: 'Codex', priority: 'Medium',
     lastUpdated: '2026-05-30', blockedBy: ['RD-16'],
     simple: 'Список адрес (картки) + add/edit як card-форма. Поля в правильному порядку, областi українською.',
-    why: 'DS-паритет адрес кабінету.', warn: null, subtasks: []
-  },
-  {
-    id: 'RD-19', title: 'Авторизація (login + forgotten)', status: 'todo', tool: 'Codex', priority: 'Low',
+    why: 'DS-паритет адрес кабінету.', warn: null, subtasks: [] },
+  { id: 'RD-19', title: 'Авторизація (login + forgotten)', status: 'todo', tool: 'Codex', priority: 'Low',
     lastUpdated: '2026-05-30', blockedBy: ['RD-16'],
     simple: 'Login + forgotten як card-форми, labels над input, success-copy → Telegram support.',
-    why: 'DS-паритет авторизації.', warn: null, subtasks: []
-  },
-  {
-    id: 'RD-20', title: 'Реєстрація (2 кроки)', status: 'todo', tool: 'Codex', priority: 'Medium',
+    why: 'DS-паритет авторизації.', warn: null, subtasks: [] },
+  { id: 'RD-20', title: 'Реєстрація (2 кроки)', status: 'todo', tool: 'Codex', priority: 'Medium',
     lastUpdated: '2026-05-30', blockedBy: ['RD-16', 'RD-17'],
     simple: 'Step 1: контакт + телефон; Step 2: адреса. First15 у сесії — поведінку не міняти, тільки візуал.',
     why: 'Зрозумілий онбординг; DS-паритет.',
-    warn: 'First15 не чіпати. Після змін — регресія register→address→checkout.', subtasks: []
-  },
-  {
-    id: 'RD-21', title: 'Контентні сторінки — DS-паритет (5 сторінок)', status: 'todo', tool: 'Codex', priority: 'Low',
+    warn: 'First15 не чіпати. Після змін — регресія register→address→checkout.', subtasks: [] },
+  { id: 'RD-21', title: 'Контентні сторінки — DS-паритет (5 стор.)', status: 'todo', tool: 'Codex', priority: 'Low',
     lastUpdated: '2026-05-30', blockedBy: [],
-    simple: 'DS-картки секцій, sticky TOC, типографіка для 5 сторінок: Гарантія, Про нас, Оплата і доставка, Обмін і повернення, Публічна оферта.',
-    why: 'DS-паритет контентних сторінок.', warn: 'Тексти НЕ чіпати.', subtasks: []
-  },
-  {
-    id: 'RD-22', title: 'Out-of-stock: кнопка «Повідомити»', status: 'todo', tool: 'Codex', priority: 'Low',
+    simple: 'DS-картки секцій, sticky TOC, типографіка: Гарантія, Про нас, Оплата і доставка, Обмін і повернення, Публічна оферта.',
+    why: 'DS-паритет контентних сторінок.', warn: 'Тексти НЕ чіпати.', subtasks: [] },
+  { id: 'RD-22', title: 'Out-of-stock: кнопка «Повідомити»', status: 'todo', tool: 'Codex', priority: 'Low',
     lastUpdated: '2026-06-01', blockedBy: [],
     simple: 'Замінити текст «Немає в наявності» на активну кнопку «Повідомити про наявність».',
-    why: 'Повернення потенційного покупця коли товар зʼявиться.',
-    warn: 'Заблоковано: потрібне рішення owner щодо каналу сповіщення (Telegram-бот / email / модалка).', subtasks: []
-  },
+    why: 'Повернення потенційного покупця коли товар зявиться.',
+    warn: 'Потрібне рішення owner щодо каналу сповіщення (Telegram-бот / email / модалка).', subtasks: [] },
   { id: 'RD-01', title: 'Design System — узгодження токенів', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-01', blockedBy: [],
     simple: 'Звели boostershop-ds.css до reference tokens.css. Radius-шкала, shadow, z-index, зелений #16A34A, прибрано gold-foam.', why: 'Єдина база токенів для всієї RD-серії.', warn: null, subtasks: [] },
   { id: 'RD-02', title: 'Header + utility bar — DS-паритет', status: 'done', tool: 'Codex', priority: 'Medium', lastUpdated: '2026-06-01', blockedBy: [],
@@ -1756,27 +1735,26 @@ const ROADMAP_TASKS = [
   { id: 'RD-05', title: 'FAQ accordion — нормалізація', status: 'done', tool: 'Codex', priority: 'Medium', lastUpdated: '2026-06-04', blockedBy: [],
     simple: 'FAQ Variant B (soft cards): border #E5E7EB, chevron-стрілка, height-transition 280ms, a11y aria-expanded.', why: 'Тихий trust-friendly акордеон без gold top-border.', warn: null, subtasks: [] },
   { id: 'RD-06', title: 'Empty-state компонент', status: 'done', tool: 'Codex', priority: 'Medium', lastUpdated: '2026-06-04', blockedBy: [],
-    simple: 'Єдиний переюзний empty-state: іконка + текст + CTA для порожнього кошика, пошуку, категорій.', why: 'Жодного «голого» порожнього простору; узгоджений вигляд.', warn: null, subtasks: [] },
+    simple: 'Єдиний переюзний empty-state: іконка + текст + CTA для порожнього кошика, пошуку, категорій.', why: 'Жодного голого порожнього простору; узгоджений вигляд.', warn: null, subtasks: [] },
   { id: 'RD-07', title: 'Сторінка категорії — DS-паритет', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-04', blockedBy: [],
     simple: 'Header-card: 4px брендова смуга, hero-row title+count+tagline+sort. Toolbar-row. Sidebar-фільтр без gold-header.', why: 'DS-паритет; UI підтримує товар, не конкурує.', warn: null, subtasks: [] },
   { id: 'RD-09', title: 'Головна сторінка — DS-паритет', status: 'done', tool: 'Codex', priority: 'Medium', lastUpdated: '2026-06-10', blockedBy: [],
     simple: 'Category tiles Variant D, Trust-strip (4 факти), порядок промо-блоків, related-carousel зі swipe-progress.', why: 'DS-паритет, mobile-first. Owner accepted.', warn: null, subtasks: [] },
   { id: 'RD-10', title: 'Сторінка товару — редизайн', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-11', blockedBy: [],
     simple: 'Нова сторінка товару: галерея, блок ціни, характеристики, відгуки через Telegram/OLX, липка кнопка «В кошик» на мобільному.', why: 'Головна конверсійна сторінка. Owner QA пройдено.', warn: null, subtasks: [] },
-
   // ─── TECH / SEO ───
   {
     id: 'TECH-005-DEEP', title: 'Sitemap GSC — Watch Only', status: 'active', tool: 'Manual', priority: 'High',
     lastUpdated: '2026-06-15', blockedBy: [],
-    simple: 'Серверна частина закрита: sitemap-full.xml валідний (47 URL), cron 04:15, robots.txt чистий. Googlebot повільно обробляє. ~38 проіндексованих.',
+    simple: 'Серверна частина закрита: sitemap-full.xml валідний (47 URL), cron 04:15, robots.txt чистий. Googlebot повільно обробляє.',
     why: 'Google повільно переіндексовує після тривалої помилки.',
     warn: 'НЕ ЧІПАТИ: sitemap.xml, robots.txt, .htaccess, redirects. Watch only.', subtasks: []
   },
   {
     id: 'TECH-009', title: 'Product structured data — очікуємо GSC', status: 'active', tool: 'Manual', priority: 'High',
     lastUpdated: '2026-05-26', blockedBy: [],
-    simple: 'shippingDetails fix задеплоєно: умову ≥1500 прибрано, value=0/100 залежно від ціни. Надіслано на GSC Validate Fix.',
-    why: 'Rich results для товарів у Google. Чекаємо підтвердження GSC.', warn: null,
+    simple: 'shippingDetails fix задеплоєно. Надіслано на GSC Validate Fix. Чекаємо підтвердження.',
+    why: 'Rich results для товарів у Google.', warn: null,
     subtasks: [{ id: '1', title: 'GSC Validate Fix', status: 'todo', desc: 'Чекаємо підтвердження GSC. Після підтвердження → Done.' }]
   },
   {
@@ -1786,59 +1764,44 @@ const ROADMAP_TASKS = [
     why: 'Однаковий товар міг додаватись двічі замість збільшення кількості.',
     warn: 'Не переписувати без timing logs і cart smoke coverage.', subtasks: []
   },
-  {
-    id: 'TECH-033', title: 'Structured data: перевірити деплой TECH-009', status: 'todo', tool: 'Manual', priority: 'High',
+  { id: 'TECH-033', title: 'Structured data: перевірити деплой TECH-009', status: 'todo', tool: 'Manual', priority: 'High',
     lastUpdated: '2026-06-07', blockedBy: ['TECH-009'],
     simple: 'Baseline crawl показав 0 сторінок зі structured data. Перевірити View Source на товарі → наявність ld+json.',
-    why: 'TECH-009 задеплоєно, але SF crawl не бачить schema на жодній сторінці.', warn: null, subtasks: []
-  },
-  {
-    id: 'TECH-010', title: 'Indexation hygiene / noindex rules', status: 'todo', tool: 'Codex', priority: 'High',
+    why: 'TECH-009 задеплоєно, але SF crawl не бачить schema на жодній сторінці.', warn: null, subtasks: [] },
+  { id: 'TECH-010', title: 'Indexation hygiene / noindex rules', status: 'todo', tool: 'Codex', priority: 'High',
     lastUpdated: '2026-05-20', blockedBy: ['TECH-005-DEEP'],
     simple: 'Аудит і виправлення noindex-правил: robots meta, canonicals. Запускати після стабілізації sitemap.',
     why: 'Частина сторінок може бути закрита від індексації без причини.',
-    warn: 'Gate: дочекатись стабілізації TECH-005-DEEP.', subtasks: []
-  },
-  {
-    id: 'TECH-012', title: 'Дублі URL в Google', status: 'todo', tool: 'Codex', priority: 'High',
+    warn: 'Gate: дочекатись стабілізації TECH-005-DEEP.', subtasks: [] },
+  { id: 'TECH-012', title: 'Дублі URL в Google', status: 'todo', tool: 'Codex', priority: 'High',
     lastUpdated: '2026-06-07', blockedBy: ['TECH-005-DEEP'],
     simple: 'Меню → ?route=product/special, підвал → /special — одна сторінка, але Google вважає їх різними.',
     why: 'Дублі розмивають вагу сторінки → гірше ранжування.',
-    warn: 'Gate: дочекатись стабілізації TECH-005-DEEP.', subtasks: []
-  },
-  {
-    id: 'TECH-016', title: 'Content and category SEO foundation', status: 'todo', tool: 'Claude + Codex', priority: 'Medium',
+    warn: 'Gate: дочекатись стабілізації TECH-005-DEEP.', subtasks: [] },
+  { id: 'TECH-016', title: 'Content and category SEO foundation', status: 'todo', tool: 'Claude + Codex', priority: 'Medium',
     lastUpdated: '2026-05-20', blockedBy: [],
     simple: 'SEO-основа для категорій і товарів: описи, H1, meta, keywords — продовження після SEO-CRIT-001.',
-    why: 'Наступний крок SEO-пропрацювання контенту.', warn: null, subtasks: []
-  },
-  {
-    id: 'TECH-021', title: 'SEO browser QA toolkit', status: 'todo', tool: 'Manual', priority: 'Medium',
+    why: 'Наступний крок SEO-пропрацювання контенту.', warn: null, subtasks: [] },
+  { id: 'TECH-021', title: 'SEO browser QA toolkit', status: 'todo', tool: 'Manual', priority: 'Medium',
     lastUpdated: '2026-05-20', blockedBy: [],
     simple: 'Набір Chrome-розширень для SEO QA: перевірка meta, schema, noindex безпосередньо в браузері.',
-    why: 'Зменшує час аудиту при кожній зміні.', warn: null, subtasks: []
-  },
-  {
-    id: 'TECH-023', title: 'Щотижневий SEO-моніторинг', status: 'todo', tool: 'Manual', priority: 'Medium',
+    why: 'Зменшує час аудиту при кожній зміні.', warn: null, subtasks: [] },
+  { id: 'TECH-023', title: 'Щотижневий SEO-моніторинг', status: 'todo', tool: 'Manual', priority: 'Medium',
     lastUpdated: '2026-05-20', blockedBy: [],
     simple: 'Чекліст: GSC (позиції, crawl errors), GA4 (трафік), Merchant (warnings), access-log (Googlebot).',
-    why: 'Регулярний моніторинг без дорогих платних інструментів.', warn: null, subtasks: []
-  },
-  {
-    id: 'TECH-022', title: 'Рішення щодо платного SEO-інструменту', status: 'todo', tool: 'Manual', priority: 'Low',
+    why: 'Регулярний моніторинг без дорогих платних інструментів.', warn: null, subtasks: [] },
+  { id: 'TECH-022', title: 'Рішення щодо платного SEO-інструменту', status: 'todo', tool: 'Manual', priority: 'Low',
     lastUpdated: '2026-05-20', blockedBy: [],
     simple: 'Оцінити Ahrefs / Semrush / Serpstat: чи виправдано вартість при поточному обсязі трафіку.',
-    why: 'Базовий GSC безкоштовний, але обмежений для глибокого аналізу.', warn: null, subtasks: []
-  },
+    why: 'Базовий GSC безкоштовний, але обмежений для глибокого аналізу.', warn: null, subtasks: [] },
   { id: 'SEO-CRIT-001', title: 'SEO-контент pass: описи, H1, meta, FAQ', status: 'done', tool: 'Claude + Codex', priority: 'High', lastUpdated: '2026-06-07', blockedBy: [],
     simple: 'Комплексний SEO pass: категорії, товари, /special, homepage H1, forbidden claims прибрані, FAQ accordion оновлено.', why: 'P0-ризик заборонених claims видалено. Owner QA пройдено.', warn: null, subtasks: [] },
   { id: 'TECH-029', title: 'Sitemap / GSC — site-side закрито', status: 'done', tool: 'Manual', priority: 'High', lastUpdated: '2026-06-07', blockedBy: [],
     simple: 'Видалено .htaccess-блок, sitemap-full.xml статичний (47 URL), cron 04:15 щодня, robots.txt → sitemap-full.xml.', why: 'Серверна частина повністю чиста.', warn: null, subtasks: [] },
   { id: 'TECH-030', title: 'Noindex pages audit', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-08', blockedBy: [],
-    simple: 'page-параметр видалено з has_duplicate_params → page=2+ тепер index,follow. Pagination → AJAX «Показати ще» з noscript fallback.', why: '168 сторінок (39%) мали noindex — частина без причини.', warn: null, subtasks: [] },
+    simple: 'page-параметр видалено з has_duplicate_params → page=2+ тепер index,follow. Pagination → AJAX з noscript fallback.', why: '168 сторінок (39%) мали noindex — частина без причини.', warn: null, subtasks: [] },
   { id: 'TECH-031', title: 'Fix 4xx errors (baseline crawl)', status: 'done', tool: 'Manual', priority: 'High', lastUpdated: '2026-06-08', blockedBy: [],
     simple: '404 image One Piece виправлено в category + module. /catalog/?path=65 — навмисно 403.', why: 'Чистий crawl без Client Error 4xx.', warn: null, subtasks: [] },
-
   // ─── CRM / DASHBOARD ───
   { id: 'CRM-001', title: 'CRM: Dashboard — форма мультиканальної закупки', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-20', blockedBy: [],
     simple: 'Supplier channel select (ZenMarket JP / Постачальник UA), умовні поля JPY/UAH, нові статуси, batch-update.', why: 'UI був заточений під ZenMarket. Для UA-постачальника форма некоректна.', warn: null, subtasks: [] },
@@ -1847,21 +1810,20 @@ const ROADMAP_TASKS = [
   { id: 'DASH-001', title: 'Огляд — три плитки без даних', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-19', blockedBy: [],
     simple: 'Собівартість складу, Активи, Потенційний прибуток — показували «—». Apps Script доповнено трьома новими полями.', why: 'Без цих даних власник не бачить реальну вартість запасів.', warn: null, subtasks: [] },
   { id: 'DASH-002', title: 'Огляд — блок «Потребують уваги» порожній', status: 'done', tool: 'Claude', priority: 'High', lastUpdated: '2026-06-15', blockedBy: [],
-    simple: 'Блок показував «—» замість списку алертів. Виправлено рендер і підʼєднання до API.', why: 'Власник не бачив критичні залишки і замовлення що потребують уваги.', warn: null, subtasks: [] },
+    simple: 'Блок показував «—» замість списку алертів. Виправлено рендер і підключення до API.', why: 'Власник не бачив критичні залишки і замовлення що потребують уваги.', warn: null, subtasks: [] },
   { id: 'DASH-WRITE-004', title: 'Облік — редагування існуючих записів', status: 'done', tool: 'Claude + Codex', priority: 'Medium', lastUpdated: '2026-06-19', blockedBy: [],
     simple: 'Форма «Облік» тепер дозволяє знайти і виправити існуючий рядок у Продажах, Закупках або Списанні.', why: 'Помилки при введенні неминучі — без редагування доводилось йти в Google Sheets.', warn: null, subtasks: [] },
-
   // ─── OTHER ───
   {
     id: 'CAT-002', title: 'Нова категорія «Аксесуари»', status: 'todo', tool: 'Manual + Codex', priority: 'Medium',
     lastUpdated: '2026-06-20', blockedBy: [],
-    simple: 'Додати категорію «Аксесуари»: навігація, бургер-меню, головна. Прив\'язати 6 SKU (ACC-001..006). Також «Інші TCG».',
+    simple: 'Додати категорію «Аксесуари»: навігація, бургер-меню, головна. Привязати 6 SKU (ACC-001..006). Також «Інші TCG».',
     why: 'Аксесуари вже є в наявності, але недоступні через відсутність категорії.',
     warn: 'Спочатку власник завантажує фото для ACC-001..006.',
     subtasks: [
       { id: '1', title: 'Фото ACC-001..006', status: 'todo', desc: 'Власник завантажує фото в адмінку.' },
       { id: '2', title: 'Категорія + навігація', status: 'todo', desc: 'Codex: категорія «Аксесуари» + «Інші TCG», топ-меню, бургер-меню, плитка на головній.' },
-      { id: '3', title: 'Прив\'язати 6 SKU', status: 'todo', desc: 'ACC-001..006 у категорію Аксесуари. Перевірити фото, ціни, slug.' }
+      { id: '3', title: 'Привязати 6 SKU', status: 'todo', desc: 'ACC-001..006 у категорію Аксесуари. Перевірити фото, ціни, slug.' }
     ]
   },
   {
@@ -1876,23 +1838,17 @@ const ROADMAP_TASKS = [
       { id: '3', title: 'Юр. перевірка', status: 'todo', desc: 'ChatGPT + Gemini + власник перевіряють обидва тексти.' }
     ]
   },
-  {
-    id: 'AUTO-003', title: 'Content pipeline: бриф → текст → Notion', status: 'todo', tool: 'Claude', priority: 'Medium',
+  { id: 'AUTO-003', title: 'Content pipeline: бриф → текст → Notion', status: 'todo', tool: 'Claude', priority: 'Medium',
     lastUpdated: '2026-06-21', blockedBy: [],
     simple: 'Один запит → Claude генерує бриф, H1, meta, текст → зберігає в plans/ → комітить → створює задачу в Notion.',
-    why: 'Автоматизація контент-задач: бриф, текст і Notion-задача з одного запиту.', warn: null, subtasks: []
-  },
-  {
-    id: 'AUTO-004', title: 'SEO-моніторинг: авто-задача при падінні позицій', status: 'todo', tool: 'Claude', priority: 'Low',
+    why: 'Автоматизація контент-задач.', warn: null, subtasks: [] },
+  { id: 'AUTO-004', title: 'SEO-моніторинг: авто-задача при падінні позицій', status: 'todo', tool: 'Claude', priority: 'Low',
     lastUpdated: '2026-06-21', blockedBy: [],
-    simple: 'Щомісяця: GSC API → порівняння з минулим місяцем → якщо сторінка просіла >5 позицій або clicks -30% → авто-задача в Notion.',
-    why: 'Раннє виявлення SEO-падінь без ручного моніторингу.', warn: null, subtasks: []
-  },
+    simple: 'Щомісяця: GSC API → порівняння → якщо сторінка просіла >5 позицій або clicks -30% → авто-задача в Notion.',
+    why: 'Раннє виявлення SEO-падінь без ручного моніторингу.', warn: null, subtasks: [] },
   { id: 'BRAND-OUTLET-001', title: 'Outlet Booster — опис і SEO', status: 'done', tool: 'Codex', priority: 'Medium', lastUpdated: '2026-05-26', blockedBy: [],
-    simple: 'Товар «Бустер Pokémon TCG: Outlet Mix» репозиціонований: опис, meta, FAQ, атрибути очищено.', why: 'Описи не відповідали бренд-позиціонуванню. Owner QA пройдено.', warn: 'Не додавати в sitemap і Merchant feed.', subtasks: [] },
+    simple: 'Товар «Бустер Pokemon TCG: Outlet Mix» репозиціонований: опис, meta, FAQ, атрибути очищено.', why: 'Описи не відповідали бренд-позиціонуванню. Owner QA пройдено.', warn: 'Не додавати в sitemap і Merchant feed.', subtasks: [] },
 ];
-
-
 
 const SM = { active:'🔵', todo:'⚪', done:'🟢', blocked:'🔴' };
 const SC = { active:'s-active', todo:'s-todo', done:'s-done', blocked:'s-blocked' };
@@ -1911,12 +1867,9 @@ function rmCard(t) {
   const effectiveStatus = (t.status === 'todo' && isBlocked(t)) ? 'blocked' : t.status;
   const cardClass = SC[effectiveStatus] || SC[t.status] || '';
   const dot = SM[effectiveStatus] || SM[t.status] || '⬜';
-
-  // subtask ID chips for collapsed header row
   const subChips = (t.subtasks||[]).length
-    ? `<div class="rm-subtask-ids">${(t.subtasks||[]).map(s=>`<span class="rm-sub-chip">${t.id}-${s.id}</span>`).join('')}</div>`
+    ? '<div class="rm-subtask-ids">' + (t.subtasks||[]).map(s=>'<span class="rm-sub-chip">'+t.id+'-'+s.id+'</span>').join('') + '</div>'
     : '';
-
   const subs = (t.subtasks||[]).length ? `
     <div class="rm-subtasks">
       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:6px">Підзадачі (${t.subtasks.length})</div>
@@ -1930,88 +1883,81 @@ function rmCard(t) {
           <div class="rm-sub-desc">${s.desc}</div>
         </div>`).join('')}
     </div>` : '';
-
-  const blockedByNote = effectiveStatus === 'blocked'
-    ? `<p style="font-size:11.5px;color:var(--yellow)">🔒 Заблоковано: ${(t.blockedBy||[]).join(', ')}</p>` : '';
-
-  const hasbody = t.simple||t.why||t.warn||subs||blockedByNote;
-  return `<div class="rm-card ${cardClass}" onclick="rmToggle(this)">
-    <div class="rm-card-head">
-      <span class="rm-dot">${dot}</span>
-      <div class="rm-head-text">
-        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-          <span class="rm-id">${t.id}</span>
-          ${subChips}
-        </div>
-        <div class="rm-title">${t.title}</div>
-      </div>
-      <div class="rm-head-right">
-        <span class="rm-tag ${t.priority==='High'?'rm-tag-high':t.priority==='Medium'?'rm-tag-med':'rm-tag-manual'}">${t.priority}</span>
-        <span class="rm-tag ${t.tool.toLowerCase().includes('codex')?'rm-tag-codex':'rm-tag-manual'}">${t.tool}</span>
-        ${hasbody?`<span class="rm-chevron">▼</span>`:''}
-      </div>
-    </div>
-    ${hasbody?`<div class="rm-card-body">
-      ${t.simple?`<p>${t.simple}</p>`:''}
-      ${blockedByNote}
-      ${t.why?`<p><b>Навіщо:</b> ${t.why}</p>`:''}
-      ${t.warn?`<p><span class="rm-tag rm-tag-warn">⚠ ${t.warn}</span></p>`:''}
-      ${subs}
-    </div>`:''}
-  </div>`;
+  const blockedNote = effectiveStatus === 'blocked'
+    ? '<p style="font-size:11.5px;color:var(--yellow)">🔒 Заблоковано: ' + (t.blockedBy||[]).join(', ') + '</p>' : '';
+  const hasbody = t.simple||t.why||t.warn||subs||blockedNote;
+  return '<div class="rm-card ' + cardClass + '" onclick="rmToggle(this)">' +
+    '<div class="rm-card-head">' +
+      '<span class="rm-dot">' + dot + '</span>' +
+      '<div class="rm-head-text">' +
+        '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">' +
+          '<span class="rm-id">' + t.id + '</span>' + subChips +
+        '</div>' +
+        '<div class="rm-title">' + t.title + '</div>' +
+      '</div>' +
+      '<div class="rm-head-right">' +
+        '<span class="rm-tag ' + (t.priority==='High'?'rm-tag-high':t.priority==='Medium'?'rm-tag-med':'rm-tag-manual') + '">' + t.priority + '</span>' +
+        '<span class="rm-tag ' + (t.tool.toLowerCase().includes('codex')?'rm-tag-codex':'rm-tag-manual') + '">' + t.tool + '</span>' +
+        (hasbody ? '<span class="rm-chevron">▼</span>' : '') +
+      '</div>' +
+    '</div>' +
+    (hasbody ? '<div class="rm-card-body">' +
+      (t.simple ? '<p>' + t.simple + '</p>' : '') +
+      blockedNote +
+      (t.why ? '<p><b>Навіщо:</b> ' + t.why + '</p>' : '') +
+      (t.warn ? '<p><span class="rm-tag rm-tag-warn">⚠ ' + t.warn + '</span></p>' : '') +
+      subs +
+    '</div>' : '') +
+  '</div>';
 }
 
 function renderRoadmapFlow() {
-  const now = new Date('2026-06-25');
-  const MS_30D = 30 * 86400000;
-
-  const active   = sortByPriority(ROADMAP_TASKS.filter(t => t.status === 'active'));
-  const blocked  = sortByPriority(ROADMAP_TASKS.filter(t => t.status === 'todo' && isBlocked(t)));
-  const avail    = sortByPriority(ROADMAP_TASKS.filter(t => t.status === 'todo' && !isBlocked(t)));
-  const recent   = sortByPriority(ROADMAP_TASKS.filter(t => {
-    if (t.status !== 'done') return false;
-    const d = new Date(t.lastUpdated || '2000-01-01');
-    return (now - d) <= MS_30D;
+  var now = new Date();
+  var MS_30D = 30 * 86400000;
+  var active  = sortByPriority(ROADMAP_TASKS.filter(function(t){ return t.status==='active'; }));
+  var blocked = sortByPriority(ROADMAP_TASKS.filter(function(t){ return t.status==='todo' && isBlocked(t); }));
+  var avail   = sortByPriority(ROADMAP_TASKS.filter(function(t){ return t.status==='todo' && !isBlocked(t); }));
+  var recent  = sortByPriority(ROADMAP_TASKS.filter(function(t){
+    if (t.status!=='done') return false;
+    return (now - new Date(t.lastUpdated||'2000-01-01')) <= MS_30D;
   }));
-  const archive  = sortByPriority(ROADMAP_TASKS.filter(t => {
-    if (t.status !== 'done') return false;
-    const d = new Date(t.lastUpdated || '2000-01-01');
-    return (now - d) > MS_30D;
+  var archive = sortByPriority(ROADMAP_TASKS.filter(function(t){
+    if (t.status!=='done') return false;
+    return (now - new Date(t.lastUpdated||'2000-01-01')) > MS_30D;
   }));
-
-  const LANES = [
-    { id:'active',  label:'🔥 Зараз в роботі',          tasks: active  },
-    { id:'blocked', label:'⛔ Наступні заблоковані',      tasks: blocked },
-    { id:'avail',   label:'✅ Наступні доступні',         tasks: avail   },
-    { id:'recent',  label:'🕓 Нещодавно виконано',        tasks: recent  },
-    { id:'archive', label:'📦 Виконані (Архів)',           tasks: archive },
+  var LANES = [
+    { id:'active',  label:'🔥 Зараз в роботі',     tasks: active  },
+    { id:'blocked', label:'⛔ Наступні заблоковані', tasks: blocked },
+    { id:'avail',   label:'✅ Наступні доступні',    tasks: avail   },
+    { id:'recent',  label:'🕓 Нещодавно виконано',   tasks: recent  },
+    { id:'archive', label:'📦 Виконані (Архів)',      tasks: archive },
   ];
-
-  let html = '<div class="rm-flow">';
-  LANES.forEach(lane => {
+  var html = '<div class="rm-flow">';
+  LANES.forEach(function(lane) {
     if (!lane.tasks.length) return;
-    const collapsed = !!_rmCollapsed[lane.id];
-    const shown = collapsed ? lane.tasks.slice(0,1) : lane.tasks;
-    const toggleLabel = collapsed ? `▶ +${lane.tasks.length - 1} більше` : '▲ Згорнути';
-    html += `<div class="rm-lane">
-      <div class="rm-lane-header" onclick="rmToggleLane('${lane.id}')">
-        <span class="rm-lane-label">${lane.label}</span>
-        <span class="rm-lane-meta">${lane.tasks.length} задач</span>
-        <span class="rm-lane-toggle" style="${collapsed?'':'transform:rotate(90deg)'}">${collapsed?'▶':'▼'}</span>
-      </div>
-      <div class="rm-lane-cards">${shown.map(rmCard).join('')}</div>
-      ${lane.tasks.length > 1 ? `<div style="text-align:center;padding:6px 0;font-size:11px;color:var(--accent);cursor:pointer" onclick="rmToggleLane('${lane.id}')">${toggleLabel}</div>` : ''}
-    </div>`;
+    var collapsed = !!_rmCollapsed[lane.id];
+    var shown = collapsed ? lane.tasks.slice(0,1) : lane.tasks;
+    var toggleLabel = collapsed ? '▶ +' + (lane.tasks.length-1) + ' більше' : '▲ Згорнути';
+    var toggleArrow = collapsed ? '▶' : '▼';
+    html += '<div class="rm-lane">' +
+      '<div class="rm-lane-header" onclick="rmToggleLane(\'' + lane.id + '\')">' +
+        '<span class="rm-lane-label">' + lane.label + '</span>' +
+        '<span class="rm-lane-meta">' + lane.tasks.length + ' задач</span>' +
+        '<span class="rm-lane-toggle">' + toggleArrow + '</span>' +
+      '</div>' +
+      '<div class="rm-lane-cards">' + shown.map(rmCard).join('') + '</div>' +
+      (lane.tasks.length > 1 ? '<div style="text-align:center;padding:6px 0;font-size:11px;color:var(--accent);cursor:pointer" onclick="rmToggleLane(\'' + lane.id + '\')">' + toggleLabel + '</div>' : '') +
+    '</div>';
   });
   html += '</div>';
   document.getElementById('roadmapBoard').innerHTML = html;
 }
 
 function renderRoadmap() {
-  const cnt = s => ROADMAP_TASKS.filter(t=>t.status===s).length;
-  const blocked = ROADMAP_TASKS.filter(t=>t.status==='todo'&&isBlocked(t)).length;
+  var cnt = function(s){ return ROADMAP_TASKS.filter(function(t){ return t.status===s; }).length; };
+  var blockedCnt = ROADMAP_TASKS.filter(function(t){ return t.status==='todo' && isBlocked(t); }).length;
   document.getElementById('roadmapSub').textContent =
-    `🔵 В роботі: ${cnt('active')}  ·  ⛔ Заблоковано: ${blocked}  ·  ✅ Доступно: ${cnt('todo')-blocked}  ·  🟢 Виконано: ${cnt('done')}`;
+    '🔵 В роботі: ' + cnt('active') + '  ·  ⛔ Заблоковано: ' + blockedCnt + '  ·  ✅ Доступно: ' + (cnt('todo')-blockedCnt) + '  ·  🟢 Виконано: ' + cnt('done');
   renderRoadmapFlow();
 }
 function loadRoadmap() { renderRoadmap(); }
@@ -2141,4 +2087,566 @@ async function loadAccounting() {
             '<div class="form-row"><label>ТТН</label><input id="saleTtn"></div>' +
             '<div class="form-row"><label>Примітка</label><input id="saleNote"></div>' +
           '</div>' +
-          '<div class="form-section-title">Позиції продажу, до 10</
+          '<div class="form-section-title">Позиції продажу, до 10</div><div class="line-items" id="saleItems"></div>' +
+          '<div class="form-actions"><button class="btn-secondary" onclick="saleAddItem()">&#10133; Додати SKU</button></div>' +
+          '<div class="form-section-title">Склад містері-бокса, 5 бустерів на кожен MBX</div><div class="line-items" id="mysteryItems"></div>' +
+          '<div class="form-actions"><button class="btn-secondary" onclick="mysteryAddItem()">&#10133; Додати компонент</button>' +
+            '<button class="btn-primary" onclick="submitSale()">&#128190; Зберегти продаж</button><div id="saleMsg" class="form-msg"></div></div>' +
+        '</div></div>' +
+        '<div class="write-section purchase"><h3>&#128230; Внести закупку</h3><div class="write-form">' +
+          '<div class="form-grid">' +
+            '<div class="form-row"><label>Постачальник / Канал</label>' + formSelect('purSupplierChannel',PURCHASE_CHANNELS,'zenmarket_jp','onchange="togglePurchaseChannelFields()"') + '</div>' +
+            '<div class="form-row"><label>Референс / № замовлення</label><input id="purOrderRef"></div>' +
+            '<div class="form-row"><label>Загальна вартість лоту, грн *</label><input type="number" min="0" step="0.01" id="purTotalCost" oninput="recalcPurchaseCosts()"></div>' +
+            '<div class="form-row"><label>Статус</label>' + formSelect('purStatus',PURCHASE_STATUSES,'Замовлено') + '</div>' +
+            '<div class="form-row" id="purJapanFeesRow"><label>Доставка / комісії по Японії, JPY</label><input type="number" min="0" step="0.01" id="purJapanFees"></div>' +
+            '<div class="form-row"><label>Доставка UA, грн</label><input type="number" min="0" step="0.01" id="purUkraineDeliveryUah"></div>' +
+            '<div class="form-row"><label>URL замовлення</label><input type="url" id="purOrderUrl"></div>' +
+            '<div class="form-row"><label>Примітка</label><input id="purNote"></div>' +
+          '</div>' +
+          '<div class="form-section-title">Позиції закупки, до 3</div><div class="purchase-items" id="purchaseItems"></div>' +
+          '<div class="form-actions"><button class="btn-secondary" onclick="purAddItem()">&#10133; Додати SKU</button>' +
+            '<button class="btn-primary" onclick="submitPurchase()">&#128190; Зберегти закупку</button><div id="purMsg" class="form-msg"></div></div>' +
+        '</div></div>' +
+        '<div class="write-section purchase"><h3>&#128465; Внести списання</h3><div class="write-form">' +
+          '<div class="form-grid">' +
+            '<div class="form-row"><label>Дата *</label><input type="date" id="woDate" value="' + today + '"></div>' +
+            '<div class="form-row"><label>Тип списання *</label>' + formSelect('woType',WRITEOFF_TYPES,'Власне відкриття') + '</div>' +
+            '<div class="form-row"><label>Причина *</label><input id="woReason"></div>' +
+            '<div class="form-row"><label>Примітка</label><input id="woNote"></div>' +
+            '<div class="form-row"><label>Очікувана кількість</label><input type="number" min="0" step="1" id="woExpectedQty"></div>' +
+          '</div>' +
+          '<div class="form-section-title">Позиції списання, до 10</div><div class="line-items" id="writeoffItems"></div>' +
+          '<div class="form-actions"><button class="btn-secondary" onclick="writeoffAddItem()">&#10133; Додати SKU</button>' +
+            '<button class="btn-primary" onclick="submitWriteoff()">&#128190; Зберегти списання</button><div id="woMsg" class="form-msg"></div></div>' +
+        '</div></div>' +
+      '</div>' +
+      '<div class="records-section"><div class="records-head"><h3>Оновлення записів</h3><div id="recordsMsg" class="records-message"></div></div>' +
+        '<div class="records-tabs"><button class="rec-tab active" onclick="showRecTab(\'sales\',this)">Продажі</button>' +
+          '<button class="rec-tab" onclick="showRecTab(\'purchases\',this)">Закупки</button></div>' +
+        '<div id="recTabSales" class="rec-pane active"><div class="loading"><div class="spinner"></div><br>Завантаження...</div></div>' +
+        '<div id="recTabPurchases" class="rec-pane hidden"></div></div>';
+
+    accountingState.saleSeq = 0;
+    accountingState.purchaseSeq = 0;
+    accountingState.writeoffSeq = 0;
+    accountingState.mysterySeq = 0;
+    accountingState.selectedPurchaseLots = {};
+    accountingState.recentLoaded = { sales: false, purchases: false };
+    accountingState.edit = null;
+    saleAddItem();
+    purAddItem();
+    togglePurchaseChannelFields();
+    writeoffAddItem();
+    loadRecTab('sales');
+  } catch(e) {
+    document.getElementById('accountingContent').innerHTML = '<div style="color:var(--red)">Помилка: ' + e.message + '</div>';
+  }
+}
+
+function addSkuLine(kind, max, withPrice, withManualCost) {
+  const stateKey = kind === 'sale' ? 'saleSeq' : (kind === 'writeoff' ? 'writeoffSeq' : 'mysterySeq');
+  const containerId = kind === 'sale' ? 'saleItems' : (kind === 'writeoff' ? 'writeoffItems' : 'mysteryItems');
+  if (document.querySelectorAll('#' + containerId + ' .line-item').length >= max) return;
+  const seq = ++accountingState[stateKey];
+  const id = kind + seq;
+  const div = document.createElement('div');
+  div.className = 'line-item';
+  div.id = kind + 'Item' + seq;
+  div.innerHTML =
+    '<div class="purchase-item-head"><span class="purchase-item-title">SKU ' + seq + '</span>' +
+      '<button class="purchase-item-remove" onclick="removeLine(\'' + kind + '\',' + seq + ')">&#215;</button></div>' +
+    '<div class="form-row"><label>Пошук SKU</label><input id="' + id + 'Search" placeholder="Назва або SKU..."></div>' +
+    '<div class="line-item-grid"><div class="form-row"><label>SKU *</label><select id="' + id + 'Select" size="4"></select></div>' +
+      '<div class="form-row"><label>Кількість *</label><input type="number" min="1" step="1" value="1" id="' + id + 'Qty"></div>' +
+      (withPrice ? '<div class="form-row"><label>Ціна за одиницю *</label><input type="number" min="0" step="0.01" id="' + id + 'Price"></div>' : '') +
+      (withManualCost ? '<div class="form-row"><label>Ручна вартість, грн</label><input type="number" min="0" step="0.01" id="' + id + 'ManualCost"></div>' : '') +
+      '<div class="form-row"><label>Примітка рядка</label><input id="' + id + 'Note"></div></div>';
+  document.getElementById(containerId).appendChild(div);
+  acSkuOptions(accountingState.skus, id + 'Select', id + 'Search');
+  if (withPrice) {
+    const sel = document.getElementById(id + 'Select');
+    sel.onchange = function() {
+      const sku = accountingState.skus.find(function(item) { return item.sku === sel.value; });
+      const price = sku && (sku.rrc != null ? sku.rrc : sku.price);
+      if (price != null) document.getElementById(id + 'Price').value = price;
+      refreshMysteryOptions();
+    };
+    sel.onchange();
+  } else if (kind === 'mystery') {
+    acMysteryOptions(id + 'Select', id + 'Search');
+  }
+}
+
+function saleAddItem() { addSkuLine('sale',10,true,false); }
+function writeoffAddItem() { addSkuLine('writeoff',10,false,false); }
+function mysteryAddItem() { addSkuLine('mystery',10,false,false); }
+function removeLine(kind, seq) {
+  const el = document.getElementById(kind + 'Item' + seq);
+  if (el) el.remove();
+  if (kind === 'purchase') recalcPurchaseCosts();
+}
+
+function purAddItem() {
+  if (document.querySelectorAll('#purchaseItems .purchase-item').length >= 3) return;
+  const seq = ++accountingState.purchaseSeq;
+  const id = 'pur' + seq;
+  const div = document.createElement('div');
+  div.className = 'purchase-item';
+  div.id = 'purItem' + seq;
+  div.innerHTML =
+    '<div class="purchase-item-head"><span class="purchase-item-title">SKU ' + seq + '</span>' +
+      '<button class="purchase-item-remove" onclick="purRemoveItem(' + seq + ')">&#215;</button></div>' +
+    '<div class="form-row"><label>Пошук SKU</label><input id="' + id + 'Search" placeholder="Назва або SKU..."></div>' +
+    '<div class="form-row"><label>SKU *</label><select id="' + id + 'Select" size="4"></select></div>' +
+    '<div class="purchase-cost-grid">' +
+      '<div class="form-row"><label>Кількість *</label><input type="number" min="1" value="1" id="' + id + 'Qty" oninput="recalcPurchaseCosts()"></div>' +
+      '<div class="form-row"><label>Вартість рядка, грн</label><input type="number" id="' + id + 'LineCost" disabled></div>' +
+      '<div class="form-row"><label>Ручна вартість, грн</label><input type="number" min="0" step="0.01" id="' + id + 'ManualCost" oninput="recalcPurchaseCosts()"></div>' +
+    '</div><div class="form-row"><label>Примітка до рядка</label><input id="' + id + 'Note"></div>';
+  document.getElementById('purchaseItems').appendChild(div);
+  acSkuOptions(accountingState.skus, id + 'Select', id + 'Search');
+  recalcPurchaseCosts();
+}
+
+function purRemoveItem(seq) {
+  const el = document.getElementById('purItem' + seq);
+  if (el) el.remove();
+  recalcPurchaseCosts();
+}
+
+function recalcPurchaseCosts() {
+  const total = Number(editValue('purTotalCost')) || 0;
+  const rows = Array.from(document.querySelectorAll('#purchaseItems .purchase-item')).map(function(div) {
+    const id = div.id.replace('purItem','pur');
+    return { id: id, qty: Number(editValue(id + 'Qty')) || 0, manualText: editValue(id + 'ManualCost') };
+  });
+  const manualTotal = rows.reduce(function(sum,row) { return sum + (row.manualText === '' ? 0 : Number(row.manualText) || 0); },0);
+  const autoQty = rows.reduce(function(sum,row) { return sum + (row.manualText === '' ? row.qty : 0); },0);
+  let allocated = manualTotal;
+  rows.forEach(function(row,index) {
+    let cost = Number(row.manualText);
+    if (row.manualText === '') {
+      const autoRows = rows.filter(function(item) { return item.manualText === ''; });
+      const isLastAuto = autoRows[autoRows.length - 1] === row;
+      cost = autoQty > 0 ? (isLastAuto ? total - allocated : Math.round((total - manualTotal) * row.qty / autoQty * 100) / 100) : 0;
+      allocated = Math.round((allocated + cost) * 100) / 100;
+    }
+    const out = document.getElementById(row.id + 'LineCost');
+    if (out) out.value = isFinite(cost) ? Math.max(0,cost).toFixed(2) : '';
+  });
+}
+
+function formMsg(id, text, type) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = text;
+  el.className = 'form-msg' + (type ? ' ' + type : '');
+}
+
+function collectSkuLines(containerId, prefix, priceField) {
+  const items = [];
+  document.querySelectorAll('#' + containerId + ' .line-item').forEach(function(div) {
+    const id = div.id.replace(prefix + 'Item',prefix);
+    const sku = editValue(id + 'Select');
+    const qty = Number(editValue(id + 'Qty')) || 0;
+    const item = { sku: sku, qty: qty, note: editValue(id + 'Note') };
+    if (priceField) item.price = Number(editValue(id + 'Price'));
+    if (sku || qty || item.note) items.push(item);
+  });
+  return items;
+}
+
+async function submitSale() {
+  const items = collectSkuLines('saleItems','sale',true);
+  const mysteryComponents = collectSkuLines('mysteryItems','mystery',false);
+  const date = editValue('saleDate');
+  if (!date || !items.length || items.some(function(item) { return !item.sku || item.qty <= 0 || item.price < 0 || !isFinite(item.price); })) {
+    formMsg('saleMsg','⚠ Перевір дату та всі позиції продажу','error'); return;
+  }
+  formMsg('saleMsg','Збереження…','');
+  try {
+    await callPost({
+      action:'add_sale', order_id:editValue('saleOrderId') || undefined, channel:editValue('saleChannel'), date:date,
+      customer_phone:editValue('salePhone'), customer_name:editValue('saleCustomer'), payment_type:editValue('salePaymentType'),
+      discount:Number(editValue('saleDiscount')) || 0, packaging_type:editValue('salePackaging'),
+      custom_packaging_cost:editValue('saleCustomPackaging') === '' ? undefined : Number(editValue('saleCustomPackaging')),
+      shop_delivery:Number(editValue('saleShopDelivery')) || 0, payment_status:editValue('salePaymentStatus'),
+      order_status:editValue('saleOrderStatus'), post:editValue('salePost'), ttn:editValue('saleTtn'), note:editValue('saleNote'),
+      items:items, mystery_components:mysteryComponents
+    });
+    formMsg('saleMsg','✅ Продаж збережено','success');
+    invalidateAccountingCaches();
+  } catch(e) { formMsg('saleMsg','❌ ' + e.message,'error'); }
+}
+
+async function submitPurchase() {
+  const supplier_channel = editValue('purSupplierChannel') || 'zenmarket_jp';
+  const isZen = supplier_channel === 'zenmarket_jp';
+  const order_ref = editValue('purOrderRef').trim();
+  const totalCostText = editValue('purTotalCost');
+  const total_cost = Number(totalCostText);
+  const items = [];
+  document.querySelectorAll('#purchaseItems .purchase-item').forEach(function(div) {
+    const id = div.id.replace('purItem','pur');
+    const manual = editValue(id + 'ManualCost');
+    items.push({ sku:editValue(id + 'Select'), qty:Number(editValue(id + 'Qty')) || 0,
+      manual_cost:manual === '' ? null : Number(manual), note:editValue(id + 'Note') });
+  });
+  if ((isZen && !order_ref) || totalCostText === '' || !isFinite(total_cost) || total_cost < 0 || !items.length ||
+      items.some(function(item) { return !item.sku || item.qty <= 0; })) {
+    formMsg('purMsg','⚠ Перевір референс, загальну вартість і позиції','error'); return;
+  }
+  formMsg('purMsg','Збереження…','');
+  try {
+    await callPost({ action:'add_purchase', supplier_channel:supplier_channel, order_ref:order_ref, total_cost:total_cost,
+      japan_fees_jpy:isZen ? (Number(editValue('purJapanFees')) || 0) : 0,
+      ukraine_delivery_uah:Number(editValue('purUkraineDeliveryUah')) || 0, status:editValue('purStatus'),
+      order_url:editValue('purOrderUrl'), note:editValue('purNote'), items:items });
+    formMsg('purMsg','✅ Закупку збережено (' + items.length + ' SKU)','success');
+    invalidateAccountingCaches();
+  } catch(e) { formMsg('purMsg','❌ ' + e.message,'error'); }
+}
+
+async function submitWriteoff() {
+  const items = collectSkuLines('writeoffItems','writeoff',false);
+  const expected = editValue('woExpectedQty');
+  if (!editValue('woDate') || !editValue('woType') || !editValue('woReason').trim() || !items.length ||
+      items.some(function(item) { return !item.sku || item.qty <= 0; })) {
+    formMsg('woMsg','⚠ Перевір загальні поля та позиції списання','error'); return;
+  }
+  formMsg('woMsg','Збереження…','');
+  try {
+    await callPost({ action:'add_writeoff', date:editValue('woDate'), writeoff_type:editValue('woType'),
+      reason:editValue('woReason').trim(), note:editValue('woNote'),
+      expected_qty:expected === '' ? undefined : Number(expected), items:items });
+    formMsg('woMsg','✅ Списання збережено (' + items.length + ' SKU)','success');
+    invalidateAccountingCaches();
+  } catch(e) { formMsg('woMsg','❌ ' + e.message,'error'); }
+}
+
+function invalidateAccountingCaches() {
+  delete cache.summary; delete cache.stock;
+  loaded.overview = false; loaded.stock = false;
+}
+
+function recEsc(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function recPaneId(name) {
+  return 'recTab' + name.charAt(0).toUpperCase() + name.slice(1);
+}
+
+function showRecTab(name, btn) {
+  document.querySelectorAll('.rec-tab').forEach(function(el) { el.classList.remove('active'); });
+  document.querySelectorAll('.rec-pane').forEach(function(el) { el.classList.add('hidden'); });
+  if (btn) btn.classList.add('active');
+  const pane = document.getElementById(recPaneId(name));
+  if (pane) pane.classList.remove('hidden');
+  accountingState.edit = null;
+  if (!accountingState.recentLoaded[name]) loadRecTab(name);
+}
+
+function recTableConfig(name) {
+  if (name === 'sales') return {
+    action: 'recent_sales',
+    columns: [['ttn_display','ТТН / доставка'],['order_id','Замовлення'],['date','Дата'],['amount','Сума'],['payment_status','Оплата'],['order_status','Статус'],['payment_type','Тип оплати']]
+  };
+  return {
+    action: 'recent_purchases',
+    columns: [['order_ref','Order Ref'],['sku','SKU'],['qty','К-сть'],['japan_fee_jpy','JP-комісія, JPY'],['status','Статус']]
+  };
+}
+
+async function loadRecTab(name, force) {
+  const pane = document.getElementById(recPaneId(name));
+  if (!pane) return;
+  if (!force && accountingState.recentLoaded[name]) {
+    renderRecTable(name);
+    return;
+  }
+  pane.innerHTML = '<div class="loading"><div class="spinner"></div><br>Завантаження...</div>';
+  try {
+    const cfg = recTableConfig(name);
+    const data = await call(cfg.action, { limit: 20 });
+    accountingState.recent[name] = data.rows || [];
+    if (name === 'sales') {
+      accountingState.recent[name].forEach(function(row) {
+        const ttn = String(row.ttn || '').trim();
+        row.ttn_display = (ttn ? ttn.slice(-4) : 'NTTN') + ' · ' + (String(row.post || '').trim() || '—');
+      });
+    }
+    if (name === 'purchases') {
+      accountingState.recent[name].sort(function(a,b) {
+        const an = Number((String(a.order_ref || '').match(/\d+/) || [0])[0]);
+        const bn = Number((String(b.order_ref || '').match(/\d+/) || [0])[0]);
+        return an - bn || String(a.order_ref || '').localeCompare(String(b.order_ref || ''));
+      });
+    }
+    accountingState.recentLoaded[name] = true;
+    renderRecTable(name);
+  } catch(e) {
+    pane.innerHTML = '<div class="records-message error">Помилка: ' + recEsc(e.message) + '</div>';
+  }
+}
+
+function renderRecTable(name) {
+  const pane = document.getElementById(recPaneId(name));
+  if (!pane) return;
+  const cfg = recTableConfig(name);
+  const rows = accountingState.recent[name] || [];
+  if (!rows.length) {
+    pane.innerHTML = '<div class="records-message">Записів немає.</div>';
+    return;
+  }
+  if (name === 'purchases') {
+    renderPurchaseTables_(pane, rows, cfg);
+    return;
+  }
+  let html = '<table class="rec-table"><thead><tr>';
+  if (name === 'purchases') html += '<th class="lot-select-cell">✓</th>';
+  cfg.columns.forEach(function(col) { html += '<th>' + recEsc(col[1]) + '</th>'; });
+  html += '</tr></thead><tbody>';
+  rows.forEach(function(row) {
+    html += '<tr' + (name === 'sales' ? ' onclick="openEditRow(\'sales\',' + Number(row.row_index) + ')"' : '') + '>';
+    if (name === 'purchases') {
+      const checked = accountingState.selectedPurchaseLots[row.row_index] ? ' checked' : '';
+      html += '<td class="lot-select-cell"><input type="checkbox" id="lotCheck' + Number(row.row_index) + '"' + checked +
+        ' onchange="togglePurchaseLot(' + Number(row.row_index) + ',this.checked)"></td>';
+    }
+    cfg.columns.forEach(function(col) { html += '<td>' + recEsc(row[col[0]]) + '</td>'; });
+    html += '</tr>';
+  });
+  html += '</tbody></table><div id="editRowForm' + name.charAt(0).toUpperCase() + name.slice(1) + '"></div>';
+  pane.innerHTML = html;
+}
+
+function purchaseTableHtml_(rows, cfg) {
+  if (!rows.length) return '';
+  let html = '<table class="rec-table"><thead><tr><th class="lot-select-cell">✓</th>';
+  cfg.columns.forEach(function(col) { html += '<th>' + recEsc(col[1]) + '</th>'; });
+  html += '</tr></thead><tbody>';
+  rows.forEach(function(row) {
+    const eligible = purchaseBatchEligible_(row);
+    const checked = accountingState.selectedPurchaseLots[row.row_index] ? ' checked' : '';
+    html += '<tr><td class="lot-select-cell">';
+    if (eligible) {
+      html += '<input type="checkbox" id="lotCheck' + Number(row.row_index) + '"' +
+        checked + ' onchange="togglePurchaseLot(' + Number(row.row_index) + ',this.checked)">';
+    } else {
+      html += '<span class="field-hint" title="Batch update тільки для ZenMarket JP">—</span>';
+    }
+    html += '</td>';
+    cfg.columns.forEach(function(col) { html += '<td>' + recEsc(row[col[0]]) + '</td>'; });
+    html += '</tr>';
+  });
+  return html + '</tbody></table>';
+}
+
+function purchaseBatchEligible_(row) {
+  const channel = String(row && (row.supplier_channel || row.supplier || row.channel) || '').trim();
+  if (channel) return channel === 'zenmarket_jp' || channel === 'ZenMarket' || channel === 'ZenMarket JP';
+  return !/^AUTO-/i.test(String(row && row.order_ref || '').trim());
+}
+
+function renderPurchaseTables_(pane, rows, cfg) {
+  const regular = rows.filter(function(row) { return String(row.status) !== 'В дорозі'; });
+  const transit = rows.filter(function(row) { return String(row.status) === 'В дорозі'; });
+  let html = regular.length ? purchaseTableHtml_(regular,cfg) : '<div class="records-message">Лотів поза дорогою немає.</div>';
+  if (transit.length) {
+    const groups = {};
+    transit.forEach(function(row) {
+      const key = String(row.track_number || '').trim() || 'NTTN';
+      (groups[key] = groups[key] || []).push(row);
+    });
+    html += '<div class="form-section-title">В дорозі · посилки</div><div class="parcel-list">';
+    Object.keys(groups).forEach(function(track) {
+      html += '<div class="parcel-block"><div class="parcel-head"><span>Посилка ' +
+        recEsc(track === 'NTTN' ? 'без ТТН' : track) + '</span><span>' +
+        groups[track].length + ' лот.</span></div>' + purchaseTableHtml_(groups[track],cfg) + '</div>';
+    });
+    html += '</div>';
+  }
+  html += '<div id="editRowFormPurchases"></div>';
+  pane.innerHTML = html;
+  renderPurchaseBatchEditor();
+}
+
+function recField(id, label, value, type, step) {
+  return '<div class="form-row"><label>' + recEsc(label) + '</label><input id="' + id + '" type="' +
+    (type || 'text') + '"' + (step ? ' step="' + step + '"' : '') + ' value="' + recEsc(value) + '"></div>';
+}
+
+function recReadOnly(label, value) {
+  return '<div class="form-row"><label>' + recEsc(label) + '</label><input type="text" value="' + recEsc(value) + '" disabled></div>';
+}
+
+function recSelect(id, label, value, options) {
+  let html = '<div class="form-row"><label>' + recEsc(label) + '</label><select id="' + id + '">';
+  options.forEach(function(option) {
+    html += '<option value="' + recEsc(option) + '"' + (String(option) === String(value) ? ' selected' : '') + '>' + recEsc(option) + '</option>';
+  });
+  return html + '</select></div>';
+}
+
+function openEditRow(type, rowIndex) {
+  const row = (accountingState.recent[type] || []).find(function(item) {
+    return Number(item.row_index) === Number(rowIndex);
+  });
+  if (!row) return;
+  if (type !== 'sales') return;
+  accountingState.edit = { type: type, row_index: Number(row.row_index) };
+  const host = document.getElementById('editRowForm' + type.charAt(0).toUpperCase() + type.slice(1));
+  if (!host) return;
+  let fields = '';
+  if (type === 'sales') {
+    fields += recReadOnly('ТТН / замовлення', (row.ttn ? 'ТТН ' + row.ttn + ' | ' : '') + row.order_id);
+    fields += recReadOnly('Поточний статус оплати', row.payment_status);
+    fields += recReadOnly('Тип оплати', row.payment_type);
+    fields += recReadOnly('Сума замовлення', fmt(row.amount));
+    fields += recSelect('editPaymentStatus','Новий статус оплати',row.payment_status,['Не оплачено','Оплачено','Повернення','Скасовано']);
+    fields += recReadOnly('Поточний статус замовлення', row.order_status);
+    fields += recSelect('editOrderStatus','Новий статус замовлення',row.order_status,['Нове','В обробці','Відправлено','Отримано','Скасовано','Повернення','Передзамовлення']);
+    fields += recField('editTtn','ТТН',row.ttn);
+    fields += recSelect('editPackagingType','Паковання',row.packaging_type,['',"Мала м'яка 14х12 см",'Середня м\'яка 16х14 см','Велика пакет 17х30 см','Конверт Airpock 14х22 см','Інше']);
+    fields += recField('editCustomPackaging','Якщо Інше, грн','','number','0.01');
+    fields += recField('editShopDelivery','Доставка за рахунок магазину',row.shop_delivery || '','number','0.01');
+    fields += recField('editNote','Примітка',row.note);
+  }
+  host.innerHTML = '<div class="edit-row-form"><h4>Оновити продаж ' + recEsc(row.order_id) + '</h4>' +
+    '<div class="edit-row-grid">' + fields + '</div>' +
+    '<div class="form-actions"><button class="btn-primary" onclick="saveEditRow()">Зберегти</button>' +
+    '<button class="btn-secondary" onclick="closeEditRow()">Скасувати</button></div></div>';
+}
+
+function editValue(id) {
+  const el = document.getElementById(id);
+  return el ? el.value : '';
+}
+
+function closeEditRow() {
+  accountingState.edit = null;
+  document.querySelectorAll('[id^="editRowForm"]').forEach(function(host) { host.innerHTML = ''; });
+}
+
+async function saveEditRow() {
+  const edit = accountingState.edit;
+  if (!edit || edit.type !== 'sales') return;
+  const payload = { action:'update_sale', row_index:edit.row_index, payment_status:editValue('editPaymentStatus'),
+    order_status:editValue('editOrderStatus'), ttn:editValue('editTtn'), packaging_type:editValue('editPackagingType'),
+    note:editValue('editNote') };
+  if (editValue('editCustomPackaging') !== '') payload.custom_packaging_cost = Number(editValue('editCustomPackaging'));
+  if (editValue('editShopDelivery') !== '') payload.shop_delivery = Number(editValue('editShopDelivery'));
+  const msg = document.getElementById('recordsMsg');
+  if (msg) { msg.textContent = 'Збереження…'; msg.className = 'records-message'; }
+  try {
+    await callPost(payload);
+    if (msg) { msg.textContent = 'Зміни збережено'; msg.className = 'records-message success'; }
+    accountingState.edit = null;
+    invalidateAccountingCaches();
+    await loadRecTab(edit.type, true);
+  } catch(e) {
+    if (msg) { msg.textContent = 'Помилка: ' + e.message; msg.className = 'records-message error'; }
+  }
+}
+
+function togglePurchaseLot(rowIndex, checked) {
+  const row = (accountingState.recent.purchases || []).find(function(item) { return Number(item.row_index) === Number(rowIndex); });
+  if (!row) return;
+  if (checked && !purchaseBatchEligible_(row)) {
+    const checkbox = document.getElementById('lotCheck' + rowIndex);
+    if (checkbox) checkbox.checked = false;
+    const msg = document.getElementById('recordsMsg');
+    if (msg) { msg.textContent = 'Batch update доступний тільки для ZenMarket JP лотів'; msg.className = 'records-message error'; }
+    return;
+  }
+  if (checked && Object.keys(accountingState.selectedPurchaseLots).length >= 5) {
+    const checkbox = document.getElementById('lotCheck' + rowIndex);
+    if (checkbox) checkbox.checked = false;
+    const msg = document.getElementById('recordsMsg');
+    if (msg) { msg.textContent = 'Можна вибрати не більше 5 лотів'; msg.className = 'records-message error'; }
+    return;
+  }
+  if (checked) accountingState.selectedPurchaseLots[rowIndex] = row;
+  else delete accountingState.selectedPurchaseLots[rowIndex];
+  renderPurchaseBatchEditor();
+}
+
+function renderPurchaseBatchEditor() {
+  const host = document.getElementById('editRowFormPurchases');
+  if (!host) return;
+  const rows = Object.keys(accountingState.selectedPurchaseLots).map(function(key) { return accountingState.selectedPurchaseLots[key]; });
+  if (!rows.length) {
+    host.innerHTML = '<div class="records-message">Вибери від 1 до 5 лотів для спільного оновлення.</div>';
+    return;
+  }
+  let selected = '<div class="selected-lots">';
+  rows.forEach(function(row) {
+    selected += '<div class="selected-lot"><div><b>' + recEsc(row.order_ref) + '</b><div class="field-hint">' +
+      recEsc(row.lot_id + ' | ' + row.sku + ' | к-сть ' + row.qty + ' | ' + row.status) +
+      '</div></div><div class="form-row"><label>JP-комісія лоту, JPY</label><input class="lot-fee-input" type="number" min="0" step="0.01" id="lotFee' +
+      Number(row.row_index) + '"></div></div>';
+  });
+  selected += '</div>';
+  host.innerHTML = '<div class="edit-row-form"><h4>Оновити закупку: вибрано ' + rows.length + ' з 5</h4>' + selected +
+    '<div class="edit-row-grid">' +
+      recField('batchTrackNumber','Трек-номер','') +
+      recField('batchDate','Дата доставки в Україну','','date') +
+      recField('batchUkraineDeliveryJpy','Доставка в Україну, JPY','','number','0.01') +
+      recSelect('batchStatus','Статус','', [''].concat(PURCHASE_STATUSES)) +
+      recField('batchNote','Примітка','') +
+    '</div><div class="form-actions"><button class="btn-primary" onclick="savePurchaseBatch()">Зберегти для вибраних лотів</button>' +
+    '<button class="btn-secondary" onclick="clearPurchaseSelection()">Скасувати вибір</button></div></div>';
+}
+
+function clearPurchaseSelection() {
+  accountingState.selectedPurchaseLots = {};
+  renderRecTable('purchases');
+}
+
+async function savePurchaseBatch() {
+  const rows = Object.keys(accountingState.selectedPurchaseLots).map(function(key) { return accountingState.selectedPurchaseLots[key]; });
+  if (!rows.length || rows.length > 5) return;
+  const lots = rows.map(function(row) {
+    const fee = editValue('lotFee' + row.row_index);
+    const item = { lot_id:row.lot_id };
+    if (fee !== '') item.japan_fee_jpy = Number(fee);
+    return item;
+  });
+  const payload = { action:'update_purchase', lots:lots };
+  if (editValue('batchTrackNumber') !== '') payload.track_number = editValue('batchTrackNumber');
+  if (editValue('batchDate') !== '') payload.date = editValue('batchDate');
+  if (editValue('batchUkraineDeliveryJpy') !== '') payload.ukraine_delivery_jpy = Number(editValue('batchUkraineDeliveryJpy'));
+  if (editValue('batchStatus') !== '') payload.status = editValue('batchStatus');
+  if (editValue('batchNote') !== '') payload.note = editValue('batchNote');
+  const hasLotFee = lots.some(function(lot) { return Object.prototype.hasOwnProperty.call(lot,'japan_fee_jpy'); });
+  if (Object.keys(payload).length === 2 && !hasLotFee) {
+    const msg = document.getElementById('recordsMsg');
+    if (msg) { msg.textContent = 'Заповни хоча б одне поле для оновлення'; msg.className = 'records-message error'; }
+    return;
+  }
+  const msg = document.getElementById('recordsMsg');
+  if (msg) { msg.textContent = 'Збереження…'; msg.className = 'records-message'; }
+  try {
+    const result = await callPost(payload);
+    if (msg) { msg.textContent = 'Оновлено лотів: ' + (result.rows_updated || rows.length); msg.className = 'records-message success'; }
+    accountingState.selectedPurchaseLots = {};
+    invalidateAccountingCaches();
+    await loadRecTab('purchases',true);
+  } catch(e) {
+    if (msg) { msg.textContent = 'Помилка: ' + e.message; msg.className = 'records-message error'; }
+  }
+}
+
+// ════════════ LOADERS MAP ════════════
+const loaders = { overview: loadOverview, stock: loadStock, consumables: loadConsumables, orders: loadOrders, skus: loadSkus, clients: loadClients, roadmap: loadRoadmap, accounting: loadAccounting };
+
+// ════════════ INIT ════════════
+loaded.overview = true;
+loadOverview();
+</script>
+</body>
+</html
