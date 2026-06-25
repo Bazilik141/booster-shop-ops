@@ -203,8 +203,8 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
 .rm-card-head { display:flex;align-items:flex-start;gap:10px;padding:12px 14px; }
 .rm-dot { font-size:16px;flex-shrink:0;margin-top:1px; }
 .rm-head-text { flex:1;min-width:0; }
-.rm-id { font-family:'SF Mono','Fira Code',monospace;font-size:10px;color:var(--accent);margin-bottom:2px; }
-.rm-title { font-size:13px;font-weight:600;line-height:1.3;color:var(--text); }
+.rm-id { font-family:'SF Mono','Fira Code',monospace;font-size:20px;color:var(--accent);margin-bottom:4px; }
+.rm-title { font-size:16px;font-weight:600;line-height:1.3;color:var(--text); }
 .rm-head-right { display:flex;gap:5px;align-items:center;flex-shrink:0;flex-wrap:wrap; }
 .rm-chevron { font-size:10px;color:var(--muted);transition:transform .2s; }
 .rm-card.open .rm-chevron { transform:rotate(180deg); }
@@ -216,10 +216,10 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
 .rm-sub.ss-active { border-left:2px solid #3b82f6; }
 .rm-sub.ss-done   { border-left:2px solid var(--green);opacity:.7; }
 .rm-sub-head { display:flex;gap:8px;align-items:center;margin-bottom:4px; }
-.rm-sub-id { font-family:'SF Mono','Fira Code',monospace;font-size:10px;color:var(--accent);flex-shrink:0; }
-.rm-sub-title { font-size:12px;font-weight:600;flex:1; }
+.rm-sub-id { font-family:'SF Mono','Fira Code',monospace;font-size:12px;color:var(--accent);flex-shrink:0; }
+.rm-sub-title { font-size:14px;font-weight:600;flex:1; }
 .rm-sub-status { font-size:13px; }
-.rm-sub-desc { font-size:11.5px;color:var(--muted);line-height:1.4; }
+.rm-sub-desc { font-size:14px;color:var(--muted);line-height:1.4; }
 .rm-tag { font-size:11px;padding:2px 7px;border-radius:5px;white-space:nowrap; }
 .rm-tag-high   { background:rgba(239,68,68,.1);color:#f87171; }
 .rm-tag-med    { background:rgba(245,158,11,.1);color:var(--yellow); }
@@ -1619,236 +1619,252 @@ function rmToggle(card) { card.classList.toggle('open'); }
 const ROADMAP_TASKS = [
   // ─── CHECKOUT / ST ───
   {
-    id: 'ST-2b.6', title: 'Баг: примарне замовлення Hutko при закритті браузера', status: 'todo', tool: 'Claude + Codex', priority: 'High',
+    id: 'ST-2b.6', title: 'Баг: порожнє замовлення Hutko після перезапуску браузера', status: 'todo', tool: 'Claude + Codex', priority: 'High',
     lastUpdated: '2026-06-25', blockedBy: [],
-    simple: 'Плаваючий баг: закрити/відкрити браузер з відкритою вкладкою чекауту → створюється «Чернетка (системний)» з методом Hutko без реальної спроби оплати. Приклад: Замовлення №186.',
-    why: 'Підозра: два костилі — мікрооновлення при blur поля доставки + авто-вибір Hutko при відкритті чекауту. Баг вилізав кілька разів після прибирання тимчасового рішення.',
-    warn: 'Плаваючий баг — не відтворюється стабільно. Потрібен аудит JS lifecycle: beforeunload/pagehide, session restore, авто-вибір методу оплати.',
+    simple: 'Залишаєш браузер відкритим на сторінці оформлення, закриваєш і знову відкриваєш — в адмінці зʼявляється порожнє замовлення з методом Hutko, хоча ніхто нічого не оплачував. Приклад: Замовлення №186.',
+    why: 'Замовлення-примари забруднюють адмінку і статистику. Треба знайти де саме відбувається хибний запуск.',
+    warn: 'Баг непостійний — відтворюється не завжди. Потрібен аудит коду чекауту.',
     subtasks: [
-      { id: '1', title: 'Аудит JS lifecycle при закритті/відкритті вкладки', status: 'todo', desc: 'Перевірити beforeunload, pagehide, session restore handlers.' },
-      { id: '2', title: 'Аудит авто-вибору Hutko при старті', status: 'todo', desc: 'Чи може костиль авто-вибору в поєднанні з мікрооновленням тригернути confirm.confirm?' },
-      { id: '3', title: 'Аудит мікрооновлення при blur доставки', status: 'todo', desc: 'Чи запускає він confirm.confirm у стані відновленої вкладки?' }
+      { id: '1', title: 'Перевірити поведінку при закритті/відкритті вкладки', status: 'todo', desc: 'Що відбувається з кодом чекауту коли браузер закривають або вкладка відновлюється?' },
+      { id: '2', title: 'Перевірити авто-вибір Hutko при відкритті сторінки', status: 'todo', desc: 'Код автоматично обирає Hutko як метод оплати при відкритті чекауту — чи не тригерить це замовлення?' },
+      { id: '3', title: 'Перевірити мікрооновлення при заповненні доставки', status: 'todo', desc: 'Після введення адреси доставки сторінка робить технічне оновлення — чи не тригерить це замовлення у відновленій вкладці?' }
     ]
   },
   {
-    id: 'ST-2c', title: 'Переключення всіх клієнтів на новий чекаут', status: 'active', tool: 'Claude + Codex', priority: 'High',
+    id: 'ST-2c', title: 'Перевести всіх покупців на новий чекаут', status: 'active', tool: 'Claude + Codex', priority: 'High',
     lastUpdated: '2026-06-24', blockedBy: [],
-    simple: 'Видалення 5 рядків з одного файлу — і всі клієнти йдуть на новий чекаут замість старого. Плюс реальна вартість доставки замість нуля.',
-    why: 'Фінальна точка всієї checkout-серії. Після цього старий чекаут стає резервним.',
-    warn: 'HIGH-RISK. Rollback = повернути ті самі 5 рядків назад.',
+    simple: 'Одна невелика зміна в коді — і всі покупці йдуть на новий чекаут замість старого. Водночас виправляємо вартість доставки: зараз вона завжди 0 грн, після — реальна ціна НП.',
+    why: 'Це фінальний крок запуску нового чекауту. Старий залишається як запасний.',
+    warn: 'Високий ризик. Якщо щось піде не так — повернути назад просто: один файл.',
     subtasks: [
-      { id: '1', title: 'Реальна вартість доставки', status: 'todo', desc: 'Зараз доставка = 0 грн. Після патчу — реальна ціна НП.' },
-      { id: '2', title: 'Cutover url.php', status: 'todo', desc: 'Прибираємо 5 рядків що перенаправляли на старий чекаут.' }
+      { id: '1', title: 'Реальна вартість доставки в замовленні', status: 'todo', desc: 'Зараз в замовленні завжди 0 грн доставки. Після: реальна ціна НП.' },
+      { id: '2', title: 'Увімкнути новий чекаут для всіх', status: 'todo', desc: 'Прибираємо перенаправлення на старий чекаут.' }
     ]
   },
   {
-    id: 'R-13.5', title: 'НП модуль — аудит та фікс доставки', status: 'active', tool: 'Codex', priority: 'High',
+    id: 'R-13.5', title: 'Нова Пошта — фікс відділень і вартості доставки', status: 'active', tool: 'Codex', priority: 'High',
     lastUpdated: '2026-06-14', blockedBy: [],
-    simple: 'Аудит і редизайн модуля Nova Poshta: фікс синхронізації відділень (52k), cron щодня, відображення реальної вартості доставки. Blocks RD-11.',
-    why: 'Відділення обривались через rate limit при синхронізації. Кошик не показує реальну вартість.',
-    warn: 'Не чіпати Hutko/fiscalization/payment flow. Gate перед RD-11.', subtasks: []
+    simple: 'Виправляємо два баги: 1) список відділень НП обривався — тепер завантажується повністю (52 тис.); 2) в кошику показується реальна вартість доставки замість нуля. Без цього не можна переходити до редизайну кошика.',
+    why: 'Клієнти бачили неповний список відділень і нульову вартість доставки.',
+    warn: 'Оплата, Hutko, фіскалізація — не чіпати.', subtasks: []
   },
   {
-    id: 'ST-6', title: 'Вимкнення старого чекауту', status: 'todo', tool: 'Manual', priority: 'High',
+    id: 'ST-6', title: 'Прибрати старий чекаут', status: 'todo', tool: 'Manual', priority: 'High',
     lastUpdated: '2026-06-24', blockedBy: ['ST-2c'],
-    simple: 'Після стабільної роботи нового чекауту — відключаємо SimpleCheckout в адмінці і прибираємо файли.',
-    why: 'Прибирає технічний борг після переключення.', warn: null, subtasks: []
+    simple: 'Після того як новий чекаут стабільно працює — вимикаємо і прибираємо старий. Менше зайвого коду, менше ризиків.',
+    why: 'Старий чекаут як резервний — зайвий тягар після повного переходу.', warn: null, subtasks: []
   },
   {
-    id: 'CHECKOUT-001', title: 'Реєстрація акаунту при замовленні', status: 'todo', tool: 'Codex', priority: 'High',
+    id: 'CHECKOUT-001', title: 'Автоматична реєстрація при замовленні', status: 'todo', tool: 'Codex', priority: 'High',
     lastUpdated: '2026-06-06', blockedBy: ['ST-2c'],
-    simple: 'Гість оформляє замовлення і бачить необов\'язкову галочку «Зберегти акаунт» → автоматично створюється особистий кабінет.',
-    why: 'Більше зареєстрованих клієнтів → легше повторні покупки.',
-    warn: 'HIGH-RISK (checkout + база даних). Потрібен технічний аудит перед хендоффом.', subtasks: []
+    simple: 'Гість оформляє замовлення і бачить галочку «Зберегти дані для наступного разу» — якщо ставить, автоматично створюється особистий кабінет.',
+    why: 'Більше постійних покупців → легше робити повторні покупки.',
+    warn: 'Зміни в чекауті і базі даних одночасно — потрібен детальний план перед запуском.', subtasks: []
   },
-  { id: 'ST-3.5', title: 'Кнопка ТТН в адмінці', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-24', blockedBy: [],
-    simple: 'Кнопка ТТН в адмінці відновлена; ТТН створюються в кабінеті НП. Фікс якоря, рендеру форми, крешу.', why: 'Відправка замовлень через НП прямо з адмінки.', warn: null, subtasks: [] },
-  { id: 'ST-3.6', title: 'COD «Контроль оплати» для ФОП', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-24', blockedBy: [],
-    simple: 'ФОП+після оплата → AfterpaymentOnGoodsCost; картка/реквізити → без контролю; приватна особа → Після оплата.', why: 'НП не дозволяє Після оплату бізнес-відправникам.', warn: null, subtasks: [] },
-  { id: 'ST-3.7', title: 'UK-локалізація форми накладної НП', status: 'done', tool: 'Codex', priority: 'Medium', lastUpdated: '2026-06-24', blockedBy: [],
-    simple: 'Форма «Форма накладної» в адмінці НП — українською.', why: 'Зручність для власника.', warn: null, subtasks: [] },
-  { id: 'ST-1', title: 'НП відділення: синк виправлено', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-12', blockedBy: [],
-    simple: 'Список відділень обривався через ліміт запитів — 13 тис замість 52 тис. Виправлено, cron налаштовано.', why: 'Клієнт не міг знайти своє відділення і оформити замовлення.', warn: null, subtasks: [] },
-  { id: 'ST-2b.5', title: 'Промокоди, знижка First15 і GA4', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-14', blockedBy: [],
-    simple: 'Промокоди, знижка -15% для нових клієнтів (First15), погодження з офертою і GA4 без дублів — залито і підтверджено live.', why: 'Останній крок перед переключенням чекауту. Owner QA пройдено.', warn: null, subtasks: [] },
-  { id: 'ST-2b.1-2b.4', title: 'Чекаут — серія UX-фіксів', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-14', blockedBy: [],
-    simple: 'Чотири патчи: замовлення лише при «Оформити», success-сторінка коректна для всіх методів, підсумок кошика завжди видно.', why: 'Усунені зайві чернетки в БД і артефакти на success-сторінці. Owner QA пройдено.', warn: null, subtasks: [] },
+  // ─── ST-3 SERIES (done, grouped) ───
+  {
+    id: 'ST-3-SERIES', title: 'Нова Пошта в адмінці — три покращення', status: 'done', tool: 'Codex', priority: 'High',
+    lastUpdated: '2026-06-24', blockedBy: [],
+    simple: 'Три задачі: відновили кнопку створення ТТН прямо в адмінці, виправили логіку «Після оплати» для ФОП, переклали форму накладної українською.',
+    why: 'Після оновлень адмінки ці функції зламались — тепер знову працюють.', warn: null,
+    subtasks: [
+      { id: '1', title: 'ST-3.5 — Кнопка ТТН в адмінці', status: 'done', desc: 'Відновили кнопку «Створити ТТН» в адмінці. Накладна НП створюється прямо з панелі замовлення.' },
+      { id: '2', title: 'ST-3.6 — Контроль оплати для ФОП', status: 'done', desc: 'ФОП не може надсилати «Після оплати» для юрОсіб НП — додали правильні умови залежно від типу відправника і оплати.' },
+      { id: '3', title: 'ST-3.7 — Українська в формі накладної', status: 'done', desc: 'Форма накладної в адмінці перекладена на українську.' }
+    ]
+  },
+  { id: 'ST-1', title: 'НП відділення: повний список відновлено', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-12', blockedBy: [],
+    simple: 'Список відділень обривався — замість 52 тис. завантажувалось лише 13 тис. Виправили, налаштували щоденне оновлення.', why: 'Клієнт не міг знайти своє відділення і оформити замовлення.', warn: null, subtasks: [] },
+  { id: 'ST-2b.5', title: 'Промокоди і знижка -15% для нових клієнтів', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-14', blockedBy: [],
+    simple: 'Запустили промокоди, автоматичну знижку -15% для нового покупця (First15) і аналітику Google без дублів.', why: 'Останній крок перед переключенням на новий чекаут.', warn: null, subtasks: [] },
+  { id: 'ST-2b.1-2b.4', title: 'Чекаут — серія виправлень', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-14', blockedBy: [],
+    simple: 'Чотири патчі: замовлення тепер створюється тільки при кліку «Оформити», а не раніше; сторінка подяки коректна для всіх способів оплати; підсумок кошика завжди видно.', why: 'В базі накопичувались зайві незавершені замовлення.', warn: null, subtasks: [] },
   // ─── REDESIGN / RD ───
   {
-    id: 'RD-11', title: 'Редизайн сторінки кошика', status: 'todo', tool: 'Codex', priority: 'High',
+    id: 'RD-11', title: 'Кошик — новий дизайн', status: 'todo', tool: 'Codex', priority: 'High',
     lastUpdated: '2026-05-30', blockedBy: ['R-13.5'],
-    simple: 'Перемальовуємо cart.twig під дизайн-систему. Остання ключова сторінка без редизайну.',
-    why: 'Єдина ключова сторінка що ще виглядає по-старому.',
-    warn: 'Gate: R-13.5 (НП модуль) має бути завершений.', subtasks: []
+    simple: 'Перемальовуємо сторінку кошика — вона остання що ще виглядає по-старому.',
+    why: 'Всі інші сторінки вже в новому стилі.', warn: 'Спочатку потрібно завершити R-13.5 (НП модуль).', subtasks: []
   },
-  { id: 'RD-12', title: 'Mini-cart drawer (desktop + mobile)', status: 'todo', tool: 'Codex', priority: 'High',
+  { id: 'RD-12', title: 'Міні-кошик (бічна панель)', status: 'todo', tool: 'Codex', priority: 'High',
     lastUpdated: '2026-05-30', blockedBy: ['RD-11'],
-    simple: 'Mini-cart як right-side drawer 380px/100%. Thumb, qty, subtotal sticky, 2 CTA.',
-    why: 'DS-паритет міні-кошика.', warn: null, subtasks: [] },
-  { id: 'RD-13', title: 'Checkout reskin HIGH-RISK', status: 'todo', tool: 'Codex', priority: 'High',
+    simple: 'Маленька бічна панель праворуч де видно обрані товари, кількість і суму — без переходу на сторінку кошика.',
+    why: 'Зручніший шопінг: не треба заходити в кошик щоразу.', warn: null, subtasks: [] },
+  { id: 'RD-13', title: 'Оформлення замовлення — новий дизайн', status: 'todo', tool: 'Codex', priority: 'High',
     lastUpdated: '2026-05-30', blockedBy: ['RD-11', 'RD-12'],
-    simple: 'Checkout як тиха форма секціями-картками. Тільки markup/CSS — payment/Hutko/NP логіку не чіпати.',
-    why: 'DS-паритет фінальної конверсійної сторінки.',
-    warn: 'HIGH-RISK. Обов\'язковий bs-checkout-smoke. Робити ОСТАННІМ.', subtasks: [] },
-  { id: 'RD-14', title: 'Checkout success — DS-паритет', status: 'todo', tool: 'Codex', priority: 'Medium',
+    simple: 'Перефарбовуємо сторінку оформлення замовлення — форма розбивається на зручні блоки-картки. Логіку оплати і доставки не чіпаємо, лише зовнішній вигляд.',
+    why: 'Остання головна сторінка яка ще не в новому стилі.',
+    warn: 'Підвищений ризик. Перед деплоєм — обовʼязкова перевірка повного циклу оформлення.', subtasks: [] },
+  { id: 'RD-14', title: 'Сторінка «Замовлення оформлено» — новий дизайн', status: 'todo', tool: 'Codex', priority: 'Medium',
     lastUpdated: '2026-05-30', blockedBy: [],
-    simple: 'DS-картка підтвердження, коректна OC4-структура, наступні кроки/контакти на success-сторінці.',
-    why: 'Чиста success-сторінка за reference.', warn: null, subtasks: [] },
-  { id: 'RD-15', title: 'Checkout failure — DS-паритет', status: 'todo', tool: 'Codex', priority: 'Medium',
+    simple: 'Красива картка підтвердження із контактами і наступними кроками після покупки.',
+    why: 'Чиста завершальна сторінка підвищує довіру.', warn: null, subtasks: [] },
+  { id: 'RD-15', title: 'Сторінка «Оплата не пройшла» — новий дизайн', status: 'todo', tool: 'Codex', priority: 'Medium',
     lastUpdated: '2026-05-30', blockedBy: [],
-    simple: 'Центрування, зрозуміле повідомлення + дія (повторити оплату / підтримка Telegram).',
-    why: 'Чиста failure-сторінка за reference.', warn: null, subtasks: [] },
-  { id: 'RD-16', title: 'Account hub + особисті дані', status: 'todo', tool: 'Codex', priority: 'Medium',
+    simple: 'Зрозуміле повідомлення про помилку оплати + кнопка «Спробувати знову» і посилання на підтримку в Telegram.',
+    why: 'Зараз сторінка порожня — клієнт не розуміє що робити далі.', warn: null, subtasks: [] },
+  {
+    id: 'RD-ACCOUNT', title: 'Особистий кабінет покупця — новий дизайн', status: 'todo', tool: 'Codex', priority: 'Medium',
     lastUpdated: '2026-05-30', blockedBy: [],
-    simple: 'DS-shell кабінету: nav/sidebar розділів + сторінка особистих даних як card-форма.',
-    why: 'Єдиний DS-shell для всіх account-сторінок. Блокує RD-17/19/20.', warn: null, subtasks: [] },
-  { id: 'RD-17', title: 'Адреси кабінету (список + форма)', status: 'todo', tool: 'Codex', priority: 'Medium',
-    lastUpdated: '2026-05-30', blockedBy: ['RD-16'],
-    simple: 'Список адрес (картки) + add/edit як card-форма. Поля в правильному порядку, областi українською.',
-    why: 'DS-паритет адрес кабінету.', warn: null, subtasks: [] },
-  { id: 'RD-19', title: 'Авторизація (login + forgotten)', status: 'todo', tool: 'Codex', priority: 'Low',
-    lastUpdated: '2026-05-30', blockedBy: ['RD-16'],
-    simple: 'Login + forgotten як card-форми, labels над input, success-copy → Telegram support.',
-    why: 'DS-паритет авторизації.', warn: null, subtasks: [] },
-  { id: 'RD-20', title: 'Реєстрація (2 кроки)', status: 'todo', tool: 'Codex', priority: 'Medium',
-    lastUpdated: '2026-05-30', blockedBy: ['RD-16', 'RD-17'],
-    simple: 'Step 1: контакт + телефон; Step 2: адреса. First15 у сесії — поведінку не міняти, тільки візуал.',
-    why: 'Зрозумілий онбординг; DS-паритет.',
-    warn: 'First15 не чіпати. Після змін — регресія register→address→checkout.', subtasks: [] },
-  { id: 'RD-21', title: 'Контентні сторінки — DS-паритет (5 стор.)', status: 'todo', tool: 'Codex', priority: 'Low',
+    simple: 'Єдиний новий стиль для всіх сторінок кабінету: особисті дані, адреси, вхід в акаунт і реєстрація.',
+    why: 'Кабінет поки виглядає по-старому — покупець помічає контраст із рештою сайту.',
+    warn: null,
+    subtasks: [
+      { id: '1', title: 'RD-16 — Загальний каркас і сторінка особистих даних', status: 'todo', desc: 'Єдиний каркас із бічним меню для всіх сторінок кабінету + форма особистих даних.' },
+      { id: '2', title: 'RD-17 — Збережені адреси', status: 'todo', desc: 'Список адрес картками + форма додавання / редагування.' },
+      { id: '3', title: 'RD-19 — Вхід і відновлення пароля', status: 'todo', desc: 'Сторінка входу в акаунт і форма відновлення пароля.' },
+      { id: '4', title: 'RD-20 — Реєстрація (2 кроки)', status: 'todo', desc: 'Крок 1: контакти. Крок 2: адреса. Знижка -15% для нових — не чіпати.' }
+    ]
+  },
+  { id: 'RD-21', title: 'Інформаційні сторінки — новий дизайн', status: 'todo', tool: 'Codex', priority: 'Low',
     lastUpdated: '2026-05-30', blockedBy: [],
-    simple: 'DS-картки секцій, sticky TOC, типографіка: Гарантія, Про нас, Оплата і доставка, Обмін і повернення, Публічна оферта.',
-    why: 'DS-паритет контентних сторінок.', warn: 'Тексти НЕ чіпати.', subtasks: [] },
-  { id: 'RD-22', title: 'Out-of-stock: кнопка «Повідомити»', status: 'todo', tool: 'Codex', priority: 'Low',
+    simple: 'Новий вигляд для 5 сторінок: Гарантія, Про нас, Оплата і доставка, Обмін і повернення, Публічна оферта. Тексти не чіпаємо.',
+    why: 'Ці сторінки ще в старому стилі.', warn: null, subtasks: [] },
+  { id: 'RD-22', title: 'Кнопка «Повідомити про наявність» для відсутніх товарів', status: 'todo', tool: 'Codex', priority: 'Low',
     lastUpdated: '2026-06-01', blockedBy: [],
-    simple: 'Замінити текст «Немає в наявності» на активну кнопку «Повідомити про наявність».',
-    why: 'Повернення потенційного покупця коли товар зявиться.',
-    warn: 'Потрібне рішення owner щодо каналу сповіщення (Telegram-бот / email / модалка).', subtasks: [] },
-  { id: 'RD-01', title: 'Design System — узгодження токенів', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-01', blockedBy: [],
-    simple: 'Звели boostershop-ds.css до reference tokens.css. Radius-шкала, shadow, z-index, зелений #16A34A, прибрано gold-foam.', why: 'Єдина база токенів для всієї RD-серії.', warn: null, subtasks: [] },
-  { id: 'RD-02', title: 'Header + utility bar — DS-паритет', status: 'done', tool: 'Codex', priority: 'Medium', lastUpdated: '2026-06-01', blockedBy: [],
-    simple: 'Компактний cart-pill, нейтральні breadcrumbs, search-поле в DS-стилі, utility-bar.', why: 'Хедер не конкурує з product visuals.', warn: null, subtasks: [] },
-  { id: 'RD-03', title: 'Footer — DS-паритет', status: 'done', tool: 'Codex', priority: 'Low', lastUpdated: '2026-06-01', blockedBy: [],
-    simple: 'Колонки Каталог/Інформація/Покупцю/Контакти, DS-типографіка, Telegram-лінки.', why: 'DS-паритет підвалу.', warn: null, subtasks: [] },
-  { id: 'RD-04', title: 'Картка товару — дизайн-система', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-01', blockedBy: [],
-    simple: 'thumb.twig: квадратне фото 1:1, бейджі, price-ієрархія, стани (sale/preorder/out-of-stock), зелений CTA.', why: 'Головний компонент каталогу. Owner QA пройдено.', warn: null, subtasks: [] },
-  { id: 'RD-05', title: 'FAQ accordion — нормалізація', status: 'done', tool: 'Codex', priority: 'Medium', lastUpdated: '2026-06-04', blockedBy: [],
-    simple: 'FAQ Variant B (soft cards): border #E5E7EB, chevron-стрілка, height-transition 280ms, a11y aria-expanded.', why: 'Тихий trust-friendly акордеон без gold top-border.', warn: null, subtasks: [] },
-  { id: 'RD-06', title: 'Empty-state компонент', status: 'done', tool: 'Codex', priority: 'Medium', lastUpdated: '2026-06-04', blockedBy: [],
-    simple: 'Єдиний переюзний empty-state: іконка + текст + CTA для порожнього кошика, пошуку, категорій.', why: 'Жодного голого порожнього простору; узгоджений вигляд.', warn: null, subtasks: [] },
-  { id: 'RD-07', title: 'Сторінка категорії — DS-паритет', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-04', blockedBy: [],
-    simple: 'Header-card: 4px брендова смуга, hero-row title+count+tagline+sort. Toolbar-row. Sidebar-фільтр без gold-header.', why: 'DS-паритет; UI підтримує товар, не конкурує.', warn: null, subtasks: [] },
-  { id: 'RD-09', title: 'Головна сторінка — DS-паритет', status: 'done', tool: 'Codex', priority: 'Medium', lastUpdated: '2026-06-10', blockedBy: [],
-    simple: 'Category tiles Variant D, Trust-strip (4 факти), порядок промо-блоків, related-carousel зі swipe-progress.', why: 'DS-паритет, mobile-first. Owner accepted.', warn: null, subtasks: [] },
-  { id: 'RD-10', title: 'Сторінка товару — редизайн', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-11', blockedBy: [],
-    simple: 'Нова сторінка товару: галерея, блок ціни, характеристики, відгуки через Telegram/OLX, липка кнопка «В кошик» на мобільному.', why: 'Головна конверсійна сторінка. Owner QA пройдено.', warn: null, subtasks: [] },
+    simple: 'Замість тексту «Немає в наявності» — кнопка «Повідомте мене коли зʼявиться». Клієнт залишає контакт і отримує повідомлення.',
+    why: 'Відсутні товари зараз просто втрачені продажі.', warn: 'Потрібне рішення: як сповіщати — Telegram-бот, email, або щось інше.', subtasks: [] },
+  // ─── RD DONE GROUPS ───
+  {
+    id: 'RD-FOUNDATION', title: 'Дизайн-система: базові компоненти (виконано)', status: 'done', tool: 'Codex', priority: 'High',
+    lastUpdated: '2026-06-04', blockedBy: [],
+    simple: 'Створили єдину дизайн-систему: кольори, відступи, картка товару, хедер, футер, фільтри, порожні стани, акордеон FAQ.',
+    why: 'Без єдиної бази не можна робити однаковий вигляд на всіх сторінках.', warn: null,
+    subtasks: [
+      { id: '1', title: 'RD-01 — Дизайн-система: кольори і відступи', status: 'done', desc: 'Єдина база: кольори, шрифти, розміри, тіні.' },
+      { id: '2', title: 'RD-02 — Хедер і утиліти', status: 'done', desc: 'Компактний кошик, пошук, хліб-крихти.' },
+      { id: '3', title: 'RD-03 — Підвал', status: 'done', desc: 'Колонки з посиланнями, контакти Telegram.' },
+      { id: '4', title: 'RD-04 — Картка товару', status: 'done', desc: 'Квадратне фото, ціна, бейджі, кнопка «В кошик».' },
+      { id: '5', title: 'RD-05 — FAQ-акордеон', status: 'done', desc: 'Розкладний список питань з анімацією.' },
+      { id: '6', title: 'RD-06 — Порожній стан', status: 'done', desc: 'Повідомлення коли кошик / пошук порожній.' },
+      { id: '7', title: 'RD-07 — Сторінка категорії', status: 'done', desc: 'Заголовок категорії, сортування, фільтр збоку.' }
+    ]
+  },
+  {
+    id: 'RD-PAGES', title: 'Дизайн-система: головні сторінки (виконано)', status: 'done', tool: 'Codex', priority: 'High',
+    lastUpdated: '2026-06-11', blockedBy: [],
+    simple: 'Нові дизайни для головної сторінки і сторінки товару.',
+    why: 'Найважливіші сторінки для покупця — тепер в новому стилі.', warn: null,
+    subtasks: [
+      { id: '1', title: 'RD-09 — Головна сторінка', status: 'done', desc: 'Плитки категорій, блок довіри, карусель товарів.' },
+      { id: '2', title: 'RD-10 — Сторінка товару', status: 'done', desc: 'Галерея, ціна, характеристики, відгуки, липка кнопка «В кошик» на телефоні.' }
+    ]
+  },
   // ─── TECH / SEO ───
   {
-    id: 'TECH-005-DEEP', title: 'Sitemap GSC — Watch Only', status: 'active', tool: 'Manual', priority: 'High',
+    id: 'TECH-005-DEEP', title: 'Google індексує сайт — спостерігаємо', status: 'active', tool: 'Manual', priority: 'High',
     lastUpdated: '2026-06-15', blockedBy: [],
-    simple: 'Серверна частина закрита: sitemap-full.xml валідний (47 URL), cron 04:15, robots.txt чистий. Googlebot повільно обробляє.',
-    why: 'Google повільно переіндексовує після тривалої помилки.',
-    warn: 'НЕ ЧІПАТИ: sitemap.xml, robots.txt, .htaccess, redirects. Watch only.', subtasks: []
+    simple: 'Технічна частина вже виправлена: карта сайту коректна (47 сторінок), оновлення щодня, Google прочитає правильно. Зараз чекаємо поки Google переіндексує — це займає кілька тижнів.',
+    why: 'Google повільно переіндексовує після довгої помилки із картою сайту.',
+    warn: 'Не чіпати: карту сайту, robots.txt, переадресації. Тільки спостерігаємо.',
+    subtasks: [
+      { id: '1', title: 'TECH-029 — Карта сайту виправлена', status: 'done', desc: 'Прибрали старий блок, карта сайту статична (47 сторінок), оновлення щодня о 04:15.' },
+      { id: '2', title: 'TECH-030 — Виправлені noindex-сторінки', status: 'done', desc: '168 сторінок (39%) були помилково закриті від Google — виправлено.' },
+      { id: '3', title: 'TECH-031 — Виправлені помилки 404', status: 'done', desc: 'Зламані посилання на зображення виправлено.' }
+    ]
   },
   {
-    id: 'TECH-009', title: 'Product structured data — очікуємо GSC', status: 'active', tool: 'Manual', priority: 'High',
+    id: 'TECH-009', title: 'Розширені результати Google (зірочки і ціни) — чекаємо', status: 'active', tool: 'Manual', priority: 'High',
     lastUpdated: '2026-05-26', blockedBy: [],
-    simple: 'shippingDetails fix задеплоєно. Надіслано на GSC Validate Fix. Чекаємо підтвердження.',
-    why: 'Rich results для товарів у Google.', warn: null,
-    subtasks: [{ id: '1', title: 'GSC Validate Fix', status: 'todo', desc: 'Чекаємо підтвердження GSC. Після підтвердження → Done.' }]
+    simple: 'Налаштували спеціальні мітки на сторінках товарів щоб Google показував ціну і наявність прямо в пошуку. Надіслали на перевірку в Google — чекаємо підтвердження.',
+    why: 'Розширені результати Google привертають більше уваги і кліків.', warn: null,
+    subtasks: [
+      { id: '1', title: 'GSC: дочекатись підтвердження', status: 'todo', desc: 'Чекаємо підтвердження від Google Search Console. Після — задача Done.' },
+      { id: '2', title: 'TECH-033 — Перевірити що мітки дійсно є на сайті', status: 'todo', desc: 'Технічна перевірка показала 0 сторінок з мітками. Перевірити вручну через «Переглянути код» на сторінці товару.' }
+    ]
   },
   {
-    id: 'TECH-025', title: 'Кошик: дедупе однакових товарів', status: 'active', tool: 'Codex', priority: 'Medium',
+    id: 'TECH-025', title: 'Кошик: виправлення дублювання товарів', status: 'active', tool: 'Codex', priority: 'Medium',
     lastUpdated: '2026-05-26', blockedBy: [],
-    simple: 'Dedupe/normalisation fix вже є у cart.php. Потрібен review з timing logs та cart smoke coverage перед будь-якими змінами.',
-    why: 'Однаковий товар міг додаватись двічі замість збільшення кількості.',
-    warn: 'Не переписувати без timing logs і cart smoke coverage.', subtasks: []
+    simple: 'Один і той самий товар міг додаватись двічі замість збільшення кількості. Виправлення вже є в коді — потрібен ретельний тест перед будь-якими змінами кошика.',
+    why: 'Клієнт міг бачити дублі в кошику.', warn: 'Не змінювати без тестування кошика.', subtasks: []
   },
-  { id: 'TECH-033', title: 'Structured data: перевірити деплой TECH-009', status: 'todo', tool: 'Manual', priority: 'High',
-    lastUpdated: '2026-06-07', blockedBy: ['TECH-009'],
-    simple: 'Baseline crawl показав 0 сторінок зі structured data. Перевірити View Source на товарі → наявність ld+json.',
-    why: 'TECH-009 задеплоєно, але SF crawl не бачить schema на жодній сторінці.', warn: null, subtasks: [] },
-  { id: 'TECH-010', title: 'Indexation hygiene / noindex rules', status: 'todo', tool: 'Codex', priority: 'High',
+  { id: 'TECH-010', title: 'Перевірити які сторінки закриті від Google', status: 'todo', tool: 'Codex', priority: 'High',
     lastUpdated: '2026-05-20', blockedBy: ['TECH-005-DEEP'],
-    simple: 'Аудит і виправлення noindex-правил: robots meta, canonicals. Запускати після стабілізації sitemap.',
-    why: 'Частина сторінок може бути закрита від індексації без причини.',
-    warn: 'Gate: дочекатись стабілізації TECH-005-DEEP.', subtasks: [] },
-  { id: 'TECH-012', title: 'Дублі URL в Google', status: 'todo', tool: 'Codex', priority: 'High',
+    simple: 'Перевіряємо і виправляємо правила видимості для пошуковиків. Деякі сторінки можуть бути помилково приховані від Google.',
+    why: 'Приховані сторінки = втрачений трафік.', warn: 'Почати тільки після стабілізації Google-індексації.', subtasks: [] },
+  { id: 'TECH-012', title: 'Виправити дублі сторінок у Google', status: 'todo', tool: 'Codex', priority: 'High',
     lastUpdated: '2026-06-07', blockedBy: ['TECH-005-DEEP'],
-    simple: 'Меню → ?route=product/special, підвал → /special — одна сторінка, але Google вважає їх різними.',
-    why: 'Дублі розмивають вагу сторінки → гірше ранжування.',
-    warn: 'Gate: дочекатись стабілізації TECH-005-DEEP.', subtasks: [] },
-  { id: 'TECH-016', title: 'Content and category SEO foundation', status: 'todo', tool: 'Claude + Codex', priority: 'Medium',
+    simple: 'Одна сторінка «Акції» доступна за двома різними адресами — Google вважає їх різними і розмиває вагу. Треба обʼєднати в одну.',
+    why: 'Дублі сторінок знижують позиції в пошуку.', warn: 'Почати тільки після стабілізації Google-індексації.', subtasks: [] },
+  { id: 'TECH-016', title: 'SEO-тексти для категорій і товарів', status: 'todo', tool: 'Claude + Codex', priority: 'Medium',
     lastUpdated: '2026-05-20', blockedBy: [],
-    simple: 'SEO-основа для категорій і товарів: описи, H1, meta, keywords — продовження після SEO-CRIT-001.',
-    why: 'Наступний крок SEO-пропрацювання контенту.', warn: null, subtasks: [] },
-  { id: 'TECH-021', title: 'SEO browser QA toolkit', status: 'todo', tool: 'Manual', priority: 'Medium',
+    simple: 'Пишемо правильні описи, заголовки і мета-теги для категорій і товарів. Продовження після першого SEO-пропрацювання.',
+    why: 'Хороші тексти піднімають позиції в Google.', warn: null, subtasks: [] },
+  {
+    id: 'SEO-MONITOR', title: 'SEO-моніторинг і інструменти', status: 'todo', tool: 'Manual', priority: 'Medium',
     lastUpdated: '2026-05-20', blockedBy: [],
-    simple: 'Набір Chrome-розширень для SEO QA: перевірка meta, schema, noindex безпосередньо в браузері.',
-    why: 'Зменшує час аудиту при кожній зміні.', warn: null, subtasks: [] },
-  { id: 'TECH-023', title: 'Щотижневий SEO-моніторинг', status: 'todo', tool: 'Manual', priority: 'Medium',
-    lastUpdated: '2026-05-20', blockedBy: [],
-    simple: 'Чекліст: GSC (позиції, crawl errors), GA4 (трафік), Merchant (warnings), access-log (Googlebot).',
-    why: 'Регулярний моніторинг без дорогих платних інструментів.', warn: null, subtasks: [] },
-  { id: 'TECH-022', title: 'Рішення щодо платного SEO-інструменту', status: 'todo', tool: 'Manual', priority: 'Low',
-    lastUpdated: '2026-05-20', blockedBy: [],
-    simple: 'Оцінити Ahrefs / Semrush / Serpstat: чи виправдано вартість при поточному обсязі трафіку.',
-    why: 'Базовий GSC безкоштовний, але обмежений для глибокого аналізу.', warn: null, subtasks: [] },
-  { id: 'SEO-CRIT-001', title: 'SEO-контент pass: описи, H1, meta, FAQ', status: 'done', tool: 'Claude + Codex', priority: 'High', lastUpdated: '2026-06-07', blockedBy: [],
-    simple: 'Комплексний SEO pass: категорії, товари, /special, homepage H1, forbidden claims прибрані, FAQ accordion оновлено.', why: 'P0-ризик заборонених claims видалено. Owner QA пройдено.', warn: null, subtasks: [] },
-  { id: 'TECH-029', title: 'Sitemap / GSC — site-side закрито', status: 'done', tool: 'Manual', priority: 'High', lastUpdated: '2026-06-07', blockedBy: [],
-    simple: 'Видалено .htaccess-блок, sitemap-full.xml статичний (47 URL), cron 04:15 щодня, robots.txt → sitemap-full.xml.', why: 'Серверна частина повністю чиста.', warn: null, subtasks: [] },
-  { id: 'TECH-030', title: 'Noindex pages audit', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-08', blockedBy: [],
-    simple: 'page-параметр видалено з has_duplicate_params → page=2+ тепер index,follow. Pagination → AJAX з noscript fallback.', why: '168 сторінок (39%) мали noindex — частина без причини.', warn: null, subtasks: [] },
-  { id: 'TECH-031', title: 'Fix 4xx errors (baseline crawl)', status: 'done', tool: 'Manual', priority: 'High', lastUpdated: '2026-06-08', blockedBy: [],
-    simple: '404 image One Piece виправлено в category + module. /catalog/?path=65 — навмисно 403.', why: 'Чистий crawl без Client Error 4xx.', warn: null, subtasks: [] },
+    simple: 'Налаштовуємо регулярний щотижневий контроль позицій у Google і вирішуємо чи варто купити платний SEO-інструмент.',
+    why: 'Без регулярного моніторингу не помічаємо падіння трафіку вчасно.', warn: null,
+    subtasks: [
+      { id: '1', title: 'TECH-021 — Розширення для браузера для перевірки SEO', status: 'todo', desc: 'Набір безкоштовних розширень Chrome для швидкої перевірки сторінок.' },
+      { id: '2', title: 'TECH-023 — Щотижневий чекліст', status: 'todo', desc: 'GSC (позиції та помилки), GA4 (трафік), Merchant Center (попередження).' },
+      { id: '3', title: 'TECH-022 — Чи потрібен платний SEO-інструмент?', status: 'todo', desc: 'Оцінити Ahrefs / Semrush / Serpstat: чи виправдовує ціна можливості при поточному трафіку.' }
+    ]
+  },
+  { id: 'SEO-CRIT-001', title: 'SEO: тексти, заголовки і FAQ — перший прохід', status: 'done', tool: 'Claude + Codex', priority: 'High', lastUpdated: '2026-06-07', blockedBy: [],
+    simple: 'Перший великий прохід по SEO: виправили описи категорій і товарів, заголовки, мета-теги, прибрали заборонені формулювання, оновили FAQ.', why: 'Прибрали ризиковані формулювання. Перевірка власника пройдена.', warn: null, subtasks: [] },
   // ─── CRM / DASHBOARD ───
-  { id: 'CRM-001', title: 'CRM: Dashboard — форма мультиканальної закупки', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-20', blockedBy: [],
-    simple: 'Supplier channel select (ZenMarket JP / Постачальник UA), умовні поля JPY/UAH, нові статуси, batch-update.', why: 'UI був заточений під ZenMarket. Для UA-постачальника форма некоректна.', warn: null, subtasks: [] },
-  { id: 'CRM-002', title: 'CRM: Apps Script — multi-channel закупки', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-20', blockedBy: [],
-    simple: 'apiAddPurchase_ для ZenMarket JP, Постачальник UA, інших каналів. 2 нові колонки, автогенерація ref, нові статуси.', why: 'Закупки протекторів у Games 7 Days (UA) не вписувались в стару форму.', warn: null, subtasks: [] },
-  { id: 'DASH-001', title: 'Огляд — три плитки без даних', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-19', blockedBy: [],
-    simple: 'Собівартість складу, Активи, Потенційний прибуток — показували «—». Apps Script доповнено трьома новими полями.', why: 'Без цих даних власник не бачить реальну вартість запасів.', warn: null, subtasks: [] },
-  { id: 'DASH-002', title: 'Огляд — блок «Потребують уваги» порожній', status: 'done', tool: 'Claude', priority: 'High', lastUpdated: '2026-06-15', blockedBy: [],
-    simple: 'Блок показував «—» замість списку алертів. Виправлено рендер і підключення до API.', why: 'Власник не бачив критичні залишки і замовлення що потребують уваги.', warn: null, subtasks: [] },
-  { id: 'DASH-WRITE-004', title: 'Облік — редагування існуючих записів', status: 'done', tool: 'Claude + Codex', priority: 'Medium', lastUpdated: '2026-06-19', blockedBy: [],
-    simple: 'Форма «Облік» тепер дозволяє знайти і виправити існуючий рядок у Продажах, Закупках або Списанні.', why: 'Помилки при введенні неминучі — без редагування доводилось йти в Google Sheets.', warn: null, subtasks: [] },
+  {
+    id: 'CRM-MULTICHANNEL', title: 'CRM: мультиканальні закупки (ZenMarket + UA постачальники)', status: 'done', tool: 'Codex', priority: 'High',
+    lastUpdated: '2026-06-20', blockedBy: [],
+    simple: 'Форма і таблиця закупок тепер підтримують і японські лоти (ZenMarket), і українських постачальників — різні поля, валюти і статуси для кожного.',
+    why: 'Закупки протекторів у Games 7 Days (UA) не вписувались у стару форму.', warn: null,
+    subtasks: [
+      { id: '1', title: 'CRM-002 — Apps Script: підтримка двох каналів', status: 'done', desc: 'Таблиця і API підтримують ZenMarket JP і Постачальника UA: різні поля, валюти, статуси.' },
+      { id: '2', title: 'CRM-001 — Dashboard: форма закупки оновлена', status: 'done', desc: 'Форма в дашборді: вибір каналу, умовні поля JPY/UAH, нові статуси.' }
+    ]
+  },
+  {
+    id: 'DASH-FIXES', title: 'Dashboard: три виправлення (червень 2026)', status: 'done', tool: 'Claude + Codex', priority: 'High',
+    lastUpdated: '2026-06-20', blockedBy: [],
+    simple: 'Три виправлення в дашборді: зʼявились три порожніх плитки (собівартість, активи, прибуток), блок «Потребують уваги» не показував нічого, і зʼявилась можливість виправляти вже введені записи.',
+    why: 'Власник не бачив реальну вартість запасів і критичні сповіщення.', warn: null,
+    subtasks: [
+      { id: '1', title: 'DASH-001 — Виправлено три порожніх плитки на Огляді', status: 'done', desc: 'Собівартість складу, активи, потенційний прибуток — тепер показують реальні дані.' },
+      { id: '2', title: 'DASH-002 — Виправлено блок «Потребують уваги»', status: 'done', desc: 'Блок знову показує критичні залишки і замовлення.' },
+      { id: '3', title: 'DASH-WRITE-004 — Редагування існуючих записів', status: 'done', desc: 'Тепер можна знайти і виправити помилковий запис прямо в дашборді, без Google Sheets.' }
+    ]
+  },
   // ─── OTHER ───
   {
     id: 'CAT-002', title: 'Нова категорія «Аксесуари»', status: 'todo', tool: 'Manual + Codex', priority: 'Medium',
     lastUpdated: '2026-06-20', blockedBy: [],
-    simple: 'Додати категорію «Аксесуари»: навігація, бургер-меню, головна. Привязати 6 SKU (ACC-001..006). Також «Інші TCG».',
-    why: 'Аксесуари вже є в наявності, але недоступні через відсутність категорії.',
-    warn: 'Спочатку власник завантажує фото для ACC-001..006.',
+    simple: 'Додаємо категорію «Аксесуари» на сайт: навігація, головна сторінка. Підключаємо 6 товарів (протектори, топлоадери, кейси). Також категорія «Інші TCG».',
+    why: 'Товари є в наявності, але покупець їх не бачить — категорії немає.',
+    warn: 'Спочатку власник завантажує фото для 6 товарів, потім запускаємо.',
     subtasks: [
-      { id: '1', title: 'Фото ACC-001..006', status: 'todo', desc: 'Власник завантажує фото в адмінку.' },
-      { id: '2', title: 'Категорія + навігація', status: 'todo', desc: 'Codex: категорія «Аксесуари» + «Інші TCG», топ-меню, бургер-меню, плитка на головній.' },
-      { id: '3', title: 'Привязати 6 SKU', status: 'todo', desc: 'ACC-001..006 у категорію Аксесуари. Перевірити фото, ціни, slug.' }
+      { id: '1', title: 'Власник: завантажити фото для 6 SKU (ACC-001..006)', status: 'todo', desc: 'Завантажити фото в адмінку для кожного з 6 аксесуарів.' },
+      { id: '2', title: 'Додати категорію і навігацію', status: 'todo', desc: 'Категорія «Аксесуари» + «Інші TCG» у меню і на головній.' },
+      { id: '3', title: 'Підключити 6 товарів', status: 'todo', desc: 'Прив\'язати ACC-001..006 до нової категорії, перевірити ціни і фото.' }
     ]
   },
   {
-    id: 'LEGAL-002', title: 'Публічна оферта + Обмін і повернення', status: 'active', tool: 'Claude + Manual', priority: 'Medium',
+    id: 'LEGAL-002', title: 'Публічна оферта і умови повернення', status: 'active', tool: 'Claude + Manual', priority: 'Medium',
     lastUpdated: '2026-05-26', blockedBy: [],
-    simple: 'Текст оферти і повернень готовий. patch-r09fix-toc-offer-20260526-v3.php чекає власника. Потрібна юр. перевірка і реальні реквізити ФОП.',
-    why: 'Публічна оферта — юридичний захист для бізнесу.',
-    warn: 'Не публікувати з плейсхолдерними реквізитами ФОП. Юр. перевірка до публікації.',
+    simple: 'Тексти оферти і умов повернення готові. Чекають власника: потрібно замінити тимчасові реквізити ФОП на реальні і пройти юридичну перевірку.',
+    why: 'Публічна оферта — юридичний захист для бізнесу і обов\'язкова вимога для магазину.',
+    warn: 'Не публікувати з тимчасовими реквізитами. Юридична перевірка обов\'язкова.',
     subtasks: [
-      { id: '1', title: 'Запустити patch v3', status: 'todo', desc: 'Власник завантажує і запускає patch-r09fix-toc-offer-20260526-v3.php.' },
-      { id: '2', title: 'Замінити реквізити ФОП', status: 'todo', desc: 'ЄДРПОУ/РНОКПП, IBAN замість плейсхолдерів.' },
-      { id: '3', title: 'Юр. перевірка', status: 'todo', desc: 'ChatGPT + Gemini + власник перевіряють обидва тексти.' }
+      { id: '1', title: 'Запустити патч з текстами', status: 'todo', desc: 'Власник: завантажити і запустити patch-r09fix-toc-offer-20260526-v3.php.' },
+      { id: '2', title: 'Внести реальні реквізити ФОП', status: 'todo', desc: 'Замінити ЄДРПОУ/РНОКПП і IBAN.' },
+      { id: '3', title: 'Юридична перевірка', status: 'todo', desc: 'Перевірити обидва тексти: оферту і умови повернення.' }
     ]
   },
-  { id: 'AUTO-003', title: 'Content pipeline: бриф → текст → Notion', status: 'todo', tool: 'Claude', priority: 'Medium',
+  {
+    id: 'AUTOMATE', title: 'Автоматизація контенту і SEO-моніторингу', status: 'todo', tool: 'Claude', priority: 'Low',
     lastUpdated: '2026-06-21', blockedBy: [],
-    simple: 'Один запит → Claude генерує бриф, H1, meta, текст → зберігає в plans/ → комітить → створює задачу в Notion.',
-    why: 'Автоматизація контент-задач.', warn: null, subtasks: [] },
-  { id: 'AUTO-004', title: 'SEO-моніторинг: авто-задача при падінні позицій', status: 'todo', tool: 'Claude', priority: 'Low',
-    lastUpdated: '2026-06-21', blockedBy: [],
-    simple: 'Щомісяця: GSC API → порівняння → якщо сторінка просіла >5 позицій або clicks -30% → авто-задача в Notion.',
-    why: 'Раннє виявлення SEO-падінь без ручного моніторингу.', warn: null, subtasks: [] },
+    simple: 'Дві автоматизації: 1) один запит → Claude пише контент і зберігає в репо; 2) щомісяця перевіряє позиції в Google і сигналізує якщо щось падає.',
+    why: 'Зменшує час на рутинні задачі.', warn: null,
+    subtasks: [
+      { id: '1', title: 'AUTO-003 — Автоматичний контент-пайплайн', status: 'todo', desc: 'Один запит → Claude генерує бриф, заголовок, мета-тег, текст → зберігає в репо → задача в Notion.' },
+      { id: '2', title: 'AUTO-004 — Сповіщення при падінні позицій', status: 'todo', desc: 'Щомісяця перевіряє GSC: якщо сторінка впала >5 позицій або -30% кліків → автозадача в Notion.' }
+    ]
+  },
   { id: 'BRAND-OUTLET-001', title: 'Outlet Booster — опис і SEO', status: 'done', tool: 'Codex', priority: 'Medium', lastUpdated: '2026-05-26', blockedBy: [],
-    simple: 'Товар «Бустер Pokemon TCG: Outlet Mix» репозиціонований: опис, meta, FAQ, атрибути очищено.', why: 'Описи не відповідали бренд-позиціонуванню. Owner QA пройдено.', warn: 'Не додавати в sitemap і Merchant feed.', subtasks: [] },
+    simple: 'Переписали опис, заголовок і мета-теги для товару «Бустер Pokemon TCG: Outlet Mix» — позиціонування як легітимний бюджетний варіант, не відходи.', why: 'Старий опис не відповідав позиціонуванню. Перевірка власника пройдена.', warn: 'Не додавати до карти сайту і Merchant feed.', subtasks: [] },
 ];
+
 
 const SM = { active:'🔵', todo:'⚪', done:'🟢', blocked:'🔴' };
 const SC = { active:'s-active', todo:'s-todo', done:'s-done', blocked:'s-blocked' };
