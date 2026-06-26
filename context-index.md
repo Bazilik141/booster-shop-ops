@@ -87,22 +87,27 @@ grep "ST-3.5" context-index.md
 
 ---
 
+## CRM — нова платформа (NCRM)
+
+> Проєкт міграції CRM на Supabase. Плани: `plans/crm-new-platform-architecture_2026-06-26.md`, `plans/crm-financial-model_2026-06-26.md`, `plans/crm-schema-v1_2026-06-26.md`. page_id-реєстр — `ROADMAP_SOP.md §5`.
+
+| Roadmap ID | Назва | Handoff |
+|---|---|---|
+| NCRM-00 | Архітектура + аудит фінмоделі + schema v1 (Done) | plans/crm-* (вище) |
+| NCRM-01 | Supabase проєкт + SQL-міграції + типи | — |
+| NCRM-02 | Repository-шар + Next.js скелет + emulator | — |
+| NCRM-03 | Імпорт історії зі Sheets + звірка KPI | — |
+| NCRM-04 | Read-екрани (summary/замовлення/склад/SKU/клієнти) | — |
+| NCRM-05 | Write-форми + FIFO-COGS | — |
+| NCRM-06 | Витрати + P&L + KPI-вʼюхи | — |
+| NCRM-07 | Order pipeline OpenCart→Supabase + smoke | — |
+| NCRM-08 | Курси валют (фетч + заморозка) | — |
+| NCRM-09 | Mobile-версія + поліш | — |
+
+---
+
 ## Інші задачі
 
 | Roadmap ID | Назва | Handoff |
 |---|---|---|
-| CHECKOUT-001 | Реєстрація акаунту при замовленні | — |
-| CAT-002 | Нова категорія «Аксесуари» | — |
-| LEGAL-002 | Публічна оферта + Обмін і повернення | — |
-| BRAND-OUTLET-001 | Outlet Booster — опис і SEO | — |
-| R-13.5 | НП модуль — master log (ST-серія) | handoffs/handoff_R-13.5_nova-poshta-module_2026-06-12.md |
-
----
-
-## Notion / дашборд — де що
-
-**Усі серії (ST + DASH/CRM/AUTO/TECH/RD/UX)** тепер у Notion database `5aef22c3-048d-4dde-a5b1-ad409de9301c`. ST заведено 2026-06-24.
-**Статус-правда — Notion; дашборд `ROADMAP_FLOW` — дзеркало.** Повні правила, page_id-реєстр, DoD, sync — `ROADMAP_SOP.md`.
-
-Notion view: `https://www.notion.so/35c3f8572fc54a7896c8af0efd4cf8d4?v=eebb19b11cfb4066a8a3b1b097775818`
-Bulk-query (`notion-query-data-sources` / `notion-query-database-view`) — Business plan, недоступно. Per-card: `notion-fetch` / `notion-update-page` за page_id.
+| CHECKOU

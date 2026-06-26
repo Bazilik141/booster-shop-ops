@@ -122,6 +122,21 @@ ST-серія (заведена в Notion 2026-06-24):
 | LEGAL-002 | `3666bf20-bdb4-81ea-8fed-ff4773081cdb` |
 | R-13.5 | `36c6bf20-bdb4-814c-becb-c451a64b22f8` |
 
+NCRM-серія (нова CRM-платформа на Supabase, заведено 2026-06-26):
+
+| Roadmap ID | Notion page_id |
+|---|---|
+| NCRM-00 | `38b6bf20-bdb4-81dc-89ba-ddf3ae182f37` |
+| NCRM-01 | `38b6bf20-bdb4-8165-b4bb-f9434ee07770` |
+| NCRM-02 | `38b6bf20-bdb4-8115-b0b3-c8c1e31be4f1` |
+| NCRM-03 | `38b6bf20-bdb4-8140-ad7e-e6db16fa8984` |
+| NCRM-04 | `38b6bf20-bdb4-8173-8803-d6fb691df55b` |
+| NCRM-05 | `38b6bf20-bdb4-81de-b682-d0b31c7c4a95` |
+| NCRM-06 | `38b6bf20-bdb4-81bf-858f-da5fc957be92` |
+| NCRM-07 | `38b6bf20-bdb4-81f4-9cce-c56933b6bdbe` |
+| NCRM-08 | `38b6bf20-bdb4-8127-b520-ee5775186f78` |
+| NCRM-09 | `38b6bf20-bdb4-8126-a49e-d4819f0bc496` |
+
 Не в списку → знайти через `notion-search` за назвою, потім додати сюди.
 Старіші виконані ST (ST-0 / ST-2 / ST-2a*) у Notion ще не заведені — backfill за потреби.
 
@@ -152,13 +167,4 @@ ST-серія (заведена в Notion 2026-06-24):
 - **`notion-search` семантичний** — не матчить точні ID. Шукати за назвою.
 - **git `index.lock` / autosync (вирішено 2026-06-24):** історично `bs-autosync.ps1` ганяв `git pull` паралельно з коммітами Claude → гонка за `.git/index` (завислий лок або `index corrupt`). Hardened-версія скрипта: пауза-сентинел `.autosync-pause`, прибирання застарілого локу (>120с, без активного git), авто-відновлення індексу (`del index; git reset`), skip-pull-when-dirty. Правило: агент ставить `.autosync-pause` перед git-операціями і прибирає після push. Аварійне ручне відновлення: `del .git\index.lock` → `del .git\index` → `git reset`.
 - **Дві копії дашборда:** активна (`Booster Shop/booster-dashboard.html`) і репо-дзеркало (`dashboard/booster-dashboard.html`) — після правок копіювати активну → дзеркало → commit.
-- **Path drift (вирішено 2026-06-25):** канонічний локальний шлях — `C:\Users\14bez\Downloads\Booster Shop`; `E:\Personal Files\...` вважається retired для нової роботи.
-
----
-
-## 9. Цей документ vs інші
-
-- `AGENTS.md` — загальні ops, ролі, патч-конвенції, ризикові зони.
-- `CODEX_WORKFLOW.md` — механіка обміну патчами через репо.
-- `CLAUDE.md` — контекст Claude; посилається сюди по governance роадмапу.
-- `ROADMAP_SOP.md` (цей) — **канон по статусу/синхронізації/DoD**. При конфлікті правил щодо роадмапу — виграє цей файл.
+- **Path drift (вирішено 2026-06-25):** канонічний локальний шлях — `C:\Users\14
