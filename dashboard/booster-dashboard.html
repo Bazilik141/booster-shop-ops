@@ -1621,9 +1621,9 @@ const ROADMAP_TASKS = [
   {
     id: 'MKT-TG-004', title: 'TG контент-автоматизація Phase 2: мультиджерело + бот-відбір + картинки + розклад', status: 'active', tool: 'Make + Codex', priority: 'Medium',
     lastUpdated: '2026-06-27', blockedBy: ['MKT-TG-003'],
-    simple: '6 кандидатів/день (3 о 10:00 + 3 о 18:00) → у бот текстом + 2-3 лінки на картинки; постиш 1-2 вручну. Дедуп, Sheet-кандидати, /pick_news, /delete_news, setMyCommands.',
+    simple: '5 кандидатів/день, 1×/день о 10:00: 1 Pokémon + 1 One Piece + 1 MTG/YGO + 2 TCG-ринок. У бот текстом + 3 лінки картинок; постиш 1-2 вручну. Кнопка /pick_news: «ККГ · 2-3 слова-тег». Дедуп, Sheet-кандидати, /pick_news, /delete_news.',
     why: 'Перетворює сирий пайплайн на зручний щоденний робочий процес з кількома джерелами (Pokémon, One Piece, MTG, YGO).',
-    warn: 'Make-білд ЗАВЕРШЕНО і перевірено end-to-end (фід→top-5 фільтр→jina→Claude→OpenAI→Serper→Запис у Новини_кандидати; дедуп guid OK; кандидат = текст + 3 лінки картинок; шлях картинок виправлено на 25.data.images[N].imageUrl). Розклад: Daily 10:00+18:00 (Europe/Kyiv). ВІДБІР: Make date-фільтр по pubDate (RFC822/масив) ненадійний → top-5 за релевантністю (топ фіду свіжий: позиція 1 = вчора). Сценарій НЕ активований — чекає owner; статус Done після перших scheduled-прогонів. Картинки можуть мати копірайт — ручний відбір у боті.', subtasks: []
+    warn: 'СТАН: пайплайн АКТИВНИЙ (jina→Claude(Sonnet)→OpenAI→Serper→Запис; дедуп guid OK; картинки 25.data.images[N].imageUrl OK). Перший прод-прогін був top-5 за релевантністю → вийшло MTG-важко (сплеск Marvel-сет+Prime Day). РІШЕННЯ owner: перейти на per-game баланс через BLUEPRINT-імпорт (canvas-хірургія віддалено ненадійна). v2 готовий: Booster Shop/Integration RSS.blueprint.v2.json. v2 = 5 кандидатів 1×/день о 10:00 (1 Pok+1 OP+1 MTG/YGO+2 TCG-ринок; фільтр query-iter), кнопка «ККГ·тег» (Claude видає тег===пост, Make парсить). ОЧІКУЄ: імпорт v2 + розклад на 10:00 + реактивація. БЕКАП (нотатка): Sonnet→Haiku + OpenAI полірує (якщо дорого). ВИТРАТИ: сьогоднішній ~$1 = мої тести; прод стара конфа ≈$10/міс, v2 ≈$5/міс; картинки не в токенах Claude. Деталі: handoffs/MKT-TG-004_per-game-balance_20260627.md', subtasks: []
   },
   {
     id: 'MKT-TG-003', title: 'Make TG-пайплайн: фікс RSS→jina→Claude→GPT→Telegram', status: 'done', tool: 'Make', priority: 'Medium',
@@ -2731,12 +2731,4 @@ async function savePurchaseBatch() {
     return;
   }
   const msg = document.getElementById('recordsMsg');
-  if (msg) { msg.textContent = 'Збереження…'; msg.className = 'records-message'; }
-  try {
-    const result = await callPost(payload);
-    if (msg) { msg.textContent = 'Оновлено лотів: ' + (result.rows_updated || rows.length); msg.className = 'records-message success'; }
-    accountingState.selectedPurchaseLots = {};
-    invalidateAccountingCaches();
-    await loadRecTab('purchases',true);
-  } catch(e) {
-    if (msg) { msg
+  if (msg)
