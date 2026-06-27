@@ -1623,7 +1623,7 @@ const ROADMAP_TASKS = [
     lastUpdated: '2026-06-27', blockedBy: ['MKT-TG-003'],
     simple: '6 кандидатів/день (3 о 10:00 + 3 о 18:00) → у бот текстом + 2-3 лінки на картинки; постиш 1-2 вручну. Дедуп, Sheet-кандидати, /pick_news, /delete_news, setMyCommands.',
     why: 'Перетворює сирий пайплайн на зручний щоденний робочий процес з кількома джерелами (Pokémon, One Piece, MTG, YGO).',
-    warn: 'Картинки можуть мати копірайт — ручний відбір як фільтр. Telegram: без буфера обміну / без видалення >48год — обійдено дизайном (план: plans/tg-content-automation-phase2-plan_2026-06-27.md).', subtasks: []
+    warn: 'Make-білд ЗАВЕРШЕНО і перевірено end-to-end (фід→top-5 фільтр→jina→Claude→OpenAI→Serper→Запис у Новини_кандидати; дедуп guid OK; кандидат = текст + 3 лінки картинок; шлях картинок виправлено на 25.data.images[N].imageUrl). Розклад: Daily 10:00+18:00 (Europe/Kyiv). ВІДБІР: Make date-фільтр по pubDate (RFC822/масив) ненадійний → top-5 за релевантністю (топ фіду свіжий: позиція 1 = вчора). Сценарій НЕ активований — чекає owner; статус Done після перших scheduled-прогонів. Картинки можуть мати копірайт — ручний відбір у боті.', subtasks: []
   },
   {
     id: 'MKT-TG-003', title: 'Make TG-пайплайн: фікс RSS→jina→Claude→GPT→Telegram', status: 'done', tool: 'Make', priority: 'Medium',
@@ -2718,4 +2718,25 @@ async function savePurchaseBatch() {
     if (fee !== '') item.japan_fee_jpy = Number(fee);
     return item;
   });
-  const payload = { action:'
+  const payload = { action:'update_purchase', lots:lots };
+  if (editValue('batchTrackNumber') !== '') payload.track_number = editValue('batchTrackNumber');
+  if (editValue('batchDate') !== '') payload.date = editValue('batchDate');
+  if (editValue('batchUkraineDeliveryJpy') !== '') payload.ukraine_delivery_jpy = Number(editValue('batchUkraineDeliveryJpy'));
+  if (editValue('batchStatus') !== '') payload.status = editValue('batchStatus');
+  if (editValue('batchNote') !== '') payload.note = editValue('batchNote');
+  const hasLotFee = lots.some(function(lot) { return Object.prototype.hasOwnProperty.call(lot,'japan_fee_jpy'); });
+  if (Object.keys(payload).length === 2 && !hasLotFee) {
+    const msg = document.getElementById('recordsMsg');
+    if (msg) { msg.textContent = 'Заповни хоча б одне поле для оновлення'; msg.className = 'records-message error'; }
+    return;
+  }
+  const msg = document.getElementById('recordsMsg');
+  if (msg) { msg.textContent = 'Збереження…'; msg.className = 'records-message'; }
+  try {
+    const result = await callPost(payload);
+    if (msg) { msg.textContent = 'Оновлено лотів: ' + (result.rows_updated || rows.length); msg.className = 'records-message success'; }
+    accountingState.selectedPurchaseLots = {};
+    invalidateAccountingCaches();
+    await loadRecTab('purchases',true);
+  } catch(e) {
+    if (msg) { msg
