@@ -1617,6 +1617,21 @@ function rmToggleLane(laneId) { _rmCollapsed[laneId] = !_rmCollapsed[laneId]; re
 function rmToggle(card) { card.classList.toggle('open'); }
 
 const ROADMAP_TASKS = [
+  // ─── КОНТЕНТ / TELEGRAM-АВТОМАТИЗАЦІЯ ───
+  {
+    id: 'MKT-TG-004', title: 'TG контент-автоматизація Phase 2: мультиджерело + бот-відбір + картинки + розклад', status: 'active', tool: 'Make + Codex', priority: 'Medium',
+    lastUpdated: '2026-06-27', blockedBy: ['MKT-TG-003'],
+    simple: '6 кандидатів/день (3 о 10:00 + 3 о 18:00) → у бот текстом + 2-3 лінки на картинки; постиш 1-2 вручну. Дедуп, Sheet-кандидати, /pick_news, /delete_news, setMyCommands.',
+    why: 'Перетворює сирий пайплайн на зручний щоденний робочий процес з кількома джерелами (Pokémon, One Piece, MTG, YGO).',
+    warn: 'Картинки можуть мати копірайт — ручний відбір як фільтр. Telegram: без буфера обміну / без видалення >48год — обійдено дизайном (план: plans/tg-content-automation-phase2-plan_2026-06-27.md).', subtasks: []
+  },
+  {
+    id: 'MKT-TG-003', title: 'Make TG-пайплайн: фікс RSS→jina→Claude→GPT→Telegram', status: 'done', tool: 'Make', priority: 'Medium',
+    lastUpdated: '2026-06-27', blockedBy: [],
+    simple: 'Виправлено сценарій "Integration RSS": Iterator (channel — масив → channel[1].item), jina URL, маппінги Claude (jina-вихід = response, не content), date-фільтр. End-to-end тест: 1 пост згенеровано і відправлено.',
+    why: 'Без робочого ланцюга немає автоматизації контенту.',
+    warn: 'Сценарій лишено Inactive; тимчасовий тест-фільтр position=1 замінюється у MKT-TG-004.', subtasks: []
+  },
   // ─── CRM (нова платформа Supabase) ───
   {
     id: 'NCRM-00', title: 'Архітектура + аудит фінмоделі + schema v1', status: 'done', tool: 'Claude', priority: 'High',
@@ -2703,37 +2718,4 @@ async function savePurchaseBatch() {
     if (fee !== '') item.japan_fee_jpy = Number(fee);
     return item;
   });
-  const payload = { action:'update_purchase', lots:lots };
-  if (editValue('batchTrackNumber') !== '') payload.track_number = editValue('batchTrackNumber');
-  if (editValue('batchDate') !== '') payload.date = editValue('batchDate');
-  if (editValue('batchUkraineDeliveryJpy') !== '') payload.ukraine_delivery_jpy = Number(editValue('batchUkraineDeliveryJpy'));
-  if (editValue('batchStatus') !== '') payload.status = editValue('batchStatus');
-  if (editValue('batchNote') !== '') payload.note = editValue('batchNote');
-  const hasLotFee = lots.some(function(lot) { return Object.prototype.hasOwnProperty.call(lot,'japan_fee_jpy'); });
-  if (Object.keys(payload).length === 2 && !hasLotFee) {
-    const msg = document.getElementById('recordsMsg');
-    if (msg) { msg.textContent = 'Заповни хоча б одне поле для оновлення'; msg.className = 'records-message error'; }
-    return;
-  }
-  const msg = document.getElementById('recordsMsg');
-  if (msg) { msg.textContent = 'Збереження…'; msg.className = 'records-message'; }
-  try {
-    const result = await callPost(payload);
-    if (msg) { msg.textContent = 'Оновлено лотів: ' + (result.rows_updated || rows.length); msg.className = 'records-message success'; }
-    accountingState.selectedPurchaseLots = {};
-    invalidateAccountingCaches();
-    await loadRecTab('purchases',true);
-  } catch(e) {
-    if (msg) { msg.textContent = 'Помилка: ' + e.message; msg.className = 'records-message error'; }
-  }
-}
-
-// ════════════ LOADERS MAP ════════════
-const loaders = { overview: loadOverview, stock: loadStock, consumables: loadConsumables, orders: loadOrders, skus: loadSkus, clients: loadClients, roadmap: loadRoadmap, accounting: loadAccounting };
-
-// ════════════ INIT ════════════
-loaded.overview = true;
-loadOverview();
-</script>
-</body>
-</html
+  const payload = { action:'

@@ -110,4 +110,25 @@ grep "ST-3.5" context-index.md
 
 | Roadmap ID | Назва | Handoff |
 |---|---|---|
-| CHECKOU
+| CHECKOUT-001 | Реєстрація акаунту при замовленні | — |
+| CAT-002 | Нова категорія «Аксесуари» | — |
+| LEGAL-002 | Публічна оферта + Обмін і повернення | — |
+| BRAND-OUTLET-001 | Outlet Booster — опис і SEO | — |
+| R-13.5 | НП модуль — master log (ST-серія) | handoffs/handoff_R-13.5_nova-poshta-module_2026-06-12.md |
+
+## MKT-TG — Telegram контент-автоматизація
+
+| Roadmap ID | Назва | Handoff / Plan |
+|---|---|---|
+| MKT-TG-003 | Make TG-пайплайн: фікс RSS→jina→Claude→GPT→Telegram (Done) | handoffs/MKT-TG-003_make-pipeline-status_20260627.md, handoffs/MKT-TG-003_make-pipeline-handoff_20260626.md |
+| MKT-TG-004 | TG контент-автоматизація Phase 2 (мультиджерело+бот+картинки+розклад) | plans/tg-content-automation-phase2-plan_2026-06-27.md |
+
+---
+
+## Notion / дашборд — де що
+
+**Усі серії (ST + DASH/CRM/AUTO/TECH/RD/UX)** тепер у Notion database `5aef22c3-048d-4dde-a5b1-ad409de9301c`. ST заведено 2026-06-24.
+**Статус-правда — Notion; дашборд `ROADMAP_FLOW` — дзеркало.** Повні правила, page_id-реєстр, DoD, sync — `ROADMAP_SOP.md`.
+
+Notion view: `https://www.notion.so/35c3f8572fc54a7896c8af0efd4cf8d4?v=eebb19b11cfb4066a8a3b1b097775818`
+Bulk-query (`notion-query-data-sources` / `notion-query-database-view`) — Business plan, недоступно. Per-card: `notion-fetch` / `notion-update-page` за page_id.
