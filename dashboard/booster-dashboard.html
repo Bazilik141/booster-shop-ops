@@ -1623,7 +1623,7 @@ const ROADMAP_TASKS = [
     lastUpdated: '2026-06-27', blockedBy: ['MKT-TG-003'],
     simple: '5 кандидатів/день, 1×/день о 10:00: 1 Pokémon + 1 One Piece + 1 MTG/YGO + 2 TCG-ринок. У бот текстом + 3 лінки картинок; постиш 1-2 вручну. Кнопка /pick_news: «ККГ · 2-3 слова-тег». Дедуп, Sheet-кандидати, /pick_news, /delete_news.',
     why: 'Перетворює сирий пайплайн на зручний щоденний робочий процес з кількома джерелами (Pokémon, One Piece, MTG, YGO).',
-    warn: 'СТАН: пайплайн АКТИВНИЙ (jina→Claude(Sonnet)→OpenAI→Serper→Запис; дедуп guid OK; картинки 25.data.images[N].imageUrl OK). Перший прод-прогін був top-5 за релевантністю → вийшло MTG-важко (сплеск Marvel-сет+Prime Day). РІШЕННЯ owner: перейти на per-game баланс через BLUEPRINT-імпорт (canvas-хірургія віддалено ненадійна). v2 готовий: Booster Shop/Integration RSS.blueprint.v2.json. v2 = 5 кандидатів 1×/день о 10:00 (1 Pok+1 OP+1 MTG/YGO+2 TCG-ринок; фільтр query-iter), кнопка «ККГ·тег» (Claude видає тег===пост, Make парсить). ОЧІКУЄ: імпорт v2 + розклад на 10:00 + реактивація. БЕКАП (нотатка): Sonnet→Haiku + OpenAI полірує (якщо дорого). ВИТРАТИ: сьогоднішній ~$1 = мої тести; прод стара конфа ≈$10/міс, v2 ≈$5/міс; картинки не в токенах Claude. Деталі: handoffs/MKT-TG-004_per-game-balance_20260627.md', subtasks: []
+    warn: 'СТАН: пайплайн АКТИВНИЙ (jina→Claude(Sonnet)→OpenAI→Serper→Запис; дедуп guid OK; картинки 25.data.images[N].imageUrl OK). Перший прод-прогін був top-5 за релевантністю → вийшло MTG-важко (сплеск Marvel-сет+Prime Day). РІШЕННЯ owner: перейти на per-game баланс через BLUEPRINT-імпорт (canvas-хірургія віддалено ненадійна). v2 готовий: Booster Shop/Integration RSS.blueprint.v2.json. v2 = 5 кандидатів 1×/день о 10:00 (1 Pok+1 OP+1 MTG/YGO+2 TCG-ринок; фільтр query-iter), кнопка «ККГ·тег» (Claude видає тег===пост, Make парсить). ОЧІКУЄ: імпорт v2 + розклад на 10:00 + реактивація. БЕКАП (нотатка): Sonnet→Haiku + OpenAI полірує (якщо дорого). ВИТРАТИ: сьогоднішній ~$1 = мої тести; прод стара конфа ≈$10/міс, v2 ≈$5/міс; картинки не в токенах Claude. БЕКЛОГ (опрацювати пізніше): (1) картинки 2/3 не в тему — Serper шукає за title, для аніме пливе (One Piece→Naruto); готовий фікс = додати назву гри в q Serper; (2) свіжість поста — нема date-фільтра (Make pubDate ненадійний), можливі застарілі статті. Деталі+фікси: handoffs/MKT-TG-004_per-game-balance_20260627.md', subtasks: []
   },
   {
     id: 'MKT-TG-003', title: 'Make TG-пайплайн: фікс RSS→jina→Claude→GPT→Telegram', status: 'done', tool: 'Make', priority: 'Medium',
@@ -2731,4 +2731,24 @@ async function savePurchaseBatch() {
     return;
   }
   const msg = document.getElementById('recordsMsg');
-  if (msg)
+  if (msg) { msg.textContent = 'Збереження…'; msg.className = 'records-message'; }
+  try {
+    const result = await callPost(payload);
+    if (msg) { msg.textContent = 'Оновлено лотів: ' + (result.rows_updated || rows.length); msg.className = 'records-message success'; }
+    accountingState.selectedPurchaseLots = {};
+    invalidateAccountingCaches();
+    await loadRecTab('purchases',true);
+  } catch(e) {
+    if (msg) { msg.textContent = 'Помилка: ' + e.message; msg.className = 'records-message error'; }
+  }
+}
+
+// ════════════ LOADERS MAP ════════════
+const loaders = { overview: loadOverview, stock: loadStock, consumables: loadConsumables, orders: loadOrders, skus: loadSkus, clients: loadClients, roadmap: loadRoadmap, accounting: loadAccounting };
+
+// ════════════ INIT ════════════
+loaded.overview = true;
+loadOverview();
+</script>
+</body>
+</html

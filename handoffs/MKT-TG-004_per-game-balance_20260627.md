@@ -73,3 +73,17 @@ Est. ~$2-3/mo. Quality slightly simpler. Apply only if needed.
 Today's ~$1 = ~8-10 of MY test runs (full article → Claude per item, ~8K in/item, Sonnet).
 Prod on old config (2×/day, top-5) ≈ $10/mo. v2 (1×/day, 5 items) ≈ ~$5/mo. Images (Serper)
 are NOT a token cost. Original "$2/mo" estimate was low (underweighted full-article input).
+
+## Follow-ups — BACKLOG (owner-flagged, process later; NOT applied)
+v2 imported & ran (2026-06-28) — works. Two refinements deferred:
+
+1. **Images 2/3 off-topic.** Serper searches `q = {{20.title}}` → for anime franchises
+   results 2-3 drift (One Piece post pulled Naruto for img2/img3). Image 1 usually fine.
+   **READY FIX** — constrain Serper q with the game (module 25 `/images`, body field `q`):
+   `{{switch(30.`__IMTINDEX__`; 1; "Pokemon TCG"; 2; "One Piece card game"; 3; "trading card game"; 4; "trading card game")}} {{20.title}}`
+   (30 = query-iterator, upstream of 25, so its index is in scope.)
+   Stretch option: image1 = article's own og:image (always on-topic) + Serper for 2/3.
+2. **Post freshness.** Per-game selection is by relevance/position — NO date filter
+   (Make pubDate filter unreliable: RFC822 string / array won't compare). Stale articles
+   can surface. Options to evaluate: (a) `parseDate(pubDate)` filter, (b) tighten Google
+   News query with recency, (c) aggregate+sort items by date before top-N. Decide later.
