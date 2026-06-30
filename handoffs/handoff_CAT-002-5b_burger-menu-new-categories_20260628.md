@@ -1,5 +1,5 @@
 # Handoff CAT-002-5b — Бургер-меню: нові категорії + фікс URL
-**Дата:** 2026-06-28
+**Дата:** 2026-06-28 (оновлено)
 **Задача:** CAT-002-5b
 **Виконавець:** Codex
 **Тип:** PHP patch + Twig edit
@@ -9,88 +9,128 @@
 
 ## Проблема
 
-Кнопки Pokémon і One Piece у slide-in бургер-меню (`#bs-menu`) ведуть на сирі OpenCart URL типу:
+1. Кнопки Pokémon і One Piece у slide-in бургер-меню (`#bs-menu`) ведуть на сирі OpenCart URL замість SEO-friendly.
+2. Нових категорій "Інші TCG" (з дропдауном YGO + MTG) і "Аксесуари" у меню немає.
+
+Поточні URL з бургера:
+```
+index.php?route=product/category&path=59        ← Pokémon
+index.php?route=product/category&path=59_61     ← Pokémon субкатегорія
+index.php?route=product/category&path=59_62     ← Pokémon субкатегорія
+index.php?route=product/category&path=59_64     ← Pokémon субкатегорія
+index.php?route=product/category&path=60        ← One Piece
+index.php?route=product/category&path=60_63     ← One Piece субкатегорія
+index.php?route=product/special                 ← Акції (залишити як є)
+```
+
+---
+
+## Цільова структура бургер-меню
 
 ```
-https://boostershop.website/index.php?route=product/category&path=59
-https://boostershop.website/index.php?route=product/category&path=60
-https://boostershop.website/index.php?route=product/category&path=60_63
+Pokémon TCG          → /catalog/pokemon          [accordion: підкатегорії]
+One Piece Card Game  → /catalog/one-piece         [accordion: підкатегорія]
+Інші TCG             → /catalog/more-tcg          [accordion: YGO + MTG]
+  ├── Yu-Gi-Oh! OCG        → /catalog/more-tcg/Yu-Gi-Oh
+  └── Magic: The Gathering → /catalog/more-tcg/magic-the-gathering
+Аксесуари            → /catalog/accessories       [пряме посилання, без дропдауну]
+Акції                → /index.php?route=product/special  [залишити]
 ```
-
-Нових категорій (Yu-Gi-Oh!, MTG, Аксесуари) у меню немає.
 
 ---
 
 ## Context
 
-Burger menu визначається у `catalog/view/template/common/header.twig`.  
-Дані передаються через `catalog_menu` (Twig loop — `c.name`, `c.href`, `c.accent`, `c.subs`).  
-JS: `catalog/view/javascript/patch-mobile-search-menu-redesign.js` — не чіпати.  
-
-Поточні `path=` ID з бургера:
-| URL | Категорія (implication) |
-|-----|------------------------|
-| `path=59` | Pokémon (батьківська) |
-| `path=59_61` | Pokémon субкатегорія |
-| `path=59_62` | Pokémon субкатегорія |
-| `path=59_64` | Pokémon субкатегорія |
-| `path=60` | One Piece (батьківська) |
-| `path=60_63` | One Piece субкатегорія |
-| `route=product/special` | Акції/Outlet |
+Burger menu: `catalog/view/template/common/header.twig` → блок `#bs-menu`.  
+Дані через `catalog_menu` (Twig loop: `c.name`, `c.href`, `c.accent`, `c.subs[]`).  
+JS accordion: `catalog/view/javascript/patch-mobile-search-menu-redesign.js` — **не чіпати**.  
+Якщо `c.subs` не порожній → Twig рендерить accordion-кнопку + список; якщо порожній → пряме посилання.  
+Accent-dot: `bs-menu__dot` отримує колір через `c.accent`.
 
 ---
 
 ## Required changes
 
-### 1. Визначити SEO URL для Pokémon і One Piece
+### 1. Фікс URL Pokémon і One Piece
 
-У OpenCart Admin → Catalog → Categories знайти категорії з ID 59 і 60.
-Перевірити поле **SEO Keyword** (вкладка SEO):
-- якщо встановлено slug → SEO URL = `/catalog/<slug>`
-- якщо не встановлено → встановити: `pokemon` для 59, `one-piece` для 60
+**Перевірити** в OpenCart Admin → Catalog → Categories:
+- Category ID 59 (Pokémon) — вкладка SEO → поле **SEO Keyword**
+- Category ID 60 (One Piece) — те саме
+- IDs 61, 62, 63, 64 — підкатегорії
 
-Аналогічно для підкатегорій 61, 62, 63, 64.
+Якщо SEO Keywords **вже встановлено** → посилання генеруються автоматично через `$this->url->link()` при увімкненому SEO URL в конфіги.  
+Якщо **не встановлено** → виконати INSERT:
 
-### 2. Оновити href у бургер-меню
+```sql
+-- Pokémon
+INSERT IGNORE INTO oc_seo_url (store_id, language_id, key, value)
+SELECT 0, language_id, 'path', '59'
+FROM oc_language WHERE status = 1;
 
-У `catalog/view/template/common/header.twig` знайти блок `bs-menu__body` → `{% for c in catalog_menu %}`.
+UPDATE oc_seo_url SET keyword = 'pokemon'
+WHERE `key` = 'path' AND value = '59';
 
-**Варіант A (рекомендований):** якщо `catalog_menu` генерується контролером з `url()->link(...)` — перевірити, чи в контролері увімкнено SEO-режим (`$this->config->get('config_seo_url')`). Якщо ні — увімкнути або замінити виклик.
-
-**Варіант B (хардкод fallback):** якщо catalog_menu не підтримує SEO slug — замінити href безпосередньо у Twig через mapping:
-
-```twig
-{% set cat_seo = {
-  59: '/catalog/pokemon',
-  60: '/catalog/one-piece'
-} %}
-{# використати cat_seo[c.id] ?? c.href #}
+-- One Piece
+UPDATE oc_seo_url SET keyword = 'one-piece'
+WHERE `key` = 'path' AND value = '60';
 ```
 
-> Codex: обери варіант залежно від того, як побудований catalog_menu у контролері.
+> Або через Admin UI: Category 59 → SEO tab → keyword = `pokemon`; Category 60 → keyword = `one-piece`.
 
-### 3. Додати нові категорії в бургер
+### 2. Категорія Аксесуари — INSERT у БД
 
-У контролері `CatalogControllerCommonHeader` (або де будується `catalog_menu`) додати вручну записи для нових категорій після наявних, **перед "Акції"**:
+```sql
+-- Основна запис
+INSERT INTO oc_category (parent_id, image, top, column, sort_order, status, date_added, date_modified)
+VALUES (0, '', 1, 1, 4, 1, NOW(), NOW());
+
+SET @acc_id = LAST_INSERT_ID();
+
+-- Назва (UA)
+INSERT INTO oc_category_description (category_id, language_id, name, description, meta_title, meta_description, meta_keyword)
+SELECT @acc_id, language_id,
+  'Аксесуари',
+  'Протектори, топлоадери, магнітні кейси та аркуші для колекціонерів і гравців TCG.',
+  'Аксесуари для карток — купити в Україні | Booster Shop',
+  'Протектори, топлоадери, магнітні кейси для колекційних карток. Доставка по Україні.',
+  'протектори для карток, топлоадери, магнітний кейс, аксесуари tcg'
+FROM oc_language WHERE status = 1;
+
+-- Store binding
+INSERT INTO oc_category_to_store (category_id, store_id) VALUES (@acc_id, 0);
+
+-- SEO URL
+INSERT INTO oc_seo_url (store_id, language_id, key, value, keyword)
+SELECT 0, language_id, 'path', @acc_id, 'accessories'
+FROM oc_language WHERE status = 1;
+```
+
+> Після INSERT зберегти значення `@acc_id` — потрібне в кроці 3.
+
+### 3. Оновити catalog_menu у контролері
+
+Знайти контролер, що будує `catalog_menu` (зазвичай `catalog/controller/common/header.php`).  
+Додати нові елементи **після One Piece і перед Акціями**:
 
 ```php
-// Yu-Gi-Oh!
+// Інші TCG — з дропдауном
 $catalog_menu[] = [
-    'name'   => 'Yu-Gi-Oh! OCG',
-    'href'   => $this->url->link('product/category', 'language=' . $this->config->get('config_language') . '&path=<YGO_CATEGORY_ID>'),
-    'accent' => '#6D28D9',
-    'subs'   => [], // підкатегорій поки немає
+    'name'   => 'Інші TCG',
+    'href'   => $this->url->link('product/category', 'language=' . $this->config->get('config_language') . '&path=<MORE_TCG_CATEGORY_ID>'),
+    'accent' => '#065F46',
+    'subs'   => [
+        [
+            'name' => 'Yu-Gi-Oh! OCG',
+            'href' => $this->url->link('product/category', 'language=' . $this->config->get('config_language') . '&path=<YGO_CATEGORY_ID>'),
+        ],
+        [
+            'name' => 'Magic: The Gathering',
+            'href' => $this->url->link('product/category', 'language=' . $this->config->get('config_language') . '&path=<MTG_CATEGORY_ID>'),
+        ],
+    ],
 ];
 
-// Magic: The Gathering
-$catalog_menu[] = [
-    'name'   => 'Magic: The Gathering',
-    'href'   => $this->url->link('product/category', 'language=' . $this->config->get('config_language') . '&path=<MTG_CATEGORY_ID>'),
-    'accent' => '#B91C1C',
-    'subs'   => [],
-];
-
-// Аксесуари
+// Аксесуари — без дропдауну
 $catalog_menu[] = [
     'name'   => 'Аксесуари',
     'href'   => $this->url->link('product/category', 'language=' . $this->config->get('config_language') . '&path=<ACC_CATEGORY_ID>'),
@@ -99,46 +139,54 @@ $catalog_menu[] = [
 ];
 ```
 
-> `<YGO_CATEGORY_ID>`, `<MTG_CATEGORY_ID>`, `<ACC_CATEGORY_ID>` — ID нових категорій з OpenCart Admin.
-> Категорія Аксесуари ще не створена: спочатку створити вручну в Admin → Catalog → Categories з SEO keyword = `accessories`.
+**Підставити:**
+- `<MORE_TCG_CATEGORY_ID>` — ID батьківської категорії "Інші TCG" (вже існує в БД, знайти через Admin)
+- `<YGO_CATEGORY_ID>` — ID підкатегорії Yu-Gi-Oh! (вже існує)
+- `<MTG_CATEGORY_ID>` — ID підкатегорії Magic: The Gathering (вже існує)
+- `<ACC_CATEGORY_ID>` — `@acc_id` з кроку 2
 
-### 4. Аксесуари — створити категорію в Admin (Manual)
+> Якщо `catalog_menu` будується через Twig loop з oc_category — альтернативно додати записи через Admin і переконатися що `top = 1` (показувати у навігації).
 
-> ⚠️ Це ручна дія власника, не Codex.
+### 4. Фікс href у Twig (fallback якщо URL все ще ugly)
 
-1. Admin → Catalog → Categories → Add New
-2. Name: `Аксесуари`
-3. SEO Keyword: `accessories`
-4. Parent: (root / без батька)
-5. Зберегти → отримати ID → підставити в крок 3
+Якщо після кроків 1–3 Pokémon/One Piece все ще генерують `index.php?path=`:
 
-Після створення SEO URL буде: `https://boostershop.website/catalog/accessories`
+```twig
+{% set seo_override = {
+    59: '/catalog/pokemon',
+    60: '/catalog/one-piece'
+} %}
 
-### 5. Оновити ROADMAP_FLOW у booster-dashboard.html
-
-Після успішного deploy оновити статус CAT-002-5b в `dashboard/booster-dashboard.html` → `ROADMAP_FLOW` → `Done`.
+{# у циклі: #}
+<a href="{{ seo_override[c.id] ?? c.href }}" ...>
+```
 
 ---
 
 ## Acceptance criteria
 
-- [ ] Бургер-меню: кнопки Pokémon і One Piece ведуть на SEO URL (`/catalog/pokemon`, `/catalog/one-piece`), а не на `index.php?path=`
-- [ ] Бургер-меню: додані кнопки Yu-Gi-Oh! (фіолет #6D28D9), Magic: The Gathering (червоний #B91C1C), Аксесуари (тіл #0D9488)
-- [ ] Нові кнопки відкривають відповідні сторінки категорій (не 404)
-- [ ] Slide-in анімація і Esc-close продовжують працювати (JS не змінювався)
-- [ ] `bs-menu__dot` кольори нових елементів відповідають accent
+- [ ] Бургер: Pokémon → `/catalog/pokemon`, не `index.php?path=59`
+- [ ] Бургер: One Piece → `/catalog/one-piece`, не `index.php?path=60`
+- [ ] Бургер: "Інші TCG" — accordion з YGO + MTG підпунктами (той самий паттерн що Pokémon)
+- [ ] YGO sub → `/catalog/more-tcg/Yu-Gi-Oh`, MTG sub → `/catalog/more-tcg/magic-the-gathering`
+- [ ] Бургер: "Аксесуари" — пряме посилання без дропдауну → `/catalog/accessories`
+- [ ] Акції — залишилися, не зникли
+- [ ] Accordion JS (Esc, scrim, анімація) — не зламаний
 
 ---
 
-## QA checklist (smoke test)
+## QA checklist
 
-1. Відкрити мобільну версію (або devtools < 768px)
-2. Натиснути бургер → меню відкрилось
-3. Клік Pokémon → URL = `/catalog/pokemon` (або slug, що налаштований) — не `index.php?path=`
-4. Back → клік One Piece → URL = `/catalog/one-piece`
-5. Перевірити Yu-Gi-Oh!, MTG, Аксесуари → кожен відкриває свою сторінку
-6. Акції — все ще в меню, нижче нових категорій
-7. Esc / клік на scrim → меню закривається
+1. Мобільний viewport або devtools < 768px
+2. Бургер → меню відкрилось
+3. Клік Pokémon → URL `/catalog/pokemon` (не `index.php`)
+4. Назад → клік One Piece → URL `/catalog/one-piece`
+5. Клік "Інші TCG" → accordion розкрився → видно YGO і MTG
+6. Клік YGO → `/catalog/more-tcg/Yu-Gi-Oh` — сторінка відкрилась, не 404
+7. Назад → Клік MTG → `/catalog/more-tcg/magic-the-gathering` — не 404
+8. Клік Аксесуари → `/catalog/accessories` — не 404
+9. Акції присутні в меню
+10. Esc / клік scrim → меню закрилось
 
 ---
 
@@ -146,6 +194,7 @@ $catalog_menu[] = [
 
 | Ризик | Рівень | Мітигація |
 |-------|--------|-----------|
-| SEO URL не налаштований для категорій | low | Встановити slug в Admin перед deploy |
-| catalog_menu не підтримує custom поля `accent` | medium | Перевірити Twig template і контролер; додати поле якщо потрібно |
-| Аксесуари ще не існують — href 404 | low | Створити категорію вручну до deploy |
+| SEO URL не налаштовано для категорій 59/60 | low | SQL UPDATE або Admin UI (крок 1) |
+| catalog_menu будується інакше (не через PHP array) | medium | Codex перевіряє контролер і адаптує підхід |
+| Аксесуари — 404 до deploy | low | Категорія створюється в кроці 2 у тому ж патчі |
+| `c.subs` не підтримується у Twig шаблоні | low | Перевірити header.twig — паттерн вже є для Pokémon |

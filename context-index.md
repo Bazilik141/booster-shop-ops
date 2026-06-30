@@ -111,7 +111,10 @@ grep "ST-3.5" context-index.md
 | Roadmap ID | Назва | Handoff |
 |---|---|---|
 | CHECKOUT-001 | Реєстрація акаунту при замовленні | — |
-| CAT-002 | Нова категорія «Аксесуари» | — |
+| CAT-002 | Категорії + аксесуари (parent) | — |
+| CAT-002-4 | YGO Blazing Dominion SKU | plans/ygo_sku_blazing_dominion_20260628.md |
+| CAT-002-5 | Тайлс категорій — кольори і HTML | plans/category_tiles_colors_20260628.md |
+| CAT-002-5b | Бургер-меню нові категорії + фікс URL | handoffs/handoff_CAT-002-5b_burger-menu-new-categories_20260628.md |
 | LEGAL-002 | Публічна оферта + Обмін і повернення | — |
 | BRAND-OUTLET-001 | Outlet Booster — опис і SEO | — |
 | R-13.5 | НП модуль — master log (ST-серія) | handoffs/handoff_R-13.5_nova-poshta-module_2026-06-12.md |

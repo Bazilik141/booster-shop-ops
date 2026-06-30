@@ -1914,15 +1914,15 @@ const ROADMAP_TASKS = [
   },
   // ─── OTHER ───
   {
-    id: 'CAT-002', title: 'Нова категорія «Аксесуари»', status: 'todo', tool: 'Manual + Codex', priority: 'Medium',
-    lastUpdated: '2026-06-20', blockedBy: [],
-    simple: 'Додаємо категорію «Аксесуари» на сайт: навігація, головна сторінка. Підключаємо 6 товарів (протектори, топлоадери, кейси). Також категорія «Інші TCG».',
+    id: 'CAT-002', title: 'Нова категорія «Аксесуари»', status: 'done', tool: 'Manual + Codex', priority: 'Medium',
+    lastUpdated: '2026-06-30', blockedBy: [],
+    simple: 'Патч CAT-002-5/5b REDO готовий (review OK 2026-06-30). Категорія acsesuary + 7 SKU (95–101) створені вручну. Patch: 2 тайли, бургер, CSS токени, описи, атрибути. Розгорнути: php cat002_5_5b_redo_20260629.php.',
     why: 'Товари є в наявності, але покупець їх не бачить — категорії немає.',
-    warn: 'Спочатку власник завантажує фото для 6 товарів, потім запускаємо.',
+    warn: '',
     subtasks: [
       { id: '1', title: 'Власник: завантажити фото для 6 SKU (ACC-001..006)', status: 'todo', desc: 'Завантажити фото в адмінку для кожного з 6 аксесуарів.' },
-      { id: '2', title: 'Додати категорію і навігацію', status: 'todo', desc: 'Категорія «Аксесуари» + «Інші TCG» у меню і на головній.' },
-      { id: '3', title: 'Підключити 6 товарів', status: 'todo', desc: 'Прив\'язати ACC-001..006 до нової категорії, перевірити ціни і фото.' }
+      { id: '2', title: 'Категорія + навігація + тайли (патч)', status: 'done', desc: 'cat002_5_5b_redo_20260629.php — review OK, ready to deploy.' },
+      { id: '3', title: 'Описи, атрибути 7 SKU + категорія 70', status: 'done', desc: 'Patch: descriptions 95–101, category 70, attributes 95–100.' }
     ]
   },
   {
