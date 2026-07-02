@@ -1,8 +1,20 @@
 # Codex Handoff — ST-2c: Real shipping cost in totals + checkout cutover
 
-Date: 2026-07-02
+Date: 2026-07-02 (rev. 2 — added ST-2b.6 blocker)
 Author: Claude (strategic assistant)
 Roadmap: ST-2c (High, Not started, Stage: Queued). Parent: R-13.5 (In progress). Blocks: ST-6.
+
+---
+
+## 0. BLOCKER — do not start Phase 1 until this is resolved
+
+**ST-2b.6 — «Порожнє замовлення Hutko після перезапуску браузера» (dashboard-only, todo, HIGH priority, not yet in Notion, no handoff/diagnostics filed as of 2026-07-02, last dashboard update 2026-06-25, order #186 example).**
+
+Symptom: leaving the checkout tab open, closing the browser, reopening it → a phantom order appears in admin with Hutko as payment method, no payment made. This is very likely the same draft-order class of bug that ST-2b.1/ST-2b.4 fixed for the "switch payment method" trigger — but triggered by tab restore / auto-selected Hutko / the address micro-update refresh instead. The dashboard lists 3 unverified suspects: tab close/reopen behavior, auto-selected Hutko firing a call on page load, and the shipping-address micro-update refresh.
+
+**Why this blocks ST-2c:** ST-2c's whole premise (§7.7 of the original handoff) is that the zero-draft-order guarantee from ST-2b.1/ST-2b.4 still holds. If ST-2b.6 is a live, unfixed hole in that guarantee, cutting over 100% of live traffic to this checkout multiplies exposure to whatever created order #186. This needs its own Phase 0 diagnostic + fix + smoke pass **before** ST-2c cutover, not after. Do not treat "no draft orders in my manual smoke pass" as sufficient — ST-2b.6 is explicitly intermittent per the dashboard note.
+
+**Action required before proceeding with this handoff:** either (a) triage and close ST-2b.6 first as its own task, or (b) if the owner explicitly accepts the risk, note that decision here in writing before Phase 1 starts. Do not silently proceed.
 
 ---
 
@@ -12,7 +24,11 @@ Roadmap: ST-2c (High, Not started, Stage: Queued). Parent: R-13.5 (In progress).
 
 ## 2. Context
 
-R-13.5 (Nova Poshta module fix) and the ST-0…ST-2b.5 series migrated checkout logic from SimpleCheckout to a patched stock OC4 checkout, in parallel, without cutting over live traffic. ST-2b.1–ST-2b.5 (defer draft orders, success-page fixes, coupon/First15/agree/GA4 parity) are all **Done**. ST-3.5/3.6/3.7 (admin TTN button, COD payment control, UK localization) are also **Done** but are a separate branch of work (admin-side, no checkout dependency).
+R-13.5 (Nova Poshta module fix) and the ST-0…ST-2b.5 series migrated checkout logic from SimpleCheckout to a patched stock OC4 checkout, in parallel, without cutting over live traffic. ST-2b.1–ST-2b.5 (defer draft orders, success-page fixes, coupon/First15/agree/GA4 parity) are all **Done**. ST-3.5/3.6/3.7 (admin TTN button, COD payment control, UK localization) are also **Done** but are a separate branch of work (admin-side, no checkout dependency). ST-2b.6 (see §0 above) is a newly surfaced, unresolved draft-order bug that must be closed or explicitly risk-accepted before this handoff proceeds.
+
+**Also not yet closed, but not blocking ST-2c directly (separate checkout-adjacent tasks, tracked here for visibility):**
+- **RD-13 — Checkout reskin (HIGH-RISK, Not started).** Depends on RD-01/RD-11/RD-12, explicitly "робити ОСТАННІМ" (do last) — visual/markup only, no payment logic. Independent of ST-2c/ST-6 sequencing but shares the same checkout.twig footprint; sequence after ST-6, not before.
+- **CHECKOUT-001 — Guest checkout opt-in account creation (Not started, "Needs technical audit").** Explicitly scoped out of RD-13/RD-20 by owner decision (2026-06-06). Independent feature, no hard dependency on ST-2c, but touches the same checkout/customer creation flow — sequence after ST-2c/ST-6 stabilize to avoid stacking checkout changes.
 
 ST-2c is the last gate before cutover. Two things are bundled here because they must ship together (shipping cost = 0 today is what currently keeps Hutko amounts correct; changing one without the other breaks payment math):
 
@@ -104,7 +120,9 @@ Run **bs-checkout-smoke** (11-step manual checkout/payment smoke) — mandatory,
 
 ## 10. Recommended status after execution
 
+- **ST-2b.6 must be closed (or explicitly risk-accepted in writing by owner) before Phase 1 starts** — see §0.
 - Phase 0 report delivered → ST-2c: `In progress`, findings noted in Notion + dashboard.
 - Phase 1 done + smoke passed + owner manual check (Hutko amount, fiscalization, CRM row, SimpleCheckout still toggleable) → ST-2c: `Done`; unblocks ST-6 (disable SimpleCheckout).
 - Update Notion R-13.5 master log entry to reflect ST-2c completion and current state of the whole NP/checkout series (last entry in Notion is from 2026-06-14 — stale relative to ST-3.5–3.7 which are Done as of 2026-06-25).
 - Update `booster-dashboard.html` `ROADMAP_FLOW` in the same session (canon: `ROADMAP_SOP.md` §3-4) — both R-13.5 subtasks currently marked `todo` ("Реальна вартість доставки в замовленні", "Увімкнути новий чекаут для всіх") should flip to reflect actual status.
+- RD-13 (checkout reskin) and CHECKOUT-001 (guest opt-in account creation) remain separately tracked, Not started — do not fold into this handoff; sequence after ST-2c/ST-6 stabilize.

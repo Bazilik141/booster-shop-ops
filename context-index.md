@@ -63,6 +63,7 @@ grep "ST-3.5" context-index.md
 |---|---|---|---|
 | TECH-005-DEEP | Sitemap GSC — Watch Only | handoffs/handoff_TECH-005-DEEP_sitemap-binary-serving_2026-06-05.md | diagnostics/TECH-005-DEEP_*.md |
 | TECH-010/012 | Noindex / canonicals / дублі URL | handoffs/handoff_TECH-010-012_noindex-canonicals_2026-06-09.md | diagnostics/indexation-status-and-sitemap-sync_2026-06-15.md |
+| TECH-012 / legacy-404 | Старі URL товарів → 301 | handoffs/handoff_TECH-012-legacy404-301_2026-07-02.md | diagnostics/TECH-012_legacy404-301_report_20260702.md |
 | TECH-029 | Sitemap / GSC — site-side | handoffs/codex-handoff-TECH029-sitemap.md | — |
 | TECH-030/031 | — | handoffs/codex-handoff-TECH030-031.md | — |
 | TECH-032/033/034 | — | handoffs/codex-handoff-TECH032-033-034.md | — |
