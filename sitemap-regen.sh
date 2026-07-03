@@ -33,5 +33,7 @@ if [ "${LOCS:-0}" -lt 10 ]; then echo "$TS FAIL too-few-locs:$LOCS"; rm -f "$TMP
 
 # 4) atomic publish
 mv -f "$TMP" "$DST" && chmod 644 "$DST"
+# 4b) mirror under fresh filename (TECH-005-DEEP 2026-07-03: escape stuck GSC Sitemaps state via new URL)
+cp -f "$DST" "$ROOT/sitemap_index.xml" && chmod 644 "$ROOT/sitemap_index.xml"
 echo "$TS OK locs=$LOCS"
 rm -f "$RAW"
