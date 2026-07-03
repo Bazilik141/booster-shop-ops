@@ -36,7 +36,8 @@ grep "ST-3.5" context-index.md
 | ST-2b3 | Confirm summary / success button | handoffs/handoff_ST-2b3_confirm-summary-success-button_20260614.md | — |
 | ST-2b4 | Residual draft order / intermediate summary | handoffs/handoff_ST-2b4_residual-draft-order-intermediate-summary_20260614.md | — |
 | ST-2b.5 | Промокоди, знижка First15 і GA4 | handoffs/handoff_ST-2b5_coupon-first15-agree-ga4-parity_20260614.md | — |
-| ST-2c | Переключення всіх клієнтів на новий чекаут | — | — |
+| ST-2b.6 | Фантомне замовлення Hutko після закриття/відкриття вкладки (Phase 0) | handoffs/handoff_ST-2b6_hutko-phantom-order-tab-restore_20260703.md | — |
+| ST-2c | Переключення всіх клієнтів на новий чекаут | handoffs/handoff_ST-2c_real-shipping-cost-cutover_2026-07-02.md | — |
 | ST-3.5 | Кнопка ТТН в адмінці | handoffs/handoff_ST-3.5_admin-ttn-button_2026-06-24.md | — |
 | ST-3.5-1 | Фікс якоря кнопки (OC 4.1.0.3) | ↑ в тому ж хендофі (підзадача) | — |
 | ST-3.5-2 | Тест форми заявки НП | ↑ в тому ж хендофі (підзадача) | — |
@@ -134,5 +135,4 @@ grep "ST-3.5" context-index.md
 **Усі серії (ST + DASH/CRM/AUTO/TECH/RD/UX)** тепер у Notion database `5aef22c3-048d-4dde-a5b1-ad409de9301c`. ST заведено 2026-06-24.
 **Статус-правда — Notion; дашборд `ROADMAP_FLOW` — дзеркало.** Повні правила, page_id-реєстр, DoD, sync — `ROADMAP_SOP.md`.
 
-Notion view: `https://www.notion.so/35c3f8572fc54a7896c8af0efd4cf8d4?v=eebb19b11cfb4066a8a3b1b097775818`
-Bulk-query (`notion-query-data-sources` / `notion-query-database-view`) — Business plan, недоступно. Per-card: `notion-fetch` / `notion-update-page` за page_id.
+Notion view: `
