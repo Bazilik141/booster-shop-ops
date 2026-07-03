@@ -1619,18 +1619,25 @@ function rmToggle(card) { card.classList.toggle('open'); }
 const ROADMAP_TASKS = [
   // ─── КОНТЕНТ / TELEGRAM-АВТОМАТИЗАЦІЯ ───
   {
-    id: 'MKT-TG-004', title: 'TG контент-автоматизація Phase 2: мультиджерело + бот-відбір + картинки + розклад', status: 'active', tool: 'Make + Codex', priority: 'Medium',
-    lastUpdated: '2026-06-27', blockedBy: ['MKT-TG-003'],
+    id: 'MKT-TG-005', title: 'Path A: lean RSS→Telegram news digest (заміна Make-пайплайну)', status: 'active', tool: 'Claude + Codex (Apps Script)', priority: 'Medium',
+    lastUpdated: '2026-07-03', blockedBy: [],
+    simple: 'Щоденний дайджест (~10:00 Kyiv) з 4 Google News RSS (Pokémon/One Piece/MTG-YGO/TCG-ринок), 5 свіжих новин (last 3 days, dedup по guid) прямо в CRM Apps Script (той самий скрипт, що вже володіє Telegram webhook). Кожен пункт — game tag + title + link + власний og:image (фікс "Naruto"-проблеми) + кнопка «✍️ Чернетка». AI (Haiku, RSS title+desc) пише пост лише по тапу — не батчем. Owner постить 1-2/день вручну.',
+    why: 'Заміняє Make-пайплайн (MKT-TG-003/004): той генерував AI-чернетки для ВСІХ ~5 новин/день (owner постить 1-2 → оплата 3-4 зайвих драфтів), картинки Serper пливли не в тему (One Piece→Naruto), pubDate не парсився (нема freshness-фільтра). Path A: AI лише on-demand → <$1/міс, og:image власний у статті → on-topic by definition, реальний Date-парсинг pubDate → надійна свіжість.',
+    warn: 'Рішення з owner (2026-07-03): модель Haiku 4.5, контекст чернетки = RSS title+description (без full-article fetch), dedup через CacheService/PropertiesService (без нового Sheet-таба). Хост — CRM Apps Script (webhook-власник), нові функції namespaced (newsDigest_, tgDraftPost_, fetchOgImage_, parseRssItems_). Стара таблиця Новини_кандидати + /pick_news лишаються live паралельно (не чіпаємо, deprecation — окремо пізніше). Codex handoff готовий: handoffs/MKT-TG-005_codex-handoff_20260703.md. Ризик: новий callback-гілка news_draft_ в handleTelegramCallback_ — обережно, там уже був ReferenceError-інцидент 2026-06-29 (MKT-TG-004-BOT runtime-fix) через невдале розміщення блоку. Owner деактивує старий Make-сценарій "Integration RSS" вручну. Деталі: handoffs/MKT-TG-005_path-A-lean-rss-digest_20260703.md', subtasks: []
+  },
+  {
+    id: 'MKT-TG-004', title: 'TG контент-автоматизація Phase 2: мультиджерело + бот-відбір + картинки + розклад', status: 'superseded', tool: 'Make + Codex', priority: 'Medium',
+    lastUpdated: '2026-07-03', blockedBy: ['MKT-TG-003'],
     simple: '5 кандидатів/день, 1×/день о 10:00: 1 Pokémon + 1 One Piece + 1 MTG/YGO + 2 TCG-ринок. У бот текстом + 3 лінки картинок; постиш 1-2 вручну. Кнопка /pick_news: «ККГ · 2-3 слова-тег». Дедуп, Sheet-кандидати, /pick_news, /delete_news.',
     why: 'Перетворює сирий пайплайн на зручний щоденний робочий процес з кількома джерелами (Pokémon, One Piece, MTG, YGO).',
-    warn: 'СТАН: пайплайн АКТИВНИЙ (jina→Claude(Sonnet)→OpenAI→Serper→Запис; дедуп guid OK; картинки 25.data.images[N].imageUrl OK). Перший прод-прогін був top-5 за релевантністю → вийшло MTG-важко (сплеск Marvel-сет+Prime Day). РІШЕННЯ owner: перейти на per-game баланс через BLUEPRINT-імпорт (canvas-хірургія віддалено ненадійна). v2 готовий: Booster Shop/Integration RSS.blueprint.v2.json. v2 = 5 кандидатів 1×/день о 10:00 (1 Pok+1 OP+1 MTG/YGO+2 TCG-ринок; фільтр query-iter), кнопка «ККГ·тег» (Claude видає тег===пост, Make парсить). ОЧІКУЄ: імпорт v2 + розклад на 10:00 + реактивація. БЕКАП (нотатка): Sonnet→Haiku + OpenAI полірує (якщо дорого). ВИТРАТИ: сьогоднішній ~$1 = мої тести; прод стара конфа ≈$10/міс, v2 ≈$5/міс; картинки не в токенах Claude. БЕКЛОГ (опрацювати пізніше): (1) картинки 2/3 не в тему — Serper шукає за title, для аніме пливе (One Piece→Naruto); готовий фікс = додати назву гри в q Serper; (2) свіжість поста — нема date-фільтра (Make pubDate ненадійний), можливі застарілі статті. Деталі+фікси: handoffs/MKT-TG-004_per-game-balance_20260627.md', subtasks: []
+    warn: 'SUPERSEDED 2026-07-03 → MKT-TG-005 (Path A). Причина: вартість (AI генерує ВСІ ~5/день, поститься 1-2), картинки Serper не в тему (One Piece→Naruto), pubDate не парсився (нема freshness-фільтра). Owner рішення: перейти на lean RSS+on-demand AI замість Make v2 BLUEPRINT-імпорту. Стара warn-історія збережена нижче для довідки: СТАН: пайплайн був АКТИВНИЙ (jina→Claude(Sonnet)→OpenAI→Serper→Запис; дедуп guid OK; картинки 25.data.images[N].imageUrl OK). Перший прод-прогін був top-5 за релевантністю → вийшло MTG-важко (сплеск Marvel-сет+Prime Day). v2 blueprint існував (Booster Shop/Integration RSS.blueprint.v2.json) але НЕ імпортований — замінений Path A. Деталі: handoffs/MKT-TG-004_per-game-balance_20260627.md, нове рішення: handoffs/MKT-TG-005_path-A-lean-rss-digest_20260703.md', subtasks: []
   },
   {
     id: 'MKT-TG-003', title: 'Make TG-пайплайн: фікс RSS→jina→Claude→GPT→Telegram', status: 'done', tool: 'Make', priority: 'Medium',
     lastUpdated: '2026-06-27', blockedBy: [],
     simple: 'Виправлено сценарій "Integration RSS": Iterator (channel — масив → channel[1].item), jina URL, маппінги Claude (jina-вихід = response, не content), date-фільтр. End-to-end тест: 1 пост згенеровано і відправлено.',
     why: 'Без робочого ланцюга немає автоматизації контенту.',
-    warn: 'Сценарій лишено Inactive; тимчасовий тест-фільтр position=1 замінюється у MKT-TG-004.', subtasks: []
+    warn: 'Сценарій лишено Inactive; замінений на MKT-TG-005 (Path A) 2026-07-03.', subtasks: []
   },
   // ─── CRM (нова платформа Supabase) ───
   {
@@ -1705,23 +1712,24 @@ const ROADMAP_TASKS = [
   },
   // ─── CHECKOUT / ST ───
   {
-    id: 'ST-2b.6', title: 'Баг: порожнє замовлення Hutko після перезапуску браузера', status: 'todo', tool: 'Claude + Codex', priority: 'High',
-    lastUpdated: '2026-06-25', blockedBy: [],
-    simple: 'Залишаєш браузер відкритим на сторінці оформлення, закриваєш і знову відкриваєш — в адмінці зʼявляється порожнє замовлення з методом Hutko, хоча ніхто нічого не оплачував. Приклад: Замовлення №186.',
-    why: 'Замовлення-примари забруднюють адмінку і статистику. Треба знайти де саме відбувається хибний запуск.',
-    warn: 'Баг непостійний — відтворюється не завжди. Потрібен аудит коду чекауту.',
+    id: 'ST-2b.6', title: 'Баг: порожнє замовлення Hutko після перезапуску браузера', status: 'done', tool: 'Claude + Codex', priority: 'High',
+    lastUpdated: '2026-07-03', blockedBy: [],
+    simple: 'Корінь знайдено: при зміні адреси доставки (в т.ч. просто вихід з поля кліком) код тихо скидав спосіб оплати і сам підставляв Hutko замість того, що обрав клієнт — без жодного кліку. Виправлено в обох чекаутах (новому і SimpleCheckout) + додано перевірку "клік має бути справжнім" на кнопці «Оформити» (був відсутній, хоча малось бути ще з ST-2b.4). Патчі застосовані на сервері 2026-07-03, власник підтвердив QA — готово.',
+    why: 'Клієнти, що обирали післяплату, отримували в адмінці Hutko без оплати — реальні замовлення, не тільки тестові.',
+    warn: null,
     subtasks: [
-      { id: '1', title: 'Перевірити поведінку при закритті/відкритті вкладки', status: 'todo', desc: 'Що відбувається з кодом чекауту коли браузер закривають або вкладка відновлюється?' },
-      { id: '2', title: 'Перевірити авто-вибір Hutko при відкритті сторінки', status: 'todo', desc: 'Код автоматично обирає Hutko як метод оплати при відкритті чекауту — чи не тригерить це замовлення?' },
-      { id: '3', title: 'Перевірити мікрооновлення при заповненні доставки', status: 'todo', desc: 'Після введення адреси доставки сторінка робить технічне оновлення — чи не тригерить це замовлення у відновленій вкладці?' }
+      { id: '1', title: 'Перевірити поведінку при закритті/відкритті вкладки', status: 'done', desc: 'Причина виявилась іншою: не bfcache, а тихий скид+автопідстановка Hutko при зміні адреси.' },
+      { id: '2', title: 'Перевірити авто-вибір Hutko при відкритті сторінки', status: 'done', desc: 'Підтверджено логами (Phase 0b) і виправлено (Phase 1): авто-вибір/автозбереження Hutko прибрано в обох чекаутах.' },
+      { id: '3', title: 'Перевірити мікрооновлення при заповненні доставки', status: 'done', desc: 'Підтверджено: саме оновлення при зміні/виході з полів адреси тригерило скид оплати. Тригер оновлення лишили недоторканим, прибрали тільки автопідстановку Hutko після нього.' },
+      { id: '4', title: 'Trusted-click гейт на кнопці «Оформити» (пропуск з ST-2b.4)', status: 'done', desc: 'Патч застосований (ST-2b6d) — блокує підроблені/сторонні кліки, клавіатура (Tab+Enter/Space) лишається робочою. Власник підтвердив QA (в т.ч. клік по різних ділянках кнопки).' }
     ]
   },
   {
     id: 'ST-2c', title: 'Перевести всіх покупців на новий чекаут', status: 'active', tool: 'Claude + Codex', priority: 'High',
-    lastUpdated: '2026-06-24', blockedBy: [],
+    lastUpdated: '2026-07-03', blockedBy: [],
     simple: 'Одна невелика зміна в коді — і всі покупці йдуть на новий чекаут замість старого. Водночас виправляємо вартість доставки: зараз вона завжди 0 грн, після — реальна ціна НП.',
     why: 'Це фінальний крок запуску нового чекауту. Старий залишається як запасний.',
-    warn: 'Високий ризик. Якщо щось піде не так — повернути назад просто: один файл.',
+    warn: 'Блокер ST-2b.6 знято 2026-07-03 (тихий скид оплати на Hutko + trusted-click гейт — виправлено, QA пройдено). Високий ризик лишається. Якщо щось піде не так — повернути назад просто: один файл.',
     subtasks: [
       { id: '1', title: 'Реальна вартість доставки в замовленні', status: 'todo', desc: 'Зараз в замовленні завжди 0 грн доставки. Після: реальна ціна НП.' },
       { id: '2', title: 'Увімкнути новий чекаут для всіх', status: 'todo', desc: 'Прибираємо перенаправлення на старий чекаут.' }
@@ -1741,11 +1749,11 @@ const ROADMAP_TASKS = [
     why: 'Старий чекаут як резервний — зайвий тягар після повного переходу.', warn: null, subtasks: []
   },
   {
-    id: 'CHECKOUT-001', title: 'Автоматична реєстрація при замовленні', status: 'todo', tool: 'Codex', priority: 'High',
-    lastUpdated: '2026-06-06', blockedBy: ['ST-2c'],
+    id: 'CHECKOUT-001', title: 'Автоматична реєстрація при замовленні', status: 'active', tool: 'Codex', priority: 'High',
+    lastUpdated: '2026-07-03', blockedBy: ['ST-2c'],
     simple: 'Гість оформляє замовлення і бачить галочку «Зберегти дані для наступного разу» — якщо ставить, автоматично створюється особистий кабінет.',
     why: 'Більше постійних покупців → легше робити повторні покупки.',
-    warn: 'Зміни в чекауті і базі даних одночасно — потрібен детальний план перед запуском.', subtasks: []
+    warn: 'Phase 0 (техаудит, read-only) стартував 2026-07-03 паралельно з ST-2c за рішенням власника. Phase 1 (реалізація) — тільки після ST-2c Done. Зміни в чекауті і базі даних одночасно — потрібен детальний план перед запуском.', subtasks: []
   },
   // ─── ST-3 SERIES (done, grouped) ───
   {
@@ -1860,10 +1868,10 @@ const ROADMAP_TASKS = [
     ]
   },
   {
-    id: 'TECH-025', title: 'Кошик: виправлення дублювання товарів', status: 'active', tool: 'Codex', priority: 'Medium',
-    lastUpdated: '2026-05-26', blockedBy: [],
-    simple: 'Один і той самий товар міг додаватись двічі замість збільшення кількості. Виправлення вже є в коді — потрібен ретельний тест перед будь-якими змінами кошика.',
-    why: 'Клієнт міг бачити дублі в кошику.', warn: 'Не змінювати без тестування кошика.', subtasks: []
+    id: 'TECH-025', title: 'Кошик: об\'єднання однакових товарів', status: 'done', tool: 'Codex', priority: 'Medium',
+    lastUpdated: '2026-07-02', blockedBy: [],
+    simple: 'Дедуп/нормалізація вже є в system/library/cart/cart.php (owner підтвердив 2026-05-26) — roadmap-запис був застарілий. Не переписувати без нових timing-логів і cart-смоук-тесту.',
+    why: 'Клієнт міг бачити дублі в кошику.', warn: 'Не чіпати цей код без нових timing-логів і cart smoke coverage (Owner Decision 2026-05-26). Codex review — під R-08.5.', subtasks: []
   },
   { id: 'TECH-010', title: 'Перевірити які сторінки закриті від Google', status: 'todo', tool: 'Codex', priority: 'High',
     lastUpdated: '2026-05-20', blockedBy: ['TECH-005-DEEP'],
