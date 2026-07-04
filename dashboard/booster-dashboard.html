@@ -1858,6 +1858,13 @@ const ROADMAP_TASKS = [
     ]
   },
   {
+    id: 'TECH-035', title: 'IndexNow: миттєве сповіщення Bing про нові товари', status: 'todo', tool: 'Codex', priority: 'Medium',
+    lastUpdated: '2026-07-04', blockedBy: [],
+    simple: 'Безкоштовний офіційний протокол: коли з\'являється новий товар, ми самі повідомляємо Bing, DuckDuckGo та AI-пошуковики — без очікування, поки бот знайде сторінку сам.',
+    why: 'Швидша поява нових товарів у Bing та AI-пошуку. На Google не впливає (Google протокол не підтримує).',
+    warn: 'Не чіпає карту сайту, robots.txt і Google-процеси. Handoff: TECH-035.', subtasks: []
+  },
+  {
     id: 'TECH-009', title: 'Розширені результати Google (зірочки і ціни) — чекаємо', status: 'active', tool: 'Manual', priority: 'High',
     lastUpdated: '2026-05-26', blockedBy: [],
     simple: 'Налаштували спеціальні мітки на сторінках товарів щоб Google показував ціну і наявність прямо в пошуку. Надіслали на перевірку в Google — чекаємо підтвердження.',
@@ -2742,21 +2749,4 @@ async function savePurchaseBatch() {
   if (msg) { msg.textContent = 'Збереження…'; msg.className = 'records-message'; }
   try {
     const result = await callPost(payload);
-    if (msg) { msg.textContent = 'Оновлено лотів: ' + (result.rows_updated || rows.length); msg.className = 'records-message success'; }
-    accountingState.selectedPurchaseLots = {};
-    invalidateAccountingCaches();
-    await loadRecTab('purchases',true);
-  } catch(e) {
-    if (msg) { msg.textContent = 'Помилка: ' + e.message; msg.className = 'records-message error'; }
-  }
-}
-
-// ════════════ LOADERS MAP ════════════
-const loaders = { overview: loadOverview, stock: loadStock, consumables: loadConsumables, orders: loadOrders, skus: loadSkus, clients: loadClients, roadmap: loadRoadmap, accounting: loadAccounting };
-
-// ════════════ INIT ════════════
-loaded.overview = true;
-loadOverview();
-</script>
-</body>
-</html
+    if (msg) { msg.tex
