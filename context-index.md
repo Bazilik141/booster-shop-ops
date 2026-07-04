@@ -132,6 +132,7 @@ grep "ST-3.5" context-index.md
 | MKT-TG-003 | Make TG-пайплайн: фікс RSS→jina→Claude→GPT→Telegram (Done, superseded by MKT-TG-005) | handoffs/MKT-TG-003_make-pipeline-status_20260627.md, handoffs/MKT-TG-003_make-pipeline-handoff_20260626.md |
 | MKT-TG-004 | TG контент-автоматизація Phase 2 (мультиджерело+бот+картинки+розклад) — Make-підхід, superseded by MKT-TG-005 | plans/tg-content-automation-phase2-plan_2026-06-27.md |
 | MKT-TG-005 | Path A: lean RSS→Telegram news digest (заміна Make-пайплайну, on-demand AI-чернетка) | handoffs/MKT-TG-005_path-A-lean-rss-digest_20260703.md, handoffs/MKT-TG-005_codex-handoff_20260703.md |
+| MKT-TG-006 | /post <url> — OpenAI-чернетка за посиланням, паралельно до RSS-дайджесту | handoffs/MKT-TG-006_codex-handoff_openai-url-draft_20260704.md |
 
 ---
 

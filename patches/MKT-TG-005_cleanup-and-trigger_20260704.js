@@ -1635,13 +1635,13 @@ tgShowMainMenu_(chatId);
 
 function tgCommandDigest_(chatId) {
 try {
-const result = newsDigest_();
+const result = newsDigest();
 if (!result || !result.sent) tgSendMessage_(chatId, 'Немає нових новин');
 return result;
 } catch (err) {
 const message = String(err && err.message ? err.message : err);
 Logger.log('Telegram digest command failed: chat_id=' + chatId + ', error=' + message);
-if (message.indexOf('newsDigest_ is already running') !== -1) {
+if (message.indexOf('newsDigest is already running') !== -1) {
 tgSendMessage_(chatId, 'Дайджест уже формується. Спробуй за хвилину.');
 return { ok: false, skipped: 'already_running' };
 }
@@ -2698,7 +2698,7 @@ return result;
 }
 // retired 2026-07-03, MKT-TG-005 cleanup: tgCommandNews_, tgShowNewsPost_ removed (old /pick_news flow)
 
-function tgSetupCommands_() {
+function tgSetupCommands() {
 const chatId = String(PropertiesService.getScriptProperties().getProperty('TELEGRAM_ALLOWED_CHAT_ID') || '').trim();
 if (!chatId) throw new Error('Missing TELEGRAM_ALLOWED_CHAT_ID');
 
@@ -2710,15 +2710,22 @@ return tgBotApi_('setMyCommands', {
     scope: { type: 'chat', chat_id: chatId }
   });
 }
-function tgSetupCommands() { return tgSetupCommands_(); }
 
 function setupNewsDigestTrigger() {
-const handler = 'newsDigest_';
+const handler = 'newsDigest';
+const retiredHandler = 'newsDigest_';
 let existing = null;
 let removedDuplicates = 0;
+let removedLegacy = 0;
 
 ScriptApp.getProjectTriggers().forEach(function(trigger) {
-if (trigger.getHandlerFunction() !== handler) return;
+const triggerHandler = trigger.getHandlerFunction();
+if (triggerHandler === retiredHandler) {
+ScriptApp.deleteTrigger(trigger);
+removedLegacy++;
+return;
+}
+if (triggerHandler !== handler) return;
 if (!existing) {
 existing = trigger;
 return;
@@ -2732,12 +2739,13 @@ if (created) {
 existing = ScriptApp.newTrigger(handler).timeBased().everyDays(1).atHour(10).create();
 }
 
-const message = created
+const message = (created
 ? 'Щоденний тригер дайджесту створено приблизно на 10:00.'
-: 'Щоденний тригер дайджесту вже існує.'
-  + (removedDuplicates ? ' Видалено дублі: ' + removedDuplicates + '.' : '');
+: 'Щоденний тригер дайджесту вже існує.')
+  + (removedDuplicates ? ' Видалено дублі: ' + removedDuplicates + '.' : '')
+  + (removedLegacy ? ' Видалено старі тригери newsDigest_: ' + removedLegacy + '.' : '');
 try { SpreadsheetApp.getUi().alert(message); } catch (e) { Logger.log(message); }
-return { ok: true, created: created, removedDuplicates: removedDuplicates };
+return { ok: true, created: created, removedDuplicates: removedDuplicates, removedLegacy: removedLegacy };
 }
 
 function apiAddNewsCandidate_(ss, payload) {
@@ -2803,9 +2811,9 @@ const NEWS_DIGEST_SOURCES = [
   }
 ];
 
-function newsDigest_() {
+function newsDigest() {
   const lock = LockService.getScriptLock();
-  if (!lock.tryLock(5000)) throw new Error('newsDigest_ is already running');
+  if (!lock.tryLock(5000)) throw new Error('newsDigest is already running');
 
   try {
     const properties = PropertiesService.getScriptProperties();
@@ -2864,7 +2872,7 @@ function newsDigest_() {
     });
 
     if (!selected.length) {
-      Logger.log('newsDigest_: no fresh unseen items');
+      Logger.log('newsDigest: no fresh unseen items');
       return { ok: true, sent: 0, skipped: 'no_fresh_items' };
     }
 
@@ -2890,7 +2898,7 @@ function newsDigest_() {
       properties.setProperty(NEWS_DIGEST_SEEN_PREFIX + item.newsId, String(nowMs));
     });
 
-    Logger.log('newsDigest_: done, sent=' + selected.length);
+    Logger.log('newsDigest: done, sent=' + selected.length);
     return { ok: true, sent: selected.length };
   } finally {
     lock.releaseLock();
@@ -3110,6 +3118,7 @@ function tgDraftPost_(item) {
     'Якщо є конкретні деталі (назва карти, ціна, дата) — обов\'язково використовуй їх. Не узагальнюй.',
     'Не пиши загальних істин, які підійшли б під будь-який товар ("колекціонери знають...", "поки ринок не відреагував", "це рідкісний момент"). Кожне речення — конкретний факт з цієї статті, не загальне міркування про ринок чи колекціонування.',
     'Не підміняй суть новини абстрактним висновком про "культурний феномен", "мейнстрим" чи подібне. Спочатку розкажи конкретний привід: подія, дата, товар, цифра. Абстрактна думка може бути останнім реченням, але не змістом усього поста.',
+    'Ніколи не пиши в самому пості про те, що деталей чи інформації бракує ("стаття не містить деталей", "деталей поки нема", "чекаємо анонсів", "на жаль"). Це не тема поста. Якщо реальних фактів обмаль — просто напиши коротший пост із того, що є (сама назва, сам факт події), природно, без згадки про відсутність даних.',
     'Уникай такого стилю:',
     '"Vintage holo — це карти ранніх сетів Pokémon TCG, де голографія наноситься особливим способом. Залежно від малюнку блиску розрізняють кілька типів: Cosmos Holo з хаотичними зірками, Sunburst Holo з променями від центру..."',
     'Це стаття Вікіпедії. Не пост.',
