@@ -71,3 +71,5 @@ Grep по ньому замість пошуку по всіх handoffs/.
 **Codex (roadmap-affecting патчі):** останній пункт Required changes = «оновити ROADMAP_FLOW в booster-dashboard.html». Notion Codex не чіпає — це Claude.
 
 **Commit-safety (autosync):** перед `git add`/`commit` створити `.autosync-pause` у корені репо, після `push` — видалити (паузить hardened `bs-autosync.ps1`, прибирає гонку за `.git/index`). Деталі — `ROADMAP_SOP.md §4/§8`.
+
+**PowerShell git-команди для owner:** ЗАВЖДИ починати блок команд з `cd "C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops"` першим рядком. PowerShell 7 у owner відкривається в `C:\Windows\System32`, а не в репо — без явного `cd` усі наступні `git`-команди падають з `fatal: not a git repository`. Ніколи не давати `git add`/`commit`/`push` без цього `cd` на початку.
