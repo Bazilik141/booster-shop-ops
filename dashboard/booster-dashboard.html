@@ -1757,10 +1757,10 @@ const ROADMAP_TASKS = [
   },
   {
     id: 'CHECKOUT-001', title: 'Автоматична реєстрація при замовленні', status: 'active', tool: 'Codex', priority: 'High',
-    lastUpdated: '2026-07-03', blockedBy: ['ST-2c'],
+    lastUpdated: '2026-07-04', blockedBy: [],
     simple: 'Гість оформляє замовлення і бачить галочку «Зберегти дані для наступного разу» — якщо ставить, автоматично створюється особистий кабінет.',
     why: 'Більше постійних покупців → легше робити повторні покупки.',
-    warn: 'Phase 0 audit завершено 2026-07-03: OC4 має нативну реєстрацію, зараз обходиться роутингом на SimpleCheckout — passwordless опція потребує кастомної збірки (reset-token, не plaintext-пароль). Чекбокс планувати в payment_method.twig (не confirm.twig — уточнення аудиту). Блокер: live-докази старіші за ST-2b6d, потрібен свіжий знімок перед Phase 1. Phase 1 — тільки після ST-2c Done.', subtasks: []
+    warn: 'Owner-рішення 2026-07-04: ST-2c більше НЕ блокер, реалізуємо у stock checkout (не SimpleCheckout — той піде під ST-6). Наслідок: фіча буде живою для реальних гостей тільки після ST-2c cutover (зараз усі лінки йдуть на SimpleCheckout через url.php). Phase 1 handoff відправлено Codex — перед кодом обов'язковий свіжий live-знімок (докази Phase 0 старіші за ST-2b6d).', subtasks: []
   },
   // ─── ST-3 SERIES (done, grouped) ───
   {
