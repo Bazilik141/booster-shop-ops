@@ -11,7 +11,7 @@ MKT-TG-005 (RSS → Telegram digest, on-demand Claude draft) is live. Owner repo
 
 New request: a separate Telegram command where the owner pastes a raw article URL directly (bypassing RSS/Google News entirely) and gets a Ukrainian Telegram post draft back. Owner explicitly asked for this to use **OpenAI**, not Anthropic/Sonnet, because they prefer OpenAI's text quality for this kind of copy.
 
-Two design decisions were defaulted to the recommended option below because the confirmation prompt to the owner failed to send in this session. **Owner should confirm or override before Codex runs**, but the handoff is written assuming these defaults:
+Owner confirmed both design decisions on 2026-07-04:
 
 - Command shape: `/post <url>` as one message (not a two-step "bot waits for your next message" flow). Reason: stateless, matches the existing `text.indexOf('/xxx') === 0` routing pattern in `handleTelegramUpdate_`, no new PropertiesService "waiting for reply" state machine needed.
 - Model: `gpt-5.5` (OpenAI's current flagship, confirmed via OpenAI's own docs as of 2026-07-04: $5 / $30 per MTok in/out, 128K max output, Responses API). Usage is on-demand and low-volume, so cost is negligible even at flagship pricing.
