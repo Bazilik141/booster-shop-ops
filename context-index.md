@@ -70,6 +70,7 @@ grep "ST-3.5" context-index.md
 | TECH-012 / legacy-404 | Старі URL товарів → 301 | handoffs/handoff_TECH-012-legacy404-301_2026-07-02.md | diagnostics/TECH-012_legacy404-301_report_20260702.md |
 | TECH-029 | Sitemap / GSC — site-side | handoffs/codex-handoff-TECH029-sitemap.md | — |
 | TECH-030/031 | — | handoffs/codex-handoff-TECH030-031.md | — |
+| TECH-035 | IndexNow (Bing/AI fast discovery) | handoffs/handoff_TECH-035_indexnow_2026-07-04.md | — |
 | TECH-032/033/034 | — | handoffs/codex-handoff-TECH032-033-034.md | — |
 
 ---
@@ -140,4 +141,4 @@ grep "ST-3.5" context-index.md
 **Статус-правда — Notion; дашборд `ROADMAP_FLOW` — дзеркало.** Повні правила, page_id-реєстр, DoD, sync — `ROADMAP_SOP.md`.
 
 Notion view: `https://www.notion.so/35c3f8572fc54a7896c8af0efd4cf8d4?v=eebb19b11cfb4066a8a3b1b097775818`
-Bulk-query (`notion-query-data-sources` / `notion-query-database-view`) — Business plan, недоступно. Per-card: `notion-fetch` / `notion-update-page` за page_id.
+Bulk-query (`notion-query-data-sources` / `notion-query-database-view
