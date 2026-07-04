@@ -9,6 +9,7 @@ declare(strict_types=1);
  * - persists the preference in session;
  * - creates a customer/address before the existing single confirm.confirm call;
  * - sends a one-time set-password link through the existing password-token flow;
+ * - suppresses the standard customer registration email for this opt-in path only;
  * - leaves SimpleCheckout, url.php, confirm.php, customer model, payment logic,
  *   Hutko, fiscalization, CRM, and database schema unchanged.
  *
@@ -38,12 +39,14 @@ const CHECKOUT001_CHECKOUT_TWIG = 'catalog/view/template/checkout/checkout.twig'
 const CHECKOUT001_PAYMENT_TWIG = 'catalog/view/template/checkout/payment_method.twig';
 const CHECKOUT001_PAYMENT_CONTROLLER = 'catalog/controller/checkout/payment_method.php';
 const CHECKOUT001_MAIL_CONTROLLER = 'catalog/controller/mail/forgotten.php';
+const CHECKOUT001_REGISTER_MAIL_CONTROLLER = 'catalog/controller/mail/register.php';
 const CHECKOUT001_MAIL_TEMPLATE = 'catalog/view/template/mail/account_created.twig';
 
 const CHECKOUT001_MARKER_CHECKOUT = 'CHECKOUT-001: pre-confirm guest account step.';
 const CHECKOUT001_MARKER_PAYMENT_TWIG = 'CHECKOUT-001: guest account opt-in UI.';
 const CHECKOUT001_MARKER_PAYMENT_CONTROLLER = 'CHECKOUT-001: guest account opt-in endpoint.';
 const CHECKOUT001_MARKER_MAIL_CONTROLLER = 'CHECKOUT-001: account-created set-password email.';
+const CHECKOUT001_MARKER_REGISTER_MAIL_CONTROLLER = 'CHECKOUT-001: skip standard registration email for opt-in account.';
 const CHECKOUT001_MARKER_MAIL_TEMPLATE = 'CHECKOUT-001 account-created set-password email';
 
 const CHECKOUT001_EXPECTED_SHA256 = [
@@ -51,6 +54,7 @@ const CHECKOUT001_EXPECTED_SHA256 = [
     CHECKOUT001_PAYMENT_TWIG => 'ee517e2778c1ea91d5519fbd782713108ab286e3fcd2eb41660223f984c2d6dc',
     CHECKOUT001_PAYMENT_CONTROLLER => '2cfc357418b0b140b8f41051730cf8d27694339feb6b53848f77201a6d00beeb',
     CHECKOUT001_MAIL_CONTROLLER => '09f1d5e9ad50b43022fd06ed3213ec4b201bdbec676ed82c15630205022cf9e5',
+    CHECKOUT001_REGISTER_MAIL_CONTROLLER => 'fd8908861a420828ce305023dfc58c351f7a18b2f8060d1f1ee25827de4a3548',
 ];
 
 function checkout001_out(string $key, string $value): void {
@@ -138,6 +142,13 @@ function checkout001_backup(string $root, string $backupRoot, string $relative):
     return $backup;
 }
 
+function checkout001_backup_root(string $root): string {
+    return checkout001_path(
+        $root,
+        '_patch_backups/' . CHECKOUT001_PATCH_ID . '-' . date('Ymd-His') . '-' . bin2hex(random_bytes(4))
+    );
+}
+
 $root = getenv('BS_PATCH_ROOT') ?: getcwd();
 $backupRoot = null;
 $backups = [];
@@ -163,6 +174,7 @@ try {
         CHECKOUT001_PAYMENT_TWIG,
         CHECKOUT001_PAYMENT_CONTROLLER,
         CHECKOUT001_MAIL_CONTROLLER,
+        CHECKOUT001_REGISTER_MAIL_CONTROLLER,
     ];
 
     $contents = [];
@@ -174,11 +186,27 @@ try {
     $mailTemplateExists = is_file($mailTemplatePath);
     $mailTemplateContent = $mailTemplateExists ? checkout001_read($root, CHECKOUT001_MAIL_TEMPLATE) : '';
 
+    $registerMailControllerOld = <<<'PHP'
+	public function index(string &$route, array &$args, &$output): void {
+		$this->load->language('mail/register');
+PHP;
+
+    $registerMailControllerNew = <<<'PHP'
+	public function index(string &$route, array &$args, &$output): void {
+		// CHECKOUT-001: skip standard registration email for opt-in account.
+		if (!empty($args[0]['checkout001_skip_standard_register_mail'])) {
+			return;
+		}
+
+		$this->load->language('mail/register');
+PHP;
+
     $markerStates = [
         CHECKOUT001_CHECKOUT_TWIG => strpos($contents[CHECKOUT001_CHECKOUT_TWIG], CHECKOUT001_MARKER_CHECKOUT) !== false,
         CHECKOUT001_PAYMENT_TWIG => strpos($contents[CHECKOUT001_PAYMENT_TWIG], CHECKOUT001_MARKER_PAYMENT_TWIG) !== false,
         CHECKOUT001_PAYMENT_CONTROLLER => strpos($contents[CHECKOUT001_PAYMENT_CONTROLLER], CHECKOUT001_MARKER_PAYMENT_CONTROLLER) !== false,
         CHECKOUT001_MAIL_CONTROLLER => strpos($contents[CHECKOUT001_MAIL_CONTROLLER], CHECKOUT001_MARKER_MAIL_CONTROLLER) !== false,
+        CHECKOUT001_REGISTER_MAIL_CONTROLLER => strpos($contents[CHECKOUT001_REGISTER_MAIL_CONTROLLER], CHECKOUT001_MARKER_REGISTER_MAIL_CONTROLLER) !== false,
         CHECKOUT001_MAIL_TEMPLATE => $mailTemplateExists && strpos($mailTemplateContent, CHECKOUT001_MARKER_MAIL_TEMPLATE) !== false,
     ];
 
@@ -188,8 +216,107 @@ try {
         checkout001_lint(__FILE__, 'patch_self');
         checkout001_lint(checkout001_path($root, CHECKOUT001_PAYMENT_CONTROLLER), 'payment_controller');
         checkout001_lint(checkout001_path($root, CHECKOUT001_MAIL_CONTROLLER), 'mail_controller');
+        checkout001_lint(checkout001_path($root, CHECKOUT001_REGISTER_MAIL_CONTROLLER), 'register_mail_controller');
         checkout001_out('already_applied', 'yes');
         checkout001_out('changed_files', '0');
+        checkout001_out('done', 'ok');
+        @unlink(__FILE__);
+        exit(0);
+    }
+
+    $legacyMarkerStates = $markerStates;
+    unset($legacyMarkerStates[CHECKOUT001_REGISTER_MAIL_CONTROLLER]);
+    $legacyApplied = !$markerStates[CHECKOUT001_REGISTER_MAIL_CONTROLLER] &&
+        count(array_filter($legacyMarkerStates)) === count($legacyMarkerStates);
+
+    if ($legacyApplied) {
+        checkout001_out('upgrade_from', 'CHECKOUT-001 pre-mail-suppression patch');
+
+        $registerHash = hash('sha256', $contents[CHECKOUT001_REGISTER_MAIL_CONTROLLER]);
+
+        if (!hash_equals(CHECKOUT001_EXPECTED_SHA256[CHECKOUT001_REGISTER_MAIL_CONTROLLER], $registerHash)) {
+            checkout001_fail(
+                'live_sha256_mismatch:' . CHECKOUT001_REGISTER_MAIL_CONTROLLER .
+                ':expected=' . CHECKOUT001_EXPECTED_SHA256[CHECKOUT001_REGISTER_MAIL_CONTROLLER] .
+                ':actual=' . $registerHash
+            );
+        }
+
+        checkout001_out('source_sha256', CHECKOUT001_REGISTER_MAIL_CONTROLLER . ':' . $registerHash);
+        checkout001_lint(__FILE__, 'patch_self');
+
+        $legacyPaymentOld = <<<'PHP'
+				'password'          => $password,
+				'newsletter'        => 0
+PHP;
+
+        $legacyPaymentNew = <<<'PHP'
+				'password'                                => $password,
+				'newsletter'                              => 0,
+				'checkout001_skip_standard_register_mail' => true
+PHP;
+
+        $legacyPaymentPatched = checkout001_replace_once(
+            $contents[CHECKOUT001_PAYMENT_CONTROLLER],
+            $legacyPaymentOld,
+            $legacyPaymentNew,
+            'legacy_payment_controller_mail_suppression_flag'
+        );
+        $legacyRegisterMailPatched = checkout001_replace_once(
+            $contents[CHECKOUT001_REGISTER_MAIL_CONTROLLER],
+            $registerMailControllerOld,
+            $registerMailControllerNew,
+            'register_mail_controller_suppression'
+        );
+
+        if (substr_count($legacyPaymentPatched, "'checkout001_skip_standard_register_mail' => true") !== 1) {
+            checkout001_fail('postbuild_legacy_mail_suppression_flag_count_changed');
+        }
+
+        $backupRoot = checkout001_backup_root($root);
+
+        foreach ([CHECKOUT001_PAYMENT_CONTROLLER, CHECKOUT001_REGISTER_MAIL_CONTROLLER] as $relative) {
+            $backups[$relative] = checkout001_backup($root, $backupRoot, $relative);
+        }
+
+        $legacyPatchedFiles = [
+            CHECKOUT001_PAYMENT_CONTROLLER => $legacyPaymentPatched,
+            CHECKOUT001_REGISTER_MAIL_CONTROLLER => $legacyRegisterMailPatched,
+        ];
+
+        foreach ($legacyPatchedFiles as $relative => $content) {
+            checkout001_write(checkout001_path($root, $relative), $content);
+            $written[] = $relative;
+        }
+
+        checkout001_lint(checkout001_path($root, CHECKOUT001_PAYMENT_CONTROLLER), 'payment_controller');
+        checkout001_lint(checkout001_path($root, CHECKOUT001_MAIL_CONTROLLER), 'mail_controller');
+        checkout001_lint(checkout001_path($root, CHECKOUT001_REGISTER_MAIL_CONTROLLER), 'register_mail_controller');
+
+        foreach ($markerStates as $relative => $_) {
+            $final = checkout001_read($root, $relative);
+            $marker = match ($relative) {
+                CHECKOUT001_CHECKOUT_TWIG => CHECKOUT001_MARKER_CHECKOUT,
+                CHECKOUT001_PAYMENT_TWIG => CHECKOUT001_MARKER_PAYMENT_TWIG,
+                CHECKOUT001_PAYMENT_CONTROLLER => CHECKOUT001_MARKER_PAYMENT_CONTROLLER,
+                CHECKOUT001_MAIL_CONTROLLER => CHECKOUT001_MARKER_MAIL_CONTROLLER,
+                CHECKOUT001_REGISTER_MAIL_CONTROLLER => CHECKOUT001_MARKER_REGISTER_MAIL_CONTROLLER,
+                CHECKOUT001_MAIL_TEMPLATE => CHECKOUT001_MARKER_MAIL_TEMPLATE,
+            };
+
+            if (substr_count($final, $marker) !== 1) {
+                checkout001_fail('postwrite_marker_failed:' . $relative);
+            }
+        }
+
+        checkout001_out('already_applied', 'no');
+        checkout001_out('changed_files', (string)count($written));
+        foreach ($written as $relative) {
+            checkout001_out('changed_file', $relative);
+        }
+        checkout001_out('standard_registration_customer_email', 'suppressed_for_checkout001_only');
+        checkout001_out('admin_registration_alert', 'unchanged');
+        checkout001_out('rollback_code', 'restore files from ' . $backupRoot . ';then clear template cache');
         checkout001_out('done', 'ok');
         @unlink(__FILE__);
         exit(0);
@@ -441,7 +568,9 @@ PHP;
 			!oc_validate_length((string)($customer_data['lastname'] ?? ''), 1, 32) ||
 			!oc_validate_length((string)($customer_data['telephone'] ?? ''), 3, 32)
 		) {
-			$this->checkout001Json(['error' => 'Не вдалося підготувати обліковий запис. Перевірте контактні дані або вимкніть опцію збереження даних.']);
+			$this->log->write('CHECKOUT-001 account creation skipped: invalid guest session data');
+			$this->checkout001SetOptIn(false);
+			$this->checkout001Json($json);
 			return;
 		}
 
@@ -468,8 +597,9 @@ PHP;
 				'email'             => $email,
 				'telephone'         => (string)$customer_data['telephone'],
 				'custom_field'      => is_array($customer_data['custom_field'] ?? null) ? $customer_data['custom_field'] : [],
-				'password'          => $password,
-				'newsletter'        => 0
+				'password'                                => $password,
+				'newsletter'                              => 0,
+				'checkout001_skip_standard_register_mail' => true
 			]);
 
 			if ($created_customer_id <= 0) {
@@ -505,14 +635,20 @@ PHP;
 			$this->session->data['checkout001_account_customer_id'] = $created_customer_id;
 		} catch (\Throwable $error) {
 			unset($this->session->data['checkout001_account_created_mail']);
-			$this->db->query('ROLLBACK');
+
+			try {
+				$this->db->query('ROLLBACK');
+			} catch (\Throwable $rollback_error) {
+				$this->log->write('CHECKOUT-001 rollback failed: ' . get_class($rollback_error));
+			}
 
 			if ($login_complete && method_exists($this->customer, 'logout')) {
 				$this->customer->logout();
 			}
 
 			$this->log->write('CHECKOUT-001 account creation failed: ' . get_class($error));
-			$this->checkout001Json(['error' => 'Не вдалося створити обліковий запис. Спробуйте ще раз або вимкніть опцію збереження даних.']);
+			$this->checkout001SetOptIn(false);
+			$this->checkout001Json($json);
 			return;
 		}
 
@@ -740,6 +876,18 @@ JS;
       });
     }
 
+    function checkout001FailOpen(reason) {
+      $('#input-create-account-opt-in').prop('checked', false);
+
+      if (window.bsSt2b6Log) {
+        window.bsSt2b6Log('CHECKOUT-001:account-prestep:fail-open', event || null, trigger || null, {
+          reason: reason || 'unknown'
+        });
+      }
+
+      loadConfirmAndSubmit();
+    }
+
     $.ajax({
       url: 'index.php?route=checkout/payment_method.createAccount&language={{ language }}',
       type: 'post',
@@ -749,14 +897,14 @@ JS;
       dataType: 'json',
       success: function(json) {
         if (json && json.error) {
-          checkout001Fail(json.error);
+          checkout001FailOpen('server');
           return;
         }
 
         loadConfirmAndSubmit();
       },
       error: function() {
-        checkout001Fail('Не вдалося перевірити дані облікового запису. Спробуйте ще раз або вимкніть опцію збереження даних.');
+        checkout001FailOpen('network');
       }
     });
 
@@ -860,6 +1008,13 @@ PHP;
         'mail_controller_account_template'
     );
 
+    $registerMailControllerPatched = checkout001_replace_once(
+        $contents[CHECKOUT001_REGISTER_MAIL_CONTROLLER],
+        $registerMailControllerOld,
+        $registerMailControllerNew,
+        'register_mail_controller_suppression'
+    );
+
     $mailTemplate = <<<'TWIG'
 {# CHECKOUT-001 account-created set-password email #}
 Вітаємо{% if firstname %}, {{ firstname }}{% endif %}!<br/>
@@ -896,10 +1051,15 @@ TWIG;
         checkout001_fail('postbuild_create_account_method_count_changed');
     }
 
-    $backupRoot = checkout001_path(
-        $root,
-        '_patch_backups/' . CHECKOUT001_PATCH_ID . '-' . date('Ymd-His')
-    );
+    if (substr_count($paymentControllerPatched, "'checkout001_skip_standard_register_mail' => true") !== 1) {
+        checkout001_fail('postbuild_mail_suppression_flag_count_changed');
+    }
+
+    if (substr_count($registerMailControllerPatched, CHECKOUT001_MARKER_REGISTER_MAIL_CONTROLLER) !== 1) {
+        checkout001_fail('postbuild_register_mail_suppression_marker_count_changed');
+    }
+
+    $backupRoot = checkout001_backup_root($root);
 
     foreach ($existingFiles as $relative) {
         $backups[$relative] = checkout001_backup($root, $backupRoot, $relative);
@@ -910,6 +1070,7 @@ TWIG;
         CHECKOUT001_PAYMENT_TWIG => $paymentTwigPatched,
         CHECKOUT001_PAYMENT_CONTROLLER => $paymentControllerPatched,
         CHECKOUT001_MAIL_CONTROLLER => $mailControllerPatched,
+        CHECKOUT001_REGISTER_MAIL_CONTROLLER => $registerMailControllerPatched,
     ];
 
     foreach ($patchedFiles as $relative => $content) {
@@ -923,12 +1084,14 @@ TWIG;
 
     checkout001_lint(checkout001_path($root, CHECKOUT001_PAYMENT_CONTROLLER), 'payment_controller');
     checkout001_lint(checkout001_path($root, CHECKOUT001_MAIL_CONTROLLER), 'mail_controller');
+    checkout001_lint(checkout001_path($root, CHECKOUT001_REGISTER_MAIL_CONTROLLER), 'register_mail_controller');
 
     $finalChecks = [
         CHECKOUT001_CHECKOUT_TWIG => CHECKOUT001_MARKER_CHECKOUT,
         CHECKOUT001_PAYMENT_TWIG => CHECKOUT001_MARKER_PAYMENT_TWIG,
         CHECKOUT001_PAYMENT_CONTROLLER => CHECKOUT001_MARKER_PAYMENT_CONTROLLER,
         CHECKOUT001_MAIL_CONTROLLER => CHECKOUT001_MARKER_MAIL_CONTROLLER,
+        CHECKOUT001_REGISTER_MAIL_CONTROLLER => CHECKOUT001_MARKER_REGISTER_MAIL_CONTROLLER,
         CHECKOUT001_MAIL_TEMPLATE => CHECKOUT001_MARKER_MAIL_TEMPLATE,
     ];
 
@@ -953,6 +1116,9 @@ TWIG;
     }
     checkout001_out('rollback_code', 'restore files from ' . $backupRoot . ' and remove ' . CHECKOUT001_MAIL_TEMPLATE . ';then clear template cache');
     checkout001_out('rollback_runtime_test_data', 'use header SQL only for a confirmed test customer_id');
+    checkout001_out('account_prestep_failure_mode', 'fail_open:log_and_continue_checkout');
+    checkout001_out('standard_registration_customer_email', 'suppressed_for_checkout001_only');
+    checkout001_out('admin_registration_alert', 'unchanged');
     checkout001_out('done', 'ok');
     @unlink(__FILE__);
 } catch (Throwable $error) {

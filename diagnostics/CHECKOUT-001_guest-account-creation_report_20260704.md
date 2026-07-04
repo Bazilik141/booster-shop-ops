@@ -4,8 +4,9 @@ Date: 2026-07-04
 
 ## Scope
 
-Implemented the Phase 1 handoff against the fresh owner-supplied bundle
-`booster-debug-CHECKOUT-001-phase1.tar.gz`.
+Implemented the Phase 1 handoff against the fresh owner-supplied bundles
+`booster-debug-CHECKOUT-001-phase1.tar.gz` and
+`booster-debug-CHECKOUT-001-register-mail-20260704.tar.gz`.
 
 The patch:
 
@@ -15,11 +16,18 @@ The patch:
   ST-2b6d trusted-click gate and before the existing `confirm.confirm` call;
 - returns the same browser response for unchecked, existing-email, and newly
   created cases;
+- treats account pre-step validation and database failures as fail-open: logs
+  the failure, clears the opt-in, and continues as guest;
+- treats transport failures as fail-open in the browser: records the diagnostic,
+  clears the visible opt-in, and continues checkout;
 - creates the customer through the existing customer model, creates the saved
   address through the existing address model, logs in the new account, and links
   the pending checkout session to it;
 - generates a normal one-time `password` token and switches the corresponding
   mail event to a dedicated account-created template;
+- suppresses the standard customer registration email only when `addCustomer()`
+  receives the CHECKOUT-001-scoped event argument; normal registration and the
+  configured admin new-account alert remain unchanged;
 - keeps newsletter at `0`.
 
 Not touched: SimpleCheckout, `system/library/url.php`, `confirm.php`,
@@ -39,6 +47,7 @@ catalog/view/template/checkout/checkout.twig
 catalog/view/template/checkout/payment_method.twig
 catalog/controller/checkout/payment_method.php
 catalog/controller/mail/forgotten.php
+catalog/controller/mail/register.php
 catalog/view/template/mail/account_created.twig   — new
 ```
 
@@ -51,6 +60,7 @@ checkout.twig        767f205f4bec6eb0d0e44e42c4d9ebd5f35e522dd9b86bb50ea18ec5132
 payment_method.twig  ee517e2778c1ea91d5519fbd782713108ab286e3fcd2eb41660223f984c2d6dc
 payment_method.php   2cfc357418b0b140b8f41051730cf8d27694339feb6b53848f77201a6d00beeb
 mail/forgotten.php   09f1d5e9ad50b43022fd06ed3213ec4b201bdbec676ed82c15630205022cf9e5
+mail/register.php    fd8908861a420828ce305023dfc58c351f7a18b2f8060d1f1ee25827de4a3548
 ```
 
 The patch fails before writing if any source hash or exact anchor differs.
@@ -70,9 +80,10 @@ First clean replay against a fresh extraction:
 
 ```text
 already_applied=no
-changed_files=5
+changed_files=6
 php_lint_payment_controller=exit=0
 php_lint_mail_controller=exit=0
+php_lint_register_mail_controller=exit=0
 done=ok
 ```
 
@@ -84,6 +95,12 @@ payment_method.twig JS syntax=ok
 trusted gate count=1
 autosave selector count=1
 runtime_smoke=ok
+runtime_fail_open=ok
+mail_event_smoke=ok
+checkout001_standard_registration_customer_email=0
+checkout001_set_password_customer_email=1
+ordinary_registration_path=unchanged
+account_prestep_failure_mode=fail_open:log_and_continue_checkout
 ```
 
 The runtime mock covered:
@@ -94,6 +111,12 @@ The runtime mock covered:
 - new email → one customer, one address, one token, newsletter `0`, login and
   checkout-session linkage;
 - repeat pre-confirm call → no duplicate.
+- simulated database exception → rollback, generic log entry, cleared opt-in,
+  success JSON, and guest checkout continuation.
+- CHECKOUT-001 account creation → zero standard registration emails and exactly
+  one dedicated set-password email;
+- ordinary account registration still enters the standard registration-mail
+  path.
 
 ## php -l result
 
@@ -101,6 +124,7 @@ The runtime mock covered:
 No syntax errors detected in CHECKOUT-001_guest-account-creation_20260704.php
 No syntax errors detected in catalog/controller/checkout/payment_method.php
 No syntax errors detected in catalog/controller/mail/forgotten.php
+No syntax errors detected in catalog/controller/mail/register.php
 ```
 
 Local PHP: 8.3.30.
@@ -115,7 +139,18 @@ changed_files=0
 done=ok
 ```
 
-Partial marker state fails loudly instead of applying over an incomplete deploy.
+An unrecognized partial marker state fails loudly instead of applying over an
+incomplete deploy.
+The patch also recognizes the previous five-file CHECKOUT-001 version and safely
+upgrades only `payment_method.php` and `mail/register.php`:
+
+```text
+upgrade_from=CHECKOUT-001 pre-mail-suppression patch
+changed_files=2
+standard_registration_customer_email=suppressed_for_checkout001_only
+admin_registration_alert=unchanged
+done=ok
+```
 
 ## Database behavior
 
@@ -136,9 +171,10 @@ Existing email, unchecked opt-in, or repeat request creates no customer.
 The exact manual test-account cleanup SQL is included in the patch header and is
 restricted to a confirmed test `customer_id`.
 
-Core `addCustomer()` events can still send the standard registration notification
-in addition to the dedicated set-password email. QA must confirm the resulting
-email sequence is acceptable.
+The CHECKOUT-001 `addCustomer()` call carries a scoped event argument. The
+customer-facing `mail/register.php::index()` handler returns before sending its
+standard welcome email only for that argument. Its admin-alert handler and normal
+registration calls are unchanged.
 
 ## Rollback
 
@@ -150,7 +186,7 @@ _patch_backups/CHECKOUT-001_guest-account-creation_20260704-<timestamp>/
 
 Code rollback:
 
-1. restore the four existing files from that backup;
+1. restore the five existing files from that backup;
 2. remove `catalog/view/template/mail/account_created.twig`;
 3. clear OpenCart template/cache files.
 
@@ -186,9 +222,13 @@ done=ok
 - [ ] New account is logged in for the current session and the order is linked.
 - [ ] Dedicated set-password email arrives; link expires after 10 minutes and
   works once.
-- [ ] Verify whether the additional standard registration email is acceptable.
+- [ ] Exactly one customer-facing email arrives for account creation: the
+  dedicated set-password email; no standard registration welcome email.
+- [ ] Configured admin new-account alert still arrives, if enabled.
 - [ ] Existing email + checked opt-in creates no duplicate, exposes no account
   state, and completes as guest.
+- [ ] Simulated account endpoint HTTP 500 / network failure silently clears the
+  visible opt-in and still produces exactly one `confirm.confirm` request.
 - [ ] Address autosave creates no account and does not reset Hutko/payment.
 - [ ] Network shows one pre-confirm account call and exactly one actual
   `confirm.confirm` request per trusted place-order click.
@@ -201,8 +241,16 @@ done=ok
 ## Side effects / risks
 
 High risk: checkout UI and customer DB creation are connected in one user action.
-Account creation is transaction-wrapped and blocks `confirm.confirm` on failure;
-the user can uncheck the optional feature and retry the order.
+Account creation is transaction-wrapped and fail-open. Server-side errors are
+logged, the opt-in is cleared, and `confirm.confirm` continues as guest.
+Transport errors are logged in the existing browser diagnostic and checkout
+continues. Core order/confirm failures remain fail-closed.
+
+An ambiguous transport failure can occur after the server already committed the
+account but before the browser received the response. Checkout still continues,
+but that order can be linked to the newly created account rather than remain a
+guest order; the browser cannot safely distinguish response loss from a request
+that never reached the server.
 
 Email uniqueness is checked through the existing model, but the database still
 has no unique email constraint. PHP session serialization and the existing
