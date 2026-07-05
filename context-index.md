@@ -116,7 +116,8 @@ grep "ST-3.5" context-index.md
 
 | Roadmap ID | Назва | Handoff |
 |---|---|---|
-| CHECKOUT-001 | Реєстрація акаунту при замовленні | — |
+| CHECKOUT-001 | Реєстрація акаунту при замовленні (Done) | handoffs/handoff_CHECKOUT-001_phase1_guest-account-creation_2026-07-04.md |
+| CHECKOUT-002 | Швидкість оформлення + редизайн loader | — |
 | CAT-002 | Категорії + аксесуари (parent) | — |
 | CAT-002-4 | YGO Blazing Dominion SKU | plans/ygo_sku_blazing_dominion_20260628.md |
 | CAT-002-5 | Тайлс категорій — кольори і HTML | plans/category_tiles_colors_20260628.md |

@@ -121,6 +121,7 @@ ST-серія (заведена в Notion 2026-06-24):
 | RD-11 | `3706bf20-bdb4-81a4-b3fa-f35e7610defa` |
 | CAT-002 | `36f6bf20-bdb4-817e-99ec-eecce853778c` |
 | CHECKOUT-001 | `3776bf20-bdb4-8130-bcbf-cbb6259d5654` |
+| CHECKOUT-002 | `3946bf20-bdb4-81bf-9f47-cda9044fd2f2` |
 | LEGAL-002 | `3666bf20-bdb4-81ea-8fed-ff4773081cdb` |
 | R-13.5 | `36c6bf20-bdb4-814c-becb-c451a64b22f8` |
 
