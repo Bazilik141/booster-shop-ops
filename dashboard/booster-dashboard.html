@@ -1621,8 +1621,8 @@ const ROADMAP_TASKS = [
   {
     id: 'MKT-TG-005', title: 'Path A: lean RSS→Telegram news digest (заміна Make-пайплайну)', status: 'active', tool: 'Claude + Codex (Apps Script)', priority: 'Medium',
     lastUpdated: '2026-07-03', blockedBy: [],
-    simple: 'Щоденний дайджест (~10:00 Kyiv) з 4 Google News RSS (Pokémon/One Piece/MTG-YGO/TCG-ринок), 5 свіжих новин (last 3 days, dedup по guid) прямо в CRM Apps Script (той самий скрипт, що вже володіє Telegram webhook). Кожен пункт — game tag + title + link + власний og:image (фікс "Naruto"-проблеми) + кнопка «✍️ Чернетка». AI (Haiku, RSS title+desc) пише пост лише по тапу — не батчем. Owner постить 1-2/день вручну.',
-    why: 'Заміняє Make-пайплайн (MKT-TG-003/004): той генерував AI-чернетки для ВСІХ ~5 новин/день (owner постить 1-2 → оплата 3-4 зайвих драфтів), картинки Serper пливли не в тему (One Piece→Naruto), pubDate не парсився (нема freshness-фільтра). Path A: AI лише on-demand → <$1/міс, og:image власний у статті → on-topic by definition, реальний Date-парсинг pubDate → надійна свіжість.',
+    simple: 'Легка заміна Make-пайплайну: RSS title+description напряму в Haiku 4.5 (без full-article fetch), dedup через CacheService/PropertiesService, хост — CRM Apps Script.',
+    why: 'Дешевша і надійніша заміна MKT-TG-004 (Make v2 blueprint не імпортовано, вирішено перейти на lean-підхід).',
     warn: 'Рішення з owner (2026-07-03): модель Haiku 4.5, контекст чернетки = RSS title+description (без full-article fetch), dedup через CacheService/PropertiesService (без нового Sheet-таба). Хост — CRM Apps Script (webhook-власник), нові функції namespaced (newsDigest_, tgDraftPost_, fetchOgImage_, parseRssItems_). Стара таблиця Новини_кандидати + /pick_news лишаються live паралельно (не чіпаємо, deprecation — окремо пізніше). Codex handoff готовий: handoffs/MKT-TG-005_codex-handoff_20260703.md. Ризик: новий callback-гілка news_draft_ в handleTelegramCallback_ — обережно, там уже був ReferenceError-інцидент 2026-06-29 (MKT-TG-004-BOT runtime-fix) через невдале розміщення блоку. Owner деактивує старий Make-сценарій "Integration RSS" вручну. Деталі: handoffs/MKT-TG-005_path-A-lean-rss-digest_20260703.md', subtasks: []
   },
   {
@@ -1655,8 +1655,8 @@ const ROADMAP_TASKS = [
     warn: null, subtasks: []
   },
   {
-    id: 'NCRM-01', title: 'Supabase проєкт + SQL-міграції (Stage 1–4) + типи', status: 'todo', tool: 'Codex + Owner', priority: 'High',
-    lastUpdated: '2026-06-26', blockedBy: [],
+    id: 'NCRM-01', title: 'Supabase проєкт + SQL-міграції (Stage 1–4) + типи', status: 'active', tool: 'Codex + Owner', priority: 'High',
+    lastUpdated: '2026-07-05', blockedBy: [],
     simple: 'Створити Supabase-проєкт (Free), SQL-міграції всіх таблиць схеми, авто-генерацію TypeScript-типів.',
     why: 'Без бази й типів далі нічого не будується.',
     warn: 'Owner створює проєкт і тримає секрети.', subtasks: []
@@ -1757,10 +1757,10 @@ const ROADMAP_TASKS = [
   },
   {
     id: 'CHECKOUT-001', title: 'Автоматична реєстрація при замовленні', status: 'active', tool: 'Codex', priority: 'High',
-    lastUpdated: '2026-07-04', blockedBy: [],
+    lastUpdated: '2026-07-03', blockedBy: ['ST-2c'],
     simple: 'Гість оформляє замовлення і бачить галочку «Зберегти дані для наступного разу» — якщо ставить, автоматично створюється особистий кабінет.',
     why: 'Більше постійних покупців → легше робити повторні покупки.',
-    warn: 'Owner-рішення 2026-07-04: ST-2c більше НЕ блокер, реалізуємо у stock checkout (не SimpleCheckout — той піде під ST-6). Наслідок: фіча буде живою для реальних гостей тільки після ST-2c cutover (зараз усі лінки йдуть на SimpleCheckout через url.php). Phase 1 handoff відправлено Codex — перед кодом обов'язковий свіжий live-знімок (докази Phase 0 старіші за ST-2b6d).', subtasks: []
+    warn: 'Phase 0 (техаудит, read-only) стартував 2026-07-03 паралельно з ST-2c за рішенням власника. Phase 1 (реалізація) — тільки після ST-2c Done. Зміни в чекауті і базі даних одночасно — потрібен детальний план перед запуском.', subtasks: []
   },
   // ─── ST-3 SERIES (done, grouped) ───
   {
@@ -1936,15 +1936,15 @@ const ROADMAP_TASKS = [
   },
   // ─── OTHER ───
   {
-    id: 'CAT-002', title: 'Нова категорія «Аксесуари»', status: 'done', tool: 'Manual + Codex', priority: 'Medium',
-    lastUpdated: '2026-06-30', blockedBy: [],
-    simple: 'Патч CAT-002-5/5b REDO готовий (review OK 2026-06-30). Категорія acsesuary + 7 SKU (95–101) створені вручну. Patch: 2 тайли, бургер, CSS токени, описи, атрибути. Розгорнути: php cat002_5_5b_redo_20260629.php.',
+    id: 'CAT-002', title: 'Нова категорія «Аксесуари»', status: 'todo', tool: 'Manual + Codex', priority: 'Medium',
+    lastUpdated: '2026-06-20', blockedBy: [],
+    simple: 'Додаємо категорію «Аксесуари» на сайт: навігація, головна сторінка. Підключаємо 6 товарів (протектори, топлоадери, кейси). Також категорія «Інші TCG».',
     why: 'Товари є в наявності, але покупець їх не бачить — категорії немає.',
-    warn: '',
+    warn: 'Спочатку власник завантажує фото для 6 товарів, потім запускаємо.',
     subtasks: [
       { id: '1', title: 'Власник: завантажити фото для 6 SKU (ACC-001..006)', status: 'todo', desc: 'Завантажити фото в адмінку для кожного з 6 аксесуарів.' },
-      { id: '2', title: 'Категорія + навігація + тайли (патч)', status: 'done', desc: 'cat002_5_5b_redo_20260629.php — review OK, ready to deploy.' },
-      { id: '3', title: 'Описи, атрибути 7 SKU + категорія 70', status: 'done', desc: 'Patch: descriptions 95–101, category 70, attributes 95–100.' }
+      { id: '2', title: 'Додати категорію і навігацію', status: 'todo', desc: 'Категорія «Аксесуари» + «Інші TCG» у меню і на головній.' },
+      { id: '3', title: 'Підключити 6 товарів', status: 'todo', desc: 'Прив\'язати ACC-001..006 до нової категорії, перевірити ціни і фото.' }
     ]
   },
   {
