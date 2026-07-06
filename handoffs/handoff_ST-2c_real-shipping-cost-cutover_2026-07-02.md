@@ -1,20 +1,20 @@
 # Codex Handoff — ST-2c: Real shipping cost in totals + checkout cutover
 
-Date: 2026-07-02 (rev. 2 — added ST-2b.6 blocker)
+Date: 2026-07-02 (rev. 3 — 2026-07-06 status check: all prior blockers cleared)
 Author: Claude (strategic assistant)
-Roadmap: ST-2c (High, Not started, Stage: Queued). Parent: R-13.5 (In progress). Blocks: ST-6.
+Roadmap: ST-2c (High, Not started, Stage: Queued). Parent: R-13.5 (In progress — sole remaining gate is this task). Blocks: ST-6.
 
 ---
 
-## 0. BLOCKER — do not start Phase 1 until this is resolved
+## 0. Blocker history — all cleared as of 2026-07-06
 
-**ST-2b.6 — «Порожнє замовлення Hutko після перезапуску браузера» (dashboard-only, todo, HIGH priority, not yet in Notion, no handoff/diagnostics filed as of 2026-07-02, last dashboard update 2026-06-25, order #186 example).**
+**ST-2b.6 — «Тихий скид оплати на Hutko + trusted-click гейт» — Done, owner QA passed 2026-07-03.** Was a hard blocker (zero-draft-order guarantee for ST-2c). Root cause: address-refresh silently reset payment selection back to Hutko without a real click, on both checkouts; separately, the «Оформити» button lacked the trusted-click gate promised in ST-2b.4. Both fixed and verified (`handoffs/handoff_ST-2b6_*`, `ST-2b6b_*`, `ST-2b6c_*`, `ST-2b6d_*`). No longer a blocker.
 
-Symptom: leaving the checkout tab open, closing the browser, reopening it → a phantom order appears in admin with Hutko as payment method, no payment made. This is very likely the same draft-order class of bug that ST-2b.1/ST-2b.4 fixed for the "switch payment method" trigger — but triggered by tab restore / auto-selected Hutko / the address micro-update refresh instead. The dashboard lists 3 unverified suspects: tab close/reopen behavior, auto-selected Hutko firing a call on page load, and the shipping-address micro-update refresh.
+**CHECKOUT-001 — Guest checkout opt-in account creation — Done, functional QA passed 2026-07-05.** Shipped in parallel with ST-2b.6 work by owner decision. Does not block ST-2c (independent feature, no shared totals/payment-math surface). A low-priority follow-up, **CHECKOUT-002** (checkout submit latency + loader redesign), was split out and is Not started — does not block ST-2c either.
 
-**Why this blocks ST-2c:** ST-2c's whole premise (§7.7 of the original handoff) is that the zero-draft-order guarantee from ST-2b.1/ST-2b.4 still holds. If ST-2b.6 is a live, unfixed hole in that guarantee, cutting over 100% of live traffic to this checkout multiplies exposure to whatever created order #186. This needs its own Phase 0 diagnostic + fix + smoke pass **before** ST-2c cutover, not after. Do not treat "no draft orders in my manual smoke pass" as sufficient — ST-2b.6 is explicitly intermittent per the dashboard note.
+**RD-13 — Checkout reskin — In progress (owner correction 2026-07-06; previously mistracked as Not started, no handoff/diagnostics filed in repo yet).** Depends on RD-01/RD-11/RD-12, explicitly "робити ОСТАННІМ" (do last), markup/CSS only. Does not block ST-2c — different dependency chain, sequence after ST-6.
 
-**Action required before proceeding with this handoff:** either (a) triage and close ST-2b.6 first as its own task, or (b) if the owner explicitly accepts the risk, note that decision here in writing before Phase 1 starts. Do not silently proceed.
+**Conclusion: no remaining checkout-side blocker for ST-2c as of 2026-07-06.** Proceed to Phase 0 diagnostics below.
 
 ---
 
@@ -24,11 +24,11 @@ Symptom: leaving the checkout tab open, closing the browser, reopening it → a 
 
 ## 2. Context
 
-R-13.5 (Nova Poshta module fix) and the ST-0…ST-2b.5 series migrated checkout logic from SimpleCheckout to a patched stock OC4 checkout, in parallel, without cutting over live traffic. ST-2b.1–ST-2b.5 (defer draft orders, success-page fixes, coupon/First15/agree/GA4 parity) are all **Done**. ST-3.5/3.6/3.7 (admin TTN button, COD payment control, UK localization) are also **Done** but are a separate branch of work (admin-side, no checkout dependency). ST-2b.6 (see §0 above) is a newly surfaced, unresolved draft-order bug that must be closed or explicitly risk-accepted before this handoff proceeds.
+R-13.5 (Nova Poshta module fix) and the ST-0…ST-2b.5 series migrated checkout logic from SimpleCheckout to a patched stock OC4 checkout, in parallel, without cutting over live traffic. ST-2b.1–ST-2b.6 (defer draft orders, success-page fixes, coupon/First15/agree/GA4 parity, Hutko silent-reset + trusted-click gate) are all **Done**. ST-3.5/3.6/3.7 (admin TTN button, COD payment control, UK localization) are also **Done** but are a separate branch of work (admin-side, no checkout dependency). CHECKOUT-001 (guest opt-in account creation) is also **Done**, shipped independently of this handoff.
 
-**Also not yet closed, but not blocking ST-2c directly (separate checkout-adjacent tasks, tracked here for visibility):**
-- **RD-13 — Checkout reskin (HIGH-RISK, Not started).** Depends on RD-01/RD-11/RD-12, explicitly "робити ОСТАННІМ" (do last) — visual/markup only, no payment logic. Independent of ST-2c/ST-6 sequencing but shares the same checkout.twig footprint; sequence after ST-6, not before.
-- **CHECKOUT-001 — Guest checkout opt-in account creation (Not started, "Needs technical audit").** Explicitly scoped out of RD-13/RD-20 by owner decision (2026-06-06). Independent feature, no hard dependency on ST-2c, but touches the same checkout/customer creation flow — sequence after ST-2c/ST-6 stabilize to avoid stacking checkout changes.
+**Separately tracked, not blocking ST-2c (visibility only):**
+- **RD-13 — Checkout reskin (HIGH-RISK, In progress).** Depends on RD-01/RD-11/RD-12, "робити ОСТАННІМ" — visual/markup only. Sequence after ST-6, not before.
+- **CHECKOUT-002 — Checkout submit performance + loader redesign (Low priority, Not started).** Follow-up from CHECKOUT-001; requires production timing capture before any optimization patch. No overlap with ST-2c's totals/shipping-cost change.
 
 ST-2c is the last gate before cutover. Two things are bundled here because they must ship together (shipping cost = 0 today is what currently keeps Hutko amounts correct; changing one without the other breaks payment math):
 
