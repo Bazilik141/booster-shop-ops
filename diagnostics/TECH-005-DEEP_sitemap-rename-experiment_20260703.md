@@ -45,3 +45,15 @@ Known community workaround for stuck GSC sitemap state ("Couldn't read" persisti
 ## 7. Risks / rollback
 
 Risk: Low-Medium (additive change; robots.txt single-line edit). Rollback = restore `Sitemap:` line to sitemap-full.xml + delete sitemap_index.xml (2 min). No canonical/redirect/feed/checkout surface touched. Merchant feed (`/merchant-feed.tsv`) untouched.
+
+---
+
+## 8. CLOSURE (2026-07-06)
+
+**Task closed: Done + watch-only (owner decision 2026-07-06).**
+
+- **Bing verdict (decisive):** BWT fully processed `sitemap-full.xml` — status "Завершено", 59/59 pages crawled, **0 errors**, 5 warnings (Title too long — content issue, separate task). An independent automated sitemap pipeline reads the exact file GSC "couldn't read".
+- **Rename experiment outcome:** `sitemap_index.xml` submission reproduced the same GSC behavior — zero processor fetch attempts. Stuck state is property-level, not URL-level.
+- **Terminal diagnosis: H1.** Site/server/WAF/file all clean (§2 evidence + Bing). GSC Sitemaps report error is Google-side and does not block indexation (52/57 indexed, historic peak).
+- **Watch-only:** check `sitemap_index.xml` status in GSC every 1–2 weeks; do not touch sitemap/robots/redirects.
+- **Follow-ups spun off:** TECH-035 (IndexNow, handoff ready) · content task for 5 long titles (owner will create) · H4 content/authority track (accessory descriptions, internal linking).
