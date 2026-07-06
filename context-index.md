@@ -101,7 +101,7 @@ grep "ST-3.5" context-index.md
 |---|---|---|
 | NCRM-00 | Архітектура + аудит фінмоделі + schema v1 (Done) | plans/crm-* (вище) |
 | NCRM-01 | Supabase проєкт + SQL-міграції + типи | handoffs/handoff_NCRM-01_supabase-project-sql-migrations_2026-07-05.md |
-| NCRM-02 | Repository-шар + Next.js скелет + emulator | — |
+| NCRM-02 | Repository-шар + Next.js скелет + emulator | handoffs/handoff_NCRM-02_repository-layer-nextjs-skeleton_2026-07-06.md |
 | NCRM-03 | Імпорт історії зі Sheets + звірка KPI | — |
 | NCRM-04 | Read-екрани (summary/замовлення/склад/SKU/клієнти) | — |
 | NCRM-05 | Write-форми + FIFO-COGS | — |
