@@ -26,9 +26,18 @@ declare(strict_types=1);
  * trusted-click gate, double-submit guard, Hutko, Checkbox, or order-status
  * behavior is changed. RD13-STUB free-shipping threshold (2000) preserved.
  *
- * Usage: php RD-13_checkout-reskin-round3_20260707.php [site_root]
+ * Usage: php RD-13_checkout-reskin-round3_20260707.php [site_root] [--dry-run] [--keep-self]
+ *
+ * Contract hardening (r3a, per Codex review):
+ * - idempotent: re-run on an already-patched site prints already_applied=yes
+ *   and exits 0 (no sha256_mismatch);
+ * - partially-applied state fails loudly with restore instructions;
+ * - OpenCart cache is cleared via config.php DIR_CACHE after a successful
+ *   write (data cache + template cache), no hardcoded paths;
+ * - the patch file deletes itself after done=ok (skip with --keep-self).
+ *
  * Rollback: restore the three files from the printed _patch_backups dir and
- * clear system/storage/cache.
+ * clear the cache dir reported by cache_clear=.
  */
 
 const RD13R3_PATCH_ID = 'RD-13_checkout-reskin-round3_20260707';
@@ -134,6 +143,62 @@ function rd13r3_restore(array $backups, string $root): void {
             @copy($backup, $target);
         }
     }
+}
+
+function rd13r3_self_delete(array $argv): void {
+    if (in_array('--keep-self', $argv, true)) {
+        rd13r3_out('self_delete', 'skipped_keep_self');
+        return;
+    }
+
+    if (@unlink(__FILE__)) {
+        rd13r3_out('self_delete', 'ok');
+    } else {
+        rd13r3_out('self_delete', 'FAILED_delete_manually');
+    }
+}
+
+function rd13r3_clear_cache(string $root): void {
+    $configPath = rd13r3_path($root, 'config.php');
+    $cacheDir = '';
+
+    if (is_file($configPath)) {
+        $config = (string) file_get_contents($configPath);
+
+        if (preg_match("~define\s*\(\s*'DIR_CACHE'\s*,\s*'([^']+)'\s*\)~", $config, $match)) {
+            $cacheDir = rtrim($match[1], '/');
+        }
+    }
+
+    if ($cacheDir === '' || !is_dir($cacheDir)) {
+        rd13r3_out('cache_clear', 'skipped_dir_cache_not_found_clear_manually');
+        return;
+    }
+
+    $removed = 0;
+
+    foreach (glob($cacheDir . '/cache.*') ?: [] as $file) {
+        if (is_file($file) && @unlink($file)) {
+            $removed++;
+        }
+    }
+
+    $templateCache = $cacheDir . '/template';
+
+    if (is_dir($templateCache)) {
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($templateCache, FilesystemIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::CHILD_FIRST
+        );
+
+        foreach ($iterator as $entry) {
+            if ($entry->isFile() && @unlink($entry->getPathname())) {
+                $removed++;
+            }
+        }
+    }
+
+    rd13r3_out('cache_clear', 'ok:removed=' . $removed . ':dir=' . $cacheDir);
 }
 
 function rd13r3_new_js(): string {
@@ -946,6 +1011,11 @@ RD13R3CSSEOT;
 
 function rd13r3_main(array $argv): void {
     $root = $argv[1] ?? '.';
+
+    if (str_starts_with($root, '--')) {
+        $root = '.';
+    }
+
     $root = rtrim($root, "/\\");
 
     rd13r3_out('patch_id', RD13R3_PATCH_ID);
@@ -960,6 +1030,35 @@ function rd13r3_main(array $argv): void {
     $css = rd13r3_read($cssPath, RD13R3_CSS);
     $js = rd13r3_read($jsPath, RD13R3_JS);
 
+    // --- Idempotency gate: exit 0 cleanly if round 3 is already applied. ---
+    $applied = [
+        'twig' => strpos($checkout, RD13R3_VERSION_NEW) !== false,
+        'css' => strpos($css, RD13R3_CSS_MARKER) !== false,
+        'js' => strpos($js, RD13R3_JS_MARKER) !== false,
+    ];
+
+    if ($applied['twig'] && $applied['css'] && $applied['js']) {
+        rd13r3_out('already_applied', 'yes');
+        rd13r3_out('done', 'ok');
+
+        if (!in_array('--dry-run', $argv, true)) {
+            rd13r3_self_delete($argv);
+        }
+
+        return;
+    }
+
+    if ($applied['twig'] || $applied['css'] || $applied['js']) {
+        rd13r3_fail(
+            'partially_applied:twig=' . ($applied['twig'] ? '1' : '0')
+            . ':css=' . ($applied['css'] ? '1' : '0')
+            . ':js=' . ($applied['js'] ? '1' : '0')
+            . ':restore_all_three_from_backups_then_rerun'
+        );
+    }
+
+    rd13r3_out('already_applied', 'no');
+
     rd13r3_hash_gate($checkout, RD13R3_CHECKOUT_SHA256, RD13R3_CHECKOUT);
     rd13r3_hash_gate($css, RD13R3_CSS_SHA256, RD13R3_CSS);
     rd13r3_hash_gate($js, RD13R3_JS_SHA256, RD13R3_JS);
@@ -972,8 +1071,6 @@ function rd13r3_main(array $argv): void {
         'guest_oferta_field_present' => strpos($js, 'input-checkout-agree') !== false,
         'account_opt_in_present' => strpos($js, 'input-create-account-opt-in') !== false,
         'js_is_round2' => strpos($js, 'RD-13 checkout reskin round 2') !== false,
-        'css_round3_not_applied' => strpos($css, RD13R3_CSS_MARKER) === false,
-        'twig_round3_not_applied' => strpos($checkout, RD13R3_VERSION_NEW) === false,
     ];
 
     foreach ($prechecks as $label => $ok) {
@@ -1081,8 +1178,10 @@ function rd13r3_main(array $argv): void {
         rd13r3_out('written_sha256', $relative . ':' . hash('sha256', $expected));
     }
 
+    rd13r3_clear_cache($root);
     rd13r3_out('changed_files', '3');
     rd13r3_out('done', 'ok');
+    rd13r3_self_delete($argv);
 }
 
 rd13r3_main($argv);
