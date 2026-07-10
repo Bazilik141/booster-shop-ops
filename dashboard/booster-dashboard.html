@@ -1132,7 +1132,7 @@ async function loadOverview() {
     } else {
       document.getElementById('pendingPreview').innerHTML =
         `<table><tr><th>Замовлення</th><th>Сума</th><th>Прибуток</th><th>Чистий прибуток %</th><th>Статус</th></tr>
-        ${o.slice(0,5).map(r =>
+        ${o.slice(0,8).map(r =>
           `<tr>
             <td><span class="chip">${r.order_id}</span>
               <span style="font-size:11px;color:var(--muted);margin-left:6px">${r.post||''} ${ttn4(r.ttn)}</span></td>
@@ -1662,8 +1662,8 @@ const ROADMAP_TASKS = [
     warn: 'Owner створює проєкт і тримає секрети.', subtasks: []
   },
   {
-    id: 'NCRM-02', title: 'Repository-шар + Next.js скелет + локальний emulator', status: 'active', tool: 'Codex', priority: 'High',
-    lastUpdated: '2026-07-06', blockedBy: ['NCRM-01'],
+    id: 'NCRM-02', title: 'Repository-шар + Next.js скелет + локальний emulator', status: 'done', tool: 'Codex', priority: 'High',
+    lastUpdated: '2026-07-10', blockedBy: ['NCRM-01'],
     simple: 'Шар доступу до бази (repository), скелет веб-застосунку Next.js на Vercel, локальне середовище Supabase.',
     why: 'Один шар доступу до даних — щоб зміни структури не ламали весь застосунок.',
     warn: null, subtasks: []
@@ -2750,4 +2750,34 @@ async function savePurchaseBatch() {
   const payload = { action:'update_purchase', lots:lots };
   if (editValue('batchTrackNumber') !== '') payload.track_number = editValue('batchTrackNumber');
   if (editValue('batchDate') !== '') payload.date = editValue('batchDate');
-  if (editValue('batchUkraineDeliveryJpy') !== '') payload.ukraine_delivery_jp
+  if (editValue('batchUkraineDeliveryJpy') !== '') payload.ukraine_delivery_jpy = Number(editValue('batchUkraineDeliveryJpy'));
+  if (editValue('batchStatus') !== '') payload.status = editValue('batchStatus');
+  if (editValue('batchNote') !== '') payload.note = editValue('batchNote');
+  const hasLotFee = lots.some(function(lot) { return Object.prototype.hasOwnProperty.call(lot,'japan_fee_jpy'); });
+  if (Object.keys(payload).length === 2 && !hasLotFee) {
+    const msg = document.getElementById('recordsMsg');
+    if (msg) { msg.textContent = 'Заповни хоча б одне поле для оновлення'; msg.className = 'records-message error'; }
+    return;
+  }
+  const msg = document.getElementById('recordsMsg');
+  if (msg) { msg.textContent = 'Збереження…'; msg.className = 'records-message'; }
+  try {
+    const result = await callPost(payload);
+    if (msg) { msg.textContent = 'Оновлено лотів: ' + (result.rows_updated || rows.length); msg.className = 'records-message success'; }
+    accountingState.selectedPurchaseLots = {};
+    invalidateAccountingCaches();
+    await loadRecTab('purchases',true);
+  } catch(e) {
+    if (msg) { msg.textContent = 'Помилка: ' + e.message; msg.className = 'records-message error'; }
+  }
+}
+
+// ════════════ LOADERS MAP ════════════
+const loaders = { overview: loadOverview, stock: loadStock, consumables: loadConsumables, orders: loadOrders, skus: loadSkus, clients: loadClients, roadmap: loadRoadmap, accounting: loadAccounting };
+
+// ════════════ INIT ════════════
+loaded.overview = true;
+loadOverview();
+</script>
+</body>
+</html>

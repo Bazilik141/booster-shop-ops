@@ -1,6 +1,9 @@
 .env*
 !.env.example
 node_modules/
+.next/
+out/
+*.tsbuildinfo
 supabase/.branches/
 supabase/.temp/
 supabase/.volumes/

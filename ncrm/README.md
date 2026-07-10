@@ -1,18 +1,20 @@
 # Booster Shop NCRM
 
-Локальна Supabase-схема нової CRM. Міграції `0001`–`0004` відтворюють
-Stage 1–4 з `plans/crm-schema-v1_2026-06-26.md`.
+Локальна Supabase-схема нової CRM + мінімальний Next.js скелет.
+Міграції `0001`–`0004` відтворюють Stage 1–4 з
+`plans/crm-schema-v1_2026-06-26.md`.
 
 ## Передумови
 
 - Docker Desktop;
 - Node.js 20+;
-- Supabase CLI 2.x (`npx supabase` також підтримується).
+- Supabase CLI 2.x (`npx supabase` також підтримується);
+- npm.
 
-Хмарний Supabase-проєкт для локальної роботи не потрібен. Не додавайте
-`project ref`, паролі або ключі до репозиторію.
+Не додавайте `project ref`, паролі або ключі до репозиторію.
+`.env.local` і Supabase temp-файли мають лишатися локальними.
 
-## Локальний запуск
+## Локальна Supabase база
 
 ```bash
 cd ncrm
@@ -24,6 +26,53 @@ npx supabase db reset
 
 ```bash
 npx supabase db diff --local
+```
+
+## Next.js застосунок
+
+Скопіюйте локальні Supabase URL/key у `.env.local` за прикладом:
+
+```bash
+cp .env.example .env.local
+```
+
+Беріть значення з:
+
+```bash
+npx supabase status -o env
+```
+
+Потрібні змінні:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+```
+
+Мапінг:
+
+- `API_URL` → `NEXT_PUBLIC_SUPABASE_URL`
+- `ANON_KEY` → `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SERVICE_ROLE_KEY` → `SUPABASE_SERVICE_ROLE_KEY`
+
+Не використовуйте `PUBLISHABLE_KEY` / `SECRET_KEY` для цього локального
+read-demo. Не комітьте `.env.local`.
+
+Запуск:
+
+```bash
+npm install
+npm run dev
+```
+
+Root route читає Supabase тільки через `lib/repositories/analytics.repo.ts`.
+UI/сторінки не мають робити прямі Supabase query calls напряму.
+
+Production build:
+
+```bash
+npm run build
 ```
 
 ## TypeScript-типи
@@ -43,5 +92,5 @@ npx supabase gen types typescript --local --schema public > lib/types/database.t
 npx supabase stop --no-backup
 ```
 
-Це впливає лише на локальний Docker-emulator. Хмарні міграції в NCRM-01
+Це впливає лише на локальний Docker-emulator. Хмарні міграції з NCRM-01
 не запускаються.
