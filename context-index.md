@@ -57,6 +57,7 @@ grep "ST-3.5" context-index.md
 | RD-10 | Сторінка товару — редизайн | handoffs/handoff_RD-10_product-page-parity_2026-06-09.md |
 | RD-10D2 | Breadcrumb mockup fix | handoffs/handoff_RD-10D2_breadcrumb-mockup-fix_2026-06-11.md |
 | RD-11 | Редизайн сторінки кошика | — |
+| RD-13 | Checkout reskin — visual-only stock checkout | handoffs/HANDOFF-RD13-checkoutV2.md · handoffs/HANDOFF-RD13-checkout-FIXES-round2.md · diagnostics/RD-13_checkout-reskin-round2_report_20260706.md |
 | RD-01/02/03 | Shell DS parity | handoffs/handoff_RD-01-02-03_shell-ds-parity_2026-05-30.md |
 
 ---
@@ -96,19 +97,21 @@ grep "ST-3.5" context-index.md
 ## CRM — нова платформа (NCRM)
 
 > Проєкт міграції CRM на Supabase. Плани: `plans/crm-new-platform-architecture_2026-06-26.md`, `plans/crm-financial-model_2026-06-26.md`, `plans/crm-schema-v1_2026-06-26.md`. page_id-реєстр — `ROADMAP_SOP.md §5`.
+>
+> **2026-07-11:** `plans/NCRM-financial-model-v2_technical-contract_20260711.md` §7 переномерував послідовність NCRM-04…07 (Inventory foundation → Mystery → Returns/COGS → Reporting/forecast/KPI), замінюючи мапінг нижче з архітектурного плану від 2026-06-26. Notion-картки NCRM-04…07 потребують ручного оновлення назв власником. NCRM-08/09 ще не звірені з v2.
 
 | Roadmap ID | Назва | Handoff |
 |---|---|---|
 | NCRM-00 | Архітектура + аудит фінмоделі + schema v1 (Done) | plans/crm-* (вище) |
 | NCRM-01 | Supabase проєкт + SQL-міграції + типи | handoffs/handoff_NCRM-01_supabase-project-sql-migrations_2026-07-05.md |
 | NCRM-02 | Repository-шар + Next.js скелет + emulator | handoffs/handoff_NCRM-02_repository-layer-nextjs-skeleton_2026-07-06.md |
-| NCRM-03 | Імпорт історії зі Sheets + звірка KPI | — |
-| NCRM-04 | Read-екрани (summary/замовлення/склад/SKU/клієнти) | — |
-| NCRM-05 | Write-форми + FIFO-COGS | — |
-| NCRM-06 | Витрати + P&L + KPI-вʼюхи | — |
-| NCRM-07 | Order pipeline OpenCart→Supabase + smoke | — |
-| NCRM-08 | Курси валют (фетч + заморозка) | — |
-| NCRM-09 | Mobile-версія + поліш | — |
+| NCRM-03 | Імпорт історії зі Sheets + звірка KPI (In progress — заблокована, див. NCRM-04) | handoffs/handoff_NCRM-03_import-history-kpi-reconciliation_2026-07-10.md |
+| NCRM-04 | Inventory ledger foundation (v2 contract) | handoffs/handoff_NCRM-04_inventory-ledger-foundation_2026-07-11.md |
+| NCRM-05 | Mystery fulfillment (v2 contract) | — |
+| NCRM-06 | Returns + cost quality (v2 contract) | — |
+| NCRM-07 | Reporting/forecast + KPI (v2 contract) | — |
+| NCRM-08 | Курси валют (фетч + заморозка) — уточнити відповідність v2 | — |
+| NCRM-09 | Mobile-версія + поліш — уточнити відповідність v2 | — |
 
 ---
 
