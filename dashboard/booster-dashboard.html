@@ -1669,53 +1669,74 @@ const ROADMAP_TASKS = [
     warn: null, subtasks: []
   },
   {
-    id: 'NCRM-03', title: 'Імпорт історії зі Sheets + звірка KPI', status: 'todo', tool: 'Claude + Codex', priority: 'High',
-    lastUpdated: '2026-06-26', blockedBy: ['NCRM-01'],
+    id: 'NCRM-03', title: 'Імпорт історії зі Sheets + звірка KPI', status: 'active', tool: 'Claude + Codex', priority: 'High',
+    lastUpdated: '2026-07-11', blockedBy: ['NCRM-01', 'NCRM-04'],
     simple: 'Разовий перенос ~300–400 рядків (продажі/закупки/списання/РРЦ/розхідники) у нову базу зі звіркою цифр.',
     why: 'Нова система має рахувати ідентично поточній — звіряємо проти відомих сум.',
-    warn: 'Не вмикати в роботу, поки KPI не зійдуться з поточними.', subtasks: []
+    warn: 'Заблоковано: 6 сигнальних рядків списань (WRT-0051/52/94-97) і FIFO-vs-легасі розбіжність не могли пройти звірку без підписаної inventory-adjustment моделі — це і будує NCRM-04. Числа з diagnostics/NCRM-03_*_20260710.md не фінальні; повторна звірка під новою моделлю — окрема майбутня задача.', subtasks: []
   },
   {
-    id: 'NCRM-04', title: 'Read-екрани (summary/замовлення/склад/SKU/клієнти)', status: 'todo', tool: 'Codex', priority: 'Medium',
-    lastUpdated: '2026-06-26', blockedBy: ['NCRM-02'],
+    id: 'NCRM-04', title: 'Inventory ledger foundation', status: 'active', tool: 'Codex', priority: 'High',
+    lastUpdated: '2026-07-11', blockedBy: ['NCRM-02'],
+    simple: 'Additive-міграція 0006: підписані inventory_adjustments/items, canonical FIFO warehouse/asset valuation, shared-cost allocation (вага→вартість→override), явний estimated-cost стан, outlet-флаг.',
+    why: 'Закриває прогалину, яка блокує NCRM-03: без підписаної моделі корекцій звірка складу ніколи не зійдеться, а COGS-fallback лишається непомітним.',
+    warn: 'Хендоф готовий (handoffs/handoff_NCRM-04_inventory-ledger-foundation_2026-07-11.md), чекає Codex. 2026-07-11: рескоуп під plans/NCRM-financial-model-v2_technical-contract_20260711.md — цей ID раніше означав «Read-екрани»; той зміст перенесено на NCRM-08 (нижче).', subtasks: []
+  },
+  {
+    id: 'NCRM-05', title: 'Mystery fulfillment', status: 'todo', tool: 'Codex', priority: 'High',
+    lastUpdated: '2026-07-11', blockedBy: ['NCRM-04'],
+    simple: 'Retire generic MBX seeds, 4 підтверджені SKU (PKM/OP-JP-MBX-ST/XL), reservation→commit workflow, автоматичний JP-пул компонентів, атомарний RPC на відправку.',
+    why: 'Mystery box — SKU з найбільшою неоднозначністю собівартості й складу; потребує окремого воркфлоу поверх inventory foundation.',
+    warn: '2026-07-11: рескоуп під v2-контракт §4 — цей ID раніше означав «Write-форми + FIFO-COGS»; той зміст перенесено на NCRM-09 (нижче).', subtasks: []
+  },
+  {
+    id: 'NCRM-06', title: 'Returns + cost quality', status: 'todo', tool: 'Codex', priority: 'Medium',
+    lastUpdated: '2026-07-11', blockedBy: ['NCRM-04'],
+    simple: 'refund_items проти sale_item; COGS-реверс лише для resellable-повернень; cost-стани pending/provisional/estimated/actual + data-quality перевірки.',
+    why: 'Без цього повернення й неоднозначна собівартість продовжують спотворювати P&L.',
+    warn: '2026-07-11: рескоуп під v2-контракт §5 — цей ID раніше означав «Витрати + P&L + KPI-вʼюхи»; той зміст злито в NCRM-07 (нижче), не окрема картка.', subtasks: []
+  },
+  {
+    id: 'NCRM-07', title: 'Reporting/forecast + KPI-вʼюхи (вкл. колишній NCRM-06)', status: 'todo', tool: 'Codex + Owner', priority: 'High',
+    lastUpdated: '2026-07-11', blockedBy: ['NCRM-04', 'NCRM-05', 'NCRM-06'],
+    simple: 'Expenses-ledger, перероблені v_pnl_monthly/KPI-вʼюхи (contribution margin, true net P&L, inventory adjustment impact, estimated/unpriced exposure), forecast margin (RRC × available_qty − 5% reserve).',
+    why: 'Щоб дашборд нарешті показував контрольовану маржу й чистий P&L, а не легасі «прибуток».',
+    warn: '2026-07-11: рескоуп під v2-контракт §6 + злиття старого NCRM-06. Цей ID раніше означав «Order pipeline OpenCart→Supabase»; той зміст перенесено на NCRM-10 (нижче).', subtasks: []
+  },
+  {
+    id: 'NCRM-08', title: 'Read-екрани (summary/замовлення/склад/SKU/клієнти)', status: 'todo', tool: 'Codex', priority: 'Medium',
+    lastUpdated: '2026-07-11', blockedBy: ['NCRM-04'],
     simple: 'Екрани перегляду: зведення, замовлення, склад і алерти, SKU, клієнти.',
     why: 'Базовий перегляд CRM у браузері замість Sheets.',
-    warn: null, subtasks: []
+    warn: '2026-07-11: новий ID (раніше — зміст NCRM-04, до рескоупу під v2-контракт). Blocker оновлено на NCRM-04 (inventory foundation), бо екрани читають FIFO/adjustments-дані.', subtasks: []
   },
   {
-    id: 'NCRM-05', title: 'Write-форми + FIFO-COGS', status: 'todo', tool: 'Codex', priority: 'High',
-    lastUpdated: '2026-06-26', blockedBy: ['NCRM-02'],
+    id: 'NCRM-09', title: 'Write-форми + FIFO-COGS', status: 'todo', tool: 'Codex', priority: 'High',
+    lastUpdated: '2026-07-11', blockedBy: ['NCRM-04'],
     simple: 'Форми внесення: продаж, закупка (регіони+валюти), списання, РРЦ, повернення, mystery box; розрахунок собівартості FIFO.',
     why: 'Серце CRM — внесення даних і правильна собівартість продажу.',
-    warn: null, subtasks: []
+    warn: '2026-07-11: новий ID (раніше — зміст NCRM-05). Частина обсягу (FIFO-COGS функція) вже може бути покрита NCRM-04 — звірити скоуп перед стартом.', subtasks: []
   },
   {
-    id: 'NCRM-06', title: 'Витрати + P&L + KPI-вʼюхи', status: 'todo', tool: 'Codex', priority: 'Medium',
-    lastUpdated: '2026-06-26', blockedBy: ['NCRM-05'],
-    simple: 'Журнал витрат, справжній P&L (мінус операційка й повернення) та звіти/алерти.',
-    why: 'Щоб операційні витрати й повернення нарешті віднімались від прибутку.',
-    warn: null, subtasks: []
-  },
-  {
-    id: 'NCRM-07', title: 'Order pipeline OpenCart→Supabase + smoke + ретайр Apps Script', status: 'todo', tool: 'Codex + Owner', priority: 'High',
-    lastUpdated: '2026-06-26', blockedBy: ['NCRM-05'],
+    id: 'NCRM-10', title: 'Order pipeline OpenCart→Supabase + smoke + ретайр Apps Script', status: 'todo', tool: 'Codex + Owner', priority: 'High',
+    lastUpdated: '2026-07-11', blockedBy: ['NCRM-09'],
     simple: 'Живі замовлення з магазину ллються прямо в нову базу (лише нові, з тест-фільтрами).',
     why: 'Прибрати прошарок Apps Script; замовлення одразу в CRM.',
-    warn: 'Зачіпає живий checkout — fire-and-forget + обовʼязковий smoke-тест.', subtasks: []
+    warn: 'Зачіпає живий checkout — fire-and-forget + обовʼязковий smoke-тест. 2026-07-11: новий ID (раніше — зміст NCRM-07); поза скоупом v2-контракту (§9 — потребує окремого dedicated handoff).', subtasks: []
   },
   {
-    id: 'NCRM-08', title: 'Курси валют (фетч ПУМБ/Приват/Моно/НБУ +1%)', status: 'todo', tool: 'Codex', priority: 'Medium',
-    lastUpdated: '2026-06-26', blockedBy: ['NCRM-01'],
+    id: 'NCRM-11', title: 'Курси валют (фетч ПУМБ/Приват/Моно/НБУ +1%)', status: 'todo', tool: 'Codex', priority: 'Medium',
+    lastUpdated: '2026-07-11', blockedBy: ['NCRM-01'],
     simple: 'Щоденні курси з історією: USD/EUR з банку (Приват/Моно), JPY з НБУ; курс заморожується при вводі.',
     why: 'Коректна собівартість імпорту й незмінність уже внесених сум.',
-    warn: null, subtasks: []
+    warn: '2026-07-11: перенумеровано з NCRM-08 (ресеквенс v2-контракту, зміст без змін).', subtasks: []
   },
   {
-    id: 'NCRM-09', title: 'Mobile-версія + поліш', status: 'todo', tool: 'Codex', priority: 'Low',
-    lastUpdated: '2026-06-26', blockedBy: ['NCRM-04'],
+    id: 'NCRM-12', title: 'Mobile-версія + поліш', status: 'todo', tool: 'Codex', priority: 'Low',
+    lastUpdated: '2026-07-11', blockedBy: ['NCRM-08'],
     simple: 'Мобільна версія поверх готового web; обсяг визначається після PC-версії та дизайну.',
     why: 'Доступ із телефону — в останню чергу, база закладена з Phase 0.',
-    warn: null, subtasks: []
+    warn: '2026-07-11: перенумеровано з NCRM-09 (зміст без змін). Blocker оновлено на NCRM-08 (нова адреса read-екранів).', subtasks: []
   },
   // ─── CHECKOUT / ST ───
   {
@@ -2702,82 +2723,4 @@ function togglePurchaseLot(rowIndex, checked) {
     return;
   }
   if (checked) accountingState.selectedPurchaseLots[rowIndex] = row;
-  else delete accountingState.selectedPurchaseLots[rowIndex];
-  renderPurchaseBatchEditor();
-}
-
-function renderPurchaseBatchEditor() {
-  const host = document.getElementById('editRowFormPurchases');
-  if (!host) return;
-  const rows = Object.keys(accountingState.selectedPurchaseLots).map(function(key) { return accountingState.selectedPurchaseLots[key]; });
-  if (!rows.length) {
-    host.innerHTML = '<div class="records-message">Вибери від 1 до 5 лотів для спільного оновлення.</div>';
-    return;
-  }
-  let selected = '<div class="selected-lots">';
-  rows.forEach(function(row) {
-    selected += '<div class="selected-lot"><div><b>' + recEsc(row.order_ref) + '</b><div class="field-hint">' +
-      recEsc(row.lot_id + ' | ' + row.sku + ' | к-сть ' + row.qty + ' | ' + row.status) +
-      '</div></div><div class="form-row"><label>JP-комісія лоту, JPY</label><input class="lot-fee-input" type="number" min="0" step="0.01" id="lotFee' +
-      Number(row.row_index) + '"></div></div>';
-  });
-  selected += '</div>';
-  host.innerHTML = '<div class="edit-row-form"><h4>Оновити закупку: вибрано ' + rows.length + ' з 5</h4>' + selected +
-    '<div class="edit-row-grid">' +
-      recField('batchTrackNumber','Трек-номер','') +
-      recField('batchDate','Дата доставки в Україну','','date') +
-      recField('batchUkraineDeliveryJpy','Доставка в Україну, JPY','','number','0.01') +
-      recSelect('batchStatus','Статус','', [''].concat(PURCHASE_STATUSES)) +
-      recField('batchNote','Примітка','') +
-    '</div><div class="form-actions"><button class="btn-primary" onclick="savePurchaseBatch()">Зберегти для вибраних лотів</button>' +
-    '<button class="btn-secondary" onclick="clearPurchaseSelection()">Скасувати вибір</button></div></div>';
-}
-
-function clearPurchaseSelection() {
-  accountingState.selectedPurchaseLots = {};
-  renderRecTable('purchases');
-}
-
-async function savePurchaseBatch() {
-  const rows = Object.keys(accountingState.selectedPurchaseLots).map(function(key) { return accountingState.selectedPurchaseLots[key]; });
-  if (!rows.length || rows.length > 5) return;
-  const lots = rows.map(function(row) {
-    const fee = editValue('lotFee' + row.row_index);
-    const item = { lot_id:row.lot_id };
-    if (fee !== '') item.japan_fee_jpy = Number(fee);
-    return item;
-  });
-  const payload = { action:'update_purchase', lots:lots };
-  if (editValue('batchTrackNumber') !== '') payload.track_number = editValue('batchTrackNumber');
-  if (editValue('batchDate') !== '') payload.date = editValue('batchDate');
-  if (editValue('batchUkraineDeliveryJpy') !== '') payload.ukraine_delivery_jpy = Number(editValue('batchUkraineDeliveryJpy'));
-  if (editValue('batchStatus') !== '') payload.status = editValue('batchStatus');
-  if (editValue('batchNote') !== '') payload.note = editValue('batchNote');
-  const hasLotFee = lots.some(function(lot) { return Object.prototype.hasOwnProperty.call(lot,'japan_fee_jpy'); });
-  if (Object.keys(payload).length === 2 && !hasLotFee) {
-    const msg = document.getElementById('recordsMsg');
-    if (msg) { msg.textContent = 'Заповни хоча б одне поле для оновлення'; msg.className = 'records-message error'; }
-    return;
-  }
-  const msg = document.getElementById('recordsMsg');
-  if (msg) { msg.textContent = 'Збереження…'; msg.className = 'records-message'; }
-  try {
-    const result = await callPost(payload);
-    if (msg) { msg.textContent = 'Оновлено лотів: ' + (result.rows_updated || rows.length); msg.className = 'records-message success'; }
-    accountingState.selectedPurchaseLots = {};
-    invalidateAccountingCaches();
-    await loadRecTab('purchases',true);
-  } catch(e) {
-    if (msg) { msg.textContent = 'Помилка: ' + e.message; msg.className = 'records-message error'; }
-  }
-}
-
-// ════════════ LOADERS MAP ════════════
-const loaders = { overview: loadOverview, stock: loadStock, consumables: loadConsumables, orders: loadOrders, skus: loadSkus, clients: loadClients, roadmap: loadRoadmap, accounting: loadAccounting };
-
-// ════════════ INIT ════════════
-loaded.overview = true;
-loadOverview();
-</script>
-</body>
-</html>
+  else delete accountingState.selectedPurchaseLots[

@@ -98,20 +98,23 @@ grep "ST-3.5" context-index.md
 
 > Проєкт міграції CRM на Supabase. Плани: `plans/crm-new-platform-architecture_2026-06-26.md`, `plans/crm-financial-model_2026-06-26.md`, `plans/crm-schema-v1_2026-06-26.md`. page_id-реєстр — `ROADMAP_SOP.md §5`.
 >
-> **2026-07-11:** `plans/NCRM-financial-model-v2_technical-contract_20260711.md` §7 переномерував послідовність NCRM-04…07 (Inventory foundation → Mystery → Returns/COGS → Reporting/forecast/KPI), замінюючи мапінг нижче з архітектурного плану від 2026-06-26. Notion-картки NCRM-04…07 потребують ручного оновлення назв власником. NCRM-08/09 ще не звірені з v2.
+> **2026-07-11:** `plans/NCRM-financial-model-v2_technical-contract_20260711.md` §7 переномерував послідовність (owner-approved). NCRM-04…07 тепер Inventory foundation → Mystery → Returns/COGS → Reporting/forecast+KPI (останній вбирає колишній NCRM-06 "Витрати+P&L+KPI"). Колишній зміст NCRM-04/05/07 (Read-екрани / Write-форми+FIFO-COGS / OpenCart pipeline) переїхав на нові картки NCRM-08/09/10; колишні NCRM-08/09 (курси/mobile) перенумеровані в NCRM-11/12 без зміни змісту. Синхронізовано в Notion + `booster-dashboard.html` (обидві копії) в тому ж сеансі — деталі й коментарі по кожній картці в Notion.
 
 | Roadmap ID | Назва | Handoff |
 |---|---|---|
 | NCRM-00 | Архітектура + аудит фінмоделі + schema v1 (Done) | plans/crm-* (вище) |
-| NCRM-01 | Supabase проєкт + SQL-міграції + типи | handoffs/handoff_NCRM-01_supabase-project-sql-migrations_2026-07-05.md |
-| NCRM-02 | Repository-шар + Next.js скелет + emulator | handoffs/handoff_NCRM-02_repository-layer-nextjs-skeleton_2026-07-06.md |
-| NCRM-03 | Імпорт історії зі Sheets + звірка KPI (In progress — заблокована, див. NCRM-04) | handoffs/handoff_NCRM-03_import-history-kpi-reconciliation_2026-07-10.md |
-| NCRM-04 | Inventory ledger foundation (v2 contract) | handoffs/handoff_NCRM-04_inventory-ledger-foundation_2026-07-11.md |
-| NCRM-05 | Mystery fulfillment (v2 contract) | — |
-| NCRM-06 | Returns + cost quality (v2 contract) | — |
-| NCRM-07 | Reporting/forecast + KPI (v2 contract) | — |
-| NCRM-08 | Курси валют (фетч + заморозка) — уточнити відповідність v2 | — |
-| NCRM-09 | Mobile-версія + поліш — уточнити відповідність v2 | — |
+| NCRM-01 | Supabase проєкт + SQL-міграції + типи (Done) | handoffs/handoff_NCRM-01_supabase-project-sql-migrations_2026-07-05.md |
+| NCRM-02 | Repository-шар + Next.js скелет + emulator (Done) | handoffs/handoff_NCRM-02_repository-layer-nextjs-skeleton_2026-07-06.md |
+| NCRM-03 | Імпорт історії зі Sheets + звірка KPI (In progress — заблокована на NCRM-04) | handoffs/handoff_NCRM-03_import-history-kpi-reconciliation_2026-07-10.md |
+| NCRM-04 | Inventory ledger foundation (In progress — хендоф готовий, чекає Codex) | handoffs/handoff_NCRM-04_inventory-ledger-foundation_2026-07-11.md |
+| NCRM-05 | Mystery fulfillment | — |
+| NCRM-06 | Returns + cost quality | — |
+| NCRM-07 | Reporting/forecast + KPI-вʼюхи (вкл. колишній NCRM-06) | — |
+| NCRM-08 | Read-екрани (summary/замовлення/склад/SKU/клієнти) — колишній зміст NCRM-04 | — |
+| NCRM-09 | Write-форми + FIFO-COGS — колишній зміст NCRM-05 | — |
+| NCRM-10 | Order pipeline OpenCart→Supabase + smoke — колишній зміст NCRM-07 | — |
+| NCRM-11 | Курси валют (фетч + заморозка) — перенумеровано з NCRM-08, зміст той самий | — |
+| NCRM-12 | Mobile-версія + поліш — перенумеровано з NCRM-09, зміст той самий | — |
 
 ---
 
@@ -135,15 +138,4 @@ grep "ST-3.5" context-index.md
 |---|---|---|
 | MKT-TG-003 | Make TG-пайплайн: фікс RSS→jina→Claude→GPT→Telegram (Done, superseded by MKT-TG-005) | handoffs/MKT-TG-003_make-pipeline-status_20260627.md, handoffs/MKT-TG-003_make-pipeline-handoff_20260626.md |
 | MKT-TG-004 | TG контент-автоматизація Phase 2 (мультиджерело+бот+картинки+розклад) — Make-підхід, superseded by MKT-TG-005 | plans/tg-content-automation-phase2-plan_2026-06-27.md |
-| MKT-TG-005 | Path A: lean RSS→Telegram news digest (заміна Make-пайплайну, on-demand AI-чернетка) | handoffs/MKT-TG-005_path-A-lean-rss-digest_20260703.md, handoffs/MKT-TG-005_codex-handoff_20260703.md |
-| MKT-TG-006 | /post <url> — OpenAI-чернетка за посиланням, паралельно до RSS-дайджесту | handoffs/MKT-TG-006_codex-handoff_openai-url-draft_20260704.md |
-
----
-
-## Notion / дашборд — де що
-
-**Усі серії (ST + DASH/CRM/AUTO/TECH/RD/UX)** тепер у Notion database `5aef22c3-048d-4dde-a5b1-ad409de9301c`. ST заведено 2026-06-24.
-**Статус-правда — Notion; дашборд `ROADMAP_FLOW` — дзеркало.** Повні правила, page_id-реєстр, DoD, sync — `ROADMAP_SOP.md`.
-
-Notion view: `https://www.notion.so/35c3f8572fc54a7896c8af0efd4cf8d4?v=eebb19b11cfb4066a8a3b1b097775818`
-Bulk-query (`notion-query-data-sources` / `notion-query-database-view
+| MKT-TG-005 | Path A: lean RSS→Telegram news digest (заміна Make-пайплайну, on-demand AI-чернетка) | handoffs/MKT-TG-005_path-A-lean-rss-digest_20260703.md, handoffs/MKT-TG-005_code
