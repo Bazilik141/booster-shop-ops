@@ -2723,4 +2723,82 @@ function togglePurchaseLot(rowIndex, checked) {
     return;
   }
   if (checked) accountingState.selectedPurchaseLots[rowIndex] = row;
-  else delete accountingState.selectedPurchaseLots[
+  else delete accountingState.selectedPurchaseLots[rowIndex];
+  renderPurchaseBatchEditor();
+}
+
+function renderPurchaseBatchEditor() {
+  const host = document.getElementById('editRowFormPurchases');
+  if (!host) return;
+  const rows = Object.keys(accountingState.selectedPurchaseLots).map(function(key) { return accountingState.selectedPurchaseLots[key]; });
+  if (!rows.length) {
+    host.innerHTML = '<div class="records-message">Вибери від 1 до 5 лотів для спільного оновлення.</div>';
+    return;
+  }
+  let selected = '<div class="selected-lots">';
+  rows.forEach(function(row) {
+    selected += '<div class="selected-lot"><div><b>' + recEsc(row.order_ref) + '</b><div class="field-hint">' +
+      recEsc(row.lot_id + ' | ' + row.sku + ' | к-сть ' + row.qty + ' | ' + row.status) +
+      '</div></div><div class="form-row"><label>JP-комісія лоту, JPY</label><input class="lot-fee-input" type="number" min="0" step="0.01" id="lotFee' +
+      Number(row.row_index) + '"></div></div>';
+  });
+  selected += '</div>';
+  host.innerHTML = '<div class="edit-row-form"><h4>Оновити закупку: вибрано ' + rows.length + ' з 5</h4>' + selected +
+    '<div class="edit-row-grid">' +
+      recField('batchTrackNumber','Трек-номер','') +
+      recField('batchDate','Дата доставки в Україну','','date') +
+      recField('batchUkraineDeliveryJpy','Доставка в Україну, JPY','','number','0.01') +
+      recSelect('batchStatus','Статус','', [''].concat(PURCHASE_STATUSES)) +
+      recField('batchNote','Примітка','') +
+    '</div><div class="form-actions"><button class="btn-primary" onclick="savePurchaseBatch()">Зберегти для вибраних лотів</button>' +
+    '<button class="btn-secondary" onclick="clearPurchaseSelection()">Скасувати вибір</button></div></div>';
+}
+
+function clearPurchaseSelection() {
+  accountingState.selectedPurchaseLots = {};
+  renderRecTable('purchases');
+}
+
+async function savePurchaseBatch() {
+  const rows = Object.keys(accountingState.selectedPurchaseLots).map(function(key) { return accountingState.selectedPurchaseLots[key]; });
+  if (!rows.length || rows.length > 5) return;
+  const lots = rows.map(function(row) {
+    const fee = editValue('lotFee' + row.row_index);
+    const item = { lot_id:row.lot_id };
+    if (fee !== '') item.japan_fee_jpy = Number(fee);
+    return item;
+  });
+  const payload = { action:'update_purchase', lots:lots };
+  if (editValue('batchTrackNumber') !== '') payload.track_number = editValue('batchTrackNumber');
+  if (editValue('batchDate') !== '') payload.date = editValue('batchDate');
+  if (editValue('batchUkraineDeliveryJpy') !== '') payload.ukraine_delivery_jpy = Number(editValue('batchUkraineDeliveryJpy'));
+  if (editValue('batchStatus') !== '') payload.status = editValue('batchStatus');
+  if (editValue('batchNote') !== '') payload.note = editValue('batchNote');
+  const hasLotFee = lots.some(function(lot) { return Object.prototype.hasOwnProperty.call(lot,'japan_fee_jpy'); });
+  if (Object.keys(payload).length === 2 && !hasLotFee) {
+    const msg = document.getElementById('recordsMsg');
+    if (msg) { msg.textContent = 'Заповни хоча б одне поле для оновлення'; msg.className = 'records-message error'; }
+    return;
+  }
+  const msg = document.getElementById('recordsMsg');
+  if (msg) { msg.textContent = 'Збереження…'; msg.className = 'records-message'; }
+  try {
+    const result = await callPost(payload);
+    if (msg) { msg.textContent = 'Оновлено лотів: ' + (result.rows_updated || rows.length); msg.className = 'records-message success'; }
+    accountingState.selectedPurchaseLots = {};
+    invalidateAccountingCaches();
+    await loadRecTab('purchases',true);
+  } catch(e) {
+    if (msg) { msg.textContent = 'Помилка: ' + e.message; msg.className = 'records-message error'; }
+  }
+}
+
+// ════════════ LOADERS MAP ════════════
+const loaders = { overview: loadOverview, stock: loadStock, consumables: loadConsumables, orders: loadOrders, skus: loadSkus, clients: loadClients, roadmap: loadRoadmap, accounting: loadAccounting };
+
+// ════════════ INIT ════════════
+loaded.overview = true;
+loadOverview();
+</script>
+</body>
+</html>
