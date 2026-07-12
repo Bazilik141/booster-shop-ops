@@ -2,8 +2,7 @@
 declare(strict_types=1);
 
 /**
- * PRODUCT-CATALOG-20260712B — add/update 8 OpenCart product cards and apply
- * the narrow EN Mega Evolution manufacturer/attribute follow-up.
+ * PRODUCT-CATALOG-20260712 — add/update 8 OpenCart product cards.
  *
  * Scope:
  * - product
@@ -11,7 +10,6 @@ declare(strict_types=1);
  * - product_to_category
  * - product_to_store
  * - product_attribute (language_id 4 only)
- * - manufacturer_id only for product_id 103, 104, 105, 106
  *
  * Explicit owner inputs applied:
  * - all target quantities are forced to 0;
@@ -32,7 +30,7 @@ declare(strict_types=1);
  * any write. It never deletes products outside the 8 target models/source IDs.
  */
 
-const BS_PATCH_ID = 'CATALOG-20260712_products-accessories-B';
+const BS_PATCH_ID = 'PRODUCT-CATALOG-20260712_products-accessories';
 const BS_EXPECTED_PRODUCT_COUNT = 8;
 const BS_LANGUAGE_ID = 4;
 const BS_STORE_ID = 0;
@@ -436,200 +434,6 @@ function bs_compare_product(mysqli $db, string $productTable, string $descriptio
     return $wantedAttributes === $currentAttributes;
 }
 
-function bs_attribute_map(array $rows): array
-{
-    $map = [];
-    foreach ($rows as $row) {
-        $attributeId = (int)($row['attribute_id'] ?? 0);
-        if ($attributeId < 1 || isset($map[$attributeId])) {
-            return ['__invalid__' => '1'];
-        }
-        $map[$attributeId] = (string)($row['text'] ?? '');
-    }
-    ksort($map);
-
-    return $map;
-}
-
-function bs_attribute_updates_payload(): array
-{
-    $common = [
-        ['attribute_id' => 12, 'name' => 'Мова', 'text' => 'Англійська (English)'],
-        ['attribute_id' => 14, 'name' => 'Рік випуску', 'text' => '2026'],
-        ['attribute_id' => 15, 'name' => 'Кількість карток у бустері', 'text' => '10'],
-        ['attribute_id' => 17, 'name' => 'Стан', 'text' => 'Новий, нерозпакований (Sealed)'],
-        ['attribute_id' => 18, 'name' => 'Походження товару', 'text' => 'Sealed-партія, без розсипу'],
-        ['attribute_id' => 19, 'name' => 'Зважування', 'text' => 'Без зважування, сортування чи ручного перевідбору'],
-        ['attribute_id' => 20, 'name' => 'Виробник', 'text' => 'The Pokémon Company'],
-    ];
-
-    return [
-        [
-            'product_id' => 103,
-            'model' => 'PKM-EN-PORD-BBN',
-            'manufacturer_id' => 11,
-            'manufacturer' => 'The Pokémon Company',
-            'attributes' => array_merge($common, [
-                ['attribute_id' => 13, 'name' => 'Назва сету', 'text' => 'Perfect Order'],
-                ['attribute_id' => 16, 'name' => 'Кількість бустерів у боксі', 'text' => '6'],
-                ['attribute_id' => 21, 'name' => 'Тип пакування', 'text' => 'Sealed Booster Bundle'],
-                ['attribute_id' => 24, 'name' => 'Додатковий вміст', 'text' => 'У кожному з 6 бустерів: 1 Basic Energy + 1 Pokémon TCG Live code card'],
-            ]),
-        ],
-        [
-            'product_id' => 104,
-            'model' => 'PKM-EN-PORD-BST',
-            'manufacturer_id' => 11,
-            'manufacturer' => 'The Pokémon Company',
-            'attributes' => array_merge($common, [
-                ['attribute_id' => 13, 'name' => 'Назва сету', 'text' => 'Perfect Order'],
-                ['attribute_id' => 21, 'name' => 'Тип пакування', 'text' => 'Sealed Booster Pack'],
-                ['attribute_id' => 24, 'name' => 'Додатковий вміст', 'text' => '1 Basic Energy + 1 Pokémon TCG Live code card'],
-            ]),
-        ],
-        [
-            'product_id' => 105,
-            'model' => 'PKM-EN-CHRS-BBN',
-            'manufacturer_id' => 11,
-            'manufacturer' => 'The Pokémon Company',
-            'attributes' => array_merge($common, [
-                ['attribute_id' => 13, 'name' => 'Назва сету', 'text' => 'Chaos Rising'],
-                ['attribute_id' => 16, 'name' => 'Кількість бустерів у боксі', 'text' => '6'],
-                ['attribute_id' => 21, 'name' => 'Тип пакування', 'text' => 'Sealed Booster Bundle'],
-                ['attribute_id' => 24, 'name' => 'Додатковий вміст', 'text' => 'У кожному з 6 бустерів: 1 Basic Energy + 1 Pokémon TCG Live code card'],
-            ]),
-        ],
-        [
-            'product_id' => 106,
-            'model' => 'PKM-EN-CHRS-BST',
-            'manufacturer_id' => 11,
-            'manufacturer' => 'The Pokémon Company',
-            'attributes' => array_merge($common, [
-                ['attribute_id' => 13, 'name' => 'Назва сету', 'text' => 'Chaos Rising'],
-                ['attribute_id' => 21, 'name' => 'Тип пакування', 'text' => 'Sealed Booster Pack'],
-                ['attribute_id' => 24, 'name' => 'Додатковий вміст', 'text' => '1 Basic Energy + 1 Pokémon TCG Live code card'],
-            ]),
-        ],
-    ];
-}
-
-function bs_prepare_attribute_updates(mysqli $db, string $productTable, string $manufacturerTable, string $attributeDescriptionTable, string $attributeTable): array
-{
-    $updates = bs_attribute_updates_payload();
-    if (count($updates) !== 4) {
-        bs_fail('attribute_update_count_invalid=' . count($updates));
-    }
-
-    $manufacturerRows = bs_rows(
-        $db,
-        'SELECT name FROM ' . bs_qi($manufacturerTable) . ' WHERE manufacturer_id=11 LIMIT 2'
-    );
-    if (count($manufacturerRows) !== 1 || (string)$manufacturerRows[0]['name'] !== 'The Pokémon Company') {
-        bs_fail('attribute_update_manufacturer_mismatch');
-    }
-
-    $seenIds = [];
-    foreach ($updates as $update) {
-        $productId = (int)$update['product_id'];
-        if (isset($seenIds[$productId])) {
-            bs_fail('attribute_update_product_duplicate=' . $productId);
-        }
-        $seenIds[$productId] = true;
-
-        $product = bs_product_by_id($db, $productTable, $productId);
-        if ($product === null || (string)$product['model'] !== (string)$update['model']) {
-            bs_fail('attribute_update_product_anchor_mismatch=' . $productId);
-        }
-
-        $seenAttributes = [];
-        foreach ($update['attributes'] as $attribute) {
-            $attributeId = (int)$attribute['attribute_id'];
-            if (isset($seenAttributes[$attributeId])) {
-                bs_fail('attribute_update_attribute_duplicate=' . $update['model'] . ':' . $attributeId);
-            }
-            $seenAttributes[$attributeId] = true;
-
-            $attributeRows = bs_rows(
-                $db,
-                'SELECT name FROM ' . bs_qi($attributeDescriptionTable)
-                . ' WHERE attribute_id=' . $attributeId
-                . ' AND language_id=' . BS_LANGUAGE_ID
-                . ' LIMIT 2'
-            );
-            if (count($attributeRows) !== 1 || (string)$attributeRows[0]['name'] !== (string)$attribute['name']) {
-                bs_fail('attribute_update_attribute_name_mismatch=' . $update['model'] . ':' . $attributeId);
-            }
-        }
-
-        $currentAttributes = bs_attribute_map(
-            bs_rows(
-                $db,
-                'SELECT attribute_id,text FROM ' . bs_qi($attributeTable)
-                . ' WHERE product_id=' . $productId . ' AND language_id=' . BS_LANGUAGE_ID
-            )
-        );
-        if (isset($currentAttributes['__invalid__'])) {
-            bs_fail('attribute_update_current_rows_invalid=' . $update['model']);
-        }
-        $wantedAttributes = bs_attribute_map($update['attributes']);
-        if ($currentAttributes !== [] && $currentAttributes !== $wantedAttributes) {
-            bs_fail('attribute_update_existing_rows_unexpected=' . $update['model']);
-        }
-    }
-
-    return $updates;
-}
-
-function bs_attribute_update_is_applied(mysqli $db, string $productTable, string $attributeTable, array $update): bool
-{
-    $product = bs_product_by_id($db, $productTable, (int)$update['product_id']);
-    if ($product === null
-        || (string)$product['model'] !== (string)$update['model']
-        || (int)$product['manufacturer_id'] !== (int)$update['manufacturer_id']) {
-        return false;
-    }
-
-    $wanted = bs_attribute_map($update['attributes']);
-    $current = bs_attribute_map(
-        bs_rows(
-            $db,
-            'SELECT attribute_id,text FROM ' . bs_qi($attributeTable)
-            . ' WHERE product_id=' . (int)$update['product_id'] . ' AND language_id=' . BS_LANGUAGE_ID
-        )
-    );
-
-    return $wanted === $current;
-}
-
-function bs_apply_attribute_update(mysqli $db, string $productTable, string $attributeTable, array $productColumns, array $attributeColumns, array $update): void
-{
-    $productId = (int)$update['product_id'];
-    bs_update(
-        $db,
-        $productTable,
-        ['manufacturer_id' => (int)$update['manufacturer_id']],
-        $productColumns,
-        'product_id=' . $productId
-    );
-
-    bs_delete($db, $attributeTable, 'product_id=' . $productId . ' AND language_id=' . BS_LANGUAGE_ID);
-    foreach ($update['attributes'] as $attribute) {
-        bs_insert(
-            $db,
-            $attributeTable,
-            [
-                'product_id' => $productId,
-                'attribute_id' => (int)$attribute['attribute_id'],
-                'language_id' => BS_LANGUAGE_ID,
-                'text' => (string)$attribute['text'],
-            ],
-            $attributeColumns
-        );
-    }
-
-    bs_out('attribute_update_applied=' . $update['model'] . ':' . $productId);
-}
-
 function bs_resolve_target_id(mysqli $db, string $productTable, array $product): ?int
 {
     $target = bs_product_by_model($db, $productTable, (string)$product['model']);
@@ -928,15 +732,6 @@ $products = bs_normalize_payload(
     $tables['attribute_description'],
     $payload['products'] ?? []
 );
-$attributeUpdates = bs_prepare_attribute_updates(
-    $db,
-    $tables['product'],
-    $tables['manufacturer'],
-    $tables['attribute_description'],
-    $tables['attribute']
-);
-bs_out('attribute_update_count=' . count($attributeUpdates));
-
 foreach ($products as &$product) {
     $product['_stock_status_id'] = $stockStatusId;
 }
@@ -963,15 +758,7 @@ if ($allApplied) {
     }
 }
 
-$attributesApplied = true;
-foreach ($attributeUpdates as $attributeUpdate) {
-    if (!bs_attribute_update_is_applied($db, $tables['product'], $tables['attribute'], $attributeUpdate)) {
-        $attributesApplied = false;
-        break;
-    }
-}
-
-if ($allApplied && $attributesApplied) {
+if ($allApplied) {
     bs_out('already_applied=yes');
     bs_out('done=ok');
     if (!$dryRun) {
@@ -987,11 +774,6 @@ if ($dryRun) {
         $id = bs_resolve_target_id($db, $tables['product'], $product);
         if ($id === null || !bs_compare_product($db, $tables['product'], $tables['description'], $tables['category'], $tables['store'], $tables['attribute'], $product, $id, $stockStatusId)) {
             bs_out('would_' . ($id === null ? 'create' : 'update') . '=' . $product['model'] . ($id === null ? '' : ':' . $id));
-        }
-    }
-    foreach ($attributeUpdates as $attributeUpdate) {
-        if (!bs_attribute_update_is_applied($db, $tables['product'], $tables['attribute'], $attributeUpdate)) {
-            bs_out('would_attribute_update=' . $attributeUpdate['model'] . ':' . $attributeUpdate['product_id']);
         }
     }
     bs_out('seo_url=preserved_or_skipped');
@@ -1012,11 +794,6 @@ foreach ($products as $product) {
         $affectedIds[] = $id;
     }
 }
-$attributeProductIds = array_map(
-    static fn(array $update): int => (int)$update['product_id'],
-    $attributeUpdates
-);
-$affectedIds = array_merge($affectedIds, $attributeProductIds);
 $affectedIds = array_values(array_unique(array_map('intval', $affectedIds)));
 
 $snapshot = [
@@ -1032,11 +809,7 @@ $snapshot = [
 if (file_put_contents($backupDir . DIRECTORY_SEPARATOR . 'db-prechange.json', json_encode($snapshot, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)) === false) {
     bs_fail('backup_write_failed=db-prechange.json');
 }
-$backupPayload = json_encode(
-    ['products' => $payload['products'] ?? [], 'attribute_updates' => $attributeUpdates],
-    JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT
-);
-if (!is_string($backupPayload) || file_put_contents($backupDir . DIRECTORY_SEPARATOR . 'payload.json', $backupPayload) === false) {
+if (file_put_contents($backupDir . DIRECTORY_SEPARATOR . 'payload.json', $rawPayload) === false) {
     bs_fail('backup_write_failed=payload.json');
 }
 $rollbackSql = bs_build_rollback($db, $snapshot, $prefix, $targetModels);
@@ -1142,17 +915,6 @@ try {
         );
     }
 
-    foreach ($attributeUpdates as $attributeUpdate) {
-        bs_apply_attribute_update(
-            $db,
-            $tables['product'],
-            $tables['attribute'],
-            $columns['product'],
-            $columns['attribute'],
-            $attributeUpdate
-        );
-    }
-
     if (!$db->commit()) {
         bs_fail('transaction_commit_failed');
     }
@@ -1161,7 +923,7 @@ try {
     bs_fail('transaction_rolled_back=' . $exception->getMessage());
 }
 
-bs_out('changed_tables=product,product_description,product_to_category,product_to_store,product_attribute,manufacturer_id');
+bs_out('changed_tables=product,product_description,product_to_category,product_to_store,product_attribute');
 bs_out('seo_url=preserved_or_skipped');
 bs_out('done=ok');
 $db->close();
