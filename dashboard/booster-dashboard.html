@@ -1683,11 +1683,11 @@ const ROADMAP_TASKS = [
     warn: '2026-07-12: Codex здав (diagnostics/NCRM-04_inventory-ledger-foundation_report_20260712.md), Claude review OK (0001-0005 незмінні, scope match). Owner прогнав db reset + db diff --local локально чисто. Commit 3c98253. Не закриває NCRM-03 (реконсиляція — окрема задача).', subtasks: []
   },
   {
-    id: 'NCRM-05', title: 'Mystery fulfillment', status: 'active', tool: 'Codex', priority: 'High',
-    lastUpdated: '2026-07-12', blockedBy: [],
+    id: 'NCRM-05', title: 'Mystery fulfillment', status: 'done', tool: 'Codex', priority: 'High',
+    lastUpdated: '2026-07-13', blockedBy: [],
     simple: 'Retire generic MBX seeds, 4 підтверджені SKU (PKM/OP-JP-MBX-ST/XL), reservation→commit workflow, автоматичний JP-пул компонентів, атомарний RPC на відправку.',
     why: 'Mystery box — SKU з найбільшою неоднозначністю собівартості й складу; потребує окремого воркфлоу поверх inventory foundation.',
-    warn: '2026-07-12: blocker NCRM-04 знято (Done, commit 3c98253). Хендоф готовий (handoffs/handoff_NCRM-05_mystery-fulfillment_2026-07-12.md), чекає Codex. Виявлено прогалину: reservations з контракту §7.1 не потрапили в NCRM-04 — цю задачу будує NCRM-05.', subtasks: []
+    warn: '2026-07-13: Codex здав (diagnostics/NCRM-05_mystery-fulfillment_report_20260713.md, commit cb964cb), Claude review OK. Owner прогнав повний локальний smoke test вручну (reserve/cancel/release, reserve/shipped/commit, обидва негативні тести — усі пройшли точно за очікуванням). is_sealed_pack без бекфілу навмисно — потрібне ручне тегування реального каталогу перед фактичним використанням. reversed-стан не реалізований (NCRM-06).', subtasks: []
   },
   {
     id: 'NCRM-06', title: 'Returns + cost quality', status: 'todo', tool: 'Codex', priority: 'Medium',

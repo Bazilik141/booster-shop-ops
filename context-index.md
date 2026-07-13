@@ -112,7 +112,7 @@ grep "ST-3.5" context-index.md
 | NCRM-02 | Repository-шар + Next.js скелет + emulator (Done) | handoffs/handoff_NCRM-02_repository-layer-nextjs-skeleton_2026-07-06.md |
 | NCRM-03 | Імпорт історії зі Sheets + звірка KPI (In progress — заблокована на NCRM-04) | handoffs/handoff_NCRM-03_import-history-kpi-reconciliation_2026-07-10.md |
 | NCRM-04 | Inventory ledger foundation (Done, commit 3c98253) | handoffs/handoff_NCRM-04_inventory-ledger-foundation_2026-07-11.md |
-| NCRM-05 | Mystery fulfillment (In progress — хендоф готовий, чекає Codex) | handoffs/handoff_NCRM-05_mystery-fulfillment_2026-07-12.md |
+| NCRM-05 | Mystery fulfillment (Done, commit cb964cb) | handoffs/handoff_NCRM-05_mystery-fulfillment_2026-07-12.md |
 | NCRM-06 | Returns + cost quality | — |
 | NCRM-07 | Reporting/forecast + KPI-вʼюхи (вкл. колишній NCRM-06) | — |
 | NCRM-08 | Read-екрани (summary/замовлення/склад/SKU/клієнти) — колишній зміст NCRM-04 | — |
