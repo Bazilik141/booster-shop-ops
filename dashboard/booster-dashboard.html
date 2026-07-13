@@ -1755,10 +1755,10 @@ const ROADMAP_TASKS = [
   },
   {
     id: 'ST-2c', title: 'Перевести всіх покупців на новий чекаут', status: 'active', tool: 'Claude + Codex', priority: 'High',
-    lastUpdated: '2026-07-13', blockedBy: ['RD-13.1J'],
+    lastUpdated: '2026-07-13', blockedBy: [],
     simple: 'Одна невелика зміна в коді — і всі покупці йдуть на новий чекаут замість старого. Водночас виправляємо вартість доставки: зараз вона завжди 0 грн, після — реальна ціна НП.',
     why: 'Це фінальний крок запуску нового чекауту. Старий залишається як запасний.',
-    warn: 'Блокер ST-2b.6 остаточно знято 2026-07-13 (ST-2b6e: read-only рендер, нуль фантомних замовлень — QA пройдено). НОВИЙ блокер: RD-13.1J — гість зараз не може оформити замовлення (422 на CAPTCHA). Cutover заборонений, поки гостьовий чекаут не полагоджено. Високий ризик лишається; відкат простий: один файл.',
+    warn: 'Всі блокери знято 2026-07-13: ST-2b.6 закрито остаточно (ST-2b6e, нуль фантомних замовлень), RD-13.1J закрито (гостьовий чекаут працює, QA пройдено). Шлях до cutover відкритий. Високий ризик лишається; відкат простий: один файл.',
     subtasks: [
       { id: '1', title: 'Реальна вартість доставки в замовленні', status: 'todo', desc: 'Зараз в замовленні завжди 0 грн доставки. Після: реальна ціна НП.' },
       { id: '2', title: 'Увімкнути новий чекаут для всіх', status: 'todo', desc: 'Прибираємо перенаправлення на старий чекаут.' }
@@ -1825,11 +1825,11 @@ const ROADMAP_TASKS = [
     simple: 'Перефарбовуємо сторінку оформлення замовлення — форма розбивається на зручні блоки-картки. Логіку оплати і доставки не чіпаємо, лише зовнішній вигляд.',
     why: 'Остання головна сторінка яка ще не в новому стилі.',
     warn: 'В роботі (власник підтвердив 2026-07-06) — окремого хендофу/діагностики в репо ще немає. Підвищений ризик. Перед деплоєм — обовʼязкова перевірка повного циклу оформлення.', subtasks: [] },
-  { id: 'RD-13.1J', title: 'Гостьовий чекаут зламано: CAPTCHA не доходить до сервера (422)', status: 'active', tool: 'Claude + Codex', priority: 'High',
+  { id: 'RD-13.1J', title: 'Гостьовий чекаут зламано: CAPTCHA не доходить до сервера (422)', status: 'done', tool: 'Claude + Codex', priority: 'High',
     lastUpdated: '2026-07-13', blockedBy: [],
-    simple: 'Гість не може оформити замовлення: кнопка шле запит старим способом (GET без токена CAPTCHA), сервер правильно відхиляє його з кодом 422, покупець бачить «Не вдалося створити замовлення». Серверна половина захисту RD-13.1C на місці, а клієнтська зникла з checkout.twig (ймовірно, перезаписана одним з візуальних патчів того ж дня). Треба повернути клієнтську половину: POST із токеном CAPTCHA.',
-    why: 'Кожен гість зараз впирається в помилку — прямі втрати замовлень. Також блокує ST-2c (cutover).',
-    warn: 'HIGH-RISK (чекаут/створення замовлення). Handoff готовий: handoff_RD-13.1J_guest-captcha-confirm-payload-restore_20260713.md. confirm.php НЕ чіпати — лише checkout.twig. Після патчу: повний bs-checkout-smoke + гостьові тести (COD і Hutko sandbox).', subtasks: [] },
+    simple: 'Гість не міг оформити замовлення: кнопка слала запит старим способом (GET без токена CAPTCHA), сервер правильно відхиляв його з кодом 422. Клієнтську половину захисту RD-13.1C відновлено в checkout.twig: POST із токеном CAPTCHA, пре-чек «розв\'яжи капчу перед оформленням», повтор після протухлого токена без перезавантаження сторінки. Хто саме перезаписав twig — встановити не вдалося (в архіві лише маніфест бекапів). Задеплоєно, власник підтвердив QA 2026-07-13 — гостьові замовлення знову працюють.',
+    why: 'Кожен гість впирався в помилку — прямі втрати замовлень. Блокував ST-2c (cutover).',
+    warn: 'Примітка для майбутніх патчів: RD-13.1J нормалізував увесь checkout.twig до LF — патч з анкером під CRLF впаде на anchor (safe-fail, треба перегенерувати). Правило зафіксовано у CODEX_WORKFLOW.md.', subtasks: [] },
   { id: 'RD-14', title: 'Сторінка «Замовлення оформлено» — новий дизайн', status: 'todo', tool: 'Codex', priority: 'Medium',
     lastUpdated: '2026-05-30', blockedBy: [],
     simple: 'Красива картка підтвердження із контактами і наступними кроками після покупки.',
@@ -2757,4 +2757,54 @@ function renderPurchaseBatchEditor() {
       recSelect('batchStatus','Статус','', [''].concat(PURCHASE_STATUSES)) +
       recField('batchNote','Примітка','') +
     '</div><div class="form-actions"><button class="btn-primary" onclick="savePurchaseBatch()">Зберегти для вибраних лотів</button>' +
-    '<button class="btn-secondary" onclick="clearPurchaseSelection()">Скасувати виб
+    '<button class="btn-secondary" onclick="clearPurchaseSelection()">Скасувати вибір</button></div></div>';
+}
+
+function clearPurchaseSelection() {
+  accountingState.selectedPurchaseLots = {};
+  renderRecTable('purchases');
+}
+
+async function savePurchaseBatch() {
+  const rows = Object.keys(accountingState.selectedPurchaseLots).map(function(key) { return accountingState.selectedPurchaseLots[key]; });
+  if (!rows.length || rows.length > 5) return;
+  const lots = rows.map(function(row) {
+    const fee = editValue('lotFee' + row.row_index);
+    const item = { lot_id:row.lot_id };
+    if (fee !== '') item.japan_fee_jpy = Number(fee);
+    return item;
+  });
+  const payload = { action:'update_purchase', lots:lots };
+  if (editValue('batchTrackNumber') !== '') payload.track_number = editValue('batchTrackNumber');
+  if (editValue('batchDate') !== '') payload.date = editValue('batchDate');
+  if (editValue('batchUkraineDeliveryJpy') !== '') payload.ukraine_delivery_jpy = Number(editValue('batchUkraineDeliveryJpy'));
+  if (editValue('batchStatus') !== '') payload.status = editValue('batchStatus');
+  if (editValue('batchNote') !== '') payload.note = editValue('batchNote');
+  const hasLotFee = lots.some(function(lot) { return Object.prototype.hasOwnProperty.call(lot,'japan_fee_jpy'); });
+  if (Object.keys(payload).length === 2 && !hasLotFee) {
+    const msg = document.getElementById('recordsMsg');
+    if (msg) { msg.textContent = 'Заповни хоча б одне поле для оновлення'; msg.className = 'records-message error'; }
+    return;
+  }
+  const msg = document.getElementById('recordsMsg');
+  if (msg) { msg.textContent = 'Збереження…'; msg.className = 'records-message'; }
+  try {
+    const result = await callPost(payload);
+    if (msg) { msg.textContent = 'Оновлено лотів: ' + (result.rows_updated || rows.length); msg.className = 'records-message success'; }
+    accountingState.selectedPurchaseLots = {};
+    invalidateAccountingCaches();
+    await loadRecTab('purchases',true);
+  } catch(e) {
+    if (msg) { msg.textContent = 'Помилка: ' + e.message; msg.className = 'records-message error'; }
+  }
+}
+
+// ════════════ LOADERS MAP ════════════
+const loaders = { overview: loadOverview, stock: loadStock, consumables: loadConsumables, orders: loadOrders, skus: loadSkus, clients: loadClients, roadmap: loadRoadmap, accounting: loadAccounting };
+
+// ════════════ INIT ════════════
+loaded.overview = true;
+loadOverview();
+</script>
+</body>
+</html>
