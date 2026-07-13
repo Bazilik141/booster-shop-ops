@@ -1741,23 +1741,24 @@ const ROADMAP_TASKS = [
   // ─── CHECKOUT / ST ───
   {
     id: 'ST-2b.6', title: 'Баг: порожнє замовлення Hutko після перезапуску браузера', status: 'done', tool: 'Claude + Codex', priority: 'High',
-    lastUpdated: '2026-07-03', blockedBy: [],
-    simple: 'Корінь знайдено: при зміні адреси доставки (в т.ч. просто вихід з поля кліком) код тихо скидав спосіб оплати і сам підставляв Hutko замість того, що обрав клієнт — без жодного кліку. Виправлено в обох чекаутах (новому і SimpleCheckout) + додано перевірку "клік має бути справжнім" на кнопці «Оформити» (був відсутній, хоча малось бути ще з ST-2b.4). Патчі застосовані на сервері 2026-07-03, власник підтвердив QA — готово.',
+    lastUpdated: '2026-07-13', blockedBy: [],
+    simple: 'Остаточний корінь знайдено (ST-2b6e): сторінка чекауту при кожному відкритті/оновленні сама викликала серверний код, що створює замовлення — ще до будь-якого кліку. Тому фікси 2b.1–2b.6d (кліки, автовибір Hutko) не закривали баг повністю. Патч 2b6e зробив рендер сторінки read-only: замовлення створюється лише після справжнього натискання «Підтвердити замовлення». Доказ з логів: замовлення #224 створене самим GET-запитом сторінки. Задеплоєно, власник підтвердив QA 2026-07-13 (3 рефреші + закриття/відновлення вкладки — нуль нових замовлень).',
     why: 'Клієнти, що обирали післяплату, отримували в адмінці Hutko без оплати — реальні замовлення, не тільки тестові.',
     warn: null,
     subtasks: [
       { id: '1', title: 'Перевірити поведінку при закритті/відкритті вкладки', status: 'done', desc: 'Причина виявилась іншою: не bfcache, а тихий скид+автопідстановка Hutko при зміні адреси.' },
       { id: '2', title: 'Перевірити авто-вибір Hutko при відкритті сторінки', status: 'done', desc: 'Підтверджено логами (Phase 0b) і виправлено (Phase 1): авто-вибір/автозбереження Hutko прибрано в обох чекаутах.' },
       { id: '3', title: 'Перевірити мікрооновлення при заповненні доставки', status: 'done', desc: 'Підтверджено: саме оновлення при зміні/виході з полів адреси тригерило скид оплати. Тригер оновлення лишили недоторканим, прибрали тільки автопідстановку Hutko після нього.' },
-      { id: '4', title: 'Trusted-click гейт на кнопці «Оформити» (пропуск з ST-2b.4)', status: 'done', desc: 'Патч застосований (ST-2b6d) — блокує підроблені/сторонні кліки, клавіатура (Tab+Enter/Space) лишається робочою. Власник підтвердив QA (в т.ч. клік по різних ділянках кнопки).' }
+      { id: '4', title: 'Trusted-click гейт на кнопці «Оформити» (пропуск з ST-2b.4)', status: 'done', desc: 'Патч застосований (ST-2b6d) — блокує підроблені/сторонні кліки, клавіатура (Tab+Enter/Space) лишається робочою. Власник підтвердив QA (в т.ч. клік по різних ділянках кнопки).' },
+      { id: '5', title: 'ST-2b6e — read-only рендер сторінки чекауту (справжній корінь)', status: 'done', desc: 'Виявлено, що замовлення створював сам рендер сторінки (checkout → confirm::index() → addOrder/editOrder), тому баг «плавав» попри клієнтські гейти. Запис замовлення дозволений лише явному confirm() після кліку. Задеплоєно + QA власника 2026-07-13. Побічно знайдено окремий баг гостьового чекауту → RD-13.1J.' }
     ]
   },
   {
     id: 'ST-2c', title: 'Перевести всіх покупців на новий чекаут', status: 'active', tool: 'Claude + Codex', priority: 'High',
-    lastUpdated: '2026-07-03', blockedBy: [],
+    lastUpdated: '2026-07-13', blockedBy: ['RD-13.1J'],
     simple: 'Одна невелика зміна в коді — і всі покупці йдуть на новий чекаут замість старого. Водночас виправляємо вартість доставки: зараз вона завжди 0 грн, після — реальна ціна НП.',
     why: 'Це фінальний крок запуску нового чекауту. Старий залишається як запасний.',
-    warn: 'Блокер ST-2b.6 знято 2026-07-03 (тихий скид оплати на Hutko + trusted-click гейт — виправлено, QA пройдено). Високий ризик лишається. Якщо щось піде не так — повернути назад просто: один файл.',
+    warn: 'Блокер ST-2b.6 остаточно знято 2026-07-13 (ST-2b6e: read-only рендер, нуль фантомних замовлень — QA пройдено). НОВИЙ блокер: RD-13.1J — гість зараз не може оформити замовлення (422 на CAPTCHA). Cutover заборонений, поки гостьовий чекаут не полагоджено. Високий ризик лишається; відкат простий: один файл.',
     subtasks: [
       { id: '1', title: 'Реальна вартість доставки в замовленні', status: 'todo', desc: 'Зараз в замовленні завжди 0 грн доставки. Після: реальна ціна НП.' },
       { id: '2', title: 'Увімкнути новий чекаут для всіх', status: 'todo', desc: 'Прибираємо перенаправлення на старий чекаут.' }
@@ -1824,6 +1825,11 @@ const ROADMAP_TASKS = [
     simple: 'Перефарбовуємо сторінку оформлення замовлення — форма розбивається на зручні блоки-картки. Логіку оплати і доставки не чіпаємо, лише зовнішній вигляд.',
     why: 'Остання головна сторінка яка ще не в новому стилі.',
     warn: 'В роботі (власник підтвердив 2026-07-06) — окремого хендофу/діагностики в репо ще немає. Підвищений ризик. Перед деплоєм — обовʼязкова перевірка повного циклу оформлення.', subtasks: [] },
+  { id: 'RD-13.1J', title: 'Гостьовий чекаут зламано: CAPTCHA не доходить до сервера (422)', status: 'active', tool: 'Claude + Codex', priority: 'High',
+    lastUpdated: '2026-07-13', blockedBy: [],
+    simple: 'Гість не може оформити замовлення: кнопка шле запит старим способом (GET без токена CAPTCHA), сервер правильно відхиляє його з кодом 422, покупець бачить «Не вдалося створити замовлення». Серверна половина захисту RD-13.1C на місці, а клієнтська зникла з checkout.twig (ймовірно, перезаписана одним з візуальних патчів того ж дня). Треба повернути клієнтську половину: POST із токеном CAPTCHA.',
+    why: 'Кожен гість зараз впирається в помилку — прямі втрати замовлень. Також блокує ST-2c (cutover).',
+    warn: 'HIGH-RISK (чекаут/створення замовлення). Handoff готовий: handoff_RD-13.1J_guest-captcha-confirm-payload-restore_20260713.md. confirm.php НЕ чіпати — лише checkout.twig. Після патчу: повний bs-checkout-smoke + гостьові тести (COD і Hutko sandbox).', subtasks: [] },
   { id: 'RD-14', title: 'Сторінка «Замовлення оформлено» — новий дизайн', status: 'todo', tool: 'Codex', priority: 'Medium',
     lastUpdated: '2026-05-30', blockedBy: [],
     simple: 'Красива картка підтвердження із контактами і наступними кроками після покупки.',
@@ -2751,54 +2757,4 @@ function renderPurchaseBatchEditor() {
       recSelect('batchStatus','Статус','', [''].concat(PURCHASE_STATUSES)) +
       recField('batchNote','Примітка','') +
     '</div><div class="form-actions"><button class="btn-primary" onclick="savePurchaseBatch()">Зберегти для вибраних лотів</button>' +
-    '<button class="btn-secondary" onclick="clearPurchaseSelection()">Скасувати вибір</button></div></div>';
-}
-
-function clearPurchaseSelection() {
-  accountingState.selectedPurchaseLots = {};
-  renderRecTable('purchases');
-}
-
-async function savePurchaseBatch() {
-  const rows = Object.keys(accountingState.selectedPurchaseLots).map(function(key) { return accountingState.selectedPurchaseLots[key]; });
-  if (!rows.length || rows.length > 5) return;
-  const lots = rows.map(function(row) {
-    const fee = editValue('lotFee' + row.row_index);
-    const item = { lot_id:row.lot_id };
-    if (fee !== '') item.japan_fee_jpy = Number(fee);
-    return item;
-  });
-  const payload = { action:'update_purchase', lots:lots };
-  if (editValue('batchTrackNumber') !== '') payload.track_number = editValue('batchTrackNumber');
-  if (editValue('batchDate') !== '') payload.date = editValue('batchDate');
-  if (editValue('batchUkraineDeliveryJpy') !== '') payload.ukraine_delivery_jpy = Number(editValue('batchUkraineDeliveryJpy'));
-  if (editValue('batchStatus') !== '') payload.status = editValue('batchStatus');
-  if (editValue('batchNote') !== '') payload.note = editValue('batchNote');
-  const hasLotFee = lots.some(function(lot) { return Object.prototype.hasOwnProperty.call(lot,'japan_fee_jpy'); });
-  if (Object.keys(payload).length === 2 && !hasLotFee) {
-    const msg = document.getElementById('recordsMsg');
-    if (msg) { msg.textContent = 'Заповни хоча б одне поле для оновлення'; msg.className = 'records-message error'; }
-    return;
-  }
-  const msg = document.getElementById('recordsMsg');
-  if (msg) { msg.textContent = 'Збереження…'; msg.className = 'records-message'; }
-  try {
-    const result = await callPost(payload);
-    if (msg) { msg.textContent = 'Оновлено лотів: ' + (result.rows_updated || rows.length); msg.className = 'records-message success'; }
-    accountingState.selectedPurchaseLots = {};
-    invalidateAccountingCaches();
-    await loadRecTab('purchases',true);
-  } catch(e) {
-    if (msg) { msg.textContent = 'Помилка: ' + e.message; msg.className = 'records-message error'; }
-  }
-}
-
-// ════════════ LOADERS MAP ════════════
-const loaders = { overview: loadOverview, stock: loadStock, consumables: loadConsumables, orders: loadOrders, skus: loadSkus, clients: loadClients, roadmap: loadRoadmap, accounting: loadAccounting };
-
-// ════════════ INIT ════════════
-loaded.overview = true;
-loadOverview();
-</script>
-</body>
-</html>
+    '<button class="btn-secondary" onclick="clearPurchaseSelection()">Скасувати виб
