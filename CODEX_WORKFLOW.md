@@ -33,6 +33,12 @@ Each patch = one self-contained runner in `patches/`, runnable from `~/public_ht
 - Naming: `patches/<taskid>_<slug>_<YYYYMMDD>.php`
 - Report:  `diagnostics/<taskid>_<slug>_report_<YYYYMMDD>.md`
 - Commit:  `Codex: <TASK-ID> <short description>`
+- EOL / anchors: RD-13.1J нормалізував увесь `checkout.twig` до LF (CRLF→LF при читанні).
+  Правило надалі: (а) новий патч НЕ повинен мовчки міняти line endings всього файлу —
+  зберігай стиль EOL цілі (як робив ST-2b6e); (б) анкери для файлів, які вже проходили
+  через раннери, підбирати з урахуванням можливого LF — при mismatch анкер просто
+  впаде (safe-fail), це не пошкодження, але вимагає перегенерації патчу;
+  (в) `checkout.twig` станом на 2026-07-13 (після RD-13.1J) — LF.
 
 ## Report must contain
 scope · files touched · dry-run result · `php -l` · idempotency · rollback ·
