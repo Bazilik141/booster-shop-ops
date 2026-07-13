@@ -42,6 +42,9 @@ grep "ST-3.5" context-index.md
 | ST-2b.6 (gate) | Trusted-click гейт на «Оформити» (закриває пропуск з ST-2b.4) | handoffs/handoff_ST-2b6d_deferred-confirm-trusted-click-gate_20260703.md | diagnostics/ST-2b6d_deferred-confirm-trusted-click-gate_report_20260703.md |
 | ST-2b.6 (root fix) | ST-2b6e — read-only рендер чекауту, запис замовлення лише через явний confirm() | — (evidence-first, без окремого handoff) | diagnostics/ST-2b6e_server-render-order-write-gate_report_20260712.md |
 | RD-13.1J | Гостьовий чекаут: відновити RD-13.1C CAPTCHA POST-payload у checkout.twig (422 на confirm.confirm) | handoffs/handoff_RD-13.1J_guest-captcha-confirm-payload-restore_20260713.md | — |
+| CHECKOUT-003 | Помилка валідації адреси одразу при відкритті чекауту (мобайл, авторизований) | handoffs/handoff_CHECKOUT-003_authorized-address-error-on-load_20260713.md | — |
+| ACC-001 | Меню кабінету: дубль на десктопі, без «Вихід» на мобайлі | handoffs/handoff_ACC-001_account-menu-dedup-logout_20260713.md | — |
+| ACC-002 | NP-форма адреси в акаунті замість стокової free-text | handoffs/handoff_ACC-002_account-np-address-form_20260713.md | — |
 | ST-2c | Переключення всіх клієнтів на новий чекаут | handoffs/handoff_ST-2c_real-shipping-cost-cutover_2026-07-02.md | — |
 | ST-3.5 | Кнопка ТТН в адмінці | handoffs/handoff_ST-3.5_admin-ttn-button_2026-06-24.md | — |
 | ST-3.5-1 | Фікс якоря кнопки (OC 4.1.0.3) | ↑ в тому ж хендофі (підзадача) | — |
