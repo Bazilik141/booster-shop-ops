@@ -86,6 +86,14 @@ npx supabase gen types typescript --local --schema public > lib/types/database.t
 
 Файл `lib/types/database.ts` є згенерованим. Не редагуйте його вручну.
 
+## Доступ і ролі (NCRM-07b, з 2026-07-15)
+
+RLS на public-схемі увімкнено deny-by-default (без policies для `anon`/`authenticated`) — сумісно з правилом вище: додаток і далі ходить лише через `service_role`, RLS на нього не діє. Таблиця `staff` (роль: `owner`/`admin`/`user_plus`/`user`) і `staff_permission_overrides` — це поки що лише schema-заготовка під майбутній логін, без UI і без реальних per-role policies (те й інше — NCRM-08/09).
+
+Повне обґрунтування й обрані варіанти: `plans/NCRM-07b_rls-multiuser-role-model_20260715.md`.
+Канонічний запис рішення: `plans/NCRM-financial-model-v2_technical-contract_20260711.md` §10.
+Технічний спек міграції: `handoffs/handoff_NCRM-07b_rls-multiuser-role-foundation_20260715.md`.
+
 ## Зупинка та локальний rollback
 
 ```bash
