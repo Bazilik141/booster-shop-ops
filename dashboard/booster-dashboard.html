@@ -1697,11 +1697,11 @@ const ROADMAP_TASKS = [
     warn: '2026-07-11: рескоуп під v2-контракт §5 — цей ID раніше означав «Витрати + P&L + KPI-вʼюхи»; той зміст злито в NCRM-07 (нижче), не окрема картка. 2026-07-14: Codex здав (diagnostics/NCRM-06_returns-cost-quality_report_20260714.md), Claude review OK. Owner прогнав db reset + db diff --local локально чисто, вручну звірив money_only/resellable/damaged/over-refund через psql. Mystery-unopened reversal і git diff 0001–0007 не передокументовано окремо — owner прийняв рішення закрити задачу без цього. Нічого не пішло в cloud Supabase/live CRM/OpenCart. Commit 0cd78bd, 4e4a0e6. Не закриває NCRM-07 (reporting/forecast) чи NCRM-03 (реконсиляція).', subtasks: []
   },
   {
-    id: 'NCRM-07', title: 'Reporting/forecast + KPI-вʼюхи (вкл. колишній NCRM-06)', status: 'active', tool: 'Codex + Owner', priority: 'High',
-    lastUpdated: '2026-07-15', blockedBy: ['NCRM-04', 'NCRM-05', 'NCRM-06'],
+    id: 'NCRM-07', title: 'Reporting/forecast + KPI-вʼюхи (вкл. колишній NCRM-06)', status: 'done', tool: 'Codex + Owner', priority: 'High',
+    lastUpdated: '2026-07-15', blockedBy: [],
     simple: 'Expenses-ledger, перероблені v_pnl_monthly/KPI-вʼюхи (contribution margin, true net P&L, inventory adjustment impact, estimated/unpriced exposure), forecast margin (RRC × available_qty − 5% reserve).',
     why: 'Щоб дашборд нарешті показував контрольовану маржу й чистий P&L, а не легасі «прибуток».',
-    warn: '2026-07-14: Unblocked — NCRM-04/05/06 all Done. Handoff: handoffs/handoff_NCRM-07_reporting-forecast-kpi-views_2026-07-14.md. 2026-07-15: Codex здав migration 0009 + diagnostics/NCRM-07_reporting-forecast-kpi_report_20260715.md, Claude review OK з зауваженнями; Codex виправив обидві прогалини (raw db reset/diff вивід, ізольований money_only тест) — очікує повторний review/owner QA перед Done. 2026-07-11: рескоуп під v2-контракт §6 + злиття старого NCRM-06. Цей ID раніше означав «Order pipeline OpenCart→Supabase»; той зміст перенесено на NCRM-10 (нижче).', subtasks: []
+    warn: '2026-07-15: Done. Migration 0009 (commit c6cc8f3 + parent). Claude review OK — обидві прогалини (raw db reset/diff вивід, ізольований money_only тест) закриті доказово: money_only true_net_profit точно збігається зі старою формулою (-650=-650), resellable відрізняється рівно на 600 UAH реверсу. git diff 0001-0008 порожній. Owner закрив на основі доказів у звіті (як NCRM-06), без окремого власного прогону db reset. Далі: NCRM-03 (реімпорт), NCRM-07b (RLS, відкрита).', subtasks: []
   },
   {
     id: 'NCRM-07b', title: 'Enable RLS on public schema', status: 'todo', tool: 'Codex', priority: 'High',

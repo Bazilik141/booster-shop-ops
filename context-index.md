@@ -115,7 +115,7 @@ grep "ST-3.5" context-index.md
 | NCRM-04 | Inventory ledger foundation (Done, commit 3c98253) | handoffs/handoff_NCRM-04_inventory-ledger-foundation_2026-07-11.md |
 | NCRM-05 | Mystery fulfillment (Done, commit cb964cb) | handoffs/handoff_NCRM-05_mystery-fulfillment_2026-07-12.md |
 | NCRM-06 | Returns + cost quality (Done, commits 0cd78bd + 4e4a0e6 — owner closed after partial manual QA; Mystery-reversal + `git diff` 0001-0007 not independently re-verified) | handoffs/handoff_NCRM-06_returns-cost-quality_2026-07-14.md |
-| NCRM-07 | Reporting/forecast + KPI-вʼюхи (вкл. колишній NCRM-06) (In progress — Codex здав migration 0009 + звіт 2026-07-15, Claude review OK з зауваженнями, owner QA не пройдено) | handoffs/handoff_NCRM-07_reporting-forecast-kpi-views_2026-07-14.md |
+| NCRM-07 | Reporting/forecast + KPI-вʼюхи (вкл. колишній NCRM-06) (Done, commit c6cc8f3 + parent — owner закрив на основі доказів у звіті, без окремого прогону db reset) | handoffs/handoff_NCRM-07_reporting-forecast-kpi-views_2026-07-14.md |
 | NCRM-07b | Enable RLS on public schema (Not started, Phase 2, заблокована на NCRM-07) | — |
 | NCRM-08 | Read-екрани (summary/замовлення/склад/SKU/клієнти) — колишній зміст NCRM-04 | — |
 | NCRM-09 | Write-форми + FIFO-COGS — колишній зміст NCRM-05 | — |
