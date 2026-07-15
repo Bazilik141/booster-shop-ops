@@ -43,6 +43,7 @@ grep "ST-3.5" context-index.md
 | ST-2b.6 (root fix) | ST-2b6e — read-only рендер чекауту, запис замовлення лише через явний confirm() | — (evidence-first, без окремого handoff) | diagnostics/ST-2b6e_server-render-order-write-gate_report_20260712.md |
 | RD-13.1J | Гостьовий чекаут: відновити RD-13.1C CAPTCHA POST-payload у checkout.twig (422 на confirm.confirm) | handoffs/handoff_RD-13.1J_guest-captcha-confirm-payload-restore_20260713.md | — |
 | CHECKOUT-003 | Помилка валідації адреси одразу при відкритті чекауту (мобайл, авторизований) | handoffs/handoff_CHECKOUT-003_authorized-address-error-on-load_20260713.md | — |
+| CHECKOUT-004 | Промокоди (coupon/First15) у новому чекауті — заміна RD13-STUB на реальний endpoint | handoffs/handoff_CHECKOUT-004_promo-code-new-checkout_20260715.md | — |
 | ACC-001 | Меню кабінету: дубль на десктопі, без «Вихід» на мобайлі | handoffs/handoff_ACC-001_account-menu-dedup-logout_20260713.md | — |
 | ACC-002 | NP-форма адреси в акаунті замість стокової free-text | handoffs/handoff_ACC-002_account-np-address-form_20260713.md | — |
 | ST-2c | Переключення всіх клієнтів на новий чекаут | handoffs/handoff_ST-2c_real-shipping-cost-cutover_2026-07-02.md | — |
@@ -114,7 +115,8 @@ grep "ST-3.5" context-index.md
 | NCRM-04 | Inventory ledger foundation (Done, commit 3c98253) | handoffs/handoff_NCRM-04_inventory-ledger-foundation_2026-07-11.md |
 | NCRM-05 | Mystery fulfillment (Done, commit cb964cb) | handoffs/handoff_NCRM-05_mystery-fulfillment_2026-07-12.md |
 | NCRM-06 | Returns + cost quality (Done, commits 0cd78bd + 4e4a0e6 — owner closed after partial manual QA; Mystery-reversal + `git diff` 0001-0007 not independently re-verified) | handoffs/handoff_NCRM-06_returns-cost-quality_2026-07-14.md |
-| NCRM-07 | Reporting/forecast + KPI-вʼюхи (вкл. колишній NCRM-06) (In progress — розблокована, хендоф написано 2026-07-14) | handoffs/handoff_NCRM-07_reporting-forecast-kpi-views_2026-07-14.md |
+| NCRM-07 | Reporting/forecast + KPI-вʼюхи (вкл. колишній NCRM-06) (In progress — Codex здав migration 0009 + звіт 2026-07-15, Claude review OK з зауваженнями, owner QA не пройдено) | handoffs/handoff_NCRM-07_reporting-forecast-kpi-views_2026-07-14.md |
+| NCRM-07b | Enable RLS on public schema (Not started, Phase 2, заблокована на NCRM-07) | — |
 | NCRM-08 | Read-екрани (summary/замовлення/склад/SKU/клієнти) — колишній зміст NCRM-04 | — |
 | NCRM-09 | Write-форми + FIFO-COGS — колишній зміст NCRM-05 | — |
 | NCRM-10 | Order pipeline OpenCart→Supabase + smoke — колишній зміст NCRM-07 | — |
