@@ -1,0 +1,67 @@
+Склад,,,,,,,,,,,,,,,,,,,
+SKU,Назва товару,Категорія / бренд,Формат,Закуплено,Продано,Списано,Залишок,Середня собівартість / ПРРО,Середня управлінська собівартість,Вартість залишку / ПРРО,Управлінська вартість залишку,Потенційна виручка,Потенційний прибуток,Мінімальний залишок,Статус залишку,Очікується / Японія,Закуплено всього,Передзамовлено / резерв,Очікується після резерву
+PKM-JP-MZERO-BLR,Pokémon — Munics Zero — JP — Blister,Pokémon,Blister,5,3,0,2,"1 210,63 грн","1 283,27 грн","2 421,26 грн","2 566,54 грн","3 400,00 грн","833,46 грн",1,ОК,2,9,0,2
+PKM-JP-MDEX-BST,Pokémon — Mega Dream EX — JP — Booster,Pokémon,Booster,30,24,1,5,"314,18 грн","333,03 грн","1 570,90 грн","1 665,15 грн","2 350,00 грн","684,85 грн",5,Мало,0,30,0,0
+PKM-JP-SCEX-BST,Pokémon — Scarlet EX — JP — Booster,Pokémon,Booster,20,10,10,0,"88,10 грн","93,39 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн",5,Немає,0,20,0,0
+PKM-JP-MZERO-BST,Pokémon — Munics Zero — JP — Booster,Pokémon,Booster,108,20,52,36,"41,07 грн","43,53 грн","1 478,52 грн","1 567,08 грн","5 400,00 грн","3 832,92 грн",5,ОК,0,108,0,0
+PKM-JP-MSYM-BST,Pokémon — Mega Symphonia — JP — Booster,Pokémon,Booster,155,117,21,17,"57,25 грн","60,68 грн","973,25 грн","1 031,56 грн","2 720,00 грн","1 688,44 грн",5,ОК,30,185,0,30
+PKM-JP-MZERO-BBX,Pokémon — Munics Zero — JP — Booster Box,Pokémon,Booster Box,5,3,0,2,"2 355,94 грн","2 497,30 грн","4 711,88 грн","4 994,60 грн","7 800,00 грн","2 805,40 грн",1,ОК,0,5,0,0
+OP-JP-V7PR-BST,One Piece — V7 Promo — JP — Booster,One Piece,Booster,36,3,12,21,"62,57 грн","66,32 грн","1 313,97 грн","1 392,72 грн","2 520,00 грн","1 127,28 грн",5,ОК,0,36,0,0
+OP-JP-OP10-BST,One Piece — OP-10 — JP — Booster,One Piece,Booster,24,21,3,0,"79,24 грн","83,99 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн",5,Немає,0,24,0,0
+PKM-JP-MBRV-BST,Pokémon — Mega Brave — JP — Booster,Pokémon,Booster,153,109,14,30,"90,50 грн","95,93 грн","2 715,00 грн","2 877,90 грн","5 100,00 грн","2 222,10 грн",5,ОК,0,153,0,0
+OP-JP-OP07-BST,One Piece — OP-07 — JP — Booster,One Piece,Booster,24,18,6,0,"72,54 грн","76,89 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн",5,Немає,0,24,0,0
+OP-JP-OP11-BST,One Piece — OP-11 — JP — Booster,One Piece,Booster,48,36,8,4,"72,54 грн","76,89 грн","290,16 грн","307,56 грн","720,00 грн","412,44 грн",5,Мало,0,48,0,0
+OP-JP-EB03-BST,One Piece — EB-03 — JP — Booster,One Piece,Booster,24,5,14,5,"75,71 грн","80,25 грн","378,55 грн","401,25 грн","850,00 грн","448,75 грн",5,Мало,0,24,0,0
+PKM-JP-SPIN-BST,Pokémon — Ninja Spinner — JP — Booster,Pokémon,Booster,77,9,29,39,"92,72 грн","98,28 грн","3 616,08 грн","3 832,92 грн","7 410,00 грн","3 577,08 грн",5,ОК,0,77,0,0
+PKM-KR-HWAK-BBX,Pokémon — Hot Wind Arena — KR — Booster Box,Pokémon,Booster Box,0,0,0,0,"0,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн",1,Немає,0,0,0,0
+PKM-KR-SEBK-BBX,Pokémon — Super Electric Breaker — KR — Booster Box,Pokémon,Booster Box,1,1,0,0,"2 251,00 грн","2 386,06 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн",1,Немає,0,1,0,0
+PKM-JP-PRTB-SET,Pokémon — Premium Trainer Box ex — JP — Collection Set,Pokémon,Collection Set,1,1,0,0,"2 337,87 грн","2 478,14 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн",1,Немає,0,1,0,0
+OP-JP-OP12-BST,One Piece — OP-12 — JP — Booster,One Piece,Booster,20,20,0,0,"77,64 грн","82,30 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн",5,Немає,0,20,0,0
+OP-JP-OP14-BST,One Piece — OP-14 — JP — Booster,One Piece,Booster,40,9,10,21,"96,00 грн","101,76 грн","2 016,00 грн","2 136,96 грн","4 200,00 грн","2 063,04 грн",5,ОК,0,40,0,0
+OP-JP-OP15-BST,One Piece — OP-15 — JP — Booster,One Piece,Booster,24,1,9,14,"82,21 грн","87,14 грн","1 150,94 грн","1 219,96 грн","2 940,00 грн","1 720,04 грн",5,ОК,0,24,0,0
+PKM-JP-INFX-BST,Pokémon — Inferno X — JP — Booster,Pokémon,Booster,60,1,4,55,"167,36 грн","177,40 грн","9 204,80 грн","9 757,00 грн","17 600,00 грн","7 843,00 грн",5,ОК,0,60,0,0
+PKM-JP-OUTL-BST,Pokémon — Outlet Mix — JP — Booster,Pokémon,Booster,278,240,6,32,"64,37 грн","68,23 грн","2 059,84 грн","2 183,36 грн","2 400,00 грн","216,64 грн",5,ОК,0,278,0,0
+YGO-JP-QCAC-BST,Yu-Gi-Oh! — Quarter Century Art Collection — JP — Booster,Yu-Gi-Oh!,Booster,15,0,1,14,"56,73 грн","60,14 грн","794,22 грн","841,96 грн","1 680,00 грн","838,04 грн",5,ОК,0,15,0,0
+OP-JP-OP08-BST,One Piece — OP-08 — JP — Booster,One Piece,Booster,48,6,14,28,"82,67 грн","87,63 грн","2 314,76 грн","2 453,64 грн","4 480,00 грн","2 026,36 грн",5,ОК,0,48,0,0
+OP-JP-OP08-BBX,One Piece — OP-08 — JP — Booster Box,One Piece,Booster Box,0,0,0,0,"0,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн",1,Немає,0,0,0,0
+PKM-JP-MIX-MBX,Pokémon — Mystery Mix — JP — Mystery Box,Pokémon,Mystery Box,0,15,0,0,"450,00 грн","450,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн",0,Немає,0,0,0,0
+OP-JP-MIX-MBX,One Piece — Mystery Mix — JP — Mystery Box,One Piece,Mystery Box,0,8,0,0,"450,00 грн","450,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн",0,Немає,0,0,0,0
+OP-JP-PRB01-BST,One Piece — PRB-01 — JP — Booster,One Piece,Booster,0,0,0,0,"0,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн",5,Немає,0,0,0,0
+OP-JP-PRB01-BBX,One Piece — PRB-01 — JP — Booster Box,One Piece,Booster Box,0,0,0,0,"0,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн",1,Немає,0,0,0,0
+OP-JP-OP07-BBX,One Piece — OP-07 — JP — Booster Box,One Piece,Booster Box,0,0,0,0,"0,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн",1,Немає,0,0,0,0
+OP-JP-OP10-BBX,One Piece — OP-10 — JP — Booster Box,One Piece,Booster Box,0,0,0,0,"0,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн",1,Немає,0,0,0,0
+OP-JP-OP11-BBX,One Piece — OP-11 — JP — Booster Box,One Piece,Booster Box,0,0,0,0,"0,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн",1,Немає,0,0,0,0
+OP-JP-EB03-BBX,One Piece — EB-03 — JP — Booster Box,One Piece,Booster Box,0,0,0,0,"0,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн",1,Немає,0,0,0,0
+OP-JP-OP12-BBX,One Piece — OP-12 — JP — Booster Box,One Piece,Booster Box,0,0,0,0,"0,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн",1,Немає,0,0,0,0
+OP-JP-OP14-BBX,One Piece — OP-14 — JP — Booster Box,One Piece,Booster Box,0,0,0,0,"0,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн",1,Немає,0,0,0,0
+OP-JP-OP15-BBX,One Piece — OP-15 — JP — Booster Box,One Piece,Booster Box,2,0,0,2,"3 640,83 грн","3 859,28 грн","7 281,66 грн","7 718,56 грн","10 400,00 грн","2 681,44 грн",1,ОК,0,2,0,0
+YGO-JP-BDOM-BST,Yu-Gi-Oh! — Blazing Dominion — JP — Booster,Yu-Gi-Oh!,Booster,30,0,1,29,"30,95 грн","32,81 грн","897,55 грн","951,49 грн","4 350,00 грн","3 398,51 грн",1,ОК,0,30,0,0
+YGO-JP-BDOM-BBX,Yu-Gi-Oh! — Blazing Dominion — JP — Booster Box,Yu-Gi-Oh!,Booster Box,0,0,0,0,"0,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн",1,Немає,0,0,0,0
+PKM-JP-MSYM-BBX,Pokémon — Mega Symphonia — JP — Booster Box,Pokémon,Booster Box,0,0,0,0,"0,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн",1,Немає,0,2,0,0
+PKM-JP-BBLT-BST,Pokémon — Black Bolt — JP — Booster,Pokémon,Booster,30,3,5,22,"213,87 грн","226,70 грн","4 705,14 грн","4 987,40 грн","7 700,00 грн","2 712,60 грн",5,ОК,0,50,0,0
+PKM-JP-SHTR-BST,Pokémon — Shiny Treasure ex — JP — Booster,Pokémon,Booster,0,0,0,0,"0,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн",5,Немає,0,0,0,0
+MTG-JP-AFRS-BST,MTG — Adventures in the Forgotten Realms — JP — Booster,MTG,Booster,0,0,0,0,"139,34 грн","147,70 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн",5,Немає,30,30,0,30
+PKM-JP-WFLR-BST,Pokémon — White Flare — JP — Booster,Pokémon,Booster,10,2,1,7,"217,84 грн","230,91 грн","1 524,88 грн","1 616,37 грн","2 450,00 грн","833,63 грн",5,ОК,0,30,0,0
+PKM-JP-SVEX-BLR,Pokémon — Scarlet & Violet ex Special Set — JP — Blister,Pokémon,Blister,4,1,1,2,"1 291,71 грн","1 369,21 грн","2 583,42 грн","2 738,42 грн","4 200,00 грн","1 461,58 грн",1,ОК,0,5,0,0
+YGO-JP-WPP5-BST,Yu-Gi-Oh! — World Premiere Pack 2024 — JP — Booster,Yu-Gi-Oh!,Booster,0,0,0,0,"0,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн",1,Немає,0,0,0,0
+YGO-JP-WPP5-BBX,Yu-Gi-Oh! — World Premiere Pack 2024 — JP — Booster Box,Yu-Gi-Oh!,Booster Box,1,0,1,0,"936,38 грн","992,56 грн","0,00 грн","0,00 грн","0,00 грн","0,00 грн",1,Немає,0,1,0,0
+PKM-KR-HWAK-BST,Pokémon — Hot Wind Arena — KR — Booster,Pokémon,Booster,30,17,2,11,"71,52 грн","75,81 грн","786,72 грн","833,91 грн","1 210,00 грн","376,09 грн",1,ОК,0,30,0,0
+PKM-JP-ABYE-BST,Pokémon — Abyss Eye — JP — Booster,Pokémon,Booster,0,0,0,0,,,"0,00 грн","0,00 грн","0,00 грн","0,00 грн",5,Немає,0,0,0,0
+PKM-JP-ABYE-BBX,Pokémon — Abyss Eye — JP — Booster Box,Pokémon,Booster Box,0,0,0,0,,,"0,00 грн","0,00 грн","0,00 грн","0,00 грн",1,Немає,0,2,0,0
+PKM-JP-MBRV-BBX,Pokémon — Mega Brave — JP — Booster Box,Pokémon,Booster Box,2,0,0,2,"3 901,84 грн","4 135,95 грн","7 803,68 грн","8 271,90 грн","10 000,00 грн","1 728,10 грн",1,ОК,0,2,0,0
+ACC-001,"Протектори для карток 63×89 мм, 100 шт",Generic,Accessory,5,0,0,5,"32,40 грн","34,34 грн","162,00 грн","171,70 грн","400,00 грн","228,30 грн",5,Мало,3,8,0,3
+ACC-002,"Протектори Games 7 Days Premium+ 63,5×88 мм, 50 шт",Games 7 Days,Accessory,10,1,0,9,"66,05 грн","70,01 грн","594,45 грн","630,09 грн","900,00 грн","269,91 грн",5,ОК,0,10,0,0
+ACC-003,"Топлоадери для карток 35PT, 25 шт",Generic,Accessory,1,0,0,1,"118,80 грн","125,93 грн","118,80 грн","125,93 грн","280,00 грн","154,07 грн",2,Мало,3,4,0,3
+ACC-004,Магнітний кейс для карток 35PT,Generic,Accessory,14,1,1,12,"25,84 грн","27,39 грн","310,08 грн","328,68 грн","900,00 грн","571,32 грн",2,ОК,0,14,0,0
+ACC-005,Акрилова підставка для магнітного кейсу,Generic,Accessory,19,0,1,18,"5,00 грн","5,30 грн","90,00 грн","95,40 грн","270,00 грн","174,60 грн",2,ОК,0,19,0,0
+ACC-006,Аркуш Games 7 Days Premium на 9 кишеньок,Games 7 Days,Accessory,5,0,0,5,"17,91 грн","18,98 грн","89,55 грн","94,90 грн","100,00 грн","5,10 грн",5,Мало,0,5,0,0
+ACC-007-360,"Альбом для колекційних карток, жовтий на 360 карток",Generic,Accessory,0,0,0,0,,,"0,00 грн","0,00 грн","0,00 грн","0,00 грн",1,Немає,1,1,0,1
+ACC-008,"Акриловий протектор без магніта, 1 шт",Generic,Accessory,0,0,0,0,,,"0,00 грн","0,00 грн","0,00 грн","0,00 грн",2,Немає,10,10,0,10
+ACC-009,"Топлоадер для картки 35PT, 1 шт",Generic,Accessory,0,0,0,0,,,"0,00 грн","0,00 грн","0,00 грн","0,00 грн",5,Немає,10,10,0,10
+PKM-EN-PORD-BBN,Pokémon — Perfect Order — EN — Booster Bundle,Pokémon,Booster Bundle,5,0,0,5,"1 232,80 грн","1 306,77 грн","6 164,00 грн","6 533,85 грн","9 500,00 грн","2 966,15 грн",1,ОК,0,5,0,0
+PKM-EN-PORD-BST,Pokémon — Perfect Order — EN — Booster,Pokémon,Booster,0,0,0,0,,,"0,00 грн","0,00 грн","0,00 грн","0,00 грн",5,Немає,0,0,0,0
+PKM-EN-CHRS-BBN,Pokémon — Chaos Rising — EN — Booster Bundle,Pokémon,Booster Bundle,5,0,0,5,"1 232,80 грн","1 306,77 грн","6 164,00 грн","6 533,85 грн","9 500,00 грн","2 966,15 грн",1,ОК,0,5,0,0
+PKM-EN-CHRS-BST,Pokémon — Chaos Rising — EN — Booster,Pokémon,Booster,0,0,0,0,,,"0,00 грн","0,00 грн","0,00 грн","0,00 грн",5,Немає,0,0,0,0
+OP-JP-OP16-BBX,One Piece — OP-16 — JP — Booster Box,One Piece,Booster Box,0,0,0,0,,,"0,00 грн","0,00 грн","0,00 грн","0,00 грн",1,Немає,0,0,0,0
+OP-JP-OP16-BST,One Piece — OP-16 — JP — Booster,One Piece,Booster,0,0,0,0,,,"0,00 грн","0,00 грн","0,00 грн","0,00 грн",5,Немає,0,24,0,0
+PKM-JP-MDEX-BBX,Pokémon — Mega Dream EX — JP — Booster Box,Pokémon,Booster Box,1,0,0,1,"1 845,00 грн","1 955,70 грн","1 845,00 грн","1 955,70 грн","5 000,00 грн","3 044,30 грн",1,Мало,0,1,0,0
