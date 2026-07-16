@@ -1704,11 +1704,11 @@ const ROADMAP_TASKS = [
     warn: '2026-07-15: Done. Migration 0009 (commit c6cc8f3 + parent). Claude review OK — обидві прогалини (raw db reset/diff вивід, ізольований money_only тест) закриті доказово: money_only true_net_profit точно збігається зі старою формулою (-650=-650), resellable відрізняється рівно на 600 UAH реверсу. git diff 0001-0008 порожній. Owner закрив на основі доказів у звіті (як NCRM-06), без окремого власного прогону db reset. Далі: NCRM-03 (реімпорт), NCRM-07b (RLS, відкрита).', subtasks: []
   },
   {
-    id: 'NCRM-07b', title: 'Enable RLS on public schema', status: 'active', tool: 'Codex + Owner', priority: 'High',
+    id: 'NCRM-07b', title: 'Enable RLS on public schema', status: 'done', tool: 'Codex + Owner', priority: 'High',
     lastUpdated: '2026-07-15', blockedBy: [],
     simple: 'Увімкнути Row Level Security на всіх таблицях public-схеми (Supabase) перед майбутнім cloud-cutover.',
     why: 'Наразі RLS вимкнено на всіх таблицях (0005: тільки service_role grants, anon/authenticated без доступу) — безпечно локально, але Supabase Security Advisor позначить це як помилку, і ризик реальний з появою anon/authenticated доступу (NCRM-08/09 UI, cloud cutover).',
-    warn: '2026-07-15: Codex реалізував локальний foundation у 0010: RLS увімкнено на 38 public-таблицях, anon/authenticated policies = 0, 7 KPI-вʼюх мають security_invoker=true, anon REST без сесії повернув 401. staff + permission overrides і created_by-скелет додані; локальний auth.users порожній, тому owner staff seed чесно пропущений. db reset/diff і build пройшли. Очікується owner QA зі Security Advisor; cloud push не виконувався.', subtasks: []
+    warn: '2026-07-15: Done. Codex: 0010_rls_multiuser_role_foundation.sql (commit b3f5ca7) — RLS увімкнено на 38 public-таблицях (36 старих + staff/staff_permission_overrides), 0 policy будь-де, 7 KPI-вʼюх з security_invoker=true, created_by-скелет на sales/purchases/writeoffs/mystery_fulfillments. Claude review OK — SQL звірено з хендофом рядок-в-рядок, збігається точно, scope creep немає. Owner staff-seed свідомо пропущено (немає auth.users). Лише локально, cloud push не було — Security Advisor поки не застосовний, до окремого рішення про cloud rollout. Owner закрив на основі review, без окремого власного прогону. Далі: NCRM-03 (реімпорт/реконсиляція, розблокована NCRM-04) або NCRM-08 (read-екрани).', subtasks: []
   },
   {
     id: 'NCRM-08', title: 'Read-екрани (summary/замовлення/склад/SKU/клієнти)', status: 'todo', tool: 'Codex', priority: 'Medium',
