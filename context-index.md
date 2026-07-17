@@ -121,7 +121,10 @@ grep "ST-3.5" context-index.md
 | NCRM-07 | Reporting/forecast + KPI-вʼюхи (вкл. колишній NCRM-06) (Done, commit c6cc8f3 + parent — owner закрив на основі доказів у звіті, без окремого прогону db reset) | handoffs/handoff_NCRM-07_reporting-forecast-kpi-views_2026-07-14.md |
 | NCRM-07b | Enable RLS on public schema | handoffs/handoff_NCRM-07b_rls-multiuser-role-foundation_20260715.md |
 | NCRM-08 | Read-екрани (summary/замовлення/склад/SKU/клієнти) — колишній зміст NCRM-04 | handoffs/handoff_NCRM-08_read-screens_2026-07-16.md |
-| NCRM-09 | Write-форми + FIFO-COGS — колишній зміст NCRM-05 | — |
+| NCRM-09 | Write-форми + FIFO-COGS + auth (owner/admin) — колишній зміст NCRM-05, розбито на 09a/09b/09c 2026-07-17 | plans/NCRM-09_write-forms-auth-split_20260717.md |
+| NCRM-09a | Auth-фундамент (owner/admin) — sub-scope NCRM-09, не окрема Notion-картка | handoffs/handoff_NCRM-09a_auth-foundation_20260717.md |
+| NCRM-09b | Write-форми продаж+закупка — sub-scope NCRM-09, 09a owner-confirmed | handoffs/handoff_NCRM-09b_sale-purchase-forms_20260717.md |
+| NCRM-09c | Write-форми списання/РРЦ/повернення/mystery box — sub-scope NCRM-09, чекає 09b | — |
 | NCRM-10 | Order pipeline OpenCart→Supabase + smoke — колишній зміст NCRM-07 | — |
 | NCRM-11 | Курси валют (фетч + заморозка) — перенумеровано з NCRM-08, зміст той самий | — |
 | NCRM-12 | Mobile-версія + поліш — перенумеровано з NCRM-09, зміст той самий | — |
