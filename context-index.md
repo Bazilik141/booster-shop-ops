@@ -79,6 +79,8 @@ grep "ST-3.5" context-index.md
 | TECH-030/031 | — | handoffs/codex-handoff-TECH030-031.md | — |
 | TECH-035 | IndexNow (Bing/AI fast discovery) | handoffs/handoff_TECH-035_indexnow_2026-07-04.md | — |
 | TECH-032/033/034 | — | handoffs/codex-handoff-TECH032-033-034.md | — |
+| TECH-013 | Mobile Core Web Vitals pass (об'єднує TECH-002/003/004) | handoffs/handoff_TECH-013_mobile-core-web-vitals_20260716.md | — |
+| TECH-042 | Bot-challenge / AI-visibility read-only check | handoffs/handoff_TECH-042_bot-challenge-ai-visibility-check_20260716.md | — |
 
 ---
 
@@ -111,13 +113,14 @@ grep "ST-3.5" context-index.md
 | NCRM-00 | Архітектура + аудит фінмоделі + schema v1 (Done) | plans/crm-* (вище) |
 | NCRM-01 | Supabase проєкт + SQL-міграції + типи (Done) | handoffs/handoff_NCRM-01_supabase-project-sql-migrations_2026-07-05.md |
 | NCRM-02 | Repository-шар + Next.js скелет + emulator (Done) | handoffs/handoff_NCRM-02_repository-layer-nextjs-skeleton_2026-07-06.md |
-| NCRM-03 | Імпорт історії зі Sheets + звірка KPI (In progress — заблокована на NCRM-04) | handoffs/handoff_NCRM-03_import-history-kpi-reconciliation_2026-07-10.md |
+| NCRM-03 | Імпорт історії зі Sheets + звірка KPI (Done, 2026-07-16, round 3 — залишок перенесено в NCRM-13) | handoffs/handoff_NCRM-03_round3_import-history-kpi-reconciliation_2026-07-16.md |
+| NCRM-13 | Signed inventory adjustment model (списання з від'ємною к-стю) — виділено з NCRM-03 (Not started) | — |
 | NCRM-04 | Inventory ledger foundation (Done, commit 3c98253) | handoffs/handoff_NCRM-04_inventory-ledger-foundation_2026-07-11.md |
 | NCRM-05 | Mystery fulfillment (Done, commit cb964cb) | handoffs/handoff_NCRM-05_mystery-fulfillment_2026-07-12.md |
 | NCRM-06 | Returns + cost quality (Done, commits 0cd78bd + 4e4a0e6 — owner closed after partial manual QA; Mystery-reversal + `git diff` 0001-0007 not independently re-verified) | handoffs/handoff_NCRM-06_returns-cost-quality_2026-07-14.md |
 | NCRM-07 | Reporting/forecast + KPI-вʼюхи (вкл. колишній NCRM-06) (Done, commit c6cc8f3 + parent — owner закрив на основі доказів у звіті, без окремого прогону db reset) | handoffs/handoff_NCRM-07_reporting-forecast-kpi-views_2026-07-14.md |
-| NCRM-07b | Enable RLS on public schema (Not started, Phase 2, заблокована на NCRM-07) | — |
-| NCRM-08 | Read-екрани (summary/замовлення/склад/SKU/клієнти) — колишній зміст NCRM-04 | — |
+| NCRM-07b | Enable RLS on public schema | handoffs/handoff_NCRM-07b_rls-multiuser-role-foundation_20260715.md |
+| NCRM-08 | Read-екрани (summary/замовлення/склад/SKU/клієнти) — колишній зміст NCRM-04 | handoffs/handoff_NCRM-08_read-screens_2026-07-16.md |
 | NCRM-09 | Write-форми + FIFO-COGS — колишній зміст NCRM-05 | — |
 | NCRM-10 | Order pipeline OpenCart→Supabase + smoke — колишній зміст NCRM-07 | — |
 | NCRM-11 | Курси валют (фетч + заморозка) — перенумеровано з NCRM-08, зміст той самий | — |

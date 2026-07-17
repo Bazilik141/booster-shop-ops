@@ -10,8 +10,10 @@
 Use `templates/handoff-template.md` for new handoffs.
 Use `templates/codex-report-template.md` when reviewing Codex diagnostics.
 
+**Codex review в чаті — жорсткий формат, без винятків:** статус одним рядком (`Review OK` / `Review OK, owner-QA потрібен` / `Повернути в роботу`) + список ручних чек-апів для власника. Без опису diff, без переліку перевірених файлів, без пояснень "чому все ок" — це не показник якості рев'ю, а шум. Деталі рев'ю (що саме перевірено в коді) лишаються лише в `diagnostics/`/пам'яті сесії; в чат — тільки те, що власник має сам перевірити руками. Розгорнутий опис — лише якщо власник явно попросить "детальніше".
+
 **Tools available:** Terminal (Claude Code CLI) and VS Code extension are installed.
-Use Terminal for git diff/commit/push and shell commands. Use VS Code for file inspection and diff review after Codex patches. See `AGENTS.md ## Environment` for full guidance.
+Use Terminal for git diff/status/log (read-only) and shell commands. **`git commit`/`push` Claude ніколи не виконує сам** — завжди готує повний PowerShell-блок, власник вставляє його в нове вікно і виконує вручну (див. AGENTS.md → Commit / push policy). Use VS Code for file inspection and diff review after Codex patches. See `AGENTS.md ## Environment` for full guidance.
 
 **For new tasks:** read the relevant handoff in `handoffs/` before writing patches or analysis.
 **For reviews:** read `diagnostics/<TASK-ID>_*_report_*.md` + `git diff` output.
@@ -70,6 +72,6 @@ Grep по ньому замість пошуку по всіх handoffs/.
 
 **Codex (roadmap-affecting патчі):** останній пункт Required changes = «оновити ROADMAP_FLOW в booster-dashboard.html». Notion Codex не чіпає — це Claude.
 
-**Commit-safety (autosync):** перед `git add`/`commit` створити `.autosync-pause` у корені репо, після `push` — видалити (паузить hardened `bs-autosync.ps1`, прибирає гонку за `.git/index`). Деталі — `ROADMAP_SOP.md §4/§8`.
+**Commit-safety (autosync):** команда, яку готує Claude, включає `New-Item .autosync-pause` перед `git add`/`commit` і `Remove-Item .autosync-pause` після `push` (паузить hardened `bs-autosync.ps1`, прибирає гонку за `.git/index`). Деталі — `ROADMAP_SOP.md §4/§8`.
 
-**PowerShell git-команди для owner:** ЗАВЖДИ починати блок команд з `cd "C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops"` першим рядком. PowerShell 7 у owner відкривається в `C:\Windows\System32`, а не в репо — без явного `cd` усі наступні `git`-команди падають з `fatal: not a git repository`. Ніколи не давати `git add`/`commit`/`push` без цього `cd` на початку.
+**PowerShell git-команди для owner — завжди ручний коміт, без винятків:** Claude сам НІКОЛИ не запускає `git commit`/`push`. Замість цього Claude віддає ОДИН готовий блок команд, який можна вставити з нуля в нове вікно PowerShell. Блок ЗАВЖДИ починається з `cd "C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops"` першим рядком (PowerShell 7 у owner відкривається в `C:\Windows\System32`, а не в репо — без явного `cd` усі наступні `git`-команди падають з `fatal: not a git repository`). Власник вставляє блок і виконує сам.

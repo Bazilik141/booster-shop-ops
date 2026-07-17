@@ -116,8 +116,10 @@ ST-серія (заведена в Notion 2026-06-24):
 | CRM-002 | `3876bf20-bdb4-8118-9fc7-d7e702832ec4` |
 | TECH-005-DEEP | `3666bf20-bdb4-8175-a429-e48eb7d6ef2d` |
 | TECH-012 | `3666bf20-bdb4-812e-8975-df8827efdb16` |
+| TECH-013 | `3a06bf20-bdb4-810c-b914-e518ca5f7188` |
 | TECH-029 | `3786bf20-bdb4-8116-8f66-c856e04a11df` |
 | TECH-035 | `3936bf20-bdb4-81d4-a0ee-e21b32119066` |
+| TECH-042 | `3a06bf20-bdb4-812b-8cd7-dd45932ff09d` |
 | RD-11 | `3706bf20-bdb4-81a4-b3fa-f35e7610defa` |
 | CAT-002 | `36f6bf20-bdb4-817e-99ec-eecce853778c` |
 | CHECKOUT-001 | `3776bf20-bdb4-8130-bcbf-cbb6259d5654` |
@@ -143,6 +145,7 @@ NCRM-серія (нова CRM-платформа на Supabase, заведено
 | NCRM-10 | `39a6bf20-bdb4-813c-a5ff-db69193a67e0` (нова картка 2026-07-11: OpenCart pipeline, колишній зміст NCRM-07) |
 | NCRM-11 | `38b6bf20-bdb4-8127-b520-ee5775186f78` (2026-07-11: перенумеровано з NCRM-08, зміст без змін — курси валют) |
 | NCRM-12 | `38b6bf20-bdb4-8126-a49e-d4819f0bc496` (2026-07-11: перенумеровано з NCRM-09, зміст без змін — mobile) |
+| NCRM-13 | `39f6bf20-bdb4-8170-a4b3-d0c81978b4bf` (нова картка 2026-07-16: Signed inventory adjustment model, виділено з NCRM-03) |
 
 MKT-TG-серія (Telegram контент-автоматизація, заведено 2026-06-27):
 

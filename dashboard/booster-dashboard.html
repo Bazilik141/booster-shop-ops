@@ -1669,11 +1669,18 @@ const ROADMAP_TASKS = [
     warn: null, subtasks: []
   },
   {
-    id: 'NCRM-03', title: 'Імпорт історії зі Sheets + звірка KPI', status: 'active', tool: 'Claude + Codex', priority: 'High',
-    lastUpdated: '2026-07-11', blockedBy: ['NCRM-01', 'NCRM-04'],
+    id: 'NCRM-03', title: 'Імпорт історії зі Sheets + звірка KPI', status: 'done', tool: 'Claude + Codex', priority: 'High',
+    lastUpdated: '2026-07-16', blockedBy: ['NCRM-01', 'NCRM-04'],
     simple: 'Разовий перенос ~300–400 рядків (продажі/закупки/списання/РРЦ/розхідники) у нову базу зі звіркою цифр.',
     why: 'Нова система має рахувати ідентично поточній — звіряємо проти відомих сум.',
-    warn: 'Заблоковано: 6 сигнальних рядків списань (WRT-0051/52/94-97) і FIFO-vs-легасі розбіжність не могли пройти звірку без підписаної inventory-adjustment моделі — це і будує NCRM-04. Числа з diagnostics/NCRM-03_*_20260710.md не фінальні; повторна звірка під новою моделлю — окрема майбутня задача.', subtasks: []
+    warn: '2026-07-16: Owner Decision CLOSED Done (round 3). Весь залишок звірки (-29 од. / -2 431.64 грн mgmt / -2 294.35 грн PRRO) на 100% пояснено 6 сигнальними рядками списань (WRT-0051/52/94-97) — вони повністю перенесені в нову картку NCRM-13 (Signed inventory adjustment model). Без нетінгу/бекдейтингу. Червень: виручка точна, contribution margin розбіжність -0.03 грн (округлення, пояснено). Батч ncrm03_20260716_r3 фінальний, лише локально. Увага: `npx supabase db reset` стирає імпортовані NCRM-03 дані (це лише міграції) — щоб знову побачити реальні цифри на NCRM-08 екранах, треба перезапустити import-history.mjs.', subtasks: []
+  },
+  {
+    id: 'NCRM-13', title: "Signed inventory adjustment model (списання з від'ємною к-стю)", status: 'todo', tool: 'Claude + Codex', priority: 'Medium',
+    lastUpdated: '2026-07-16', blockedBy: [],
+    simple: "Окрема сутність для +/- коригувань складу (не звичайне списання): 6 історичних рядків WRT-0051/52/94-97, разом -29 од.",
+    why: 'Схема v1 (writeoff_items.qty > 0) не дозволяє імпортувати відновлення/переміщення залишків як є; без цієї моделі NCRM-03 не міг зійтись до копійки.',
+    warn: 'Виділено з NCRM-03 (Owner Decision 2026-07-16). Round 3 підтвердив по-SKU таблицею: усі 6 рядків потрібні (3-SKU→MZERO рекласифікація WRT-0093-96, MBRV↔OUTL переміщення WRT-0097/98, 2 самостійні інвентаризаційні знахідки WRT-0051/52). Не блокує NCRM-08/09 — розблоковує лише повне копійка-в-копійку закриття NCRM-03 анкерів.', subtasks: []
   },
   {
     id: 'NCRM-04', title: 'Inventory ledger foundation', status: 'done', tool: 'Codex', priority: 'High',
@@ -1697,11 +1704,11 @@ const ROADMAP_TASKS = [
     warn: '2026-07-11: рескоуп під v2-контракт §5 — цей ID раніше означав «Витрати + P&L + KPI-вʼюхи»; той зміст злито в NCRM-07 (нижче), не окрема картка. 2026-07-14: Codex здав (diagnostics/NCRM-06_returns-cost-quality_report_20260714.md), Claude review OK. Owner прогнав db reset + db diff --local локально чисто, вручну звірив money_only/resellable/damaged/over-refund через psql. Mystery-unopened reversal і git diff 0001–0007 не передокументовано окремо — owner прийняв рішення закрити задачу без цього. Нічого не пішло в cloud Supabase/live CRM/OpenCart. Commit 0cd78bd, 4e4a0e6. Не закриває NCRM-07 (reporting/forecast) чи NCRM-03 (реконсиляція).', subtasks: []
   },
   {
-    id: 'NCRM-07', title: 'Reporting/forecast + KPI-вʼюхи (вкл. колишній NCRM-06)', status: 'done', tool: 'Codex + Owner', priority: 'High',
-    lastUpdated: '2026-07-15', blockedBy: [],
+    id: 'NCRM-07', title: 'Reporting/forecast + KPI-вʼюхи (вкл. колишній NCRM-06)', status: 'active', tool: 'Codex + Owner', priority: 'High',
+    lastUpdated: '2026-07-15', blockedBy: ['NCRM-04', 'NCRM-05', 'NCRM-06'],
     simple: 'Expenses-ledger, перероблені v_pnl_monthly/KPI-вʼюхи (contribution margin, true net P&L, inventory adjustment impact, estimated/unpriced exposure), forecast margin (RRC × available_qty − 5% reserve).',
     why: 'Щоб дашборд нарешті показував контрольовану маржу й чистий P&L, а не легасі «прибуток».',
-    warn: '2026-07-15: Done. Migration 0009 (commit c6cc8f3 + parent). Claude review OK — обидві прогалини (raw db reset/diff вивід, ізольований money_only тест) закриті доказово: money_only true_net_profit точно збігається зі старою формулою (-650=-650), resellable відрізняється рівно на 600 UAH реверсу. git diff 0001-0008 порожній. Owner закрив на основі доказів у звіті (як NCRM-06), без окремого власного прогону db reset. Далі: NCRM-03 (реімпорт), NCRM-07b (RLS, відкрита).', subtasks: []
+    warn: '2026-07-14: Unblocked — NCRM-04/05/06 all Done. Handoff: handoffs/handoff_NCRM-07_reporting-forecast-kpi-views_2026-07-14.md. 2026-07-15: Codex здав migration 0009 + diagnostics/NCRM-07_reporting-forecast-kpi_report_20260715.md, Claude review OK з зауваженнями — не закривати без owner QA (див. звіт: ізольований money_only тест не прогнано окремо, raw db reset/diff вивід не вкладено в звіт). 2026-07-11: рескоуп під v2-контракт §6 + злиття старого NCRM-06. Цей ID раніше означав «Order pipeline OpenCart→Supabase»; той зміст перенесено на NCRM-10 (нижче).', subtasks: []
   },
   {
     id: 'NCRM-07b', title: 'Enable RLS on public schema', status: 'done', tool: 'Codex + Owner', priority: 'High',
@@ -1711,11 +1718,11 @@ const ROADMAP_TASKS = [
     warn: '2026-07-15: Done. Codex: 0010_rls_multiuser_role_foundation.sql (commit b3f5ca7) — RLS увімкнено на 38 public-таблицях (36 старих + staff/staff_permission_overrides), 0 policy будь-де, 7 KPI-вʼюх з security_invoker=true, created_by-скелет на sales/purchases/writeoffs/mystery_fulfillments. Claude review OK — SQL звірено з хендофом рядок-в-рядок, збігається точно, scope creep немає. Owner staff-seed свідомо пропущено (немає auth.users). Лише локально, cloud push не було — Security Advisor поки не застосовний, до окремого рішення про cloud rollout. Owner закрив на основі review, без окремого власного прогону. Далі: NCRM-03 (реімпорт/реконсиляція, розблокована NCRM-04) або NCRM-08 (read-екрани).', subtasks: []
   },
   {
-    id: 'NCRM-08', title: 'Read-екрани (summary/замовлення/склад/SKU/клієнти)', status: 'todo', tool: 'Codex', priority: 'Medium',
-    lastUpdated: '2026-07-11', blockedBy: ['NCRM-04'],
+    id: 'NCRM-08', title: 'Read-екрани (summary/замовлення/склад/SKU/клієнти)', status: 'done', tool: 'Codex', priority: 'Medium',
+    lastUpdated: '2026-07-17', blockedBy: ['NCRM-04'],
     simple: 'Екрани перегляду: зведення, замовлення, склад і алерти, SKU, клієнти.',
     why: 'Базовий перегляд CRM у браузері замість Sheets.',
-    warn: '2026-07-11: новий ID (раніше — зміст NCRM-04, до рескоупу під v2-контракт). Blocker оновлено на NCRM-04 (inventory foundation), бо екрани читають FIFO/adjustments-дані.', subtasks: []
+    warn: '2026-07-11: новий ID (раніше — зміст NCRM-04, до рескоупу під v2-контракт). Blocker оновлено на NCRM-04 (inventory foundation), бо екрани читають FIFO/adjustments-дані. 2026-07-16: In progress — взято в роботу (Notion + дашборд синхронізовано). 2026-07-16: Codex здав 5 екранів (diagnostics/NCRM-08_read-screens_report_20260716.md), Claude review OK, boundary-критерії (no direct Supabase import, no mutations) підтверджені незалежно. 2026-07-17: Owner QA на реальних даних (NCRM-03 import) — екрани живі, цифри коректні, крім одного: /customers рахує скасовані замовлення в LTV/order count (не фільтрує через fn_is_actual_sale, на відміну від v_repeat_customers). 2026-07-17: Codex здав fix (isActualSaleRow, дзеркалить fn_is_actual_sale), Claude review OK, owner підтвердив на /customers (Максим Тимощук: 4→3 замовлення, LTV 3563→2812.50 грн, скасоване OC-FOP-0238 випало, /orders як і раніше показує все). CLOSED Done. Auth/login (contract §10) винесено в NCRM-09 — застосунок лишається local-only, service_role-only, без деплою.', subtasks: []
   },
   {
     id: 'NCRM-09', title: 'Write-форми + FIFO-COGS', status: 'todo', tool: 'Codex', priority: 'High',
@@ -1762,10 +1769,10 @@ const ROADMAP_TASKS = [
   },
   {
     id: 'ST-2c', title: 'Перевести всіх покупців на новий чекаут', status: 'active', tool: 'Claude + Codex', priority: 'High',
-    lastUpdated: '2026-07-14', blockedBy: [],
+    lastUpdated: '2026-07-15', blockedBy: ['CHECKOUT-004'],
     simple: 'Одна невелика зміна в коді — і всі покупці йдуть на новий чекаут замість старого. Водночас виправляємо вартість доставки: зараз вона завжди 0 грн, після — реальна ціна НП.',
     why: 'Це фінальний крок запуску нового чекауту. Старий залишається як запасний.',
-    warn: 'Блокери по чекауту знято: ST-2b.6 закрито остаточно 2026-07-13 (ST-2b6e), RD-13.1J закрито 2026-07-13, CHECKOUT-003 і ACC-001 закрито 2026-07-14. Лишається дофікс регресії ACC-002 (збережені адреси НП). Високий ризик лишається; відкат простий: один файл.',
+    warn: 'Всі задачі-попередники закрито (ST-2b.6, RD-13.1J, CHECKOUT-003, ACC-001, ACC-002 A–F — смок пройдено 2026-07-15). НОВИЙ блокер: CHECKOUT-004 — промокоди на новому чекауті не застосовуються (заглушка). Cutover після фікса промо. Високий ризик лишається; відкат простий: один файл.',
     subtasks: [
       { id: '1', title: 'Реальна вартість доставки в замовленні', status: 'todo', desc: 'Зараз в замовленні завжди 0 грн доставки. Після: реальна ціна НП.' },
       { id: '2', title: 'Увімкнути новий чекаут для всіх', status: 'todo', desc: 'Прибираємо перенаправлення на старий чекаут.' }
@@ -1806,11 +1813,11 @@ const ROADMAP_TASKS = [
     warn: 'Звіт: diagnostics/ACC-001_account-menu-dedup-logout_report_20260714.md.', subtasks: []
   },
   {
-    id: 'ACC-002', title: 'NP-форма адреси в акаунті (замість стокової)', status: 'active', tool: 'Claude + Codex', priority: 'High',
-    lastUpdated: '2026-07-14', blockedBy: [],
-    simple: 'Phase 1 задеплоєно: форма адреси в кабінеті тепер з довідниками НП (область/місто/відділення/поштомат/кур\'єр), метадані зберігаються без зміни схеми БД, старі адреси не переписуються. Але знайдено регресію: збережені поштомати хибно позначаються недоступними (перевірка йшла по назві замість ідентифікатора), у картці отримувача міг з\'явитись плейсхолдер замість імені, дублювались поля імені у формі НП.',
-    why: 'Збережені адреси — довільний текст: логіка НП з ними не працювала. Після дофіксу — працюватиме повний цикл.',
-    warn: 'НЕ закривати. Діагностика регресії: diagnostics/ACC-002_phase1_regression_report_20260714.md — hotfix у роботі в Codex. Після hotfix: QA-план зі звіту + повний bs-checkout-smoke.', subtasks: []
+    id: 'ACC-002', title: 'NP-форма адреси в акаунті (замість стокової)', status: 'done', tool: 'Claude + Codex', priority: 'High',
+    lastUpdated: '2026-07-15', blockedBy: [],
+    simple: 'Форма адреси в кабінеті тепер з довідниками НП (область/місто/відділення/поштомат/кур\'єр), метадані зберігаються без зміни схеми БД, старі адреси не переписуються. Регресії після Phase 1 закрито ланцюжком hotfix A–F; фінальний корінь дублювання адрес — старий after-обробник модуля НП, який дописував другу адресу після коректного збереження (вимкнено в ACC-002F). Власник пройшов смок-тести 2026-07-15 — закрито.',
+    why: 'Збережені адреси були довільним текстом: логіка НП з ними не працювала. Тепер працює повний цикл.',
+    warn: 'Звіти: diagnostics/ACC-002_phase1_* та ACC-002A–F. Старі дублікати адрес у базі не видалялись автоматично — чистити вручну за потреби. Під час тестів знайдено окремий баг промокодів → CHECKOUT-004.', subtasks: []
   },
   {
     id: 'RD-13.1J', title: 'Гостьовий чекаут зламано: CAPTCHA не доходить до сервера (422)', status: 'done', tool: 'Claude + Codex', priority: 'High',
@@ -1818,6 +1825,13 @@ const ROADMAP_TASKS = [
     simple: 'Гість не міг оформити замовлення: запит йшов без токена CAPTCHA, сервер відхиляв з 422. Клієнтську половину захисту RD-13.1C відновлено (POST з токеном, повтор без перезавантаження). Задеплоєно, власник підтвердив QA 2026-07-13.',
     why: 'Кожен гість впирався в помилку — прямі втрати замовлень.',
     warn: 'Примітка: патч нормалізував checkout.twig до LF — правило зафіксовано в CODEX_WORKFLOW.md.', subtasks: []
+  },
+  {
+    id: 'CHECKOUT-004', title: 'Промокоди на новому чекауті не застосовуються (заглушка)', status: 'todo', tool: 'Claude + Codex', priority: 'High',
+    lastUpdated: '2026-07-15', blockedBy: [],
+    simple: 'Поле «Промокод» на живому чекауті є, але купони не застосовуються — під полем напис «Промокоди з\'являться незабаром». При цьому робоча логіка купонів/First15 була готова ще в червні (ST-2b.5) — ймовірно, блок підмінили під час рескіну RD-13. Спершу з\'ясувати, що саме заглушило блок, потім повернути робочу логіку в новому дизайні.',
+    why: 'Без промокодів не можна вмикати новий чекаут для всіх (ST-2c): First15 — робочий інструмент залучення клієнтів.',
+    warn: 'HIGH-RISK зона (чекаут/тотали). Знайдено owner-тестами 2026-07-15. Handoff ще не написаний. Після фіксу — перевірка купона + First15 + сум у замовленні.', subtasks: []
   },
   {
     id: 'CHECKOUT-002', title: 'Швидкість оформлення + редизайн loader', status: 'todo', tool: 'Codex', priority: 'Low',
@@ -1927,6 +1941,20 @@ const ROADMAP_TASKS = [
       { id: '2', title: 'TECH-030 — Виправлені noindex-сторінки', status: 'done', desc: '168 сторінок (39%) були помилково закриті від Google — виправлено.' },
       { id: '3', title: 'TECH-031 — Виправлені помилки 404', status: 'done', desc: 'Зламані посилання на зображення виправлено.' }
     ]
+  },
+  {
+    id: 'TECH-013', title: 'Mobile Core Web Vitals pass (об\'єднує TECH-002/003/004)', status: 'active', tool: 'Codex', priority: 'High',
+    lastUpdated: '2026-07-16', blockedBy: [],
+    simple: 'PageSpeed mobile-скан 16.07.2026: Performance 62/100, LCP 8.3с, FCP 4.1с, Speed Index 6.2с (TBT і CLS вже ідеальні — 0). Головне: 773 КіБ зайвих зображень (лого і Pokémon-іконка в 8× більшому розмірі, ніж показуються), 327 КіБ без кешування на власних JS/CSS/шрифтах, ~3с рендер-блокуючих запитів.',
+    why: 'Повільний мобільний рендер = гірший UX і слабший сигнал для Google ranking factors.',
+    warn: 'Торкається спільного header/footer (усі сторінки, включно з checkout) і можливо .htaccess (новий ізольований cache-блок, окремо від sitemap-блоку TECH-005-DEEP). Обов\'язковий bs-checkout-smoke після деплою. Handoff: TECH-013.', subtasks: []
+  },
+  {
+    id: 'TECH-042', title: 'Bot-challenge / AI-visibility read-only check', status: 'todo', tool: 'Claude + Owner', priority: 'Medium',
+    lastUpdated: '2026-07-16', blockedBy: [],
+    simple: 'Власник отримав "Please wait while your request is being verified…" при спробі ChatGPT відкрити сайт напряму. Домен НЕ за Cloudflare (підтверджено TECH-005-DEEP); гіпотеза — окремий bot-protection шар хостингу вибірково челенджить AI-агентів, не Googlebot.',
+    why: 'Google indexation в нормі — але AI-пошук (ChatGPT, Perplexity) не бачить GSC-метрик і може мати окрему проблему видимості.',
+    warn: 'Read-only, не чіпати sitemap/robots/.htaccess/WAF. Не реанімація TECH-005-DEEP (закрито, watch-only). Handoff: TECH-042.', subtasks: []
   },
   {
     id: 'SITE-TG-001', title: 'Hotfix: t.me → telegram.me по всьому сайту', status: 'done', tool: 'Claude + Owner', priority: 'High',
@@ -2806,42 +2834,4 @@ async function savePurchaseBatch() {
   const rows = Object.keys(accountingState.selectedPurchaseLots).map(function(key) { return accountingState.selectedPurchaseLots[key]; });
   if (!rows.length || rows.length > 5) return;
   const lots = rows.map(function(row) {
-    const fee = editValue('lotFee' + row.row_index);
-    const item = { lot_id:row.lot_id };
-    if (fee !== '') item.japan_fee_jpy = Number(fee);
-    return item;
-  });
-  const payload = { action:'update_purchase', lots:lots };
-  if (editValue('batchTrackNumber') !== '') payload.track_number = editValue('batchTrackNumber');
-  if (editValue('batchDate') !== '') payload.date = editValue('batchDate');
-  if (editValue('batchUkraineDeliveryJpy') !== '') payload.ukraine_delivery_jpy = Number(editValue('batchUkraineDeliveryJpy'));
-  if (editValue('batchStatus') !== '') payload.status = editValue('batchStatus');
-  if (editValue('batchNote') !== '') payload.note = editValue('batchNote');
-  const hasLotFee = lots.some(function(lot) { return Object.prototype.hasOwnProperty.call(lot,'japan_fee_jpy'); });
-  if (Object.keys(payload).length === 2 && !hasLotFee) {
-    const msg = document.getElementById('recordsMsg');
-    if (msg) { msg.textContent = 'Заповни хоча б одне поле для оновлення'; msg.className = 'records-message error'; }
-    return;
-  }
-  const msg = document.getElementById('recordsMsg');
-  if (msg) { msg.textContent = 'Збереження…'; msg.className = 'records-message'; }
-  try {
-    const result = await callPost(payload);
-    if (msg) { msg.textContent = 'Оновлено лотів: ' + (result.rows_updated || rows.length); msg.className = 'records-message success'; }
-    accountingState.selectedPurchaseLots = {};
-    invalidateAccountingCaches();
-    await loadRecTab('purchases',true);
-  } catch(e) {
-    if (msg) { msg.textContent = 'Помилка: ' + e.message; msg.className = 'records-message error'; }
-  }
-}
-
-// ════════════ LOADERS MAP ════════════
-const loaders = { overview: loadOverview, stock: loadStock, consumables: loadConsumables, orders: loadOrders, skus: loadSkus, clients: loadClients, roadmap: loadRoadmap, accounting: loadAccounting };
-
-// ════════════ INIT ════════════
-loaded.overview = true;
-loadOverview();
-</script>
-</body>
-</html>
+    const fee
