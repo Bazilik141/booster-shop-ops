@@ -1680,7 +1680,7 @@ const ROADMAP_TASKS = [
     lastUpdated: '2026-07-16', blockedBy: [],
     simple: "Окрема сутність для +/- коригувань складу (не звичайне списання): 6 історичних рядків WRT-0051/52/94-97, разом -29 од.",
     why: 'Схема v1 (writeoff_items.qty > 0) не дозволяє імпортувати відновлення/переміщення залишків як є; без цієї моделі NCRM-03 не міг зійтись до копійки.',
-    warn: 'Виділено з NCRM-03 (Owner Decision 2026-07-16). Round 3 підтвердив по-SKU таблицею: усі 6 рядків потрібні (3-SKU→MZERO рекласифікація WRT-0093-96, MBRV↔OUTL переміщення WRT-0097/98, 2 самостійні інвентаризаційні знахідки WRT-0051/52). Не блокує NCRM-08/09 — розблоковує лише повне копійка-в-копійку закриття NCRM-03 анкерів.', subtasks: []
+    warn: 'Виділено з NCRM-03 (Owner Decision 2026-07-16). Round 3 підтвердив по-SKU таблицею: усі 6 рядків потрібні (3-SKU→MZERO рекласифікація WRT-0093-96, MBRV↔OUTL переміщення WRT-0097/98, 2 самостійні інвентаризаційні знахідки WRT-0051/52). Не блокує NCRM-08/09 — розблоковує лише повне копійка-в-копійку закриття NCRM-03 анкерів. 2026-07-17: при скоупінгу NCRM-09d (форма повернень) виявлено, що resellable-return правильно рахує COGS-reversal (fn_prepare_refund_item), але фізичний restock складу (FIFO available qty) ніде не реалізований — саме цей механізм має закрити NCRM-13. Owner-рішення: форма повернень переїжджає сюди замість окремого NCRM-09d.', subtasks: []
   },
   {
     id: 'NCRM-04', title: 'Inventory ledger foundation', status: 'done', tool: 'Codex', priority: 'High',
@@ -1725,18 +1725,18 @@ const ROADMAP_TASKS = [
     warn: '2026-07-11: новий ID (раніше — зміст NCRM-04, до рескоупу під v2-контракт). Blocker оновлено на NCRM-04 (inventory foundation), бо екрани читають FIFO/adjustments-дані. 2026-07-16: In progress — взято в роботу (Notion + дашборд синхронізовано). 2026-07-16: Codex здав 5 екранів (diagnostics/NCRM-08_read-screens_report_20260716.md), Claude review OK, boundary-критерії (no direct Supabase import, no mutations) підтверджені незалежно. 2026-07-17: Owner QA на реальних даних (NCRM-03 import) — екрани живі, цифри коректні, крім одного: /customers рахує скасовані замовлення в LTV/order count (не фільтрує через fn_is_actual_sale, на відміну від v_repeat_customers). 2026-07-17: Codex здав fix (isActualSaleRow, дзеркалить fn_is_actual_sale), Claude review OK, owner підтвердив на /customers (Максим Тимощук: 4→3 замовлення, LTV 3563→2812.50 грн, скасоване OC-FOP-0238 випало, /orders як і раніше показує все). CLOSED Done. Auth/login (contract §10) винесено в NCRM-09 — застосунок лишається local-only, service_role-only, без деплою.', subtasks: []
   },
   {
-    id: 'NCRM-09', title: 'Write-форми + FIFO-COGS + auth (owner/admin)', status: 'in-progress', tool: 'Codex', priority: 'High',
-    lastUpdated: '2026-07-17', blockedBy: ['NCRM-08'],
+    id: 'NCRM-09', title: 'Write-форми + FIFO-COGS + auth (owner/admin)', status: 'done', tool: 'Codex', priority: 'High',
+    lastUpdated: '2026-07-18', blockedBy: ['NCRM-08'],
     simple: 'Форми внесення: продаж, закупка (регіони+валюти), списання, РРЦ, повернення, mystery box; розрахунок собівартості FIFO; логін і доступ для owner/admin.',
     why: 'Серце CRM — внесення даних і правильна собівартість продажу.',
-    warn: '2026-07-11: новий ID (раніше — зміст NCRM-05). 2026-07-17: NCRM-08 CLOSED Done, блокер знято. Owner підтвердив розбиття на 3 хендофи: NCRM-09a (auth-фундамент owner/admin — логін, сесія, route-gate, created_by), потім NCRM-09b (продаж+закупка форми), потім NCRM-09c (списання/РРЦ/повернення/mystery box). Знахідка при скоупінгу: repo-шар для sale/purchase/writeoff/RRC вже частково написаний раніше (addSale/addPurchase/addWriteoff/updateRrc), без created_by і без UI — auth 09a саме це й закриває. FIFO-COGS сам розрахунок вже покритий тригерами NCRM-04/06, форми лише пишуть рядки. NCRM-09a handoff готовий і відправлений (handoffs/handoff_NCRM-09a_auth-foundation_20260717.md), план — plans/NCRM-09_write-forms-auth-split_20260717.md. 2026-07-17: Codex здав 09a (diagnostics/NCRM-09a_auth-foundation_report_20260717.md), Claude review OK, owner QA підтвердив (login/logout/wrong-password/route-gate працюють). Admin-роль тест відкладено (не критично зараз). created_by формально ще не перевірено живим insert-ом — підтвердиться разом з 09b. Далі: хендоф NCRM-09b (продаж+закупка форми).', subtasks: []
+    warn: '2026-07-11: новий ID (раніше — зміст NCRM-05). 2026-07-17: NCRM-08 CLOSED Done, блокер знято. Owner підтвердив розбиття на 3 хендофи: NCRM-09a (auth-фундамент owner/admin — логін, сесія, route-gate, created_by), потім NCRM-09b (продаж+закупка форми), потім NCRM-09c (списання/РРЦ/повернення/mystery box). Знахідка при скоупінгу: repo-шар для sale/purchase/writeoff/RRC вже частково написаний раніше (addSale/addPurchase/addWriteoff/updateRrc), без created_by і без UI — auth 09a саме це й закриває. FIFO-COGS сам розрахунок вже покритий тригерами NCRM-04/06, форми лише пишуть рядки. NCRM-09a handoff готовий і відправлений (handoffs/handoff_NCRM-09a_auth-foundation_20260717.md), план — plans/NCRM-09_write-forms-auth-split_20260717.md. 2026-07-17: Codex здав 09a (diagnostics/NCRM-09a_auth-foundation_report_20260717.md), Claude review OK, owner QA підтвердив (login/logout/wrong-password/route-gate працюють). Admin-роль тест відкладено (не критично зараз). created_by формально ще не перевірено живим insert-ом — підтвердиться разом з 09b. 2026-07-17: Codex здав 09b (diagnostics/NCRM-09b_sale-purchase-forms_report_20260717.md) — форми продаж+закупка, allocation через fn_allocate_purchase_shared_fee (без JS-математики), compensating rollback. Claude review OK. Owner QA: created_by на sales перевірено напряму в Studio — ОК. Закупки/allocation/rollback/blocked-role owner підтвердив усно, без скріншотів — не перевірено Claude незалежно. 2026-07-17: 09c звужено до списання+РРЦ при скоупінгу — повернення (2 різних флоу, guard-тригери, потрібен новий refunds.repo.ts) і mystery box (повна reserve→commit стейт-машина, DB RPC готові, UI/repo нема) виявились завеликими для одного хендофу разом з простими списання/РРЦ. Нова розбивка: 09c списання+РРЦ (handoff готовий, handoffs/handoff_NCRM-09c_writeoff-rrc-forms_20260717.md) → 09d повернення (не заскоуплено) → 09e mystery box (не заскоуплено). 2026-07-17: Codex здав 09c (diagnostics/NCRM-09c_writeoff-rrc-forms_report_20260717.md), Claude review OK, owner QA підтвердив (списання/РРЦ живі, MBOX відсутній у типі). Відома дрібна дірка: mystery-SKU можна вибрати як позицію звичайного (не-MBOX) списання, DB-гард на це не реагує — не критично, залишено як є. 2026-07-17: NCRM-09d (повернення) ПРИЗУПИНЕНО — resellable-return рахує COGS-reversal правильно, але фізичний restock складу не реалізований без signed inventory adjustments; owner вирішив перенести форму повернень у NCRM-13 замість окремого 09d. 2026-07-17: Codex handoff NCRM-09e готовий (handoffs/handoff_NCRM-09e_mystery-box-fulfillment_20260717.md) — UI над готовими RPC fn_reserve/fn_commit/fn_release_mystery_fulfillment + view v_mystery_eligible_components; fn_reverse (post-commit) свідомо виключено, прив'язаний до NCRM-13. 2026-07-18: Codex здав 09e (diagnostics/NCRM-09e_mystery-box-fulfillment_report_20260718.md), Claude review OK. Owner QA: reserve з невірною к-стю відхиляється коректно, reserve працює, commit протестовано на замовленні одразу в статусі shipped (успішно, COGS actual) — cancel/auto-release не протестовано, бо форми зміни статусу замовлення в UI ще нема (окрема підзадача заведена під NCRM-12). Release-логіка (order_status IN cancelled/refund) перевірена Claude напряму в SQL fn_release_mystery_fulfillment, незалежно від UI. CLOSED Done — auth+продаж+закупка+списання+РРЦ+mystery box усі живі. Повернення (колишній 09d) переїхало в NCRM-13, туди й далі.', subtasks: []
   },
   {
-    id: 'NCRM-10', title: 'Order pipeline OpenCart→Supabase + smoke + ретайр Apps Script', status: 'todo', tool: 'Codex + Owner', priority: 'High',
-    lastUpdated: '2026-07-11', blockedBy: ['NCRM-09'],
+    id: 'NCRM-10', title: 'Order pipeline OpenCart→Supabase + smoke + ретайр Apps Script', status: 'active', tool: 'Codex + Owner', priority: 'High',
+    lastUpdated: '2026-07-18', blockedBy: ['NCRM-09'],
     simple: 'Живі замовлення з магазину ллються прямо в нову базу (лише нові, з тест-фільтрами).',
     why: 'Прибрати прошарок Apps Script; замовлення одразу в CRM.',
-    warn: 'Зачіпає живий checkout — fire-and-forget + обовʼязковий smoke-тест. 2026-07-11: новий ID (раніше — зміст NCRM-07); поза скоупом v2-контракту (§9 — потребує окремого dedicated handoff).', subtasks: []
+    warn: 'Зачіпає живий checkout — fire-and-forget + обовʼязковий smoke-тест. 2026-07-11: новий ID (раніше — зміст NCRM-07); поза скоупом v2-контракту (§9 — потребує окремого dedicated handoff). 2026-07-18: Blocker NCRM-09 Done — взято в роботу (Notion + дашборд синхронізовано). Owner підтвердив відкриті [CONFIRM] з plans/crm-new-platform-architecture_2026-06-26.md §11.3: scope = лише нові замовлення, доступ правити код OpenCart є. Хендоф готовий: handoffs/handoff_NCRM-10_order-pipeline-opencart-supabase_20260718.md — очікує Codex.', subtasks: []
   },
   {
     id: 'NCRM-11', title: 'Курси валют (фетч ПУМБ/Приват/Моно/НБУ +1%)', status: 'todo', tool: 'Codex', priority: 'Medium',
@@ -1747,10 +1747,12 @@ const ROADMAP_TASKS = [
   },
   {
     id: 'NCRM-12', title: 'Mobile-версія + поліш', status: 'todo', tool: 'Codex', priority: 'Low',
-    lastUpdated: '2026-07-11', blockedBy: ['NCRM-08'],
+    lastUpdated: '2026-07-18', blockedBy: ['NCRM-08'],
     simple: 'Мобільна версія поверх готового web; обсяг визначається після PC-версії та дизайну.',
     why: 'Доступ із телефону — в останню чергу, база закладена з Phase 0.',
-    warn: '2026-07-11: перенумеровано з NCRM-09 (зміст без змін). Blocker оновлено на NCRM-08 (нова адреса read-екранів).', subtasks: []
+    warn: '2026-07-11: перенумеровано з NCRM-09 (зміст без змін). Blocker оновлено на NCRM-08 (нова адреса read-екранів). 2026-07-18: додано підзадачу — форма зміни статусу замовлення (repo-функція updateSaleStatus існує з NCRM-09b, UI нема ніде). Виявлено при QA NCRM-09e: без цієї форми неможливо протестувати автозвільнення mystery-резерву при cancel/refund.', subtasks: [
+      { id: '1', title: 'Форма зміни статусу замовлення', status: 'todo', desc: 'UI над існуючою updateSaleStatus (sales.repo.ts, NCRM-09b) — зміна order_status/payment_status/ttn/note на /orders/[id]. Потрібно й для загального UX, і як передумова тестування auto-release mystery-резерву (fn_release_mystery_fulfillment спрацьовує лише на cancelled/refund).' }
+    ]
   },
   // ─── CHECKOUT / ST ───
   {
@@ -1769,10 +1771,10 @@ const ROADMAP_TASKS = [
   },
   {
     id: 'ST-2c', title: 'Перевести всіх покупців на новий чекаут', status: 'active', tool: 'Claude + Codex', priority: 'High',
-    lastUpdated: '2026-07-15', blockedBy: ['CHECKOUT-004'],
+    lastUpdated: '2026-07-18', blockedBy: [],
     simple: 'Одна невелика зміна в коді — і всі покупці йдуть на новий чекаут замість старого. Водночас виправляємо вартість доставки: зараз вона завжди 0 грн, після — реальна ціна НП.',
     why: 'Це фінальний крок запуску нового чекауту. Старий залишається як запасний.',
-    warn: 'Всі задачі-попередники закрито (ST-2b.6, RD-13.1J, CHECKOUT-003, ACC-001, ACC-002 A–F — смок пройдено 2026-07-15). НОВИЙ блокер: CHECKOUT-004 — промокоди на новому чекауті не застосовуються (заглушка). Cutover після фікса промо. Високий ризик лишається; відкат простий: один файл.',
+    warn: 'Всі задачі-попередники закрито (ST-2b.6, RD-13.1J, CHECKOUT-003, ACC-001, ACC-002 A–F, CHECKOUT-004 — смок і owner QA пройдено 2026-07-18). Блокерів більше нема — можна братись за subtasks нижче. Високий ризик лишається; відкат простий: один файл.',
     subtasks: [
       { id: '1', title: 'Реальна вартість доставки в замовленні', status: 'todo', desc: 'Зараз в замовленні завжди 0 грн доставки. Після: реальна ціна НП.' },
       { id: '2', title: 'Увімкнути новий чекаут для всіх', status: 'todo', desc: 'Прибираємо перенаправлення на старий чекаут.' }
@@ -1827,11 +1829,25 @@ const ROADMAP_TASKS = [
     warn: 'Примітка: патч нормалізував checkout.twig до LF — правило зафіксовано в CODEX_WORKFLOW.md.', subtasks: []
   },
   {
-    id: 'CHECKOUT-004', title: 'Промокоди на новому чекауті не застосовуються (заглушка)', status: 'todo', tool: 'Claude + Codex', priority: 'High',
-    lastUpdated: '2026-07-15', blockedBy: [],
-    simple: 'Поле «Промокод» на живому чекауті є, але купони не застосовуються — під полем напис «Промокоди з\'являться незабаром». При цьому робоча логіка купонів/First15 була готова ще в червні (ST-2b.5) — ймовірно, блок підмінили під час рескіну RD-13. Спершу з\'ясувати, що саме заглушило блок, потім повернути робочу логіку в новому дизайні.',
-    why: 'Без промокодів не можна вмикати новий чекаут для всіх (ST-2c): First15 — робочий інструмент залучення клієнтів.',
-    warn: 'HIGH-RISK зона (чекаут/тотали). Знайдено owner-тестами 2026-07-15. Handoff ще не написаний. Після фіксу — перевірка купона + First15 + сум у замовленні.', subtasks: []
+    id: 'CHECKOUT-004', title: 'Промокоди на новому чекауті не застосовуються (заглушка) + First15 при гостьовій реєстрації', status: 'done', tool: 'Claude + Codex', priority: 'High',
+    lastUpdated: '2026-07-18', blockedBy: [],
+    simple: 'Поле «Промокод» було заглушкою («Промокоди з\'являться незабаром») — підключили до робочого endpoint (порт логіки ST-2b.5). Під час тестів знайшлись ще два побічні баги в гостьовій реєстрації під час чекауту: бита НП-адреса в новоствореному акаунті і First15 не застосовувався. Всі виправлено ланцюжком CHECKOUT-005→006→007(A). Власник підтвердив QA 2026-07-18.',
+    why: 'Без промокодів не можна було вмикати новий чекаут для всіх (ST-2c): First15 — робочий інструмент залучення клієнтів.',
+    warn: 'HIGH-RISK зона (чекаут/тотали/акаунт). Дрібне на майбутнє: перевірити, що editCustomer() при знятті First15-прапорця не чіпає групу/статус клієнта (низька ймовірність проблеми, стандартна поведінка OC4, окремо не тестувалось). ST-2c більше не заблокований.',
+    subtasks: [
+      { id: '1', title: 'CHECKOUT-004 — заміна заглушки на робочий coupon endpoint', status: 'done', desc: 'Новий catalog/controller/checkout/coupon.php + booster_coupon.php, RD13-STUB прибрано, First15/coupon UI підключено до нового чекауту.' },
+      { id: '2', title: 'CHECKOUT-005 — гостьова реєстрація: НП-адреса + перший запуск First15', status: 'done', desc: 'НП-адреса виправлена одразу. First15 спершу почав застосовуватись на ПОТОЧНЕ замовлення без показу знижки на екрані до підтвердження — знайдено власником, звідси CHECKOUT-006.' },
+      { id: '3', title: 'CHECKOUT-006 — прибрати передчасне застосування на поточне замовлення', status: 'done', desc: 'Поточне замовлення при реєстрації йде повною ціною (як показано в підтвердженні); success-сторінка повідомляє про знижку на наступне замовлення.' },
+      { id: '4', title: 'CHECKOUT-007 + 007A — автоматичне застосування на справжнє наступне замовлення', status: 'done', desc: 'Durable-прапорець на акаунті клієнта (custom_field), знімається після першого успішного автозастосування. 007A — фолбек показу повідомлення на success для шляхів, де не Hutko.' }
+    ]
+  },
+  {
+    id: 'PAY-001', title: 'Monobank Покупка Частинами — інтеграція оплати частинами', status: 'active', tool: 'Claude + Codex', priority: 'Medium',
+    lastUpdated: '2026-07-18', blockedBy: [],
+    simple: 'Новий спосіб оплати: безвідсоткова розстрочка від monobank (3–25 платежів), комісію платить магазин (приклад з докс: 2.9% за розбивку на 2 платежі). Технічна схема: POST /api/order/create → push клієнту в застосунок mono → callback або polling статусу → /api/order/confirm після видачі товару. Sandbox публічний і доступний без реєстрації — Codex може починати Phase 1 build вже зараз.',
+    why: 'Безвідсоткова розстрочка на дорогих товарах (бокси/дисплеї) підвищує конверсію без знижки в ціні магазину.',
+    warn: 'HIGH-RISK зона (checkout/payment/order status). Production заблоковано: власник ще не зареєстрований партнером у @chast_monobankbot (потрібно для stage/prod store-id+secret). Відкриті рішення власника: заміна vs доповнення ПУМБ-плейсхолдера (RD-10), позиція кнопки/входу в чекауті, мінімальна сума, хто покриває комісію. Handoff: PAY-001.',
+    subtasks: []
   },
   {
     id: 'CHECKOUT-002', title: 'Швидкість оформлення + редизайн loader', status: 'todo', tool: 'Codex', priority: 'Low',
@@ -2834,4 +2850,42 @@ async function savePurchaseBatch() {
   const rows = Object.keys(accountingState.selectedPurchaseLots).map(function(key) { return accountingState.selectedPurchaseLots[key]; });
   if (!rows.length || rows.length > 5) return;
   const lots = rows.map(function(row) {
-    const fee
+    const fee = editValue('lotFee' + row.row_index);
+    const item = { lot_id:row.lot_id };
+    if (fee !== '') item.japan_fee_jpy = Number(fee);
+    return item;
+  });
+  const payload = { action:'update_purchase', lots:lots };
+  if (editValue('batchTrackNumber') !== '') payload.track_number = editValue('batchTrackNumber');
+  if (editValue('batchDate') !== '') payload.date = editValue('batchDate');
+  if (editValue('batchUkraineDeliveryJpy') !== '') payload.ukraine_delivery_jpy = Number(editValue('batchUkraineDeliveryJpy'));
+  if (editValue('batchStatus') !== '') payload.status = editValue('batchStatus');
+  if (editValue('batchNote') !== '') payload.note = editValue('batchNote');
+  const hasLotFee = lots.some(function(lot) { return Object.prototype.hasOwnProperty.call(lot,'japan_fee_jpy'); });
+  if (Object.keys(payload).length === 2 && !hasLotFee) {
+    const msg = document.getElementById('recordsMsg');
+    if (msg) { msg.textContent = 'Заповни хоча б одне поле для оновлення'; msg.className = 'records-message error'; }
+    return;
+  }
+  const msg = document.getElementById('recordsMsg');
+  if (msg) { msg.textContent = 'Збереження…'; msg.className = 'records-message'; }
+  try {
+    const result = await callPost(payload);
+    if (msg) { msg.textContent = 'Оновлено лотів: ' + (result.rows_updated || rows.length); msg.className = 'records-message success'; }
+    accountingState.selectedPurchaseLots = {};
+    invalidateAccountingCaches();
+    await loadRecTab('purchases',true);
+  } catch(e) {
+    if (msg) { msg.textContent = 'Помилка: ' + e.message; msg.className = 'records-message error'; }
+  }
+}
+
+// ════════════ LOADERS MAP ════════════
+const loaders = { overview: loadOverview, stock: loadStock, consumables: loadConsumables, orders: loadOrders, skus: loadSkus, clients: loadClients, roadmap: loadRoadmap, accounting: loadAccounting };
+
+// ════════════ INIT ════════════
+loaded.overview = true;
+loadOverview();
+</script>
+</body>
+</html>

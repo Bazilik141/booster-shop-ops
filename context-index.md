@@ -44,9 +44,12 @@ grep "ST-3.5" context-index.md
 | RD-13.1J | Гостьовий чекаут: відновити RD-13.1C CAPTCHA POST-payload у checkout.twig (422 на confirm.confirm) | handoffs/handoff_RD-13.1J_guest-captcha-confirm-payload-restore_20260713.md | — |
 | CHECKOUT-003 | Помилка валідації адреси одразу при відкритті чекауту (мобайл, авторизований) | handoffs/handoff_CHECKOUT-003_authorized-address-error-on-load_20260713.md | — |
 | CHECKOUT-004 | Промокоди (coupon/First15) у новому чекауті — заміна RD13-STUB на реальний endpoint | handoffs/handoff_CHECKOUT-004_promo-code-new-checkout_20260715.md | — |
+| CHECKOUT-005 | Гостьова реєстрація під час чекауту: НП-адреса + First15 (задача описана напряму Codex, без хендофа) | — | diagnostics/CHECKOUT-005_guest-account-np-first15_report_20260715.md |
+| CHECKOUT-006 | First15 при гостьовій реєстрації під час чекауту → знижка на наступне замовлення (не на поточне) | handoffs/handoff_CHECKOUT-006_first15-next-order-message_20260715.md | — |
+| CHECKOUT-007 | First15 автоматично застосовується на справжнє наступне замовлення клієнта (без ручного вводу коду) | handoffs/handoff_CHECKOUT-007_first15-auto-apply-next-order_20260717.md | — |
 | ACC-001 | Меню кабінету: дубль на десктопі, без «Вихід» на мобайлі | handoffs/handoff_ACC-001_account-menu-dedup-logout_20260713.md | — |
 | ACC-002 | NP-форма адреси в акаунті замість стокової free-text | handoffs/handoff_ACC-002_account-np-address-form_20260713.md | — |
-| ST-2c | Переключення всіх клієнтів на новий чекаут | handoffs/handoff_ST-2c_real-shipping-cost-cutover_2026-07-02.md | — |
+| ST-2c | Переключення всіх клієнтів на новий чекаут | handoffs/handoff_ST-2c_real-shipping-cost-content-sweep_20260718.md (реальна вартість + текстовий свіп, поріг 2000 грн) + handoffs/handoff_ST-2c_real-shipping-cost-cutover_2026-07-02.md (§url.php cutover — окремий пізніший крок) | — |
 | ST-3.5 | Кнопка ТТН в адмінці | handoffs/handoff_ST-3.5_admin-ttn-button_2026-06-24.md | — |
 | ST-3.5-1 | Фікс якоря кнопки (OC 4.1.0.3) | ↑ в тому ж хендофі (підзадача) | — |
 | ST-3.5-2 | Тест форми заявки НП | ↑ в тому ж хендофі (підзадача) | — |
@@ -114,7 +117,7 @@ grep "ST-3.5" context-index.md
 | NCRM-01 | Supabase проєкт + SQL-міграції + типи (Done) | handoffs/handoff_NCRM-01_supabase-project-sql-migrations_2026-07-05.md |
 | NCRM-02 | Repository-шар + Next.js скелет + emulator (Done) | handoffs/handoff_NCRM-02_repository-layer-nextjs-skeleton_2026-07-06.md |
 | NCRM-03 | Імпорт історії зі Sheets + звірка KPI (Done, 2026-07-16, round 3 — залишок перенесено в NCRM-13) | handoffs/handoff_NCRM-03_round3_import-history-kpi-reconciliation_2026-07-16.md |
-| NCRM-13 | Signed inventory adjustment model (списання з від'ємною к-стю) — виділено з NCRM-03 (Not started) | — |
+| NCRM-13 | Signed inventory adjustment model (списання з від'ємною к-стю) — виділено з NCRM-03 (Not started); 2026-07-17: додано форму повернень (колишній NCRM-09d) — фізичний restock складу при resellable-поверненні | — |
 | NCRM-04 | Inventory ledger foundation (Done, commit 3c98253) | handoffs/handoff_NCRM-04_inventory-ledger-foundation_2026-07-11.md |
 | NCRM-05 | Mystery fulfillment (Done, commit cb964cb) | handoffs/handoff_NCRM-05_mystery-fulfillment_2026-07-12.md |
 | NCRM-06 | Returns + cost quality (Done, commits 0cd78bd + 4e4a0e6 — owner closed after partial manual QA; Mystery-reversal + `git diff` 0001-0007 not independently re-verified) | handoffs/handoff_NCRM-06_returns-cost-quality_2026-07-14.md |
@@ -124,8 +127,10 @@ grep "ST-3.5" context-index.md
 | NCRM-09 | Write-форми + FIFO-COGS + auth (owner/admin) — колишній зміст NCRM-05, розбито на 09a/09b/09c 2026-07-17 | plans/NCRM-09_write-forms-auth-split_20260717.md |
 | NCRM-09a | Auth-фундамент (owner/admin) — sub-scope NCRM-09, не окрема Notion-картка | handoffs/handoff_NCRM-09a_auth-foundation_20260717.md |
 | NCRM-09b | Write-форми продаж+закупка — sub-scope NCRM-09, 09a owner-confirmed | handoffs/handoff_NCRM-09b_sale-purchase-forms_20260717.md |
-| NCRM-09c | Write-форми списання/РРЦ/повернення/mystery box — sub-scope NCRM-09, чекає 09b | — |
-| NCRM-10 | Order pipeline OpenCart→Supabase + smoke — колишній зміст NCRM-07 | — |
+| NCRM-09c | Write-форми списання+РРЦ — sub-scope NCRM-09, звужено (повернення/mystery виділено в 09d/09e) | handoffs/handoff_NCRM-09c_writeoff-rrc-forms_20260717.md |
+| NCRM-09d | Write-форма повернення (refunds) — ПРИЗУПИНЕНО 2026-07-17, переміщено в NCRM-13 (COGS-reversal рахується правильно, але фізичний restock складу не реалізований без signed inventory adjustments) | — |
+| NCRM-09e | Mystery box reservation/assembly UI (reserve/commit/release, без reversal) — sub-scope NCRM-09 | handoffs/handoff_NCRM-09e_mystery-box-fulfillment_20260717.md |
+| NCRM-10 | Order pipeline OpenCart→Supabase + smoke — колишній зміст NCRM-07; 2026-07-18 In progress, scope підтверджено (лише нові замовлення, hook-доступ є) | handoffs/handoff_NCRM-10_order-pipeline-opencart-supabase_20260718.md |
 | NCRM-11 | Курси валют (фетч + заморозка) — перенумеровано з NCRM-08, зміст той самий | — |
 | NCRM-12 | Mobile-версія + поліш — перенумеровано з NCRM-09, зміст той самий | — |
 
@@ -135,6 +140,7 @@ grep "ST-3.5" context-index.md
 
 | Roadmap ID | Назва | Handoff |
 |---|---|---|
+| PAY-001 | Monobank Покупка Частинами — інтеграція оплати частинами (Phase 1 sandbox, In progress) | handoffs/handoff_PAY-001_monobank-chastyny-integration_20260718.md |
 | CHECKOUT-001 | Реєстрація акаунту при замовленні (Done) | handoffs/handoff_CHECKOUT-001_phase1_guest-account-creation_2026-07-04.md |
 | CHECKOUT-002 | Швидкість оформлення + редизайн loader | — |
 | CAT-002 | Категорії + аксесуари (parent) | — |

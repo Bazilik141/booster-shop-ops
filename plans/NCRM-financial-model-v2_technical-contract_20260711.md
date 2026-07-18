@@ -197,6 +197,8 @@ The following are additive migrations/tasks. Exact sequence numbers are reserved
 - OpenCart production changes before a dedicated order-sync/CRM handoff.
 - Reclassifying historical legacy dashboard averages as canonical FIFO values.
 
+**2026-07-18:** the dedicated order-sync/CRM handoff required above is now written — `handoffs/handoff_NCRM-10_order-pipeline-opencart-supabase_20260718.md` (NCRM-10). Owner confirmed the two open `[CONFIRM]` items from `crm-new-platform-architecture_2026-06-26.md` §11.3: pipeline scope = new orders only (insert), and OpenCart theme/controller code access exists. This unblocks Codex on NCRM-10; the §9 gate above is satisfied for that task specifically, not waived generally.
+
 ## 10. Access model / RLS foundation (addendum, owner-approved 2026-07-15)
 
 Not part of the original 2026-07-11 contract above — added when NCRM-07b ("Enable RLS on public schema") turned out to need a real scoping decision instead of a bare RLS flip. Recorded here so it isn't only findable inside a dated plan file.
