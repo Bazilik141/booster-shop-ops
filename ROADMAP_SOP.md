@@ -112,6 +112,7 @@ ST-серія (заведена в Notion 2026-06-24):
 
 | Roadmap ID | Notion page_id |
 |---|---|
+| PAY-001 | `3a16bf20-bdb4-819b-99a7-f8535b0c74d6` (заведено 2026-07-18: Monobank Покупка Частинами) |
 | CRM-001 | `3876bf20-bdb4-81dc-987d-d119fff4d2e9` |
 | CRM-002 | `3876bf20-bdb4-8118-9fc7-d7e702832ec4` |
 | TECH-005-DEEP | `3666bf20-bdb4-8175-a429-e48eb7d6ef2d` |
@@ -124,6 +125,7 @@ ST-серія (заведена в Notion 2026-06-24):
 | CAT-002 | `36f6bf20-bdb4-817e-99ec-eecce853778c` |
 | CHECKOUT-001 | `3776bf20-bdb4-8130-bcbf-cbb6259d5654` |
 | CHECKOUT-002 | `3946bf20-bdb4-81bf-9f47-cda9044fd2f2` |
+| CHECKOUT-004 | `3a16bf20-bdb4-8119-902c-e42e2b56a8bb` (заведено 2026-07-18, Done; охоплює й CHECKOUT-005/006/007/007A як частину тієї ж картки — окремих рядків Notion для них нема) |
 | LEGAL-002 | `3666bf20-bdb4-81ea-8fed-ff4773081cdb` |
 | R-13.5 | `36c6bf20-bdb4-814c-becb-c451a64b22f8` |
 
