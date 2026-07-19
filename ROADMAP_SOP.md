@@ -113,6 +113,7 @@ ST-серія (заведена в Notion 2026-06-24):
 | Roadmap ID | Notion page_id |
 |---|---|
 | PAY-001 | `3a16bf20-bdb4-819b-99a7-f8535b0c74d6` (заведено 2026-07-18: Monobank Покупка Частинами) |
+| PAY-001-UI | `3a26bf20-bdb4-811f-baf2-ed050b4c78e7` (заведено 2026-07-18: дизайн-бриф для Claude Design) |
 | CRM-001 | `3876bf20-bdb4-81dc-987d-d119fff4d2e9` |
 | CRM-002 | `3876bf20-bdb4-8118-9fc7-d7e702832ec4` |
 | TECH-005-DEEP | `3666bf20-bdb4-8175-a429-e48eb7d6ef2d` |
