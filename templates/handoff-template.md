@@ -1,6 +1,7 @@
 # Codex Handoff — <TASK-ID>: <short title>
 
 Date: YYYY-MM-DD | Parent: <parent task if any>
+Codex config: model=<Sol/Terra/Luna> · effort=<Низький/Середній/Високий/Найвищий/Ультра>
 
 ## Context
 <!-- 2-3 sentences: current state, what triggered this task. No workflow repetition — see AGENTS.md. -->

@@ -31,15 +31,15 @@ templates/    handoff + report templates
 ```
 
 ## Environment
-- **Terminal (Claude Code CLI)** — installed. Use for: git operations, bash scripts, FTP deploy triggers.
+- **Terminal (Claude Code CLI)** — installed. Use for: git diff/status/log (read-only), bash scripts, FTP deploy triggers. **Ніколи для `git commit`/`git push`** — ці команди завжди йдуть власнику готовим блоком для ручного виконання (див. Commit / push policy нижче).
 - **VS Code (Claude Code extension)** — installed. Use for: viewing/editing repo files, inspecting diffs.
 
 ## Roles & boundaries
 | Agent | Does | Does NOT |
 |-------|------|----------|
-| **Claude** | audit, SEO/UX strategy, handoffs, post-patch review, git diff | server access, deploy |
-| **Codex** | patches (`patches/`), reports (`diagnostics/`), commit/push only when owner asks | server access, deploy, auto-commit/push |
-| **Owner** | approves in chat, uploads + runs patch on server, triggers commits | — |
+| **Claude** | audit, SEO/UX strategy, handoffs, post-patch review, git diff, prepares ready-to-paste commit/push command | server access, deploy, git commit/push |
+| **Codex** | patches (`patches/`), reports (`diagnostics/`) | server access, deploy, git commit/push |
+| **Owner** | approves in chat, uploads + runs patch on server, **runs every `git commit`/`push` manually** from the command Claude prepares | — |
 
 ## Flow
 ```
@@ -55,11 +55,11 @@ Claude handoff → Codex patch → drop to C:\Users\14bez\Downloads\Booster Shop
   - Статус у Notion ставить Claude; Codex Notion НЕ чіпає. Codex оновлює `ROADMAP_FLOW` дашборда як останній крок roadmap-affecting патчу (Claude вписує це в handoff).
 
 ## Commit / push policy
-- **Do NOT commit or push unless owner explicitly asks.** Show `git diff` summary and wait.
-- Якщо owner просить закомітити: спершу `New-Item .autosync-pause` у корені (паузить autosync), після `push` — `Remove-Item .autosync-pause`. Деталі: `ROADMAP_SOP.md §4/§8`.
-- Risky tasks (checkout, payment, schema, DB, .htaccess): propose branch + PR, still wait.
+- **Claude і Codex НІКОЛИ не виконують `git commit`/`git push` самі — жодних винятків.** Коміт/пуш завжди робить власник вручну.
+- Claude показує `git diff` summary в чаті, потім готує ОДИН повний PowerShell-блок (готовий вставити з нуля в нове вікно): `cd` у корінь репо → `New-Item .autosync-pause` → `git add`/`commit`/`push` → `Remove-Item .autosync-pause`. Власник вставляє блок як є і виконує сам.
+- Risky tasks (checkout, payment, schema, DB, .htaccess): propose branch + PR, командний блок все одно готує Claude, виконує власник.
 - Commit message format: `Codex: <TASK-ID> <short description>`
-- Do NOT commit: `.bak`, `.tar.gz`, `.zip`, `.log`, DB dumps, secrets/tokens.
+- Do NOT include in the command: `.bak`, `.tar.gz`, `.zip`, `.log`, DB dumps, secrets/tokens.
 
 ## Patch conventions (PHP runner)
 Each patch must:
@@ -106,6 +106,19 @@ Live state comes from owner's **cPanel backup drop**.
 ## Risky zones — extra care + rollback + smoke test required
 checkout · payment · Hutko · Checkbox · fiscalization · Nova Poshta · order status ·
 Merchant feed · schema/JSON-LD · SEO (sitemap/robots/canonical/.htaccess) · CRM · DB
+
+## Codex model + effort recommendation
+Кожен готовий хендоф містить рядок `Codex config: model=<Sol/Terra/Luna> · effort=<Низький/Середній/Високий/Найвищий/Ультра>` одразу після Date — це модель і глибина думки, з якими власник запускає задачу в Codex CLI.
+
+| Задача | Model | Effort |
+|---|---|---|
+| Risky zone (список вище) або багатофайлова/архітектурно неоднозначна задача | Sol | Найвищий |
+| Типовий патч — фіча, багфікс, тести (default) | Terra | Середній (Високий, якщо задача багатокрокова) |
+| Механічна правка — копірайтинг, форматування, дрібний CSS/текст | Luna | Низький |
+
+Ультра — лише якщо задача явно ділиться на незалежні шматки (паралельний рефактор кількох непов'язаних модулів); швидко з'їдає квоту, тому не за замовчуванням.
+
+Джерело: офіційний OpenAI GPT-5.6 model guide (Sol = flagship/складні задачі, Terra = баланс/щоденна робота, Luna = швидкі механічні задачі), липень 2026.
 
 ## Token and context efficiency
 - For CRM and Google Sheets work, use the Apps Script API or narrow bounded ranges first.
