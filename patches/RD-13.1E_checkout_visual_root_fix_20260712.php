@@ -254,4 +254,4 @@ foreach ($targets as $key => $relative) { rd131e_write($paths[$key], $files[$key
 rd131e_log('changed=' . implode(',', $targets));
 rd131e_log('done=ok');
 rd131e_log('qa=guest checkout: PIB vs phone/email equal input width (desktop+mobile); mobile <=420px compact CAPTCHA, no right overflow; >420px normal CAPTCHA fits card');
-if (@unlink(__FILE__)) { rd131e_log('self_delete=ok'); } else {
+if (@unlink(__FILE__)) { rd131e_log('self_delete=ok'); } else { rd131e_log('self_delete=skipped'); }
