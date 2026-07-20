@@ -62,6 +62,7 @@ export type AddSaleItemPayload = {
 };
 
 export type AddSalePayload = {
+  createdBy: string;
   orderNo: string;
   openCartOrderId?: string | null;
   channelId: string;

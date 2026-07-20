@@ -5,6 +5,7 @@ type OpenCartItem = {
   sku?: unknown;
   model?: unknown;
   quantity?: unknown;
+  unit_price?: unknown;
   price?: unknown;
   total?: unknown;
 };
@@ -52,6 +53,18 @@ function numberValue(value: unknown): number | null {
     return Number.isFinite(parsed) ? parsed : null;
   }
   return null;
+}
+
+function orderIdText(value: unknown): string {
+  if (typeof value === "number" && Number.isSafeInteger(value)) {
+    return String(value);
+  }
+
+  return text(value);
+}
+
+function itemUnitPrice(item: OpenCartItem): number | null {
+  return numberValue(item.unit_price) ?? numberValue(item.price);
 }
 
 function normalize(value: unknown): string {
@@ -106,6 +119,11 @@ function paymentTypeCode(payload: OpenCartPayload): string {
   const value = normalize(
     text(payload.payment_method_name) + " " + text(payload.payment_method_code),
   );
+
+  const monoParts = value.match(/mono_chast[._-]mono_chast_([345])/);
+  if (monoParts) {
+    return `credit_mono_${monoParts[1]}`;
+  }
 
   if (
     value.includes("рекв") ||
@@ -166,7 +184,7 @@ function validatePayload(payload: OpenCartPayload): {
   items: OpenCartItem[];
   totals: OpenCartTotal[];
 } | { error: string } {
-  const orderId = text(payload.order_id);
+  const orderId = orderIdText(payload.order_id);
   const orderNo = text(payload.order_key) || "OC-FOP-" + orderId.padStart(4, "0");
   const soldAt = toSoldAt(payload.date_added);
   const items = Array.isArray(payload.products) ? payload.products as OpenCartItem[] : [];
@@ -182,7 +200,7 @@ function validatePayload(payload: OpenCartPayload): {
   for (const item of items) {
     const sku = canonicalSku(item);
     const quantity = numberValue(item.quantity);
-    const price = numberValue(item.price);
+    const price = itemUnitPrice(item);
 
     if (!sku || quantity === null || !Number.isInteger(quantity) || quantity <= 0 || price === null || price < 0) {
       return { error: "each product needs SKU, positive integer quantity, and non-negative price" };
@@ -246,7 +264,7 @@ Deno.serve(async (request) => {
     items: validated.items.map((item) => ({
       sku: canonicalSku(item),
       qty: numberValue(item.quantity),
-      unit_price: numberValue(item.price),
+      unit_price: itemUnitPrice(item),
       note: text(item.name),
     })),
   };

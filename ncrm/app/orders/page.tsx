@@ -15,6 +15,7 @@ export default async function OrdersPage() {
         <div className="eyebrow">NCRM-08 · read-only</div>
         <h1>Замовлення</h1>
         <p>{orders.total} записів. Статуси, оплата й канал показані людськими назвами.</p>
+        <p><Link href="/orders/new">Створити продаж →</Link></p>
       </section>
       <section className="card table-card">
         <div className="table-wrap">

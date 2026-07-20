@@ -94,6 +94,7 @@ export async function addWriteoff(payload: AddWriteoffPayload): Promise<Writeoff
   const { data: writeoff, error: writeoffError } = await supabase
     .from("writeoffs")
     .insert({
+      created_by: payload.createdBy,
       writeoff_no: payload.writeoffNo,
       type: payload.type,
       reason: payload.reason ?? null,

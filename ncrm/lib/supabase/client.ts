@@ -1,4 +1,4 @@
-import { createBrowserClient } from "@supabase/ssr";
+import { createBrowserClient, createServerClient } from "@supabase/ssr";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/types/database";
 
@@ -68,6 +68,31 @@ export function createSupabaseBrowserAppClient(): SupabaseClient<Database> {
   const env = readSupabaseEnv({ useServiceRole: false });
 
   return createBrowserClient<Database>(env.url, env.key);
+}
+
+type SessionCookie = {
+  name: string;
+  value: string;
+  options?: Record<string, unknown>;
+};
+
+type SessionCookieStore = {
+  getAll: () => { name: string; value: string }[];
+  setAll: (cookies: SessionCookie[]) => void;
+};
+
+/**
+ * Session/identity client only. Business-table access remains in repository
+ * modules through createRepositoryClient(), which uses the service-role key.
+ */
+export function createSupabaseSessionClient(
+  cookieStore: SessionCookieStore
+): SupabaseClient<Database> {
+  const env = readSupabaseEnv({ useServiceRole: false });
+
+  return createServerClient<Database>(env.url, env.key, {
+    cookies: cookieStore
+  });
 }
 
 export function createRepositoryClient(): SupabaseClient<Database> {

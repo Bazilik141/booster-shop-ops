@@ -31,6 +31,7 @@ export type AddWriteoffItemPayload = {
 };
 
 export type AddWriteoffPayload = {
+  createdBy: string;
   writeoffNo: string;
   type: string;
   reason?: string | null;

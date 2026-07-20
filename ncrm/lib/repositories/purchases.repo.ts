@@ -2,6 +2,7 @@ import type {
   AddPurchasePayload,
   BatchUpdateLotStatusPayload,
   Purchase,
+  PurchaseSharedFeeType,
   PurchaseLot
 } from "@/lib/domain";
 import { createRepositoryClient } from "@/lib/supabase/client";
@@ -24,6 +25,11 @@ type PurchaseRecord = Tables<"purchases"> & {
 
 const LOT_SELECT = "*, products(sku, name, full_name)";
 const PURCHASE_SELECT = "*, purchase_lots(*, products(sku, name, full_name))";
+const SHARED_FEES: { type: PurchaseSharedFeeType; amountKey: "forwardingFeeUah" | "intlShippingUah" | "localDeliveryUah" }[] = [
+  { type: "forwarding_fee", amountKey: "forwardingFeeUah" },
+  { type: "intl_shipping", amountKey: "intlShippingUah" },
+  { type: "local_delivery", amountKey: "localDeliveryUah" }
+];
 
 function firstProduct(raw: PurchaseLotRecord["products"]): ProductMini | null {
   if (!raw) {
@@ -116,6 +122,7 @@ export async function listPurchaseLots(
 export async function addPurchase(payload: AddPurchasePayload): Promise<Purchase> {
   const supabase = createRepositoryClient();
   const purchaseInsert: TablesInsert<"purchases"> = {
+    created_by: payload.createdBy,
     region_id: payload.regionId,
     supplier_name: payload.supplierName ?? null,
     order_ref: payload.orderRef ?? null,
@@ -150,7 +157,14 @@ export async function addPurchase(payload: AddPurchasePayload): Promise<Purchase
     throw repositoryError("addPurchase", purchaseError.message);
   }
 
-  if (payload.lots?.length) {
+  try {
+    if (!payload.lots?.length) {
+      throw new Error("At least one purchase lot is required.");
+    }
+    if (payload.lots.length > 1 && !payload.sharedFeeAllocation) {
+      throw new Error("Multi-lot purchases require a shared-fee allocation method.");
+    }
+
     const lotRows: TablesInsert<"purchase_lots">[] = payload.lots.map((lot) => ({
       lot_code: lot.lotCode,
       purchase_id: purchase.id,
@@ -168,24 +182,81 @@ export async function addPurchase(payload: AddPurchasePayload): Promise<Purchase
       note: lot.note ?? null
     }));
 
-    const { error: lotError } = await supabase.from("purchase_lots").insert(lotRows);
+    const { data: insertedLots, error: lotError } = await supabase
+      .from("purchase_lots")
+      .insert(lotRows)
+      .select("id, lot_code");
 
     if (lotError) {
-      throw repositoryError("addPurchaseLots", lotError.message);
+      throw new Error(`addPurchaseLots: ${lotError.message}`);
     }
+
+    if (payload.lots.length > 1 && payload.sharedFeeAllocation) {
+      const lotsByCode = new Map((insertedLots ?? []).map((lot) => [lot.lot_code, lot.id]));
+      for (const fee of SHARED_FEES) {
+        if (payload[fee.amountKey] === 0) continue;
+
+        const manualByLotCode = payload.sharedFeeAllocation.manualAllocations?.[fee.type];
+        const manualAllocations = payload.sharedFeeAllocation.method === "manual"
+          ? Object.fromEntries(payload.lots.map((lot) => {
+              const lotId = lotsByCode.get(lot.lotCode);
+              const allocated = manualByLotCode?.[lot.lotCode];
+              if (!lotId || typeof allocated !== "number") {
+                throw new Error(`Manual ${fee.type} allocation must be entered for every lot.`);
+              }
+              return [lotId, allocated];
+            }))
+          : null;
+
+        const { error: allocationError } = await supabase.rpc("fn_allocate_purchase_shared_fee", {
+          p_purchase_id: purchase.id,
+          p_fee_type: fee.type,
+          p_allocation_method: payload.sharedFeeAllocation.method,
+          p_manual_allocations: manualAllocations
+        });
+        if (allocationError) {
+          throw new Error(`allocate ${fee.type}: ${allocationError.message}`);
+        }
+      }
+    }
+
+    const { data, error } = await supabase
+      .from("purchases")
+      .select(PURCHASE_SELECT)
+      .eq("id", purchase.id)
+      .single();
+
+    if (error) {
+      throw new Error(`addPurchaseReadback: ${error.message}`);
+    }
+
+    return mapPurchase(data as PurchaseRecord);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    const { data: lots } = await supabase
+      .from("purchase_lots")
+      .select("id")
+      .eq("purchase_id", purchase.id);
+    const lotIds = (lots ?? []).map((lot) => lot.id);
+    const rollbackErrors: string[] = [];
+
+    if (lotIds.length > 0) {
+      const { error: allocationsError } = await supabase
+        .from("purchase_lot_fee_allocations")
+        .delete()
+        .in("purchase_lot_id", lotIds);
+      if (allocationsError) rollbackErrors.push(allocationsError.message);
+    }
+    const { error: lotsError } = await supabase.from("purchase_lots").delete().eq("purchase_id", purchase.id);
+    if (lotsError) rollbackErrors.push(lotsError.message);
+    const { error: purchaseDeleteError } = await supabase.from("purchases").delete().eq("id", purchase.id);
+    if (purchaseDeleteError) rollbackErrors.push(purchaseDeleteError.message);
+
+    const rollbackSuffix = rollbackErrors.length === 0
+      ? "incomplete purchase rolled back"
+      : `rollback failed: ${rollbackErrors.join(" | ")}`;
+    throw repositoryError("addPurchase", `${message}; ${rollbackSuffix}`);
   }
-
-  const { data, error } = await supabase
-    .from("purchases")
-    .select(PURCHASE_SELECT)
-    .eq("id", purchase.id)
-    .single();
-
-  if (error) {
-    throw repositoryError("addPurchaseReadback", error.message);
-  }
-
-  return mapPurchase(data as PurchaseRecord);
 }
 
 export async function batchUpdateStatus(

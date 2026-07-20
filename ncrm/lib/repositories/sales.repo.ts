@@ -105,6 +105,7 @@ export async function getSale(id: string): Promise<Sale | null> {
 export async function addSale(payload: AddSalePayload): Promise<Sale> {
   const supabase = createRepositoryClient();
   const saleInsert: TablesInsert<"sales"> = {
+    created_by: payload.createdBy,
     order_no: payload.orderNo,
     opencart_order_id: payload.openCartOrderId ?? null,
     channel_id: payload.channelId,

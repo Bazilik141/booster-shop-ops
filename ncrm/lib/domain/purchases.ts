@@ -65,7 +65,20 @@ export type AddPurchaseLotPayload = {
   note?: string | null;
 };
 
+export type PurchaseSharedFeeType =
+  | "forwarding_fee"
+  | "intl_shipping"
+  | "local_delivery";
+
+export type PurchaseFeeAllocationMethod = "weight" | "value" | "manual";
+
+export type PurchaseSharedFeeAllocation = {
+  method: PurchaseFeeAllocationMethod;
+  manualAllocations?: Partial<Record<PurchaseSharedFeeType, Record<string, number>>>;
+};
+
 export type AddPurchasePayload = {
+  createdBy: string;
   regionId: string;
   supplierName?: string | null;
   orderRef?: string | null;
@@ -89,6 +102,7 @@ export type AddPurchasePayload = {
   localDeliveryUah: number;
   note?: string | null;
   lots?: AddPurchaseLotPayload[];
+  sharedFeeAllocation?: PurchaseSharedFeeAllocation;
 };
 
 export type BatchUpdateLotStatusPayload = {

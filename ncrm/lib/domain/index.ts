@@ -1,7 +1,9 @@
 export type * from "./analytics";
 export type * from "./customers";
+export type * from "./mystery";
 export type * from "./orders";
 export type * from "./products";
 export type * from "./purchases";
+export type * from "./reference";
 export type * from "./sales";
 export type * from "./writeoffs";

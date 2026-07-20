@@ -18,8 +18,14 @@ function argValue(name, fallback) {
 }
 
 const dataDir = path.resolve(argValue("--data-dir", defaultDataDir));
-const batch = argValue("--batch", "ncrm03_20260716");
+const batch = argValue("--batch", "ncrm03_20260716_r3");
 const month = argValue("--month", "2026-06-01");
+const pairedLegacyReclassifications = [
+  { id: "WRT-0094", counterpart: "WRT-0093", sku: "PKM-JP-MSYM-BST", qty: -11, counterpartSku: "PKM-JP-MZERO-BST", counterpartQty: 18 },
+  { id: "WRT-0095", counterpart: "WRT-0093", sku: "PKM-JP-MDEX-BST", qty: -1, counterpartSku: "PKM-JP-MZERO-BST", counterpartQty: 18 },
+  { id: "WRT-0096", counterpart: "WRT-0093", sku: "PKM-JP-OUTL-BST", qty: -6, counterpartSku: "PKM-JP-MZERO-BST", counterpartQty: 18 },
+  { id: "WRT-0097", counterpart: "WRT-0098", sku: "PKM-JP-MBRV-BST", qty: -1, counterpartSku: "PKM-JP-OUTL-BST", counterpartQty: 1 }
+];
 
 const sourceFiles = {
   sales: ["Booster Shop CRM — облік товарів - Продажі.csv", "sales.csv"],
@@ -97,6 +103,24 @@ function metric(name, expected, actual) {
   const diff = normalizedExpected === null || normalizedActual === null ? null : round2(normalizedActual - normalizedExpected);
   return { metric: name, expected: normalizedExpected, actual: normalizedActual, diff, tolerance: 0.01, pass: diff !== null && Math.abs(diff) <= 0.01 };
 }
+function noteValue(note, key) {
+  const match = clean(note).match(new RegExp(`(?:^|;\\s*)${key}=([^;]+)`));
+  return match ? clean(match[1]) : null;
+}
+function pairedReclassificationRows(rows) {
+  const byId = new Map(rows.map((row) => [row.id, row]));
+  return pairedLegacyReclassifications.map((definition) => {
+    const row = byId.get(definition.id);
+    const counterpart = byId.get(definition.counterpart);
+    if (!row || !counterpart || row.sku !== definition.sku || row.qty !== definition.qty || counterpart.sku !== definition.counterpartSku || counterpart.qty !== definition.counterpartQty) {
+      throw new Error(`Paired legacy reclassification ${definition.id}/${definition.counterpart} does not match the approved frozen-source shape.`);
+    }
+    if (!`${row.reason} ${row.note} ${counterpart.reason} ${counterpart.note}`.includes(definition.counterpart)) {
+      throw new Error(`Paired legacy reclassification ${definition.id} lacks its source reference to ${definition.counterpart}.`);
+    }
+    return { ...row, counterpart: definition.counterpart, classification: "superseded_paired_reclassification" };
+  });
+}
 
 const [salesSource, purchasesSource, writeoffsSource, stockSource] = await Promise.all([
   sourceRows("sales"), sourceRows("purchases"), sourceRows("writeoffs"), sourceRows("stock")
@@ -106,6 +130,11 @@ const stockExpected = {
   prro: round2(stockSource.reduce((total, row) => total + parseMoney(row["Вартість залишку / ПРРО"]), 0)),
   mgmt: round2(stockSource.reduce((total, row) => total + parseMoney(row["Управлінська вартість залишку"]), 0))
 };
+const sourceStockBySku = new Map();
+for (const row of stockSource) {
+  const sku = clean(row.SKU);
+  if (sku) sourceStockBySku.set(sku, (sourceStockBySku.get(sku) ?? 0) + parseMoney(row["Залишок"]));
+}
 const sourceInbound = purchasesSource.reduce((total, row) => {
   if (!["ordered", "in_transit"].includes(lotStatus(row["Статус"])) || parseMoney(row["Кількість одиниць"]) <= 0) return total;
   total.prro += parseMoney(row["Собівартість закупки партії / ПРРО"]);
@@ -126,16 +155,18 @@ const legacyMysterySourceCostByKey = new Map(salesSource
   .map((row) => [`${clean(row["Номер замовлення / операції"])}|${clean(row.SKU)}`, {
     qty: parseMoney(row["Кількість"]), mgmt_unit: parseMoney(row["Управлінська собівартість 1 од."]), is_actual: isActualSale(row)
   }]));
-const deferredNcrm13 = writeoffsSource
-  .map((row) => ({ id: clean(row["ID списання"]), date: clean(row["Дата"]), sku: clean(row.SKU), qty: parseMoney(row["Кількість"]), prro_unit: parseMoney(row["Собівартість 1 од. / ПРРО"]), mgmt_unit: parseMoney(row["Управлінська собівартість 1 од."]), reason: clean(row["Причина"]), note: clean(row["Примітка"]) }))
-  .filter((row) => row.qty < 0);
+const sourceWriteoffRows = writeoffsSource
+  .map((row) => ({ id: clean(row["ID списання"]), date: clean(row["Дата"]), sku: clean(row.SKU), qty: parseMoney(row["Кількість"]), prro_unit: parseMoney(row["Собівартість 1 од. / ПРРО"]), mgmt_unit: parseMoney(row["Управлінська собівартість 1 од."]), reason: clean(row["Причина"]), note: clean(row["Примітка"]) }));
+const supersededPairedCorrections = pairedReclassificationRows(sourceWriteoffRows);
+const supersededPairedIds = new Set(supersededPairedCorrections.map((row) => row.id));
+const deferredNcrm13 = sourceWriteoffRows.filter((row) => row.qty < 0 && !supersededPairedIds.has(row.id));
 const signedResidual = deferredNcrm13.reduce((total, row) => ({
   qty: total.qty + row.qty, prro: total.prro + row.qty * row.prro_unit, mgmt: total.mgmt + row.qty * row.mgmt_unit
 }), { qty: 0, prro: 0, mgmt: 0 });
 
 await loadEnvFile();
 const client = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, { auth: { autoRefreshToken: false, persistSession: false } });
-const [valuation, lotCosts, pnl, products, sales, saleItems, writeoffs, writeoffItems, fulfillments, contents, alerts] = await Promise.all([
+const [valuation, lotCosts, pnl, products, sales, saleItems, writeoffs, writeoffItems, fulfillments, contents, alerts, purchaseLots, purchases] = await Promise.all([
   query(client, "v_inventory_fifo_valuation", "product_id,sku,warehouse_qty,warehouse_prro_cost,warehouse_mgmt_cost,asset_qty,asset_prro_cost,asset_mgmt_cost"),
   query(client, "v_purchase_lot_costs", "id,status,prro_total,mgmt_total"),
   client.from("v_pnl_monthly").select("month,revenue,contribution_margin,true_net_profit").eq("month", month).maybeSingle().then(({ data, error }) => { if (error) throw new Error(`v_pnl_monthly: ${error.message}`); return data; }),
@@ -143,14 +174,28 @@ const [valuation, lotCosts, pnl, products, sales, saleItems, writeoffs, writeoff
   query(client, "sale_items", "id,sale_id,product_id,qty,cost_state,cost_method,prro_unit,mgmt_unit"),
   query(client, "writeoffs", "id,writeoff_no,type,note"), query(client, "writeoff_items", "id,writeoff_id,product_id,qty,note"),
   query(client, "mystery_fulfillments", "id,sale_item_id,state,note"), query(client, "mystery_contents", "id,sale_item_id,component_product_id,qty,source,writeoff_item_id"),
-  query(client, "v_stock_alerts", "sku,stock_qty")
+  query(client, "v_stock_alerts", "sku,stock_qty"),
+  query(client, "purchase_lots", "lot_code,purchase_id,product_id,delivery_date,note"),
+  query(client, "purchases", "id,ordered_at")
 ]);
 const sum = (rows, key) => round2(rows.reduce((total, row) => total + Number(row[key] ?? 0), 0));
 const dbWarehouse = { qty: sum(valuation, "warehouse_qty"), prro: sum(valuation, "warehouse_prro_cost"), mgmt: sum(valuation, "warehouse_mgmt_cost") };
 const dbAsset = { prro: sum(valuation, "asset_prro_cost"), mgmt: sum(valuation, "asset_mgmt_cost") };
 const dbTransit = lotCosts.filter((row) => row.status === "in_transit").reduce((total, row) => ({ prro: total.prro + Number(row.prro_total ?? 0), mgmt: total.mgmt + Number(row.mgmt_total ?? 0) }), { prro: 0, mgmt: 0 });
 const productById = new Map(products.map((row) => [row.id, row]));
+const purchaseById = new Map(purchases.map((row) => [row.id, row]));
 const salesById = new Map(sales.map((row) => [row.id, row]));
+const legacyEffectiveAvailability = purchaseLots
+  .filter((lot) => clean(lot.note).includes("legacy_effective_availability_from="))
+  .map((lot) => ({
+    lot_code: lot.lot_code, sku: productById.get(lot.product_id)?.sku ?? null,
+    source_delivery_date: noteValue(lot.note, "source_delivery_date"),
+    effective_availability_date: noteValue(lot.note, "legacy_effective_availability_from") ?? purchaseById.get(lot.purchase_id)?.ordered_at ?? null,
+    database_delivery_date: lot.delivery_date ?? null,
+    reason: noteValue(lot.note, "legacy_availability_reason"),
+    trigger_references: noteValue(lot.note, "legacy_availability_triggers")?.split("|") ?? []
+  }))
+  .sort((left, right) => left.lot_code.localeCompare(right.lot_code));
 const batchSales = new Set(sales.filter((row) => clean(row.note).includes(`imported_batch=${batch}`)).map((row) => row.id));
 const batchSaleItems = saleItems.filter((row) => batchSales.has(row.sale_id));
 const mboxItems = batchSaleItems.filter((row) => legacyMysterySkus.has(productById.get(row.product_id)?.sku));
@@ -183,6 +228,21 @@ const provisionalMboxJuneCogsReduction = round2(mboxProvisional.reduce((total, r
 const mboxCrossGameDocuments = mboxWriteoffs.filter((row) => /MBOX-LEGACY-(MBZ-PHYS-0001|OLX-PHYS-0011|OLX-PHYS-0012|OLX-PHYS-0013)/.test(row.writeoff_no));
 const sourceCanonicalAsset = { prro: round2(stockExpected.prro + sourceInbound.prro), mgmt: round2(stockExpected.mgmt + sourceInbound.mgmt) };
 const sourceMonthPolicyAdjustedContribution = round2(sourceMonthContribution + provisionalMboxJuneCogsReduction);
+const dbWarehouseQtyBySku = new Map(valuation.map((row) => [row.sku, Number(row.warehouse_qty ?? 0)]));
+const deferredQtyBySku = new Map();
+for (const row of deferredNcrm13) deferredQtyBySku.set(row.sku, (deferredQtyBySku.get(row.sku) ?? 0) + row.qty);
+const allStockSkus = new Set([...sourceStockBySku.keys(), ...dbWarehouseQtyBySku.keys(), ...deferredQtyBySku.keys()]);
+const perSkuWarehouseResidual = [...allStockSkus]
+  .map((sku) => {
+    const source_qty = round2(sourceStockBySku.get(sku) ?? 0);
+    const db_qty = round2(dbWarehouseQtyBySku.get(sku) ?? 0);
+    const qty_diff = round2(db_qty - source_qty);
+    const deferred_ncrm13_qty = round2(deferredQtyBySku.get(sku) ?? 0);
+    return { sku, source_qty, db_qty, qty_diff, deferred_ncrm13_qty, matches_deferred_ncrm13: Math.abs(qty_diff - deferred_ncrm13_qty) <= 0.01 };
+  })
+  .filter((row) => Math.abs(row.qty_diff) > 0.01 || Math.abs(row.deferred_ncrm13_qty) > 0.01)
+  .sort((left, right) => left.sku.localeCompare(right.sku));
+const residualMatchesNcrm13Only = perSkuWarehouseResidual.every((row) => row.matches_deferred_ncrm13);
 
 const metrics = [
   metric("warehouse_prro_uah", stockExpected.prro, dbWarehouse.prro),
@@ -204,7 +264,22 @@ console.log(JSON.stringify({
     month: { revenue: sourceMonthRevenue, contribution_margin_legacy: sourceMonthContribution, contribution_margin_policy_adjusted: sourceMonthPolicyAdjustedContribution, source_sale_lines: sourceMonth.length }
   },
   db_totals: { warehouse: dbWarehouse, asset: dbAsset, in_transit: { prro: round2(dbTransit.prro), mgmt: round2(dbTransit.mgmt) }, pnl },
-  deferred_to_ncrm13: { count: deferredNcrm13.length, signed_qty: round2(signedResidual.qty), signed_prro_value: round2(signedResidual.prro), signed_mgmt_value: round2(signedResidual.mgmt), rows: deferredNcrm13 },
+  availability_rule: {
+    adjusted_lot_count: legacyEffectiveAvailability.length,
+    pre_receipt_lot_count: legacyEffectiveAvailability.filter((row) => row.reason === "pre_receipt_consumption").length,
+    undated_warehouse_lot_count: legacyEffectiveAvailability.filter((row) => row.reason === "warehouse_status_without_delivery_date").length,
+    rows: legacyEffectiveAvailability,
+    storage_note: "For dated pre-receipt lots, source_delivery_date is retained in the audit note while database_delivery_date is NULL so the existing FIFO view uses purchases.ordered_at as the effective availability date."
+  },
+  writeoff_classification: {
+    superseded_paired_reclassifications: supersededPairedCorrections,
+    deferred_to_ncrm13: { count: deferredNcrm13.length, signed_qty: round2(signedResidual.qty), signed_prro_value: round2(signedResidual.prro), signed_mgmt_value: round2(signedResidual.mgmt), rows: deferredNcrm13 }
+  },
+  residual_reconciliation: {
+    per_sku_warehouse_qty: perSkuWarehouseResidual,
+    matches_ncrm13_only: residualMatchesNcrm13Only,
+    explanation: "qty_diff is DB warehouse quantity minus frozen source stock quantity. For a deferred negative legacy writeoff, the expected unmatched quantity is the signed source qty."
+  },
   mystery_reconstruction: {
     generated_mbox_documents: mboxWriteoffs.length, generated_component_items: mboxSourceLinkedItems.length,
     actual_sale_item_rows: mboxActual.length, actual_box_units: round2(mboxActual.reduce((total, row) => total + Number(row.qty), 0)),
