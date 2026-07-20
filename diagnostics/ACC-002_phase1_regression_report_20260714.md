@@ -69,6 +69,12 @@ Required fix: for an authorised checkout, synchronize the hidden module values f
      fallback, rejects placeholder text as a receiver name, and synchronizes
      the module's hidden NP fields while hiding its duplicate recipient inputs.
 
+3. `ACC-002C_delivery-card-compact-summary_20260714.php`
+   - `catalog/view/javascript/checkout-reskin.js`
+   - restores the design contract for the collapsed delivery card: it shows
+     only `Нова пошта · поштомат №49489` (or the delivery type), never the
+     full Nova Poshta point/address label.
+
 Neither patch changes the initial saved-address policy. The session-address
 gate remains deferred until the faulty session state is captured.
 
@@ -76,9 +82,9 @@ gate remains deferred until the faulty session state is captured.
 
 - Fresh-live file inspection: passed.
 - Read-only public NP autocomplete request: reproduced the false-negative result.
-- Both patches: exact-anchor dry-run passed against
+- All patches: exact-anchor dry-run passed against
   `booster-debug-ACC002-regression-live.tar.gz`.
-- Both patches: full fixture run created backups, passed `php -l`, self-deleted
+- All patches: full fixture run created backups, passed applicable syntax checks, self-deleted
   on success, and returned `already_applied=yes` on a repeat run.
 - Resulting `catalog/controller/account/address.php` and
   `catalog/controller/checkout/checkout.php`: `php -l` passed.
