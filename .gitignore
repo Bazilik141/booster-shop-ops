@@ -13,4 +13,7 @@ client_secret.json
 # autosync runtime pause flag (local only)
 .autosync-pause
 *.tmp
-client_secret.json
+
+# Python bytecode cache
+__pycache__/
+*.pyc
