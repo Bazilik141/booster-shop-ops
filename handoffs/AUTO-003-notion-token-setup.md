@@ -1,52 +1,44 @@
-# Handoff — AUTO-003: Notion token setup (рішення прийнято, чекає ручної дії)
+# Handoff — AUTO-003: Notion token and database ID correction
 
 Date: 2026-07-20
-Status: DECIDED — Варіант A (перемістити базу в Private). Чекає ручної дії власника в Notion.
+Status: IN PROGRESS — personal access token confirmed; stale database ID corrected locally.
 
 ---
 
-## 1. Conclusion
+## Conclusion
 
-Обрано Варіант A. Перевірка репо і Notion підтвердила: переміщення бази безпечне для коду й документації — ID бази/колекції/view не змінюються при "Move to" в Notion, тому жодних правок у скриптах чи CLAUDE.md/ROADMAP_SOP.md не потрібно. Залишається один ручний крок від власника в Notion UI.
+The earlier Private-move plan was invalid for the Roadmap database, which is managed inside Notion Home and is not selectable in the internal-connection content picker. The owner created a personal access token instead. A read-only API request confirmed that the live Roadmap database ID is `35c3f857-2fc5-4a78-96c8-af0efd4cf8d4`.
 
-## 2. Task type
+The former ID `5aef22c3-048d-4dde-a5b1-ad409de9301c` returns `object_not_found`; it was the blocker in AUTO-002/AUTO-003, not a missing Notion permission.
 
-Manual (дія тільки в Notion UI) + документаційний апдейт (цей файл).
+## Scope
 
-## 3. Owner
+- Replace the stale database ID in AUTO-002/AUTO-003 local scripts and operational documentation.
+- Keep the owner's personal access token only in ignored `repo-root/.env.review` as `NOTION_TOKEN=...`.
+- Do not move the Notion database, change its data, or expose any secret.
 
-Manual — переміщення бази і надання доступу інтеграції робить лише власник вручну.
+## Evidence
 
-## 4. Status
+```text
+GET /v1/databases/5aef22c3-048d-4dde-a5b1-ad409de9301c -> 404 object_not_found
+GET /v1/databases/35c3f857-2fc5-4a78-96c8-af0efd4cf8d4 -> 35c3f857-2fc5-4a78-96c8-af0efd4cf8d4
+```
 
-Unblocked — план готовий, чекає виконання власником.
+## Remaining dependencies
 
-## 5. Next action (власник, Notion UI)
+- `bscontent` additionally requires owner-provided `ANTHROPIC_API_KEY` in `.env.review`.
+- `bsseo --dry-run` additionally requires a one-time Google Search Console OAuth setup: `GSC_CLIENT_ID`, `GSC_CLIENT_SECRET`, `GSC_REFRESH_TOKEN`, and `GSC_SITE_URL`.
+- These independent secrets were absent on 2026-07-20; their absence does not invalidate the Notion token or ID correction.
 
-1. Відкрити базу https://www.notion.so/35c3f8572fc54a7896c8af0efd4cf8d4
-2. Перемістити її в Private (Move to → Private) — без "•••", варіант меню залежить від версії інтерфейсу власника; шукати "Move to" будь-яким доступним способом (бічна панель / клавіатурне скорочення / контекстне меню сторінки).
-3. Після переміщення: Settings → My integrations → "Booster Review" → Access → додати базу "Booster Shop Roadmap" (тепер має з'явитись у списку).
+## QA checklist
 
-## 6. Codex handoff
+- [x] Personal access token authenticates to Notion.
+- [x] Personal access token reads the live Roadmap database ID.
+- [ ] `python -m py_compile auto_review.py scripts/auto_review.py scripts/content_pipeline.py scripts/seo_monitor.py`
+- [ ] `bscontent "тест"` after adding `ANTHROPIC_API_KEY` creates a content file and a Roadmap task.
+- [ ] `bsseo --dry-run` after GSC OAuth setup completes without configuration errors.
 
-Не потрібен. Codex не працює з Notion (CODEX_INSTRUCTIONS.md §5: "Claude reads/writes Notion; Codex does NOT touch Notion") — переміщення бази й підключення інтеграції жодним чином не стосується Codex-скоупу.
+## Risks and rollback
 
-## 7. QA checklist (власник, після кроків §5)
-
-- [ ] Notion: база "Booster Shop Roadmap" видима в Private, доступна за тим самим URL
-- [ ] Notion: "Booster Review" підключена до бази через Content access
-- [ ] Termінал: `bscontent "тест"` → в кінці виводу `[AUTO-003] Notion: <url>` замість `NOTION_TOKEN not set`
-- [ ] Termінал: `bsseo --dry-run` → без помилок (не залежить від токена, але перевірка що нічого не зламалось)
-- [ ] Notion: нова тестова задача з `bscontent` дійсно з'явилась у базі з правильними Status/Priority/Category
-- [ ] Якщо база раніше була вбудована на сторінці "Home" — перевірити, що там більше не залишилось "порожнього" місця/помилки; за бажанням додати назад як Linked view
-
-## 8. Risks
-
-- **Layout-ризик (низький, не технічний):** база була вбудована inline прямо на персональній сторінці "Home" (поруч з "My Tasks"). Після переносу в Private вона зникне з Home — доведеться заходити напряму в Private або додати назад як Linked database view.
-- **Доступ інших учасників workspace (перевірити вручну):** якщо базу зараз бачить хтось окрім власника через Home — після переносу в Private вони втратять видимість, поки їх не додати явно. Склад учасників workspace я перевірити не можу — власник має підтвердити сам.
-- **Код/ID — ризику немає:** `NOTION_DB_ID = "5aef22c3-048d-4dde-a5b1-ad409de9301c"` захардкожено однаково в `scripts/auto_review.py` (AUTO-002), `scripts/content_pipeline.py` і `scripts/seo_monitor.py` (AUTO-003); той самий ID і URL — у `CLAUDE.md`, `ROADMAP_SOP.md §1/§5`, `context-index.md`, `templates/booster-shop-notion-templates.md`. Жодних згадок токена/ID більше ніде в репо не знайдено (перевірено `grep -rli notion` по всьому репо, окрім `node_modules`/`.next`/`.git`). Notion не змінює page/collection/view ID при переміщенні — вся інфраструктура зверху продовжує працювati без правок.
-- **Побічний ефект (плюс):** той самий `NOTION_TOKEN` одразу розблокує і AUTO-002 (`bsreview` — автопост коментаря в Notion), не тільки AUTO-003 — обидва скрипти читають один і той самий `.env.review`.
-
-## Старий контекст (для історії)
-
-Оригінальна проблема, гіпотеза і варіанти A/B/C — без змін, див. git-історію цього файлу (перший коміт AUTO-003-notion-token-setup.md).
+- Low risk: only local constants and documentation change; no Notion mutation occurs.
+- Rollback: restore the old constants from git only if a fresh read-only API check proves the new ID invalid.

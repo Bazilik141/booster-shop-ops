@@ -141,7 +141,7 @@ grep "ST-3.5" context-index.md
 | Roadmap ID | Назва | Handoff |
 |---|---|---|
 | PAY-001 | Monobank Покупка Частинами — інтеграція оплати частинами (Phase 1 sandbox, In progress) | handoffs/handoff_PAY-001_monobank-chastyny-integration_20260718.md |
-| PAY-001-UI | Візуальний дизайн-бриф для Claude Design: кнопка + модалка «Купити в кредит» + стани чекауту | handoffs/handoff_PAY-001-UI_visual-design-brief_20260718.md |
+| PAY-001-UI | Візуальний дизайн-бриф для Claude Design: кнопка + модалка «Купити в кредит» + стани чекауту; готова специфікація отримана 2026-07-19 | handoffs/handoff_PAY-001-UI_visual-design-brief_20260718.md (бриф) → `handoffs/CODEX - PAY-001-credit-flow.md` (готовий результат Claude Design) |
 | CHECKOUT-001 | Реєстрація акаунту при замовленні (Done) | handoffs/handoff_CHECKOUT-001_phase1_guest-account-creation_2026-07-04.md |
 | CHECKOUT-002 | Швидкість оформлення + редизайн loader | — |
 | CAT-002 | Категорії + аксесуари (parent) | — |
@@ -165,7 +165,7 @@ grep "ST-3.5" context-index.md
 
 ## Notion / дашборд — де що
 
-**Усі серії (ST + DASH/CRM/AUTO/TECH/RD/UX)** тепер у Notion database `5aef22c3-048d-4dde-a5b1-ad409de9301c`. ST заведено 2026-06-24.
+**Усі серії (ST + DASH/CRM/AUTO/TECH/RD/UX)** тепер у Notion database `35c3f857-2fc5-4a78-96c8-af0efd4cf8d4`. ST заведено 2026-06-24.
 **Статус-правда — Notion; дашборд `ROADMAP_FLOW` — дзеркало.** Повні правила, page_id-реєстр, DoD, sync — `ROADMAP_SOP.md`.
 
 Notion view: `https://www.notion.so/35c3f8572fc54a7896c8af0efd4cf8d4?v=eebb19b11cfb4066a8a3b1b097775818`

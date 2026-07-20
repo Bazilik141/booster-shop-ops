@@ -28,7 +28,7 @@
 **Правило:** статус НЕ зберігається в `context-index.md`, у назвах файлів чи в head хендофів. Тільки Notion (+ дзеркало в дашборді).
 
 Notion roadmap: `https://www.notion.so/35c3f8572fc54a7896c8af0efd4cf8d4`
-Data source (collection): `5aef22c3-048d-4dde-a5b1-ad409de9301c`
+Database: `35c3f857-2fc5-4a78-96c8-af0efd4cf8d4`
 View: `?v=eebb19b11cfb4066a8a3b1b097775818`
 
 ---

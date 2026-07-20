@@ -10,7 +10,7 @@ Usage:
 
 Requires env vars (set in scripts/.env or system env):
   ANTHROPIC_API_KEY  — Claude API key
-  NOTION_TOKEN       — Notion Internal Integration token (from notion.so/my-integrations)
+  NOTION_TOKEN       — Notion Personal Access Token (from notion.so/profile/integrations)
 """
 
 import os
@@ -27,14 +27,15 @@ DIAG_DIR    = REPO_ROOT / "diagnostics"
 HANDOFF_DIR = REPO_ROOT / "handoffs"
 
 # ── notion config ───────────────────────────────────────────────────────────
-NOTION_DB_ID = "5aef22c3-048d-4dde-a5b1-ad409de9301c"   # Booster Shop Roadmap
+NOTION_DB_ID = "35c3f857-2fc5-4a78-96c8-af0efd4cf8d4"   # Booster Shop Roadmap
 
 # ── helpers ─────────────────────────────────────────────────────────────────
 
 def load_dotenv():
-    """Load scripts/.env if exists (simple KEY=VALUE parser, no external deps)."""
-    env_path = Path(__file__).parent / ".env"
-    if env_path.exists():
+    """Load the ignored repo-root secret file or legacy scripts/.env."""
+    for env_path in (REPO_ROOT / ".env.review", Path(__file__).parent / ".env"):
+        if not env_path.exists():
+            continue
         for line in env_path.read_text(encoding="utf-8").splitlines():
             line = line.strip()
             if line and not line.startswith("#") and "=" in line:

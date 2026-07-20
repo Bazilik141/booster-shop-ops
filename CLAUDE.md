@@ -56,7 +56,7 @@ URL: `https://www.notion.so/35c3f8572fc54a7896c8af0efd4cf8d4`
 - Bulk-read заблоковано планом → читати/писати per-картка: `notion-fetch` за page_id; `notion-update-page` (`update_properties`, напр. `"Status":"In progress"`).
 - page_id рядків (ST + часті не-ST) — `ROADMAP_SOP.md §5`. `notion-search` семантичний — шукати за назвою, не за ID.
 
-Collection: `5aef22c3-048d-4dde-a5b1-ad409de9301c` · View: `?v=eebb19b11cfb4066a8a3b1b097775818`
+Database: `35c3f857-2fc5-4a78-96c8-af0efd4cf8d4` · View: `?v=eebb19b11cfb4066a8a3b1b097775818`
 
 ## Швидкий індекс задач
 

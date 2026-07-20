@@ -21,7 +21,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 PLANS_DIR = REPO_ROOT / "plans"
 PROJECT_CONTEXT = PLANS_DIR / "PROJECT_CONTEXT.md"
-NOTION_DB_ID = "5aef22c3-048d-4dde-a5b1-ad409de9301c"
+NOTION_DB_ID = "35c3f857-2fc5-4a78-96c8-af0efd4cf8d4"
 NOTION_VERSION = "2022-06-28"
 MODEL = "claude-sonnet-4-6"
 

@@ -10,7 +10,7 @@ Usage (run from repo root):
 
 Config: create .env.review in repo root (see .env.review.example)
   ANTHROPIC_API_KEY  — from console.anthropic.com
-  NOTION_TOKEN       — from notion.so/my-integrations
+  NOTION_TOKEN       — Personal Access Token from notion.so/profile/integrations
 """
 
 import os
@@ -24,7 +24,7 @@ from pathlib import Path
 REPO_ROOT    = Path(__file__).parent
 DIAG_DIR     = REPO_ROOT / "diagnostics"
 HANDOFF_DIR  = REPO_ROOT / "handoffs"
-NOTION_DB_ID = "5aef22c3-048d-4dde-a5b1-ad409de9301c"
+NOTION_DB_ID = "35c3f857-2fc5-4a78-96c8-af0efd4cf8d4"
 
 
 def load_dotenv():
