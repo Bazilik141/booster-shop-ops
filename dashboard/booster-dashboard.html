@@ -1847,13 +1847,13 @@ const ROADMAP_TASKS = [
   },
   {
     id: 'PAY-001', title: 'Monobank Покупка Частинами — інтеграція оплати частинами', status: 'active', tool: 'Claude + Codex', priority: 'Medium',
-    lastUpdated: '2026-07-20', blockedBy: [],
+    lastUpdated: '2026-07-21', blockedBy: [],
     simple: 'Новий вид покупки — «Покупка в кредит» (окремо від звичайного чекауту): кнопка на товарній сторінці відкриває інформаційну модалку вибору провайдера (референс COMFY.ua, без API-виклику), де monobank ПЧ стає карткою поряд з існуючим ПУМБ-плейсхолдером (не заміна). order/create викликається на чекауті, на кліку «Оформити». Бізнес-правила власника: мінімальна сума 500 грн, комісію монобанку покриває магазин (без націнки клієнту), максимум 5 платежів через available_parts_count. Реальна тарифна сітка підтверджена: 3→2.9%, 4→4.1%, 5→5.9%. Повна API-довідка (усі 9 ендпоінтів «Заявки на ПЧ») прочитана й додана в handoff. Official OpenCart-модуля монобанку не існує (перевірено власником 2026-07-19) — кастомна розробка Codex, паузу знято.',
     why: 'Безвідсоткова розстрочка на дорогих товарах (бокси/дисплеї) підвищує конверсію без знижки в ціні магазину.',
     /* Historical detail retained below; it contained a raw apostrophe that broke the whole inline script.
-    warn: 'HIGH-RISK зона (checkout/payment/order status). Production заблоковано: власник ще не зареєстрований партнером у @chast_monobankbot — не блокує Phase 1. Повний пакет DB-підтвердження готовий (handoff, розділ 0): transaction-таблиця, OC-статуси (NCRM завжди бачить "Нове"), extension config, available_parts_count=[3,4,5], NCRM payment_types credit_mono_3/4/5 з реальною комісією (2.9/4.1/5.9%), payment_status="unpaid" з ручним фліпом на "paid". confirm списує перший платіж клієнта в момент виклику — прив'язати до реальної відправки товару. Готово передавати Codex. Handoff: PAY-001, PAY-001-UI.',
+    warn: 'HIGH-RISK зона (checkout/payment/order status). Production заблоковано: власник ще не зареєстрований партнером у @chast_monobankbot — не блокує Phase 1. Повний пакет DB-підтвердження готовий (handoff, розділ 0). Готово передавати Codex. Handoff: PAY-001, PAY-001-UI.',
     */
-    warn: 'HIGH-RISK зона (checkout/payment/order status). Phase 1 sandbox готовий до Codex; production лишається заблокованим до партнерської реєстрації власника. Тепер також гейтить cutover ST-2c: новий чекаут вмикаємо вже з оплатою частинами monobank, щоб не оперувати живий чекаут потім. Handoff: PAY-001, PAY-001-UI.',
+    warn: 'HIGH-RISK зона (checkout/payment/order status). Гейтить cutover ST-2c: новий чекаут вмикаємо вже з оплатою частинами, щоб не оперувати живий чекаут потім. Поточний блокер: адмін-форма методу падає (незадекларована $error-властивість) — фікс-патч написано (patches/PAY-001_admin_error_property_fix_20260721.php), статус деплою підтверджує власник. Production заблоковано до партнерської реєстрації. Master-хендоф: handoffs/handoff_PAY-001_RESET_checkout-architecture-correction_20260721.md (з корекціями 2026-07-21) — читати ПЕРШИМ. Handoff: PAY-001, PAY-001-UI, PAY-001-RESET.',
     subtasks: []
   },
   {
@@ -2090,13 +2090,13 @@ const ROADMAP_TASKS = [
     ]
   },
   {
-    id: 'AUTOMATE', title: 'Автоматизація контенту і SEO-моніторингу', status: 'todo', tool: 'Claude', priority: 'Low',
-    lastUpdated: '2026-06-21', blockedBy: [],
+    id: 'AUTOMATE', title: 'Автоматизація контенту і SEO-моніторингу', status: 'done', tool: 'Claude', priority: 'Low',
+    lastUpdated: '2026-07-21', blockedBy: [],
     simple: 'Дві автоматизації: 1) один запит → Claude пише контент і зберігає в репо; 2) щомісяця перевіряє позиції в Google і сигналізує якщо щось падає.',
     why: 'Зменшує час на рутинні задачі.', warn: null,
     subtasks: [
-      { id: '1', title: 'AUTO-003 — Автоматичний контент-пайплайн', status: 'todo', desc: 'Один запит → Claude генерує бриф, заголовок, мета-тег, текст → зберігає в репо → задача в Notion.' },
-      { id: '2', title: 'AUTO-004 — Сповіщення при падінні позицій', status: 'todo', desc: 'Щомісяця перевіряє GSC: якщо сторінка впала >5 позицій або -30% кліків → автозадача в Notion.' }
+      { id: '1', title: 'AUTO-003 — Автоматичний контент-пайплайн', status: 'done', desc: 'Один запит → Claude генерує бриф, заголовок, мета-тег, текст → зберігає в репо → задача в Notion. Підтверджено live-запуском 2026-07-21.' },
+      { id: '2', title: 'AUTO-004 — Сповіщення при падінні позицій', status: 'done', desc: 'Щомісяця перевіряє GSC: якщо сторінка впала >5 позицій або -30% кліків → автозадача в Notion. GSC OAuth підключено, dry-run підтверджено 2026-07-21 (52 сторінки, перший знімок збережено).' }
     ]
   },
   { id: 'BRAND-OUTLET-001', title: 'Outlet Booster — опис і SEO', status: 'done', tool: 'Codex', priority: 'Medium', lastUpdated: '2026-05-26', blockedBy: [],

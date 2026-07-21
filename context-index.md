@@ -140,7 +140,7 @@ grep "ST-3.5" context-index.md
 
 | Roadmap ID | Назва | Handoff |
 |---|---|---|
-| PAY-001 | Monobank Покупка Частинами — інтеграція оплати частинами (Phase 1 sandbox, In progress) | handoffs/handoff_PAY-001_monobank-chastyny-integration_20260718.md |
+| PAY-001 | Monobank Покупка Частинами — інтеграція оплати частинами (Phase 1 деплоєно, адмін-баг не пофіксовано, In progress) | **Читати першим:** `handoffs/handoff_PAY-001_RESET_checkout-architecture-correction_20260721.md` (виправлення архітектури чекауту + актуальний стан) → потім `handoffs/handoff_PAY-001_monobank-chastyny-integration_20260718.md` (історія раундів 0–9, повна API-довідка) |
 | PAY-001-UI | Візуальний дизайн-бриф для Claude Design: кнопка + модалка «Купити в кредит» + стани чекауту; готова специфікація отримана 2026-07-19 | handoffs/handoff_PAY-001-UI_visual-design-brief_20260718.md (бриф) → `handoffs/CODEX - PAY-001-credit-flow.md` (готовий результат Claude Design) |
 | CHECKOUT-001 | Реєстрація акаунту при замовленні (Done) | handoffs/handoff_CHECKOUT-001_phase1_guest-account-creation_2026-07-04.md |
 | CHECKOUT-002 | Швидкість оформлення + редизайн loader | — |
