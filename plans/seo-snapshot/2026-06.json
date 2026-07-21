@@ -1,0 +1,276 @@
+{
+  "comparison_period": {
+    "end": "2026-05-31",
+    "start": "2026-05-01"
+  },
+  "generated_at": "2026-07-21T04:50:23.626167+00:00",
+  "notion_task_urls": [],
+  "pages": {
+    "https://boostershop.website/": {
+      "clicks": 33.0,
+      "impressions": 130.0,
+      "position": 10.076923076923077
+    },
+    "https://boostershop.website/?route=information/contact&language=uk-ua": {
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "position": 9.5
+    },
+    "https://boostershop.website/catalog/One-Piece": {
+      "clicks": 3.0,
+      "impressions": 17.0,
+      "position": 16.941176470588236
+    },
+    "https://boostershop.website/catalog/One-Piece/One-Piece-Boosters": {
+      "clicks": 1.0,
+      "impressions": 7.0,
+      "position": 22.285714285714285
+    },
+    "https://boostershop.website/catalog/One-Piece/one-piece-nabory-ta-boksy": {
+      "clicks": 2.0,
+      "impressions": 12.0,
+      "position": 9.833333333333334
+    },
+    "https://boostershop.website/catalog/Pokemon": {
+      "clicks": 1.0,
+      "impressions": 23.0,
+      "position": 35.30434782608695
+    },
+    "https://boostershop.website/catalog/Pokemon/Pokemon-booster-box": {
+      "clicks": 0.0,
+      "impressions": 17.0,
+      "position": 7.470588235294118
+    },
+    "https://boostershop.website/catalog/Pokemon/bustery-pokemon": {
+      "clicks": 0.0,
+      "impressions": 12.0,
+      "position": 55.5
+    },
+    "https://boostershop.website/catalog/Pokemon/pokemon-tcg-nabory": {
+      "clicks": 0.0,
+      "impressions": 10.0,
+      "position": 10.6
+    },
+    "https://boostershop.website/catalog/more-tcg": {
+      "clicks": 0.0,
+      "impressions": 5.0,
+      "position": 3.6
+    },
+    "https://boostershop.website/catalog/more-tcg/Yu-Gi-Oh": {
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "position": 7.0
+    },
+    "https://boostershop.website/catalog/more-tcg/magic-the-gathering": {
+      "clicks": 0.0,
+      "impressions": 4.0,
+      "position": 23.0
+    },
+    "https://boostershop.website/index.php?route=product/category&language=uk-ua&path=59": {
+      "clicks": 4.0,
+      "impressions": 22.0,
+      "position": 8.772727272727273
+    },
+    "https://boostershop.website/index.php?route=product/special": {
+      "clicks": 0.0,
+      "impressions": 4.0,
+      "position": 5.25
+    },
+    "https://boostershop.website/information/Obmin-i-povernennya": {
+      "clicks": 0.0,
+      "impressions": 5.0,
+      "position": 6.0
+    },
+    "https://boostershop.website/information/oplata-i-dostavka": {
+      "clicks": 0.0,
+      "impressions": 13.0,
+      "position": 28.076923076923077
+    },
+    "https://boostershop.website/information/original-garanty": {
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "position": 10.0
+    },
+    "https://boostershop.website/information/pro-nas": {
+      "clicks": 0.0,
+      "impressions": 14.0,
+      "position": 3.2857142857142856
+    },
+    "https://boostershop.website/information/publichna-oferta": {
+      "clicks": 0.0,
+      "impressions": 11.0,
+      "position": 2.6363636363636367
+    },
+    "https://boostershop.website/product/Magic-the-Gathering-Adventures-in-the-Forgotten-Realms": {
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "position": 2.0
+    },
+    "https://boostershop.website/product/One-Piece-Boosters-EB-03": {
+      "clicks": 6.0,
+      "impressions": 38.0,
+      "position": 8.263157894736842
+    },
+    "https://boostershop.website/product/One-Piece-Boosters-OP-07": {
+      "clicks": 0.0,
+      "impressions": 7.0,
+      "position": 10.714285714285714
+    },
+    "https://boostershop.website/product/One-Piece-Boosters-OP-08-Two-Legends": {
+      "clicks": 1.0,
+      "impressions": 5.0,
+      "position": 11.8
+    },
+    "https://boostershop.website/product/One-Piece-Boosters-OP-10": {
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "position": 6.0
+    },
+    "https://boostershop.website/product/One-Piece-Boosters-OP-11": {
+      "clicks": 1.0,
+      "impressions": 8.0,
+      "position": 6.125
+    },
+    "https://boostershop.website/product/One-Piece-Boosters-OP-12": {
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "position": 8.0
+    },
+    "https://boostershop.website/product/One-Piece-Boosters-OP-14": {
+      "clicks": 0.0,
+      "impressions": 1.0,
+      "position": 4.0
+    },
+    "https://boostershop.website/product/One-Piece-Boosters-OP-14/": {
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "position": 4.333333333333334
+    },
+    "https://boostershop.website/product/One-Piece-Boosters-OP-15": {
+      "clicks": 0.0,
+      "impressions": 22.0,
+      "position": 9.590909090909092
+    },
+    "https://boostershop.website/product/One-Piece-Boosters-Promotion-Pack-V7": {
+      "clicks": 1.0,
+      "impressions": 14.0,
+      "position": 8.357142857142858
+    },
+    "https://boostershop.website/product/One-Piece-Mystery-Box": {
+      "clicks": 1.0,
+      "impressions": 17.0,
+      "position": 12.058823529411764
+    },
+    "https://boostershop.website/product/OnePiece-booster-box-OP15": {
+      "clicks": 0.0,
+      "impressions": 20.0,
+      "position": 8.2
+    },
+    "https://boostershop.website/product/Pokemon-Japanese-outlet-booster": {
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "position": 2.0
+    },
+    "https://boostershop.website/product/Pokemon-Mega-Gallade-EX-Special-Set": {
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "position": 6.5
+    },
+    "https://boostershop.website/product/Pokemon-Scarlet-Violet-ex-Special-Set": {
+      "clicks": 0.0,
+      "impressions": 7.0,
+      "position": 12.428571428571429
+    },
+    "https://boostershop.website/product/Pokemon-booster-box-Hot-Wind-Arena": {
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "position": 3.0
+    },
+    "https://boostershop.website/product/Pokemon-booster-box-Munics-Zero": {
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "position": 5.0
+    },
+    "https://boostershop.website/product/Pokemon-booster-box-Ninja-Spinner": {
+      "clicks": 0.0,
+      "impressions": 32.0,
+      "position": 15.65625
+    },
+    "https://boostershop.website/product/Pokemon-booster-box-Super-Electro-Breaker": {
+      "clicks": 0.0,
+      "impressions": 8.0,
+      "position": 3.75
+    },
+    "https://boostershop.website/product/Pokemon-boosters-Abyss-Eye": {
+      "clicks": 2.0,
+      "impressions": 16.0,
+      "position": 4.4375
+    },
+    "https://boostershop.website/product/Pokemon-boosters-Black-Bolt": {
+      "clicks": 1.0,
+      "impressions": 7.0,
+      "position": 3.5714285714285716
+    },
+    "https://boostershop.website/product/Pokemon-boosters-Hot-Wind-Arena": {
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "position": 5.333333333333333
+    },
+    "https://boostershop.website/product/Pokemon-boosters-Inferno-X": {
+      "clicks": 1.0,
+      "impressions": 4.0,
+      "position": 7.75
+    },
+    "https://boostershop.website/product/Pokemon-boosters-Mega-Brave": {
+      "clicks": 2.0,
+      "impressions": 5.0,
+      "position": 8.0
+    },
+    "https://boostershop.website/product/Pokemon-boosters-Mega-Dream-EX": {
+      "clicks": 2.0,
+      "impressions": 23.0,
+      "position": 5.260869565217392
+    },
+    "https://boostershop.website/product/Pokemon-boosters-Mega-Symphonia": {
+      "clicks": 0.0,
+      "impressions": 4.0,
+      "position": 10.75
+    },
+    "https://boostershop.website/product/Pokemon-boosters-Munics-Zero": {
+      "clicks": 0.0,
+      "impressions": 13.0,
+      "position": 5.0
+    },
+    "https://boostershop.website/product/Pokemon-boosters-Ninja-Spinner": {
+      "clicks": 0.0,
+      "impressions": 51.0,
+      "position": 24.215686274509803
+    },
+    "https://boostershop.website/product/Pokemon-boosters-White-Flare": {
+      "clicks": 0.0,
+      "impressions": 3.0,
+      "position": 4.333333333333334
+    },
+    "https://boostershop.website/product/Yu-Gi-Oh-boosters-Quarter-Century-Art-Collection": {
+      "clicks": 0.0,
+      "impressions": 4.0,
+      "position": 4.0
+    },
+    "https://boostershop.website/product/Yu-Gi-Oh-boosters-World-Premiere-Pack-2024": {
+      "clicks": 0.0,
+      "impressions": 2.0,
+      "position": 5.0
+    },
+    "https://boostershop.website/product/pokemon-tcg-nabory-MBOX": {
+      "clicks": 0.0,
+      "impressions": 5.0,
+      "position": 4.6
+    }
+  },
+  "period": {
+    "end": "2026-06-30",
+    "start": "2026-06-01"
+  },
+  "schema_version": 1,
+  "site_url": "https://boostershop.website/"
+}

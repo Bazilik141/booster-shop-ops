@@ -80,7 +80,7 @@ def call_claude(topic: str, context: str) -> str:
         raise RuntimeError("ANTHROPIC_API_KEY is not set in .env.review, scripts/.env, or the environment")
 
     context_block = context if context else "No extra local project context was provided."
-    prompt = f"""Ти SEO-копірайтер для українського інтернет-магазину колекційних карток Booster Shop (boosterok.com.ua).
+    prompt = f"""Ти SEO-копірайтер для українського інтернет-магазину колекційних карток Booster Shop (boostershop.website).
 
 Тематика: {topic}
 
@@ -118,6 +118,14 @@ def notion_select(name: str) -> dict:
     return {"select": {"name": name}}
 
 
+def notion_status(name: str) -> dict:
+    return {"status": {"name": name}}
+
+
+def notion_text(value: str) -> dict:
+    return {"rich_text": [{"type": "text", "text": {"content": value}}]}
+
+
 def post_notion_task(slug: str, date_tag: str) -> str | None:
     token = os.environ.get("NOTION_TOKEN", "")
     if not token:
@@ -127,10 +135,10 @@ def post_notion_task(slug: str, date_tag: str) -> str | None:
         "parent": {"database_id": NOTION_DB_ID},
         "properties": {
             "Name": {"title": [{"type": "text", "text": {"content": f"CONTENT: {slug} — ready for review"}}]},
-            "Status": notion_select("Not started"),
+            "Status": notion_status("Not started"),
             "Priority": notion_select("Medium"),
-            "Category": notion_select("Content / SEO"),
-            "Task Type": notion_select("Claude"),
+            "Category": notion_text("Content / SEO"),
+            "Task Type": notion_text("Claude"),
             "Roadmap ID": {"rich_text": [{"type": "text", "text": {"content": roadmap_id}}]},
         },
     }

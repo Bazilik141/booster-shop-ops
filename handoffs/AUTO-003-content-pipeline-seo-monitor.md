@@ -81,7 +81,7 @@ python scripts/content_pipeline.py "категорія покемон бусте
 ### Промпт для Claude (базовий)
 
 ```
-Ти SEO-копірайтер для українського інтернет-магазину колекційних карток Booster Shop (boosterok.com.ua).
+Ти SEO-копірайтер для українського інтернет-магазину колекційних карток Booster Shop (boostershop.website).
 Тематика: {topic}
 
 Згенеруй:
@@ -117,7 +117,7 @@ python scripts/seo_monitor.py --dry-run   # без Notion-задач
    GSC_CLIENT_ID=...
    GSC_CLIENT_SECRET=...
    GSC_REFRESH_TOKEN=...
-   GSC_SITE_URL=https://boosterok.com.ua/
+   GSC_SITE_URL=https://boostershop.website/
    ```
 2. Запитує Search Console API:
    - Метрики: `clicks`, `impressions`, `position`
@@ -164,7 +164,7 @@ python scripts/seo_monitor.py --dry-run   # без Notion-задач
 GSC_CLIENT_ID=...
 GSC_CLIENT_SECRET=...
 GSC_REFRESH_TOKEN=...
-GSC_SITE_URL=https://boosterok.com.ua/
+GSC_SITE_URL=https://boostershop.website/
 ```
 
 ---

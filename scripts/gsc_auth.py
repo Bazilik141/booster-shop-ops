@@ -96,7 +96,7 @@ def main() -> int:
     print(f"GSC_CLIENT_ID={installed['client_id']}")
     print(f"GSC_CLIENT_SECRET={installed.get('client_secret', '')}")
     print(f"GSC_REFRESH_TOKEN={refresh_token}")
-    print("GSC_SITE_URL=https://boosterok.com.ua/")
+    print("GSC_SITE_URL=https://boostershop.website/")
     print("[AUTO-003] done=ok")
     return 0
 

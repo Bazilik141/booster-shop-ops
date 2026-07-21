@@ -158,9 +158,9 @@ def notion_task(issue: dict, period_tag: str) -> str | None:
         "parent": {"database_id": NOTION_DB_ID},
         "properties": {
             "Name": {"title": [{"type": "text", "text": {"content": f"SEO drop: {url} (pos {position_text})"[:1900]}}]},
-            "Status": {"select": {"name": "Not started"}},
+            "Status": {"status": {"name": "Not started"}},
             "Priority": {"select": {"name": issue["priority"]}},
-            "Category": {"select": {"name": "SEO"}},
+            "Category": {"rich_text": [{"type": "text", "text": {"content": "SEO"}}]},
             "Roadmap ID": {"rich_text": [{"type": "text", "text": {"content": f"SEO-{period_tag}-{slug}"}}]},
         },
     }
