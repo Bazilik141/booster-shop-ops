@@ -1853,7 +1853,27 @@ const ROADMAP_TASKS = [
     /* Historical detail retained below; it contained a raw apostrophe that broke the whole inline script.
     warn: 'HIGH-RISK зона (checkout/payment/order status). Production заблоковано: власник ще не зареєстрований партнером у @chast_monobankbot — не блокує Phase 1. Повний пакет DB-підтвердження готовий (handoff, розділ 0). Готово передавати Codex. Handoff: PAY-001, PAY-001-UI.',
     */
-    warn: 'HIGH-RISK зона (checkout/payment/order status). Гейтить cutover ST-2c: новий чекаут вмикаємо вже з оплатою частинами, щоб не оперувати живий чекаут потім. Поточний блокер: адмін-форма методу падає (незадекларована $error-властивість) — фікс-патч написано (patches/PAY-001_admin_error_property_fix_20260721.php), статус деплою підтверджує власник. Production заблоковано до партнерської реєстрації. Master-хендоф: handoffs/handoff_PAY-001_RESET_checkout-architecture-correction_20260721.md (з корекціями 2026-07-21) — читати ПЕРШИМ. Handoff: PAY-001, PAY-001-UI, PAY-001-RESET.',
+    warn: 'HIGH-RISK зона (checkout/payment/order status). Гейтить cutover ST-2c. Sandbox повністю пройдено 2026-07-21: адмін-форма пофіксована, 4 тест-телефони OK, isolation повернуто, status=0, регресія Hutko/COD/IBAN чиста. Production заблоковано до реєстрації в @chast_monobankbot. Читати: RESET-handoff першим, потім plans/PAY_decomposition_mono-pumb-preorder_20260721.md. Handoff: PAY-001, PAY-001-UI, PAY-001-RESET.',
+    subtasks: [
+      { id: '1', title: 'Phase 1 — бекенд-екстеншн + sandbox QA', status: 'done', desc: 'DB-схема, OC4-реєстр, адмін-форма ($error-фікс), 4 тест-телефони пройдено 2026-07-21. Метод ізольовано від клієнтів: status=0 + isolation-патч на getMethods.' },
+      { id: '2', title: 'Phase 2 — UI: товарна сторінка, модалка 3/4/5, чекаут', status: 'todo', desc: 'Дизайн-специфікація готова (CODEX - PAY-001-credit-flow.md). Модалка одразу з неактивною карткою ПУМБ. Точку входу методу (getMethods при задеплоєному isolation чи окрема) Codex фіксує в патчі — див. декомпозицію, розділ 6.3.' },
+      { id: '3', title: 'Production — реєстрація в @chast_monobankbot', status: 'todo', desc: 'Близько 3 днів, робити паралельно з Phase 2. Потім stage/production ключі і money-smoke.' }
+    ]
+  },
+  {
+    id: 'PAY-002', title: 'ПУМБ «Сплата частинами» — другий провайдер розстрочки', status: 'todo', tool: 'Claude + Codex', priority: 'Medium',
+    lastUpdated: '2026-07-21', blockedBy: ['PAY-001'],
+    simple: 'Договір з ПУМБ підписано 2026-07-21 (SF1/21.3.2/4510). Рішення власника: лише Сплата частинами, 3/4/5 платежів, комісії 3.0/4.5/5.8 відсотка (банк утримує сам, гроші наступного робочого дня). Флоу автоматичний в обидва боки: callback банку сам оновлює статус замовлення в адмінці; зміна статусу на Відправлено сама шле банку сигнал відвантаження (TTL заявки 7 днів). Перший платіж клієнта — через місяць. Робиться по шаблону mono_chast ПІСЛЯ завершення PAY-001.',
+    why: 'Другий банк розстрочки поряд з monobank: вищий шанс схвалення для клієнта, більша конверсія дорогих товарів.',
+    warn: 'Чекаємо від банку: store_id/secret, тест-контур, актуальний Порядок обміну по API (PDF v2.4 застарів — реальний статус FOUNDED, TTL 7 днів), IP для whitelist, офіційні лого. Реклама: макети з брендом ПУМБ погоджувати з банком ДО публікації (договірна вимога). Невикуп посилки = повернення коштів банку за 3 роб. дні — потрібен трекінг невикуплених ПЧ-посилок. План: plans/PAY_decomposition_mono-pumb-preorder_20260721.md.',
+    subtasks: []
+  },
+  {
+    id: 'ORD-PREORDER', title: 'Статус замовлення «Передзамовлення» в адмінці', status: 'todo', tool: 'Codex', priority: 'Medium',
+    lastUpdated: '2026-07-21', blockedBy: [],
+    simple: 'Новий статус замовлення «Передзамовлення» в OpenCart — для позицій, що надходять за 2-6 тижнів. Це НЕ кредитна логіка і НЕ чекаут: просто статус в адмінці + мапінг у NCRM order-sync, щоб синк не спіткнувся на невідомому статусі.',
+    why: 'Зручний облік передзамовлень у звичному флоу адмінки замість ручних поміток.',
+    warn: 'Патч тільки разом з перевіркою статусних мапінгів у ncrm order-sync (index.ts). Незалежна від PAY-серії — можна робити паралельно в будь-який момент. План: plans/PAY_decomposition_mono-pumb-preorder_20260721.md, розділ 6.4.',
     subtasks: []
   },
   {
