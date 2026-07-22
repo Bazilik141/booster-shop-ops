@@ -2,7 +2,8 @@
 /**
  * PAY-001 Phase 2 — dedicated stock-checkout credit UI.
  *
- * Scope: product credit chooser, stock checkout virtual mono_chast method, and UI assets.
+ * Scope: product credit chooser, stock checkout virtual mono_chast method,
+ * sandbox-ready Mono confirm/pending bridge, and UI assets.
  * No DB/schema changes. The deployed SimpleCheckout isolation remains untouched.
  * Rollback: restore every file from _patch_backups/PAY-001_phase2_credit_ui_20260721-<timestamp>/files/.
  */
@@ -47,6 +48,7 @@ $targets = [
     'catalog/view/template/checkout/payment_method.twig',
     'catalog/view/stylesheet/boostershop-ds.css',
     'catalog/view/template/common/header.twig',
+    'extension/mono_chast/catalog/controller/payment/mono_chast.php',
 ];
 foreach ($targets as $relative) {
     if (!is_file($root . '/' . $relative)) fail('Target missing: ' . $relative);
@@ -188,40 +190,37 @@ $checkoutReplacement = <<<'PHP'
 
 		// PAY-001-PHASE2-CREDIT-UI-20260721: product UI can suggest only 3/4/5.
 		// The stock payment controller validates the final virtual option again.
-		if (isset($this->request->get['mono_chast_parts'])) {
-			$pay001_parts = (int)$this->request->get['mono_chast_parts'];
-			if (in_array($pay001_parts, [3, 4, 5], true)) {
-				$this->session->data['pay001_mono_chast_parts'] = $pay001_parts;
-			}
+		$pay001_parts = isset($this->request->get['mono_chast_parts']) ? (int)$this->request->get['mono_chast_parts'] : 0;
+		if (in_array($pay001_parts, [3, 4, 5], true)) {
+			$this->session->data['pay001_mono_chast_parts'] = $pay001_parts;
+			$this->session->data['pay001_mono_chast_from_modal'] = 1;
+		} else {
+			// Direct or malformed checkout URLs must never inherit a credit-modal choice.
+			unset($this->session->data['pay001_mono_chast_parts'], $this->session->data['pay001_mono_chast_from_modal']);
 		}
 PHP;
 $source['catalog/controller/checkout/checkout.php'] = replace_once($source['catalog/controller/checkout/checkout.php'], $checkoutAnchor, $checkoutReplacement, 'checkout.php language');
 
-$paymentIndexAnchor = "\t\t\$data['language'] = \$this->config->get('config_language');\n";
-$paymentIndexReplacement = <<<'PHP'
-		$data['language'] = $this->config->get('config_language');
-		$data['pay001_mono_chast_enabled'] = $this->pay001MonoChastEnabled();
+$boosterMethodsAnchor = <<<'PHP'
+		return $this->filterBoosterCheckoutPaymentMethods(
+			$this->model_checkout_payment_method->getMethods($payment_address)
+		);
 PHP;
-$source['catalog/controller/checkout/payment_method.php'] = replace_once($source['catalog/controller/checkout/payment_method.php'], $paymentIndexAnchor, $paymentIndexReplacement, 'payment_method.php index');
+$boosterMethodsReplacement = <<<'PHP'
+		$payment_methods = $this->filterBoosterCheckoutPaymentMethods(
+			$this->model_checkout_payment_method->getMethods($payment_address)
+		);
 
-$methodsAnchor = <<<'PHP'
-			$payment_methods = $this->model_checkout_payment_method->getMethods($payment_address);
+		// Dedicated stock-checkout entry. Do not call the Mono model here:
+		// deployed SimpleCheckout isolation deliberately makes its getMethods() return [].
+		$pay001_mono_method = $this->pay001MonoChastMethod();
+		if ($pay001_mono_method) {
+			$payment_methods['mono_chast'] = $pay001_mono_method;
+		}
 
-			if ($payment_methods) {
+		return $payment_methods;
 PHP;
-$methodsReplacement = <<<'PHP'
-			$payment_methods = $this->model_checkout_payment_method->getMethods($payment_address);
-
-			// Dedicated stock-checkout entry. Do not call the Mono model here:
-			// deployed SimpleCheckout isolation deliberately makes its getMethods() return [].
-			$pay001_mono_method = $this->pay001MonoChastMethod();
-			if ($pay001_mono_method) {
-				$payment_methods['mono_chast'] = $pay001_mono_method;
-			}
-
-			if ($payment_methods) {
-PHP;
-$source['catalog/controller/checkout/payment_method.php'] = replace_once($source['catalog/controller/checkout/payment_method.php'], $methodsAnchor, $methodsReplacement, 'payment_method.php methods');
+$source['catalog/controller/checkout/payment_method.php'] = replace_once($source['catalog/controller/checkout/payment_method.php'], $boosterMethodsAnchor, $boosterMethodsReplacement, 'payment_method.php booster methods');
 
 $commentAnchor = "\t/**\n\t * Comment\n";
 $helpers = <<<'PHP'
@@ -268,6 +267,7 @@ $helpers = <<<'PHP'
 			'option' => $options,
 			'pay001_credit' => true,
 			'pay001_preferred' => $preferred,
+			'pay001_from_modal' => !empty($this->session->data['pay001_mono_chast_from_modal']),
 			'pay001_total' => round((float)$this->cart->getTotal(), 2),
 			'sort_order' => (int)$this->config->get('payment_mono_chast_sort_order')
 		];
@@ -275,6 +275,70 @@ $helpers = <<<'PHP'
 
 PHP;
 $source['catalog/controller/checkout/payment_method.php'] = replace_once($source['catalog/controller/checkout/payment_method.php'], $commentAnchor, $helpers . $commentAnchor, 'payment_method.php helpers');
+
+$monoIndexAnchor = "    public function index(): string { return ''; } // Phase 1 remains hidden; Phase 2 supplies UI.\n";
+$monoIndexReplacement = <<<'PHP'
+    public function index(): string {
+        if (!$this->config->get('payment_mono_chast_status')) {
+            return '';
+        }
+
+        $language = rawurlencode((string)$this->config->get('config_language'));
+        $confirm_url = str_replace('&amp;', '&', $this->url->link('extension/mono_chast/payment/mono_chast.confirm', 'language=' . $language, true));
+        $poll_url = str_replace('&amp;', '&', $this->url->link('extension/mono_chast/payment/mono_chast.poll', 'language=' . $language, true));
+
+        $confirm_json = json_encode($confirm_url, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+        $poll_json = json_encode($poll_url, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+
+        if (!is_string($confirm_json) || !is_string($poll_json)) {
+            return '';
+        }
+
+        return '<div id="pay001-mono-confirm" class="pay001-mono-confirm">'
+            . '<p data-pay001-mono-status>Після створення заявки підтвердьте покупку у застосунку monobank.</p>'
+            . '<button type="button" id="button-confirm" class="btn btn-primary">Надіслати заявку в monobank</button>'
+            . '<script>(function($){'
+            . 'var root=$("#pay001-mono-confirm"),confirmUrl=' . $confirm_json . ',pollUrl=' . $poll_json . ',maxPolls=24;'
+            . 'function release(){ $("#bs-checkout-submit-loader").removeClass("bs-is-visible").attr("aria-hidden","true"); $("body").removeAttr("aria-busy"); }'
+            . 'function status(message,error){ root.find("[data-pay001-mono-status]").toggleClass("text-danger",!!error).text(message||""); }'
+            . 'function poll(attempt){ $.ajax({url:pollUrl,type:"post",dataType:"json"}).done(function(json){ var state=String((json||{}).state||""),sub=String((json||{}).order_sub_state||""); if(state==="FAIL"){status("Банк відхилив заявку: "+(sub||"без уточнення"),true);return;} if(state==="SUCCESS"){status("Статус заявки: "+(sub||"успішно")+".",false);return;} if(attempt<maxPolls){window.setTimeout(function(){poll(attempt+1);},5000);}else{status("Заявка ще обробляється. Перевірте застосунок monobank; статус замовлення оновиться автоматично.",false);}}).fail(function(){if(attempt<maxPolls)window.setTimeout(function(){poll(attempt+1);},5000);}); }'
+            . 'root.off("click.pay001", "#button-confirm").on("click.pay001", "#button-confirm", function(event){event.preventDefault();var button=$(this);button.prop("disabled",true).addClass("loading");status("Створюємо заявку в monobank...");$.ajax({url:confirmUrl,type:"post",dataType:"json"}).done(function(json){if(!json||json.error){status((json&&json.error)||"Не вдалося створити заявку monobank.",true);button.prop("disabled",false).removeClass("loading");release();return;}status("Заявку створено. Відкрийте застосунок monobank і підтвердьте покупку.");release();poll(0);}).fail(function(){status("Не вдалося зв’язатися з monobank. Спробуйте ще раз.",true);button.prop("disabled",false).removeClass("loading");release();});});'
+            . '})(jQuery);</script></div>';
+    }
+PHP;
+$source['extension/mono_chast/catalog/controller/payment/mono_chast.php'] = replace_once($source['extension/mono_chast/catalog/controller/payment/mono_chast.php'], $monoIndexAnchor, $monoIndexReplacement, 'mono_chast.php index');
+
+$monoCreateAnchor = <<<'PHP'
+        if (($response['http'] ?? 0) !== 201 || empty($response['body']['order_id'])) { $this->storeEvent($orderId, 'OC-' . $orderId, '', 'CREATE_FAILED', '', $response, 0, 'create', (int)($response['http'] ?? 0)); $json['error'] = 'Monobank sandbox rejected the application.'; $this->reply($json); return; }
+        $this->storeEvent($orderId, 'OC-' . $orderId, (string)$response['body']['order_id'], 'IN_PROCESS', 'WAITING_FOR_CLIENT', $response, (int)$match[1], 'create', (int)($response['http'] ?? 0));
+        $json = ['success' => true, 'order_id' => $response['body']['order_id'], 'idempotent' => false];
+PHP;
+$monoCreateReplacement = <<<'PHP'
+        $http = (int)($response['http'] ?? 0);
+        $mono_order_id = (string)($response['body']['order_id'] ?? '');
+
+        if ($http === 409 && $mono_order_id !== '') {
+            $this->storeEvent($orderId, 'OC-' . $orderId, $mono_order_id, 'IN_PROCESS', 'WAITING_FOR_CLIENT', $response, (int)$match[1], 'create_duplicate', $http);
+            $this->reply(['success' => true, 'order_id' => $mono_order_id, 'idempotent' => true]);
+            return;
+        }
+
+        if ($http !== 201 || $mono_order_id === '') { $this->storeEvent($orderId, 'OC-' . $orderId, '', 'CREATE_FAILED', '', $response, 0, 'create', $http); $json['error'] = 'Monobank sandbox rejected the application.'; $this->reply($json); return; }
+        $this->storeEvent($orderId, 'OC-' . $orderId, $mono_order_id, 'IN_PROCESS', 'WAITING_FOR_CLIENT', $response, (int)$match[1], 'create', $http);
+        $json = ['success' => true, 'order_id' => $mono_order_id, 'idempotent' => false];
+PHP;
+$source['extension/mono_chast/catalog/controller/payment/mono_chast.php'] = replace_once($source['extension/mono_chast/catalog/controller/payment/mono_chast.php'], $monoCreateAnchor, $monoCreateReplacement, 'mono_chast.php create recovery');
+
+$monoProductsAnchor = <<<'PHP'
+        $products = []; $q = $this->db->query("SELECT `name`,`quantity`,`total` FROM `" . DB_PREFIX . "order_product` WHERE `order_id`='" . (int)$order['order_id'] . "'");
+        foreach ($q->rows as $row) $products[] = ['name' => (string)$row['name'], 'count' => (int)$row['quantity'], 'sum' => round((float)$row['total'], 2)];
+PHP;
+$monoProductsReplacement = <<<'PHP'
+        // Mono API defines products[].sum as the financed unit price, not a line total.
+        $products = []; $q = $this->db->query("SELECT `name`,`quantity`,`price` FROM `" . DB_PREFIX . "order_product` WHERE `order_id`='" . (int)$order['order_id'] . "'");
+        foreach ($q->rows as $row) $products[] = ['name' => (string)$row['name'], 'count' => (int)$row['quantity'], 'sum' => round((float)$row['price'], 2)];
+PHP;
+$source['extension/mono_chast/catalog/controller/payment/mono_chast.php'] = replace_once($source['extension/mono_chast/catalog/controller/payment/mono_chast.php'], $monoProductsAnchor, $monoProductsReplacement, 'mono_chast.php product unit price');
 
 $twigNormalizeAnchor = <<<'TWIG'
   function normalizeChoice(choice) {
@@ -326,7 +390,8 @@ $flattenAnchor = <<<'TWIG'
               options.push({
                 code: option.code,
                 label: option.name || option.title || group.name || groupKey,
-                id: optionKey
+                id: optionKey,
+                category: option.booster_category || ''
               });
             }
           });
@@ -352,7 +417,8 @@ $flattenReplacement = <<<'TWIG'
         if (group && group.pay001_credit && group.option) {
           var monoOptions = [];
           $.each(group.option, function(optionKey, option) {
-            if (option && option.code) monoOptions.push({ code: option.code, count: Number(String(option.code).match(/mono_chast_(\d)/)[1]) });
+            var match = option && option.code ? String(option.code).match(/mono_chast_(\d)/) : null;
+            if (match) monoOptions.push({ code: option.code, count: Number(match[1]) });
           });
           if (monoOptions.length) {
             options.push({
@@ -361,13 +427,14 @@ $flattenReplacement = <<<'TWIG'
               id: 'mono_chast',
               pay001Credit: true,
               preferred: Number(group.pay001_preferred) || monoOptions[0].count,
+              fromModal: !!group.pay001_from_modal,
               total: Number(group.pay001_total) || 0,
               monoOptions: monoOptions
             });
           }
         } else if (group && group.option) {
           $.each(group.option, function(optionKey, option) {
-            if (option && option.code) options.push({ code: option.code, label: option.name || option.title || group.name || groupKey, id: optionKey });
+            if (option && option.code) options.push({ code: option.code, label: option.name || option.title || group.name || groupKey, id: optionKey, category: option.booster_category || '' });
           });
         } else if (group && group.code) {
           options.push({ code: group.code, label: group.name || group.title || groupKey, id: groupKey });
@@ -379,8 +446,50 @@ $flattenReplacement = <<<'TWIG'
 TWIG;
 $source['catalog/view/template/checkout/payment_method.twig'] = replace_once($source['catalog/view/template/checkout/payment_method.twig'], $flattenAnchor, $flattenReplacement, 'payment_method.twig flatten');
 
+$findOptionAnchor = <<<'TWIG'
+  function findPaymentOption(options, choice) {
+    var found = null;
+    choice = normalizeChoice(choice);
+
+    $.each(options, function(index, option) {
+      if (!found && (normalizeChoice(option.category) === choice || paymentMatchesChoice(option.code, choice))) {
+        found = option;
+      }
+    });
+
+    return found;
+  }
+TWIG;
+$findOptionReplacement = <<<'TWIG'
+  function findPaymentOption(options, choice) {
+    var found = null;
+    var rawChoice = String(choice || '');
+    choice = normalizeChoice(choice);
+
+    $.each(options, function(index, option) {
+      if (!found && option.pay001Credit && option.monoOptions) {
+        $.each(option.monoOptions, function(_, monoOption) {
+          if (!found && monoOption.code === rawChoice) found = $.extend({}, option, { code: monoOption.code });
+        });
+      }
+      if (!found && (normalizeChoice(option.category) === choice || paymentMatchesChoice(option.code, choice))) {
+        found = option;
+      }
+    });
+
+    return found;
+  }
+TWIG;
+$source['catalog/view/template/checkout/payment_method.twig'] = replace_once($source['catalog/view/template/checkout/payment_method.twig'], $findOptionAnchor, $findOptionReplacement, 'payment_method.twig find option');
+
 $renderAnchor = <<<'TWIG'
-  function renderPaymentMethods(json) {
+  function renderPaymentMethods(json, stateOptions) {
+    stateOptions = stateOptions || {};
+
+    if (window.bsCheckoutState && !window.bsCheckoutState.isCurrent(stateOptions.stateRevision)) {
+      return;
+    }
+
     if (json && json.error) {
       status(json.error, true);
       return;
@@ -389,6 +498,16 @@ $renderAnchor = <<<'TWIG'
     var options = flattenPaymentMethods(json);
     var current = $('#input-payment-code').val();
     var selected = current ? findPaymentOption(options, current) : null;
+    var desiredChoice = normalizeChoice(bsPaymentPendingChoice || current);
+
+    if (current && !selected) {
+      current = '';
+      $('#input-payment-code, #input-payment-method').val('');
+    }
+
+    if (!selected && desiredChoice) {
+      selected = findPaymentOption(options, desiredChoice);
+    }
 
 
     if (!options.length) {
@@ -411,8 +530,17 @@ $renderAnchor = <<<'TWIG'
 
     $('#bs-payment-methods').html(html);
 
+    if (selected && selected.code !== current) {
+      savePayment(selected.code, selected.label, true, null, stateOptions.stateRevision);
+      return;
+    }
+
     status(current ? 'Оплату обрано.' : 'Оберіть спосіб оплати.');
-    refreshConfirmSummary();
+    if (window.bsCheckoutState) {
+      window.bsCheckoutState.paymentMethodsRendered(stateOptions.stateRevision);
+    } else {
+      refreshConfirmSummary();
+    }
   }
 TWIG;
 $renderReplacement = <<<'TWIG'
@@ -434,13 +562,24 @@ $renderReplacement = <<<'TWIG'
     $drawer.find('[data-pay001-phone]').text(phone);
     return $drawer;
   }
-  function renderPaymentMethods(json) {
+  function renderPaymentMethods(json, stateOptions) {
+    stateOptions = stateOptions || {};
+    if (window.bsCheckoutState && !window.bsCheckoutState.isCurrent(stateOptions.stateRevision)) return;
     if (json && json.error) { status(json.error, true); return; }
     var options = flattenPaymentMethods(json);
     var current = $('#input-payment-code').val();
     var selected = current ? findPaymentOption(options, current) : null;
+    var desiredChoice = normalizeChoice(bsPaymentPendingChoice || current);
+    if (current && !selected) {
+      current = '';
+      $('#input-payment-code, #input-payment-method').val('');
+    }
+    if (!selected && desiredChoice) {
+      var desiredOption = findPaymentOption(options, desiredChoice);
+      if (!desiredOption || !desiredOption.pay001Credit || desiredOption.fromModal) selected = desiredOption;
+    }
     if (!selected && !current) {
-      $.each(options, function(_, option) { if (!selected && option.pay001Credit) selected = option; });
+      $.each(options, function(_, option) { if (!selected && option.pay001Credit && option.fromModal) selected = option; });
     }
     if (!options.length) {
       $('#bs-payment-methods').html('');
@@ -451,16 +590,24 @@ $renderReplacement = <<<'TWIG'
     var html = '';
     $.each(options, function(index, option) {
       var inputId = 'input-payment-method-' + index;
-      var checked = selected && selected.code === option.code ? ' checked' : '';
+      var renderedCode = option.pay001Credit && selected && selected.pay001Credit ? selected.code : option.code;
+      var checked = selected && selected.code === renderedCode ? ' checked' : '';
       html += '<label class="bs-checkout-method-option' + (option.pay001Credit ? ' pay001-checkout-method' : '') + '" for="' + inputId + '">' +
-        '<input type="radio" name="payment_method" id="' + inputId + '" value="' + escapeHtml(option.code) + '" data-label="' + escapeHtml(option.label) + '"' + checked + ' />' +
+        '<input type="radio" name="payment_method" id="' + inputId + '" value="' + escapeHtml(renderedCode) + '" data-label="' + escapeHtml(option.label) + '"' + checked + ' />' +
         '<span>' + (option.pay001Credit ? '<strong>Оплатити частинами</strong><small>Розстрочка від підключених банків</small>' : escapeHtml(option.label)) + '</span></label>';
-      if (option.pay001Credit && checked) html += pay001Drawer(option, option.code).prop('outerHTML');
+      if (option.pay001Credit && checked) html += pay001Drawer(option, selected.code).prop('outerHTML');
     });
     $('#bs-payment-methods').html(html);
-    if (!current && selected && selected.pay001Credit) setTimeout(function () { savePayment(selected.code, selected.label, true); }, 0);
-    status(current || selected ? 'Оплату обрано.' : 'Оберіть спосіб оплати.');
-    refreshConfirmSummary();
+    if (selected && selected.code !== current) {
+      savePayment(selected.code, selected.label, true, null, stateOptions.stateRevision);
+      return;
+    }
+    status(current ? 'Оплату обрано.' : 'Оберіть спосіб оплати.');
+    if (window.bsCheckoutState) {
+      window.bsCheckoutState.paymentMethodsRendered(stateOptions.stateRevision);
+    } else {
+      refreshConfirmSummary();
+    }
   }
 TWIG;
 $source['catalog/view/template/checkout/payment_method.twig'] = replace_once($source['catalog/view/template/checkout/payment_method.twig'], $renderAnchor, $renderReplacement, 'payment_method.twig renderer');
@@ -468,13 +615,13 @@ $source['catalog/view/template/checkout/payment_method.twig'] = replace_once($so
 $eventAnchor = <<<'TWIG'
   $(document).on('change', '#bs-payment-methods input[name="payment_method"]', function(event) {
     var $input = $(this);
-    savePayment($input.val(), $input.data('label'), false, event);
+    savePayment($input.val(), $input.data('label'), false, event, window.bsCheckoutState ? window.bsCheckoutState.currentRevision() : undefined);
   });
 TWIG;
 $eventReplacement = <<<'TWIG'
   $(document).on('change', '#bs-payment-methods input[name="payment_method"]', function(event) {
     var $input = $(this);
-    savePayment($input.val(), $input.data('label'), false, event);
+    savePayment($input.val(), $input.data('label'), false, event, window.bsCheckoutState ? window.bsCheckoutState.currentRevision() : undefined);
   });
   $(document).on('click', '[data-pay001-checkout-part]', function() {
     var $button = $(this);
@@ -486,7 +633,7 @@ $eventReplacement = <<<'TWIG'
     $button.addClass('is-active');
     $drawer.find('[data-pay001-monthly]').text(pay001Money(total / count));
     $drawer.find('[data-pay001-left]').text(Math.max(count - 1, 0));
-    savePayment(code, 'Оплатити частинами', false);
+    savePayment(code, 'Оплатити частинами', false, null, window.bsCheckoutState ? window.bsCheckoutState.currentRevision() : undefined);
   });
 TWIG;
 $source['catalog/view/template/checkout/payment_method.twig'] = replace_once($source['catalog/view/template/checkout/payment_method.twig'], $eventAnchor, $eventReplacement, 'payment_method.twig events');
@@ -534,6 +681,8 @@ $cssAppend = <<<'CSS'
 .pay001-checkout-drawer { margin: -1px 0 10px; padding: 12px; border: 1px solid var(--bs-blue, #3b82f6); border-top: 0; border-radius: 0 0 10px 10px; background: #eff6ff; }
 .pay001-checkout-provider + .pay001-checkout-provider { margin-top: 10px; }
 .pay001-checkout-provider p { margin: 12px 0 0; color: #475569; font-size: 12px; }
+.pay001-mono-confirm { margin-top: 12px; }
+.pay001-mono-confirm [data-pay001-mono-status] { margin: 0 0 10px; color: #475569; }
 @media (max-width: 480px) {
   .pay001-modal { align-items: end; padding: 0; }
   .pay001-modal__sheet { width: 100%; max-height: 88vh; border-radius: 16px 16px 0 0; padding: 20px 16px; }
@@ -562,7 +711,7 @@ try {
     foreach ($source as $relative => $contents) { write_target($root, $relative, $contents); $written[] = $relative; }
     foreach ($assets as $relative => $contents) { write_target($root, $relative, $contents); $written[] = $relative; }
     $php = PHP_BINARY;
-    foreach (['catalog/controller/product/product.php', 'catalog/controller/checkout/checkout.php', 'catalog/controller/checkout/payment_method.php'] as $relative) {
+    foreach (['catalog/controller/product/product.php', 'catalog/controller/checkout/checkout.php', 'catalog/controller/checkout/payment_method.php', 'extension/mono_chast/catalog/controller/payment/mono_chast.php'] as $relative) {
         exec(escapeshellarg($php) . ' -l ' . escapeshellarg($root . '/' . $relative), $lint, $status);
         if ($status !== 0) throw new RuntimeException('php -l failed: ' . $relative);
     }
