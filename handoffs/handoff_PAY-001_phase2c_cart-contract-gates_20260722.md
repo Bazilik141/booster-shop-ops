@@ -1,7 +1,11 @@
 # Codex Handoff — PAY-001 Phase 2c: cart contract, пороги, preorder guard, копірайт-фікси
 
 Date: 2026-07-22 | Parent: `diagnostics/PAY-001_credit-cart-contract_report_20260722.md` (контракт Codex) + рішення власника 2026-07-22
-Читати разом з: `handoffs/handoff_PAY-001_RESET_checkout-architecture-correction_20260721.md` (архітектура) і дизайн-пакетом PAY-001-UI2 (буде доданий власником після Claude Design — фінальні тексти/візуали звідти).
+Читати разом з: `handoffs/handoff_PAY-001_RESET_checkout-architecture-correction_20260721.md` (архітектура) і **дизайн-пакетом `handoffs/CODEX - PAY-001-ADDENDUM-2.md`** (затверджені відповіді Q1–Q5: тексти кнопок/підказок/алерту, стани, розміри — фінальні тексти/візуали ТІЛЬКИ звідти).
+
+**Два уточнення до дизайн-пакета (звірено з кодом 2026-07-22):**
+1. Суми в текстах («від 500 грн», «менша за 500 грн») — НЕ хардкодити: рендерити з `max(500, payment_mono_chast_min_total)` (та сама формула вже в `product.php:389` і `payment_method.php:353`). Дизайн-тексти — шаблон, число підставляється.
+2. Кнопка «Підтвердити замовлення» рендериться/керується `checkout-reskin.js` (`setText(button, 'Підтвердити замовлення →')`) — disabled-стан алерту інтегрувати з існуючим станом цієї кнопки, не створювати паралельну логіку. Codex should verify against actual project files.
 
 ## 1. Task ID
 
