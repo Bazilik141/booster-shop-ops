@@ -140,7 +140,7 @@ grep "ST-3.5" context-index.md
 
 | Roadmap ID | Назва | Handoff |
 |---|---|---|
-| PAY-001 | Monobank Покупка Частинами — інтеграція оплати частинами (Phase 1 деплоєно, адмін-баг не пофіксовано, In progress) | **Читати першим:** `handoffs/handoff_PAY-001_RESET_checkout-architecture-correction_20260721.md` (виправлення архітектури чекауту + актуальний стан) → потім `handoffs/handoff_PAY-001_monobank-chastyny-integration_20260718.md` (історія раундів 0–9, повна API-довідка) |
+| PAY-001 | Monobank Покупка Частинами — інтеграція оплати частинами | **Читати першим:** `handoffs/handoff_PAY-001_RESET_checkout-architecture-correction_20260721.md` (виправлення архітектури чекауту + актуальний стан) → `diagnostics/PAY-001_progress-and-preorder-followup_report_20260721.md` (поточний Codex→Claude стан) → потім `handoffs/handoff_PAY-001_monobank-chastyny-integration_20260718.md` (історія раундів 0–9, повна API-довідка) |
 | PAY-001-UI | Візуальний дизайн-бриф для Claude Design: кнопка + модалка «Купити в кредит» + стани чекауту; готова специфікація отримана 2026-07-19 | handoffs/handoff_PAY-001-UI_visual-design-brief_20260718.md (бриф) → `handoffs/CODEX - PAY-001-credit-flow.md` (готовий результат Claude Design) |
 | CHECKOUT-001 | Реєстрація акаунту при замовленні (Done) | handoffs/handoff_CHECKOUT-001_phase1_guest-account-creation_2026-07-04.md |
 | CHECKOUT-002 | Швидкість оформлення + редизайн loader | — |
@@ -148,7 +148,7 @@ grep "ST-3.5" context-index.md
 | CAT-002-4 | YGO Blazing Dominion SKU | plans/ygo_sku_blazing_dominion_20260628.md |
 | CAT-002-5 | Тайлс категорій — кольори і HTML | plans/category_tiles_colors_20260628.md |
 | CAT-002-5b | Бургер-меню нові категорії + фікс URL | handoffs/handoff_CAT-002-5b_burger-menu-new-categories_20260628.md |
-| LEGAL-002 | Публічна оферта + Обмін і повернення | — |
+| LEGAL-002 | Публічна оферта + Обмін і повернення (mono/ПУМБ розстрочка + архів редакцій, фінальний текст власника) | handoffs/handoff_LEGAL-002_offer-mono-pumb-archive_20260724.md (актуальний) → handoffs/handoff_LEGAL-002_offer-mono-pumb-archive_20260723.md (попередня чернетка Claude, замінена текстом власника) |
 | BRAND-OUTLET-001 | Outlet Booster — опис і SEO | — |
 | R-13.5 | НП модуль — master log (ST-серія) | handoffs/handoff_R-13.5_nova-poshta-module_2026-06-12.md |
 

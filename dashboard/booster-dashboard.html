@@ -1120,19 +1120,19 @@ async function loadOverview() {
 
   // Pending orders preview
   try {
-    const d = cache.orders || await p_orders;
-    cache.orders = d;
-    const o = d.orders || [];
+    const allOrders = cache.ordersAll || await p_ordersAll;
+    cache.ordersAll = allOrders;
+    const o = (allOrders.orders || []).filter(isActiveOrder);
     const badge = document.getElementById('pendingBadge');
-    badge.textContent = d.count || 0;
-    badge.className = 'badge ' + ((d.count||0) > 0 ? 'b-yellow' : 'b-green');
+    badge.textContent = o.length;
+    badge.className = 'badge ' + (o.length > 0 ? 'b-yellow' : 'b-green');
 
     if (!o.length) {
       document.getElementById('pendingPreview').innerHTML = '<div style="color:var(--muted);padding:4px 0;font-size:13px">✅ Активних замовлень немає</div>';
     } else {
       document.getElementById('pendingPreview').innerHTML =
         `<table><tr><th>Замовлення</th><th>Сума</th><th>Прибуток</th><th>Чистий прибуток %</th><th>Статус</th></tr>
-        ${o.slice(0,8).map(r =>
+        ${o.slice(0,9).map(r =>
           `<tr>
             <td><span class="chip">${r.order_id}</span>
               <span style="font-size:11px;color:var(--muted);margin-left:6px">${r.post||''} ${ttn4(r.ttn)}</span></td>
@@ -1369,6 +1369,13 @@ function orderDateMs(order) {
 
 function isCompletedOrder(order) {
   return String((order && order.order_status) || '').trim() === 'Отримано';
+}
+
+function isActiveOrder(order) {
+  const orderStatus = String((order && order.order_status) || '').trim();
+  const paymentStatus = String((order && order.payment_status) || '').trim();
+  const terminal = ['Скасовано', 'Отримано', 'Повернення'].indexOf(orderStatus) !== -1;
+  return (['Нове', 'В обробці', 'Відправлено'].indexOf(orderStatus) !== -1 || paymentStatus === 'Не оплачено') && !terminal;
 }
 
 function isOrderWithinDays(order, days) {
@@ -1847,18 +1854,25 @@ const ROADMAP_TASKS = [
   },
   {
     id: 'PAY-001', title: 'Monobank Покупка Частинами — інтеграція оплати частинами', status: 'active', tool: 'Claude + Codex', priority: 'Medium',
-    lastUpdated: '2026-07-21', blockedBy: [],
-    simple: 'Новий вид покупки — «Покупка в кредит» (окремо від звичайного чекауту): кнопка на товарній сторінці відкриває інформаційну модалку вибору провайдера (референс COMFY.ua, без API-виклику), де monobank ПЧ стає карткою поряд з існуючим ПУМБ-плейсхолдером (не заміна). order/create викликається на чекауті, на кліку «Оформити». Бізнес-правила власника: мінімальна сума 500 грн, комісію монобанку покриває магазин (без націнки клієнту), максимум 5 платежів через available_parts_count. Реальна тарифна сітка підтверджена: 3→2.9%, 4→4.1%, 5→5.9%. Повна API-довідка (усі 9 ендпоінтів «Заявки на ПЧ») прочитана й додана в handoff. Official OpenCart-модуля монобанку не існує (перевірено власником 2026-07-19) — кастомна розробка Codex, паузу знято.',
+    lastUpdated: '2026-07-25', blockedBy: [],
+    simple: 'Новий вид покупки — «Покупка в кредит» (окремо від звичайного чекауту): кнопка на товарній сторінці відкриває інформаційну модалку вибору провайдера (референс COMFY.ua, без API-виклику), де monobank ПЧ стає карткою поряд з існуючим ПУМБ-плейсхолдером (не заміна). order/create викликається на чекауті, на кліку «Оформити». Бізнес-правила власника: мінімальна сума 500 грн, комісію монобанку покриває магазин (без націнки клієнту), максимум 5 платежів через available_parts_count. Реальна тарифна сітка підтверджена: 3→2.9%, 4→4.1%, 5→5.9%. Phase 1 (бекенд) і Phase 2 (UI: cart-add контракт, поріг, preorder-гейт, чекаут-блокер, дизайн ADDENDUM-2) реалізовано.',
     why: 'Безвідсоткова розстрочка на дорогих товарах (бокси/дисплеї) підвищує конверсію без знижки в ціні магазину.',
-    /* Historical detail retained below; it contained a raw apostrophe that broke the whole inline script.
-    warn: 'HIGH-RISK зона (checkout/payment/order status). Production заблоковано: власник ще не зареєстрований партнером у @chast_monobankbot — не блокує Phase 1. Повний пакет DB-підтвердження готовий (handoff, розділ 0). Готово передавати Codex. Handoff: PAY-001, PAY-001-UI.',
-    */
-    warn: 'HIGH-RISK зона (checkout/payment/order status). Гейтить cutover ST-2c. Sandbox повністю пройдено 2026-07-21: адмін-форма пофіксована, 4 тест-телефони OK, isolation повернуто, status=0, регресія Hutko/COD/IBAN чиста. Production заблоковано до реєстрації в @chast_monobankbot. Читати: RESET-handoff першим, потім plans/PAY_decomposition_mono-pumb-preorder_20260721.md. Handoff: PAY-001, PAY-001-UI, PAY-001-RESET.',
+    warn: 'HIGH-RISK зона (checkout/payment/order status). Живий sandbox-тест власника 2026-07-25 знайшов 4 дефекти (D1 — реальний order/create падав), усі виправлено: D1 корінь — Array-to-string баг в mono_chast.php; D2 — тотали купона не оновлювались; D3 — строк кредиту залипав на попередньому товарі; D4 — приглушений рядок на чекауті. Окремо Phase 2d lifecycle fail-safe за доказами замовлення #276: point_id тепер обов\'язковий, CREATE_FAILED більше не рахується успіхом, захист від зміни способу оплати на живій mono-транзакції, success-редірект. Повний 15-крок смок ще не перепройдено після цих фіксів — наступний гейт. Production заблоковано: point_id монобанк видає лише після власного тестування інтеграції (не самореєстрація за 3 дні, як вважалось раніше) — спершу стабільний сценарій на sandbox. Читати: handoffs/handoff_PAY-001_RESET_checkout-architecture-correction_20260721.md, далі plans/PAY_decomposition_mono-pumb-preorder_20260721.md, далі handoffs/handoff_PAY-001_phase2c-defects_followup_20260725.md.',
     subtasks: [
-      { id: '1', title: 'Phase 1 — бекенд-екстеншн + sandbox QA', status: 'done', desc: 'DB-схема, OC4-реєстр, адмін-форма ($error-фікс), 4 тест-телефони пройдено 2026-07-21. Метод ізольовано від клієнтів: status=0 + isolation-патч на getMethods.' },
-      { id: '2', title: 'Phase 2 — UI: товарна сторінка, модалка 3/4/5, чекаут', status: 'todo', desc: 'Дизайн-специфікація готова (CODEX - PAY-001-credit-flow.md). Модалка одразу з неактивною карткою ПУМБ. Точку входу методу (getMethods при задеплоєному isolation чи окрема) Codex фіксує в патчі — див. декомпозицію, розділ 6.3.' },
-      { id: '3', title: 'Production — реєстрація в @chast_monobankbot', status: 'todo', desc: 'Близько 3 днів, робити паралельно з Phase 2. Потім stage/production ключі і money-smoke.' }
+      { id: '1', title: 'Phase 1 — бекенд-екстеншн + sandbox QA', status: 'done', desc: 'DB-схема, OC4-реєстр, адмін-форма, 4 тест-телефони пройдено 2026-07-21. Ізольовано від SimpleCheckout (status=0 + isolation-патч getMethods).' },
+      { id: '2', title: 'Phase 2 — UI + чекаут-гейти', status: 'done', desc: 'Cart-add контракт, динамічний поріг, preorder-гейт, фіксований порядок 3/4/5, чекаут-блокер, дизайн ADDENDUM-2. Задеплоєно.' },
+      { id: '3', title: 'Phase 2c/2d — дефекти живого QA + lifecycle fail-safe', status: 'done', desc: 'D1-D4 виправлено (корінь D1 — Array-to-string баг). Phase 2d: point_id обов\'язковий, CREATE_FAILED не «успіх», cross-method guard, success-редірект — за доказами замовлення #276.' },
+      { id: '4', title: 'Повторний повний смок-тест (15 кроків)', status: 'todo', desc: 'Підтвердити всі фікси разом на sandbox перед тим, як монобанк почне тестувати інтеграцію.' },
+      { id: '5', title: 'Production — point_id від монобанку', status: 'todo', desc: 'Монобанк видає point_id лише після власного тестування інтеграції (не самореєстрація). Спершу стабільний sandbox, потім чекаємо банк.' }
     ]
+  },
+  {
+    id: 'PAY-001-UI', title: 'Візуальний дизайн: кнопка + модалка «Купити в кредит» (Claude Design)', status: 'done', tool: 'Claude Design + Codex', priority: 'Medium',
+    lastUpdated: '2026-07-22', blockedBy: [],
+    simple: 'Дизайн-специфікація готова і реалізована: точні тексти кнопок, кольори, copy, стани чипів (handoffs/CODEX - PAY-001-ADDENDUM-2.md). Задеплоєно разом з Phase 2c (cart-add контракт, поріг, preorder-гейт).',
+    why: 'Демо-UI без реального payment method у risky zone (checkout) = зайвий тимчасовий код і подвійна робота.',
+    warn: 'Лого ПУМБ і брендинг — під договірним обмеженням (пре-апрув банку перед публікацією), не чіпати без узгодження. Handoff: PAY-001-UI, ADDENDUM-2.',
+    subtasks: []
   },
   {
     id: 'PAY-002', title: 'ПУМБ «Сплата частинами» — другий провайдер розстрочки', status: 'todo', tool: 'Claude + Codex', priority: 'Medium',
@@ -1874,14 +1888,6 @@ const ROADMAP_TASKS = [
     simple: 'Новий статус замовлення «Передзамовлення» в OpenCart — для позицій, що надходять за 2-6 тижнів. Це НЕ кредитна логіка і НЕ чекаут: просто статус в адмінці + мапінг у NCRM order-sync, щоб синк не спіткнувся на невідомому статусі.',
     why: 'Зручний облік передзамовлень у звичному флоу адмінки замість ручних поміток.',
     warn: 'Патч тільки разом з перевіркою статусних мапінгів у ncrm order-sync (index.ts). Незалежна від PAY-серії — можна робити паралельно в будь-який момент. План: plans/PAY_decomposition_mono-pumb-preorder_20260721.md, розділ 6.4.',
-    subtasks: []
-  },
-  {
-    id: 'PAY-001-UI', title: 'Візуальний дизайн: кнопка + модалка «Купити в кредит» (Claude Design)', status: 'todo', tool: 'Claude Design + Codex', priority: 'Medium',
-    lastUpdated: '2026-07-19', blockedBy: ['PAY-001'],
-    simple: 'Дизайн-специфікація готова (handoffs/CODEX - PAY-001-credit-flow.md). Codex звірив з backup 2026-07-19: кредитний блок на товарі — лише прихований CSS-правилом (boostershop-ds.css:3646) ПУМБ-плейсхолдер; способу оплати "Оплатити частинами" в OpenCart ще нема. Рішення: послідовно, не паралельно — спершу PAY-001 Phase 1 backend, потім цей UI-патч поверх реального sandbox payment method. Офіційні PNG-асети лапки monobank (18 файлів, чорний/сірий/білий × flat/outlined × 400/800/1500px) знайдено й додано в handoffs/assets/PAY-001-UI/monobank-label/.',
-    why: 'Демо-UI без реального payment method у risky zone (checkout) = зайвий тимчасовий код і подвійна робота.',
-    warn: 'Офіційні асети лапки monobank знайдено й додані в repo 2026-07-19 (handoffs/assets/PAY-001-UI/monobank-label/). Лого ПУМБ ще не надано — потрібне перед фінальним патчем, це не ресурс монобанку. Handoff: PAY-001-UI.',
     subtasks: []
   },
   {
@@ -2098,15 +2104,16 @@ const ROADMAP_TASKS = [
     ]
   },
   {
-    id: 'LEGAL-002', title: 'Публічна оферта і умови повернення', status: 'active', tool: 'Claude + Manual', priority: 'Medium',
-    lastUpdated: '2026-05-26', blockedBy: [],
-    simple: 'Тексти оферти і умов повернення готові. Чекають власника: потрібно замінити тимчасові реквізити ФОП на реальні і пройти юридичну перевірку.',
+    id: 'LEGAL-002', title: 'Публічна оферта і умови повернення', status: 'active', tool: 'Claude + Manual + Codex', priority: 'Medium',
+    lastUpdated: '2026-07-24', blockedBy: [],
+    simple: 'Фінальний текст оферти від власника (19 розділів) зверстано і готово до Codex (handoff_LEGAL-002_offer-mono-pumb-archive_20260724.md). 4 пункти лишені відкритими для звірки власником (mono момент списання і ставка, діапазон ПУМБ, теза про РРО) — Claude сам їх не виправляв.',
     why: 'Публічна оферта — юридичний захист для бізнесу і обов\'язкова вимога для магазину.',
-    warn: 'Не публікувати з тимчасовими реквізитами. Юридична перевірка обов\'язкова.',
+    warn: 'Не публікувати з тимчасовими реквізитами і без юридичної перевірки. Не деплоїти, поки власник не звірив 4 позначені пункти.',
     subtasks: [
       { id: '1', title: 'Запустити патч з текстами', status: 'todo', desc: 'Власник: завантажити і запустити patch-r09fix-toc-offer-20260526-v3.php.' },
       { id: '2', title: 'Внести реальні реквізити ФОП', status: 'todo', desc: 'Замінити ЄДРПОУ/РНОКПП і IBAN.' },
-      { id: '3', title: 'Юридична перевірка', status: 'todo', desc: 'Перевірити обидва тексти: оферту і умови повернення.' }
+      { id: '3', title: 'Юридична перевірка', status: 'todo', desc: 'Перевірити обидва тексти: оферту і умови повернення.' },
+      { id: '4', title: 'mono/ПУМБ розстрочка + архів редакцій', status: 'todo', desc: 'Власник звіряє 4 пункти (7.8.3, 7.9.2, 9.3) → Codex деплоїть нову редакцію + архівну сторінку 26.05.2026 (handoff_LEGAL-002_offer-mono-pumb-archive_20260724.md).' }
     ]
   },
   {

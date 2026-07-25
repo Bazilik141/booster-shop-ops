@@ -4,7 +4,7 @@ Date: 2026-07-25
 
 ## Scope
 
-Implemented the Phase 2c handoff against `backup-7.24.2026_17-02-32_boosters.tar.gz`, with `CODEX - PAY-001-ADDENDUM-2.md` taking precedence:
+Implemented the Phase 2c handoff against the owner-collected current live snapshot `booster-debug-PAY001-phase2c-current.tar.gz`, with `CODEX - PAY-001-ADDENDUM-2.md` taking precedence:
 
 - both modal actions use the stock `checkout/cart.add` endpoint with the selected quantity and options;
 - `Додати й оформити` redirects only after a successful cart add; `Продовжити покупки` adds and closes without redirect; `×` remains no-op;
@@ -36,6 +36,8 @@ catalog/view/template/common/header.twig
 
 The patch performs exact source SHA256 checks plus one-count anchors before writing all eight files.
 
+The first production attempt safely stopped before backup/write with a SHA mismatch in `catalog/view/template/common/header.twig`. A three-way comparison showed that the other seven targets still matched the 2026-07-24 backup exactly; only TOC-003 had changed the stylesheet cache-buster from `pay001-ui-20260721` to `toc003-20260724`. The rebased target preserves that drift as `toc003-pay001-phase2c-20260725`.
+
 ## Root causes fixed
 
 - Product modal action previously only assigned the checkout URL and never called `checkout/cart.add`.
@@ -47,7 +49,7 @@ The patch performs exact source SHA256 checks plus one-count anchors before writ
 ## Dry-run result
 
 ```text
-backup=...\_patch_backups\PAY-001_phase2c_cart_contract_gates_20260725-20260725-035518
+backup=...\_patch_backups\PAY-001_phase2c_cart_contract_gates_20260725-20260725-041203
 changed_file=catalog/controller/product/product.php
 changed_file=catalog/view/template/product/product.twig
 changed_file=catalog/controller/checkout/payment_method.php
