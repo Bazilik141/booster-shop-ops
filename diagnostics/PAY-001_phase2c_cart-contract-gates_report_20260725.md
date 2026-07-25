@@ -7,11 +7,13 @@ Date: 2026-07-25
 Implemented the Phase 2c handoff against `backup-7.24.2026_17-02-32_boosters.tar.gz`, with `CODEX - PAY-001-ADDENDUM-2.md` taking precedence:
 
 - both modal actions use the stock `checkout/cart.add` endpoint with the selected quantity and options;
-- `Купити частинами` redirects only after a successful cart add; `Продовжити покупки` adds and closes without redirect; `×` remains no-op;
+- `Додати й оформити` redirects only after a successful cart add; `Продовжити покупки` adds and closes without redirect; `×` remains no-op;
 - product credit UI stays visible and reacts to selected quantity, threshold, and factual stock;
 - stock checkout calculates the Mono gate from final payable after coupon/discount and rejects factual stock `< 1`, with preorder taking priority;
 - chips remain in canonical `3 → 4 → 5` order, use correct Ukrainian grammar, and the checkout subtitle is removed;
 - coupon/cart total refreshes re-fetch payment methods and update the soft blocker.
+- warning colors use the existing `--bs-warning-bg`, `--bs-warning-fg`, and `--bs-warning-line` design tokens;
+- bank cards are not faded merely because another bank/term is selected; the PUMB `СКОРО БУДЕ` card keeps its current status and dashed border but no longer loses its brand colors through `opacity`.
 
 The optional same-SKU quantity already present in cart is not included in the product-page estimate. The addendum explicitly marks this as a non-blocker; the product page uses `unit price × selected quantity`, while checkout remains authoritative.
 
@@ -45,7 +47,7 @@ The patch performs exact source SHA256 checks plus one-count anchors before writ
 ## Dry-run result
 
 ```text
-backup=...\_patch_backups\PAY-001_phase2c_cart_contract_gates_20260725-20260725-032855
+backup=...\_patch_backups\PAY-001_phase2c_cart_contract_gates_20260725-20260725-035518
 changed_file=catalog/controller/product/product.php
 changed_file=catalog/view/template/product/product.twig
 changed_file=catalog/controller/checkout/payment_method.php
@@ -60,6 +62,16 @@ post_apply_hashes=ok
 ```
 
 Static contract checks passed for both modal actions, cart payload, product gate, coupon-aware final total, factual-stock gate, canonical chip order, subtitle removal, grammar helper, warnings, confirm blocker, and reactive payment-method refresh.
+
+The coupon-aware totals call was verified against the exact engine/model files from the same backup:
+
+- `Loader::model()` registers every model method as a closure on `Opencart\System\Engine\Proxy`;
+- `Proxy::__get()` returns that closure by reference;
+- `catalog/model/checkout/cart.php::getTotals(array &$totals, array &$taxes, int &$total)` requires reference parameters;
+- the existing live `catalog/controller/checkout/confirm.php` already uses the identical `($this->model_checkout_cart->getTotals)(...)` form after `prepareCouponTotal()`;
+- a local runtime harness using the extracted real `Proxy` returned `proxy_reference=ok total=875 coupon=-125 tax=20`, proving reference mutations propagate through this invocation form.
+
+This validates the PHP/OpenCart call mechanism. The actual configured coupon plus credit behavior still requires the owner-side checkout QA because local source-copy validation has no production session, DB, or enabled total extensions.
 
 Embedded Twig JavaScript parse check:
 
@@ -109,7 +121,7 @@ php PAY-001_phase2c_cart_contract_gates_20260725.php
 ## Post-deploy QA checklist
 
 - [ ] Status `payment_mono_chast_status` stays unchanged until controlled QA.
-- [ ] In-stock product above threshold: choose 5 payments, click `Купити частинами`; selected quantity is added, stock checkout opens, credit and 5 are selected.
+- [ ] In-stock product above threshold: choose 5 payments, click `Додати й оформити`; selected quantity is added, stock checkout opens, credit and 5 are selected.
 - [ ] Repeat with required product options; validation error does not redirect.
 - [ ] `Продовжити покупки` adds the same quantity/options, refreshes the cart badge, closes the modal, and does not redirect.
 - [ ] `×` closes without adding.
@@ -123,6 +135,7 @@ php PAY-001_phase2c_cart_contract_gates_20260725.php
 - [ ] Guest and authorized checkout smoke: shipping, NP address, coupon, oferta, deferred confirm, Hutko/COD/IBAN.
 - [ ] SimpleCheckout retains its existing isolated behavior.
 - [ ] Visual QA at 375px, tablet, and desktop; modal actions stack primary then secondary on mobile.
+- [ ] PUMB card retains full brand color when monobank or one of its terms is active; only active selection styling changes, not the opacity of other bank cards.
 
 ## Side effects / risks
 
