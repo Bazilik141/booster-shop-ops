@@ -150,6 +150,7 @@ NCRM-серія (нова CRM-платформа на Supabase, заведено
 | NCRM-12 | `38b6bf20-bdb4-8126-a49e-d4819f0bc496` (2026-07-11: перенумеровано з NCRM-09, зміст без змін — mobile) |
 | NCRM-13 | `39f6bf20-bdb4-8170-a4b3-d0c81978b4bf` (нова картка 2026-07-16: Signed inventory adjustment model, виділено з NCRM-03) |
 | NCRM-14 | `3a96bf20-bdb4-812c-95e5-f2dd31cf0ffe` (нова картка 2026-07-26: ПУМБ payment-type mapping в order-sync + discount_total fix, знайдено при закритті NCRM-10) |
+| NCRM-15 | `3a96bf20-bdb4-8171-b60b-f6e7c1941324` (нова картка 2026-07-26: Mobile-версія, виділена з NCRM-12) |
 
 MKT-TG-серія (Telegram контент-автоматизація, заведено 2026-06-27):
 

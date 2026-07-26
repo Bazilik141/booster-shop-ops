@@ -132,8 +132,9 @@ grep "ST-3.5" context-index.md
 | NCRM-09e | Mystery box reservation/assembly UI (reserve/commit/release, без reversal) — sub-scope NCRM-09 | handoffs/handoff_NCRM-09e_mystery-box-fulfillment_20260717.md |
 | NCRM-10 | Order pipeline OpenCart→Supabase + smoke — колишній зміст NCRM-07 (Done, 2026-07-26, owner QA пройдено; CHECKOUT-002 async-queue + виправлений cron-розклад; discount_total=0 баг лишається окремо, не блокує) | handoffs/handoff_NCRM-10_order-pipeline-opencart-supabase_20260718.md |
 | NCRM-11 | Курси валют — автоматичний фетч Приват/Моно→НБУ (без ПУМБ, owner-рішення 2026-07-26), +1% буфер лише для НБУ; заморозка при закупці — окремо (In progress, план+хендофф готові, передано Codex) | handoffs/handoff_NCRM-11_currency-rates-fetch_20260726.md |
-| NCRM-12 | Mobile-версія + поліш — перенумеровано з NCRM-09, зміст той самий | — |
+| NCRM-12 | Форма зміни статусу замовлення (order_status/payment_status/ttn/note на /orders/[id]) — звужено 2026-07-26, mobile винесено в NCRM-15. Хендофф готовий, у черзі після NCRM-11 | handoffs/handoff_NCRM-12_order-status-form_20260726.md |
 | NCRM-14 | Order-sync: типи оплати ПУМБ ПЧ (credit_pumb_3/4/5) + фікс discount_total=0 — обидва виділено при закритті NCRM-10, той самий файл index.ts, один раунд (In progress, 2026-07-26, хендофф готовий, власник передає Codex) | handoffs/handoff_NCRM-14_order-sync-pumb-payment-types_20260726.md |
+| NCRM-15 | Mobile-версія + поліш — виділено з NCRM-12 2026-07-26, без чіткого обсягу (design-discovery потрібен) | — |
 
 ---
 

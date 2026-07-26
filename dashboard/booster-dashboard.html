@@ -1756,13 +1756,18 @@ const ROADMAP_TASKS = [
     warn: '2026-07-11: перенумеровано з NCRM-08 (ресеквенс v2-контракту, зміст без змін). 2026-07-26: власник підтвердив 2 відкриті рішення зі схеми — без ПУМБ як джерела курсу (назва картки застаріла, працюємо за plans/crm-schema-v1 §D3c), фетч автоматичний (cron, не ручне введення). План (plans/NCRM-11_currency-rates-fetch_plan_20260726.md) і хендофф (handoffs/handoff_NCRM-11_currency-rates-fetch_20260726.md) готові, передано Codex. Це перший scheduled job у Supabase-проєкті — закриття лише після підтвердженого самостійного циклу cron (24-48 год без ручного втручання), за тим самим принципом що CHECKOUT-002/NCRM-10.', subtasks: []
   },
   {
-    id: 'NCRM-12', title: 'Mobile-версія + поліш', status: 'todo', tool: 'Codex', priority: 'Low',
-    lastUpdated: '2026-07-18', blockedBy: ['NCRM-08'],
+    id: 'NCRM-12', title: 'Форма зміни статусу замовлення', status: 'todo', tool: 'Codex', priority: 'Medium',
+    lastUpdated: '2026-07-26', blockedBy: [],
+    simple: 'UI на /orders/[id] для зміни order_status/payment_status/ttn/note існуючого замовлення — repo-функція updateSaleStatus вже готова, форми нема.',
+    why: 'Загальний UX + передумова тестування auto-release mystery-резерву (fn_release_mystery_fulfillment спрацьовує лише на cancelled/refund, це не можна було перевірити при закритті NCRM-09e).',
+    warn: '2026-07-26: звужено — "Mobile-версія" винесена окремою карткою NCRM-15, тут лишається лише форма статусу. Хендофф готовий (handoffs/handoff_NCRM-12_order-status-form_20260726.md), але свідомо НЕ передано Codex — власник поставив у чергу після закриття NCRM-11 (24-48г підтвердження cron). LOW-RISK: чиста UI-надбудова, без нової міграції.', subtasks: []
+  },
+  {
+    id: 'NCRM-15', title: 'Mobile-версія + поліш', status: 'todo', tool: 'Codex', priority: 'Low',
+    lastUpdated: '2026-07-26', blockedBy: [],
     simple: 'Мобільна версія поверх готового web; обсяг визначається після PC-версії та дизайну.',
     why: 'Доступ із телефону — в останню чергу, база закладена з Phase 0.',
-    warn: '2026-07-11: перенумеровано з NCRM-09 (зміст без змін). Blocker оновлено на NCRM-08 (нова адреса read-екранів). 2026-07-18: додано підзадачу — форма зміни статусу замовлення (repo-функція updateSaleStatus існує з NCRM-09b, UI нема ніде). Виявлено при QA NCRM-09e: без цієї форми неможливо протестувати автозвільнення mystery-резерву при cancel/refund.', subtasks: [
-      { id: '1', title: 'Форма зміни статусу замовлення', status: 'todo', desc: 'UI над існуючою updateSaleStatus (sales.repo.ts, NCRM-09b) — зміна order_status/payment_status/ttn/note на /orders/[id]. Потрібно й для загального UX, і як передумова тестування auto-release mystery-резерву (fn_release_mystery_fulfillment спрацьовує лише на cancelled/refund).' }
-    ]
+    warn: '2026-07-26: виділено з NCRM-12 як окрема картка (власник рішення) — "форма зміни статусу" мала конкретний скоуп і лишилась в NCRM-12, "мобільна версія" без чіткого обсягу (design-discovery потрібен) переїхала сюди. Владелец вирішує scope після готового desktop-web.', subtasks: []
   },
   {
     id: 'NCRM-14', title: 'Order-sync: ПУМБ payment types + discount_total fix', status: 'active', tool: 'Claude + Codex', priority: 'Medium',
