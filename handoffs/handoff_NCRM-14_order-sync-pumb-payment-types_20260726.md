@@ -1,13 +1,13 @@
-# Codex Handoff — NCRM-11: ПУМБ ПЧ payment types + order-sync мапінг
+# Codex Handoff — NCRM-14: ПУМБ ПЧ payment types + order-sync мапінг
 
 Date: 2026-07-26 | Owner: Raccoon | Планувальник: Claude | Виконавець: Codex
-Пов'язаний план: `plans/NCRM-11_order-sync-payment-type-capture_plan_20260726.md`
+Пов'язаний план: `plans/NCRM-14_order-sync-payment-type-capture_plan_20260726.md`
 
 > HIGH-RISK: торкається живого order-sync (той самий шлях, що впав мовчки 2026-07-19).
 > Payment-суміжне → див. `bs-checkout-smoke`. Schema/reference-дані → див. `bs-merchant-schema-qa` (тут — лише внутрішній Supabase-довідник, не Merchant feed).
 
 ## 1. Task ID
-NCRM-11 — додати типи оплати «ПУМБ Сплата частинами» 3/4/5 у нову CRM і навчити OpenCart→Supabase sync (`order-sync/index.ts`) коректно їх розпізнавати при створенні замовлення. Скоуп статусів мінімальний: лише `payment_type_code`; `payment_status`/`order_status` не чіпати.
+NCRM-14 — додати типи оплати «ПУМБ Сплата частинами» 3/4/5 у нову CRM і навчити OpenCart→Supabase sync (`order-sync/index.ts`) коректно їх розпізнавати при створенні замовлення. Скоуп статусів мінімальний: лише `payment_type_code`; `payment_status`/`order_status` не чіпати.
 
 ## 2. Context
 Новий чекаут живий для всіх; MONO ПЧ готове, ПУМБ ПЧ у роботі (PAY-002, договір №SF1/21.3.2/4510 підписано 2026-07-21). Зараз `paymentTypeCode()` в `index.ts` (рядки ~118-146) мапить MONO ПЧ (`mono_chast.mono_chast_[345]` → `credit_mono_[345]`), `bank_details`, `fop_control`, а **все інше повертає `acquiring`** — тобто ПУМБ, коли з'явиться, потрапить у купу з Hutko-карткою. MONO-типи+комісії вже є в міграції `0013_pay001_mono_payment_types.sql`. Комісії ПУМБ відомі з Додатку №2 договору. Бізнес-рішення закриті: обидва провайдери лише 3/4/5 платежів, лише «Сплата частинами».
@@ -24,7 +24,7 @@ NCRM-11 — додати типи оплати «ПУМБ Сплата част�
 
 **Фаза 2 — мапінг** у `ncrm/supabase/functions/order-sync/index.ts`, функція `paymentTypeCode()`: додати гілку ПУМБ **перед** фінальним `return "acquiring"` і бажано поруч з mono-гілкою:
 - Очікуваний патерн коду ПУМБ-модуля (за аналогією з `mono_chast.mono_chast_3`): щось на кшталт `pumb_credit.pumb_credit_[345]`. Гілка має витягти цифру платежів і повернути `credit_pumb_${n}`.
-- ⚠️ **MUST-VERIFY:** реальний рядок `payment_method_code`/`payment_method_name`, який шле ПУМБ-extension, ще НЕ підтверджено (extension `pumb_credit` з'явиться в PAY-002). Codex має зробити регекс стійким (варіанти `pumb`+`chast`/`part`/`_3`) АЛЕ лишити явний `// TODO NCRM-11: verify against real pumb_credit payment_method_code from PAY-002` і не видаляти fallback `acquiring`.
+- ⚠️ **MUST-VERIFY:** реальний рядок `payment_method_code`/`payment_method_name`, який шле ПУМБ-extension, ще НЕ підтверджено (extension `pumb_credit` з'явиться в PAY-002). Codex має зробити регекс стійким (варіанти `pumb`+`chast`/`part`/`_3`) АЛЕ лишити явний `// TODO NCRM-14: verify against real pumb_credit payment_method_code from PAY-002` і не видаляти fallback `acquiring`.
 - Комбінований саніті-матч, наприклад: якщо `value` містить `pumb` і одну з цифр 3/4/5 у контексті платежів — мапити; інакше не чіпати наявну логіку.
 
 Не писати фінальний код у цьому хендоффі — Codex звіряє з реальним `index.ts` і `0013`.
@@ -63,4 +63,4 @@ Codex should verify against actual project files before writing.
 - Міграція 0014: безпечна (лише insert довідкових рядків); за потреби `delete from payment_types where code like 'credit_pumb_%'` та відповідні `app_config`-ключі. БД-даних замовлень не торкається.
 
 ## 10. Recommended status after execution
-NCRM-11 → «In progress»: Фаза 1 (міграція) + Фаза 2 (мапінг) можна закрити після регрес-smoke MONO/реквізити; **повне закриття NCRM-11 — лише після верифікації ПУМБ-гілки на реальному замовленні** (разом з релізом PAY-002). PAY-002 і NCRM discount_total — окремі відкриті задачі.
+NCRM-14 → «In progress»: Фаза 1 (міграція) + Фаза 2 (мапінг) можна закрити після регрес-smoke MONO/реквізити; **повне закриття NCRM-14 — лише після верифікації ПУМБ-гілки на реальному замовленні** (разом з релізом PAY-002). PAY-002 і NCRM discount_total — окремі відкриті задачі.

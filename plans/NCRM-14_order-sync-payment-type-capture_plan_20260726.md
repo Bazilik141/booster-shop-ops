@@ -1,4 +1,4 @@
-# NCRM-11 — CRM-план: захоплення актуальних типів оплати з нового чекауту (MONO ПЧ / ПУМБ ПЧ)
+# NCRM-14 — CRM-план: захоплення актуальних типів оплати з нового чекауту (MONO ПЧ / ПУМБ ПЧ)
 
 Date: 2026-07-26 | Джерела: `ncrm/supabase/functions/order-sync/index.ts` (поточний мапінг, round-4-fixed), `ncrm/supabase/migrations/0002_stage2_sales.sql` (довідники payment_types/statuses), `ncrm/supabase/migrations/0013_pay001_mono_payment_types.sql` (MONO ПЧ типи+комісії), `plans/PAY_decomposition_mono-pumb-preorder_20260721.md` (PAY-002 ПУМБ, договір №SF1/21.3.2/4510), `handoff_CHECKOUT002-NCRM10_silent-sync-failure-continuity_20260719.md`.
 
@@ -20,7 +20,7 @@ Mixed — Claude (план + Codex-хендофф), Codex (патч index.ts + �
 
 ## 5. Next action
 1. Затвердити цей план.
-2. Віддати Codex `handoffs/handoff_NCRM-11_order-sync-pumb-payment-types_20260726.md` — фаза 1 (міграція) безпечна одразу; фаза 2 (index.ts) застосувати, верифікувати на першому ПУМБ-замовленні.
+2. Віддати Codex `handoffs/handoff_NCRM-14_order-sync-pumb-payment-types_20260726.md` — фаза 1 (міграція) безпечна одразу; фаза 2 (index.ts) застосувати, верифікувати на першому ПУМБ-замовленні.
 3. Власнику: підтвердити точний рядок `payment_method_code` ПУМБ-модуля, щойно з'явиться extension у PAY-002 (очікуваний патерн — `pumb_credit.pumb_credit_3/4/5` за зразком `mono_chast.mono_chast_3`).
 
 ---
@@ -82,8 +82,8 @@ Mixed — Claude (план + Codex-хендофф), Codex (патч index.ts + �
 |---|---|---|
 | NCRM-10 order-sync pipeline | ✅ Working | #256-#265 доставлено; cron-воркер встановлено 2026-07-26 |
 | CHECKOUT-002 async side-effects | ✅ Resolved | Причина мовчазного фейлу — невстановлений cron, не `telegram.php`; чергу дренуємо раз/хв |
-| **NCRM-11 payment-type capture** | 🆕 Planned | Цей план; хендофф готовий |
+| **NCRM-14 payment-type capture** | 🆕 Planned | Цей план; хендофф готовий |
 | PAY-001 MONO ПЧ — sync | ✅ Covered | Типи+комісії в 0013; мапінг у index.ts робочий |
 | PAY-002 ПУМБ ПЧ — sync | ⏳ Blocked-on-PAY-002 | Міграцію можна зараз; index.ts-гілку верифікувати на 1-му реальному ПУМБ-замовленні |
-| NCRM discount_total | ❗ Open (окремо) | Не входить у NCRM-11 |
+| NCRM discount_total | ❗ Open (окремо) | Не входить у NCRM-14 |
 | NCRM status lifecycle (paid/shipped) | 💤 Deferred | Фаза 3, за гейтом власника |
