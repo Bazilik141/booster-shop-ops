@@ -1767,14 +1767,28 @@ const ROADMAP_TASKS = [
     lastUpdated: '2026-07-26', blockedBy: [],
     simple: 'Мобільна версія поверх готового web; обсяг визначається після PC-версії та дизайну.',
     why: 'Доступ із телефону — в останню чергу, база закладена з Phase 0.',
-    warn: '2026-07-26: виділено з NCRM-12 як окрема картка (власник рішення) — "форма зміни статусу" мала конкретний скоуп і лишилась в NCRM-12, "мобільна версія" без чіткого обсягу (design-discovery потрібен) переїхала сюди. Владелец вирішує scope після готового desktop-web.', subtasks: []
+    warn: '2026-07-26: виділено з NCRM-12 як окрема картка (власник рішення) — "форма зміни статусу" мала конкретний скоуп і лишилась в NCRM-12, "мобільна версія" без чіткого обсягу (design-discovery потрібен) переїхала сюди. Власник вирішує scope після готового desktop-web.', subtasks: []
+  },
+  {
+    id: 'NCRM-16', title: 'Спосіб оплати «Післяплата monobazar» (2.9%)', status: 'todo', tool: 'Codex', priority: 'Medium',
+    lastUpdated: '2026-07-26', blockedBy: [],
+    simple: 'Новий payment_type під ФОП-профіль Monobazar (комісія 2.9%, інші тарифи ніж fop_control/cod_personal), автопідстановка при виборі каналу Monobazar у формі продажу.',
+    why: 'Власник тепер веде Monobazar через ФОП — існуючі типи оплати (Контроль оплати ФОП, Післяплата фіз) мають чужі тарифи, у Moно свої домовленості з поштою.',
+    warn: '2026-07-26: хендофф готовий (handoffs/handoff_NCRM-16_monobazar-postpay-fee_20260726.md). LOW-RISK, не залежить від NCRM-11/12/14 — міграція 0016 + невелика правка форми продажу (sale-form.tsx). За замовчуванням у черзі за NCRM-11/12, але може йти паралельно, якщо власник вирішить прискорити.', subtasks: []
+  },
+  {
+    id: 'NCRM-17', title: 'Деплой Next.js застосунку (візуал нової CRM)', status: 'todo', tool: 'Manual (owner) + Codex', priority: 'Medium',
+    lastUpdated: '2026-07-26', blockedBy: [],
+    simple: 'Застосунок і досі лише локальний (npm run dev, .env.local вказує на 127.0.0.1) — те, що бачив власник, це локальна тестова база, не жива хмарна. Потрібне рішення: хостити (Vercel, як планувалось) чи свідомо лишати локальним.',
+    why: 'Без цього "перехід на нову CRM" неможливий фізично — застосунок не існує ніде, крім комп\'ютера власника з відкритим терміналом.',
+    warn: '2026-07-26: заведено при аудиті — архітектурний план (plans/crm-new-platform-architecture_2026-06-26.md §8, Фаза 0) планував ранній деплой на Vercel, цього не сталось. Декомпозиція: (1) власник вирішує хостинг (Vercel Hobby free чи інше); (2) якщо Vercel — production env vars мають вказувати на ХМАРНИЙ Supabase-проєкт, не на .env.local; (3) SERVICE_ROLE_KEY заводиться як Vercel env var, ніде в git; (4) після деплою — QA що екрани показують реальні хмарні дані, не порожню/тестову базу. Codex-хендофф ще не писався, чекає рішення власника по (1).', subtasks: []
   },
   {
     id: 'NCRM-14', title: 'Order-sync: ПУМБ payment types + discount_total fix', status: 'active', tool: 'Claude + Codex', priority: 'Medium',
     lastUpdated: '2026-07-26', blockedBy: [],
     simple: 'index.ts вчиться розпізнавати ПУМБ-оплату частинами (зараз падає в acquiring разом з карткою) і рахувати реальну знижку замовлення (зараз завжди 0).',
     why: 'Знайдено при закритті NCRM-10: order-sync не знає про ПУМБ ПЧ (PAY-002 у роботі) і мовчки пише discount_total=0 для кожного замовлення — обидва фікси в тому самому файлі, один Codex-раунд.',
-    warn: '2026-07-26: план (plans/NCRM-14_order-sync-payment-type-capture_plan_20260726.md) і хендофф (handoffs/handoff_NCRM-14_order-sync-pumb-payment-types_20260726.md) готові, власник передає Codex. Фаза 1 (міграція 0014, ПУМБ payment_types+комісії) і Фаза 2b (discount_total — index.ts читає payload.discount_total напряму замість неіснучого payload.totals) безпечні одразу. Фаза 2 (ПУМБ-гілка в paymentTypeCode) готова, але верифікація на реальному ПУМБ-замовленні залежить від PAY-002 (extension pumb_credit ще не існує). Ретроактивна правка вже вставлених рядків з discount_total=0 (OC-FOP-0256-0259) свідомо НЕ робиться. Ризик HIGH — живий order-sync, той самий шлях що впав мовчки 2026-07-19; обов'язковий smoke на реальному замовленні після редеплою.', subtasks: []
+    warn: '2026-07-26: план (plans/NCRM-14_order-sync-payment-type-capture_plan_20260726.md) і хендофф (handoffs/handoff_NCRM-14_order-sync-pumb-payment-types_20260726.md) готові, власник передає Codex. Фаза 1 (міграція 0014, ПУМБ payment_types+комісії) і Фаза 2b (discount_total — index.ts читає payload.discount_total напряму замість неіснучого payload.totals) безпечні одразу. Фаза 2 (ПУМБ-гілка в paymentTypeCode) готова, але верифікація на реальному ПУМБ-замовленні залежить від PAY-002 (extension pumb_credit ще не існує). Ретроактивна правка вже вставлених рядків з discount_total=0 (OC-FOP-0256-0259) свідомо НЕ робиться. Ризик HIGH — живий order-sync, той самий шлях що впав мовчки 2026-07-19; обов\'язковий smoke на реальному замовленні після редеплою.', subtasks: []
   },
   // ─── CHECKOUT / ST ───
   {

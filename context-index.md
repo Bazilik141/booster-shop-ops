@@ -135,6 +135,8 @@ grep "ST-3.5" context-index.md
 | NCRM-12 | Форма зміни статусу замовлення (order_status/payment_status/ttn/note на /orders/[id]) — звужено 2026-07-26, mobile винесено в NCRM-15. Хендофф готовий, у черзі після NCRM-11 | handoffs/handoff_NCRM-12_order-status-form_20260726.md |
 | NCRM-14 | Order-sync: типи оплати ПУМБ ПЧ (credit_pumb_3/4/5) + фікс discount_total=0 — обидва виділено при закритті NCRM-10, той самий файл index.ts, один раунд (In progress, 2026-07-26, хендофф готовий, власник передає Codex) | handoffs/handoff_NCRM-14_order-sync-pumb-payment-types_20260726.md |
 | NCRM-15 | Mobile-версія + поліш — виділено з NCRM-12 2026-07-26, без чіткого обсягу (design-discovery потрібен) | — |
+| NCRM-16 | Спосіб оплати «Післяплата monobazar» (2.9%) — новий ФОП-профіль власника, автопідстановка в формі продажу. LOW-RISK, незалежна від 11/12/14 | handoffs/handoff_NCRM-16_monobazar-postpay-fee_20260726.md |
+| NCRM-17 | Деплой Next.js застосунку — досі лише local-only (`npm run dev`), архітектурний план планував Vercel ще на Phase 0, не сталося. Чекає рішення власника по хостингу | — |
 
 ---
 
