@@ -1742,18 +1742,18 @@ const ROADMAP_TASKS = [
     warn: 'Done 2026-07-18: auth, продажі, закупки, списання, РРЦ і mystery box працюють. Повернення перенесено до NCRM-13 через потребу signed inventory adjustments.', subtasks: []
   },
   {
-    id: 'NCRM-10', title: 'Order pipeline OpenCart→Supabase + smoke + ретайр Apps Script', status: 'active', tool: 'Codex + Owner', priority: 'High',
-    lastUpdated: '2026-07-19', blockedBy: [],
+    id: 'NCRM-10', title: 'Order pipeline OpenCart→Supabase + smoke + ретайр Apps Script', status: 'done', tool: 'Codex + Owner', priority: 'High',
+    lastUpdated: '2026-07-26', blockedBy: [],
     simple: 'Живі замовлення з магазину ллються прямо в нову базу (лише нові, з тест-фільтрами).',
     why: 'Прибрати прошарок Apps Script; замовлення одразу в CRM.',
-    warn: 'Зачіпає живий checkout — обовʼязковий smoke-тест. 2026-07-19: pipeline технічно увімкнений, але повний smoke ще не пройдено. Після round 2 реалізовано partial insert для невідомих SKU; round 3 збільшує таймаут cold start, round 4 виправляє валідацію order_id і unit_price, round 5 готує відкладене надсилання після відповіді checkout. Потрібна owner QA: звичайне не-test замовлення має зʼявитися в Supabase без затримки success-redirect та без нового error_log. Діагностика: diagnostics/NCRM-10_round3_increase-sync-timeout_report_20260719.md, NCRM-10_round4_fix-order-id-type-check_report_20260719.md, NCRM-10_round5_defer-order-sync-after-response_report_20260719.md.', subtasks: []
+    warn: 'CLOSED Done 2026-07-26. Round 2-5 (partial insert, timeout, order_id/unit_price валідація, відкладене надсилання) + CHECKOUT-002 (patches/CHECKOUT-002_async-order-side-effects_20260719.php, diagnostics/CHECKOUT-002_async-order-side-effects_report_20260719.md) — Telegram/CRM/NCRM винесено з checkout у приватну чергу, доставка окремим cron раз/хв, БД чекауту не змінюється. 2026-07-21: знайдено і виправлено баг — cron-розклад був `*/2 */6 * * *` (раз на 2 хв лише 4 години на добу) замість `* * * * *` (diagnostics/CHECKOUT-002_order270_continuity_diagnosis_20260721.md, order #270 evidence). 2026-07-26: owner QA пройдено, sync стабільний. Відомий окремий баг (не блокує закриття NCRM-10): `discount_total` завжди 0 у sales — index.ts читає payload.totals, якого PHP не шле; PHP шле payload.discount_total напряму (diagnostics/NCRM-10_discount-total-not-mapped_note_20260719.md). Не заскоуплено як окремий хендофф — owner вирішив запланувати пізніше.', subtasks: []
   },
   {
-    id: 'NCRM-11', title: 'Курси валют (фетч ПУМБ/Приват/Моно/НБУ +1%)', status: 'todo', tool: 'Codex', priority: 'Medium',
-    lastUpdated: '2026-07-11', blockedBy: ['NCRM-01'],
-    simple: 'Щоденні курси з історією: USD/EUR з банку (Приват/Моно), JPY з НБУ; курс заморожується при вводі.',
+    id: 'NCRM-11', title: 'Курси валют (фетч Приват/Моно/НБУ +1%)', status: 'active', tool: 'Codex', priority: 'Medium',
+    lastUpdated: '2026-07-26', blockedBy: [],
+    simple: 'Щоденні курси з історією: USD/EUR з банку (Приват/Моно, інакше НБУ), JPY завжди з НБУ +1% буфер. Заморозка курсу при вводі закупки — окрема майбутня задача.',
     why: 'Коректна собівартість імпорту й незмінність уже внесених сум.',
-    warn: '2026-07-11: перенумеровано з NCRM-08 (ресеквенс v2-контракту, зміст без змін).', subtasks: []
+    warn: '2026-07-11: перенумеровано з NCRM-08 (ресеквенс v2-контракту, зміст без змін). 2026-07-26: власник підтвердив 2 відкриті рішення зі схеми — без ПУМБ як джерела курсу (назва картки застаріла, працюємо за plans/crm-schema-v1 §D3c), фетч автоматичний (cron, не ручне введення). План (plans/NCRM-11_currency-rates-fetch_plan_20260726.md) і хендофф (handoffs/handoff_NCRM-11_currency-rates-fetch_20260726.md) готові, передано Codex. Це перший scheduled job у Supabase-проєкті — закриття лише після підтвердженого самостійного циклу cron (24-48 год без ручного втручання), за тим самим принципом що CHECKOUT-002/NCRM-10.', subtasks: []
   },
   {
     id: 'NCRM-12', title: 'Mobile-версія + поліш', status: 'todo', tool: 'Codex', priority: 'Low',
@@ -1763,6 +1763,13 @@ const ROADMAP_TASKS = [
     warn: '2026-07-11: перенумеровано з NCRM-09 (зміст без змін). Blocker оновлено на NCRM-08 (нова адреса read-екранів). 2026-07-18: додано підзадачу — форма зміни статусу замовлення (repo-функція updateSaleStatus існує з NCRM-09b, UI нема ніде). Виявлено при QA NCRM-09e: без цієї форми неможливо протестувати автозвільнення mystery-резерву при cancel/refund.', subtasks: [
       { id: '1', title: 'Форма зміни статусу замовлення', status: 'todo', desc: 'UI над існуючою updateSaleStatus (sales.repo.ts, NCRM-09b) — зміна order_status/payment_status/ttn/note на /orders/[id]. Потрібно й для загального UX, і як передумова тестування auto-release mystery-резерву (fn_release_mystery_fulfillment спрацьовує лише на cancelled/refund).' }
     ]
+  },
+  {
+    id: 'NCRM-14', title: 'Order-sync: ПУМБ payment types + discount_total fix', status: 'active', tool: 'Claude + Codex', priority: 'Medium',
+    lastUpdated: '2026-07-26', blockedBy: [],
+    simple: 'index.ts вчиться розпізнавати ПУМБ-оплату частинами (зараз падає в acquiring разом з карткою) і рахувати реальну знижку замовлення (зараз завжди 0).',
+    why: 'Знайдено при закритті NCRM-10: order-sync не знає про ПУМБ ПЧ (PAY-002 у роботі) і мовчки пише discount_total=0 для кожного замовлення — обидва фікси в тому самому файлі, один Codex-раунд.',
+    warn: '2026-07-26: план (plans/NCRM-14_order-sync-payment-type-capture_plan_20260726.md) і хендофф (handoffs/handoff_NCRM-14_order-sync-pumb-payment-types_20260726.md) готові, власник передає Codex. Фаза 1 (міграція 0014, ПУМБ payment_types+комісії) і Фаза 2b (discount_total — index.ts читає payload.discount_total напряму замість неіснучого payload.totals) безпечні одразу. Фаза 2 (ПУМБ-гілка в paymentTypeCode) готова, але верифікація на реальному ПУМБ-замовленні залежить від PAY-002 (extension pumb_credit ще не існує). Ретроактивна правка вже вставлених рядків з discount_total=0 (OC-FOP-0256-0259) свідомо НЕ робиться. Ризик HIGH — живий order-sync, той самий шлях що впав мовчки 2026-07-19; обов'язковий smoke на реальному замовленні після редеплою.', subtasks: []
   },
   // ─── CHECKOUT / ST ───
   {
