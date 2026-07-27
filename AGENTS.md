@@ -6,11 +6,7 @@
 OpenCart e-commerce: boostershop.website (MTG, Pokemon, One Piece, Yu-Gi-Oh).
 Stack: OpenCart (Twig/PHP), custom checkout + NP integration, Google Apps Script CRM, Google Sheets.
 
-## RC-B4 authoritative corrections
-
-Until RC-B5 consolidates duplicate wording, this section overrides any
-conflicting Git, roadmap-writer, Notion-search, or `bsreview` wording later in
-this file or in the other repository guidance.
+## Core authority and writer rules
 
 - Claude never commits or pushes.
 - Codex may commit or push only after a direct, explicit owner request in the
@@ -59,15 +55,17 @@ templates/    handoff + report templates
 ```
 
 ## Environment
-- **Terminal (Claude Code CLI)** — installed. Use for: git diff/status/log (read-only), bash scripts, FTP deploy triggers. **Ніколи для `git commit`/`git push`** — ці команди завжди йдуть власнику готовим блоком для ручного виконання (див. Commit / push policy нижче).
+- **Terminal (Claude Code CLI)** — installed. Claude may use it for read-only
+  `git diff`/`status`/`log` and shell diagnostics. Claude must never run
+  `git commit` or `git push`; it prepares a complete owner-run command block.
 - **VS Code (Claude Code extension)** — installed. Use for: viewing/editing repo files, inspecting diffs.
 
 ## Roles & boundaries
 | Agent | Does | Does NOT |
 |-------|------|----------|
 | **Claude** | audit, SEO/UX strategy, handoffs, post-patch review, git diff, prepares ready-to-paste commit/push command | server access, deploy, git commit/push |
-| **Codex** | patches (`patches/`), reports (`diagnostics/`) | server access, deploy, git commit/push |
-| **Owner** | approves in chat, uploads + runs patch on server, **runs every `git commit`/`push` manually** from the command Claude prepares | — |
+| **Codex** | patches (`patches/`), reports (`diagnostics/`), authorized `ROADMAP_FLOW` changes | server access, deploy, commit/push without exact active-task approval |
+| **Owner** | approves scope, normally runs prepared Git commands, uploads and runs server patches, performs final QA | — |
 
 ## Flow
 ```
@@ -76,16 +74,24 @@ Claude handoff → Codex patch → drop to C:\Users\14bez\Downloads\Booster Shop
 ```
 
 ## Source of truth
-- **Notion roadmap** — task status, priorities (статус-канон). Дашборд `ROADMAP_FLOW` — дзеркало.
+- **Notion roadmap** — canonical task status and priorities.
+- **Dashboard `ROADMAP_FLOW`** — mirror of Notion task status.
 - **This repo** — implementation history, diffs, patch files
 - **Owner cPanel backup drop** — live source for diagnosis (no server access)
-- **Roadmap governance** (статус / синхронізація / DoD / ролі) → **`ROADMAP_SOP.md`** (канон).
-  - Статус у Notion ставить Claude; Codex Notion НЕ чіпає. Codex оновлює `ROADMAP_FLOW` дашборда як останній крок roadmap-affecting патчу (Claude вписує це в handoff).
+- **Roadmap governance** (status, synchronization, Definition of Done, and
+  writer roles) — `ROADMAP_SOP.md`.
+- Claude writes Booster Notion task properties/status by default. Codex does
+  not write Notion properties/status and updates `ROADMAP_FLOW` only when an
+  authorized roadmap-affecting implementation requires it.
 
 ## Commit / push policy
-- **Claude і Codex НІКОЛИ не виконують `git commit`/`git push` самі — жодних винятків.** Коміт/пуш завжди робить власник вручну.
-- Claude показує `git diff` summary в чаті, потім готує ОДИН повний PowerShell-блок (готовий вставити з нуля в нове вікно): `cd` у корінь репо → `New-Item .autosync-pause` → `git add`/`commit`/`push` → `Remove-Item .autosync-pause`. Власник вставляє блок як є і виконує сам.
-- Risky tasks (checkout, payment, schema, DB, .htaccess): propose branch + PR, командний блок все одно готує Claude, виконує власник.
+- Apply the authority rules above. Without exact active-task commit/push
+  authorization, show a concise diff summary and prepare one complete owner-run
+  PowerShell block: enter the exact repo root, create `.autosync-pause`, stage
+  only approved files, validate the staged set, commit/push, and remove the
+  sentinel.
+- For risky tasks (checkout, payment, schema, DB, `.htaccess`), propose a branch
+  and pull request when appropriate.
 - Commit message format: `Codex: <TASK-ID> <short description>`
 - Do NOT include in the command: `.bak`, `.tar.gz`, `.zip`, `.log`, DB dumps, secrets/tokens.
 
@@ -136,24 +142,28 @@ checkout · payment · Hutko · Checkbox · fiscalization · Nova Poshta · orde
 Merchant feed · schema/JSON-LD · SEO (sitemap/robots/canonical/.htaccess) · CRM · DB
 
 ## Codex model + effort recommendation
-Кожен готовий хендоф містить рядок `Codex config: model=<Sol/Terra/Luna> · effort=<Низький/Середній/Високий/Найвищий/Ультра>` одразу після Date — це модель і глибина думки, з якими власник запускає задачу в Codex CLI.
+Every completed handoff includes
+`Codex config: model=<Sol/Terra/Luna> · effort=<low/medium/high/xhigh/ultra>`
+immediately after its date.
 
-| Задача | Model | Effort |
+| Task type | Model | Effort |
 |---|---|---|
-| Risky zone (список вище) або багатофайлова/архітектурно неоднозначна задача | Sol | Найвищий |
-| Типовий патч — фіча, багфікс, тести (default) | Terra | Середній (Високий, якщо задача багатокрокова) |
-| Механічна правка — копірайтинг, форматування, дрібний CSS/текст | Luna | Низький |
+| Risky-zone, multi-file, or architecturally ambiguous work | Sol | xhigh |
+| Typical feature, bug fix, or tests | Terra | medium; high when multi-step |
+| Mechanical copy, formatting, or small CSS/text change | Luna | low |
 
-Ультра — лише якщо задача явно ділиться на незалежні шматки (паралельний рефактор кількох непов'язаних модулів); швидко з'їдає квоту, тому не за замовчуванням.
+Use `ultra` only when the task clearly splits into independent parallel work;
+it is not the default.
 
-Джерело: офіційний OpenAI GPT-5.6 model guide (Sol = flagship/складні задачі, Terra = баланс/щоденна робота, Luna = швидкі механічні задачі), липень 2026.
+Source: OpenAI GPT-5.6 model guide, July 2026.
 
 ## Token and context efficiency
 - For CRM and Google Sheets work, use the Apps Script API or narrow bounded ranges first.
 - Do not export or read an entire workbook, large sheet, or session log when a targeted read suffices.
 - A full export is allowed only when targeted reads cannot safely complete the task — tell the owner first.
 - Default verification budget: one syntax check + one smoke-test pass per scoped change.
-- Before structural edits to `Apps_Script_код`, read and preserve the complete affected function block.
+- Before structural edits to Apps Script source, read and preserve the complete
+  affected function block.
 
 ## OpenCart SEO URL rules
 - Format: `Pokemon-boosters-Set-Name`, `YuGiOh-boosters-Set-Name` (human-readable)

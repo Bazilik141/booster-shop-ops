@@ -1,17 +1,21 @@
 # Context Index — Booster Shop
 
-> **Мапа `ID → handoff → diagnostics`.** Статусу тут НЕМАЄ — статус лише в Notion (див. `ROADMAP_SOP.md §1`).
-> page_id рядків Notion — `ROADMAP_SOP.md §5`. Оновлювати при новому хендофі/діагностиці.
+> **Map: `task ID → handoff → diagnostics`.** This file never stores task
+> status. Notion status is canonical; see `ROADMAP_SOP.md §1`.
+> Known Notion page IDs are in `ROADMAP_SOP.md §5`. Update this index when a
+> task gains a new handoff or diagnostic.
 
-## Як користуватись
+## Usage
 
-При старті задачі `ST-X.X` — одразу grep по цьому файлу:
+Start task-context lookup with a targeted search:
 
 ```bash
 grep "ST-3.5" context-index.md
 ```
 
-Видає: handoff-файл і наявність діагностики. Статус/scope — у Notion-картці (page_id у `ROADMAP_SOP.md §5`) та `ROADMAP_FLOW` дашборда.
+The matching row provides the handoff and diagnostic routes. Read canonical
+status and priority from the verified Notion card. Use dashboard
+`ROADMAP_FLOW` only as the local status mirror.
 
 ---
 

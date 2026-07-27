@@ -1,87 +1,138 @@
-# CODEX_WORKFLOW.md — Booster Shop ops automation protocol
+# CODEX_WORKFLOW.md — Booster Shop Implementation Protocol
 
-Purpose: Codex and Claude exchange work through THIS repo. Owner only approves
-(yes / no / edits in chat) and runs patches on the server. Minimize round-trips.
+Purpose: define how the owner, Claude, and Codex exchange bounded work through
+the Booster repository. `AGENTS.md` remains the canonical authority and safety
+contract; `ROADMAP_SOP.md` remains canonical for task-status governance.
 
-## RC-B4 effective authority
+## Roles in this workflow
 
-This section overrides conflicting legacy wording elsewhere in this file until
-RC-B5 consolidation.
+- **Claude** writes handoffs and plans, reviews Codex results from the local
+  clone, and owns Booster Notion task-property/status writes by default. Claude
+  never commits, pushes, or deploys.
+- **Codex** implements approved changes, creates patches and diagnostics, and
+  owns required `ROADMAP_FLOW` edits in authorized roadmap-affecting work.
+  Codex has no server access and never deploys.
+- **Owner** approves scope, is the only production deployment gate, runs server
+  patches, and performs final manual QA.
 
-- Claude never commits or pushes.
-- Codex may commit or push only after a direct, explicit owner request in the
-  active task for the exact approved scope. The permission is one-time and
-  creates no standing authority.
-- Without that request, Codex stops after implementation, checks, and a concise
-  diff summary.
-- The owner is the only production deployment gate and performs final manual
-  QA.
-- Claude is the sole default writer of Booster Notion task properties and
-  statuses. Codex owns `ROADMAP_FLOW` changes in authorized roadmap-affecting
-  implementation. Exceptions require explicit owner reassignment.
-- `scripts/auto_review.py` is the canonical implementation behind `bsreview`;
-  the repository-root duplicate is legacy.
-- `bsreview --dry-run` performs the read-only review path. A normal run may save
-  a diagnostic and post a Notion comment, but never changes properties or
-  status.
+Codex may commit or push only after a direct, explicit owner request in the
+active task for the exact scope. This is one-time authority and creates no
+standing permission. Otherwise, stop after implementation, checks, and a
+concise diff summary.
 
-## Roles & boundaries
-- **Claude** — writes handoffs (`handoffs/`) and plans (`plans/`); reviews Codex
-  patches from the local clone. NO server access, NO GitHub-network access
-  (cannot push/pull/deploy; reads only the local working tree + dropped backups).
-- **Codex** — implements patches (`patches/`) + execution reports (`diagnostics/`);
-  drops a patch copy in `C:\Users\14bez\Downloads` for owner upload convenience;
-  commits/pushes **only when owner explicitly asks**. **No server access** (confirmed
-  2026-06-13: no SSH/FTP) — does NOT pull live source and does NOT deploy.
-- **Owner** — approves in chat; runs `php <patch>.php` on the server (the only prod gate).
+## Work exchange
 
-The repo is the shared bus. Owner runs `bs-autosync.ps1` so the local clone
-auto-pulls; Claude then reads Codex output without manual git.
+1. Claude writes a bounded handoff in `handoffs/`.
+2. Codex reads the handoff, current evidence, and applicable project rules.
+3. Codex implements only the approved scope.
+4. Codex places self-contained runners in `patches/` and required reports in
+   `diagnostics/`.
+5. Claude or the owner reviews the bounded diff and acceptance evidence.
+6. The owner uploads and runs any production patch and performs QA.
+7. Claude updates Notion task status when closure is authorized; Codex updates
+   `ROADMAP_FLOW` only when that action is part of its authorized scope.
 
-## Branch / commit policy
-- Codex creates patch files in `patches/` (+ identical uploadable copy in `C:\Users\14bez\Downloads`) and reports in `diagnostics/`.
-- **Do NOT commit or push unless the owner explicitly asks.** Show `git diff` / a concise
-  summary and wait for Claude review + owner go. The owner performs the commit/push.
-- Якщо owner просить закомітити саме Codex: спершу `New-Item .autosync-pause` (паузить autosync), після `push` — `Remove-Item .autosync-pause` (`ROADMAP_SOP.md §4/§8`).
-- Risky tasks (checkout, payment, schema, DB, url.php cutover): propose a branch + PR, still wait for go.
+The repository is the shared implementation bus. `bs-autosync.ps1` may update
+the local clone when safe; it must not compete with active Git writes.
 
-## Patch conventions (PHP runner)
-Each patch = one self-contained runner in `patches/`, runnable from `~/public_html`:
-- anchor pre-check (fail if anchor count != expected — never blind-edit),
-- backup to `_patch_backups/<patch>-<ts>/` before write,
-- `php -l` gate, restore-on-fail,
-- idempotent marker (`already_applied=yes` on repeat run),
-- self-delete after success.
-- Naming: `patches/<taskid>_<slug>_<YYYYMMDD>.php`
-- Report:  `diagnostics/<taskid>_<slug>_report_<YYYYMMDD>.md`
-- Commit:  `Codex: <TASK-ID> <short description>`
-- EOL / anchors: RD-13.1J нормалізував увесь `checkout.twig` до LF (CRLF→LF при читанні).
-  Правило надалі: (а) новий патч НЕ повинен мовчки міняти line endings всього файлу —
-  зберігай стиль EOL цілі (як робив ST-2b6e); (б) анкери для файлів, які вже проходили
-  через раннери, підбирати з урахуванням можливого LF — при mismatch анкер просто
-  впаде (safe-fail), це не пошкодження, але вимагає перегенерації патчу;
-  (в) `checkout.twig` станом на 2026-07-13 (після RD-13.1J) — LF.
+## Output locations
 
-## Report must contain
-scope · files touched · dry-run result · `php -l` · idempotency · rollback ·
-run command · post-deploy QA checklist.
+- Patch runner:
+  `patches/<TASK-ID>_<slug>_<YYYYMMDD>.php`
+- Diagnostic:
+  `diagnostics/<TASK-ID>_<slug>_report_<YYYYMMDD>.md`
+- Owner-upload convenience copy when required:
+  `C:\Users\14bez\Downloads\<same patch filename>`
 
-## Do NOT commit
-hosting backups, DB dumps, `*.tar.gz` `*.zip` `*.bak` `*.log`, customer data,
-secrets / tokens / API keys. (Most already in `.gitignore`.)
+Do not create an upload copy when the task does not produce a server patch.
 
-## Live source (diagnosis input)
-Codex has no server access, so live state comes from owner's **cPanel backup drop**
-into the `Booster Shop` folder (files + DB dump). Claude reads source/config from the
-latest backup. Keep dropping a fresh backup before deep checkout/DB diagnosis.
+## Git boundary
 
-## Deploy (owner, manual)
-1. Owner uploads the patch (`patches/<patch>.php`, or its copy in `Downloads`) to
-   `~/public_html` via FTP / cPanel File Manager.
-2. Owner runs `php <patch>.php`, watches for `done=ok`, then runs QA.
-Codex never deploys.
+- Do not commit or push without the exact authority defined in `AGENTS.md`.
+- Before any authorized Git write, inspect the working tree and stop if
+  unrelated changes overlap the approved files.
+- Stage only approved paths and validate the staged file set.
+- Use `.autosync-pause` around commit/push operations.
+- Commit message format:
+  `Codex: <TASK-ID> <short description>`
+- For risky work, use a branch and pull request when appropriate.
 
-## Source of truth
-Notion roadmap = status & priorities (канон). Дашборд `ROADMAP_FLOW` = дзеркало. This repo = history + review evidence.
-Governance / синхронізація / DoD / ролі → **`ROADMAP_SOP.md`**.
-**Закриття задачі:** статус у Notion ставить Claude (Codex Notion НЕ чіпає); Codex оновлює `ROADMAP_FLOW` дашборда як останній крок roadmap-affecting патчу. Owner каже, кому закривати — той робить обидва місця.
+## PHP runner requirements
+
+Each server patch must be one self-contained runner executable from
+`~/public_html` and must:
+
+1. fail clearly when a target file is missing;
+2. verify every edit anchor and safe-fail when its count is unexpected;
+3. back up targets to `_patch_backups/<patch>-<timestamp>/` before writing;
+4. run `php -l` and restore the backup on failure;
+5. be idempotent and report `already_applied=yes` on repeat;
+6. include rollback SQL for any explicitly authorized DB mutation;
+7. self-delete after success.
+
+### EOL and anchor safety
+
+Preserve each target's existing line-ending style. Never rewrite an entire file
+from CRLF to LF or LF to CRLF as an unrelated side effect.
+
+Historical note: `RD-13.1J` normalized `checkout.twig` to LF. Anchors targeting
+that file must account for its current LF form. An anchor mismatch must
+safe-fail and trigger patch regeneration; it is not permission to edit blindly.
+
+## Diagnostic requirements
+
+Every handoff task, risky-zone change, or diagnostic investigation requires a
+report containing:
+
+- scope and deviations;
+- files touched;
+- dry-run or focused local-check result;
+- `php -l` result when PHP is involved;
+- idempotency evidence;
+- rollback path;
+- owner run command;
+- post-deploy QA checklist;
+- side effects and unresolved risks.
+
+Use `templates/codex-report-template.md`.
+
+## Prohibited repository content
+
+Never commit hosting backups, DB dumps, archives, `*.bak`, `*.log`, customer
+data, payment identifiers, secrets, tokens, API keys, or credentials.
+
+## Live-source boundary
+
+Agents have no production server access. Diagnose live state from the newest
+owner-supplied cPanel backup. If a required file or DB table is absent, stop and
+ask the owner for a narrow fresh archive; do not infer the live implementation.
+
+## Owner deployment
+
+1. Owner uploads the reviewed patch to `~/public_html` through FTP or cPanel.
+2. Owner runs `php <patch>.php` and checks for the documented success output.
+3. Owner performs the handoff's smoke test and manual QA.
+4. Deployment evidence is recorded separately from local/source validation.
+
+Codex and Claude never deploy.
+
+## Review automation
+
+`bs-review.ps1` invokes canonical `scripts/auto_review.py`.
+
+- `bsreview --dry-run` may generate and print a Claude review but does not save
+  a file or read/write Notion.
+- A normal `bsreview` may save a diagnostic and, with `NOTION_TOKEN`, query by
+  Roadmap ID and post one Notion comment.
+- It never changes a Notion property or status.
+- The repository-root `auto_review.py` is legacy and must not be invoked.
+
+## Status sources
+
+- Notion roadmap: canonical task status and priority.
+- `ROADMAP_FLOW`: dashboard mirror written by Codex only when authorized.
+- Repository: implementation history and review evidence.
+- `context-index.md`: task-to-evidence index without status.
+
+See `ROADMAP_SOP.md` for lifecycle, synchronization, page IDs, and Definition
+of Done.

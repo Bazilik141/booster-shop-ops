@@ -1,128 +1,134 @@
-# ROADMAP_SOP.md — Roadmap operating procedure (Claude + Codex)
+# ROADMAP_SOP.md — Booster Roadmap Operating Procedure
 
-## RC-B4 authoritative governance corrections
+This file is canonical for Booster task status, lifecycle, synchronization,
+writer ownership, page-ID routing, and Definition of Done.
 
-Until RC-B5 removes duplicate legacy text, this section overrides any
-conflicting writer, Git-authority, Notion-search, or `bsreview` rule below.
+- `AGENTS.md` is canonical for general authority, safety, and implementation
+  rules.
+- `CODEX_WORKFLOW.md` defines the handoff-to-implementation protocol.
+- `CLAUDE.md` defines Claude-specific context and review routing.
 
-- Notion remains the canonical task-status source; `ROADMAP_FLOW` remains its
-  dashboard mirror.
-- Claude is the sole default writer of Booster Notion task properties and
-  statuses. Codex does not update Notion properties or status.
-- Codex owns `ROADMAP_FLOW` updates required by an authorized
-  roadmap-affecting implementation.
-- The owner controls deployment, final manual QA, and the decision that a risky
-  or legal task is ready to close. If a required writer is unavailable, stop
-  and hand off; do not let another agent update both status systems unless the
-  owner explicitly reassigns that exact action.
-- Claude never commits or pushes. Codex may commit or push only after a direct,
-  explicit owner request in the active task for the exact scope. This grants no
-  standing permission. The owner remains the only production deployment gate.
-- `scripts/auto_review.py` is the canonical implementation behind
-  `bs-review.ps1` / `bsreview`; the repository-root `auto_review.py` is legacy.
-- `bsreview --dry-run` is read-only: it does not save a diagnostic or read/write
-  Notion. A normal run may save a diagnostic and post one Notion comment, but
-  must never change a Notion property or status.
-- Notion search is ranked semantic/content search. Prefer a known page ID and
-  direct fetch. Otherwise search by title or distinctive keywords and verify
-  the fetched page's Roadmap ID. Exact-ID recall is not guaranteed, but exact-ID
-  queries are not categorically forbidden.
+## 0. Core invariants
 
-> Канонічний документ з **governance роадмапу**: де живе статус, як синхронізувати Notion ↔ дашборд, хто що оновлює, коли задача = Done.
-> Загальні ops-правила — у `AGENTS.md`. Обмін патчами Claude↔Codex — у `CODEX_WORKFLOW.md`. Цей файл головний для всього, що стосується статусу й роадмапу.
-> Last updated: 2026-06-24.
+- Notion roadmap is the canonical task-status and priority source.
+- Dashboard `ROADMAP_FLOW` is a mirror, not an independent status source.
+- `context-index.md` contains task-to-evidence routing and never stores status.
+- Claude is the default writer of Booster Notion task properties and status.
+- Codex owns required `ROADMAP_FLOW` changes in authorized roadmap-affecting
+  work.
+- Agents do not act as parallel writers. A writer exception requires exact
+  owner reassignment.
+- The owner controls production deployment, final manual QA, and the decision
+  that a risky or legal task is ready to close.
+- Claude never commits or pushes. Codex may do so only after direct, explicit,
+  one-time owner authorization for the exact active-task scope.
+- `scripts/auto_review.py` is the canonical `bsreview` implementation. It never
+  changes Notion properties or status.
 
----
+## 1. Sources of truth
 
-## 0. Суть (TL;DR для власника)
-
-- **Джерело правди по статусу — Notion roadmap.** Дашборд — зручне дзеркало. Більше ніде статус не дублюється.
-- Будь-яка зміна статусу йде в **обидва** (Notion + дашборд) у тому ж сеансі.
-- Claude пише в Notion і звіряє. Codex оновлює `ROADMAP_FLOW` дашборда як останній крок патчу. Власник аппрувить і деплоїть.
-- Bulk-читання Notion заблоковане планом → статуси читаємо/пишемо **по картці** за `page_id`.
-
----
-
-## 1. Single source of truth
-
-| Що | Джерело правди | Роль |
+| Information | Canonical source | Purpose |
 |---|---|---|
-| **Статус, пріоритет, власник задачі** | **Notion roadmap** | canonical |
-| Перегляд статусу «одним екраном» | `booster-dashboard.html` → `ROADMAP_FLOW` | дзеркало Notion |
-| Scope, логіка, історія задачі | `handoffs/` + `diagnostics/` | реалізація/історія |
-| Мапа `ID → handoff → Notion page_id` | `context-index.md` | індекс (БЕЗ статусу) |
-| Код, дифи, патчі | репо | історія реалізації |
+| Task status, priority, and task owner | Notion roadmap | Canonical project state |
+| At-a-glance status view | `booster-dashboard.html` → `ROADMAP_FLOW` | Mirror of Notion |
+| Scope, logic, and task evidence | `handoffs/` + `diagnostics/` | Implementation context |
+| Task ID → handoff/diagnostic/page ID | `context-index.md` | Routing index without status |
+| Code, diffs, and patch history | Repository | Implementation history |
 
-**Правило:** статус НЕ зберігається в `context-index.md`, у назвах файлів чи в head хендофів. Тільки Notion (+ дзеркало в дашборді).
+Do not store task status in `context-index.md`, filenames, or handoff headers.
 
-Notion roadmap: `https://www.notion.so/35c3f8572fc54a7896c8af0efd4cf8d4`
+Notion roadmap:
+`https://www.notion.so/35c3f8572fc54a7896c8af0efd4cf8d4`
+
 Database: `35c3f857-2fc5-4a78-96c8-af0efd4cf8d4`
+
 View: `?v=eebb19b11cfb4066a8a3b1b097775818`
 
----
+## 2. Status vocabulary
 
-## 2. Status vocabulary — Notion ↔ дашборд
-
-| Notion `Status` | Dashboard `status` | Значення |
+| Notion `Status` | Dashboard `status` | Meaning |
 |---|---|---|
-| `Not started` | `todo` | ще не почато |
-| `In progress` | `active` | у роботі (включно з «handoff готовий, чекає Codex») |
-| `Done` | `done` | виконано + QA пройдено |
+| `Not started` | `todo` | Work has not started |
+| `In progress` | `active` | Active work, including a ready handoff waiting for Codex |
+| `Done` | `done` | Required implementation, deployment, and QA evidence are complete |
 
-**Watch-only** (моніторинг без активної роботи, напр. SEO після фіксу): у Notion немає такого статусу → ставимо `Done` + примітка в `Owner Decision`/`Stage` на кшталт «watch-only». У дашборді — `done` або окремий лейн/підпис. (Саме тут був розсинхрон TECH-029.)
+For watch-only monitoring after implementation, use `Done` and add a
+`watch-only` note in `Owner Decision` or `Stage`. Do not leave completed work in
+`In progress` only because an external system such as Google still needs time.
 
----
+## 3. Task lifecycle and writers
 
-## 3. Task lifecycle — хто що оновлює
-
-| Етап | Дія | Notion | Дашборд | Хто |
+| Stage | Evidence/action | Notion writer | Dashboard writer | Gate |
 |---|---|---|---|---|
-| 1. Створення | новий рядок задачі | create row, `Not started` | додати в `ROADMAP_FLOW` | Claude |
-| 2. Взяли в роботу | написано handoff | `In progress` | `active` | Claude |
-| 3. Реалізація | Codex патч | — | — | Codex (drop у `patches/`) |
-| 4. Review | `bsreview [TASK-ID]` (git diff + handoff + diagnostic → haiku) + scope-check | — | — | Claude / авто |
-| 5. Деплой + QA | owner запускає патч | — | — | Owner |
-| 6. Закриття | owner каже «закривай» | `Done` | `done` | **один агент** (кому owner сказав) → оновлює ОБИДВА |
+| 1. Create | Task row and initial scope | Claude | Codex when mirror creation is authorized | `Not started` / `todo` |
+| 2. Start | Bounded handoff exists | Claude | Codex when mirror change is authorized | `In progress` / `active` |
+| 3. Implement | Patch/source change + diagnostics | — | Codex only if required by scope | Acceptance checks |
+| 4. Review | Handoff + diagnostic + bounded diff | — | — | Claude/owner verdict |
+| 5. Deploy and QA | Owner runs patch and manual checks | — | — | Owner evidence |
+| 6. Close | Owner authorizes closure after DoD | Claude sets `Done` | Codex mirrors `done` | Both converge |
 
-**Закриття — без штучного поділу.** Owner каже будь-кому з агентів «закривай задачу виконаною» → той самий агент ставить `Done` у Notion І дзеркалить у `ROADMAP_FLOW` дашборда, однією дією. (Codex оновлює дашборд як крок патчу; статус у Notion — через `bsreview`/`NOTION_TOKEN`, або передає Claude, якщо Notion-доступу нема в той момент.)
+Notion and dashboard must converge within the same bounded workflow, but one
+agent does not write both systems by default. If a required writer is
+unavailable, stop and hand off. Do not silently create a competing writer.
 
----
+## 4. Status read and synchronization procedure
 
-## 4. Sync procedure (двостороння, з урахуванням обмежень плану)
+### Read canonical status
 
-**Читання статусу** (bulk-query заблоковано — Business plan):
-1. `notion-fetch` за `page_id`/URL картки → властивість `Status`.
-2. Якщо `page_id` невідомий → `notion-search` за **назвою** (не за точним ID типу «ST-3.5» — семантичний пошук не матчить ID) → взяти `id` з результату → fetch.
+1. Prefer a known `page_id` and direct Notion fetch.
+2. If no page ID is known, search by task title or distinctive keywords.
+3. Fetch the result and verify its `Roadmap ID`.
+4. Use `ROADMAP_FLOW` only as the local mirror and drift signal.
 
-**Запис статусу:**
-- Notion: `notion-update-page`, `command: "update_properties"`, напр. `{"Status": "In progress"}`.
-- Дашборд: правка `status:` у `ROADMAP_FLOW` активного файла → копія в репо-дзеркало → commit.
+Ranked semantic/content search does not guarantee exact-ID recall. Exact-ID
+queries are not categorically forbidden; they simply require result
+verification.
 
-**Commit-safety (autosync):** комітить/пушить ЗАВЖДИ owner вручну за готовим блоком від Claude. Блок включає `New-Item .autosync-pause` перед `git add`/`commit` і `Remove-Item .autosync-pause` після `push`. Це паузить hardened `bs-autosync.ps1` і прибирає гонку за `.git/index`. Якщо забув — hardened-autosync усе одно пропускає pull при брудному дереві та сам відновлює зламаний індекс (страхувальна сітка, не заміна паузі).
+### Write status
 
-**Хто свіжіший, той і виграє** (обидва мають зійтися до реальності):
-- Notion свіжіший за реальність дашборда → вирівняти дашборд під Notion.
-- Реальність (зроблено/змінено) випереджає Notion → оновити картку Notion, потім дашборд.
+- **Notion:** Claude updates properties/status through the available Notion
+  page-update tool.
+- **Dashboard:** Codex edits the active `ROADMAP_FLOW`, then copies it to
+  `dashboard/booster-dashboard.html`, only within authorized scope.
 
-**Звірка на старті roadmap-сесії:** пройтися по `active`/`todo` задачах ROADMAP_FLOW, fetch карток, вирівняти розбіжності. Done-задачі — спот-чек за потреби.
+If verified implementation or owner QA is newer than Notion, Claude first
+updates canonical Notion state and Codex then aligns the dashboard mirror. If
+the dashboard disagrees without newer evidence, align it to Notion.
 
----
+### Drift review
 
-## 4a. Автоматизація review — `bsreview` (AUTO-002)
+At the start of a roadmap-maintenance task:
 
-`bsreview [TASK-ID]` (PowerShell `bs-review.ps1` → `scripts/auto_review.py`):
-- авто-знаходить diagnostic + handoff + `git diff HEAD~1..HEAD` → Claude **haiku** → review (5 секцій: task solved · side effects · AC check · owner manual checks · verdict) → файл `diagnostics/<TASK-ID>_auto_review_<date>.md`.
-- `bsreview` без ID — бере останній diagnostic. `bsreview --dry-run` — прев'ю без збереження і без Notion.
-- **Notion-інтеграція готова:** з `NOTION_TOKEN` у `.env.review` скрипт знаходить картку за `Roadmap ID` (прямий Notion REST API — обходить MCP-ліміт bulk-read) і постить коментар `🤖 Auto-review`. Токен додати коли зручно: `notion.so/my-integrations` → нова інтеграція → під'єднати до Roadmap DB → вписати в `.env.review`.
-- Конфіг `.env.review` (`ANTHROPIC_API_KEY` + `NOTION_TOKEN`) — НЕ комітити.
+1. inspect active/todo dashboard entries;
+2. fetch their Notion cards using known page IDs when available;
+3. report mismatches;
+4. correct only the system assigned to the active writer and authorized scope.
 
-Це штатний інструмент кроку Review (§3.4). Для глибокого/ризикового патчу — додатково ручний review Claude.
+Spot-check completed tasks only when evidence suggests drift.
 
----
+## 4a. Review automation — `bsreview` (AUTO-002)
 
-## 5. page_id registry (MCP-fallback для статус-write)
+`bs-review.ps1` invokes `scripts/auto_review.py`.
 
-ST-серія (заведена в Notion 2026-06-24):
+- `bsreview [TASK-ID]` finds a diagnostic and handoff, reads the Git diff, calls
+  Claude, saves a review diagnostic, and may post one Notion comment when
+  `NOTION_TOKEN` is available.
+- `bsreview` without an ID uses the newest diagnostic.
+- `bsreview --dry-run` may call Claude and print the review but does not save a
+  diagnostic or read/write Notion.
+- Normal mode may query the roadmap by exact `Roadmap ID` through the Notion
+  REST API and post one comment.
+- No mode may update a Notion property or status.
+- The repository-root `auto_review.py` is legacy and must not be invoked.
+- `.env.review` may contain `ANTHROPIC_API_KEY` and `NOTION_TOKEN`; never commit
+  or expose it.
+
+Use manual Claude review in addition to automation for risky or complex
+changes.
+
+## 5. Notion page-ID registry
+
+### ST series
 
 | Roadmap ID | Notion page_id |
 |---|---|
@@ -136,97 +142,129 @@ ST-серія (заведена в Notion 2026-06-24):
 | ST-2b.1–2b.4 | `3896bf20-bdb4-815f-8762-ec1e16c6e146` |
 | ST-2b.6 | `3926bf20-bdb4-81a0-992c-dc6840dc1baf` |
 
-Часто вживані не-ST (станом на 2026-06-24):
+### Frequently used non-ST tasks
 
-| Roadmap ID | Notion page_id |
-|---|---|
-| PAY-001 | `3a16bf20-bdb4-819b-99a7-f8535b0c74d6` (заведено 2026-07-18: Monobank Покупка Частинами) |
-| PAY-001-UI | `3a26bf20-bdb4-811f-baf2-ed050b4c78e7` (заведено 2026-07-18: дизайн-бриф для Claude Design) |
-| CRM-001 | `3876bf20-bdb4-81dc-987d-d119fff4d2e9` |
-| CRM-002 | `3876bf20-bdb4-8118-9fc7-d7e702832ec4` |
-| TECH-005-DEEP | `3666bf20-bdb4-8175-a429-e48eb7d6ef2d` |
-| TECH-012 | `3666bf20-bdb4-812e-8975-df8827efdb16` |
-| TECH-013 | `3a06bf20-bdb4-810c-b914-e518ca5f7188` |
-| TECH-029 | `3786bf20-bdb4-8116-8f66-c856e04a11df` |
-| TECH-035 | `3936bf20-bdb4-81d4-a0ee-e21b32119066` |
-| TECH-042 | `3a06bf20-bdb4-812b-8cd7-dd45932ff09d` |
-| RD-11 | `3706bf20-bdb4-81a4-b3fa-f35e7610defa` |
-| CAT-002 | `36f6bf20-bdb4-817e-99ec-eecce853778c` |
-| CHECKOUT-001 | `3776bf20-bdb4-8130-bcbf-cbb6259d5654` |
-| CHECKOUT-002 | `3946bf20-bdb4-81bf-9f47-cda9044fd2f2` |
-| CHECKOUT-004 | `3a16bf20-bdb4-8119-902c-e42e2b56a8bb` (заведено 2026-07-18, Done; охоплює й CHECKOUT-005/006/007/007A як частину тієї ж картки — окремих рядків Notion для них нема) |
-| LEGAL-002 | `3666bf20-bdb4-81ea-8fed-ff4773081cdb` |
-| R-13.5 | `36c6bf20-bdb4-814c-becb-c451a64b22f8` |
+| Roadmap ID | Notion page_id | Note |
+|---|---|---|
+| PAY-001 | `3a16bf20-bdb4-819b-99a7-f8535b0c74d6` | Added 2026-07-18: Monobank "Покупка Частинами" |
+| PAY-001-UI | `3a26bf20-bdb4-811f-baf2-ed050b4c78e7` | Added 2026-07-18: design brief |
+| CRM-001 | `3876bf20-bdb4-81dc-987d-d119fff4d2e9` | — |
+| CRM-002 | `3876bf20-bdb4-8118-9fc7-d7e702832ec4` | — |
+| TECH-005-DEEP | `3666bf20-bdb4-8175-a429-e48eb7d6ef2d` | — |
+| TECH-012 | `3666bf20-bdb4-812e-8975-df8827efdb16` | — |
+| TECH-013 | `3a06bf20-bdb4-810c-b914-e518ca5f7188` | — |
+| TECH-029 | `3786bf20-bdb4-8116-8f66-c856e04a11df` | — |
+| TECH-035 | `3936bf20-bdb4-81d4-a0ee-e21b32119066` | — |
+| TECH-042 | `3a06bf20-bdb4-812b-8cd7-dd45932ff09d` | — |
+| RD-11 | `3706bf20-bdb4-81a4-b3fa-f35e7610defa` | — |
+| CAT-002 | `36f6bf20-bdb4-817e-99ec-eecce853778c` | — |
+| CHECKOUT-001 | `3776bf20-bdb4-8130-bcbf-cbb6259d5654` | — |
+| CHECKOUT-002 | `3946bf20-bdb4-81bf-9f47-cda9044fd2f2` | — |
+| CHECKOUT-004 | `3a16bf20-bdb4-8119-902c-e42e2b56a8bb` | Added 2026-07-18; also covers CHECKOUT-005/006/007/007A |
+| LEGAL-002 | `3666bf20-bdb4-81ea-8fed-ff4773081cdb` | — |
+| R-13.5 | `36c6bf20-bdb4-814c-becb-c451a64b22f8` | — |
 
-NCRM-серія (нова CRM-платформа на Supabase, заведено 2026-06-26; NCRM-04…12 переномеровано й рескоупнуто 2026-07-11 під `plans/NCRM-financial-model-v2_technical-contract_20260711.md` — деталі в `context-index.md`):
+### NCRM series
 
-| Roadmap ID | Notion page_id |
-|---|---|
-| NCRM-00 | `38b6bf20-bdb4-81dc-89ba-ddf3ae182f37` |
-| NCRM-01 | `38b6bf20-bdb4-8165-b4bb-f9434ee07770` |
-| NCRM-02 | `38b6bf20-bdb4-8115-b0b3-c8c1e31be4f1` |
-| NCRM-03 | `38b6bf20-bdb4-8140-ad7e-e6db16fa8984` |
-| NCRM-04 | `38b6bf20-bdb4-8173-8803-d6fb691df55b` (2026-07-11: Inventory ledger foundation; було Read-екрани) |
-| NCRM-05 | `38b6bf20-bdb4-81de-b682-d0b31c7c4a95` (2026-07-11: Mystery fulfillment; було Write-форми+FIFO-COGS) |
-| NCRM-06 | `38b6bf20-bdb4-81bf-858f-da5fc957be92` (2026-07-11: Returns + cost quality; було Витрати+P&L+KPI) |
-| NCRM-07 | `38b6bf20-bdb4-81f4-9cce-c56933b6bdbe` (2026-07-11: Reporting/forecast+KPI, вкл. колишній NCRM-06; було OpenCart pipeline) |
-| NCRM-07b | `39f6bf20-bdb4-8185-adc2-cf8c29f6e359` (нова картка 2026-07-15: Enable RLS + multi-user role foundation; Done) |
-| NCRM-08 | `39a6bf20-bdb4-815a-87d9-cd4348f16ddb` (нова картка 2026-07-11: Read-екрани, колишній зміст NCRM-04) |
-| NCRM-09 | `39a6bf20-bdb4-81da-81fc-c3bb866981b4` (нова картка 2026-07-11: Write-форми+FIFO-COGS, колишній зміст NCRM-05) |
-| NCRM-10 | `39a6bf20-bdb4-813c-a5ff-db69193a67e0` (нова картка 2026-07-11: OpenCart pipeline, колишній зміст NCRM-07) |
-| NCRM-11 | `38b6bf20-bdb4-8127-b520-ee5775186f78` (2026-07-11: перенумеровано з NCRM-08, зміст без змін — курси валют) |
-| NCRM-12 | `38b6bf20-bdb4-8126-a49e-d4819f0bc496` (2026-07-11: перенумеровано з NCRM-09, зміст без змін — mobile) |
-| NCRM-13 | `39f6bf20-bdb4-8170-a4b3-d0c81978b4bf` (нова картка 2026-07-16: Signed inventory adjustment model, виділено з NCRM-03) |
-| NCRM-14 | `3a96bf20-bdb4-812c-95e5-f2dd31cf0ffe` (нова картка 2026-07-26: ПУМБ payment-type mapping в order-sync + discount_total fix, знайдено при закритті NCRM-10) |
-| NCRM-15 | `3a96bf20-bdb4-8171-b60b-f6e7c1941324` (нова картка 2026-07-26: Mobile-версія, виділена з NCRM-12) |
-| NCRM-16 | `3a96bf20-bdb4-81db-9552-ce80397183cb` (нова картка 2026-07-26: «Післяплата monobazar» 2.9%, ФОП-профіль власника) |
-| NCRM-17 | `3a96bf20-bdb4-81f5-9892-e76ecb5ba061` (нова картка 2026-07-26: деплой Next.js застосунку, заведено при аудиті — застосунок досі local-only) |
+NCRM-04 through NCRM-12 were renumbered/rescoped on 2026-07-11 under
+`plans/NCRM-financial-model-v2_technical-contract_20260711.md`.
 
-MKT-TG-серія (Telegram контент-автоматизація, заведено 2026-06-27):
+| Roadmap ID | Notion page_id | Note |
+|---|---|---|
+| NCRM-00 | `38b6bf20-bdb4-81dc-89ba-ddf3ae182f37` | — |
+| NCRM-01 | `38b6bf20-bdb4-8165-b4bb-f9434ee07770` | — |
+| NCRM-02 | `38b6bf20-bdb4-8115-b0b3-c8c1e31be4f1` | — |
+| NCRM-03 | `38b6bf20-bdb4-8140-ad7e-e6db16fa8984` | — |
+| NCRM-04 | `38b6bf20-bdb4-8173-8803-d6fb691df55b` | Inventory ledger foundation; formerly Read screens |
+| NCRM-05 | `38b6bf20-bdb4-81de-b682-d0b31c7c4a95` | Mystery fulfillment; formerly Write forms + FIFO COGS |
+| NCRM-06 | `38b6bf20-bdb4-81bf-858f-da5fc957be92` | Returns and cost quality; formerly Expenses + P&L + KPI |
+| NCRM-07 | `38b6bf20-bdb4-81f4-9cce-c56933b6bdbe` | Reporting, forecast, and KPI; formerly OpenCart pipeline |
+| NCRM-07b | `39f6bf20-bdb4-8185-adc2-cf8c29f6e359` | RLS and multi-user role foundation |
+| NCRM-08 | `39a6bf20-bdb4-815a-87d9-cd4348f16ddb` | Read screens; former NCRM-04 scope |
+| NCRM-09 | `39a6bf20-bdb4-81da-81fc-c3bb866981b4` | Write forms + FIFO COGS; former NCRM-05 scope |
+| NCRM-10 | `39a6bf20-bdb4-813c-a5ff-db69193a67e0` | OpenCart pipeline; former NCRM-07 scope |
+| NCRM-11 | `38b6bf20-bdb4-8127-b520-ee5775186f78` | Renumbered from NCRM-08; currency rates |
+| NCRM-12 | `38b6bf20-bdb4-8126-a49e-d4819f0bc496` | Renumbered from NCRM-09; mobile |
+| NCRM-13 | `39f6bf20-bdb4-8170-a4b3-d0c81978b4bf` | Signed inventory adjustment model |
+| NCRM-14 | `3a96bf20-bdb4-812c-95e5-f2dd31cf0ffe` | PUMB order-sync mapping and `discount_total` |
+| NCRM-15 | `3a96bf20-bdb4-8171-b60b-f6e7c1941324` | Mobile scope split from NCRM-12 |
+| NCRM-16 | `3a96bf20-bdb4-81db-9552-ce80397183cb` | Monobazar postpay 2.9% and owner FOP profile |
+| NCRM-17 | `3a96bf20-bdb4-81f5-9892-e76ecb5ba061` | Deploy local-only Next.js application |
 
-| Roadmap ID | Notion page_id |
-|---|---|
-| MKT-TG-003 | `38c6bf20-bdb4-8194-ac7b-fe967c7a0849` |
-| MKT-TG-004 | `38c6bf20-bdb4-8145-b9e6-d1bebf8636ef` (Done, superseded by MKT-TG-005) |
-| MKT-TG-005 | `3926bf20-bdb4-810f-958d-eb9b249bb45b` |
+### MKT-TG series
 
-Не в списку → знайти через `notion-search` за назвою, потім додати сюди.
-Старіші виконані ST (ST-0 / ST-2 / ST-2a*) у Notion ще не заведені — backfill за потреби.
+| Roadmap ID | Notion page_id | Note |
+|---|---|---|
+| MKT-TG-003 | `38c6bf20-bdb4-8194-ac7b-fe967c7a0849` | — |
+| MKT-TG-004 | `38c6bf20-bdb4-8145-b9e6-d1bebf8636ef` | Done; superseded by MKT-TG-005 |
+| MKT-TG-005 | `3926bf20-bdb4-810f-958d-eb9b249bb45b` | — |
 
----
+If a task is absent, search by title or distinctive keywords, verify its
+`Roadmap ID`, then add the page ID here. Older completed ST tasks
+(`ST-0`, `ST-2`, and `ST-2a*`) may be backfilled when needed.
 
-## 6. Definition of Done (по типах)
+## 6. Definition of Done
 
-- **Default:** реалізовано + git diff у scope + дашборд/Notion = Done.
-- **Checkout / payment / Hutko / Checkbox / NP / order:** `bs-checkout-smoke` пройдено + **owner manual QA** (оплата/фіскал/CRM readback) → лише тоді Done.
-- **SEO / sitemap / robots / canonical:** серверна частина закрита + (де доречно) підтвердження в GSC. Якщо чекаємо Google — `Done` + «watch-only» примітка, НЕ тримати в `In progress` нескінченно.
-- **CRM / dashboard / Apps Script:** деплой нової версії + readback через Apps Script (`action=summary`/`orders`) або вузький діапазон Sheets.
-- **Content / Legal:** текст готовий — це ще НЕ Done; Done лише після owner-публікації + (для legal) юр. перевірки та реальних реквізитів.
+- **Default:** approved scope implemented, bounded diff reviewed, required
+  checks pass, Notion status is correct, and `ROADMAP_FLOW` mirrors it.
+- **Checkout, payment, Hutko, Checkbox, Nova Poshta, or order flow:**
+  `bs-checkout-smoke` passes and the owner completes payment/fiscal/CRM manual
+  QA before `Done`.
+- **SEO, sitemap, robots, or canonical:** server work is complete and GSC
+  evidence is recorded where applicable. If Google processing remains, use
+  `Done` plus a watch-only note.
+- **CRM, dashboard, or Apps Script:** the new version is deployed and read back
+  through the Apps Script API (`action=summary`/`orders`) or a narrow Sheets
+  range.
+- **Content or legal:** prepared text is not `Done` until owner publication;
+  legal work also requires legal review and verified real business details.
 
----
+Local checks, source-copy checks, and dry-runs are not deployment or production
+proof.
 
-## 7. Roles (roadmap-specific; загальні — в AGENTS.md)
+## 7. Writer and authority summary
 
-- **Закриває той, кому owner сказав** — оновлює Notion + дашборд разом, без поділу на підпроцеси.
-- **Claude:** звірка Notion↔дашборд, handoffs, review; Notion-write через MCP (`notion-update-page`).
-- **Codex:** патчі + `ROADMAP_FLOW` дашборда (останній крок roadmap-affecting патчу); Notion-write через `bsreview`/`NOTION_TOKEN` або передає Claude; commit/push сам НІКОЛИ не робить.
-- **Owner:** аппрув у чаті, деплой, фінальне QA, рішення «Done» по ризикових/legal, **завжди сам виконує commit/push** за готовим блоком команд від Claude.
+- **Claude:** handoffs, reviews, Notion task properties/status, and drift
+  reporting. Never commit, push, or deploy.
+- **Codex:** implementation, diagnostics, and authorized `ROADMAP_FLOW`
+  changes. Commit/push only with exact one-time owner authority. Never deploy.
+- **Owner:** scope decisions, deployment, risky/legal closure decision, and
+  final manual QA. Normally runs prepared Git commands.
 
----
+If a required writer is unavailable, hand off. Do not use `bsreview` or another
+agent as a status-writer workaround.
 
-## 8. Known constraints / guardrails
+## 8. Constraints and safeguards
 
-- **Notion bulk-read через MCP заблокований** (`notion-query-data-sources` SQL і `notion-query-database-view` вимагають Business + Notion AI) → per-card workflow (§4–5). **АЛЕ** прямий Notion REST API через `NOTION_TOKEN` (`.env.review`, AUTO-002 / §4a) вміє query за точним `Roadmap ID` — коли токен налаштовано, це обходить ліміт і дає пошук за ID поза MCP.
-- **`notion-search` семантичний** — не матчить точні ID. Шукати за назвою.
-- **git `index.lock` / autosync (вирішено 2026-06-24):** історично `bs-autosync.ps1` ганяв `git pull` паралельно з коммітами Claude → гонка за `.git/index` (завислий лок або `index corrupt`). Hardened-версія скрипта: пауза-сентинел `.autosync-pause`, прибирання застарілого локу (>120с, без активного git), авто-відновлення індексу (`del index; git reset`), skip-pull-when-dirty. Правило: owner (за готовим блоком від Claude) ставить `.autosync-pause` перед git-операціями і прибирає після push — агент сам ці git-команди не запускає. Аварійне ручне відновлення: `del .git\index.lock` → `del .git\index` → `git reset`.
-- **Дві копії дашборда:** активна (`Booster Shop/booster-dashboard.html`) і репо-дзеркало (`dashboard/booster-dashboard.html`) — після правок копіювати активну → дзеркало → commit.
-- **Path drift (вирішено 2026-06-25):** канонічний локальний шлях — `C:\Users\14bez\Downloads\Booster Shop`; `E:\Personal Files\...` вважається retired для нової роботи.
+- Notion MCP bulk-read capabilities may be unavailable because of plan limits.
+  Use per-card direct fetch or verified search results.
+- Direct Notion REST review automation may query the database by exact
+  `Roadmap ID` when `NOTION_TOKEN` is configured.
+- Use `.autosync-pause` around authorized Git writes. The hardened autosync
+  script skips pulls on a dirty tree and can recover stale index state, but
+  that safety net does not replace the sentinel.
+- Active dashboard:
+  `C:\Users\14bez\Downloads\Booster Shop\booster-dashboard.html`
+- Repository dashboard mirror:
+  `dashboard/booster-dashboard.html`
+- After an authorized dashboard edit, copy active dashboard → repository
+  mirror before the scoped commit.
+- Canonical local Booster parent:
+  `C:\Users\14bez\Downloads\Booster Shop`
+- `E:\Personal Files\...` and `E:\Program Files\...` are retired.
 
----
+## 9. Document precedence
 
-## 9. Цей документ vs інші
+For roadmap status, synchronization, writer ownership, page-ID routing, and
+Definition of Done, this file is canonical.
 
-- `AGENTS.md` — загальні ops, ролі, патч-конвенції, ризикові зони.
-- `CODEX_WORKFLOW.md` — механіка обміну патчами через репо.
-- `CLAUDE.md` — контекст Claude; посилається сюди по governance роадмапу.
-- `ROADMAP_SOP.md` (цей) — **канон по статусу/синхронізації/DoD**. При конфлікті правил щод
+For general authority, project routing, risky zones, patch conventions, and
+mutation safety, `AGENTS.md` is canonical.
+
+For Codex handoff, patch, diagnostic, and owner-deployment mechanics,
+`CODEX_WORKFLOW.md` is canonical.
+
+For Claude-specific context and review behavior, `CLAUDE.md` is canonical.
+
+When two documents appear to conflict, apply the rule from the file that owns
+that subject above. Current explicit owner instructions still take priority.
