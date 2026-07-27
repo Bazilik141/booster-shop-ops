@@ -3,12 +3,18 @@
 AUTO-002: Codex patch auto-review
 Reads diagnostic report + handoff + git diff → calls Claude API → saves review + posts to Notion.
 
+Canonical implementation: scripts/auto_review.py.
+The repository-root auto_review.py is a legacy duplicate and must not be used.
+A normal run may save a diagnostic and post a Notion comment. It never changes
+Notion properties or status. --dry-run skips both diagnostic saving and all
+Notion reads/writes, while still calling Claude for the review.
+
 Usage:
   python scripts/auto_review.py TASK-ID       # review specific task
   python scripts/auto_review.py               # auto-detect from latest diagnostic
-  python scripts/auto_review.py --dry-run     # print review, skip Notion post
+  python scripts/auto_review.py --dry-run     # no file save, no Notion read/write
 
-Requires env vars (set in scripts/.env or system env):
+Requires env vars (repo-root .env.review, legacy scripts/.env, or system env):
   ANTHROPIC_API_KEY  — Claude API key
   NOTION_TOKEN       — Notion Personal Access Token (from notion.so/profile/integrations)
 """
@@ -30,6 +36,13 @@ HANDOFF_DIR = REPO_ROOT / "handoffs"
 NOTION_DB_ID = "35c3f857-2fc5-4a78-96c8-af0efd4cf8d4"   # Booster Shop Roadmap
 
 # ── helpers ─────────────────────────────────────────────────────────────────
+
+def configure_stdio():
+    """Use UTF-8 for review output on Windows instead of the legacy code page."""
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="replace")
+
 
 def load_dotenv():
     """Load the ignored repo-root secret file or legacy scripts/.env."""
@@ -65,11 +78,13 @@ def git_diff(max_chars: int = 20_000) -> str:
     try:
         stat = subprocess.run(
             ["git", "diff", "HEAD~1..HEAD", "--stat"],
-            capture_output=True, text=True, cwd=REPO_ROOT, timeout=15
+            capture_output=True, text=True, encoding="utf-8", errors="replace",
+            cwd=REPO_ROOT, timeout=15
         ).stdout
         diff = subprocess.run(
             ["git", "diff", "HEAD~1..HEAD"],
-            capture_output=True, text=True, cwd=REPO_ROOT, timeout=15
+            capture_output=True, text=True, encoding="utf-8", errors="replace",
+            cwd=REPO_ROOT, timeout=15
         ).stdout
         if len(diff) > max_chars:
             diff = diff[:max_chars] + "\n...[diff truncated — too large]"
@@ -208,6 +223,7 @@ def save_review(task_id: str, review: str) -> Path:
 # ── main ────────────────────────────────────────────────────────────────────
 
 def main():
+    configure_stdio()
     load_dotenv()
 
     args = [a for a in sys.argv[1:] if not a.startswith("--")]

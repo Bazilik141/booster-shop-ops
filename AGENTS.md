@@ -6,6 +6,34 @@
 OpenCart e-commerce: boostershop.website (MTG, Pokemon, One Piece, Yu-Gi-Oh).
 Stack: OpenCart (Twig/PHP), custom checkout + NP integration, Google Apps Script CRM, Google Sheets.
 
+## RC-B4 authoritative corrections
+
+Until RC-B5 consolidates duplicate wording, this section overrides any
+conflicting Git, roadmap-writer, Notion-search, or `bsreview` wording later in
+this file or in the other repository guidance.
+
+- Claude never commits or pushes.
+- Codex may commit or push only after a direct, explicit owner request in the
+  active task and only for the exact approved scope. This grants no standing
+  permission. Otherwise Codex prepares changes, checks, and a concise diff
+  summary only.
+- The owner is the only production deployment gate and performs final manual
+  QA.
+- Claude is the sole default writer of Booster Notion task properties and
+  statuses. Codex does not change Notion properties or statuses.
+- Codex owns `ROADMAP_FLOW` changes required by an authorized
+  roadmap-affecting implementation. Exceptions require explicit owner
+  reassignment; agents must not compete as parallel status writers.
+- `scripts/auto_review.py` is the canonical implementation behind
+  `bs-review.ps1` / `bsreview`. The repository-root `auto_review.py` is a legacy
+  duplicate and must not be invoked.
+- Use `bsreview --dry-run` for a read-only automated review. A normal
+  `bsreview` may save a diagnostic and post a Notion comment, but it must never
+  change a Notion property or status.
+- Notion search is ranked content search. Prefer a known page ID and direct
+  fetch; otherwise search by title or distinctive keywords and verify the
+  returned page's Roadmap ID. Do not claim that an exact ID can never match.
+
 ## Local paths (owner's machine)
 - **Repo (local):** `C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\` ← primary working folder
 - **GitHub:** `https://github.com/Bazilik141/booster-shop-ops` (branch: master)

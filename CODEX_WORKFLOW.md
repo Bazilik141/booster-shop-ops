@@ -3,6 +3,28 @@
 Purpose: Codex and Claude exchange work through THIS repo. Owner only approves
 (yes / no / edits in chat) and runs patches on the server. Minimize round-trips.
 
+## RC-B4 effective authority
+
+This section overrides conflicting legacy wording elsewhere in this file until
+RC-B5 consolidation.
+
+- Claude never commits or pushes.
+- Codex may commit or push only after a direct, explicit owner request in the
+  active task for the exact approved scope. The permission is one-time and
+  creates no standing authority.
+- Without that request, Codex stops after implementation, checks, and a concise
+  diff summary.
+- The owner is the only production deployment gate and performs final manual
+  QA.
+- Claude is the sole default writer of Booster Notion task properties and
+  statuses. Codex owns `ROADMAP_FLOW` changes in authorized roadmap-affecting
+  implementation. Exceptions require explicit owner reassignment.
+- `scripts/auto_review.py` is the canonical implementation behind `bsreview`;
+  the repository-root duplicate is legacy.
+- `bsreview --dry-run` performs the read-only review path. A normal run may save
+  a diagnostic and post a Notion comment, but never changes properties or
+  status.
+
 ## Roles & boundaries
 - **Claude** — writes handoffs (`handoffs/`) and plans (`plans/`); reviews Codex
   patches from the local clone. NO server access, NO GitHub-network access

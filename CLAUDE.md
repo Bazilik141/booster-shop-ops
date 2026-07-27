@@ -2,6 +2,28 @@
 
 @AGENTS.md
 
+## RC-B4 effective corrections
+
+The `RC-B4 authoritative corrections` section in `AGENTS.md` overrides older
+conflicting wording in this file until RC-B5 consolidation.
+
+- Claude never commits or pushes. It may prepare a complete owner-run command
+  block, but must not execute it.
+- Codex may commit or push only after a direct, explicit owner request in the
+  active task for the exact approved scope. The permission is one-time and
+  creates no standing authority.
+- Claude is the sole default writer of Booster Notion task properties and
+  statuses. Codex owns authorized `ROADMAP_FLOW` updates. Do not let one agent
+  update both systems unless the owner explicitly reassigns that exact action.
+- `scripts/auto_review.py` is the canonical `bsreview` implementation. Do not
+  invoke the legacy repository-root `auto_review.py`.
+- `bsreview --dry-run` is the read-only mode. A normal run may save a diagnostic
+  and post a Notion comment; it never changes Notion properties or status.
+- Notion search is ranked semantic/content search, not a guaranteed exact-ID
+  lookup. Prefer a known page ID with direct fetch. Otherwise search by title or
+  distinctive keywords, then verify the fetched page's Roadmap ID. Do not
+  categorically ban an exact-ID query or claim it can never match.
+
 ## Additional context for Claude
 
 **Key contacts:** Owner = Raccoon (14bezlikiy14@gmail.com)

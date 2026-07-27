@@ -1,5 +1,33 @@
 # ROADMAP_SOP.md — Roadmap operating procedure (Claude + Codex)
 
+## RC-B4 authoritative governance corrections
+
+Until RC-B5 removes duplicate legacy text, this section overrides any
+conflicting writer, Git-authority, Notion-search, or `bsreview` rule below.
+
+- Notion remains the canonical task-status source; `ROADMAP_FLOW` remains its
+  dashboard mirror.
+- Claude is the sole default writer of Booster Notion task properties and
+  statuses. Codex does not update Notion properties or status.
+- Codex owns `ROADMAP_FLOW` updates required by an authorized
+  roadmap-affecting implementation.
+- The owner controls deployment, final manual QA, and the decision that a risky
+  or legal task is ready to close. If a required writer is unavailable, stop
+  and hand off; do not let another agent update both status systems unless the
+  owner explicitly reassigns that exact action.
+- Claude never commits or pushes. Codex may commit or push only after a direct,
+  explicit owner request in the active task for the exact scope. This grants no
+  standing permission. The owner remains the only production deployment gate.
+- `scripts/auto_review.py` is the canonical implementation behind
+  `bs-review.ps1` / `bsreview`; the repository-root `auto_review.py` is legacy.
+- `bsreview --dry-run` is read-only: it does not save a diagnostic or read/write
+  Notion. A normal run may save a diagnostic and post one Notion comment, but
+  must never change a Notion property or status.
+- Notion search is ranked semantic/content search. Prefer a known page ID and
+  direct fetch. Otherwise search by title or distinctive keywords and verify
+  the fetched page's Roadmap ID. Exact-ID recall is not guaranteed, but exact-ID
+  queries are not categorically forbidden.
+
 > Канонічний документ з **governance роадмапу**: де живе статус, як синхронізувати Notion ↔ дашборд, хто що оновлює, коли задача = Done.
 > Загальні ops-правила — у `AGENTS.md`. Обмін патчами Claude↔Codex — у `CODEX_WORKFLOW.md`. Цей файл головний для всього, що стосується статусу й роадмапу.
 > Last updated: 2026-06-24.
