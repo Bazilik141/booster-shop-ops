@@ -10,10 +10,33 @@ writer ownership, page-ID routing, and Definition of Done.
 
 ## 0. Core invariants
 
+> **2026-07-27 amendment (owner-authorized, permanent):** the owner reassigned
+> the `ROADMAP_FLOW`/dashboard-mirror writer role from Codex-only to Claude,
+> in the same session that created NCRM-18/NCRM-19. This supersedes the
+> Codex-only dashboard-writer wording below and in §3/§4/§7 wherever it
+> conflicts. Codex retains its existing authority to change `ROADMAP_FLOW`
+> when required by its own authorized implementation work (e.g. a migration
+> that changes task scope) — this amendment adds Claude as a second authorized
+> writer for routine status/property mirroring, it does not remove Codex's.
+> Both agents must still avoid writing the same field in the same task at the
+> same time; check the dashboard's own diff before editing.
+>
+> **Known physical limit:** Claude's mounted access is
+> `booster-shop-ops/dashboard/booster-dashboard.html` (repository mirror)
+> only. The standalone "active dashboard" at
+> `C:\Users\14bez\Downloads\Booster Shop\booster-dashboard.html` (outside the
+> mounted folder) is not reachable by Claude. Until the owner either grants
+> access to that path or retires the standalone copy in favor of opening the
+> repo copy directly, the owner must still copy
+> repo mirror → active dashboard after a Claude-authored edit — the direction
+> is reversed from the original workflow in §8.
+
 - Notion roadmap is the canonical task-status and priority source.
 - Dashboard `ROADMAP_FLOW` is a mirror, not an independent status source.
 - `context-index.md` contains task-to-evidence routing and never stores status.
-- Claude is the default writer of Booster Notion task properties and status.
+- Claude is the default writer of Booster Notion task properties and status,
+  and, per the 2026-07-27 amendment above, of the `ROADMAP_FLOW` dashboard
+  mirror.
 - Codex owns required `ROADMAP_FLOW` changes in authorized roadmap-affecting
   work.
 - Agents do not act as parallel writers. A writer exception requires exact
@@ -60,12 +83,12 @@ For watch-only monitoring after implementation, use `Done` and add a
 
 | Stage | Evidence/action | Notion writer | Dashboard writer | Gate |
 |---|---|---|---|---|
-| 1. Create | Task row and initial scope | Claude | Codex when mirror creation is authorized | `Not started` / `todo` |
-| 2. Start | Bounded handoff exists | Claude | Codex when mirror change is authorized | `In progress` / `active` |
+| 1. Create | Task row and initial scope | Claude | Claude (2026-07-27 amendment), or Codex when mirror creation is authorized | `Not started` / `todo` |
+| 2. Start | Bounded handoff exists | Claude | Claude (2026-07-27 amendment), or Codex when mirror change is authorized | `In progress` / `active` |
 | 3. Implement | Patch/source change + diagnostics | — | Codex only if required by scope | Acceptance checks |
 | 4. Review | Handoff + diagnostic + bounded diff | — | — | Claude/owner verdict |
 | 5. Deploy and QA | Owner runs patch and manual checks | — | — | Owner evidence |
-| 6. Close | Owner authorizes closure after DoD | Claude sets `Done` | Codex mirrors `done` | Both converge |
+| 6. Close | Owner authorizes closure after DoD | Claude sets `Done` | Claude mirrors `done` (2026-07-27 amendment), or Codex | Both converge |
 
 Notion and dashboard must converge within the same bounded workflow, but one
 agent does not write both systems by default. If a required writer is
@@ -88,8 +111,13 @@ verification.
 
 - **Notion:** Claude updates properties/status through the available Notion
   page-update tool.
-- **Dashboard:** Codex edits the active `ROADMAP_FLOW`, then copies it to
-  `dashboard/booster-dashboard.html`, only within authorized scope.
+- **Dashboard:** since the 2026-07-27 amendment (§0), Claude may edit
+  `dashboard/booster-dashboard.html` (the repository mirror; the standalone
+  active copy is outside Claude's reach — see §0) directly to keep it aligned
+  with Notion. Codex may still edit the active `ROADMAP_FLOW` and copy it to
+  the repository mirror within its own authorized implementation scope. Do
+  not have both agents edit the same task's dashboard entry in the same
+  window without checking the other's latest diff first.
 
 If verified implementation or owner QA is newer than Notion, Claude first
 updates canonical Notion state and Codex then aligns the dashboard mirror. If
@@ -148,6 +176,9 @@ changes.
 |---|---|---|
 | PAY-001 | `3a16bf20-bdb4-819b-99a7-f8535b0c74d6` | Added 2026-07-18: Monobank "Покупка Частинами" |
 | PAY-001-UI | `3a26bf20-bdb4-811f-baf2-ed050b4c78e7` | Added 2026-07-18: design brief |
+| PAY-002 | `3aa6bf20-bdb4-812a-b541-ef4d483f3657` | Added 2026-07-27: PUMB «Сплачуйте частинами». The card existed only in the dashboard mirror until this date |
+| PAY-003 | `3aa6bf20-bdb4-8187-baa7-df479a24d475` | Added 2026-07-27: shared credit-confirmation intermediate page (mono + PUMB), blockedBy PAY-002 |
+| PAY-001-SMOKE | `3aa6bf20-bdb4-8122-86a9-c201c8700185` | Added 2026-07-27: unified final QA gate for mono + PUMB, created immediately after PAY-001 closed |
 | CRM-001 | `3876bf20-bdb4-81dc-987d-d119fff4d2e9` | — |
 | CRM-002 | `3876bf20-bdb4-8118-9fc7-d7e702832ec4` | — |
 | TECH-005-DEEP | `3666bf20-bdb4-8175-a429-e48eb7d6ef2d` | — |
@@ -190,6 +221,8 @@ NCRM-04 through NCRM-12 were renumbered/rescoped on 2026-07-11 under
 | NCRM-15 | `3a96bf20-bdb4-8171-b60b-f6e7c1941324` | Mobile scope split from NCRM-12 |
 | NCRM-16 | `3a96bf20-bdb4-81db-9552-ce80397183cb` | Monobazar postpay 2.9% and owner FOP profile |
 | NCRM-17 | `3a96bf20-bdb4-81f5-9892-e76ecb5ba061` | Deploy local-only Next.js application |
+| NCRM-18 | `3aa6bf20-bdb4-819f-a83a-e4d2018362a1` | Added 2026-07-27: migrate roadmap tracking from Notion into NCRM; deferred to end of current backlog (blocked by NCRM-11–17), not yet scoped |
+| NCRM-19 | `3aa6bf20-bdb4-81a1-a1b9-e6863e5fd021` | Added 2026-07-27: Notion↔dashboard sync automation, nearer-term stand-in for NCRM-18; not yet scoped |
 
 ### MKT-TG series
 
@@ -224,8 +257,10 @@ proof.
 
 ## 7. Writer and authority summary
 
-- **Claude:** handoffs, reviews, Notion task properties/status, and drift
-  reporting. Never commit, push, or deploy.
+- **Claude:** handoffs, reviews, Notion task properties/status, drift
+  reporting, and (2026-07-27 amendment, §0) the `ROADMAP_FLOW` dashboard
+  mirror at `dashboard/booster-dashboard.html`. Never commit, push, or
+  deploy.
 - **Codex:** implementation, diagnostics, and authorized `ROADMAP_FLOW`
   changes. Commit/push only with exact one-time owner authority. Never deploy.
 - **Owner:** scope decisions, deployment, risky/legal closure decision, and
