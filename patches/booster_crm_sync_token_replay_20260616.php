@@ -300,6 +300,11 @@ if (!preg_match("/private const SECRET_TOKEN = '([^']*)'/", $source, $oldTokenMa
 $url = $urlMatch[1];
 $newToken = read_new_token($tokenFile, $log);
 
+if (hash_equals($oldTokenMatch[1], $newToken)) {
+    patch_log($log, 'already_applied=yes');
+    exit(0);
+}
+
 if (!is_dir($backupDir) && !mkdir($backupDir, 0755, true) && !is_dir($backupDir)) {
     patch_fail($log, 'cannot create backup dir');
 }
