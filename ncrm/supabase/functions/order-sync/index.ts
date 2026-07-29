@@ -27,6 +27,7 @@ type OpenCartPayload = {
   comment?: unknown;
   payment_method_name?: unknown;
   payment_method_code?: unknown;
+  discount_total?: unknown;
   shipping_method_name?: unknown;
   shipping_method_code?: unknown;
   products?: unknown;
@@ -125,6 +126,13 @@ function paymentTypeCode(payload: OpenCartPayload): string {
     return `credit_mono_${monoParts[1]}`;
   }
 
+  // TODO NCRM-14: verify against real pumb_credit payment_method_code from PAY-002.
+  const isPumb = /(?:pumb|пумб)/u.test(value);
+  const isInstallmentPayment = /(?:сплат\p{L}*|частин\p{L}*|chast|part(?:s)?|credit|payment|installment)/u.test(value);
+  const pumbParts = value.match(/(?:^|[^\d])([345])(?:$|[^\d])/);
+  if (isPumb && isInstallmentPayment && pumbParts) {
+    return `credit_pumb_${pumbParts[1]}`;
+  }
   if (
     value.includes("рекв") ||
     value.includes("bank") ||
@@ -170,6 +178,96 @@ function discountTotal(totals: OpenCartTotal[]): number {
       ? sum + Math.abs(value)
       : sum;
   }, 0);
+}
+
+async function notifyCreditOrderSync(
+  orderId: string,
+  paymentTypeCode: string,
+  ok: boolean,
+  errorMessage?: string,
+): Promise<void> {
+  if (!/^credit_(mono|pumb)_[345]$/.test(paymentTypeCode)) return;
+
+  try {
+    const token = Deno.env.get("TELEGRAM_BOT_TOKEN") ?? "";
+    const chatId = Deno.env.get("TELEGRAM_CHAT_ID") ?? "";
+
+    if (!token || !chatId) {
+      console.warn("order-sync Telegram alert skipped", {
+        orderId,
+        paymentTypeCode,
+        reason: "missing-secret",
+      });
+      return;
+    }
+
+    const outcome = ok
+      ? "OK"
+      : "ПОМИЛКА\nRPC: " + (errorMessage || "невідома помилка");
+    const response = await fetch(
+      `https://api.telegram.org/bot${token}/sendMessage`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: [
+            "NCRM-14 order-sync",
+            "OpenCart #" + orderId,
+            "payment_type_code: " + paymentTypeCode,
+            "Результат: " + outcome,
+          ].join("\n"),
+        }),
+      },
+    );
+
+    if (!response.ok) {
+      console.warn("order-sync Telegram alert failed", {
+        orderId,
+        paymentTypeCode,
+        httpStatus: response.status,
+      });
+    }
+  } catch {
+    // Do not log the fetch error: its URL may contain the Telegram bot token.
+    console.warn("order-sync Telegram alert failed", {
+      orderId,
+      paymentTypeCode,
+      reason: "request-error",
+    });
+  }
+}
+
+function scheduleCreditOrderSyncNotification(
+  orderId: string,
+  paymentTypeCode: string,
+  ok: boolean,
+  errorMessage?: string,
+): void {
+  try {
+    const edgeRuntime = (globalThis as typeof globalThis & {
+      EdgeRuntime?: { waitUntil(promise: Promise<unknown>): void };
+    }).EdgeRuntime;
+
+    if (!edgeRuntime) {
+      console.warn("order-sync Telegram alert failed", {
+        orderId,
+        paymentTypeCode,
+        reason: "background-runtime-unavailable",
+      });
+      return;
+    }
+
+    edgeRuntime.waitUntil(
+      notifyCreditOrderSync(orderId, paymentTypeCode, ok, errorMessage),
+    );
+  } catch {
+    console.warn("order-sync Telegram alert failed", {
+      orderId,
+      paymentTypeCode,
+      reason: "background-task-registration-error",
+    });
+  }
 }
 
 function toSoldAt(value: unknown): string | null {
@@ -247,17 +345,31 @@ Deno.serve(async (request) => {
     "OpenCart #" + validated.orderId,
     text(payload.comment) ? "Коментар: " + text(payload.comment) : "",
   ].filter(Boolean).join("; ");
+  const directDiscountTotal = numberValue(payload.discount_total);
+  const usesDiscountFallback = directDiscountTotal === null || directDiscountTotal < 0;
+  const saleDiscountTotal = usesDiscountFallback
+    ? discountTotal(validated.totals)
+    : directDiscountTotal;
+  const syncedPaymentTypeCode = paymentTypeCode(payload);
+
+  if (usesDiscountFallback) {
+    console.warn("order-sync discount_total fallback", {
+      orderId: validated.orderId,
+      reason: directDiscountTotal === null ? "missing-or-invalid" : "negative-value",
+    });
+  }
+
   const rpcPayload = {
     opencart_order_id: validated.orderId,
     order_no: validated.orderNo,
     sold_at: validated.soldAt,
     customer_phone: text(payload.telephone),
     customer_name: customerName,
-    payment_type_code: paymentTypeCode(payload),
+    payment_type_code: syncedPaymentTypeCode,
     payment_status_code: "unpaid",
     order_status_code: "new",
     post_method_code: postMethodCode(payload),
-    discount_total: discountTotal(validated.totals),
+    discount_total: saleDiscountTotal,
     packaging_cost: 0,
     shop_delivery: 0,
     note,
@@ -276,6 +388,12 @@ Deno.serve(async (request) => {
   });
 
   if (error) {
+    scheduleCreditOrderSyncNotification(
+      validated.orderId,
+      syncedPaymentTypeCode,
+      false,
+      error.message,
+    );
     console.error("order-sync RPC failed", {
       orderId: validated.orderId,
       code: error.code,
@@ -284,5 +402,10 @@ Deno.serve(async (request) => {
     return json({ error: "order ingestion failed" }, 422);
   }
 
+  scheduleCreditOrderSyncNotification(
+    validated.orderId,
+    syncedPaymentTypeCode,
+    true,
+  );
   return json(data as Record<string, unknown>);
 });
