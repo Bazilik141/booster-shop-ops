@@ -21,15 +21,23 @@ writer ownership, page-ID routing, and Definition of Done.
 > Both agents must still avoid writing the same field in the same task at the
 > same time; check the dashboard's own diff before editing.
 >
-> **Known physical limit:** Claude's mounted access is
+> **Known physical limit (2026-07-27, superseded 2026-07-28 — see next
+> amendment):** Claude's mounted access was
 > `booster-shop-ops/dashboard/booster-dashboard.html` (repository mirror)
 > only. The standalone "active dashboard" at
 > `C:\Users\14bez\Downloads\Booster Shop\booster-dashboard.html` (outside the
-> mounted folder) is not reachable by Claude. Until the owner either grants
-> access to that path or retires the standalone copy in favor of opening the
-> repo copy directly, the owner must still copy
-> repo mirror → active dashboard after a Claude-authored edit — the direction
-> is reversed from the original workflow in §8.
+> mounted folder) was not reachable by Claude, so the owner had to copy
+> repo mirror → active dashboard after every Claude-authored edit.
+>
+> **2026-07-28 amendment (owner-authorized, permanent): single canonical
+> dashboard file.** The owner retired the standalone "active dashboard" copy.
+> `dashboard/booster-dashboard.html` inside this repository is now the only
+> dashboard file — the owner opens it directly (e.g. via its `file://` path)
+> instead of a separate outside-repo copy. This supersedes the 2026-07-27
+> physical-limit note above, the copy-back requirement it describes, and
+> §4/§8 wherever they still describe two files. Claude and Codex both edit
+> this one file directly; there is no copy step between two dashboard files
+> anymore.
 
 - Notion roadmap is the canonical task-status and priority source.
 - Dashboard `ROADMAP_FLOW` is a mirror, not an independent status source.
@@ -111,12 +119,11 @@ verification.
 
 - **Notion:** Claude updates properties/status through the available Notion
   page-update tool.
-- **Dashboard:** since the 2026-07-27 amendment (§0), Claude may edit
-  `dashboard/booster-dashboard.html` (the repository mirror; the standalone
-  active copy is outside Claude's reach — see §0) directly to keep it aligned
-  with Notion. Codex may still edit the active `ROADMAP_FLOW` and copy it to
-  the repository mirror within its own authorized implementation scope. Do
-  not have both agents edit the same task's dashboard entry in the same
+- **Dashboard:** `dashboard/booster-dashboard.html` is the single canonical
+  dashboard file (2026-07-28 amendment, §0) — there is no separate active
+  copy anymore. Claude may edit it directly to keep it aligned with Notion.
+  Codex edits the same file within its own authorized implementation scope.
+  Do not have both agents edit the same task's dashboard entry in the same
   window without checking the other's latest diff first.
 
 If verified implementation or owner QA is newer than Notion, Claude first
@@ -181,6 +188,7 @@ changes.
 | PAY-001-SMOKE | `3aa6bf20-bdb4-8122-86a9-c201c8700185` | Added 2026-07-27: unified final QA gate for mono + PUMB, created immediately after PAY-001 closed |
 | CRM-001 | `3876bf20-bdb4-81dc-987d-d119fff4d2e9` | — |
 | CRM-002 | `3876bf20-bdb4-8118-9fc7-d7e702832ec4` | — |
+| CRM-003 | `3ac6bf20-bdb4-81cb-a1f3-fb09f399c1e7` | Added 2026-07-29: BOOSTER_CRM_TOKEN rotation (hardcoded exposure found in dashboard.html + docs/index.html) |
 | TECH-005-DEEP | `3666bf20-bdb4-8175-a429-e48eb7d6ef2d` | — |
 | TECH-012 | `3666bf20-bdb4-812e-8975-df8827efdb16` | — |
 | TECH-013 | `3a06bf20-bdb4-810c-b914-e518ca5f7188` | — |
@@ -192,6 +200,9 @@ changes.
 | CHECKOUT-001 | `3776bf20-bdb4-8130-bcbf-cbb6259d5654` | — |
 | CHECKOUT-002 | `3946bf20-bdb4-81bf-9f47-cda9044fd2f2` | — |
 | CHECKOUT-004 | `3a16bf20-bdb4-8119-902c-e42e2b56a8bb` | Added 2026-07-18; also covers CHECKOUT-005/006/007/007A |
+| CHECKOUT-008 | `3ac6bf20-bdb4-8135-beb9-c7c7cbba4630` | Added 2026-07-29: IBAN requisites in order-confirmation email + checkout success "copy requisites" button, IBAN-only |
+| CHECKOUT-009 | `3ac6bf20-bdb4-81ab-b82c-e949bc08c990` | Added 2026-07-29, closed Done 2026-07-29: P0 — checkout did not register the selected delivery; Stage 1 deployed and confirmed by the owner |
+| CHECKOUT-010 | `3ac6bf20-bdb4-812b-9403-e41f6b86d77e` | Added 2026-07-29: CHECKOUT-009 Stage 2 checkout-state consolidation + deferred follow-ups; not started, needs owner authorization |
 | LEGAL-002 | `3666bf20-bdb4-81ea-8fed-ff4773081cdb` | — |
 | R-13.5 | `36c6bf20-bdb4-814c-becb-c451a64b22f8` | — |
 
@@ -223,6 +234,7 @@ NCRM-04 through NCRM-12 were renumbered/rescoped on 2026-07-11 under
 | NCRM-17 | `3a96bf20-bdb4-81f5-9892-e76ecb5ba061` | Deploy local-only Next.js application |
 | NCRM-18 | `3aa6bf20-bdb4-819f-a83a-e4d2018362a1` | Added 2026-07-27: migrate roadmap tracking from Notion into NCRM; deferred to end of current backlog (blocked by NCRM-11–17), not yet scoped |
 | NCRM-19 | `3aa6bf20-bdb4-81a1-a1b9-e6863e5fd021` | Added 2026-07-27: Notion↔dashboard sync automation, nearer-term stand-in for NCRM-18; not yet scoped |
+| NCRM-20 | `3ac6bf20-bdb4-8120-a055-f0fa0683c53c` | Added 2026-07-29: backfill orders lost during the Mono sync bug (see NCRM-10) from Apps Script/Sheets into Supabase `sales`; owner-approved, not yet scoped/diagnosed |
 
 ### MKT-TG series
 
@@ -231,6 +243,23 @@ NCRM-04 through NCRM-12 were renumbered/rescoped on 2026-07-11 under
 | MKT-TG-003 | `38c6bf20-bdb4-8194-ac7b-fe967c7a0849` | — |
 | MKT-TG-004 | `38c6bf20-bdb4-8145-b9e6-d1bebf8636ef` | Done; superseded by MKT-TG-005 |
 | MKT-TG-005 | `3926bf20-bdb4-810f-958d-eb9b249bb45b` | — |
+
+### 3D-P series
+
+> New program added 2026-07-27/28: a friend 3D-prints TCG-themed figurines
+> and accessories; two commercial tracks (site-sale revenue share vs.
+> marketing-freebie purchase). Scoping plan:
+> `plans/3D-P-000_scoping-and-architecture_20260728.md`. Not yet a Codex
+> handoff — discovery/planning stage only, no production writes made.
+
+| Roadmap ID | Notion page_id | Note |
+|---|---|---|
+| 3D-P-000 | `3ab6bf20-bdb4-8135-a58d-fe58e1ceeb27` | Discovery & scoping |
+| 3D-P-001 | `3ab6bf20-bdb4-815d-b16e-cdbc5c9350bf` | Nomenclature & cost/RRP tracking workbook (v1 delivered) |
+| 3D-P-002 | `3ab6bf20-bdb4-81ad-8432-febbb72cea29` | Catalog placement — Pokémon «Фігурки» subcategory, SEO risk-gated |
+| 3D-P-003 | `3ab6bf20-bdb4-814f-8812-c1f540a5f996` | Pricing & sizing market research |
+| 3D-P-004 | `3ab6bf20-bdb4-81c9-aa79-f29053013425` | Marketing-freebie sourcing flow |
+| 3D-P-005 | `3ab6bf20-bdb4-8140-b62e-e1fd4c8622f0` | Future NCRM module, narrow Friend access (deferred) |
 
 If a task is absent, search by title or distinctive keywords, verify its
 `Roadmap ID`, then add the page ID here. Older completed ST tasks
@@ -278,12 +307,10 @@ agent as a status-writer workaround.
 - Use `.autosync-pause` around authorized Git writes. The hardened autosync
   script skips pulls on a dirty tree and can recover stale index state, but
   that safety net does not replace the sentinel.
-- Active dashboard:
-  `C:\Users\14bez\Downloads\Booster Shop\booster-dashboard.html`
-- Repository dashboard mirror:
-  `dashboard/booster-dashboard.html`
-- After an authorized dashboard edit, copy active dashboard → repository
-  mirror before the scoped commit.
+- Dashboard (single canonical file, 2026-07-28 amendment, §0):
+  `dashboard/booster-dashboard.html` inside this repository. The former
+  standalone copy at `C:\Users\14bez\Downloads\Booster Shop\booster-dashboard.html`
+  is retired — do not recreate it or copy into it.
 - Canonical local Booster parent:
   `C:\Users\14bez\Downloads\Booster Shop`
 - `E:\Personal Files\...` and `E:\Program Files\...` are retired.
