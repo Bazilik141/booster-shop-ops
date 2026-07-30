@@ -241,6 +241,209 @@ altered by the site's `.htaccess` / SEO-URL rewriting.
     operator (owner's chosen flow) is acceptable, and the actual TTL for
     `WAITING_STORE_CONFIRM`.
 
+## 7a. Bank answers received (2026-07-28)
+
+Partial answer from the bank's integration contact; several items explicitly
+deferred to named colleagues.
+
+| # | Status | Answer / next step |
+|---|---|---|
+| 2 (our IPs) | Resolved implicitly | Not asked back — bank did not request our source IPs |
+| 2 (their IPs, our Q2) | **Escalated, not answered** | Not documented on their side either. Contact **Oleksiy Berlizov** directly — Telegram `@berlizovoleksii` / `Oleksiy.Berlizov@fuib.com` |
+| 3 (our Q3, SLA/retry) | **Open, confirmed undocumented** | No retry/timeout policy exists in the bank's own docs |
+| 5 (our Q5, `amount` type) | **Open, confirmed ambiguous** | Bank confirms the contradiction we found; no authoritative answer available |
+| 6 (our Q6, max amount) | **Resolved — new figure** | Bank states **500 UAH min / 500 000 UAH max**. This is a fourth, bank-stated figure, higher than all three conflicting document figures (100k/150k/300k). Treat as the current best answer; still worth getting in writing before hardcoding, but safe to use as the admin-panel default now |
+| 7 (our Q7, `promo_product_code`) | **Resolved — not applicable to us** | Used only for chain-partner/vendor promo campaigns (e.g. flagship-phone deals) with their own analytics tracking — not relevant to Booster Shop. Confirms the plan's existing approach: omit the field entirely, no code change needed |
+| 8 (our Q8, duplicate `store_order_id`) | **Open, confirmed undocumented** | No documented behavior; must be discovered empirically in the test contour |
+| 9 (our Q9, test contour) | **Resolved, with new detail** | Test OAuth2 endpoint exists (same `auth.dts.fuib.com` host, test credentials). Additionally: `GET /galadriel/v1/sf-credits/{id}` has **static fixture IDs 1–13** that return fixed states (`WAITING_CLIENT`, `FUNDED`, `REJECTED`, etc.) without needing a full create→confirm cycle — useful for `PAY-001-SMOKE` Stage 2 polling tests. Test phone numbers are not documented; will come from colleagues `@Andrii_sitt` and Vasyl during actual test-contour work in the bank's Telegram group |
+| 10 (our Q10, rate limits) | **Open, confirmed undocumented** | No rate-limit policy documented |
+| 11 (our Q11, shipment timing) | **Resolved 2026-07-28** — see §7c | Owner forwarded a 2026-07-21 exchange (Роман Назаренко ↔ Євгеній Леусенко) directly on this point; our chosen flow (signal at carrier handover) is accepted |
+| 11 (our Q11, TTL) | **Escalated, not answered** | "Question for colleagues" — no ETA given |
+| Credentials timing (our Q10 in the original letter) | **Resolved** | Test/prod OAuth2 credentials and any available allowlist info are emailed to the address we provided, after the bank completes its own setup — **3–7 days after the bank receives our callback URL and other required integration info**. The clock starts on their receipt of that info, not on this reply |
+
+### What this changes right now
+
+- **Max amount**: set the admin panel's `payment_pumb_credit_max_total` to
+  `500000` once the patch is deployed (config-only, no code change — the field
+  was deliberately left empty/configurable for exactly this reason).
+- **`promo_product_code`**: confirmed out of scope — no action needed, the
+  skeleton already omits it.
+- **IP allowlist**: genuinely uncertain whether the bank can supply static
+  callback source IPs at all — their own integration contact didn't have this
+  and redirected to a named colleague. The skeleton already degrades
+  gracefully if no IPs are ever configured (`allowedIp()` returns true when
+  the allowlist setting is empty), so this does not block anything — but it
+  does mean Basic auth over TLS may end up being the *only* protection on the
+  callback route, not defense-in-depth with an IP check. Worth remembering
+  when deciding whether to harden the callback handler later (e.g. always
+  re-verify state via `GET /sf-credits/{id}` before trusting a callback body,
+  rather than applying its stated state directly).
+- **Still open, no code impact yet**: SLA/retry, `amount` type
+  (Integer vs Decimal(2)), duplicate `store_order_id` behavior, rate limits,
+  TTL for `WAITING_STORE_CONFIRM`. None of these block building or deploying
+  the disabled skeleton; all of them matter before enabling live traffic and
+  should be answered (or empirically observed in the test contour) before
+  `PAY-001-SMOKE`.
+
+## 7b. Bank answers, round 2 (2026-07-28)
+
+Second reply from the same bank contact, resolving five of the remaining
+open items. Numbering below maps by content to the original §7 list, not to
+the bank's own reply numbering (the bank did not reuse our numbering).
+
+| Original Q | Status | Answer |
+|---|---|---|
+| Q3 (SLA/retry) | **Resolved** | The bank's system performs **no automatic retries** on a failed/unreachable callback delivery. The bank explicitly says the hybrid scheme (callback + our `GET /sf-credits/{id}` poll fallback) is the right fit for exactly this gap — a missed callback is recovered by our own polling, not by a bank-side retry. Validates the architecture decision made 2026-07-27 |
+| Q5 (`amount` type) | **Resolved** | Authoritative format is **Integer, in kopiykas** (1000.00 UAH → `100000`). The `<6 digits>.<2 digits>` error-table wording does not override this — kopiykas/Integer is what to implement |
+| Q7 (`promo_product_code`) | **Corrected — see note below** | Confirmed: `NEW_3` / `NEW_4` / `NEW_5` (contract Додаток №2) are valid `promo_product_code` values. The field is **optional** — if omitted, the bank auto-selects the standard product by `term` and charges the **base contract commission**, which is the same 3.00/4.50/5.80% schedule. Net effect: omitting the field is safe and gives the same commission outcome as sending it explicitly, so the skeleton's current omission is fine for MVP; no code change required |
+| Q8 (duplicate `store_order_id`) | **Resolved — new risk identified** | The bank has **no unique constraint** on `store_order_id`. A repeated `POST /sf-credits` with the same `store_order_id` creates a **new, separate application** with a new `cap_id` — it is not treated as a duplicate or an error. See finding below: our own `confirm()` does not currently guard against this |
+| Q10 (rate limits) | **Resolved** | No hard rate limit. Bank asks partners to keep fallback `GET` polling to **no more than once per 30 seconds per pending application** |
+| Q11 (TTL) | **Conflicting — see §7c** | Round-2 answer states `WAITING_STORE_CONFIRM` times out at **24 hours** → `CONFIRM_TIME_EXPIRED`. A separate, online-store-specific 2026-07-21 exchange (§7c) states the bank sets a **7-day** application lifetime for online stores specifically to allow for postal transit. Same underlying window, two different numbers — not resolved, needs one direct written clarification. State-mapping code is unaffected either way: `CONFIRM_TIME_EXPIRED` is already handled (see below) |
+
+### New finding — no app-side guard against double `POST /sf-credits`
+
+`confirm()` (patch lines 149–163) calls `POST /sf-credits` unconditionally
+whenever it runs — there is no check for an existing, still-open transaction
+for the same `order_id` before creating a new application. Combined with the
+bank's Q8 answer (no dedup on their side, a repeat POST just creates a second
+`cap_id`), a double-click on the confirm button, a page refresh after
+confirm, or a browser back-button resubmit will now provably create two
+separate live credit applications for one order — not just a theoretical
+risk, a confirmed bank behavior.
+
+This does not block running the disabled skeleton (`payment_pumb_credit_status`
+stays `0`, no customer traffic reaches `confirm()` yet), but it must be fixed
+before enabling the method or running `PAY-001-SMOKE`. Recommended fix for a
+Codex follow-up: in `confirm()`, before calling the API, look up
+`transactionByOrder($orderId, $isTest)`; if a row already exists and its
+last known `state` is not a failed/expired/cancelled terminal state, return
+the existing `cap_id`/state instead of creating a new application.
+
+## 7c. Q11 shipment-signal timing — resolved, with a new TTL conflict
+
+Owner forwarded a 2026-07-21 chat exchange between Роман Назаренко (PUMB)
+and Євгеній Леусенко (Booster Shop side) that predates the numbered §7
+question list and answers the shipment-timing half of Q11 directly, in the
+context of an online store shipping via postal operators (matches our setup:
+FOP agreements with Нова Пошта / Укрпошта, no physical point of sale).
+
+**Resolved:** our chosen flow — sending the "відвантаження товару" signal
+(`PATCH .../method=UPDATE, goods_shipped:true`) at the moment goods are
+handed to the postal carrier, not at the moment the client completes the
+installment application in the PUMB app — is explicitly acceptable. Роман
+confirms this is how many sellers operate. Sequence confirmed: the shipment
+signal moves the application to a funded state, and **funds land in the
+merchant account 5–10 minutes later**. (Роман's own chat spells the funded
+state "FOUNDED" — same spelling as the original 21.07 plan draft that this
+document's §3 divergence table treats as a typo for "FUNDED". A human
+casually typing "FOUNDED" in Telegram is weak evidence either way — not
+enough to overturn the existing FUNDED conclusion, which came from the
+actual protocol docs, but worth a live-response check before hardcoding
+either spelling anywhere.)
+
+**New conflict — TTL / application lifetime:** this same exchange states the
+bank sets application lifetime for online stores at **7 days**, specifically
+to give postal delivery time to complete. This describes the same window as
+`WAITING_STORE_CONFIRM`, but does not match the round-2 answer (§7b, received
+the same day this document was last touched) stating **24 hours** for that
+same state before `CONFIRM_TIME_EXPIRED`. Two different numbers for what
+looks like the same window, from the same bank contact, days apart. Do not
+rely on either number for time-sensitive logic (e.g., a "ship within X or
+risk expiry" warning) until the bank confirms in writing which applies to
+our contract, and whether postal transit time counts toward it or only the
+handover-to-carrier step does.
+
+**Owner operating decision (2026-07-29):** regardless of which bank-side
+figure is eventually confirmed (24 hours vs 7 days), the owner will target
+handing goods to the carrier and sending the `goods_shipped` signal **within
+24 hours** of application creation. This is an internal operating SLA, not a
+resolution of the bank-side conflict — it satisfies either scenario, so it is
+not schedule-blocking, but the written clarification from the bank is still
+open and should be folded into the next consolidated follow-up (see owner
+status below).
+
+**Not adopted, recorded for awareness only:** Роман also described an
+alternative some sellers use — sending the shipment signal immediately at
+application completion (before physically shipping) to get funded same-day,
+accepting the risk of a return/refund flow if the client never collects the
+parcel. Booster Shop's already-decided flow (signal only at actual carrier
+handover, per the owner's 2026-07-27 decision and the "preserve trust in
+original sealed products" / accuracy principle) is unchanged by this —
+recorded here only so the alternative isn't reconsidered without a reason.
+
+## 7d. Bank answers, round 4 (2026-07-30)
+
+Reply from Roman Nazarenko and colleague Andrii Sarnavskyi to the
+2026-07-29 consolidated follow-up.
+
+| Item | Status | Answer |
+|---|---|---|
+| §7c TTL conflict | **Resolved — 7 days wins** | Roman: "по статусу відвантаження... ставимо 7 днів строк життя заявки." Overturns the 2026-07-28 round-2 answer of 24 hours. This is a bank-side setting ("ці налаштування на нашій стороні") — no config on our end. Our own 24h shipping *target* (owner decision, 2026-07-29) remains a fine operating habit but is no longer a hard deadline |
+| Q4 (callback format) | **Resolved** | Andrii: format confirmed correct. `guarantee_letter` is absent on the *first* callback and only appears after the client signs — already handled correctly by the deployed code (`$letter = $data['guarantee_letter'] ?? null;`), no change needed |
+| Callback source IPs | **Resolved** | Andrii: `194.44.66.16/28` — same proxy range for both test and prod. This is a CIDR block (16 addresses, `.16`–`.31`), but the deployed `allowedIp()` does exact-string matching against a CSV list, not CIDR matching. Practical fix needs no code change: enter all 16 addresses individually into both "Test callback IP allowlist" and "Production callback IP allowlist" fields: `194.44.66.16,194.44.66.17,194.44.66.18,194.44.66.19,194.44.66.20,194.44.66.21,194.44.66.22,194.44.66.23,194.44.66.24,194.44.66.25,194.44.66.26,194.44.66.27,194.44.66.28,194.44.66.29,194.44.66.30,194.44.66.31`. CIDR-range support in `allowedIp()` is a nice-to-have for later (bank could expand the range), not urgent |
+| Test phone numbers | **Pending** | Andrii: "будемо надамо" — promised, not yet received |
+| OAuth2 credentials | **Pending** | Andrii: sent by email, two separate messages for test and prod. Not yet received |
+| Recovery of a "fallen" application | **New info, operational note** | Roman: the bank can restore ("відновлюємо") a failed application on their side on request — relevant to our `CREATE_FAILED` / manual-review design; not a code change, just useful to know when handling a stuck order later |
+
+### New finding — likely wrong state-name spelling in deployed code (`FUNDED` vs `FOUNDED`)
+
+Roman, unprompted: **"у вас фінальний статус має бути FOUNDED. Це значить що заявка профінансована."** This is the second independent human source using this spelling — the original 21.07 archive document also used "FOUNDED" (previously treated as a typo, see §3 divergence table, on the assumption that "FUNDED" from other protocol docs was authoritative). Roman stating it directly and explicitly, unprompted, raises real doubt about that earlier call.
+
+The deployed controller checks the state string in exactly one place
+(`patches/PAY-002_pumb-credit-skeleton_20260728.php` line 261,
+`applyOrderStatus()`): `$state === 'FUNDED' ? 'funded' : ...`. If the bank's
+actual API response uses `"FOUNDED"`, this comparison **never matches**, the
+order status silently never updates to "Розстрочка — оформлено" for a
+genuinely funded order, and `$key` falls through to `''` — no crash, no log,
+just a silently stuck order. This is a live-money-adjacent state (funds
+already transferred) that would be easy to miss until a real order got stuck.
+
+Not urgent today (method still disabled, no live traffic), but must be
+resolved before enabling. Two ways to close it, not mutually exclusive:
+
+1. **Defensive fix now (recommended, cheap, zero downside):** accept both
+   spellings — `in_array($state, ['FUNDED', 'FOUNDED'], true) ? 'funded' : ...`
+   in the same line. Costs nothing if the real value turns out to be
+   `FUNDED`; prevents a silent stuck-order bug if it's `FOUNDED`.
+2. **Live confirmation:** once test OAuth2 credentials arrive, capture the
+   exact `state` string from a real `GET /sf-credits/{id}` or callback
+   response and settle this definitively — already tracked as a
+   `PAY-001-SMOKE` dependency.
+
+### Owner status (2026-07-29)
+
+- The formal callback-URL letter to Roman Nazarenko has been sent (owner
+  confirmed 2026-07-28; exact send date not recorded) — the bank's stated
+  3–7 day credential-delivery window is running against that send date, not
+  this document's date.
+- Owner decision (2026-07-28, reaffirmed 2026-07-29): **defer** the Oleksiy
+  Berlizov IP follow-up and bundle it with the still-open items (Q4 explicit
+  callback-format confirmation, the §7c TTL conflict, written confirmation of
+  the ~500 000 UAH max amount) into **one** consolidated follow-up rather than
+  several partial messages.
+- **Do not send that follow-up yet.** Sequence before contacting the bank
+  again:
+  1. ~~Codex applies the idempotency-guard handoff~~ — first attempt returned
+     for changes 2026-07-29; **round 2 fixed both findings, independently
+     re-verified, Review OK** (`diagnostics/PAY-002_confirm-idempotency-guard_review_20260729.md`
+     §7). **Cleared to deploy**, still not yet uploaded.
+  2. ✅ done 2026-07-29 — both patches deployed; all owner QA not gated on
+     bank credentials is complete (callback route tested end to end, correct
+     `cap_id` persisted, `payment_pumb_credit_status` confirmed `0`). See
+     `diagnostics/PAY-002_confirm-idempotency-guard_review_20260729.md` §7 and
+     `diagnostics/PAY-002_pumb-credit-skeleton_review_20260728.md` §5.
+  3. ✅ done 2026-07-29 — consolidated follow-up sent to Roman Nazarenko.
+     Covered: IP addresses for the callback allowlist, Q4 (callback body
+     format `{cap_id, state, guarantee_letter}` — final as-is?), §7c TTL
+     clarification (24h vs 7-day conflict, explicitly noting our shipment
+     signal fires at Nova Poshta handover). Max amount (500 000 UAH) was
+     **not** sent as a question — owner recorded it as our own fixed
+     internal value (already set in the admin panel's max-amount field);
+     still worth a written bank confirmation eventually, but not blocking.
+  4. Credentials arriving from the bank is not itself a trigger to write
+     back — it's a trigger to start test-contour QA (`PAY-001-SMOKE` Stage 2
+     prerequisites).
+
 ## 8. Open owner decisions
 
 1. ~~Test callback URL host~~ ✅ Resolved 2026-07-27 — Variant A, section 5.1.
