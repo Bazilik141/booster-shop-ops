@@ -23,6 +23,7 @@ import os
 import sys
 import glob
 import json
+import re
 import subprocess
 from datetime import datetime
 from pathlib import Path
@@ -31,6 +32,7 @@ from pathlib import Path
 REPO_ROOT   = Path(__file__).parent.parent
 DIAG_DIR    = REPO_ROOT / "diagnostics"
 HANDOFF_DIR = REPO_ROOT / "handoffs"
+REPO_DASHBOARD = REPO_ROOT / "dashboard" / "booster-dashboard.html"
 
 # ── notion config ───────────────────────────────────────────────────────────
 NOTION_DB_ID = "35c3f857-2fc5-4a78-96c8-af0efd4cf8d4"   # Booster Shop Roadmap
@@ -176,7 +178,8 @@ def post_notion_comment(page_id: str, text: str) -> bool:
         return False
 
 
-def find_notion_page(task_id: str) -> str | None:
+def find_notion_page(task_id: str) -> dict | None:
+    """Return the Notion page object already fetched for the review/comment step."""
     try:
         import urllib.request
         token = os.environ.get("NOTION_TOKEN", "")
@@ -202,10 +205,113 @@ def find_notion_page(task_id: str) -> str | None:
         with urllib.request.urlopen(req, timeout=10) as r:
             data = json.loads(r.read())
             results = data.get("results", [])
-            return results[0]["id"] if results else None
+            return results[0] if results else None
     except Exception as exc:
         print(f"[Notion] search failed: {exc}")
         return None
+
+
+def notion_property_text(notion_card: dict, property_name: str) -> str | None:
+    """Read a text-like value from the Notion property shapes used by the roadmap."""
+    prop = notion_card.get("properties", {}).get(property_name, {})
+    for prop_type in ("status", "select"):
+        value = prop.get(prop_type)
+        if isinstance(value, dict) and isinstance(value.get("name"), str):
+            return value["name"]
+
+    rich_text = prop.get("rich_text")
+    if isinstance(rich_text, list):
+        return "".join(
+            item.get("plain_text", "")
+            for item in rich_text
+            if isinstance(item, dict)
+        )
+    return None
+
+
+def update_dashboard_entry(dashboard: str, task_id: str, values: dict[str, str]) -> str | None:
+    """Replace only requested single-quoted fields in exactly one dashboard task object."""
+    id_matches = list(re.finditer(
+        rf"(?m)^\s*id:\s*'{re.escape(task_id)}'\s*,", dashboard
+    ))
+    if len(id_matches) != 1:
+        print(f"[dashboard-sync] WARNING: {task_id}: expected one id block, found {len(id_matches)}; skipped")
+        return None
+
+    id_match = id_matches[0]
+    starts = list(re.finditer(r"(?m)^\s*\{\s*$", dashboard[:id_match.start()]))
+    end_match = re.search(r"(?m)^\s*\},\s*$", dashboard[id_match.end():])
+    if not starts or not end_match:
+        print(f"[dashboard-sync] WARNING: {task_id}: task block boundaries not found; skipped")
+        return None
+
+    block_start = starts[-1].start()
+    block_end = id_match.end() + end_match.end()
+    block = dashboard[block_start:block_end]
+    changed = False
+
+    for field, new_value in values.items():
+        field_re = re.compile(rf"(?m)(\b{re.escape(field)}\s*:\s*)'([^']*)'")
+        field_matches = list(field_re.finditer(block))
+        if len(field_matches) != 1:
+            print(
+                f"[dashboard-sync] WARNING: {task_id}: expected one {field} field, "
+                f"found {len(field_matches)}; skipped"
+            )
+            return None
+        old_value = field_matches[0].group(2)
+        if old_value != new_value:
+            print(f"[dashboard-sync] {task_id}: {field} {old_value!r} -> {new_value!r}")
+            block = field_re.sub(
+                lambda match: f"{match.group(1)}'{new_value}'", block, count=1
+            )
+            changed = True
+
+    if not changed:
+        return dashboard
+    return dashboard[:block_start] + block + dashboard[block_end:]
+
+
+def sync_dashboard_status(task_id: str, notion_card: dict) -> None:
+    """Mirror structured roadmap fields from one Notion card into the dashboard."""
+    if task_id.upper().startswith("AUTO-"):
+        print(f"[dashboard-sync] {task_id}: AUTO series is out of scope; skipped")
+        return
+
+    notion_status = notion_property_text(notion_card, "Status")
+    status_map = {"Not started": "todo", "In progress": "active", "Done": "done"}
+    if notion_status not in status_map:
+        print(f"[dashboard-sync] WARNING: {task_id}: unsupported Notion Status {notion_status!r}; skipped")
+        return
+
+    priority = notion_property_text(notion_card, "Priority")
+    if priority not in {"High", "Medium", "Low"}:
+        print(f"[dashboard-sync] WARNING: {task_id}: unsupported Notion Priority {priority!r}; skipped")
+        return
+
+    values = {"status": status_map[notion_status], "priority": priority}
+    last_updated = notion_property_text(notion_card, "Last Updated")
+    if last_updated is None:
+        print(f"[dashboard-sync] WARNING: {task_id}: Notion Last Updated is missing; left unchanged")
+    elif re.fullmatch(r"\d{4}-\d{2}-\d{2}", last_updated):
+        values["lastUpdated"] = last_updated
+    else:
+        print(f"[dashboard-sync] WARNING: {task_id}: invalid Last Updated {last_updated!r}; left unchanged")
+
+    if not REPO_DASHBOARD.exists():
+        print(f"[dashboard-sync] WARNING: dashboard not found at {REPO_DASHBOARD}; skipped")
+        return
+
+    original = REPO_DASHBOARD.read_text(encoding="utf-8")
+    updated = update_dashboard_entry(original, task_id, values)
+    if updated is None:
+        return
+    if updated == original:
+        print(f"[dashboard-sync] {task_id}: no change; files not written")
+        return
+
+    REPO_DASHBOARD.write_text(updated, encoding="utf-8")
+    print(f"[dashboard-sync] {task_id}: wrote {REPO_DASHBOARD}")
 
 
 def save_review(task_id: str, review: str) -> Path:
@@ -275,12 +381,13 @@ def main():
     # 6. post to Notion
     if not dry_run and os.environ.get("NOTION_TOKEN"):
         print("[AUTO-002] Posting to Notion...")
-        page_id = find_notion_page(task_id)
-        if page_id:
+        notion_card = find_notion_page(task_id)
+        if notion_card:
             ts = datetime.now().strftime("%Y-%m-%d %H:%M")
             comment = f"🤖 Auto-review {ts}\n\n{review}"
-            ok = post_notion_comment(page_id, comment)
+            ok = post_notion_comment(notion_card["id"], comment)
             print(f"[AUTO-002] Notion   : {'✅ posted' if ok else '⚠️ failed'}")
+            sync_dashboard_status(task_id, notion_card)
         else:
             print(f"[AUTO-002] Notion   : ⚠️ task {task_id} not found in roadmap DB")
     elif dry_run:

@@ -33,9 +33,8 @@ Stack: OpenCart (Twig/PHP), custom checkout + NP integration, Google Apps Script
 ## Local paths (owner's machine)
 - **Repo (local):** `C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\` ← primary working folder
 - **GitHub:** `https://github.com/Bazilik141/booster-shop-ops` (branch: master)
-- **Dashboard (live):** `C:\Users\14bez\Downloads\Booster Shop\booster-dashboard.html` — edit THIS file directly
-- **Dashboard (git copy):** `dashboard/booster-dashboard.html` inside the repo — copy after edits, then commit
-- **Dashboard URL:** `file:///C:/Users/14bez/Downloads/Booster%20Shop/booster-dashboard.html`
+- **Dashboard (single canonical file, 2026-07-28):** `dashboard/booster-dashboard.html` inside the repo — edit THIS file directly, commit as usual. The former standalone copy outside the repo is retired; do not recreate it.
+- **Dashboard URL:** `file:///C:/Users/14bez/Downloads/Booster%20Shop/booster-shop-ops/dashboard/booster-dashboard.html`
 
 Old paths retired — do not use:
 - `E:\Personal Files\...`
@@ -50,7 +49,7 @@ handoffs/     task briefs (Claude → Codex scope boundary)
 patches/      PHP/JS/CSS runners (Codex output)
 plans/        roadmaps, audits, content plans
 diagnostics/  post-patch reports (Codex output, risky/handoff tasks only)
-dashboard/    git copy of booster-dashboard.html (version history only)
+dashboard/    canonical booster-dashboard.html (single file, edited directly)
 templates/    handoff + report templates
 ```
 

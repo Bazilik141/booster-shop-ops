@@ -401,14 +401,16 @@ already transferred) that would be easy to miss until a real order got stuck.
 Not urgent today (method still disabled, no live traffic), but must be
 resolved before enabling. Two ways to close it, not mutually exclusive:
 
-1. **Defensive fix now (recommended, cheap, zero downside):** accept both
-   spellings — `in_array($state, ['FUNDED', 'FOUNDED'], true) ? 'funded' : ...`
-   in the same line. Costs nothing if the real value turns out to be
-   `FUNDED`; prevents a silent stuck-order bug if it's `FOUNDED`.
-2. **Live confirmation:** once test OAuth2 credentials arrive, capture the
-   exact `state` string from a real `GET /sf-credits/{id}` or callback
-   response and settle this definitively — already tracked as a
-   `PAY-001-SMOKE` dependency.
+1. ✅ **Done 2026-07-30** — defensive fix deployed:
+   `patches/PAY-002_founded-state-defensive-fix_20260730.php`, reviewed OK
+   (`diagnostics/PAY-002_founded-state-defensive-fix_review_20260730.md`).
+   Live `grep` confirmed this was the only `FUNDED`/`FOUNDED` comparison in
+   the extension; now accepts both spellings, mapped to the same `funded`
+   status key. No downside either way this resolves.
+2. **Still open, informational only:** once test OAuth2 credentials arrive,
+   capture the exact `state` string from a real `GET /sf-credits/{id}` or
+   callback response and record it here for the record — already tracked as
+   a `PAY-001-SMOKE` dependency, no longer a code blocker.
 
 ### Owner status (2026-07-29)
 

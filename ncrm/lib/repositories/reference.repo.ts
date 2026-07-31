@@ -1,4 +1,5 @@
 import type {
+  PaymentTypeOption,
   PurchaseFormReferences,
   ReferenceOption,
   SaleFormReferences,
@@ -8,7 +9,8 @@ import { createRepositoryClient } from "@/lib/supabase/client";
 import type { Tables } from "@/lib/types/database";
 import { repositoryError } from "./_utils";
 
-type NamedReference = Tables<"sale_channels">;
+type NamedReference = Pick<Tables<"sale_channels">, "id" | "code" | "name_uk">;
+type PaymentTypeReference = Tables<"payment_types">;
 type SupplierRegion = Tables<"supplier_regions">;
 
 function mapReference(row: NamedReference): ReferenceOption {
@@ -16,7 +18,7 @@ function mapReference(row: NamedReference): ReferenceOption {
 }
 
 async function listNamedReference(
-  table: "sale_channels" | "payment_types" | "payment_statuses" | "order_statuses" | "post_methods"
+  table: "sale_channels" | "payment_statuses" | "order_statuses" | "post_methods"
 ): Promise<ReferenceOption[]> {
   const supabase = createRepositoryClient();
   const { data, error } = await supabase
@@ -32,10 +34,47 @@ async function listNamedReference(
   return ((data ?? []) as NamedReference[]).map(mapReference);
 }
 
+async function listPaymentTypes(): Promise<PaymentTypeOption[]> {
+  const supabase = createRepositoryClient();
+  const { data, error } = await supabase
+    .from("payment_types")
+    .select("id, code, name_uk, fee_pct_config_key")
+    .eq("is_active", true)
+    .order("name_uk", { ascending: true });
+
+  if (error) {
+    throw repositoryError("listReference.payment_types", error.message);
+  }
+
+  const paymentTypes = (data ?? []) as PaymentTypeReference[];
+  const configKeys = [...new Set(paymentTypes.flatMap((paymentType) => paymentType.fee_pct_config_key ? [paymentType.fee_pct_config_key] : []))];
+  const feePctByKey = new Map<string, number>();
+
+  if (configKeys.length > 0) {
+    const { data: configRows, error: configError } = await supabase
+      .from("v_current_app_config")
+      .select("key, value_num")
+      .in("key", configKeys);
+
+    if (configError) {
+      throw repositoryError("listReference.payment_types.config", configError.message);
+    }
+
+    for (const config of configRows ?? []) {
+      if (config.key && config.value_num !== null) feePctByKey.set(config.key, config.value_num);
+    }
+  }
+
+  return paymentTypes.map((paymentType) => ({
+    ...mapReference(paymentType),
+    feePct: paymentType.fee_pct_config_key ? feePctByKey.get(paymentType.fee_pct_config_key) ?? null : null
+  }));
+}
+
 export async function getSaleFormReferences(): Promise<SaleFormReferences> {
   const [channels, paymentTypes, paymentStatuses, orderStatuses, postMethods] = await Promise.all([
     listNamedReference("sale_channels"),
-    listNamedReference("payment_types"),
+    listPaymentTypes(),
     listNamedReference("payment_statuses"),
     listNamedReference("order_statuses"),
     listNamedReference("post_methods")

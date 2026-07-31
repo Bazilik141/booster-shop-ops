@@ -4,6 +4,10 @@ export type ReferenceOption = {
   name: string;
 };
 
+export type PaymentTypeOption = ReferenceOption & {
+  feePct: number | null;
+};
+
 export type SupplierRegionOption = ReferenceOption & {
   defaultGoodsCurrency: string;
   defaultForwardingCurrency: string;
@@ -13,7 +17,7 @@ export type SupplierRegionOption = ReferenceOption & {
 
 export type SaleFormReferences = {
   channels: ReferenceOption[];
-  paymentTypes: ReferenceOption[];
+  paymentTypes: PaymentTypeOption[];
   paymentStatuses: ReferenceOption[];
   orderStatuses: ReferenceOption[];
   postMethods: ReferenceOption[];

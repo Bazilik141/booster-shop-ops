@@ -45,7 +45,7 @@ Use the smallest sufficient context.
 2. Read the referenced handoff and diagnostic; inspect the local Git log/diff
    when implementation history matters.
 3. If scope or mirror status is still unclear, inspect the task entry in
-   `ROADMAP_FLOW` in the active dashboard.
+   `ROADMAP_FLOW` in `dashboard/booster-dashboard.html`.
 4. If canonical status or priority is required, use Notion:
    - prefer a known `page_id` and direct fetch;
    - otherwise search by title or distinctive keywords;
@@ -91,10 +91,8 @@ properties or status. The repository-root `auto_review.py` is legacy.
 - If the required writer is unavailable, stop and hand off instead of creating
   competing state.
 
-Active dashboard:
-`C:\Users\14bez\Downloads\Booster Shop\booster-dashboard.html`
-
-Repository mirror: `dashboard/booster-dashboard.html`
+Dashboard (single canonical file, 2026-07-28): `dashboard/booster-dashboard.html`
+in this repository. The former standalone copy is retired.
 
 ## Commit-block requirements
 
