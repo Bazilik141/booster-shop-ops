@@ -163,6 +163,16 @@ Source: OpenAI GPT-5.6 model guide, July 2026.
 - Default verification budget: one syntax check + one smoke-test pass per scoped change.
 - Before structural edits to Apps Script source, read and preserve the complete
   affected function block.
+- **3D-Print Sheet (once `3D-P-008` ships):** use the dedicated `BOOSTER_3DP_TOKEN` Apps Script API for any
+  read or write against the 3D-P workbook (`3d-print/3D-P_nomenclature-tracker_*.xlsx` /
+  `docs.google.com/spreadsheets/d/1yp15H3YJGkqI4Rx89G4QZHkD9m67gnWh58TsTTi-jjo`) — `3dp_get_row`,
+  `3dp_get_range`, `3dp_overview`/`3dp_skus`/`3dp_sales`/`3dp_plyushky`/`3dp_payouts` for reads,
+  `3dp_write`/`3dp_append_row` for scoped writes (manual-input cells only, always logged to `_Аудит_API`).
+  Do not use a Drive full-document read (`read_file_content` or equivalent) on this workbook except for a
+  one-off human-readable audit — it burns tokens re-reading the whole Легенда/Аналітика prose for what a
+  narrow API call answers directly, and it cannot write. Until `3D-P-008` ships, a narrow Drive read (specific
+  known cells, not the whole doc) is an acceptable fallback — never write to the Sheet by any means other than
+  the API once it exists.
 
 ## OpenCart SEO URL rules
 - Format: `Pokemon-boosters-Set-Name`, `YuGiOh-boosters-Set-Name` (human-readable)

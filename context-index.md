@@ -194,6 +194,10 @@ status and priority from the verified Notion card. Use dashboard
 | 3D-P-003 | Аналіз ринкових РРЦ і розмірів | plans/3D-P-000_scoping-and-architecture_20260728.md §6 (1 приклад, недостатньо) |
 | 3D-P-004 | Маркетингові «плюшки» — потік закупівлі/бонусів | plans/3D-P-000_scoping-and-architecture_20260728.md §5 |
 | 3D-P-005 | Майбутній модуль у NCRM (вузький доступ другу) | plans/3D-P-000_scoping-and-architecture_20260728.md §5, узгоджено з NCRM-18 |
+| 3D-P-006 | Owner dashboard tab («3D-друк» в booster-dashboard.html) + калькулятор | handoffs/handoff_3D-P-006_owner-dashboard-tab_20260731.md (FINAL calculator spec 2026-08-02; блок доти, поки не відвантажиться addendum з 3D-P-008) |
+| 3D-P-007 | Локальний сервер Сергія (споживач API з 3D-P-008) | handoffs/handoff_3D-P-007_serhiy-local-server_20260731.md (оновлено 2026-08-02 під batch/брак-модель) |
+| 3D-P-008 | Apps Script API foundation (read+write) + реконсиляція таблиці | handoffs/handoff_3D-P-008_apps-script-api-foundation_20260731.md (базова частина Done/deployed 01.08; addendum «Schema correction, 2026-08-02» на початку файлу — фінальна формула, ще не імплементована) · diagnostics/3D-P-008_apps-script-api-foundation_report_20260801.md · diagnostics/3D-P-008_reconciliation_diff_20260801.md (очікує owner approval) |
+| 3D-P-010 | Автопідтяжка вартості паковання з основної СРМ у 3D-P Продажі | handoffs/handoff_3D-P-010_crm-packaging-cost-pull_20260802.md (CRM risky zone, Фаза 0 = дослідження перед імплементацією) |
 
 ---
 
