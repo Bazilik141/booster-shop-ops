@@ -2,25 +2,33 @@
 
 Date: 2026-08-02
 
-## Scope
+## Outcome
 
-Implemented a standalone local-only Node.js server that is a pure consumer of
-the deployed 3D-P Apps Script API. It has the required batch calculator,
-fixture workflow, print-log creation, and post-production defect edit. It does
-not edit `Code.gs`, the dashboard, main CRM, or the Google Sheet directly.
+Prepared an isolated, local-only Node.js server in
+`3d-print/serhiy-local-server/`. It consumes the deployed 3D-P Apps Script API
+and does not edit `Code.gs`, the dashboard, `ROADMAP_FLOW`, Notion, the Google
+Sheet directly, CRM, or any deployment.
 
-The final cost model is applied to per-unit values only:
+The package now targets the deployed Addendum #2 contract rather than the
+pre-addendum G:J-only workflow:
 
-- material = `(weight per unit / spool weight) * spool price`;
-- electricity = `0.17 * time per unit * electricity price`;
-- amortization = `amortization rate * time per unit`.
+- selected SKU loads its raw batch draft with `3dp_batch_draft`;
+- save persists all five raw values atomically for that draft through
+  `3dp_batch_draft_save`, then writes the derived per-unit values to
+  `Номенклатура!G:J` using guarded `3dp_write` calls;
+- the final formula divides session totals by quantity before material,
+  electricity, and amortization are calculated;
+- global settings remain read-only and are loaded from `Налаштування!A1:C4`;
+- the local view reads active SKUs/availability, active print log, fixtures,
+  payouts, and only bounded `Легенда!A32:A38` questions;
+- print creation uses `3dp_append_row`; defect edits use the specialized,
+  history-preserving `3dp_print_log_update` route.
 
-The three constants are read from the API settings block and are never editable
-in the local UI. Fixture is resolved by name from `3dp_fixtures`, then its
-reference price alone is written to `Номенклатура!N` as an independent later
-action. Defect count is deliberately outside the cost formula.
+No plastic-type field, packaging-cost calculation, direct Sheet access,
+owner-only settings edit, archive/restore, or stock adjustment was added.
+Those are outside Serhiy's role or belong to other tasks.
 
-## Files touched
+## Files
 
 ```
 3d-print/serhiy-local-server/package.json
@@ -31,67 +39,56 @@ action. Defect count is deliberately outside the cost formula.
 3d-print/serhiy-local-server/public/app.js
 3d-print/serhiy-local-server/public/styles.css
 3d-print/serhiy-local-server/tests/calculator.test.mjs
+3d-print/serhiy-local-server/tests/server-local.test.mjs
 3d-print/serhiy-local-server/README.md
 diagnostics/3D-P-007_serhiy-local-server_report_20260802.md
 ```
 
-## Local validation
+## Local verification
 
+Executed successfully:
+
+```text
+npm --prefix .\3d-print\serhiy-local-server test
+4 passed, 0 failed
+
+node --check .\3d-print\serhiy-local-server\server.mjs
+node --check .\3d-print\serhiy-local-server\public\app.js
+node --check .\3d-print\serhiy-local-server\lib\calculator.mjs
+node --check .\3d-print\serhiy-local-server\tests\server-local.test.mjs
 ```
-npm test
-3 passed, 0 failed
 
-node --check .\server.mjs
-node --check .\public\app.js
-git diff --check
-```
-
-The calculation test uses a 36-unit session and proves 180 g / 18 h become
-5 g / 0.5 h per unit before material, electricity, and amortization are
-computed. A separate localhost-only smoke started the server with a fictitious
-API URL/token and confirmed `GET /` returned `200 text/html`; it did not call
-the remote API.
+The integration test starts both a fake 3D-P API and the local server on
+loopback-only ephemeral ports. It verifies the client uses only the distinct
+Serhiy test credential, calls `3dp_payouts` and bounded
+`Легенда!A32:A38`, round-trips the five raw Addendum #2 values, writes derived
+`G:J` values, and uses both print-log write paths. No live endpoint, token, or
+business data is used by that test.
 
 ## Credential and network boundary
 
-The server requires only local process variables:
+The server needs exactly local `BOOSTER_3DP_URL` and
+`BOOSTER_3DP_SERHIY_TOKEN` variables. The token never reaches browser code,
+files, logs, or the UI. It listens only on `127.0.0.1`; the browser talks only
+to localhost, while the local process is the sole caller of the 3D-P web app.
+`BOOSTER_CRM_TOKEN` and the owner/dashboard 3D-P token are neither read nor
+accepted.
 
-- `BOOSTER_3DP_URL`
-- `BOOSTER_3DP_SERHIY_TOKEN`
+## Remaining live gate
 
-It binds only to `127.0.0.1`. The browser only calls this local server; the
-server is the sole caller of the 3D-P web app. No file or endpoint accepts,
-stores, logs, or displays a CRM token or dashboard token.
+Not verified in this task:
 
-## Known API boundary
+- an owner-provisioned, distinct live Serhiy token;
+- real endpoint response under that token;
+- a deliberately selected test-SKU batch draft/save/reload;
+- one real test print-log append plus post-production defect update, confirmed
+  by the owner in `_Аудит_API`.
 
-The deployed API supplies only one `3dp_write` cell per request. Therefore a
-batch SKU save is four separately audited, optimistic-lock writes to `G:J`.
-If a concurrent change produces `STALE_WRITE`, the UI stops and asks the user
-to refresh; it never retries blindly or falls back to a direct Sheet write.
-An atomic multi-cell API action would be a separate 3D-P-008 change and is out
-of scope here.
+These steps write only through existing API controls and require the owner and
+Serhiy together. They are not implied by the local test pass.
 
-## Owner + Serhiy live QA
+## Recovery
 
-- [ ] Set the distinct Serhiy API token locally, start the server, and verify real SKU/availability/fixture/print-log data load.
-- [ ] Calculate a test batch and confirm UI values and saved `Номенклатура!G:J` are per unit, not batch totals.
-- [ ] Add a non-production `Друк-лог` session through the UI; confirm it appears live.
-- [ ] Change its `Брак, шт`; confirm the `було → стало` history and the `serhiy` audit identity.
-- [ ] Assign and clear a fixture; confirm only `Номенклатура!N` changes and that base cost calculation still works without it.
-
-## Rollback
-
-Stop the local process with `Ctrl+C`. The server has no dashboard, CRM, or
-Sheet-schema side effect. Individual live writes are recoverable from
-`_Аудит_API` by the owner.
-## Explicitly omitted pending owner authorization
-
-Payout status and the bounded open-question block in `Легенда` are intentionally
-not requested from or displayed by this server: they can expose financial or
-internal planning information to Serhiy beyond the production workflow. The
-server currently shows only SKU/availability, the final calculator, fixtures,
-and active `Друк-лог` data. Adding either omitted view requires separate,
-explicit owner authorization and is not implied by the separate Serhiy API
-token.
-
+Stop the local process with `Ctrl+C`. The package has no deployment, dashboard,
+CRM, or Sheet-schema side effects. Individual API writes are traceable and
+recoverable by the owner through `_Аудит_API`.

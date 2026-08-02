@@ -8,7 +8,15 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const publicDir = path.join(here, "public");
 const apiUrl = requiredEnv("BOOSTER_3DP_URL");
 const serhiyToken = requiredEnv("BOOSTER_3DP_SERHIY_TOKEN");
-const port = Number(process.env.PORT || 3107);
+const port = requestedPort(process.env.PORT || "3107");
+const LEGEND_OPEN_QUESTIONS = Object.freeze({ sheet: "Легенда", range: "A32:A38" });
+const BATCH_DRAFT_KEYS = Object.freeze([
+  "quantity",
+  "total_weight_g",
+  "total_print_time_h",
+  "spool_weight_g",
+  "spool_price_uah",
+]);
 
 const MIME = Object.freeze({
   ".css": "text/css; charset=utf-8",
@@ -19,10 +27,14 @@ const MIME = Object.freeze({
 
 function requiredEnv(name) {
   const value = String(process.env[name] || "").trim();
-  if (!value) {
-    throw new Error(`${name} is required. Set it locally; never put a real token in a file.`);
-  }
+  if (!value) throw new Error(`${name} is required. Set it locally; never put a real token in a file.`);
   return value;
+}
+
+function requestedPort(value) {
+  const parsed = Number(value);
+  if (!Number.isInteger(parsed) || parsed < 0 || parsed > 65535) throw new Error("PORT must be an integer from 0 to 65535.");
+  return parsed;
 }
 
 function fail(message, status = 400, code = "LOCAL_VALIDATION") {
@@ -104,22 +116,43 @@ function sameValue(left, right) {
   return a === b;
 }
 
+function batchInput(body) {
+  return {
+    quantity: finitePositive(body.quantity, "Кількість у партії"),
+    total_weight_g: finitePositive(body.total_weight_g, "Сумарна вага"),
+    total_print_time_h: finitePositive(body.total_print_time_h, "Сумарний час"),
+    spool_weight_g: finitePositive(body.spool_weight_g, "Вага котушки"),
+    spool_price_uah: finitePositive(body.spool_price_uah, "Ціна котушки"),
+  };
+}
+
+
+function draftValues(payload) {
+  const source = payload?.values || {};
+  return Object.fromEntries(BATCH_DRAFT_KEYS.map((key) => [key, source[key] ?? ""]));
+}
+
 async function readSku(sku) {
   const payload = await call3dpGet("3dp_get_row", { sheet: "Номенклатура", sku });
   return payload.row;
 }
 
+async function readBatchDraft(sku) {
+  const payload = await call3dpGet("3dp_batch_draft", { sku });
+  return { ...payload, values: draftValues(payload) };
+}
+
 async function saveBatch(body) {
   const sku = cleanSku(body.sku);
-  const input = {
-    quantity: finitePositive(body.quantity, "Кількість у партії"),
-    total_weight_g: finitePositive(body.total_weight_g, "Сумарна вага"),
-    total_time_hours: finitePositive(body.total_time_hours, "Сумарний час"),
-    spool_weight_g: finitePositive(body.spool_weight_g, "Вага котушки"),
-    spool_price_uah: finitePositive(body.spool_price_uah, "Ціна котушки"),
-  };
-  const [settings, row] = await Promise.all([getSettings(), readSku(sku)]);
+  const input = batchInput(body);
+  const [settings, row, currentDraft] = await Promise.all([getSettings(), readSku(sku), readBatchDraft(sku)]);
   const calculation = calculateBatchCost(input, settings);
+  const rawDraft = await call3dpPost({
+    action: "3dp_batch_draft_save",
+    sku,
+    values: input,
+    expected_current: currentDraft.values,
+  });
   const writes = [
     ["G", row["Час друку за од., год"], normalizedForApi(calculation.per_unit.time_hours)],
     ["H", row["Вага виробу за од., г"], normalizedForApi(calculation.per_unit.weight_g)],
@@ -139,7 +172,14 @@ async function saveBatch(body) {
     });
     applied.push(result.cell);
   }
-  return { sku, calculation, cells_updated: applied, already_current: applied.length === 0 };
+  return {
+    sku,
+    calculation,
+    draft: draftValues(rawDraft),
+    draft_already_current: Boolean(rawDraft.already_applied),
+    cells_updated: applied,
+    already_current: Boolean(rawDraft.already_applied) && applied.length === 0,
+  };
 }
 
 async function saveFixture(body) {
@@ -196,14 +236,24 @@ async function updateDefect(body) {
 }
 
 async function bootstrap() {
-  const [overview, skus, fixtures, settings, printLog] = await Promise.all([
+  const [overview, skus, fixtures, settings, printLog, payouts, questions] = await Promise.all([
     call3dpGet("3dp_overview"),
     call3dpGet("3dp_skus"),
     call3dpGet("3dp_fixtures"),
     getSettings(),
     call3dpGet("3dp_print_log", { include_archived: "false" }),
+    call3dpGet("3dp_payouts"),
+    call3dpGet("3dp_get_range", LEGEND_OPEN_QUESTIONS),
   ]);
-  return { overview: overview.summary, skus: skus.rows, fixtures: fixtures.rows, settings, print_log: printLog.rows };
+  return {
+    overview: overview.summary,
+    skus: skus.rows,
+    fixtures: fixtures.rows,
+    settings,
+    print_log: printLog.rows,
+    payouts: payouts.rows,
+    open_questions: questions.values,
+  };
 }
 
 async function readBody(request) {
@@ -254,9 +304,9 @@ const server = http.createServer(async (request, response) => {
   try {
     const url = new URL(request.url, "http://127.0.0.1");
     if (request.method === "GET" && url.pathname === "/api/bootstrap") return json(response, 200, { ok: true, ...(await bootstrap()) });
+    if (request.method === "GET" && url.pathname === "/api/batch-draft") return json(response, 200, { ok: true, ...(await readBatchDraft(cleanSku(url.searchParams.get("sku"))) ) });
     if (request.method === "POST" && url.pathname === "/api/calculate") {
-      const body = await readBody(request);
-      const calculation = calculateBatchCost(body, await getSettings());
+      const calculation = calculateBatchCost(batchInput(await readBody(request)), await getSettings());
       return json(response, 200, { ok: true, calculation });
     }
     if (request.method === "POST" && url.pathname === "/api/save-batch") return json(response, 200, { ok: true, ...(await saveBatch(await readBody(request))) });
@@ -271,6 +321,7 @@ const server = http.createServer(async (request, response) => {
 });
 
 server.listen(port, "127.0.0.1", () => {
-  console.log(`3D-P Serhiy server is running at http://127.0.0.1:${port}`);
+  const address = server.address();
+  console.log(`3D-P Serhiy server is running at http://127.0.0.1:${address.port}`);
   console.log("Bound to localhost only. Press Ctrl+C to stop it.");
 });

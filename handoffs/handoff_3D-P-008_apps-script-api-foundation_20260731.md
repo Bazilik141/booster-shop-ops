@@ -132,14 +132,24 @@ via `_Аудит_API` with the note included.
 
 ## Acceptance criteria (Addendum #2)
 
+**2026-08-02 clarification: these are API-level checks, not dashboard-UI checks.** `3D-P-013`'s Phase B UI
+does not exist yet, so "save via calculator" / "reselect SKU" below must be read as **direct API calls**
+(extend `tests/live-addendum2-smoke.ps1`, or add a small companion script, following the same pattern already
+used for the negative/no-net-change smoke), not manual clicks in a dashboard that isn't built. Owner should
+not need to wait for `3D-P-013` to validate Addendum #2 — use a designated test SKU (reuse the existing
+"ПРИКЛАД"/test-row exclusion convention so it doesn't pollute real views) and have the script report clear
+before/after values for each check so the owner can eyeball the result from the terminal, same as the prior
+smoke tests.
+
 - [ ] `Налаштування` writable via `3dp_write` for the owner token only; Serhiy token rejected with the normal
       `COLUMN_NOT_ALLOWED`-equivalent error.
-- [ ] Raw batch-draft values round-trip: save via calculator, reselect SKU (same and new session), original
-      raw values return, still editable.
+- [ ] Raw batch-draft values round-trip: save all five via the API, read them back (same and a fresh call),
+      confirm exact values returned, unchanged by an unrelated read.
 - [ ] `Номенклатура` SKU archive/restore works identically in spirit to `Друк-лог`'s existing mechanism —
-      archived SKU disappears from active views, remains restorable, audit trail intact.
-- [ ] Stock adjustment requires a reason/note, is traceable (old→new + note visible after the fact), never a
-      silent direct overwrite.
+      archived SKU disappears from `3dp_skus`/`3dp_overview` by default, appears with `include_archived=true`,
+      remains restorable, audit trail intact.
+- [ ] Stock adjustment requires a reason/note, is traceable (old→new + note visible in the ledger afterward),
+      never a silent direct overwrite, and `Наявність!G` reflects the same delta.
 - [ ] All four additions pass the same negative tests as the rest of the API (formula-cell rejection,
       non-whitelist rejection, stale-write rejection) — do not skip these for the new surface just because it's
       small.
@@ -149,6 +159,51 @@ via `_Аудит_API` with the note included.
 
 `In progress` until deployed and the four acceptance criteria above pass owner QA → then this addendum is
 Done; `3D-P-013` Phase B can then start.
+
+**Status: Done, 2026-08-02.** See `diagnostics/3D-P-008_addendum-2_report_20260802.md` — all four positive QA
+checks passed live on `FIG-CHARM-001`.
+
+## Addendum #3 — durable write path for посилання на модель / РРЦ (фактична) / Ціна під викуп, 2026-08-02
+
+Codex found a real gap while building `3D-P-013` (see `diagnostics/3D-P-013_dashboard-tab-restructure_report_20260802.md`,
+"Hard boundary" section): the live API fixture has **no durable `Номенклатура` column or whitelisted action**
+for посилання на модель, РРЦ (фактична), or Ціна під викуп (Track-2 buyout price). Claude's `3D-P-013`
+handoff incorrectly assumed these "already fit the existing whitelist" — that was wrong, and Codex correctly
+refused to invent a destination rather than guess a column. This addendum closes that gap.
+
+**Before writing any code:** confirm via a bounded live read of `Номенклатура`'s current headers whether these
+three fields exist anywhere as plain (non-whitelisted) columns already, or need to be created from scratch.
+Do not assume either way — the schema has changed twice today (Addendum #1 removed/renamed columns, Addendum
+#2 added `O:P` technical columns), so a fresh header read is required, not a memory of an earlier version.
+
+**Scope:**
+
+- If the three fields already exist as columns: add them to `OWNER_MANUAL_COLUMNS_3DP` (all three are
+  owner-set — Serhiy does not set pricing or the model link) with the same formula-check/optimistic-lock/audit
+  guarantees as every other manual cell.
+- If any do not exist: add the missing column(s), following the existing pattern (confirm exact letters
+  against live headers, do not guess a position), then whitelist as above.
+- `3D-P-013`'s Вироби zone (and the corresponding read-only columns in Інформація) can then switch from
+  read-only/placeholder to full CRUD for these three fields — that UI wiring is `3D-P-013`'s job once this
+  addendum ships, not this addendum's.
+
+**Note on urgency:** these three fields matter for closing `3D-P-002`'s Enable gate (real РРЦ + model link).
+If this addendum takes a while, the owner can still edit the underlying Sheet cells directly (outside the
+guarded API) to unblock `3D-P-002` in the meantime — slower and manual, but not blocked on this addendum. Do
+not treat this addendum as gating `3D-P-002`.
+
+### Acceptance criteria (Addendum #3)
+
+- [ ] Live header read confirms exact current state of these three fields before any write.
+- [ ] All three writable via `3dp_write` for the owner token only; Serhiy token rejected.
+- [ ] Formula-cell rejection, non-whitelist rejection, and stale-write rejection all still function for the
+      new/updated columns.
+- [ ] `ROADMAP_FLOW` entry for `3D-P-008` updated.
+
+### Recommended status after Addendum #3
+
+`Not started`. Small, bounded — should not need `xhigh` effort like the base task; propose `medium`/`high`
+depending on whether new columns are needed.
 
 ---
 

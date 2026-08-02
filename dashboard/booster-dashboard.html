@@ -297,6 +297,51 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
 .records-message.success { color:var(--green); }
 .records-message.error { color:var(--red); }
 
+  /* ── 3D-P workspace ── */
+  .three-dp-tabs { display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px; }
+  .three-dp-tab { padding:8px 14px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--muted);cursor:pointer;font-size:12px;font-weight:600; }
+  .three-dp-tab.active { border-color:var(--accent);background:rgba(124,111,255,.14);color:var(--text); }
+  .three-dp-zone { display:none; }
+  .three-dp-zone.active { display:block; }
+  .three-dp-settings { margin:-6px 0 16px;padding:14px;border:1px solid var(--border);border-radius:9px;background:var(--surface2); }
+  .three-dp-settings.hidden { display:none; }
+  .three-dp-settings-head { display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px; }
+  .three-dp-toolbar { display:flex;gap:8px;flex-wrap:wrap;align-items:end;margin-bottom:14px; }
+  .three-dp-toolbar label { display:flex;flex-direction:column;gap:5px;color:var(--muted);font-size:11px; }
+  .three-dp-toolbar input,.three-dp-toolbar select,.three-dp-product-form input,.three-dp-product-form select,.three-dp-product-form textarea,.three-dp-settings input { min-width:130px;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:8px 9px;color:var(--text);font-size:12px; }
+  .three-dp-product-form textarea { min-height:72px;resize:vertical; }
+  .three-dp-form-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px; }
+  .three-dp-form-grid label { display:flex;flex-direction:column;gap:5px;color:var(--muted);font-size:12px; }
+  .three-dp-readonly { display:block;min-height:34px;padding:8px 9px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:12px; }
+  .three-dp-note { margin-top:10px;color:var(--muted);font-size:11px;line-height:1.45; }
+  .three-dp-message { min-height:18px;margin-top:10px;font-size:12px;color:var(--muted); }
+  .three-dp-message.success { color:var(--green); }
+  .three-dp-message.error { color:var(--red); }
+  .three-dp-status { display:inline-block;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600; }
+  .three-dp-status.active { color:var(--green);background:rgba(34,197,94,.12); }
+  .three-dp-status.archived { color:var(--yellow);background:rgba(245,158,11,.12); }
+  .three-dp-margin { display:inline-block;padding:4px 7px;border-radius:6px;font-size:11px;font-weight:600;white-space:nowrap; }
+  .three-dp-margin.desired { color:var(--green);background:rgba(34,197,94,.20); }
+  .three-dp-margin.optimal { color:var(--green);background:rgba(34,197,94,.09); }
+  .three-dp-margin.acceptable { color:var(--yellow);background:rgba(245,158,11,.12); }
+  .three-dp-margin.low { color:var(--orange);background:rgba(249,115,22,.13); }
+  .three-dp-margin.critical { color:var(--red);background:rgba(239,68,68,.14); }
+  .three-dp-attention { display:grid;gap:8px; }
+  .three-dp-attention-row { display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05); }
+  .three-dp-attention-row:last-child { border-bottom:0; }
+  .three-dp-analytics-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:14px 0 18px; }
+  .three-dp-mini-card { padding:13px;border:1px solid var(--border);border-radius:9px;background:var(--surface2); }
+  .three-dp-mini-card .label { color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.4px; }
+  .three-dp-mini-card .value { font-size:19px;font-weight:700;margin-top:6px; }
+  .three-dp-mini-card .sub { margin-top:5px;color:var(--muted);font-size:11px;line-height:1.35; }
+  .three-dp-column-picker { position:relative; }
+  .three-dp-column-picker summary { list-style:none; }
+  .three-dp-column-picker summary::-webkit-details-marker { display:none; }
+  .three-dp-column-picker[open] > div { position:absolute;right:0;z-index:3;min-width:220px;max-width:300px;padding:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:0 12px 32px rgba(0,0,0,.35); }
+  .three-dp-column-picker label { display:flex;gap:7px;align-items:center;padding:4px 0;font-size:12px;color:var(--text); }
+  .three-dp-top-list { display:grid;gap:7px; }
+  .three-dp-top-row { display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:12px; }
+  .three-dp-top-row:last-child { border-bottom:0; }
 @media (max-width: 800px) {
   .sidebar { display: none; }
   .main { padding: 16px; }
@@ -521,12 +566,32 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
   <div id="page-3dprint" class="page">
     <div class="header"><div class="page-title">3D-друк</div><div class="page-sub" id="threeDpSub">Окремий 3D-P API · дані з таблиці не читаються напряму</div></div>
     <div class="cards" id="threeDpCards"><div class="card"><div class="loading"><div class="spinner"></div><br>Завантаження...</div></div></div>
-    <div class="section"><div class="section-header"><span class="section-title">Калькулятор партії</span><button onclick="configure3dpAccess()">Налаштувати 3D-P API</button></div><div id="threeDpCalculator"><div class="loading"><div class="spinner"></div></div></div></div>
-    <div class="section"><div class="section-header"><span class="section-title">SKU і наявність</span></div><div id="threeDpSkuTable"></div></div>
-    <div class="section"><div class="section-header"><span class="section-title">Продажі</span></div><div id="threeDpSalesTable"></div></div>
-    <div class="section"><div class="section-header"><span class="section-title">Маркетингові плюшки</span></div><div id="threeDpPlyushkyTable"></div></div>
-    <div class="section"><div class="section-header"><span class="section-title">Виплати</span></div><div id="threeDpPayoutsTable"></div></div>
-  </div>
+    <div class="three-dp-tabs" role="tablist" aria-label="Робочі зони 3D-друку">
+      <button class="three-dp-tab active" id="threeDpTab-calculator" onclick="showThreeDpZone('calculator')" role="tab">Калькулятор</button>
+      <button class="three-dp-tab" id="threeDpTab-products" onclick="showThreeDpZone('products')" role="tab">Вироби</button>
+      <button class="three-dp-tab" id="threeDpTab-information" onclick="showThreeDpZone('information')" role="tab">Інформація</button>
+    </div>
+
+    <div id="threeDpZone-calculator" class="three-dp-zone active">
+      <div class="section">
+        <div class="section-header"><span class="section-title">Калькулятор партії</span><button class="btn-secondary" type="button" onclick="toggleThreeDpSettings()" title="Налаштування 3D-P">⚙ Налаштування</button></div>
+        <div id="threeDpSettingsPanel" class="three-dp-settings hidden"></div>
+        <div id="threeDpCalculator"><div class="loading"><div class="spinner"></div></div></div>
+      </div>
+    </div>
+
+    <div id="threeDpZone-products" class="three-dp-zone">
+      <div class="section"><div class="section-header"><span class="section-title">Вироби: SKU та керовані зміни</span></div><div id="threeDpProductWorkspace"></div></div>
+    </div>
+
+    <div id="threeDpZone-information" class="three-dp-zone">
+      <div class="section"><div class="section-header"><span class="section-title">Потребує уваги</span></div><div id="threeDpAttention"></div></div>
+      <div class="section"><div class="section-header"><span class="section-title">Зведення та аналітика</span></div><div id="threeDpInformationSummary"></div></div>
+      <div class="section"><div class="section-header"><span class="section-title">Всі вироби</span><details class="three-dp-column-picker"><summary class="btn-secondary">Колонки</summary><div id="threeDpColumnPicker"></div></details></div><div id="threeDpInformationTable"></div></div>
+      <div class="section"><div class="section-header"><span class="section-title">Продажі</span></div><div id="threeDpSalesTable"></div></div>
+      <div class="section"><div class="section-header"><span class="section-title">Виплати</span></div><div id="threeDpPayoutsTable"></div></div>
+      <div class="section"><div class="section-header"><span class="section-title">Журнал маркетингових плюшок</span></div><div id="threeDpPlyushkyTable"></div></div>
+    </div>  </div>
 
 </main>
 
@@ -616,7 +681,7 @@ const accountingState = {
   recentLoaded: { sales: false, purchases: false },
   edit: null
 };
-const threeDpState = { skus: [], fixtures: [], settings: {}, analytics: [] };
+
 
 function showError(msg) {
   const el = document.getElementById('errorBanner');
@@ -661,61 +726,172 @@ function hardRefresh() {
 
 const spin = () => '<div class="loading"><div class="spinner"></div></div>';
 // ════════════ 3D PRINT (isolated Apps Script API consumer) ════════════
-function threeDpEsc(value) { return String(value == null ? '—' : value).replace(/[&<>'"]/g, function(ch) { return ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' })[ch]; }); }
-function threeDpNumber(value) { const n = Number(String(value == null ? '' : value).replace(',', '.').replace(/[^0-9.-]/g, '')); return Number.isFinite(n) ? n : 0; }
-function threeDpMoney(value) { return '₴' + threeDpNumber(value).toLocaleString('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+const THREE_DP_MODEL_LINKS_KEY = 'booster_3dp_model_links_v1';
+const THREE_DP_INFO_PREFS_KEY = 'booster_3dp_information_prefs_v1';
+const THREE_DP_FIELDS = ['quantity','total_weight_g','total_print_time_h','spool_weight_g','spool_price_uah'];
+const THREE_DP_SETTINGS = [
+  ['power',2,'Потужність принтера, кВт','кВт'],
+  ['electricity',3,'Ціна електроенергії, грн/кВт·год','грн/кВт·год'],
+  ['amortization',4,'Амортизація принтера, грн/год','грн/год']
+];
+const THREE_DP_COLUMNS = [['sku','SKU'],['name','Назва'],['type','Тип'],['status','Статус'],['availability','Наявність'],['cost','Собівартість Сергія'],['time','Час / од.'],['rrp','РРЦ фактична'],['recommended','РРЦ рекомендована'],['buyout','Ціна викупу Booster Shop']];
+const threeDpState = { skus: [], fixtures: [], settings: {}, analytics: [], sales: [], plyushky: [], payouts: [], overview: {} };
+let threeDpModelLinks = {};
+let threeDpInfoPrefs = {};
+try { threeDpModelLinks = JSON.parse(localStorage.getItem(THREE_DP_MODEL_LINKS_KEY) || '{}') || {}; } catch (e) {}
+try { threeDpInfoPrefs = JSON.parse(localStorage.getItem(THREE_DP_INFO_PREFS_KEY) || '{}') || {}; } catch (e) {}
+const threeDpUi = { zone:'calculator', settingsOpen:false, settingsMsg:{}, calc:{ sku:'', values:{}, expected:{}, request:0, loading:false, msg:{} }, product:{ sku:'', ledger:[], loading:false, msg:{} }, info:{ search:'', type:'all', status:'all', cost:'all', group:'none', sort:'sku', dir:'asc', visible:Object.assign({}, threeDpInfoPrefs.visible || {}) } };
+
+function threeDpEsc(value) { return String(value == null ? '—' : value).replace(/[&<>'"]/g, function(c) { return ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'})[c]; }); }
+function threeDpNumber(value) { const n = Number(String(value == null ? '' : value).replace(',','.').replace(/[^0-9.-]/g,'')); return Number.isFinite(n) ? n : 0; }
+function threeDpMoney(value) { return '₴' + threeDpNumber(value).toLocaleString('uk-UA',{minimumFractionDigits:2,maximumFractionDigits:2}); }
 function threeDpInput(id) { return document.getElementById(id); }
-function threeDpCurrentSku() { return threeDpState.skus.find(function(row) { return String(row.SKU || '') === String((threeDpInput('threeDpSku') || {}).value || ''); }) || null; }
-function threeDpSetting(label) { return threeDpState.settings[label] || 0; }
-function threeDpFixture() { return threeDpState.fixtures.find(function(row) { return String(row['Назва фурнітури'] || '') === String((threeDpInput('threeDpFixture') || {}).value || ''); }) || null; }
-function threeDpTable(targetId, rows) {
-  const target = document.getElementById(targetId);
-  if (!rows || !rows.length) { target.innerHTML = '<div style="color:var(--muted);padding:8px 0">Немає записів</div>'; return; }
-  const columns = Object.keys(rows[0]).filter(function(key) { return key !== 'availability'; }).slice(0, 20);
-  target.innerHTML = '<div class="tbl-wrap"><table><tr>' + columns.map(function(key) { return '<th>' + threeDpEsc(key) + '</th>'; }).join('') + '</tr>' + rows.map(function(row) { return '<tr>' + columns.map(function(key) { const value = row[key]; return '<td>' + threeDpEsc(typeof value === 'object' ? '' : value) + '</td>'; }).join('') + '</tr>'; }).join('') + '</table></div>';
+function threeDpStatus(row) { return String((row || {})['API_статус_запису'] || 'Активний'); }
+function threeDpSku(sku) { return threeDpState.skus.find(function(r) { return String(r.SKU || '') === String(sku || ''); }) || null; }
+function threeDpActiveSkus() { return threeDpState.skus.filter(function(r) { return threeDpStatus(r) !== 'Архів'; }); }
+function threeDpCurrentSku() { return threeDpSku(threeDpUi.calc.sku); }
+function threeDpSetting(label) { return threeDpState.settings[label] == null ? 0 : threeDpState.settings[label]; }
+function threeDpEqual(a,b) { const an=Number(a), bn=Number(b); return Number.isFinite(an) && Number.isFinite(bn) && String(a).trim() !== '' && String(b).trim() !== '' ? Math.abs(an-bn)<0.000001 : String(a == null ? '' : a) === String(b == null ? '' : b); }
+function threeDpDate(value) { const n=Date.parse(String(value || '').slice(0,10)+'T00:00:00'); return Number.isFinite(n) ? n : 0; }
+function threeDpBlankDraft() { return {quantity:'',total_weight_g:'',total_print_time_h:'',spool_weight_g:'',spool_price_uah:''}; }
+function threeDpMessage(message) { return '<div class="three-dp-message '+threeDpEsc(message.kind || '')+'">'+threeDpEsc(message.text || '')+'</div>'; }
+function threeDpModel(sku) { return String(threeDpModelLinks[String(sku || '')] || ''); }
+function saveThreeDpModel(sku,value) { const key=String(sku || ''); if (!key) return; const next=String(value || '').trim(); if(next) threeDpModelLinks[key]=next; else delete threeDpModelLinks[key]; localStorage.setItem(THREE_DP_MODEL_LINKS_KEY,JSON.stringify(threeDpModelLinks)); }
+function threeDpStatusHtml(row) { const archived=threeDpStatus(row)==='Архів'; return '<span class="three-dp-status '+(archived?'archived':'active')+'">'+(archived?'Архів':'Активний')+'</span>'; }
+
+function showThreeDpZone(zone) {
+  if(['calculator','products','information'].indexOf(zone) < 0) return;
+  threeDpUi.zone=zone;
+  document.querySelectorAll('.three-dp-zone').forEach(function(el){el.classList.toggle('active',el.id==='threeDpZone-'+zone);});
+  document.querySelectorAll('.three-dp-tab').forEach(function(el){el.classList.toggle('active',el.id==='threeDpTab-'+zone);});
+  if(zone==='products') renderThreeDpProducts();
+  if(zone==='information') renderThreeDpInformation();
 }
-function renderThreeDpTables() {
-  const skuRows = threeDpState.skus.map(function(row) { const availability = row.availability || {}; return Object.assign({}, row, { 'Надруковано, шт': availability['Надруковано всього, шт'], 'Брак, шт': availability['Брак всього, шт'], 'Наявно, шт': availability['Наявно зараз, шт'] }); });
-  threeDpTable('threeDpSkuTable', skuRows); threeDpTable('threeDpSalesTable', threeDpState.sales || []); threeDpTable('threeDpPlyushkyTable', threeDpState.plyushky || []); threeDpTable('threeDpPayoutsTable', threeDpState.payouts || []);
+function threeDpTable(id,rows) {
+  const target=document.getElementById(id); if(!target) return;
+  if(!rows || !rows.length) { target.innerHTML='<div style="color:var(--muted);padding:8px 0">Немає записів</div>'; return; }
+  const cols=Object.keys(rows[0]).filter(function(k){return k!=='availability' && k!=='row_number' && k!=='API_історія_змін';}).slice(0,20);
+  target.innerHTML='<div class="tbl-wrap"><table><tr>'+cols.map(function(k){return '<th>'+threeDpEsc(k)+'</th>';}).join('')+'</tr>'+rows.map(function(row){return '<tr>'+cols.map(function(k){return '<td>'+threeDpEsc(typeof row[k] === 'object' ? '' : row[k])+'</td>';}).join('')+'</tr>';}).join('')+'</table></div>';
 }
 function renderThreeDpCards(summary) {
-  const values = [['SKU', summary.sku_count], ['Наявно', summary.available], ['Продано', summary.sold], ['Нараховано Сергію', threeDpMoney(summary.accrued_serhiy_current_month)]];
-  document.getElementById('threeDpCards').innerHTML = values.map(function(item) { return '<div class="card"><div class="card-label">' + threeDpEsc(item[0]) + '</div><div class="card-value">' + threeDpEsc(item[1]) + '</div></div>'; }).join('');
-}
-function renderThreeDpCalculator() {
-  const root = document.getElementById('threeDpCalculator'); const sku = threeDpCurrentSku(); const previous = function(id) { const el = threeDpInput(id); return el ? el.value : ''; };
-  const fixtureOptions = ['<option value="">Без фурнітури зараз</option>'].concat(threeDpState.fixtures.map(function(row) { const name = row['Назва фурнітури']; const price = row['Ціна, грн/шт']; return '<option value="' + threeDpEsc(name) + '">' + threeDpEsc(name) + ' — ' + threeDpMoney(price) + '</option>'; })).join('');
-  root.innerHTML = '<div class="edit-row-grid">' +
-    '<label>SKU<select id="threeDpSku" onchange="renderThreeDpCalculator()"><option value="">Оберіть SKU</option>' + threeDpState.skus.map(function(row) { return '<option value="' + threeDpEsc(row.SKU) + '"' + (sku && row.SKU === sku.SKU ? ' selected' : '') + '>' + threeDpEsc(row.SKU + ' — ' + (row['Назва виробу'] || '')) + '</option>'; }).join('') + '</select></label>' +
-    '<label>Кількість у партії, шт<input id="threeDpQty" type="number" min="1" step="1" value="' + threeDpEsc(previous('threeDpQty') || '1') + '" oninput="renderThreeDpCalc()"></label>' +
-    '<label>Сумарна вага партії, г<input id="threeDpWeightBatch" type="number" min="0" step="0.01" value="' + threeDpEsc(previous('threeDpWeightBatch')) + '" oninput="renderThreeDpCalc()"></label>' +
-    '<label>Сумарний час партії, год<input id="threeDpTimeBatch" type="number" min="0" step="0.01" value="' + threeDpEsc(previous('threeDpTimeBatch')) + '" oninput="renderThreeDpCalc()"></label>' +
-    '<label>Вага котушки, г<input id="threeDpSpoolWeight" type="number" min="0" step="0.01" value="' + threeDpEsc(previous('threeDpSpoolWeight')) + '" oninput="renderThreeDpCalc()"></label>' +
-    '<label>Ціна котушки, грн<input id="threeDpSpoolPrice" type="number" min="0" step="0.01" value="' + threeDpEsc(previous('threeDpSpoolPrice')) + '" oninput="renderThreeDpCalc()"></label>' +
-    '<label>Фурнітура (призначається пізніше)<select id="threeDpFixture" onchange="renderThreeDpCalc()">' + fixtureOptions + '</select></label>' +
-    '<label>Посилання на модель (чернетка)<input id="threeDpModelLink" type="url" placeholder="https://…" value="' + threeDpEsc(previous('threeDpModelLink')) + '"></label>' +
-  '</div><div id="threeDpCalcResult" style="margin-top:16px"></div><div style="margin-top:12px;color:var(--muted);font-size:12px">Константи read-only з Налаштування: ' + threeDpEsc(threeDpSetting('Потужність принтера, кВт')) + ' кВт · ' + threeDpEsc(threeDpSetting('Ціна електроенергії, грн/кВт·год')) + ' грн/кВт·год · ' + threeDpEsc(threeDpSetting('Амортизація принтера, грн/год')) + ' грн/год. <button type="button" onclick="window.alert(&quot;Редагування глобальних констант: Налаштування!B2:B4 у 3D-P Sheet. Dashboard показує їх лише read-only, щоб не обходити API whitelist.&quot;)">Де редагувати</button> API навмисно не дає dashboard записувати ці глобальні параметри.</div>';
-  renderThreeDpCalc();
-}
-function renderThreeDpCalc() {
-  const qty = threeDpNumber((threeDpInput('threeDpQty') || {}).value); const weight = qty > 0 ? threeDpNumber((threeDpInput('threeDpWeightBatch') || {}).value) / qty : 0; const time = qty > 0 ? threeDpNumber((threeDpInput('threeDpTimeBatch') || {}).value) / qty : 0; const spoolWeight = threeDpNumber((threeDpInput('threeDpSpoolWeight') || {}).value); const spoolPrice = threeDpNumber((threeDpInput('threeDpSpoolPrice') || {}).value);
-  const material = spoolWeight > 0 ? weight / spoolWeight * spoolPrice : 0; const electricity = threeDpSetting('Потужність принтера, кВт') * time * threeDpSetting('Ціна електроенергії, грн/кВт·год'); const amortization = threeDpSetting('Амортизація принтера, грн/год') * time; const fixture = threeDpFixture(); const fixturePrice = fixture ? threeDpNumber(fixture['Ціна, грн/шт']) : 0; const base = material + electricity + amortization; const total = base + fixturePrice;
-  const result = document.getElementById('threeDpCalcResult'); if (!result) return;
-  result.innerHTML = '<div class="grid2"><div><b>На одиницю (з партії)</b><table><tr><td>Вага</td><td>' + weight.toFixed(2) + ' г</td></tr><tr><td>Час</td><td>' + time.toFixed(2) + ' год</td></tr><tr><td>Матеріал</td><td>' + threeDpMoney(material) + '</td></tr><tr><td>Електроенергія</td><td>' + threeDpMoney(electricity) + '</td></tr><tr><td>Амортизація</td><td>' + threeDpMoney(amortization) + '</td></tr><tr><td>Виробнича собівартість</td><td><b>' + threeDpMoney(base) + '</b></td></tr><tr><td>Фурнітура</td><td>' + threeDpMoney(fixturePrice) + '</td></tr><tr><td>Разом із фурнітурою</td><td><b>' + threeDpMoney(total) + '</b></td></tr></table></div>' + '<div><b>РРЦ-сценарії (пакування не входить: 3D-P-010)</b><div class="edit-row-grid" style="margin-top:8px">' + ['Консервативна','Середня','Оптимістична'].map(function(name, index) { return '<label>' + name + ', грн<input class="threeDpRrp" data-label="' + name + '" type="number" min="0" step="1" value="' + threeDpEsc((document.querySelectorAll('.threeDpRrp')[index] || {}).value || '') + '" oninput="renderThreeDpCalc()"></label>'; }).join('') + '</div><div id="threeDpMargins" style="margin-top:10px"></div></div></div><button style="margin-top:14px" onclick="saveThreeDpCalculation()"' + (threeDpCurrentSku() ? '' : ' disabled') + '>Зберегти per-unit значення в Номенклатуру</button><div id="threeDpSaveMsg" style="margin-top:8px;font-size:12px"></div>';
-  const margin = document.getElementById('threeDpMargins'); if (margin) margin.innerHTML = Array.from(document.querySelectorAll('.threeDpRrp')).map(function(input) { const price = threeDpNumber(input.value); return '<div>' + threeDpEsc(input.dataset.label) + ': ' + (price ? ('маржинальний прибуток ' + threeDpMoney(price - total) + '; BoosterShop 50%: ' + threeDpMoney((price - total) / 2)) : 'вкажіть РРЦ') + '</div>'; }).join('');
-}
-async function saveThreeDpCalculation() {
-  const sku = threeDpCurrentSku(); const msg = document.getElementById('threeDpSaveMsg'); if (!sku) { msg.textContent = 'Оберіть SKU.'; return; }
-  const qty = threeDpNumber((threeDpInput('threeDpQty') || {}).value); const spoolWeight = threeDpNumber((threeDpInput('threeDpSpoolWeight') || {}).value); const spoolPrice = threeDpNumber((threeDpInput('threeDpSpoolPrice') || {}).value); if (!(qty > 0 && spoolWeight > 0 && spoolPrice >= 0)) { msg.textContent = 'Заповніть кількість, вагу та ціну котушки.'; return; }
-  const writes = [ ['G', threeDpNumber(threeDpInput('threeDpTimeBatch').value) / qty, 'Час друку за од., год'], ['H', threeDpNumber(threeDpInput('threeDpWeightBatch').value) / qty, 'Вага виробу за од., г'], ['I', spoolWeight, 'Вага котушки, г'], ['J', spoolPrice, 'Ціна котушки, грн'] ]; const fixture = threeDpFixture(); if (fixture) writes.push(['N', threeDpNumber(fixture['Ціна, грн/шт']), 'Фурнітура (ланцюжок/карабін), грн/шт']);
-  if (!window.confirm('Зберегти лише per-unit значення для ' + sku.SKU + '? Пакування й посилання на модель не записуються цим API.')) return;
-  try { msg.textContent = 'Збереження…'; for (const write of writes) await call3dpPost({ action: '3dp_write', sheet: 'Номенклатура', sku_or_row: sku.SKU, column: write[0], value: write[1], expected_current: sku[write[2]] }); const fresh = await call3dp('3dp_get_row', { sheet: 'Номенклатура', sku: sku.SKU }); threeDpState.skus = threeDpState.skus.map(function(row) { return row.SKU === sku.SKU ? Object.assign({}, row, fresh.row) : row; }); msg.textContent = 'Збережено; 3dp_get_row підтвердив актуальні per-unit значення.'; msg.style.color = 'var(--green)'; renderThreeDpTables(); } catch (error) { msg.textContent = 'Помилка: ' + error.message; msg.style.color = 'var(--red)'; }
-}
-async function load3dPrint() {
-  const root = document.getElementById('threeDpCalculator');
-  try { const results = await Promise.all([call3dp('3dp_overview'), call3dp('3dp_skus'), call3dp('3dp_sales'), call3dp('3dp_plyushky'), call3dp('3dp_payouts'), call3dp('3dp_fixtures'), call3dp('3dp_get_range', { sheet: 'Налаштування', range: 'A1:C4' }), call3dp('3dp_get_range', { sheet: 'Аналітика', range: 'A3:N17' })]); threeDpState.skus = results[1].rows || []; threeDpState.sales = results[2].rows || []; threeDpState.plyushky = results[3].rows || []; threeDpState.payouts = results[4].rows || []; threeDpState.fixtures = results[5].rows || []; threeDpState.analytics = results[7].values || []; const settingsRows = results[6].values || []; threeDpState.settings = settingsRows.slice(1).reduce(function(out, row) { out[row[0]] = row[1]; return out; }, {}); renderThreeDpCards(results[0].summary || {}); renderThreeDpTables(); renderThreeDpCalculator(); document.getElementById('threeDpSub').textContent = 'Оновлено через bounded 3D-P API · ' + (results[0].month || ''); } catch (error) { root.innerHTML = '<div style="color:var(--yellow)">3D-P ще не підключено: ' + threeDpEsc(error.message) + '</div>'; document.getElementById('threeDpSub').textContent = 'Потрібні окремі локальні URL і token 3D-P API'; }
+  const target=document.getElementById('threeDpCards'); if(!target) return;
+  const values=[['SKU',summary.sku_count],['Наявно',summary.available],['Продано',summary.sold],['Нараховано Сергію',threeDpMoney(summary.accrued_serhiy_current_month)]];
+  target.innerHTML=values.map(function(x){return '<div class="card"><div class="card-label">'+threeDpEsc(x[0])+'</div><div class="card-value">'+threeDpEsc(x[1])+'</div></div>';}).join('');
 }
 
+function toggleThreeDpSettings() { threeDpUi.settingsOpen=!threeDpUi.settingsOpen; renderThreeDpSettings(); }
+function renderThreeDpSettings() {
+  const panel=document.getElementById('threeDpSettingsPanel'); if(!panel) return;
+  panel.classList.toggle('hidden',!threeDpUi.settingsOpen); if(!threeDpUi.settingsOpen) { panel.innerHTML=''; return; }
+  panel.innerHTML='<div class="three-dp-settings-head"><div><b>Глобальні константи</b><div class="three-dp-note">Owner-only запис через API з optimistic lock. Нові значення одразу застосовує калькулятор.</div></div><button class="btn-secondary" type="button" onclick="configure3dpAccess()">Налаштувати 3D-P API</button></div><div class="three-dp-form-grid">'+THREE_DP_SETTINGS.map(function(f){return '<label>'+threeDpEsc(f[2])+'<input id="threeDpSetting-'+f[0]+'" type="number" min="0" step="0.01" value="'+threeDpEsc(threeDpSetting(f[2]))+'"><small>'+threeDpEsc(f[3])+'</small></label>';}).join('')+'</div><div class="form-actions" style="margin-top:12px"><button class="btn-primary" type="button" onclick="saveThreeDpSettings()">Зберегти константи</button></div>'+threeDpMessage(threeDpUi.settingsMsg);
+}
+async function saveThreeDpSettings() {
+  const changed=THREE_DP_SETTINGS.map(function(f){return {f:f,value:(threeDpInput('threeDpSetting-'+f[0]) || {}).value};}).filter(function(x){return !threeDpEqual(x.value,threeDpSetting(x.f[2]));});
+  if(!changed.length){threeDpUi.settingsMsg={text:'Немає змін для збереження.',kind:''};renderThreeDpSettings();return;}
+  if(changed.some(function(x){return String(x.value).trim()==='' || threeDpNumber(x.value)<0;})){threeDpUi.settingsMsg={text:'Усі значення мають бути невід’ємними числами.',kind:'error'};renderThreeDpSettings();return;}
+  if(!confirm('Зберегти змінені глобальні константи 3D-P?')) return;
+  try { threeDpUi.settingsMsg={text:'Збереження…',kind:''};renderThreeDpSettings(); for(const x of changed) await call3dpPost({action:'3dp_write',sheet:'Налаштування',sku_or_row:x.f[1],column:'B',value:threeDpNumber(x.value),expected_current:threeDpSetting(x.f[2])}); const fresh=await call3dp('3dp_get_range',{sheet:'Налаштування',range:'A1:C4'}); threeDpState.settings=(fresh.values || []).slice(1).reduce(function(out,row){out[row[0]]=row[1];return out;},{}); threeDpUi.settingsMsg={text:'Збережено й перечитано через API.',kind:'success'};renderThreeDpSettings();renderThreeDpCalc(); } catch(e) { threeDpUi.settingsMsg={text:'Помилка: '+e.message,kind:'error'};renderThreeDpSettings(); }
+}
+
+function renderThreeDpCalculator() {
+  const root=document.getElementById('threeDpCalculator'); if(!root) return;
+  const values=Object.assign(threeDpBlankDraft(),threeDpUi.calc.values || {});
+  root.innerHTML='<div class="three-dp-form-grid"><label>SKU<select onchange="threeDpSelectCalcSku(this.value)"><option value="">Оберіть активний SKU</option>'+threeDpActiveSkus().map(function(row){return '<option value="'+threeDpEsc(row.SKU)+'"'+(row.SKU===threeDpUi.calc.sku?' selected':'')+'>'+threeDpEsc(row.SKU+' — '+(row['Назва виробу'] || ''))+'</option>';}).join('')+'</select></label><label>Кількість у партії, шт<input type="number" min="1" step="1" value="'+threeDpEsc(values.quantity)+'" oninput="threeDpCalcField(\'quantity\',this.value)"></label><label>Сумарна вага партії, г<input type="number" min="0" step="0.01" value="'+threeDpEsc(values.total_weight_g)+'" oninput="threeDpCalcField(\'total_weight_g\',this.value)"></label><label>Сумарний час партії, год<input type="number" min="0" step="0.01" value="'+threeDpEsc(values.total_print_time_h)+'" oninput="threeDpCalcField(\'total_print_time_h\',this.value)"></label><label>Вага котушки, г<input type="number" min="0" step="0.01" value="'+threeDpEsc(values.spool_weight_g)+'" oninput="threeDpCalcField(\'spool_weight_g\',this.value)"></label><label>Ціна котушки, грн<input type="number" min="0" step="0.01" value="'+threeDpEsc(values.spool_price_uah)+'" oninput="threeDpCalcField(\'spool_price_uah\',this.value)"></label></div><div class="three-dp-note">Raw чернетка зберігається окремо для SKU. Фурнітура й РРЦ навмисно не входять у калькулятор.</div><div id="threeDpCalcResult" style="margin-top:16px"></div>';
+  renderThreeDpCalc();
+}
+function threeDpCalcField(field,value) { threeDpUi.calc.values[field]=value;renderThreeDpCalc(); }
+async function threeDpSelectCalcSku(sku) {
+  threeDpUi.calc.sku=String(sku || '');threeDpUi.calc.values=threeDpBlankDraft();threeDpUi.calc.expected=threeDpBlankDraft();threeDpUi.calc.msg={};
+  if(!sku){renderThreeDpCalculator();return;}
+  const request=++threeDpUi.calc.request;threeDpUi.calc.loading=true;renderThreeDpCalculator();
+  try { const draft=await call3dp('3dp_batch_draft',{sku:sku}); if(request!==threeDpUi.calc.request)return;threeDpUi.calc.values=Object.assign(threeDpBlankDraft(),draft.values || {});threeDpUi.calc.expected=Object.assign(threeDpBlankDraft(),draft.values || {});threeDpUi.calc.msg={text:draft.found?'Чернетку партії завантажено.':'Для SKU ще немає чернетки партії.',kind:''}; } catch(e) { if(request===threeDpUi.calc.request)threeDpUi.calc.msg={text:'Помилка читання чернетки: '+e.message,kind:'error'}; }
+  if(request===threeDpUi.calc.request){threeDpUi.calc.loading=false;renderThreeDpCalculator();}
+}
+function renderThreeDpCalc() {
+  const target=document.getElementById('threeDpCalcResult');if(!target)return;
+  const v=Object.assign(threeDpBlankDraft(),threeDpUi.calc.values || {}),sku=threeDpCurrentSku(),qty=threeDpNumber(v.quantity),weight=qty>0?threeDpNumber(v.total_weight_g)/qty:0,time=qty>0?threeDpNumber(v.total_print_time_h)/qty:0,spoolW=threeDpNumber(v.spool_weight_g),spoolP=threeDpNumber(v.spool_price_uah),material=spoolW>0?weight/spoolW*spoolP:0,electricity=threeDpSetting('Потужність принтера, кВт')*time*threeDpSetting('Ціна електроенергії, грн/кВт·год'),amortization=threeDpSetting('Амортизація принтера, грн/год')*time,cost=material+electricity+amortization;
+  target.innerHTML='<div class="grid2"><div><b>На одиницю (з партії)</b><table><tr><td>Вага</td><td>'+weight.toFixed(2)+' г</td></tr><tr><td>Час</td><td>'+time.toFixed(2)+' год</td></tr><tr><td>Матеріал</td><td>'+threeDpMoney(material)+'</td></tr><tr><td>Електроенергія</td><td>'+threeDpMoney(electricity)+'</td></tr><tr><td>Амортизація</td><td>'+threeDpMoney(amortization)+'</td></tr><tr><td>Собівартість друку</td><td><b>'+threeDpMoney(cost)+'</b></td></tr></table></div><div><b>Поточне значення SKU</b><div class="three-dp-note">Собівартість Сергія з формули Номенклатури: <b>'+(sku?threeDpMoney(sku['Собівартість Сергія (виробнича), грн']):'—')+'</b></div><div class="three-dp-note">'+(threeDpUi.calc.loading?'Завантаження чернетки…':'Після збереження API оновить тільки G:J (per-unit).')+'</div></div></div><button class="btn-primary" style="margin-top:14px" type="button" onclick="saveThreeDpCalculation()"'+(sku?'':' disabled')+'>Зберегти чернетку та per-unit значення</button>'+threeDpMessage(threeDpUi.calc.msg);
+}async function saveThreeDpCalculation() {
+  const sku=threeDpCurrentSku();if(!sku)return;
+  const raw=Object.assign(threeDpBlankDraft(),threeDpUi.calc.values || {}),values={};THREE_DP_FIELDS.forEach(function(f){values[f]=threeDpNumber(raw[f]);});
+  if(!(values.quantity>0 && Number.isInteger(values.quantity) && values.total_weight_g>=0 && values.total_print_time_h>=0 && values.spool_weight_g>0 && values.spool_price_uah>=0)){threeDpUi.calc.msg={text:'Заповніть кількість (ціле > 0), вагу/час партії та параметри котушки.',kind:'error'};renderThreeDpCalc();return;}
+  if(!confirm('Зберегти raw чернетку партії та per-unit значення G:J для '+sku.SKU+'?'))return;
+  try { threeDpUi.calc.msg={text:'Збереження…',kind:''};renderThreeDpCalc();const draft=await call3dpPost({action:'3dp_batch_draft_save',sku:sku.SKU,values:values,expected_current:threeDpUi.calc.expected || threeDpBlankDraft()});threeDpUi.calc.values=Object.assign(threeDpBlankDraft(),draft.values || values);threeDpUi.calc.expected=Object.assign(threeDpBlankDraft(),draft.values || values);const writes=[['G',values.total_print_time_h/values.quantity,'Час друку за од., год'],['H',values.total_weight_g/values.quantity,'Вага виробу за од., г'],['I',values.spool_weight_g,'Вага котушки, г'],['J',values.spool_price_uah,'Ціна котушки, грн']].filter(function(w){return !threeDpEqual(sku[w[2]],w[1]);});for(const w of writes)await call3dpPost({action:'3dp_write',sheet:'Номенклатура',sku_or_row:sku.SKU,column:w[0],value:w[1],expected_current:sku[w[2]]});const fresh=await call3dp('3dp_get_row',{sheet:'Номенклатура',sku:sku.SKU});threeDpState.skus=threeDpState.skus.map(function(r){return r.SKU===sku.SKU?Object.assign({},r,fresh.row):r;});threeDpUi.calc.msg={text:'Чернетку збережено; 3dp_get_row підтвердив актуальні per-unit значення.',kind:'success'};renderThreeDpCalc();renderThreeDpProducts();renderThreeDpInformation(); } catch(e) { threeDpUi.calc.msg={text:'Помилка: '+e.message,kind:'error'};renderThreeDpCalc(); }
+}
+
+function threeDpLatest(rows,sku,field) { const match=(rows || []).filter(function(r){return String(r.SKU || '')===String(sku || '');}).slice().sort(function(a,b){return threeDpDate(b['Дата'])-threeDpDate(a['Дата']);});return match.length?match[0][field]:''; }
+function threeDpMetrics(row) { const availability=(row || {}).availability || {};return { availability:availability['Наявно зараз, шт'],time:row && row['Час друку за од., год'],cost:row && row['Собівартість Сергія (виробнича), грн'],rrp:threeDpLatest(threeDpState.sales,row && row.SKU,'Фактична ціна за од., грн (після знижки)'),buyout:threeDpLatest(threeDpState.plyushky,row && row.SKU,'Ціна закупівлі за од., грн')}; }
+function threeDpSelectProduct(sku) { threeDpUi.product.sku=String(sku || '');threeDpUi.product.ledger=[];threeDpUi.product.msg={};renderThreeDpProducts();if(sku)loadThreeDpLedger(sku); }
+function threeDpNewProduct() { threeDpSelectProduct(''); }
+function renderThreeDpProducts() {
+  const root=document.getElementById('threeDpProductWorkspace');if(!root)return;
+  const row=threeDpSku(threeDpUi.product.sku),existing=Boolean(row),archived=existing && threeDpStatus(row)==='Архів',metrics=existing?threeDpMetrics(row):{};
+  const options=threeDpState.skus.slice().sort(function(a,b){return String(a.SKU).localeCompare(String(b.SKU),'uk');}).map(function(r){return '<option value="'+threeDpEsc(r.SKU)+'"'+(r.SKU===threeDpUi.product.sku?' selected':'')+'>'+threeDpEsc(r.SKU+' — '+(r['Назва виробу'] || '')+(threeDpStatus(r)==='Архів'?' (архів)':''))+'</option>';}).join('');
+  const type=existing?row['Тип']:'';
+  root.innerHTML='<div class="three-dp-toolbar"><label>Оберіть SKU<select onchange="threeDpSelectProduct(this.value)"><option value="">Новий виріб</option>'+options+'</select></label><button class="btn-secondary" type="button" onclick="threeDpNewProduct()">+ Новий SKU</button></div><div class="three-dp-product-form"><div class="three-dp-form-grid"><label>SKU'+(existing?'<span class="three-dp-readonly mono">'+threeDpEsc(row.SKU)+'</span>':'<input id="threeDpProductSku" placeholder="BR-... / FIG-... / ACC-3D-...">')+'</label><label>Назва виробу<input id="threeDpProductName" value="'+threeDpEsc(existing?row['Назва виробу']:'')+'"></label><label>Категорія / тип<select id="threeDpProductType"><option value="">Оберіть тип</option>'+['Брелок','Фігурка','Функціональний аксесуар'].map(function(x){return '<option value="'+threeDpEsc(x)+'"'+(x===type?' selected':'')+'>'+threeDpEsc(x)+'</option>';}).join('')+'</select></label><label>Посилання на модель (локальна чернетка)<input id="threeDpProductModel" type="url" placeholder="https://…" value="'+threeDpEsc(existing?threeDpModel(row.SKU):'')+'"></label><label>Примітки<textarea id="threeDpProductNotes">'+threeDpEsc(existing?row['Примітки']:'')+'</textarea></label><label>Час друку / од.<span class="three-dp-readonly">'+(existing?threeDpEsc(metrics.time)+' год':'—')+'</span></label><label>Собівартість Сергія<span class="three-dp-readonly">'+(existing?threeDpMoney(metrics.cost):'—')+'</span></label><label>РРЦ фактична<span class="three-dp-readonly">'+(existing && metrics.rrp!==''?threeDpMoney(metrics.rrp)+' · останній продаж':'—')+'</span></label><label>Ціна під викуп <span title="Це ціна, яку заплатить Booster Shop за придбання 1 шт виробу." style="cursor:help">?</span><span class="three-dp-readonly">'+(existing && metrics.buyout!==''?threeDpMoney(metrics.buyout)+' · останній запис журналу':'—')+'</span></label><label>Наявність (read-only)<span class="three-dp-readonly">'+(existing?threeDpEsc(metrics.availability)+' шт':'—')+'</span></label>' +(existing?'<label>API-статус<span class="three-dp-readonly">'+threeDpStatusHtml(row)+'</span></label>':'')+'</div><div class="form-actions" style="margin-top:14px"><button class="btn-primary" type="button" onclick="saveThreeDpProduct()">'+(existing?'Зберегти поля виробу':'Створити SKU')+'</button>' +(existing?'<button class="btn-secondary" type="button" onclick="toggleThreeDpArchive()">'+(archived?'Відновити SKU':'Архівувати SKU')+'</button>':'')+'</div><div class="three-dp-note">SKU після створення незмінний. Посилання на модель лишається browser-local: у live schema немає затвердженої колонки. РРЦ та ціна викупу відображаються лише з журналів — без фіктивного запису в Sheet.</div>'+threeDpMessage(threeDpUi.product.msg)+'</div>' +(existing?renderThreeDpStock(row,metrics,archived):'');
+}
+function threeDpSkuTypeError(sku,type) { const s=String(sku || '').trim().toUpperCase();if(!/^(BR-[A-Z0-9][A-Z0-9-]*|FIG-[A-Z0-9][A-Z0-9-]*|ACC-3D-\d{3,})$/.test(s))return 'SKU має відповідати BR-…, FIG-… або ACC-3D-….';if((s.indexOf('BR-')===0 && type!=='Брелок')||(s.indexOf('FIG-')===0 && type!=='Фігурка')||(s.indexOf('ACC-3D-')===0 && type!=='Функціональний аксесуар'))return 'Префікс SKU не відповідає обраному типу.';return ''; }
+async function saveThreeDpProduct() {
+  const row=threeDpSku(threeDpUi.product.sku),name=String((threeDpInput('threeDpProductName') || {}).value || '').trim(),type=String((threeDpInput('threeDpProductType') || {}).value || '').trim(),notes=String((threeDpInput('threeDpProductNotes') || {}).value || '').trim(),model=String((threeDpInput('threeDpProductModel') || {}).value || '').trim();
+  if(!name || !type){threeDpUi.product.msg={text:'Назва і тип є обов’язковими.',kind:'error'};renderThreeDpProducts();return;}
+  try { if(!row){const sku=String((threeDpInput('threeDpProductSku') || {}).value || '').trim().toUpperCase(),invalid=threeDpSkuTypeError(sku,type);if(invalid){threeDpUi.product.msg={text:invalid,kind:'error'};renderThreeDpProducts();return;}if(!confirm('Створити новий SKU '+sku+'?'))return;threeDpUi.product.msg={text:'Створення…',kind:''};renderThreeDpProducts();const created=await call3dpPost({action:'3dp_append_row',sheet:'Номенклатура',values:{A:sku,B:name,D:type,M:notes}}),fresh=await call3dp('3dp_get_row',{sheet:'Номенклатура',sku:sku});threeDpState.skus.push(fresh.row);threeDpUi.product.sku=sku;saveThreeDpModel(sku,model);threeDpUi.product.msg={text:'SKU створено в рядку '+created.row+' і перечитано через API.',kind:'success'};renderThreeDpProducts();renderThreeDpCalculator();renderThreeDpInformation();return;}
+    const changes=[['B',name,'Назва виробу'],['D',type,'Тип'],['M',notes,'Примітки']].filter(function(x){return !threeDpEqual(row[x[2]],x[1]);});if(!changes.length && threeDpModel(row.SKU)===model){threeDpUi.product.msg={text:'Немає змін для збереження.',kind:''};renderThreeDpProducts();return;}if(!confirm('Зберегти змінені поля для '+row.SKU+'?'))return;threeDpUi.product.msg={text:'Збереження…',kind:''};renderThreeDpProducts();for(const x of changes)await call3dpPost({action:'3dp_write',sheet:'Номенклатура',sku_or_row:row.SKU,column:x[0],value:x[1],expected_current:row[x[2]]});saveThreeDpModel(row.SKU,model);const fresh=await call3dp('3dp_get_row',{sheet:'Номенклатура',sku:row.SKU});threeDpState.skus=threeDpState.skus.map(function(r){return r.SKU===row.SKU?Object.assign({},r,fresh.row):r;});threeDpUi.product.msg={text:'Поля виробу збережено й перечитано через API.',kind:'success'};renderThreeDpProducts();renderThreeDpCalculator();renderThreeDpInformation();
+  } catch(e) { threeDpUi.product.msg={text:'Помилка: '+e.message,kind:'error'};renderThreeDpProducts(); }
+}
+async function toggleThreeDpArchive() {
+  const row=threeDpSku(threeDpUi.product.sku);if(!row)return;const archived=threeDpStatus(row)==='Архів',reason=archived?'':(prompt('Коротка причина архівації (необов’язково):','') || '');if(!confirm((archived?'Відновити':'Архівувати')+' SKU '+row.SKU+'? Це reversible API-статус, не видалення.'))return;
+  try { threeDpUi.product.msg={text:archived?'Відновлення…':'Архівація…',kind:''};renderThreeDpProducts();await call3dpPost({action:archived?'3dp_nomenclature_restore':'3dp_nomenclature_archive',row:row.row_number,expected_status:threeDpStatus(row),reason:reason});await reloadThreeDpData();threeDpUi.product.msg={text:archived?'SKU відновлено; active views оновлено.':'SKU архівовано; active views оновлено.',kind:'success'};renderThreeDpAll(); } catch(e) { threeDpUi.product.msg={text:'Помилка: '+e.message,kind:'error'};renderThreeDpProducts(); }
+}function renderThreeDpStock(row,metrics,archived) {
+  const ledger=threeDpUi.product.loading?'<div class="loading"><div class="spinner"></div></div>':threeDpUi.product.ledger.length?'<div class="tbl-wrap"><table><tr><th>Час</th><th>Delta</th><th>Причина</th></tr>'+threeDpUi.product.ledger.map(function(x){return '<tr><td>'+threeDpEsc(x['Дата коригування (Київ)'])+'</td><td>'+threeDpEsc(x.Delta)+'</td><td>'+threeDpEsc(x.Причина)+'</td></tr>';}).join('')+'</table></div>':'<div class="three-dp-note">Коригувань ще немає.</div>';
+  return '<div class="form-section-title">Коригування наявності</div><div class="three-dp-form-grid"><label>Поточна наявність (Наявність!G)<span class="three-dp-readonly">'+threeDpEsc(metrics.availability)+' шт</span></label><label>Delta (ціле число)<input id="threeDpStockDelta" type="number" step="1" value=""'+(archived?' disabled':'')+'></label><label>Причина<input id="threeDpStockReason" maxlength="240" placeholder="напр. списання браку"'+(archived?' disabled':'')+'></label></div><div class="form-actions" style="margin-top:12px"><button class="btn-secondary" type="button" onclick="saveThreeDpStock()"'+(archived?' disabled':'')+'>Записати коригування</button></div><div class="three-dp-note">Запис додається в append-only ledger; формула Наявність!G не перезаписується.</div><div class="form-section-title">Останні коригування</div>'+ledger;
+}
+async function loadThreeDpLedger(sku) {
+  if(!sku)return;threeDpUi.product.loading=true;renderThreeDpProducts();
+  try { const result=await call3dp('3dp_stock_adjustments',{sku:sku,limit:10});if(threeDpUi.product.sku===sku)threeDpUi.product.ledger=result.rows || []; } catch(e) { if(threeDpUi.product.sku===sku)threeDpUi.product.msg={text:'Ledger не завантажився: '+e.message,kind:'error'}; }
+  if(threeDpUi.product.sku===sku){threeDpUi.product.loading=false;renderThreeDpProducts();}
+}
+async function saveThreeDpStock() {
+  const row=threeDpSku(threeDpUi.product.sku);if(!row || threeDpStatus(row)==='Архів')return;const metrics=threeDpMetrics(row),delta=Number((threeDpInput('threeDpStockDelta') || {}).value),reason=String((threeDpInput('threeDpStockReason') || {}).value || '').trim();
+  if(!Number.isInteger(delta) || delta===0 || reason.length<3){threeDpUi.product.msg={text:'Вкажіть ненульовий цілий delta і причину від 3 символів.',kind:'error'};renderThreeDpProducts();return;}
+  if(!confirm('Записати delta '+delta+' для '+row.SKU+'? Це створить постійний ledger-запис.'))return;
+  try { threeDpUi.product.msg={text:'Запис коригування…',kind:''};renderThreeDpProducts();const result=await call3dpPost({action:'3dp_adjust_stock',sku:row.SKU,expected_current:threeDpNumber(metrics.availability),delta:delta,reason:reason});await reloadThreeDpData();await loadThreeDpLedger(row.SKU);threeDpUi.product.msg={text:'Ledger row '+result.ledger_row+': Наявність!G '+result.old_value+' → '+result.new_value+'.',kind:'success'};renderThreeDpAll(); } catch(e) { threeDpUi.product.msg={text:'Помилка: '+e.message,kind:'error'};renderThreeDpProducts(); }
+}
+
+function threeDpMargin(cost,rrp) {
+  const price=threeDpNumber(rrp),amount=threeDpNumber(cost);if(!(price>0))return null;const pct=(price-amount)/price*100,limits=amount<=10?[90,75,60,40]:amount<=25?[80,70,55,40]:amount<=60?[80,65,50,35]:amount<=99?[80,65,50,30]:[80,70,55,40],tier=pct>=limits[0]?'desired':pct>=limits[1]?'optimal':pct>=limits[2]?'acceptable':pct>=limits[3]?'low':'critical',labels={desired:'Найбажаніша',optimal:'Оптимальна',acceptable:'Прийнятна',low:'Низька',critical:'Критична'};return {pct:pct,tier:tier,label:labels[tier]};
+}
+function threeDpInfoRecord(row) { const m=threeDpMetrics(row),margin=threeDpMargin(m.cost,m.rrp);return {row:row,sku:String(row.SKU || ''),name:String(row['Назва виробу'] || ''),type:String(row['Тип'] || '—'),status:threeDpStatus(row),availability:threeDpNumber(m.availability),cost:threeDpNumber(m.cost),time:threeDpNumber(m.time),rrp:m.rrp===''?null:threeDpNumber(m.rrp),buyout:m.buyout===''?null:threeDpNumber(m.buyout),model:threeDpModel(row.SKU),margin:margin}; }
+function threeDpVisible(key) { return threeDpUi.info.visible[key]!==false; }
+function threeDpCostMatch(value) { const b=threeDpUi.info.cost;if(b==='all')return true;if(b==='0-10')return value<=10;if(b==='10-25')return value>10 && value<=25;if(b==='25-60')return value>25 && value<=60;if(b==='60-99')return value>60 && value<=99;return value>99; }
+function threeDpCell(record,key) {
+  if(key==='sku')return '<span class="chip mono">'+threeDpEsc(record.sku)+'</span>';if(key==='name')return threeDpEsc(record.name || '—');if(key==='type')return threeDpEsc(record.type);if(key==='status')return threeDpStatusHtml(record.row);if(key==='availability')return '<b>'+threeDpEsc(record.availability)+'</b>';if(key==='cost')return threeDpMoney(record.cost);if(key==='time')return threeDpEsc(record.time)+' год';if(key==='rrp')return record.rrp==null?'<span style="color:var(--muted)">—</span>':threeDpMoney(record.rrp)+(record.margin?'<br><span class="three-dp-margin '+record.margin.tier+'">'+threeDpEsc(record.margin.label)+' · '+record.margin.pct.toFixed(1)+'%</span>':'');if(key==='recommended')return '<span style="color:var(--muted)">Очікує формулу власника</span>';if(key==='buyout')return record.buyout==null?'<span style="color:var(--muted)">—</span>':threeDpMoney(record.buyout);return '—';
+}
+function threeDpSortValue(record,key) { return ['availability','cost','time','rrp','buyout'].indexOf(key)!==-1?(record[key]==null?-1:Number(record[key])):String(record[key]==null?'':record[key]).toLowerCase(); }
+function setThreeDpInfo(key,value) { threeDpUi.info[key]=value;renderThreeDpInformation(); }
+function sortThreeDpInfo(key) { if(threeDpUi.info.sort===key)threeDpUi.info.dir=threeDpUi.info.dir==='asc'?'desc':'asc';else{threeDpUi.info.sort=key;threeDpUi.info.dir=['availability','cost','time','rrp','buyout'].indexOf(key)!==-1?'desc':'asc';}renderThreeDpInformation(); }
+function toggleThreeDpColumn(key,checked) { threeDpUi.info.visible[key]=checked;localStorage.setItem(THREE_DP_INFO_PREFS_KEY,JSON.stringify({visible:threeDpUi.info.visible}));renderThreeDpInformation(); }
+function renderThreeDpInformation() {
+  const records=threeDpState.skus.map(threeDpInfoRecord);renderThreeDpAttention(records);renderThreeDpSummary(records);
+  const picker=document.getElementById('threeDpColumnPicker');if(picker)picker.innerHTML=THREE_DP_COLUMNS.map(function(c){return '<label><input type="checkbox" '+(threeDpVisible(c[0])?'checked':'')+' onchange="toggleThreeDpColumn(\''+c[0]+'\',this.checked)"> '+threeDpEsc(c[1])+'</label>';}).join('');
+  const visible=THREE_DP_COLUMNS.filter(function(c){return threeDpVisible(c[0]);}),q=String(threeDpUi.info.search || '').trim().toLowerCase(),types=Array.from(new Set(records.map(function(r){return r.type;}).filter(function(x){return x && x!=='—';}))).sort();
+  const rows=records.filter(function(r){return (!q || (r.sku+' '+r.name).toLowerCase().includes(q)) && (threeDpUi.info.type==='all' || r.type===threeDpUi.info.type) && (threeDpUi.info.status==='all' || r.status===threeDpUi.info.status) && threeDpCostMatch(r.cost);}),key=threeDpUi.info.sort,dir=threeDpUi.info.dir==='asc'?1:-1;
+  rows.sort(function(a,b){const av=threeDpSortValue(a,key),bv=threeDpSortValue(b,key),compare=typeof av==='number' && typeof bv==='number'?av-bv:String(av).localeCompare(String(bv),'uk',{numeric:true,sensitivity:'base'});return compare===0?a.sku.localeCompare(b.sku,'uk'):compare*dir;});
+  const output=[];let lastGroup=null;rows.forEach(function(r){const group=threeDpUi.info.group==='type'?r.type:threeDpUi.info.group==='status'?r.status:'';if(group && group!==lastGroup){output.push('<tr><td colspan="'+Math.max(1,visible.length)+'" style="background:var(--surface2);font-size:11px;font-weight:700;color:var(--muted)">'+threeDpEsc(group)+'</td></tr>');lastGroup=group;}output.push('<tr>'+visible.map(function(c){return '<td>'+threeDpCell(r,c[0])+'</td>';}).join('')+'</tr>');});
+  const target=document.getElementById('threeDpInformationTable');if(target){const arrow=function(c){return threeDpUi.info.sort===c?(threeDpUi.info.dir==='asc'?' ▲':' ▼'):' ↕';};target.innerHTML='<div class="three-dp-toolbar"><label>Пошук SKU / назви<input value="'+threeDpEsc(threeDpUi.info.search)+'" placeholder="🔍 Пошук…" oninput="setThreeDpInfo(\'search\',this.value)"></label><label>Тип<select onchange="setThreeDpInfo(\'type\',this.value)"><option value="all">Усі</option>'+types.map(function(x){return '<option value="'+threeDpEsc(x)+'"'+(threeDpUi.info.type===x?' selected':'')+'>'+threeDpEsc(x)+'</option>';}).join('')+'</select></label><label>Статус<select onchange="setThreeDpInfo(\'status\',this.value)"><option value="all">Усі</option><option value="Активний"'+(threeDpUi.info.status==='Активний'?' selected':'')+'>Активний</option><option value="Архів"'+(threeDpUi.info.status==='Архів'?' selected':'')+'>Архів</option></select></label><label>Собівартість<select onchange="setThreeDpInfo(\'cost\',this.value)"><option value="all">Усі</option><option value="0-10">до 10</option><option value="10-25">10.01–25</option><option value="25-60">25.01–60</option><option value="60-99">60.01–99</option><option value="100+">вище 99</option></select></label><label>Групувати<select onchange="setThreeDpInfo(\'group\',this.value)"><option value="none">Без груп</option><option value="type"'+(threeDpUi.info.group==='type'?' selected':'')+'>За типом</option><option value="status"'+(threeDpUi.info.group==='status'?' selected':'')+'>За статусом</option></select></label></div><div class="tbl-wrap"><table><tr>'+visible.map(function(c){return '<th onclick="sortThreeDpInfo(\''+c[0]+'\')" style="cursor:pointer">'+threeDpEsc(c[1])+arrow(c[0])+'</th>';}).join('')+'</tr>'+(output.length?output.join(''):'<tr><td colspan="'+Math.max(1,visible.length)+'" style="color:var(--muted)">Немає виробів за цими фільтрами.</td></tr>')+'</table></div>';}
+  threeDpTable('threeDpSalesTable',threeDpState.sales);threeDpTable('threeDpPayoutsTable',threeDpState.payouts);threeDpTable('threeDpPlyushkyTable',threeDpState.plyushky);
+}function threeDpAttention(records) { const target=document.getElementById('threeDpAttention');if(!target)return;const rows=records.map(function(r){const issues=[];if(r.rrp==null)issues.push('немає РРЦ');if(!r.model)issues.push('немає посилання на модель');if(r.status==='Активний' && r.availability<=1)issues.push(r.availability<=0?'наявність = 0':'наявність наближається до 0');return {r:r,issues:issues};}).filter(function(x){return x.issues.length;});target.innerHTML=rows.length?'<div class="three-dp-attention">'+rows.map(function(x){return '<div class="three-dp-attention-row"><span class="chip mono">'+threeDpEsc(x.r.sku)+'</span><b>'+threeDpEsc(x.r.name || '—')+'</b>'+x.issues.map(function(i){return '<span class="issue-tag">'+threeDpEsc(i)+'</span>';}).join('')+'</div>';}).join('')+'</div>':'<div style="color:var(--muted)">Активні SKU не мають контрольних пропусків.</div>'; }
+function threeDpMonth(offset) { const d=new Date();d.setDate(1);d.setMonth(d.getMonth()+offset);return d.toISOString().slice(0,7); }
+function threeDpMonthly(month) { return (threeDpState.sales || []).filter(function(r){return String(r['Дата'] || '').slice(0,7)===month;}).reduce(function(out,r){out.revenue+=threeDpNumber(r['Фактична ціна за од., грн (після знижки)'])*threeDpNumber(r['Кількість']);out.profit+=threeDpNumber(r['Дохід Booster Shop, грн']);return out;},{revenue:0,profit:0}); }
+function renderThreeDpSummary(records) {
+  const target=document.getElementById('threeDpInformationSummary');if(!target)return;const active=records.filter(function(r){return r.status==='Активний';}),warehouse=active.reduce(function(s,r){return s+r.availability*r.cost;},0),potential=active.reduce(function(s,r){return s+(r.rrp==null?0:r.availability*(r.rrp-r.cost));},0),now=threeDpMonthly(threeDpMonth(0)),previous=threeDpMonthly(threeDpMonth(-1)),profits={};
+  (threeDpState.sales || []).filter(function(r){return threeDpDate(r['Дата'])>=Date.now()-30*86400000;}).forEach(function(r){const sku=String(r.SKU || '');profits[sku]=(profits[sku] || 0)+threeDpNumber(r['Дохід Booster Shop, грн']);});const top=Object.keys(profits).map(function(sku){return {sku:sku,profit:profits[sku],name:(threeDpSku(sku) || {})['Назва виробу'] || ''};}).sort(function(a,b){return b.profit-a.profit;}).slice(0,5),months=[-5,-4,-3,-2,-1,0].map(function(x){const month=threeDpMonth(x);return {month:month,values:threeDpMonthly(month)};}),series=function(field){return '<div class="three-dp-top-list">'+months.map(function(x){return '<div class="three-dp-top-row"><span>'+threeDpEsc(x.month)+'</span><b>'+threeDpMoney(x.values[field])+'</b></div>';}).join('')+'</div>';};
+  target.innerHTML='<div class="three-dp-analytics-grid"><div class="three-dp-mini-card"><div class="label">Собівартість складу</div><div class="value">'+threeDpMoney(warehouse)+'</div><div class="sub">активна наявність × поточна собівартість</div></div><div class="three-dp-mini-card"><div class="label">Потенційний прибуток складу</div><div class="value">'+threeDpMoney(potential)+'</div><div class="sub">лише де є фактична РРЦ</div></div><div class="three-dp-mini-card"><div class="label">Виручка, '+threeDpEsc(threeDpMonth(0))+'</div><div class="value">'+threeDpMoney(now.revenue)+'</div><div class="sub">попередній місяць: '+threeDpMoney(previous.revenue)+'</div></div><div class="three-dp-mini-card"><div class="label">Чистий прибуток, '+threeDpEsc(threeDpMonth(0))+'</div><div class="value">'+threeDpMoney(now.profit)+'</div><div class="sub">попередній місяць: '+threeDpMoney(previous.profit)+'</div></div><div class="three-dp-mini-card"><div class="label">% замовлень з 3D</div><div class="value">—</div><div class="sub">Очікує спільний detection mechanism 3D-P-010.</div></div></div><div class="grid2"><div><b>Топ-5 SKU за прибутком · 30 днів</b><div class="three-dp-top-list" style="margin-top:8px">'+(top.length?top.map(function(x){return '<div class="three-dp-top-row"><span><span class="chip mono">'+threeDpEsc(x.sku)+'</span> '+threeDpEsc(x.name)+'</span><b>'+threeDpMoney(x.profit)+'</b></div>';}).join(''):'<div class="three-dp-note">Немає продажів за 30 днів.</div>')+'</div></div><div><b>Виручка · 6 місяців</b><div style="margin-top:8px">'+series('revenue')+'</div></div></div><div class="grid2" style="margin-top:18px"><div><b>Чистий прибуток · 6 місяців</b><div style="margin-top:8px">'+series('profit')+'</div></div><div><b>РРЦ рекомендована</b><div class="three-dp-note" style="margin-top:8px">Генератор навмисно не реалізований: формула target margin / interest weight чекає окремого підтвердження власника.</div></div></div>';
+}
+async function reloadThreeDpData() {
+  const x=await Promise.all([call3dp('3dp_overview'),call3dp('3dp_skus',{include_archived:'true'}),call3dp('3dp_sales'),call3dp('3dp_plyushky'),call3dp('3dp_payouts'),call3dp('3dp_fixtures'),call3dp('3dp_get_range',{sheet:'Налаштування',range:'A1:C4'}),call3dp('3dp_get_range',{sheet:'Аналітика',range:'A3:N17'})]);threeDpState.overview=x[0] || {};threeDpState.skus=x[1].rows || [];threeDpState.sales=x[2].rows || [];threeDpState.plyushky=x[3].rows || [];threeDpState.payouts=x[4].rows || [];threeDpState.fixtures=x[5].rows || [];threeDpState.analytics=x[7].values || [];threeDpState.settings=(x[6].values || []).slice(1).reduce(function(out,row){out[row[0]]=row[1];return out;},{});if(threeDpUi.calc.sku && !threeDpActiveSkus().some(function(r){return r.SKU===threeDpUi.calc.sku;}))threeDpUi.calc.sku='';
+}
+function renderThreeDpAll() { renderThreeDpCards((threeDpState.overview || {}).summary || {});renderThreeDpSettings();renderThreeDpCalculator();renderThreeDpProducts();renderThreeDpInformation(); }
+async function load3dPrint() { const root=document.getElementById('threeDpCalculator');try { await reloadThreeDpData();renderThreeDpAll();document.getElementById('threeDpSub').textContent='Оновлено через bounded 3D-P API · '+((threeDpState.overview || {}).month || ''); } catch(e) { if(root)root.innerHTML='<div style="color:var(--yellow)">3D-P ще не підключено: '+threeDpEsc(e.message)+'</div>';document.getElementById('threeDpSub').textContent='Потрібні окремі локальні URL і token 3D-P API'; } }
 // ════════════ FORMATTERS ════════════
 const fmt   = n => n != null ? '₴' + Number(n).toLocaleString('uk-UA', {maximumFractionDigits:0}) : '—';
 const fmtP  = n => n != null ? Number(n).toFixed(1) + '%' : '—';
@@ -1981,26 +2157,42 @@ const ROADMAP_TASKS = [
   },  {
     id: '3D-P-008', title: '3D-P Apps Script API: bounded read/write, audit і reconciliation', status: 'active', tool: 'Codex + Apps Script', priority: 'High',
     lastUpdated: '2026-08-02', blockedBy: [],
-    simple: 'Окремий Apps Script Web API для 3D-P Sheet: bounded read actions, два незалежні токени, role-based manual-field writes, optimistic locking, _Аудит_API і reconciliation локального v6 з live Sheet.',
+    simple: 'Окремий Apps Script Web API для 3D-P Sheet: bounded read/write, два незалежні токени, role-based manual-field writes, optimistic locking, _Аудит_API, reconciliation і Addendum #2 для чернеток партій, SKU archive/restore та traceable stock correction.',
     why: '3D-P-006 (owner dashboard) і 3D-P-007 (локальний UI Сергія) мають працювати через один захищений data layer, не читати/писати Google Sheet напряму і не використовувати master CRM token.',
-    warn: '2026-08-02: owner reports Code.gs replacement, preview3dpApiSetup(), setup3dpApi(), and a new Web App deployment are complete. Pending proof is only the live negative + no-net-change positive smoke; until it passes, 3D-P-006/007 calculator UI remains blocked. Reconciliation business writes remain a separate owner gate.',
+    warn: '2026-08-02: legacy Номенклатура!F3 не використовується як archive state; Addendum #2 використовує технічні O:P. Owner-run no-net і API-only positive smoke пройшли: setup already_applied=true, FIG-CHARM-001 draft fresh-read, active→archive→active з include_archived, Наявність!G 0→1 і matching ledger row. Залишені свідомі test draft/audit/ledger effects; будь-який stock counter-adjustment потребує окремого owner approval. Reconciliation business writes лишаються окремим owner gate.',
     subtasks: [
       { id: '1', title: 'Apps Script source + local mock tests', status: 'done', desc: '7 read paths; formula/non-whitelist/stale rejects; audited write; print-log append/edit/archive/restore; setup idempotency.' },
       { id: '2', title: 'Corrected deployment + owner token', status: 'done', desc: 'Corrected version published at the same /exec URL; owner-token authentication passed. Serhiy-token live proof is deferred to 3D-P-007.' },
       { id: '3', title: 'Live negative tests + audit proof', status: 'done', desc: 'FORMULA_CELL, COLUMN_NOT_ALLOWED, STALE_WRITE passed with 0 changes; O3 blank→0→blank verified by two dashboard audit rows.' },
       { id: '4', title: 'Owner reconciliation approval and apply', status: 'todo', desc: 'Спочатку review diff; потім лише підтверджені A3/F3/H3/J3/M3 через 3dp_write.' },
-      { id: '5', title: 'Schema correction deploy + live QA', status: 'active', desc: 'Owner reported deployment complete; Codex awaits only negative and no-net-change positive smoke output.' }
+      { id: '5', title: 'Schema correction deploy + live QA', status: 'done', desc: 'Owner deployed the positive-QA route; idempotent setup, bounded reads, guardrails and all four API-only test-SKU checks passed live.' },
+      { id: '6', title: 'Addendum #2: drafts, SKU archive і stock ledger', status: 'done', desc: 'Live FIG-CHARM-001 QA passed: draft fresh-read, active→archive→active visibility, and Наявність!G 0→1 with matching reasoned ledger entry.' }
     ]
   },
   {
     id: '3D-P-010', title: 'Автопідтягування вартості пакування CRM → 3D-P', status: 'active', tool: 'Codex + Apps Script', priority: 'High',
-    lastUpdated: '2026-08-02', blockedBy: [],
-    simple: 'Phase 0: підтвердити поточне main-CRM джерело ціни пакування, GET-відповідь замовлення та ключ зв’язку з Продажі 3D-P до будь-якого коду.',
+    lastUpdated: '2026-08-02', blockedBy: ['owner review/deploy of CRM V86 patch', 'fixture schema/semantics', 'підтверджене поле 3D-P для фурнітури'],
+    simple: 'Packaging Phase 1 local package готовий під підтверджений CRM Auto V86: сумує main-CRM Продажі!P по замовленню та guarded API записує суму один раз у перший 3D-P Продажі!G match за N.',
     why: 'Пакування для 3D-товару має підтягуватись з основного CRM у Продажі!G, але це CRM risky zone і не можна вгадувати поточний API-контракт.',
-    warn: 'Phase 0 local evidence: historical CRM source (2026-07-04) resolves non-Інше from Розхідники A:C and orders GET does not return packaging fields; recent_sales does. This is not current-live proof. No local CRM/3D-P URL or token is configured for the required bounded GET reads, so Phase 1 is blocked on owner review plus current source/live response evidence. No CRM or Sheet write was attempted.',
+    warn: '2026-08-02: V86 source anchor підтверджено власником. Локальний patch fail-open: no 3D SKU/no 3D-P row/API outage не ламають add/update; identical G не створює зайвий audit. Потрібен лише owner review, Script Properties URL+owner-token та Version 87 deploy/real smoke. Fixture Phase 0 окремо: V86 читає Розхідники A:name/B:category/C:cost, але не доводить accepted «Фурнітура», її order-edit dropdown, списання чи 3D-P destination.',
     subtasks: [
-      { id: '1', title: 'Phase 0 source/API/header evidence', status: 'done', desc: 'Historical source reviewed; live bounded evidence unavailable locally and explicitly flagged.' },
-      { id: '2', title: 'Owner review and Phase 1 authorization', status: 'todo', desc: 'Choose integration design only after current source and bounded GET response are confirmed.' }
+      { id: '1', title: 'Phase 0 source/API/header evidence', status: 'done', desc: 'CRM Auto V86 source is confirmed; P/AC packaging mapping and Розхідники A:C reads verified.' },
+      { id: '2', title: 'Packaging Phase 1 local source patch + tests', status: 'done', desc: 'patches/3D-P-010_crm-packaging-pull_20260802.js; five local contract tests pass.' },
+      { id: '3', title: 'Owner CRM deploy and real packaging smoke', status: 'todo', desc: 'Review V86 anchors, set CRM-local 3D-P URL/token properties, deploy Version 87, then test standard/custom/multiline/fail-open flows.' },
+      { id: '4', title: 'Fixture Phase 0 and separate implementation', status: 'todo', desc: 'Confirm category validation, order-edit payload, consumption semantics and 3D-P destination before any fixture code.' }
+    ]
+  },
+  {
+    id: '3D-P-013', title: 'Реструктурувати вкладку «3D-друк» на три робочі зони', status: 'active', tool: 'Codex', priority: 'High',
+    lastUpdated: '2026-08-02', blockedBy: ['durable model/RRP/buyout field mapping', 'owner browser QA'],
+    simple: 'Локально замінено пласку 3D-P сторінку на внутрішні зони Калькулятор / Вироби / Інформація; вона лишається одним пунктом sidebar і споживає лише 3D-P API.',
+    why: 'Власник і Сергій отримують окремі робочі поверхні для партії, SKU та операційної інформації замість змішаного списку таблиць.',
+    warn: '2026-08-02: local static gates пройдено; Addendum #2 actions для constants/drafts/archive/stock уже підключені, але не викликались dashboard-ом live. Не вигадано записів для model link, ручної РРЦ чи buyout: у підтвердженому contract fixture Номенклатура їх не має. РРЦ-рекомендація лишається явним placeholder до окремого owner рішення. Codex in-app browser policy заблокувала file:// visual smoke, тому три breakpoint-и та API write-flow — owner browser QA після локального налаштування URL/token.',
+    subtasks: [
+      { id: '1', title: 'Локальна структура трьох зон та read-only information UI', status: 'done', desc: 'Subtabs, sortable/filterable table, local column visibility, margin tiers, attention and journals are implemented locally.' },
+      { id: '2', title: 'Calculator + Addendum #2 controls', status: 'done', desc: 'Owner settings, raw drafts, guarded per-unit save, archive/restore and ledger-backed stock controls are wired to existing 3D-P API actions.' },
+      { id: '3', title: 'Durable SKU model/RRP/buyout mapping', status: 'todo', desc: 'Requires an owner-confirmed writable Sheet/API field; current UI does not fabricate a destination.' },
+      { id: '4', title: 'Owner browser QA', status: 'todo', desc: 'Configure local 3D-P URL/token, verify three zones at desktop/tablet/mobile, then run one deliberate test-SKU flow.' }
     ]
   },
   {

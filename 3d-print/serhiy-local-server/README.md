@@ -1,63 +1,79 @@
 # 3D-P Serhiy local server
 
-Small local-only UI for Serhiy. It talks **only** to the deployed 3D-P Apps
-Script web app; it does not have a Google Sheets/Drive client, main CRM URL, or
-`BOOSTER_CRM_TOKEN`.
+A standalone local-only UI for Serhiy. It is an API consumer: the browser talks
+only to this localhost process, and this process talks only to the deployed
+3D-P Apps Script Web App. It has no Google Sheets/Drive client, main-CRM URL,
+or `BOOSTER_CRM_TOKEN`.
 
 ## What it does
 
-- Shows the 3D-P overview, SKUs/availability, active print log, and fixture list.
-- Calculates the final batch model. Batch total weight and time are divided by
-  quantity before `Номенклатура!G:H` per-unit values are saved.
-- Reads the three global settings from `Налаштування!A1:C4`; the local UI cannot
-  edit them.
-- Writes only through the deployed API as the `serhiy` identity:
-  `Номенклатура!G,H,I,J,N` and approved `Друк-лог` actions.
-- Adds a print session and changes `Брак, шт` through the API's specialized
-  history-preserving action.
+- Shows the bounded 3D-P overview, active SKU/availability, active print log,
+  fixture list, payout-status rows, and only `Легенда!A32:A38` (known open
+  questions).
+- Uses the final batch model: session total weight and print time are divided by
+  batch quantity before per-unit values are written to `Номенклатура!G:J`.
+- Loads and saves the five raw batch values with Addendum #2's
+  `3dp_batch_draft` / `3dp_batch_draft_save`, so a selected SKU's draft
+  survives refreshes and re-selection:
+  `quantity`, `total_weight_g`, `total_print_time_h`, `spool_weight_g`,
+  `spool_price_uah`.
+- Reads the three global settings from `Налаштування!A1:C4` and displays them
+  read-only. Serhiy cannot edit those owner-only constants.
+- Adds a print session through `3dp_append_row`, and changes `Брак, шт` only
+  through the history-preserving `3dp_print_log_update` action.
+- Assigns optional fixture price through the API. Fixture is a later,
+  independent step; it is not part of the base formula and does not block a
+  batch save.
 
-There is no plastic-type field. Fixture is a later, independent assignment:
-the UI resolves its selected name from `Фурнітура_довідник` and saves the
-reference price into `Номенклатура!N`.
+There is no plastic-type field and no packaging-cost logic. Packaging is
+3D-P-010, not this local server.
 
-## Prerequisites
+## Credential boundary
 
-- Node.js 18 or newer (`node --version`). No `npm install` is needed.
-- The 3D-P web app deployed after the 3D-P-008 schema correction.
-- A **separate** Apps Script property `BOOSTER_3DP_SERHIY_TOKEN`. Do not reuse
-  the dashboard token and do not paste either token in this repository, chat,
-  screenshots, or browser fields.
+The process needs exactly these local environment variables:
 
-## Run on Serhiy's PC
+- `BOOSTER_3DP_URL` — deployed Apps Script Web App URL ending in `/exec`.
+- `BOOSTER_3DP_SERHIY_TOKEN` — a Serhiy-only credential provisioned in Apps
+  Script separately from the owner/dashboard token.
 
-In PowerShell, from this folder, set the two values only for the current local
-process. The actual token must never be copied into this README or `.env.example`.
+Never set `BOOSTER_CRM_TOKEN` here. Do not reuse the owner/dashboard 3D-P
+token, put a real token in `.env.example`, commit one, display one in the
+browser, or send one in chat/screenshots. The server binds only to `127.0.0.1`;
+it is not reachable from the LAN.
+
+## Start on Serhiy's PC
+
+Node.js 18+ is required. No `npm install` is needed: this package uses only
+Node's built-in modules.
+
+In PowerShell, from this directory, define the variables for this PowerShell
+session and run the server:
 
 ```powershell
 Set-Location 'C:\path\to\booster-shop-ops\3d-print\serhiy-local-server'
-$env:BOOSTER_3DP_URL='https://script.google.com/macros/s/.../exec'
-$env:BOOSTER_3DP_SERHIY_TOKEN='Serhiy-only token from the owner'
+$env:BOOSTER_3DP_URL = 'https://script.google.com/macros/s/DEPLOYMENT_ID/exec'
+$env:BOOSTER_3DP_SERHIY_TOKEN = 'Serhiy-only token from the owner'
 npm start
 ```
 
-Open `http://127.0.0.1:3107`. The server binds to `127.0.0.1` only, so it is
-not exposed to other devices on the network. Stop it with `Ctrl+C`.
+Open `http://127.0.0.1:3107`. Stop it with `Ctrl+C`; session environment
+variables disappear when that PowerShell window closes.
 
 ## Normal workflow
 
-1. Pick SKU, enter session quantity, total product weight, total print time,
-   spool weight, and spool price. Click **Розрахувати**.
-2. Check per-unit values and the three cost lines. Click **Зберегти per-unit у
-   SKU** only when they are correct.
-3. Add the actual session to **Друк-лог**. Defect quantity is kept separate from
-   the cost formula.
-4. After production, choose a fixture if one is needed. It is optional and can
-   be changed or cleared later.
-5. To correct a defect count, use its row's **Зберегти брак** button. A stale
-   value is rejected; refresh and retry instead of overwriting someone else's
-   change.
+1. Select an active SKU. Its stored five-field batch draft loads automatically.
+2. Enter or amend batch quantity, total product weight, total print time, spool
+   weight, and spool price. Calculate and verify the per-unit values and three
+   cost lines.
+3. Click **Зберегти чернетку і per-unit у SKU**. The API saves the raw draft
+   first, then writes per-unit values to `G:J`. A concurrent edit returns
+   `STALE_WRITE`; refresh instead of trying to overwrite it.
+4. Add the real print session through **Друк-лог: нова сесія**. Correct
+   post-production defects with **Зберегти брак**, which preserves API history.
+5. Select fixture only after production if it applies. It can be cleared later
+   and does not change the base calculation.
 
-## Checks before owner/Serhiy QA
+## Local verification
 
 ```powershell
 Set-Location 'C:\path\to\booster-shop-ops\3d-print\serhiy-local-server'
@@ -66,30 +82,34 @@ node --check .\server.mjs
 node --check .\public\app.js
 ```
 
-## Live QA (owner + Serhiy)
+`npm test` uses a fake localhost 3D-P API. It verifies the local server sends
+only the Serhiy credential, reads bounded payout/Legend views, round-trips the
+five raw batch inputs, writes only computed per-unit `G:J`, and uses the
+specialized print-log actions. It does not call the live endpoint or change
+business data.
 
-1. With the Serhiy token, open the local UI and confirm real SKU, availability,
-   fixture list, and active log load. The browser must only call `127.0.0.1`;
-   the server is the sole API caller.
-2. Use a non-production test SKU/session: calculate a batch (for example,
-   36 units) and verify the displayed per-unit weight/time are totals divided
-   by 36. Save it and refresh; confirm `Номенклатура!G:J` match those per-unit
-   values, not batch totals.
-3. Add one test `Друк-лог` row, then modify `Брак, шт`. Confirm the row updates
-   and its API history contains `було → стало`.
-4. Select a fixture and confirm only `Номенклатура!N` changes; clear it and
-   confirm it is independently reversible.
-5. Check `_Аудит_API` as owner: successful writes should identify `serhiy`.
+## Owner + Serhiy live QA
 
-## Limits and recovery
+1. Start the server with the distinct Serhiy token and confirm the browser only
+   calls `127.0.0.1`; real data must load from the local server, not a direct
+   Sheets/Drive request.
+2. On a non-production test SKU, save a known batch (for example 36 units,
+   180 g and 18 h). Refresh/reselect the SKU and confirm all five raw values
+   reload, while `G:J` contain `0.5 h`, `5 g`, `1000 g`, and `800 грн` per unit
+   inputs where applicable — never 18 h or 180 g as per-unit data.
+3. Create a test `Друк-лог` row and change `Брак, шт`; owner checks the live
+   row history and `_Аудит_API` identity is `serhiy`.
+4. Check fixture change/clear is independent. Confirm payout/open-question
+   views show only the bounded data expected for this tool.
 
-The existing API permits one `3dp_write` cell per request, so a per-unit SKU
-save is four audited, optimistic-lock writes. If another editor changes a SKU
-between those writes, the UI stops with `STALE_WRITE` and tells Serhiy to refresh.
-Already-applied cells remain individually visible in `_Аудит_API`; no silent
-retry or direct-Sheet fallback exists. A future atomic batch-write action would
-be a separate 3D-P-008 scope change, not part of this server.
+## Recovery and limits
 
-Rollback is simply stopping this local server. It has no dashboard, CRM, or
-Sheet-schema changes. Any approved data correction is recoverable from
-`_Аудит_API` by the owner.
+Rollback is stopping the local process. It has no dashboard, CRM, or
+Sheet-schema side effects. Approved API writes remain recoverable by the owner
+from `_Аудит_API`.
+
+The API's generic `3dp_write` action updates one cell at a time. The batch
+save therefore has a known bounded risk: if a later per-unit cell becomes stale
+after the raw draft has saved, the UI stops and reports the error; it never
+retries blindly or falls back to direct Sheet access. An atomic batch action
+would be a separate 3D-P-008 change.

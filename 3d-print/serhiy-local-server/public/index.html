@@ -13,7 +13,7 @@
         <div>
           <p class="eyebrow">Локальний доступ Сергія</p>
           <h1>Booster 3D-друк</h1>
-          <p class="muted">Дані з 3D-P API. Сторінка не має доступу до CRM чи Google Sheets напряму.</p>
+          <p class="muted">Дані надходять тільки через 3D-P API. Сторінка не має доступу до CRM чи Google Sheets напряму.</p>
         </div>
         <button id="reload" type="button">Оновити дані</button>
       </header>
@@ -29,19 +29,31 @@
       </section>
 
       <section class="panel">
+        <h2>Виплати</h2>
+        <p class="muted">Статус нарахувань і виплат з обмеженої API-відповіді.</p>
+        <div class="table-wrap"><table><thead id="payout-head"></thead><tbody id="payout-rows"></tbody></table></div>
+      </section>
+
+      <section class="panel">
+        <h2>Відомі відкриті питання</h2>
+        <p class="muted">Лише обмежений діапазон Легенда!A32:A38 через 3D-P API.</p>
+        <ul id="open-questions" class="questions"></ul>
+      </section>
+
+      <section class="panel">
         <h2>Калькулятор партії</h2>
-        <p class="muted">У таблицю потрапляють лише значення за одиницю. Сумарні вага й час діляться на кількість партії.</p>
+        <p class="muted">Чернетка зберігає п’ять введених значень для SKU. У Номенклатуру потрапляють лише значення за одиницю: сумарні вага й час діляться на кількість партії.</p>
         <form id="batch-form" class="grid">
           <label>SKU<select name="sku" class="sku-select" required></select></label>
           <label>Кількість у партії, шт<input name="quantity" type="number" min="1" step="1" required></label>
-          <label>Сумарна вага виробів, г<input name="total_weight_g" type="number" min="0.000001" step="any" required></label>
-          <label>Сумарний час друку, год<input name="total_time_hours" type="number" min="0.000001" step="any" required></label>
+          <label>Сумарна вага партії, г<input name="total_weight_g" type="number" min="0.000001" step="any" required></label>
+          <label>Сумарний час партії, год<input name="total_print_time_h" type="number" min="0.000001" step="any" required></label>
           <label>Вага котушки, г<input name="spool_weight_g" type="number" min="0.000001" step="any" required></label>
           <label>Ціна котушки, грн<input name="spool_price_uah" type="number" min="0.000001" step="any" required></label>
-          <div class="actions"><button type="submit">Розрахувати</button><button id="save-batch" type="button" disabled>Зберегти per-unit у SKU</button></div>
+          <div class="actions"><button type="submit">Розрахувати</button><button id="save-batch" type="button" disabled>Зберегти чернетку і per-unit у SKU</button></div>
         </form>
         <div id="settings" class="settings" aria-live="polite"></div>
-        <div id="calculation" class="result empty">Введіть дані партії та натисніть «Розрахувати».</div>
+        <div id="calculation" class="result empty">Оберіть SKU: сервер завантажить його чернетку. Потім введіть або перевірте дані й натисніть «Розрахувати».</div>
       </section>
 
       <section class="panel">

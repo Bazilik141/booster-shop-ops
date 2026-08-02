@@ -9,7 +9,7 @@ const number = (value, label) => {
 export function calculateBatchCost(input, settings) {
   const quantity = number(input.quantity, "Batch quantity");
   const totalWeightG = number(input.total_weight_g, "Total product weight");
-  const totalTimeHours = number(input.total_time_hours, "Total print time");
+  const totalTimeHours = number(input.total_print_time_h, "Total print time");
   const spoolWeightG = number(input.spool_weight_g, "Spool weight");
   const spoolPriceUah = number(input.spool_price_uah, "Spool price");
   const printerPowerKw = number(settings.printer_power_kw, "Printer power");
@@ -25,7 +25,7 @@ export function calculateBatchCost(input, settings) {
   return {
     quantity,
     total_weight_g: totalWeightG,
-    total_time_hours: totalTimeHours,
+    total_print_time_h: totalTimeHours,
     spool_weight_g: spoolWeightG,
     spool_price_uah: spoolPriceUah,
     per_unit: {

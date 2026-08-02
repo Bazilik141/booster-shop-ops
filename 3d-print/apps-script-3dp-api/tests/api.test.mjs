@@ -200,7 +200,7 @@ const spreadsheet = new MockSpreadsheet("1yp15H3YJGkqI4Rx89G4QZHkD9m67gnWh58TsTT
   new MockSheet("Номенклатура", [
     nomenclatureHeaders,
     ["ПРИКЛАД-001", "Приклад", "—", "Фігурка", "Продаж на сайті", "ПРИКЛАД — видалити", 4, "PLA", 120, 700, formula(84, "=I2*J2/1000+N2+O2*G2"), "2026-07-28", "приклад", 0, 1.5],
-    ["BR-CHARM-001", "Брелок Чармандер", "Pokemon", "Брелок", "Продаж на сайті", "Активний", 0.1032, "PLA", 2.45, 1549.98, formula(6.797451, "=I3*J3/1000+N3+O3*G3"), "2026-07-31", "реальний", 3, 12],
+    ["BR-CHARM-001", "Брелок Чармандер", "Pokemon", "Брелок", "Продаж на сайті", "Підготовка до запуску", 0.1032, "PLA", 2.45, 1549.98, formula(6.797451, "=I3*J3/1000+N3+O3*G3"), "2026-07-31", "реальний", 3, 12],
   ]),
   new MockSheet("Друк-лог", [
     printLogHeaders,
@@ -307,6 +307,62 @@ const repairResult = context.repair3dpAvailabilityFormulas();
 assert.equal(repairResult.already_applied, false);
 assert.match(spreadsheet.getSheetByName("Наявність").getRange("C3").getFormula(), /;/);
 assert.equal(context.repair3dpAvailabilityFormulas().already_applied, true);
+const addendumPreview = context.preview3dpApiAddendum2();
+assert.equal(addendumPreview.ok, true);
+const addendumSetup = context.setup3dpApiAddendum2();
+assert.equal(addendumSetup.ok, true);
+assert.equal(addendumSetup.already_applied, false);
+assert.equal(spreadsheet.getSheetByName("_Чернетки_партій").isSheetHidden(), true);
+assert.equal(spreadsheet.getSheetByName("_Коригування_наявності").isSheetHidden(), true);
+assert.match(spreadsheet.getSheetByName("Наявність").getRange("G3").getFormula(), /_Коригування_наявності/);
+assert.equal(context.setup3dpApiAddendum2().already_applied, true);
+const addendumSetupViaApi = context.handlePost3dp_({ action: "3dp_setup_addendum2" }, owner);
+assert.equal(addendumSetupViaApi.ok, true);
+assert.equal(addendumSetupViaApi.already_applied, true);
+expectCode("FORBIDDEN", () => context.handlePost3dp_({ action: "3dp_setup_addendum2" }, serhiy));
+
+expectCode("COLUMN_NOT_ALLOWED", () => context.writeAction3dp_(spreadsheet, {
+  sheet: "Налаштування", sku_or_row: 2, column: "B", value: 0.2, expected_current: 0.17,
+}, serhiy));
+expectCode("ROW_NOT_ALLOWED", () => context.writeAction3dp_(spreadsheet, {
+  sheet: "Налаштування", sku_or_row: 5, column: "B", value: 0.2, expected_current: "",
+}, owner));
+const settingsWrite = context.writeAction3dp_(spreadsheet, {
+  sheet: "Налаштування", sku_or_row: 2, column: "B", value: 0.2, expected_current: 0.17,
+}, owner);
+assert.equal(settingsWrite.new_value, 0.2);
+expectCode("SHEET_NOT_WRITABLE", () => context.appendRowAction3dp_(spreadsheet, {
+  sheet: "Налаштування", values: { B: 0.3 },
+}, owner));
+
+const emptyBatchDraft = context.getBatchDraftAction3dp_(spreadsheet, { sku: "BR-CHARM-001" }, serhiy);
+assert.equal(emptyBatchDraft.found, false);
+assert.deepEqual(JSON.parse(JSON.stringify(emptyBatchDraft.values)), {
+  quantity: "", total_weight_g: "", total_print_time_h: "", spool_weight_g: "", spool_price_uah: "",
+});
+expectCode("FORMULA_VALUE_NOT_ALLOWED", () => context.saveBatchDraftAction3dp_(spreadsheet, {
+  sku: "BR-CHARM-001", values: { quantity: "=1+1" }, expected_current: { quantity: "" },
+}, serhiy));
+expectCode("STALE_WRITE", () => context.saveBatchDraftAction3dp_(spreadsheet, {
+  sku: "BR-CHARM-001", values: { quantity: 36 }, expected_current: { quantity: 1 },
+}, serhiy));
+const batchSave = context.saveBatchDraftAction3dp_(spreadsheet, {
+  sku: "BR-CHARM-001",
+  values: { quantity: 36, total_weight_g: 88.24, total_print_time_h: 3.72, spool_weight_g: 1000, spool_price_uah: 1600 },
+  expected_current: { quantity: "", total_weight_g: "", total_print_time_h: "", spool_weight_g: "", spool_price_uah: "" },
+}, serhiy);
+assert.equal(batchSave.row, 2);
+const rereadBatchDraft = context.getBatchDraftAction3dp_(spreadsheet, { sku: "BR-CHARM-001" }, owner);
+assert.equal(rereadBatchDraft.found, true);
+assert.deepEqual(JSON.parse(JSON.stringify(rereadBatchDraft.values)), {
+  quantity: 36, total_weight_g: 88.24, total_print_time_h: 3.72, spool_weight_g: 1000, spool_price_uah: 1600,
+});
+assert.equal(context.handleGet3dp_({ action: "3dp_batch_draft", sku: "BR-CHARM-001" }, owner).found, true);
+assert.equal(context.handlePost3dp_({
+  action: "3dp_batch_draft_save", sku: "BR-CHARM-001",
+  values: { quantity: 36 }, expected_current: { quantity: 36 },
+}, serhiy).already_applied, true);
+
 
 assert.equal(context.overviewAction3dp_(spreadsheet).summary.sku_count, 1);
 assert.equal(context.overviewAction3dp_(spreadsheet).summary.available, 34);
@@ -354,6 +410,47 @@ assert.equal(context.printLogAction3dp_(spreadsheet, {}).count, 0);
 assert.equal(context.printLogAction3dp_(spreadsheet, { include_archived: "true" }).count, 1);
 const restoreResult = context.setPrintLogArchiveAction3dp_(spreadsheet, { row: 3, expected_status: "Архів" }, serhiy, false);
 assert.equal(restoreResult.status, "Активний");
+expectCode("COLUMN_NOT_ALLOWED", () => context.writeAction3dp_(spreadsheet, {
+  sheet: "Номенклатура", sku_or_row: "BR-CHARM-001", column: "O", value: "Архів", expected_current: "Активний",
+}, owner));
+expectCode("FORBIDDEN", () => context.setNomenclatureArchiveAction3dp_(spreadsheet, {
+  row: 3, expected_status: "Активний",
+}, serhiy, true));
+expectCode("STALE_WRITE", () => context.setNomenclatureArchiveAction3dp_(spreadsheet, {
+  row: 3, expected_status: "Архів",
+}, owner, true));
+const skuArchiveResult = context.setNomenclatureArchiveAction3dp_(spreadsheet, {
+  row: 3, expected_status: "Активний", reason: "тестове приховування",
+}, owner, true);
+assert.equal(skuArchiveResult.status, "Архів");
+assert.equal(context.skusAction3dp_(spreadsheet, {}).count, 0);
+assert.equal(context.skusAction3dp_(spreadsheet, { include_archived: "true" }).count, 1);
+assert.equal(context.overviewAction3dp_(spreadsheet).summary.available, 0);
+const skuRestoreResult = context.setNomenclatureArchiveAction3dp_(spreadsheet, {
+  row: 3, expected_status: "Архів",
+}, owner, false);
+assert.equal(skuRestoreResult.status, "Активний");
+assert.equal(context.skusAction3dp_(spreadsheet, {}).count, 1);
+
+expectCode("FORBIDDEN", () => context.stockAdjustmentsAction3dp_(spreadsheet, {}, serhiy));
+expectCode("STALE_WRITE", () => context.adjustStockAction3dp_(spreadsheet, {
+  sku: "BR-CHARM-001", expected_current: 33, delta: -2, reason: "списання браку",
+}, owner));
+expectCode("NEGATIVE_STOCK", () => context.adjustStockAction3dp_(spreadsheet, {
+  sku: "BR-CHARM-001", expected_current: 34, delta: -35, reason: "помилкове списання",
+}, owner));
+const stockAdjustment = context.adjustStockAction3dp_(spreadsheet, {
+  sku: "BR-CHARM-001", expected_current: 34, delta: -2, reason: "списання браку",
+}, owner);
+assert.equal(stockAdjustment.new_value, 32);
+assert.equal(spreadsheet.getSheetByName("_Коригування_наявності").getRange("A2:D2").getValues()[0][0], "BR-CHARM-001");
+assert.equal(spreadsheet.getSheetByName("_Коригування_наявності").getRange("A2:D2").getValues()[0][1], -2);
+assert.equal(context.stockAdjustmentsAction3dp_(spreadsheet, { sku: "BR-CHARM-001" }, owner).count, 1);
+assert.equal(context.handleGet3dp_({ action: "3dp_stock_adjustments", sku: "BR-CHARM-001" }, owner).count, 1);
+assert.equal(context.handlePost3dp_({
+  action: "3dp_adjust_stock", sku: "BR-CHARM-001", expected_current: 34, delta: 0, reason: "без зміни",
+}, owner).already_applied, true);
+
 
 const appendResult = context.appendRowAction3dp_(spreadsheet, {
   sheet: "Друк-лог",
@@ -370,9 +467,10 @@ assert.ok(audit.getRange(2, 2, audit.getLastRow() - 1, 1).getValues().flat().inc
 console.log(JSON.stringify({
   ok: true,
   setup_idempotent: true,
-  read_actions_checked: 7,
+  read_actions_checked: 9,
   negative_write_tests: ["FORMULA_CELL", "COLUMN_NOT_ALLOWED", "STALE_WRITE"],
   extra_security_tests: ["FORMULA_VALUE_NOT_ALLOWED", "DOCUMENTATION_RANGE_BLOCKS"],
   print_log: ["append", "edit_with_history", "archive", "restore"],
+  addendum_2: ["owner_settings_only", "batch_draft_round_trip", "sku_archive_restore", "stock_ledger"],
   audit_rows: audit.getLastRow() - 1,
 }));

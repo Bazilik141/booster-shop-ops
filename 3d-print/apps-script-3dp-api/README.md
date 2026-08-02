@@ -67,6 +67,34 @@ Before running setup, create a named Google Sheets version such as
 `Наявність!C:D`, paste the corrected source and run only
 `repair3dpAvailabilityFormulas()`; it is idempotent and touches only those formulas.
 
+## Addendum #2: dashboard product and calculator API extension
+
+This local source package also contains Addendum #2. It is **not deployment or
+live-QA proof**. It must be deployed only after the final-cost schema correction
+(Addendum #1) is live and verified.
+
+Run `preview3dpApiAddendum2()` first. It makes no writes and refuses to proceed
+unless all Addendum #1 anchors are present: final `Номенклатура!G:J` and `K1`,
+the approved `Налаштування!B2:B4` block, and `Друк-лог!J:K` archive/history
+columns. A mismatch returns `ADDENDUM_1_REQUIRED` or
+`SETUP_ANCHOR_MISMATCH` without changing the workbook.
+
+After a named Sheet version is created, run `setup3dpApiAddendum2()`. It is
+idempotent and only:
+
+- enables owner-only guarded `3dp_write` access to `Налаштування!B2:B4`;
+- preserves legacy `Номенклатура!F` business status untouched and adds technical
+  `O:P` archive state/history (`Активний` / `Архів`) with `_Аудит_API` trail;
+- creates and hides `_Чернетки_партій` with a SKU key plus the five raw batch
+  calculator inputs;
+- creates and hides `_Коригування_наявності`, an append-only SKU/delta/reason/
+  Kyiv-time stock ledger;
+- changes only `Наявність!G` formulas so they include that ledger. The stock
+  API never overwrites an availability formula cell.
+
+The two internal sheets are intentionally unavailable through `3dp_get_range`.
+They are exposed only through bounded specialized actions below.
+
 ## Deployment steps (owner)
 
 1. Open the existing approved bound 3D-P Apps Script project; do not use the main CRM project.
@@ -92,6 +120,14 @@ does not update an already deployed web app.
 - `3dp_payouts`
 - `3dp_print_log&include_archived=<true|false>`
 - `3dp_fixtures` — bounded fixture name/price list for both calculator dropdowns
+- `3dp_batch_draft&sku=<SKU>` — owner or Serhiy gets one SKU's five raw
+  calculator inputs, or `found:false` with blanks
+- `3dp_stock_adjustments&sku=<optional SKU>&limit=<1..100>` — owner-only,
+  bounded latest-first adjustment history
+
+`3dp_skus` hides archived SKUs by default. Pass `include_archived=true` only
+for the owner restore view. `3dp_overview` excludes archived SKUs and their
+availability totals from active dashboard calculations.
 
 Illustrative/example rows are removed from the table actions.
 
@@ -108,6 +144,24 @@ CORS preflight.
 - `3dp_print_log_archive` — reversible soft archive; accepts `expected_status`
   and an optional reason
 - `3dp_print_log_restore` — restores an archived row
+- `3dp_batch_draft_save` — owner or Serhiy saves one or more of `quantity`,
+  `total_weight_g`, `total_print_time_h`, `spool_weight_g`,
+  `spool_price_uah`; every supplied field needs its last-read value in
+  `expected_current`
+- `3dp_nomenclature_archive` / `3dp_nomenclature_restore` — owner-only,
+  reversible SKU status action with `row`, optional `expected_status`, and
+  optional reason; direct `Номенклатура!O` system-status writes are blocked
+- `3dp_adjust_stock` — owner-only ledger append, requiring `sku`, a short
+  `reason`, `expected_current`, and exactly one of integer `delta` or
+  non-negative integer `new_value`; negative stock is rejected
+- `3dp_setup_addendum2` — owner-only invocation of the strict, idempotent
+  Addendum #2 setup. It returns `already_applied:true` only when it made no
+  schema change; the live positive smoke uses it as a preflight before writes.
+
+`3dp_write` permits the owner only at `Налаштування!B2:B4`; the Serhiy token is
+rejected with `COLUMN_NOT_ALLOWED`. New SKU rows receive technical
+`Номенклатура!O=Активний`; archive state is never a generic writable column, while
+legacy business field `F` remains unchanged.
 
 There is intentionally no physical-delete action.
 
@@ -127,6 +181,47 @@ $env:BOOSTER_3DP_URL='https://script.google.com/macros/s/.../exec'
 $env:BOOSTER_3DP_TOKEN='paste-owner-token-locally'
 Invoke-RestMethod "$env:BOOSTER_3DP_URL?action=3dp_overview&token=$env:BOOSTER_3DP_TOKEN"
 ```
+
+For Addendum #2, run this separate no-net-change live smoke after publishing a
+new Web App version:
+
+```powershell
+.\3d-print\apps-script-3dp-api\tests\live-addendum2-smoke.ps1
+```
+
+It prompts for the `/exec` URL and both tokens when their local environment
+variables are absent. Token input is hidden; no secret-filled PowerShell command
+or persistent environment variable is required. It performs one same-value owner
+settings write (one audit row, zero net business-data change), and proves Serhiy
+settings denial, generic SKU-status denial, bounded draft/stock-history reads,
+and the stock stale-write guard. It intentionally does not create a test draft,
+archive a real SKU, or alter stock.
+
+For controlled API-only positive QA, first deploy the source containing
+`3dp_setup_addendum2`, then run against an owner-selected test SKU:
+
+```powershell
+.\3d-print\apps-script-3dp-api\tests\live-addendum2-positive-smoke.ps1 `
+  -TestSku 'YOUR-TEST-SKU' `
+  -StockDelta 1 `
+  -ConfirmLiveWrites
+```
+
+The runner prompts for the `/exec` URL and owner token if absent locally. It
+prints JSON snapshots before and after every control point, and asserts all four:
+
+1. `3dp_setup_addendum2` returns `already_applied:true` before data writes;
+2. all five batch-draft raw values save and fresh-read through the API;
+3. the selected active SKU is archived, absent from active `3dp_skus`, visible
+   through `include_archived=true`, then restored to active;
+4. `Наявність!G` changes by the supplied non-zero delta and a bounded ledger
+   read returns the exact generated reason and delta.
+
+This is intentionally data-changing. It saves the supplied batch-draft values,
+creates archive and restore audit/history entries, and appends one permanent
+stock-ledger adjustment. It never picks a SKU automatically and does not create
+an automatic counter-adjustment; select a dedicated test SKU and a deliberate
+small delta.
 
 The required negative tests after deployment are:
 

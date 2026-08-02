@@ -48,8 +48,8 @@ inside the single "🖨️ 3D-друк" entry.
   Сумарний час партії, год; Вага котушки, г; Ціна котушки, грн) so reselecting a SKU repopulates them. Until
   this ships, the calculator still computes and saves correctly (per-unit values to `Номенклатура` as today)
   — it just won't remember the raw batch inputs across a reselect. Acceptable Phase A gap, not a blocker.
-  "Посилання на модель (чернетка)" and "РРЦ" are already normal manual SKU fields — no special draft mechanism
-  needed for those, just standard read/write **[Phase A]**.
+  "Посилання на модель (чернетка)" and "РРЦ" are **not** yet writable at all — see the Zone B correction below
+  (`3D-P-008` Addendum #3) — do not build draft persistence for fields that have no write path yet.
 - **[Phase A]** Remove the fixture selection/calculation section entirely: no "Фурнітура" input, no "Разом із
   фурнітурою" output line. Fixture cost is handled entirely outside the calculator (post-print assignment, and
   per `3D-P-010`'s 2026-08-02 addendum, pulled from order-pack-time entry in the main CRM — not calculated
@@ -63,17 +63,18 @@ inside the single "🖨️ 3D-друк" entry.
 Add/edit form per SKU, replacing any ad-hoc SKU creation flow:
 
 - **[Phase A]** Fields: SKU (immutable after creation), назва, категорія/тип (брелок/фігурка/аксесуар, per the
-  SKU-prefix convention in `plans/3D-P-002_catalog-placement-admin-guide_20260731.md` §8), посилання на модель
-  (editable), примітки. Статус and наявність adjustment are Phase B, see below.
+  SKU-prefix convention in `plans/3D-P-002_catalog-placement-admin-guide_20260731.md` §8), примітки. Статус and
+  наявність adjustment are Phase B, see below.
 - **[Phase A]** Вага виробу / час друку / собівартість Сергія: **read-only display here**, sourced from the
   calculator's last save. Do not make these independently editable on this screen — one source of truth, avoid
   the two screens drifting.
-- **[Phase A]** РРЦ (фактична): manual, editable, **must show the current value pre-filled** before the owner
-  types a new one (owner explicitly wants to see what they're changing, not an empty field). Already fits the
-  existing `Номенклатура` write whitelist, no new API needed.
-- **[Phase A]** Ціна під викуп (Track-2 buyout price): manual, editable. Add a "?" / "*" affordance next to the
-  label — hovering shows the tooltip: "Це ціна, яку заплатить Booster Shop за придбання 1 шт виробу." Both РРЦ
-  and Ціна під викуп must also surface in Zone C's table (same underlying fields, two views).
+- **[Phase C — corrected 2026-08-02]** Посилання на модель, РРЦ (фактична), and Ціна під викуп (Track-2 buyout
+  price, with the "?" tooltip: "Це ціна, яку заплатить Booster Shop за придбання 1 шт виробу") are **not**
+  Phase A after all — Claude's original claim that these "already fit the existing whitelist" was wrong. Codex
+  correctly found no durable `Номенклатура` column/action exists for any of the three and shipped them as
+  read-only/placeholder rather than inventing a destination. They become editable once `3D-P-008` Addendum #3
+  ships (owner-only write path). Both РРЦ and Ціна під викуп must surface in Zone C's table regardless of
+  phase — read-only there is fine until Addendum #3 lands.
 - **[Phase B]** Статус (**only** Активний / Архів — no Draft/Чернетка state). Until this ships, do not fake a
   status field client-side — leave it out of the Phase A form rather than build something that has to be
   reworked.
@@ -184,23 +185,29 @@ handoff does not depend on it (the РРЦ факт./рекомендована c
 - [ ] Calculator: constants text removed, "⚙" panel holds the relocated API-config button and a read-only
       constants display, fixture rows and RRP-scenario block removed. Batch calc still computes/saves per-unit
       values correctly (raw-draft persistence is Phase B, not tested here).
-- [ ] Вироби (Phase A fields only): SKU/назва/категорія/посилання-на-модель/примітки CRUD works, РРЦ and
-      Ціна-під-викуп fields pre-fill and save correctly, buyout-price tooltip renders. No статус field, no
-      archive button, наявність is read-only — confirm none of these Phase B affordances are half-built.
+- [ ] Вироби (Phase A fields only): SKU/назва/категорія/примітки CRUD works. Посилання-на-модель/РРЦ/Ціна-під-
+      викуп render read-only with the buyout-price tooltip still visible — confirm they are NOT editable yet
+      (Phase C, blocked on Addendum #3) and no code silently writes a guessed column for them. No статус field,
+      no archive button, наявність is read-only — confirm none of these Phase B affordances are half-built.
 - [ ] Інформація: table sort/filter/column-hide all work; search box filters by назва/SKU; margin coloring on
       РРЦ факт. matches the grid table above exactly for at least 3 test cases across different cost brackets;
       alerts block correctly flags a SKU missing РРЦ and one missing a model link; Продажі/Виплати/Плюшки
       journal all render in this zone, not elsewhere.
 - [ ] РРЦ (рекомендована) column exists and shows a clear pending/placeholder state, not a guessed number.
-- [ ] `ROADMAP_FLOW` entry for `3D-P-013` added, noting Phase A done / Phase B pending.
+- [ ] `ROADMAP_FLOW` entry for `3D-P-013` added, noting Phase A done / Phase B and Phase C pending.
 
-**Phase B (after `3D-P-008` Addendum #2 ships):**
+**Phase B (after `3D-P-008` Addendum #2 ships — Done, 2026-08-02):**
 
 - [ ] "⚙" panel gains working constants edit (owner token only).
 - [ ] Raw batch-draft values persist and repopulate on SKU reselect (test: enter values, save, switch to
       another SKU, switch back — original raw values return, still editable).
 - [ ] Вироби gains статус (Активний/Архів), наявність adjustment with traceable reason, and Archive/restore —
       all confirmed via `_Аудит_API` or equivalent.
+
+**Phase C (after `3D-P-008` Addendum #3 ships — not started):**
+
+- [ ] Посилання на модель, РРЦ (фактична), and Ціна під викуп become editable, pre-filled with current value,
+      save correctly through the new whitelisted columns/action.
 
 ## QA checklist (owner runs after deploy)
 

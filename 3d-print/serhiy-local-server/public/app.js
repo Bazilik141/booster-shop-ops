@@ -1,6 +1,7 @@
 const state = { data: null, lastCalculation: null };
 const money = new Intl.NumberFormat("uk-UA", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const number = new Intl.NumberFormat("uk-UA", { maximumFractionDigits: 3 });
+const draftKeys = ["quantity", "total_weight_g", "total_print_time_h", "spool_weight_g", "spool_price_uah"];
 
 const byId = (id) => document.getElementById(id);
 const status = (message, error = false) => {
@@ -30,15 +31,21 @@ function escapeHtml(value) {
 
 function setSkuOptions() {
   const options = state.data.skus.map((row) => `<option value="${escapeHtml(row.SKU)}">${escapeHtml(row.SKU)} — ${escapeHtml(row["Назва виробу"] || "без назви")}</option>`).join("");
-  document.querySelectorAll(".sku-select").forEach((select) => { select.innerHTML = `<option value="">Оберіть SKU</option>${options}`; });
+  document.querySelectorAll(".sku-select").forEach((select) => {
+    const selected = select.value;
+    select.innerHTML = `<option value="">Оберіть SKU</option>${options}`;
+    if (state.data.skus.some((row) => String(row.SKU) === selected)) select.value = selected;
+  });
 }
 
 function setFixtureOptions() {
+  const selected = byId("fixture-select").value;
   byId("fixture-select").innerHTML = `<option value="">Без фурнітури / очистити</option>${state.data.fixtures.map((row) => {
     const name = row["Назва фурнітури"];
     const price = Number(row["Ціна, грн/шт"] || 0);
     return `<option value="${escapeHtml(name)}">${escapeHtml(name)} — ${money.format(price)} грн/шт</option>`;
   }).join("")}`;
+  if ([...byId("fixture-select").options].some((option) => option.value === selected)) byId("fixture-select").value = selected;
 }
 
 function renderOverview() {
@@ -48,11 +55,11 @@ function renderOverview() {
   byId("printed").textContent = number.format(overview.printed || 0);
   byId("defects").textContent = number.format(overview.defects || 0);
   byId("accrued").textContent = `${money.format(overview.accrued_serhiy_current_month || 0)} грн`;
-  const s = state.data.settings;
+  const settings = state.data.settings;
   byId("settings").innerHTML = [
-    `Потужність: ${number.format(s.printer_power_kw)} кВт`,
-    `Електроенергія: ${money.format(s.electricity_price_uah_per_kwh)} грн/кВт·год`,
-    `Амортизація: ${money.format(s.amortization_uah_per_hour)} грн/год`,
+    `Потужність: ${number.format(settings.printer_power_kw)} кВт`,
+    `Електроенергія: ${money.format(settings.electricity_price_uah_per_kwh)} грн/кВт·год`,
+    `Амортизація: ${money.format(settings.amortization_uah_per_hour)} грн/год`,
   ].map((item) => `<span>${item}</span>`).join("");
 }
 
@@ -77,12 +84,26 @@ function renderPrintLog() {
   </tr>`).join("") || '<tr><td colspan="6">Активних записів ще немає.</td></tr>';
 }
 
+function renderPayouts() {
+  const rows = state.data.payouts || [];
+  const keys = rows.length ? Object.keys(rows[0]).filter((key) => key !== "row_number") : [];
+  byId("payout-head").innerHTML = keys.length ? `<tr>${keys.map((key) => `<th>${escapeHtml(key)}</th>`).join("")}</tr>` : "";
+  byId("payout-rows").innerHTML = rows.map((row) => `<tr>${keys.map((key) => `<td>${escapeHtml(row[key] ?? "—")}</td>`).join("")}</tr>`).join("") || '<tr><td>Немає доступних записів виплат.</td></tr>';
+}
+
+function renderOpenQuestions() {
+  const entries = (state.data.open_questions || []).map((row) => String(row?.[0] ?? "").trim()).filter(Boolean);
+  byId("open-questions").innerHTML = entries.map((entry) => `<li>${escapeHtml(entry)}</li>`).join("") || "<li>У вказаному діапазоні немає записів.</li>";
+}
+
 function render() {
   setSkuOptions();
   setFixtureOptions();
   renderOverview();
   renderSkuRows();
   renderPrintLog();
+  renderPayouts();
+  renderOpenQuestions();
 }
 
 function renderCalculation(calculation) {
@@ -101,6 +122,17 @@ function renderCalculation(calculation) {
     </ul><p class="muted">Фурнітура додається окремо після друку. Праця та брак у цю формулу не входять.</p>`;
 }
 
+async function loadDraft(sku) {
+  if (!sku) return;
+  status("Завантажую збережену чернетку партії…");
+  const payload = await request(`/api/batch-draft?sku=${encodeURIComponent(sku)}`);
+  const form = byId("batch-form");
+  draftKeys.forEach((key) => { form.elements[key].value = payload.values?.[key] ?? ""; });
+  state.lastCalculation = null;
+  byId("save-batch").disabled = true;
+  status(payload.found ? "Чернетку партії завантажено. Перевірте й розрахуйте." : "Для SKU ще немає чернетки. Введіть дані партії.");
+}
+
 async function reload() {
   status("Оновлюю дані…");
   state.data = await request("/api/bootstrap");
@@ -109,6 +141,10 @@ async function reload() {
 }
 
 byId("reload").addEventListener("click", () => reload().catch((error) => status(error.message, true)));
+
+byId("batch-form").elements.sku.addEventListener("change", (event) => {
+  loadDraft(event.target.value).catch((error) => status(error.message, true));
+});
 
 byId("batch-form").addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -123,9 +159,10 @@ byId("batch-form").addEventListener("submit", async (event) => {
 byId("save-batch").addEventListener("click", async () => {
   try {
     const form = byId("batch-form");
-    status("Зберігаю per-unit значення у SKU…");
+    status("Зберігаю raw-чернетку й per-unit значення у SKU…");
     const payload = await request("/api/save-batch", formObject(form));
-    status(payload.already_current ? "SKU уже має ці per-unit значення." : `Оновлено: ${payload.cells_updated.join(", ")}.`);
+    const detail = payload.already_current ? "Чернетка і SKU вже актуальні." : `Чернетка збережена; оновлено SKU: ${payload.cells_updated.join(", ") || "без змін"}.`;
+    status(detail);
     await reload();
   } catch (error) { status(error.message, true); }
 });

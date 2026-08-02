@@ -12,7 +12,7 @@ test("divides batch totals before applying the final spool formula", () => {
   const result = calculateBatchCost({
     quantity: 36,
     total_weight_g: 180,
-    total_time_hours: 18,
+    total_print_time_h: 18,
     spool_weight_g: 1000,
     spool_price_uah: 800,
   }, settings);
@@ -27,7 +27,7 @@ test("divides batch totals before applying the final spool formula", () => {
 
 test("rejects zero or missing batch inputs", () => {
   assert.throws(() => calculateBatchCost({
-    quantity: 0, total_weight_g: 1, total_time_hours: 1, spool_weight_g: 1, spool_price_uah: 1,
+    quantity: 0, total_weight_g: 1, total_print_time_h: 1, spool_weight_g: 1, spool_price_uah: 1,
   }, settings), /Batch quantity/);
 });
 
