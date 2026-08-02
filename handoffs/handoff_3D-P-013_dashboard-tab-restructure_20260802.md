@@ -19,8 +19,15 @@ just reorganized consumption in the UI) or `3D-P-007` (Serhiy's server is unaffe
 coupling, same as before).
 
 **One sub-feature in this handoff (recommended-RRP generation formula, §Zone C) is marked TBD below — do not
-build it until the owner confirms the exact mechanism.** Everything else in this handoff is locked and can
-proceed immediately.
+build it until the owner confirms the exact mechanism.**
+
+**Phase split, 2026-08-02 (Codex review finding, correct — this handoff is NOT pure UI as originally framed):**
+four requirements below need new API/schema surface that `3D-P-008` does not currently expose: editable
+`Налаштування`, raw batch-draft persistence, `Номенклатура` archive/restore, and traceable наявність
+adjustment. These are scoped in `3D-P-008`'s "Addendum #2" section, a separate, narrow follow-up to the API.
+Each item below is tagged **[Phase A]** (buildable now, against the existing deployed API) or **[Phase B]**
+(blocked on `3D-P-008` Addendum #2). Build all Phase A work now; do not start Phase B items until that
+addendum is Done.
 
 ## Scope — three zones inside the existing "3D-друк" nav section
 
@@ -30,55 +37,60 @@ inside the single "🖨️ 3D-друк" entry.
 
 ### Zone A — Калькулятор (revise existing `threeDpCalculator`)
 
-- Remove the current read-only constants text line ("Константи read-only з Налаштування: 0.17 кВт ·
-  4.32 грн/кВт·год · 12 грн/год. Де редагувати...").
-- Add a small "⚙" icon in this zone's header. Clicking it opens a settings panel, owner-only, that:
-  - Lets the owner view/edit the three global constants (170 Вт / 4.32 грн/кВт·год / 12 грн/год) — same write
-    path as already exists for these settings cells (see `3D-P-008`'s 2026-08-02 addendum for where they
-    live).
-  - Also relocates the existing "Налаштувати 3D-P API" button (currently inline next to the "Калькулятор
-    партії" section header, `dashboard/booster-dashboard.html` — the `configure3dpAccess()` button) — move it
-    into this same "⚙" panel instead of sitting in the section header. One place for owner-only service
-    controls.
-- **New: persist raw batch-draft inputs per SKU**, not just the derived per-unit values. Currently "Зберегти"
-  writes only computed per-unit numbers to `Номенклатура`. Add persistence (new columns or a small dedicated
-  range — Codex's choice, confirm against current live schema first) for the **raw** entered values:
-  Кількість у партії (шт), Сумарна вага партії (г), Сумарний час партії (год), Вага котушки (г), Ціна котушки
-  (грн). When the owner reselects a SKU from the dropdown — same session or a new one — these raw values must
-  repopulate the form fields (still fully editable, not read-only). "Посилання на модель (чернетка)" and
-  "РРЦ" are already normal manual SKU fields — no special draft mechanism needed for those, just standard
-  read/write.
-- Remove the fixture selection/calculation section entirely: no "Фурнітура" input, no "Разом із фурнітурою"
-  output line. Fixture cost is handled entirely outside the calculator (post-print assignment, and per
-  `3D-P-010`'s 2026-08-02 addendum, pulled from order-pack-time entry in the main CRM — not calculated here).
-- Remove the 3-tier RRP scenario block (Консервативна/Середня/Оптимістична) and its "(пакування не входить:
-  3D-P-010)" note entirely from the calculator output. RRP display moves to Zone C/B (see below) — the
-  calculator's job is only "Собівартість Сергія", nothing about pricing.
+- **[Phase A]** Remove the current read-only constants text line ("Константи read-only з Налаштування: 0.17
+  кВт · 4.32 грн/кВт·год · 12 грн/год. Де редагувати...").
+- **[Phase A]** Add a small "⚙" icon in this zone's header. In Phase A it holds only the relocated "Налаштувати
+  3D-P API" button (currently inline next to the "Калькулятор партії" section header — the
+  `configure3dpAccess()` button) and a **read-only** display of the three constants (already readable via the
+  existing settings read action). **[Phase B]** once `3D-P-008` Addendum #2 ships, the same panel gains actual
+  edit capability for the three constants (owner-only write).
+- **[Phase B]** Persist raw batch-draft inputs per SKU (Кількість у партії, шт; Сумарна вага партії, г;
+  Сумарний час партії, год; Вага котушки, г; Ціна котушки, грн) so reselecting a SKU repopulates them. Until
+  this ships, the calculator still computes and saves correctly (per-unit values to `Номенклатура` as today)
+  — it just won't remember the raw batch inputs across a reselect. Acceptable Phase A gap, not a blocker.
+  "Посилання на модель (чернетка)" and "РРЦ" are already normal manual SKU fields — no special draft mechanism
+  needed for those, just standard read/write **[Phase A]**.
+- **[Phase A]** Remove the fixture selection/calculation section entirely: no "Фурнітура" input, no "Разом із
+  фурнітурою" output line. Fixture cost is handled entirely outside the calculator (post-print assignment, and
+  per `3D-P-010`'s 2026-08-02 addendum, pulled from order-pack-time entry in the main CRM — not calculated
+  here).
+- **[Phase A]** Remove the 3-tier RRP scenario block (Консервативна/Середня/Оптимістична) and its "(пакування
+  не входить: 3D-P-010)" note entirely from the calculator output. RRP display moves to Zone C/B (see below) —
+  the calculator's job is only "Собівартість Сергія", nothing about pricing.
 
 ### Zone B — Вироби (new: SKU CRUD)
 
 Add/edit form per SKU, replacing any ad-hoc SKU creation flow:
 
-- Fields: SKU (immutable after creation), назва, категорія/тип (брелок/фігурка/аксесуар, per the SKU-prefix
-  convention in `plans/3D-P-002_catalog-placement-admin-guide_20260731.md` §8), статус (**only** Активний /
-  Архів — no Draft/Чернетка state), наявність (with an adjustment/write-off action — see below), посилання на
-  модель (editable), примітки.
-- Вага виробу / час друку / собівартість Сергія: **read-only display here**, sourced from the calculator's
-  last save. Do not make these independently editable on this screen — one source of truth, avoid the two
-  screens drifting.
-- РРЦ (фактична): manual, editable, **must show the current value pre-filled** before the owner types a new
-  one (owner explicitly wants to see what they're changing, not an empty field).
-- Ціна під викуп (Track-2 buyout price): manual, editable. Add a "?" / "*" affordance next to the label —
-  hovering shows the tooltip: "Це ціна, яку заплатить Booster Shop за придбання 1 шт виробу."
-  Both РРЦ and Ціна під викуп must also surface in Zone C's table (same underlying fields, two views).
-- Наявність adjustment: an explicit action to record a correction/write-off (not just overwrite the number
-  silently) — log what changed, same spirit as the existing `Друк-лог` edit-history mechanism (`було → стало`)
-  that `3D-P-008` already built; reuse that pattern if the write path allows it.
-- Delete → **Archive** (reversible status change), not a hard delete. Mirror `Друк-лог`'s existing
-  archive/restore mechanism from `3D-P-008` (same UX: archived SKUs stop appearing in active views/availability
-  calculations but remain restorable, same audit trail via `_Аудит_API`).
+- **[Phase A]** Fields: SKU (immutable after creation), назва, категорія/тип (брелок/фігурка/аксесуар, per the
+  SKU-prefix convention in `plans/3D-P-002_catalog-placement-admin-guide_20260731.md` §8), посилання на модель
+  (editable), примітки. Статус and наявність adjustment are Phase B, see below.
+- **[Phase A]** Вага виробу / час друку / собівартість Сергія: **read-only display here**, sourced from the
+  calculator's last save. Do not make these independently editable on this screen — one source of truth, avoid
+  the two screens drifting.
+- **[Phase A]** РРЦ (фактична): manual, editable, **must show the current value pre-filled** before the owner
+  types a new one (owner explicitly wants to see what they're changing, not an empty field). Already fits the
+  existing `Номенклатура` write whitelist, no new API needed.
+- **[Phase A]** Ціна під викуп (Track-2 buyout price): manual, editable. Add a "?" / "*" affordance next to the
+  label — hovering shows the tooltip: "Це ціна, яку заплатить Booster Shop за придбання 1 шт виробу." Both РРЦ
+  and Ціна під викуп must also surface in Zone C's table (same underlying fields, two views).
+- **[Phase B]** Статус (**only** Активний / Архів — no Draft/Чернетка state). Until this ships, do not fake a
+  status field client-side — leave it out of the Phase A form rather than build something that has to be
+  reworked.
+- **[Phase B]** Наявність adjustment: an explicit action to record a correction/write-off (not just overwrite
+  the number silently) — requires the new `3dp_adjust_stock`-style action from `3D-P-008` Addendum #2. Until
+  it ships, наявність is read-only in this zone (edits happen the existing way, outside this new form).
+- **[Phase B]** Delete → **Archive** (reversible status change), not a hard delete. Mirror `Друк-лог`'s
+  existing archive/restore mechanism from `3D-P-008` (same UX: archived SKUs stop appearing in active
+  views/availability calculations but remain restorable, same audit trail via `_Аудит_API`) — needs Addendum
+  #2's `Номенклатура` archive/restore action. Until it ships, do not add a delete/archive button that has
+  nowhere to write.
 
 ### Zone C — Інформація (read-only table + logs + analytics)
+
+**[Phase A]** — this whole zone is display/reorganization over data the API already exposes; no Addendum #2
+dependency. The two exceptions are individually tagged below (recommended RRP stays TBD regardless of phase;
+the 3D-order-% tile depends on `3D-P-010`, not on Addendum #2).
 
 **Main table** — all SKUs, all characteristics, one row per SKU:
 
@@ -165,30 +177,43 @@ handoff does not depend on it (the РРЦ факт./рекомендована c
 
 ## Acceptance criteria
 
+**Phase A:**
+
 - [ ] Three zones (Калькулятор / Вироби / Інформація) render inside the single "3D-друк" nav section, switch
       cleanly, no cross-zone state leakage.
-- [ ] Calculator: constants text removed, "⚙" panel holds constants edit + the relocated API-config button,
-      fixture rows and RRP-scenario block removed, raw batch-draft values persist and repopulate on SKU
-      reselect (test: enter values, save, switch to another SKU, switch back — original raw values return,
-      still editable).
-- [ ] Вироби: full CRUD works, РРЦ field pre-fills current value before edit, buyout-price tooltip renders,
-      наявність adjustment leaves a traceable record, delete performs an Archive (reversible, confirmed via
-      `_Аудит_API` or equivalent), no "Чернетка" status exists anywhere in the UI.
+- [ ] Calculator: constants text removed, "⚙" panel holds the relocated API-config button and a read-only
+      constants display, fixture rows and RRP-scenario block removed. Batch calc still computes/saves per-unit
+      values correctly (raw-draft persistence is Phase B, not tested here).
+- [ ] Вироби (Phase A fields only): SKU/назва/категорія/посилання-на-модель/примітки CRUD works, РРЦ and
+      Ціна-під-викуп fields pre-fill and save correctly, buyout-price tooltip renders. No статус field, no
+      archive button, наявність is read-only — confirm none of these Phase B affordances are half-built.
 - [ ] Інформація: table sort/filter/column-hide all work; search box filters by назва/SKU; margin coloring on
       РРЦ факт. matches the grid table above exactly for at least 3 test cases across different cost brackets;
       alerts block correctly flags a SKU missing РРЦ and one missing a model link; Продажі/Виплати/Плюшки
       journal all render in this zone, not elsewhere.
-- [ ] РРЦ (рекомендована) column exists and shows a clear pending/placeholder state, not a guessed number,
-      until the TBD formula is confirmed and implemented.
-- [ ] `ROADMAP_FLOW` entry for `3D-P-013` added.
+- [ ] РРЦ (рекомендована) column exists and shows a clear pending/placeholder state, not a guessed number.
+- [ ] `ROADMAP_FLOW` entry for `3D-P-013` added, noting Phase A done / Phase B pending.
+
+**Phase B (after `3D-P-008` Addendum #2 ships):**
+
+- [ ] "⚙" panel gains working constants edit (owner token only).
+- [ ] Raw batch-draft values persist and repopulate on SKU reselect (test: enter values, save, switch to
+      another SKU, switch back — original raw values return, still editable).
+- [ ] Вироби gains статус (Активний/Архів), наявність adjustment with traceable reason, and Archive/restore —
+      all confirmed via `_Аудит_API` or equivalent.
 
 ## QA checklist (owner runs after deploy)
 
+**Phase A:**
 - [ ] Walk all three zones, confirm no main-CRM page regressed.
-- [ ] Add one test SKU end-to-end via Вироби, confirm it appears correctly in Інформація and is selectable in
-      the Калькулятор dropdown.
-- [ ] Archive that test SKU, confirm it disappears from active views but is restorable.
+- [ ] Add one test SKU end-to-end via Вироби (Phase A fields), confirm it appears correctly in Інформація and
+      is selectable in the Калькулятор dropdown.
 - [ ] Confirm the margin color on a known SKU's РРЦ matches the grid table by hand-checking the math.
+
+**Phase B:**
+- [ ] Archive a test SKU, confirm it disappears from active views but is restorable.
+- [ ] Adjust наявність with a reason, confirm the reason is visible afterward.
+- [ ] Reselect a SKU in the calculator after a batch save, confirm raw inputs return.
 
 ## Rollback note
 
@@ -204,5 +229,6 @@ handoff does not depend on it (the РРЦ факт./рекомендована c
 
 ## Recommended status after execution
 
-`In progress` until owner QA passes → then `Done`. The RRP-generation sub-item stays open even after the rest
-of this task is Done, tracked as a follow-up patch once confirmed.
+`In progress` — Phase A can ship and pass its own QA independently → `Done` only once Phase B (blocked on
+`3D-P-008` Addendum #2) also passes QA. The RRP-generation sub-item stays open even after both phases are
+Done, tracked as a follow-up patch once the formula is confirmed.

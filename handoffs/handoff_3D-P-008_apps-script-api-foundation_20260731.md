@@ -91,6 +91,65 @@ This addendum must ship (or be explicitly owner-waived) **before** `3D-P-006`/`3
 against the schema — both handoffs now reference this section instead of the original 2026-07-31 combined-rate
 design.
 
+**Status: Done, deployed 2026-08-02 (owner-run).** See `diagnostics/3D-P-008_schema-correction_report_20260802.md`.
+
+## Addendum #2 — API/schema extension for 3D-P-013's Вироби/Калькулятор needs, 2026-08-02
+
+Codex reviewed `3D-P-013` (dashboard restructure) and correctly flagged that four of its requirements are not
+"pure UI" — they need new API surface on top of Addendum #1's already-deployed schema. This addendum scopes
+that narrow extension. `3D-P-013` splits into a Phase A (buildable now, no API changes) and a Phase B (blocked
+on this addendum) — see the split in `3D-P-013`'s handoff.
+
+**1. Owner-only write access to `Налаштування`.** Addendum #1 made `Налаштування!B2:B4` visible, blue,
+human-editable cells directly in Sheets, but did not add `Налаштування` to the API's write whitelist — the
+dashboard/API cannot write to it today. Add `Налаштування` to `OWNER_MANUAL_COLUMNS_3DP` only (never
+`SERHIY_MANUAL_COLUMNS_3DP` — these three constants are owner-only, per the original 2026-08-02 cost-model
+decision). Same formula-check/optimistic-lock/`_Аудит_API` guarantees as every other write.
+
+**2. Raw batch-draft persistence.** `3D-P-013`'s calculator needs the raw entered values (Кількість у партії,
+шт; Сумарна вага партії, г; Сумарний час партії, год; Вага котушки, г; Ціна котушки, грн) to survive a SKU
+reselect/new session — not just the derived per-unit values already written to `G:J`. Add storage for these
+five raw values (new `Номенклатура` columns, or a small dedicated keyed range/tab — Codex's call, confirm
+against current live headers first) and add them to the write whitelist for **both** owner and Serhiy (Serhiy
+is the one entering batch data day-to-day). Same guard rails as every other manual cell.
+
+**3. SKU archive/restore for `Номенклатура`.** Addendum #1 built archive/restore only for `Друк-лог` rows.
+`3D-P-013`'s Вироби zone needs the same reversible-status mechanism for SKU rows in `Номенклатура` — mirror
+the existing `Друк-лог` archive/restore implementation exactly (same status field pattern, same audit
+guarantees). Archived SKUs must stop appearing in active dropdowns/availability calculations but remain
+restorable.
+
+**4. Traceable наявність (stock) adjustment.** `3D-P-013` needs a dedicated action for correcting/writing off
+stock — not a raw `3dp_write` overwrite of the наявність cell. New action (e.g. `3dp_adjust_stock`) that takes
+a delta or new value plus a short reason/note, applies it, and logs old→new plus the note — reuse the existing
+`було → стало` history mechanism already built for `Друк-лог` edits if the write path allows it, otherwise log
+via `_Аудит_API` with the note included.
+
+**What this addendum does NOT cover** (explicitly out of scope, already handled elsewhere):
+- The recommended-RRP generation formula — still pending owner confirmation, tracked in `3D-P-013`.
+- `% orders with 3D items` — depends entirely on `3D-P-010`, no second detection mechanism here.
+- Fixture/packaging pull — `3D-P-010`'s scope, unrelated to this addendum.
+
+## Acceptance criteria (Addendum #2)
+
+- [ ] `Налаштування` writable via `3dp_write` for the owner token only; Serhiy token rejected with the normal
+      `COLUMN_NOT_ALLOWED`-equivalent error.
+- [ ] Raw batch-draft values round-trip: save via calculator, reselect SKU (same and new session), original
+      raw values return, still editable.
+- [ ] `Номенклатура` SKU archive/restore works identically in spirit to `Друк-лог`'s existing mechanism —
+      archived SKU disappears from active views, remains restorable, audit trail intact.
+- [ ] Stock adjustment requires a reason/note, is traceable (old→new + note visible after the fact), never a
+      silent direct overwrite.
+- [ ] All four additions pass the same negative tests as the rest of the API (formula-cell rejection,
+      non-whitelist rejection, stale-write rejection) — do not skip these for the new surface just because it's
+      small.
+- [ ] `ROADMAP_FLOW` entry for `3D-P-008` updated to reflect this addendum.
+
+## Recommended status after Addendum #2
+
+`In progress` until deployed and the four acceptance criteria above pass owner QA → then this addendum is
+Done; `3D-P-013` Phase B can then start.
+
 ---
 
 ## Context
