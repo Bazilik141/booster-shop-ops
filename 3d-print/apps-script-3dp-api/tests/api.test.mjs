@@ -147,6 +147,10 @@ class MockSheet {
   appendRow(values) {
     this.getRange(Math.max(this.getLastRow() + 1, 1), 1, 1, values.length).setValues([values]);
   }
+  deleteColumn(column) {
+    this.grid.forEach((row) => row.splice(column - 1, 1));
+    return this;
+  }
   setFrozenRows() { return this; }
   isSheetHidden() { return this.hidden; }
   hideSheet() { this.hidden = true; return this; }
@@ -177,7 +181,7 @@ const formula = (value, expression) => ({ value, formula: expression });
 const nomenclatureHeaders = [
   "SKU", "Назва виробу", "Франшиза", "Тип", "Трек", "Статус", "Час друку, год", "Матеріал (пластик)",
   "Витрата матеріалу, г", "Ціна матеріалу, грн/кг", "Собівартість Сергія (матеріал+фурнітура), грн",
-  "Дата оновлення", "Примітки", "Фурнітура (ланцюжок/карабін), грн/шт",
+  "Дата оновлення", "Примітки", "Фурнітура (ланцюжок/карабін), грн/шт", "Комбінована амортизація, грн/год",
 ];
 const printLogHeaders = [
   "Дата", "SKU", "Надруковано, шт", "Час друку факт, год", "Брак/відходи, шт",
@@ -195,8 +199,8 @@ const spreadsheet = new MockSpreadsheet("1yp15H3YJGkqI4Rx89G4QZHkD9m67gnWh58TsTT
   new MockSheet("Легенда", Array.from({ length: 33 }, (_, index) => index === 31 ? ["Відомі відкриті питання", ""] : index === 32 ? ["Питання", "Відповідь"] : [])),
   new MockSheet("Номенклатура", [
     nomenclatureHeaders,
-    ["ПРИКЛАД-001", "Приклад", "—", "Фігурка", "Продаж на сайті", "ПРИКЛАД — видалити", 4, "PLA", 120, 700, formula(84, "=I2*J2/1000+N2"), "2026-07-28", "приклад", 0],
-    ["BR-CHARM-001", "Брелок Чармандер", "Pokemon", "Брелок", "Продаж на сайті", "Активний", 0.1032, "PLA", 2.45, 1549.98, formula(6.797451, "=I3*J3/1000+N3"), "2026-07-31", "реальний", 3],
+    ["ПРИКЛАД-001", "Приклад", "—", "Фігурка", "Продаж на сайті", "ПРИКЛАД — видалити", 4, "PLA", 120, 700, formula(84, "=I2*J2/1000+N2+O2*G2"), "2026-07-28", "приклад", 0, 1.5],
+    ["BR-CHARM-001", "Брелок Чармандер", "Pokemon", "Брелок", "Продаж на сайті", "Активний", 0.1032, "PLA", 2.45, 1549.98, formula(6.797451, "=I3*J3/1000+N3+O3*G3"), "2026-07-31", "реальний", 3, 12],
   ]),
   new MockSheet("Друк-лог", [
     printLogHeaders,
@@ -279,16 +283,24 @@ expectCode("UNAUTHORIZED", () => context.authenticate3dp_("wrong"));
 const firstSetup = context.setup3dpApi();
 assert.equal(firstSetup.ok, true);
 assert.equal(firstSetup.already_applied, false);
-assert.equal(spreadsheet.getSheetByName("Номенклатура").getRange("O1").getValue(), "Комбінована амортизація, грн/год");
-assert.match(spreadsheet.getSheetByName("Номенклатура").getRange("K3").getFormula(), /\+O3\*G3$/);
+assert.equal(spreadsheet.getSheetByName("Номенклатура").getRange("O1").getValue(), "");
+assert.deepEqual(spreadsheet.getSheetByName("Номенклатура").getRange("G1:J1").getValues()[0], ["Час друку за од., год", "Вага виробу за од., г", "Вага котушки, г", "Ціна котушки, грн"]);
+assert.deepEqual(spreadsheet.getSheetByName("Номенклатура").getRange("H3:J3").getValues()[0], ["", "", ""]);
+assert.match(spreadsheet.getSheetByName("Номенклатура").getRange("K3").getFormula(), /'Налаштування'!\$B\$2/);
+assert.doesNotMatch(spreadsheet.getSheetByName("Номенклатура").getRange("K3").getFormula(), /O3/);
+assert.equal(spreadsheet.getSheetByName("Налаштування").getRange("B2").getValue(), 0.17);
+assert.equal(spreadsheet.getSheetByName("Фурнітура_довідник").getRange("A1").getValue(), "Назва фурнітури");
+assert.equal(spreadsheet.getSheetByName("Друк-лог").getRange("E1").getValue(), "Брак, шт");
 assert.equal(spreadsheet.getSheetByName("Друк-лог").getRange("J3").getValue(), "Активний");
 const archiveAwareFormula = spreadsheet.getSheetByName("Наявність").getRange("C3").getFormula();
 assert.match(archiveAwareFormula, /<>Архів/);
 assert.match(archiveAwareFormula, /;/);
 assert.doesNotMatch(archiveAwareFormula, /,/);
 assert.equal(spreadsheet.getSheetByName("_Аудит_API").isSheetHidden(), true);
+spreadsheet.getSheetByName("Налаштування").getRange("B3").setValue(5);
 const secondSetup = context.setup3dpApi();
 assert.equal(secondSetup.already_applied, true);
+assert.equal(spreadsheet.getSheetByName("Налаштування").getRange("B3").getValue(), 5);
 
 spreadsheet.getSheetByName("Наявність").getRange("C3").setFormula('=IF(A3="","",SUMIFS(X,Y))');
 const repairResult = context.repair3dpAvailabilityFormulas();
@@ -302,6 +314,7 @@ assert.equal(context.skusAction3dp_(spreadsheet).count, 1);
 assert.equal(context.tableAction3dp_(spreadsheet, "Продажі", { requireHeader: "SKU" }).count, 1);
 assert.equal(context.tableAction3dp_(spreadsheet, "Маркетингові_плюшки", { requireHeader: "SKU" }).count, 1);
 assert.equal(context.tableAction3dp_(spreadsheet, "Виплати", { requireHeader: "Період (РРРР-ММ)" }).count, 1);
+assert.equal(context.handleGet3dp_({ action: "3dp_fixtures" }, owner).count, 0);
 assert.equal(context.getRowAction3dp_(spreadsheet, { sheet: "Номенклатура", sku: "BR-CHARM-001" }).row.SKU, "BR-CHARM-001");
 assert.equal(JSON.stringify(context.getRangeAction3dp_(spreadsheet, { sheet: "Легенда", range: "A32:B33" }, serhiy).values[1]), JSON.stringify(["Питання", "Відповідь"]));
 expectCode("RANGE_NOT_ALLOWED", () => context.getRangeAction3dp_(spreadsheet, { sheet: "Легенда", range: "A1:B2" }, owner));
@@ -318,22 +331,22 @@ expectCode("STALE_WRITE", () => context.writeAction3dp_(spreadsheet, {
   sheet: "Номенклатура", sku_or_row: "BR-CHARM-001", column: "J", value: 1600, expected_current: 999,
 }, owner));
 expectCode("FORMULA_VALUE_NOT_ALLOWED", () => context.writeAction3dp_(spreadsheet, {
-  sheet: "Номенклатура", sku_or_row: "BR-CHARM-001", column: "J", value: "=1+1", expected_current: 1549.98,
+  sheet: "Номенклатура", sku_or_row: "BR-CHARM-001", column: "J", value: "=1+1", expected_current: "",
 }, owner));
 
 const writeResult = context.writeAction3dp_(spreadsheet, {
-  sheet: "Номенклатура", sku_or_row: "BR-CHARM-001", column: "J", value: 1600, expected_current: 1549.98,
+  sheet: "Номенклатура", sku_or_row: "BR-CHARM-001", column: "J", value: 1600, expected_current: "",
 }, owner);
 assert.equal(writeResult.new_value, 1600);
 assert.equal(spreadsheet.getSheetByName("Номенклатура").getRange("J3").getValue(), 1600);
 
 const editResult = context.updatePrintLogAction3dp_(spreadsheet, {
   row: 3,
-  changes: { C: 37, I: "уточнено" },
-  expected_current: { C: 36, I: "реальний друк" },
+  changes: { C: 37, E: 1, I: "уточнено" },
+  expected_current: { C: 36, E: 0, I: "реальний друк" },
 }, serhiy);
-assert.equal(editResult.changes, 2);
-assert.match(spreadsheet.getSheetByName("Друк-лог").getRange("K3").getValue(), /Надруковано, шт: 36 → 37/);
+assert.equal(editResult.changes, 3);
+assert.match(spreadsheet.getSheetByName("Друк-лог").getRange("K3").getValue(), /Брак, шт: 0 → 1/);
 
 const archiveResult = context.setPrintLogArchiveAction3dp_(spreadsheet, { row: 3, expected_status: "Активний", reason: "дублікат" }, serhiy, true);
 assert.equal(archiveResult.status, "Архів");

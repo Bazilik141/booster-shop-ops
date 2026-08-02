@@ -340,6 +340,9 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
     <div class="nav-item" onclick="showPage('accounting')">
       <span class="nav-icon">➕</span> Облік
     </div>
+    <div class="nav-item" onclick="showPage('3dprint')">
+      <span class="nav-icon">🖨️</span> 3D-друк
+    </div>
   </div>
   <div class="sidebar-footer">
     <div id="sidebarUpdated">—</div>
@@ -514,12 +517,25 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
     <div id="accountingContent"><div class="loading"><div class="spinner"></div><br>Завантаження...</div></div>
   </div>
 
+  <!-- ─── 3D PRINT ─── -->
+  <div id="page-3dprint" class="page">
+    <div class="header"><div class="page-title">3D-друк</div><div class="page-sub" id="threeDpSub">Окремий 3D-P API · дані з таблиці не читаються напряму</div></div>
+    <div class="cards" id="threeDpCards"><div class="card"><div class="loading"><div class="spinner"></div><br>Завантаження...</div></div></div>
+    <div class="section"><div class="section-header"><span class="section-title">Калькулятор партії</span><button onclick="configure3dpAccess()">Налаштувати 3D-P API</button></div><div id="threeDpCalculator"><div class="loading"><div class="spinner"></div></div></div></div>
+    <div class="section"><div class="section-header"><span class="section-title">SKU і наявність</span></div><div id="threeDpSkuTable"></div></div>
+    <div class="section"><div class="section-header"><span class="section-title">Продажі</span></div><div id="threeDpSalesTable"></div></div>
+    <div class="section"><div class="section-header"><span class="section-title">Маркетингові плюшки</span></div><div id="threeDpPlyushkyTable"></div></div>
+    <div class="section"><div class="section-header"><span class="section-title">Виплати</span></div><div id="threeDpPayoutsTable"></div></div>
+  </div>
+
 </main>
 
 <script>
 // ════════════ CONFIG ════════════
 const API = 'https://script.google.com/macros/s/AKfycbz2WIFlW7A-ta7HtewK-0wsklekB-HDIgCx3CF1JGfmPaRvs2UgI0qktcfhvKzPYDbX-A/exec';
 const TOKEN_STORAGE_KEY = 'booster_crm_token';
+const API_3DP_STORAGE_KEY = 'booster_3dp_api_url';
+const TOKEN_3DP_STORAGE_KEY = 'booster_3dp_token';
 
 let TOKEN = window.localStorage.getItem(TOKEN_STORAGE_KEY) || '';
 
@@ -554,6 +570,36 @@ async function callPost(payload) {
   return d;
 }
 
+// This client intentionally does not share the main CRM URL or token.
+function get3dpCredentials() {
+  const api = window.localStorage.getItem(API_3DP_STORAGE_KEY) || '';
+  const token = window.localStorage.getItem(TOKEN_3DP_STORAGE_KEY) || '';
+  if (!api || !token) throw new Error('Вкажіть окремі URL та token 3D-P API через «Налаштувати 3D-P API».');
+  return { api, token };
+}
+function configure3dpAccess() {
+  const api = window.prompt('3D-P Apps Script Web App URL (/exec):', window.localStorage.getItem(API_3DP_STORAGE_KEY) || '');
+  if (!api) return;
+  if (!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec(?:\?.*)?$/i.test(api.trim())) { window.alert('Потрібен URL Apps Script, що закінчується на /exec.'); return; }
+  const token = window.prompt('Окремий owner token 3D-P API:', window.localStorage.getItem(TOKEN_3DP_STORAGE_KEY) || '');
+  if (!token) return;
+  window.localStorage.setItem(API_3DP_STORAGE_KEY, api.trim());
+  window.localStorage.setItem(TOKEN_3DP_STORAGE_KEY, token.trim());
+  loaded['3dprint'] = false; load3dPrint();
+}
+async function call3dp(action, extra = {}) {
+  const { api, token } = get3dpCredentials();
+  const r = await fetch(`${api}?${new URLSearchParams({ action, token, ...extra })}`, { redirect: 'follow' });
+  if (!r.ok) throw new Error(`3D-P HTTP ${r.status}`);
+  const d = await r.json(); if (!d.ok) throw new Error(d.error || '3D-P API error'); return d;
+}
+async function call3dpPost(payload) {
+  const { api, token } = get3dpCredentials();
+  const r = await fetch(api, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ ...payload, token }), redirect: 'follow' });
+  if (!r.ok) throw new Error(`3D-P HTTP ${r.status}`);
+  const d = await r.json(); if (!d.ok) throw new Error(d.error || '3D-P API error'); return d;
+}
+
 // ════════════ STATE ════════════
 const cache = {};
 const loaded = {};
@@ -570,6 +616,7 @@ const accountingState = {
   recentLoaded: { sales: false, purchases: false },
   edit: null
 };
+const threeDpState = { skus: [], fixtures: [], settings: {}, analytics: [] };
 
 function showError(msg) {
   const el = document.getElementById('errorBanner');
@@ -582,7 +629,7 @@ function showError(msg) {
 function clearError() { document.getElementById('errorBanner').classList.remove('show'); }
 
 // ════════════ NAV ════════════
-const titles = { overview: 'Огляд', stock: 'Склад', consumables: 'Розхідники', orders: 'Замовлення', skus: 'Товари', clients: 'Клієнти', roadmap: 'Роадмап', accounting: 'Облік' };
+const titles = { overview: 'Огляд', stock: 'Склад', consumables: 'Розхідники', orders: 'Замовлення', skus: 'Товари', clients: 'Клієнти', roadmap: 'Роадмап', accounting: 'Облік', '3dprint': '3D-друк' };
 
 function showPageByName(name, skipEvent) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -603,7 +650,7 @@ function showPage(name) {
 function hardRefresh() {
   Object.keys(cache).forEach(k => delete cache[k]);
   Object.keys(loaded).forEach(k => delete loaded[k]);
-  ['summaryCards','pendingPreview','alertsPreview','stockTable','consumablesTable','ordersTable','skuTable','clientsTable','topSkusList']
+  ['summaryCards','pendingPreview','alertsPreview','stockTable','consumablesTable','ordersTable','skuTable','clientsTable','topSkusList','threeDpCards','threeDpCalculator','threeDpSkuTable','threeDpSalesTable','threeDpPlyushkyTable','threeDpPayoutsTable']
     .forEach(id => { const el = document.getElementById(id); if(el) el.innerHTML = spin(); });
   ['channelSection','trendGrid','topSkusSection'].forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
   clearError();
@@ -613,6 +660,61 @@ function hardRefresh() {
 }
 
 const spin = () => '<div class="loading"><div class="spinner"></div></div>';
+// ════════════ 3D PRINT (isolated Apps Script API consumer) ════════════
+function threeDpEsc(value) { return String(value == null ? '—' : value).replace(/[&<>'"]/g, function(ch) { return ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' })[ch]; }); }
+function threeDpNumber(value) { const n = Number(String(value == null ? '' : value).replace(',', '.').replace(/[^0-9.-]/g, '')); return Number.isFinite(n) ? n : 0; }
+function threeDpMoney(value) { return '₴' + threeDpNumber(value).toLocaleString('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+function threeDpInput(id) { return document.getElementById(id); }
+function threeDpCurrentSku() { return threeDpState.skus.find(function(row) { return String(row.SKU || '') === String((threeDpInput('threeDpSku') || {}).value || ''); }) || null; }
+function threeDpSetting(label) { return threeDpState.settings[label] || 0; }
+function threeDpFixture() { return threeDpState.fixtures.find(function(row) { return String(row['Назва фурнітури'] || '') === String((threeDpInput('threeDpFixture') || {}).value || ''); }) || null; }
+function threeDpTable(targetId, rows) {
+  const target = document.getElementById(targetId);
+  if (!rows || !rows.length) { target.innerHTML = '<div style="color:var(--muted);padding:8px 0">Немає записів</div>'; return; }
+  const columns = Object.keys(rows[0]).filter(function(key) { return key !== 'availability'; }).slice(0, 20);
+  target.innerHTML = '<div class="tbl-wrap"><table><tr>' + columns.map(function(key) { return '<th>' + threeDpEsc(key) + '</th>'; }).join('') + '</tr>' + rows.map(function(row) { return '<tr>' + columns.map(function(key) { const value = row[key]; return '<td>' + threeDpEsc(typeof value === 'object' ? '' : value) + '</td>'; }).join('') + '</tr>'; }).join('') + '</table></div>';
+}
+function renderThreeDpTables() {
+  const skuRows = threeDpState.skus.map(function(row) { const availability = row.availability || {}; return Object.assign({}, row, { 'Надруковано, шт': availability['Надруковано всього, шт'], 'Брак, шт': availability['Брак всього, шт'], 'Наявно, шт': availability['Наявно зараз, шт'] }); });
+  threeDpTable('threeDpSkuTable', skuRows); threeDpTable('threeDpSalesTable', threeDpState.sales || []); threeDpTable('threeDpPlyushkyTable', threeDpState.plyushky || []); threeDpTable('threeDpPayoutsTable', threeDpState.payouts || []);
+}
+function renderThreeDpCards(summary) {
+  const values = [['SKU', summary.sku_count], ['Наявно', summary.available], ['Продано', summary.sold], ['Нараховано Сергію', threeDpMoney(summary.accrued_serhiy_current_month)]];
+  document.getElementById('threeDpCards').innerHTML = values.map(function(item) { return '<div class="card"><div class="card-label">' + threeDpEsc(item[0]) + '</div><div class="card-value">' + threeDpEsc(item[1]) + '</div></div>'; }).join('');
+}
+function renderThreeDpCalculator() {
+  const root = document.getElementById('threeDpCalculator'); const sku = threeDpCurrentSku(); const previous = function(id) { const el = threeDpInput(id); return el ? el.value : ''; };
+  const fixtureOptions = ['<option value="">Без фурнітури зараз</option>'].concat(threeDpState.fixtures.map(function(row) { const name = row['Назва фурнітури']; const price = row['Ціна, грн/шт']; return '<option value="' + threeDpEsc(name) + '">' + threeDpEsc(name) + ' — ' + threeDpMoney(price) + '</option>'; })).join('');
+  root.innerHTML = '<div class="edit-row-grid">' +
+    '<label>SKU<select id="threeDpSku" onchange="renderThreeDpCalculator()"><option value="">Оберіть SKU</option>' + threeDpState.skus.map(function(row) { return '<option value="' + threeDpEsc(row.SKU) + '"' + (sku && row.SKU === sku.SKU ? ' selected' : '') + '>' + threeDpEsc(row.SKU + ' — ' + (row['Назва виробу'] || '')) + '</option>'; }).join('') + '</select></label>' +
+    '<label>Кількість у партії, шт<input id="threeDpQty" type="number" min="1" step="1" value="' + threeDpEsc(previous('threeDpQty') || '1') + '" oninput="renderThreeDpCalc()"></label>' +
+    '<label>Сумарна вага партії, г<input id="threeDpWeightBatch" type="number" min="0" step="0.01" value="' + threeDpEsc(previous('threeDpWeightBatch')) + '" oninput="renderThreeDpCalc()"></label>' +
+    '<label>Сумарний час партії, год<input id="threeDpTimeBatch" type="number" min="0" step="0.01" value="' + threeDpEsc(previous('threeDpTimeBatch')) + '" oninput="renderThreeDpCalc()"></label>' +
+    '<label>Вага котушки, г<input id="threeDpSpoolWeight" type="number" min="0" step="0.01" value="' + threeDpEsc(previous('threeDpSpoolWeight')) + '" oninput="renderThreeDpCalc()"></label>' +
+    '<label>Ціна котушки, грн<input id="threeDpSpoolPrice" type="number" min="0" step="0.01" value="' + threeDpEsc(previous('threeDpSpoolPrice')) + '" oninput="renderThreeDpCalc()"></label>' +
+    '<label>Фурнітура (призначається пізніше)<select id="threeDpFixture" onchange="renderThreeDpCalc()">' + fixtureOptions + '</select></label>' +
+    '<label>Посилання на модель (чернетка)<input id="threeDpModelLink" type="url" placeholder="https://…" value="' + threeDpEsc(previous('threeDpModelLink')) + '"></label>' +
+  '</div><div id="threeDpCalcResult" style="margin-top:16px"></div><div style="margin-top:12px;color:var(--muted);font-size:12px">Константи read-only з Налаштування: ' + threeDpEsc(threeDpSetting('Потужність принтера, кВт')) + ' кВт · ' + threeDpEsc(threeDpSetting('Ціна електроенергії, грн/кВт·год')) + ' грн/кВт·год · ' + threeDpEsc(threeDpSetting('Амортизація принтера, грн/год')) + ' грн/год. <button type="button" onclick="window.alert(&quot;Редагування глобальних констант: Налаштування!B2:B4 у 3D-P Sheet. Dashboard показує їх лише read-only, щоб не обходити API whitelist.&quot;)">Де редагувати</button> API навмисно не дає dashboard записувати ці глобальні параметри.</div>';
+  renderThreeDpCalc();
+}
+function renderThreeDpCalc() {
+  const qty = threeDpNumber((threeDpInput('threeDpQty') || {}).value); const weight = qty > 0 ? threeDpNumber((threeDpInput('threeDpWeightBatch') || {}).value) / qty : 0; const time = qty > 0 ? threeDpNumber((threeDpInput('threeDpTimeBatch') || {}).value) / qty : 0; const spoolWeight = threeDpNumber((threeDpInput('threeDpSpoolWeight') || {}).value); const spoolPrice = threeDpNumber((threeDpInput('threeDpSpoolPrice') || {}).value);
+  const material = spoolWeight > 0 ? weight / spoolWeight * spoolPrice : 0; const electricity = threeDpSetting('Потужність принтера, кВт') * time * threeDpSetting('Ціна електроенергії, грн/кВт·год'); const amortization = threeDpSetting('Амортизація принтера, грн/год') * time; const fixture = threeDpFixture(); const fixturePrice = fixture ? threeDpNumber(fixture['Ціна, грн/шт']) : 0; const base = material + electricity + amortization; const total = base + fixturePrice;
+  const result = document.getElementById('threeDpCalcResult'); if (!result) return;
+  result.innerHTML = '<div class="grid2"><div><b>На одиницю (з партії)</b><table><tr><td>Вага</td><td>' + weight.toFixed(2) + ' г</td></tr><tr><td>Час</td><td>' + time.toFixed(2) + ' год</td></tr><tr><td>Матеріал</td><td>' + threeDpMoney(material) + '</td></tr><tr><td>Електроенергія</td><td>' + threeDpMoney(electricity) + '</td></tr><tr><td>Амортизація</td><td>' + threeDpMoney(amortization) + '</td></tr><tr><td>Виробнича собівартість</td><td><b>' + threeDpMoney(base) + '</b></td></tr><tr><td>Фурнітура</td><td>' + threeDpMoney(fixturePrice) + '</td></tr><tr><td>Разом із фурнітурою</td><td><b>' + threeDpMoney(total) + '</b></td></tr></table></div>' + '<div><b>РРЦ-сценарії (пакування не входить: 3D-P-010)</b><div class="edit-row-grid" style="margin-top:8px">' + ['Консервативна','Середня','Оптимістична'].map(function(name, index) { return '<label>' + name + ', грн<input class="threeDpRrp" data-label="' + name + '" type="number" min="0" step="1" value="' + threeDpEsc((document.querySelectorAll('.threeDpRrp')[index] || {}).value || '') + '" oninput="renderThreeDpCalc()"></label>'; }).join('') + '</div><div id="threeDpMargins" style="margin-top:10px"></div></div></div><button style="margin-top:14px" onclick="saveThreeDpCalculation()"' + (threeDpCurrentSku() ? '' : ' disabled') + '>Зберегти per-unit значення в Номенклатуру</button><div id="threeDpSaveMsg" style="margin-top:8px;font-size:12px"></div>';
+  const margin = document.getElementById('threeDpMargins'); if (margin) margin.innerHTML = Array.from(document.querySelectorAll('.threeDpRrp')).map(function(input) { const price = threeDpNumber(input.value); return '<div>' + threeDpEsc(input.dataset.label) + ': ' + (price ? ('маржинальний прибуток ' + threeDpMoney(price - total) + '; BoosterShop 50%: ' + threeDpMoney((price - total) / 2)) : 'вкажіть РРЦ') + '</div>'; }).join('');
+}
+async function saveThreeDpCalculation() {
+  const sku = threeDpCurrentSku(); const msg = document.getElementById('threeDpSaveMsg'); if (!sku) { msg.textContent = 'Оберіть SKU.'; return; }
+  const qty = threeDpNumber((threeDpInput('threeDpQty') || {}).value); const spoolWeight = threeDpNumber((threeDpInput('threeDpSpoolWeight') || {}).value); const spoolPrice = threeDpNumber((threeDpInput('threeDpSpoolPrice') || {}).value); if (!(qty > 0 && spoolWeight > 0 && spoolPrice >= 0)) { msg.textContent = 'Заповніть кількість, вагу та ціну котушки.'; return; }
+  const writes = [ ['G', threeDpNumber(threeDpInput('threeDpTimeBatch').value) / qty, 'Час друку за од., год'], ['H', threeDpNumber(threeDpInput('threeDpWeightBatch').value) / qty, 'Вага виробу за од., г'], ['I', spoolWeight, 'Вага котушки, г'], ['J', spoolPrice, 'Ціна котушки, грн'] ]; const fixture = threeDpFixture(); if (fixture) writes.push(['N', threeDpNumber(fixture['Ціна, грн/шт']), 'Фурнітура (ланцюжок/карабін), грн/шт']);
+  if (!window.confirm('Зберегти лише per-unit значення для ' + sku.SKU + '? Пакування й посилання на модель не записуються цим API.')) return;
+  try { msg.textContent = 'Збереження…'; for (const write of writes) await call3dpPost({ action: '3dp_write', sheet: 'Номенклатура', sku_or_row: sku.SKU, column: write[0], value: write[1], expected_current: sku[write[2]] }); const fresh = await call3dp('3dp_get_row', { sheet: 'Номенклатура', sku: sku.SKU }); threeDpState.skus = threeDpState.skus.map(function(row) { return row.SKU === sku.SKU ? Object.assign({}, row, fresh.row) : row; }); msg.textContent = 'Збережено; 3dp_get_row підтвердив актуальні per-unit значення.'; msg.style.color = 'var(--green)'; renderThreeDpTables(); } catch (error) { msg.textContent = 'Помилка: ' + error.message; msg.style.color = 'var(--red)'; }
+}
+async function load3dPrint() {
+  const root = document.getElementById('threeDpCalculator');
+  try { const results = await Promise.all([call3dp('3dp_overview'), call3dp('3dp_skus'), call3dp('3dp_sales'), call3dp('3dp_plyushky'), call3dp('3dp_payouts'), call3dp('3dp_fixtures'), call3dp('3dp_get_range', { sheet: 'Налаштування', range: 'A1:C4' }), call3dp('3dp_get_range', { sheet: 'Аналітика', range: 'A3:N17' })]); threeDpState.skus = results[1].rows || []; threeDpState.sales = results[2].rows || []; threeDpState.plyushky = results[3].rows || []; threeDpState.payouts = results[4].rows || []; threeDpState.fixtures = results[5].rows || []; threeDpState.analytics = results[7].values || []; const settingsRows = results[6].values || []; threeDpState.settings = settingsRows.slice(1).reduce(function(out, row) { out[row[0]] = row[1]; return out; }, {}); renderThreeDpCards(results[0].summary || {}); renderThreeDpTables(); renderThreeDpCalculator(); document.getElementById('threeDpSub').textContent = 'Оновлено через bounded 3D-P API · ' + (results[0].month || ''); } catch (error) { root.innerHTML = '<div style="color:var(--yellow)">3D-P ще не підключено: ' + threeDpEsc(error.message) + '</div>'; document.getElementById('threeDpSub').textContent = 'Потрібні окремі локальні URL і token 3D-P API'; }
+}
 
 // ════════════ FORMATTERS ════════════
 const fmt   = n => n != null ? '₴' + Number(n).toLocaleString('uk-UA', {maximumFractionDigits:0}) : '—';
@@ -1866,19 +1968,57 @@ const ROADMAP_TASKS = [
     warn: '2026-07-28: ChatGPT-хендофф дає повний кандидат-спек (дата-модель/ролі/калькулятор/розрахунки) для цього модуля — plans/3D-P_handoff-chatgpt_v1_20260728.md, рев\'ю в плані §11. Рекомендація хендоффу (окремий VPS-бекенд ЗАРАЗ) НЕ прийнята — конфліктує з NCRM. 2026-07-28: власник вирішив — не green-field NCRM-дизайн зараз; будуємо на Google Sheets + локальний сервер UI, переносимо в NCRM коли той буде готовий. Скоуп задачі тепер "перенести Sheets+локальний-сервер у NCRM", той самий блокер NCRM-11..17. Того ж дня уточнено: власник дивиться через вкладку в цьому дашборді (без нової інфраструктури), а Сергію робимо локальний сервер НА ЙОГО КОМП\'ЮТЕРІ, що тягне дані через Apps Script Web API з Google-авторизацією (= варіант 4 з §14.1 ChatGPT-документа) — питання віддаленого доступу закрито, воно тут і не стояло. Нова конкретна вимога: серверу Сергія потрібен ОКРЕМИЙ вузько-скоупований Apps Script екшн і окремий токен — не той самий master-токен, що вже знайдений захардкодженим у цьому файлі (запис 3D-P-000 вище). Apps Script бекенд-робота, ризикова зона, через Codex-хендофф коли дійде до реалізації.', subtasks: []
   },
   {
+    id: '3D-P-006', title: 'Вкладка «3D-друк» у dashboard + batch-калькулятор', status: 'active', tool: 'Codex', priority: 'High',
+    lastUpdated: '2026-08-02', blockedBy: [],
+    simple: 'Вкладка dashboard працює тільки через окремий 3D-P Apps Script API: огляд, SKU/наявність, продажі, плюшки, виплати та batch-калькулятор final spool-based моделі.',
+    why: 'Власник бачить 3D-напрям в існуючому dashboard без прямого доступу до Google Sheet або спільного CRM token.',
+    warn: '2026-08-02: 3D-P-008 schema-correction live-smoke пройшов (negative: FORMULA_CELL/COLUMN_NOT_ALLOWED/STALE_WRITE, 0 змін; positive: N3 no-op audit, 0 net change). UI підготовлено локально; перед завершенням потрібні owner API URL+окремий token лише в localStorage, один batch save→fresh get_row та перевірка існуючої вкладки Огляд. Посилання на модель лишається локальною чернеткою: у чинному API/Sheet немає затвердженої колонки для його запису. Пакування не входить — окремий 3D-P-010.',
+    subtasks: [
+      { id: '1', title: 'Ізольований 3D-P API client + read tables', status: 'done', desc: 'Окремі localStorage URL/token, bounded read actions, без Sheet/Drive API і без main CRM token.' },
+      { id: '2', title: 'Batch-калькулятор та guarded per-unit save', status: 'done', desc: 'Ділить сумарні вагу/час на кількість, пише G:J (і N тільки при виборі фурнітури) через expected_current, потім fresh 3dp_get_row.' },
+      { id: '3', title: 'Owner browser QA', status: 'todo', desc: 'Підключити local 3D-P URL/token, перевірити read tables, batch save/refetch і регресію Огляд.' }
+    ]
+  },  {
     id: '3D-P-008', title: '3D-P Apps Script API: bounded read/write, audit і reconciliation', status: 'active', tool: 'Codex + Apps Script', priority: 'High',
-    lastUpdated: '2026-08-01', blockedBy: [],
+    lastUpdated: '2026-08-02', blockedBy: [],
     simple: 'Окремий Apps Script Web API для 3D-P Sheet: bounded read actions, два незалежні токени, role-based manual-field writes, optimistic locking, _Аудит_API і reconciliation локального v6 з live Sheet.',
     why: '3D-P-006 (owner dashboard) і 3D-P-007 (локальний UI Сергія) мають працювати через один захищений data layer, не читати/писати Google Sheet напряму і не використовувати master CRM token.',
-    warn: '2026-08-01: owner виконав deploy + setup; locale formula repair виконано, C2:D15 валідні. Owner-token live QA пройшов: 3 negative guards, O3 blank→0→blank, два _Аудит_API записи dashboard. До business-data writes лишається лише окреме схвалення reconciliation diff; Serhiy-token/print-log proof — у 3D-P-007. Owner-approved розширення: Сергій може додавати й редагувати Друк-лог, а видалення замінено оборотним статусом «Архів» з автоматичним було→стало history та _Аудит_API. Архівні рядки не рахуються в Наявність. У Номенклатура додається O «Комбінована амортизація, грн/год», K лишається формулою. До live business-data writes потрібні: owner deploy, 3 negative tests і окреме схвалення reconciliation diff.',
+    warn: '2026-08-02: owner reports Code.gs replacement, preview3dpApiSetup(), setup3dpApi(), and a new Web App deployment are complete. Pending proof is only the live negative + no-net-change positive smoke; until it passes, 3D-P-006/007 calculator UI remains blocked. Reconciliation business writes remain a separate owner gate.',
     subtasks: [
       { id: '1', title: 'Apps Script source + local mock tests', status: 'done', desc: '7 read paths; formula/non-whitelist/stale rejects; audited write; print-log append/edit/archive/restore; setup idempotency.' },
       { id: '2', title: 'Corrected deployment + owner token', status: 'done', desc: 'Corrected version published at the same /exec URL; owner-token authentication passed. Serhiy-token live proof is deferred to 3D-P-007.' },
       { id: '3', title: 'Live negative tests + audit proof', status: 'done', desc: 'FORMULA_CELL, COLUMN_NOT_ALLOWED, STALE_WRITE passed with 0 changes; O3 blank→0→blank verified by two dashboard audit rows.' },
-      { id: '4', title: 'Owner reconciliation approval and apply', status: 'todo', desc: 'Спочатку review diff; потім лише підтверджені A3/F3/H3/J3/M3 через 3dp_write.' }
+      { id: '4', title: 'Owner reconciliation approval and apply', status: 'todo', desc: 'Спочатку review diff; потім лише підтверджені A3/F3/H3/J3/M3 через 3dp_write.' },
+      { id: '5', title: 'Schema correction deploy + live QA', status: 'active', desc: 'Owner reported deployment complete; Codex awaits only negative and no-net-change positive smoke output.' }
     ]
   },
-  // ─── CHECKOUT / ST ───
+  {
+    id: '3D-P-010', title: 'Автопідтягування вартості пакування CRM → 3D-P', status: 'active', tool: 'Codex + Apps Script', priority: 'High',
+    lastUpdated: '2026-08-02', blockedBy: [],
+    simple: 'Phase 0: підтвердити поточне main-CRM джерело ціни пакування, GET-відповідь замовлення та ключ зв’язку з Продажі 3D-P до будь-якого коду.',
+    why: 'Пакування для 3D-товару має підтягуватись з основного CRM у Продажі!G, але це CRM risky zone і не можна вгадувати поточний API-контракт.',
+    warn: 'Phase 0 local evidence: historical CRM source (2026-07-04) resolves non-Інше from Розхідники A:C and orders GET does not return packaging fields; recent_sales does. This is not current-live proof. No local CRM/3D-P URL or token is configured for the required bounded GET reads, so Phase 1 is blocked on owner review plus current source/live response evidence. No CRM or Sheet write was attempted.',
+    subtasks: [
+      { id: '1', title: 'Phase 0 source/API/header evidence', status: 'done', desc: 'Historical source reviewed; live bounded evidence unavailable locally and explicitly flagged.' },
+      { id: '2', title: 'Owner review and Phase 1 authorization', status: 'todo', desc: 'Choose integration design only after current source and bounded GET response are confirmed.' }
+    ]
+  },
+  {
+    id: '3D-P-011', title: 'Вибір характеристики товару + UI сторінки для мультихарактеристичних 3D-товарів', status: 'todo', tool: 'Claude', priority: '',
+    lastUpdated: '2026-08-01', blockedBy: [],
+    simple: 'Дозволити вибір характеристики товару (напр. розміру) прямо на сторінці товару замість кількох окремих сторінок. Приклад-тригер: Онікс 21 см і Онікс 15 см — одна сторінка з вибором розміру замість двох.',
+    why: 'Зараз кожен розмір/варіант 3D-друкованого товару потребував би окремої сторінки товару — гірший UX і дублювання карток для одного виробу.',
+    warn: '2026-08-01: скоуп підтверджено власником — обмежено лише напрямом 3D-P, НЕ загальна catalog-фіча для інших товарів. Технічна реалізація (два окремі товари/SKU під спільним UI чи один товар з опціями OpenCart) навмисно не вирішена — пропрацювання пізніше. Пріоритет навмисно не проставлено. Потенційно зачіпає ризикові зони (schema/JSON-LD, canonical URL) при об\'єднанні двох існуючих URL в один — врахувати через bs-seo-risk-gate і bs-merchant-schema-qa перед реальною зміною.',
+    subtasks: []
+  },
+  {
+    id: '3D-P-012', title: 'Короткі відео товару (5/10/15с) на сторінці 3D-товару', status: 'todo', tool: 'Claude', priority: '',
+    lastUpdated: '2026-08-01', blockedBy: [],
+    simple: 'Додати можливість завантажувати короткі відео (~5/10/15 с) до сторінок 3D-друкованих товарів окрім фото.',
+    why: 'Власник хоче показувати короткі відео товару поряд із фото на сторінці 3D-друкованого виробу.',
+    warn: '2026-08-01: скоуп лише 3D-P, ведеться незалежно від 3D-P-011 (без blockedBy). Пріоритет не проставлено. Попереднє дослідження (загальні дані OpenCart, не перевірено проти живої теми): OpenCart 4.x у ядрі не має вбудованої відео-галереї товару; ринкові розширення для 4.x існують (MP4/YouTube/Vimeo). Головна невідома — чи сумісне готове розширення з кастомною темою boostershop-ds.css, чи потрібна кастомна інтеграція; потрібна діагностика проти найновішого cPanel-бекапу. Технічний підхід (розширення vs самохостинг mp4 vs зовнішній embed) не вирішено. Самохостинг/розширення торкає спільні CSS/JS теми — soft risky zone (AGENTS.md UI/CSS patch discipline).',
+    subtasks: []
+  },  // ─── CHECKOUT / ST ───
   {
     id: 'ST-2b.6', title: 'Баг: порожнє замовлення Hutko після перезапуску браузера', status: 'done', tool: 'Claude + Codex', priority: 'High',
     lastUpdated: '2026-07-13', blockedBy: [],
@@ -3089,7 +3229,7 @@ async function savePurchaseBatch() {
 }
 
 // ════════════ LOADERS MAP ════════════
-const loaders = { overview: loadOverview, stock: loadStock, consumables: loadConsumables, orders: loadOrders, skus: loadSkus, clients: loadClients, roadmap: loadRoadmap, accounting: loadAccounting };
+const loaders = { overview: loadOverview, stock: loadStock, consumables: loadConsumables, orders: loadOrders, skus: loadSkus, clients: loadClients, roadmap: loadRoadmap, accounting: loadAccounting, '3dprint': load3dPrint };
 
 // ════════════ INIT ════════════
 loaded.overview = true;

@@ -260,6 +260,13 @@ NCRM-04 through NCRM-12 were renumbered/rescoped on 2026-07-11 under
 | 3D-P-003 | `3ab6bf20-bdb4-814f-8812-c1f540a5f996` | Pricing & sizing market research |
 | 3D-P-004 | `3ab6bf20-bdb4-81c9-aa79-f29053013425` | Marketing-freebie sourcing flow |
 | 3D-P-005 | `3ab6bf20-bdb4-8140-b62e-e1fd4c8622f0` | Future NCRM module, narrow Friend access (deferred) |
+| 3D-P-006 | `3ae6bf20-bdb4-819e-8001-d6927f132f81` | Owner dashboard tab (3D-друк section) — first version shipped 2026-08-02, restructure follow-up is 3D-P-013 |
+| 3D-P-007 | `3ae6bf20-bdb4-81f7-9c7b-fefcfe12ffba` | Serhiy local server, consumer of 3D-P-008's API |
+| 3D-P-008 | `3af6bf20-bdb4-8189-a3a9-e88a374d01b1` | 3D-P Apps Script API foundation (read+write) + reconciliation; 2026-08-02 schema-correction addendum prepared, not yet deployed |
+| 3D-P-010 | `3af6bf20-bdb4-8110-8e88-fdee44316a0d` | Auto-pull packaging + fixture cost from main CRM into 3D-P sheet; Phase 0 investigation blocked on live CRM evidence as of 2026-08-02 |
+| 3D-P-011 | `3af6bf20-bdb4-8119-8158-dccb93c0e5b0` | Added 2026-08-01: PDP characteristic (e.g. size) selector + product-page UI for multi-variant 3D-print items (Onyx 21cm/15cm trigger). Scope confirmed owner-only within 3D-P, not a general catalog feature. Discovery stage, no priority set, no Codex handoff yet. NOTE 2026-08-02: a separate session briefly reused this number for a dashboard-restructure task before the collision was caught — that task is 3D-P-013, unrelated to this one |
+| 3D-P-012 | `3af6bf20-bdb4-819b-bcbd-ff058993dc21` | Added 2026-08-01: short product videos (~5/10/15s) alongside photos on 3D-print product pages. Owner confirmed independent of 3D-P-011 (no blockedBy). Discovery stage, no priority set. Feasibility pre-check: OC4 core has no native video field; marketplace extensions exist for 4.x; compatibility with custom boostershop-ds theme not yet verified against live backup |
+| 3D-P-013 | `3b06bf20-bdb4-81cc-a456-c24c6c557448` | Added 2026-08-02: «3D-друк» dashboard tab restructure (Калькулятор/Вироби/Інформація zones), follow-up to 3D-P-006. Originally misnumbered 3D-P-011, renumbered same day after the collision above was found |
 
 If a task is absent, search by title or distinctive keywords, verify its
 `Roadmap ID`, then add the page ID here. Older completed ST tasks

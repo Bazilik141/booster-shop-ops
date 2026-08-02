@@ -197,7 +197,12 @@ status and priority from the verified Notion card. Use dashboard
 | 3D-P-006 | Owner dashboard tab («3D-друк» в booster-dashboard.html) + калькулятор | handoffs/handoff_3D-P-006_owner-dashboard-tab_20260731.md (FINAL calculator spec 2026-08-02; блок доти, поки не відвантажиться addendum з 3D-P-008) |
 | 3D-P-007 | Локальний сервер Сергія (споживач API з 3D-P-008) | handoffs/handoff_3D-P-007_serhiy-local-server_20260731.md (оновлено 2026-08-02 під batch/брак-модель) |
 | 3D-P-008 | Apps Script API foundation (read+write) + реконсиляція таблиці | handoffs/handoff_3D-P-008_apps-script-api-foundation_20260731.md (базова частина Done/deployed 01.08; addendum «Schema correction, 2026-08-02» на початку файлу — фінальна формула, ще не імплементована) · diagnostics/3D-P-008_apps-script-api-foundation_report_20260801.md · diagnostics/3D-P-008_reconciliation_diff_20260801.md (очікує owner approval) |
-| 3D-P-010 | Автопідтяжка вартості паковання з основної СРМ у 3D-P Продажі | handoffs/handoff_3D-P-010_crm-packaging-cost-pull_20260802.md (CRM risky zone, Фаза 0 = дослідження перед імплементацією) |
+| 3D-P-010 | Автопідтяжка вартості паковання + фурнітури з основної СРМ у 3D-P Продажі | handoffs/handoff_3D-P-010_crm-packaging-cost-pull_20260802.md (розширено 02.08 фурнітурою; CRM risky zone, Фаза 0 = дослідження перед імплементацією) |
+| 3D-P-011 | PDP-селектор характеристик (розмір тощо) для мультиваріантних 3D-товарів («Onyx 21/15см») | ROADMAP_SOP.md §3D-P series (додано 01.08, окрема сесія; discovery stage, хендофу Кодексу ще немає) |
+| 3D-P-012 | Короткі відео товару (~5/10/15с) на сторінках 3D-товарів | ROADMAP_SOP.md §3D-P series (додано 01.08, окрема сесія; discovery stage) |
+| 3D-P-013 | Реструктуризація вкладки «3D-друк» в дашборді (Калькулятор/Вироби/Інформація) | handoffs/handoff_3D-P-013_dashboard-tab-restructure_20260802.md (замінює плоский layout 3D-P-006; формула рекомендованої РРЦ — TBD, окремо; ⚠ початково заведено як 3D-P-011, перенумеровано через колізію ID з 01.08) |
+| 3D-P-011 | Вибір характеристики товару (розмір) + UI сторінки товару для мультихарактеристичних 3D-товарів (тригер: Онікс 21 см / 15 см) | Немає хендоффа/плану — щойно заведено 2026-08-01, discovery-стадія. Скоуп лише 3D-P, без пріоритету. Технічна реалізація (2 SKU/картки vs 1 товар з опціями) не вирішена |
+| 3D-P-012 | Короткі відео товару (~5/10/15 с) на сторінці 3D-товару окрім фото | Немає хендоффа/плану — щойно заведено 2026-08-01, discovery-стадія. Скоуп лише 3D-P, незалежно від 3D-P-011. Без пріоритету. Feasibility pre-check (не перевірено проти живого бекапу): OC4 core без нативної відео-галереї, ринкові розширення є для 4.x, сумісність із boostershop-ds темою не підтверджена |
 
 ---
 

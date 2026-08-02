@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex,nofollow">
+    <title>Booster 3D — Сергій</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <header>
+        <div>
+          <p class="eyebrow">Локальний доступ Сергія</p>
+          <h1>Booster 3D-друк</h1>
+          <p class="muted">Дані з 3D-P API. Сторінка не має доступу до CRM чи Google Sheets напряму.</p>
+        </div>
+        <button id="reload" type="button">Оновити дані</button>
+      </header>
+
+      <p id="status" class="status" role="status">Завантаження…</p>
+
+      <section class="cards" aria-label="Поточний стан">
+        <article><span>SKU</span><strong id="sku-count">—</strong></article>
+        <article><span>Наявно</span><strong id="available">—</strong></article>
+        <article><span>Надруковано</span><strong id="printed">—</strong></article>
+        <article><span>Брак</span><strong id="defects">—</strong></article>
+        <article><span>Нараховано цього місяця</span><strong id="accrued">—</strong></article>
+      </section>
+
+      <section class="panel">
+        <h2>Калькулятор партії</h2>
+        <p class="muted">У таблицю потрапляють лише значення за одиницю. Сумарні вага й час діляться на кількість партії.</p>
+        <form id="batch-form" class="grid">
+          <label>SKU<select name="sku" class="sku-select" required></select></label>
+          <label>Кількість у партії, шт<input name="quantity" type="number" min="1" step="1" required></label>
+          <label>Сумарна вага виробів, г<input name="total_weight_g" type="number" min="0.000001" step="any" required></label>
+          <label>Сумарний час друку, год<input name="total_time_hours" type="number" min="0.000001" step="any" required></label>
+          <label>Вага котушки, г<input name="spool_weight_g" type="number" min="0.000001" step="any" required></label>
+          <label>Ціна котушки, грн<input name="spool_price_uah" type="number" min="0.000001" step="any" required></label>
+          <div class="actions"><button type="submit">Розрахувати</button><button id="save-batch" type="button" disabled>Зберегти per-unit у SKU</button></div>
+        </form>
+        <div id="settings" class="settings" aria-live="polite"></div>
+        <div id="calculation" class="result empty">Введіть дані партії та натисніть «Розрахувати».</div>
+      </section>
+
+      <section class="panel">
+        <h2>Фурнітура — окремо після друку</h2>
+        <p class="muted">У SKU зберігається ціна обраної фурнітури. Вона не блокує базовий розрахунок партії.</p>
+        <form id="fixture-form" class="inline-form">
+          <label>SKU<select name="sku" class="sku-select" required></select></label>
+          <label>Фурнітура<select id="fixture-select" name="fixture_name"><option value="">Без фурнітури / очистити</option></select></label>
+          <button type="submit">Зберегти фурнітуру</button>
+        </form>
+      </section>
+
+      <section class="panel">
+        <h2>Друк-лог: нова сесія</h2>
+        <p class="muted">Брак не входить у собівартість. Його можна змінити нижче після виробництва.</p>
+        <form id="print-log-form" class="grid">
+          <label>Дата<input name="date" type="date" required></label>
+          <label>SKU<select name="sku" class="sku-select" required></select></label>
+          <label>Надруковано, шт<input name="printed_quantity" type="number" min="1" step="1" required></label>
+          <label>Час друку факт, год<input name="actual_time_hours" type="number" min="0.000001" step="any" required></label>
+          <label>Витрачено матеріалу факт, г<input name="actual_material_g" type="number" min="0.000001" step="any" required></label>
+          <label>Брак, шт<input name="defects" type="number" min="0" step="1" value="0"></label>
+          <label>Хто друкував<input name="printer" maxlength="120" value="Сергій"></label>
+          <label>Примітки<input name="notes" maxlength="1000"></label>
+          <div class="actions"><button type="submit">Додати у Друк-лог</button></div>
+        </form>
+      </section>
+
+      <section class="panel">
+        <h2>Активний Друк-лог</h2>
+        <div class="table-wrap"><table><thead><tr><th>Дата</th><th>SKU</th><th>Надруковано</th><th>Час, год</th><th>Брак, шт</th><th>Дія</th></tr></thead><tbody id="print-log-rows"></tbody></table></div>
+      </section>
+
+      <section class="panel">
+        <h2>SKU і наявність</h2>
+        <div class="table-wrap"><table><thead><tr><th>SKU</th><th>Назва</th><th>Статус</th><th>Наявно</th><th>Фурнітура, грн/шт</th></tr></thead><tbody id="sku-rows"></tbody></table></div>
+      </section>
+    </main>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

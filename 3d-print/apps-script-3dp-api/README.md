@@ -10,12 +10,13 @@ It is separate from the Booster CRM Apps Script project and never uses
 
 ## Current gate
 
-The owner completed deployment, formula repair, and owner-token live API QA on
-2026-08-01. `Наявність!C2:D15` has valid semicolon formulas and numeric results.
-The owner-token smoke test passed all three negative guards, then performed a
-guarded `Номенклатура!O3` `blank → 0 → blank` write/restore; `_Аудит_API`
-contains both records. Reconciliation writes remain an explicit owner gate.
-Serhiy-token and print-log live proof belongs to 3D-P-007.
+The owner completed the original deployment, formula repair, and owner-token live
+API QA on 2026-08-01. The 2026-08-02 schema-correction source is prepared
+locally but is **not deployed** yet: it removes `Номенклатура!O`, resets legacy
+plastic/price-per-kg values, and adds the final spool-based cost model. Do not
+run 3D-P-006 or 3D-P-007 calculator UI against the live Sheet until the owner
+runs the deployment gate below. Reconciliation writes remain a separate explicit
+owner gate; Serhiy-token and print-log live proof belong to 3D-P-007.
 
 Do not paste generated token values into Git, this README, a client file, a
 screenshot, or a chat message.
@@ -49,9 +50,12 @@ without changing the Sheet.
 After reviewing the preview, run `setup3dpApi()`. It is idempotent and performs
 only the approved changes:
 
-- `Номенклатура!O:O` — adds `Комбінована амортизація, грн/год` as a manual field;
-- `Номенклатура!K:K` — updates the cost formula to
-  `material + hardware + amortization rate × print hours`;
+- `Номенклатура!O:O` — removes the legacy `Комбінована амортизація, грн/год` field;
+- `Номенклатура!G:J` — renames inputs to per-unit print time/weight and spool weight/price, then clears the legacy plastic/price-per-kg values (owner-approved for the current SKU);
+- `Налаштування!B2:B4` — creates editable global constants: `0.17` kW, `4.32` UAH/kWh, `12` UAH/h;
+- `Номенклатура!K:K` — uses material from `weight per unit ÷ spool weight × spool price`, plus electricity, amortization, and independently editable fixture price;
+- `Друк-лог!E:E` — renames the existing editable defect field to `Брак, шт`; its existing post-production history path is retained;
+- `Фурнітура_довідник!A:B` — creates the name/price reference list consumed by calculator dropdowns;
 - `Друк-лог!J:J` — adds system state `Активний` / `Архів`;
 - `Друк-лог!K:K` — adds the automatic per-row `було → стало` history;
 - `Наявність!C:D` — stops archived print-log rows from affecting stock totals;
@@ -65,28 +69,12 @@ Before running setup, create a named Google Sheets version such as
 
 ## Deployment steps (owner)
 
-1. Open the approved live Sheet.
-2. Open **Extensions → Apps Script**. Create a new bound script project; do not
-   reuse the main CRM project.
-3. Replace `Code.gs` with this folder's `Code.gs`.
-4. Enable the manifest in Apps Script project settings and replace
-   `appsscript.json` with this folder's manifest.
-5. Run `preview3dpApiSetup()` and inspect the returned object/execution log.
-6. Create a named Sheet version, then run `setup3dpApi()` and authorize the
-   spreadsheet permissions.
-7. Generate two independent 256-bit tokens locally. PowerShell command (run it
-   twice and keep the outputs private):
-
-   ```powershell
-   [Convert]::ToHexString([Security.Cryptography.RandomNumberGenerator]::GetBytes(32)).ToLower()
-   ```
-
-8. In **Project settings → Script Properties**, add the two properties listed
-   in the Security model section.
-9. Choose **Deploy → New deployment → Web app**:
-   - Execute as: **Me**
-   - Who has access: **Anyone**
-10. Copy the `/exec` URL. The URL is not a secret; the tokens are.
+1. Open the existing approved bound 3D-P Apps Script project; do not use the main CRM project.
+2. Replace only `Code.gs` with this folder's updated `Code.gs`.
+3. Run `preview3dpApiSetup()` and confirm it reports legacy `O` removal, `Налаштування`, `Фурнітура_довідник`, legacy `H:J` clearing, and `Брак, шт`.
+4. Create a named Google Sheets version, then run `setup3dpApi()` once. It is idempotent after the migration.
+5. Publish a **new version of the existing web-app deployment**. Keep both existing Script Properties unchanged; do not regenerate or expose tokens.
+6. Run the local negative smoke and the updated no-net-change positive audit smoke below, then manually confirm headers, settings values, the K formula, and `_Аудит_API`.
 
 Every source change requires a new deployment version. Editing the script alone
 does not update an already deployed web app.
@@ -103,6 +91,7 @@ does not update an already deployed web app.
 - `3dp_plyushky`
 - `3dp_payouts`
 - `3dp_print_log&include_archived=<true|false>`
+- `3dp_fixtures` — bounded fixture name/price list for both calculator dropdowns
 
 Illustrative/example rows are removed from the table actions.
 
@@ -124,7 +113,7 @@ There is intentionally no physical-delete action.
 
 ### Serhiy write scope
 
-- `Номенклатура`: `G,H,I,J,L,M,N,O`
+- `Номенклатура`: `G,H,I,J,L,M,N` (no plastic type or per-SKU combined-rate field)
 - `Друк-лог`: `A,B,C,D,E,F,H,I`, using append/update/archive/restore actions
 
 Formula columns `Номенклатура!K` and `Друк-лог!G` are always rejected.
@@ -154,6 +143,10 @@ Run all three without changing a live cell:
 The script discovers a real SKU, uses only the owner token from the current
 process environment, asserts the three error codes, and reports
 `live_cells_changed=0`. It never prints the token.
+
+The positive audit smoke reads one real SKU and re-writes its existing fixture value
+to the same cell using `expected_current`; it creates one audit row but causes zero net
+business-data change. It no longer uses the removed `O` column.
 
 Do not perform reconciliation writes until the owner approves the separate diff
 report. Use the API, not a direct Sheet edit, for every approved reconciliation

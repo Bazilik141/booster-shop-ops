@@ -1,0 +1,14 @@
+{
+  "name": "booster-3dp-serhiy-local-server",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Local-only Serhiy UI for the Booster 3D-P Apps Script API.",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

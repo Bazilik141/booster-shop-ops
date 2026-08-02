@@ -15,6 +15,8 @@ const API_3DP = Object.freeze({
   ownerTokenProperty: 'BOOSTER_3DP_TOKEN',
   serhiyTokenProperty: 'BOOSTER_3DP_SERHIY_TOKEN',
   auditSheet: '_Аудит_API',
+  settingsSheet: 'Налаштування',
+  fixturesSheet: 'Фурнітура_довідник',
   printLogSheet: 'Друк-лог',
   printLogStatusColumn: 'J',
   printLogHistoryColumn: 'K',
@@ -33,12 +35,14 @@ const SHEETS_3DP = Object.freeze({
   plyushky: 'Маркетингові_плюшки',
   availability: 'Наявність',
   analytics: 'Аналітика',
+  settings: 'Налаштування',
+  fixtures: 'Фурнітура_довідник',
 });
 
 // Grounded from the live formulas, the workbook Legend, and the owner-approved scope.
 // K in Номенклатура and G in Друк-лог are deliberately absent because they are formulas.
 const OWNER_MANUAL_COLUMNS_3DP = Object.freeze({
-  'Номенклатура': Object.freeze(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'L', 'M', 'N', 'O']),
+  'Номенклатура': Object.freeze(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'L', 'M', 'N']),
   'Друк-лог': Object.freeze(['A', 'B', 'C', 'D', 'E', 'F', 'H', 'I']),
   'Продажі': Object.freeze(['A', 'B', 'D', 'E', 'G', 'H', 'M', 'N', 'O', 'P', 'Q', 'R']),
   'Виплати': Object.freeze(['A', 'D', 'E', 'F']),
@@ -46,7 +50,7 @@ const OWNER_MANUAL_COLUMNS_3DP = Object.freeze({
 });
 
 const SERHIY_MANUAL_COLUMNS_3DP = Object.freeze({
-  'Номенклатура': Object.freeze(['G', 'H', 'I', 'J', 'L', 'M', 'N', 'O']),
+  'Номенклатура': Object.freeze(['G', 'H', 'I', 'J', 'L', 'M', 'N']),
   'Друк-лог': Object.freeze(['A', 'B', 'C', 'D', 'E', 'F', 'H', 'I']),
 });
 
@@ -67,6 +71,8 @@ const READABLE_SHEETS_3DP = Object.freeze([
   'Маркетингові_плюшки',
   'Наявність',
   'Аналітика',
+  'Налаштування',
+  'Фурнітура_довідник',
 ]);
 
 function doGet(e) {
@@ -117,6 +123,8 @@ function handleGet3dp_(params, actor) {
       return tableAction3dp_(spreadsheet, SHEETS_3DP.payouts, { requireHeader: 'Період (РРРР-ММ)' });
     case '3dp_print_log':
       return printLogAction3dp_(spreadsheet, params);
+    case '3dp_fixtures':
+      return tableAction3dp_(spreadsheet, SHEETS_3DP.fixtures, { requireHeader: 'Назва фурнітури' });
     default:
       throw apiError3dp_('UNKNOWN_ACTION', 'Unknown read action.');
   }
@@ -764,6 +772,7 @@ function actionNameForSheet3dp_(sheetName) {
   if (sheetName === SHEETS_3DP.sales) return '3dp_sales';
   if (sheetName === SHEETS_3DP.payouts) return '3dp_payouts';
   if (sheetName === SHEETS_3DP.plyushky) return '3dp_plyushky';
+  if (sheetName === SHEETS_3DP.fixtures) return '3dp_fixtures';
   return '3dp_table';
 }
 
@@ -803,7 +812,11 @@ function preview3dpApiSetup() {
     ok: true,
     spreadsheet_id: spreadsheet.getId(),
     planned_changes: [
-      'Номенклатура: add O header for combined amortization and include O*G in K formulas',
+      'Номенклатура: delete legacy O combined-amortization column, replace plastic and price/kg inputs with per-unit weight plus spool weight/price, and clear legacy H:J values',
+      'Налаштування: create editable global constants for printer power, electricity price, and printer amortization',
+      'Фурнітура_довідник: create the name/price reference list for calculator dropdowns',
+      'Номенклатура: make K use the final spool-based material, electricity, amortization, and fixture formula',
+      'Друк-лог: rename the existing editable defect field to Брак, шт; existing edit-with-history path remains in use',
       'Друк-лог: add J status and K per-row change history; no row deletion',
       'Наявність: exclude Друк-лог rows whose API status is Архів',
       'Normalize approved manual-input columns to blue font on prepared non-example rows',
@@ -821,7 +834,9 @@ function setup3dpApi() {
     validateSetupAnchors3dp_(spreadsheet);
     const changes = [];
 
-    setupNomenclatureAmortization3dp_(spreadsheet, changes);
+    setupGlobalSettings3dp_(spreadsheet, changes);
+    setupNomenclatureFinalCostSchema3dp_(spreadsheet, changes);
+    setupFixturesReference3dp_(spreadsheet, changes);
     setupPrintLogSystemColumns3dp_(spreadsheet, changes);
     setupAvailabilityArchiveAwareFormulas3dp_(spreadsheet, changes);
     normalizeManualInputColors3dp_(spreadsheet, changes);
@@ -848,15 +863,17 @@ function repair3dpAvailabilityFormulas() {
 function validateSetupAnchors3dp_(spreadsheet) {
   const expected = {};
   expected[SHEETS_3DP.nomenclature] = [
-    'SKU', 'Назва виробу', 'Франшиза', 'Тип', 'Трек', 'Статус', 'Час друку, год', 'Матеріал (пластик)',
-    'Витрата матеріалу, г', 'Ціна матеріалу, грн/кг', [
+    'SKU', 'Назва виробу', 'Франшиза', 'Тип', 'Трек', 'Статус', ['Час друку, год', 'Час друку за од., год'],
+    ['Матеріал (пластик)', 'Вага виробу за од., г'], ['Витрата матеріалу, г', 'Вага котушки, г'],
+    ['Ціна матеріалу, грн/кг', 'Ціна котушки, грн'], [
       'Собівартість Сергія (матеріал+фурнітура), грн',
       'Собівартість Сергія (матеріал+фурнітура+амортизація), грн',
+      'Собівартість Сергія (виробнича), грн',
     ],
     'Дата оновлення', 'Примітки', 'Фурнітура (ланцюжок/карабін), грн/шт',
   ];
   expected[SHEETS_3DP.printLog] = [
-    'Дата', 'SKU', 'Надруковано, шт', 'Час друку факт, год', 'Брак/відходи, шт',
+    'Дата', 'SKU', 'Надруковано, шт', 'Час друку факт, год', ['Брак/відходи, шт', 'Брак, шт'],
     'Витрачено матеріалу, г (факт)', 'Собівартість партії, грн', 'Хто друкував', 'Примітки',
   ];
   expected[SHEETS_3DP.availability] = [
@@ -876,18 +893,37 @@ function validateSetupAnchors3dp_(spreadsheet) {
   });
 }
 
-function setupNomenclatureAmortization3dp_(spreadsheet, changes) {
+function setupNomenclatureFinalCostSchema3dp_(spreadsheet, changes) {
   const sheet = getSheet3dp_(spreadsheet, SHEETS_3DP.nomenclature);
   const currentO = String(sheet.getRange('O1').getDisplayValue() || '');
-  const expectedO = 'Комбінована амортизація, грн/год';
-  if (currentO && currentO !== expectedO) throw apiError3dp_('SETUP_ANCHOR_MISMATCH', 'Номенклатура!O1 is occupied by another column.');
-  if (!currentO) {
-    sheet.getRange('N1').copyTo(sheet.getRange('O1'), SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false);
-    sheet.getRange('O1').setValue(expectedO);
-    changes.push('Номенклатура!O1 added');
+  const legacyO = 'Комбінована амортизація, грн/год';
+  if (currentO && currentO !== legacyO) throw apiError3dp_('SETUP_ANCHOR_MISMATCH', 'Номенклатура!O1 is occupied by an unexpected column.');
+
+  const legacyH = String(sheet.getRange('H1').getDisplayValue() || '') === 'Матеріал (пластик)';
+  const legacyI = String(sheet.getRange('I1').getDisplayValue() || '') === 'Витрата матеріалу, г';
+  const legacyJ = String(sheet.getRange('J1').getDisplayValue() || '') === 'Ціна матеріалу, грн/кг';
+  const requiresLegacyClear = legacyH || legacyI || legacyJ;
+  if (requiresLegacyClear && !(legacyH && legacyI && legacyJ)) {
+    throw apiError3dp_('SETUP_ANCHOR_MISMATCH', 'Номенклатура H:J is a partial legacy schema; stop before clearing values.');
+  }
+  if (requiresLegacyClear) {
+    const lastRow = Math.max(sheet.getLastRow(), 2);
+    sheet.getRange(2, 8, lastRow - 1, 3).clearContent();
+    changes.push('Номенклатура!H2:J' + lastRow + ' legacy plastic/price-per-kg values cleared by owner-approved migration');
+  }
+  if (currentO) {
+    sheet.deleteColumn(15);
+    changes.push('Номенклатура!O legacy combined-amortization column removed');
   }
 
-  const expectedK = 'Собівартість Сергія (матеріал+фурнітура+амортизація), грн';
+  const expectedHeaders = ['Час друку за од., год', 'Вага виробу за од., г', 'Вага котушки, г', 'Ціна котушки, грн'];
+  const currentHeaders = sheet.getRange(1, 7, 1, 4).getDisplayValues()[0];
+  if (JSON.stringify(currentHeaders) !== JSON.stringify(expectedHeaders)) {
+    sheet.getRange(1, 7, 1, 4).setValues([expectedHeaders]);
+    changes.push('Номенклатура!G1:J1 renamed for per-unit/spool inputs');
+  }
+
+  const expectedK = 'Собівартість Сергія (виробнича), грн';
   if (sheet.getRange('K1').getDisplayValue() !== expectedK) {
     sheet.getRange('K1').setValue(expectedK);
     changes.push('Номенклатура!K1 updated');
@@ -897,7 +933,7 @@ function setupNomenclatureAmortization3dp_(spreadsheet, changes) {
   let formulaChanged = false;
   for (let row = 2; row <= lastFormulaRow; row += 1) {
     const range = sheet.getRange(row, 11);
-    const expectedFormula = '=I' + row + '*J' + row + '/1000+N' + row + '+O' + row + '*G' + row;
+    const expectedFormula = '=IF(A' + row + '="";"";IFERROR(H' + row + '/I' + row + '*J' + row + '+G' + row + '*\'' + API_3DP.settingsSheet + '\'!$B$2*\'' + API_3DP.settingsSheet + '\'!$B$3+G' + row + '*\'' + API_3DP.settingsSheet + '\'!$B$4+N' + row + ';""))';
     if (canonicalFormula3dp_(range.getFormula()) !== canonicalFormula3dp_(expectedFormula)) {
       range.setFormula(expectedFormula);
       formulaChanged = true;
@@ -906,8 +942,59 @@ function setupNomenclatureAmortization3dp_(spreadsheet, changes) {
   if (formulaChanged) changes.push('Номенклатура!K2:K' + lastFormulaRow + ' formulas normalized');
 }
 
+function setupGlobalSettings3dp_(spreadsheet, changes) {
+  let sheet = spreadsheet.getSheetByName(API_3DP.settingsSheet);
+  const expected = [
+    ['Глобальні константи 3D-друку', '', ''],
+    ['Потужність принтера, кВт', 0.17, 'кВт'],
+    ['Ціна електроенергії, грн/кВт·год', 4.32, 'грн/кВт·год'],
+    ['Амортизація принтера, грн/год', 12, 'грн/год'],
+  ];
+  if (!sheet) {
+    sheet = spreadsheet.insertSheet(API_3DP.settingsSheet);
+    sheet.getRange(1, 1, 4, 3).setValues(expected);
+    sheet.getRange('B2:B4').setFontColor('#0000ff');
+    changes.push(API_3DP.settingsSheet + ' created with editable B2:B4 constants');
+    return;
+  }
+  const current = sheet.getRange(1, 1, 4, 3).getDisplayValues();
+  expected.forEach(function (row, rowIndex) {
+    [0, 2].forEach(function (columnIndex) {
+      if (String(current[rowIndex][columnIndex] || '') !== String(row[columnIndex] || '')) {
+        throw apiError3dp_('SETUP_ANCHOR_MISMATCH', API_3DP.settingsSheet + ' structure differs from the approved settings block.');
+      }
+    });
+  });
+  const valuesRange = sheet.getRange('B2:B4');
+  const colors = valuesRange.getFontColors();
+  const alreadyBlue = colors.every(function (row) { return String(row[0] || '').toLowerCase() === '#0000ff'; });
+  if (!alreadyBlue) {
+    valuesRange.setFontColor('#0000ff');
+    changes.push(API_3DP.settingsSheet + '!B2:B4 marked as editable settings');
+  }
+}
+
+function setupFixturesReference3dp_(spreadsheet, changes) {
+  let sheet = spreadsheet.getSheetByName(API_3DP.fixturesSheet);
+  if (!sheet) {
+    sheet = spreadsheet.insertSheet(API_3DP.fixturesSheet);
+    sheet.getRange('A1:B1').setValues([['Назва фурнітури', 'Ціна, грн/шт']]);
+    changes.push(API_3DP.fixturesSheet + ' created with name/price headers');
+    return;
+  }
+  const headers = sheet.getRange('A1:B1').getDisplayValues()[0];
+  if (headers[0] !== 'Назва фурнітури' || headers[1] !== 'Ціна, грн/шт') {
+    throw apiError3dp_('SETUP_ANCHOR_MISMATCH', API_3DP.fixturesSheet + '!A1:B1 headers do not match the approved reference-list schema.');
+  }
+}
 function setupPrintLogSystemColumns3dp_(spreadsheet, changes) {
   const sheet = getSheet3dp_(spreadsheet, SHEETS_3DP.printLog);
+  const defectHeader = String(sheet.getRange('E1').getDisplayValue() || '');
+  if (defectHeader !== 'Брак, шт') {
+    if (defectHeader !== 'Брак/відходи, шт') throw apiError3dp_('SETUP_ANCHOR_MISMATCH', 'Друк-лог!E1 is not the approved defect column.');
+    sheet.getRange('E1').setValue('Брак, шт');
+    changes.push('Друк-лог!E1 renamed to Брак, шт');
+  }
   const headers = [
     { column: 'J', value: 'API_статус_запису' },
     { column: 'K', value: 'API_історія_змін' },
