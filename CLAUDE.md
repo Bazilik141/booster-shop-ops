@@ -6,19 +6,58 @@
 only Claude-specific routing and review behavior. Roadmap governance is
 canonical in `ROADMAP_SOP.md`.
 
-## Claude role
+## Two Claude surfaces — identify which one you are
 
-- Owner: Raccoon.
-- Primary work: strategy, SEO/UX, handoff writing, independent post-Codex
-  review, and Booster Notion task-property/status updates.
+Owner: Raccoon. Since 2026-08-05 there are two distinct Claude roles. Read the
+one that matches how you are running, and do not assume the other's authority.
+
+### Claude (chat / Cowork) — no repository write access to code
+
+- Primary work: strategy, SEO/UX, handoff writing, **executor recommendation**,
+  independent post-patch review, and Booster Notion task-property/status
+  updates.
 - Use `templates/handoff-template.md` for new handoffs.
-- Use `templates/codex-report-template.md` when reviewing Codex diagnostics.
-- Never deploy, commit, or push. Follow the authority and writer rules in
-  `AGENTS.md`.
+- Use `templates/codex-report-template.md` when reviewing diagnostics.
+- Does **not** author patches. Never deploys, commits, or pushes.
+
+### Claude Code (repo-resident terminal agent) — authorized patch author
+
+- May author patches in `patches/` and reports in `diagnostics/` when the owner
+  has assigned it as executor for that task. See the authority rules and the
+  role table in `AGENTS.md` (amended 2026-08-05: patch authorship is shared
+  between Codex and Claude Code).
+- Executes from the handoff named by the owner. One work package per patch file.
+- **Never commits, pushes, or deploys.** Delivery is: patch file dropped into
+  `patches/`, owner uploads it to `~/public_html` and runs `php <patch>.php`.
+- **Never writes Notion properties or status** — that writer is Claude (chat).
+  If a status change is needed, state it and stop.
+- May update `ROADMAP_FLOW` in `dashboard/booster-dashboard.html` only when an
+  authorized roadmap-affecting implementation requires it — never both systems.
+- There is **no staging environment**. Every deployed patch lands directly on
+  production. Assume the owner will run it on the live site.
+
+Both surfaces follow the authority and writer rules in `AGENTS.md`.
+
+## Secrets — do not read
+
+These files exist in the working folder and are correctly gitignored. Do not
+open, read, print, summarize, or copy them, and never include their contents in
+a patch, diagnostic, commit or chat message:
+
+- `.env.review`
+- `scripts/.env`
+- `client_secret.json`
+
+If a task appears to require a credential, stop and ask the owner. Do not go
+looking for it in configuration files.
+
+`backup-*.tar.gz` in the repo root is the live-site backup (multi-GB). Extract
+only the specific files you need, to a temporary location — never unpack it into
+the repository.
 
 ## Owner-facing review format
 
-Default chat output for a completed Codex review:
+Default chat output for a completed patch review (Codex or Claude Code):
 
 1. one verdict line: `Review OK`, `Review OK; owner QA required`, or
    `Return for changes`;
@@ -68,7 +107,11 @@ Known constraints:
 
 ## Review routing
 
-For a Codex result:
+Review is always performed by a different surface than the one that wrote the
+patch. Claude (chat) reviews patches authored by Codex or by Claude Code.
+Claude Code does not sign off on its own patch.
+
+For a completed patch result (Codex or Claude Code):
 
 1. read `diagnostics/<TASK-ID>_*_report_*.md`;
 2. read the relevant handoff and acceptance criteria;
@@ -83,9 +126,11 @@ properties or status. The repository-root `auto_review.py` is legacy.
 ## Status synchronization
 
 - Notion task status is canonical; `ROADMAP_FLOW` is its dashboard mirror.
-- Claude is the default writer of Booster Notion task properties and status.
-- Codex writes required `ROADMAP_FLOW` changes only within an authorized
-  roadmap-affecting implementation.
+- Claude (chat) is the default writer of Booster Notion task properties and
+  status. Neither Codex nor Claude Code writes Notion.
+- The assigned patch executor — Codex or Claude Code — writes required
+  `ROADMAP_FLOW` changes only within an authorized roadmap-affecting
+  implementation.
 - Do not update both systems as a single writer unless the owner explicitly
   reassigns that exact action.
 - If the required writer is unavailable, stop and hand off instead of creating
