@@ -8,7 +8,16 @@ Stack: OpenCart (Twig/PHP), custom checkout + NP integration, Google Apps Script
 
 ## Core authority and writer rules
 
-- Claude never commits or pushes.
+- Claude never commits or pushes. Claude Code never commits, pushes, or deploys.
+- **Patch authorship is shared (2026-08-05, owner decision).** Patches in
+  `patches/` may be authored by **Codex or Claude Code**. The owner assigns the
+  executor per task. Two agents must never author patches for the same task in
+  the same round — that is a parallel-writer violation.
+- **Executor recommendation is mandatory.** Before or while preparing a handoff,
+  Claude states a recommended executor, model and thinking depth (see
+  "Executor, model and effort recommendation"). The owner decides; Claude then
+  writes the handoff addressed to the chosen executor. Claude does not assign
+  the executor itself.
 - Codex may commit or push only after a direct, explicit owner request in the
   active task and only for the exact approved scope. This grants no standing
   permission. Otherwise Codex prepares changes, checks, and a concise diff
@@ -62,13 +71,18 @@ templates/    handoff + report templates
 ## Roles & boundaries
 | Agent | Does | Does NOT |
 |-------|------|----------|
-| **Claude** | audit, SEO/UX strategy, handoffs, post-patch review, git diff, prepares ready-to-paste commit/push command | server access, deploy, git commit/push |
-| **Codex** | patches (`patches/`), reports (`diagnostics/`), authorized `ROADMAP_FLOW` changes | server access, deploy, commit/push without exact active-task approval |
-| **Owner** | approves scope, normally runs prepared Git commands, uploads and runs server patches, performs final QA | — |
+| **Claude** (chat/Cowork) | audit, SEO/UX strategy, handoffs, executor recommendation, post-patch review, git diff, Notion status, prepares ready-to-paste commit/push command | write patches, server access, deploy, git commit/push |
+| **Codex** | patches (`patches/`), reports (`diagnostics/`), authorized `ROADMAP_FLOW` changes | server access, deploy, Notion properties/status, commit/push without exact active-task approval |
+| **Claude Code** (repo agent) | patches (`patches/`), reports (`diagnostics/`), local verification, authorized `ROADMAP_FLOW` changes | server access, deploy, Notion properties/status, commit, push |
+| **Owner** | approves scope, assigns the executor, normally runs prepared Git commands, uploads and runs server patches, performs final QA | — |
+
+Only one patch author per task per round. If the owner reassigns mid-task, the
+previous executor stops before the new one starts.
 
 ## Flow
 ```
-Claude handoff → Codex patch → drop to C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\
+Claude executor recommendation → Owner assigns executor → Claude handoff
+→ Codex OR Claude Code patch → drop to C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\patches\
 → Claude review (git diff) → Owner deploy (php patch.php in ~/public_html) → Owner QA
 ```
 
@@ -140,10 +154,29 @@ Live state comes from owner's **cPanel backup drop**.
 checkout · payment · Hutko · Checkbox · fiscalization · Nova Poshta · order status ·
 Merchant feed · schema/JSON-LD · SEO (sitemap/robots/canonical/.htaccess) · CRM · DB
 
-## Codex model + effort recommendation
-Every completed handoff includes
-`Codex config: model=<Sol/Terra/Luna> · effort=<low/medium/high/xhigh/ultra>`
-immediately after its date.
+## Executor, model and effort recommendation
+
+Every handoff carries an executor line immediately after its date:
+
+`Executor: <Codex|Claude Code> · model=<...> · effort/thinking=<...>` — plus one
+sentence of justification.
+
+Claude proposes; the owner decides. If the owner overrides the recommendation,
+Claude records the override in the handoff without arguing it again.
+
+### Which executor
+
+| Signal | Prefer |
+|---|---|
+| Task needs live-file discovery across an unfamiliar tree, or heavy local verification (build, test, image processing, measurement) | Claude Code |
+| Task is a well-bounded patch against files already identified in the handoff | either — pick by remaining weekly quota |
+| Task is long-running, multi-round, and mostly mechanical once specified | Codex |
+| The other executor already worked this task this round | keep the same executor — never swap mid-round |
+
+Weekly quota is a legitimate tie-breaker. State it explicitly when it is the
+deciding factor, so the choice stays auditable.
+
+### Codex model + effort
 
 | Task type | Model | Effort |
 |---|---|---|
@@ -155,6 +188,18 @@ Use `ultra` only when the task clearly splits into independent parallel work;
 it is not the default.
 
 Source: OpenAI GPT-5.6 model guide, July 2026.
+
+### Claude Code model + thinking depth
+
+| Task type | Model | Thinking |
+|---|---|---|
+| Risky-zone, multi-file, or architecturally ambiguous work | Opus | high |
+| Typical feature, bug fix, or tests | Sonnet | medium; high when multi-step |
+| Mechanical copy, formatting, or small CSS/text change | Haiku | low |
+
+Do not run risky-zone work on a small model. A weak model on a risky zone is
+how unrelated code gets overwritten — this has already happened once on CRM and
+3D-table work (owner report, 2026-08-05).
 
 ## Token and context efficiency
 - For CRM and Google Sheets work, use the Apps Script API or narrow bounded ranges first.

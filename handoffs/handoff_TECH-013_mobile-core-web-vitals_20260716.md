@@ -1,5 +1,11 @@
 # Codex Handoff — TECH-013: Mobile Core Web Vitals pass
 
+> **SUPERSEDED 2026-08-05 — DO NOT EXECUTE FROM THIS FILE.**
+> Canonical handoff: `handoffs/handoff_TECH-013_mobile-cwv-stage1_20260804.md` (Rev. 2026-08-05,
+> executor: Claude Code). This file is retained as the **2026-07-16 baseline record**; its
+> file-level diagnostics (§2 opportunities 1–8) are folded into §2A of the canonical handoff.
+> Nothing here is deleted — use it to compare against the 04.08 measurements.
+
 Date: 2026-07-16 | Parent: TECH-013 (умбрела для TECH-002/003/004) | Prepared by: Claude · Recipient: Codex + Owner
 
 ---

@@ -89,7 +89,7 @@ status and priority from the verified Notion card. Use dashboard
 | TECH-030/031 | — | handoffs/codex-handoff-TECH030-031.md | — |
 | TECH-035 | IndexNow (Bing/AI fast discovery) | handoffs/handoff_TECH-035_indexnow_2026-07-04.md | — |
 | TECH-032/033/034 | — | handoffs/codex-handoff-TECH032-033-034.md | — |
-| TECH-013 | Mobile Core Web Vitals pass (об'єднує TECH-002/003/004) | handoffs/handoff_TECH-013_mobile-core-web-vitals_20260716.md | — |
+| TECH-013 | Mobile Core Web Vitals pass, Stage 1 (об'єднує TECH-002/003/004; TECH-003 = підзадача WP2) | **handoffs/handoff_TECH-013_mobile-cwv-stage1_20260804.md** (Rev. 2026-08-05, канонічний, виконавець Claude Code) · handoffs/handoff_TECH-013_mobile-core-web-vitals_20260716.md (SUPERSEDED, бейзлайн 16.07) | — |
 | TECH-042 | Bot-challenge / AI-visibility read-only check | handoffs/handoff_TECH-042_bot-challenge-ai-visibility-check_20260716.md | — |
 
 ---
@@ -170,6 +170,7 @@ status and priority from the verified Notion card. Use dashboard
 | LEGAL-002 | Публічна оферта + Обмін і повернення (mono/ПУМБ розстрочка + архів редакцій, фінальний текст власника) | handoffs/handoff_LEGAL-002_offer-mono-pumb-archive_20260724.md (актуальний) → handoffs/handoff_LEGAL-002_offer-mono-pumb-archive_20260723.md (попередня чернетка Claude, замінена текстом власника) |
 | BRAND-OUTLET-001 | Outlet Booster — опис і SEO | — |
 | R-13.5 | НП модуль — master log (ST-серія) | handoffs/handoff_R-13.5_nova-poshta-module_2026-06-12.md |
+| ANALYTICS-001 | Встановлення Plerdy tracking snippet у footer.twig — заведено 2026-08-05, ще не в Notion roadmap (owner to confirm) | handoffs/handoff_ANALYTICS-001_plerdy-tracking-install_20260805.md |
 
 ## MKT-TG — Telegram контент-автоматизація
 
