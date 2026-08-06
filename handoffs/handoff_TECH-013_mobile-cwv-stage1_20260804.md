@@ -195,7 +195,161 @@ independent rollback, which is the only safety net in a patch-based deploy model
 - product/category content, titles, meta descriptions
 - jQuery as a library — do not remove; live search and probably other widgets depend on it
 
-## 6. Likely files / areas — verify against actual files, do not assume
+## 5A. CORRECTIONS from orientation, 2026-08-05 — these override the sections above
+
+Source: `diagnostics/TECH-013_orientation_report_20260805.md`. Claims below were
+independently re-verified by Claude (chat) against the backup: `.htaccess` byte/line
+counts, the `@import`, the duplicate preconnect pairs, and the unversioned image paths
+all match exactly.
+
+1. **§6 paths were wrong.** `config_theme` = `basic`; OpenCart 4.1 resolves this to the
+   base template root. Real paths are `catalog/view/template/common/header.twig` and
+   `footer.twig`, CSS root `catalog/view/stylesheet/`. There is **no**
+   `catalog/view/theme/basic/`. Use §5B below, not §6.
+2. **The `# BEGIN sitemap-no-compression` block no longer exists** — it was deleted per
+   the TECH-005-DEEP runbook (Block G step 1). Ten blank lines at `.htaccess:6–15` are its
+   footprint. The frozen zone is restated in §5B. The "never `*.xml`" rule is unchanged.
+3. **`.htaccess` contains no cache or compression policy at all.** The selective 7-day
+   TTLs seen in July come from server-level LiteSpeed/cPanel config, not from a file we
+   control. WP3 appends to a file with zero existing policy — nothing to conflict with,
+   but also confirm with `curl -sI` that the appended block actually takes effect.
+4. **Do NOT remove the `gstatic` preconnect.** All four Google Fonts serve `.woff2` from
+   `fonts.gstatic.com` — the origin is used, just discovered late. The real defect is that
+   lines 45/46 are repeated verbatim at 51/52. **De-duplicate; keep one hint each.**
+5. **The fourth Google Fonts request is a CSS `@import`, not a `<link>`** —
+   `boostershop-ds.css:13` imports Manrope, the DS body font. It is undiscoverable until a
+   158,573-byte stylesheet downloads *and* parses, creating a serialized 3-hop chain. This
+   is the largest named root cause for WP1 and §2A did not identify it.
+6. **WP4 is smaller than assumed.** All four Google Fonts URLs already carry
+   `&display=swap`. The only remaining work is 10 `font-display:block` declarations in
+   self-hosted `all.min.css`. Anchor count must be exactly 10 or abort.
+7. **Two JS files are already deferred** (`bs-faq.js`,
+   `patch-mobile-search-menu-redesign.js`). Remaining sync head JS: jQuery, `common.js`,
+   `booster-product-polish.js`, plus whatever `getScripts('header')` emits.
+8. **§2A byte figures are gzipped transfer sizes.** On disk: `bootstrap.css` 270,584 B,
+   `all.min.css` 104,502 B, `boostershop-ds.css` 158,573 B. Acceptance criteria must state
+   which measure is used.
+9. **`category.twig:171` is a false alarm** — the attribute-less `<img>` sits inside a
+   `{# … #}` Twig comment and never renders. TECH-003 is intact; verify, do not redo.
+
+### Work-package order — REVISED (owner approved 2026-08-05)
+
+`WP1 → WP4 → WP2 → WP3`. WP3 moves from third to last for a hard reason:
+
+**Images are not cache-busted.** `home.twig:43`/`:53` and `header.php:65` emit
+unversioned paths (`{{ base }}image/catalog/...`), while CSS/JS carry `?v=`. Shipping
+`max-age=31536000, immutable` before WP2 would pin the old 394 KB logo and 196 KB tile in
+returning visitors' browsers for a year and make the 773 KiB acceptance criterion
+unmeasurable.
+
+**Durable consequence — must be solved inside WP3, not deferred.** Re-exporting the images
+in WP2 does not fix the underlying fragility: any *future* image change would be pinned
+for a year too. WP3 must therefore do one of:
+
+- (a) apply the long `immutable` TTL **only** to `?v=`-versioned assets, and a short TTL
+  (≤7 days) to unversioned paths; or
+- (b) add cache-busting to image URLs first, then apply the long TTL uniformly.
+
+Choose one explicitly in the patch description and state why. Do not ship a blanket
+one-year `immutable` rule over unversioned image paths.
+
+### §5C — live computed-style measurements, owner-supplied 2026-08-05
+
+Captured on `https://boostershop.website/` via DevTools console.
+**Caveat: desktop viewport 1411×911, dpr 1 — device emulation was not active.**
+Font usage below is viewport-independent and therefore valid. Painted box sizes are
+desktop-only and must be re-captured at 390 px before WP2 sets export dimensions.
+
+**CONFIRMED — `Inter` is unused. Remove it in WP1.**
+`Inter` appears in **zero** computed `font-family` values and in **zero** entries of
+`document.fonts` loaded set. The `<link>` at `header.twig:53` is a fully unused
+render-blocking request to `fonts.googleapis.com`. Deleting it removes one blocking
+request and one origin round-trip with no visual effect.
+
+Family usage (element counts): `Manrope` 344 · `JetBrains Mono` 2 ·
+`IBM Plex Sans Condensed` 2 · `Font Awesome 6 Free` 1.
+
+Loaded fonts: Manrope 400/500/600/700/800, IBM Plex Sans Condensed 400/600,
+Font Awesome 6 Free 900.
+
+**`JetBrains Mono` — probable second removal, verify first.** Two elements compute to it,
+but it does **not** appear in the loaded-font set, meaning it is never actually painted.
+Identify those two elements before deleting `header.twig:54`. Do not remove on this
+evidence alone.
+
+**`IBM Plex Sans Condensed` — keep.** Used and loaded.
+
+**`bootstrap-icons.css` — confirmed not referenced.** Absent from
+`document.styleSheets`. Dead file on disk only; no WP1 action, do not delete in this task.
+
+**Manrope loads five weights (400–800).** Weight trimming is a real further saving but is
+Stage 2 — it requires auditing every weight actually rendered. Out of scope here.
+
+Painted sizes (desktop, dpr 1 — indicative only):
+`logo` 135×42, intrinsic 1498×465 · `.bs-catcard__media` 240×168 with `img` painted
+226×154, intrinsic 1500×585.
+
+### §5D — WP2 export targets, RESOLVED 2026-08-05
+
+Mobile capture completed: viewport 390×824, **dpr 2**. Combined with the desktop capture,
+export targets are now fixed. No further measurement needed for WP2.
+
+**`object-fit: contain`, `object-position: 50% 50%` on `.bs-catcard__media img`.**
+This resolves the aspect-ratio concern raised in the orientation report. `contain`
+letterboxes the image inside an explicitly CSS-sized box without cropping, so re-exporting
+**at the original aspect ratio** cannot move layout. The declared `width="168" height="168"`
+attributes do not drive layout here — the CSS box does — which is why CLS is 0 despite the
+mismatch. Keep the aspect ratio; do not "fix" the attributes to 1:1 dimensions.
+
+Painted CSS sizes (element box vs actual rendered content under `contain`):
+
+| Asset | Mobile 390 / dpr2 | Desktop 1411 / dpr1 | Intrinsic | **Export target** |
+|---|---|---|---|---|
+| Header logo | 103×32 | 135×42 | 1498×465 (3.222:1) | **270×84** |
+| `PokemonC.png` | box 116×88 → content 116×45 | box 226×154 → content 226×88 | 1500×585 (2.564:1) | **452×176** |
+| `One Piece-Photoroom.png` | same box, content ≈116×28 | content ≈226×54 | 463×111 (4.17:1) | **452×108** |
+
+Targets are sized for **desktop retina (dpr 2)**, the largest requirement across
+breakpoints — not for mobile alone. Mobile-only sizing would under-serve desktop retina
+and produce visible blur.
+
+**Correction to §2A's image accounting.** `One Piece-Photoroom.png` is intrinsically
+463×111 against a 452×108 requirement — it is **already correctly sized** and yields
+effectively no saving. The 773 KiB opportunity is dominated by the logo (394 KB → expect
+well under the 40 KiB acceptance bar) and `PokemonC.png` (196 KB). Do not spend WP2 effort
+re-exporting the One Piece tile; convert format only if it is not already WebP.
+
+### §5E — `JetBrains Mono` resolved: removable, with one visual check
+
+The two elements are `DIV.bs-menu__label` and `DIV.bs-menu__label.bs-menu__label--sep`.
+The font is **not** in the loaded set on either desktop or mobile, so those labels already
+render in fallback today. Removing `header.twig:54` is therefore visually neutral in the
+current state.
+
+Residual risk: the labels may be hidden at capture time and could trigger the load when the
+menu opens. **Before deleting, open the mobile menu and screenshot `.bs-menu__label`;
+repeat after.** If identical, the removal stands. If not, keep the link and record why.
+
+With Inter (§5C) and JetBrains Mono removed, WP1 eliminates **two** of the three head
+Google Fonts `<link>` requests outright, on top of hoisting the Manrope `@import`.
+
+### §5B — restated `.htaccess` frozen zone (replaces the §2.2/§5 wording)
+
+Do not modify, reorder or reformat:
+
+- `.htaccess:2–5` — `<FilesMatch "sitemap.*\.xml$">` (`ForceType`, `Header set Content-Type`)
+- `.htaccess:16–45` — `# BEGIN LSCACHE … # END LSCACHE`, including
+  `CacheDisable public /sitemap*.xml`
+- `.htaccess:57–59` — HTTPS + non-www 301 canonical redirect
+- `.htaccess:61–72` — `# BEGIN legacy-404-301 20260702` block (10 product 301s)
+- `.htaccess:74`, `:76`, `:77` — `uk-ua` rewrites and the commented sitemap rewrite
+- `.htaccess:80–82` — OpenCart SEO front-controller rewrite
+- `.htaccess:6–15` — the ten blank lines. Leave them. Cosmetic cleanup here is pointless
+  risk in a risky zone.
+
+Append point for `# BEGIN BS-SPEED-1 cache`: **end of file, after line 82.**
+
+## 6. Likely files / areas — SUPERSEDED by §5A.1, kept for history
 - `catalog/view/theme/<active-theme>/template/common/header.twig` (head, CSS/JS includes, logo)
 - `catalog/view/theme/<active-theme>/template/common/footer.twig` (scripts before `</body>`)
 - Theme stylesheets under `catalog/view/theme/<active-theme>/stylesheet/`
