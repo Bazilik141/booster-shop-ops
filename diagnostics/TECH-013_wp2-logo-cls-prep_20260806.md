@@ -1,5 +1,28 @@
 # TECH-013 — WP2 prep note: the header logo CLS is a CSS problem, not a file-size problem
 
+> ## ⚠ SUPERSEDED IN TWO PLACES — corrected 2026-08-06 by in-browser measurement
+>
+> 1. **This note named `boostershop-ds.css:834` as the winning rule. That is wrong.**
+>    Seven rules match `.bs-header__logo img`. The ones that actually apply are
+>    **`:2292`** (`body.bs .bs-header__logo img { height:42px !important; max-width:180px
+>    !important; width:auto !important }`) and **`:2375`** (the `max-width:768px` variant,
+>    `height:32px !important`). Both carry `!important` *and* higher specificity than
+>    `:834`, so `:834`'s 46px and `:839`'s 34px are dead code. This matches the owner's
+>    live captures — 42 px at 1411 px wide, 32 px at 390 px — which `:834` could not explain.
+>
+> 2. **The claim that space is not reserved is also wrong.** Measured directly: the logo
+>    box is 135.3×42 *before* the image bytes arrive and 135.3×42 after — the `width`/
+>    `height` attributes supply a working aspect-ratio hint (`aspect-ratio: auto 1498/465`).
+>    The logo is byte-identical on all three pages, yet home and product show CLS 0.003
+>    while category shows 0.25; a shared element cannot explain a category-only shift.
+>    The likely culprit is category-only and JS-rendered — the load-more widget
+>    (`.bs-btn-load-more` / `.bs-load-more-progress`) or the smart-filter panel.
+>
+> The WP2 patch still adds an explicit `aspect-ratio` at `:2292`, because after the
+> re-export the old 1498×465 attributes no longer describe the file and the reservation
+> should not depend on those attributes surviving future edits. But it is **not** expected
+> to move desktop category CLS on its own. Everything below is kept for history.
+
 Date: 2026-08-06 · Executor: Claude Code · Status: **RECORDED, NOT ACTED ON**
 Raised by the owner after the post-WP1 PSI run. This note exists so the finding is not
 lost between WP4 and WP2. **No file was changed for this.**
