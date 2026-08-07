@@ -27,6 +27,7 @@ const API_3DP = Object.freeze({
   maxRangeCells: 500,
   maxReadRows: 500,
   maxStockAdjustmentReasonChars: 250,
+  salesCrmRowHeader: 'CRM row number',
 });
 
 const SHEETS_3DP = Object.freeze({
@@ -66,6 +67,10 @@ const STOCK_ADJUSTMENT_HEADERS_3DP = Object.freeze([
   'Причина',
   'Дата коригування (Київ)',
 ]);
+
+const TECHNICAL_APPEND_COLUMNS_3DP = Object.freeze({
+  'Продажі': Object.freeze(['T']),
+});
 
 // Grounded from the live formulas, the workbook Legend, and the owner-approved scope.
 // K in Номенклатура and G in Друк-лог are deliberately absent because they are formulas.
@@ -186,6 +191,8 @@ function handlePost3dp_(body, actor) {
       return setNomenclatureArchiveAction3dp_(spreadsheet, body, actor, false);
     case '3dp_adjust_stock':
       return adjustStockAction3dp_(spreadsheet, body, actor);
+    case '3dp_setup_3dp010':
+      return setup3dp010Action3dp_(spreadsheet, actor);
     case '3dp_setup_addendum2':
       return setupAddendum2Action3dp_(spreadsheet, actor);
     default:
@@ -471,7 +478,11 @@ function appendRowAction3dp_(spreadsheet, body, actor) {
   const normalized = {};
   Object.keys(values).forEach(function (key) {
     const column = resolveColumn3dp_(sheet, key);
-    assertCellWriteAllowed3dp_(sheetName, column, actor);
+    if (sheetName === SHEETS_3DP.sales && column === 'T') {
+      assertTechnicalSaleAppendAllowed3dp_(sheet, column, values[key], actor);
+    } else {
+      assertCellWriteAllowed3dp_(sheetName, column, actor);
+    }
     if (Object.prototype.hasOwnProperty.call(normalized, column)) {
       throw apiError3dp_('DUPLICATE_COLUMN', 'The same target column was supplied more than once.');
     }
@@ -479,6 +490,9 @@ function appendRowAction3dp_(spreadsheet, body, actor) {
     normalized[column] = values[key];
   });
   if (!Object.keys(normalized).length) throw apiError3dp_('VALUES_REQUIRED', 'At least one value is required.');
+  if (sheetName === SHEETS_3DP.sales && !Object.prototype.hasOwnProperty.call(normalized, 'T')) {
+    throw apiError3dp_('CRM_ROW_REQUIRED', 'Продажі rows require the technical CRM row number in column T.');
+  }
 
   const row = findFirstBusinessEmptyRow3dp_(sheet, sheetName, actor);
   copyFormulaCells3dp_(sheet, sheetName, row);
@@ -816,12 +830,36 @@ function stockAdjustmentsAction3dp_(spreadsheet, params, actor) {
   if (lastRow < 2) return { action: '3dp_stock_adjustments', rows: [], count: 0 };
   const headers = sheet.getRange(1, 1, 1, STOCK_ADJUSTMENT_HEADERS_3DP.length).getDisplayValues()[0];
   const values = sheet.getRange(2, 1, lastRow - 1, STOCK_ADJUSTMENT_HEADERS_3DP.length).getValues();
+  const reason = String(params.reason || '').trim();
   const rows = values.map(function (row, index) {
     return rowObject3dp_(headers, row, index + 2);
   }).filter(function (row) {
-    return !isBlank3dp_(row.SKU) && (!sku || String(row.SKU) === sku);
+    return !isBlank3dp_(row.SKU) && (!sku || String(row.SKU) === sku) &&
+        (!reason || stockReasonMatches3dp_(row['Причина'], reason));
   }).reverse().slice(0, limit);
   return { action: '3dp_stock_adjustments', rows: rows, count: rows.length, sku: sku || null };
+}
+
+function stockReasonMatches3dp_(stored, requested) {
+  const actual = String(stored || '').trim();
+  const expected = String(requested || '').trim();
+  return actual === expected || actual === expected + '; WARNING: insufficient stock';
+}
+
+function isAutomaticSaleAdjustmentReason3dp_(reason) {
+  return /^auto:\s*CRM order\s+\S+/i.test(String(reason || '').trim());
+}
+
+function findExistingStockAdjustment3dp_(ledger, sku, reason) {
+  const lastRow = Math.min(ledger.getLastRow(), API_3DP.maxReadRows);
+  if (lastRow < 2) return 0;
+  const values = ledger.getRange(2, 1, lastRow - 1, STOCK_ADJUSTMENT_HEADERS_3DP.length).getValues();
+  for (let index = values.length - 1; index >= 0; index -= 1) {
+    if (String(values[index][0] || '').trim() === sku && stockReasonMatches3dp_(values[index][2], reason)) {
+      return index + 2;
+    }
+  }
+  return 0;
 }
 
 function adjustStockAction3dp_(spreadsheet, body, actor) {
@@ -837,6 +875,7 @@ function adjustStockAction3dp_(spreadsheet, body, actor) {
     throw apiError3dp_('EXPECTED_REQUIRED', 'expected_current is required for a stock adjustment.');
   }
   const reason = requiredReason3dp_(body.reason);
+  const automaticSale = isAutomaticSaleAdjustmentReason3dp_(reason);
   const availability = getSheet3dp_(spreadsheet, SHEETS_3DP.availability);
   const availabilityRow = findAvailabilityRow3dp_(availability, sku);
   const stockRange = availability.getRange(availabilityRow, 7);
@@ -844,7 +883,16 @@ function adjustStockAction3dp_(spreadsheet, body, actor) {
   if (!formula || canonicalFormula3dp_(formula).indexOf(SHEETS_3DP.stockAdjustments) === -1) {
     throw apiError3dp_('STOCK_FORMULA_NOT_READY', 'Run setup3dpApiAddendum2 before adjusting stock.');
   }
-  const oldValue = inventoryWholeNumber3dp_(stockRange.getValue(), 'Current stock must be a non-negative whole number.');
+
+  const ledger = getInternalSheet3dp_(spreadsheet, SHEETS_3DP.stockAdjustments);
+  const existingLedgerRow = findExistingStockAdjustment3dp_(ledger, sku, reason);
+  if (existingLedgerRow) {
+    return { action: '3dp_adjust_stock', sku: sku, already_applied: true, ledger_row: existingLedgerRow, reason: reason };
+  }
+
+  const oldValue = automaticSale
+    ? signedWholeNumber3dp_(stockRange.getValue(), 'Current stock must be a whole number.')
+    : inventoryWholeNumber3dp_(stockRange.getValue(), 'Current stock must be a non-negative whole number.');
   if (!equalCellValue3dp_(oldValue, body.expected_current)) {
     throw apiError3dp_('STALE_WRITE', 'Stock changed after it was read. Refresh and retry.');
   }
@@ -858,46 +906,62 @@ function adjustStockAction3dp_(spreadsheet, body, actor) {
     ? signedWholeNumber3dp_(body.delta, 'delta must be a whole number.')
     : inventoryWholeNumber3dp_(body.new_value, 'new_value must be a non-negative whole number.') - oldValue;
   const newValue = oldValue + delta;
-  if (newValue < 0) throw apiError3dp_('NEGATIVE_STOCK', 'Stock cannot become negative.');
+  if (newValue < 0 && !automaticSale) throw apiError3dp_('NEGATIVE_STOCK', 'Stock cannot become negative.');
   if (delta === 0) {
     return { action: '3dp_adjust_stock', sku: sku, old_value: oldValue, new_value: newValue, already_applied: true };
   }
 
-  const ledger = getInternalSheet3dp_(spreadsheet, SHEETS_3DP.stockAdjustments);
   const ledgerRow = nextInternalRow3dp_(ledger);
-  const ranges = [
-    ledger.getRange(ledgerRow, 1),
-    ledger.getRange(ledgerRow, 2),
-    ledger.getRange(ledgerRow, 3),
-    ledger.getRange(ledgerRow, 4),
-  ];
+  const ranges = [ledger.getRange(ledgerRow, 1), ledger.getRange(ledgerRow, 2), ledger.getRange(ledgerRow, 3), ledger.getRange(ledgerRow, 4)];
   ranges.forEach(function (range) {
     if (range.getFormula()) throw apiError3dp_('FORMULA_CELL', 'Stock-adjustment ledger must remain manual cells.');
   });
   const oldRawValues = ranges.map(function (range) { return range.getValue(); });
-  const ledgerValues = [sku, delta, reason, now3dp_()];
+  const warning = newValue < 0 ? 'insufficient_stock' : '';
+  const ledgerReason = warning ? reason + '; WARNING: insufficient stock' : reason;
+  const ledgerValues = [sku, delta, ledgerReason, now3dp_()];
   try {
     ranges.forEach(function (range, index) { setCellValue3dp_(range, ledgerValues[index]); });
-    appendAudit3dp_(
-      spreadsheet,
-      actor,
-      'STOCK_ADJUSTMENT',
-      SHEETS_3DP.availability,
-      'G' + availabilityRow,
-      oldValue,
-      newValue,
-      'sku=' + sku + '; delta=' + delta + '; reason=' + reason + '; ledger_row=' + ledgerRow
-    );
+    appendAudit3dp_(spreadsheet, actor, 'STOCK_ADJUSTMENT', SHEETS_3DP.availability, 'G' + availabilityRow, oldValue, newValue,
+      'sku=' + sku + '; delta=' + delta + '; reason=' + ledgerReason + '; ledger_row=' + ledgerRow);
   } catch (error) {
     ranges.forEach(function (range, index) { setCellValue3dp_(range, oldRawValues[index]); });
     throw error;
   }
-  return { action: '3dp_adjust_stock', sku: sku, row: availabilityRow, old_value: oldValue, new_value: newValue, delta: delta, ledger_row: ledgerRow };
+  return { action: '3dp_adjust_stock', sku: sku, row: availabilityRow, old_value: oldValue, new_value: newValue, delta: delta,
+    ledger_row: ledgerRow, warning: warning || null };
 }
 /**
  * The Web App has already acquired the script lock in doPost(). Keep this
  * wrapper lock-free so the owner-only setup route cannot deadlock itself.
  */
+function setup3dp010Action3dp_(spreadsheet, actor) {
+  assertOwner3dp_(actor, 'Caller may not run 3D-P-010 setup.');
+  const sheet = getSheet3dp_(spreadsheet, SHEETS_3DP.sales);
+  const headerRange = sheet.getRange('T1');
+  const currentHeader = String(headerRange.getDisplayValue() || '').trim();
+  if (currentHeader && currentHeader !== API_3DP.salesCrmRowHeader) {
+    throw apiError3dp_('SETUP_ANCHOR_MISMATCH', 'Продажі!T1 is occupied by an unexpected header.');
+  }
+  const lastRow = Math.max(sheet.getLastRow(), 2);
+  const values = sheet.getRange(2, 20, lastRow - 1, 1).getValues();
+  const formulas = sheet.getRange(2, 20, lastRow - 1, 1).getFormulas();
+  for (let index = 0; index < values.length; index += 1) {
+    if (!isBlank3dp_(values[index][0]) || formulas[index][0]) {
+      throw apiError3dp_('T_NOT_EMPTY', 'Продажі!T must be empty before 3D-P-010 setup.');
+    }
+  }
+  if (!currentHeader) headerRange.setValue(API_3DP.salesCrmRowHeader);
+  return { action: '3dp_setup_3dp010', ok: true, already_applied: Boolean(currentHeader), sheet: SHEETS_3DP.sales,
+    column: 'T', header: API_3DP.salesCrmRowHeader, rows_checked: lastRow - 1 };
+}
+
+function setup3dp010() {
+  return withScriptLock3dp_(function () {
+    return setup3dp010Action3dp_(getSpreadsheet3dp_(), { role: 'owner', identity: 'dashboard' });
+  });
+}
+
 function setupAddendum2Action3dp_(spreadsheet, actor) {
   assertOwner3dp_(actor, 'Caller may not run Addendum #2 setup.');
   return setup3dpApiAddendum2Unlocked3dp_(spreadsheet);
@@ -913,6 +977,18 @@ function assertRealPrintLogRow3dp_(sheet, row) {
   if (row < 2 || row > sheet.getLastRow()) throw apiError3dp_('ROW_NOT_FOUND', 'Print-log row not found.');
   const sku = String(sheet.getRange(row, 2).getValue() || '').trim();
   if (!sku || isPlaceholderSku3dp_(sku)) throw apiError3dp_('ROW_NOT_ALLOWED', 'Illustrative or empty rows cannot be edited through this action.');
+}
+
+function assertTechnicalSaleAppendAllowed3dp_(sheet, column, value, actor) {
+  if (!actor || actor.role !== 'owner' || column !== 'T') {
+    throw apiError3dp_('COLUMN_NOT_ALLOWED', 'Technical sale columns are reserved for the CRM order hook.');
+  }
+  if (sheet.getRange('T1').getDisplayValue() !== API_3DP.salesCrmRowHeader) {
+    throw apiError3dp_('SCHEMA_NOT_READY', 'Run 3D-P-010 setup before appending Продажі rows.');
+  }
+  if (typeof value !== 'number' || !Number.isInteger(value) || value < 3) {
+    throw apiError3dp_('CRM_ROW_INVALID', 'CRM row number must be a whole number >= 3.');
+  }
 }
 
 function assertCellWriteAllowed3dp_(sheetName, column, actor) {
@@ -1095,8 +1171,9 @@ function findFirstBusinessEmptyRow3dp_(sheet, sheetName, actor) {
   const columns = actor.role === 'serhiy' ? (SERHIY_MANUAL_COLUMNS_3DP[sheetName] || []) : ownerColumns;
   if (!columns.length) throw apiError3dp_('SHEET_NOT_WRITABLE', 'Caller cannot append rows to this sheet.');
   const maxRow = Math.min(Math.max(sheet.getLastRow() + 1, 2), sheet.getMaxRows());
+  const occupiedColumns = ownerColumns.concat(TECHNICAL_APPEND_COLUMNS_3DP[sheetName] || []);
   for (let row = 2; row <= maxRow; row += 1) {
-    const empty = ownerColumns.every(function (column) {
+    const empty = occupiedColumns.every(function (column) {
       return isBlank3dp_(sheet.getRange(row, columnToNumber3dp_(column)).getValue());
     });
     const unusedStatus = sheetName === SHEETS_3DP.nomenclature &&

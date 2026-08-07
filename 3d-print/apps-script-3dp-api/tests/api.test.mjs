@@ -320,6 +320,27 @@ const addendumSetupViaApi = context.handlePost3dp_({ action: "3dp_setup_addendum
 assert.equal(addendumSetupViaApi.ok, true);
 assert.equal(addendumSetupViaApi.already_applied, true);
 expectCode("FORBIDDEN", () => context.handlePost3dp_({ action: "3dp_setup_addendum2" }, serhiy));
+const setup010 = context.handlePost3dp_({ action: "3dp_setup_3dp010" }, owner);
+assert.equal(setup010.ok, true);
+assert.equal(setup010.already_applied, false);
+assert.equal(spreadsheet.getSheetByName("Продажі").getRange("T1").getValue(), "CRM row number");
+assert.equal(context.handlePost3dp_({ action: "3dp_setup_3dp010" }, owner).already_applied, true);
+expectCode("FORBIDDEN", () => context.handlePost3dp_({ action: "3dp_setup_3dp010" }, serhiy));
+
+const saleAppend = context.appendRowAction3dp_(spreadsheet, {
+  sheet: "Продажі",
+  values: { A: "2026-08-03", B: "BR-CHARM-001", D: 1, E: 62, G: 0, M: "Сайт", N: "OC-3DP-1", T: 77 },
+}, owner);
+assert.equal(saleAppend.row, 4);
+assert.equal(spreadsheet.getSheetByName("Продажі").getRange("T4").getValue(), 77);
+expectCode("T_NOT_EMPTY", () => context.handlePost3dp_({ action: "3dp_setup_3dp010" }, owner));
+expectCode("COLUMN_NOT_ALLOWED", () => context.writeAction3dp_(spreadsheet, {
+  sheet: "Продажі", sku_or_row: 4, column: "T", value: 78, expected_current: 77,
+}, owner));
+expectCode("CRM_ROW_REQUIRED", () => context.appendRowAction3dp_(spreadsheet, {
+  sheet: "Продажі",
+  values: { A: "2026-08-03", B: "BR-CHARM-001", D: 1, E: 62, G: 0, M: "Сайт", N: "OC-3DP-2" },
+}, owner));
 
 expectCode("COLUMN_NOT_ALLOWED", () => context.writeAction3dp_(spreadsheet, {
   sheet: "Налаштування", sku_or_row: 2, column: "B", value: 0.2, expected_current: 0.17,
@@ -367,7 +388,7 @@ assert.equal(context.handlePost3dp_({
 assert.equal(context.overviewAction3dp_(spreadsheet).summary.sku_count, 1);
 assert.equal(context.overviewAction3dp_(spreadsheet).summary.available, 34);
 assert.equal(context.skusAction3dp_(spreadsheet).count, 1);
-assert.equal(context.tableAction3dp_(spreadsheet, "Продажі", { requireHeader: "SKU" }).count, 1);
+assert.equal(context.tableAction3dp_(spreadsheet, "Продажі", { requireHeader: "SKU" }).count, 2);
 assert.equal(context.tableAction3dp_(spreadsheet, "Маркетингові_плюшки", { requireHeader: "SKU" }).count, 1);
 assert.equal(context.tableAction3dp_(spreadsheet, "Виплати", { requireHeader: "Період (РРРР-ММ)" }).count, 1);
 assert.equal(context.handleGet3dp_({ action: "3dp_fixtures" }, owner).count, 0);
@@ -450,6 +471,19 @@ assert.equal(context.handleGet3dp_({ action: "3dp_stock_adjustments", sku: "BR-C
 assert.equal(context.handlePost3dp_({
   action: "3dp_adjust_stock", sku: "BR-CHARM-001", expected_current: 34, delta: 0, reason: "без зміни",
 }, owner).already_applied, true);
+const autoReason = "auto: CRM order OC-NEGATIVE row 88";
+const autoAdjustment = context.handlePost3dp_({
+  action: "3dp_adjust_stock", sku: "BR-CHARM-001", expected_current: 34, delta: -40, reason: autoReason,
+}, owner);
+assert.equal(autoAdjustment.new_value, -6);
+assert.equal(autoAdjustment.warning, "insufficient_stock");
+assert.equal(context.handleGet3dp_({
+  action: "3dp_stock_adjustments", sku: "BR-CHARM-001", reason: autoReason, limit: 1,
+}, owner).count, 1);
+const duplicateAutoAdjustment = context.handlePost3dp_({
+  action: "3dp_adjust_stock", sku: "BR-CHARM-001", expected_current: 999, delta: -40, reason: autoReason,
+}, owner);
+assert.equal(duplicateAutoAdjustment.already_applied, true);
 
 
 const appendResult = context.appendRowAction3dp_(spreadsheet, {

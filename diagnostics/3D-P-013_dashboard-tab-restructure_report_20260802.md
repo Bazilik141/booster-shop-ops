@@ -75,3 +75,66 @@ visual runtime or live-API claim.
 This is one dashboard file. Revert the `3D-P-013` dashboard change before any
 local dashboard publication if owner QA fails. No deployment, Apps Script
 change, direct Sheet mutation, or CRM write happened in this task.
+
+## Addendum — owner browser QA findings, 2026-08-02
+
+Owner ran manual QA in a real browser (desktop width) per this report's "Owner QA / live gate" section.
+
+**Working:** SKU archive/restore (Активний → Архів → Активний visibility toggled correctly). Вироби form
+renders with Посилання-на-модель/РРЦ/Ціна-під-викуп correctly read-only/placeholder per the "Hard boundary"
+section above — no fictitious Sheet write attempted, matches spec. Наявність adjustment ledger works
+functionally: a test correction changed `Наявність!G` from `1` → `3` and the append-only history table shows
+both the earlier Addendum #2 positive-smoke entry and the new test entry.
+
+**Bug found:** `Помилка: renderThreeDpAttention is not defined` appears (a) on initial load of the Калькулятор
+zone before any interaction, and (b) again after saving Вироби fields / recording a stock adjustment. This is
+a JS `ReferenceError` — some render/refresh path calls `renderThreeDpAttention()` (presumably the "Потребує
+уваги" alerts-block renderer from Zone C) but that function is either never defined or named differently
+elsewhere in the file. It does not appear to corrupt data (the stock ledger and archive state both updated
+correctly despite the error), but it surfaces as a visible red error banner to the owner on core actions —
+needs a fix before this ships to Serhiy or is considered QA-passed.
+
+**Needs a second look, not confirmed as a bug:** the "Останні коригування" (recent adjustments) table shows
+`Delta: —` for both history rows, even though the naявність total visibly changed by a nonzero amount each
+time (`0→1`, then `1→3`). Either the delta value isn't being echoed back correctly by the ledger read, or the
+UI isn't rendering the field that holds it — needs Codex to check whether the ledger read action actually
+returns a delta field and whether the table binds to the right key.
+
+**Not yet tested:** tablet/mobile widths, long SKU/name text, hover/focus/active states (owner QA only covered
+desktop so far).
+## Addendum — local fix for owner QA findings, 2026-08-02
+
+**Root cause.** `renderThreeDpInformation()` called
+`renderThreeDpAttention(records)`, but the only renderer definition is
+`threeDpAttention(records)`. The call runs during the all-zone refresh used by
+initial 3D load, product saves and stock adjustments, which explains every
+observed ReferenceError without affecting the already-completed API write.
+
+**Fix.** The call now uses the defined `threeDpAttention(records)` function.
+The stock-ledger API response is confirmed to use the exact header
+`Зміна наявності, шт`; the UI had incorrectly used a nonexistent `Delta` key
+and now binds that returned header directly. A numeric zero remains visibly
+`0`, not an em dash.
+
+**Local regression check.** `tests/3d-p-013-dashboard-ui-regression.test.mjs`
+compiles the inline dashboard script and verifies the corrected all-zone render
+path plus the exact API ledger-header binding. It does not call the live API.
+
+**Remaining owner re-QA.** Reload the normal local dashboard, open all three
+zones, save one already-selected SKU field without changing data, and inspect
+the existing recent-stock ledger. Then use a separately approved test SKU for
+any data-changing adjustment. The prior archive/restore and stock writes are
+not repeated by this fix.
+## Addendum — post-mutation dashboard refresh, 2026-08-02
+
+**Change.** Creating or saving a SKU in `Вироби` now keeps the bounded
+`3dp_get_row` confirmation, then calls `reloadThreeDpData()` and
+`renderThreeDpAll()`. The existing archive/restore and stock-adjustment paths
+already use the same full reload; the latter also reloads the selected SKU's
+ledger. Consequently, all 3D-P zones reflect each successful mutation without
+a browser-page reload.
+
+**Local regression.** The dashboard regression test now asserts full
+API-backed reload and full-zone render paths for new/existing SKU save,
+archive/restore, and stock adjustment. Browser/API runtime behaviour remains
+for owner re-QA; no live write was run by this change.

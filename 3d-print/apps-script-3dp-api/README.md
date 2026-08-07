@@ -102,10 +102,26 @@ They are exposed only through bounded specialized actions below.
 3. Run `preview3dpApiSetup()` and confirm it reports legacy `O` removal, `Налаштування`, `Фурнітура_довідник`, legacy `H:J` clearing, and `Брак, шт`.
 4. Create a named Google Sheets version, then run `setup3dpApi()` once. It is idempotent after the migration.
 5. Publish a **new version of the existing web-app deployment**. Keep both existing Script Properties unchanged; do not regenerate or expose tokens.
-6. Run the local negative smoke and the updated no-net-change positive audit smoke below, then manually confirm headers, settings values, the K formula, and `_Аудит_API`.
+6. Run the owner-only `setup3dp010()` only after the bounded T emptiness check succeeds; publish a new Web App version containing it.
+7. Run the local negative smoke and the updated no-net-change positive audit smoke below, then manually confirm headers, settings values, the K formula, `Продажі!T1`, and `_Аудит_API`.
 
 Every source change requires a new deployment version. Editing the script alone
 does not update an already deployed web app.
+
+## 3D-P-010 CRM auto-sale match key
+
+After Addendum #2 is live, run the owner-only `setup3dp010()` editor function
+once. It checks that `Продажі!T:T` is empty before writing `T1=CRM row number`;
+it returns `T_NOT_EMPTY` and makes no write if any existing T data or formula is
+found. The new T column is technical, integer-only, formula-free, and is not
+available through generic `3dp_write`. Sales-row creation through
+`3dp_append_row` requires the CRM row number in T. The CRM hook matches on the
+composite key `Продажі!N + Продажі!T`.
+
+For automatic sale stock adjustments, use reason `auto: CRM order <id> row
+<crm-row>`. The adjustment is idempotent by SKU plus exact reason. If stock is
+insufficient, the ledger may go negative and the API returns a warning; manual
+adjustments still reject negative resulting stock.
 
 ## Read actions (GET)
 
@@ -122,8 +138,8 @@ does not update an already deployed web app.
 - `3dp_fixtures` — bounded fixture name/price list for both calculator dropdowns
 - `3dp_batch_draft&sku=<SKU>` — owner or Serhiy gets one SKU's five raw
   calculator inputs, or `found:false` with blanks
-- `3dp_stock_adjustments&sku=<optional SKU>&limit=<1..100>` — owner-only,
-  bounded latest-first adjustment history
+- `3dp_stock_adjustments&sku=<optional SKU>&reason=<exact reason>&limit=<1..100>` — owner-only,
+  bounded latest-first adjustment history; SKU and reason filters are optional
 
 `3dp_skus` hides archived SKUs by default. Pass `include_archived=true` only
 for the owner restore view. `3dp_overview` excludes archived SKUs and their
@@ -138,7 +154,8 @@ CORS preflight.
 
 - `3dp_write` — one whitelisted non-formula cell; use `expected_current`
 - `3dp_append_row` — first business-empty prepared row; formula columns are copied
-  from the preceding prepared row and cannot be supplied by the client
+  from the preceding prepared row and cannot be supplied by the client; a `Продажі`
+  row also requires technical column T with an integer CRM row number
 - `3dp_print_log_update` — edits an active print-log row; requires an
   `expected_current` entry for every changed field and appends automatic row history
 - `3dp_print_log_archive` — reversible soft archive; accepts `expected_status`
@@ -153,10 +170,14 @@ CORS preflight.
   optional reason; direct `Номенклатура!O` system-status writes are blocked
 - `3dp_adjust_stock` — owner-only ledger append, requiring `sku`, a short
   `reason`, `expected_current`, and exactly one of integer `delta` or
-  non-negative integer `new_value`; negative stock is rejected
+  non-negative integer `new_value`; manual adjustments reject negative stock,
+  while an automatic `auto: CRM order <id> row <crm-row>` adjustment may go
+  negative and returns a non-blocking `insufficient_stock` warning
 - `3dp_setup_addendum2` — owner-only invocation of the strict, idempotent
   Addendum #2 setup. It returns `already_applied:true` only when it made no
   schema change; the live positive smoke uses it as a preflight before writes.
+- `3dp_setup_3dp010` — owner-only, bounded setup for `Продажі!T1:T:lastRow`;
+  it writes `CRM row number` only when T is empty and otherwise returns `T_NOT_EMPTY`.
 
 `3dp_write` permits the owner only at `Налаштування!B2:B4`; the Serhiy token is
 rejected with `COLUMN_NOT_ALLOWED`. New SKU rows receive technical

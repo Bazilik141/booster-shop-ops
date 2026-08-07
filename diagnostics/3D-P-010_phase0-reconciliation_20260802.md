@@ -87,3 +87,21 @@ Do not deploy the patch if review finds an anchor mismatch. After deployment,
 revert the three hook edits and helper block as one unit; the 3D-P base API is
 unchanged. A mistaken successful `G` write remains recoverable through
 `_Аудит_API`.
+## Addendum — safe post-deploy verifier, 2026-08-02
+
+`tests/live-3dp010-packaging-verify.ps1` is a **read-only** verifier. After
+an owner saves a deliberately created normal CRM test order, it reads V86
+`recent_sales` and 3D-P `3dp_sales`, prints the minimal matching values, and
+asserts that the aggregated CRM packaging total equals only the lowest matching
+3D-P row's `Продажі!G`. It sends no CRM or 3D-P POST request.
+
+Run it once per standard, `Інше`, or multi-line test case, with the deliberately
+chosen test `OrderId` and expected positive packaging amount. `-ExpectNo3dpRow`
+checks the missing-target fail-open case after the owner observes that normal
+CRM save succeeded.
+
+A fully automated end-to-end writer is intentionally not provided: V86 has no
+test-only create/delete contract, so calling `apiAddSale_` would leave CRM sale
+rows and automated config removal to simulate an outage would mutate live
+Script Properties. The remaining API-outage check is therefore a short manual
+owner gate; local package tests already cover fail-open behavior.

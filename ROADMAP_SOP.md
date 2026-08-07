@@ -189,6 +189,7 @@ changes.
 | CRM-001 | `3876bf20-bdb4-81dc-987d-d119fff4d2e9` | — |
 | CRM-002 | `3876bf20-bdb4-8118-9fc7-d7e702832ec4` | — |
 | CRM-003 | `3ac6bf20-bdb4-81cb-a1f3-fb09f399c1e7` | Added 2026-07-29: BOOSTER_CRM_TOKEN rotation (hardcoded exposure found in dashboard.html + docs/index.html) |
+| CRM-004 | `3b56bf20-bdb4-812c-99a8-ceb7d3ee89fd` | Added 2026-08-07 from Finding 10 of `diagnostics/3D-P_live-schema-audit_20260803.md`: main-CRM data-validation defects (Паковання dropdown source range overlaps product data; new SKUs trip Недійсне значення). Configuration, not script. Must not be folded into 3D-P tasks |
 | TECH-005-DEEP | `3666bf20-bdb4-8175-a429-e48eb7d6ef2d` | — |
 | TECH-012 | `3666bf20-bdb4-812e-8975-df8827efdb16` | — |
 | TECH-013 | `3a06bf20-bdb4-810c-b914-e518ca5f7188` | — |
@@ -264,9 +265,36 @@ NCRM-04 through NCRM-12 were renumbered/rescoped on 2026-07-11 under
 | 3D-P-007 | `3ae6bf20-bdb4-81f7-9c7b-fefcfe12ffba` | Serhiy local server, consumer of 3D-P-008's API |
 | 3D-P-008 | `3af6bf20-bdb4-8189-a3a9-e88a374d01b1` | 3D-P Apps Script API foundation (read+write) + reconciliation; 2026-08-02 schema-correction addendum prepared, not yet deployed |
 | 3D-P-010 | `3af6bf20-bdb4-8110-8e88-fdee44316a0d` | Auto-pull packaging + fixture cost from main CRM into 3D-P sheet; Phase 0 investigation blocked on live CRM evidence as of 2026-08-02 |
-| 3D-P-011 | `3af6bf20-bdb4-8119-8158-dccb93c0e5b0` | Added 2026-08-01: PDP characteristic (e.g. size) selector + product-page UI for multi-variant 3D-print items (Onyx 21cm/15cm trigger). Scope confirmed owner-only within 3D-P, not a general catalog feature. Discovery stage, no priority set, no Codex handoff yet. NOTE 2026-08-02: a separate session briefly reused this number for a dashboard-restructure task before the collision was caught — that task is 3D-P-013, unrelated to this one |
-| 3D-P-012 | `3af6bf20-bdb4-819b-bcbd-ff058993dc21` | Added 2026-08-01: short product videos (~5/10/15s) alongside photos on 3D-print product pages. Owner confirmed independent of 3D-P-011 (no blockedBy). Discovery stage, no priority set. Feasibility pre-check: OC4 core has no native video field; marketplace extensions exist for 4.x; compatibility with custom boostershop-ds theme not yet verified against live backup |
+| 3D-P-011 | `3af6bf20-bdb4-8119-8158-dccb93c0e5b0` | Added 2026-08-06 (date corrected — originally logged as 08-01 in error): PDP characteristic (e.g. size) selector + product-page UI for multi-variant 3D-print items (Onyx 21cm/15cm trigger). Scope confirmed owner-only within 3D-P, not a general catalog feature. Discovery stage, no priority set, no Codex handoff yet. NOTE (pre-existing in this file when checked 2026-08-06, provenance not independently verified): text referencing a 2026-08-02 ID collision with a dashboard-restructure task (now 3D-P-013) was already present here — see also duplicate 3D-P-011/012 rows in context-index.md flagged to owner for reconciliation |
+| 3D-P-012 | `3af6bf20-bdb4-819b-bcbd-ff058993dc21` | Added 2026-08-06 (date corrected — originally logged as 08-01 in error): short product videos (~5/10/15s) alongside photos on 3D-print product pages. Owner confirmed independent of 3D-P-011 (no blockedBy). Discovery stage, no priority set. Feasibility pre-check: OC4 core has no native video field; marketplace extensions exist for 4.x; compatibility with custom boostershop-ds theme not yet verified against live backup |
 | 3D-P-013 | `3b06bf20-bdb4-81cc-a456-c24c6c557448` | Added 2026-08-02: «3D-друк» dashboard tab restructure (Калькулятор/Вироби/Інформація zones), follow-up to 3D-P-006. Originally misnumbered 3D-P-011, renumbered same day after the collision above was found |
+| 3D-P-014 | `3b16bf20-bdb4-81cc-aa44-da48d4df15ac` | Added 2026-08-03: make CRM→3D-P sync failures visible (durable `_Журнал_синхронізації` tab, `3dp_sync_journal` read action, dashboard panel). Owner sequenced this BEFORE further architecture work. Handoff: `handoffs/handoff_3D-P-014_sync-failure-visibility_20260803.md` |
+| 3D-P-015 | `3b16bf20-bdb4-8146-9f06-faaf2b54f67d` | Added 2026-08-03: rebuild the price model around a single фактична РРЦ + ціна під викуп; removes the three Аналітика price scenarios and everything derived from them; freezes cost/RRP into sale rows. Supersedes 3D-P-008 Addendum #3. Blocked by 3D-P-014. Handoff: `handoffs/handoff_3D-P-015_price-model-rebuild_20260803.md` |
+| 3D-P-016 | `3b56bf20-bdb4-8173-92ad-ca8a9a91d8e8` | Added 2026-08-07 from the gap audit (gap G5): break-even minimum price + discount control. Agreed in V1 §5.4-5.5, never built. Blocked by 3D-P-015 |
+| 3D-P-017 | `3b56bf20-bdb4-81e4-863e-f7cddaeb752e` | Added 2026-08-07 from the gap audit (gap G6): returns as a separate financial operation. Agreed in V1 §5.6, never built. Owner rule locked 2026-08-07 |
+| 3D-P-018 | `3b56bf20-bdb4-8103-99ff-cea734c92408` | Added 2026-08-07 from the gap audit (gap G9): Виробництво/Друк-лог zone in the owner dashboard. The API actions already exist and are unused |
+| 3D-P-019 | `3b56bf20-bdb4-81f6-8f8a-e4c5842ede7e` | Added 2026-08-07 on a new owner requirement: record who paid for each fixture (owner or Serhiy). Affects both tracks |
+| 3D-P-020 | `3b56bf20-bdb4-8182-8982-e795fde4e9dd` | Added 2026-08-07: Track-2 cost must post to the main CRM Marketing expense line. Closes the 3D-P-004 ledger question |
+| 3D-P-021 | `3b56bf20-bdb4-8125-8e81-eb68f946b69a` | Added 2026-08-07: delete ПРИКЛАД-001 demo rows across 6 tabs and zero the FIG-CHARM-001 test stock, after a named Sheets version. Run before 3D-P-015 |
+
+**Note 2026-08-07 (supersedes the 2026-08-03 note):** `3D-P-009` was never
+issued and has no Notion page. It is referenced only in
+`handoffs/handoff_3D-P-010_crm-packaging-cost-pull_20260802.md`. Decision: the
+number stays permanently unused — do not recycle it. Numbering continued at
+`3D-P-016`; the next free ID is `3D-P-022`.
+
+**Owner decisions locked 2026-08-07** (full context in
+`diagnostics/3D-P_gap-register-and-work-plan_20260807.md`):
+
+1. `3D-P-015` new business columns are appended **after** the technical `O`/`P`
+   block, becoming `Q`, `R`, `S`. No shift, no migration, no whitelist change.
+2. `3D-P-017` returns: open period reduces the current accrual, an already paid
+   period gets a negative correction next period; the sale row is never deleted.
+3. `3D-P-020` Track-2 cost posts to the **main CRM** Marketing expense line.
+4. `3D-P-019` fixture payer must be recorded per fixture, both tracks.
+5. `3D-P-021` full cleanup, named Sheets version first, stock corrections only
+   through the Addendum #2 ledger.
+6. Build order: workbook + CRM backend → owner dashboard QA → Serhiy's server.
 
 If a task is absent, search by title or distinctive keywords, verify its
 `Roadmap ID`, then add the page ID here. Older completed ST tasks

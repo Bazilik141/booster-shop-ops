@@ -1,20 +1,3 @@
-/*
- * 3D-P-010 — main CRM V86 packaging + auto-create 3D-P sales pull
- * Source anchor: Booster Shop CRM — Apps Script код 29.07.2026.csv
- * Confirmed owner baseline: CRM Auto V86, deployed 2026-07-29 13:07.
- *
- * This is a source patch for the main CRM Code.gs, not a standalone script.
- * Add the helper block once, then make the three exact V86 edits below.
- *
- * Required main-CRM Script Properties (set only by the owner after review):
- *   BOOSTER_3DP_URL        deployed 3D-P Apps Script URL ending in /exec
- *   BOOSTER_3DP_SYNC_TOKEN owner-role 3D-P token; never log or expose it
- *
- * Failure model: all 3D-P network/auth/matching failures return a skip and
- * are logged without a token. apiAddSale_/apiUpdateSale_ continue normally.
- * Technical match key: 3D-P Продажі!N + Продажі!T (CRM row number).
- */
-
 // BEGIN 3D-P-010 helper block — insert before apiAddSale_ in main CRM Code.gs
 const CRM_3DP_SYNC_URL_PROPERTY_ = 'BOOSTER_3DP_URL';
 const CRM_3DP_SYNC_TOKEN_PROPERTY_ = 'BOOSTER_3DP_SYNC_TOKEN';
@@ -244,32 +227,3 @@ function sync3dpPackagingCost_(sales, orderId, rowNumbers) {
   return sync3dpSales_(sales, orderId, rowNumbers);
 }
 // END 3D-P-010 helper block
-
-/*
- * V86/V87 edit 1 — apiAddSale_:
- *
- * A. After:
- *   const costRunState = {};
- * add:
- *   const addedRows = [];
- *
- * B. Immediately after:
- *   const row = firstRow + index;
- * add:
- *   addedRows.push(row);
- *
- * C. Immediately before:
- *   updateSkuCurrentCost_(ss);
- * add:
- *   sync3dpSales_(sales, operation, addedRows);
- *
- * V86/V87 edit 2 — apiUpdateSale_:
- * Immediately before:
- *   invalidateDoGetCache_();
- * add:
- *   sync3dpSales_(sales, order, rows);
- *
- * Do not modify doPost, main CRM sheet values, packaging calculation,
- * getPackagingCost_(), or any storefront code. Fixture is deliberately absent.
- * Deploy the 3D-P API T-column setup before the CRM patch; the hook remains fail-open if T is unavailable.
- */

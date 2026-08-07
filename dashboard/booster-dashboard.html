@@ -2145,10 +2145,10 @@ const ROADMAP_TASKS = [
   },
   {
     id: '3D-P-006', title: 'Вкладка «3D-друк» у dashboard + batch-калькулятор', status: 'active', tool: 'Codex', priority: 'High',
-    lastUpdated: '2026-08-02', blockedBy: [],
+    lastUpdated: '2026-08-07', blockedBy: ['owner closure decision'],
     simple: 'Вкладка dashboard працює тільки через окремий 3D-P Apps Script API: огляд, SKU/наявність, продажі, плюшки, виплати та batch-калькулятор final spool-based моделі.',
     why: 'Власник бачить 3D-напрям в існуючому dashboard без прямого доступу до Google Sheet або спільного CRM token.',
-    warn: '2026-08-02: 3D-P-008 schema-correction live-smoke пройшов (negative: FORMULA_CELL/COLUMN_NOT_ALLOWED/STALE_WRITE, 0 змін; positive: N3 no-op audit, 0 net change). UI підготовлено локально; перед завершенням потрібні owner API URL+окремий token лише в localStorage, один batch save→fresh get_row та перевірка існуючої вкладки Огляд. Посилання на модель лишається локальною чернеткою: у чинному API/Sheet немає затвердженої колонки для його запису. Пакування не входить — окремий 3D-P-010.',
+    warn: '2026-08-07: перша версія вкладки відвантажена 02.08 і живе в dashboard. Плаский layout цієї задачі замінено трьома зонами 3D-P-013 — далі під цим ID нічого не будується. Notion-статус виправлено з помилкового «Not started» на «In progress»; Claude не ставить Done без явного дозволу власника (ROADMAP_SOP §3 крок 6). Owner QA поточної вкладки йде в 3D-P-013. || 2026-08-02: 3D-P-008 schema-correction live-smoke пройшов (negative: FORMULA_CELL/COLUMN_NOT_ALLOWED/STALE_WRITE, 0 змін; positive: N3 no-op audit, 0 net change). UI підготовлено локально; перед завершенням потрібні owner API URL+окремий token лише в localStorage, один batch save→fresh get_row та перевірка існуючої вкладки Огляд. Посилання на модель лишається локальною чернеткою: у чинному API/Sheet немає затвердженої колонки для його запису. Пакування не входить — окремий 3D-P-010.',
     subtasks: [
       { id: '1', title: 'Ізольований 3D-P API client + read tables', status: 'done', desc: 'Окремі localStorage URL/token, bounded read actions, без Sheet/Drive API і без main CRM token.' },
       { id: '2', title: 'Batch-калькулятор та guarded per-unit save', status: 'done', desc: 'Ділить сумарні вагу/час на кількість, пише G:J (і N тільки при виборі фурнітури) через expected_current, потім fresh 3dp_get_row.' },
@@ -2171,27 +2171,28 @@ const ROADMAP_TASKS = [
   },
   {
     id: '3D-P-010', title: 'Автопідтягування вартості пакування CRM → 3D-P', status: 'active', tool: 'Codex + Apps Script', priority: 'High',
-    lastUpdated: '2026-08-02', blockedBy: ['owner review/deploy of CRM V86 patch', 'fixture schema/semantics', 'підтверджене поле 3D-P для фурнітури'],
+    lastUpdated: '2026-08-07', blockedBy: ['третій шлях запису updateSaleStatus() не підчеплений', '3D-P-014 (видимість збоїв)', 'дані Фурнітура_довідник + 3D-P-019 (хто оплатив)'],
     simple: 'Packaging Phase 1 local package готовий під підтверджений CRM Auto V86: сумує main-CRM Продажі!P по замовленню та guarded API записує суму один раз у перший 3D-P Продажі!G match за N.',
     why: 'Пакування для 3D-товару має підтягуватись з основного CRM у Продажі!G, але це CRM risky zone і не можна вгадувати поточний API-контракт.',
-    warn: '2026-08-02: V86 source anchor підтверджено власником. Локальний patch fail-open: no 3D SKU/no 3D-P row/API outage не ламають add/update; identical G не створює зайвий audit. Потрібен лише owner review, Script Properties URL+owner-token та Version 87 deploy/real smoke. Fixture Phase 0 окремо: V86 читає Розхідники A:name/B:category/C:cost, але не доводить accepted «Фурнітура», її order-edit dropdown, списання чи 3D-P destination.',
+    warn: '2026-08-07 (реальний стан): синхронізація НЕ працює. V87 (update-only) не спрацьовував жодного разу — оновлював рядок, який ніхто не створював. Виправлений блок вставлено і задеплоєно як V89 (04.08, зі слів власника) — замовлення OC-FOP-0300 все одно не синхронізувалось. Причина (Finding 9, diagnostics/3D-P_live-schema-audit_20260803.md): у основній CRM є ТРЕТІЙ шлях запису продажу — меню-функція updateSaleStatus() (алиас updatePaymentStatus()), яка пише Продажі напряму і ніколи не викликає apiUpdateSale_. Це звичний робочий шлях власника, і його ніколи не підчіплювали. Хендофу на це виправлення немає. Продажі!T1 = "CRM row number" підтверджено живим читанням — схемний гейт задоволено. Меню-контекст працює під user-авторизацією, тому поведінку UrlFetchApp треба перевірити окремо, а не припускати. Finding 10 (валідації Паковання/SKU) винесено в CRM-004. || 2026-08-02: V86 source anchor підтверджено власником. Локальний patch fail-open: no 3D SKU/no 3D-P row/API outage не ламають add/update; identical G не створює зайвий audit. Потрібен лише owner review, Script Properties URL+owner-token та Version 87 deploy/real smoke. Fixture Phase 0 окремо: V86 читає Розхідники A:name/B:category/C:cost, але не доводить accepted «Фурнітура», її order-edit dropdown, списання чи 3D-P destination.',
     subtasks: [
       { id: '1', title: 'Phase 0 source/API/header evidence', status: 'done', desc: 'CRM Auto V86 source is confirmed; P/AC packaging mapping and Розхідники A:C reads verified.' },
       { id: '2', title: 'Packaging Phase 1 local source patch + tests', status: 'done', desc: 'patches/3D-P-010_crm-packaging-pull_20260802.js; five local contract tests pass.' },
-      { id: '3', title: 'Owner CRM deploy and real packaging smoke', status: 'todo', desc: 'Review V86 anchors, set CRM-local 3D-P URL/token properties, deploy Version 87, then test standard/custom/multiline/fail-open flows.' },
-      { id: '4', title: 'Fixture Phase 0 and separate implementation', status: 'todo', desc: 'Confirm category validation, order-edit payload, consumption semantics and 3D-P destination before any fixture code.' }
+      { id: '3', title: 'Owner CRM deploy and real packaging smoke', status: 'done', desc: 'V87 і V89 задеплоєні власником (02.08 / 04.08). Smoke провалився обидва рази — див. warn, причина не в деплої.' },
+      { id: '4', title: 'Підчепити третій шлях запису updateSaleStatus()', status: 'todo', desc: 'Немає хендофу. Той самий fail-open контракт; окремо перевірити UrlFetchApp у меню (user) контексті. Робити після 3D-P-014, щоб наступна спроба діагностувалась, а не вгадувалась.' },
+      { id: '5', title: 'Fixture Phase 0 and separate implementation', status: 'todo', desc: 'Confirm category validation, order-edit payload, consumption semantics and 3D-P destination before any fixture code. Заблоковано порожнім Фурнітура_довідник і новою вимогою 3D-P-019 (хто оплатив фурнітуру).' }
     ]
   },
   {
     id: '3D-P-013', title: 'Реструктурувати вкладку «3D-друк» на три робочі зони', status: 'active', tool: 'Codex', priority: 'High',
-    lastUpdated: '2026-08-02', blockedBy: ['durable model/RRP/buyout field mapping', 'owner browser QA'],
+    lastUpdated: '2026-08-07', blockedBy: ['owner re-QA + tablet/mobile', '3D-P-015: реальні колонки РРЦ/викуп/модель замість підмін'],
     simple: 'Локально замінено пласку 3D-P сторінку на внутрішні зони Калькулятор / Вироби / Інформація; вона лишається одним пунктом sidebar і споживає лише 3D-P API.',
     why: 'Власник і Сергій отримують окремі робочі поверхні для партії, SKU та операційної інформації замість змішаного списку таблиць.',
     warn: '2026-08-02: owner desktop QA підтвердив archive/restore та stock ledger live, але знайшов два UI bindings: undefined attention renderer і Delta key. Локально виправлено на існуючі threeDpAttention()/«Зміна наявності, шт»; regression test пройшов, потрібен короткий owner re-QA. Addendum #2 actions для constants/drafts/archive/stock уже підключені, але окремо не smoke-tested dashboard-ом. Не вигадано записів для model link, ручної РРЦ чи buyout: у підтвердженому contract fixture Номенклатура їх не має. РРЦ-рекомендація лишається явним placeholder до окремого owner рішення. Codex in-app browser policy заблокувала file:// visual smoke, тому tablet/mobile та API write-flow — owner browser QA після локального налаштування URL/token.',
     subtasks: [
       { id: '1', title: 'Локальна структура трьох зон та read-only information UI', status: 'done', desc: 'Subtabs, sortable/filterable table, local column visibility, margin tiers, attention and journals are implemented locally.' },
       { id: '2', title: 'Calculator + Addendum #2 controls', status: 'done', desc: 'Owner settings, raw drafts, guarded per-unit save, archive/restore and ledger-backed stock controls are wired to existing 3D-P API actions.' },
-      { id: '3', title: 'Durable SKU model/RRP/buyout mapping', status: 'todo', desc: 'Requires an owner-confirmed writable Sheet/API field; current UI does not fabricate a destination.' },
+      { id: '3', title: 'Durable SKU model/RRP/buyout mapping', status: 'todo', desc: 'Аудит 07.08: вкладка показує підміни, бо реальних колонок немає. РРЦ = остання ціна продажу ПІСЛЯ знижки (threeDpLatest по Продажі!E); ціна під викуп = остання ціна закупівлі з плюшок; посилання на модель = localStorage браузера власника. Сітка маржі рахує правильно, але від неправильного числа; SKU без продажів назавжди показує «немає РРЦ». Розблоковується 3D-P-015 (нові колонки Q/R/S).' },
       { id: '4', title: 'Owner browser QA', status: 'todo', desc: 'Configure local 3D-P URL/token, verify three zones at desktop/tablet/mobile, then run one deliberate test-SKU flow.' }
     ]
   },
@@ -2209,6 +2210,98 @@ const ROADMAP_TASKS = [
     simple: 'Додати можливість завантажувати короткі відео (~5/10/15 с) до сторінок 3D-друкованих товарів окрім фото.',
     why: 'Власник хоче показувати короткі відео товару поряд із фото на сторінці 3D-друкованого виробу.',
     warn: '2026-08-06: скоуп лише 3D-P, ведеться незалежно від 3D-P-011 (без blockedBy). Пріоритет не проставлено. Попереднє дослідження (загальні дані OpenCart, не перевірено проти живої теми): OpenCart 4.x у ядрі не має вбудованої відео-галереї товару; ринкові розширення для 4.x існують (MP4/YouTube/Vimeo). Головна невідома — чи сумісне готове розширення з кастомною темою boostershop-ds.css, чи потрібна кастомна інтеграція; потрібна діагностика проти найновішого cPanel-бекапу. Технічний підхід (розширення vs самохостинг mp4 vs зовнішній embed) не вирішено. Самохостинг/розширення торкає спільні CSS/JS теми — soft risky zone (AGENTS.md UI/CSS patch discipline).',
+    subtasks: []
+  },
+  {
+    id: '3D-P-007', title: 'Локальний сервер Сергія (споживач 3D-P API)', status: 'active', tool: 'Codex', priority: 'Medium',
+    lastUpdated: '2026-08-07', blockedBy: ['owner QA власного дашборда (3D-P-013)', 're-spec під схему після 3D-P-015', 'рішення: що саме Сергій бачить'],
+    simple: 'Окремий локальний сервер на машині Сергія: калькулятор партії, друк-лог, наявність, статус виплат — через власний вузький токен, без доступу до Google Sheet напряму.',
+    why: 'Сергій має вносити виробничі дані сам, але не отримувати доступ до таблиці, майстер-токена CRM чи фінансів магазину.',
+    warn: '2026-08-07: власник пересортував порядок — сервер Сергія робимо ОСТАННІМ, після таблиці, бекенду CRM і власного owner QA. Не встановлювати на машину Сергія до цього гейта. Аудит 07.08 підтвердив: lib/calculator.mjs реалізує саме зафіксовану 02.08 формулу (котушкова модель), тобто пакет НЕ на застарілому першому драфті. Але його специфікували ДО рішень 013/014/015, тому він не знає ні про фактичну РРЦ, ні про журнал синхронізації, ні про перебудовану Аналітику. Потрібен re-spec, не переписування. npm test 4/4 проходив 02.08; Сергій жодного разу не встановлював і не запускав.',
+    subtasks: [
+      { id: '1', title: 'Пакет сервера + локальні тести', status: 'done', desc: 'Калькулятор, читання, batch-draft round-trip, друк-лог append/edit; 4/4 тести пройшли 02.08.' },
+      { id: '2', title: 'Re-spec під фінальну схему', status: 'todo', desc: 'Після 3D-P-015: фактична РРЦ, заморожена економіка, журнал. Плюс рішення власника про обсяг даних для Сергія.' },
+      { id: '3', title: 'Встановлення у Сергія + спільне live QA', status: 'todo', desc: 'Ніколи не виконувалось. Тільки після owner QA дашборда.' }
+    ]
+  },
+  {
+    id: '3D-P-014', title: 'Зробити збої синхронізації CRM → 3D-P видимими', status: 'active', tool: 'Codex / Claude Code', priority: 'High',
+    lastUpdated: '2026-08-07', blockedBy: [],
+    simple: 'Довговічний журнал синхронізації у таблиці (_Журнал_синхронізації), окрема read-дія 3dp_sync_journal і панель у зоні «Інформація» дашборда.',
+    why: 'Хук 3D-P-010 навмисно fail-open, але падає МОВЧКИ — пише лише в Logger.log, якого власник не бачить. Через це збій OC-FOP-0300 довелось діагностувати навздогад.',
+    warn: '2026-08-07: підтверджено, що не реалізовано — у Code.gs немає дії 3dp_sync_journal і немає логіки _Журнал_синхронізації. Хендоф готовий: handoffs/handoff_3D-P-014_sync-failure-visibility_20260803.md, блокерів немає. Власник зафіксував 03.08: видимість збоїв ПЕРЕД будь-якою подальшою архітектурою. Це перший виконуваний пункт усього беклогу 3D-P. Fail-open зберігається точно: якщо падає сам запис у журнал — це теж не блокує збереження замовлення.',
+    subtasks: []
+  },
+  {
+    id: '3D-P-015', title: 'Перебудова цінової моделі навколо фактичної РРЦ', status: 'active', tool: 'Codex / Claude Code', priority: 'High',
+    lastUpdated: '2026-08-07', blockedBy: ['3D-P-014', 'рекомендована РРЦ — формула не затверджена'],
+    simple: 'Додати РРЦ фактичну, ціну під викуп і посилання на модель; прибрати три спекулятивні цінові сценарії з Аналітики; заморозити собівартість і РРЦ числом у рядок продажу.',
+    why: 'У таблиці НЕМАЄ жодної колонки РРЦ. Уся фінансова математика тримається на трьох вигаданих сценаріях, і зміна ціни котушки заднім числом переписує економіку минулих продажів та нарахувань Сергію.',
+    warn: '2026-08-07 РІШЕННЯ ВЛАСНИКА (зафіксовано): нові бізнес-колонки додаються ПІСЛЯ технічних O/P і стають Q, R, S. Ніякого зсуву O/P, ніякої міграції, без змін nomenclatureStatusColumn/nomenclatureHistoryColumn і whitelist-ів — щоб не чіпати задеплоєні шляхи архіву/історії. Рекомендована РРЦ лишається явним placeholder до окремого рішення; вигадувати формулу заборонено. Рекомендовано спершу виконати 3D-P-021 (чистка демо-рядків), щоб Аналітика не перебудовувалась поверх забруднених даних. Хендоф: handoffs/handoff_3D-P-015_price-model-rebuild_20260803.md',
+    subtasks: []
+  },
+  {
+    id: '3D-P-021', title: 'Чистка демо- та тестових даних у живій таблиці', status: 'todo', tool: 'Owner + Claude', priority: 'High',
+    lastUpdated: '2026-08-07', blockedBy: [],
+    simple: 'Видалити рядки ПРИКЛАД-001 з усіх 6 вкладок і обнулити тестову наявність FIG-CHARM-001, попередньо зробивши іменовану версію таблиці як точку відкату.',
+    why: 'Демо-рядки досі тягнуться в підсумки (Наявність 2 шт, Виплати 165 ₴), а FIG-CHARM-001 показує 3 шт наявності від смоук-тестів при 0 продажів. Поки це не прибрано, жодна цифра в таблиці й дашборді не є достовірною.',
+    warn: '2026-08-07 РІШЕННЯ ВЛАСНИКА: чистити все. Спершу іменована версія Google Sheets як точка відкату, потім видалення. Корекція наявності — ТІЛЬКИ через ledger додатка #2, не прямою правкою клітинки, щоб зберігся аудит-слід. Робити до 3D-P-015.',
+    subtasks: []
+  },
+  {
+    id: '3D-P-016', title: 'Мінімальна беззбиткова ціна + контроль знижки', status: 'todo', tool: 'Claude → executor', priority: 'Medium',
+    lastUpdated: '2026-08-07', blockedBy: ['3D-P-015', 'правило поведінки при продажу нижче мінімуму'],
+    simple: 'Рахувати мінімальну ціну, нижче якої одна зі сторін працює в мінус (Модель B: собівартість Сергія + витрати магазину), і позначати продажі нижче неї.',
+    why: 'Було в первинному ТЗ (§5.4-5.5) і ніколи не побудовано: у живому коді 0 згадок беззбитковості. Знижку зараз ніщо не контролює.',
+    warn: '2026-08-07: заведено з аудиту прогалин (G5). Власник підтвердив 31.07, що числового ліміту знижки без погодження Сергія немає — тому контроль інформаційний, не блокуючий. Точна поведінка при продажу нижче мінімуму (лише прапорець / вимагати причину / блокувати) ще не вирішена.',
+    subtasks: []
+  },
+  {
+    id: '3D-P-017', title: 'Повернення як окрема фінансова операція', status: 'todo', tool: 'Claude → executor', priority: 'High',
+    lastUpdated: '2026-08-07', blockedBy: ['3D-P-015', '3D-P-014', 'тригер повернення на боці основної CRM'],
+    simple: 'Повернення не видаляє продаж, а створює окрему операцію: якщо період відкритий — зменшує поточне нарахування Сергію, якщо виплата вже пройшла — мінусове коригування в наступному періоді. Придатний товар повертається на склад окремим рухом.',
+    why: 'Зараз повернення не обробляється ніяк: сума вже нарахована Сергію і залишиться нарахованою. У первинному ТЗ (§5.6) це було, у коді — 0 згадок.',
+    warn: '2026-08-07 РІШЕННЯ ВЛАСНИКА (зафіксовано): окрема операція, період вирішує. Тригер на боці основної CRM упирається в ту саму проблему трьох шляхів запису, що й 3D-P-010 — спершу треба закрити її.',
+    subtasks: []
+  },
+  {
+    id: '3D-P-018', title: 'Зона «Виробництво» (Друк-лог) у дашборді власника', status: 'todo', tool: 'Claude → executor', priority: 'Medium',
+    lastUpdated: '2026-08-07', blockedBy: ['owner QA 3D-P-013'],
+    simple: 'Показати друк-лог у власному дашборді: API вже вміє 3dp_print_log, print_log_update, print_log_archive і print_log_restore, але дашборд не викликає жодної з них.',
+    why: 'Зараз виробничі дані можна вносити тільки через сервер Сергія, який ніколи не встановлювався. Тобто друк-лог фактично недоступний власнику.',
+    warn: '2026-08-07: заведено з аудиту прогалин (G9). Технічних блокерів немає, потрібен лише скоуп. Робити після owner QA 3D-P-013, щоб не перебудовувати вкладку двічі. Відкрите питання: власник хоче лише переглядати чи ще й вносити рядки друк-логу.',
+    subtasks: []
+  },
+  {
+    id: '3D-P-019', title: 'Фурнітура: хто оплатив (власник / Сергій)', status: 'todo', tool: 'Claude → executor', priority: 'High',
+    lastUpdated: '2026-08-07', blockedBy: ['порожній Фурнітура_довідник', 'спосіб фіксації платника не обрано'],
+    simple: 'Фіксувати, хто оплатив фурнітуру — власник чи Сергій, — щоб витрати рахувались коректно в обох треках.',
+    why: 'Нова вимога власника 07.08: частину фурнітури купує він, частину Сергій. Таблиця зберігає лише Номенклатура!N (ціна фурнітури за од.) без платника, тому і поділ 50/50, і ціна під викуп рахуються на неатрибутованій витраті.',
+    warn: '2026-08-07: Фурнітура_довідник досі порожній (лише заголовки) — вихідних даних немає взагалі. Не вирішено, де саме фіксувати платника: у рядку довідника фурнітури, у партії друку чи в SKU. Перетинається з фурнітурною частиною 3D-P-010 і з заморозкою собівартості 3D-P-015 — порядок треба визначити до реалізації.',
+    subtasks: []
+  },
+  {
+    id: '3D-P-020', title: 'Витрата Track-2 в статтю «Маркетинг» основної CRM', status: 'todo', tool: 'Claude → executor', priority: 'Medium',
+    lastUpdated: '2026-08-07', blockedBy: ['структура витрат основної CRM не досліджена', '3D-P-019'],
+    simple: 'Витрата на бонусний виріб (викуп у Сергія + фурнітура) має потрапляти в загальну статтю «Маркетинг» основної CRM, а не лежати тільки у вкладці плюшок.',
+    why: 'Зараз вартість бонусної програми не входить у жодну загальну цифру витрат — щоб її дізнатись, треба відкривати вкладку і рахувати руками.',
+    warn: '2026-08-07 РІШЕННЯ ВЛАСНИКА (зафіксовано): витрата йде в загальну статтю «Маркетинг» ОСНОВНОЇ CRM. Потік виплат Сергію цією задачею не змінюється. Крос-системна задача: ціль — основна CRM, не 3D-P таблиця; структуру витрат основної CRM під це ще не дивились. Закриває відкрите питання 3D-P-004.',
+    subtasks: []
+  },
+  {
+    id: '3D-P-CARDCONTENT', title: 'Наповнення карток товару та категорій для 3D-SKU', status: 'todo', tool: 'Claude + Owner', priority: 'Medium',
+    lastUpdated: '2026-08-07', blockedBy: ['3D-P-002 (структура категорій)', 'хендоф атрибутів LEGAL-002b-3DP (Частина IV/V)'],
+    simple: 'Назви, описи та значення атрибутів по кожному 3D-друкованому SKU для карток товару і категорій.',
+    why: 'Без цього SKU неможливо опублікувати на сайті, навіть коли категорія і бекенд готові.',
+    warn: '2026-08-07: SKU-конвенція і формула SEO-назв затверджені й зафіксовані — plans/3D-P_sku-naming-convention_20260807.md (канон) + handoffs/handoff_3D-P_sku-naming-principle_chatgpt_20260807.md (самодостатній хендоф для ChatGPT). Власник опрацьовує в окремому діалозі. Було помилково заведено як «3D-P-015» 06.08 — номер уже зайнятий, перейменовано на нечисловий ярлик.',
+    subtasks: []
+  },
+  {
+    id: 'CRM-004', title: 'Валідації в основній CRM: Паковання + список SKU', status: 'todo', tool: 'Claude → executor', priority: 'Medium',
+    lastUpdated: '2026-08-07', blockedBy: [],
+    simple: 'Дві помилки налаштування валідації в основній CRM: у випадному списку «Паковання» зʼявляється назва товару, а нові SKU дають попередження «Недійсне значення».',
+    why: 'Обидві заважають нормально працювати з формою Оновити_продаж і повторюватимуться на кожному новому SKU.',
+    warn: '2026-08-07: заведено з Finding 10 (diagnostics/3D-P_live-schema-audit_20260803.md, датовано 04.08). Це помилки КОНФІГУРАЦІЇ, не скрипта: source range валідації B12 перетинається з даними товарів. Попередження на SKU лише warning-only, значення все одно записуються, синхронізацію не блокує. НЕ складати з 3D-P-014/015 — інша система, інший радіус ураження.',
     subtasks: []
   },  // ─── CHECKOUT / ST ───
   {
