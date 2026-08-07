@@ -25,10 +25,21 @@ Stack: OpenCart (Twig/PHP), custom checkout + NP integration, Google Apps Script
 - The owner is the only production deployment gate and performs final manual
   QA.
 - Claude is the sole default writer of Booster Notion task properties and
-  statuses. Codex does not change Notion properties or statuses.
-- Codex owns `ROADMAP_FLOW` changes required by an authorized
-  roadmap-affecting implementation. Exceptions require explicit owner
+  statuses. Neither Codex nor Claude Code changes Notion properties or statuses.
+- The assigned patch executor owns `ROADMAP_FLOW` changes required by an
+  authorized roadmap-affecting implementation. Exceptions require explicit owner
   reassignment; agents must not compete as parallel status writers.
+- **New-task mirroring (2026-08-06, owner decision).** Creating a task in the
+  Notion roadmap is not an "implementation", so under the previous wording a new
+  row had no defined path into the dashboard mirror and silently never appeared.
+  Discovered when four tasks created on 2026-08-06 were missing from the
+  dashboard. Therefore: **whoever creates a Notion roadmap row also creates its
+  `ROADMAP_FLOW` row in the same session** — in practice Claude (chat).
+  This grant is narrow. Claude (chat) writes dashboard rows **only for tasks it
+  just created**. Status and progress updates on pre-existing rows remain the
+  executor's, unchanged. If one session needs both a creation and a status change
+  to an existing row, do the creation and hand off the status change rather than
+  becoming a second writer.
 - `scripts/auto_review.py` is the canonical implementation behind
   `bs-review.ps1` / `bsreview`. The repository-root `auto_review.py` is a legacy
   duplicate and must not be invoked.

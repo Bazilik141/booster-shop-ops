@@ -834,15 +834,15 @@ function threeDpSkuTypeError(sku,type) { const s=String(sku || '').trim().toUppe
 async function saveThreeDpProduct() {
   const row=threeDpSku(threeDpUi.product.sku),name=String((threeDpInput('threeDpProductName') || {}).value || '').trim(),type=String((threeDpInput('threeDpProductType') || {}).value || '').trim(),notes=String((threeDpInput('threeDpProductNotes') || {}).value || '').trim(),model=String((threeDpInput('threeDpProductModel') || {}).value || '').trim();
   if(!name || !type){threeDpUi.product.msg={text:'Назва і тип є обов’язковими.',kind:'error'};renderThreeDpProducts();return;}
-  try { if(!row){const sku=String((threeDpInput('threeDpProductSku') || {}).value || '').trim().toUpperCase(),invalid=threeDpSkuTypeError(sku,type);if(invalid){threeDpUi.product.msg={text:invalid,kind:'error'};renderThreeDpProducts();return;}if(!confirm('Створити новий SKU '+sku+'?'))return;threeDpUi.product.msg={text:'Створення…',kind:''};renderThreeDpProducts();const created=await call3dpPost({action:'3dp_append_row',sheet:'Номенклатура',values:{A:sku,B:name,D:type,M:notes}}),fresh=await call3dp('3dp_get_row',{sheet:'Номенклатура',sku:sku});threeDpState.skus.push(fresh.row);threeDpUi.product.sku=sku;saveThreeDpModel(sku,model);threeDpUi.product.msg={text:'SKU створено в рядку '+created.row+' і перечитано через API.',kind:'success'};renderThreeDpProducts();renderThreeDpCalculator();renderThreeDpInformation();return;}
-    const changes=[['B',name,'Назва виробу'],['D',type,'Тип'],['M',notes,'Примітки']].filter(function(x){return !threeDpEqual(row[x[2]],x[1]);});if(!changes.length && threeDpModel(row.SKU)===model){threeDpUi.product.msg={text:'Немає змін для збереження.',kind:''};renderThreeDpProducts();return;}if(!confirm('Зберегти змінені поля для '+row.SKU+'?'))return;threeDpUi.product.msg={text:'Збереження…',kind:''};renderThreeDpProducts();for(const x of changes)await call3dpPost({action:'3dp_write',sheet:'Номенклатура',sku_or_row:row.SKU,column:x[0],value:x[1],expected_current:row[x[2]]});saveThreeDpModel(row.SKU,model);const fresh=await call3dp('3dp_get_row',{sheet:'Номенклатура',sku:row.SKU});threeDpState.skus=threeDpState.skus.map(function(r){return r.SKU===row.SKU?Object.assign({},r,fresh.row):r;});threeDpUi.product.msg={text:'Поля виробу збережено й перечитано через API.',kind:'success'};renderThreeDpProducts();renderThreeDpCalculator();renderThreeDpInformation();
+  try { if(!row){const sku=String((threeDpInput('threeDpProductSku') || {}).value || '').trim().toUpperCase(),invalid=threeDpSkuTypeError(sku,type);if(invalid){threeDpUi.product.msg={text:invalid,kind:'error'};renderThreeDpProducts();return;}if(!confirm('Створити новий SKU '+sku+'?'))return;threeDpUi.product.msg={text:'Створення…',kind:''};renderThreeDpProducts();const created=await call3dpPost({action:'3dp_append_row',sheet:'Номенклатура',values:{A:sku,B:name,D:type,M:notes}});await call3dp('3dp_get_row',{sheet:'Номенклатура',sku:sku});await reloadThreeDpData();threeDpUi.product.sku=sku;saveThreeDpModel(sku,model);threeDpUi.product.msg={text:'SKU створено в рядку '+created.row+'; усі 3D-P зони оновлено.',kind:'success'};renderThreeDpAll();return;}
+    const changes=[['B',name,'Назва виробу'],['D',type,'Тип'],['M',notes,'Примітки']].filter(function(x){return !threeDpEqual(row[x[2]],x[1]);});if(!changes.length && threeDpModel(row.SKU)===model){threeDpUi.product.msg={text:'Немає змін для збереження.',kind:''};renderThreeDpProducts();return;}if(!confirm('Зберегти змінені поля для '+row.SKU+'?'))return;threeDpUi.product.msg={text:'Збереження…',kind:''};renderThreeDpProducts();for(const x of changes)await call3dpPost({action:'3dp_write',sheet:'Номенклатура',sku_or_row:row.SKU,column:x[0],value:x[1],expected_current:row[x[2]]});saveThreeDpModel(row.SKU,model);await call3dp('3dp_get_row',{sheet:'Номенклатура',sku:row.SKU});await reloadThreeDpData();threeDpUi.product.msg={text:'Поля виробу збережено й перечитано через API; усі 3D-P зони оновлено.',kind:'success'};renderThreeDpAll();
   } catch(e) { threeDpUi.product.msg={text:'Помилка: '+e.message,kind:'error'};renderThreeDpProducts(); }
 }
 async function toggleThreeDpArchive() {
   const row=threeDpSku(threeDpUi.product.sku);if(!row)return;const archived=threeDpStatus(row)==='Архів',reason=archived?'':(prompt('Коротка причина архівації (необов’язково):','') || '');if(!confirm((archived?'Відновити':'Архівувати')+' SKU '+row.SKU+'? Це reversible API-статус, не видалення.'))return;
   try { threeDpUi.product.msg={text:archived?'Відновлення…':'Архівація…',kind:''};renderThreeDpProducts();await call3dpPost({action:archived?'3dp_nomenclature_restore':'3dp_nomenclature_archive',row:row.row_number,expected_status:threeDpStatus(row),reason:reason});await reloadThreeDpData();threeDpUi.product.msg={text:archived?'SKU відновлено; active views оновлено.':'SKU архівовано; active views оновлено.',kind:'success'};renderThreeDpAll(); } catch(e) { threeDpUi.product.msg={text:'Помилка: '+e.message,kind:'error'};renderThreeDpProducts(); }
 }function renderThreeDpStock(row,metrics,archived) {
-  const ledger=threeDpUi.product.loading?'<div class="loading"><div class="spinner"></div></div>':threeDpUi.product.ledger.length?'<div class="tbl-wrap"><table><tr><th>Час</th><th>Delta</th><th>Причина</th></tr>'+threeDpUi.product.ledger.map(function(x){return '<tr><td>'+threeDpEsc(x['Дата коригування (Київ)'])+'</td><td>'+threeDpEsc(x.Delta)+'</td><td>'+threeDpEsc(x.Причина)+'</td></tr>';}).join('')+'</table></div>':'<div class="three-dp-note">Коригувань ще немає.</div>';
+  const ledger=threeDpUi.product.loading?'<div class="loading"><div class="spinner"></div></div>':threeDpUi.product.ledger.length?'<div class="tbl-wrap"><table><tr><th>Час</th><th>Delta</th><th>Причина</th></tr>'+threeDpUi.product.ledger.map(function(x){return '<tr><td>'+threeDpEsc(x['Дата коригування (Київ)'])+'</td><td>'+threeDpEsc(x['Зміна наявності, шт'])+'</td><td>'+threeDpEsc(x.Причина)+'</td></tr>';}).join('')+'</table></div>':'<div class="three-dp-note">Коригувань ще немає.</div>';
   return '<div class="form-section-title">Коригування наявності</div><div class="three-dp-form-grid"><label>Поточна наявність (Наявність!G)<span class="three-dp-readonly">'+threeDpEsc(metrics.availability)+' шт</span></label><label>Delta (ціле число)<input id="threeDpStockDelta" type="number" step="1" value=""'+(archived?' disabled':'')+'></label><label>Причина<input id="threeDpStockReason" maxlength="240" placeholder="напр. списання браку"'+(archived?' disabled':'')+'></label></div><div class="form-actions" style="margin-top:12px"><button class="btn-secondary" type="button" onclick="saveThreeDpStock()"'+(archived?' disabled':'')+'>Записати коригування</button></div><div class="three-dp-note">Запис додається в append-only ledger; формула Наявність!G не перезаписується.</div><div class="form-section-title">Останні коригування</div>'+ledger;
 }
 async function loadThreeDpLedger(sku) {
@@ -871,7 +871,7 @@ function setThreeDpInfo(key,value) { threeDpUi.info[key]=value;renderThreeDpInfo
 function sortThreeDpInfo(key) { if(threeDpUi.info.sort===key)threeDpUi.info.dir=threeDpUi.info.dir==='asc'?'desc':'asc';else{threeDpUi.info.sort=key;threeDpUi.info.dir=['availability','cost','time','rrp','buyout'].indexOf(key)!==-1?'desc':'asc';}renderThreeDpInformation(); }
 function toggleThreeDpColumn(key,checked) { threeDpUi.info.visible[key]=checked;localStorage.setItem(THREE_DP_INFO_PREFS_KEY,JSON.stringify({visible:threeDpUi.info.visible}));renderThreeDpInformation(); }
 function renderThreeDpInformation() {
-  const records=threeDpState.skus.map(threeDpInfoRecord);renderThreeDpAttention(records);renderThreeDpSummary(records);
+  const records=threeDpState.skus.map(threeDpInfoRecord);threeDpAttention(records);renderThreeDpSummary(records);
   const picker=document.getElementById('threeDpColumnPicker');if(picker)picker.innerHTML=THREE_DP_COLUMNS.map(function(c){return '<label><input type="checkbox" '+(threeDpVisible(c[0])?'checked':'')+' onchange="toggleThreeDpColumn(\''+c[0]+'\',this.checked)"> '+threeDpEsc(c[1])+'</label>';}).join('');
   const visible=THREE_DP_COLUMNS.filter(function(c){return threeDpVisible(c[0]);}),q=String(threeDpUi.info.search || '').trim().toLowerCase(),types=Array.from(new Set(records.map(function(r){return r.type;}).filter(function(x){return x && x!=='—';}))).sort();
   const rows=records.filter(function(r){return (!q || (r.sku+' '+r.name).toLowerCase().includes(q)) && (threeDpUi.info.type==='all' || r.type===threeDpUi.info.type) && (threeDpUi.info.status==='all' || r.status===threeDpUi.info.status) && threeDpCostMatch(r.cost);}),key=threeDpUi.info.sort,dir=threeDpUi.info.dir==='asc'?1:-1;
@@ -2187,7 +2187,7 @@ const ROADMAP_TASKS = [
     lastUpdated: '2026-08-02', blockedBy: ['durable model/RRP/buyout field mapping', 'owner browser QA'],
     simple: 'Локально замінено пласку 3D-P сторінку на внутрішні зони Калькулятор / Вироби / Інформація; вона лишається одним пунктом sidebar і споживає лише 3D-P API.',
     why: 'Власник і Сергій отримують окремі робочі поверхні для партії, SKU та операційної інформації замість змішаного списку таблиць.',
-    warn: '2026-08-02: local static gates пройдено; Addendum #2 actions для constants/drafts/archive/stock уже підключені, але не викликались dashboard-ом live. Не вигадано записів для model link, ручної РРЦ чи buyout: у підтвердженому contract fixture Номенклатура їх не має. РРЦ-рекомендація лишається явним placeholder до окремого owner рішення. Codex in-app browser policy заблокувала file:// visual smoke, тому три breakpoint-и та API write-flow — owner browser QA після локального налаштування URL/token.',
+    warn: '2026-08-02: owner desktop QA підтвердив archive/restore та stock ledger live, але знайшов два UI bindings: undefined attention renderer і Delta key. Локально виправлено на існуючі threeDpAttention()/«Зміна наявності, шт»; regression test пройшов, потрібен короткий owner re-QA. Addendum #2 actions для constants/drafts/archive/stock уже підключені, але окремо не smoke-tested dashboard-ом. Не вигадано записів для model link, ручної РРЦ чи buyout: у підтвердженому contract fixture Номенклатура їх не має. РРЦ-рекомендація лишається явним placeholder до окремого owner рішення. Codex in-app browser policy заблокувала file:// visual smoke, тому tablet/mobile та API write-flow — owner browser QA після локального налаштування URL/token.',
     subtasks: [
       { id: '1', title: 'Локальна структура трьох зон та read-only information UI', status: 'done', desc: 'Subtabs, sortable/filterable table, local column visibility, margin tiers, attention and journals are implemented locally.' },
       { id: '2', title: 'Calculator + Addendum #2 controls', status: 'done', desc: 'Owner settings, raw drafts, guarded per-unit save, archive/restore and ledger-backed stock controls are wired to existing 3D-P API actions.' },
@@ -2197,18 +2197,18 @@ const ROADMAP_TASKS = [
   },
   {
     id: '3D-P-011', title: 'Вибір характеристики товару + UI сторінки для мультихарактеристичних 3D-товарів', status: 'todo', tool: 'Claude', priority: '',
-    lastUpdated: '2026-08-01', blockedBy: [],
+    lastUpdated: '2026-08-06', blockedBy: [],
     simple: 'Дозволити вибір характеристики товару (напр. розміру) прямо на сторінці товару замість кількох окремих сторінок. Приклад-тригер: Онікс 21 см і Онікс 15 см — одна сторінка з вибором розміру замість двох.',
     why: 'Зараз кожен розмір/варіант 3D-друкованого товару потребував би окремої сторінки товару — гірший UX і дублювання карток для одного виробу.',
-    warn: '2026-08-01: скоуп підтверджено власником — обмежено лише напрямом 3D-P, НЕ загальна catalog-фіча для інших товарів. Технічна реалізація (два окремі товари/SKU під спільним UI чи один товар з опціями OpenCart) навмисно не вирішена — пропрацювання пізніше. Пріоритет навмисно не проставлено. Потенційно зачіпає ризикові зони (schema/JSON-LD, canonical URL) при об\'єднанні двох існуючих URL в один — врахувати через bs-seo-risk-gate і bs-merchant-schema-qa перед реальною зміною.',
+    warn: '2026-08-06 діагностика проти живого cPanel-бекапу (backup-8.5.2026_10-49-27_boosters.tar.gz): нативна OpenCart 4.1 master/variant фіча (кнопка «Додати варіант») РЕАЛЬНО активна на бекенді — controller/product/product.php:416-452 і model/catalog/product.php:122 містять стоковий master_id/variant код, незмінений. Але живий шаблон теми catalog/view/template/product/product.twig (58KB, кастомна тема) НЕ має жодного variant-селектора на фронті — 0 згадок "variant", форма додавання в кошик жорстко фіксує product_id, галерея показує лише поточний товар. Тобто якщо зараз завести Онікс 21см як variant Онікс 15см — вийде 2 повністю окремі непов\'язані сторінки на сайті. Висновок: бекенд/дата-модель вже готові нативно, бракує лише фронтенд-частини (передати сусідні variant product_id/href/price/image в шаблон + рендер селектора + збереження canonical/URL per variant). Звужує задачу до одного bounded фронтенд-доповнення, не повного кастомного білда. SEO/schema-наслідки (canonical, JSON-LD для двох URL) ще не перевірені — окремий крок через bs-seo-risk-gate/bs-merchant-schema-qa перед реалізацією. Повний звіт: diagnostics/3D-P-011_native-variant-feasibility_report_20260806.md',
     subtasks: []
   },
   {
     id: '3D-P-012', title: 'Короткі відео товару (5/10/15с) на сторінці 3D-товару', status: 'todo', tool: 'Claude', priority: '',
-    lastUpdated: '2026-08-01', blockedBy: [],
+    lastUpdated: '2026-08-06', blockedBy: [],
     simple: 'Додати можливість завантажувати короткі відео (~5/10/15 с) до сторінок 3D-друкованих товарів окрім фото.',
     why: 'Власник хоче показувати короткі відео товару поряд із фото на сторінці 3D-друкованого виробу.',
-    warn: '2026-08-01: скоуп лише 3D-P, ведеться незалежно від 3D-P-011 (без blockedBy). Пріоритет не проставлено. Попереднє дослідження (загальні дані OpenCart, не перевірено проти живої теми): OpenCart 4.x у ядрі не має вбудованої відео-галереї товару; ринкові розширення для 4.x існують (MP4/YouTube/Vimeo). Головна невідома — чи сумісне готове розширення з кастомною темою boostershop-ds.css, чи потрібна кастомна інтеграція; потрібна діагностика проти найновішого cPanel-бекапу. Технічний підхід (розширення vs самохостинг mp4 vs зовнішній embed) не вирішено. Самохостинг/розширення торкає спільні CSS/JS теми — soft risky zone (AGENTS.md UI/CSS patch discipline).',
+    warn: '2026-08-06: скоуп лише 3D-P, ведеться незалежно від 3D-P-011 (без blockedBy). Пріоритет не проставлено. Попереднє дослідження (загальні дані OpenCart, не перевірено проти живої теми): OpenCart 4.x у ядрі не має вбудованої відео-галереї товару; ринкові розширення для 4.x існують (MP4/YouTube/Vimeo). Головна невідома — чи сумісне готове розширення з кастомною темою boostershop-ds.css, чи потрібна кастомна інтеграція; потрібна діагностика проти найновішого cPanel-бекапу. Технічний підхід (розширення vs самохостинг mp4 vs зовнішній embed) не вирішено. Самохостинг/розширення торкає спільні CSS/JS теми — soft risky zone (AGENTS.md UI/CSS patch discipline).',
     subtasks: []
   },  // ─── CHECKOUT / ST ───
   {
@@ -2470,11 +2470,45 @@ const ROADMAP_TASKS = [
     ]
   },
   {
-    id: 'TECH-013', title: 'Mobile Core Web Vitals pass (об\'єднує TECH-002/003/004)', status: 'active', tool: 'Codex', priority: 'High',
-    lastUpdated: '2026-07-16', blockedBy: [],
-    simple: 'PageSpeed mobile-скан 16.07.2026: Performance 62/100, LCP 8.3с, FCP 4.1с, Speed Index 6.2с (TBT і CLS вже ідеальні — 0). Головне: 773 КіБ зайвих зображень (лого і Pokémon-іконка в 8× більшому розмірі, ніж показуються), 327 КіБ без кешування на власних JS/CSS/шрифтах, ~3с рендер-блокуючих запитів.',
+    id: 'TECH-013', title: 'Mobile Core Web Vitals pass (об\'єднує TECH-002/003/004)', status: 'done', tool: 'Claude Code', priority: 'High',
+    lastUpdated: '2026-08-06', blockedBy: [],
+    simple: 'Зроблено в чотири патчі за два дні. Мобільний LCP впав з 8,8 до 6,7 с на головній (категорія 6,0, товар 6,5), CLS утримано на нулі. Логотип схуд з 394 КБ до 20,7 КБ, плитка Pokémon з 196 до 48 КБ. Уперше з\'явилася політика кешування: код 30 днів, зображення 7. Шрифт Inter прибрано як узагалі невикористаний.',
     why: 'Повільний мобільний рендер = гірший UX і слабший сигнал для Google ranking factors.',
-    warn: 'Торкається спільного header/footer (усі сторінки, включно з checkout) і можливо .htaccess (новий ізольований cache-блок, окремо від sitemap-блоку TECH-005-DEEP). Обов\'язковий bs-checkout-smoke після деплою. Handoff: TECH-013.', subtasks: []
+    warn: 'Цілі LCP ≤4с і FCP ≤2,5с НЕ досягнуті. Залишок тримають render-blocking 2710 мс на мобайлі (TECH-045) і мініатюри карток товарів (TECH-044). QA і bs-checkout-smoke пройдені 06.08. Handoff: TECH-013 rev. 2026-08-05.',
+    subtasks: [
+      { id: '1', title: 'WP1 — рендер-блокуючі запити', status: 'done', desc: 'Manrope винесено з глибини стилів у шапку, Inter прибрано, дублі preconnect прибрано, скрипти відкладено скрізь крім checkout.' },
+      { id: '2', title: 'WP4 — поведінка шрифтів', status: 'done', desc: '10 декларацій FontAwesome переведено з block на swap.' },
+      { id: '3', title: 'WP2 — зображення + резервування місця', status: 'done', desc: 'Логотип 270×84, плитка 452×176, перша картка категорії більше не відкладається.' },
+      { id: '4', title: 'WP3 — кешування в .htaccess', status: 'done', desc: 'Код 30 днів, зображення 7 днів. xml і txt свідомо не зачеплені.' }
+    ]
+  },
+  {
+    id: 'TECH-044', title: 'Картки товарів: WebP + розміри мініатюр', status: 'todo', tool: 'не призначено', priority: 'High',
+    lastUpdated: '2026-08-06', blockedBy: [],
+    simple: 'Після TECH-013 зображення досі важать 252 КіБ на головній, 511 на категорії і 830 на товарі — при плановій межі 200. Майже все це мініатюри карток товарів: 11 з 15 у форматі PNG замість WebP, і віддаються вони 250×250 там, де картка малює 340×240 — тобто ще й розтягуються та виглядають мʼяко на телефоні.',
+    why: 'Найбільший залишковий важіль для швидкості на мобільному. PNG→WebP зазвичай дає мінус 60–80% ваги.',
+    warn: 'Рішення власника 06.08 — варіант А: патч резизера OpenCart на WebP-вивід незалежно від формату джерела. Без записів у БД і без ручної роботи в адмінці. Обовʼязковий bs-merchant-schema-qa: Merchant Center тягне посилання на зображення з фіду.', subtasks: []
+  },
+  {
+    id: 'TECH-045', title: 'Stage 2: рендер-блокування на мобайлі + невикористаний код', status: 'todo', tool: 'не призначено', priority: 'High',
+    lastUpdated: '2026-08-06', blockedBy: [],
+    simple: 'Рендер-блокуючі запити на мобайлі досі 2710 мс (десктоп — 590). TECH-013 зняв лише близько 12% від початкових 3080 мс. Причина видна: 115 КіБ невикористаного JavaScript, 78 КіБ невикористаного CSS, 66 КіБ неминифікованого JS. Це і тримає FCP на 3,9 с.',
+    why: 'Без цього мобільний бал PageSpeed не підніметься істотно, скільки б зображень ми не стискали.',
+    warn: 'Ризикована зона: header.twig глобальний і рендериться на checkout. Агресивне вирізання CSS було прямо заборонене в Stage 1 через ризик тихо зламати UI на неперевірених сторінках — обмеження зберігається. Будь-яке видалення правил — перевірка на трьох breakpoints + обовʼязковий bs-checkout-smoke.', subtasks: []
+  },
+  {
+    id: 'TECH-043', title: 'Зсув макета на десктопній категорії (CLS 0,25–0,54)', status: 'todo', tool: 'не призначено', priority: 'Medium',
+    lastUpdated: '2026-08-06', blockedBy: [],
+    simple: 'Сторінка категорії на компʼютері стрибає при завантаженні: показник зсуву коливається від 0,25 до 0,54 при нормі 0,1. Головна і картка товару чисті (0,003), мобайл скрізь нуль. Причина поки не встановлена — але сам розкид між прогонами каже, що винен елемент, який домальовується скриптом.',
+    why: 'Стрибок контенту під час завантаження дратує і рахується Google як окремий сигнал якості.',
+    warn: 'Логотип шапки перевірено і виключено: він резервує місце коректно і однаковий на всіх сторінках. Підозрювані — віджет «Показати ще» і панель фільтрів. Перший крок: зняти з PageSpeed список елементів зсуву, мінімум три прогони. Без цього патч буде стрільбою наосліп.', subtasks: []
+  },
+  {
+    id: 'UX-035', title: 'Доступність: посилання в хлібних крихтах і порядок заголовків', status: 'todo', tool: 'не призначено', priority: 'Low',
+    lastUpdated: '2026-08-06', blockedBy: [],
+    simple: 'Дві дрібниці, знайдені побічно. Перше: «домик» у хлібних крихтах — це посилання лише з іконкою, без тексту, тож програма читання з екрана озвучує його як порожнє. Друге: заголовок картки товару має тег h4 там, де порядок рівнів заголовків цього не передбачає.',
+    why: 'Метрика доступності зараз 94/100. На швидкість не впливає, але це найдешевші бали з усіх наявних.',
+    warn: 'Не чіпати мікророзмітку BreadcrumbList — це SEO-зона. Тег заголовка не міняти наосліп: bs-pcard__title спільний для всіх карток, CSS може бути привʼязаний до тега. Можливо, коректніше поправити рівні вище, а не сам тег.', subtasks: []
   },
   {
     id: 'TECH-042', title: 'Bot-challenge / AI-visibility read-only check', status: 'todo', tool: 'Claude + Owner', priority: 'Medium',
