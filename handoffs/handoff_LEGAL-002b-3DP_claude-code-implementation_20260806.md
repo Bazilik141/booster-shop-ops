@@ -53,7 +53,7 @@ Should the new archive page be `noindex`? LEGAL-002 left this open and it does n
 **Do not touch:** `sitemap.xml`, `robots.txt`, `.htaccess`, redirects/canonical, checkout/payment/fiscalization, Merchant feed, `ocp5_information` ids 1/4/5, nav/footer menus.
 
 **Acceptance criteria:**
-- `GET https://boostershop.website/information/publichna-oferta` → 200, body contains `Редакція від: <strong>06.08.2026</strong>`, exactly 21 `<h2>` tags, section 7 title `Товари 3D-друку, декоративні та електричні вироби` present.
+- `GET https://boostershop.website/information/publichna-oferta` → 200, body contains `Редакція від: <strong>07.08.2026</strong>`, exactly 21 `<h2>` tags, section 7 title `Товари 3D-друку, декоративні та електричні вироби` present.
 - `GET https://boostershop.website/information/publichna-oferta-arhiv-2026-07-24` → 200, body starts with the archival banner, rest byte-identical to the pre-change id=3 description (verify via the SHA-256 backup taken before the UPDATE).
 - Section 21 of the live offer links to both `publichna-oferta-arhiv-2026-07-24` and `publichna-oferta-arhiv-2026-05-26`; both archive pages link back to the live offer; no 404s either direction.
 
