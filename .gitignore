@@ -17,3 +17,6 @@ client_secret.json
 # Python bytecode cache
 __pycache__/
 *.pyc
+
+# Claude Code local tool-permission cache (machine-local, not shared config)
+.claude/settings.local.json
