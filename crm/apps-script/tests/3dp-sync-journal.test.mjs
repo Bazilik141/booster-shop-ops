@@ -72,15 +72,19 @@ function makeEnvironment(options = {}) {
     outage: !!options.outage,
     schemaReady: options.schemaReady !== false,
     existingRows: options.existingRows || [],
+    nomenclatureRows: options.nomenclatureRows || {},
+    nomenclatureFailures: options.nomenclatureFailures || {},
     stockAlreadyApplied: !!options.stockAlreadyApplied,
     negativeStock: !!options.negativeStock,
+    appendPayloads: [],
+    writePayloads: [],
   };
   const logs = [];
   const context = vm.createContext({
     JSON, Math, Number, String, Boolean, Array, Object, RegExp, Date, Error, isFinite,
     Logger: { log: (line) => logs.push(String(line)) },
     Session: { getScriptTimeZone: () => "Europe/Kyiv" },
-    Utilities: { formatDate: () => "2026-08-08 12:00:00" },
+    Utilities: { formatDate: (value) => value && typeof value.getTime === "function" && value.getTime() === Date.parse("2026-08-08T12:47:22.000Z") ? "2026-08-08 15:47:22" : "2026-08-08 12:00:00" },
     PropertiesService: { getScriptProperties: () => ({ getProperty: (key) => properties[key] || "" }) },
     SpreadsheetApp: { openById: () => spreadsheet },
     ContentService: { MimeType: { JSON: "JSON" }, createTextOutput: (text) => ({ text, setMimeType() { return this; } }) },
@@ -89,12 +93,20 @@ function makeEnvironment(options = {}) {
         if (remote.outage) throw new Error("Request failed for https://3dp.example/exec?token=3dp-sync-token");
         const body = request.method === "post" ? JSON.parse(request.payload) : null;
         const action = body ? body.action : new URL(url).searchParams.get("action");
-        if (action === "3dp_get_range") return response({ ok: true, values: [[remote.schemaReady ? "CRM row number" : "wrong header"]] });
+        if (action === "3dp_get_range") return response({ ok: true, values: [remote.schemaReady ? ["CRM row number", "РРЦ на момент продажу, грн", "Вартість фурнітури за од., грн (заморожена)", "Платник фурнітури"] : ["wrong header"]] });
         if (action === "3dp_sales") return response({ ok: true, rows: remote.existingRows });
         if (action === "3dp_stock_adjustments") return response({ ok: true, rows: remote.stockAlreadyApplied ? [{ "Причина": new URL(url).searchParams.get("reason") }] : [] });
-        if (action === "3dp_get_row") return response({ ok: true, row: { "Наявно зараз, шт": 10 } });
-        if (action === "3dp_append_row") return response({ ok: true, row: 20 });
-        if (action === "3dp_write") return response({ ok: true });
+        if (action === "3dp_get_row") {
+          const params = new URL(url).searchParams;
+          if (params.get("sheet") === "Номенклатура") {
+            const sku = params.get("sku");
+            if (remote.nomenclatureFailures[sku]) return response({ ok: false, code: remote.nomenclatureFailures[sku] });
+            return response({ ok: true, row: remote.nomenclatureRows[sku] || { "Собівартість Сергія (виробнича), грн": 12.5, "РРЦ фактична, грн": 99, "Фурнітура (ціна-довідка), грн/шт": 4 } });
+          }
+          return response({ ok: true, row: { "Наявно зараз, шт": 10 } });
+        }
+        if (action === "3dp_append_row") { remote.appendPayloads.push(body); return response({ ok: true, row: 20 }); }
+        if (action === "3dp_write") { remote.writePayloads.push(body); return response({ ok: true }); }
         if (action === "3dp_adjust_stock") return response({ ok: true, new_value: remote.negativeStock ? -1 : 9, warning: remote.negativeStock ? "insufficient_stock" : null });
         throw new Error("unexpected 3D-P action " + action);
       },
@@ -107,6 +119,7 @@ function makeEnvironment(options = {}) {
 assert.match(code, /sync3dpPackagingCost_\(sales, operation, addedRows, 'apiAddSale_'\)/);
 assert.match(code, /sync3dpPackagingCost_\(sales, order, rows, 'apiUpdateSale_'\)/);
 assert.match(code, /function sync3dpPackagingCost_\(sales, orderId, rowNumbers\)[\s\S]*arguments\[3\]/);
+assert.match(code, /ROW_NOT_FOUND\|ROW_FILTERED/);
 const journalFunction = code.slice(code.indexOf("function crm3dpJournalEntry_"), code.indexOf("function crm3dpAppendJournal_"));
 assert.doesNotMatch(journalFunction, /SpreadsheetApp\.getActive/);
 assert.doesNotMatch(fs.readFileSync(path.resolve(here, "../../../3d-print/apps-script-3dp-api/Code.gs"), "utf8"), /sync_journal/);
@@ -128,6 +141,55 @@ assert.doesNotMatch(fs.readFileSync(path.resolve(here, "../../../3d-print/apps-s
   assert.equal(result.ok, true);
   assert.equal(result.created, 1);
   assert.equal(journalRows(env.spreadsheet)[0][5], 'created');
+  assert.equal(env.remote.appendPayloads[0].values.F, 12.5);
+  assert.equal(env.remote.appendPayloads[0].values.U, 99);
+  assert.equal(env.remote.appendPayloads[0].values.V, 4);
+  assert.equal(env.remote.appendPayloads[0].values.W, 'власник');
+}
+
+{
+  const env = makeEnvironment({ nomenclatureRows: {
+    'FIG-CHARM-001': { "Собівартість Сергія (виробнича), грн": "", "РРЦ фактична, грн": "", "Фурнітура (ціна-довідка), грн/шт": 4 },
+  } });
+  const sales = new MockSales(env.spreadsheet, new Map([[3, saleRow('FIG-CHARM-001')]]));
+  const result = env.context.__test.sync3dpSales_(sales, 'OC-FOP-MISSING-FROZEN', [3], 'apiAddSale_');
+  assert.equal(result.ok, true);
+  assert.equal(result.skipped, 'missing_frozen_inputs');
+  assert.equal(env.remote.appendPayloads.length, 0);
+  assert.equal(journalRows(env.spreadsheet)[0][5], 'skipped_missing_cost_or_rrp');
+  assert.match(journalRows(env.spreadsheet)[0][6], /CRM sale remains saved/);
+}
+
+{
+  const env = makeEnvironment({ nomenclatureFailures: { 'FIG-CHARM-001': 'ROW_NOT_FOUND' } });
+  const sales = new MockSales(env.spreadsheet, new Map([
+    [3, saleRow('FIG-CHARM-001')],
+    [4, saleRow('ACC-3D-DITTO-410')],
+  ]));
+  const result = env.context.__test.sync3dpSales_(sales, 'OC-FOP-MISSING-NOMENCLATURE', [3, 4], 'apiAddSale_');
+  assert.equal(result.ok, true);
+  assert.equal(result.created, 1);
+  assert.deepEqual(journalRows(env.spreadsheet).map((row) => row[5]), ['skipped_sku_not_in_nomenclature', 'created']);
+  assert.match(journalRows(env.spreadsheet)[0][6], /FIG-CHARM-001.*Номенклатура/);
+  assert.equal(env.remote.appendPayloads.length, 1);
+  assert.equal(env.remote.writePayloads.filter((payload) => payload.column === 'G').length, 1);
+}
+
+{
+  const env = makeEnvironment({ nomenclatureFailures: { 'FIG-CHARM-001': 'ROW_FILTERED' } });
+  const sales = new MockSales(env.spreadsheet, new Map([[3, saleRow('FIG-CHARM-001')]]));
+  const result = env.context.__test.sync3dpSales_(sales, 'OC-FOP-FILTERED-NOMENCLATURE', [3], 'apiAddSale_');
+  assert.equal(result.ok, true);
+  assert.equal(result.skipped, 'missing_frozen_inputs');
+  assert.equal(journalRows(env.spreadsheet)[0][5], 'skipped_sku_not_in_nomenclature');
+}
+
+{
+  const env = makeEnvironment({ nomenclatureFailures: { 'FIG-CHARM-001': 'UNAUTHORIZED' } });
+  const sales = new MockSales(env.spreadsheet, new Map([[3, saleRow('FIG-CHARM-001')]]));
+  const result = env.context.__test.sync3dpSales_(sales, 'OC-FOP-NOMENCLATURE-AUTH', [3], 'apiAddSale_');
+  assert.equal(result.ok, false);
+  assert.equal(journalRows(env.spreadsheet)[0][5], 'skipped_api_error');
 }
 
 {
@@ -274,10 +336,12 @@ assert.doesNotMatch(fs.readFileSync(path.resolve(here, "../../../3d-print/apps-s
   const sales = new MockSales(env.spreadsheet, new Map());
   env.context.__test.sync3dpSales_(sales, "", [], "unknown");
   const sheet = env.spreadsheet.getSheetByName("_Журнал_3DP_синхронізації");
-  sheet.rows = [["timestamp_kyiv", "source", "order_id", "crm_row", "sku", "outcome", "detail"], ["2026-08-08 10:00:00", "apiAddSale_", "OC-1", 3, "FIG-1", "created", "created"], ["2026-08-08 10:01:00", "apiUpdateSale_", "OC-1", 3, "FIG-1", "warning_negative_stock", "warning"]];
+  const storedKyivDate = vm.runInContext('new Date("2026-08-08T12:47:22.000Z")', env.context);
+  sheet.rows = [["timestamp_kyiv", "source", "order_id", "crm_row", "sku", "outcome", "detail"], ["2026-08-08 10:00:00", "apiAddSale_", "OC-1", 3, "FIG-1", "created", "created"], [storedKyivDate, "apiUpdateSale_", "OC-1", 3, "FIG-1", "warning_negative_stock", "warning"]];
   const read = env.context.__test.apiSyncJournal_({ limit: 1 });
   assert.equal(read.count, 1);
   assert.equal(read.rows[0].outcome, "warning_negative_stock");
+  assert.equal(read.rows[0].timestamp_kyiv, "2026-08-08 15:47:22");
   assert.equal(JSON.parse(env.context.__test.doGet({ parameter: { action: "sync_journal", token: "wrong" } }).text).ok, false);
   assert.equal(JSON.parse(env.context.__test.doGet({ parameter: { action: "sync_journal", token: "owner-token", limit: "1" } }).text).rows[0].outcome, "warning_negative_stock");
 }

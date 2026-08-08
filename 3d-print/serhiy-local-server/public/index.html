@@ -47,7 +47,7 @@
           <label>SKU<select name="sku" class="sku-select" required></select></label>
           <label>Кількість у партії, шт<input name="quantity" type="number" min="1" step="1" required></label>
           <label>Сумарна вага партії, г<input name="total_weight_g" type="number" min="0.000001" step="any" required></label>
-          <label>Сумарний час партії, год<input name="total_print_time_h" type="number" min="0.000001" step="any" required></label>
+          <label>Сумарний час партії, год<input name="total_print_time_h" type="text" inputmode="decimal" autocomplete="off" data-print-time-input="total_print_time_h" required><small class="muted" data-print-time-hint="total_print_time_h">Можна: 1:30, 1 год 30 хв або 1,5.</small></label>
           <label>Вага котушки, г<input name="spool_weight_g" type="number" min="0.000001" step="any" required></label>
           <label>Ціна котушки, грн<input name="spool_price_uah" type="number" min="0.000001" step="any" required></label>
           <div class="actions"><button type="submit">Розрахувати</button><button id="save-batch" type="button" disabled>Зберегти чернетку і per-unit у SKU</button></div>
@@ -73,7 +73,7 @@
           <label>Дата<input name="date" type="date" required></label>
           <label>SKU<select name="sku" class="sku-select" required></select></label>
           <label>Надруковано, шт<input name="printed_quantity" type="number" min="1" step="1" required></label>
-          <label>Час друку факт, год<input name="actual_time_hours" type="number" min="0.000001" step="any" required></label>
+          <label>Час друку факт, год<input name="actual_time_hours" type="text" inputmode="decimal" autocomplete="off" data-print-time-input="actual_time_hours" required><small class="muted" data-print-time-hint="actual_time_hours">Можна: 1:30, 1 год 30 хв або 1,5.</small></label>
           <label>Витрачено матеріалу факт, г<input name="actual_material_g" type="number" min="0.000001" step="any" required></label>
           <label>Брак, шт<input name="defects" type="number" min="0" step="1" value="0"></label>
           <label>Хто друкував<input name="printer" maxlength="120" value="Сергій"></label>
@@ -89,9 +89,10 @@
 
       <section class="panel">
         <h2>SKU і наявність</h2>
-        <div class="table-wrap"><table><thead><tr><th>SKU</th><th>Назва</th><th>Статус</th><th>Наявно</th><th>Фурнітура, грн/шт</th></tr></thead><tbody id="sku-rows"></tbody></table></div>
+        <div class="table-wrap"><table><thead><tr><th>SKU</th><th>Назва</th><th>Статус</th><th>Наявно</th><th>Фурнітура (довідка), грн/шт</th></tr></thead><tbody id="sku-rows"></tbody></table></div>
       </section>
     </main>
+    <script src="/print-time.js"></script>
     <script type="module" src="/app.js"></script>
   </body>
 </html>

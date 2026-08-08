@@ -813,9 +813,14 @@ return date;
 const CRM_3DP_SYNC_URL_PROPERTY_ = 'BOOSTER_3DP_URL';
 const CRM_3DP_SYNC_TOKEN_PROPERTY_ = 'BOOSTER_3DP_SYNC_TOKEN';
 const CRM_3DP_SALES_SHEET_ = 'Продажі';
+const CRM_3DP_NOMENCLATURE_SHEET_ = 'Номенклатура';
 const CRM_3DP_ORDER_HEADER_ = '№ замовлення';
 const CRM_3DP_CRM_ROW_HEADER_ = 'CRM row number';
 const CRM_3DP_EXPENSE_HEADER_ = 'Витрати BoosterShop за од., грн';
+const CRM_3DP_PRODUCTION_COST_HEADER_ = 'Собівартість Сергія (виробнича), грн';
+const CRM_3DP_ACTUAL_RRP_HEADER_ = 'РРЦ фактична, грн';
+const CRM_3DP_FIXTURE_REFERENCE_HEADER_ = 'Фурнітура (ціна-довідка), грн/шт';
+const CRM_3DP_SALES_FROZEN_HEADERS_ = ['CRM row number', 'РРЦ на момент продажу, грн', 'Вартість фурнітури за од., грн (заморожена)', 'Платник фурнітури'];
 const CRM_3DP_STOCK_HEADER_ = 'Наявно зараз, шт';
 const CRM_3DP_SYNC_JOURNAL_SHEET_ = '_Журнал_3DP_синхронізації';
 const CRM_3DP_SYNC_JOURNAL_HEADERS_ = ['timestamp_kyiv', 'source', 'order_id', 'crm_row', 'sku', 'outcome', 'detail'];
@@ -989,9 +994,10 @@ function crm3dpOrderRows_(sales, rowNumbers) {
 }
 
 function crm3dpSaleRows_(config) {
-  const schema = crm3dpGet_(config, { action: '3dp_get_range', sheet: CRM_3DP_SALES_SHEET_, range: 'T1:T1' });
-  if (!schema.values || !schema.values[0] || String(schema.values[0][0] || '').trim() !== CRM_3DP_CRM_ROW_HEADER_) {
-    throw new Error('3D-P Продажі!T schema is not ready');
+  const schema = crm3dpGet_(config, { action: '3dp_get_range', sheet: CRM_3DP_SALES_SHEET_, range: 'T1:W1' });
+  const headers = schema && schema.values && schema.values[0] ? schema.values[0].map(function (value) { return String(value || '').trim(); }) : [];
+  if (JSON.stringify(headers) !== JSON.stringify(CRM_3DP_SALES_FROZEN_HEADERS_)) {
+    throw new Error('3D-P Продажі!T:W frozen-value schema is not ready');
   }
   const list = crm3dpGet_(config, { action: '3dp_sales' });
   return Array.isArray(list.rows) ? list.rows : [];
@@ -1006,7 +1012,44 @@ function crm3dpSaleMatches_(rows, order, crmRow) {
   });
 }
 
-function crm3dpSaleAppendValues_(entry, order) {
+function crm3dpFiniteNonNegative_(value) {
+  const raw = String(value == null ? '' : value).trim();
+  if (!raw) return null;
+  const normalized = raw.replace(',', '.').replace(/[^0-9.-]/g, '');
+  if (!normalized) return null;
+  const parsed = Number(normalized);
+  return Number.isFinite(parsed) && parsed >= 0 ? crm3dpRound2_(parsed) : null;
+}
+
+function crm3dpFrozenSaleInputs_(config, sku) {
+  let response;
+  try {
+    response = crm3dpGet_(config, { action: '3dp_get_row', sheet: CRM_3DP_NOMENCLATURE_SHEET_, sku: sku });
+  } catch (error) {
+    const message = String(error && error.message ? error.message : error);
+    if (/^3D-P request failed \(\d+\): (ROW_NOT_FOUND|ROW_FILTERED)$/.test(message)) {
+      return { ok: false, skipped: 'sku_not_in_nomenclature', reason: '3D-P sync skipped: SKU ' + sku + ' is absent from 3D-P Номенклатура; CRM sale remains saved.' };
+    }
+    throw error;
+  }
+  const row = response && response.row ? response.row : null;
+  if (!row) {
+    return { ok: false, skipped: 'sku_not_in_nomenclature', reason: '3D-P sync skipped: SKU ' + sku + ' is absent from 3D-P Номенклатура; CRM sale remains saved.' };
+  }
+  const productionCost = crm3dpFiniteNonNegative_(row[CRM_3DP_PRODUCTION_COST_HEADER_]);
+  const actualRrp = crm3dpFiniteNonNegative_(row[CRM_3DP_ACTUAL_RRP_HEADER_]);
+  if (productionCost === null || actualRrp === null) {
+    return { ok: false, skipped: 'missing_cost_or_rrp', reason: '3D-P sync skipped: Номенклатура!K production cost or Q actual RRP is blank or invalid; CRM sale remains saved.' };
+  }
+  const fixtureRaw = String(row[CRM_3DP_FIXTURE_REFERENCE_HEADER_] == null ? '' : row[CRM_3DP_FIXTURE_REFERENCE_HEADER_]).trim();
+  const fixture = fixtureRaw ? crm3dpFiniteNonNegative_(fixtureRaw) : 0;
+  if (fixture === null) {
+    return { ok: false, skipped: 'invalid_fixture_price', reason: '3D-P sync skipped: Номенклатура!N fixture reference must be a non-negative number when filled.' };
+  }
+  return { ok: true, production_cost: productionCost, actual_rrp: actualRrp, fixture_cost: fixture, fixture_payer: 'власник' };
+}
+
+function crm3dpSaleAppendValues_(entry, order, frozen) {
   const values = entry.values || [];
   const quantity = crm3dpNumber_(values[7]);
   const linePrice = crm3dpNumber_(values[8]);
@@ -1016,10 +1059,14 @@ function crm3dpSaleAppendValues_(entry, order) {
     B: String(values[5] || '').trim(),
     D: quantity,
     E: crm3dpRound2_(quantity ? linePrice - lineDiscount / quantity : linePrice),
+    F: frozen.production_cost,
     G: 0,
     M: String(values[1] || '').trim(),
     N: order,
     T: entry.row,
+    U: frozen.actual_rrp,
+    V: frozen.fixture_cost,
+    W: frozen.fixture_payer,
   };
 }
 
@@ -1090,12 +1137,21 @@ function sync3dpSales_(sales, orderId, rowNumbers, source) {
     }
 
     const existingRows = crm3dpSaleRows_(config);
+    const frozenBySku = {};
     const created = [];
     const matches = [];
     triggerRows.forEach(function (entry) {
       const found = crm3dpSaleMatches_(existingRows, order, entry.row);
       if (found.length) {
         matches.push({ entry: entry, row: found[0], duplicate_key: found.length > 1 });
+        return;
+      }
+      const sku = String(entry.values[5] || '').trim();
+      const frozen = frozenBySku[sku] || (frozenBySku[sku] = crm3dpFrozenSaleInputs_(config, sku));
+      if (!frozen.ok) {
+        const outcome = frozen.skipped === 'missing_cost_or_rrp' ? 'skipped_missing_cost_or_rrp'
+          : (frozen.skipped === 'sku_not_in_nomenclature' ? 'skipped_sku_not_in_nomenclature' : 'skipped_invalid_fixture_price');
+        crm3dpLogSkip_(sales, journalSource, order, entry, outcome, frozen.reason);
         return;
       }
       const appended = crm3dpFetchJson_(config.url, {
@@ -1105,7 +1161,7 @@ function sync3dpSales_(sales, orderId, rowNumbers, source) {
           action: '3dp_append_row',
           token: config.token,
           sheet: CRM_3DP_SALES_SHEET_,
-          values: crm3dpSaleAppendValues_(entry, order),
+          values: crm3dpSaleAppendValues_(entry, order, frozen),
         }),
       });
       const createdSale = { row_number: appended.row };
@@ -1122,6 +1178,9 @@ function sync3dpSales_(sales, orderId, rowNumbers, source) {
       crm3dpAppendJournal_(sales, journalSource, order, entry, adjustment.journal_outcome || 'created', createdDetail);
     });
 
+    if (!matches.length) {
+      return { ok: true, order: order, created: 0, matched: 0, skipped: 'missing_frozen_inputs', packaging: packagingTotal };
+    }
     const first = matches.slice().sort(function (left, right) {
       return crm3dpNumber_(left.row.row_number) - crm3dpNumber_(right.row.row_number);
     })[0];
@@ -1162,7 +1221,7 @@ function sync3dpSales_(sales, orderId, rowNumbers, source) {
     return { ok: true, order: order, created: created.length, matched: matches.length, packaging: packagingTotal };
   } catch (error) {
     const message = String(error && error.message ? error.message : error);
-    const outcome = message === '3D-P Продажі!T schema is not ready' ? 'skipped_schema' : 'skipped_api_error';
+    const outcome = message === '3D-P Продажі!T:W frozen-value schema is not ready' ? 'skipped_schema' : 'skipped_api_error';
     crm3dpLogSkip_(sales, journalSource, order, triggerRows[0] || null, outcome, message);
     return { ok: false, skipped: '3dp_unavailable' };
   }

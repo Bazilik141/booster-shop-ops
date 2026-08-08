@@ -165,6 +165,10 @@ checks passed live on `FIG-CHARM-001`.
 
 ## Addendum #3 — durable write path for посилання на модель / РРЦ (фактична) / Ціна під викуп, 2026-08-02
 
+**Superseded 2026-08-08 by `3D-P-015`.** Do not implement this addendum separately: its durable
+`Номенклатура!Q:S` schema, owner-only API writes, and dashboard wiring ship together with the
+3D-P-015 price-model migration, which also owns the required live preflight and audit trail.
+
 Codex found a real gap while building `3D-P-013` (see `diagnostics/3D-P-013_dashboard-tab-restructure_report_20260802.md`,
 "Hard boundary" section): the live API fixture has **no durable `Номенклатура` column or whitelisted action**
 for посилання на модель, РРЦ (фактична), or Ціна під викуп (Track-2 buyout price). Claude's `3D-P-013`

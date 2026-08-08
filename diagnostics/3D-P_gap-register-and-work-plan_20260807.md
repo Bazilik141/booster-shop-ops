@@ -62,7 +62,7 @@ them. Production data can only be entered through Serhiy's server, which has nev
 | Cost versioning / frozen sale economics | **Absent** | `Номенклатура!K` is one live formula; `Продажі!F` derived |
 | Break-even price, max discount, below-minimum flag | **Absent** | 0 matches for `мінімальн` / `беззбитк` in `Code.gs` |
 | Returns as a financial operation | **Absent** | 0 matches for `Поверненн` in `Code.gs` |
-| Licence cost, stock locations, planned-defect rate | **Absent** (locations and defect-rate deliberately dropped; licence never decided) | `Code.gs`, V1 §6.8/§6.9/§7.7 |
+| Licence cost, stock locations | **Absent** (locations deliberately dropped; licence never decided) | `Code.gs`, V1 §6.8/§6.9/§7.7 |
 | CRM → 3D-P sale sync | **Deployed but non-functional** | Finding 9, 2026-08-04 |
 | Sync failure visibility | **Absent** | no `3dp_sync_journal` in `Code.gs` |
 | Owner-side production log UI | **Absent** | dashboard calls no `print_log` action |
@@ -103,9 +103,12 @@ correctly in `threeDpMargin()`. It is correct arithmetic over a wrong input.
 
 The 3D-P-006 handoff states the tab is a subset of V1 §10: no `Product`/`Variant`/`CostVersion`/
 `Settlement` entities, no production kanban, no market-comparables browser. Also deliberately dropped:
-plastic type (not tracked), planned defect rate in the cost formula (defect is a `Друк-лог` count only),
-labour as a separate cost line (absorbed by the 50/50 split), Model A. These are decisions, not misses —
-except `CostVersion`, whose *function* returned as G2 and must be built.
+plastic type (not tracked), labour as a separate cost line (absorbed by the 50/50 split), Model A. These
+are decisions, not misses — except `CostVersion`, whose *function* returned as G2 and must be built.
+
+The planned defect rate is **not** deliberately excluded anymore. The owner reversed that decision on
+2026-08-08: `3D-P-015-FIX2` adds one owner-only global `Налаштування!B5` rate to the production-cost
+formula. It is a planned simple uplift, distinct from the actual `Друк-лог` defect count.
 
 ### 3.4 Correction to an earlier diagnostic
 

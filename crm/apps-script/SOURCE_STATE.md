@@ -10,7 +10,7 @@ new Web App version.
 | Mirror file | `crm/apps-script/Code.gs` |
 | Baseline pulled from live | 2026-08-08, 11:41 Kyiv (owner export `CodeJS - CRM.txt`) |
 | **Mirror content deployed to live** | **2026-08-08, owner-reported** — owner pasted this exact file into the bound CRM project and published a new Web App version |
-| Deployed Web App version number | **V92, published 2026-08-08 15:23 Kyiv** (owner-reported). Previous known was V89 (2026-08-04) |
+| Deployed Web App version number | **UNKNOWN since the 2026-08-08 evening republish — owner action required.** V92 (2026-08-08 15:23 Kyiv) is superseded; the owner republished this file during `3D-P-015`. Previous known were V92 → V89 (2026-08-04) |
 | Live-verified after deploy | **Yes.** `3D-P-014` owner QA on 2026-08-08 produced four correct journal outcomes through the live Web App (`apiAddSale_` create, `apiUpdateSale_` create-on-update, `apiUpdateSale_` noop, `skipped_no_3dp_sku`), and `3D-P-022` was proven by `ACC-3D-DITTO-410` syncing end to end |
 | Local syntax check | `node --check` passed 2026-08-08 |
 | Previous repo copy | `Booster Shop CRM - Apps_Script_код 29.07.2026.csv` (2026-07-29, pre-V87/V89) — superseded, keep for history only |
@@ -36,11 +36,27 @@ wholesale, so it is high-confidence rather than independently proven.
 | Field | Value |
 |---|---|
 | Mirror file | `3d-print/apps-script-3dp-api/Code.gs` |
-| Verified against live | 2026-08-08 — owner export byte-identical apart from CRLF line endings |
-| Deployed Web App version | **V7, published 2026-08-03 20:55 Kyiv** (owner-reported) |
+| Last verified byte-identical to live | 2026-08-08 (pre-`3D-P-015` state) — owner export identical apart from CRLF |
+| Deployed Web App version | **UNKNOWN — owner action required.** V7 (2026-08-03 20:55) is superseded |
 
-The 3D-P script has not changed since V7 and needed no change for `3D-P-014` or `3D-P-022`; both
-landed entirely on the CRM side.
+> ⚠ **2026-08-08 evening — both projects were republished and the version numbers were not
+> recorded.** During `3D-P-015`, `3D-P-015-FIX1`, `3D-P-015-FIX2` and `3D-P-024` the owner pasted
+> this repository's `3d-print/apps-script-3dp-api/Code.gs` into the bound 3D-P project and published
+> a new Web App version **at least twice**, and republished `crm/apps-script/Code.gs` once. The
+> deployments are proven to have taken effect by live behaviour, not by an export:
+>
+> - `3dp_setup_3dp015` executed against the live workbook — evidence
+>   `diagnostics/3D-P-015_live-migration_20260808_205617.json`;
+> - `3dp_setup_3dp024` executed and the `onEdit` normaliser was confirmed live (`1:39` → `1.65`);
+> - `Налаштування!B5` defect rate created without overwriting the owner's `B2 = 0.15`.
+>
+> **Still required from the owner before any task plans against these mirrors** (rule
+> OPS-CODEMIRROR, step 2): the published Web App version number for each project, and a fresh
+> export of both live `Code.gs` files to re-establish byte identity. Until then, treat the deployed
+> version as unknown and do **not** state a version number anywhere.
+
+The 3D-P script was unchanged between V7 and 2026-08-08; `3D-P-014` and `3D-P-022` landed entirely
+on the CRM side. Everything after that is the `3D-P-015` / `3D-P-024` family described above.
 
 ## Rule (OPS-CODEMIRROR)
 

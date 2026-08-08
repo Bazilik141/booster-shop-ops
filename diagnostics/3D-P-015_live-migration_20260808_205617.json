@@ -1,0 +1,120 @@
+{
+  "task": "3D-P-015",
+  "captured_at_local": "2026-08-08 20:56:17 +03:00",
+  "mode": "live_write",
+  "api_identity_probe": {
+    "action": "3dp_overview",
+    "summary_contract": "3dp_overview"
+  },
+  "settings_a1_to_c5": {
+    "values": [
+      [
+        "Глобальні константи 3D-друку",
+        "",
+        ""
+      ],
+      [
+        "Потужність принтера, кВт",
+        0.15,
+        "кВт"
+      ],
+      [
+        "Ціна електроенергії, грн/кВт·год",
+        4.32,
+        "грн/кВт·год"
+      ],
+      [
+        "Амортизація принтера, грн/год",
+        12,
+        "грн/год"
+      ],
+      [
+        "Планований брак, частка",
+        0.1,
+        "частка (0.1 = 10%)"
+      ]
+    ],
+    "formulas": [
+      [
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        ""
+      ]
+    ]
+  },
+  "action": {
+    "already_applied": false,
+    "changes": [
+      "Налаштування!A5:C5 initialized with the owner-editable planned defect rate",
+      "Налаштування!B2:B5 marked as editable settings",
+      "Номенклатура!K2:K7 no longer includes fixture reference N"
+    ]
+  },
+  "nomenclature_n_to_s": [
+    "Фурнітура (ціна-довідка), грн/шт",
+    "API_статус_запису",
+    "API_історія_змін",
+    "РРЦ фактична, грн",
+    "Ціна під викуп, грн",
+    "Посилання на модель"
+  ],
+  "sales_t_to_w": [
+    "CRM row number",
+    "РРЦ на момент продажу, грн",
+    "Вартість фурнітури за од., грн (заморожена)",
+    "Платник фурнітури"
+  ],
+  "cost_checks": [
+    {
+      "sku": "ACC-3D-DITTO-410",
+      "row_number": 2,
+      "cost_formula": "=IF(A2=\"\";\"\";IFERROR((H2/I2*J2+G2*'Налаштування'!$B$2*'Налаштування'!$B$3+G2*'Налаштування'!$B$4)*(1+'Налаштування'!$B$5);\"\"))",
+      "fixture_reference": ""
+    }
+  ],
+  "analytics_a3_to_n3": [
+    "SKU",
+    "Назва",
+    "Собівартість Сергія, грн",
+    "Витрати BoosterShop (фурнітура), грн",
+    "Час друку, год",
+    "% прибутку Сергію",
+    "РРЦ фактична",
+    "РРЦ рекомендована",
+    "Маржа BoosterShop, грн",
+    "Маржа BoosterShop, %",
+    "Нараховано Сергію, грн",
+    "Прибуток Сергію/год друку, грн",
+    "",
+    ""
+  ],
+  "analytics_formula_checks": [
+    {
+      "row": 4,
+      "margin_i": "=IF(OR(A4=\"\";NOT(ISNUMBER(C4));NOT(ISNUMBER(G4)));\"\";IF(G4-C4-N(D4)<0;\"збиток\";(G4-C4-N(D4))*(1-F4)))",
+      "margin_pct_j": "=IF(OR(NOT(ISNUMBER(I4));NOT(ISNUMBER(G4));G4=0);\"\";I4/G4)",
+      "accrual_k": "=IF(OR(A4=\"\";NOT(ISNUMBER(C4));NOT(ISNUMBER(G4)));\"\";IF(G4-C4-N(D4)<0;\"збиток\";C4+F4*(G4-C4-N(D4))))",
+      "hourly_l": "=IF(OR(E4=\"\";E4=0;K4=\"\");\"\";IF(ISNUMBER(K4);K4/E4;\"збиток\"))"
+    }
+  ]
+}

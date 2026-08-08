@@ -2,10 +2,14 @@ import http from "node:http";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import "../shared/print-time.js";
 import { calculateBatchCost, settingsFromRange } from "./lib/calculator.mjs";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const publicDir = path.join(here, "public");
+const sharedPrintTimeScript = path.resolve(here, "../shared/print-time.js");
+const printTime = globalThis.BoosterPrintTime;
+if (!printTime) throw new Error("Shared print-time parser did not load.");
 const apiUrl = requiredEnv("BOOSTER_3DP_URL");
 const serhiyToken = requiredEnv("BOOSTER_3DP_SERHIY_TOKEN");
 const port = requestedPort(process.env.PORT || "3107");
@@ -106,6 +110,14 @@ function optionalNonNegative(value, label) {
   return parsed;
 }
 
+function decimalPrintTime(value, label) {
+  const parsed = printTime.parse(value);
+  if (!parsed.ok || parsed.blank || !(parsed.hours > 0)) {
+    throw fail(`${label}: ${parsed.error || "вкажіть значення більше нуля."}`);
+  }
+  return parsed.hours;
+}
+
 function normalizedForApi(value) {
   return Number(Number(value).toFixed(8));
 }
@@ -120,7 +132,7 @@ function batchInput(body) {
   return {
     quantity: finitePositive(body.quantity, "Кількість у партії"),
     total_weight_g: finitePositive(body.total_weight_g, "Сумарна вага"),
-    total_print_time_h: finitePositive(body.total_print_time_h, "Сумарний час"),
+    total_print_time_h: decimalPrintTime(body.total_print_time_h, "Сумарний час"),
     spool_weight_g: finitePositive(body.spool_weight_g, "Вага котушки"),
     spool_price_uah: finitePositive(body.spool_price_uah, "Ціна котушки"),
   };
@@ -192,7 +204,7 @@ async function saveFixture(body) {
     if (!fixture) throw fail("Обрана фурнітура відсутня у довіднику.");
     value = finitePositive(fixture["Ціна, грн/шт"], "Ціна фурнітури");
   }
-  const expectedCurrent = row["Фурнітура (ланцюжок/карабін), грн/шт"] ?? "";
+  const expectedCurrent = row["Фурнітура (ціна-довідка), грн/шт"] ?? "";
   if (sameValue(expectedCurrent, value)) return { sku, price_uah: value, already_current: true };
   const result = await call3dpPost({
     action: "3dp_write",
@@ -212,7 +224,7 @@ async function appendPrintLog(body) {
     A: String(body.date || today).trim(),
     B: sku,
     C: finitePositive(body.printed_quantity, "Надруковано, шт"),
-    D: finitePositive(body.actual_time_hours, "Час друку факт"),
+    D: decimalPrintTime(body.actual_time_hours, "Час друку факт"),
     E: optionalNonNegative(body.defects, "Брак"),
     F: finitePositive(body.actual_material_g, "Витрачено матеріалу"),
     H: String(body.printer || "Сергій").trim().slice(0, 120),
@@ -281,6 +293,16 @@ function json(response, status, payload) {
 }
 
 async function serveStatic(response, pathname) {
+  if (pathname === "/print-time.js") {
+    const content = await fs.readFile(sharedPrintTimeScript);
+    response.writeHead(200, {
+      "Content-Type": MIME[".js"],
+      "Cache-Control": "no-store",
+      "X-Content-Type-Options": "nosniff",
+    });
+    response.end(content);
+    return;
+  }
   const requested = pathname === "/" ? "/index.html" : pathname;
   const target = path.resolve(publicDir, `.${requested}`);
   if (!target.startsWith(`${publicDir}${path.sep}`)) throw fail("Not found.", 404, "NOT_FOUND");

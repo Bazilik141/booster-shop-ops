@@ -39,7 +39,7 @@ Assert-3dpSuccess -Name 'read real SKU for no-net-change audit smoke' -Response 
 if (-not $skus.rows -or $skus.rows.Count -lt 1) { throw 'No real SKU is available for the no-net-change audit smoke.' }
 
 $row = $skus.rows[0]
-$fixtureHeader = 'Фурнітура (ланцюжок/карабін), грн/шт'
+$fixtureHeader = 'Фурнітура (ціна-довідка), грн/шт'
 if ($null -eq $row.$fixtureHeader) { throw "Fixture header '$fixtureHeader' was not returned by 3dp_skus." }
 
 $response = Invoke-3dpPost -Payload @{

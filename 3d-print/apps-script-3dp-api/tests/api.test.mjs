@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const code = fs.readFileSync(path.resolve(here, "../Code.gs"), "utf8");
+const sharedPrintTimeCode = fs.readFileSync(path.resolve(here, "../../shared/print-time.js"), "utf8");
 
 function columnToNumber(column) {
   return [...column.toUpperCase()].reduce((value, char) => value * 26 + char.charCodeAt(0) - 64, 0);
@@ -44,17 +45,27 @@ class MockRange {
   }
 
   getValue() { return this.cells()[0][0].value ?? ""; }
-  getDisplayValue() { return display(this.getValue()); }
+  getDisplayValue() { const cell = this.cells()[0][0]; return cell.displayValue ?? display(cell.value); }
   getFormula() { return this.cells()[0][0].formula || ""; }
   getValues() { return this.cells().map((row) => row.map((cell) => cell.value ?? "")); }
-  getDisplayValues() { return this.getValues().map((row) => row.map(display)); }
+  getDisplayValues() { return this.cells().map((row) => row.map((cell) => cell.displayValue ?? display(cell.value))); }
   getFormulas() { return this.cells().map((row) => row.map((cell) => cell.formula || "")); }
+  getNote() { return this.cells()[0][0].note || ""; }
+  getNotes() { return this.cells().map((row) => row.map((cell) => cell.note || "")); }
+  getNumberFormat() { return this.cells()[0][0].numberFormat || "General"; }
   getFontColors() { return this.cells().map((row) => row.map((cell) => cell.fontColor || "#000000")); }
+  getSheet() { return this.sheet; }
+  getRow() { return this.row; }
+  getColumn() { return this.column; }
+  getNumRows() { return this.rows; }
+  getNumColumns() { return this.columns; }
+  getCell(row, column) { return new MockRange(this.sheet, this.row + row - 1, this.column + column - 1); }
 
   setValue(value) {
     const cell = this.cells()[0][0];
     cell.value = value;
     cell.formula = "";
+    delete cell.displayValue;
     return this;
   }
 
@@ -66,6 +77,7 @@ class MockRange {
         const cell = this.sheet.cell(this.row + rowOffset, this.column + colOffset);
         cell.value = value;
         cell.formula = "";
+        delete cell.displayValue;
       });
     });
     return this;
@@ -73,6 +85,25 @@ class MockRange {
 
   setFormula(formula) {
     this.cells()[0][0].formula = formula;
+    return this;
+  }
+
+  setNote(note) {
+    this.cells()[0][0].note = note;
+    return this;
+  }
+
+  setNotes(notes) {
+    assert.equal(notes.length, this.rows);
+    notes.forEach((row, rowOffset) => {
+      assert.equal(row.length, this.columns);
+      row.forEach((note, colOffset) => { this.sheet.cell(this.row + rowOffset, this.column + colOffset).note = note; });
+    });
+    return this;
+  }
+
+  setNumberFormat(numberFormat) {
+    this.cells().flat().forEach((cell) => { cell.numberFormat = numberFormat; });
     return this;
   }
 
@@ -86,6 +117,15 @@ class MockRange {
 
   setFontColor(color) {
     this.cells().flat().forEach((cell) => { cell.fontColor = color; });
+    return this;
+  }
+
+  setFontColors(colors) {
+    assert.equal(colors.length, this.rows);
+    colors.forEach((row, rowOffset) => {
+      assert.equal(row.length, this.columns);
+      row.forEach((color, colOffset) => { this.sheet.cell(this.row + rowOffset, this.column + colOffset).fontColor = color; });
+    });
     return this;
   }
 
@@ -117,7 +157,7 @@ class MockSheet {
 
   cell(row, column) {
     while (this.grid.length < row) this.grid.push([]);
-    while (this.grid[row - 1].length < column) this.grid[row - 1].push({ value: "", formula: "", fontColor: "#000000" });
+    while (this.grid[row - 1].length < column) this.grid[row - 1].push({ value: "", formula: "", fontColor: "#000000", note: "", numberFormat: "General" });
     return this.grid[row - 1][column - 1];
   }
 
@@ -194,6 +234,12 @@ const salesHeaders = [
   "Канал", "№ замовлення", "Примітки", "Тип знижки", "Параметр знижки",
   "Погоджено з Сергієм (Так/Ні)", "Період (авто, РРРР-ММ)",
 ];
+const legacyAnalyticsHeaders = [
+  "SKU", "Назва", "Собівартість Сергія, грн", "Витрати BoosterShop, грн", "Час друку, год", "% прибутку Сергію",
+  "Ціна Консервативна", "Ціна Середня", "Ціна Оптимістична", "Маржа BoosterShop Консерв, грн",
+  "Маржа BoosterShop Середня, грн", "Маржа BoosterShop Оптим, грн", "Нараховано Сергію (Середня), грн",
+  "Прибуток Сергію/год друку (Середня), грн",
+];
 
 const spreadsheet = new MockSpreadsheet("1yp15H3YJGkqI4Rx89G4QZHkD9m67gnWh58TsTTi-jjo", [
   new MockSheet("Легенда", Array.from({ length: 33 }, (_, index) => index === 31 ? ["Відомі відкриті питання", ""] : index === 32 ? ["Питання", "Відповідь"] : [])),
@@ -210,8 +256,8 @@ const spreadsheet = new MockSpreadsheet("1yp15H3YJGkqI4Rx89G4QZHkD9m67gnWh58TsTT
   ]),
   new MockSheet("Продажі", [
     salesHeaders,
-    ["2026-07-25", "ПРИКЛАД-001", formula("Приклад", "=X"), 1, 350, formula(84, "=X"), 20, 0.5, formula(246, "=X"), formula("ОК", "=X"), formula(207, "=X"), formula(123, "=X"), "Сайт", "—", "приклад — видалити", "", "", "", formula("2026-07", "=X")],
-    ["2026-08-01", "BR-CHARM-001", formula("Брелок Чармандер", "=X"), 2, 62, formula(6.8, "=X"), 0, 0.5, formula(55.2, "=X"), formula("ОК", "=X"), formula(68, "=X"), formula(55.2, "=X"), "Сайт", "1001", "", "", "", "Так", formula("2026-08", "=X")],
+    ["2026-07-25", "ПРИКЛАД-001", formula("Приклад", "=X"), 1, 350, formula(84, "=X"), 20, 0.5, formula(246, '=IF(OR(B2="";E2="");"";E2-F2-G2)'), formula("ОК", "=X"), formula(207, '=IF(OR(I2="";I2<0);"див. Статус";D2*(F2+H2*I2))'), formula(123, '=IF(OR(I2="";I2<0);"див. Статус";D2*I2*(1-H2))'), "Сайт", "—", "приклад — видалити", "", "", "", formula("2026-07", "=X")],
+    ["2026-08-01", "BR-CHARM-001", formula("Брелок Чармандер", "=X"), 2, 62, formula(6.8, "=X"), 0, 0.5, formula(55.2, '=IF(OR(B3="";E3="");"";E3-F3-G3)'), formula("ОК", "=X"), formula(68, '=IF(OR(I3="";I3<0);"див. Статус";D3*(F3+H3*I3))'), formula(55.2, '=IF(OR(I3="";I3<0);"див. Статус";D3*I3*(1-H3))'), "Сайт", "1001", "", "", "", "Так", formula("2026-08", "=X")],
   ]),
   new MockSheet("Виплати", [
     ["Період (РРРР-ММ)", "Нараховано Сергію за період, грн", "Термін перевірки Сергієм", "Дата фактичної виплати", "Статус", "Примітки"],
@@ -229,7 +275,7 @@ const spreadsheet = new MockSpreadsheet("1yp15H3YJGkqI4Rx89G4QZHkD9m67gnWh58TsTT
     [formula("ПРИКЛАД-001", "=A2"), formula("Приклад", "=B2"), formula(5, "=SUMIF(X)"), formula(1, "=SUMIF(X)"), formula(1, "=SUMIF(X)"), formula(1, "=SUMIF(X)"), formula(2, "=X")],
     [formula("BR-CHARM-001", "=A3"), formula("Брелок Чармандер", "=B3"), formula(36, "=SUMIF(X)"), formula(0, "=SUMIF(X)"), formula(2, "=SUMIF(X)"), formula(0, "=SUMIF(X)"), formula(34, "=X")],
   ]),
-  new MockSheet("Аналітика", [["SKU", "Назва", "Собівартість Сергія, грн"]]),
+  new MockSheet("Аналітика", [["Маржа-калькулятор по SKU (цінові сценарії, формула 50/50 після повернення собівартості)"], [], legacyAnalyticsHeaders]),
 ]);
 
 const properties = {
@@ -269,6 +315,10 @@ const context = {
 };
 vm.createContext(context);
 vm.runInContext(code, context, { filename: "Code.gs" });
+const sharedPrintTimeContext = vm.createContext({ Number, Object, String, RegExp, globalThis: {} });
+vm.runInContext(sharedPrintTimeCode, sharedPrintTimeContext, { filename: "print-time.js" });
+const sharedPrintTime = sharedPrintTimeContext.globalThis.BoosterPrintTime;
+assert.ok(sharedPrintTime, "shared print-time parser must load");
 
 const owner = { role: "owner", identity: "dashboard" };
 const serhiy = { role: "serhiy", identity: "serhiy" };
@@ -288,7 +338,10 @@ assert.deepEqual(spreadsheet.getSheetByName("Номенклатура").getRange
 assert.deepEqual(spreadsheet.getSheetByName("Номенклатура").getRange("H3:J3").getValues()[0], ["", "", ""]);
 assert.match(spreadsheet.getSheetByName("Номенклатура").getRange("K3").getFormula(), /'Налаштування'!\$B\$2/);
 assert.doesNotMatch(spreadsheet.getSheetByName("Номенклатура").getRange("K3").getFormula(), /O3/);
+assert.doesNotMatch(spreadsheet.getSheetByName("Номенклатура").getRange("K3").getFormula(), /N3/);
 assert.equal(spreadsheet.getSheetByName("Налаштування").getRange("B2").getValue(), 0.17);
+assert.deepEqual(spreadsheet.getSheetByName("Налаштування").getRange("A5:C5").getValues()[0], ["Планований брак, частка", 0.1, "частка (0.1 = 10%)"]);
+assert.equal(spreadsheet.getSheetByName("Налаштування").getRange("B5").getFontColors()[0][0], "#0000ff");
 assert.equal(spreadsheet.getSheetByName("Фурнітура_довідник").getRange("A1").getValue(), "Назва фурнітури");
 assert.equal(spreadsheet.getSheetByName("Друк-лог").getRange("E1").getValue(), "Брак, шт");
 assert.equal(spreadsheet.getSheetByName("Друк-лог").getRange("J3").getValue(), "Активний");
@@ -297,10 +350,14 @@ assert.match(archiveAwareFormula, /<>Архів/);
 assert.match(archiveAwareFormula, /;/);
 assert.doesNotMatch(archiveAwareFormula, /,/);
 assert.equal(spreadsheet.getSheetByName("_Аудит_API").isSheetHidden(), true);
+spreadsheet.getSheetByName("Налаштування").getRange("B2").setValue(0.15);
 spreadsheet.getSheetByName("Налаштування").getRange("B3").setValue(5);
+spreadsheet.getSheetByName("Налаштування").getRange("B5").setValue(0.07);
 const secondSetup = context.setup3dpApi();
 assert.equal(secondSetup.already_applied, true);
+assert.equal(spreadsheet.getSheetByName("Налаштування").getRange("B2").getValue(), 0.15);
 assert.equal(spreadsheet.getSheetByName("Налаштування").getRange("B3").getValue(), 5);
+assert.equal(spreadsheet.getSheetByName("Налаштування").getRange("B5").getValue(), 0.07);
 
 spreadsheet.getSheetByName("Наявність").getRange("C3").setFormula('=IF(A3="","",SUMIFS(X,Y))');
 const repairResult = context.repair3dpAvailabilityFormulas();
@@ -333,6 +390,9 @@ const saleAppend = context.appendRowAction3dp_(spreadsheet, {
 }, owner);
 assert.equal(saleAppend.row, 4);
 assert.equal(spreadsheet.getSheetByName("Продажі").getRange("T4").getValue(), 77);
+spreadsheet.getSheetByName("Продажі").getRange("I4").setFormula(context.salesMarginFormula3dp_(4, false));
+spreadsheet.getSheetByName("Продажі").getRange("K4").setFormula(context.salesSerhiyAccrualFormula3dp_(4, false));
+spreadsheet.getSheetByName("Продажі").getRange("L4").setFormula(context.salesBoosterIncomeFormula3dp_(4, false));
 expectCode("T_NOT_EMPTY", () => context.handlePost3dp_({ action: "3dp_setup_3dp010" }, owner));
 expectCode("COLUMN_NOT_ALLOWED", () => context.writeAction3dp_(spreadsheet, {
   sheet: "Продажі", sku_or_row: 4, column: "T", value: 78, expected_current: 77,
@@ -342,16 +402,214 @@ expectCode("CRM_ROW_REQUIRED", () => context.appendRowAction3dp_(spreadsheet, {
   values: { A: "2026-08-03", B: "BR-CHARM-001", D: 1, E: 62, G: 0, M: "Сайт", N: "OC-3DP-2" },
 }, owner));
 
+const nomenclatureForFormulaGenerations = spreadsheet.getSheetByName("Номенклатура");
+const costFormulaGenerations = [
+  context.nomenclatureFinalCostFormula3dp_(3, true, false),
+  context.nomenclatureFinalCostFormula3dp_(3, false, false),
+  context.nomenclatureFinalCostFormula3dp_(3, false, true),
+];
+costFormulaGenerations.forEach((formulaGeneration) => {
+  nomenclatureForFormulaGenerations.getRange("K3").setFormula(formulaGeneration);
+  assert.equal(context.preview3dp015().ok, true);
+});
+const setup015Preview = context.preview3dp015();
+assert.equal(setup015Preview.ok, true);
+const setup015 = context.handlePost3dp_({ action: "3dp_setup_3dp015" }, owner);
+assert.equal(setup015.ok, true);
+assert.equal(setup015.already_applied, false);
+assert.equal(spreadsheet.getSheetByName("Номенклатура").getRange("N1").getValue(), "Фурнітура (ціна-довідка), грн/шт");
+assert.deepEqual(spreadsheet.getSheetByName("Номенклатура").getRange("Q1:S1").getValues()[0], [
+  "РРЦ фактична, грн", "Ціна під викуп, грн", "Посилання на модель",
+]);
+assert.doesNotMatch(spreadsheet.getSheetByName("Номенклатура").getRange("K3").getFormula(), /N3/);
+assert.match(spreadsheet.getSheetByName("Номенклатура").getRange("K3").getFormula(), /\)\*\(1\+'Налаштування'!\$B\$5\)/);
+assert.deepEqual(spreadsheet.getSheetByName("Продажі").getRange("U1:W1").getValues()[0], [
+  "РРЦ на момент продажу, грн", "Вартість фурнітури за од., грн (заморожена)", "Платник фурнітури",
+]);
+assert.match(spreadsheet.getSheetByName("Продажі").getRange("I3").getFormula(), /IF\(W3="власник";V3;0\)/);
+assert.match(spreadsheet.getSheetByName("Продажі").getRange("K3").getFormula(), /IF\(W3="Сергій";V3;0\)/);
+assert.match(spreadsheet.getSheetByName("Продажі").getRange("L3").getFormula(), /IF\(W3="Сергій";V3;0\)/);
+assert.deepEqual(spreadsheet.getSheetByName("Аналітика").getRange("A3:N3").getValues()[0], [
+  "SKU", "Назва", "Собівартість Сергія, грн", "Витрати BoosterShop (фурнітура), грн", "Час друку, год", "% прибутку Сергію",
+  "РРЦ фактична", "РРЦ рекомендована", "Маржа BoosterShop, грн", "Маржа BoosterShop, %", "Нараховано Сергію, грн",
+  "Прибуток Сергію/год друку, грн", "", "",
+]);
+assert.match(spreadsheet.getSheetByName("Аналітика").getRange("A4").getFormula(), /Номенклатура'!A3/);
+assert.match(spreadsheet.getSheetByName("Аналітика").getRange("H4").getFormula(), /pending/);
+const analytics = spreadsheet.getSheetByName("Аналітика");
+analytics.getRange("A18").setValue("market-reference sentinel");
+assert.equal(analytics.getRange("D3").getNote().includes("Номенклатура!N"), true);
+assert.match(analytics.getRange("I4").getFormula(), /\(G4-C4-N\(D4\)\)\*\(1-F4\)/);
+assert.match(analytics.getRange("J4").getFormula(), /I4\/G4/);
+assert.match(analytics.getRange("K4").getFormula(), /C4\+F4\*\(G4-C4-N\(D4\)\)/);
+assert.doesNotMatch(analytics.getRange("K4").getFormula(), /F4\*I4/);
+assert.match(analytics.getRange("I4").getFormula(), /<0;"збиток"/);
+assert.match(analytics.getRange("K4").getFormula(), /<0;"збиток"/);
+const analyticsHandCheck = { rrp: 99, cost: 12.5, fixture: 4, ownerShare: 0.5 };
+const analyticsBaseMargin = analyticsHandCheck.rrp - analyticsHandCheck.cost - analyticsHandCheck.fixture;
+const analyticsOwnerMargin = analyticsBaseMargin * (1 - analyticsHandCheck.ownerShare);
+const analyticsSerhiyAccrual = analyticsHandCheck.cost + analyticsHandCheck.ownerShare * analyticsBaseMargin;
+assert.equal(analyticsOwnerMargin, 41.25);
+assert.equal(analyticsSerhiyAccrual, 53.75);
+assert.equal(analyticsOwnerMargin + analyticsSerhiyAccrual, 95);
+const dittoBaseCost = 27.64 / 1000 * 900 + 1.39 * 0.15 * 4.32 + 1.39 * 12;
+const rounded = (value) => Math.round((value + Number.EPSILON) * 100) / 100;
+assert.equal(rounded(dittoBaseCost), 42.46);
+assert.equal(rounded(dittoBaseCost * (1 + 0)), 42.46);
+assert.equal(rounded(dittoBaseCost * (1 + 0.1)).toFixed(2), "46.70");
+const auditRowsAfterInitial015 = spreadsheet.getSheetByName("_Аудит_API").getLastRow();
+analytics.getRange("F4").setValue(0.6);
+assert.equal(context.handlePost3dp_({ action: "3dp_setup_3dp015" }, owner).already_applied, true);
+assert.equal(analytics.getRange("F4").getValue(), 0.6);
+assert.equal(spreadsheet.getSheetByName("_Аудит_API").getLastRow(), auditRowsAfterInitial015);
+
+const printTimeVectors = [
+  ["1:39", { ok: true, blank: false, kind: "clock", hours: 1.65 }],
+  ["25:30", { ok: true, blank: false, kind: "clock", hours: 25.5 }],
+  ["1 год 39 хв", { ok: true, blank: false, kind: "words", hours: 1.65 }],
+  ["1год39хв", { ok: true, blank: false, kind: "words", hours: 1.65 }],
+  ["1h39m", { ok: true, blank: false, kind: "words", hours: 1.65 }],
+  ["1,65", { ok: true, blank: false, kind: "decimal", hours: 1.65 }],
+  ["1.65", { ok: true, blank: false, kind: "decimal", hours: 1.65 }],
+  ["", { ok: true, blank: true, kind: "blank", hours: null }],
+  ["1:60", { ok: false, blank: false, kind: "invalid" }],
+  ["nonsense", { ok: false, blank: false, kind: "invalid" }],
+];
+printTimeVectors.forEach(([input, expected]) => {
+  const appsScriptResult = context.parsePrintTime3dp_(input);
+  const sharedResult = sharedPrintTime.parse(input);
+  Object.entries(expected).forEach(([key, value]) => assert.equal(appsScriptResult[key], value, `Apps Script ${input} ${key}`));
+  assert.equal(JSON.stringify(appsScriptResult), JSON.stringify(sharedResult), `Apps Script mirror must match shared parser for ${input}`);
+});
+assert.equal(sharedPrintTime.display(1.65), "1,65 год (1 год 39 хв)");
+assert.match(sharedPrintTime.warning(0.001), /Незвичний час/);
+assert.equal(sharedPrintTime.warning(1.65), "");
+
+const nomenclature024 = spreadsheet.getSheetByName("Номенклатура");
+const sales024 = spreadsheet.getSheetByName("Продажі");
+nomenclature024.getRange("K2").clearContent();
+sales024.getRange("I2").clearContent();
+sales024.getRange("K2").clearContent();
+sales024.getRange("L2").clearContent();
+assert.equal(context.preview3dp015().ok, true, "blank approved formula cells must not reject validation");
+const setup024 = context.handlePost3dp_({ action: "3dp_setup_3dp024" }, owner);
+assert.equal(setup024.ok, true);
+assert.equal(setup024.already_applied, false);
+assert.match(nomenclature024.getRange("K2").getFormula(), /Налаштування'!\$B\$5/);
+assert.match(sales024.getRange("I2").getFormula(), /IF\(W2="власник";V2;0\)/);
+assert.match(sales024.getRange("K2").getFormula(), /IF\(W2="Сергій";V2;0\)/);
+assert.match(sales024.getRange("L2").getFormula(), /IF\(W2="Сергій";V2;0\)/);
+assert.match(nomenclature024.getRange("G1").getNote(), /Вводьте десяткові години/);
+assert.match(spreadsheet.getSheetByName("Друк-лог").getRange("D1").getNote(), /Вводьте десяткові години/);
+assert.equal(analytics.getRange("A1").getValue(), "Маржа-калькулятор по SKU (фактична РРЦ, формула 50/50 після повернення собівартості)");
+assert.equal(analytics.getRange("A18").getValue(), "market-reference sentinel");
+assert.match(JSON.stringify(setup024.changes), /planned defect-rate uplift/);
+assert.equal(context.handlePost3dp_({ action: "3dp_setup_3dp024" }, owner).already_applied, true);
+expectCode("FORBIDDEN", () => context.handlePost3dp_({ action: "3dp_setup_3dp024" }, serhiy));
+
+const timeCell = nomenclature024.getRange("G3");
+timeCell.setValue(0.06875).setNumberFormat("h:mm");
+timeCell.cells()[0][0].displayValue = "1:39";
+context.onEdit({ range: timeCell, value: "1:39" });
+assert.equal(timeCell.getValue(), 1.65);
+assert.equal(timeCell.getNumberFormat(), "0.##########");
+assert.equal(timeCell.getNote(), "");
+timeCell.setValue("1,65");
+context.onEdit({ range: timeCell, value: "1,65" });
+assert.equal(timeCell.getValue(), 1.65);
+const printLogTimeCell = spreadsheet.getSheetByName("Друк-лог").getRange("D3");
+printLogTimeCell.setValue("1год39хв");
+context.onEdit({ range: printLogTimeCell, value: "1год39хв" });
+assert.equal(printLogTimeCell.getValue(), 1.65);
+printLogTimeCell.setValue("25:30");
+context.onEdit({ range: printLogTimeCell, value: "25:30" });
+assert.equal(printLogTimeCell.getValue(), 25.5);
+printLogTimeCell.setValue(0.001);
+context.onEdit({ range: printLogTimeCell, value: "0.001" });
+assert.equal(printLogTimeCell.getValue(), 0.001);
+assert.match(printLogTimeCell.getNote(), /Незвичний час/);
+const unrelated = spreadsheet.getSheetByName("Продажі").getRange("D3");
+unrelated.setValue("1:39");
+context.onEdit({ range: unrelated, value: "1:39" });
+assert.equal(unrelated.getValue(), "1:39");
+const mixedPaste = nomenclature024.getRange(3, 6, 1, 2);
+mixedPaste.setValues([["unrelated", "1:39"]]);
+context.onEdit({ range: mixedPaste });
+assert.equal(mixedPaste.getCell(1, 1).getValue(), "unrelated");
+assert.equal(mixedPaste.getCell(1, 2).getValue(), 1.65);
+timeCell.setValue("");
+context.onEdit({ range: timeCell, value: "" });
+assert.equal(timeCell.getValue(), "");
+
+const nomenclature = spreadsheet.getSheetByName("Номенклатура");
+nomenclature.appendRow(["FIG-NEW-001", "Нова фігурка", "Pokemon", "Фігурка", "Продаж на сайті", "Підготовка", 1, 100, 1000, 800, "", "2026-08-08", "новий SKU", 2, "Активний", ""]);
+const addedNomenclatureRow = nomenclature.getLastRow();
+nomenclature.getRange(addedNomenclatureRow, 11).setFormula(context.nomenclatureFinalCostFormula3dp_(addedNomenclatureRow, false));
+const analyticsAddedSku = context.handlePost3dp_({ action: "3dp_setup_3dp015" }, owner);
+assert.equal(analyticsAddedSku.already_applied, false);
+assert.match(analytics.getRange("A5").getFormula(), /Номенклатура'!A4/);
+assert.equal(analytics.getRange("F4").getValue(), 0.6);
+assert.equal(analytics.getRange("F5").getValue(), 0.5);
+assert.equal(analytics.getRange("A18").getValue(), "market-reference sentinel");
+nomenclature.grid.splice(addedNomenclatureRow - 1, 1);
+const analyticsRemovedSku = context.handlePost3dp_({ action: "3dp_setup_3dp015" }, owner);
+assert.equal(analyticsRemovedSku.already_applied, false);
+assert.deepEqual(analytics.getRange("A5:N5").getValues()[0], Array(14).fill(""));
+assert.deepEqual(analytics.getRange("A5:N5").getFormulas()[0], Array(14).fill(""));
+assert.equal(analytics.getRange("A18").getValue(), "market-reference sentinel");
+
+for (let index = 0; index < 14; index += 1) {
+  nomenclature.appendRow(["FIG-GUARD-" + String(index).padStart(3, "0"), "Guard " + index, "Pokemon", "Фігурка", "Продаж на сайті", "Підготовка", 1, 100, 1000, 800, "", "2026-08-08", "guard", 0, "Активний", ""]);
+  const row = nomenclature.getLastRow();
+  nomenclature.getRange(row, 11).setFormula(context.nomenclatureFinalCostFormula3dp_(row, false));
+}
+const analyticsBeforeGuard = { values: analytics.getRange("A3:N17").getValues(), formulas: analytics.getRange("A3:N17").getFormulas() };
+const auditRowsBeforeGuard = spreadsheet.getSheetByName("_Аудит_API").getLastRow();
+expectCode("SETUP_ANCHOR_MISMATCH", () => context.handlePost3dp_({ action: "3dp_setup_3dp015" }, owner));
+assert.deepEqual(analytics.getRange("A3:N17").getValues(), analyticsBeforeGuard.values);
+assert.deepEqual(analytics.getRange("A3:N17").getFormulas(), analyticsBeforeGuard.formulas);
+assert.equal(spreadsheet.getSheetByName("_Аудит_API").getLastRow(), auditRowsBeforeGuard);
+nomenclature.grid.splice(3, 14);
+
+expectCode("FORBIDDEN", () => context.handlePost3dp_({ action: "3dp_setup_3dp015" }, serhiy));
+expectCode("COLUMN_NOT_ALLOWED", () => context.writeAction3dp_(spreadsheet, {
+  sheet: "Номенклатура", sku_or_row: "BR-CHARM-001", column: "Q", value: 75, expected_current: "",
+}, serhiy));
+expectCode("FROZEN_VALUES_REQUIRED", () => context.appendRowAction3dp_(spreadsheet, {
+  sheet: "Продажі", values: { A: "2026-08-03", B: "BR-CHARM-001", D: 1, E: 62, G: 0, M: "Сайт", N: "OC-3DP-3", T: 78 },
+}, owner));
+const frozenSaleAppend = context.appendRowAction3dp_(spreadsheet, {
+  sheet: "Продажі",
+  values: { A: "2026-08-03", B: "BR-CHARM-001", D: 1, E: 62, F: 6.8, G: 0, M: "Сайт", N: "OC-3DP-3", T: 78, U: 75, V: 3, W: "власник" },
+}, owner);
+assert.equal(frozenSaleAppend.row, 5);
+assert.equal(spreadsheet.getSheetByName("Продажі").getRange("F5").getValue(), 6.8);
+assert.equal(spreadsheet.getSheetByName("Продажі").getRange("U5:W5").getValues()[0].join('|'), "75|3|власник");
+
 expectCode("COLUMN_NOT_ALLOWED", () => context.writeAction3dp_(spreadsheet, {
   sheet: "Налаштування", sku_or_row: 2, column: "B", value: 0.2, expected_current: 0.17,
 }, serhiy));
+expectCode("COLUMN_NOT_ALLOWED", () => context.writeAction3dp_(spreadsheet, {
+  sheet: "Налаштування", sku_or_row: 5, column: "B", value: 0.2, expected_current: 0.07,
+}, serhiy));
 expectCode("ROW_NOT_ALLOWED", () => context.writeAction3dp_(spreadsheet, {
-  sheet: "Налаштування", sku_or_row: 5, column: "B", value: 0.2, expected_current: "",
+  sheet: "Налаштування", sku_or_row: 6, column: "B", value: 0.2, expected_current: "",
 }, owner));
 const settingsWrite = context.writeAction3dp_(spreadsheet, {
-  sheet: "Налаштування", sku_or_row: 2, column: "B", value: 0.2, expected_current: 0.17,
+  sheet: "Налаштування", sku_or_row: 2, column: "B", value: 0.2, expected_current: 0.15,
 }, owner);
 assert.equal(settingsWrite.new_value, 0.2);
+const frozenBeforeDefectRateChange = spreadsheet.getSheetByName("Продажі").getRange("F5:W5").getValues()[0];
+const defectRateZero = context.writeAction3dp_(spreadsheet, {
+  sheet: "Налаштування", sku_or_row: 5, column: "B", value: 0, expected_current: 0.07,
+}, owner);
+assert.equal(defectRateZero.new_value, 0);
+assert.deepEqual(spreadsheet.getSheetByName("Продажі").getRange("F5:W5").getValues()[0], frozenBeforeDefectRateChange);
+const defectRateUplift = context.writeAction3dp_(spreadsheet, {
+  sheet: "Налаштування", sku_or_row: 5, column: "B", value: 0.1, expected_current: 0,
+}, owner);
+assert.equal(defectRateUplift.new_value, 0.1);
+assert.deepEqual(spreadsheet.getSheetByName("Продажі").getRange("F5:W5").getValues()[0], frozenBeforeDefectRateChange);
 expectCode("SHEET_NOT_WRITABLE", () => context.appendRowAction3dp_(spreadsheet, {
   sheet: "Налаштування", values: { B: 0.3 },
 }, owner));
@@ -388,7 +646,7 @@ assert.equal(context.handlePost3dp_({
 assert.equal(context.overviewAction3dp_(spreadsheet).summary.sku_count, 1);
 assert.equal(context.overviewAction3dp_(spreadsheet).summary.available, 34);
 assert.equal(context.skusAction3dp_(spreadsheet).count, 1);
-assert.equal(context.tableAction3dp_(spreadsheet, "Продажі", { requireHeader: "SKU" }).count, 2);
+assert.equal(context.tableAction3dp_(spreadsheet, "Продажі", { requireHeader: "SKU" }).count, 3);
 assert.equal(context.tableAction3dp_(spreadsheet, "Маркетингові_плюшки", { requireHeader: "SKU" }).count, 1);
 assert.equal(context.tableAction3dp_(spreadsheet, "Виплати", { requireHeader: "Період (РРРР-ММ)" }).count, 1);
 assert.equal(context.handleGet3dp_({ action: "3dp_fixtures" }, owner).count, 0);

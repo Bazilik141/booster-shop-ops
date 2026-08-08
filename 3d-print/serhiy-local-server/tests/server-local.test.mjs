@@ -37,7 +37,7 @@ async function startFakeApi() {
       "Вага виробу за од., г": "",
       "Вага котушки, г": "",
       "Ціна котушки, грн": "",
-      "Фурнітура (ланцюжок/карабін), грн/шт": "",
+      "Фурнітура (ціна-довідка), грн/шт": "",
     },
     requests: [],
   };
@@ -78,7 +78,7 @@ async function startFakeApi() {
           H: "Вага виробу за од., г",
           I: "Вага котушки, г",
           J: "Ціна котушки, грн",
-          N: "Фурнітура (ланцюжок/карабін), грн/шт",
+          N: "Фурнітура (ціна-довідка), грн/шт",
         };
         assert.equal(body.expected_current, state.sku[byColumn[body.column]]);
         state.sku[byColumn[body.column]] = body.value;
@@ -151,7 +151,12 @@ test("local server consumes only the Serhiy API contract and persists final batc
 
   const page = await fetch(local.url);
   assert.equal(page.status, 200);
-  assert.match(await page.text(), /Чернетка зберігає п’ять введених значень/);
+  const pageHtml = await page.text();
+  assert.match(pageHtml, /Чернетка зберігає п’ять введених значень/);
+  assert.match(pageHtml, /data-print-time-input="total_print_time_h"/);
+  const sharedParser = await fetch(`${local.url}/print-time.js`);
+  assert.equal(sharedParser.status, 200);
+  assert.match(await sharedParser.text(), /BoosterPrintTime/);
 
   const bootstrap = await localJson(`${local.url}/api/bootstrap`);
   assert.equal(bootstrap.skus[0].SKU, "FIG-TEST-001");
@@ -168,7 +173,7 @@ test("local server consumes only the Serhiy API contract and persists final batc
     sku: "FIG-TEST-001",
     quantity: 36,
     total_weight_g: 180,
-    total_print_time_h: 18,
+    total_print_time_h: "18:00",
     spool_weight_g: 1000,
     spool_price_uah: 800,
   });
@@ -179,9 +184,10 @@ test("local server consumes only the Serhiy API contract and persists final batc
   assert.deepEqual(api.state.draft, saved.draft);
 
   const appended = await localJson(`${local.url}/api/print-log`, {
-    sku: "FIG-TEST-001", date: "2026-08-02", printed_quantity: 2, actual_time_hours: 1, actual_material_g: 10, defects: 0, printer: "Сергій", notes: "test",
+    sku: "FIG-TEST-001", date: "2026-08-02", printed_quantity: 2, actual_time_hours: "1 год 39 хв", actual_material_g: 10, defects: 0, printer: "Сергій", notes: "test",
   });
   assert.equal(appended.row, 8);
+  assert.equal(api.state.requests.find((item) => item.action === "3dp_append_row").body.values.D, 1.65);
   await localJson(`${local.url}/api/defect`, { row: 7, defects: 1, expected_current: 0 });
 
   const actions = api.state.requests.map((item) => item.action);
