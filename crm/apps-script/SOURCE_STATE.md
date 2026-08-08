@@ -8,18 +8,39 @@ new Web App version.
 | Field | Value |
 |---|---|
 | Mirror file | `crm/apps-script/Code.gs` |
-| Pulled from live | **2026-08-08, 11:41 Kyiv** (owner export `CodeJS - CRM.txt`) |
-| Lines / bytes | 4104 / 242470 (LF-normalised from the CRLF export) |
-| Deployed Web App version at pull time | **V89 (owner-reported 2026-08-04)** — not independently verifiable from source |
+| Baseline pulled from live | 2026-08-08, 11:41 Kyiv (owner export `CodeJS - CRM.txt`) |
+| **Mirror content deployed to live** | **2026-08-08, owner-reported** — owner pasted this exact file into the bound CRM project and published a new Web App version |
+| Deployed Web App version number | **V92, published 2026-08-08 15:23 Kyiv** (owner-reported). Previous known was V89 (2026-08-04) |
+| Live-verified after deploy | **Yes.** `3D-P-014` owner QA on 2026-08-08 produced four correct journal outcomes through the live Web App (`apiAddSale_` create, `apiUpdateSale_` create-on-update, `apiUpdateSale_` noop, `skipped_no_3dp_sku`), and `3D-P-022` was proven by `ACC-3D-DITTO-410` syncing end to end |
 | Local syntax check | `node --check` passed 2026-08-08 |
 | Previous repo copy | `Booster Shop CRM - Apps_Script_код 29.07.2026.csv` (2026-07-29, pre-V87/V89) — superseded, keep for history only |
 
-## Local pending change
+## Mirror status
 
-`Code.gs` now contains prepared local **3D-P-014 rev 2** journal work and the **3D-P-022**
-SKU-trigger alignment. This file is not deployment proof: after the owner pastes it into the bound
-CRM Apps Script project and publishes a new Web App version, export `Code.gs` again and record the
-version above. Do not claim byte-identical CRM mirror status before that refresh.
+**Local pending changes: 3D-P-010 WP4 and 3D-P-023.** The V92 mirror remains the high-confidence live baseline.
+This local `Code.gs` adds one call from `updateSaleStatus()` to the existing
+`sync3dpPackagingCost_(sales, order, rows, 'updateSaleStatus')` wrapper after cache invalidation
+and before the form is cleared. It also formats existing date-valued journal timestamps as Kyiv text
+in `apiSyncJournal_`, without changing the underlying Sheet cell type. It is not deployment proof:
+after the owner publishes a new CRM Web App version, export `Code.gs` again and record that version above.
+
+Timeline that ties the prior baseline to the deployment: **V92 published 15:23**, first QA journal
+entry **15:47** — so every 2026-08-08 QA result in `3D-P-014` and `3D-P-022` was produced by V92.
+
+One caveat before the next task treats the replacement deployment as proof: byte-identity will need
+a post-deploy export. The V92 identity itself was inferred from the owner pasting the prior file
+wholesale, so it is high-confidence rather than independently proven.
+
+## Companion mirror — 3D-P Apps Script
+
+| Field | Value |
+|---|---|
+| Mirror file | `3d-print/apps-script-3dp-api/Code.gs` |
+| Verified against live | 2026-08-08 — owner export byte-identical apart from CRLF line endings |
+| Deployed Web App version | **V7, published 2026-08-03 20:55 Kyiv** (owner-reported) |
+
+The 3D-P script has not changed since V7 and needed no change for `3D-P-014` or `3D-P-022`; both
+landed entirely on the CRM side.
 
 ## Rule (OPS-CODEMIRROR)
 

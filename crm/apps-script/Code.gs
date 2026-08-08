@@ -575,7 +575,7 @@ if (packagingChanged) { sales.getRange(row, 16).setValue(packagingAllocations[in
 if (shopDelivery !== null) sales.getRange(row, 20).setValue(deliveryAllocations[index]);
 if (!isBlank_(note)) appendCellText_(sales.getRange(row, 27), note); fixSaleCostForRow_(ss, row, costRunState, { clearPending: false });
 });
-invalidateDoGetCache_(); clearSaleUpdateForm();
+invalidateDoGetCache_(); sync3dpPackagingCost_(sales, order, rows, 'updateSaleStatus'); clearSaleUpdateForm();
 SpreadsheetApp.getUi().alert('Продаж оновлено: ' + order + ' / рядків: ' + rows.length);
 }
 
@@ -718,7 +718,7 @@ const firstRow = sheet.getLastRow() - count + 1;
 const values = sheet.getRange(firstRow, 1, count, CRM_3DP_SYNC_JOURNAL_HEADERS_.length).getValues();
 const rows = values.reverse().map(function (row, index) {
 return {
-timestamp_kyiv: row[0],
+    timestamp_kyiv: crm3dpJournalTimestampKyiv_(row[0]),
 source: row[1],
 order_id: row[2],
 crm_row: row[3],
@@ -822,6 +822,13 @@ const CRM_3DP_SYNC_JOURNAL_HEADERS_ = ['timestamp_kyiv', 'source', 'order_id', '
 const CRM_3DP_SYNC_JOURNAL_ROW_CAP_ = 1000;
 const CRM_3DP_SYNC_JOURNAL_TIMEZONE_ = 'Europe/Kyiv';
 const CRM_3DP_SYNC_JOURNAL_DETAIL_MAX_LENGTH_ = 240;
+
+function crm3dpJournalTimestampKyiv_(value) {
+  if (Object.prototype.toString.call(value) === '[object Date]' && !isNaN(value.getTime())) {
+    return Utilities.formatDate(value, CRM_3DP_SYNC_JOURNAL_TIMEZONE_, 'yyyy-MM-dd HH:mm:ss');
+  }
+  return String(value || '').trim();
+}
 
 function is3dpPackagingSku_(value) {
   const sku = String(value || '').trim().toUpperCase();
