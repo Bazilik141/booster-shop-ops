@@ -14,6 +14,13 @@ new Web App version.
 | Local syntax check | `node --check` passed 2026-08-08 |
 | Previous repo copy | `Booster Shop CRM - Apps_Script_код 29.07.2026.csv` (2026-07-29, pre-V87/V89) — superseded, keep for history only |
 
+## Local pending change
+
+`Code.gs` now contains the prepared **3D-P-014 rev 2** CRM-local sync journal. It is
+not deployed: the live baseline remains the 2026-08-08 export above until the owner pastes this
+version into the bound CRM Apps Script project, publishes a new Web App version, and exports it
+again. Do not claim byte-identical CRM mirror status before that refresh.
+
 ## Rule (OPS-CODEMIRROR)
 
 1. Any task that reads, plans against, or patches either Apps Script project **checks the pull

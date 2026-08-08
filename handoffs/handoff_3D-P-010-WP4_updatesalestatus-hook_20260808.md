@@ -149,7 +149,15 @@ Before starting: create a named Google Sheets version of both the CRM and the 3D
    authorization context, not the Web App context — this is the one behaviour that cannot be
    proven locally. On the first menu run after deploy, expect a possible Google authorization
    prompt for external requests. Accept it and record whether it appeared.
-2. Update a real order containing `FIG-CHARM-001` through `Оновити_продаж`. Expect: a new row in
+2. Update a real order containing a **trigger-matching 3D-P SKU that exists in both the CRM
+   catalogue and the 3D-P `Номенклатура`** through `Оновити_продаж`.
+   ⚠ **Corrected 2026-08-08:** an earlier draft of this step named `FIG-CHARM-001`. Verified by a
+   read of the live CRM spreadsheet the same day: `FIG-CHARM-001` appears **zero** times in the CRM
+   catalogue — it never was there, which is exactly why it triggered `Недійсне значення` warnings
+   (Finding 10). Meanwhile `ACC-3D-DITTO-410` is in the CRM catalogue but fails the trigger regex
+   (`3D-P-022`) and is not yet in `Номенклатура`. **No SKU currently satisfies all three
+   conditions**, so `3D-P-022` must be fixed and one SKU registered on both sides before this step
+   is runnable. Expect: a new row in
    3D-P `Продажі` with `N` = order number and `T` = the CRM row number, `G` = packaging total,
    and one matching `_Коригування_наявності` entry with reason
    `auto: CRM order <id> row <row>`.
