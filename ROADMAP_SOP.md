@@ -278,6 +278,8 @@ NCRM-04 through NCRM-12 were renumbered/rescoped on 2026-07-11 under
 | 3D-P-020 | `3b56bf20-bdb4-8182-8982-e795fde4e9dd` | Added 2026-08-07: Track-2 cost must post to the main CRM Marketing expense line. Closes the 3D-P-004 ledger question |
 | 3D-P-021 | `3b56bf20-bdb4-8125-8e81-eb68f946b69a` | Added 2026-08-07: delete ПРИКЛАД-001 demo rows across 6 tabs and zero the FIG-CHARM-001 test stock, after a named Sheets version. Run before 3D-P-015 |
 
+| 3D-P-022 | `3b66bf20-bdb4-81b0-ad36-d2e9fb81cb52` | Added 2026-08-08 during 3D-P-014 owner QA: the deployed CRM trigger `is3dpPackagingSku_` expects `ACC-3D-` + three digits, but the canonical convention locked 2026-08-07 is `PREFIX-MNEMONIC-XYZ`. Every `ACC-3D-` SKU in the approved table fails the trigger; `BR-`/`FIG-` are unaffected |
+
 **Note 2026-08-07 (supersedes the 2026-08-03 note):** `3D-P-009` was never
 issued and has no Notion page. It is referenced only in
 `handoffs/handoff_3D-P-010_crm-packaging-cost-pull_20260802.md`. Decision: the

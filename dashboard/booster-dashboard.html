@@ -585,6 +585,7 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
     </div>
 
     <div id="threeDpZone-information" class="three-dp-zone">
+      <div class="section"><div class="section-header"><span class="section-title">Синхронізація з CRM</span><button class="btn-secondary" type="button" onclick="refreshThreeDpSyncJournal()">Оновити</button></div><div id="threeDpSyncJournal"></div></div>
       <div class="section"><div class="section-header"><span class="section-title">Потребує уваги</span></div><div id="threeDpAttention"></div></div>
       <div class="section"><div class="section-header"><span class="section-title">Зведення та аналітика</span></div><div id="threeDpInformationSummary"></div></div>
       <div class="section"><div class="section-header"><span class="section-title">Всі вироби</span><details class="three-dp-column-picker"><summary class="btn-secondary">Колонки</summary><div id="threeDpColumnPicker"></div></details></div><div id="threeDpInformationTable"></div></div>
@@ -736,6 +737,10 @@ const THREE_DP_SETTINGS = [
 ];
 const THREE_DP_COLUMNS = [['sku','SKU'],['name','Назва'],['type','Тип'],['status','Статус'],['availability','Наявність'],['cost','Собівартість Сергія'],['time','Час / од.'],['rrp','РРЦ фактична'],['recommended','РРЦ рекомендована'],['buyout','Ціна викупу Booster Shop']];
 const threeDpState = { skus: [], fixtures: [], settings: {}, analytics: [], sales: [], plyushky: [], payouts: [], overview: {} };
+threeDpState.syncJournal = [];
+threeDpState.syncJournalLoaded = false;
+threeDpState.syncJournalLoading = false;
+threeDpState.syncJournalError = '';
 let threeDpModelLinks = {};
 let threeDpInfoPrefs = {};
 try { threeDpModelLinks = JSON.parse(localStorage.getItem(THREE_DP_MODEL_LINKS_KEY) || '{}') || {}; } catch (e) {}
@@ -758,6 +763,27 @@ function threeDpMessage(message) { return '<div class="three-dp-message '+threeD
 function threeDpModel(sku) { return String(threeDpModelLinks[String(sku || '')] || ''); }
 function saveThreeDpModel(sku,value) { const key=String(sku || ''); if (!key) return; const next=String(value || '').trim(); if(next) threeDpModelLinks[key]=next; else delete threeDpModelLinks[key]; localStorage.setItem(THREE_DP_MODEL_LINKS_KEY,JSON.stringify(threeDpModelLinks)); }
 function threeDpStatusHtml(row) { const archived=threeDpStatus(row)==='Архів'; return '<span class="three-dp-status '+(archived?'archived':'active')+'">'+(archived?'Архів':'Активний')+'</span>'; }
+
+function threeDpSyncOutcomeHtml(outcome) {
+  const value=String(outcome || 'error');
+  const success=['created','updated','noop'].indexOf(value)!==-1;
+  return '<span class="'+(success?'chip':'issue-tag')+'">'+threeDpEsc(value)+'</span>';
+}
+function renderThreeDpSyncJournal() {
+  const target=document.getElementById('threeDpSyncJournal');if(!target)return;
+  if(!threeDpState.syncJournalLoaded && !threeDpState.syncJournalLoading && !threeDpState.syncJournalError) refreshThreeDpSyncJournal();
+  if(threeDpState.syncJournalLoading){target.innerHTML='<div class="three-dp-note">Завантаження журналу синхронізації…</div>';return;}
+  if(threeDpState.syncJournalError){target.innerHTML='<div class="three-dp-message error">Журнал недоступний: '+threeDpEsc(threeDpState.syncJournalError)+'</div>';return;}
+  const rows=threeDpState.syncJournal || [];
+  target.innerHTML=rows.length?'<div class="tbl-wrap"><table><tr><th>Час (Київ)</th><th>Джерело</th><th>Замовлення</th><th>CRM рядок</th><th>SKU</th><th>Результат</th><th>Деталь</th></tr>'+rows.map(function(row){return '<tr><td>'+threeDpEsc(row.timestamp_kyiv)+'</td><td>'+threeDpEsc(row.source)+'</td><td>'+threeDpEsc(row.order_id)+'</td><td>'+threeDpEsc(row.crm_row)+'</td><td>'+threeDpEsc(row.sku)+'</td><td>'+threeDpSyncOutcomeHtml(row.outcome)+'</td><td>'+threeDpEsc(row.detail)+'</td></tr>';}).join('')+'</table></div>':'<div class="three-dp-note">Записів ще немає: це означає, що хук синхронізації не запускався.</div>';
+}
+async function refreshThreeDpSyncJournal() {
+  if(threeDpState.syncJournalLoading)return;
+  threeDpState.syncJournalLoading=true;threeDpState.syncJournalError='';renderThreeDpSyncJournal();
+  try { const result=await call('sync_journal',{limit:20});threeDpState.syncJournal=result.rows || [];threeDpState.syncJournalLoaded=true; }
+  catch(e) { threeDpState.syncJournal=[];threeDpState.syncJournalError=e && e.message ? e.message : String(e); }
+  finally { threeDpState.syncJournalLoading=false;renderThreeDpSyncJournal(); }
+}
 
 function showThreeDpZone(zone) {
   if(['calculator','products','information'].indexOf(zone) < 0) return;
@@ -871,6 +897,7 @@ function setThreeDpInfo(key,value) { threeDpUi.info[key]=value;renderThreeDpInfo
 function sortThreeDpInfo(key) { if(threeDpUi.info.sort===key)threeDpUi.info.dir=threeDpUi.info.dir==='asc'?'desc':'asc';else{threeDpUi.info.sort=key;threeDpUi.info.dir=['availability','cost','time','rrp','buyout'].indexOf(key)!==-1?'desc':'asc';}renderThreeDpInformation(); }
 function toggleThreeDpColumn(key,checked) { threeDpUi.info.visible[key]=checked;localStorage.setItem(THREE_DP_INFO_PREFS_KEY,JSON.stringify({visible:threeDpUi.info.visible}));renderThreeDpInformation(); }
 function renderThreeDpInformation() {
+  renderThreeDpSyncJournal();
   const records=threeDpState.skus.map(threeDpInfoRecord);threeDpAttention(records);renderThreeDpSummary(records);
   const picker=document.getElementById('threeDpColumnPicker');if(picker)picker.innerHTML=THREE_DP_COLUMNS.map(function(c){return '<label><input type="checkbox" '+(threeDpVisible(c[0])?'checked':'')+' onchange="toggleThreeDpColumn(\''+c[0]+'\',this.checked)"> '+threeDpEsc(c[1])+'</label>';}).join('');
   const visible=THREE_DP_COLUMNS.filter(function(c){return threeDpVisible(c[0]);}),q=String(threeDpUi.info.search || '').trim().toLowerCase(),types=Array.from(new Set(records.map(function(r){return r.type;}).filter(function(x){return x && x!=='—';}))).sort();
@@ -2302,6 +2329,14 @@ const ROADMAP_TASKS = [
     simple: 'Дві помилки налаштування валідації в основній CRM: у випадному списку «Паковання» зʼявляється назва товару, а нові SKU дають попередження «Недійсне значення».',
     why: 'Обидві заважають нормально працювати з формою Оновити_продаж і повторюватимуться на кожному новому SKU.',
     warn: '2026-08-07: заведено з Finding 10 (diagnostics/3D-P_live-schema-audit_20260803.md, датовано 04.08). Це помилки КОНФІГУРАЦІЇ, не скрипта: source range валідації B12 перетинається з даними товарів. Попередження на SKU лише warning-only, значення все одно записуються, синхронізацію не блокує. НЕ складати з 3D-P-014/015 — інша система, інший радіус ураження.',
+    subtasks: []
+  },
+  {
+    id: '3D-P-022', title: 'Тригерний регекс SKU суперечить канонічній конвенції', status: 'todo', tool: 'Claude → executor', priority: 'High',
+    lastUpdated: '2026-08-08', blockedBy: [],
+    simple: 'Хук у CRM не розпізнає SKU виду ACC-3D-PKM-130, бо чекає три цифри одразу після ACC-3D-. Через це вся родина ACC-3D- ніколи не синхронізується в 3D-P.',
+    why: 'Регекс писався 02.08, а конвенція SKU затверджена 07.08 — їх ніхто не звірив. Кожен ACC-3D- SKU із затвердженої таблиці провалює тригер.',
+    warn: '2026-08-08, знайдено під час owner QA 3D-P-014. is3dpPackagingSku_ перевіряє /^(?:BR-[A-Z0-9][A-Z0-9-]*|FIG-[A-Z0-9][A-Z0-9-]*|ACC-3D-\\d{3}(?:-[A-Z0-9]+)*)$/. Гілка ACC-3D- чекає три цифри ОДРАЗУ після префікса (ACC-3D-410), а канонічна конвенція (plans/3D-P_sku-naming-convention_20260807.md) — це ПРЕФІКС-МНЕМОНІКА-XYZ, тобто ACC-3D-PKM-130. Прогнав регекс: ACC-3D-DITTO-410 і ВСІ ACC-3D- позиції із затвердженої таблиці (PKM-110/120/130/200/201/202/300...) НЕ проходять. BR- і FIG- ліберальні й працюють — саме тому FIG-CHARM-001 завжди синхронізувався. Наслідок: журнал 3D-P-014 покаже skipped_no_3dp_sku, що читається як «у замовленні немає 3D-товару», а не «форма SKU не підходить» — збій видно, але він вводить в оману. Варто додати окремий outcome skipped_sku_shape. Рішення: розширити гілку ACC-3D- під конвенцію АБО виводити тригер із конвенції; у будь-якому разі регекс і документ конвенції мають стати одним джерелом правди.',
     subtasks: []
   },
   {
