@@ -189,6 +189,7 @@ changes.
 | CRM-001 | `3876bf20-bdb4-81dc-987d-d119fff4d2e9` | — |
 | CRM-002 | `3876bf20-bdb4-8118-9fc7-d7e702832ec4` | — |
 | CRM-003 | `3ac6bf20-bdb4-81cb-a1f3-fb09f399c1e7` | Added 2026-07-29: BOOSTER_CRM_TOKEN rotation (hardcoded exposure found in dashboard.html + docs/index.html) |
+| OPS-CODEMIRROR | `3b66bf20-bdb4-81f8-8ccb-c58955892365` | Added and completed 2026-08-08: both Apps Script projects mirrored in the repository. `crm/apps-script/Code.gs` + `crm/apps-script/SOURCE_STATE.md` (pull 2026-08-08 11:41, owner-reported V89); `3d-print/apps-script-3dp-api/Code.gs` verified byte-identical to live. Rule in `AGENTS.md` → "Apps Script mirrors" |
 | CRM-004 | `3b56bf20-bdb4-812c-99a8-ceb7d3ee89fd` | Added 2026-08-07 from Finding 10 of `diagnostics/3D-P_live-schema-audit_20260803.md`: main-CRM data-validation defects (Паковання dropdown source range overlaps product data; new SKUs trip Недійсне значення). Configuration, not script. Must not be folded into 3D-P tasks |
 | TECH-005-DEEP | `3666bf20-bdb4-8175-a429-e48eb7d6ef2d` | — |
 | TECH-012 | `3666bf20-bdb4-812e-8975-df8827efdb16` | — |
@@ -273,7 +274,7 @@ NCRM-04 through NCRM-12 were renumbered/rescoped on 2026-07-11 under
 | 3D-P-016 | `3b56bf20-bdb4-8173-92ad-ca8a9a91d8e8` | Added 2026-08-07 from the gap audit (gap G5): break-even minimum price + discount control. Agreed in V1 §5.4-5.5, never built. Blocked by 3D-P-015 |
 | 3D-P-017 | `3b56bf20-bdb4-81e4-863e-f7cddaeb752e` | Added 2026-08-07 from the gap audit (gap G6): returns as a separate financial operation. Agreed in V1 §5.6, never built. Owner rule locked 2026-08-07 |
 | 3D-P-018 | `3b56bf20-bdb4-8103-99ff-cea734c92408` | Added 2026-08-07 from the gap audit (gap G9): Виробництво/Друк-лог zone in the owner dashboard. The API actions already exist and are unused |
-| 3D-P-019 | `3b56bf20-bdb4-81f6-8f8a-e4c5842ede7e` | Added 2026-08-07 on a new owner requirement: record who paid for each fixture (owner or Serhiy). Affects both tracks |
+| 3D-P-019 | `3b56bf20-bdb4-81f6-8f8a-e4c5842ede7e` | Added 2026-08-07 on a new owner requirement: record who paid for each fixture (owner or Serhiy). Affects both tracks. Design note 2026-08-08: `plans/3D-P-019_fixture-payer-model_20260808.md` — found that `Номенклатура!K` already folds the fixture price into Serhiy's production cost with no payer, so the schema half should ship inside 3D-P-015 rather than as a second migration |
 | 3D-P-020 | `3b56bf20-bdb4-8182-8982-e795fde4e9dd` | Added 2026-08-07: Track-2 cost must post to the main CRM Marketing expense line. Closes the 3D-P-004 ledger question |
 | 3D-P-021 | `3b56bf20-bdb4-8125-8e81-eb68f946b69a` | Added 2026-08-07: delete ПРИКЛАД-001 demo rows across 6 tabs and zero the FIG-CHARM-001 test stock, after a named Sheets version. Run before 3D-P-015 |
 

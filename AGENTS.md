@@ -161,6 +161,25 @@ Live state comes from owner's **cPanel backup drop**.
 - If a needed file is missing from backup, ask owner to run:
   `tar -czf booster-debug-files.tar.gz path/to/file1 path/to/file2`
 
+## Apps Script mirrors (OPS-CODEMIRROR, owner decision 2026-08-08)
+Both Apps Script projects are mirrored in the repository so an executor reads real code instead
+of guessing a deployed version. This rule exists because three consecutive `3D-P-010` attempts
+were planned against an assumed script version.
+
+- **Main CRM:** `crm/apps-script/Code.gs` — state recorded in `crm/apps-script/SOURCE_STATE.md`
+- **3D-P:** `3d-print/apps-script-3dp-api/Code.gs`
+
+Rules:
+1. Any task that reads, plans against, or patches either script **checks the pull date in
+   `SOURCE_STATE.md` first**. If the mirror is older than the change being planned, request a
+   fresh owner export before writing a handoff.
+2. Whoever changes a live script refreshes the mirror **in the same session**, including the pull
+   date and the deployed version.
+3. Source is not deployment. Editing a script does not update the published Web App; never infer
+   a deployed version number from source alone.
+4. A mirror must never contain tokens. Both projects keep secrets in Script Properties; if a token
+   appears in an export, stop and tell the owner rather than committing it.
+
 ## Risky zones — extra care + rollback + smoke test required
 checkout · payment · Hutko · Checkbox · fiscalization · Nova Poshta · order status ·
 Merchant feed · schema/JSON-LD · SEO (sitemap/robots/canonical/.htaccess) · CRM · DB
