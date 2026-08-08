@@ -280,6 +280,16 @@ NCRM-04 through NCRM-12 were renumbered/rescoped on 2026-07-11 under
 
 | 3D-P-022 | `3b66bf20-bdb4-81b0-ad36-d2e9fb81cb52` | Added 2026-08-08 during 3D-P-014 owner QA: the deployed CRM trigger `is3dpPackagingSku_` expects `ACC-3D-` + three digits, but the canonical convention locked 2026-08-07 is `PREFIX-MNEMONIC-XYZ`. Every `ACC-3D-` SKU in the approved table fails the trigger; `BR-`/`FIG-` are unaffected |
 
+| 3D-P-023 | `3b66bf20-bdb4-81da-8569-f1d54a8d94b1` | Added 2026-08-08 during 3D-P-014 QA: the sync-journal timestamp column is labelled Kyiv but renders UTC, because the written string is auto-parsed by Sheets into a Date. Cosmetic, low priority |
+
+**Closed 2026-08-08 after owner QA:** `3D-P-014` (CRM-local sync journal — four
+live cases passed; outage and not-configured cases skipped by owner choice and
+covered by mock tests only), `3D-P-022` (SKU trigger aligned with the canonical
+convention — `ACC-3D-DITTO-410` verified end to end), `3D-P-021` (demo-data
+cleanup — independently confirmed, zero `ПРИКЛАД-001` rows remain in the live
+workbook). **The CRM→3D-P sync worked for the first time on 2026-08-08** after
+three failed attempts.
+
 **Note 2026-08-07 (supersedes the 2026-08-03 note):** `3D-P-009` was never
 issued and has no Notion page. It is referenced only in
 `handoffs/handoff_3D-P-010_crm-packaging-cost-pull_20260802.md`. Decision: the

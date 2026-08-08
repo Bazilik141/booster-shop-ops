@@ -16,10 +16,10 @@ new Web App version.
 
 ## Local pending change
 
-`Code.gs` now contains the prepared **3D-P-014 rev 2** CRM-local sync journal. It is
-not deployed: the live baseline remains the 2026-08-08 export above until the owner pastes this
-version into the bound CRM Apps Script project, publishes a new Web App version, and exports it
-again. Do not claim byte-identical CRM mirror status before that refresh.
+`Code.gs` now contains prepared local **3D-P-014 rev 2** journal work and the **3D-P-022**
+SKU-trigger alignment. This file is not deployment proof: after the owner pastes it into the bound
+CRM Apps Script project and publishes a new Web App version, export `Code.gs` again and record the
+version above. Do not claim byte-identical CRM mirror status before that refresh.
 
 ## Rule (OPS-CODEMIRROR)
 

@@ -856,7 +856,7 @@ function renderThreeDpProducts() {
   const type=existing?row['Тип']:'';
   root.innerHTML='<div class="three-dp-toolbar"><label>Оберіть SKU<select onchange="threeDpSelectProduct(this.value)"><option value="">Новий виріб</option>'+options+'</select></label><button class="btn-secondary" type="button" onclick="threeDpNewProduct()">+ Новий SKU</button></div><div class="three-dp-product-form"><div class="three-dp-form-grid"><label>SKU'+(existing?'<span class="three-dp-readonly mono">'+threeDpEsc(row.SKU)+'</span>':'<input id="threeDpProductSku" placeholder="BR-... / FIG-... / ACC-3D-...">')+'</label><label>Назва виробу<input id="threeDpProductName" value="'+threeDpEsc(existing?row['Назва виробу']:'')+'"></label><label>Категорія / тип<select id="threeDpProductType"><option value="">Оберіть тип</option>'+['Брелок','Фігурка','Функціональний аксесуар'].map(function(x){return '<option value="'+threeDpEsc(x)+'"'+(x===type?' selected':'')+'>'+threeDpEsc(x)+'</option>';}).join('')+'</select></label><label>Посилання на модель (локальна чернетка)<input id="threeDpProductModel" type="url" placeholder="https://…" value="'+threeDpEsc(existing?threeDpModel(row.SKU):'')+'"></label><label>Примітки<textarea id="threeDpProductNotes">'+threeDpEsc(existing?row['Примітки']:'')+'</textarea></label><label>Час друку / од.<span class="three-dp-readonly">'+(existing?threeDpEsc(metrics.time)+' год':'—')+'</span></label><label>Собівартість Сергія<span class="three-dp-readonly">'+(existing?threeDpMoney(metrics.cost):'—')+'</span></label><label>РРЦ фактична<span class="three-dp-readonly">'+(existing && metrics.rrp!==''?threeDpMoney(metrics.rrp)+' · останній продаж':'—')+'</span></label><label>Ціна під викуп <span title="Це ціна, яку заплатить Booster Shop за придбання 1 шт виробу." style="cursor:help">?</span><span class="three-dp-readonly">'+(existing && metrics.buyout!==''?threeDpMoney(metrics.buyout)+' · останній запис журналу':'—')+'</span></label><label>Наявність (read-only)<span class="three-dp-readonly">'+(existing?threeDpEsc(metrics.availability)+' шт':'—')+'</span></label>' +(existing?'<label>API-статус<span class="three-dp-readonly">'+threeDpStatusHtml(row)+'</span></label>':'')+'</div><div class="form-actions" style="margin-top:14px"><button class="btn-primary" type="button" onclick="saveThreeDpProduct()">'+(existing?'Зберегти поля виробу':'Створити SKU')+'</button>' +(existing?'<button class="btn-secondary" type="button" onclick="toggleThreeDpArchive()">'+(archived?'Відновити SKU':'Архівувати SKU')+'</button>':'')+'</div><div class="three-dp-note">SKU після створення незмінний. Посилання на модель лишається browser-local: у live schema немає затвердженої колонки. РРЦ та ціна викупу відображаються лише з журналів — без фіктивного запису в Sheet.</div>'+threeDpMessage(threeDpUi.product.msg)+'</div>' +(existing?renderThreeDpStock(row,metrics,archived):'');
 }
-function threeDpSkuTypeError(sku,type) { const s=String(sku || '').trim().toUpperCase();if(!/^(BR-[A-Z0-9][A-Z0-9-]*|FIG-[A-Z0-9][A-Z0-9-]*|ACC-3D-\d{3,})$/.test(s))return 'SKU має відповідати BR-…, FIG-… або ACC-3D-….';if((s.indexOf('BR-')===0 && type!=='Брелок')||(s.indexOf('FIG-')===0 && type!=='Фігурка')||(s.indexOf('ACC-3D-')===0 && type!=='Функціональний аксесуар'))return 'Префікс SKU не відповідає обраному типу.';return ''; }
+function threeDpSkuTypeError(sku,type) { const s=String(sku || '').trim().toUpperCase();if(!/^(BR|FIG|ACC-3D)-[A-Z0-9]{2,5}-\d{3}$/.test(s))return 'SKU має форму BR-CHARM-001, FIG-CHARM-001 або ACC-3D-PKM-130.';if((s.indexOf('BR-')===0 && type!=='Брелок')||(s.indexOf('FIG-')===0 && type!=='Фігурка')||(s.indexOf('ACC-3D-')===0 && type!=='Функціональний аксесуар'))return 'Префікс SKU не відповідає обраному типу.';return ''; }
 async function saveThreeDpProduct() {
   const row=threeDpSku(threeDpUi.product.sku),name=String((threeDpInput('threeDpProductName') || {}).value || '').trim(),type=String((threeDpInput('threeDpProductType') || {}).value || '').trim(),notes=String((threeDpInput('threeDpProductNotes') || {}).value || '').trim(),model=String((threeDpInput('threeDpProductModel') || {}).value || '').trim();
   if(!name || !type){threeDpUi.product.msg={text:'Назва і тип є обов’язковими.',kind:'error'};renderThreeDpProducts();return;}
@@ -2252,7 +2252,7 @@ const ROADMAP_TASKS = [
     ]
   },
   {
-    id: '3D-P-014', title: 'Зробити збої синхронізації CRM → 3D-P видимими', status: 'active', tool: 'Codex / Claude Code', priority: 'High',
+    id: '3D-P-014', title: 'Зробити збої синхронізації CRM → 3D-P видимими', status: 'done', tool: 'Codex / Claude Code', priority: 'High',
     lastUpdated: '2026-08-08', blockedBy: [],
     simple: 'Довговічний журнал синхронізації у ОСНОВНІЙ CRM (прихована вкладка _Журнал_3DP_синхронізації), read-дія sync_journal у CRM API і панель у зоні «Інформація» дашборда.',
     why: 'Хук 3D-P-010 навмисно fail-open, але падає МОВЧКИ — пише лише в Logger.log, якого власник не бачить. Через це збій OC-FOP-0300 довелось діагностувати навздогад.',
@@ -2268,8 +2268,8 @@ const ROADMAP_TASKS = [
     subtasks: []
   },
   {
-    id: '3D-P-021', title: 'Чистка демо- та тестових даних у живій таблиці', status: 'todo', tool: 'Owner + Claude', priority: 'High',
-    lastUpdated: '2026-08-07', blockedBy: [],
+    id: '3D-P-021', title: 'Чистка демо- та тестових даних у живій таблиці', status: 'done', tool: 'Owner + Claude', priority: 'High',
+    lastUpdated: '2026-08-08', blockedBy: [],
     simple: 'Видалити рядки ПРИКЛАД-001 з усіх 6 вкладок і обнулити тестову наявність FIG-CHARM-001, попередньо зробивши іменовану версію таблиці як точку відкату.',
     why: 'Демо-рядки досі тягнуться в підсумки (Наявність 2 шт, Виплати 165 ₴), а FIG-CHARM-001 показує 3 шт наявності від смоук-тестів при 0 продажів. Поки це не прибрано, жодна цифра в таблиці й дашборді не є достовірною.',
     warn: '2026-08-07 РІШЕННЯ ВЛАСНИКА: чистити все. Спершу іменована версія Google Sheets як точка відкату, потім видалення. Корекція наявності — ТІЛЬКИ через ledger додатка #2, не прямою правкою клітинки, щоб зберігся аудит-слід. Робити до 3D-P-015.',
@@ -2332,11 +2332,19 @@ const ROADMAP_TASKS = [
     subtasks: []
   },
   {
-    id: '3D-P-022', title: 'Тригерний регекс SKU суперечить канонічній конвенції', status: 'active', tool: 'Codex', priority: 'High',
+    id: '3D-P-022', title: 'Тригерний регекс SKU суперечить канонічній конвенції', status: 'done', tool: 'Codex', priority: 'High',
     lastUpdated: '2026-08-08', blockedBy: [],
     simple: 'Хук у CRM не розпізнає SKU виду ACC-3D-PKM-130, бо чекає три цифри одразу після ACC-3D-. Через це вся родина ACC-3D- ніколи не синхронізується в 3D-P.',
     why: 'Регекс писався 02.08, а конвенція SKU затверджена 07.08 — їх ніхто не звірив. Кожен ACC-3D- SKU із затвердженої таблиці провалює тригер.',
     warn: '2026-08-08 ХЕНДОФ ГОТОВИЙ: handoffs/handoff_3D-P-022_sku-trigger-convention-alignment_20260808.md. ЦЕ ПЕРЕДУМОВА QA 3D-P-014, не фоллоу-ап — станом на 08.08 немає жодного SKU, який одночасно є в каталозі CRM, є в 3D-P Номенклатурі і проходить тригер. Знайдено ТРЕТЮ розбіжність: валідатор форми створення в дашборді (threeDpSkuTypeError) чекає ACC-3D-\\d{3,} без нічого після цифр, тому власник НЕ МОЖЕ завести ACC-3D-DITTO-410 навіть через дашборд. У 3D-P API валідації форми SKU немає взагалі — тобто точок контролю рівно дві. Рішення: тригер робимо ліберальним (^(?:BR|FIG|ACC-3D)-[A-Z0-9][A-Z0-9-]*$ — його задача не пропустити продаж, хибний негатив = тиха втрата даних), а форму створення в дашборді — строгою під канон (^(BR|FIG|ACC-3D)-[A-Z0-9]{2,5}-\\d{3}$ — її хибний позитив просто показує людині помилку). Плюс окремий outcome skipped_sku_shape. Нічого не перейменовуємо. || 2026-08-08, знайдено під час owner QA 3D-P-014. is3dpPackagingSku_ перевіряє /^(?:BR-[A-Z0-9][A-Z0-9-]*|FIG-[A-Z0-9][A-Z0-9-]*|ACC-3D-\\d{3}(?:-[A-Z0-9]+)*)$/. Гілка ACC-3D- чекає три цифри ОДРАЗУ після префікса (ACC-3D-410), а канонічна конвенція (plans/3D-P_sku-naming-convention_20260807.md) — це ПРЕФІКС-МНЕМОНІКА-XYZ, тобто ACC-3D-PKM-130. Прогнав регекс: ACC-3D-DITTO-410 і ВСІ ACC-3D- позиції із затвердженої таблиці (PKM-110/120/130/200/201/202/300...) НЕ проходять. BR- і FIG- ліберальні й працюють — саме тому FIG-CHARM-001 завжди синхронізувався. Наслідок: журнал 3D-P-014 покаже skipped_no_3dp_sku, що читається як «у замовленні немає 3D-товару», а не «форма SKU не підходить» — збій видно, але він вводить в оману. Варто додати окремий outcome skipped_sku_shape. Рішення: розширити гілку ACC-3D- під конвенцію АБО виводити тригер із конвенції; у будь-якому разі регекс і документ конвенції мають стати одним джерелом правди.',
+    subtasks: []
+  },
+  {
+    id: '3D-P-023', title: 'Час у журналі синхронізації показується в UTC замість Києва', status: 'todo', tool: 'Claude → executor', priority: 'Low',
+    lastUpdated: '2026-08-08', blockedBy: [],
+    simple: 'Колонка «Час (Київ)» у журналі синхронізації показує UTC — на три години менше. Самі часи правильні, кривий лише вигляд.',
+    why: 'Це діагностична панель. Час, який виглядає неправильно, коштуватиме часу під час наступного розбору інциденту.',
+    warn: '2026-08-08, знайдено під час owner QA 3D-P-014. Панель показує 2026-08-08T12:47:22.000Z замість 15:47 за Києвом. Причина: crm3dpJournalEntry_ пише відформатований київський рядок через Utilities.formatDate, але Google Sheets автоматично розпізнає його як дату і зберігає як справжнє значення дати, тому читання через API повертає Date, який серіалізується в ISO UTC. Варіанти виправлення: писати клітинку як звичайний текст (апостроф на початку або текстовий формат колонки) або форматувати значення на читанні в apiSyncJournal_. Дані не зіпсовані, пріоритет низький.',
     subtasks: []
   },
   {

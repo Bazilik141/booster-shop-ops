@@ -825,7 +825,11 @@ const CRM_3DP_SYNC_JOURNAL_DETAIL_MAX_LENGTH_ = 240;
 
 function is3dpPackagingSku_(value) {
   const sku = String(value || '').trim().toUpperCase();
-  return /^(?:BR-[A-Z0-9][A-Z0-9-]*|FIG-[A-Z0-9][A-Z0-9-]*|ACC-3D-\d{3}(?:-[A-Z0-9]+)*)$/.test(sku);
+  return /^(?:BR|FIG|ACC-3D)-[A-Z0-9][A-Z0-9-]*$/.test(sku);
+}
+
+function has3dpPackagingSkuPrefix_(value) {
+  return /^(?:BR|FIG|ACC-3D)-/.test(String(value || '').trim().toUpperCase());
 }
 
 function crm3dpNumber_(value) {
@@ -864,6 +868,7 @@ function crm3dpJournalDetail_(outcome, detail) {
     noop: 'The matching 3D-P sale was already synchronized.',
     skipped_invalid_qty: 'CRM quantity must be a positive whole number for stock sync.',
     skipped_no_3dp_sku: 'The CRM order contains no 3D-P SKU.',
+    skipped_sku_shape: 'A 3D-P SKU has a recognized prefix but an invalid shape.',
     skipped_not_configured: '3D-P sync URL or token is not configured.',
     skipped_schema: '3D-P sales schema is not ready.',
     skipped_api_error: '3D-P API is unavailable or rejected the request.',
@@ -1055,7 +1060,16 @@ function sync3dpSales_(sales, orderId, rowNumbers, source) {
   try {
     const crmRows = crm3dpOrderRows_(sales, rowNumbers);
     triggerRows = crmRows.filter(function (entry) { return is3dpPackagingSku_(entry.values[5]); });
+    const malformedSkuEntries = crmRows.filter(function (entry) {
+      return has3dpPackagingSkuPrefix_(entry.values[5]) && !is3dpPackagingSku_(entry.values[5]);
+    });
+    malformedSkuEntries.forEach(function (entry) {
+      const malformedSku = String(entry.values[5] || '').trim();
+      crm3dpLogSkip_(sales, journalSource, order, entry, 'skipped_sku_shape',
+        '3D-P SKU has an invalid shape: ' + malformedSku);
+    });
     if (!triggerRows.length) {
+      if (malformedSkuEntries.length) return { ok: true, skipped: 'sku_shape' };
       crm3dpLogSkip_(sales, journalSource, order, null, 'skipped_no_3dp_sku', 'no 3D-P SKU in CRM order');
       return { ok: true, skipped: 'no_3dp_sku' };
     }

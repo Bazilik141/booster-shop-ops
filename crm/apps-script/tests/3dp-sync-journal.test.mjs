@@ -100,7 +100,7 @@ function makeEnvironment(options = {}) {
       },
     },
   });
-  vm.runInContext(`${code}\nglobalThis.__test = { sync3dpSales_, sync3dpPackagingCost_, crm3dpAppendJournal_, crm3dpSanitizeJournalDetail_, apiSyncJournal_, doGet };`, context, { filename: codePath });
+  vm.runInContext(`${code}\nglobalThis.__test = { sync3dpSales_, sync3dpPackagingCost_, is3dpPackagingSku_, crm3dpAppendJournal_, crm3dpSanitizeJournalDetail_, apiSyncJournal_, doGet };`, context, { filename: codePath });
   return { context, spreadsheet, properties, remote, logs };
 }
 
@@ -110,6 +110,46 @@ assert.match(code, /function sync3dpPackagingCost_\(sales, orderId, rowNumbers\)
 const journalFunction = code.slice(code.indexOf("function crm3dpJournalEntry_"), code.indexOf("function crm3dpAppendJournal_"));
 assert.doesNotMatch(journalFunction, /SpreadsheetApp\.getActive/);
 assert.doesNotMatch(fs.readFileSync(path.resolve(here, "../../../3d-print/apps-script-3dp-api/Code.gs"), "utf8"), /sync_journal/);
+
+{
+  const env = makeEnvironment();
+  for (const sku of ['ACC-3D-DITTO-410', 'ACC-3D-PKM-130', 'ACC-3D-410', 'FIG-CHARM-001', 'BR-CHARM-100']) {
+    assert.equal(env.context.__test.is3dpPackagingSku_(sku), true, sku + ' must trigger 3D-P sync');
+  }
+  for (const sku of ['ACC-001', 'MBX-STD-001', 'ACC-3D-']) {
+    assert.equal(env.context.__test.is3dpPackagingSku_(sku), false, sku + ' must not trigger 3D-P sync');
+  }
+}
+
+{
+  const env = makeEnvironment();
+  const sales = new MockSales(env.spreadsheet, new Map([[3, saleRow('ACC-3D-DITTO-410')]]));
+  const result = env.context.__test.sync3dpSales_(sales, 'OC-FOP-ACC-001', [3], 'apiAddSale_');
+  assert.equal(result.ok, true);
+  assert.equal(result.created, 1);
+  assert.equal(journalRows(env.spreadsheet)[0][5], 'created');
+}
+
+{
+  const env = makeEnvironment();
+  const sales = new MockSales(env.spreadsheet, new Map([[3, saleRow('ACC-3D-')]]));
+  const result = env.context.__test.sync3dpSales_(sales, 'OC-FOP-SHAPE-001', [3], 'apiAddSale_');
+  assert.equal(result.skipped, 'sku_shape');
+  assert.equal(journalRows(env.spreadsheet)[0][4], 'ACC-3D-');
+  assert.equal(journalRows(env.spreadsheet)[0][5], 'skipped_sku_shape');
+  assert.match(journalRows(env.spreadsheet)[0][6], /ACC-3D-/);
+}
+
+{
+  const env = makeEnvironment();
+  const sales = new MockSales(env.spreadsheet, new Map([
+    [3, saleRow('ACC-3D-')],
+    [4, saleRow('ACC-3D-DITTO-410')],
+  ]));
+  const result = env.context.__test.sync3dpSales_(sales, 'OC-FOP-MIXED-001', [3, 4], 'apiAddSale_');
+  assert.equal(result.created, 1);
+  assert.deepEqual(journalRows(env.spreadsheet).map((row) => row[5]), ['skipped_sku_shape', 'created']);
+}
 
 {
   const env = makeEnvironment();
