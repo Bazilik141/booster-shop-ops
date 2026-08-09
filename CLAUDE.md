@@ -125,14 +125,24 @@ properties or status. The repository-root `auto_review.py` is legacy.
 
 ## Status synchronization
 
+`ROADMAP_SOP.md` is canonical for writer ownership; this section follows it.
+
 - Notion task status is canonical; `ROADMAP_FLOW` is its dashboard mirror.
 - Claude (chat) is the default writer of Booster Notion task properties and
-  status. Neither Codex nor Claude Code writes Notion.
+  status, **including `Done`**. The owner authorizes closure per the Definition
+  of Done; Claude performs the write. Claude never decides closure itself.
+  Neither Codex nor Claude Code writes Notion.
 - The assigned patch executor — Codex or Claude Code — writes required
-  `ROADMAP_FLOW` changes only within an authorized roadmap-affecting
-  implementation.
-- Do not update both systems as a single writer unless the owner explicitly
-  reassigns that exact action.
+  `ROADMAP_FLOW` changes within an authorized roadmap-affecting implementation.
+- **Claude (chat) also writes `ROADMAP_FLOW`, narrowly.** Whoever creates a
+  Notion roadmap row creates its `ROADMAP_FLOW` row in the same session
+  (`AGENTS.md`, 2026-08-06) — a creation is not complete until both exist. This
+  supersedes the former blanket "do not update both systems" wording, which
+  caused four tasks created on 2026-08-06 to be missing from the dashboard.
+- The grant stops there. For a status change on a **pre-existing** row, update
+  Notion, state the required `ROADMAP_FLOW` change, and hand it off rather than
+  becoming a second writer — unless the owner reassigns that exact action.
+  Check the dashboard's latest diff before any edit.
 - If the required writer is unavailable, stop and hand off instead of creating
   competing state.
 

@@ -180,6 +180,19 @@ Rules:
 4. A mirror must never contain tokens. Both projects keep secrets in Script Properties; if a token
    appears in an export, stop and tell the owner rather than committing it.
 
+## CRM integrity check (OPS-CRMINTEGRITY, owner decision 2026-08-09)
+
+Any change that alters main-CRM sheet structure, adds or removes a row in
+`Товари`, `РРЦ`, `Розхідники`, or `Майстер_Товарів`, or edits a formula column must:
+
+1. run the read-only dashboard **CRM integrity check** before the change and record its bounded output;
+2. never write a literal over a formula column;
+3. run the same check after the change and include its bounded output in the diagnostic;
+4. treat any new problem code as a defect of that change, not as pre-existing noise.
+
+The check runs inside Apps Script and returns a capped problem list; it must not stream sheet
+contents to an agent. Its companion runbook is `docs/CRM-new-SKU-runbook.md`.
+
 ## Risky zones — extra care + rollback + smoke test required
 checkout · payment · Hutko · Checkbox · fiscalization · Nova Poshta · order status ·
 Merchant feed · schema/JSON-LD · SEO (sitemap/robots/canonical/.htaccess) · CRM · DB
@@ -256,3 +269,105 @@ how unrelated code gets overwritten — this has already happened once on CRM an
 
 ## Owner sync helpers
 `bspush` / `bsmain` / `bsreview` — PowerShell commit/push helpers
+
+## Claude runtime values
+
+Values Claude's skills look up before producing a runbook, an audit, or a plan.
+Filled rows are resolved from this file; `TBD` rows are genuinely unknown — an
+honest gap is safe, a guessed value is not.
+
+Read by: `bs-deploy-verify`, `bs-seo-audit`, `bs-competitor-watch`,
+`bs-email-sequence`, `bs-campaign-plan`, `bs-keyword-map`.
+
+**Never put passwords, API keys, tokens, or merchant credentials here.** Paths
+and public URLs only. If a value cannot be recorded without exposing a secret,
+write `owner-held`.
+
+### Production
+
+| Value | Setting |
+|---|---|
+| Base URL | `https://boostershop.website` |
+| Product lines | MTG · Pokemon · One Piece · Yu-Gi-Oh · 3D-printed |
+| Web root on server | `~/public_html` |
+| Deploy command | `php <filename>` in `~/public_html`, run by the owner |
+| Staging / test environment | none — patches execute directly on production |
+| Server access for Claude | none — live state only via owner's cPanel backup drop |
+
+### Backup and rollback
+
+| Value | Setting |
+|---|---|
+| File backup | automatic, by the patch runner, to `_patch_backups/<patch>-<ts>/` before any write (convention C3) |
+| Syntax safety net | `php -l` after write, restore-on-fail (convention C4) |
+| Repeat run | `already_applied=yes` marker (convention C5) |
+| Patch lifecycle | self-deletes after success (C7) — re-running requires re-upload |
+| DB backup | **not covered by C3.** Separate dump required before any DB-touching patch — method `TBD` |
+| DB rollback | rollback SQL in the patch header (convention C6) |
+| Live-state source | newest `backup-*.tar.gz` from the owner's cPanel drop, by filename timestamp |
+
+A logically wrong but syntactically valid write passes C4, reports success and
+self-deletes. That failure class is what post-deploy Tier 1 checks exist for.
+
+### Tier 1 smoke URLs
+
+Checked after every deploy, regardless of how small the patch looked.
+
+| Page | URL |
+|---|---|
+| Home | `https://boostershop.website` |
+| Category — representative | `TBD` |
+| Product — sealed TCG | `TBD` |
+| Product — 3D-printed | `TBD` |
+| Cart | `TBD` |
+| Checkout entry | `TBD` |
+
+### Logs
+
+| Value | Setting |
+|---|---|
+| PHP error log path | `TBD` |
+| Access log path | `TBD` |
+| How the owner reads them | `TBD` |
+
+### SEO
+
+| Value | Setting |
+|---|---|
+| `sitemap.xml` URL | `TBD` |
+| `robots.txt` URL | `TBD` |
+| SEO URL format | human-readable, e.g. `Pokemon-boosters-Set-Name` |
+| Box / display URLs | use `booster-box` |
+| Single pack URLs | use `boosters` |
+| SKU in SEO URL | never — SKU lives only in the SKU field |
+| Languages served | `TBD` |
+| Search Console access | `TBD` |
+| Merchant Center access | `TBD` |
+| Keyword map location | `TBD` — recommend `plans/keyword-map_<YYYYMMDD>.md`, single file |
+
+### Email
+
+| Value | Setting |
+|---|---|
+| Mail platform | `TBD` |
+| Marketing opt-in at registration / checkout | `TBD` |
+| Unsubscribe mechanism | `TBD` |
+| Approximate list size | `TBD` |
+| Consent basis on record | `TBD` |
+
+### Competitors
+
+Owner-supplied list for `bs-competitor-watch`. Claude never assembles this from
+general knowledge of the market.
+
+| # | Shop | URL |
+|---|---|---|
+| 1 | `TBD` | `TBD` |
+| 2 | `TBD` | `TBD` |
+| 3 | `TBD` | `TBD` |
+
+### Maintenance
+
+When a value changes, update it here and nowhere else. Skills read this section
+live; a value copied into a handoff, a plan, or a skill file goes stale silently
+and gets trusted anyway.
