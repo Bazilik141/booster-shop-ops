@@ -70,6 +70,8 @@ body {
 
 /* ── Metric cards ── */
 .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 14px; margin-bottom: 22px; }
+/* The integrity tile is appended by independent async branches; grid order keeps it last. */
+#crmIntegrityCard { order: 999; }
 .card {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: 12px; padding: 18px;
@@ -89,6 +91,8 @@ body {
   border-radius: 12px; padding: 20px; margin-bottom: 18px;
 }
 .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.crm-integrity-header { gap: 10px; flex-wrap: wrap; }
+.crm-integrity-copy { white-space: nowrap; }
 .section-title { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; }
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 .trend-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-bottom: 18px; }
@@ -411,6 +415,8 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
       <div class="card"><div class="loading"><div class="spinner"></div><br>Завантаження...</div></div>
     </div>
 
+    <div id="crmIntegrityDetail" style="display:none"></div>
+
     <div class="grid2">
       <div class="section">
         <div class="section-header">
@@ -622,6 +628,54 @@ async function call(action, extra = {}) {
   const d = await r.json();
   if (!d.ok) throw new Error(d.error || 'API error');
   return d;
+}
+
+const crmIntegrityState = { status:'idle', result:null, error:'', time:'' };
+const CRM_INTEGRITY_COPY_CONFIRM_MS = 2000;
+function crmIntegrityLocalTime() { return new Date().toLocaleTimeString('uk-UA',{hour:'2-digit',minute:'2-digit'}); }
+function crmIntegrityElapsed(result) { const elapsed=Number(result && result.elapsed_ms);return Number.isFinite(elapsed) && elapsed>=0?' · '+elapsed+' мс':''; }
+async function crmIntegrityCopyResult(button) {
+  const result=crmIntegrityState.result;if(!result || !button)return;const original=button.textContent || 'Скопіювати результат',payload=JSON.stringify(result,null,2);
+  try {
+    if(navigator.clipboard && typeof navigator.clipboard.writeText==='function')await navigator.clipboard.writeText(payload);
+    else {
+      const textarea=document.createElement('textarea');textarea.value=payload;textarea.setAttribute('aria-hidden','true');
+      // Non-secure-context fallback: fixed and transparent so copying does not shift the dashboard layout.
+      textarea.style.position='fixed';textarea.style.opacity='0';textarea.style.pointerEvents='none';document.body.appendChild(textarea);textarea.select();
+      const copied=typeof document.execCommand==='function' && document.execCommand('copy');textarea.remove();if(!copied)throw new Error('copy failed');
+    }
+    button.textContent='Скопійовано ✓';
+  } catch(e) { button.textContent='Не вдалося скопіювати'; }
+  window.setTimeout(function(){button.textContent=original;},CRM_INTEGRITY_COPY_CONFIRM_MS);
+}
+function crmIntegrityRender(result) {
+  const root=document.getElementById('crmIntegrityDetail');if(!root)return;const problems=(result && result.problems) || [],truncated=(result && result.truncated) || {},coverage=(result && result.coverage && result.coverage.rrp_mismatch_3dp) || null;
+  root.style.display='none';root.innerHTML='';if(!result)return;
+  const copyButton='<button type="button" class="btn-secondary crm-integrity-copy" onclick="crmIntegrityCopyResult(this)">Скопіювати результат</button>';
+  if(!problems.length){root.innerHTML='<div class="section" style="margin-top:16px"><div class="section-header crm-integrity-header"><span class="section-title">Перевірка цілісності CRM</span>'+copyButton+'</div></div>';root.style.display='block';return;}
+  const rows=problems.map(function(problem){return '<tr><td>'+threeDpEsc(problem.sheet)+'</td><td>'+threeDpEsc(problem.rows)+'</td><td><code>'+threeDpEsc(problem.code)+'</code></td><td>'+threeDpEsc(problem.detail)+'</td></tr>';}).join('');
+  const clipped=Object.keys(truncated).map(function(code){return '<div style="font-size:12px;color:var(--muted);margin-top:6px">Ще '+threeDpEsc(truncated[code])+' проблем(и) з кодом <code>'+threeDpEsc(code)+'</code> не показано.</div>';}).join('');
+  const coverageNote=coverage && coverage.deferred?'<div style="font-size:12px;color:var(--muted);margin-top:6px">3D-P РРЦ: '+threeDpEsc(coverage.deferred)+'</div>':coverage && coverage.skipped_missing_crm_rrp?'<div style="font-size:12px;color:var(--muted);margin-top:6px">3D-P РРЦ: порівняно '+threeDpEsc(coverage.compared)+'; пропущено без SKU-ключа CRM РРЦ: '+threeDpEsc(coverage.skipped_missing_crm_rrp)+'.</div>':'';
+  root.innerHTML='<div class="section" style="margin-top:16px"><div class="section-header crm-integrity-header"><span class="section-title">Перевірка цілісності CRM</span>'+copyButton+'</div><div style="color:var(--red);font-weight:600;margin-bottom:8px">Потрібна увага: '+problems.length+' проблем(и).</div><div class="tbl-wrap"><table><tr><th>Вкладка</th><th>Рядки</th><th>Код</th><th>Деталь</th></tr>'+rows+'</table></div>'+clipped+coverageNote+'</div>';
+  root.style.display='block';
+}
+function renderCrmIntegrityTile() {
+  const cards=document.getElementById('summaryCards');if(!cards)return;const existing=document.getElementById('crmIntegrityCard');if(existing)existing.remove();
+  const card=document.createElement('div');card.id='crmIntegrityCard';card.className='card';card.style.cursor='pointer';card.setAttribute('role','button');card.setAttribute('tabindex','0');
+  const result=crmIntegrityState.result,problems=(result && result.problems) || [],time=crmIntegrityState.time?(' · '+crmIntegrityState.time):'',elapsed=crmIntegrityElapsed(result);
+  let value='Перевірити',sub='read-only · без вивантаження таблиць';
+  if(crmIntegrityState.status==='running'){value=spin();sub='Перевірка…';}
+  else if(crmIntegrityState.status==='clean'){card.className='card c-green';value='✓ OK';sub='Проблем не знайдено'+time+elapsed;}
+  else if(crmIntegrityState.status==='problems'){value='<span style="color:var(--red)">'+problems.length+'</span>';sub=problems.length+' проблем(и) · деталі нижче'+time+elapsed;}
+  else if(crmIntegrityState.status==='error'){value='—';sub=threeDpEsc(crmIntegrityState.error || 'Перевірка недоступна.');}
+  card.innerHTML='<div class="card-label">ЦІЛІСНІСТЬ CRM</div><div class="card-value">'+value+'</div><div class="card-sub">'+sub+'</div>';
+  card.onclick=runCrmIntegrityCheck;card.onkeydown=function(event){if(event.key==='Enter' || event.key===' '){event.preventDefault();runCrmIntegrityCheck();}};cards.appendChild(card);
+}
+async function runCrmIntegrityCheck() {
+  if(crmIntegrityState.status==='running')return;crmIntegrityState.status='running';crmIntegrityState.error='';renderCrmIntegrityTile();
+  try { const result=await call('integrity_check');crmIntegrityState.result=result;crmIntegrityState.time=crmIntegrityLocalTime();crmIntegrityState.status=((result && result.problems) || []).length?'problems':'clean';crmIntegrityRender(result); }
+  catch(e) { crmIntegrityState.result=null;crmIntegrityState.time='';crmIntegrityState.status='error';crmIntegrityState.error='Перевірка недоступна: '+String(e && e.message ? e.message : e);crmIntegrityRender(null); }
+  finally { renderCrmIntegrityTile(); }
 }
 
 async function callPost(payload) {
@@ -877,9 +931,18 @@ async function saveThreeDpProduct() {
 async function toggleThreeDpArchive() {
   const row=threeDpSku(threeDpUi.product.sku);if(!row)return;const archived=threeDpStatus(row)==='Архів',reason=archived?'':(prompt('Коротка причина архівації (необов’язково):','') || '');if(!confirm((archived?'Відновити':'Архівувати')+' SKU '+row.SKU+'? Це reversible API-статус, не видалення.'))return;
   try { threeDpUi.product.msg={text:archived?'Відновлення…':'Архівація…',kind:''};renderThreeDpProducts();await call3dpPost({action:archived?'3dp_nomenclature_restore':'3dp_nomenclature_archive',row:row.row_number,expected_status:threeDpStatus(row),reason:reason});await reloadThreeDpData();threeDpUi.product.msg={text:archived?'SKU відновлено; active views оновлено.':'SKU архівовано; active views оновлено.',kind:'success'};renderThreeDpAll(); } catch(e) { threeDpUi.product.msg={text:'Помилка: '+e.message,kind:'error'};renderThreeDpProducts(); }
-}function renderThreeDpStock(row,metrics,archived) {
+}function threeDpStockAdjustmentForActual(actual,current) {
+  if(!Number.isInteger(actual) || actual<0)return {valid:false,delta:null,text:'Вкажіть фактичну наявність цілим невід’ємним числом.'};
+  const delta=actual-current;if(delta===0)return {valid:true,delta:0,text:'Змін немає.'};
+  return {valid:true,delta:delta,text:'Буде записано: '+(delta>0?'+':'−')+Math.abs(delta)+' шт'};
+}
+function previewThreeDpStockAdjustment() {
+  const row=threeDpSku(threeDpUi.product.sku),input=threeDpInput('threeDpStockActual'),preview=document.getElementById('threeDpStockPreview'),button=document.getElementById('threeDpStockSubmit');if(!row || !input || !preview || !button)return;
+  const raw=String(input.value || '').trim(),adjustment=raw===''?{valid:false,delta:null,text:'Вкажіть фактичну наявність.'}:threeDpStockAdjustmentForActual(Number(raw),threeDpNumber(threeDpMetrics(row).availability));preview.textContent=adjustment.text;button.disabled=!adjustment.valid || adjustment.delta===0 || threeDpStatus(row)==='Архів';
+}
+function renderThreeDpStock(row,metrics,archived) {
   const ledger=threeDpUi.product.loading?'<div class="loading"><div class="spinner"></div></div>':threeDpUi.product.ledger.length?'<div class="tbl-wrap"><table><tr><th>Час</th><th>Delta</th><th>Причина</th></tr>'+threeDpUi.product.ledger.map(function(x){return '<tr><td>'+threeDpEsc(x['Дата коригування (Київ)'])+'</td><td>'+threeDpEsc(x['Зміна наявності, шт'])+'</td><td>'+threeDpEsc(x.Причина)+'</td></tr>';}).join('')+'</table></div>':'<div class="three-dp-note">Коригувань ще немає.</div>';
-  return '<div class="form-section-title">Коригування наявності</div><div class="three-dp-form-grid"><label>Поточна наявність (Наявність!G)<span class="three-dp-readonly">'+threeDpEsc(metrics.availability)+' шт</span></label><label>Delta (ціле число)<input id="threeDpStockDelta" type="number" step="1" value=""'+(archived?' disabled':'')+'></label><label>Причина<input id="threeDpStockReason" maxlength="240" placeholder="напр. списання браку"'+(archived?' disabled':'')+'></label></div><div class="form-actions" style="margin-top:12px"><button class="btn-secondary" type="button" onclick="saveThreeDpStock()"'+(archived?' disabled':'')+'>Записати коригування</button></div><div class="three-dp-note">Запис додається в append-only ledger; формула Наявність!G не перезаписується.</div><div class="form-section-title">Останні коригування</div>'+ledger;
+  return '<div class="form-section-title">Коригування наявності</div><div class="three-dp-form-grid"><label>Поточна наявність (Наявність!G)<span class="three-dp-readonly">'+threeDpEsc(metrics.availability)+' шт</span></label><label>Фактична наявність зараз, шт<input id="threeDpStockActual" type="number" min="0" step="1" value="" oninput="previewThreeDpStockAdjustment()"'+(archived?' disabled':'')+'></label><label>Причина<input id="threeDpStockReason" maxlength="240" placeholder="напр. списання браку"'+(archived?' disabled':'')+'></label></div><div id="threeDpStockPreview" class="three-dp-note" aria-live="polite">Вкажіть фактичну наявність цілим невід’ємним числом.</div><div class="form-actions" style="margin-top:12px"><button id="threeDpStockSubmit" class="btn-secondary" type="button" onclick="saveThreeDpStock()" disabled>Записати коригування</button></div><div class="three-dp-note">Запис додається в append-only ledger; формула Наявність!G не перезаписується.</div><div class="form-section-title">Останні коригування</div>'+ledger;
 }
 async function loadThreeDpLedger(sku) {
   if(!sku)return;threeDpUi.product.loading=true;renderThreeDpProducts();
@@ -887,10 +950,9 @@ async function loadThreeDpLedger(sku) {
   if(threeDpUi.product.sku===sku){threeDpUi.product.loading=false;renderThreeDpProducts();}
 }
 async function saveThreeDpStock() {
-  const row=threeDpSku(threeDpUi.product.sku);if(!row || threeDpStatus(row)==='Архів')return;const metrics=threeDpMetrics(row),delta=Number((threeDpInput('threeDpStockDelta') || {}).value),reason=String((threeDpInput('threeDpStockReason') || {}).value || '').trim();
-  if(!Number.isInteger(delta) || delta===0 || reason.length<3){threeDpUi.product.msg={text:'Вкажіть ненульовий цілий delta і причину від 3 символів.',kind:'error'};renderThreeDpProducts();return;}
-  if(!confirm('Записати delta '+delta+' для '+row.SKU+'? Це створить постійний ledger-запис.'))return;
-  try { threeDpUi.product.msg={text:'Запис коригування…',kind:''};renderThreeDpProducts();const result=await call3dpPost({action:'3dp_adjust_stock',sku:row.SKU,expected_current:threeDpNumber(metrics.availability),delta:delta,reason:reason});await reloadThreeDpData();await loadThreeDpLedger(row.SKU);threeDpUi.product.msg={text:'Ledger row '+result.ledger_row+': Наявність!G '+result.old_value+' → '+result.new_value+'.',kind:'success'};renderThreeDpAll(); } catch(e) { threeDpUi.product.msg={text:'Помилка: '+e.message,kind:'error'};renderThreeDpProducts(); }
+  const row=threeDpSku(threeDpUi.product.sku);if(!row || threeDpStatus(row)==='Архів')return;const raw=String((threeDpInput('threeDpStockActual') || {}).value || '').trim(),actual=Number(raw),reason=String((threeDpInput('threeDpStockReason') || {}).value || '').trim();
+  if(raw==='' || !Number.isInteger(actual) || actual<0 || reason.length<3){threeDpUi.product.msg={text:'Вкажіть фактичну наявність цілим невід’ємним числом і причину від 3 символів.',kind:'error'};renderThreeDpProducts();return;}
+  try { threeDpUi.product.msg={text:'Перечитування поточної наявності…',kind:''};renderThreeDpProducts();const fresh=await call3dp('3dp_get_row',{sheet:'Наявність',sku:row.SKU}),freshRow=fresh && fresh.row;if(!freshRow)throw new Error('SKU не знайдено під час повторного читання.');const freshRaw=String(freshRow['Наявно зараз, шт'] == null ? '' : freshRow['Наявно зараз, шт']).trim();if(freshRaw==='')throw new Error('Поточна наявність не повернулась під час повторного читання.');const freshCurrent=threeDpNumber(freshRaw),adjustment=threeDpStockAdjustmentForActual(actual,freshCurrent);if(!adjustment.valid)throw new Error(adjustment.text);if(adjustment.delta===0){await reloadThreeDpData();threeDpUi.product.msg={text:'Змін немає: ledger-запис не створено.',kind:''};renderThreeDpAll();return;}if(!confirm('Фактична наявність '+actual+' для '+row.SKU+'. '+adjustment.text+'. Це створить постійний ledger-запис.')){threeDpUi.product.msg={};renderThreeDpProducts();return;}threeDpUi.product.msg={text:'Запис коригування…',kind:''};renderThreeDpProducts();const result=await call3dpPost({action:'3dp_adjust_stock',sku:row.SKU,expected_current:freshCurrent,delta:adjustment.delta,reason:reason});await reloadThreeDpData();await loadThreeDpLedger(row.SKU);threeDpUi.product.msg={text:'Ledger row '+result.ledger_row+': Наявність!G '+result.old_value+' → '+result.new_value+'.',kind:'success'};renderThreeDpAll(); } catch(e) { threeDpUi.product.msg={text:'Помилка: '+e.message,kind:'error'};renderThreeDpProducts(); }
 }
 
 function threeDpMargin(cost,rrp) {
@@ -1324,6 +1386,9 @@ async function loadOverview() {
     showError(e.message);
     document.getElementById('summaryCards').innerHTML = '';
   }
+
+  renderCrmIntegrityTile();
+  crmIntegrityRender(crmIntegrityState.result);
 
   // Channel stats
   try {

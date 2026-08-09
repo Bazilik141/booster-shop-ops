@@ -189,6 +189,7 @@ fixed and before `3D-P-014` makes failures visible.
 | F6 | **Insufficient fixture stock warns, never blocks** an order save — identical to the 2026-08-03 fail-open rule for 3D-P sale stock. |
 | F7 | **Money split as in §6**, with Serhiy's fixture compensation always a separate accrual record from his print cost. |
 | F8 | **Schema half ships inside `3D-P-015`** (remove `+ N` from `K`, add frozen fixture cost and payer fields to the sale row). Operational half stays in `3D-P-019`. One migration, not two. |
+| F9 | **Locked 2026-08-09. A sale is restricted to fixtures from one payer.** No per-line fixture ledger and no `W = змішано` in the current CRM. `Продажі!W` is part of `CRM_3DP_SALES_FROZEN_HEADERS_`, which V95 enforces by strict `JSON.stringify` equality, so a per-line model would break the sync contract across two deployed scripts at once — for a case that has never occurred (0 real Track-1 sales, 2 fixture rows, both owner-paid). A genuinely mixed order is entered as two sale rows. **Accepted cost:** that split inflates order count and skews average order value in per-order metrics; this is a known distortion, not a defect. Per-line payer accounting is deferred to NCRM. Full rationale and phase-B constraints: `handoffs/handoff_3D-P-019B_single-payer-per-sale_20260809.md`. |
 
 ### Carried constraint for NCRM (not for this task)
 

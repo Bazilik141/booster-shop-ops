@@ -10,12 +10,25 @@ new Web App version.
 | Mirror file | `crm/apps-script/Code.gs` |
 | Baseline pulled from live | 2026-08-08, 11:41 Kyiv (owner export `CodeJS - CRM.txt`) |
 | **Mirror content deployed to live** | **2026-08-08, owner-reported** — owner pasted this exact file into the bound CRM project and published a new Web App version |
-| Deployed Web App version number | **V95, exported 2026-08-08 19:31 Kyiv.** Owner export re-verified **2026-08-09: identical to this mirror apart from CRLF line endings.** Supersedes V92 (2026-08-08 15:23) and V89 (2026-08-04) |
+| Deployed Web App version number | **V97, published 2026-08-09 14:44 Kyiv.** Owner export `CodeJS - CRM (Версія 97, 8 серп. 2026 р.,).txt` verified **2026-08-09: identical to this mirror apart from CRLF line endings** (4515 lines both sides, `diff` empty). Supersedes V95 (2026-08-08 19:31), V92 (2026-08-08 15:23) and V89 (2026-08-04) |
 | Live-verified after deploy | **Yes.** `3D-P-014` owner QA on 2026-08-08 produced four correct journal outcomes through the live Web App (`apiAddSale_` create, `apiUpdateSale_` create-on-update, `apiUpdateSale_` noop, `skipped_no_3dp_sku`), and `3D-P-022` was proven by `ACC-3D-DITTO-410` syncing end to end |
 | Local syntax check | `node --check` passed 2026-08-08 |
 | Previous repo copy | `Booster Shop CRM - Apps_Script_код 29.07.2026.csv` (2026-07-29, pre-V87/V89) — superseded, keep for history only |
 
 ## Mirror status
+
+> ✅ **2026-08-09, 14:52 — CRM mirror re-verified against the V97 owner export. No local pending
+> changes on the CRM side.** `diff` after CRLF normalisation is empty; 4515 lines on both sides.
+>
+> Confirmed present in the exported live source, not inferred: `apiIntegrityCheck_`,
+> `CRM_INTEGRITY_3DP_SKU_RE_`, `elapsed_ms`, and `report.clean = report.problems.length === 0` —
+> i.e. `CRM-005` **including** the `ok`/`clean` collision fix is genuinely live in V97.
+>
+> Runtime corroboration, not inference: the owner's 14:45 live run returned a populated problem list
+> with `elapsed_ms` 5750 instead of the pre-fix `API error`. Baseline recorded in
+> `diagnostics/CRM-005_first-live-baseline_20260809.md`.
+
+### Superseded note (kept for history)
 
 **Local pending changes: 3D-P-010 WP4 and 3D-P-023.** The V92 mirror remains the high-confidence live baseline.
 This local `Code.gs` adds one call from `updateSaleStatus()` to the existing

@@ -675,6 +675,9 @@ return _memo.salesRows;
 function keepWarm() { _getCrmSs(); try { _getAutoSs(); } catch (e) { /* non-fatal */ } }
 
 const CACHEABLE_ACTIONS = { sku_list: 300, stock_alerts: 120, summary: 90, channel_stats: 120, monthly_summary: 300 };
+const CRM_INTEGRITY_MAX_PROBLEMS_PER_CODE_ = 10;
+// Keep this SKU grammar aligned with plans/3D-P_sku-naming-convention_20260807.md.
+const CRM_INTEGRITY_3DP_SKU_RE_ = /^(?:BR|FIG|ACC-3D)-[A-Z0-9][A-Z0-9-]*$/;
 
 function apiDoGetCacheVersion_() {
 if (!_memo.doGetCacheVersion) _memo.doGetCacheVersion = String(PropertiesService.getScriptProperties().getProperty('CRM_DOGET_CACHE_VERSION') || '1');
@@ -699,9 +702,193 @@ if (action === 'ltv_report') return apiLtvReport_(params);
 if (action === 'recent_sales') return apiRecentSales_(params);
 if (action === 'recent_purchases') return apiRecentPurchases_(params);
 if (action === 'sync_journal') return apiSyncJournal_(params);
+if (action === 'integrity_check') return apiIntegrityCheck_();
 
 return { ok: false, error: 'unknown action: ' + action };
 }
+
+function apiIntegrityCheck_() {
+const startedAt = new Date().getTime();
+const report = { ok: true, action: 'integrity_check', checked: ['Товари', 'РРЦ', 'Розхідники', 'Майстер_Товарів'], problems: [], truncated: {}, coverage: {} };
+const crm = _getCrmSs();
+const automation = _getAutoSs();
+const products = crmIntegrityTable_(crm.getSheetByName('Товари'), 2, 3);
+const rrc = crmIntegrityTable_(crm.getSheetByName('РРЦ'), 2, 3);
+const consumables = crmIntegrityTable_(crm.getSheetByName('Розхідники'), 3, 4);
+const master = crmIntegrityTable_(automation.getSheetByName('Майстер_Товарів'), 1, 2);
+
+const ready = crmIntegrityRequireHeaders_(report, products, ['SKU', 'Коротка назва', 'Поточна ціна продажу', 'Активний товар']) &&
+  crmIntegrityRequireHeaders_(report, rrc, ['SKU', 'Назва товару', 'РРЦ, грн', 'Дата оновлення']) &&
+  crmIntegrityRequireHeaders_(report, consumables, ['Тип розхідника', 'Надійшло через витрати', 'Їде через витрати', 'Використано в продажах', 'Залишок на складі', 'Вартість залишку']) &&
+  crmIntegrityRequireHeaders_(report, master, ['SKU', 'Назва', 'Ціна CRM', 'Активний']);
+if (!ready) return crmIntegrityFinalize_(report, startedAt);
+
+crmIntegrityCheckFormulaSeeds_(report, rrc, ['A', 'B', 'C', 'D'], 'РРЦ!A3:D3 must remain ARRAYFORMULA seeds.', true);
+crmIntegrityCheckRowFormulas_(report, products, ['Коротка назва', 'Поточна ціна продажу']);
+crmIntegrityCheckRowFormulas_(report, consumables, ['Надійшло через витрати', 'Їде через витрати', 'Використано в продажах', 'Залишок на складі', 'Вартість залишку']);
+crmIntegrityCheckFormulaSeeds_(report, consumables, ['N'], 'Розхідники!N4 must remain the dropdown formula seed.', false);
+crmIntegrityCheckMasterFormulaSeeds_(report, master);
+
+const productSkuIndex = products.headerIndex.SKU;
+const productActiveIndex = products.headerIndex['Активний товар'];
+const rrcSkuIndex = rrc.headerIndex.SKU;
+const rrcNameIndex = rrc.headerIndex['Назва товару'];
+const rrcPriceIndex = rrc.headerIndex['РРЦ, грн'];
+const rrcDateIndex = rrc.headerIndex['Дата оновлення'];
+const masterSkuIndex = master.headerIndex.SKU;
+const masterActiveIndex = master.headerIndex['Активний'];
+const rrcBySku = {};
+const productBySku = {};
+const masterBySku = {};
+const priceWithoutSkuRows = [];
+
+products.values.forEach(function(row, index) {
+  const sku = crmIntegrityText_(row[productSkuIndex]);
+  if (!sku) return;
+  if (productBySku[sku]) {
+    crmIntegrityAdd_(report, 'duplicate_sku', 'Товари', String(products.dataStartRow + index), 'SKU repeats: ' + sku + '.');
+    return;
+  }
+  productBySku[sku] = { row: products.dataStartRow + index, values: row, formulaRow: products.formulas[index] || [] };
+});
+
+rrc.values.forEach(function(row, index) {
+  const sku = crmIntegrityText_(row[rrcSkuIndex]);
+  const name = crmIntegrityText_(row[rrcNameIndex]);
+  const hasManualValue = crmIntegrityPresent_(row[rrcPriceIndex]) || crmIntegrityPresent_(row[rrcDateIndex]) || crmIntegrityPresent_(row[6]);
+  if (hasManualValue && (!sku || !name)) priceWithoutSkuRows.push(rrc.dataStartRow + index);
+  if (!sku) return;
+  if (rrcBySku[sku]) {
+    crmIntegrityAdd_(report, 'duplicate_sku', 'РРЦ', String(rrc.dataStartRow + index), 'SKU repeats: ' + sku + '.');
+    return;
+  }
+  rrcBySku[sku] = { row: rrc.dataStartRow + index, price: row[rrcPriceIndex], name: name };
+});
+if (priceWithoutSkuRows.length) crmIntegrityAdd_(report, 'price_without_sku', 'РРЦ', crmIntegrityRowsLabel_(priceWithoutSkuRows), 'Price, date, or note is filled while SKU or product name is missing.');
+
+master.values.forEach(function(row, index) {
+  const sku = crmIntegrityText_(row[masterSkuIndex]);
+  if (!sku) return;
+  if (masterBySku[sku]) {
+    crmIntegrityAdd_(report, 'duplicate_sku', 'Майстер_Товарів', String(master.dataStartRow + index), 'SKU repeats: ' + sku + '.');
+    return;
+  }
+  masterBySku[sku] = { row: master.dataStartRow + index, values: row };
+});
+
+Object.keys(productBySku).forEach(function(sku) {
+  const product = productBySku[sku];
+  const active = crmIntegrityTrue_(product.values[productActiveIndex]);
+  const masterRow = masterBySku[sku];
+  const rrcRow = rrcBySku[sku];
+  if (!masterRow) crmIntegrityAdd_(report, 'missing_master_row', 'Товари', String(product.row), sku + ' exists in Товари but not in Майстер_Товарів.');
+  else if (active && !crmIntegrityTrue_(masterRow.values[masterActiveIndex])) crmIntegrityAdd_(report, 'master_row_inactive', 'Майстер_Товарів', String(masterRow.row), sku + ' is active in Товари but inactive in Майстер_Товарів.');
+  if (active && (!rrcRow || !crmIntegrityPresent_(rrcRow.price))) crmIntegrityAdd_(report, 'active_sku_without_rrp', 'Товари', String(product.row), sku + ' is active but has no SKU-keyed CRM RRP.');
+});
+
+crmIntegrityCheck3dpRrp_(report, productBySku, rrcBySku);
+return crmIntegrityFinalize_(report, startedAt);
+}
+
+function crmIntegrityTable_(sheet, headerRow, dataStartRow) {
+if (!sheet) return { sheet: null, title: '—', headerRow: headerRow, dataStartRow: dataStartRow, headers: [], headerIndex: {}, values: [], formulas: [] };
+const lastColumn = sheet.getLastColumn();
+const lastRow = Math.max(sheet.getLastRow(), headerRow);
+const headers = sheet.getRange(headerRow, 1, 1, lastColumn).getDisplayValues()[0];
+const headerIndex = {};
+headers.forEach(function(header, index) { const key = String(header || '').trim(); if (key) headerIndex[key] = index; });
+const count = Math.max(lastRow - dataStartRow + 1, 0);
+const range = count ? sheet.getRange(dataStartRow, 1, count, lastColumn) : null;
+return { sheet: sheet, title: sheet.getName(), headerRow: headerRow, dataStartRow: dataStartRow, headers: headers, headerIndex: headerIndex, values: range ? range.getValues() : [], formulas: range ? range.getFormulas() : [] };
+}
+
+function crmIntegrityRequireHeaders_(report, table, required) {
+if (!table.sheet) { crmIntegrityAdd_(report, 'missing_sheet', table.title, '—', 'Required sheet is missing.'); return false; }
+const missing = required.filter(function(header) { return table.headerIndex[header] == null; });
+if (missing.length) { crmIntegrityAdd_(report, 'schema_missing_headers', table.title, String(table.headerRow), 'Missing headers: ' + missing.join(', ') + '.'); return false; }
+return true;
+}
+
+function crmIntegrityCheckFormulaSeeds_(report, table, columns, detail, requireArrayFormula) {
+if (!table.sheet) return;
+const missing = columns.filter(function(column) {
+  const formula = String(table.sheet.getRange(table.dataStartRow, crmIntegrityColumnNumber_(column)).getFormula() || '').trim();
+  return requireArrayFormula ? !/^=ARRAYFORMULA\(/i.test(formula) : !formula;
+});
+if (missing.length) crmIntegrityAdd_(report, 'formula_column_literal', table.title, String(table.dataStartRow), detail + ' Missing formula seed(s): ' + missing.join(', ') + '.');
+}
+
+function crmIntegrityCheckRowFormulas_(report, table, headers) {
+if (!table.sheet || table.headerIndex['SKU'] == null && table.headerIndex['Тип розхідника'] == null) return;
+const identityIndex = table.headerIndex.SKU != null ? table.headerIndex.SKU : table.headerIndex['Тип розхідника'];
+headers.forEach(function(header) {
+  const columnIndex = table.headerIndex[header];
+  if (columnIndex == null) return;
+  const badRows = [];
+  table.values.forEach(function(row, index) {
+    if (!crmIntegrityText_(row[identityIndex])) return;
+    if (!String((table.formulas[index] || [])[columnIndex] || '').trim()) badRows.push(table.dataStartRow + index);
+  });
+  if (badRows.length) crmIntegrityAdd_(report, 'formula_column_literal', table.title, crmIntegrityRowsLabel_(badRows), header + ' contains a literal where a formula is required.');
+});
+}
+
+function crmIntegrityCheckMasterFormulaSeeds_(report, table) {
+if (!table.sheet) return;
+const formulaColumns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'T', 'U'];
+const missing = formulaColumns.filter(function(column) {
+  return !String(table.sheet.getRange(table.dataStartRow, crmIntegrityColumnNumber_(column)).getFormula() || '').trim();
+});
+if (missing.length) crmIntegrityAdd_(report, 'formula_column_literal', table.title, String(table.dataStartRow), 'Master formula seed(s) are missing: ' + missing.join(', ') + '.');
+}
+
+function crmIntegrityCheck3dpRrp_(report, productBySku, rrcBySku) {
+const relevantSkus = Object.keys(productBySku).filter(function(sku) { return CRM_INTEGRITY_3DP_SKU_RE_.test(sku); });
+const coverage = { compared: 0, skipped_missing_crm_rrp: 0, deferred: null };
+if (!relevantSkus.length) { report.coverage.rrp_mismatch_3dp = coverage; return; }
+const config = crm3dpConfig_();
+if (!config) { coverage.deferred = '3D-P API is not configured.'; report.coverage.rrp_mismatch_3dp = coverage; return; }
+let remote;
+try { remote = crm3dpGet_(config, { action: '3dp_skus' }); }
+catch (error) { coverage.deferred = '3D-P API is unavailable: ' + crmIntegritySafeRemoteCode_(error); report.coverage.rrp_mismatch_3dp = coverage; return; }
+const remoteBySku = {};
+(Array.isArray(remote.rows) ? remote.rows : []).forEach(function(row) { const sku = crmIntegrityText_(row.SKU); if (sku) remoteBySku[sku] = row; });
+relevantSkus.forEach(function(sku) {
+  const local = rrcBySku[sku];
+  const remoteRow = remoteBySku[sku];
+  if (!local || !crmIntegrityPresent_(local.price)) { coverage.skipped_missing_crm_rrp++; return; }
+  if (!remoteRow) return;
+  const remotePrice = crmIntegrityNumber_(remoteRow['РРЦ фактична, грн']);
+  const localPrice = crmIntegrityNumber_(local.price);
+  if (remotePrice == null || localPrice == null) return;
+  coverage.compared++;
+  if (Math.abs(remotePrice - localPrice) > 0.009) crmIntegrityAdd_(report, 'rrp_mismatch_3dp', 'РРЦ', String(local.row), sku + ': CRM ' + localPrice + ' vs 3D-P ' + remotePrice + '.');
+});
+report.coverage.rrp_mismatch_3dp = coverage;
+}
+
+function crmIntegrityAdd_(report, code, sheet, rows, detail) {
+const count = report.problems.filter(function(problem) { return problem.code === code; }).length;
+if (count >= CRM_INTEGRITY_MAX_PROBLEMS_PER_CODE_) { report.truncated[code] = (report.truncated[code] || 0) + 1; return; }
+report.problems.push({ sheet: sheet, rows: rows, code: code, detail: detail });
+}
+
+function crmIntegrityFinalize_(report, startedAt) {
+report.ok = true;
+report.clean = report.problems.length === 0;
+const started = Number(startedAt);
+report.elapsed_ms = Math.max(0, new Date().getTime() - (Number.isFinite(started) ? started : new Date().getTime()));
+if (!Object.keys(report.truncated).length) delete report.truncated;
+return report;
+}
+
+function crmIntegrityText_(value) { const text = String(value == null ? '' : value).trim(); return /^#(?:REF|N\/A|VALUE|NAME|DIV\/0|NUM|ERROR)!?$/i.test(text) ? '' : text; }
+function crmIntegrityPresent_(value) { return crmIntegrityText_(value) !== ''; }
+function crmIntegrityTrue_(value) { return ['так', 'true', 'yes', '1'].indexOf(crmIntegrityText_(value).toLowerCase()) !== -1; }
+function crmIntegrityColumnNumber_(column) { let number = 0; String(column || '').toUpperCase().split('').forEach(function(letter) { number = number * 26 + letter.charCodeAt(0) - 64; }); return number; }
+function crmIntegrityRowsLabel_(rows) { const values = (rows || []).slice().sort(function(a, b) { return a - b; }); if (!values.length) return '—'; const ranges = []; let start = values[0]; let previous = values[0]; for (let i = 1; i < values.length; i++) { if (values[i] === previous + 1) { previous = values[i]; continue; } ranges.push(start === previous ? String(start) : start + '-' + previous); start = previous = values[i]; } ranges.push(start === previous ? String(start) : start + '-' + previous); return ranges.join(', '); }
+function crmIntegrityNumber_(value) { const normalized = crmIntegrityText_(value).replace(',', '.').replace(/[^0-9.-]/g, ''); const number = Number(normalized); return normalized && Number.isFinite(number) ? number : null; }
+function crmIntegritySafeRemoteCode_(error) { const message = String(error && error.message ? error.message : error); const match = message.match(/[A-Z][A-Z0-9_]{1,80}/); return match ? match[0] : 'remote_error'; }
 
 function apiSyncJournal_(params) {
 const spreadsheet = _getCrmSs();

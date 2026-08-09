@@ -96,6 +96,13 @@ report containing:
 
 Use `templates/codex-report-template.md`.
 
+## CRM structural-change guard
+
+`OPS-CRMINTEGRITY` in `AGENTS.md` is mandatory for any main-CRM structural change, catalogue row
+change, or formula-column edit. Run the dashboard's read-only CRM integrity check before and after,
+record its bounded output in the diagnostic, and treat any newly introduced problem code as a defect.
+Use `docs/CRM-new-SKU-runbook.md` for new SKU work; do not manually overwrite formula columns.
+
 ## Prohibited repository content
 
 Never commit hosting backups, DB dumps, archives, `*.bak`, `*.log`, customer
