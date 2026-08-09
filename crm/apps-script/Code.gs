@@ -693,6 +693,7 @@ function apiDoGetCacheKey_(action, params) { const version = apiDoGetCacheVersio
 function handleApiAction_(action, params) {
 if (action === 'summary') return apiSummary_();
 if (action === 'orders') return apiOrders_(params);
+if (action === 'order_items') return apiOrderItems_(params);
 if (action === 'stock_alerts') return apiStockAlerts_();
 if (action === 'sku_list') return apiSkuList_(params);
 if (action === 'consumables') return apiConsumables_(params);
@@ -2326,6 +2327,57 @@ const status = String(params.status || 'active').trim() || 'active';
 const limit = Math.max(1, Math.min(num_(params.limit) || 20, 500));
 const orders = crmGetOrders_(status, limit, params);
 return { ok: true, filter: status, count: orders.length, orders: orders };
+}
+
+function apiOrderItems_(params) {
+const orderId = String(params && params.order_id || '').trim();
+if (!orderId) return { ok: false, error: 'order_id required' };
+const table = apiRecentTable_(_getCrmSs().getSheetByName('Продажі'), 'Номер замовлення / операції');
+if (!table.headerRow) return { ok: true, order_id: orderId, count: 0, items: [], totals: { amount: 0, profit: 0 } };
+const c = {
+order: apiRecentCol_(table.headers, 'Номер замовлення / операції'),
+sku: apiRecentCol_(table.headers, 'SKU'),
+name: apiRecentCol_(table.headers, 'Назва товару'),
+qty: apiRecentCol_(table.headers, 'Кількість'),
+price: apiRecentCol_(table.headers, 'Ціна за одиницю'),
+discount: apiRecentCol_(table.headers, 'Знижка'),
+amount: apiRecentCol_(table.headers, 'Сума продажу'),
+mgmtCostUnit: apiRecentCol_(table.headers, 'Управлінська собівартість 1 од.'),
+mgmtCostLine: apiRecentCol_(table.headers, 'Управлінська собівартість продажу'),
+packaging: apiRecentCol_(table.headers, 'Пакування'),
+acquiring: apiRecentCol_(table.headers, 'Еквайринг'),
+novaPay: apiRecentCol_(table.headers, 'Нова Пей'),
+marketplaceFee: apiRecentCol_(table.headers, 'Комісія маркетплейсу'),
+shopDelivery: apiRecentCol_(table.headers, 'Доставка за рахунок магазину'),
+profit: apiRecentCol_(table.headers, 'Чистий прибуток')
+};
+const items = table.rows.filter(function(row) { return String(row[c.order] || '').trim() === orderId; }).map(function(row) {
+const amount = round2_(apiNum_(row[c.amount]));
+const profit = round2_(apiNum_(row[c.profit]));
+const acquiring = round2_(apiNum_(row[c.acquiring]));
+const novaPay = round2_(apiNum_(row[c.novaPay]));
+const marketplaceFee = round2_(apiNum_(row[c.marketplaceFee]));
+return {
+sku: String(row[c.sku] || '').trim(),
+name: String(row[c.name] || '').trim(),
+qty: apiNum_(row[c.qty]),
+price: round2_(apiNum_(row[c.price])),
+discount: round2_(apiNum_(row[c.discount])),
+amount: amount,
+mgmt_cost_unit: round2_(apiNum_(row[c.mgmtCostUnit])),
+mgmt_cost_line: round2_(apiNum_(row[c.mgmtCostLine])),
+packaging: round2_(apiNum_(row[c.packaging])),
+acquiring: acquiring,
+nova_pay: novaPay,
+marketplace_fee: marketplaceFee,
+payment_fees: round2_(acquiring + novaPay + marketplaceFee),
+shop_delivery: round2_(apiNum_(row[c.shopDelivery])),
+profit: profit,
+profit_pct: amount ? round2_(profit / amount * 100) : null
+};
+});
+const totals = items.reduce(function(sum, item) { sum.amount += item.amount; sum.profit += item.profit; return sum; }, { amount: 0, profit: 0 });
+return { ok: true, order_id: orderId, count: items.length, items: items, totals: { amount: round2_(totals.amount), profit: round2_(totals.profit) } };
 }
 
 function apiStockAlerts_() {

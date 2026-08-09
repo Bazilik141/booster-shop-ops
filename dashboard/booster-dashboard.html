@@ -163,6 +163,18 @@ tr:hover td { background: var(--surface2); }
 .order-toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
 .order-toolbar button { padding: 7px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--muted); font-size: 12px; cursor: pointer; }
 .order-toolbar button.active { border-color: var(--accent); color: var(--text); background: rgba(124,111,255,.12); }
+/* Compact-table spacing; keep the keyboard outline inside the row so opening it does not shift table geometry. */
+.order-summary-row { cursor: pointer; }
+.order-summary-row:hover td { background: rgba(124,111,255,.06); }
+.order-summary-row:focus { outline: 2px solid var(--accent); outline-offset: -2px; }
+.order-expand-chevron { display: inline-block; margin-right: 6px; transition: transform .15s ease; }
+.order-summary-row[aria-expanded="true"] .order-expand-chevron { transform: rotate(90deg); }
+.order-items-row > td { padding: 0; background: rgba(124,111,255,.04); }
+.order-items-panel { padding: 14px; }
+.order-items-panel .tbl-wrap { margin: 0; }
+.order-items-totals td { font-weight: 700; border-top: 1px solid var(--border); }
+.order-items-message { color: var(--muted); padding: 10px 0; }
+.order-items-message.error { color: var(--red); }
 .order-divider td { background: rgba(124,111,255,.10) !important; color: var(--muted); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
 tr.client-active td { background: rgba(124,111,255,.08) !important; }
 
@@ -725,6 +737,7 @@ async function call3dpPost(payload) {
 const cache = {};
 const loaded = {};
 const orderState = { mode: 'default', sort: 'date_desc' };
+const orderItemsState = { cache: Object.create(null), loading: Object.create(null), errors: Object.create(null), expanded: Object.create(null), activeRows: [], completedRows: [] };
 let _clientsData = [];
 const accountingState = {
   skus: [],
@@ -771,6 +784,7 @@ function showPage(name) {
 function hardRefresh() {
   Object.keys(cache).forEach(k => delete cache[k]);
   Object.keys(loaded).forEach(k => delete loaded[k]);
+  clearOrderItemsState();
   ['summaryCards','pendingPreview','alertsPreview','stockTable','consumablesTable','ordersTable','skuTable','clientsTable','topSkusList','threeDpCards','threeDpCalculator','threeDpSkuTable','threeDpSalesTable','threeDpPlyushkyTable','threeDpPayoutsTable']
     .forEach(id => { const el = document.getElementById(id); if(el) el.innerHTML = spin(); });
   ['channelSection','trendGrid','topSkusSection'].forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
@@ -1807,24 +1821,98 @@ function toggleOrdersDateSort() {
   loadOrders(orderState.mode);
 }
 
+function clearOrderItemsState() {
+  ['cache','loading','errors','expanded'].forEach(function(key) { orderItemsState[key] = Object.create(null); });
+  orderItemsState.activeRows = [];
+  orderItemsState.completedRows = [];
+}
+
+function orderItemsKeydown(event, row) {
+  if (event.key !== 'Enter' && event.key !== ' ') return;
+  event.preventDefault();
+  toggleOrderItems(row && row.dataset ? row.dataset.orderId : '');
+}
+
+function orderItemsPaymentFeesHtml(item) {
+  const parts = [
+    ['Еквайринг', item.acquiring],
+    ['Нова Пей', item.nova_pay],
+    ['Маркетплейс', item.marketplace_fee]
+  ].filter(function(part) { return Number(part[1]) !== 0; });
+  return parts.length ? parts.map(function(part) { return threeDpEsc(part[0]) + ': ' + fmt(part[1]); }).join('<br>') : '—';
+}
+
+function renderOrderItemsPanel(order) {
+  const orderId = String(order && order.order_id || '').trim();
+  if (!orderItemsState.expanded[orderId]) return '';
+  if (orderItemsState.loading[orderId]) return '<tr class="order-items-row"><td colspan="10"><div class="order-items-panel">' + spin() + '</div></td></tr>';
+  if (orderItemsState.errors[orderId]) return '<tr class="order-items-row"><td colspan="10"><div class="order-items-panel"><div class="order-items-message error">Не вдалося завантажити позиції: ' + threeDpEsc(orderItemsState.errors[orderId]) + '</div></div></td></tr>';
+  const result = orderItemsState.cache[orderId];
+  const items = result && Array.isArray(result.items) ? result.items : [];
+  if (!items.length) return '<tr class="order-items-row"><td colspan="10"><div class="order-items-panel"><div class="order-items-message">Позицій для цього замовлення не знайдено.</div></div></td></tr>';
+  const showDiscount = items.some(function(item) { return Number(item.discount) !== 0; });
+  const showPaymentFees = items.some(function(item) { return Number(item.payment_fees) !== 0; });
+  const totals = items.reduce(function(sum, item) { sum.amount += Number(item.amount) || 0; sum.profit += Number(item.profit) || 0; return sum; }, { amount: 0, profit: 0 });
+  const cols = 9 + (showDiscount ? 1 : 0) + (showPaymentFees ? 1 : 0);
+  const rows = items.map(function(item) {
+    const profit = Number(item.profit) || 0;
+    const profitColor = profit < 0 ? 'var(--red)' : 'var(--green)';
+    return '<tr><td>' + threeDpEsc(item.name || '—') + '</td><td><code>' + threeDpEsc(item.sku || '—') + '</code></td><td>' + threeDpEsc(item.qty) + '</td><td>' + fmt(item.mgmt_cost_line) + '<br><span style="font-size:11px;color:var(--muted)">' + fmt(item.mgmt_cost_unit) + '/од.</span></td><td>' + fmt(item.packaging) + '</td><td>' + fmt(item.shop_delivery) + '</td>' + (showPaymentFees ? '<td>' + orderItemsPaymentFeesHtml(item) + '</td>' : '') + (showDiscount ? '<td>' + fmt(item.discount) + '</td>' : '') + '<td>' + fmt(item.amount) + '</td><td><b style="color:' + profitColor + '">' + fmt(item.profit) + '</b></td><td><b style="color:' + profitColor + '">' + fmtP(item.profit_pct) + '</b></td></tr>';
+  }).join('');
+  const totalProfitColor = totals.profit < 0 ? 'var(--red)' : 'var(--green)';
+  return '<tr class="order-items-row"><td colspan="10"><div class="order-items-panel"><div class="tbl-wrap"><table><tr><th>Назва</th><th>SKU</th><th>К-сть</th><th>Собівартість (упр.)</th><th>Пакування</th><th>Доставка</th>' + (showPaymentFees ? '<th>Платіжні комісії</th>' : '') + (showDiscount ? '<th>Знижка</th>' : '') + '<th>Сума</th><th>Прибуток ₴</th><th>%</th></tr>' + rows + '<tr class="order-items-totals"><td colspan="' + (cols - 3) + '">Разом</td><td>' + fmt(totals.amount) + '</td><td style="color:' + totalProfitColor + '">' + fmt(totals.profit) + '</td><td>' + fmtP(totals.amount ? totals.profit / totals.amount * 100 : null) + '</td></tr></table></div></div></td></tr>';
+}
+
+async function toggleOrderItems(orderId) {
+  const key = String(orderId || '').trim();
+  if (!key) return;
+  if (orderItemsState.expanded[key]) {
+    delete orderItemsState.expanded[key];
+    renderOrdersTable(orderItemsState.activeRows, orderItemsState.completedRows);
+    return;
+  }
+  orderItemsState.expanded[key] = true;
+  if (orderItemsState.cache[key]) {
+    renderOrdersTable(orderItemsState.activeRows, orderItemsState.completedRows);
+    return;
+  }
+  orderItemsState.loading[key] = true;
+  delete orderItemsState.errors[key];
+  renderOrdersTable(orderItemsState.activeRows, orderItemsState.completedRows);
+  try {
+    orderItemsState.cache[key] = await call('order_items', { order_id: key });
+  } catch (e) {
+    orderItemsState.errors[key] = String(e && e.message ? e.message : e);
+  } finally {
+    delete orderItemsState.loading[key];
+    renderOrdersTable(orderItemsState.activeRows, orderItemsState.completedRows);
+  }
+}
+
 function renderOrderRows(rows) {
-  return sortOrderRows(rows).map(r => `<tr>
-        <td><span class="chip mono">${r.order_id}</span></td>
-        <td style="font-size:12px;color:var(--muted)">${r.date||'—'}</td>
-        <td style="font-size:12px">${r.source||'—'}</td>
-        <td class="mono" style="font-size:12px">${ttn4(r.ttn)}</td>
-        <td>${r.post||'—'}</td>
-        <td style="font-size:11px;color:var(--muted);max-width:160px">${(r.skus||[]).join(', ')}</td>
+  return sortOrderRows(rows).map(function(r) {
+    const orderId = String(r.order_id || '').trim();
+    const expanded = !!orderItemsState.expanded[orderId];
+    return `<tr class="order-summary-row" data-order-id="${threeDpEsc(orderId)}" role="button" tabindex="0" aria-expanded="${expanded ? 'true' : 'false'}" onclick="toggleOrderItems(this.dataset.orderId)" onkeydown="orderItemsKeydown(event,this)">
+        <td><span class="order-expand-chevron" aria-hidden="true">▸</span><span class="chip mono">${threeDpEsc(orderId)}</span></td>
+        <td style="font-size:12px;color:var(--muted)">${threeDpEsc(r.date||'—')}</td>
+        <td style="font-size:12px">${threeDpEsc(r.source||'—')}</td>
+        <td class="mono" style="font-size:12px">${threeDpEsc(ttn4(r.ttn))}</td>
+        <td>${threeDpEsc(r.post||'—')}</td>
+        <td style="font-size:11px;color:var(--muted);max-width:160px">${(r.skus||[]).map(function(sku) { return threeDpEsc(sku); }).join(', ')}</td>
         <td><b>${fmt(r.amount)}</b></td>
-        <td><b style="color:var(--green)">${r.profit != null ? fmt(r.profit) : '—'}</b></td>
+        <td><b style="color:${Number(r.profit) < 0 ? 'var(--red)' : 'var(--green)'}">${r.profit != null ? fmt(r.profit) : '—'}</b></td>
         <td>${profitPctCell(r)}</td>
         <td>${payPill(r.payment_status, r.order_status)}</td>
-      </tr>`).join('');
+      </tr>${renderOrderItemsPanel(r)}`;
+  }).join('');
 }
 
 function renderOrdersTable(activeRows, completedRows) {
   const active = activeRows || [];
   const completed = completedRows || [];
+  orderItemsState.activeRows = active;
+  orderItemsState.completedRows = completed;
   if (!active.length && !completed.length) {
     document.getElementById('ordersTable').innerHTML = '<div style="color:var(--muted);padding:20px">Замовлень для цього фільтра немає</div>';
     return;
