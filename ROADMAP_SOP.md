@@ -281,6 +281,8 @@ NCRM-04 through NCRM-12 were renumbered/rescoped on 2026-07-11 under
 | 3D-P-022 | `3b66bf20-bdb4-81b0-ad36-d2e9fb81cb52` | Added 2026-08-08 during 3D-P-014 owner QA: the deployed CRM trigger `is3dpPackagingSku_` expects `ACC-3D-` + three digits, but the canonical convention locked 2026-08-07 is `PREFIX-MNEMONIC-XYZ`. Every `ACC-3D-` SKU in the approved table fails the trigger; `BR-`/`FIG-` are unaffected |
 
 | 3D-P-023 | `3b66bf20-bdb4-81da-8569-f1d54a8d94b1` | Added 2026-08-08 during 3D-P-014 QA: the sync-journal timestamp column is labelled Kyiv but renders UTC, because the written string is auto-parsed by Sheets into a Date. Cosmetic, low priority |
+| 3D-P-025 | `3b76bf20-bdb4-81a6-838b-d6a27eff68bc` | Added 2026-08-09 during dashboard QA: the stock-correction field asks for a delta while the owner supplies the actual count, so `99` became `196`. Append-only ledger unchanged; only the input semantics move. Handoff: `handoffs/handoff_3D-P-025_stock-field-actual-count_20260809.md` |
+| CRM-005 | `3b76bf20-bdb4-8140-8397-f14d1cc785dd` | Added 2026-08-09 after a repeat CRM breakage on SKU creation: a server-side, read-only integrity check returning a bounded problem list, plus rule `OPS-CRMINTEGRITY` and a new-SKU runbook. Owner constraint: the check must not stream sheet contents to an agent. Handoff: `handoffs/handoff_CRM-005_integrity-check-and-rule_20260809.md` |
 | 3D-P-024 | `3b66bf20-bdb4-8132-a8d5-f3078cf95abb` | Added 2026-08-08 during 3D-P-015 live QA: print time is stored as decimal hours everywhere and nothing said so, so `1:39` and `1,39` silently produced wrong costs. Storage unit unchanged; normalisation moved to every entry point. Deployed and live-verified the same day. Handoff: `handoffs/handoff_3D-P-024_print-time-entry-usability_20260808.md` |
 
 **Closed 2026-08-08 after owner QA:** `3D-P-014` (CRM-local sync journal — four
@@ -295,8 +297,9 @@ three failed attempts.
 issued and has no Notion page. It is referenced only in
 `handoffs/handoff_3D-P-010_crm-packaging-cost-pull_20260802.md`. Decision: the
 number stays permanently unused — do not recycle it. Numbering continued at
-`3D-P-016`; **the next free ID is `3D-P-025`** (`3D-P-022`, `3D-P-023` and
-`3D-P-024` were taken on 2026-08-08).
+`3D-P-016`; **the next free ID is `3D-P-026`** (`3D-P-022`, `3D-P-023` and
+`3D-P-024` were taken on 2026-08-08, `3D-P-025` on 2026-08-09). In the `CRM-`
+series the next free ID is **`CRM-006`** (`CRM-005` taken on 2026-08-09).
 
 **Owner decisions locked 2026-08-07** (full context in
 `diagnostics/3D-P_gap-register-and-work-plan_20260807.md`):

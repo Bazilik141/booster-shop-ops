@@ -153,7 +153,7 @@ live sheet with the audit log preserved.
 
 | ID | Work | Handoff | Blocked by |
 |---|---|---|---|
-| C1 | Re-QA of the two 2026-08-02 fixes + tablet/mobile widths | `3D-P-013` | nothing |
+| C1 | Re-QA of the two 2026-08-02 fixes, **desktop only** | `3D-P-013` | nothing |
 | C2 | Replace the three surrogates (§3.2) with the real columns | `3D-P-013` partial | A2 |
 | C3 | Виробництво zone over the existing `print_log` API actions (G9) | **none** | nothing technical; needs scope |
 | C4 | Recommended-РРЦ generator (G8) | spec pending | owner confirmation of the mechanism |
