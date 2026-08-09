@@ -302,7 +302,7 @@ write `owner-held`.
 | Syntax safety net | `php -l` after write, restore-on-fail (convention C4) |
 | Repeat run | `already_applied=yes` marker (convention C5) |
 | Patch lifecycle | self-deletes after success (C7) — re-running requires re-upload |
-| DB backup | **not covered by C3.** Separate dump required before any DB-touching patch — method `TBD` |
+| DB backup | **not covered by C3.** Separate dump required before any DB-touching patch: cPanel → Backup → Download a MySQL Database Backup (the OpenCart database). The full cPanel backup also carries a dump under `mysql/` |
 | DB rollback | rollback SQL in the patch header (convention C6) |
 | Live-state source | newest `backup-*.tar.gz` from the owner's cPanel drop, by filename timestamp |
 
@@ -315,32 +315,51 @@ Checked after every deploy, regardless of how small the patch looked.
 
 | Page | URL |
 |---|---|
-| Home | `https://boostershop.website` |
-| Category — representative | `TBD` |
-| Product — sealed TCG | `TBD` |
-| Product — 3D-printed | `TBD` |
-| Cart | `TBD` |
-| Checkout entry | `TBD` |
+| Home | `https://boostershop.website/` |
+| Category — top level | `https://boostershop.website/catalog/Pokemon` |
+| Category — nested | `https://boostershop.website/catalog/Pokemon/Pokemon-booster-box` |
+| Product — sealed TCG | `https://boostershop.website/product/One-Piece-Boosters-OP-11` |
+| Product — 3D-printed | `https://boostershop.website/product/FIG-CHARM-001` |
+| Information page | `https://boostershop.website/information/oplata-i-dostavka` |
+| Cart | `https://boostershop.website/index.php?route=checkout/cart` |
+| Checkout entry | `https://boostershop.website/index.php?route=checkout/checkout` |
+
+Checkout also runs the `pinta_simple_checkout` extension
+(`?route=extension/SimpleCheckout/module/pinta_simple_checkout`) — include it in
+any checkout-touching verification.
 
 ### Logs
 
 | Value | Setting |
 |---|---|
-| PHP error log path | `TBD` |
-| Access log path | `TBD` |
-| How the owner reads them | `TBD` |
+| OpenCart error log | `/home2/boosters/ocartdata/storage/logs/` (`DIR_LOGS`, outside the web root) |
+| Access log | `/home2/boosters/logs/boostershop.website` |
+| SSL access log | `/home2/boosters/logs/boostershop.website-ssl_log` |
+| Rotated monthly archives | `/home2/boosters/logs/*-<Mon>-<YYYY>.gz` |
+| Order-sync log | `/home2/boosters/logs/booster-async-order-sync.log` |
+| Sitemap regen log | `/home2/boosters/logs/sitemap-regen.log` |
+| How the owner reads them | cPanel File Manager or Errors view |
+
+`public_html/php.ini` sets no `error_log` directive and has `display_errors`
+commented out, so PHP notices surface in the OpenCart log above, not on the page.
 
 ### SEO
 
 | Value | Setting |
 |---|---|
-| `sitemap.xml` URL | `TBD` |
-| `robots.txt` URL | `TBD` |
+| Sitemap URL | `https://boostershop.website/sitemap_index.xml` (declared in `robots.txt`) |
+| Secondary sitemap file | `public_html/sitemap-full.xml` |
+| `robots.txt` URL | `https://boostershop.website/robots.txt` |
+| `robots.txt` policy | allows all; disallows faceted params `page$`, `sort`, `order`, `limit`, `filter_name`, `filter_sub_category`, `filter_description`, `filter_group` |
+| Category URL pattern | `/catalog/<Category>` and `/catalog/<Category>/<Subcategory>` |
+| Product URL pattern | `/product/<seo-name>` |
+| Information URL pattern | `/information/<seo-name>` |
 | SEO URL format | human-readable, e.g. `Pokemon-boosters-Set-Name` |
 | Box / display URLs | use `booster-box` |
 | Single pack URLs | use `boosters` |
 | SKU in SEO URL | never — SKU lives only in the SKU field |
-| Languages served | `TBD` |
+| Languages served | one storefront language; no language prefix in URLs and no `hreflang` alternates in the sitemap |
+| Merchant feed | `public_html/merchant-feed.tsv` |
 | Search Console access | `TBD` |
 | Merchant Center access | `TBD` |
 | Keyword map location | `TBD` — recommend `plans/keyword-map_<YYYYMMDD>.md`, single file |
