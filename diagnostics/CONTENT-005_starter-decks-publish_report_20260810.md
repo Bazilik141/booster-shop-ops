@@ -77,6 +77,65 @@ cd ~/public_html || exit
 php CONTENT-005_starter-decks-publish_20260810.php --apply && php -r 'require "config.php"; foreach (glob(DIR_CACHE . "cache.*") ?: [] as $f) if (is_file($f)) @unlink($f); foreach (glob(DIR_CACHE . "template/*") ?: [] as $f) if (is_file($f)) @unlink($f); echo "cache cleared\n";'
 ~~~
 
+## Production run — completed 2026-08-10
+
+Recorded by Claude from the owner's terminal output, 2026-08-10. Run host `uashared43`,
+`cwd=/home2/boosters/public_html`, `time_utc=2026-08-10T14:37:53+00:00`, mode `--apply`.
+
+| SKU | product_id | URL |
+|---|---:|---|
+| `OP-JP-ST32-STD` | **120** | `https://boostershop.website/product/One-Piece-Starter-Deck-ST-32-Roronoa-Zoro` |
+| `OP-JP-ST33-STD` | **121** | `https://boostershop.website/product/One-Piece-Starter-Deck-ST-33-Kuzan` |
+| `OP-JP-ST34-STD` | **122** | `https://boostershop.website/product/One-Piece-Starter-Deck-ST-34-Charlotte-Katakuri` |
+| `OP-JP-ST35-STD` | **123** | `https://boostershop.website/product/One-Piece-Starter-Deck-ST-35-Sabo` |
+| `OP-JP-ST36-STD` | **124** | `https://boostershop.website/product/One-Piece-Starter-Deck-ST-36-Eustass-Kid` |
+
+- `new_attribute_id=49`, `new_attribute_created=yes` — `Кількість карток у колоді`.
+- `rollback_product_ids_csv=120,121,122,123,124`.
+- Prestate:
+  `/home2/boosters/public_html/_patch_backups/CONTENT-005_starter-decks-publish_20260810-20260810-143753/prestate.json`.
+- `changed_tables=ocp5_attribute, ocp5_attribute_description, ocp5_product, ocp5_product_description,
+  ocp5_product_to_category, ocp5_product_to_store, ocp5_product_attribute, ocp5_product_related,
+  ocp5_seo_url`.
+- `done=ok`, `self_delete=ok`. **The runner deleted itself on the server**; the only remaining copy is
+  `patches/CONTENT-005_starter-decks-publish_20260810.php` in the repository, and its header holds the
+  rollback SQL these ids plug into.
+- Cache cleared in the same command (`cache cleared`).
+
+Two review concerns closed by the run itself: `php_lint=ok` shows `exec` was available on this host,
+so the F2 fallback path was not needed; and `cache cleared` printed, so `DIR_CACHE` resolves as the
+run command assumed (review finding N1).
+
+The `MYSQL_OPT_RECONNECT is deprecated` line is emitted by the OpenCart config/mysqli layer, not by
+this patch. Harmless, unrelated, pre-existing.
+
+**Post-run owner action, deliberate:** the five products were switched to hidden immediately after
+the run because the product photographs are not uploaded yet. They are live rows in the database but
+not reachable by customers, so schema, Merchant-feed and sitemap work is still pending.
+
+## Ready-to-run rollback
+
+Only if the five products must be removed. Take a database backup first; this is a manual DELETE
+against production.
+
+```sql
+START TRANSACTION;
+DELETE FROM ocp5_product_related WHERE product_id IN (120,121,122,123,124) OR related_id IN (120,121,122,123,124);
+DELETE FROM ocp5_product_attribute WHERE product_id IN (120,121,122,123,124);
+DELETE FROM ocp5_product_to_layout WHERE product_id IN (120,121,122,123,124);
+DELETE FROM ocp5_product_to_store WHERE product_id IN (120,121,122,123,124);
+DELETE FROM ocp5_product_to_category WHERE product_id IN (120,121,122,123,124);
+DELETE FROM ocp5_product_description WHERE product_id IN (120,121,122,123,124);
+DELETE FROM ocp5_seo_url WHERE `key` = 'product_id' AND value IN (120,121,122,123,124);
+DELETE FROM ocp5_product WHERE product_id IN (120,121,122,123,124);
+DELETE FROM ocp5_attribute_description WHERE attribute_id = 49 AND language_id = 4;
+DELETE FROM ocp5_attribute WHERE attribute_id = 49 AND attribute_group_id = 7;
+COMMIT;
+```
+
+The last two statements are valid because `new_attribute_created=yes`. Run them only if the attribute
+is not by then in use by any other product.
+
 ## Claude-review follow-up
 
 - D1 addressed by owner decision: product fields are now explicitly controlled.

@@ -146,7 +146,19 @@ back rather than half-publishing.
 for a second store, or after a rollback — the file must be re-uploaded from `patches/`. Keep the repo
 copy.
 
-## Rollback
+## Rollback — instantiated after the 2026-08-10 run
+
+The run succeeded at `2026-08-10T14:37:53Z`. Concrete keys, recorded here because the runner
+self-deleted on the server and this is the second place someone will look:
+
+- products **120, 121, 122, 123, 124** (ST-32 → ST-36)
+- new attribute **49** (`Кількість карток у колоді`), `new_attribute_created=yes`
+- prestate `/home2/boosters/public_html/_patch_backups/CONTENT-005_starter-decks-publish_20260810-20260810-143753/prestate.json`
+
+Ready-to-run SQL is in `diagnostics/CONTENT-005_starter-decks-publish_report_20260810.md`.
+
+N1 and F2 are closed by the run itself: `cache cleared` printed, so `DIR_CACHE` resolved as assumed,
+and `php_lint=ok` shows `exec` was available so the fallback path was never exercised.
 
 Three layers, in the order to reach for them:
 
