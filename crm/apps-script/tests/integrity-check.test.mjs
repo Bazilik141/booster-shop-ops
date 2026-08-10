@@ -68,7 +68,7 @@ function setMasterFormulas(sheet, sku, active) {
   sheet.setValue(2, 1, sku); sheet.setValue(2, 16, active ? "Так" : "Ні");
 }
 
-function makeEnvironment({ productCount = 1, rrcEnabled = true, brokenRrcRows = [], missingMaster = false, masterActive = true, productActive = true, literalProductPrice = false, duplicateProductSku = false, remoteMode = 'none' } = {}) {
+function makeEnvironment({ productCount = 1, rrcEnabled = true, brokenRrcRows = [], missingMaster = false, masterActive = true, productActive = true, literalProductPrice = false, literalProductShortName = false, productSku = null, duplicateProductSku = false, consumableUsageName = null, literalConsumableUsage = false, remoteMode = 'none' } = {}) {
   const products = new MockSheet("Товари", 15);
   const rrc = new MockSheet("РРЦ", 8);
   const consumables = new MockSheet("Розхідники", 14);
@@ -79,13 +79,18 @@ function makeEnvironment({ productCount = 1, rrcEnabled = true, brokenRrcRows = 
   setHeaders(master, 1, ["SKU", "Назва", "Повна назва на сайті", "Бренд", "Мова", "Сет", "Формат", "Карт у бустері", "Бустерів у боксі", "Ціна CRM", "Ціна OpenCart", "Залишок", "Статус складу", "Очікується", "URL товару", "Активний", "Якість даних", "Статус автоматизації", "Нотатки", "Джерело даних", "Оновлено"]);
   [1, 2, 3, 4].forEach((column) => rrc.setFormula(3, column, "=ARRAYFORMULA(\"ok\")", ""));
   [6, 7, 8, 9, 11, 14].forEach((column) => consumables.setFormula(4, column, "=IF(TRUE;0;0)", 0));
-  consumables.setValue(4, 1, "Пакет");
+  consumables.setValue(4, 1, consumableUsageName || "Пакет");
+  if (literalConsumableUsage) {
+    consumables.setValue(4, 8, 0);
+    consumables.formulas.delete(consumables.key(4, 8));
+  }
 
   for (let index = 0; index < productCount; index += 1) {
     const row = index + 3;
-    const sku = duplicateProductSku && index === 1 ? "ACC-3D-TEST-001" : "ACC-3D-TEST-" + String(index + 1).padStart(3, "0");
+    const sku = duplicateProductSku && index === 1 ? "ACC-3D-TEST-001" : index === 0 && productSku ? productSku : "ACC-3D-TEST-" + String(index + 1).padStart(3, "0");
     products.setValue(row, 1, sku); products.setValue(row, 12, productActive ? "Так" : "Ні");
-    products.setFormula(row, 2, "=\"Назва\"", "Назва"); if (literalProductPrice) products.setValue(row, 10, 100); else products.setFormula(row, 10, "=100", 100);
+    if (literalProductShortName) products.setValue(row, 2, "Manual name"); else products.setFormula(row, 2, "=\"Назва\"", "Назва");
+    if (literalProductPrice) products.setValue(row, 10, 100); else products.setFormula(row, 10, "=100", 100);
     if (rrcEnabled && (!duplicateProductSku || index === 0)) { rrc.setValue(row, 1, sku); rrc.setValue(row, 2, "Назва"); rrc.setValue(row, 5, 100); rrc.setValue(row, 6, "2026-08-09"); }
     if (index === 0) setMasterFormulas(master, missingMaster ? "ACC-3D-OTHER-999" : sku, masterActive);
     else if (!duplicateProductSku) { master.setValue(row, 1, sku); master.setValue(row, 16, masterActive ? "Так" : "Ні"); }
@@ -139,6 +144,37 @@ assertOnlyProblem(makeEnvironment({ missingMaster: true })(), 'missing_master_ro
 assertOnlyProblem(makeEnvironment({ masterActive: false })(), 'master_row_inactive');
 assertOnlyProblem(makeEnvironment({ literalProductPrice: true })(), 'formula_column_literal');
 assertOnlyProblem(makeEnvironment({ productCount: 2, duplicateProductSku: true })(), 'duplicate_sku');
+
+{
+  const manualShortNameSkus = [
+    'ACC-001', 'ACC-002', 'ACC-003', 'ACC-004', 'ACC-005', 'ACC-006', 'ACC-007-360', 'ACC-008', 'ACC-009',
+    'PKM-JP-MBX-XL', 'OP-JP-MBX-XL', 'PKM-JP-MBX-ST', 'OP-JP-MBX-ST', 'ACC-3D-DITTO-410', 'PKM-EN-PBLK-BLR-SLP',
+  ];
+  manualShortNameSkus.forEach((sku) => {
+    const result = makeEnvironment({ productSku: sku, literalProductShortName: true })();
+    assert.deepEqual(JSON.parse(JSON.stringify(result.problems)), [], sku + ' must remain an allowed manual short name.');
+  });
+  const nonExempt = makeEnvironment({ productSku: 'PKM-EN-NOT-EXEMPT', literalProductShortName: true })();
+  assertOnlyProblem(nonExempt, 'formula_column_literal');
+  assert.match(nonExempt.problems[0].detail, /Коротка назва/);
+  const literalPrice = makeEnvironment({ productSku: 'ACC-001', literalProductShortName: true, literalProductPrice: true })();
+  assertOnlyProblem(literalPrice, 'formula_column_literal');
+  assert.match(literalPrice.problems[0].detail, /Поточна ціна продажу/);
+}
+
+{
+  const manualUsageNames = [
+    'Аніме-брелок поліестер', 'Брошки TCG енергії', 'Фоторамка One Piece', 'Фоторамка Pokémon', 'Наліпка One Piece',
+    'Нашивка', 'Фігурка краба', 'Піни One Piece', 'Фігурка Pokémon', 'FUR-BR-COLOR-MIX', 'FUR-BR-CARB',
+  ];
+  manualUsageNames.forEach((name) => {
+    const result = makeEnvironment({ consumableUsageName: name, literalConsumableUsage: true })();
+    assert.deepEqual(JSON.parse(JSON.stringify(result.problems)), [], name + ' must remain an allowed manual historic usage.');
+  });
+  const nonExempt = makeEnvironment({ consumableUsageName: 'Неузгоджений ручний розхідник', literalConsumableUsage: true })();
+  assertOnlyProblem(nonExempt, 'formula_column_literal');
+  assert.match(nonExempt.problems[0].detail, /Використано в продажах/);
+}
 
 {
   const result = makeEnvironment({ remoteMode: 'mismatch' })();

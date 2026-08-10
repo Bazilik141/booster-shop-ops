@@ -9,13 +9,25 @@ new Web App version.
 |---|---|
 | Mirror file | `crm/apps-script/Code.gs` |
 | Baseline pulled from live | 2026-08-08, 11:41 Kyiv (owner export `CodeJS - CRM.txt`) |
-| **Mirror content deployed to live** | **2026-08-08, owner-reported** — owner pasted this exact file into the bound CRM project and published a new Web App version |
-| Deployed Web App version number | **V98, published 2026-08-09 (`order_items`).** Owner export `CodeJS - CRM (Версія 98, 8 серп. 2026 р.,).txt` verified **2026-08-09: identical to this mirror apart from CRLF line endings** (`diff` empty). Content-level proof, not filename trust: the export contains `apiOrderItems_`. Supersedes V97 (2026-08-09 14:44, `integrity_check` + `ok`/`clean` fix), V95 (2026-08-08 19:31), V92 (2026-08-08 15:23) and V89 (2026-08-04) |
+| **Mirror content deployed to live** | **V101, 2026-08-10 22:06 Kyiv, owner-reported** — owner published the local `crm/apps-script/Code.gs` CRM-006-5 candidate in the bound CRM project |
+| Deployed Web App version number | **V101, owner-reported published 2026-08-10 22:06 Kyiv (`CRM-006-5` formula-literal repair and narrow manual-usage integrity exceptions).** Deployment provenance establishes this local mirror as the deployed source; the post-deploy `integrity_check` is still pending. V99 was the prior runtime-proven deployment; V98 was the last independently byte-compared source export and supersedes V97 (2026-08-09 14:44, `integrity_check` + `ok`/`clean` fix), V95 (2026-08-08 19:31), V92 (2026-08-08 15:23) and V89 (2026-08-04) |
 | Live-verified after deploy | **Yes.** `3D-P-014` owner QA on 2026-08-08 produced four correct journal outcomes through the live Web App (`apiAddSale_` create, `apiUpdateSale_` create-on-update, `apiUpdateSale_` noop, `skipped_no_3dp_sku`), and `3D-P-022` was proven by `ACC-3D-DITTO-410` syncing end to end |
 | Local syntax check | `node --check` passed 2026-08-08 |
 | Previous repo copy | `Booster Shop CRM - Apps_Script_код 29.07.2026.csv` (2026-07-29, pre-V87/V89) — superseded, keep for history only |
 
 ## Mirror status
+
+> ✅ **2026-08-10, 22:06 — V101 owner-reported deployment from the CRM-006-5 local mirror.**
+> The source restores the confirmed live formulas and exempts only 11 documented manual historical
+> `Розхідники → Використано в продажах` values. The local integrity suite passes; final live
+> `integrity_check` evidence is pending.
+
+> ✅ **2026-08-10, 19:59 — V99 owner-deployed from the exact local mirror and runtime-proven.** Its `integrity_check`
+> response no longer reports `Товари → Коротка назва` rows `52-60, 71-76`; it retains the separate
+> `Товари → Поточна ціна продажу` rows `38-39` and all three existing `Розхідники` findings. This
+> proves the intended live behavior without hiding unrelated defects. The owner pasted this exact
+> local `Code.gs`, so the mirror-to-V99 identity is established by direct deployment provenance;
+> no redundant post-deploy export is requested.
 
 > ✅ **2026-08-09, evening — CRM mirror re-verified against the V98 owner export. No local pending
 > changes on the CRM side.** `diff` after CRLF normalisation is empty. V98 adds the read-only

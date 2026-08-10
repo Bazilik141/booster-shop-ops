@@ -678,6 +678,41 @@ const CACHEABLE_ACTIONS = { sku_list: 300, stock_alerts: 120, summary: 90, chann
 const CRM_INTEGRITY_MAX_PROBLEMS_PER_CODE_ = 10;
 // Keep this SKU grammar aligned with plans/3D-P_sku-naming-convention_20260807.md.
 const CRM_INTEGRITY_3DP_SKU_RE_ = /^(?:BR|FIG|ACC-3D)-[A-Z0-9][A-Z0-9-]*$/;
+// Verified manual in the owner-approved 2026-08-08 22:54 history copy. These names cannot be
+// reproduced by the ordinary Brand/Set/Language/Format row formula without losing information.
+const CRM_INTEGRITY_MANUAL_SHORT_NAME_SKUS_ = {
+  'ACC-001': true,
+  'ACC-002': true,
+  'ACC-003': true,
+  'ACC-004': true,
+  'ACC-005': true,
+  'ACC-006': true,
+  'ACC-007-360': true,
+  'ACC-008': true,
+  'ACC-009': true,
+  'PKM-JP-MBX-XL': true,
+  'OP-JP-MBX-XL': true,
+  'PKM-JP-MBX-ST': true,
+  'OP-JP-MBX-ST': true,
+  'ACC-3D-DITTO-410': true,
+  'PKM-EN-PBLK-BLR-SLP': true,
+};
+// Verified manual historic usage from the owner-approved 2026-08-10 21:41 history copy.
+// These were marketing/3D write-offs before a matching sale/write-off reference existed, so
+// replacing them with a sales-derived formula would silently change accounting history.
+const CRM_INTEGRITY_MANUAL_CONSUMABLE_USAGE_NAMES_ = {
+  'Аніме-брелок поліестер': true,
+  'Брошки TCG енергії': true,
+  'Фоторамка One Piece': true,
+  'Фоторамка Pokémon': true,
+  'Наліпка One Piece': true,
+  'Нашивка': true,
+  'Фігурка краба': true,
+  'Піни One Piece': true,
+  'Фігурка Pokémon': true,
+  'FUR-BR-COLOR-MIX': true,
+  'FUR-BR-CARB': true,
+};
 
 function apiDoGetCacheVersion_() {
 if (!_memo.doGetCacheVersion) _memo.doGetCacheVersion = String(PropertiesService.getScriptProperties().getProperty('CRM_DOGET_CACHE_VERSION') || '1');
@@ -827,7 +862,10 @@ headers.forEach(function(header) {
   if (columnIndex == null) return;
   const badRows = [];
   table.values.forEach(function(row, index) {
-    if (!crmIntegrityText_(row[identityIndex])) return;
+    const identity = crmIntegrityText_(row[identityIndex]);
+    if (!identity) return;
+    if (table.title === 'Товари' && header === 'Коротка назва' && Object.prototype.hasOwnProperty.call(CRM_INTEGRITY_MANUAL_SHORT_NAME_SKUS_, identity)) return;
+    if (table.title === 'Розхідники' && header === 'Використано в продажах' && Object.prototype.hasOwnProperty.call(CRM_INTEGRITY_MANUAL_CONSUMABLE_USAGE_NAMES_, identity)) return;
     if (!String((table.formulas[index] || [])[columnIndex] || '').trim()) badRows.push(table.dataStartRow + index);
   });
   if (badRows.length) crmIntegrityAdd_(report, 'formula_column_literal', table.title, crmIntegrityRowsLabel_(badRows), header + ' contains a literal where a formula is required.');
