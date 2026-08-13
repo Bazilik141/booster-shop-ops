@@ -678,6 +678,41 @@ const CACHEABLE_ACTIONS = { sku_list: 300, stock_alerts: 120, summary: 90, chann
 const CRM_INTEGRITY_MAX_PROBLEMS_PER_CODE_ = 10;
 // Keep this SKU grammar aligned with plans/3D-P_sku-naming-convention_20260807.md.
 const CRM_INTEGRITY_3DP_SKU_RE_ = /^(?:BR|FIG|ACC-3D)-[A-Z0-9][A-Z0-9-]*$/;
+// Verified manual in the owner-approved 2026-08-08 22:54 history copy. These names cannot be
+// reproduced by the ordinary Brand/Set/Language/Format row formula without losing information.
+const CRM_INTEGRITY_MANUAL_SHORT_NAME_SKUS_ = {
+  'ACC-001': true,
+  'ACC-002': true,
+  'ACC-003': true,
+  'ACC-004': true,
+  'ACC-005': true,
+  'ACC-006': true,
+  'ACC-007-360': true,
+  'ACC-008': true,
+  'ACC-009': true,
+  'PKM-JP-MBX-XL': true,
+  'OP-JP-MBX-XL': true,
+  'PKM-JP-MBX-ST': true,
+  'OP-JP-MBX-ST': true,
+  'ACC-3D-DITTO-410': true,
+  'PKM-EN-PBLK-BLR-SLP': true,
+};
+// Verified manual historic usage from the owner-approved 2026-08-10 21:41 history copy.
+// These were marketing/3D write-offs before a matching sale/write-off reference existed, so
+// replacing them with a sales-derived formula would silently change accounting history.
+const CRM_INTEGRITY_MANUAL_CONSUMABLE_USAGE_NAMES_ = {
+  'Аніме-брелок поліестер': true,
+  'Брошки TCG енергії': true,
+  'Фоторамка One Piece': true,
+  'Фоторамка Pokémon': true,
+  'Наліпка One Piece': true,
+  'Нашивка': true,
+  'Фігурка краба': true,
+  'Піни One Piece': true,
+  'Фігурка Pokémon': true,
+  'FUR-BR-COLOR-MIX': true,
+  'FUR-BR-CARB': true,
+};
 
 function apiDoGetCacheVersion_() {
 if (!_memo.doGetCacheVersion) _memo.doGetCacheVersion = String(PropertiesService.getScriptProperties().getProperty('CRM_DOGET_CACHE_VERSION') || '1');
@@ -827,7 +862,10 @@ headers.forEach(function(header) {
   if (columnIndex == null) return;
   const badRows = [];
   table.values.forEach(function(row, index) {
-    if (!crmIntegrityText_(row[identityIndex])) return;
+    const identity = crmIntegrityText_(row[identityIndex]);
+    if (!identity) return;
+    if (table.title === 'Товари' && header === 'Коротка назва' && Object.prototype.hasOwnProperty.call(CRM_INTEGRITY_MANUAL_SHORT_NAME_SKUS_, identity)) return;
+    if (table.title === 'Розхідники' && header === 'Використано в продажах' && Object.prototype.hasOwnProperty.call(CRM_INTEGRITY_MANUAL_CONSUMABLE_USAGE_NAMES_, identity)) return;
     if (!String((table.formulas[index] || [])[columnIndex] || '').trim()) badRows.push(table.dataStartRow + index);
   });
   if (badRows.length) crmIntegrityAdd_(report, 'formula_column_literal', table.title, crmIntegrityRowsLabel_(badRows), header + ' contains a literal where a formula is required.');
@@ -3187,6 +3225,115 @@ return { ok: false, invalid: true };
 PropertiesService.getScriptProperties().setProperty('OPENAI_API_KEY', apiKey);
 ui.alert('OPENAI_API_KEY збережено.');
 return { ok: true };
+}
+
+// 3D-P-019 Phase A is intentionally a one-off, owner-run setup action. It is not registered in
+// the Web App API and must not be called from the normal order/write-off paths.
+function setup3dp019FixturePayerPhaseA() {
+const sheetName = 'Розхідники';
+const headerRow = 3;
+const firstDataRow = 4;
+const legacyLastColumn = 14; // A:N. N is the existing sale-form dropdown formula seed.
+const payerColumn = 15; // O. It must be appended after N, never inserted before an existing column.
+const legacyHeaders = [
+  'Тип розхідника', 'Категорія', 'Собівартість 1 шт', 'Початково на складі', 'Початково їде',
+  'Надійшло через витрати', 'Їде через витрати', 'Використано в продажах', 'Залишок на складі',
+  'Очікується', 'Вартість залишку', 'Примітка', '', 'Dropdown для форми продажу'
+];
+const fixtureNames = ['FUR-BR-COLOR-MIX', 'FUR-BR-CARB'];
+const legacyCategory = '3D-друк';
+const fixtureCategory = 'Фурнітура';
+const ownerPayer = 'власник';
+const text = function(value) { return String(value == null ? '' : value).trim(); };
+
+const sheet = SpreadsheetApp.getActive().getSheetByName(sheetName);
+if (!sheet) throw new Error('3D-P-019 Phase A stopped: sheet ' + sheetName + ' was not found.');
+
+const lastColumn = sheet.getLastColumn();
+if (lastColumn < legacyLastColumn) {
+  throw new Error('3D-P-019 Phase A stopped: ' + sheetName + ' has only ' + lastColumn + ' used columns; expected A:N.');
+}
+if (lastColumn > payerColumn) {
+  throw new Error('3D-P-019 Phase A stopped: ' + sheetName + ' has data after column O; append safety cannot be proven.');
+}
+
+const headers = sheet.getRange(headerRow, 1, 1, lastColumn).getDisplayValues()[0].map(text);
+for (let index = 0; index < legacyHeaders.length; index++) {
+  if (headers[index] !== legacyHeaders[index]) {
+    throw new Error('3D-P-019 Phase A stopped: ' + sheetName + ' header ' + String.fromCharCode(65 + index)
+      + ' differs from the verified A:N schema.');
+  }
+}
+const hasPayerColumn = lastColumn === payerColumn;
+if (hasPayerColumn && headers[payerColumn - 1] !== 'Платник') {
+  throw new Error('3D-P-019 Phase A stopped: column O is not the expected Платник header.');
+}
+
+const lastRow = sheet.getLastRow();
+if (lastRow < firstDataRow) throw new Error('3D-P-019 Phase A stopped: no consumable rows were found.');
+const rowWidth = hasPayerColumn ? payerColumn : legacyLastColumn;
+const rows = sheet.getRange(firstDataRow, 1, lastRow - firstDataRow + 1, rowWidth).getValues()
+  .map(function(values, index) { return { row: firstDataRow + index, values: values }; });
+const fixtureRows = rows.filter(function(item) {
+  const category = text(item.values[1]);
+  return category === legacyCategory || category === fixtureCategory;
+});
+
+if (fixtureRows.length !== fixtureNames.length) {
+  throw new Error('3D-P-019 Phase A stopped: expected exactly two fixture-category rows, found ' + fixtureRows.length + '.');
+}
+const seenFixtures = {};
+fixtureRows.forEach(function(item) {
+  const name = text(item.values[0]);
+  const category = text(item.values[1]);
+  const payer = hasPayerColumn ? text(item.values[payerColumn - 1]) : '';
+  if (fixtureNames.indexOf(name) === -1 || seenFixtures[name]) {
+    throw new Error('3D-P-019 Phase A stopped: unexpected or duplicate fixture row ' + name + '.');
+  }
+  if (category !== legacyCategory && category !== fixtureCategory) {
+    throw new Error('3D-P-019 Phase A stopped: fixture ' + name + ' has an unsupported category.');
+  }
+  if (payer && payer !== ownerPayer) {
+    throw new Error('3D-P-019 Phase A stopped: fixture ' + name + ' already has an unapproved payer value.');
+  }
+  seenFixtures[name] = true;
+});
+fixtureNames.forEach(function(name) {
+  if (!seenFixtures[name]) throw new Error('3D-P-019 Phase A stopped: required fixture ' + name + ' was not found.');
+});
+
+let headerAdded = false;
+if (!hasPayerColumn) {
+  sheet.insertColumnAfter(legacyLastColumn);
+  sheet.getRange(headerRow, payerColumn).setValue('Платник');
+  headerAdded = true;
+}
+
+let categoriesRenamed = 0;
+let payersBackfilled = 0;
+fixtureRows.forEach(function(item) {
+  if (text(item.values[1]) === legacyCategory) {
+    sheet.getRange(item.row, 2).setValue(fixtureCategory);
+    categoriesRenamed++;
+  }
+  const payer = hasPayerColumn ? text(item.values[payerColumn - 1]) : '';
+  if (!payer) {
+    sheet.getRange(item.row, payerColumn).setValue(ownerPayer);
+    payersBackfilled++;
+  }
+});
+SpreadsheetApp.flush();
+
+const result = {
+  ok: true,
+  action: '3dp019_phase_a_fixture_payer_setup',
+  header_added: headerAdded,
+  category_rows_renamed: categoriesRenamed,
+  payer_rows_backfilled: payersBackfilled,
+  already_applied: !headerAdded && categoriesRenamed === 0 && payersBackfilled === 0
+};
+Logger.log(JSON.stringify(result));
+return result;
 }
 
 function setupNewsDigestTrigger() {

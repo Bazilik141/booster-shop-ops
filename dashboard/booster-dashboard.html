@@ -553,6 +553,11 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
       <div class="page-sub">Всі активні SKU з залишками і статусами</div>
     </div>
     <div class="section">
+      <div class="section-header"><span class="section-title">Пакетна зміна РРЦ</span><button id="applyRrpChangesButton" class="btn-primary" type="button" onclick="applyRrpChanges()" disabled>Застосувати зміни РРЦ</button></div>
+      <div class="three-dp-note">Введи нову РРЦ у правій колонці й застосуй усі зміни одним підтвердженням. 3D SKU тут лише для перегляду — їхня РРЦ змінюється у вкладці 3D.</div>
+      <div id="skuRrpMessage"></div>
+    </div>
+    <div class="section">
       <div class="section-header"><span class="section-title">Новий SKU в основній CRM</span><button class="btn-primary" type="button" onclick="toggleSkuCreateForm()">+ Додати SKU</button></div>
       <div class="three-dp-note">Один контрольований запис створює товар у «Товари», РРЦ і формульні проєкції. Формули та «Майстер_Товарів» вручну не перезаписуються.</div>
       <div id="skuCreateWorkspace" class="hidden"></div>
@@ -1514,9 +1519,17 @@ async function loadOverview() {
     const st = d.stock || {};
     const dq = d.data_quality || {};
     const po = d.pending_orders || {};
-    let mtd = { current: d.sales_current_month || {}, previous: null };
+    let mtd = { current: d.sales_current_month || {}, previous: d.sales_prev_month || null };
     let ordersData = { orders: [] };
     let ordersForUnpaidOk = false;
+    try {
+      const ms = await p_monthly;
+      cache.monthly = ms;
+      if (ms.month_to_date) mtd.current = ms.month_to_date;
+      if (ms.previous_month_to_date) mtd.previous = ms.previous_month_to_date;
+    } catch(e) {
+      console.warn('mtd card:', e.message);
+    }
     try {
       ordersData = await p_orders;
       cache.orders = ordersData;
@@ -1524,25 +1537,22 @@ async function loadOverview() {
     } catch(e) {
       console.warn('orders unpaid card:', e.message);
     }
-    try {
-      const allOrders = await p_ordersAll;
-      cache.ordersAll = allOrders;
-      const bounds = mtdPeriodBounds();
-      mtd = {
-        current: aggregateOrdersForRange(allOrders.orders || [], bounds.current),
-        previous: aggregateOrdersForRange(allOrders.orders || [], bounds.previous)
-      };
-    } catch(e) {
-      console.warn('mtd card:', e.message);
-    }
-    const unpaids = (ordersData.orders || []).filter(r =>
+    const activeOrders = ordersData.orders || [];
+    const preorderOrders = activeOrders.filter(r => r.order_status === 'Передзамовлення');
+    const ordinaryActiveOrders = activeOrders.filter(r => r.order_status !== 'Передзамовлення');
+    const unpaids = ordinaryActiveOrders.filter(r =>
       r.order_status === 'Відправлено' && r.payment_status === 'Не оплачено'
     );
     const unpaidTotal = unpaids.reduce((s, r) => s + (Number(r.amount) || 0), 0);
-    const activePaidTotal = ordersForUnpaidOk ? (ordersData.orders || []).filter(r => r.payment_status !== 'Не оплачено').reduce((s, r) => s + (Number(r.amount) || 0), 0) : null;
-    const activeUnpaidTotal = ordersForUnpaidOk ? (ordersData.orders || []).filter(r => r.payment_status === 'Не оплачено').reduce((s, r) => s + (Number(r.amount) || 0), 0) : null;
-    const activeCount = ordersForUnpaidOk ? (ordersData.count || (ordersData.orders || []).length) : (po.count || 0);
-    const activeSub = ordersForUnpaidOk ? `Оплачено ${fmt(activePaidTotal)}<br>Не оплачено ${fmt(activeUnpaidTotal)}` : 'Немає даних';
+    const activePaidTotal = ordersForUnpaidOk ? ordinaryActiveOrders.filter(r => r.payment_status !== 'Не оплачено').reduce((s, r) => s + (Number(r.amount) || 0), 0) : null;
+    const activeUnpaidTotal = ordersForUnpaidOk ? ordinaryActiveOrders.filter(r => r.payment_status === 'Не оплачено').reduce((s, r) => s + (Number(r.amount) || 0), 0) : null;
+    const preorderPaidTotal = preorderOrders.filter(r => r.payment_status === 'Оплачено').reduce((s, r) => s + (Number(r.amount) || 0), 0);
+    const preorderUnpaidTotal = preorderOrders.filter(r => r.payment_status !== 'Оплачено').reduce((s, r) => s + (Number(r.amount) || 0), 0);
+    const activeCount = ordersForUnpaidOk ? (ordersData.count || activeOrders.length) : (po.count || 0);
+    const preorderSub = preorderOrders.length
+      ? `<br><span style="font-size:10px;color:var(--muted)">Передзам.: ${preorderOrders.length} · опл. ${fmt(preorderPaidTotal)}${preorderUnpaidTotal ? ' · не опл. ' + fmt(preorderUnpaidTotal) : ''}</span>`
+      : '';
+    const activeSub = ordersForUnpaidOk ? `Оплачено ${fmt(activePaidTotal)}<br>Не оплачено ${fmt(activeUnpaidTotal)}${preorderSub}` : 'Немає даних';
     const warehouseProfit = d.potential_profit_warehouse != null ? Number(d.potential_profit_warehouse) : null;
     const warehouseCost  = d.warehouse_cost          != null ? Number(d.warehouse_cost)          : null;
     const assetCost      = d.asset_cost              != null ? Number(d.asset_cost)              : null;
@@ -2005,7 +2015,7 @@ function isActiveOrder(order) {
   const orderStatus = String((order && order.order_status) || '').trim();
   const paymentStatus = String((order && order.payment_status) || '').trim();
   const terminal = ['Скасовано', 'Отримано', 'Повернення'].indexOf(orderStatus) !== -1;
-  return (['Нове', 'В обробці', 'Відправлено'].indexOf(orderStatus) !== -1 || paymentStatus === 'Не оплачено') && !terminal;
+  return (['Нове', 'В обробці', 'Відправлено', 'Передзамовлення'].indexOf(orderStatus) !== -1 || paymentStatus === 'Не оплачено') && !terminal;
 }
 
 function isOrderWithinDays(order, days) {
@@ -2194,6 +2204,33 @@ async function loadOrders(mode = orderState.mode) {
 }
 // ════════════ SKUs ════════════
 const skuCreateState = { open:false, loading:false, options:null, message:{} };
+const skuRrpState = { pending:Object.create(null), saving:false, message:{} };
+function skuRrpMessage() { return skuRrpState.message && skuRrpState.message.text ? threeDpMessage(skuRrpState.message) : ''; }
+function renderSkuRrpControls() {
+  const button=document.getElementById('applyRrpChangesButton');const message=document.getElementById('skuRrpMessage');const count=Object.keys(skuRrpState.pending).length;
+  if(button){button.disabled=skuRrpState.saving || !count;button.textContent=skuRrpState.saving?'Застосовую…':'Застосувати зміни РРЦ'+(count?' ('+count+')':'');}
+  if(message)message.innerHTML=skuRrpMessage();
+}
+function queueRrpChange(input) {
+  const sku=String(input && input.dataset && input.dataset.sku || '').trim().toUpperCase();const current=Number(input && input.dataset && input.dataset.current);const raw=String(input && input.value != null ? input.value : '').trim().replace(',','.');const next=Number(raw);
+  if(!sku || !Number.isFinite(current) || current<=0)return;
+  if(!raw || !Number.isFinite(next) || next<=0){delete skuRrpState.pending[sku];input.setCustomValidity('Вкажи РРЦ більше нуля або поверни поточне значення.');renderSkuRrpControls();return;}
+  input.setCustomValidity('');const rounded=Math.round((next+Number.EPSILON)*100)/100;
+  if(Math.abs(rounded-current)<0.009)delete skuRrpState.pending[sku];else skuRrpState.pending[sku]={sku:sku,rrp:rounded,expected_rrp:current};
+  renderSkuRrpControls();
+}
+async function applyRrpChanges() {
+  const changes=Object.keys(skuRrpState.pending).map(function(sku){return skuRrpState.pending[sku];});
+  if(!changes.length)return;
+  if(!confirm('Застосувати нову РРЦ для '+changes.length+' SKU? CRM перевірить, що поточні значення не змінилися після завантаження списку.'))return;
+  skuRrpState.saving=true;skuRrpState.message={text:'Застосовую зміни РРЦ…',kind:''};renderSkuRrpControls();
+  try{
+    const result=await callPost({action:'update_rrp_batch',changes:changes});
+    skuRrpState.pending=Object.create(null);skuRrpState.message={text:result.rows_updated?'РРЦ оновлено: '+result.rows_updated+' SKU.':'Значення вже були актуальні; записів не змінено.',kind:'success'};
+    delete cache.skus;await loadSkus();runCrmIntegrityCheck();
+  }catch(e){skuRrpState.message={text:'РРЦ не змінено: '+e.message,kind:'error'};}
+  finally{skuRrpState.saving=false;renderSkuRrpControls();}
+}
 function skuCreateMessage() { return skuCreateState.message && skuCreateState.message.text ? threeDpMessage(skuCreateState.message) : ''; }
 function skuCreateOptionList(id, values) { return '<datalist id="'+id+'">'+(values || []).map(function(value){return '<option value="'+threeDpEsc(value)+'"></option>';}).join('')+'</datalist>'; }
 async function toggleSkuCreateForm() {
@@ -2217,12 +2254,14 @@ async function saveNewSku() {
 async function loadSkus() {
   clearError();
   renderSkuCreateForm();
+  renderSkuRrpControls();
   try {
     const d = await call('sku_list');
     cache.skus = d;
     const s = d.skus || [];
+    const visibleBySku={};s.forEach(function(item){visibleBySku[String(item.sku || '').trim().toUpperCase()]=item;});Object.keys(skuRrpState.pending).forEach(function(sku){if(!visibleBySku[sku] || visibleBySku[sku].is_3dp)delete skuRrpState.pending[sku];});renderSkuRrpControls();
     document.getElementById('skuTable').innerHTML = `<div class="tbl-wrap"><table>
-      <tr><th>SKU</th><th>Назва</th><th>РРЦ</th><th>Дин. РРЦ</th><th>Гранична закупка</th><th>Маржа</th><th>30д</th><th>60д</th><th>Залишок</th><th>Очікується</th><th>Днів запасу</th><th>Терм.</th></tr>
+      <tr><th>SKU</th><th>Назва</th><th>РРЦ</th><th>Дин. РРЦ</th><th>Гранична закупка</th><th>Маржа</th><th>30д</th><th>60д</th><th>Залишок</th><th>Очікується</th><th>Днів запасу</th><th>Терм.</th><th>Нова РРЦ, грн</th></tr>
       ${s.map(r => `<tr>
         <td><span class="chip mono">${r.sku}</span></td>
         <td style="font-size:12px;max-width:180px;line-height:1.3">${skuName(r.name, r.sku)}</td>
@@ -2236,6 +2275,7 @@ async function loadSkus() {
         <td>${r.expected??'—'}</td>
         <td>${dayCoverage(r.stock, r.sold_30d, r.sold_60d)}</td>
         <td class="${urgCls(r.urgency)}">${r.urgency||'—'}</td>
+        <td>${r.is_3dp?'<span style="color:var(--muted);font-size:12px">У вкладці 3D</span>':'<input type="number" min="0.01" step="0.01" inputmode="decimal" aria-label="Нова РРЦ для '+threeDpEsc(r.sku)+'" data-sku="'+threeDpEsc(r.sku)+'" data-current="'+Number(r.rrc ?? r.price_crm)+'" value="" placeholder="'+Number(r.rrc ?? r.price_crm)+'" oninput="queueRrpChange(this)" style="width:96px;padding:6px 7px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text)">'}</td>
       </tr>`).join('')}
     </table></div>`;
     const skf = document.getElementById('skuFilter');
@@ -2769,6 +2809,20 @@ const ROADMAP_TASKS = [
     why: 'Без SKU колоди неможливо ні прийняти на склад, ні порахувати собівартість, ні вивести на сайт. А без ручного розподілу вартості CRM поділила б ₴4 257 порівну по кількості — ₴709.50 на кожну позицію, тобто колода відразу в мінус при РРЦ ₴700.',
     warn: '2026-08-10 ЗАКРИТО. Блокер знято пасом 4a CRM-006 (Товари!B77:B81 отримали формулу), після чого обидві частини виконано й прочитано назад із живої книги; фінальна перевірка цілісності на V101 чиста. WP1: додано формат Starter Deck/STD і сети ST-32…ST-36, розширено ЛИШЕ кінці вже наявних діапазонів валідації (Товари!F3:F201 → AD4:AD44, G3:G201 → J4:J15); пʼять активних рядків Товари!77:81, РРЦ по 700.00 від 10.08, пʼять рядків у Майстер_Товарів. Колонки B і J на нових рядках лишились формулами — перевірено читанням формул, а не значень. WP2: шість записів Закупки!126:131, LOT-0131…LOT-0136, товар 4 257.00 грн рівно за рішенням власника (бокс 3 000 + 5 × 251.40), японська комісія 228.58 грн проти номінальних ¥800 при курсі 3.5000 — зайва копійка це округлення по рядках 38.10/38.10/38.09 у двох тризначних внесеннях. Формули L:P не чіпані, порахували 3 038.10 за бокс і 289.50/289.49 за колоду. Усі рядки в статусі Замовлено. || ПРИЙНЯТЕ ЗАСТЕРЕЖЕННЯ, власник у курсі: Склад показує по одиниці в Закуплено всього і нуль в очікуваному, бо формула рахує В дорозі / На складі в Японії / Виграно, але не Замовлено. Формулу навмисно не чіпали — це вихід за обсяг задачі. Цифри зʼявляться самі, коли лот перейде в дорогу. Чи має Замовлено рахуватись очікуваним — окреме рішення, місце йому в NCRM або власній задачі. || ЗНАЙДЕНО ЖИВЦЕМ, У ХЕНДОФІ ЦЬОГО НЕ БУЛО: діапазони валідації Налаштування!J4:J14 і AD4:AD39 довелось розширювати, інакше нові значення існували б, але не вибирались. || Далі: CONTENT-005 (картки пʼяти колод і заливка на сайт) з боку CRM розблоковано. ЗВІТ: diagnostics/CRM-008_starter-decks-sku-and-purchase_report_20260810.md. || ІСТОРІЯ ЗУПИНКИ: 2026-08-10 ЗУПИНЕНО НА PREFLIGHT, У КНИЗІ НІЧОГО НЕ ЗМІНЕНО. Спрацювала власна стоп-умова хендофу: колонка Товари!Коротка назва не дотягується до нових рядків — B77:B81 порожні, формули там немає взагалі. Завести 5 SKU зараз означало б власноруч створити 5 нових дефектів цілісності, тому виконавець зупинився правильно. Блокує ТІЛЬКИ колонка B: Товари!J77:J81 формулу ціни зберігають. Розблокування — CRM-006 пас 4, власник авторизував його 10.08 у повному обсязі; хендофф handoffs/handoff_CRM-006-PASS4_formula-restore_20260810.md. || ЗНАЙДЕНО ЖИВЦЕМ, У ХЕНДОФІ ЦЬОГО НЕ БУЛО: джерела випадаючих списків — Налаштування!J4:J14 (формати) і AD4:AD39 (сети), тобто Starter Deck і ST-32…ST-36 потребують ще й розширення діапазонів валідації, інакше нові значення існуватимуть, але не будуть вибиратись. Хендофф треба доповнити перед другим заходом. || Rollback-копія власника: «10 серпня, 15:01 До 008». Курси!B5 = 3.5000 JPY збігається з розрахунком хендофу; yskh293 у Закупках ще немає. CRM-008 не відновлюється автоматично: потрібен свіжий preflight, власний baseline цілісності й окремий дозвіл власника. ЗВІТ: diagnostics/CRM-008_starter-decks-sku-and-purchase_report_20260810.md. || ВИХІДНІ УМОВИ ЗАДАЧІ: 2026-08-10 РІШЕННЯ ВЛАСНИКА: бокс ₴3 000, решта порівну по колодах — ₴251.40 кожна (3 000 + 5 × 251.40 = 4 257.00 рівно). || НОВИЙ ФОРМАТ: Starter Deck / STD. SKU: OP-JP-ST32-STD Зоро, ST33 Кузан, ST34 Катакурі, ST35 Сабо, ST36 Кід. Без суфікса з імʼям — ST-32…ST-36 і так унікальні. РРЦ ₴700 кожна. || ДВІ СТРУКТУРНІ ЗМІНИ В НАЛАШТУВАННЯХ, обидві джерела для випадаючих списків: формат Starter Deck/STD і пʼять кодів сетів ST-32…ST-36. Тому OPS-CRMINTEGRITY діє повністю — перевірка до і після, жодного літерала над формулою. || ЗІТКНЕННЯ З ВІДКРИТОЮ ЗАДАЧЕЮ: пас 4 у CRM-006 досі володіє затертими формулами в Товари!B і Товари!J (рядки 38-39, 49-67, 71-76). Нові рядки лягають одразу за цим блоком. Ремонтувати ті колонки в цій задачі ЗАБОРОНЕНО — якщо формула не дотягується до нового рядка, зупинитись і сказати. || ОБМЕЖЕННЯ ФОРМИ, не побажання: apiAddPurchase_ і форма Внести_закупку беруть максимум три позиції, тому шість рядків = два внесення під тим самим yskh293, а ¥800 ділиться ¥400/¥400, інакше комісія подвоїться. || Хендофф: handoffs/handoff_CRM-008_starter-decks-sku-and-purchase_20260810.md. Контентна половина — CONTENT-005.',
     subtasks: []
+  },
+  {
+    id: 'CRM-009', title: 'Консолідація скриптів CRM/3D-P, універсальна чистка тестових замовлень і масове редагування РРЦ', status: 'done', tool: 'Codex', priority: 'High',
+    lastUpdated: '2026-08-13', blockedBy: [],
+    simple: 'Пʼять пакетів за 13.08: чистка тестового MAN-FOP-0006, універсальна дія чистки тестових замовлень за маркером у примітці, винесення відпрацьованих одноразових міграцій в архів (CRM −357 рядків, 3D-P −667), збереження недоторканою підсистеми Telegram/новин і масове редагування РРЦ звичайних товарів прямо на вкладці Товари.',
+    why: 'Скрипти за пʼять днів виросли з 4 714 до 7 000 рядків і обросли одноразовими міграціями, які вже відпрацювали. Плюс не було жодного безпечного способу прибрати тестове замовлення так, щоб не лишилось хвостів у 3D-P, і не було способу правити РРЦ пачкою.',
+    warn: '2026-08-13 ЗАКРИТО за авторизацією власника. DoD для Apps Script виконано: версії опубліковані І прочитані назад через API — bounded integrity_check дав clean=true, problems=[], compared=3, deferred=null, elapsed_ms=8523; owner QA ок. Поточний живий базис: CRM V117 (22:48). || ЧИСТКА ТЕСТОВИХ ЗАМОВЛЕНЬ: клітинки чистяться на місці, ЖОДЕН рядок не видаляється — тому номери рядків не їдуть і всі захардкоджені константи рядків у скрипті лишаються валідними. Формули, _Аудит_API і журнал синхронізації зберігаються. Один позначений рядок відбирає ВСЕ замовлення, щоб звичайні та 3D реєстри не розʼїхались. Гейти: токен CRM, підтвердження в сторінці, точна фраза CLEAN TEST ORDERS, а віддалений 3D-P endpoint owner-only і вимагає CLEAN TEST ORDER <order>. Перехід від allow-list до маркера зроблено за прямою вказівкою власника. || ЗАСТЕРЕЖЕННЯ РЕВʼЮ, власник ознайомлений і прийняв: прев\'ю і застосування виконуються одним викликом, тобто JSON зі списком видаленого власник бачить уже після запису; маркер шукається підрядком у вільному тексті примітки. || АРХІВ: crm/apps-script/archive/one-off-migrations_20260813.gs (370 рядків, 18 функцій) і 3d-print/apps-script-3dp-api/archive/one-off-migrations_20260813.gs (675 рядків, 36 функцій) — репозиторій-онлі, В ЖИВИЙ ПРОЄКТ НЕ ВСТАВЛЯЮТЬСЯ НІКОЛИ. Живі файли: CRM 7 000 → 6 643, 3D-P 3 051 → 2 384. Знято пʼять відставних маршрутів API 3dp_setup_*. Закоментованих залишків у робочих файлах немає. Незалежна перевірка: архівний setup3dp019FixturePayerPhaseA побайтово рівний живій версії з V102. || УРОК, ЯКИЙ ЛЕГКО ЗАБУТИ: тригери Apps Script викликають функції ЗА ІМЕНЕМ із налаштувань проєкту, а не з коду. keepWarm і runNewsPruneOnce виглядають мертвими за статичним пошуком, але є реальними цілями тригерів. Панель тригерів власника: CRM — runNightlyInventoryMaintenance, keepWarm, runNewsPruneOnce; 3D-P — жодного. Чистка за грепом зламала б фонову автоматику мовчки. || МАСОВА РРЦ: запис лише в РРЦ!E:G, формульні Товари!J і РРЦ!H перевіряються до запису, F:G захищені; кожен запит несе значення, яке було на момент завантаження списку, і сервер відхиляє ВСЮ пачку, якщо ціль змінилась — застаріла вкладка не перезапише свіже значення; невдала верифікація відкочує E:G усіх запланованих рядків. 3D заблоковано і в UI, і в API — правиться лише на вкладці 3D. Відкат пачки — ввести попередні значення новою пачкою, автоматичного revert немає. || ВІДОМІ ПАДІННЯ ТЕСТІВ, свідомо не приховані: tests/3d-p-013-dashboard-ui-regression.test.mjs чекає старий рендерер 3D-інформації, tests/3d-p-010-crm-packaging-pull.test.mjs не інжектить поточну залежність read3dp019FixtureFormLines_. || ЗВІТИ: diagnostics/CRM-3DP_test-order-purge-and-archive_report_20260813.md, diagnostics/CRM_RRP_bulk-dashboard-edit_report_20260813.md.',
+    subtasks: [
+      { id: '1', title: 'Чистка тестового замовлення MAN-FOP-0006', status: 'done', desc: 'Усі три рядки (ACC-3D-DITTO-410, PKM-JP-MBX-XL, OP-JP-MBX-ST) прибрані з обох систем. CRM V114 / 3D-P V22, перевірено власником.' },
+      { id: '2', title: 'Універсальна дія чистки тестових замовлень', status: 'done', desc: 'Дія дашборда test_order_cleanup за маркером у Продажі!Примітка. Preflight по 11 поверхнях CRM і 3D-P, чистка лише ручних клітинок, повторний запуск ідемпотентний. CRM V115 / 3D-P V23.' },
+      { id: '3', title: 'Архів відпрацьованих одноразових міграцій', status: 'done', desc: 'CRM −357 рядків, 3D-P −667. Два архівні файли в репозиторії, які ніколи не вставляються в живий проєкт. Знято пʼять маршрутів 3dp_setup_*.' },
+      { id: '4', title: 'Підсистема Telegram/новин збережена недоторканою', status: 'done', desc: 'Виведена зі скоупу рішенням власника і перевірена: newsDigest, keepWarm, runNewsPruneOnce, runNightlyInventoryMaintenance, tgDraftPostAnthropic_ на місці. Панель тригерів звірена ДО видалення.' },
+      { id: '5', title: 'Масове редагування РРЦ на вкладці Товари', status: 'done', desc: 'Колонка «Нова РРЦ, грн» і один запит update_rrp_batch після підтвердження власника, із захистом від застарілих даних вкладки й відкотом при невдалій верифікації. CRM V117.' }
+    ]
   },
   {
     id: 'CONTENT-005', title: 'Картки товару для пʼяти стартових колод OP-16 і заливка на сайт', status: 'done', tool: 'Codex', priority: 'Medium',

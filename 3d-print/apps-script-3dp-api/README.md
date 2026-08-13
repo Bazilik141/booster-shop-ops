@@ -178,6 +178,22 @@ CORS preflight.
   schema change; the live positive smoke uses it as a preflight before writes.
 - `3dp_setup_3dp010` — owner-only, bounded setup for `Продажі!T1:T:lastRow`;
   it writes `CRM row number` only when T is empty and otherwise returns `T_NOT_EMPTY`.
+- `3dp_payout_create` — owner-only append of one unique `YYYY-MM` payout period;
+  amount and review-deadline cells remain formula-owned.
+- `3dp_payout_mark_paid` — owner-only optimistic update of the exact payout row;
+  it requires the expected period and refuses to replace a different payment date.
+- `3dp_order_gifts_append` — owner-only, request-idempotent batch append of up to
+  ten CRM-selected 3D gifts to `Маркетингові_плюшки`; it validates active SKU,
+  buyout price and current 3D stock before writing, and the resulting sheet formula
+  reduces 3D availability without a second stock-adjustment entry.
+- `3dp_test_order_purge` — owner-only exact cleanup for the approved test order
+  `MAN-FOP-0005`; `dry_run:true` previews the bounded Sales and stock-adjustment
+  rows, and apply preserves formulas plus audit history.
+
+The matching editor migration is `preview3dpSalesProfitShareBackfill()` followed
+by `setup3dpSalesProfitShareBackfill()`. It fills only blank `% прибутку Сергію`
+cells for existing 3D Sales rows from the SKU-specific Analytics share, records
+the changes in `_Аудит_API`, and is idempotent on repeat.
 
 `3dp_write` permits the owner only at `Налаштування!B2:B4`; the Serhiy token is
 rejected with `COLUMN_NOT_ALLOWED`. New SKU rows receive technical

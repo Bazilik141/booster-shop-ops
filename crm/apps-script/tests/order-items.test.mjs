@@ -68,6 +68,7 @@ const table = { headerRow: 2, headers, rows };
 const context = vm.createContext({
   Array, Math, Number, Object, String,
   _getCrmSs: () => ({ getSheetByName: (name) => name === 'Продажі' ? {} : null }),
+  crm3dpMarketingByOrder_: () => ({ byOrder: { 'OC-FOP-0312': 22.96 }, byRow: { 3: 22.96 } }),
   apiRecentTable_: () => table,
   apiRecentCol_: (input, name) => {
     const index = input.indexOf(name);
@@ -82,7 +83,9 @@ vm.runInContext(functionSource('apiOrderItems_') + '\nglobalThis.orderItems = ap
 const multi = JSON.parse(JSON.stringify(context.orderItems({ order_id: 'OC-FOP-0312' })));
 assert.equal(multi.ok, true);
 assert.equal(multi.count, 3);
-assert.deepEqual(multi.totals, { amount: 7400, profit: 3839.76 });
+assert.deepEqual(multi.totals, { amount: 7400, profit: 3839.76, marketing: 22.96 });
+assert.equal(multi.items[0].marketing, 22.96);
+assert.equal(multi.items[1].marketing, 0);
 assert.equal(multi.items[1].mgmt_cost_unit, 1.05);
 assert.equal(multi.items[1].mgmt_cost_line, 2.10, 'line cost is returned directly and not reconstructed from quantity');
 assert.equal(multi.items[0].payment_fees, 21);
@@ -96,7 +99,7 @@ multi.items.forEach((item) => {
 
 const single = JSON.parse(JSON.stringify(context.orderItems({ order_id: 'OC-FOP-0313' })));
 assert.equal(single.count, 1);
-assert.deepEqual(single.totals, { amount: 160, profit: 90.09 });
+assert.deepEqual(single.totals, { amount: 160, profit: 90.09, marketing: 0 });
 assert.equal(single.items[0].nova_pay, 0.8);
 
 const negative = JSON.parse(JSON.stringify(context.orderItems({ order_id: 'OC-FOP-0310' })));

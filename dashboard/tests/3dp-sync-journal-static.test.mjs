@@ -27,7 +27,7 @@ assert.match(dashboard, /\['Q',rrp,'РРЦ фактична, грн'\]/);
 assert.match(dashboard, /\['R',buyout,'Ціна під викуп, грн'\]/);
 assert.match(dashboard, /\['S',model,'Посилання на модель'\]/);
 assert.match(dashboard, /\['defect_rate',5,'Планований брак, частка','частка \(0\.1 = 10%\)'\]/);
-assert.equal((dashboard.match(/range:'A1:C5'/g) || []).length, 2);
+assert.equal((dashboard.match(/range:'A1:C5'/g) || []).length, 1);
 assert.doesNotMatch(dashboard, /range:'A1:C4'/);
 assert.match(dashboard, /baseCost=material\+electricity\+amortization,cost=baseCost\*\(1\+defectRate\)/);
 assert.match(dashboard, /Плановий брак/);

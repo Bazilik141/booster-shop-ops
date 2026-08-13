@@ -28,6 +28,7 @@ const dashboardCallSource = dashboardFunctionSource('call');
 async function throughDashboardTransport(response) {
   const context = vm.createContext({
     URLSearchParams, API: 'https://crm.example/exec', TOKEN: 'test-token',
+    ensureCrmToken_: () => true,
     fetch: async () => ({ ok: true, status: 200, json: async () => response }),
   });
   vm.runInContext(dashboardCallSource + '\nglobalThis.__testCall = call;', context, { filename: 'dashboard/booster-dashboard.html' });

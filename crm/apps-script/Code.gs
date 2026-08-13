@@ -38,6 +38,7 @@ const componentRows = formSheet.getRange('A36:C45').getValues();
 const mysteryComponents = componentRows
 .filter(row => row[0] && num_(row[1]) > 0)
 .map(row => ({ sku: parseSku_(row[0]), qty: num_(row[1]), note: row[2] || '' }));
+const fixtureLines = read3dp019FixtureFormLines_(formSheet, 'Внести_продаж');
 
 if (!items.length) {
 SpreadsheetApp.getUi().alert('Додай хоча б один SKU у таблицю позицій.');
@@ -62,6 +63,12 @@ const source = form['Джерело'] || 'Вручну';
 const paymentType = form['Тип оплати'] || 'За реквізитами';
 const packagingType = form['Паковання'] || '';
 const operation = form['Номер замовлення / операції (опц.)'] || generateOperationNumber(source, paymentType);
+const fixturePlan = build3dp019FixtureUsagePlan_(ss, fixtureLines, 'Продаж', operation);
+if (!fixturePlan.ok) { SpreadsheetApp.getUi().alert(fixturePlan.error); return; }
+if (fixturePlan.entries.length && !items.some(function(item) { return is3dpPackagingSku_(item.sku); })) {
+SpreadsheetApp.getUi().alert('Фурнітуру можна додати лише до продажу з 3D-P SKU.');
+return;
+}
 const gross = items.reduce((sum, item) => sum + item.qty * item.price, 0);
 const checkDiscount = Math.min(num_(form['Знижка на чек']), gross);
 const packaging = num_(form['Вартість паковання, грн']);
@@ -73,8 +80,10 @@ return;
 const orderNote = [form['Примітка'], packagingType ? 'Паковання: ' + packagingType : ''].filter(Boolean).join('; ');
 const firstRow = nextEmptyRow_(sales, 1, 3, 501);
 const costRunState = {};
+const addedRows = [];
 items.forEach(function(item, index) {
 const row = firstRow + index;
+addedRows.push(row);
 const weight = gross ? (item.qty * item.price) / gross : 0;
 const lineDiscount = round2_(checkDiscount * weight);
 const linePackaging = round2_(packaging * weight);
@@ -93,8 +102,10 @@ if (mysteryComponents.length) {
 addMysteryBoxWriteOffs_(ss, mysteryComponents, form['Дата продажу'], operation);
 }
 
-updateSkuCurrentCost_(ss); invalidateDoGetCache_(); clearInputForm('Внести_продаж');
-SpreadsheetApp.getUi().alert('Продаж додано: ' + operation + ' / позицій: ' + items.length);
+if (fixturePlan.entries.length) append3dp019FixtureUsage_(ss, fixturePlan, form['Дата продажу'], 'Продаж', operation, form['Примітка']);
+updateSkuCurrentCost_(ss); invalidateDoGetCache_(); sync3dpPackagingCost_(sales, operation, addedRows, 'addSale'); clearInputForm('Внести_продаж');
+const fixtureWarning = fixturePlan.warning ? '\n' + fixturePlan.warning : '';
+SpreadsheetApp.getUi().alert('Продаж додано: ' + operation + ' / позицій: ' + items.length + fixtureWarning);
 }
 
 function addPurchase() {
@@ -242,6 +253,7 @@ const form = readForm_('Внести_списання');
 const writeOffs = ss.getSheetByName('Списання');
 const batchValues = formSheet.getRange('A13:D22').getValues();
 const lines = [];
+const fixtureLines = read3dp019FixtureFormLines_(formSheet, 'Внести_списання');
 const hasBatchLines = batchValues.some(function(row) { return !!row[0] || !!row[1] || !!row[3]; });
 
 if (hasBatchLines) {
@@ -295,6 +307,8 @@ return;
 }
 const startNumber = nextIdNumber_('Списання', 1, 'WRT');
 const ids = lines.map(function(line, index) { return 'WRT-' + String(startNumber + index).padStart(4, '0'); });
+const fixturePlan = build3dp019FixtureUsagePlan_(ss, fixtureLines, 'Списання', ids[0]);
+if (!fixturePlan.ok) { SpreadsheetApp.getUi().alert(fixturePlan.error); return; }
 writeOffs.getRange(row, 1, lines.length, 4).setValues(lines.map(function(line, index) {
 return [ids[index], form['Дата'], form['Тип списання'], line.sku];
 }));
@@ -305,8 +319,10 @@ if (form['Примітка']) noteParts.push(form['Примітка']);
 if (line.note) noteParts.push(line.note);
 return [form['Причина'], noteParts.join('; ')];
 }));
+if (fixturePlan.entries.length) append3dp019FixtureUsage_(ss, fixturePlan, form['Дата'], 'Списання', ids[0], [form['Причина'], form['Примітка']].filter(Boolean).join('; '));
 updateSkuCurrentCost_(ss); invalidateDoGetCache_(); clearInputForm('Внести_списання');
-SpreadsheetApp.getUi().alert('Списання додано. Рядків: ' + lines.length + '. ID: ' + ids[0] + (ids.length > 1 ? '–' + ids[ids.length - 1] : '')); 
+const fixtureWarning = fixturePlan.warning ? '\n' + fixturePlan.warning : '';
+SpreadsheetApp.getUi().alert('Списання додано. Рядків: ' + lines.length + '. ID: ' + ids[0] + (ids.length > 1 ? '–' + ids[ids.length - 1] : '') + fixtureWarning);
 }
 
 function addExpense() {
@@ -395,10 +411,10 @@ function clearInputForm(sheetName) {
 const ss = SpreadsheetApp.getActive();
 const sheet = ss.getSheetByName(sheetName);
 const ranges = {};
-ranges['Внести_продаж'] = ['B4:B16', 'E10', 'A21:B30', 'E21:E30', 'A36:C45'];
+ranges['Внести_продаж'] = ['B4:B16', 'E10', 'A21:B30', 'E21:E30', 'A36:C45', 'A49:B55'];
 ranges['Внести_закупку'] = ['B4:B9', 'A12:B14', 'D12:E14'];
 ranges['Оновити_закупку'] = ['B4:B17', 'C4:C11'];
-ranges['Внести_списання'] = ['B4:B10', 'A13:B22', 'D13:D22'];
+ranges['Внести_списання'] = ['B4:B10', 'A13:B22', 'D13:D22', 'A25:B30'];
 ranges['Внести_витрату'] = ['B4:B13'];
 sheet.getRangeList(ranges[sheetName]).clearContent();
 if (sheetName === 'Внести_продаж') { sheet.getRange('B5').setValue(new Date()); restoreSaleFormulas_(sheet); }
@@ -540,6 +556,8 @@ function updateSaleStatus() {
 resetMemoForMutation_(); const ss = SpreadsheetApp.getActive();
 const form = readForm_('Оновити_продаж');
 const sales = ss.getSheetByName('Продажі');
+const formSheet = ss.getSheetByName('Оновити_продаж');
+const fixtureLines = read3dp019FixtureFormLines_(formSheet, 'Оновити_продаж');
 const selectedOrder = form['ТТН / замовлення'] || form['Номер замовлення / операції'];
 const order = resolveSaleUpdateOrder_(ss, selectedOrder);
 if (!order) { SpreadsheetApp.getUi().alert('Вибери ТТН/замовлення для оновлення.'); return; }
@@ -549,6 +567,12 @@ data.forEach(function(values, index) {
 if (String(values[0] || '').trim() === order) matches.push({ row: index + 3, values: values });
 });
 if (!matches.length) { SpreadsheetApp.getUi().alert('Не знайшов продажі з номером: ' + order); return; }
+const fixturePlan = build3dp019FixtureUsagePlan_(ss, fixtureLines, 'Продаж', order, { allow_correction: true });
+if (!fixturePlan.ok) { SpreadsheetApp.getUi().alert(fixturePlan.error); return; }
+if (fixturePlan.entries.length && !matches.some(function(match) { return is3dpPackagingSku_(match.values[5]); })) {
+SpreadsheetApp.getUi().alert('Фурнітуру можна додати лише до продажу з 3D-P SKU.');
+return;
+}
 const current = matches[0].values;
 const newPaymentStatus = form['Новий статус оплати'];
 const newOrderStatus = form['Новий статус замовлення'];
@@ -560,7 +584,7 @@ const packagingChanged = !isBlank_(packagingType) && String(packagingType).trim(
 const packaging = packagingChanged ? getPackagingCost_(packagingType, form['Якщо Інше, грн']) : null;
 const shopDelivery = isBlank_(form['Доставка за рахунок магазину']) ? null : num_(form['Доставка за рахунок магазину']);
 const note = form['Примітка'];
-const hasUpdate = paymentChanged || orderChanged || !isBlank_(ttn) || packagingChanged || shopDelivery !== null || !isBlank_(note);
+const hasUpdate = paymentChanged || orderChanged || !isBlank_(ttn) || packagingChanged || shopDelivery !== null || !isBlank_(note) || fixturePlan.entries.length;
 if (!hasUpdate) { SpreadsheetApp.getUi().alert('Нічого не змінено: поточні значення вже підтягнуті у форму.'); return; }
 if (packagingChanged && packaging <= 0 && String(packagingType).trim() !== 'Інше') { SpreadsheetApp.getUi().alert('Для обраного паковання не підтягнулась вартість. Якщо це Інше, сума 0 грн дозволена.'); return; }
 const rows = matches.map(function(match) { return match.row; });
@@ -575,15 +599,17 @@ if (packagingChanged) { sales.getRange(row, 16).setValue(packagingAllocations[in
 if (shopDelivery !== null) sales.getRange(row, 20).setValue(deliveryAllocations[index]);
 if (!isBlank_(note)) appendCellText_(sales.getRange(row, 27), note); fixSaleCostForRow_(ss, row, costRunState, { clearPending: false });
 });
+if (fixturePlan.entries.length) append3dp019FixtureUsage_(ss, fixturePlan, current[2], fixturePlan.ledger_source, order, note);
 invalidateDoGetCache_(); sync3dpPackagingCost_(sales, order, rows, 'updateSaleStatus'); clearSaleUpdateForm();
-SpreadsheetApp.getUi().alert('Продаж оновлено: ' + order + ' / рядків: ' + rows.length);
+const fixtureWarning = fixturePlan.warning ? '\n' + fixturePlan.warning : '';
+SpreadsheetApp.getUi().alert('Продаж оновлено: ' + order + ' / рядків: ' + rows.length + fixtureWarning);
 }
 
 function updatePaymentStatus() { updateSaleStatus(); }
 
 function clearSaleUpdateForm() {
 const sheet = SpreadsheetApp.getActive().getSheetByName('Оновити_продаж');
-sheet.getRangeList(['B4', 'B11:B15']).clearContent();
+sheet.getRangeList(['B4', 'B11:B15', 'A22:B28']).clearContent();
 restoreSaleUpdateFormulas_(sheet);
 }
 
@@ -627,6 +653,8 @@ const range = e && e.range;
 if (!range) return;
 const sheet = range.getSheet();
 if (sheet.getName() === 'Оновити_продаж' && range.getA1Notation() === 'B4') restoreSaleUpdateFormulas_(sheet);
+if (sheet.getName() === 'Розхідники') apply3dp019FixturePayerDefaultOnEdit_(sheet, range);
+apply3dp019FixturePayerGuardOnEdit_(sheet, range);
 }
 
 
@@ -674,7 +702,7 @@ return _memo.salesRows;
 
 function keepWarm() { _getCrmSs(); try { _getAutoSs(); } catch (e) { /* non-fatal */ } }
 
-const CACHEABLE_ACTIONS = { sku_list: 300, stock_alerts: 120, summary: 90, channel_stats: 120, monthly_summary: 300 };
+const CACHEABLE_ACTIONS = { sku_list: 300, order_component_catalog: 60, stock_alerts: 120, summary: 90, channel_stats: 120, monthly_summary: 300 };
 const CRM_INTEGRITY_MAX_PROBLEMS_PER_CODE_ = 10;
 // Keep this SKU grammar aligned with plans/3D-P_sku-naming-convention_20260807.md.
 const CRM_INTEGRITY_3DP_SKU_RE_ = /^(?:BR|FIG|ACC-3D)-[A-Z0-9][A-Z0-9-]*$/;
@@ -723,12 +751,13 @@ function invalidateDoGetCache_() {
 const version = String(new Date().getTime()); PropertiesService.getScriptProperties().setProperty('CRM_DOGET_CACHE_VERSION', version); if (typeof _memo !== 'undefined' && _memo) _memo.doGetCacheVersion = version;
 }
 
-function apiDoGetCacheKey_(action, params) { const version = apiDoGetCacheVersion_(); if (action === 'sku_list') return 'bscrm_v2_' + version + '_' + action + '_' + String(params.sort || '').toLowerCase() + '_' + String(params.limit || ''); return 'bscrm_v2_' + version + '_' + action; }
+function apiDoGetCacheKey_(action, params) { const version = apiDoGetCacheVersion_(); if (action === 'sku_list') return 'bscrm_v2_' + version + '_' + action + '_' + String(params.sort || '').toLowerCase() + '_' + String(params.limit || ''); if (action === 'monthly_summary') return 'bscrm_v2_' + version + '_' + action + '_v2'; return 'bscrm_v2_' + version + '_' + action; }
 
 function handleApiAction_(action, params) {
 if (action === 'summary') return apiSummary_();
 if (action === 'orders') return apiOrders_(params);
 if (action === 'order_items') return apiOrderItems_(params);
+if (action === 'order_edit_context') return apiOrderEditContext_(params);
 if (action === 'stock_alerts') return apiStockAlerts_();
 if (action === 'sku_list') return apiSkuList_(params);
 if (action === 'consumables') return apiConsumables_(params);
@@ -738,6 +767,8 @@ if (action === 'ltv_report') return apiLtvReport_(params);
 if (action === 'recent_sales') return apiRecentSales_(params);
 if (action === 'recent_purchases') return apiRecentPurchases_(params);
 if (action === 'sync_journal') return apiSyncJournal_(params);
+if (action === 'catalog_options') return apiCatalogOptions_();
+if (action === 'order_component_catalog') return apiOrderComponentCatalog_();
 if (action === 'integrity_check') return apiIntegrityCheck_();
 
 return { ok: false, error: 'unknown action: ' + action };
@@ -1007,9 +1038,15 @@ const action = String(payload.action || '').trim().toLowerCase();
 if (action === 'add_sale') return boosterCrmJson_(apiAddSale_(ss, payload));
 if (action === 'add_purchase') return boosterCrmJson_(apiAddPurchase_(ss, payload));
 if (action === 'add_writeoff') return boosterCrmJson_(apiAddWriteOff_(ss, payload));
-if (action === 'update_sale') return boosterCrmJson_(apiUpdateSale_(ss, payload));
+if (action === 'update_sale') return boosterCrmJson_(apiUpdateSaleWithComponents_(ss, payload));
+if (action === 'retry_3dp_sync') return boosterCrmJson_(apiRetry3dpOrderSync_(ss, payload));
 if (action === 'update_purchase') return boosterCrmJson_(apiUpdatePurchase_(ss, payload));
 if (action === 'add_news_candidate') return boosterCrmJson_(apiAddNewsCandidate_(ss, payload));
+if (action === 'add_sku') return boosterCrmJson_(apiAddSku_(ss, payload));
+if (action === 'update_rrp_batch') return boosterCrmJson_(apiUpdateRrpBatch_(ss, payload));
+  if (action === 'add_consumable_purchase') return boosterCrmJson_(apiAddConsumablePurchase_(ss, payload));
+  if (action === 'update_consumable_purchase') return boosterCrmJson_(apiUpdateConsumablePurchase_(ss, payload));
+  if (action === 'test_order_cleanup') return boosterCrmJson_(apiTestOrderCleanup_(ss, payload));
 
 const result = upsertOpenCartOrder_(ss, payload);
 return boosterCrmJson_({ ok: true, result: result });
@@ -1035,6 +1072,252 @@ const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(text); const date = match ? new D
 if (isNaN(date.getTime()) || (match && (date.getFullYear() !== Number(match[1]) || date.getMonth() !== Number(match[2]) - 1 || date.getDate() !== Number(match[3])))) throw new Error(fieldName + ' invalid');
 return date;
 }
+
+function apiCatalogOptionValues_(sheet, a1) {
+return sheet.getRange(a1).getDisplayValues().map(function(row) { return String(row[0] || '').trim(); }).filter(Boolean);
+}
+
+function apiCatalogOptions_() {
+const sheet = _getCrmSs().getSheetByName('Налаштування');
+if (!sheet) return { ok: false, error: 'settings sheet missing' };
+return {
+ok: true,
+brands: apiCatalogOptionValues_(sheet, 'D4:D10'),
+languages: apiCatalogOptionValues_(sheet, 'G4:G8'),
+formats: apiCatalogOptionValues_(sheet, 'J4:J15'),
+sets: apiCatalogOptionValues_(sheet, 'AD4:AD44')
+};
+}
+
+function apiCatalogOptionPlan_(sheet, a1, value, allowNew) {
+const text = String(value || '').trim();
+if (!text) throw new Error('catalog option required: ' + a1);
+const range = sheet.getRange(a1);
+const values = range.getDisplayValues().map(function(row) { return String(row[0] || '').trim(); });
+if (values.indexOf(text) !== -1) return null;
+if (!allowNew) throw new Error('catalog option is not in settings: ' + text);
+const blank = values.indexOf('');
+if (blank === -1) throw new Error('catalog option list is full: ' + a1);
+return { cell: range.getCell(blank + 1, 1), value: text, range: a1 };
+}
+
+function apiFindEmptyProductRow_(products, rrc) {
+const first = 3;
+const last = 201;
+const productValues = products.getRange(first, 1, last - first + 1, 15).getValues();
+const rrcValues = rrc.getRange(first, 5, last - first + 1, 3).getValues();
+const manualIndexes = [0, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14];
+for (let index = 0; index < productValues.length; index++) {
+const productBlank = manualIndexes.every(function(column) { return String(productValues[index][column] || '').trim() === ''; });
+const rrcBlank = rrcValues[index].every(function(value) { return String(value || '').trim() === ''; });
+if (productBlank && rrcBlank) return first + index;
+}
+throw new Error('no empty product row through row 201');
+}
+
+function apiFindSkuRow_(sheet, sku, startRow, endRow) {
+const values = sheet.getRange(startRow, 1, endRow - startRow + 1, 1).getDisplayValues();
+for (let index = 0; index < values.length; index++) {
+if (String(values[index][0] || '').trim().toUpperCase() === sku) return startRow + index;
+}
+return 0;
+}
+
+function apiMasterHasSku_(sku) {
+try {
+const sheet = _getAutoSs().getSheetByName('Майстер_Товарів');
+if (!sheet) return false;
+return Boolean(apiFindSkuRow_(sheet, sku, 2, Math.max(sheet.getLastRow(), 2)));
+} catch (error) {
+return false;
+}
+}
+
+function apiAddSku_(ss, payload) {
+try {
+resetMemoForMutation_();
+const products = ss.getSheetByName('Товари');
+const rrc = ss.getSheetByName('РРЦ');
+const settings = ss.getSheetByName('Налаштування');
+if (!products || !rrc || !settings) throw new Error('catalog sheet missing');
+const sku = String(payload.sku || '').trim().toUpperCase();
+const fullName = String(payload.full_name || payload.name || '').trim();
+const brand = String(payload.brand || '').trim();
+const language = String(payload.language || '').trim();
+const setName = String(payload.set || '').trim();
+const format = String(payload.format || '').trim();
+const rrpValue = Number(payload.rrp);
+const cards = String(payload.cards_per_booster == null ? '' : payload.cards_per_booster).trim();
+const boosters = String(payload.boosters_per_box == null ? '' : payload.boosters_per_box).trim();
+const minStock = String(payload.min_stock == null ? '' : payload.min_stock).trim();
+const fixedCost = String(payload.fixed_cost == null ? '' : payload.fixed_cost).trim();
+const url = String(payload.url || '').trim();
+const note = String(payload.note || '').trim();
+const active = payload.active === false || String(payload.active || '').toLowerCase() === 'false' || String(payload.active || '').toLowerCase() === 'ні' ? 'Ні' : 'Так';
+const fullNameShort = String(payload.short_name_mode || '').trim() === 'full_name' || String(payload.source || '').trim() === '3d';
+if (!/^[A-Z0-9][A-Z0-9-]{2,63}$/.test(sku)) throw new Error('invalid sku');
+if (!fullName) throw new Error('full_name required');
+if (!brand || !language || !setName || !format) throw new Error('brand, language, set and format required');
+if (!isFinite(rrpValue) || rrpValue <= 0) throw new Error('rrp must be > 0');
+if (cards && (!/^\d+$/.test(cards) || Number(cards) < 0)) throw new Error('cards_per_booster must be a non-negative integer');
+if (boosters && (!/^\d+$/.test(boosters) || Number(boosters) < 0)) throw new Error('boosters_per_box must be a non-negative integer');
+if (minStock && (!/^\d+$/.test(minStock) || Number(minStock) < 0)) throw new Error('min_stock must be a non-negative integer');
+if (fixedCost && (!isFinite(Number(fixedCost)) || Number(fixedCost) < 0)) throw new Error('fixed_cost must be >= 0');
+if (url && !/^https?:\/\//i.test(url)) throw new Error('url must start with http:// or https://');
+
+const existingRow = apiFindSkuRow_(products, sku, 3, 201);
+if (existingRow) {
+const existing = products.getRange(existingRow, 1, 1, 15).getDisplayValues()[0];
+const existingRrp = Number(rrc.getRange(existingRow, 5).getValue());
+const same = String(existing[2] || '').trim() === fullName && String(existing[3] || '').trim() === brand && String(existing[4] || '').trim() === language && String(existing[5] || '').trim() === setName && String(existing[6] || '').trim() === format && String(existing[11] || '').trim() === active && Math.abs(existingRrp - rrpValue) < 0.009;
+if (!same) throw new Error('SKU already exists with different CRM fields or RRP');
+return { ok: true, action: 'add_sku', sku: sku, product_row: existingRow, rrp_row: existingRow, already_applied: true, master_visible: apiMasterHasSku_(sku) };
+}
+
+const row = apiFindEmptyProductRow_(products, rrc);
+if (!products.getRange(row, 10).getFormula()) throw new Error('Товари!J' + row + ' price formula is missing');
+if (!rrc.getRange(row, 8).getFormula()) throw new Error('РРЦ!H' + row + ' dynamic price formula is missing');
+const originalShortNameFormula = products.getRange(row, 2).getFormula();
+const allowNew = payload.allow_new_options === true;
+const optionPlans = [
+apiCatalogOptionPlan_(settings, 'D4:D10', brand, allowNew),
+apiCatalogOptionPlan_(settings, 'G4:G8', language, allowNew),
+apiCatalogOptionPlan_(settings, 'AD4:AD44', setName, allowNew),
+apiCatalogOptionPlan_(settings, 'J4:J15', format, allowNew)
+].filter(Boolean);
+try {
+optionPlans.forEach(function(plan) { plan.cell.setValue(plan.value); });
+products.getRange(row, 1).setValue(sku);
+products.getRange(row, 2).setFormula(fullNameShort ? '=IF($A' + row + '="";"";$C' + row + ')' : '=IF(OR($D' + row + '="";$F' + row + '="";$E' + row + '="";$G' + row + '="");"";$D' + row + '&" — "&$F' + row + '&" — "&$E' + row + '&" — "&$G' + row + ')');
+products.getRange(row, 3, 1, 7).setValues([[fullName, brand, language, setName, format, cards ? Number(cards) : '', boosters ? Number(boosters) : '']]);
+products.getRange(row, 11, 1, 5).setValues([[minStock ? Number(minStock) : '', active, url, note, fixedCost ? Number(fixedCost) : '']]);
+SpreadsheetApp.flush();
+if (String(rrc.getRange(row, 1).getDisplayValue() || '').trim().toUpperCase() !== sku) throw new Error('РРЦ formula projection did not expose the new SKU');
+rrc.getRange(row, 5, 1, 3).setValues([[round2_(rrpValue), new Date(), 'Створено через owner dashboard: ' + sku + (note ? '; ' + note : '')]]);
+SpreadsheetApp.flush();
+if (String(products.getRange(row, 1).getDisplayValue() || '').trim() !== sku || Math.abs(Number(rrc.getRange(row, 5).getValue()) - rrpValue) >= 0.009) throw new Error('new SKU verification failed');
+invalidateDoGetCache_();
+return { ok: true, action: 'add_sku', sku: sku, product_row: row, rrp_row: row, options_added: optionPlans.map(function(plan) { return plan.value; }), already_applied: false, master_visible: apiMasterHasSku_(sku), integrity_check_required: true };
+} catch (error) {
+products.getRange(row, 1, 1, 9).clearContent();
+products.getRange(row, 11, 1, 5).clearContent();
+rrc.getRange(row, 5, 1, 3).clearContent();
+if (originalShortNameFormula) products.getRange(row, 2).setFormula(originalShortNameFormula);
+optionPlans.forEach(function(plan) { plan.cell.clearContent(); });
+SpreadsheetApp.flush();
+throw error;
+}
+} catch (err) {
+return { ok: false, action: 'add_sku', error: String(err && err.message ? err.message : err) };
+}
+}
+
+function apiUpdateRrpBatch_(ss, payload) {
+try {
+resetMemoForMutation_();
+const products = ss.getSheetByName('Товари');
+const rrc = ss.getSheetByName('РРЦ');
+if (!products || !rrc) throw new Error('catalog sheet missing');
+
+const changes = Array.isArray(payload && payload.changes) ? payload.changes : [];
+const firstRow = 3;
+const lastRow = 201;
+if (!changes.length) throw new Error('at least one RRP change is required');
+if (changes.length > lastRow - firstRow + 1) throw new Error('too many RRP changes in one request');
+
+const rowCount = lastRow - firstRow + 1;
+const productSkus = products.getRange(firstRow, 1, rowCount, 1).getDisplayValues();
+const productValues = products.getRange(firstRow, 1, rowCount, 7).getValues();
+const productPriceFormulas = products.getRange(firstRow, 10, rowCount, 1).getFormulas();
+const rrcValues = rrc.getRange(firstRow, 1, rowCount, 8).getValues();
+const rrcDisplay = rrc.getRange(firstRow, 1, rowCount, 8).getDisplayValues();
+const rrcFormulas = rrc.getRange(firstRow, 1, rowCount, 8).getFormulas();
+const productRows = {};
+const rrcRows = {};
+productSkus.forEach(function(row, index) {
+const sku = String(row[0] || '').trim().toUpperCase();
+if (sku && !productRows[sku]) productRows[sku] = { row: firstRow + index, values: productValues[index] };
+});
+rrcDisplay.forEach(function(row, index) {
+const sku = String(row[0] || '').trim().toUpperCase();
+if (sku && !rrcRows[sku]) rrcRows[sku] = firstRow + index;
+});
+
+const seen = {};
+const plan = [];
+const unchanged = [];
+changes.forEach(function(change) {
+const sku = String(change && change.sku || '').trim().toUpperCase();
+const nextRrp = Number(change && change.rrp);
+const expectedRrp = Number(change && change.expected_rrp);
+if (!/^[A-Z0-9][A-Z0-9-]{2,63}$/.test(sku)) throw new Error('invalid sku');
+if (seen[sku]) throw new Error('duplicate SKU in RRP batch: ' + sku);
+seen[sku] = true;
+if (is3dpPackagingSku_(sku)) throw new Error('3D SKU must be edited in the 3D dashboard: ' + sku);
+if (!isFinite(nextRrp) || nextRrp <= 0) throw new Error('RRP must be > 0 for ' + sku);
+if (!isFinite(expectedRrp) || expectedRrp <= 0) throw new Error('current RRP is required for ' + sku);
+
+const product = productRows[sku];
+const productRow = product && product.row;
+const rrpRow = rrcRows[sku];
+if (!productRow) throw new Error('SKU is missing from Товари: ' + sku);
+if (!rrpRow) throw new Error('SKU is missing from РРЦ: ' + sku);
+if (is3dpCatalogSku_(sku, product.values[5], product.values[6])) throw new Error('3D SKU must be edited in the 3D dashboard: ' + sku);
+const productIndex = productRow - firstRow;
+const rrpIndex = rrpRow - firstRow;
+if (!productPriceFormulas[productIndex][0]) throw new Error('Товари!J' + productRow + ' price formula is missing');
+if (!rrcFormulas[rrpIndex][7]) throw new Error('РРЦ!H' + rrpRow + ' dynamic price formula is missing');
+// РРЦ!E is owner-editable and may contain a one-off calculation such as =90*30.
+// Applying a new RRP intentionally replaces that calculation with the requested fixed value.
+if (rrcFormulas[rrpIndex].slice(5, 7).some(function(formula) { return !!formula; })) throw new Error('РРЦ!F:G must remain manual-value columns for ' + sku);
+
+const currentRrp = Number(rrcValues[rrpIndex][4]);
+if (!isFinite(currentRrp) || currentRrp <= 0) throw new Error('current RRP is invalid for ' + sku);
+if (Math.abs(currentRrp - expectedRrp) >= 0.009) throw new Error('RRP changed for ' + sku + '; refresh the SKU list before applying changes');
+const roundedRrp = round2_(nextRrp);
+if (Math.abs(currentRrp - roundedRrp) < 0.009) {
+unchanged.push({ sku: sku, product_row: productRow, rrp_row: rrpRow, rrp: currentRrp });
+return;
+}
+plan.push({
+sku: sku,
+product_row: productRow,
+rrp_row: rrpRow,
+previous_rrp: currentRrp,
+rrp: roundedRrp,
+range: rrc.getRange(rrpRow, 5, 1, 3),
+previous_values: [rrcValues[rrpIndex].slice(4, 7)]
+});
+});
+
+if (!plan.length) return { ok: true, action: 'update_rrp_batch', rows_updated: 0, updated: [], unchanged: unchanged, already_applied: true };
+try {
+plan.forEach(function(item) {
+item.range.setValues([[item.rrp, new Date(), 'РРЦ змінено через owner dashboard: ' + item.sku + '; ' + item.previous_rrp + ' -> ' + item.rrp]]);
+});
+SpreadsheetApp.flush();
+plan.forEach(function(item) {
+const saved = Number(rrc.getRange(item.rrp_row, 5).getValue());
+if (!isFinite(saved) || Math.abs(saved - item.rrp) >= 0.009) throw new Error('RRP verification failed for ' + item.sku);
+});
+} catch (error) {
+plan.forEach(function(item) { item.range.setValues(item.previous_values); });
+SpreadsheetApp.flush();
+throw error;
+}
+invalidateDoGetCache_();
+return {
+ok: true,
+action: 'update_rrp_batch',
+rows_updated: plan.length,
+updated: plan.map(function(item) { return { sku: item.sku, product_row: item.product_row, rrp_row: item.rrp_row, previous_rrp: item.previous_rrp, rrp: item.rrp }; }),
+unchanged: unchanged,
+already_applied: false
+};
+} catch (err) {
+return { ok: false, action: 'update_rrp_batch', error: String(err && err.message ? err.message : err) };
+}
+}
 // BEGIN 3D-P-010 helper block — insert before apiAddSale_ in main CRM Code.gs
 const CRM_3DP_SYNC_URL_PROPERTY_ = 'BOOSTER_3DP_URL';
 const CRM_3DP_SYNC_TOKEN_PROPERTY_ = 'BOOSTER_3DP_SYNC_TOKEN';
@@ -1045,8 +1328,15 @@ const CRM_3DP_CRM_ROW_HEADER_ = 'CRM row number';
 const CRM_3DP_EXPENSE_HEADER_ = 'Витрати BoosterShop за од., грн';
 const CRM_3DP_PRODUCTION_COST_HEADER_ = 'Собівартість Сергія (виробнича), грн';
 const CRM_3DP_ACTUAL_RRP_HEADER_ = 'РРЦ фактична, грн';
-const CRM_3DP_FIXTURE_REFERENCE_HEADER_ = 'Фурнітура (ціна-довідка), грн/шт';
-const CRM_3DP_SALES_FROZEN_HEADERS_ = ['CRM row number', 'РРЦ на момент продажу, грн', 'Вартість фурнітури за од., грн (заморожена)', 'Платник фурнітури'];
+const CRM_3DP_BUYOUT_HEADER_ = 'Ціна під викуп, грн';
+const CRM_3DP_PROFIT_SHARE_HEADER_ = '% прибутку Сергію';
+const CRM_3DP_FIXTURE_ALLOCATION_ERROR_ = 'CRM_3DP_FIXTURE_ALLOCATION:';
+const CRM_3DP_SALES_FROZEN_HEADERS_ = [
+  'CRM row number', 'РРЦ на момент продажу, грн', 'Вартість фурнітури за од., грн (заморожена)', 'Платник фурнітури',
+  'Режим CRM', 'Фурнітура власника за од., грн (заморожена)', 'Фурнітура Сергія за од., грн (заморожена)', 'Ціна викупу за од., грн (заморожена)'
+];
+const CRM_3DP_FIXTURE_COST_HEADER_ = 'Вартість фурнітури за од., грн (заморожена)';
+const CRM_3DP_FIXTURE_PAYER_HEADER_ = 'Платник фурнітури';
 const CRM_3DP_STOCK_HEADER_ = 'Наявно зараз, шт';
 const CRM_3DP_SYNC_JOURNAL_SHEET_ = '_Журнал_3DP_синхронізації';
 const CRM_3DP_SYNC_JOURNAL_HEADERS_ = ['timestamp_kyiv', 'source', 'order_id', 'crm_row', 'sku', 'outcome', 'detail'];
@@ -1064,6 +1354,11 @@ function crm3dpJournalTimestampKyiv_(value) {
 function is3dpPackagingSku_(value) {
   const sku = String(value || '').trim().toUpperCase();
   return /^(?:BR|FIG|ACC-3D)-[A-Z0-9][A-Z0-9-]*$/.test(sku);
+}
+
+function is3dpCatalogSku_(sku, setName, format) {
+  if (is3dpPackagingSku_(sku)) return true;
+  return [setName, format].some(function(value) { return /(^|[^A-Z0-9])3D($|[^A-Z0-9])/i.test(String(value || '')); });
 }
 
 function has3dpPackagingSkuPrefix_(value) {
@@ -1109,12 +1404,20 @@ function crm3dpJournalDetail_(outcome, detail) {
     skipped_sku_shape: 'A 3D-P SKU has a recognized prefix but an invalid shape.',
     skipped_not_configured: '3D-P sync URL or token is not configured.',
     skipped_schema: '3D-P sales schema is not ready.',
+    skipped_fixture_allocation: 'Fixture ledger data cannot be allocated to this 3D-P sale.',
     skipped_api_error: '3D-P API is unavailable or rejected the request.',
     warning_negative_stock: 'Automatic stock adjustment resulted in negative stock.',
     warning_duplicate_key: 'More than one 3D-P sale row matches the CRM key.',
+    warning_fixture_update: 'Frozen fixture values could not be updated on an existing 3D-P sale row.',
     error: '3D-P synchronization could not start.',
   };
   return crm3dpSanitizeJournalDetail_(detail, details[outcome] || '3D-P sync recorded an unclassified outcome.');
+}
+
+function crm3dpSyncErrorOutcome_(message) {
+  if (message === '3D-P Продажі!T:W frozen-value schema is not ready' || message === '3D-P Продажі!T:AA frozen-value schema is not ready') return 'skipped_schema';
+  if (String(message || '').indexOf(CRM_3DP_FIXTURE_ALLOCATION_ERROR_) === 0) return 'skipped_fixture_allocation';
+  return 'skipped_api_error';
 }
 
 function crm3dpJournalSource_(source) {
@@ -1183,20 +1486,30 @@ function crm3dpConfig_() {
 }
 
 function crm3dpFetchJson_(url, options) {
-  const response = UrlFetchApp.fetch(url, Object.assign({ muteHttpExceptions: true }, options || {}));
-  const status = response.getResponseCode();
-  let payload = null;
-  try {
-    payload = JSON.parse(response.getContentText() || '{}');
-  } catch (error) {
-    throw new Error('3D-P returned invalid JSON (' + status + ')');
+  let lastStatus = 0;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const response = UrlFetchApp.fetch(url, Object.assign({ muteHttpExceptions: true }, options || {}));
+    const status = response.getResponseCode();
+    lastStatus = status;
+    let payload = null;
+    try {
+      payload = JSON.parse(response.getContentText() || '{}');
+    } catch (error) {
+      // A real HTTP 404 means the Apps Script route did not execute the requested action, so one
+      // bounded retry is safe even for POST. Other invalid responses remain non-retryable because
+      // the remote mutation outcome would be uncertain.
+      if (status === 404 && attempt === 0) { Utilities.sleep(300); continue; }
+      throw new Error('3D-P returned invalid JSON (' + status + ')');
+    }
+    if (status === 404 && attempt === 0) { Utilities.sleep(300); continue; }
+    if (status < 200 || status >= 300 || !payload || payload.ok !== true) {
+      const remoteCode = String((payload && payload.code) || '').trim();
+      const safeCode = /^[A-Z][A-Z0-9_]{1,80}$/.test(remoteCode) ? remoteCode : 'remote_error';
+      throw new Error('3D-P request failed (' + status + '): ' + safeCode);
+    }
+    return payload;
   }
-  if (status < 200 || status >= 300 || !payload || payload.ok !== true) {
-    const remoteCode = String((payload && payload.code) || '').trim();
-    const safeCode = /^[A-Z][A-Z0-9_]{1,80}$/.test(remoteCode) ? remoteCode : 'remote_error';
-    throw new Error('3D-P request failed (' + status + '): ' + safeCode);
-  }
-  return payload;
+  throw new Error('3D-P returned invalid JSON (' + lastStatus + ')');
 }
 
 function crm3dpGet_(config, params) {
@@ -1206,6 +1519,14 @@ function crm3dpGet_(config, params) {
   return crm3dpFetchJson_(config.url + '?' + query + '&token=' + encodeURIComponent(config.token), {
     method: 'get',
     headers: { Accept: 'application/json' },
+  });
+}
+
+function crm3dpPost_(config, body) {
+  return crm3dpFetchJson_(config.url, {
+    method: 'post',
+    contentType: 'text/plain;charset=utf-8',
+    payload: JSON.stringify(Object.assign({}, body || {}, { token: config.token })),
   });
 }
 
@@ -1219,11 +1540,13 @@ function crm3dpOrderRows_(sales, rowNumbers) {
     });
 }
 
-function crm3dpSaleRows_(config) {
-  const schema = crm3dpGet_(config, { action: '3dp_get_range', sheet: CRM_3DP_SALES_SHEET_, range: 'T1:W1' });
+function crm3dpSaleRows_(config, requireOrderLineSchema) {
+  const schemaRange = requireOrderLineSchema ? 'T1:AA1' : 'T1:W1';
+  const expectedHeaders = requireOrderLineSchema ? CRM_3DP_SALES_FROZEN_HEADERS_ : CRM_3DP_SALES_FROZEN_HEADERS_.slice(0, 4);
+  const schema = crm3dpGet_(config, { action: '3dp_get_range', sheet: CRM_3DP_SALES_SHEET_, range: schemaRange });
   const headers = schema && schema.values && schema.values[0] ? schema.values[0].map(function (value) { return String(value || '').trim(); }) : [];
-  if (JSON.stringify(headers) !== JSON.stringify(CRM_3DP_SALES_FROZEN_HEADERS_)) {
-    throw new Error('3D-P Продажі!T:W frozen-value schema is not ready');
+  if (JSON.stringify(headers) !== JSON.stringify(expectedHeaders)) {
+    throw new Error('3D-P Продажі!' + (requireOrderLineSchema ? 'T:AA' : 'T:W') + ' frozen-value schema is not ready');
   }
   const list = crm3dpGet_(config, { action: '3dp_sales' });
   return Array.isArray(list.rows) ? list.rows : [];
@@ -1247,7 +1570,7 @@ function crm3dpFiniteNonNegative_(value) {
   return Number.isFinite(parsed) && parsed >= 0 ? crm3dpRound2_(parsed) : null;
 }
 
-function crm3dpFrozenSaleInputs_(config, sku) {
+function crm3dpFrozenSaleInputs_(config, sku, fixtureFrozen, requireBuyout) {
   let response;
   try {
     response = crm3dpGet_(config, { action: '3dp_get_row', sheet: CRM_3DP_NOMENCLATURE_SHEET_, sku: sku });
@@ -1264,18 +1587,172 @@ function crm3dpFrozenSaleInputs_(config, sku) {
   }
   const productionCost = crm3dpFiniteNonNegative_(row[CRM_3DP_PRODUCTION_COST_HEADER_]);
   const actualRrp = crm3dpFiniteNonNegative_(row[CRM_3DP_ACTUAL_RRP_HEADER_]);
-  if (productionCost === null || actualRrp === null) {
-    return { ok: false, skipped: 'missing_cost_or_rrp', reason: '3D-P sync skipped: Номенклатура!K production cost or Q actual RRP is blank or invalid; CRM sale remains saved.' };
+  const buyout = crm3dpFiniteNonNegative_(row[CRM_3DP_BUYOUT_HEADER_]);
+  const profitShareRaw = row[CRM_3DP_PROFIT_SHARE_HEADER_];
+  const profitShare = String(profitShareRaw == null ? '' : profitShareRaw).trim() === '' ? null : crm3dpNumber_(profitShareRaw);
+  if (productionCost === null || actualRrp === null || (requireBuyout && buyout === null)) {
+    return { ok: false, skipped: 'missing_cost_or_rrp', reason: '3D-P sync skipped: Номенклатура production cost, actual RRP, or buyout price is blank or invalid; CRM sale remains saved.' };
   }
-  const fixtureRaw = String(row[CRM_3DP_FIXTURE_REFERENCE_HEADER_] == null ? '' : row[CRM_3DP_FIXTURE_REFERENCE_HEADER_]).trim();
-  const fixture = fixtureRaw ? crm3dpFiniteNonNegative_(fixtureRaw) : 0;
-  if (fixture === null) {
-    return { ok: false, skipped: 'invalid_fixture_price', reason: '3D-P sync skipped: Номенклатура!N fixture reference must be a non-negative number when filled.' };
+  if (profitShare === null || !Number.isFinite(profitShare) || profitShare < 0 || profitShare > 1) {
+    return { ok: false, skipped: 'missing_profit_share', reason: '3D-P sync skipped: Serhiy profit share is blank or outside 0..1; CRM sale remains saved.' };
   }
-  return { ok: true, production_cost: productionCost, actual_rrp: actualRrp, fixture_cost: fixture, fixture_payer: 'власник' };
+  const fixture = fixtureFrozen || { total_per_unit: 0, payer: '', owner_per_unit: 0, serhiy_per_unit: 0 };
+  const fixtureCost = fixture.total_per_unit == null ? crm3dpNumber_(fixture.cost_per_unit) : fixture.total_per_unit;
+  return { ok: true, production_cost: productionCost, actual_rrp: actualRrp, buyout: buyout === null ? 0 : buyout, profit_share: profitShare,
+    fixture_cost: fixtureCost, fixture_payer: fixture.payer,
+    owner_fixture_per_unit: fixture.owner_per_unit, serhiy_fixture_per_unit: fixture.serhiy_per_unit };
 }
 
-function crm3dpSaleAppendValues_(entry, order, frozen) {
+function crm3dpFixtureFrozenForLine_(sales, order, entry, triggerRows) {
+  const ss = sales.getParent();
+  const ledger = ss.getSheetByName(CRM_3DP019_FIXTURE_USAGE_SHEET_);
+  if (!ledger || ledger.getLastRow() < 2) return { total_per_unit: 0, owner_per_unit: 0, serhiy_per_unit: 0, payer: '', has_ledger: false };
+  const width = Math.max(ledger.getLastColumn(), 14);
+  const sku = String(entry && entry.values && entry.values[5] || '').trim();
+  const rows = ledger.getRange(2, 1, ledger.getLastRow() - 1, width).getValues().filter(function(row) {
+    const source = String(row[2] || '').trim();
+    if ((source !== 'Продаж' && source !== 'Коригування') || String(row[3] || '').trim() !== order) return false;
+    const targetRow = Math.floor(crm3dpNumber_(row[12]));
+    const targetSku = String(row[13] || '').trim();
+    if (targetRow) return targetRow === entry.row;
+    if (targetSku) return targetSku === sku;
+    return (triggerRows || []).length === 1;
+  });
+  if (!rows.length) return { total_per_unit: 0, owner_per_unit: 0, serhiy_per_unit: 0, payer: '', has_ledger: false };
+  const invalidPayer = rows.filter(function(row) { const payer = String(row[5] || '').trim(); return payer !== 'власник' && payer !== 'Сергій'; })[0];
+  if (invalidPayer) throw new Error(CRM_3DP_FIXTURE_ALLOCATION_ERROR_ + 'PAYER; fixture ledger contains an invalid payer for CRM row ' + entry.row + '.');
+  const units = crm3dpNumber_(entry && entry.values && entry.values[7]);
+  if (units <= 0) throw new Error(CRM_3DP_FIXTURE_ALLOCATION_ERROR_ + 'ZERO_UNITS; ledger cannot allocate to zero 3D-P units for CRM row ' + entry.row + '.');
+  const ownerTotal = rows.reduce(function(sum, row) { return String(row[5] || '').trim() === 'власник' ? sum + crm3dpNumber_(row[8]) : sum; }, 0);
+  const serhiyTotal = rows.reduce(function(sum, row) { return String(row[5] || '').trim() === 'Сергій' ? sum + crm3dpNumber_(row[8]) : sum; }, 0);
+  const ownerPerUnit = crm3dpRound2_(ownerTotal / units);
+  const serhiyPerUnit = crm3dpRound2_(serhiyTotal / units);
+  const payer = ownerPerUnit && serhiyPerUnit ? '' : (ownerPerUnit ? 'власник' : (serhiyPerUnit ? 'Сергій' : ''));
+  return { total_per_unit: crm3dpRound2_(ownerPerUnit + serhiyPerUnit), owner_per_unit: ownerPerUnit,
+    serhiy_per_unit: serhiyPerUnit, owner_total: crm3dpRound2_(ownerTotal), serhiy_total: crm3dpRound2_(serhiyTotal), payer: payer, has_ledger: true };
+}
+
+// Compatibility for legacy sheet forms and their regression suite. New dashboard updates use the
+// line-specific helper above, which intentionally permits owner and Serhiy fixtures on one order.
+function crm3dpFixtureFrozenForOrder_(sales, order, triggerRows) {
+  const ss = sales.getParent();
+  const ledger = ss.getSheetByName(CRM_3DP019_FIXTURE_USAGE_SHEET_);
+  if (!ledger || ledger.getLastRow() < 2) return { cost_per_unit: 0, payer: '', has_ledger: false };
+  const rows = ledger.getRange(2, 1, ledger.getLastRow() - 1, 11).getValues().filter(function(row) {
+    const source = String(row[2] || '').trim();
+    return (source === 'Продаж' || source === 'Коригування') && String(row[3] || '').trim() === order;
+  });
+  if (!rows.length) return { cost_per_unit: 0, payer: '', has_ledger: false };
+  const payers = {};
+  rows.forEach(function(row) {
+    const payer = String(row[5] || '').trim();
+    if (payer !== 'власник' && payer !== 'Сергій') throw new Error(CRM_3DP_FIXTURE_ALLOCATION_ERROR_ + 'PAYER; fixture ledger contains an invalid payer.');
+    payers[payer] = true;
+  });
+  const payerNames = Object.keys(payers);
+  if (payerNames.length > 1) throw new Error(CRM_3DP_FIXTURE_ALLOCATION_ERROR_ + 'MIXED_PAYER; legacy order-level allocation cannot mix fixture payers.');
+  const units = (triggerRows || []).reduce(function(sum, entry) { return sum + crm3dpNumber_(entry && entry.values && entry.values[7]); }, 0);
+  if (units <= 0) throw new Error(CRM_3DP_FIXTURE_ALLOCATION_ERROR_ + 'ZERO_UNITS; ledger cannot allocate to zero 3D-P units.');
+  const total = rows.reduce(function(sum, row) { return sum + crm3dpNumber_(row[8]); }, 0);
+  const costPerUnit = crm3dpRound2_(total / units);
+  return { cost_per_unit: costPerUnit, payer: costPerUnit ? payerNames[0] : '', has_ledger: true };
+}
+
+function crm3dpWriteFixtureFrozenForExistingSale_(config, saleRow, fixtureFrozen) {
+  const fields = [
+    { column: 'V', header: CRM_3DP_FIXTURE_COST_HEADER_, value: crm3dpNumber_(fixtureFrozen && fixtureFrozen.cost_per_unit) },
+    { column: 'W', header: CRM_3DP_FIXTURE_PAYER_HEADER_, value: String(fixtureFrozen && fixtureFrozen.payer || '').trim() },
+  ];
+  const states = [];
+  let wrote = false;
+  for (let index = 0; index < fields.length; index++) {
+    const field = fields[index];
+    const current = saleRow[field.header] == null ? '' : saleRow[field.header];
+    const same = typeof field.value === 'number'
+      ? String(current == null ? '' : current).trim() !== '' && Math.abs(crm3dpNumber_(current) - field.value) < 0.005
+      : String(current || '').trim() === String(field.value || '').trim();
+    if (same) { states.push(field.column + ' unchanged'); continue; }
+    try {
+      crm3dpFetchJson_(config.url, { method: 'post', contentType: 'text/plain;charset=utf-8', payload: JSON.stringify({
+        action: '3dp_write', token: config.token, sheet: CRM_3DP_SALES_SHEET_, sku_or_row: saleRow.row_number,
+        column: field.column, value: field.value, expected_current: current,
+      }) });
+      saleRow[field.header] = field.value;
+      wrote = true;
+      states.push(field.column + ' updated');
+    } catch (error) {
+      states.push(field.column + ' update failed');
+      return { ok: false, wrote: wrote, detail: 'Frozen fixture update: ' + states.join('; ') + '; cause: ' + String(error && error.message ? error.message : error) };
+    }
+  }
+  return { ok: true, wrote: wrote, detail: 'Frozen fixture update: ' + states.join('; ') + '.' };
+}
+
+function crm3dpWriteFrozenForExistingSale_(config, saleRow, desired) {
+  const fields = [
+    { column: 'H', header: CRM_3DP_PROFIT_SHARE_HEADER_, value: desired.profit_share },
+    { column: 'V', header: CRM_3DP_FIXTURE_COST_HEADER_, value: desired.fixture_cost },
+    { column: 'W', header: CRM_3DP_FIXTURE_PAYER_HEADER_, value: desired.fixture_payer },
+    { column: 'X', header: 'Режим CRM', value: desired.mode },
+    { column: 'Y', header: 'Фурнітура власника за од., грн (заморожена)', value: desired.owner_fixture_per_unit },
+    { column: 'Z', header: 'Фурнітура Сергія за од., грн (заморожена)', value: desired.serhiy_fixture_per_unit },
+    { column: 'AA', header: 'Ціна викупу за од., грн (заморожена)', value: desired.buyout },
+  ];
+  const states = [];
+  let wrote = false;
+  for (let index = 0; index < fields.length; index++) {
+    const field = fields[index];
+    const current = saleRow[field.header] == null ? '' : saleRow[field.header];
+    const same = typeof field.value === 'number'
+      ? String(current == null ? '' : current).trim() !== '' && Math.abs(crm3dpNumber_(current) - field.value) < 0.005
+      : String(current || '').trim() === String(field.value || '').trim();
+    if (same) { states.push(field.column + ' current'); continue; }
+    try {
+      crm3dpFetchJson_(config.url, { method: 'post', contentType: 'text/plain;charset=utf-8', payload: JSON.stringify({
+        action: '3dp_write', token: config.token, sheet: CRM_3DP_SALES_SHEET_, sku_or_row: saleRow.row_number,
+        column: field.column, value: field.value, expected_current: current,
+      }) });
+      saleRow[field.header] = field.value;
+      wrote = true;
+      states.push(field.column + ' updated');
+    } catch (error) {
+      const message = String(error && error.message ? error.message : error);
+      if (message.indexOf('STALE_WRITE') !== -1) {
+        try {
+          const refreshed = crm3dpSaleRows_(config, true).filter(function(row) {
+            return Number(row.row_number) === Number(saleRow.row_number);
+          })[0];
+          if (!refreshed) throw new Error('remote sale row disappeared during refresh');
+          const refreshedCurrent = refreshed[field.header] == null ? '' : refreshed[field.header];
+          const refreshedSame = typeof field.value === 'number'
+            ? String(refreshedCurrent == null ? '' : refreshedCurrent).trim() !== '' && Math.abs(crm3dpNumber_(refreshedCurrent) - field.value) < 0.005
+            : String(refreshedCurrent || '').trim() === String(field.value || '').trim();
+          if (!refreshedSame) {
+            crm3dpFetchJson_(config.url, { method: 'post', contentType: 'text/plain;charset=utf-8', payload: JSON.stringify({
+              action: '3dp_write', token: config.token, sheet: CRM_3DP_SALES_SHEET_, sku_or_row: saleRow.row_number,
+              column: field.column, value: field.value, expected_current: refreshedCurrent,
+            }) });
+            wrote = true;
+            states.push(field.column + ' refreshed and updated');
+          } else {
+            states.push(field.column + ' current after refresh');
+          }
+          saleRow[field.header] = field.value;
+          continue;
+        } catch (retryError) {
+          states.push(field.column + ' failed after refresh');
+          return { ok: false, wrote: wrote, detail: states.join('; ') + '; cause: ' + String(retryError && retryError.message ? retryError.message : retryError) };
+        }
+      }
+      states.push(field.column + ' failed');
+      return { ok: false, wrote: wrote, detail: states.join('; ') + '; cause: ' + message };
+    }
+  }
+  return { ok: true, wrote: wrote, detail: states.join('; ') + '.' };
+}
+
+
+function crm3dpSaleAppendValues_(entry, order, frozen, mode) {
   const values = entry.values || [];
   const quantity = crm3dpNumber_(values[7]);
   const linePrice = crm3dpNumber_(values[8]);
@@ -1287,12 +1764,17 @@ function crm3dpSaleAppendValues_(entry, order, frozen) {
     E: crm3dpRound2_(quantity ? linePrice - lineDiscount / quantity : linePrice),
     F: frozen.production_cost,
     G: 0,
+    H: frozen.profit_share,
     M: String(values[1] || '').trim(),
     N: order,
     T: entry.row,
     U: frozen.actual_rrp,
     V: frozen.fixture_cost,
     W: frozen.fixture_payer,
+    X: mode,
+    Y: frozen.owner_fixture_per_unit,
+    Z: frozen.serhiy_fixture_per_unit,
+    AA: frozen.buyout,
   };
 }
 
@@ -1364,6 +1846,7 @@ function sync3dpSales_(sales, orderId, rowNumbers, source) {
 
     const existingRows = crm3dpSaleRows_(config);
     const frozenBySku = {};
+    const fixtureFrozen = crm3dpFixtureFrozenForOrder_(sales, order, triggerRows);
     const created = [];
     const matches = [];
     triggerRows.forEach(function (entry) {
@@ -1373,7 +1856,7 @@ function sync3dpSales_(sales, orderId, rowNumbers, source) {
         return;
       }
       const sku = String(entry.values[5] || '').trim();
-      const frozen = frozenBySku[sku] || (frozenBySku[sku] = crm3dpFrozenSaleInputs_(config, sku));
+      const frozen = frozenBySku[sku] || (frozenBySku[sku] = crm3dpFrozenSaleInputs_(config, sku, fixtureFrozen));
       if (!frozen.ok) {
         const outcome = frozen.skipped === 'missing_cost_or_rrp' ? 'skipped_missing_cost_or_rrp'
           : (frozen.skipped === 'sku_not_in_nomenclature' ? 'skipped_sku_not_in_nomenclature' : 'skipped_invalid_fixture_price');
@@ -1430,6 +1913,7 @@ function sync3dpSales_(sales, orderId, rowNumbers, source) {
     matches.forEach(function (match) {
       if (!created.some(function (row) { return row.row_number === match.row.row_number; })) {
         const adjustment = crm3dpEnsureStock_(config, sales, journalSource, order, match.entry);
+        const fixtureWrite = crm3dpWriteFixtureFrozenForExistingSale_(config, match.row, fixtureFrozen);
         const wroteExpense = expenseChanged && match.row.row_number === first.row.row_number;
         let outcome = adjustment.journal_outcome || (wroteExpense || !adjustment.already_applied ? 'updated' : 'noop');
         let detail = adjustment.journal_detail || (wroteExpense
@@ -1437,6 +1921,12 @@ function sync3dpSales_(sales, orderId, rowNumbers, source) {
             ? 'Existing 3D-P sale data was updated; automatic stock adjustment was already applied.'
             : 'Existing 3D-P sale data was updated.')
           : (adjustment.already_applied ? 'The matching 3D-P sale and stock adjustment were already synchronized.' : 'Automatic stock adjustment was applied.'));
+        if (!fixtureWrite.ok) {
+          outcome = 'warning_fixture_update';
+          detail = 'CRM fixture correction saved, but 3D-P frozen fixture update is incomplete: ' + fixtureWrite.detail;
+        } else if (fixtureWrite.wrote) {
+          detail += ' ' + fixtureWrite.detail;
+        }
         if (match.duplicate_key) {
           outcome = 'warning_duplicate_key';
           detail += ' More than one 3D-P sale row matches this CRM key.';
@@ -1447,20 +1937,432 @@ function sync3dpSales_(sales, orderId, rowNumbers, source) {
     return { ok: true, order: order, created: created.length, matched: matches.length, packaging: packagingTotal };
   } catch (error) {
     const message = String(error && error.message ? error.message : error);
-    const outcome = message === '3D-P Продажі!T:W frozen-value schema is not ready' ? 'skipped_schema' : 'skipped_api_error';
+    const outcome = crm3dpSyncErrorOutcome_(message);
     crm3dpLogSkip_(sales, journalSource, order, triggerRows[0] || null, outcome, message);
     return { ok: false, skipped: '3dp_unavailable' };
   }
 }
 
-// Compatibility name retained for the V87 helper callers/tests.
+function crm3dpModeForEntry_(ss, entry, options) {
+  const overrides = options && options.modes || {};
+  const explicit = String(overrides[entry.row] || '').trim();
+  if (explicit === 'Продаж' || explicit === 'Маркетинг') return explicit;
+  try {
+    const prior = latest3dpAccountingByRow_(ss)[entry.row];
+    if (prior && (prior.mode === 'Продаж' || prior.mode === 'Маркетинг')) return prior.mode;
+  } catch (error) {}
+  return 'Продаж';
+}
+
+function sync3dpSalesV2_(sales, orderId, rowNumbers, source, options) {
+  const journalSource = crm3dpJournalSource_(source);
+  const order = String(orderId || '').trim();
+  if (!order) return { ok: false, skipped: 'missing_order_id' };
+  const ss = sales.getParent();
+  const crmRows = crm3dpOrderRows_(sales, rowNumbers);
+  const triggerRows = crmRows.filter(function(entry) { return is3dpPackagingSku_(entry.values[5]); });
+  if (!triggerRows.length) {
+    crm3dpLogSkip_(sales, journalSource, order, null, 'skipped_no_3dp_sku', 'no 3D-P SKU in CRM order');
+    return { ok: true, skipped: 'no_3dp_sku' };
+  }
+  const config = crm3dpConfig_();
+  if (!config) {
+    crm3dpLogSkip_(sales, journalSource, order, triggerRows[0], 'skipped_not_configured', '3D-P sync properties are not configured');
+    return { ok: false, skipped: 'not_configured' };
+  }
+  let existingRows;
+  try { existingRows = crm3dpSaleRows_(config, true); }
+  catch (error) {
+    const message = String(error && error.message ? error.message : error);
+    crm3dpLogSkip_(sales, journalSource, order, triggerRows[0], crm3dpSyncErrorOutcome_(message), message);
+    return { ok: false, skipped: 'schema_or_api' };
+  }
+  const result = { ok: true, order: order, created: 0, matched: 0, accounting_rows: 0, failures: [] };
+  triggerRows.forEach(function(entry) {
+    try {
+      const mode = crm3dpModeForEntry_(ss, entry, options || {});
+      const fixture = crm3dpFixtureFrozenForLine_(sales, order, entry, triggerRows);
+      const frozen = crm3dpFrozenSaleInputs_(config, String(entry.values[5] || '').trim(), fixture, true);
+      if (!frozen.ok) {
+        crm3dpLogSkip_(sales, journalSource, order, entry, frozen.skipped === 'sku_not_in_nomenclature' ? 'skipped_sku_not_in_nomenclature' : 'skipped_missing_cost_or_rrp', frozen.reason);
+        result.failures.push({ crm_row: entry.row, detail: frozen.reason });
+        return;
+      }
+      frozen.mode = mode;
+      const found = crm3dpSaleMatches_(existingRows, order, entry.row);
+      let remote = found[0] || null;
+      const wasCreated = !remote;
+      let detail = '';
+      if (!remote) {
+        const appended = crm3dpFetchJson_(config.url, { method: 'post', contentType: 'text/plain;charset=utf-8', payload: JSON.stringify({
+          action: '3dp_append_row', token: config.token, sheet: CRM_3DP_SALES_SHEET_, values: crm3dpSaleAppendValues_(entry, order, frozen, mode),
+        }) });
+        remote = { row_number: appended.row };
+        remote[CRM_3DP_ORDER_HEADER_] = order;
+        remote[CRM_3DP_CRM_ROW_HEADER_] = entry.row;
+        remote[CRM_3DP_EXPENSE_HEADER_] = 0;
+        existingRows.push(remote);
+        result.created++;
+        detail = '3D-P row created.';
+      } else {
+        result.matched++;
+        const frozenWrite = crm3dpWriteFrozenForExistingSale_(config, remote, frozen);
+        detail = frozenWrite.detail;
+        if (!frozenWrite.ok) throw new Error('Frozen values incomplete: ' + frozenWrite.detail);
+      }
+      const entryQuantity = crm3dpNumber_(entry.values[7]);
+      const desiredPackaging = crm3dpRound2_(entryQuantity > 0 ? crm3dpNumber_(entry.values[15]) / entryQuantity : 0);
+      const currentPackaging = remote[CRM_3DP_EXPENSE_HEADER_] == null ? 0 : remote[CRM_3DP_EXPENSE_HEADER_];
+      if (Math.abs(crm3dpNumber_(currentPackaging) - desiredPackaging) >= 0.005) {
+        crm3dpFetchJson_(config.url, { method: 'post', contentType: 'text/plain;charset=utf-8', payload: JSON.stringify({
+          action: '3dp_write', token: config.token, sheet: CRM_3DP_SALES_SHEET_, sku_or_row: remote.row_number,
+          column: 'G', value: desiredPackaging, expected_current: currentPackaging,
+        }) });
+        remote[CRM_3DP_EXPENSE_HEADER_] = desiredPackaging;
+        detail += ' G updated.';
+      }
+      const adjustment = crm3dpEnsureStock_(config, sales, journalSource, order, entry);
+      const snapshot = crm3dpAccountingSnapshot_(entry, order, frozen, fixture, mode, options && options.request_id);
+      const saved = append3dpAccountingSnapshot_(ss, snapshot, 'source=' + journalSource);
+      project3dpAccountingToCrm_(ss, saved);
+      result.accounting_rows++;
+      const outcome = adjustment.journal_outcome || (wasCreated ? 'created' : (detail ? 'updated' : 'noop'));
+      crm3dpAppendJournal_(sales, journalSource, order, entry, outcome, [detail, adjustment.journal_detail].filter(Boolean).join(' '));
+    } catch (error) {
+      result.ok = false;
+      const message = String(error && error.message ? error.message : error);
+      result.failures.push({ crm_row: entry.row, detail: message });
+      crm3dpAppendJournal_(sales, journalSource, order, entry, crm3dpSyncErrorOutcome_(message), message);
+    }
+  });
+  result.partial = result.accounting_rows > 0 && result.failures.length > 0;
+  return result;
+}
+
+// Compatibility name retained for all existing callers.
 function sync3dpPackagingCost_(sales, orderId, rowNumbers) {
-  return sync3dpSales_(sales, orderId, rowNumbers, arguments[3]);
+  return sync3dpSalesV2_(sales, orderId, rowNumbers, arguments[3], arguments[4]);
 }
 // END 3D-P-010 helper block
 
 function apiAddSale_(ss, payload) { try { resetMemoForMutation_(); const sales = ss.getSheetByName('Продажі'); if (!sales) throw new Error('sales sheet missing'); const date = apiNormalizeDateValue_(payload.date, 'date'); if (!date) throw new Error('date required'); const rawItems = Array.isArray(payload.items) ? payload.items.slice(0, 10) : []; if (!rawItems.length) throw new Error('items required'); const items = rawItems.map(function(item) { const sku = parseSku_(item && item.sku); const qty = num_(item && item.qty); const price = num_(item && item.price); if (!sku) throw new Error('sku required'); if (qty <= 0) throw new Error('qty must be > 0'); if (price < 0) throw new Error('price must be >= 0'); return { sku: sku, qty: qty, price: price, note: String(item.note || '').trim() }; }); const source = String(payload.channel || payload.source || 'Вручну').trim() || 'Вручну'; const paymentType = String(payload.payment_type || 'За реквізитами').trim() || 'За реквізитами'; const packagingType = String(payload.packaging_type || '').trim(); const operation = String(payload.order_id || '').trim() || generateOperationNumber(source, paymentType); const gross = items.reduce(function(sum, item) { return sum + item.qty * item.price; }, 0); const discount = Math.min(Math.max(0, num_(payload.discount)), gross); const customPackaging = Object.prototype.hasOwnProperty.call(payload, 'custom_packaging_cost') ? payload.custom_packaging_cost : ''; const packaging = packagingType ? getPackagingCost_(packagingType, customPackaging) : 0; const shopDelivery = Math.max(0, num_(payload.shop_delivery)); const baseNote = [String(payload.note || '').trim(), packagingType ? 'Паковання: ' + packagingType : ''].filter(Boolean).join('; '); const rawComponents = Array.isArray(payload.mystery_components) ? payload.mystery_components.slice(0, 10) : []; const components = rawComponents.map(function(item) { const sku = parseSku_(item && item.sku); const qty = num_(item && item.qty); if (!sku) throw new Error('mystery component sku required'); if (qty <= 0) throw new Error('mystery component qty must be > 0'); return { sku: sku, qty: qty, note: String(item.note || '').trim() }; }); const mysteryQty = items.filter(function(item) { return isMysteryBoxSale_(item.sku, ''); }).reduce(function(sum, item) { return sum + item.qty; }, 0); if (!mysteryQty && components.length) throw new Error('mystery components require an MBX sale'); if (mysteryQty) { const componentQty = components.reduce(function(sum, item) { return sum + item.qty; }, 0); if (!components.length || Math.abs(componentQty - mysteryQty * 5) > 0.0001) throw new Error('mystery components must total ' + (mysteryQty * 5)); } const firstRow = nextEmptyRow_(sales, 1, 3, 501); if (firstRow + items.length - 1 > 501) throw new Error('not enough rows in sales sheet'); const costRunState = {}; const addedRows = []; items.forEach(function(item, index) { const row = firstRow + index; addedRows.push(row); const weight = gross ? item.qty * item.price / gross : 0; const note = [baseNote, item.note].filter(Boolean).join('; '); sales.getRange(row, 1, 1, 6).setValues([[operation, source, date, String(payload.customer_phone || '').trim(), String(payload.customer_name || '').trim(), item.sku]]); sales.getRange(row, 8, 1, 3).setValues([[item.qty, item.price, round2_(discount * weight)]]); sales.getRange(row, 16).setValue(round2_(packaging * weight)); sales.getRange(row, 20).setValue(round2_(shopDelivery * weight)); sales.getRange(row, 23, 1, 6).setValues([[String(payload.payment_status || '').trim(), String(payload.order_status || '').trim(), String(payload.post || '').trim(), String(payload.ttn || '').trim(), note, paymentType]]); sales.getRange(row, 29).setValue(packagingType); fixSaleCostForRow_(ss, row, costRunState, { clearPending: true }); }); if (components.length) { addMysteryBoxWriteOffs_(ss, components, date, operation); SpreadsheetApp.flush(); recalculateMysteryBoxOrderCost_(ss, operation); } updateSkuCurrentCost_(ss); sync3dpPackagingCost_(sales, operation, addedRows, 'apiAddSale_'); invalidateDoGetCache_(); return { ok: true, rows_added: items.length, order_id: operation }; } catch (err) { return { ok: false, error: String(err && err.message ? err.message : err) }; } } function apiAddPurchase_(ss, payload) { try { resetMemoForMutation_(); const purchases = ss.getSheetByName('Закупки'); if (!purchases) throw new Error('purchases sheet missing'); const supplierChannel = String(payload.supplier_channel || 'zenmarket_jp').trim() || 'zenmarket_jp'; const isZenmarket = supplierChannel === 'zenmarket_jp' || supplierChannel === 'ZenMarket'; const rawOrder = String(payload.order_ref || '').trim(); const order = rawOrder || (isZenmarket ? '' : ('AUTO-' + supplierChannel.replace(/[^A-Za-z0-9]+/g, '-').toUpperCase() + '-' + Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyyMMdd-HHmmss') + '-' + Math.floor(Math.random() * 1000))); if (!order) throw new Error('order_ref required for zenmarket_jp'); if (!Object.prototype.hasOwnProperty.call(payload, 'total_cost')) throw new Error('total_cost required'); const totalCost = num_(payload.total_cost); if (totalCost < 0) throw new Error('total_cost must be >= 0'); const rawItems = Array.isArray(payload.items) ? payload.items.slice(0, 3) : []; if (!rawItems.length) throw new Error('items required'); const items = rawItems.map(function(item) { const sku = parseSku_(item && item.sku); const qty = num_(item && item.qty); const hasManual = item && item.manual_cost !== null && item.manual_cost !== '' && item.manual_cost !== undefined; const manualCost = hasManual ? num_(item.manual_cost) : null; if (!sku) throw new Error('sku required'); if (qty <= 0) throw new Error('qty must be > 0'); if (hasManual && manualCost < 0) throw new Error('manual_cost must be >= 0'); return { sku: sku, qty: qty, manualCost: manualCost, note: String(item.note || '').trim() }; }); const manualTotal = items.reduce(function(sum, item) { return sum + (item.manualCost === null ? 0 : item.manualCost); }, 0); const autoQty = items.reduce(function(sum, item) { return sum + (item.manualCost === null ? item.qty : 0); }, 0); if (manualTotal > totalCost + 0.05) throw new Error('manual costs exceed total_cost'); if (!autoQty && Math.abs(manualTotal - totalCost) > 0.05) throw new Error('manual costs must equal total_cost'); let allocatedCost = round2_(manualTotal); const autoItems = items.filter(function(item) { return item.manualCost === null; }); items.forEach(function(item) { if (item.manualCost !== null) item.cost = round2_(item.manualCost); else { const isLast = autoItems[autoItems.length - 1] === item; item.cost = isLast ? round2_(totalCost - allocatedCost) : round2_((totalCost - manualTotal) * item.qty / autoQty); allocatedCost = round2_(allocatedCost + item.cost); } if (item.cost < 0) throw new Error('line cost must be >= 0'); }); const lineTotal = round2_(items.reduce(function(sum, item) { return sum + item.cost; }, 0)); if (Math.abs(lineTotal - totalCost) > 0.05) throw new Error('line costs do not equal total_cost'); const japanFeesJpy = isZenmarket ? Math.max(0, num_(payload.japan_fees_jpy)) : 0; const japanFees = japanFeesJpy ? round2_(japanFeesJpy / getCurrencyRate_('JPY')) : 0; const ukraineDelivery = Math.max(0, num_(payload.ukraine_delivery_uah)); const totalQty = items.reduce(function(sum, item) { return sum + item.qty; }, 0); const firstRow = nextEmptyRow_(purchases, 1, 3, 301); if (firstRow + items.length - 1 > 301) throw new Error('not enough rows in purchases sheet'); const lotIds = generateLotIds_(items.length); let allocatedFees = 0; let allocatedUkraine = 0; const hasManual = items.some(function(item) { return item.manualCost !== null; }); items.forEach(function(item, index) { const row = firstRow + index; const lineFees = japanFees ? (index === items.length - 1 ? round2_(japanFees - allocatedFees) : round2_(japanFees * item.qty / totalQty)) : ''; const lineUkraine = ukraineDelivery ? (index === items.length - 1 ? round2_(ukraineDelivery - allocatedUkraine) : round2_(ukraineDelivery * item.qty / totalQty)) : ''; if (japanFees) allocatedFees = round2_(allocatedFees + lineFees); if (ukraineDelivery) allocatedUkraine = round2_(allocatedUkraine + lineUkraine); const note = [String(payload.note || '').trim(), item.note, hasManual ? 'Вартість рядків: авто/ручне коригування з форми' : (items.length > 1 ? 'Вартість лоту розподілена пропорційно кількості' : ''), items.length > 1 && japanFees ? 'JP доставка/комісії в JPY конвертовані в грн і розподілені пропорційно кількості' : ''].filter(Boolean).join('; '); purchases.getRange(row, 1, 1, 5).setValues([[lotIds[index], order, '', '', item.sku]]); purchases.getRange(row, 8, 1, 4).setValues([[item.qty, item.cost, lineFees, lineUkraine]]); purchases.getRange(row, 17, 1, 3).setValues([[String(payload.status || 'Замовлено').trim(), note, String(payload.order_url || '').trim()]]); purchases.getRange(row, 20).setValue(supplierChannel); }); invalidateDoGetCache_(); return { ok: true, rows_added: items.length, lot_ids: lotIds }; } catch (err) { return { ok: false, error: String(err && err.message ? err.message : err) }; } } function apiAddWriteOff_(ss, payload) { try { resetMemoForMutation_(); const writeOffs = ss.getSheetByName('Списання'); if (!writeOffs) throw new Error('writeoff sheet missing'); const date = apiNormalizeDateValue_(payload.date, 'date'); if (!date) throw new Error('date required'); const type = String(payload.writeoff_type || payload.type || '').trim(); const reason = String(payload.reason || '').trim(); if (!type) throw new Error('writeoff_type required'); if (!reason) throw new Error('reason required'); const rawItems = Array.isArray(payload.items) ? payload.items.slice(0, 10) : []; if (!rawItems.length) throw new Error('items required'); const items = rawItems.map(function(item) { const sku = parseSku_(item && item.sku); const qty = num_(item && item.qty); if (!sku) throw new Error('sku required'); if (qty <= 0) throw new Error('qty must be > 0'); return { sku: sku, qty: qty, note: String(item.note || '').trim() }; }); if (Object.prototype.hasOwnProperty.call(payload, 'expected_qty') && String(payload.expected_qty) !== '') { const expected = num_(payload.expected_qty); const actual = items.reduce(function(sum, item) { return sum + item.qty; }, 0); if (expected > 0 && Math.abs(actual - expected) > 0.000001) throw new Error('actual quantity ' + actual + ' does not match expected ' + expected); } const row = nextEmptyRow_(writeOffs, 1, 3, 201); if (row + items.length - 1 > 201) throw new Error('not enough rows in writeoff sheet'); const startNumber = nextIdNumber_('Списання', 1, 'WRT'); const ids = items.map(function(item, index) { return 'WRT-' + String(startNumber + index).padStart(4, '0'); }); writeOffs.getRange(row, 1, items.length, 4).setValues(items.map(function(item, index) { return [ids[index], date, type, item.sku]; })); writeOffs.getRange(row, 6, items.length, 1).setValues(items.map(function(item) { return [item.qty]; })); writeOffs.getRange(row, 11, items.length, 2).setValues(items.map(function(item) { return [reason, [String(payload.note || '').trim(), item.note].filter(Boolean).join('; ')]; })); SpreadsheetApp.flush(); recalculateMysteryBoxOrdersFromNote_(ss, String(payload.note || '').trim()); updateSkuCurrentCost_(ss); invalidateDoGetCache_(); return { ok: true, rows_added: items.length, ids: ids }; } catch (err) { return { ok: false, error: String(err && err.message ? err.message : err) }; } } function apiRecentTable_(sheet, requiredHeader) { if (!sheet) return { headerRow: 0, headers: [], rows: [] }; const lastRow = sheet.getLastRow(); const lastCol = Math.min(sheet.getLastColumn(), 50); if (lastRow < 1 || lastCol < 1) return { headerRow: 0, headers: [], rows: [] }; const values = sheet.getRange(1, 1, lastRow, lastCol).getValues(); const wanted = apiNormalizeHeader_(requiredHeader); let headerIndex = -1; for (let i = 0; i < Math.min(values.length, 20); i++) { if (values[i].map(apiNormalizeHeader_).indexOf(wanted) !== -1) { headerIndex = i; break; } } if (headerIndex === -1) throw new Error('header not found: ' + requiredHeader); return { headerRow: headerIndex + 1, headers: values[headerIndex], rows: values.slice(headerIndex + 1) }; } function apiRecentCol_(headers, name) { const index = headers.map(apiNormalizeHeader_).indexOf(apiNormalizeHeader_(name)); if (index === -1) throw new Error('column not found: ' + name); return index; } function apiRecentLimit_(params) { return Math.max(1, Math.min(Math.floor(apiNum_(params && params.limit) || 20), 50)); } function apiRecentSales_(params) { const table = apiRecentTable_(_getCrmSs().getSheetByName('Продажі'), 'Номер замовлення / операції'); if (!table.headerRow) return { ok: true, rows: [] }; const c = { order: apiRecentCol_(table.headers, 'Номер замовлення / операції'), date: apiRecentCol_(table.headers, 'Дата продажу'), amount: apiRecentCol_(table.headers, 'Сума продажу'), packagingCost: apiRecentCol_(table.headers, 'Пакування'), shopDelivery: apiRecentCol_(table.headers, 'Доставка за рахунок магазину'), paymentStatus: apiRecentCol_(table.headers, 'Статус оплати'), orderStatus: apiRecentCol_(table.headers, 'Статус замовлення'), ttn: apiRecentCol_(table.headers, 'ТТН'), post: apiRecentCol_(table.headers, 'Пошта'), note: apiRecentCol_(table.headers, 'Примітка'), paymentType: apiRecentCol_(table.headers, 'Тип оплати'), packagingType: apiRecentCol_(table.headers, 'Паковання') }; const rows = []; let current = null; for (let i = table.rows.length - 1; i >= 0; i--) { const row = table.rows[i]; const order = String(row[c.order] || '').trim(); if (!order) { current = null; continue; } if (!current || current.order_id !== order) { current = { row_index: table.headerRow + 1 + i, order_id: order, date: row[c.date] ? apiDate_(row[c.date]) : '', payment_status: row[c.paymentStatus] || '', payment_type: row[c.paymentType] || '', order_status: row[c.orderStatus] || '', ttn: row[c.ttn] || '', post: row[c.post] || '', packaging_type: row[c.packagingType] || '', amount: 0, packaging_cost: 0, shop_delivery: 0, note: row[c.note] || '' }; rows.push(current); } current.row_index = table.headerRow + 1 + i; current.amount += apiNum_(row[c.amount]); current.packaging_cost += apiNum_(row[c.packagingCost]); current.shop_delivery += apiNum_(row[c.shopDelivery]); } const result = rows.map(function(item) { item.amount = round2_(item.amount); item.packaging_cost = round2_(item.packaging_cost); item.shop_delivery = round2_(item.shop_delivery); return item; }).filter(function(item) { return ['Скасовано', 'Повернення'].indexOf(String(item.payment_status)) === -1 && ['Скасовано', 'Повернення'].indexOf(String(item.order_status)) === -1 && (String(item.payment_status) !== 'Оплачено' || String(item.order_status) !== 'Отримано'); }).sort(function(a, b) { return b.row_index - a.row_index; }).slice(0, apiRecentLimit_(params)); return { ok: true, rows: result }; } function apiRecentPurchases_(params) { const table = apiRecentTable_(_getCrmSs().getSheetByName('Закупки'), 'ID партії'); if (!table.headerRow) return { ok: true, rows: [] }; const c = { lot: apiRecentCol_(table.headers, 'ID партії'), order: apiRecentCol_(table.headers, 'ZenMarket Order №'), track: apiRecentCol_(table.headers, 'Трек-номер'), date: apiRecentCol_(table.headers, 'Дата доставки в Україну'), sku: apiRecentCol_(table.headers, 'SKU'), qty: apiRecentCol_(table.headers, 'Кількість одиниць'), japanFee: apiRecentCol_(table.headers, 'Доставка / комісії по Японії, грн'), status: apiRecentCol_(table.headers, 'Статус'), note: apiRecentCol_(table.headers, 'Примітка') }; const terminal = { 'На складі UA': true, 'На складі': true, 'Продано': true, 'Частково продано': true, 'Скасовано': true }; const rows = []; const jpyRate = getCurrencyRate_('JPY'); for (let i = 0; i < table.rows.length; i++) { const row = table.rows[i]; const lotId = String(row[c.lot] || '').trim(); const status = String(row[c.status] || '').trim(); if (!lotId || row[c.date] || terminal[status]) continue; rows.push({ row_index: table.headerRow + 1 + i, lot_id: lotId, order_ref: row[c.order] || '', track_number: row[c.track] || '', date: '', sku: row[c.sku] || '', qty: apiNum_(row[c.qty]), japan_fee_jpy: round2_(apiNum_(row[c.japanFee]) * jpyRate), status: status, note: row[c.note] || '' }); } rows.sort(function(a, b) { const an = Number((String(a.order_ref || '').match(/\d+/) || [0])[0]); const bn = Number((String(b.order_ref || '').match(/\d+/) || [0])[0]); return an - bn || String(a.order_ref || '').localeCompare(String(b.order_ref || '')); }); return { ok: true, rows: rows.slice(0, apiRecentLimit_(params)) }; } function apiUpdateSale_(ss, payload) { try { resetMemoForMutation_(); const sales = ss.getSheetByName('Продажі'); if (!sales) throw new Error('sales sheet missing'); const rowIndex = Math.floor(apiNum_(payload.row_index)); if (rowIndex < 3 || rowIndex > sales.getLastRow()) throw new Error('invalid row_index'); const current = sales.getRange(rowIndex, 1, 1, 29).getValues()[0]; const order = String(current[0] || '').trim(); if (!order) throw new Error('sale row is empty'); const rows = [rowIndex]; for (let row = rowIndex - 1; row >= 3; row--) { if (String(sales.getRange(row, 1).getValue() || '').trim() !== order) break; rows.unshift(row); } for (let row = rowIndex + 1; row <= sales.getLastRow(); row++) { if (String(sales.getRange(row, 1).getValue() || '').trim() !== order) break; rows.push(row); } const paymentStatus = String(payload.payment_status || '').trim(); const orderStatus = String(payload.order_status || '').trim(); const ttn = String(payload.ttn || '').trim(); const packagingType = String(payload.packaging_type || '').trim(); const note = String(payload.note || '').trim(); const paymentChanged = paymentStatus && paymentStatus !== String(current[22] || '').trim(); const orderChanged = orderStatus && orderStatus !== String(current[23] || '').trim(); const ttnChanged = Object.prototype.hasOwnProperty.call(payload, 'ttn') && ttn !== String(current[25] || '').trim(); const packagingChanged = packagingType && packagingType !== String(current[28] || '').trim(); const hasCustomPackaging = Object.prototype.hasOwnProperty.call(payload, 'custom_packaging_cost') && String(payload.custom_packaging_cost) !== ''; const packaging = packagingChanged || hasCustomPackaging ? getPackagingCost_(packagingType, payload.custom_packaging_cost) : null; const hasDelivery = Object.prototype.hasOwnProperty.call(payload, 'shop_delivery') && String(payload.shop_delivery) !== ''; const shopDelivery = hasDelivery ? Math.max(0, apiNum_(payload.shop_delivery)) : null; if (!paymentChanged && !orderChanged && !ttnChanged && packaging === null && shopDelivery === null && !note) { throw new Error('nothing changed'); } const weights = orderRowWeights_(sales, rows); const packagingAllocations = packaging === null ? [] : allocateAmount_(packaging, weights); const deliveryAllocations = shopDelivery === null ? [] : allocateAmount_(shopDelivery, weights); const costRunState = {}; rows.forEach(function(row, index) { if (paymentChanged) sales.getRange(row, 23).setValue(paymentStatus); if (orderChanged) sales.getRange(row, 24).setValue(orderStatus); if (ttnChanged) sales.getRange(row, 26).setValue(ttn); if (packaging !== null) { sales.getRange(row, 16).setValue(packagingAllocations[index]); sales.getRange(row, 29).setValue(packagingType); } if (shopDelivery !== null) sales.getRange(row, 20).setValue(deliveryAllocations[index]); if (note) appendCellText_(sales.getRange(row, 27), note); fixSaleCostForRow_(ss, row, costRunState, { clearPending: false }); }); sync3dpPackagingCost_(sales, order, rows, 'apiUpdateSale_'); invalidateDoGetCache_(); return { ok: true, row_index: rowIndex, order_id: order, rows_updated: rows.length }; } catch (err) { return { ok: false, error: String(err && err.message ? err.message : err) }; } } function apiUpdatePurchase_(ss, payload) { try { resetMemoForMutation_(); const purchases = ss.getSheetByName('Закупки'); if (!purchases) throw new Error('purchases sheet missing'); const rawLots = Array.isArray(payload.lots) ? payload.lots : []; if (!rawLots.length) throw new Error('lots required'); if (rawLots.length > 5) throw new Error('maximum 5 lots'); const lots = {}; rawLots.forEach(function(item) { const lotId = String(item && item.lot_id || '').trim(); if (!/^LOT-[0-9]+$/i.test(lotId)) throw new Error('invalid lot_id'); if (lots[lotId]) throw new Error('duplicate lot_id'); lots[lotId] = item; }); const data = purchases.getRange(3, 1, Math.max(purchases.getLastRow() - 2, 1), 18).getValues(); const matches = []; data.forEach(function(values, index) { const lotId = String(values[0] || '').trim(); if (lots[lotId]) matches.push({ row: index + 3, values: values, lot: lots[lotId] }); }); if (matches.length !== rawLots.length) throw new Error('one or more lots not found'); const hasTrack = Object.prototype.hasOwnProperty.call(payload, 'track_number'); const hasDate = Object.prototype.hasOwnProperty.call(payload, 'date') && String(payload.date || '').trim(); const hasStatus = Object.prototype.hasOwnProperty.call(payload, 'status') && String(payload.status || '').trim(); const hasUkraine = Object.prototype.hasOwnProperty.call(payload, 'ukraine_delivery_jpy') && String(payload.ukraine_delivery_jpy) !== ''; const note = String(payload.note || '').trim(); const hasJapan = matches.some(function(match) { return Object.prototype.hasOwnProperty.call(match.lot, 'japan_fee_jpy') && String(match.lot.japan_fee_jpy) !== ''; }); if (!hasTrack && !hasDate && !hasStatus && !hasUkraine && !note && !hasJapan) throw new Error('nothing changed'); const jpyRate = getCurrencyRate_('JPY'); let ukraineAllocations = []; if (hasUkraine) { const totalUah = round2_(Math.max(0, apiNum_(payload.ukraine_delivery_jpy)) / jpyRate); ukraineAllocations = matches.length > 1 ? allocateAmount_(totalUah, matches.map(function(match) { return apiNum_(match.values[8]); })) : [totalUah]; } matches.forEach(function(match, index) { if (hasTrack) purchases.getRange(match.row, 3).setValue(String(payload.track_number || '').trim()); if (hasDate) purchases.getRange(match.row, 4).setValue(apiNormalizeDateValue_(payload.date, 'date')); if (hasStatus) purchases.getRange(match.row, 17).setValue(String(payload.status).trim()); if (Object.prototype.hasOwnProperty.call(match.lot, 'japan_fee_jpy') && String(match.lot.japan_fee_jpy) !== '') purchases.getRange(match.row, 10).setValue(round2_(Math.max(0, apiNum_(match.lot.japan_fee_jpy)) / jpyRate)); if (hasUkraine) purchases.getRange(match.row, 11).setValue(ukraineAllocations[index]); if (note) appendCellText_(purchases.getRange(match.row, 18), note); }); invalidateDoGetCache_(); return { ok: true, rows_updated: matches.length, lot_ids: Object.keys(lots) }; } catch (err) { return { ok: false, error: String(err && err.message ? err.message : err) }; } }
-function recalculateMysteryBoxOrdersFromNote_(ss, note) { note = String(note || '').trim(); if (!note) return []; const sales = ss.getSheetByName('Продажі'); if (!sales) return []; const values = sales.getRange(3, 1, Math.max(sales.getLastRow() - 2, 1), 6).getValues(); const orders = {}; values.forEach(function(row) { const order = String(row[0] || '').trim(); const escaped = order.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); if (order && isMysteryBoxSale_(row[5], '') && new RegExp('(^|\\s|[;,:])' + escaped + '($|\\s|[;,.])').test(note)) orders[order] = true; }); Object.keys(orders).forEach(function(order) { recalculateMysteryBoxOrderCost_(ss, order); }); return Object.keys(orders); } function recalculateMysteryBoxOrderCost_(ss, order) { order = String(order || '').trim(); if (!order) return null; const sales = ss.getSheetByName('Продажі'); const writeOffs = ss.getSheetByName('Списання'); if (!sales || !writeOffs) return null; ensureSaleCostAuditColumns_(sales); const saleValues = sales.getRange(3, 1, Math.max(sales.getLastRow() - 2, 1), 32).getValues(); const mysteryRows = []; saleValues.forEach(function(values, index) { if (String(values[0] || '').trim() === order && isMysteryBoxSale_(values[5], values[6])) mysteryRows.push({ row: index + 3, values: values }); }); if (!mysteryRows.length) return null; const writeOffValues = writeOffs.getRange(3, 1, Math.max(writeOffs.getLastRow() - 2, 1), 12).getValues(); let prroComponents = 0; let mgmtComponents = 0; const componentAudit = []; writeOffValues.forEach(function(values) { const note = String(values[11] || ''); if (note.indexOf(order) === -1) return; const qty = num_(values[5]); const prro = num_(values[8]); const mgmt = num_(values[9]); if (qty <= 0 || (!prro && !mgmt)) return; prroComponents += prro; mgmtComponents += mgmt || prro; componentAudit.push(String(values[3] || '') + '=' + round2_(mgmt || prro)); }); if (prroComponents <= 0 && mgmtComponents <= 0) return null; const qty = mysteryRows.reduce(function(sum, item) { return sum + num_(item.values[7]); }, 0); if (qty <= 0) return null; const first = mysteryRows[0]; const saleDate = first.values[2]; const sticker = getAutoConsumableUnitCost_(ss, 'Стікер лого+QR', 'any', order, first.row, saleDate); const blind = getAutoConsumableUnitCost_(ss, 'Блайнд-пакет для картки', 'mystery', order, first.row, saleDate); const mysteryLabel = getAutoConsumableUnitCost_(ss, 'Наліпка Mystery Box', 'mystery', order, first.row, saleDate); const directExpense = getDirectOrderExpense_(ss, order); const prroUnit = round2_(prroComponents / qty); const mgmtUnit = round2_((mgmtComponents + sticker + blind + mysteryLabel + directExpense) / qty); const audit = trimCostAudit_('components: ' + componentAudit.join(', ') + '; consumables=' + round2_(sticker + blind + mysteryLabel) + '; direct expenses=' + round2_(directExpense)); mysteryRows.forEach(function(item) { sales.getRange(item.row, 12, 1, 2).setValues([[prroUnit, mgmtUnit]]); sales.getRange(item.row, 30, 1, 3).setValues([['MBX фактична комплектація', audit, new Date()]]); }); return { order_id: order, rows_updated: mysteryRows.length, prro_unit: prroUnit, mgmt_unit: mgmtUnit }; } function getDirectOrderExpense_(ss, order) { const expenses = ss.getSheetByName('Витрати'); if (!expenses) return 0; const values = expenses.getRange(3, 1, Math.max(expenses.getLastRow() - 2, 1), 6).getValues(); return round2_(values.reduce(function(sum, row) { const linked = String(row[4] || '').trim().toLowerCase(); const orderRef = String(row[5] || '').trim(); return linked === 'так' && orderRef === order ? sum + num_(row[3]) : sum; }, 0)); }
+function recalculateMysteryBoxOrdersFromNote_(ss, note) { note = String(note || '').trim(); if (!note) return []; const sales = ss.getSheetByName('Продажі'); if (!sales) return []; const values = sales.getRange(3, 1, Math.max(sales.getLastRow() - 2, 1), 6).getValues(); const orders = {}; values.forEach(function(row) { const order = String(row[0] || '').trim(); const escaped = order.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); if (order && isMysteryBoxSale_(row[5], '') && new RegExp('(^|\\s|[;,:])' + escaped + '($|\\s|[;,.])').test(note)) orders[order] = true; }); Object.keys(orders).forEach(function(order) { recalculateMysteryBoxOrderCost_(ss, order); }); return Object.keys(orders); }
+
+function recalculateMysteryBoxOrderCost_(ss, order, options) {
+options = options || {};
+order = String(order || '').trim(); if (!order) return null;
+const sales = ss.getSheetByName('Продажі'); const writeOffs = ss.getSheetByName('Списання');
+if (!sales || !writeOffs) return null;
+ensureSaleCostAuditColumns_(sales);
+const saleValues = sales.getRange(3, 1, Math.max(sales.getLastRow() - 2, 1), 32).getValues();
+const mysteryRows = [];
+saleValues.forEach(function(values, index) { if (String(values[0] || '').trim() === order && isMysteryBoxSale_(values[5], values[6])) mysteryRows.push({ row: index + 3, values: values }); });
+if (!mysteryRows.length) return null;
+const writeOffValues = writeOffs.getRange(3, 1, Math.max(writeOffs.getLastRow() - 2, 1), 12).getValues();
+let prroComponents = 0; let mgmtComponents = 0; const componentAudit = [];
+writeOffValues.forEach(function(values) { const note = String(values[11] || ''); if (note.indexOf(order) === -1) return; const qty = num_(values[5]); const prro = num_(values[8]); const mgmt = num_(values[9]); if (qty <= 0 || (!prro && !mgmt)) return; prroComponents += prro; mgmtComponents += mgmt || prro; componentAudit.push(String(values[3] || '') + '=' + round2_(mgmt || prro)); });
+if (prroComponents <= 0 && mgmtComponents <= 0) return null;
+const qty = mysteryRows.reduce(function(sum, item) { return sum + num_(item.values[7]); }, 0); if (qty <= 0) return null;
+const first = mysteryRows[0]; const saleDate = first.values[2];
+const sticker = getAutoConsumableUnitCost_(ss, 'Стікер лого+QR', 'any', order, first.row, saleDate);
+const blind = getAutoConsumableUnitCost_(ss, 'Блайнд-пакет для картки', 'mystery', order, first.row, saleDate);
+const mysteryLabel = getAutoConsumableUnitCost_(ss, 'Наліпка Mystery Box', 'mystery', order, first.row, saleDate);
+const directExpense = getDirectOrderExpense_(ss, order);
+const prroUnit = round2_(prroComponents / qty);
+const mgmtUnit = round2_((mgmtComponents + sticker + blind + mysteryLabel + directExpense) / qty);
+const audit = trimCostAudit_('components: ' + componentAudit.join(', ') + '; consumables=' + round2_(sticker + blind + mysteryLabel) + '; direct expenses=' + round2_(directExpense));
+const result = { order_id: order, rows_updated: mysteryRows.length, rows: mysteryRows.map(function(item) { return item.row; }), qty: qty, before_prro_unit: round2_(num_(first.values[11])), before_mgmt_unit: round2_(num_(first.values[12])), prro_components: round2_(prroComponents), mgmt_components: round2_(mgmtComponents), consumables: round2_(sticker + blind + mysteryLabel), direct_expenses: round2_(directExpense), prro_unit: prroUnit, mgmt_unit: mgmtUnit, dry_run: !!options.dry_run };
+result.would_change = Math.abs(result.before_prro_unit - prroUnit) > 0.009 || Math.abs(result.before_mgmt_unit - mgmtUnit) > 0.009;
+if (!options.dry_run) mysteryRows.forEach(function(item) { sales.getRange(item.row, 12, 1, 2).setValues([[prroUnit, mgmtUnit]]); sales.getRange(item.row, 30, 1, 3).setValues([['MBX фактична комплектація', audit, new Date()]]); });
+return result;
+}
+
+
+// Later declaration intentionally replaces the compact legacy API writer above. Each check-level
+// amount is allocated with a balancing last row, and the full current-cost rebuild is left to the
+// existing nightly maintenance instead of blocking the dashboard response.
+function apiAddSale_(ss, payload) {
+  try {
+    resetMemoForMutation_();
+    const sales = ss.getSheetByName('Продажі');
+    if (!sales) throw new Error('sales sheet missing');
+    const date = apiNormalizeDateValue_(payload.date, 'date');
+    if (!date) throw new Error('date required');
+    const rawItems = Array.isArray(payload.items) ? payload.items.slice(0, 10) : [];
+    if (!rawItems.length) throw new Error('items required');
+    const items = rawItems.map(function(item) {
+      const sku = parseSku_(item && item.sku), qty = num_(item && item.qty), price = num_(item && item.price);
+      if (!sku) throw new Error('sku required');
+      if (qty <= 0) throw new Error('qty must be > 0');
+      if (price < 0) throw new Error('price must be >= 0');
+      return { sku: sku, qty: qty, price: price, note: String(item.note || '').trim() };
+    });
+    const source = String(payload.channel || payload.source || 'Вручну').trim() || 'Вручну';
+    const paymentType = String(payload.payment_type || 'За реквізитами').trim() || 'За реквізитами';
+    const packagingType = String(payload.packaging_type || '').trim();
+    const operation = String(payload.order_id || '').trim() || generateOperationNumber(source, paymentType);
+    const grossValues = items.map(function(item) { return item.qty * item.price; });
+    const gross = grossValues.reduce(function(sum, value) { return sum + value; }, 0);
+    const discount = Math.min(Math.max(0, num_(payload.discount)), gross);
+    const customPackaging = Object.prototype.hasOwnProperty.call(payload, 'custom_packaging_cost') ? payload.custom_packaging_cost : '';
+    const packaging = packagingType ? getPackagingCost_(packagingType, customPackaging) : 0;
+    const shopDelivery = Math.max(0, num_(payload.shop_delivery));
+    const discountAllocations = allocateAmount_(discount, grossValues);
+    const packagingAllocations = allocateAmount_(packaging, grossValues);
+    const deliveryAllocations = allocateAmount_(shopDelivery, grossValues);
+    const baseNote = [String(payload.note || '').trim(), packagingType ? 'Паковання: ' + packagingType : ''].filter(Boolean).join('; ');
+    const rawComponents = Array.isArray(payload.mystery_components) ? payload.mystery_components.slice(0, 10) : [];
+    const components = rawComponents.map(function(item) {
+      const sku = parseSku_(item && item.sku), qty = num_(item && item.qty);
+      if (!sku) throw new Error('mystery component sku required');
+      if (qty <= 0) throw new Error('mystery component qty must be > 0');
+      return { sku: sku, qty: qty, note: String(item.note || '').trim() };
+    });
+    const mysteryQty = items.filter(function(item) { return isMysteryBoxSale_(item.sku, ''); }).reduce(function(sum, item) { return sum + item.qty; }, 0);
+    if (!mysteryQty && components.length) throw new Error('mystery components require an MBX sale');
+    if (mysteryQty) {
+      const componentQty = components.reduce(function(sum, item) { return sum + item.qty; }, 0);
+      if (!components.length || Math.abs(componentQty - mysteryQty * 5) > 0.0001) throw new Error('mystery components must total ' + (mysteryQty * 5));
+    }
+    const firstRow = nextEmptyRow_(sales, 1, 3, 501);
+    if (firstRow + items.length - 1 > 501) throw new Error('not enough rows in sales sheet');
+    const costRunState = {}, addedRows = [];
+    items.forEach(function(item, index) {
+      const row = firstRow + index;
+      addedRows.push(row);
+      const note = [baseNote, item.note].filter(Boolean).join('; ');
+      sales.getRange(row, 1, 1, 6).setValues([[operation, source, date, String(payload.customer_phone || '').trim(), String(payload.customer_name || '').trim(), item.sku]]);
+      sales.getRange(row, 8, 1, 3).setValues([[item.qty, item.price, discountAllocations[index]]]);
+      sales.getRange(row, 16).setValue(packagingAllocations[index]);
+      sales.getRange(row, 20).setValue(deliveryAllocations[index]);
+      sales.getRange(row, 23, 1, 6).setValues([[String(payload.payment_status || '').trim(), String(payload.order_status || '').trim(), String(payload.post || '').trim(), String(payload.ttn || '').trim(), note, paymentType]]);
+      sales.getRange(row, 29).setValue(packagingType);
+      fixSaleCostForRow_(ss, row, costRunState, { clearPending: true });
+    });
+    if (components.length) {
+      addMysteryBoxWriteOffs_(ss, components, date, operation);
+      SpreadsheetApp.flush();
+      recalculateMysteryBoxOrderCost_(ss, operation);
+    }
+    const accounting = sync3dpPackagingCost_(sales, operation, addedRows, 'apiAddSale_');
+    invalidateDoGetCache_();
+    return { ok: true, rows_added: items.length, order_id: operation, accounting: accounting || null,
+      partial: Boolean(accounting && accounting.ok === false), current_cost_refresh: 'deferred_to_nightly_inventory_maintenance' };
+  } catch (err) {
+    return { ok: false, error: String(err && err.message ? err.message : err) };
+  }
+}
+
+
+const CRM_TEST_ORDER_CLEANUP_ = Object.freeze({
+  confirmation: 'CLEAN TEST ORDERS',
+  marker: /(?:тестове\s+замовлення|тест\s+замовлення)/iu,
+  note_column: 27,
+});
+
+// Owner-only dashboard action. A sale belongs to this cleanup only when its
+// note contains the explicit Ukrainian test-order marker above. If one line of
+// an order matches, the whole order is selected so ordinary and 3D ledgers stay aligned.
+function apiTestOrderCleanup_(ss, payload) {
+  if (String(payload.confirm || '') !== CRM_TEST_ORDER_CLEANUP_.confirmation) {
+    throw new Error('Exact dashboard confirmation is required before test-order cleanup.');
+  }
+  const selectedOrders = testOrderCleanupOrderIds_(ss);
+  const report = {
+    ok: true,
+    action: 'test_order_cleanup',
+    marker: 'тестове замовлення | тест замовлення',
+    selected_orders: selectedOrders,
+    preflight: [],
+    applied: [],
+    after: [],
+    errors: [],
+    rows_cleared: 0,
+    already_applied: selectedOrders.length === 0,
+    verification: { ok: false, remaining_marked_orders: [], residual_orders: [] },
+  };
+  if (!selectedOrders.length) {
+    report.verification = { ok: true, remaining_marked_orders: [], residual_orders: [] };
+    report.status = 'no_matching_test_orders';
+    Logger.log(JSON.stringify(report));
+    return report;
+  }
+
+  const config = crm3dpConfig_();
+  if (!config) {
+    report.errors.push({ stage: 'preflight', detail: '3D-P sync properties are not configured; cleanup refuses to leave remote stock behind.' });
+    report.status = 'preflight_failed';
+    Logger.log(JSON.stringify(report));
+    return report;
+  }
+
+  // All selected orders are read from CRM and 3D-P before the first write.
+  // Apps Script cannot make both workbooks one database transaction, so an
+  // interrupted run is reported per order and can be safely resumed.
+  selectedOrders.forEach(function(order) {
+    try { report.preflight.push(testOrderCleanupOrderReport_(ss, config, order, true)); }
+    catch (error) { report.errors.push({ stage: 'preflight', order: order, detail: String(error && error.message ? error.message : error) }); }
+  });
+  if (report.errors.length) {
+    report.status = 'preflight_failed';
+    Logger.log(JSON.stringify(report));
+    return report;
+  }
+  for (let index = 0; index < selectedOrders.length; index++) {
+    const order = selectedOrders[index];
+    try {
+      const applied = testOrderCleanupOrderReport_(ss, config, order, false);
+      report.applied.push(applied);
+      report.rows_cleared += Number(applied.rows_cleared || 0);
+    } catch (error) {
+      report.errors.push({ stage: 'apply', order: order, detail: String(error && error.message ? error.message : error) });
+      break;
+    }
+  }
+  selectedOrders.forEach(function(order) {
+    try { report.after.push(testOrderCleanupOrderReport_(ss, config, order, true, true)); }
+    catch (error) { report.errors.push({ stage: 'after_check', order: order, detail: String(error && error.message ? error.message : error) }); }
+  });
+  try { report.verification.remaining_marked_orders = testOrderCleanupOrderIds_(ss); }
+  catch (error) { report.errors.push({ stage: 'after_check', detail: String(error && error.message ? error.message : error) }); }
+  report.verification.residual_orders = report.after.filter(function(item) { return Number(item.rows_to_clear || 0) > 0; }).map(function(item) { return item.order; });
+  report.verification.ok = report.errors.length === 0 && report.verification.remaining_marked_orders.length === 0 && report.verification.residual_orders.length === 0;
+  report.status = report.verification.ok ? 'completed' : 'interrupted_or_verification_failed';
+  Logger.log(JSON.stringify(report));
+  return report;
+}
+
+function testOrderCleanupOrderIds_(ss) {
+  const sales = ss.getSheetByName('Продажі');
+  if (!sales) throw new Error('Продажі sheet is required to scan test-order markers.');
+  const values = sales.getRange(3, 1, Math.max(sales.getLastRow() - 2, 1), 32).getValues();
+  const found = {};
+  values.forEach(function(row, index) {
+    const note = String(row[CRM_TEST_ORDER_CLEANUP_.note_column - 1] || '').trim();
+    if (!CRM_TEST_ORDER_CLEANUP_.marker.test(note)) return;
+    const order = String(row[0] || '').trim();
+    if (!order) throw new Error('Test-order marker found in Продажі row ' + (index + 3) + ', but the order ID is blank.');
+    found[order] = true;
+  });
+  return Object.keys(found).sort();
+}
+
+function crmRowsMatching_(sheet, startRow, width, predicate) {
+  if (!sheet) return [];
+  const count = Math.max(sheet.getLastRow() - startRow + 1, 1);
+  const values = sheet.getRange(startRow, 1, count, width).getValues();
+  const rows = [];
+  values.forEach(function(value, index) { if (predicate(value)) rows.push({ row: startRow + index, values: value }); });
+  return rows;
+}
+
+function snapshotCrmRange_(range) { return { range: range, values: range.getValues(), formulas: range.getFormulas() }; }
+function restoreCrmRange_(snapshot) {
+  for (let r = 0; r < snapshot.values.length; r++) for (let c = 0; c < snapshot.values[r].length; c++) {
+    const cell = snapshot.range.getCell(r + 1, c + 1), formula = snapshot.formulas[r][c];
+    if (formula) cell.setFormula(formula); else cell.setValue(snapshot.values[r][c]);
+  }
+}
+
+function clearCrmRangePreservingFormulas_(range) {
+  const formulas = range.getFormulas();
+  formulas.forEach(function(row, rowIndex) {
+    row.forEach(function(formula, columnIndex) {
+      if (!formula) range.getCell(rowIndex + 1, columnIndex + 1).clearContent();
+    });
+  });
+}
+
+function testOrderCleanupFifoEvidence_(ss, saleRows) {
+  const purchases = ss.getSheetByName('Закупки');
+  if (!purchases) throw new Error('Закупки sheet is required to verify FIFO restoration.');
+  const skuMap = {};
+  saleRows.forEach(function(item) { const sku = String(item.values[5] || '').trim(); if (sku) skuMap[sku] = true; });
+  const skus = Object.keys(skuMap).sort();
+  const wanted = {}; skus.forEach(function(sku) { wanted[sku] = true; });
+  const values = purchases.getRange(3, 1, Math.max(purchases.getLastRow() - 2, 1), 17).getValues();
+  const lotRows = [];
+  values.forEach(function(row, index) {
+    const sku = String(row[4] || '').trim();
+    if (wanted[sku]) lotRows.push({ row: index + 3, sku: sku, lot_id: String(row[0] || '').trim(), quantity: num_(row[7]), status: String(row[16] || '').trim() });
+  });
+  return {
+    mode: 'recomputed_from_purchases_sales_and_writeoffs',
+    target_skus: skus,
+    matching_lot_rows: lotRows,
+    safe_to_apply: true,
+    note: 'The active FIFO/current-cost path derives consumption from Закупки, Продажі, and Списання; this cleanup clears only matching write-offs and then recomputes current cost. No mutable per-lot balance is restored by hand.',
+  };
+}
+
+function testOrderCleanupSalesEvidence_(saleRows) {
+  const actual = saleRows.map(function(item) { return String(item.values[5] || '').trim(); }).sort();
+  return { actual_skus: actual, sale_rows: saleRows.length, source: 'selected_from_sales_note_marker' };
+}
+
+function testOrderCleanupPlan_(ss, order, allowMissingSales) {
+  const sales = ss.getSheetByName('Продажі'), components = ss.getSheetByName(CRM_ORDER_COMPONENT_USAGE_SHEET_), fixtures = ss.getSheetByName(CRM_3DP019_FIXTURE_USAGE_SHEET_), accounting = ss.getSheetByName(CRM_3DP_ORDER_ACCOUNTING_SHEET_), writeoffs = ss.getSheetByName('Списання'), expenses = ss.getSheetByName('Витрати');
+  if (!sales || !components || !fixtures || !accounting || !writeoffs || !expenses) throw new Error('Test-order purge prerequisites are missing.');
+  const saleRows = crmRowsMatching_(sales, 3, 32, function(row) { return String(row[0] || '').trim() === order; });
+  if (!saleRows.length && !allowMissingSales) throw new Error('Test-order cleanup stopped: selected order ' + order + ' has no sale rows.');
+  const componentRows = crmRowsMatching_(components, 2, 15, function(row) { return String(row[2] || '').trim() === order; });
+  const fixtureRows = crmRowsMatching_(fixtures, 2, 14, function(row) { return String(row[3] || '').trim() === order; });
+  const accountingRows = crmRowsMatching_(accounting, 2, 20, function(row) { return String(row[2] || '').trim() === order; });
+  const writeoffIds = {};
+  componentRows.forEach(function(item) { const id = String(item.values[12] || '').trim(); if (id) writeoffIds[id] = true; });
+  const writeoffRows = crmRowsMatching_(writeoffs, 3, 12, function(row) { return !!writeoffIds[String(row[0] || '').trim()] || String(row[11] || '').indexOf('Продаж ' + order) !== -1; });
+  const expenseRows = crmRowsMatching_(expenses, 3, 11, function(row) { return String(row[5] || '').trim() === order; });
+  const marketingExpenseRows = expenseRows.filter(function(item) { return String(item.values[6] || '').indexOf('[3dp_marketing:') !== -1; });
+  const fifoEvidence = testOrderCleanupFifoEvidence_(ss, saleRows);
+  return { sales: sales, components: components, fixtures: fixtures, accounting: accounting, writeoffs: writeoffs, expenses: expenses,
+    sale_rows: saleRows, component_rows: componentRows, fixture_rows: fixtureRows, accounting_rows: accountingRows, writeoff_rows: writeoffRows, expense_rows: expenseRows,
+    marketing_expense_rows: marketingExpenseRows, sales_evidence: testOrderCleanupSalesEvidence_(saleRows), fifo_evidence: fifoEvidence };
+}
+
+function testOrderCleanupOrderReport_(ss, config, order, dryRun, allowMissingSales) {
+  const plan = testOrderCleanupPlan_(ss, order, !!allowMissingSales);
+  const remote = crm3dpFetchJson_(config.url, { method: 'post', contentType: 'text/plain;charset=utf-8', payload: JSON.stringify({
+    action: '3dp_test_order_cleanup', token: config.token, order: order, dry_run: !!dryRun, confirm: dryRun ? '' : 'CLEAN TEST ORDER ' + order,
+  }) });
+  if (!remote || remote.action !== '3dp_test_order_cleanup' || String(remote.order || '') !== order) throw new Error('3D-P cleanup response did not confirm the requested order.');
+  const counts = {
+    sales: plan.sale_rows.length,
+    components: plan.component_rows.length,
+    fixtures: plan.fixture_rows.length,
+    accounting: plan.accounting_rows.length,
+    writeoffs: plan.writeoff_rows.length,
+    expenses: plan.expense_rows.length,
+    three_dp_marketing_expenses: plan.marketing_expense_rows.length,
+    remote_sales: (remote.sales_rows || []).length,
+    remote_stock_adjustments: (remote.stock_adjustment_rows || []).length,
+    remote_marketing_gifts: (remote.marketing_gift_rows || []).length,
+    remote_gift_request_markers: Number(remote.gift_request_marker_count || 0),
+  };
+  const localCount = counts.sales + counts.components + counts.fixtures + counts.accounting + counts.writeoffs + counts.expenses;
+  const report = { ok: true, action: 'test_order_cleanup_order', order: order, dry_run: !!dryRun, counts: counts, remote: remote, sales_evidence: plan.sales_evidence, fifo_evidence: plan.fifo_evidence, rows_to_clear: localCount + Number(remote.rows_to_clear || 0), rows_cleared: 0, already_applied: localCount === 0 && !!remote.already_applied };
+  if (dryRun || report.already_applied) { Logger.log(JSON.stringify(report)); return report; }
+  const snapshots = [];
+  try {
+    plan.sale_rows.forEach(function(item) { const range = plan.sales.getRange(item.row, 1, 1, 32); snapshots.push(snapshotCrmRange_(range)); clearCrmRangePreservingFormulas_(range); });
+    plan.component_rows.forEach(function(item) { const range = plan.components.getRange(item.row, 1, 1, 15); snapshots.push(snapshotCrmRange_(range)); clearCrmRangePreservingFormulas_(range); });
+    plan.fixture_rows.forEach(function(item) { const range = plan.fixtures.getRange(item.row, 1, 1, 14); snapshots.push(snapshotCrmRange_(range)); clearCrmRangePreservingFormulas_(range); });
+    plan.accounting_rows.forEach(function(item) { const range = plan.accounting.getRange(item.row, 1, 1, 20); snapshots.push(snapshotCrmRange_(range)); clearCrmRangePreservingFormulas_(range); });
+    plan.writeoff_rows.forEach(function(item) { const range = plan.writeoffs.getRange(item.row, 1, 1, 12); snapshots.push(snapshotCrmRange_(range)); clearCrmRangePreservingFormulas_(range); });
+    plan.expense_rows.forEach(function(item) { const range = plan.expenses.getRange(item.row, 1, 1, 11); snapshots.push(snapshotCrmRange_(range)); clearCrmRangePreservingFormulas_(range); });
+    SpreadsheetApp.flush();
+    updateSkuCurrentCost_(ss);
+    invalidateDoGetCache_();
+    report.rows_cleared = localCount;
+  } catch (error) {
+    snapshots.reverse().forEach(restoreCrmRange_);
+    SpreadsheetApp.flush();
+    throw new Error('3D-P cleanup completed, but CRM cleanup failed; rerun the same idempotent dashboard cleanup: ' + String(error && error.message ? error.message : error));
+  }
+  report.rows_cleared += Number(remote.rows_cleared || 0);
+  Logger.log(JSON.stringify(report)); return report;
+}
+
+function getDirectOrderExpense_(ss, order) { const expenses = ss.getSheetByName('Витрати'); if (!expenses) return 0; const values = expenses.getRange(3, 1, Math.max(expenses.getLastRow() - 2, 1), 6).getValues(); return round2_(values.reduce(function(sum, row) { const linked = String(row[4] || '').trim().toLowerCase(); const orderRef = String(row[5] || '').trim(); return linked === 'так' && orderRef === order ? sum + num_(row[3]) : sum; }, 0)); }
 
 
 
@@ -1648,6 +2550,16 @@ if (!isActualSaleForCost_(values)) {
 if (options.clearPending) sales.getRange(row, 12, 1, 2).clearContent();
 sales.getRange(row, 30, 1, 3).setValues([['Відкладено', buildPendingCostAudit_(values), new Date()]]);
 return null;
+}
+if (isMysteryBoxSale_(sku, values[6])) {
+if (!runState.mysteryOrders) runState.mysteryOrders = {};
+const orderKey = String(values[0] || '').trim();
+if (!Object.prototype.hasOwnProperty.call(runState.mysteryOrders, orderKey)) {
+runState.mysteryOrders[orderKey] = recalculateMysteryBoxOrderCost_(ss, orderKey) || null;
+}
+// Once linked Mystery Box writeoffs exist, they are the frozen source of truth. Do not replace
+// them with the zero-stock FIFO fallback during a later status, TTN, packaging, or component edit.
+if (runState.mysteryOrders[orderKey]) return runState.mysteryOrders[orderKey];
 }
 const formulas = sales.getRange(row, 12, 1, 2).getFormulas()[0];
 const methodCell = String(sales.getRange(row, 30).getValue() || '').trim();
@@ -2220,7 +3132,7 @@ const prevMonth = apiFindRow_(report, 'Попередній місяць');
 // Warehouse profit is calculated from the same FIFO remainder as warehouse cost.
 const salesRows = _getCrmSalesRows();
 const period7d = apiSevenDayPeriodComparison_(salesRows);
-const skuList = apiSkuList_({}, salesRows);
+const skuList = apiSummarySkuSnapshot_();
 const rrcBySku = {};
 (skuList.skus || []).forEach(function(item) {
 const sku = String(item.sku || '').trim();
@@ -2360,6 +3272,20 @@ total_amount: round2_(pending.total_amount)
 };
 }
 
+function apiSummarySkuSnapshot_() {
+const objects = apiSheetObjects_(_getAutoSs().getSheetByName('Майстер_Товарів'), ['SKU']);
+const rrc = apiReadRrcMap_(_getCrmSs());
+const skus = [];
+objects.rows.forEach(function(row) {
+const sku = String(apiObjVal_(row, ['SKU', 'Артикул']) || '').trim();
+const active = String(apiObjVal_(row, ['Активний', 'Active']) || '').trim().toLowerCase();
+if (!sku || ['так', 'true', 'yes', '1'].indexOf(active) === -1) return;
+const price = rrc[sku] || {};
+skus.push({ sku: sku, rrc: apiNum_(price.rrc), stock_status: apiObjVal_(row, ['Статус залишку', 'Статус', 'Stock status']) });
+});
+return { ok: true, skus: skus };
+}
+
 function apiOrders_(params) {
 const status = String(params.status || 'active').trim() || 'active';
 const limit = Math.max(1, Math.min(num_(params.limit) || 20, 500));
@@ -2371,7 +3297,7 @@ function apiOrderItems_(params) {
 const orderId = String(params && params.order_id || '').trim();
 if (!orderId) return { ok: false, error: 'order_id required' };
 const table = apiRecentTable_(_getCrmSs().getSheetByName('Продажі'), 'Номер замовлення / операції');
-if (!table.headerRow) return { ok: true, order_id: orderId, count: 0, items: [], totals: { amount: 0, profit: 0 } };
+if (!table.headerRow) return { ok: true, order_id: orderId, count: 0, items: [], totals: { amount: 0, profit: 0, marketing: 0 } };
 const c = {
 order: apiRecentCol_(table.headers, 'Номер замовлення / операції'),
 sku: apiRecentCol_(table.headers, 'SKU'),
@@ -2389,7 +3315,10 @@ marketplaceFee: apiRecentCol_(table.headers, 'Комісія маркетпле�
 shopDelivery: apiRecentCol_(table.headers, 'Доставка за рахунок магазину'),
 profit: apiRecentCol_(table.headers, 'Чистий прибуток')
 };
-const items = table.rows.filter(function(row) { return String(row[c.order] || '').trim() === orderId; }).map(function(row) {
+const marketingByRow = crm3dpMarketingByOrder_(_getCrmSs()).byRow;
+const items = table.rows.map(function(row, index) { return { row: row, sourceRow: table.headerRow + 1 + index }; })
+.filter(function(entry) { return String(entry.row[c.order] || '').trim() === orderId; }).map(function(entry) {
+const row = entry.row;
 const amount = round2_(apiNum_(row[c.amount]));
 const profit = round2_(apiNum_(row[c.profit]));
 const acquiring = round2_(apiNum_(row[c.acquiring]));
@@ -2411,11 +3340,49 @@ marketplace_fee: marketplaceFee,
 payment_fees: round2_(acquiring + novaPay + marketplaceFee),
 shop_delivery: round2_(apiNum_(row[c.shopDelivery])),
 profit: profit,
+marketing: round2_(marketingByRow[entry.sourceRow] || 0),
 profit_pct: amount ? round2_(profit / amount * 100) : null
 };
 });
-const totals = items.reduce(function(sum, item) { sum.amount += item.amount; sum.profit += item.profit; return sum; }, { amount: 0, profit: 0 });
-return { ok: true, order_id: orderId, count: items.length, items: items, totals: { amount: round2_(totals.amount), profit: round2_(totals.profit) } };
+const totals = items.reduce(function(sum, item) { sum.amount += item.amount; sum.profit += item.profit; sum.marketing += item.marketing; return sum; }, { amount: 0, profit: 0, marketing: 0 });
+return { ok: true, order_id: orderId, count: items.length, items: items, totals: { amount: round2_(totals.amount), profit: round2_(totals.profit), marketing: round2_(totals.marketing) } };
+}
+
+function crm3dpMarketingByOrder_(ss) {
+  const result = { byOrder: {}, byRow: {} };
+  let latest;
+  try { latest = latest3dpAccountingByRow_(ss); } catch (error) { latest = {}; }
+  Object.keys(latest).forEach(function(key) {
+    const item = latest[key];
+    const marketing = round2_(item.marketing || 0);
+    result.byRow[item.crm_row] = marketing;
+    result.byOrder[item.order] = round2_((result.byOrder[item.order] || 0) + marketing);
+  });
+  const componentMarketing = orderComponentMarketingByOrder_(ss);
+  Object.keys(componentMarketing.byRow).forEach(function(key) {
+    result.byRow[key] = round2_((result.byRow[key] || 0) + componentMarketing.byRow[key]);
+  });
+  Object.keys(componentMarketing.byOrder).forEach(function(key) {
+    result.byOrder[key] = round2_((result.byOrder[key] || 0) + componentMarketing.byOrder[key]);
+  });
+  return result;
+}
+
+function apiOrderEditContext_(params) {
+  const order = String(params && params.order_id || '').trim();
+  if (!order) return { ok: false, error: 'order_id required' };
+  const ss = _getCrmSs();
+  const sales = ss.getSheetByName('Продажі');
+  const latest = (function() { try { return latest3dpAccountingByRow_(ss); } catch (error) { return {}; } })();
+  const values = sales.getRange(3, 1, Math.max(sales.getLastRow() - 2, 1), 8).getValues();
+  const lines = [];
+  values.forEach(function(row, index) {
+    if (String(row[0] || '').trim() !== order) return;
+    const crmRow = index + 3;
+    const sku = String(row[5] || '').trim();
+    lines.push({ crm_row: crmRow, sku: sku, name: String(row[6] || '').trim(), qty: num_(row[7]), is_3dp: is3dpPackagingSku_(sku), mode: latest[crmRow] ? latest[crmRow].mode : 'Продаж' });
+  });
+  return { ok: true, order_id: order, lines: lines };
 }
 
 function apiStockAlerts_() {
@@ -2433,7 +3400,7 @@ if (!sku) return;
 const active = String(apiObjVal_(row, ['Активний', 'Active']) || '').trim().toLowerCase();
 if (['так', 'true', 'yes', '1'].indexOf(active) === -1) return;
 const issuesText = apiObjVal_(row, ['Якість даних', 'Проблеми', 'Issues']);
-const skuName = row['Назва'] || row['Назва товару'] || row['Повна назва на сайті'] || ''; const metric = metrics[sku] || {}; const stockMetric = stockMetrics[sku] || {}; const rrcMetric = rrcMetrics[sku] || {}; const currentRrc = rrcMetric.rrc || apiNum_(apiObjVal_(row, ['Ціна CRM', 'РРЦ', 'Ціна'])); skus.push({ sku: sku, name: skuName, full_name: row['Повна назва на сайті'] || skuName, brand: apiObjVal_(row, ['Бренд', 'Brand']), format: apiObjVal_(row, ['Формат', 'Format']), rrc: currentRrc, price_crm: currentRrc, dynamic_rrc: rrcMetric.dynamic_rrc || 0, current_rrc_margin_pct: rrcMetric.margin_pct, rrc_cost_base_60d: rrcMetric.cost_base_60d || 0, price_opencart: apiNum_(apiObjVal_(row, ['Ціна OpenCart', 'OpenCart ціна', 'Feed price'])), stock: stockMetric.stock != null ? stockMetric.stock : apiNum_(apiObjVal_(row, ['Залишок', 'На складі', 'Stock'])), expected: stockMetric.expected != null ? stockMetric.expected : apiNum_(apiObjVal_(row, ['Очікується', 'В дорозі', 'Expected'])), stock_status: apiObjVal_(row, ['Статус залишку', 'Статус', 'Stock status']), url: apiObjVal_(row, ['URL', 'Посилання', 'Link']), issues: splitTags_(issuesText), sold_30d: metric.sold_30d != null ? metric.sold_30d : (stockMetric.sold_30d || 0), profit_30d: metric.profit_30d || 0, sold_60d: metric.sold_60d != null ? metric.sold_60d : (stockMetric.sold_60d || 0), profit_60d: metric.profit_60d || 0, action: stockMetric.action || '', urgency: stockMetric.urgency || '', max_buy_price: stockMetric.max_buy_price, margin_pct: stockMetric.margin_pct });
+const skuName = row['Назва'] || row['Назва товару'] || row['Повна назва на сайті'] || ''; const metric = metrics[sku] || {}; const stockMetric = stockMetrics[sku] || {}; const rrcMetric = rrcMetrics[sku] || {}; const currentRrc = rrcMetric.rrc || apiNum_(apiObjVal_(row, ['Ціна CRM', 'РРЦ', 'Ціна'])); const format = apiObjVal_(row, ['Формат', 'Format']); const setName = apiObjVal_(row, ['Сет', 'Сет / група', 'Набір', 'Set']); skus.push({ sku: sku, name: skuName, full_name: row['Повна назва на сайті'] || skuName, brand: apiObjVal_(row, ['Бренд', 'Brand']), format: format, is_3dp: is3dpCatalogSku_(sku, setName, format), rrc: currentRrc, price_crm: currentRrc, dynamic_rrc: rrcMetric.dynamic_rrc || 0, current_rrc_margin_pct: rrcMetric.margin_pct, rrc_cost_base_60d: rrcMetric.cost_base_60d || 0, price_opencart: apiNum_(apiObjVal_(row, ['Ціна OpenCart', 'OpenCart ціна', 'Feed price'])), stock: stockMetric.stock != null ? stockMetric.stock : apiNum_(apiObjVal_(row, ['Залишок', 'На складі', 'Stock'])), expected: stockMetric.expected != null ? stockMetric.expected : apiNum_(apiObjVal_(row, ['Очікується', 'В дорозі', 'Expected'])), stock_status: apiObjVal_(row, ['Статус залишку', 'Статус', 'Stock status']), url: apiObjVal_(row, ['URL', 'Посилання', 'Link']), issues: splitTags_(issuesText), sold_30d: metric.sold_30d != null ? metric.sold_30d : (stockMetric.sold_30d || 0), profit_30d: metric.profit_30d || 0, sold_60d: metric.sold_60d != null ? metric.sold_60d : (stockMetric.sold_60d || 0), profit_60d: metric.profit_60d || 0, action: stockMetric.action || '', urgency: stockMetric.urgency || '', max_buy_price: stockMetric.max_buy_price, margin_pct: stockMetric.margin_pct });
 });
 if (String(params.sort || '').toLowerCase() === 'profit') skus.sort(function(a, b) { return (b.profit_30d || 0) - (a.profit_30d || 0); }); const limit = Math.max(0, Math.min(apiNum_(params.limit) || 0, 500)); const resultSkus = limit ? skus.slice(0, limit) : skus; return { ok: true, count: resultSkus.length, skus: resultSkus };
 }
@@ -2441,7 +3408,7 @@ function crmGetOrders_(status, limit, params) {
 params = params || {}; const st = String(status || 'active').toLowerCase(); const days = Math.max(0, Math.min(num_(params.days) || 0, 3650)); const sortDir = String(params.sort || 'date_desc').toLowerCase() === 'date_asc' ? 'date_asc' : 'date_desc';
 const cleanLimit = Math.max(1, Math.min(num_(limit) || 20, 500));
 const cache = CacheService.getScriptCache();
-const cacheKey = 'crm_orders_v3_' + crmOrdersCacheVersion_() + '_' + st + '_' + cleanLimit + '_' + days + '_' + sortDir;
+const cacheKey = 'crm_orders_v4_' + crmOrdersCacheVersion_() + '_' + st + '_' + cleanLimit + '_' + days + '_' + sortDir;
 const cached = cache.get(cacheKey);
 if (cached) return JSON.parse(cached);
 const ss = _getCrmSs();
@@ -2452,6 +3419,8 @@ const map = {};
 values.forEach(function(row, index) { const orderId = String(row[0] || '').trim(); if (!orderId) return; if (!map[orderId]) map[orderId] = { order_id: orderId, date: apiDate_(row[2]), source: row[1] || '', payment_status: row[22] || '', order_status: row[23] || '', ttn: row[25] || '', post: row[24] || '', payment_type: row[27] || '', amount: 0, profit: 0, items_count: 0, skus: [], rows: [], sort: dateSortValue_(row[2]) || index };
 const order = map[orderId]; order.amount = round2_(order.amount + num_(row[10])); order.profit = round2_(order.profit + num_(row[21])); order.items_count = round2_(order.items_count + num_(row[7]));
 const sku = String(row[5] || '').trim(); if (sku && order.skus.indexOf(sku) === -1) order.skus.push(sku); order.rows.push(index + 3); });
+const marketingByOrder = crm3dpMarketingByOrder_(ss).byOrder;
+Object.keys(map).forEach(function(orderId) { map[orderId].marketing = round2_(marketingByOrder[orderId] || 0); });
 let orders = Object.keys(map).map(function(key) { return map[key]; });
 orders = orders.filter(function(order) { return crmOrderMatchesStatus_(order, st); }); if (days > 0) { const cutoff = new Date().getTime() - days * 86400000; orders = orders.filter(function(order) { return order.sort && order.sort >= cutoff; }); }
 orders.sort(function(a, b) { return sortDir === 'date_asc' ? a.sort - b.sort : b.sort - a.sort; });
@@ -2475,7 +3444,7 @@ const terminal = ['Скасовано', 'Отримано', 'Поверненн�
 if (st === 'all') return true; if (st === 'completed') return orderStatus === 'Отримано';
 if (st === 'shipped') return orderStatus === 'Відправлено';
 if (st === 'unpaid') return paymentStatus === 'Не оплачено' && !terminal;
-return (orderStatus === 'Відправлено' || paymentStatus === 'Не оплачено') && !terminal;
+return (['Нове', 'В обробці', 'Відправлено', 'Передзамовлення'].indexOf(orderStatus) !== -1 || paymentStatus === 'Не оплачено') && !terminal;
 }
 
 function apiReadStockAlertsAndCounts_() {
@@ -2884,26 +3853,21 @@ item.orders = Object.keys(item.orderMap).length;
 item.margin_pct = item.revenue ? round2_(item.profit / item.revenue * 100) : 0;
 delete item.orderMap;
 });
-return { ok: true, months: months, repeat_rate_pct: apiRepeatRateFromRows_(rows) };
+const currentStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+const currentEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).getTime();
+const previousMonthLastDay = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+const comparablePreviousDay = Math.min(now.getDate(), previousMonthLastDay);
+const previousStart = new Date(now.getFullYear(), now.getMonth() - 1, 1).getTime();
+const previousEnd = new Date(now.getFullYear(), now.getMonth() - 1, comparablePreviousDay + 1).getTime();
+return {
+ok: true,
+months: months,
+month_to_date: apiAggregateSalesRows_(rows, currentStart, currentEnd),
+previous_month_to_date: apiAggregateSalesRows_(rows, previousStart, previousEnd),
+repeat_rate_pct: apiRepeatRateFromRows_(rows)
+};
 }
 
-function apiLtvReportLegacy_(params) {
-params = params || {};
-const limit = Math.max(1, Math.min(apiNum_(params.limit) || 10, 50));
-const rows = apiReadCrmSalesRows_();
-const clients = {};
-rows.forEach(function(row) {
-const key = apiCustomerKey_(row);
-if (!key) return;
-if (!clients[key]) clients[key] = { display: apiCustomerDisplay_(row), orders: {}, units: 0, revenue: 0 };
-clients[key].orders[String(row[0] || '')] = true;
-clients[key].units = round2_(clients[key].units + num_(row[7]));
-clients[key].revenue = round2_(clients[key].revenue + num_(row[10]));
-});
-const result = Object.keys(clients).map(function(key) { const c = clients[key]; return { identifier: c.display, display: c.display, orders: Object.keys(c.orders).length, units: c.units, revenue: round2_(c.revenue), ltv: round2_(c.revenue) }; });
-result.sort(function(a, b) { return b.ltv - a.ltv; });
-return { ok: true, limit: limit, clients: result.slice(0, limit) };
-}
 
 function apiRepeatRateFromRows_(rows) {
 const clients = {};
@@ -2987,6 +3951,7 @@ return startDate.getDate() + '-' + endDate.getDate() + ' ' + apiMonthLabel_(star
 
 function apiLtvReport_(params) {
 params = params || {};
+if (String(params.qualified || '').toLowerCase() === 'true') return apiQualifiedClientsReport_(params);
 const limit = Math.max(1, Math.min(apiNum_(params.limit) || 10, 50));
 const period = String(params.period || 'all_time').trim() === '60d' ? '60d' : 'all_time';
 const cutoff = new Date().getTime() - 60 * 86400000;
@@ -3011,6 +3976,27 @@ if (!clients[key].name || clients[key].name === '—') clients[key].name = apiCu
 const result = Object.keys(clients).map(function(key) { const c = clients[key]; return { identifier: c.display, display: c.display, name: c.name || '—', channel: apiTopChannel_(c.channels), orders: Object.keys(c.orders).length, units: c.units, revenue: round2_(c.revenue), profit: round2_(c.profit), ltv: round2_(c.revenue) }; });
 result.sort(function(a, b) { return b.ltv - a.ltv; });
 return { ok: true, period: period, limit: limit, clients: result.slice(0, limit) };
+}
+
+function apiQualifiedClientsReport_(params) {
+const limit = Math.max(1, Math.min(apiNum_(params.limit) || 200, 500));
+const cutoff = new Date().getTime() - 60 * 86400000;
+const clients = {};
+apiReadCrmSalesRows_().forEach(function(row) {
+const key = apiCustomerKey_(row); if (!key) return;
+if (!clients[key]) clients[key] = { display: apiCustomerDisplay_(row), name: apiCustomerName_(row), channels: {}, orders: {}, orders60: {}, units: 0, revenue: 0, profit: 0, spend60: 0 };
+const client = clients[key]; const order = String(row[0] || ''); const revenue = num_(row[10]); const profit = num_(row[21]); const channel = String(row[1] || 'Інше').trim() || 'Інше';
+client.orders[order] = true; client.units = round2_(client.units + num_(row[7])); client.revenue = round2_(client.revenue + revenue); client.profit = round2_(client.profit + profit); client.channels[channel] = round2_(num_(client.channels[channel]) + revenue);
+const sort = dateSortValue_(row[2]); if (sort && sort >= cutoff) { client.orders60[order] = true; client.spend60 = round2_(client.spend60 + revenue); }
+if (!client.name || client.name === '—') client.name = apiCustomerName_(row);
+});
+const result = Object.keys(clients).map(function(key) {
+const c = clients[key]; const orders = Object.keys(c.orders).length; const margin = c.revenue ? round2_(c.profit / c.revenue * 100) : 0; const reasons = [];
+if (orders > 1) reasons.push('repeat'); if (c.spend60 > 1500) reasons.push('spend_60d'); if (margin > 40) reasons.push('margin');
+return { identifier: c.display, display: c.display, name: c.name || '—', channel: apiTopChannel_(c.channels), orders: orders, orders_60d: Object.keys(c.orders60).length, units: c.units, revenue: round2_(c.revenue), ltv: round2_(c.revenue), profit: round2_(c.profit), margin_pct: margin, spend_60d: round2_(c.spend60), qualification: reasons };
+}).filter(function(client) { return client.qualification.length > 0; });
+result.sort(function(a, b) { return b.spend_60d - a.spend_60d || b.ltv - a.ltv || b.orders - a.orders || String(a.display).localeCompare(String(b.display), 'uk'); });
+return { ok: true, period: 'qualified', criteria: { min_orders_exclusive: 1, min_spend_60d_exclusive: 1500, min_margin_pct_exclusive: 40 }, limit: limit, total_matching: result.length, clients: result.slice(0, limit) };
 }
 
 function apiCustomerName_(row) {
@@ -3045,7 +4031,7 @@ if (!sheet) throw new Error('Немає вкладки Розхідники');
 const expenseSheet = ss.getSheetByName('Витрати');
 const salesSheet = ss.getSheetByName('Продажі');
 const lastRow = Math.max(sheet.getLastRow(), 4);
-const rows = sheet.getRange(4, 1, lastRow - 3, 10).getValues();
+const rows = sheet.getRange(4, 1, lastRow - 3, 15).getValues();
 const namesMap = {};
 rows.forEach(function(row) { const name = String(row[0] || '').trim(); if (name) namesMap[name] = true; });
 const latest = apiConsumableLatestPurchases_(expenseSheet, namesMap);
@@ -3065,7 +4051,7 @@ const daily = used30 / days;
 const daysLeft = daily > 0 ? stock / daily : null;
 const recentPurchase = !!(last && last.sort && last.sort >= cutoff);
 if (!(stock > 0 || incoming > 0 || used30 > 0 || recentPurchase)) return;
-result.push({ name: name, category: category, unit_cost: round2_((last && last.unit_cost) ? last.unit_cost : fallbackCost), stock: round2_(stock), incoming: round2_(incoming), used_30d: used30, daily_usage: round2_(daily), days_left: daysLeft == null ? null : round2_(daysLeft), last_purchase_date: last ? apiDate_(last.date) : '', last_purchase_qty: last ? round2_(last.qty) : 0, last_purchase_status: last ? last.status : '' });
+result.push({ name: name, category: category, payer: String(row[14] || (category === 'Фурнітура' ? 'власник' : '')).trim(), unit_cost: round2_((last && last.unit_cost) ? last.unit_cost : fallbackCost), stock: round2_(stock), incoming: round2_(incoming), used_30d: used30, daily_usage: round2_(daily), days_left: daysLeft == null ? null : round2_(daysLeft), last_purchase_date: last ? apiDate_(last.date) : '', last_purchase_qty: last ? round2_(last.qty) : 0, last_purchase_status: last ? last.status : '' });
 });
 result.sort(function(a, b) {
 const ad = a.days_left == null ? 999999 : a.days_left;
@@ -3073,8 +4059,142 @@ const bd = b.days_left == null ? 999999 : b.days_left;
 if (ad !== bd) return ad - bd;
 return String(a.name).localeCompare(String(b.name), 'uk');
 });
-return { ok: true, days: days, count: result.length, consumables: result };
+return { ok: true, days: days, count: result.length, consumables: result, purchases: apiConsumableOpenPurchases_(expenseSheet) };
 }
+
+const CRM_CONSUMABLE_PURCHASE_STATUSES_ = ['Замовлено', 'Їде', 'На складі', 'Скасовано'];
+const CRM_CONSUMABLE_CATEGORIES_ = ['Упаковка', 'Маркетинг', 'Фурнітура', 'Інше'];
+
+function apiConsumableOpenPurchases_(sheet) {
+if (!sheet) return [];
+const lastRow = Math.max(sheet.getLastRow(), 3);
+const values = sheet.getRange(3, 1, lastRow - 2, 11).getValues();
+return values.map(function(row, index) {
+  return { row_index: index + 3, date: apiDate_(row[0]), expense_category: String(row[1] || ''), description: String(row[2] || ''), total_cost: round2_(num_(row[3])), reference: String(row[5] || ''), note: String(row[6] || ''), name: String(row[7] || ''), qty: round2_(num_(row[8])), status: String(row[9] || ''), unit_cost: round2_(num_(row[10])) };
+}).filter(function(row) { return row.name && row.qty > 0 && ['Замовлено', 'Їде'].indexOf(row.status) !== -1; }).sort(function(a, b) { return b.row_index - a.row_index; }).slice(0, 100);
+}
+
+function consumableExpenseCategory_(catalogCategory) {
+if (catalogCategory === 'Упаковка') return 'Пакування';
+if (catalogCategory === 'Маркетинг') return 'Маркетинг';
+return 'Інше';
+}
+
+function consumableUsageFormula_(row, name, category, payer) {
+const escaped = String(name || '').replace(/"/g, '""');
+if (category === 'Фурнітура') return '=IF($A' + row + '="";"";SUMIFS(Використання_фурнітури!$G$2:$G;Використання_фурнітури!$E$2:$E;$A' + row + ';Використання_фурнітури!$F$2:$F;$O' + row + '))';
+return '=IF($A' + row + '="";"";IFNA(SUMIFS(Використання_компонентів!$F$2:$F;Використання_компонентів!$D$2:$D;"Розхідник";Використання_компонентів!$E$2:$E;"' + escaped + '");0))';
+}
+
+function setConsumableCatalogFormulas_(sheet, row, name, category, payer) {
+sheet.getRange(row, 3).setFormula('=IFERROR(SUMIFS(\'Витрати\'!$D$3:$D$199;\'Витрати\'!$H$3:$H$199;$A' + row + ')/SUMIFS(\'Витрати\'!$I$3:$I$199;\'Витрати\'!$H$3:$H$199;$A' + row + ');0)');
+sheet.getRange(row, 6).setFormula('=SUMIFS(\'Витрати\'!$I$3:$I$199;\'Витрати\'!$H$3:$H$199;$A' + row + ';\'Витрати\'!$J$3:$J$199;"На складі")');
+sheet.getRange(row, 7).setFormula('=SUMIFS(\'Витрати\'!$I$3:$I$199;\'Витрати\'!$H$3:$H$199;$A' + row + ';\'Витрати\'!$J$3:$J$199;"Їде")+SUMIFS(\'Витрати\'!$I$3:$I$199;\'Витрати\'!$H$3:$H$199;$A' + row + ';\'Витрати\'!$J$3:$J$199;"Замовлено")');
+  sheet.getRange(row, 8).setFormula(consumableUsageFormula_(row, name, category, payer));
+sheet.getRange(row, 9).setFormula('=$D' + row + '+$F' + row + '-$H' + row);
+sheet.getRange(row, 10).setFormula('=$E' + row + '+$G' + row);
+sheet.getRange(row, 11).setFormula('=$I' + row + '*$C' + row);
+}
+
+function ensureConsumableIncomingFormulas_(sheet) {
+const lastRow = Math.max(sheet.getLastRow(), 4);
+const values = sheet.getRange(4, 1, lastRow - 3, 2).getValues();
+let updated = 0;
+values.forEach(function(values, index) {
+  const row = index + 4, name = String(values[0] || '').trim();
+  if (!name) return;
+  const formula = '=SUMIFS(\'Витрати\'!$I$3:$I$199;\'Витрати\'!$H$3:$H$199;$A' + row + ';\'Витрати\'!$J$3:$J$199;"Їде")+SUMIFS(\'Витрати\'!$I$3:$I$199;\'Витрати\'!$H$3:$H$199;$A' + row + ';\'Витрати\'!$J$3:$J$199;"Замовлено")';
+  if (String(sheet.getRange(row, 7).getFormula() || '') !== formula) { sheet.getRange(row, 7).setFormula(formula); updated++; }
+});
+return updated;
+}
+
+function apiAddConsumablePurchase_(ss, payload) {
+let createdCatalogRow = 0, createdExpenseRow = 0;
+try {
+  const name = String(payload.name || '').trim();
+  const qty = num_(payload.qty), total = num_(payload.total_cost);
+  const status = String(payload.status || 'Замовлено').trim();
+  const requestedCategory = String(payload.category || '').trim();
+  const payer = String(payload.payer || '').trim();
+  if (!name || name.length > 120) throw new Error('name required (max 120 chars)');
+  if (!(qty > 0)) throw new Error('qty must be > 0');
+  if (!(total >= 0)) throw new Error('total_cost must be >= 0');
+  if (CRM_CONSUMABLE_PURCHASE_STATUSES_.indexOf(status) === -1) throw new Error('invalid consumable status');
+  const consumables = ss.getSheetByName('Розхідники'), expenses = ss.getSheetByName('Витрати');
+  if (!consumables || !expenses) throw new Error('consumables workflow sheets missing');
+  const lastCatalogRow = Math.max(consumables.getLastRow(), 4);
+  const catalogValues = consumables.getRange(4, 1, lastCatalogRow - 3, 15).getValues();
+  let catalogRow = 0, category = '', existingPayer = '';
+  catalogValues.forEach(function(row, index) { if (String(row[0] || '').trim() === name) { if (catalogRow) throw new Error('duplicate consumable key'); catalogRow = index + 4; category = String(row[1] || '').trim(); existingPayer = String(row[14] || '').trim(); } });
+  const createdCatalog = !catalogRow;
+  const preIntegrity = createdCatalog ? apiIntegrityCheck_() : null;
+  if (createdCatalog) {
+    category = requestedCategory;
+    if (CRM_CONSUMABLE_CATEGORIES_.indexOf(category) === -1) throw new Error('category required for a new consumable');
+    if (category === 'Фурнітура' && ['власник', 'Сергій'].indexOf(payer) === -1) throw new Error('fixture payer must be власник or Сергій');
+    catalogRow = nextEmptyRow_(consumables, 1, 4, 80);
+    createdCatalogRow = catalogRow;
+    consumables.getRange(catalogRow, 1, 1, 2).setValues([[name, category]]);
+    consumables.getRange(catalogRow, 4, 1, 2).setValues([[0, 0]]);
+    consumables.getRange(catalogRow, 12).setValue(String(payload.catalog_note || '').trim());
+    consumables.getRange(catalogRow, 15).setValue(category === 'Фурнітура' ? payer : '');
+    setConsumableCatalogFormulas_(consumables, catalogRow, name, category, payer);
+  } else {
+    if (requestedCategory && requestedCategory !== category) throw new Error('category differs from the existing consumable');
+    if (category === 'Фурнітура' && payer && payer !== (existingPayer || 'власник')) throw new Error('payer differs from the existing fixture');
+  }
+  const incomingFormulasUpdated = ensureConsumableIncomingFormulas_(consumables);
+  const expenseRow = nextEmptyRow_(expenses, 1, 3, 199);
+  createdExpenseRow = expenseRow;
+  const date = apiNormalizeDateValue_(payload.date, 'date'); if (!date) throw new Error('date required');
+  const description = String(payload.description || ('Закупка: ' + name)).trim();
+  expenses.getRange(expenseRow, 1, 1, 10).setValues([[date, consumableExpenseCategory_(category), description, round2_(total), 'Ні', String(payload.reference || '').trim(), String(payload.note || '').trim(), name, qty, status]]);
+  expenses.getRange(expenseRow, 11).setFormula('=IFERROR($D' + expenseRow + '/$I' + expenseRow + ';0)');
+  SpreadsheetApp.flush();
+  let postIntegrity = null;
+  if (createdCatalog) {
+    postIntegrity = apiIntegrityCheck_();
+    const before = {}; (preIntegrity.problems || []).forEach(function(problem) { before[JSON.stringify(problem)] = true; });
+    const introduced = (postIntegrity.problems || []).filter(function(problem) { return !before[JSON.stringify(problem)]; });
+    if (introduced.length) {
+      expenses.getRange(expenseRow, 1, 1, 11).clearContent();
+      consumables.getRange(catalogRow, 1, 1, 15).clearContent();
+      throw new Error('integrity check rejected the new consumable: ' + introduced[0].code);
+    }
+  }
+  invalidateDoGetCache_();
+  return { ok: true, row_index: expenseRow, catalog_row: catalogRow, catalog_created: createdCatalog, incoming_formulas_updated: incomingFormulasUpdated, integrity_before_clean: preIntegrity ? preIntegrity.clean : null, integrity_after_clean: postIntegrity ? postIntegrity.clean : null };
+} catch (err) {
+  try {
+    const rollbackSs = ss || _getCrmSs();
+    if (createdExpenseRow) rollbackSs.getSheetByName('Витрати').getRange(createdExpenseRow, 1, 1, 11).clearContent();
+    if (createdCatalogRow) rollbackSs.getSheetByName('Розхідники').getRange(createdCatalogRow, 1, 1, 15).clearContent();
+  } catch (rollbackError) {
+    return { ok: false, error: String(err && err.message ? err.message : err), rollback_error: String(rollbackError && rollbackError.message ? rollbackError.message : rollbackError) };
+  }
+  return { ok: false, error: String(err && err.message ? err.message : err) };
+}
+}
+
+function apiUpdateConsumablePurchase_(ss, payload) {
+try {
+  const row = Math.floor(num_(payload.row_index));
+  const status = String(payload.status || '').trim();
+  if (row < 3 || row > 199) throw new Error('invalid row_index');
+  if (CRM_CONSUMABLE_PURCHASE_STATUSES_.indexOf(status) === -1) throw new Error('invalid consumable status');
+  const sheet = ss.getSheetByName('Витрати'); if (!sheet) throw new Error('expense sheet missing');
+  const values = sheet.getRange(row, 1, 1, 11).getValues()[0];
+  if (!String(values[7] || '').trim() || num_(values[8]) <= 0) throw new Error('consumable purchase not found');
+  const expected = String(payload.expected_status || '').trim();
+  if (expected && expected !== String(values[9] || '').trim()) throw new Error('purchase status changed; refresh and retry');
+  if (status === String(values[9] || '').trim()) return { ok: true, row_index: row, status: status, already_applied: true };
+  sheet.getRange(row, 10).setValue(status);
+  SpreadsheetApp.flush(); invalidateDoGetCache_();
+  return { ok: true, row_index: row, name: String(values[7] || ''), status: status, already_applied: false };
+} catch (err) { return { ok: false, error: String(err && err.message ? err.message : err) }; }
+}
+
 
 function apiConsumableCutoff_(days) {
 const now = new Date();
@@ -3225,6 +4345,377 @@ return { ok: false, invalid: true };
 PropertiesService.getScriptProperties().setProperty('OPENAI_API_KEY', apiKey);
 ui.alert('OPENAI_API_KEY збережено.');
 return { ok: true };
+}
+
+// 3D-P-019 Phase A is intentionally a one-off, owner-run setup action. It is not registered in
+// the Web App API and must not be called from the normal order/write-off paths.
+
+function ensure3dp019FixturePayerValidation_(sheet, firstDataRow, payerColumn, ownerPayer, serhiyPayer) {
+const rowCount = Math.max(sheet.getMaxRows() - firstDataRow + 1, 1);
+const range = sheet.getRange(firstDataRow, payerColumn, rowCount, 1);
+const current = range.getDataValidations();
+const valid = current.length === rowCount && current.every(function(row) {
+  return row.length === 1 && is3dp019FixturePayerValidation_(row[0], ownerPayer, serhiyPayer);
+});
+if (valid) return false;
+const rule = SpreadsheetApp.newDataValidation()
+  .requireValueInList([ownerPayer, serhiyPayer], true)
+  .setAllowInvalid(false)
+  .setHelpText('Оберіть лише «власник» або «Сергій». Порожній платник автоматично означає «власник».')
+  .build();
+range.setDataValidation(rule);
+return true;
+}
+
+function is3dp019FixturePayerValidation_(rule, ownerPayer, serhiyPayer) {
+if (!rule || rule.getCriteriaType() !== SpreadsheetApp.DataValidationCriteria.VALUE_IN_LIST || rule.getAllowInvalid()) return false;
+const criteria = rule.getCriteriaValues() || [];
+const values = Array.isArray(criteria[0]) ? criteria[0].map(function(value) { return String(value); }) : [];
+return JSON.stringify(values) === JSON.stringify([ownerPayer, serhiyPayer]);
+}
+
+function apply3dp019FixturePayerDefaultOnEdit_(sheet, range) {
+const firstDataRow = 4;
+const payerColumn = 15;
+const firstTouchedColumn = range.getColumn();
+const lastTouchedColumn = firstTouchedColumn + range.getNumColumns() - 1;
+const touchesFixtureIdentity = firstTouchedColumn <= 2 && lastTouchedColumn >= 1;
+const touchesPayer = firstTouchedColumn <= payerColumn && lastTouchedColumn >= payerColumn;
+if (!touchesFixtureIdentity && !touchesPayer) return;
+const firstRow = Math.max(firstDataRow, range.getRow());
+const lastRow = range.getRow() + range.getNumRows() - 1;
+if (lastRow < firstRow) return;
+const defaulted = [];
+for (let row = firstRow; row <= lastRow; row++) {
+  const values = sheet.getRange(row, 1, 1, payerColumn).getValues()[0];
+  const name = String(values[0] == null ? '' : values[0]).trim();
+  const category = String(values[1] == null ? '' : values[1]).trim();
+  const payer = String(values[payerColumn - 1] == null ? '' : values[payerColumn - 1]).trim();
+  if ((category !== 'Фурнітура' && name.indexOf('FUR-') !== 0) || payer) continue;
+  sheet.getRange(row, payerColumn).setValue('власник');
+  defaulted.push(name || ('рядок ' + row));
+}
+if (defaulted.length) {
+  sheet.toast('Платник не вказаний: для ' + defaulted.join(', ') + ' встановлено «власник». Якщо закупівлю оплатив Сергій, обери «Сергій» перед підтвердженням.', '3D-P-019', 10);
+}
+}
+
+const CRM_3DP019_FIXTURE_USAGE_SHEET_ = 'Використання_фурнітури';
+const CRM_3DP019_FIXTURE_USAGE_HEADERS_ = [
+  'ID', 'Дата', 'Джерело', 'Посилання', 'Розхідник', 'Платник', 'Кількість',
+  'Собівартість 1 шт', 'Вартість', 'Примітка', 'Створено'
+];
+const CRM_3DP019_FIXTURE_TARGET_HEADERS_ = ['CRM row number', 'SKU цілі'];
+
+function setup3dp019FixtureUsagePhaseB() {
+const ss = SpreadsheetApp.getActive();
+const consumables = ss.getSheetByName('Розхідники');
+if (!consumables) throw new Error('3D-P-019 Phase B stopped: sheet Розхідники was not found.');
+const headers = consumables.getRange(3, 1, 1, 15).getDisplayValues()[0].map(function(value) { return String(value || '').trim(); });
+if (headers[0] !== 'Тип розхідника' || headers[1] !== 'Категорія' || headers[7] !== 'Використано в продажах' || headers[14] !== 'Платник') {
+  throw new Error('3D-P-019 Phase B stopped: Розхідники A/B/H/O headers do not match the verified Phase-A schema.');
+}
+const fixtureRows = get3dp019FixtureCatalog_(consumables).rows;
+if (!fixtureRows.length) throw new Error('3D-P-019 Phase B stopped: no Фурнітура rows were found in Розхідники.');
+fixtureRows.forEach(function(item) {
+  const usageCell = consumables.getRange(item.row, 8);
+  const formula = String(usageCell.getFormula() || '').trim();
+  const value = num_(usageCell.getValue());
+  if (!formula && Math.abs(value) > 0.000001) {
+    throw new Error('3D-P-019 Phase B stopped: fixture ' + item.name + ' has a non-zero manual usage value in H' + item.row + '. Reconcile it before migration.');
+  }
+});
+const formSheets = ['Внести_продаж', 'Оновити_продаж', 'Внести_списання'].map(function(name) {
+  const sheet = ss.getSheetByName(name);
+  if (!sheet) throw new Error('3D-P-019 Phase B stopped: form ' + name + ' was not found.');
+  const config = fixtureFormConfig3dp019_(name);
+  assert3dp019FixtureFormCanSetup_(sheet, config);
+  return { name: name, sheet: sheet, config: config };
+});
+const payerValidationUpdated = ensure3dp019FixturePayerValidation_(consumables, 4, 15, 'власник', 'Сергій');
+const ledger = ensure3dp019FixtureUsageLedger_(ss);
+fixtureRows.forEach(function(item) { set3dp019FixtureUsageFormula_(consumables, item.row); });
+const helperRange = ledger.getRange(2, 12, Math.max(ledger.getMaxRows() - 1, 1), 1);
+const forms = formSheets.map(function(item) {
+  ensure3dp019FixtureForm_(item.sheet, item.config, helperRange);
+  return item.name;
+});
+SpreadsheetApp.flush();
+const result = { ok: true, action: '3dp019_phase_b_fixture_usage_setup', ledger: CRM_3DP019_FIXTURE_USAGE_SHEET_, fixture_rows_migrated: fixtureRows.length, payer_validation_enforced: payerValidationUpdated, forms: forms };
+Logger.log(JSON.stringify(result));
+return result;
+}
+
+function ensure3dp019FixtureUsageLedger_(ss) {
+let sheet = ss.getSheetByName(CRM_3DP019_FIXTURE_USAGE_SHEET_);
+if (!sheet) {
+  sheet = ss.insertSheet(CRM_3DP019_FIXTURE_USAGE_SHEET_);
+  sheet.getRange(1, 1, 1, CRM_3DP019_FIXTURE_USAGE_HEADERS_.length).setValues([CRM_3DP019_FIXTURE_USAGE_HEADERS_]);
+  sheet.setFrozenRows(1);
+  sheet.getRange(1, 12).setValue('Fixture dropdown helper');
+  sheet.getRange(2, 12).setFormula('=ARRAYFORMULA(IFERROR(FILTER(Розхідники!A4:A80&" | "&Розхідники!O4:O80;Розхідники!B4:B80="Фурнітура";Розхідники!A4:A80<>"");""))');
+  sheet.getRange(1, 13, 1, 2).setValues([CRM_3DP019_FIXTURE_TARGET_HEADERS_]);
+  sheet.hideColumns(12);
+  return sheet;
+}
+const headers = sheet.getRange(1, 1, 1, CRM_3DP019_FIXTURE_USAGE_HEADERS_.length).getDisplayValues()[0].map(function(value) { return String(value || '').trim(); });
+if (JSON.stringify(headers) !== JSON.stringify(CRM_3DP019_FIXTURE_USAGE_HEADERS_)) {
+  throw new Error('3D-P-019 Phase B stopped: existing Використання_фурнітури headers do not match the expected append-only ledger schema.');
+}
+if (String(sheet.getRange(1, 12).getDisplayValue() || '').trim() !== 'Fixture dropdown helper') {
+  throw new Error('3D-P-019 Phase B stopped: existing Використання_фурнітури helper column is not recognized.');
+}
+const targetHeaders = sheet.getRange(1, 13, 1, 2).getDisplayValues()[0].map(function(value) { return String(value || '').trim(); });
+if (!targetHeaders[0] && !targetHeaders[1]) sheet.getRange(1, 13, 1, 2).setValues([CRM_3DP019_FIXTURE_TARGET_HEADERS_]);
+else if (JSON.stringify(targetHeaders) !== JSON.stringify(CRM_3DP019_FIXTURE_TARGET_HEADERS_)) throw new Error('Використання_фурнітури target headers do not match the expected schema.');
+return sheet;
+}
+
+function fixtureFormConfig3dp019_(sheetName) {
+const configs = {
+  'Внести_продаж': { title: 'A47', headers: 'A48:C48', input: 'A49:B55', area: 'A47:C55', firstRow: 49, lastRow: 55 },
+  'Оновити_продаж': { title: 'A20', headers: 'A21:C21', input: 'A22:B28', area: 'A20:C28', firstRow: 22, lastRow: 28 },
+  'Внести_списання': { title: 'A23', headers: 'A24:C24', input: 'A25:B30', area: 'A23:C30', firstRow: 25, lastRow: 30 }
+};
+const config = configs[sheetName];
+if (!config) throw new Error('3D-P-019 fixture form is not configured for ' + sheetName + '.');
+return config;
+}
+
+function ensure3dp019FixtureForm_(sheet, config, helperRange) {
+const title = 'Фурнітура для 3D-друку';
+const existingTitle = String(sheet.getRange(config.title).getDisplayValue() || '').trim();
+if (!existingTitle) {
+  sheet.getRange(config.title).setValue(title);
+  sheet.getRange(config.headers).setValues([['Фурнітура (платник)', 'Кількість', 'Платник']]);
+}
+const fixtureRule = SpreadsheetApp.newDataValidation().requireValueInRange(helperRange, true).setAllowInvalid(false)
+  .setHelpText('Обери фурнітуру зі вказаним платником. Для однієї операції дозволений лише один платник.').build();
+const quantityRule = SpreadsheetApp.newDataValidation().requireNumberGreaterThan(0).setAllowInvalid(false)
+  .setHelpText('Кількість фурнітури має бути більшою за нуль.').build();
+sheet.getRange(config.input).getColumn();
+sheet.getRange(config.firstRow, 1, config.lastRow - config.firstRow + 1, 1).setDataValidation(fixtureRule);
+const correctionQuantityRule = SpreadsheetApp.newDataValidation().requireNumberNotEqualTo(0).setAllowInvalid(false)
+  .setHelpText('Для коригування вкажи кількість, відмінну від нуля; від’ємне значення скасовує використання.').build();
+sheet.getRange(config.firstRow, 2, config.lastRow - config.firstRow + 1, 1)
+  .setDataValidation(sheet.getName() === 'Оновити_продаж' ? correctionQuantityRule : quantityRule);
+for (let row = config.firstRow; row <= config.lastRow; row++) {
+  sheet.getRange(row, 3).setFormula('=IF($A' + row + '="";"";TRIM(MID($A' + row + ';FIND("|";$A' + row + ')+1;999)))');
+}
+}
+
+function assert3dp019FixtureFormCanSetup_(sheet, config) {
+const title = String(sheet.getRange(config.title).getDisplayValue() || '').trim();
+if (!title) {
+  const occupied = sheet.getRange(config.area).getDisplayValues().flat().map(function(value) { return String(value || '').trim(); }).filter(Boolean);
+  if (occupied.length) throw new Error('3D-P-019 Phase B stopped: ' + sheet.getName() + ' fixture area is occupied.');
+  return;
+}
+if (title !== 'Фурнітура для 3D-друку') throw new Error('3D-P-019 Phase B stopped: ' + sheet.getName() + ' fixture title is not recognized.');
+const headers = sheet.getRange(config.headers).getDisplayValues()[0].map(function(value) { return String(value || '').trim(); });
+if (JSON.stringify(headers) !== JSON.stringify(['Фурнітура (платник)', 'Кількість', 'Платник'])) {
+  throw new Error('3D-P-019 Phase B stopped: ' + sheet.getName() + ' fixture headers are not recognized.');
+}
+}
+
+function read3dp019FixtureFormLines_(sheet, sheetName) {
+if (!sheet) return [];
+const config = fixtureFormConfig3dp019_(sheetName);
+const values = sheet.getRange(config.input).getValues();
+const lines = [];
+values.forEach(function(row, index) {
+  const rawFixture = String(row[0] == null ? '' : row[0]).trim();
+  const rawQuantity = row[1];
+  const rowNumber = config.firstRow + index;
+  if (!rawFixture && isBlank_(rawQuantity)) return;
+  if (!rawFixture) {
+    lines.push({ error: 'У рядку фурнітури ' + rowNumber + ' обери фурнітуру або очисти кількість.' });
+    return;
+  }
+  const qty = num_(rawQuantity);
+  const allowsCorrection = sheetName === 'Оновити_продаж';
+  if ((!allowsCorrection && qty <= 0) || (allowsCorrection && qty === 0)) {
+    lines.push({ error: 'У рядку фурнітури ' + rowNumber + (allowsCorrection ? ' кількість не може бути нулем.' : ' кількість має бути більшою за нуль.') });
+    return;
+  }
+  lines.push({ selection: rawFixture, qty: qty, row: rowNumber });
+});
+return lines;
+}
+
+function get3dp019FixtureCatalog_(consumables) {
+const lastRow = Math.max(consumables.getLastRow(), 4);
+const values = consumables.getRange(4, 1, lastRow - 3, 15).getValues();
+const rows = [];
+const byKey = {};
+values.forEach(function(values, index) {
+  const name = String(values[0] == null ? '' : values[0]).trim();
+  const category = String(values[1] == null ? '' : values[1]).trim();
+  const payer = String(values[14] == null ? '' : values[14]).trim();
+  if (category !== 'Фурнітура') return;
+  if (!name || ['власник', 'Сергій'].indexOf(payer) === -1) throw new Error('3D-P-019 fixture catalog stopped: row ' + (index + 4) + ' needs a valid Платник.');
+  const key = name + '\u0001' + payer;
+  if (byKey[key]) throw new Error('3D-P-019 fixture catalog stopped: duplicate fixture identity ' + name + ' / ' + payer + '.');
+  const item = { row: index + 4, name: name, payer: payer, unitCost: num_(values[2]), stock: num_(values[8]) };
+  rows.push(item); byKey[key] = item;
+});
+return { rows: rows, byKey: byKey };
+}
+
+function parse3dp019FixtureSelection_(selection) {
+const parts = String(selection == null ? '' : selection).split(' | ').map(function(value) { return value.trim(); });
+if (parts.length !== 2 || !parts[0] || ['власник', 'Сергій'].indexOf(parts[1]) === -1) return null;
+return { name: parts[0], payer: parts[1] };
+}
+
+function build3dp019FixtureUsagePlan_(ss, rawLines, source, reference, options) {
+options = options || {};
+const invalid = (rawLines || []).filter(function(line) { return line && line.error; })[0];
+if (invalid) return { ok: false, error: invalid.error, entries: [] };
+if (!(rawLines || []).length) return { ok: true, entries: [], payer: '', total: 0, warning: '', ledger_source: source };
+const ledger = ss.getSheetByName(CRM_3DP019_FIXTURE_USAGE_SHEET_);
+if (!ledger) return { ok: false, error: 'Спершу запусти setup3dp019FixtureUsagePhaseB().', entries: [] };
+const existing = ledger.getRange(2, 1, Math.max(ledger.getLastRow() - 1, 1), 11).getValues();
+const referenceText = String(reference || '').trim();
+const operationRows = existing.filter(function(row) {
+  const rowSource = String(row[2] || '').trim();
+  return String(row[3] || '').trim() === referenceText && (rowSource === source || rowSource === 'Коригування');
+});
+const isCorrection = !!options.allow_correction && operationRows.length > 0;
+if (operationRows.length && !isCorrection) {
+  return { ok: false, error: 'Фурнітура для ' + source.toLowerCase() + ' ' + reference + ' уже внесена в журнал. Повторне списання заблоковане.', entries: [] };
+}
+const consumables = ss.getSheetByName('Розхідники');
+if (!consumables) return { ok: false, error: 'Не знайдено вкладку Розхідники.', entries: [] };
+let catalog;
+try { catalog = get3dp019FixtureCatalog_(consumables); }
+catch (error) { return { ok: false, error: String(error && error.message ? error.message : error), entries: [] }; }
+const operationPayers = operationRows.map(function(row) { return String(row[5] || '').trim(); }).filter(Boolean);
+const existingPayer = operationPayers[0] || '';
+if (existingPayer && operationPayers.some(function(payer) { return payer !== existingPayer; })) {
+  return { ok: false, error: 'У журналі вже змішані платники для операції ' + reference + '. Потрібна окрема звірка.', entries: [] };
+}
+const entries = [];
+const plannedCorrectionQuantities = {};
+let first = null;
+for (let index = 0; index < rawLines.length; index++) {
+  const line = rawLines[index];
+  const parsed = parse3dp019FixtureSelection_(line.selection);
+  if (!parsed) return { ok: false, error: 'Рядок фурнітури ' + line.row + ' має некоректний формат. Обери значення зі списку.', entries: [] };
+  const fixture = catalog.byKey[parsed.name + '\u0001' + parsed.payer];
+  if (!fixture) return { ok: false, error: 'Фурнітура ' + parsed.name + ' / ' + parsed.payer + ' більше не відповідає Розхідники. Онови форму.', entries: [] };
+  if (!first) first = fixture;
+  if (fixture.payer !== first.payer) {
+    return { ok: false, error: 'Не можна змішувати платників: уже обрано ' + first.name + ' (' + first.payer + '); відхилено ' + fixture.name + ' (' + fixture.payer + '). Створи окрему операцію.', entries: [] };
+  }
+  if (isCorrection && existingPayer && fixture.payer !== existingPayer) {
+    return { ok: false, error: 'Не можна змінювати платника коригування: в операції вже ' + existingPayer + ', відхилено ' + fixture.name + ' (' + fixture.payer + ').', entries: [] };
+  }
+  let unitCost = fixture.unitCost;
+  if (isCorrection) {
+    const originalRows = operationRows.filter(function(row) {
+      return String(row[2] || '').trim() === source && String(row[4] || '').trim() === fixture.name && String(row[5] || '').trim() === fixture.payer;
+    });
+    const costs = originalRows.map(function(row) { return num_(row[7]); }).filter(function(value, position, values) { return values.indexOf(value) === position; });
+    if (costs.length !== 1) {
+      return { ok: false, error: 'Немає однозначної вихідної ціни для коригування ' + fixture.name + ' (' + fixture.payer + '). Виправлення не записано.', entries: [] };
+    }
+    unitCost = costs[0];
+    const net = operationRows.filter(function(row) { return String(row[4] || '').trim() === fixture.name && String(row[5] || '').trim() === fixture.payer; })
+      .reduce(function(sum, row) { return sum + num_(row[6]); }, 0);
+    const key = fixture.name + '\u0001' + fixture.payer;
+    const priorRequested = plannedCorrectionQuantities[key] || 0;
+    if (net + priorRequested + line.qty < -0.000001) {
+      return { ok: false, error: 'Коригування ' + fixture.name + ' нижче нуля: зараз ' + net + ', уже в цій формі ' + priorRequested + ', запит ' + line.qty + '.', entries: [] };
+    }
+    plannedCorrectionQuantities[key] = priorRequested + line.qty;
+  }
+  entries.push({ row: fixture.row, name: fixture.name, payer: fixture.payer, qty: line.qty, unitCost: unitCost, stock: fixture.stock });
+}
+const totals = {};
+entries.forEach(function(entry) { totals[entry.name + '\u0001' + entry.payer] = (totals[entry.name + '\u0001' + entry.payer] || 0) + entry.qty; });
+const shortages = Object.keys(totals).map(function(key) {
+  const entry = entries.filter(function(item) { return item.name + '\u0001' + item.payer === key; })[0];
+  return totals[key] > entry.stock ? entry.name + ': запит ' + totals[key] + ', на складі ' + entry.stock : '';
+}).filter(Boolean);
+return { ok: true, entries: entries, payer: first.payer, total: round2_(entries.reduce(function(sum, entry) { return sum + entry.qty * entry.unitCost; }, 0)), warning: shortages.length ? '⚠ Недостатньо фурнітури (' + shortages.join('; ') + '). Збережено за правилом F6.' : '', ledger_source: isCorrection ? 'Коригування' : source, is_correction: isCorrection };
+}
+
+function append3dp019FixtureUsage_(ss, plan, date, source, reference, note) {
+if (!plan || !plan.entries || !plan.entries.length) return { rows_added: 0 };
+const ledger = ensure3dp019FixtureUsageLedger_(ss);
+const row = Math.max(ledger.getLastRow() + 1, 2);
+const ids = next3dp019FixtureUsageIds_(ledger, plan.entries.length);
+ledger.getRange(row, 1, plan.entries.length, 11).setValues(plan.entries.map(function(entry, index) {
+  return [ids[index], date, source, reference, entry.name, entry.payer, entry.qty, entry.unitCost, round2_(entry.qty * entry.unitCost), note || '', new Date()];
+}));
+ledger.getRange(row, 13, plan.entries.length, 2).setValues(plan.entries.map(function(entry) { return [entry.targetRow || '', entry.targetSku || '']; }));
+return { rows_added: plan.entries.length, payer: plan.payer, total: plan.total };
+}
+
+function build3dpLineFixtureUsagePlan_(ss, rawLines, orderRows) {
+const lines = Array.isArray(rawLines) ? rawLines.slice(0, 10) : [];
+if (!lines.length) return { ok: true, entries: [], warning: '', ledger_source: 'Коригування' };
+const consumables = ss.getSheetByName('Розхідники');
+if (!consumables) return { ok: false, error: 'Не знайдено вкладку Розхідники.', entries: [] };
+let catalog;
+try { catalog = get3dp019FixtureCatalog_(consumables); } catch (error) { return { ok: false, error: String(error && error.message ? error.message : error), entries: [] }; }
+const targets = {};
+(orderRows || []).forEach(function(match) { if (is3dpPackagingSku_(match.values[5])) targets[match.row] = String(match.values[5] || '').trim(); });
+const requested = {};
+const entries = [];
+for (let index = 0; index < lines.length; index++) {
+  const line = lines[index] || {};
+  const parsed = parse3dp019FixtureSelection_(line.selection);
+  const targetRow = Math.floor(num_(line.target_row));
+  if (!parsed) return { ok: false, error: 'Некоректна фурнітура в рядку ' + (index + 1) + '. Онови список.', entries: [] };
+  if (!targets[targetRow]) return { ok: false, error: 'Для фурнітури обери конкретний 3D-рядок замовлення.', entries: [] };
+  const fixture = catalog.byKey[parsed.name + '\u0001' + parsed.payer];
+  const qty = num_(line.qty);
+  if (!fixture) return { ok: false, error: 'Фурнітура більше не відповідає Розхідники: ' + parsed.name + '.', entries: [] };
+  if (qty <= 0) return { ok: false, error: 'Кількість фурнітури має бути більшою за нуль: ' + fixture.name + '.', entries: [] };
+  const key = fixture.name + '\u0001' + fixture.payer;
+  requested[key] = round2_((requested[key] || 0) + qty);
+  entries.push({ name: fixture.name, payer: fixture.payer, qty: qty, unitCost: fixture.unitCost, stock: fixture.stock,
+    targetRow: targetRow, targetSku: targets[targetRow] });
+}
+const shortages = Object.keys(requested).map(function(key) {
+  const item = entries.filter(function(entry) { return entry.name + '\u0001' + entry.payer === key; })[0];
+  return requested[key] > item.stock ? item.name + ': запит ' + requested[key] + ', на складі ' + item.stock : '';
+}).filter(Boolean);
+return { ok: true, entries: entries, warning: shortages.length ? '⚠ Недостатньо фурнітури (' + shortages.join('; ') + '). Збережено.' : '', ledger_source: 'Коригування', total: round2_(entries.reduce(function(sum, entry) { return sum + entry.qty * entry.unitCost; }, 0)) };
+}
+
+function next3dp019FixtureUsageIds_(ledger, count) {
+const values = ledger.getRange(2, 1, Math.max(ledger.getLastRow() - 1, 1), 1).getValues().flat();
+let highest = 0;
+values.forEach(function(value) { const match = /^FUR-USE-([0-9]+)$/.exec(String(value || '').trim()); if (match) highest = Math.max(highest, Number(match[1])); });
+const ids = [];
+for (let index = 0; index < count; index++) ids.push('FUR-USE-' + String(highest + index + 1).padStart(5, '0'));
+return ids;
+}
+
+function set3dp019FixtureUsageFormula_(sheet, row) {
+sheet.getRange(row, 8).setFormula('=IF($A' + row + '="";"";SUMIFS(Використання_фурнітури!$G$2:$G;Використання_фурнітури!$E$2:$E;$A' + row + ';Використання_фурнітури!$F$2:$F;$O' + row + '))');
+}
+
+function apply3dp019FixturePayerGuardOnEdit_(sheet, range) {
+let config;
+try { config = fixtureFormConfig3dp019_(sheet.getName()); } catch (error) { return; }
+const firstColumn = range.getColumn();
+const lastColumn = firstColumn + range.getNumColumns() - 1;
+const firstRow = range.getRow();
+const lastRow = firstRow + range.getNumRows() - 1;
+if (firstColumn > 1 || lastColumn < 1 || lastRow < config.firstRow || firstRow > config.lastRow) return;
+const selections = sheet.getRange(config.firstRow, 1, config.lastRow - config.firstRow + 1, 1).getValues().map(function(row, index) {
+  return { row: config.firstRow + index, parsed: parse3dp019FixtureSelection_(row[0]) };
+}).filter(function(item) { return item.parsed; });
+if (!selections.length) return;
+const first = selections[0];
+const rejected = selections.filter(function(item) { return item.parsed.payer !== first.parsed.payer; })[0];
+if (!rejected) return;
+sheet.getRange(rejected.row, 1).clearContent();
+sheet.toast('Не можна змішувати платників: уже обрано ' + first.parsed.name + ' (' + first.parsed.payer + '); відхилено ' + rejected.parsed.name + ' (' + rejected.parsed.payer + '). Створи окрему операцію.', '3D-P-019', 10);
 }
 
 function setupNewsDigestTrigger() {
@@ -4602,4 +6093,676 @@ function newsClipText_(value, maxLength) {
 
 function runNewsPruneOnce() {
   newsPruneDigestProperties_(PropertiesService.getScriptProperties());
+}
+
+// Owner-only order-component workflow. Kept append-only so inventory and frozen COGS
+// changes remain auditable when an already-created order is assembled later.
+const CRM_ORDER_COMPONENT_USAGE_SHEET_ = 'Використання_компонентів';
+const CRM_ORDER_COMPONENT_USAGE_HEADERS_ = [
+  'ID', 'Дата', 'Замовлення', 'Тип', 'Код / назва', 'Кількість',
+  'Собівартість 1 шт / ПРРО', 'Управлінська собівартість 1 шт',
+  'Вартість / ПРРО', 'Управлінська вартість', 'Примітка', 'Створено', 'ID списання',
+  'CRM row number', 'SKU цілі'
+];
+const CRM_ORDER_COMPONENT_AUDIT_RE_ = /(?:^|; )order_components_prro=([0-9.-]+),mgmt=([0-9.-]+)(?=;|$)/;
+
+function setupOrderComponentUsage() {
+  const ss = SpreadsheetApp.getActive();
+  const ledger = ensureOrderComponentUsageLedger_(ss, true);
+  const consumables = ss.getSheetByName('Розхідники');
+  if (!consumables) throw new Error('Order components setup stopped: sheet Розхідники was not found.');
+  const lastRow = Math.max(consumables.getLastRow(), 4);
+  const values = consumables.getRange(4, 1, lastRow - 3, 15).getValues();
+  let formulasUpdated = 0;
+  values.forEach(function(row, index) {
+    const rowNumber = index + 4;
+    const name = String(row[0] || '').trim();
+    const category = String(row[1] || '').trim();
+    if (!name || category === 'Фурнітура') return;
+    const cell = consumables.getRange(rowNumber, 8);
+    const formula = String(cell.getFormula() || '').trim();
+    if (formula.indexOf(CRM_ORDER_COMPONENT_USAGE_SHEET_) !== -1) return;
+    const base = formula ? '(' + formula.substring(1) + ')' : String(num_(cell.getValue()));
+    const escapedName = name.replace(/"/g, '""');
+    cell.setFormula('=' + base + '+IFNA(SUMIFS(Використання_компонентів!$F$2:$F;Використання_компонентів!$D$2:$D;"Розхідник";Використання_компонентів!$E$2:$E;"' + escapedName + '");0)');
+    formulasUpdated++;
+  });
+  SpreadsheetApp.flush();
+  const result = { ok: true, action: 'order_component_usage_setup', ledger: ledger.getName(), consumable_formulas_updated: formulasUpdated, already_applied: formulasUpdated === 0 };
+  Logger.log(JSON.stringify(result));
+  return result;
+}
+
+function ensureOrderComponentUsageLedger_(ss, allowCreate) {
+  let sheet = ss.getSheetByName(CRM_ORDER_COMPONENT_USAGE_SHEET_);
+  if (!sheet && allowCreate) {
+    sheet = ss.insertSheet(CRM_ORDER_COMPONENT_USAGE_SHEET_);
+    sheet.getRange(1, 1, 1, CRM_ORDER_COMPONENT_USAGE_HEADERS_.length).setValues([CRM_ORDER_COMPONENT_USAGE_HEADERS_]);
+    sheet.setFrozenRows(1);
+  }
+  if (!sheet) throw new Error('Спершу запусти setupOrderComponentUsage().');
+  const legacyHeaders = CRM_ORDER_COMPONENT_USAGE_HEADERS_.slice(0, 13);
+  const currentLegacy = sheet.getRange(1, 1, 1, 13).getDisplayValues()[0].map(function(value) { return String(value || '').trim(); });
+  const targetHeaderValues = sheet.getRange(1, 14, 1, 2).getDisplayValues()[0];
+  if (JSON.stringify(currentLegacy) === JSON.stringify(legacyHeaders) &&
+      !String(targetHeaderValues[0] || '').trim() && !String(targetHeaderValues[1] || '').trim()) {
+    sheet.getRange(1, 14, 1, 2).setValues([CRM_ORDER_COMPONENT_USAGE_HEADERS_.slice(13)]);
+  }
+  const headers = sheet.getRange(1, 1, 1, CRM_ORDER_COMPONENT_USAGE_HEADERS_.length).getDisplayValues()[0].map(function(value) { return String(value || '').trim(); });
+  if (JSON.stringify(headers) !== JSON.stringify(CRM_ORDER_COMPONENT_USAGE_HEADERS_)) throw new Error('Використання_компонентів headers do not match the expected schema.');
+  return sheet;
+}
+
+function apiOrderComponentCatalog_() {
+  const ss = _getCrmSs();
+  const stock = ss.getSheetByName('Склад');
+  const consumables = ss.getSheetByName('Розхідники');
+  if (!stock || !consumables) return { ok: false, error: 'stock or consumables sheet missing' };
+  const components = [];
+  const stockValues = stock.getRange(3, 1, Math.max(stock.getLastRow() - 2, 1), 10).getValues();
+  stockValues.forEach(function(row) {
+    const sku = String(row[0] || '').trim();
+    const qty = num_(row[7]);
+    if (!sku || qty <= 0 || is3dpPackagingSku_(sku)) return;
+    components.push({ id: 'sku:' + sku, kind: 'SKU', code: sku, name: String(row[1] || sku), stock: round2_(qty), prro_unit: round2_(num_(row[8])), mgmt_unit: round2_(num_(row[9]) || num_(row[8])) });
+  });
+  let threeDpError = '';
+  const config = crm3dpConfig_();
+  if (!config) {
+    threeDpError = '3D-P API не налаштовано у CRM.';
+  } else {
+    try {
+      const remote = crm3dpGet_(config, { action: '3dp_skus' });
+      (Array.isArray(remote.rows) ? remote.rows : []).forEach(function(row) {
+        const sku = String(row.SKU || '').trim();
+        const availability = row.availability || {};
+        const qty = num_(availability[CRM_3DP_STOCK_HEADER_]);
+        if (!sku || !is3dpPackagingSku_(sku) || qty <= 0 || String(row.API_статус_запису || '').trim() === 'Архів') return;
+        const buyout = round2_(num_(row[CRM_3DP_BUYOUT_HEADER_]));
+        components.push({ id: '3dp:' + sku, kind: '3D-P', code: sku, name: String(row['Назва виробу'] || sku), stock: round2_(qty), prro_unit: 0, mgmt_unit: buyout });
+      });
+    } catch (error) {
+      threeDpError = '3D-P каталог тимчасово недоступний: ' + crmIntegritySafeRemoteCode_(error);
+    }
+  }
+  const fixtures = [];
+  const consumableValues = consumables.getRange(4, 1, Math.max(consumables.getLastRow() - 3, 1), 15).getValues();
+  consumableValues.forEach(function(row) {
+    const name = String(row[0] || '').trim();
+    const category = String(row[1] || '').trim();
+    const qty = num_(row[8]);
+    const unitCost = round2_(num_(row[2]));
+    if (!name) return;
+    if (category === 'Фурнітура') {
+      const payer = String(row[14] || '').trim();
+      if (['власник', 'Сергій'].indexOf(payer) !== -1) fixtures.push({ selection: name + ' | ' + payer, name: name, payer: payer, stock: round2_(qty), unit_cost: unitCost });
+      return;
+    }
+    if (qty <= 0) return;
+    components.push({ id: 'consumable:' + name, kind: 'Розхідник', code: name, name: name, category: category, stock: round2_(qty), prro_unit: 0, mgmt_unit: unitCost });
+  });
+  components.sort(function(a, b) { return String(a.kind + a.name).localeCompare(String(b.kind + b.name), 'uk'); });
+  fixtures.sort(function(a, b) { return String(a.name).localeCompare(String(b.name), 'uk'); });
+  return { ok: true, components: components, fixtures: fixtures, three_dp_error: threeDpError };
+}
+
+function buildOrderComponentPlan_(ss, rawItems) {
+  const items = Array.isArray(rawItems) ? rawItems.slice(0, 10) : [];
+  if (!items.length) return { ok: true, entries: [], prro_total: 0, mgmt_total: 0 };
+  const catalog = apiOrderComponentCatalog_();
+  if (!catalog.ok) return { ok: false, error: catalog.error, entries: [] };
+  const byId = {};
+  catalog.components.forEach(function(item) { byId[item.id] = item; });
+  const requested = {};
+  const entries = [];
+  for (let index = 0; index < items.length; index++) {
+    const id = String(items[index] && items[index].id || '').trim();
+    const qty = num_(items[index] && items[index].qty);
+    const catalogItem = byId[id];
+    if (!catalogItem) return { ok: false, error: 'Компонент більше не доступний: ' + id + '. Онови список.', entries: [] };
+    if (qty <= 0) return { ok: false, error: 'Кількість компонента має бути більшою за нуль: ' + catalogItem.name + '.', entries: [] };
+    requested[id] = round2_((requested[id] || 0) + qty);
+    if (requested[id] > catalogItem.stock + 0.000001) return { ok: false, error: 'Недостатньо на складі: ' + catalogItem.name + ' — запит ' + requested[id] + ', залишок ' + catalogItem.stock + '.', entries: [] };
+    entries.push({ kind: catalogItem.kind, code: catalogItem.code, name: catalogItem.name, qty: qty, prroUnit: catalogItem.prro_unit, mgmtUnit: catalogItem.mgmt_unit,
+      note: String(items[index].note || '').trim(), targetRow: Math.floor(num_(items[index].target_row)), targetSku: String(items[index].target_sku || '').trim() });
+  }
+  return { ok: true, entries: entries, prro_total: round2_(entries.reduce(function(sum, item) { return sum + item.qty * item.prroUnit; }, 0)), mgmt_total: round2_(entries.reduce(function(sum, item) { return sum + item.qty * item.mgmtUnit; }, 0)) };
+}
+
+function nextOrderComponentUsageIds_(ledger, count) {
+  const values = ledger.getRange(2, 1, Math.max(ledger.getLastRow() - 1, 1), 1).getValues().flat();
+  let highest = 0;
+  values.forEach(function(value) { const match = /^CMP-USE-([0-9]+)$/.exec(String(value || '').trim()); if (match) highest = Math.max(highest, Number(match[1])); });
+  return Array.from({ length: count }, function(_, index) { return 'CMP-USE-' + String(highest + index + 1).padStart(5, '0'); });
+}
+
+function appendOrderComponents_(ss, plan, date, order, note) {
+  if (!plan.entries.length) return { rows_added: 0, writeoff_ids: [] };
+  const ledger = ensureOrderComponentUsageLedger_(ss, false);
+  const writeOffs = ss.getSheetByName('Списання');
+  if (!writeOffs) throw new Error('writeoff sheet missing');
+  const skuEntries = plan.entries.filter(function(item) { return item.kind === 'SKU'; });
+  const writeoffRow = nextEmptyRow_(writeOffs, 1, 3, 201);
+  if (writeoffRow + skuEntries.length - 1 > 201) throw new Error('not enough rows in writeoff sheet');
+  const startNumber = skuEntries.length ? nextIdNumber_('Списання', 1, 'WRT') : 0;
+  const writeoffIds = skuEntries.map(function(_, index) { return 'WRT-' + String(startNumber + index).padStart(4, '0'); });
+  const componentIds = nextOrderComponentUsageIds_(ledger, plan.entries.length);
+  const ledgerRow = Math.max(ledger.getLastRow() + 1, 2);
+  let writeoffsWritten = false;
+  let ledgerWritten = false;
+  try {
+    if (skuEntries.length) {
+      writeOffs.getRange(writeoffRow, 1, skuEntries.length, 4).setValues(skuEntries.map(function(item, index) { return [writeoffIds[index], date, 'Інше', item.code]; }));
+      writeOffs.getRange(writeoffRow, 6, skuEntries.length, 1).setValues(skuEntries.map(function(item) { return [item.qty]; }));
+      writeOffs.getRange(writeoffRow, 11, skuEntries.length, 2).setValues(skuEntries.map(function(item) { return ['для комплектації замовлення', ['Продаж ' + order, note, item.note].filter(Boolean).join('; ')]; }));
+      writeoffsWritten = true;
+    }
+    let skuIndex = 0;
+    ledger.getRange(ledgerRow, 1, plan.entries.length, 15).setValues(plan.entries.map(function(item, index) {
+      const writeoffId = item.kind === 'SKU' ? writeoffIds[skuIndex++] : '';
+      return [componentIds[index], date, order, item.kind, item.code, item.qty, item.prroUnit, item.mgmtUnit, round2_(item.qty * item.prroUnit), round2_(item.qty * item.mgmtUnit), [note, item.note].filter(Boolean).join('; '), new Date(), writeoffId, item.targetRow || '', item.targetSku || ''];
+    }));
+    ledgerWritten = true;
+    return { rows_added: plan.entries.length, writeoff_ids: writeoffIds, component_ids: componentIds };
+  } catch (error) {
+    if (ledgerWritten) ledger.getRange(ledgerRow, 1, plan.entries.length, 15).clearContent();
+    if (writeoffsWritten && skuEntries.length) {
+      writeOffs.getRange(writeoffRow, 1, skuEntries.length, 4).clearContent();
+      writeOffs.getRange(writeoffRow, 6, skuEntries.length, 1).clearContent();
+      writeOffs.getRange(writeoffRow, 11, skuEntries.length, 2).clearContent();
+    }
+    throw error;
+  }
+}
+
+function append3dpOrderGifts_(plan, date, order, requestId) {
+  const entries = plan.entries.filter(function(item) { return item.kind === '3D-P'; });
+  if (!entries.length) return { rows_added: 0, already_applied: true };
+  const config = crm3dpConfig_();
+  if (!config) throw new Error('3D-P API не налаштовано: 3D-подарунки не списані.');
+  return crm3dpPost_(config, {
+    action: '3dp_order_gifts_append',
+    request_id: requestId,
+    order: order,
+    date: apiDate_(date),
+    items: entries.map(function(item) { return { sku: item.code, qty: item.qty, note: item.note }; }),
+  });
+}
+
+function orderComponentTotals_(ss, order) {
+  const ledger = ensureOrderComponentUsageLedger_(ss, false);
+  const values = ledger.getRange(2, 1, Math.max(ledger.getLastRow() - 1, 1), 15).getValues();
+  return values.reduce(function(total, row) {
+    if (String(row[2] || '').trim() !== order) return total;
+    const target = Math.floor(num_(row[13]));
+    const bucket = target ? (total.byRow[target] = total.byRow[target] || { prro: 0, mgmt: 0 }) : total.unassigned;
+    bucket.prro = round2_(bucket.prro + num_(row[8]));
+    bucket.mgmt = round2_(bucket.mgmt + num_(row[9]));
+    total.prro = round2_(total.prro + num_(row[8]));
+    total.mgmt = round2_(total.mgmt + num_(row[9]));
+    return total;
+  }, { prro: 0, mgmt: 0, byRow: {}, unassigned: { prro: 0, mgmt: 0 } });
+}
+
+function orderComponentMarketingByOrder_(ss) {
+  const result = { byOrder: {}, byRow: {} };
+  const ledger = ss.getSheetByName(CRM_ORDER_COMPONENT_USAGE_SHEET_);
+  const sales = ss.getSheetByName('Продажі');
+  if (!ledger || !sales || ledger.getLastRow() < 2) return result;
+  const ledgerValues = ledger.getRange(2, 1, ledger.getLastRow() - 1, 15).getValues();
+  const unassigned = {};
+  ledgerValues.forEach(function(row) {
+    const order = String(row[2] || '').trim();
+    const marketing = round2_(num_(row[9]));
+    if (!order || !marketing) return;
+    const targetRow = Math.floor(num_(row[13]));
+    // A targeted entry is fulfillment cost for that exact line (for example Mystery Box content),
+    // not a marketing gift. Only order-level entries are projected to the Marketing column.
+    if (targetRow) return;
+    result.byOrder[order] = round2_((result.byOrder[order] || 0) + marketing);
+    unassigned[order] = round2_((unassigned[order] || 0) + marketing);
+  });
+  if (!Object.keys(unassigned).length) return result;
+  const salesValues = sales.getRange(3, 1, Math.max(sales.getLastRow() - 2, 1), 11).getValues();
+  const rowsByOrder = {};
+  salesValues.forEach(function(row, index) {
+    const order = String(row[0] || '').trim();
+    if (!Object.prototype.hasOwnProperty.call(unassigned, order)) return;
+    if (!rowsByOrder[order]) rowsByOrder[order] = [];
+    rowsByOrder[order].push({ row: index + 3, amount: Math.max(num_(row[10]), 0) });
+  });
+  Object.keys(unassigned).forEach(function(order) {
+    const rows = rowsByOrder[order] || [];
+    if (!rows.length) return;
+    const allocations = allocateAmount_(unassigned[order], rows.map(function(item) { return item.amount; }));
+    rows.forEach(function(item, index) {
+      result.byRow[item.row] = round2_((result.byRow[item.row] || 0) + allocations[index]);
+    });
+  });
+  return result;
+}
+
+function replaceOrderComponentAudit_(audit, prro, mgmt) {
+  const clean = String(audit || '').replace(CRM_ORDER_COMPONENT_AUDIT_RE_, '').replace(/^; |; $/g, '').trim();
+  return trimCostAudit_([clean, 'order_components_prro=' + round2_(prro) + ',mgmt=' + round2_(mgmt)].filter(Boolean).join('; '));
+}
+
+function normalizeRepeatedExactNote_(value) {
+  const current = String(value || '').trim();
+  const parts = current.split(';').map(function(part) { return part.trim(); }).filter(Boolean);
+  return parts.length > 1 && parts.every(function(part) { return part === parts[0]; }) ? parts[0] : current;
+}
+
+function applyOrderComponentCost_(ss, order, rows) {
+  const sales = ss.getSheetByName('Продажі');
+  const totals = orderComponentTotals_(ss, order);
+  if (!totals.prro && !totals.mgmt) return { rows_updated: 0, prro_total: 0, mgmt_total: 0 };
+  const quantities = rows.map(function(row) { return Math.max(num_(sales.getRange(row, 8).getValue()), 0); });
+  const weights = orderRowWeights_(sales, rows);
+  const prroAllocations = allocateAmount_(totals.unassigned.prro, weights);
+  const mgmtAllocations = allocateAmount_(totals.unassigned.mgmt, weights);
+  rows.forEach(function(row, index) {
+    const count = quantities[index];
+    if (count <= 0) return;
+    const current = sales.getRange(row, 12, 1, 2).getValues()[0];
+    const audit = String(sales.getRange(row, 31).getValue() || '');
+    const prior = CRM_ORDER_COMPONENT_AUDIT_RE_.exec(audit);
+    const priorPrro = prior ? num_(prior[1]) : 0;
+    const priorMgmt = prior ? num_(prior[2]) : 0;
+    const basePrro = round2_(num_(current[0]) * count - priorPrro);
+    const baseMgmt = round2_(num_(current[1]) * count - priorMgmt);
+    const targeted = totals.byRow[row] || { prro: 0, mgmt: 0 };
+    const rowPrro = round2_(prroAllocations[index] + targeted.prro);
+    const rowMgmt = round2_(mgmtAllocations[index] + targeted.mgmt);
+    sales.getRange(row, 12, 1, 2).setValues([[round2_((basePrro + rowPrro) / count), round2_((baseMgmt + rowMgmt) / count)]]);
+    const methodCell = sales.getRange(row, 30);
+    const method = String(methodCell.getValue() || 'Frozen');
+    if (method.indexOf('компоненти замовлення') === -1) methodCell.setValue(method + ' + компоненти замовлення');
+    sales.getRange(row, 31, 1, 2).setValues([[replaceOrderComponentAudit_(audit, rowPrro, rowMgmt), new Date()]]);
+  });
+  return { rows_updated: rows.length, prro_total: totals.prro, mgmt_total: totals.mgmt };
+}
+
+
+function applyMysteryConsumableComponentCost_(ss, order, rows) {
+  const ledger = ensureOrderComponentUsageLedger_(ss, false);
+  const ledgerValues = ledger.getRange(2, 1, Math.max(ledger.getLastRow() - 1, 1), 13).getValues();
+  const total = round2_(ledgerValues.reduce(function(sum, row) {
+    return String(row[2] || '').trim() === order && String(row[3] || '').trim() === 'Розхідник' ? sum + num_(row[9]) : sum;
+  }, 0));
+  if (!total) return { rows_updated: 0, mgmt_total: 0 };
+  const sales = ss.getSheetByName('Продажі');
+  const weights = orderRowWeights_(sales, rows);
+  const allocations = allocateAmount_(total, weights);
+  rows.forEach(function(row, index) {
+    const qty = Math.max(num_(sales.getRange(row, 8).getValue()), 0);
+    if (qty <= 0) return;
+    const costCell = sales.getRange(row, 13);
+    const auditCell = sales.getRange(row, 31);
+    const audit = String(auditCell.getValue() || '');
+    const priorMatch = /(?:^|; )mystery_consumable_components=([0-9.-]+)(?=;|$)/.exec(audit);
+    const prior = priorMatch ? num_(priorMatch[1]) : 0;
+    costCell.setValue(round2_((num_(costCell.getValue()) * qty - prior + allocations[index]) / qty));
+    const clean = audit.replace(/(?:^|; )mystery_consumable_components=([0-9.-]+)(?=;|$)/, '').replace(/^; |; $/g, '').trim();
+    auditCell.setValue(trimCostAudit_([clean, 'mystery_consumable_components=' + round2_(allocations[index])].filter(Boolean).join('; ')));
+  });
+  return { rows_updated: rows.length, mgmt_total: total };
+}
+
+const CRM_3DP_ORDER_ACCOUNTING_SHEET_ = '3D_облік_замовлень';
+const CRM_3DP_ORDER_ACCOUNTING_HEADERS_ = [
+  'ID', 'Дата', 'Замовлення', 'CRM row number', 'SKU', 'Кількість', 'Режим',
+  'Чистий дохід рядка', 'Собівартість Сергія за од.', 'Ціна викупу за од.', 'Частка Сергія',
+  'Фурнітура власника', 'Фурнітура Сергія', 'Пакування', 'Нараховано Сергію',
+  'Управлінська собівартість', 'Маркетинг', 'Request ID', 'Створено', 'Примітка'
+];
+
+function ensure3dpOrderAccountingLedger_(ss, allowCreate) {
+  let sheet = ss.getSheetByName(CRM_3DP_ORDER_ACCOUNTING_SHEET_);
+  if (!sheet && allowCreate) {
+    sheet = ss.insertSheet(CRM_3DP_ORDER_ACCOUNTING_SHEET_);
+    sheet.getRange(1, 1, 1, CRM_3DP_ORDER_ACCOUNTING_HEADERS_.length).setValues([CRM_3DP_ORDER_ACCOUNTING_HEADERS_]);
+    sheet.setFrozenRows(1);
+  }
+  if (!sheet) throw new Error('Спершу запусти setup3dpOrderLineAccountingCRM().');
+  const headers = sheet.getRange(1, 1, 1, CRM_3DP_ORDER_ACCOUNTING_HEADERS_.length).getDisplayValues()[0].map(function(value) { return String(value || '').trim(); });
+  if (JSON.stringify(headers) !== JSON.stringify(CRM_3DP_ORDER_ACCOUNTING_HEADERS_)) throw new Error('3D_облік_замовлень headers do not match the expected schema.');
+  return sheet;
+}
+
+function repair3dpExpenseProjectionFormulas_(ss) {
+  const sheet = ss.getSheetByName('Витрати');
+  if (!sheet) throw new Error('Order-line accounting setup stopped: sheet Витрати was not found.');
+  const formulas = expenseProjectionFormulas3dp_();
+  const anchorL = sheet.getRange('L3');
+  const anchorM = sheet.getRange('M3');
+  const currentFormulaL = String(anchorL.getFormula() || '');
+  const currentFormulaM = String(anchorM.getFormula() || '');
+  if ((currentFormulaL && currentFormulaL !== formulas.L) || (currentFormulaM && currentFormulaM !== formulas.M)) {
+    throw new Error('Витрати L3/M3 setup stopped: unexpected ARRAYFORMULA anchor.');
+  }
+  const anchorsReady = currentFormulaL === formulas.L && currentFormulaM === formulas.M;
+  const anchorHasRefError = /^#REF!?$/i.test(String(anchorL.getDisplayValue() || '').trim()) || /^#REF!?$/i.test(String(anchorM.getDisplayValue() || '').trim());
+  // A healthy ARRAYFORMULA spill has displayed results but no user-entered values below its anchors.
+  // Do not mistake those calculated results for manual blockers on an idempotent repeat.
+  if (anchorsReady && !anchorHasRefError) return 0;
+  const lastRow = Math.min(Math.max(sheet.getLastRow(), 3), 199);
+  sheet.getRange('L3:M3').clearContent();
+  SpreadsheetApp.flush();
+  const values = sheet.getRange(3, 1, lastRow - 2, 13).getValues();
+  let cleared = 0;
+  try {
+    for (let index = 1; index < values.length; index++) {
+      const row = index + 3;
+      const hasDate = String(values[index][0] || '').trim() !== '';
+      const expectedL = !hasDate ? '' : ((String(values[index][7] || '').trim() || String(values[index][1] || '').trim() === 'Пакування' || String(values[index][4] || '').trim() === 'Так') ? 'Ні' : 'Так');
+      const expectedM = !hasDate ? '' : (String(values[index][7] || '').trim() ? 'Розхідник: не в операційці' : (String(values[index][1] || '').trim() === 'Пакування' ? 'Розхідник: не в операційці' : (String(values[index][4] || '').trim() === 'Так' ? 'Пряма витрата продажу: не в операційці' : 'Рахується в операційці')));
+      const currentL = String(values[index][11] || '').trim();
+      const currentM = String(values[index][12] || '').trim();
+      if ((currentL || currentM) && (currentL !== expectedL || currentM !== expectedM)) {
+        throw new Error('Витрати L/M setup stopped: unexpected literal at row ' + row + '.');
+      }
+      if (currentL || currentM) { sheet.getRange(row, 12, 1, 2).clearContent(); cleared++; }
+    }
+  } catch (error) {
+    if (currentFormulaL) anchorL.setFormula(currentFormulaL); else anchorL.clearContent();
+    if (currentFormulaM) anchorM.setFormula(currentFormulaM); else anchorM.clearContent();
+    SpreadsheetApp.flush();
+    throw error;
+  }
+  anchorL.setFormula(formulas.L);
+  anchorM.setFormula(formulas.M);
+  return cleared;
+}
+
+function expenseProjectionFormulas3dp_() {
+  return {
+    L: '=ARRAYFORMULA(IF($A$3:$A$199="";"";IF((($H$3:$H$199<>"")+($B$3:$B$199="Пакування")+($E$3:$E$199="Так"))>0;"Ні";"Так")))',
+    M: '=ARRAYFORMULA(IF($A$3:$A$199="";"";IF($H$3:$H$199<>"";"Розхідник: не в операційці";IF($B$3:$B$199="Пакування";"Розхідник: не в операційці";IF($E$3:$E$199="Так";"Пряма витрата продажу: не в операційці";"Рахується в операційці")))))'
+  };
+}
+
+function exactHeaders3dp_(sheet, startColumn, expected) {
+  if (!sheet) return false;
+  const actual = sheet.getRange(1, startColumn, 1, expected.length).getDisplayValues()[0].map(function(value) { return String(value || '').trim(); });
+  return JSON.stringify(actual) === JSON.stringify(expected);
+}
+
+function backfill3dpFixtureTargets_(ss) {
+  const ledger = ensure3dp019FixtureUsageLedger_(ss);
+  const sales = ss.getSheetByName('Продажі');
+  if (!sales || ledger.getLastRow() < 2) return 0;
+  const saleValues = sales.getRange(3, 1, Math.max(sales.getLastRow() - 2, 1), 8).getValues();
+  const byOrder = {};
+  saleValues.forEach(function(values, index) {
+    const order = String(values[0] || '').trim();
+    const sku = String(values[5] || '').trim();
+    if (order && is3dpPackagingSku_(sku)) (byOrder[order] = byOrder[order] || []).push({ row: index + 3, sku: sku });
+  });
+  const rows = ledger.getRange(2, 1, ledger.getLastRow() - 1, 14).getValues();
+  let changed = 0;
+  rows.forEach(function(values, index) {
+    if (values[12] || values[13]) return;
+    const targets = byOrder[String(values[3] || '').trim()] || [];
+    if (targets.length !== 1) return;
+    ledger.getRange(index + 2, 13, 1, 2).setValues([[targets[0].row, targets[0].sku]]);
+    changed++;
+  });
+  return changed;
+}
+
+function setup3dpOrderLineAccountingCRM() {
+  const ss = SpreadsheetApp.getActive();
+  const componentBefore = ss.getSheetByName(CRM_ORDER_COMPONENT_USAGE_SHEET_);
+  const fixtureBefore = ss.getSheetByName(CRM_3DP019_FIXTURE_USAGE_SHEET_);
+  const accountingBefore = ss.getSheetByName(CRM_3DP_ORDER_ACCOUNTING_SHEET_);
+  const expensesBefore = ss.getSheetByName('Витрати');
+  const formulas = expenseProjectionFormulas3dp_();
+  const componentSchemaReady = exactHeaders3dp_(componentBefore, 1, CRM_ORDER_COMPONENT_USAGE_HEADERS_);
+  const fixtureSchemaReady = exactHeaders3dp_(fixtureBefore, 1, CRM_3DP019_FIXTURE_USAGE_HEADERS_) && exactHeaders3dp_(fixtureBefore, 13, CRM_3DP019_FIXTURE_TARGET_HEADERS_);
+  const accountingSchemaReady = exactHeaders3dp_(accountingBefore, 1, CRM_3DP_ORDER_ACCOUNTING_HEADERS_);
+  const expenseFormulasReady = !!expensesBefore && String(expensesBefore.getRange('L3').getFormula() || '') === formulas.L && String(expensesBefore.getRange('M3').getFormula() || '') === formulas.M;
+  const componentLedger = ensureOrderComponentUsageLedger_(ss, true);
+  const fixtureLedger = ensure3dp019FixtureUsageLedger_(ss);
+  const accounting = ensure3dpOrderAccountingLedger_(ss, true);
+  const fixtureTargetsBackfilled = backfill3dpFixtureTargets_(ss);
+  const expenseFormulaBlockersCleared = repair3dpExpenseProjectionFormulas_(ss);
+  SpreadsheetApp.flush();
+  const result = { ok: true, action: '3dp_order_line_accounting_setup', accounting_ledger: accounting.getName(), component_ledger: componentLedger.getName(), fixture_ledger: fixtureLedger.getName(), component_schema_added: !componentSchemaReady, fixture_target_schema_added: !fixtureSchemaReady, accounting_schema_added: !accountingSchemaReady, expense_formulas_restored: !expenseFormulasReady, fixture_targets_backfilled: fixtureTargetsBackfilled, expense_formula_blockers_cleared: expenseFormulaBlockersCleared, already_applied: componentSchemaReady && fixtureSchemaReady && accountingSchemaReady && expenseFormulasReady && fixtureTargetsBackfilled === 0 && expenseFormulaBlockersCleared === 0 };
+  Logger.log(JSON.stringify(result));
+  return result;
+}
+
+function latest3dpAccountingByRow_(ss) {
+  const sheet = ensure3dpOrderAccountingLedger_(ss, false);
+  const values = sheet.getRange(2, 1, Math.max(sheet.getLastRow() - 1, 1), CRM_3DP_ORDER_ACCOUNTING_HEADERS_.length).getValues();
+  return values.reduce(function(result, row) {
+    const crmRow = Math.floor(num_(row[3]));
+    if (crmRow) result[crmRow] = { id: row[0], order: String(row[2] || '').trim(), crm_row: crmRow, sku: String(row[4] || '').trim(), qty: num_(row[5]), mode: String(row[6] || 'Продаж').trim(), net_revenue: num_(row[7]), production_unit: num_(row[8]), buyout_unit: num_(row[9]), split: num_(row[10]), owner_fixture: num_(row[11]), serhiy_fixture: num_(row[12]), packaging: num_(row[13]), serhiy_payout: num_(row[14]), mgmt_cost: num_(row[15]), marketing: num_(row[16]), request_id: String(row[17] || '') };
+    return result;
+  }, {});
+}
+
+function next3dpAccountingId_(sheet) {
+  const values = sheet.getRange(2, 1, Math.max(sheet.getLastRow() - 1, 1), 1).getValues().flat();
+  let max = 0;
+  values.forEach(function(value) { const match = /^3DP-ACC-([0-9]+)$/.exec(String(value || '').trim()); if (match) max = Math.max(max, Number(match[1])); });
+  return '3DP-ACC-' + String(max + 1).padStart(5, '0');
+}
+
+function crm3dpAccountingSnapshot_(entry, order, frozen, fixture, mode, requestId) {
+  const values = entry.values || [];
+  const qty = crm3dpNumber_(values[7]);
+  const netUnit = qty ? crm3dpNumber_(values[8]) - crm3dpNumber_(values[9]) / qty : 0;
+  const netRevenue = crm3dpRound2_(netUnit * qty);
+  const packaging = crm3dpRound2_(values[15]);
+  const ownerFixture = crm3dpRound2_(fixture.owner_total || fixture.owner_per_unit * qty);
+  const serhiyFixture = crm3dpRound2_(fixture.serhiy_total || fixture.serhiy_per_unit * qty);
+  const productionTotal = crm3dpRound2_(frozen.production_cost * qty);
+  const split = crm3dpNumber_(frozen.profit_share);
+  const serhiyPayout = mode === 'Маркетинг'
+    ? crm3dpRound2_(frozen.buyout * qty + serhiyFixture)
+    : crm3dpRound2_(productionTotal + serhiyFixture + split * (netRevenue - productionTotal - packaging - ownerFixture - serhiyFixture));
+  const mgmtCost = mode === 'Маркетинг' ? crm3dpRound2_(frozen.buyout * qty + ownerFixture + serhiyFixture) : crm3dpRound2_(serhiyPayout + ownerFixture);
+  return { date: values[2], order: order, crm_row: entry.row, sku: String(values[5] || '').trim(), qty: qty, mode: mode,
+    net_revenue: netRevenue, production_unit: frozen.production_cost, buyout_unit: frozen.buyout, split: split,
+    owner_fixture: ownerFixture, serhiy_fixture: serhiyFixture, packaging: packaging,
+    serhiy_payout: serhiyPayout, mgmt_cost: mgmtCost, marketing: mode === 'Маркетинг' ? mgmtCost : 0, request_id: requestId || '' };
+}
+
+function append3dpAccountingSnapshot_(ss, snapshot, note) {
+  const latest = latest3dpAccountingByRow_(ss)[snapshot.crm_row];
+  const fingerprint = function(item) { return [item.mode, item.qty, item.net_revenue, item.production_unit, item.buyout_unit, item.owner_fixture, item.serhiy_fixture, item.packaging, item.serhiy_payout, item.mgmt_cost, item.marketing].join('|'); };
+  if (latest && fingerprint(latest) === fingerprint(snapshot)) return latest;
+  const sheet = ensure3dpOrderAccountingLedger_(ss, false);
+  const id = next3dpAccountingId_(sheet);
+  const row = Math.max(sheet.getLastRow() + 1, 2);
+  sheet.getRange(row, 1, 1, CRM_3DP_ORDER_ACCOUNTING_HEADERS_.length).setValues([[
+    id, snapshot.date, snapshot.order, snapshot.crm_row, snapshot.sku, snapshot.qty, snapshot.mode,
+    snapshot.net_revenue, snapshot.production_unit, snapshot.buyout_unit, snapshot.split,
+    snapshot.owner_fixture, snapshot.serhiy_fixture, snapshot.packaging, snapshot.serhiy_payout,
+    snapshot.mgmt_cost, snapshot.marketing, snapshot.request_id, new Date(), note || ''
+  ]]);
+  snapshot.id = id;
+  return snapshot;
+}
+
+function project3dpAccountingToCrm_(ss, snapshot) {
+  const sales = ss.getSheetByName('Продажі');
+  const qty = Math.max(snapshot.qty, 0);
+  if (!sales || !qty) return;
+  ensureSaleCostAuditColumns_(sales);
+  sales.getRange(snapshot.crm_row, 12, 1, 2).setValues([[0, round2_(snapshot.mgmt_cost / qty)]]);
+  sales.getRange(snapshot.crm_row, 30, 1, 3).setValues([[
+    snapshot.mode === 'Маркетинг' ? '3D-P Маркетинг' : '3D-P Продаж ' + Math.round(snapshot.split * 100) + '/' + Math.round((1 - snapshot.split) * 100),
+    trimCostAudit_('3dp_accounting_id=' + snapshot.id + '; 3dp_mode=' + snapshot.mode + '; 3dp_mgmt_total=' + round2_(snapshot.mgmt_cost) + '; 3dp_marketing=' + round2_(snapshot.marketing) + '; prro=0'),
+    new Date()
+  ]]);
+  const expenses = ss.getSheetByName('Витрати');
+  if (!expenses) return;
+  const marker = '[3dp_marketing:' + snapshot.crm_row + ']';
+  const values = expenses.getRange(3, 1, Math.max(expenses.getLastRow() - 2, 1), 7).getValues();
+  let targetRow = 0;
+  values.some(function(row, index) { if (String(row[6] || '').indexOf(marker) !== -1) { targetRow = index + 3; return true; } return false; });
+  if (!targetRow && snapshot.mode !== 'Маркетинг') return;
+  if (!targetRow) targetRow = nextEmptyRow_(expenses, 1, 3, 201);
+  expenses.getRange(targetRow, 1, 1, 7).setValues([[snapshot.date, 'Маркетинг', '3D-подарунок ' + snapshot.sku, snapshot.marketing, 'Так', snapshot.order, marker + ' derived from ' + snapshot.id + '; excluded from operating expenses and order direct-expense recalc']]);
+}
+
+// Later declaration intentionally replaces the legacy one-line helper above. 3D marketing is already
+// included in the target sale line's management cost, so its linked projection must not be counted twice.
+function getDirectOrderExpense_(ss, order) {
+  const expenses = ss.getSheetByName('Витрати');
+  if (!expenses) return 0;
+  const values = expenses.getRange(3, 1, Math.max(expenses.getLastRow() - 2, 1), 7).getValues();
+  return round2_(values.reduce(function(sum, row) {
+    const linked = String(row[4] || '').trim().toLowerCase();
+    const orderRef = String(row[5] || '').trim();
+    const note = String(row[6] || '');
+    return linked === 'так' && orderRef === order && note.indexOf('[3dp_marketing:') === -1 ? sum + num_(row[3]) : sum;
+  }, 0));
+}
+
+function orderUpdateRequestState_(ss, order, requestId) {
+  const marker = '[dashboard_request:' + requestId + ']';
+  const result = { component: false, fixture: false, marker: marker };
+  const components = ss.getSheetByName(CRM_ORDER_COMPONENT_USAGE_SHEET_);
+  if (components) {
+    const rows = components.getRange(2, 1, Math.max(components.getLastRow() - 1, 1), 11).getValues();
+    result.component = rows.some(function(row) { return String(row[2] || '').trim() === order && String(row[10] || '').indexOf(marker) !== -1; });
+  }
+  const fixtures = ss.getSheetByName(CRM_3DP019_FIXTURE_USAGE_SHEET_);
+  if (fixtures) {
+    const rows = fixtures.getRange(2, 1, Math.max(fixtures.getLastRow() - 1, 1), 10).getValues();
+    result.fixture = rows.some(function(row) { return String(row[3] || '').trim() === order && String(row[9] || '').indexOf(marker) !== -1; });
+  }
+  return result;
+}
+
+function apiUpdateSaleWithComponents_(ss, payload) {
+  const progress = { fields_updated: false, components_written: 0, fixtures_written: 0, three_dp_gifts_written: 0, cost_updated: false };
+  try {
+    resetMemoForMutation_();
+    const sales = ss.getSheetByName('Продажі');
+    if (!sales) throw new Error('sales sheet missing');
+    const rowIndex = Math.floor(apiNum_(payload.row_index));
+    if (rowIndex < 3 || rowIndex > sales.getLastRow()) throw new Error('invalid row_index');
+    const current = sales.getRange(rowIndex, 1, 1, 29).getValues()[0];
+    const order = String(current[0] || '').trim();
+    if (!order) throw new Error('sale row is empty');
+    const rows = [rowIndex];
+    for (let row = rowIndex - 1; row >= 3; row--) { if (String(sales.getRange(row, 1).getValue() || '').trim() !== order) break; rows.unshift(row); }
+    for (let row = rowIndex + 1; row <= sales.getLastRow(); row++) { if (String(sales.getRange(row, 1).getValue() || '').trim() !== order) break; rows.push(row); }
+    const matches = rows.map(function(row) { return { row: row, values: sales.getRange(row, 1, 1, 29).getValues()[0] }; });
+    const fixtureLines = (Array.isArray(payload.fixtures) ? payload.fixtures.slice(0, 10) : []).map(function(item, index) { return { selection: String(item && item.selection || '').trim(), qty: num_(item && item.qty), row: index + 1, target_row: Math.floor(num_(item && item.target_row)), target_sku: String(item && item.target_sku || '').trim() }; });
+    const rawComponents = Array.isArray(payload.components) ? payload.components.slice(0, 10) : [];
+    const raw3dpModes = Array.isArray(payload.three_dp_lines) ? payload.three_dp_lines.slice(0, 10) : [];
+    const componentRequested = rawComponents.length > 0;
+    const fixtureRequested = fixtureLines.length > 0;
+    const requestId = String(payload.request_id || '').trim();
+    if ((componentRequested || fixtureRequested || raw3dpModes.length) && !/^[A-Za-z0-9_-]{8,80}$/.test(requestId)) throw new Error('valid request_id required for component, fixture, or 3D mode update');
+    const requestState = requestId ? orderUpdateRequestState_(ss, order, requestId) : { component: false, fixture: false, marker: '' };
+    const componentPlan = requestState.component ? { ok: true, entries: [], prro_total: 0, mgmt_total: 0 } : buildOrderComponentPlan_(ss, rawComponents);
+    if (!componentPlan.ok) throw new Error(componentPlan.error);
+    componentPlan.entries.forEach(function(item) {
+      if (!item.targetRow && !item.targetSku) return;
+      const target = matches.filter(function(match) { return match.row === item.targetRow; })[0];
+      if (!item.targetRow || !item.targetSku || !target || String(target.values[5] || '').trim() !== item.targetSku) throw new Error('Ціль компонента має бути або порожня для всього замовлення, або точний рядок замовлення.');
+    });
+    const fixturePlan = requestState.fixture ? { ok: true, entries: [], warning: '', ledger_source: 'Коригування' } : build3dpLineFixtureUsagePlan_(ss, fixtureLines, matches);
+    if (!fixturePlan.ok) throw new Error(fixturePlan.error);
+    const modeMap = {};
+    raw3dpModes.forEach(function(item) {
+      const targetRow = Math.floor(num_(item && item.crm_row));
+      const mode = String(item && item.mode || '').trim();
+      const target = matches.filter(function(match) { return match.row === targetRow && is3dpPackagingSku_(match.values[5]); })[0];
+      if (!target) throw new Error('3D-режим посилається на відсутній рядок замовлення.');
+      if (mode !== 'Продаж' && mode !== 'Маркетинг') throw new Error('3D-режим має бути Продаж або Маркетинг.');
+      modeMap[targetRow] = mode;
+    });
+    const paymentStatus = String(payload.payment_status || '').trim();
+    const orderStatus = String(payload.order_status || '').trim();
+    const ttn = String(payload.ttn || '').trim();
+    const packagingType = String(payload.packaging_type || '').trim();
+    const hasNote = Object.prototype.hasOwnProperty.call(payload, 'note');
+    const note = normalizeRepeatedExactNote_(payload.note);
+    const noteChanged = hasNote && note !== String(current[26] || '').trim();
+    const mutationNote = [note, requestState.marker].filter(Boolean).join('; ');
+    const paymentChanged = paymentStatus && paymentStatus !== String(current[22] || '').trim();
+    const orderChanged = orderStatus && orderStatus !== String(current[23] || '').trim();
+    const ttnChanged = Object.prototype.hasOwnProperty.call(payload, 'ttn') && ttn !== String(current[25] || '').trim();
+    const packagingChanged = packagingType && packagingType !== String(current[28] || '').trim();
+    const hasCustomPackaging = Object.prototype.hasOwnProperty.call(payload, 'custom_packaging_cost') && String(payload.custom_packaging_cost) !== '';
+    const packaging = packagingChanged || hasCustomPackaging ? getPackagingCost_(packagingType, payload.custom_packaging_cost) : null;
+    const hasDelivery = Object.prototype.hasOwnProperty.call(payload, 'shop_delivery') && String(payload.shop_delivery) !== '';
+    const shopDelivery = hasDelivery ? Math.max(0, apiNum_(payload.shop_delivery)) : null;
+    if (!paymentChanged && !orderChanged && !ttnChanged && packaging === null && shopDelivery === null && !noteChanged && !componentRequested && !fixtureRequested && !raw3dpModes.length) throw new Error('nothing changed');
+    const weights = orderRowWeights_(sales, rows);
+    const packagingAllocations = packaging === null ? [] : allocateAmount_(packaging, weights);
+    const deliveryAllocations = shopDelivery === null ? [] : allocateAmount_(shopDelivery, weights);
+    const costRunState = {};
+    progress.fields_updated = paymentChanged || orderChanged || ttnChanged || packaging !== null || shopDelivery !== null || noteChanged;
+    rows.forEach(function(row, index) {
+      if (paymentChanged) sales.getRange(row, 23).setValue(paymentStatus);
+      if (orderChanged) sales.getRange(row, 24).setValue(orderStatus);
+      if (ttnChanged) sales.getRange(row, 26).setValue(ttn);
+      if (packaging !== null) { sales.getRange(row, 16).setValue(packagingAllocations[index]); sales.getRange(row, 29).setValue(packagingType); }
+      if (shopDelivery !== null) sales.getRange(row, 20).setValue(deliveryAllocations[index]);
+      if (noteChanged) sales.getRange(row, 27).setValue(note);
+      fixSaleCostForRow_(ss, row, costRunState, { clearPending: false });
+    });
+    if (componentPlan.entries.length) {
+      const threeDpGiftWrite = append3dpOrderGifts_(componentPlan, current[2], order, requestId);
+      progress.three_dp_gifts_written = threeDpGiftWrite.rows_added || 0;
+      const written = appendOrderComponents_(ss, componentPlan, current[2], order, mutationNote);
+      progress.components_written = written.rows_added;
+    }
+    if (fixturePlan.entries.length) {
+      const written = append3dp019FixtureUsage_(ss, fixturePlan, current[2], fixturePlan.ledger_source, order, mutationNote);
+      progress.fixtures_written = written.rows_added;
+    }
+    const syncResult = sync3dpPackagingCost_(sales, order, rows, 'apiUpdateSale_', { modes: modeMap, request_id: requestId });
+    if (syncResult && syncResult.accounting_rows) progress.cost_updated = true;
+    // Apply general components after the 3D base-cost projection. Otherwise a targeted component
+    // on a 3D line would be overwritten by the freshly calculated Sale/Marketing cost.
+    SpreadsheetApp.flush();
+    const componentCost = ss.getSheetByName(CRM_ORDER_COMPONENT_USAGE_SHEET_)
+      ? applyOrderComponentCost_(ss, order, rows)
+      : { rows_updated: 0 };
+    if (componentCost.rows_updated) {
+      updateSkuCurrentCost_(ss);
+      progress.cost_updated = true;
+    }
+    invalidateDoGetCache_();
+    return { ok: true, row_index: rowIndex, order_id: order, rows_updated: rows.length, components_written: progress.components_written, fixtures_written: progress.fixtures_written, three_dp_gifts_written: progress.three_dp_gifts_written, component_prro_total: componentPlan.prro_total, component_mgmt_total: componentPlan.mgmt_total, fixture_warning: fixturePlan.warning || '', accounting: syncResult || null, already_applied: requestState.component || requestState.fixture, partial: !!(syncResult && syncResult.ok === false), retry_action: syncResult && syncResult.ok === false ? 'retry_3dp_sync' : '', error: syncResult && syncResult.ok === false ? 'Не всі 3D-рядки синхронізовано' : '' };
+  } catch (err) {
+    const changed = progress.fields_updated || progress.components_written || progress.fixtures_written || progress.three_dp_gifts_written || progress.cost_updated;
+    return { ok: changed, partial: changed, retry_action: changed ? 'resubmit_order_update' : '', error: String(err && err.message ? err.message : err), detail: progress };
+  }
+}
+
+function apiRetry3dpOrderSync_(ss, payload) {
+  try {
+    resetMemoForMutation_();
+    const sales = ss.getSheetByName('Продажі');
+    if (!sales) throw new Error('sales sheet missing');
+    const rowIndex = Math.floor(apiNum_(payload.row_index));
+    if (rowIndex < 3 || rowIndex > sales.getLastRow()) throw new Error('invalid row_index');
+    const order = String(sales.getRange(rowIndex, 1).getValue() || '').trim();
+    if (!order) throw new Error('sale row is empty');
+    const rows = [rowIndex];
+    for (let row = rowIndex - 1; row >= 3; row--) { if (String(sales.getRange(row, 1).getValue() || '').trim() !== order) break; rows.unshift(row); }
+    for (let row = rowIndex + 1; row <= sales.getLastRow(); row++) { if (String(sales.getRange(row, 1).getValue() || '').trim() !== order) break; rows.push(row); }
+    const requestId = String(payload.request_id || '').trim();
+    if (!/^[A-Za-z0-9_-]{8,80}$/.test(requestId)) throw new Error('valid request_id required');
+    const result = sync3dpPackagingCost_(sales, order, rows, 'apiRetry3dpOrderSync_', { request_id: requestId });
+    SpreadsheetApp.flush();
+    invalidateDoGetCache_();
+    const failureDetail = result && result.failures && result.failures.length
+      ? result.failures.map(function(item) { return item.crm_row + ' — ' + item.detail; }).join(' | ')
+      : '';
+    return { ok: !!(result && result.ok), partial: !!(result && result.ok === false), order_id: order, rows_checked: rows.length, accounting: result || null, error: result && result.ok === false ? ('Не всі 3D-рядки синхронізовано' + (failureDetail ? ': ' + failureDetail : '')) : '' };
+  } catch (err) {
+    return { ok: false, partial: false, error: String(err && err.message ? err.message : err) };
+  }
 }

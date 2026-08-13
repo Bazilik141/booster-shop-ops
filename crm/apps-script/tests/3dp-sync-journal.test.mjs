@@ -61,6 +61,13 @@ function journalRows(spreadsheet) {
   return sheet.getRange(2, 1, sheet.getLastRow() - 1, 7).getValues();
 }
 
+function addFixtureLedgerRows(spreadsheet, rows) {
+  const ledger = spreadsheet.insertSheet("Використання_фурнітури");
+  ledger.getRange(1, 1, 1, 11).setValues([["ID", "Дата", "Джерело", "Посилання", "Фурнітура", "Платник", "Кількість", "Ціна", "Сума", "Примітка", "timestamp"]]);
+  ledger.getRange(2, 1, rows.length, 11).setValues(rows);
+  return ledger;
+}
+
 function makeEnvironment(options = {}) {
   const spreadsheet = new MockSpreadsheet();
   const properties = {
@@ -74,8 +81,12 @@ function makeEnvironment(options = {}) {
     existingRows: options.existingRows || [],
     nomenclatureRows: options.nomenclatureRows || {},
     nomenclatureFailures: options.nomenclatureFailures || {},
+    writeFailures: options.writeFailures || {},
+    writeFailuresOnce: Object.assign({}, options.writeFailuresOnce || {}),
     stockAlreadyApplied: !!options.stockAlreadyApplied,
     negativeStock: !!options.negativeStock,
+    transient404: Number(options.transient404 || 0),
+    fetches: 0,
     appendPayloads: [],
     writePayloads: [],
   };
@@ -84,16 +95,24 @@ function makeEnvironment(options = {}) {
     JSON, Math, Number, String, Boolean, Array, Object, RegExp, Date, Error, isFinite,
     Logger: { log: (line) => logs.push(String(line)) },
     Session: { getScriptTimeZone: () => "Europe/Kyiv" },
-    Utilities: { formatDate: (value) => value && typeof value.getTime === "function" && value.getTime() === Date.parse("2026-08-08T12:47:22.000Z") ? "2026-08-08 15:47:22" : "2026-08-08 12:00:00" },
+    Utilities: { formatDate: (value) => value && typeof value.getTime === "function" && value.getTime() === Date.parse("2026-08-08T12:47:22.000Z") ? "2026-08-08 15:47:22" : "2026-08-08 12:00:00", sleep(){} },
     PropertiesService: { getScriptProperties: () => ({ getProperty: (key) => properties[key] || "" }) },
-    SpreadsheetApp: { openById: () => spreadsheet },
+    SpreadsheetApp: { getActive: () => spreadsheet, openById: () => spreadsheet },
     ContentService: { MimeType: { JSON: "JSON" }, createTextOutput: (text) => ({ text, setMimeType() { return this; } }) },
     UrlFetchApp: {
       fetch: (url, request = {}) => {
+        remote.fetches += 1;
+        if (remote.transient404 > 0) { remote.transient404 -= 1; return { getResponseCode: () => 404, getContentText: () => "<html>not found</html>" }; }
         if (remote.outage) throw new Error("Request failed for https://3dp.example/exec?token=3dp-sync-token");
         const body = request.method === "post" ? JSON.parse(request.payload) : null;
         const action = body ? body.action : new URL(url).searchParams.get("action");
-        if (action === "3dp_get_range") return response({ ok: true, values: [remote.schemaReady ? ["CRM row number", "РРЦ на момент продажу, грн", "Вартість фурнітури за од., грн (заморожена)", "Платник фурнітури"] : ["wrong header"]] });
+        if (action === "3dp_get_range") {
+          const requestedRange = body ? body.range : new URL(url).searchParams.get("range");
+          const headers = requestedRange === "T1:AA1"
+            ? ["CRM row number", "РРЦ на момент продажу, грн", "Вартість фурнітури за од., грн (заморожена)", "Платник фурнітури", "Режим CRM", "Фурнітура власника за од., грн (заморожена)", "Фурнітура Сергія за од., грн (заморожена)", "Ціна викупу за од., грн (заморожена)"]
+            : ["CRM row number", "РРЦ на момент продажу, грн", "Вартість фурнітури за од., грн (заморожена)", "Платник фурнітури"];
+          return response({ ok: true, values: [remote.schemaReady ? headers : ["wrong header"]] });
+        }
         if (action === "3dp_sales") return response({ ok: true, rows: remote.existingRows });
         if (action === "3dp_stock_adjustments") return response({ ok: true, rows: remote.stockAlreadyApplied ? [{ "Причина": new URL(url).searchParams.get("reason") }] : [] });
         if (action === "3dp_get_row") {
@@ -101,18 +120,34 @@ function makeEnvironment(options = {}) {
           if (params.get("sheet") === "Номенклатура") {
             const sku = params.get("sku");
             if (remote.nomenclatureFailures[sku]) return response({ ok: false, code: remote.nomenclatureFailures[sku] });
-            return response({ ok: true, row: remote.nomenclatureRows[sku] || { "Собівартість Сергія (виробнича), грн": 12.5, "РРЦ фактична, грн": 99, "Фурнітура (ціна-довідка), грн/шт": 4 } });
+            return response({ ok: true, row: remote.nomenclatureRows[sku] || { "Собівартість Сергія (виробнича), грн": 12.5, "РРЦ фактична, грн": 99, "Ціна під викуп, грн": 20, "% прибутку Сергію": 0.5, "Фурнітура (ціна-довідка), грн/шт": 4 } });
           }
           return response({ ok: true, row: { "Наявно зараз, шт": 10 } });
         }
         if (action === "3dp_append_row") { remote.appendPayloads.push(body); return response({ ok: true, row: 20 }); }
-        if (action === "3dp_write") { remote.writePayloads.push(body); return response({ ok: true }); }
+        if (action === "3dp_write") {
+          remote.writePayloads.push(body);
+          if (remote.writeFailuresOnce[body.column]) {
+            const failure = remote.writeFailuresOnce[body.column];
+            delete remote.writeFailuresOnce[body.column];
+            const row = remote.existingRows.find((item) => Number(item.row_number) === Number(body.sku_or_row));
+            if (row && failure.current !== undefined) row[failure.header] = failure.current;
+            return response({ ok: false, code: failure.code });
+          }
+          if (remote.writeFailures[body.column]) return response({ ok: false, code: remote.writeFailures[body.column] });
+          const row = remote.existingRows.find((item) => Number(item.row_number) === Number(body.sku_or_row));
+          if (row) {
+            const headers = { H: "% прибутку Сергію", V: "Вартість фурнітури за од., грн (заморожена)", W: "Платник фурнітури", X: "Режим CRM", Y: "Фурнітура власника за од., грн (заморожена)", Z: "Фурнітура Сергія за од., грн (заморожена)", AA: "Ціна викупу за од., грн (заморожена)" };
+            if (headers[body.column]) row[headers[body.column]] = body.value;
+          }
+          return response({ ok: true });
+        }
         if (action === "3dp_adjust_stock") return response({ ok: true, new_value: remote.negativeStock ? -1 : 9, warning: remote.negativeStock ? "insufficient_stock" : null });
         throw new Error("unexpected 3D-P action " + action);
       },
     },
   });
-  vm.runInContext(`${code}\nglobalThis.__test = { sync3dpSales_, sync3dpPackagingCost_, is3dpPackagingSku_, crm3dpAppendJournal_, crm3dpSanitizeJournalDetail_, apiSyncJournal_, doGet };`, context, { filename: codePath });
+  vm.runInContext(`${code}\nglobalThis.__test = { sync3dpSales_, sync3dpPackagingCost_, is3dpPackagingSku_, crm3dpAppendJournal_, crm3dpSanitizeJournalDetail_, crm3dpFetchJson_, crm3dpWriteFrozenForExistingSale_, apiSyncJournal_, doGet };`, context, { filename: codePath });
   return { context, spreadsheet, properties, remote, logs };
 }
 
@@ -135,7 +170,41 @@ assert.doesNotMatch(fs.readFileSync(path.resolve(here, "../../../3d-print/apps-s
 }
 
 {
+  const env = makeEnvironment({ transient404: 1 });
+  const result = env.context.__test.crm3dpFetchJson_("https://3dp.example/exec?action=3dp_sales", { method: "get" });
+  assert.equal(result.ok, true);
+  assert.equal(env.remote.fetches, 2, "one transient 404 is retried exactly once");
+}
+
+{
+  const ownerFixtureHeader = "Фурнітура власника за од., грн (заморожена)";
+  const existing = {
+    row_number: 20,
+    "% прибутку Сергію": 0.5,
+    "Вартість фурнітури за од., грн (заморожена)": 4,
+    "Платник фурнітури": "власник",
+    "Режим CRM": "Продаж",
+    [ownerFixtureHeader]: 4,
+    "Фурнітура Сергія за од., грн (заморожена)": 0,
+    "Ціна викупу за од., грн (заморожена)": 20,
+  };
+  const env = makeEnvironment({
+    existingRows: [existing],
+    writeFailuresOnce: { Y: { code: "STALE_WRITE", header: ownerFixtureHeader, current: 5 } },
+  });
+  const result = env.context.__test.crm3dpWriteFrozenForExistingSale_(env.context.crm3dpConfig_(), existing, {
+    profit_share: 0.5, fixture_cost: 16.03, fixture_payer: "власник", mode: "Продаж",
+    owner_fixture_per_unit: 16.03, serhiy_fixture_per_unit: 0, buyout: 20,
+  });
+  assert.equal(result.ok, true, "one stale frozen field is refreshed and completed inside the same sync");
+  assert.match(result.detail, /V updated; W current; X current; Y refreshed and updated/);
+  assert.deepEqual(env.remote.writePayloads.filter((payload) => payload.column === "Y").map((payload) => payload.expected_current), [4, 5]);
+  assert.equal(existing[ownerFixtureHeader], 16.03);
+}
+
+{
   const env = makeEnvironment();
+  addFixtureLedgerRows(env.spreadsheet, [["FUR-USE-00001", "2026-08-11", "Продаж", "OC-FOP-ACC-001", "тест", "власник", 1, 4, 4, "", ""]]);
   const sales = new MockSales(env.spreadsheet, new Map([[3, saleRow('ACC-3D-DITTO-410')]]));
   const result = env.context.__test.sync3dpSales_(sales, 'OC-FOP-ACC-001', [3], 'apiAddSale_');
   assert.equal(result.ok, true);
@@ -145,6 +214,71 @@ assert.doesNotMatch(fs.readFileSync(path.resolve(here, "../../../3d-print/apps-s
   assert.equal(env.remote.appendPayloads[0].values.U, 99);
   assert.equal(env.remote.appendPayloads[0].values.V, 4);
   assert.equal(env.remote.appendPayloads[0].values.W, 'власник');
+}
+
+{
+  const env = makeEnvironment();
+  addFixtureLedgerRows(env.spreadsheet, [["FUR-USE-00001", "2026-08-11", "Продаж", "OC-FOP-FIXTURE-ERROR", "тест", "", 1, 4, 4, "", ""]]);
+  const sales = new MockSales(env.spreadsheet, new Map([[3, saleRow('FIG-CHARM-001')]]));
+  const result = env.context.__test.sync3dpSales_(sales, 'OC-FOP-FIXTURE-ERROR', [3], 'apiAddSale_');
+  assert.equal(result.ok, false);
+  assert.equal(env.remote.appendPayloads.length, 0);
+  assert.equal(journalRows(env.spreadsheet)[0][5], 'skipped_fixture_allocation');
+  assert.match(journalRows(env.spreadsheet)[0][6], /PAYER/);
+}
+
+{
+  const env = makeEnvironment();
+  addFixtureLedgerRows(env.spreadsheet, [["FUR-USE-00001", "2026-08-11", "Продаж", "OC-FOP-FIXTURE-ZERO", "тест", "власник", 1, 4, 4, "", ""]]);
+  const sales = new MockSales(env.spreadsheet, new Map([[3, saleRow('FIG-CHARM-001', 0)]]));
+  const result = env.context.__test.sync3dpSales_(sales, 'OC-FOP-FIXTURE-ZERO', [3], 'apiAddSale_');
+  assert.equal(result.ok, false);
+  assert.equal(env.remote.appendPayloads.length, 0);
+  assert.equal(journalRows(env.spreadsheet)[0][5], 'skipped_fixture_allocation');
+  assert.match(journalRows(env.spreadsheet)[0][6], /ZERO_UNITS/);
+}
+
+{
+  const env = makeEnvironment({ stockAlreadyApplied: true, existingRows: [{
+    row_number: 20, '№ замовлення': 'OC-FOP-CORRECTION', 'CRM row number': 3,
+    'Витрати BoosterShop за од., грн': 10,
+    'Вартість фурнітури за од., грн (заморожена)': 4,
+    'Платник фурнітури': 'власник',
+  }] });
+  addFixtureLedgerRows(env.spreadsheet, [
+    ["FUR-USE-00001", "2026-08-11", "Продаж", "OC-FOP-CORRECTION", "тест", "власник", 2, 4, 8, "", ""],
+    ["FUR-USE-00002", "2026-08-11", "Коригування", "OC-FOP-CORRECTION", "тест", "власник", -2, 4, -8, "", ""],
+  ]);
+  const sales = new MockSales(env.spreadsheet, new Map([[3, saleRow('FIG-CHARM-001')]]));
+  const result = env.context.__test.sync3dpSales_(sales, 'OC-FOP-CORRECTION', [3], 'updateSaleStatus');
+  assert.equal(result.ok, true);
+  assert.equal(result.created, 0);
+  assert.deepEqual(env.remote.writePayloads.map((payload) => [payload.column, payload.value, payload.expected_current]), [
+    ['V', 0, 4], ['W', '', 'власник'],
+  ]);
+  assert.match(journalRows(env.spreadsheet)[0][6], /Frozen fixture update: V updated; W updated/);
+}
+
+{
+  const existingRow = {
+    row_number: 20, '№ замовлення': 'OC-FOP-PARTIAL', 'CRM row number': 3,
+    'Витрати BoosterShop за од., грн': 10,
+    'Вартість фурнітури за од., грн (заморожена)': 4,
+    'Платник фурнітури': 'власник',
+  };
+  const env = makeEnvironment({ stockAlreadyApplied: true, writeFailures: { W: 'TEST_W_FAILURE' }, existingRows: [existingRow] });
+  addFixtureLedgerRows(env.spreadsheet, [
+    ["FUR-USE-00001", "2026-08-11", "Продаж", "OC-FOP-PARTIAL", "тест", "власник", 2, 4, 8, "", ""],
+    ["FUR-USE-00002", "2026-08-11", "Коригування", "OC-FOP-PARTIAL", "тест", "власник", -2, 4, -8, "", ""],
+  ]);
+  const sales = new MockSales(env.spreadsheet, new Map([[3, saleRow('FIG-CHARM-001')]]));
+  const result = env.context.__test.sync3dpSales_(sales, 'OC-FOP-PARTIAL', [3], 'updateSaleStatus');
+  assert.equal(result.ok, true, 'CRM correction remains fail-open after a partial remote write');
+  assert.deepEqual(env.remote.writePayloads.map((payload) => [payload.column, payload.value]), [['V', 0], ['W', '']]);
+  assert.equal(existingRow['Вартість фурнітури за од., грн (заморожена)'], 0, 'V was persisted before W failed');
+  assert.equal(existingRow['Платник фурнітури'], 'власник', 'W remains unchanged after its failed write');
+  assert.equal(journalRows(env.spreadsheet)[0][5], 'warning_fixture_update');
+  assert.match(journalRows(env.spreadsheet)[0][6], /V updated; W update failed/);
 }
 
 {
