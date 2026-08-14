@@ -824,13 +824,15 @@ const accountingState = {
 };
 const ORDER_EDIT_PENDING_KEY = 'booster_order_edit_pending_v1';
 
-function orderEditPayloadSignature_(payload) {
-  const stable=JSON.stringify({row_index:payload.row_index,payment_status:payload.payment_status,order_status:payload.order_status,ttn:payload.ttn,packaging_type:payload.packaging_type,note:payload.note,custom_packaging_cost:payload.custom_packaging_cost,shop_delivery:payload.shop_delivery,components:payload.components,fixtures:payload.fixtures,three_dp_lines:payload.three_dp_lines});
+function orderEditPayloadSignatureForPackaging_(payload,packagingType) {
+  const stable=JSON.stringify({row_index:payload.row_index,payment_status:payload.payment_status,order_status:payload.order_status,ttn:payload.ttn,packaging_type:packagingType,note:payload.note,custom_packaging_cost:payload.custom_packaging_cost,shop_delivery:payload.shop_delivery,components:payload.components,fixtures:payload.fixtures,three_dp_lines:payload.three_dp_lines});
   let hash=2166136261;for(let index=0;index<stable.length;index++){hash^=stable.charCodeAt(index);hash=Math.imul(hash,16777619);}return String(hash>>>0);
 }
+function orderEditPayloadSignature_(payload){return orderEditPayloadSignatureForPackaging_(payload,canonicalPackagingType(payload.packaging_type));}
+function legacyOrderEditPayloadSignature_(payload){return orderEditPayloadSignatureForPackaging_(payload,String(payload.packaging_type||'').replace(/x/g,'х'));}
 function pendingOrderEditRequestId_(order,payload) {
-  const signature=orderEditPayloadSignature_(payload);let pending={};try{pending=JSON.parse(localStorage.getItem(ORDER_EDIT_PENDING_KEY)||'{}')||{};}catch(e){}
-  if(pending.order===order&&pending.signature===signature&&/^[A-Za-z0-9_-]{8,80}$/.test(String(pending.request_id||'')))return pending.request_id;
+  const signature=orderEditPayloadSignature_(payload),legacySignature=legacyOrderEditPayloadSignature_(payload);let pending={};try{pending=JSON.parse(localStorage.getItem(ORDER_EDIT_PENDING_KEY)||'{}')||{};}catch(e){}
+  if(pending.order===order&&(pending.signature===signature||pending.signature===legacySignature)&&/^[A-Za-z0-9_-]{8,80}$/.test(String(pending.request_id||'')))return pending.request_id;
   const requestId='dashboard-'+Date.now()+'-'+Math.random().toString(36).slice(2,10);localStorage.setItem(ORDER_EDIT_PENDING_KEY,JSON.stringify({order:order,signature:signature,request_id:requestId}));return requestId;
 }
 function clearPendingOrderEdit_(requestId) { try{const pending=JSON.parse(localStorage.getItem(ORDER_EDIT_PENDING_KEY)||'{}')||{};if(!requestId||pending.request_id===requestId)localStorage.removeItem(ORDER_EDIT_PENDING_KEY);}catch(e){} }
@@ -2833,11 +2835,11 @@ const ROADMAP_TASKS = [
     subtasks: []
   },
   {
-    id: 'CRM-004', title: 'Валідації в основній CRM: Паковання + список SKU', status: 'todo', tool: 'Claude → executor', priority: 'Medium',
-    lastUpdated: '2026-08-07', blockedBy: [],
+    id: 'CRM-004', title: 'Валідації в основній CRM: Паковання + список SKU', status: 'done', tool: 'Codex', priority: 'Medium',
+    lastUpdated: '2026-08-14', blockedBy: [],
     simple: 'Дві помилки налаштування валідації в основній CRM: у випадному списку «Паковання» зʼявляється назва товару, а нові SKU дають попередження «Недійсне значення».',
     why: 'Обидві заважають нормально працювати з формою Оновити_продаж і повторюватимуться на кожному новому SKU.',
-    warn: '2026-08-07: заведено з Finding 10 (diagnostics/3D-P_live-schema-audit_20260803.md, датовано 04.08). Це помилки КОНФІГУРАЦІЇ, не скрипта: source range валідації B12 перетинається з даними товарів. Попередження на SKU лише warning-only, значення все одно записуються, синхронізацію не блокує. НЕ складати з 3D-P-014/015 — інша система, інший радіус ураження.',
+    warn: '2026-08-07: заведено з Finding 10 (diagnostics/3D-P_live-schema-audit_20260803.md, датовано 04.08). Це помилки КОНФІГУРАЦІЇ, не скрипта: source range валідації B12 перетинається з даними товарів. Попередження на SKU лише warning-only, значення все одно записуються, синхронізацію не блокує. НЕ складати з 3D-P-014/015 — інша система, інший радіус ураження. || 2026-08-14: Done, задеплоєно як CRM Apps Script Web App version 120 (2026-08-14 16:25), live QA власника пройдено. У цьому ж деплої підзадача без окремого Roadmap ID — розблокування імпорту тестових OpenCart-замовлень (isIgnoredOpenCartOrder_ більше не глушить owner/test-ідентичність). Звіти: diagnostics/CRM-004_packaging-validation_report_20260814.md, diagnostics/CRM_opencart-test-order-import_report_20260814.md. Notion CRM-004 синхронізовано в цій же сесії.',
     subtasks: []
   },
   {
@@ -3549,7 +3551,10 @@ const PURCHASE_CHANNELS = [
 ];
 const PURCHASE_STATUSES = ['Замовлено','В дорозі','На складі UA','Скасовано'];
 const WRITEOFF_TYPES = ['Власне відкриття','Подарунок','Промо','Брак','Тест','Втрата','Інше'];
-const PACKAGING_TYPES = ['',"Мала м'яка 14х12 см",'Середня м\'яка 16х14 см','Велика пакет 17х30 см','Конверт Airpock 14х22 см','Інше'];
+// Must match CRM_PACKAGING_TYPES_ in crm/apps-script/Code.gs. ASCII x avoids a
+// visually identical Cyrillic х from becoming a different Google Sheets value.
+const PACKAGING_TYPES = ['',"Мала м'яка 14x12 см",'Середня м\'яка 16x14 см','Велика пакет 17x30 см','Конверт Airpock 14x22 см','Інше'];
+function canonicalPackagingType(value){const raw=String(value==null?'':value).trim(),key=raw.replace(/[’`]/g,"'").replace(/[хx]/g,'x').replace(/\s+/g,' ').toLowerCase();return PACKAGING_TYPES.find(function(item){return String(item).replace(/[’`]/g,"'").replace(/[хx]/g,'x').replace(/\s+/g,' ').toLowerCase()===key;})||raw;}
 
 function formSelect(id, options, value, attrs) {
   let html = '<select id="' + id + '"' + (attrs ? ' ' + attrs : '') + '>';
@@ -4039,7 +4044,7 @@ async function openEditRow(type, rowIndex) {
     fields += recReadOnly('Поточний статус замовлення', row.order_status);
     fields += recSelect('editOrderStatus','Новий статус замовлення',row.order_status,['Нове','В обробці','Відправлено','Отримано','Скасовано','Повернення','Передзамовлення']);
     fields += recField('editTtn','ТТН',row.ttn);
-    fields += recSelect('editPackagingType','Паковання',row.packaging_type,['',"Мала м'яка 14х12 см",'Середня м\'яка 16х14 см','Велика пакет 17х30 см','Конверт Airpock 14х22 см','Інше']);
+    fields += recSelect('editPackagingType','Паковання',canonicalPackagingType(row.packaging_type),PACKAGING_TYPES);
     fields += recField('editCustomPackaging','Якщо Інше, грн','','number','0.01');
     fields += recField('editShopDelivery','Доставка за рахунок магазину',row.shop_delivery || '','number','0.01');
     fields += recField('editNote','Примітка',row.note);
