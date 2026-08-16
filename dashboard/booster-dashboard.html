@@ -3239,10 +3239,10 @@ const ROADMAP_TASKS = [
   },
   {
     id: 'SEO-008', title: 'Семантичне ядро: карта «ключ → сторінка»', status: 'todo', tool: 'Claude (bs-keyword-map)', priority: 'High',
-    lastUpdated: '2026-08-13', blockedBy: [],
+    lastUpdated: '2026-08-16', blockedBy: [],
     simple: 'Один список: яка сторінка під який пошуковий запит заточена. Один головний ключ — одна сторінка, щоб наші ж сторінки не конкурували між собою в Google.',
     why: 'Такої карти зараз немає взагалі — в AGENTS.md рядок Keyword map location стоїть TBD, тому перевірка канібалізації в скілах bs-content-brief / bs-content-qa / bs-3dp-card-qa формально є, а виконати її немає по чому.',
-    warn: '2026-08-13 ЗАВЕДЕНО за прямою вказівкою власника під час QA першої партії карток 3D-друку (вісім SKU серії BR-). ЗНАЙДЕНО ЖИВЦЕМ: «брелок One Piece» стоїть у supporting-ключах чотирьох різних товарних карток, «брелок Pokémon» — двох, «аксесуари Pokémon/One Piece» — наскрізно по всій партії. Це ключі категорійних сторінок (Pokémon → 3D-вироби, Аксесуари → 3D-вироби), за які зараз конкурують товарні сторінки між собою і з самою категорією. На восьми картках керовано, на 34 SKU printable-партії — ні. || ОБСЯГ: інвентаризація сторінок → один primary-ключ на сторінку → розділення рівнів (головні терми категоріям, лонг-тейл товарам) → двоалфавітність (Чармандер/Charmander, Дітто/Ditto, Покебол/Pokeball як РІЗНІ запити, а не синоніми) → комерційні модифікатори (купити / Україна / доставка / подарунок) → файл plans/keyword-map_<YYYYMMDD>.md + оновлення рядка Keyword map location в AGENTS.md. || ⚠ ЧАСТОТНІСТЬ І СКЛАДНІСТЬ НЕ ВИГАДУВАТИ: доступ до Search Console в AGENTS.md стоїть TBD. Без підтвердженого джерела даних карта будується як структура пріоритетів, а не таблиця обсягів. || Задача нічого не публікує і не змінює сторінки — зміни в мета-даних і текстах ідуть окремими задачами. Блокує масштабне наповнення карток 3D-друку (3D-P-CARDCONTENT) за межами першої партії. Notion: 3bb6bf20-bdb4-8129-8f63-dd6a8745ec88',
+    warn: '2026-08-16 ЗАВЕДЕНО за прямою вказівкою власника під час QA першої партії карток 3D-друку (вісім SKU серії BR-). ЗНАЙДЕНО ЖИВЦЕМ: «брелок One Piece» стоїть у supporting-ключах чотирьох різних товарних карток, «брелок Pokémon» — двох, «аксесуари Pokémon/One Piece» — наскрізно по всій партії. Це ключі категорійних сторінок (Pokémon → 3D-вироби, Аксесуари → 3D-вироби), за які зараз конкурують товарні сторінки між собою і з самою категорією. На восьми картках керовано, на 34 SKU printable-партії — ні. || ОБСЯГ: інвентаризація сторінок → один primary-ключ на сторінку → розділення рівнів (головні терми категоріям, лонг-тейл товарам) → двоалфавітність (Чармандер/Charmander, Дітто/Ditto, Покебол/Pokeball як РІЗНІ запити, а не синоніми) → комерційні модифікатори (купити / Україна / доставка / подарунок) → файл plans/keyword-map_<YYYYMMDD>.md + оновлення рядка Keyword map location в AGENTS.md. || ⚠ ЧАСТОТНІСТЬ І СКЛАДНІСТЬ НЕ ВИГАДУВАТИ: доступ до Search Console в AGENTS.md стоїть TBD. Без підтвердженого джерела даних карта будується як структура пріоритетів, а не таблиця обсягів. || Задача нічого не публікує і не змінює сторінки — зміни в мета-даних і текстах ідуть окремими задачами. Блокує масштабне наповнення карток 3D-друку (3D-P-CARDCONTENT) за межами першої партії. Notion: 3bb6bf20-bdb4-8129-8f63-dd6a8745ec88',
     subtasks: []
   },
   { id: 'SEO-CRIT-001', title: 'SEO: тексти, заголовки і FAQ — перший прохід', status: 'done', tool: 'Claude + Codex', priority: 'High', lastUpdated: '2026-06-07', blockedBy: [],
@@ -3550,6 +3550,7 @@ const PURCHASE_CHANNELS = [
   ['other','Інше']
 ];
 const PURCHASE_STATUSES = ['Замовлено','В дорозі','На складі UA','Скасовано'];
+const PURCHASE_BATCH_LIMIT = 10;
 const WRITEOFF_TYPES = ['Власне відкриття','Подарунок','Промо','Брак','Тест','Втрата','Інше'];
 // Must match CRM_PACKAGING_TYPES_ in crm/apps-script/Code.gs. ASCII x avoids a
 // visually identical Cyrillic х from becoming a different Google Sheets value.
@@ -4134,11 +4135,11 @@ function togglePurchaseLot(rowIndex, checked) {
     if (msg) { msg.textContent = 'Batch update доступний тільки для ZenMarket JP лотів'; msg.className = 'records-message error'; }
     return;
   }
-  if (checked && Object.keys(accountingState.selectedPurchaseLots).length >= 5) {
+  if (checked && Object.keys(accountingState.selectedPurchaseLots).length >= PURCHASE_BATCH_LIMIT) {
     const checkbox = document.getElementById('lotCheck' + rowIndex);
     if (checkbox) checkbox.checked = false;
     const msg = document.getElementById('recordsMsg');
-    if (msg) { msg.textContent = 'Можна вибрати не більше 5 лотів'; msg.className = 'records-message error'; }
+    if (msg) { msg.textContent = 'Можна вибрати не більше ' + PURCHASE_BATCH_LIMIT + ' лотів'; msg.className = 'records-message error'; }
     return;
   }
   if (checked) accountingState.selectedPurchaseLots[rowIndex] = row;
@@ -4151,7 +4152,7 @@ function renderPurchaseBatchEditor() {
   if (!host) return;
   const rows = Object.keys(accountingState.selectedPurchaseLots).map(function(key) { return accountingState.selectedPurchaseLots[key]; });
   if (!rows.length) {
-    host.innerHTML = '<div class="records-message">Вибери від 1 до 5 лотів для спільного оновлення.</div>';
+    host.innerHTML = '<div class="records-message">Вибери від 1 до ' + PURCHASE_BATCH_LIMIT + ' лотів для спільного оновлення.</div>';
     return;
   }
   let selected = '<div class="selected-lots">';
@@ -4162,7 +4163,7 @@ function renderPurchaseBatchEditor() {
       Number(row.row_index) + '"></div></div>';
   });
   selected += '</div>';
-  host.innerHTML = '<div class="edit-row-form"><h4>Оновити закупку: вибрано ' + rows.length + ' з 5</h4>' + selected +
+  host.innerHTML = '<div class="edit-row-form"><h4>Оновити закупку: вибрано ' + rows.length + ' з ' + PURCHASE_BATCH_LIMIT + '</h4>' + selected +
     '<div class="edit-row-grid">' +
       recField('batchTrackNumber','Трек-номер','') +
       recField('batchDate','Дата доставки в Україну','','date') +
@@ -4180,7 +4181,7 @@ function clearPurchaseSelection() {
 
 async function savePurchaseBatch() {
   const rows = Object.keys(accountingState.selectedPurchaseLots).map(function(key) { return accountingState.selectedPurchaseLots[key]; });
-  if (!rows.length || rows.length > 5) return;
+  if (!rows.length || rows.length > PURCHASE_BATCH_LIMIT) return;
   const lots = rows.map(function(row) {
     const fee = editValue('lotFee' + row.row_index);
     const item = { lot_id:row.lot_id };
