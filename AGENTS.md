@@ -324,9 +324,31 @@ Checked after every deploy, regardless of how small the patch looked.
 | Cart | `https://boostershop.website/index.php?route=checkout/cart` |
 | Checkout entry | `https://boostershop.website/index.php?route=checkout/checkout` |
 
-Checkout also runs the `pinta_simple_checkout` extension
-(`?route=extension/SimpleCheckout/module/pinta_simple_checkout`) — include it in
-any checkout-touching verification.
+**Checkout runs the stock `checkout/checkout` controller** (modified during the
+redesign). Corrected 2026-08-16 on owner confirmation; the previous wording here
+sent every executor to the wrong file for weeks.
+
+Evidence, today's backup `backup-8.16.2026_08-03-55_boosters.tar.gz`:
+
+- `public_html/system/library/url.php` no longer rewrites `checkout/checkout`.
+  Line 62 is only a comment: *"ST-2c cutover: stock checkout is default;
+  SimpleCheckout remains installed."* The rewrite described in
+  `diagnostics/CHECKOUT-001_phase0_audit_20260703.md` (`url.php:61-65`) is gone.
+- The `SimpleCheckout` extension is nonetheless **still installed and enabled**:
+  `ocp5_extension` id 60 (`SimpleCheckout` / `module` / `pinta_simple_checkout`),
+  `ocp5_extension_install` id 15 (Pinta Webware 1.5.2, status 1), and
+  `module_pinta_simple_checkout_status = 1`.
+
+So: it is out of the request path but not removed. Do **not** treat its presence
+in the file tree, the extension list, or the settings table as evidence that it
+serves checkout — that inference was made on 2026-08-16 and was wrong. Equally,
+do not assume it is inert before checking; disabling or deleting it is its own
+task, with its own smoke test.
+
+Reading older diagnostics: `CHECKOUT-001` (early July) describes the
+SimpleCheckout-era request path and is history, not a map of current code. From
+`CHECKOUT-004` (2026-07-15) onward the reports already say "new checkout" and
+"old/legacy SimpleCheckout" — that wording is current and correct.
 
 ### Logs
 
