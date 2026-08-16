@@ -21,11 +21,12 @@ class Range{
   clearContent(){this.cells().flat().forEach(cell=>{cell.value="";cell.formula="";});return this;}
 }
 class Sheet{
-  constructor(name){this.name=name;this.map=new Map();}
+  constructor(name){this.name=name;this.map=new Map();this.maxRows=201;}
   key(r,c){return `${r}:${c}`;}
   cell(r,c){const key=this.key(r,c);if(!this.map.has(key))this.map.set(key,{value:"",formula:""});return this.map.get(key);}
   getRange(r,c,rows=1,cols=1){if(typeof r==="string"){const match=/^([A-Z]+)(\d+)(?::([A-Z]+)(\d+))?$/.exec(r);if(!match)throw new Error("bad A1: "+r);const col=s=>[...s].reduce((n,ch)=>n*26+ch.charCodeAt(0)-64,0),startCol=col(match[1]),startRow=Number(match[2]),endCol=col(match[3]||match[1]),endRow=Number(match[4]||match[2]);return new Range(this,startRow,startCol,endRow-startRow+1,endCol-startCol+1);}return new Range(this,r,c,rows,cols);}
   getLastRow(){let last=0;for(const [key,cell] of this.map)if(cell.value!==""||cell.formula)last=Math.max(last,Number(key.split(":")[0]));return last;}
+  getMaxRows(){return Math.max(this.maxRows,this.getLastRow());}
   getName(){return this.name;}
   setFrozenRows(){return this;}
 }
@@ -52,7 +53,7 @@ const context=vm.createContext({JSON,Math,Number,String,Boolean,Array,Object,Reg
   Logger:{log(){}},SpreadsheetApp:{openById:()=>crm,getActive:()=>crm,flush(){}},PropertiesService:{getScriptProperties:()=>({getProperty:key=>scriptProperties[key]||"",setProperty(key,value){scriptProperties[key]=value;}})},
   Utilities:{formatDate:()=>"2026-08-12"},Session:{getScriptTimeZone:()=>"Europe/Kyiv"},ContentService:{MimeType:{JSON:"JSON"},createTextOutput:()=>({setMimeType(){return this;}})}
 });
-vm.runInContext(code+"\nglobalThis.__test={apiOrderComponentCatalog_,buildOrderComponentPlan_,replaceOrderComponentAudit_,normalizeRepeatedExactNote_,setupOrderComponentUsage,orderUpdateRequestState_,orderComponentMarketingByOrder_,crm3dpAccountingSnapshot_,repair3dpExpenseProjectionFormulas_,expenseProjectionFormulas3dp_,apiAddConsumablePurchase_,apiUpdateConsumablePurchase_,allocateAmount_};",context,{filename:"Code.gs"});
+vm.runInContext(code+"\nglobalThis.__test={apiOrderComponentCatalog_,buildOrderComponentPlan_,replaceOrderComponentAudit_,normalizeRepeatedExactNote_,setupOrderComponentUsage,orderUpdateRequestState_,orderComponentMarketingByOrder_,crm3dpAccountingSnapshot_,repair3dpExpenseProjectionFormulas_,expenseProjectionFormulas3dp_,apiAddConsumablePurchase_,apiUpdateConsumablePurchase_,allocateAmount_,writeoffLastWritableRow_,nextWriteoffRow_};",context,{filename:"Code.gs"});
 
 const catalog=context.__test.apiOrderComponentCatalog_();
 assert.equal(catalog.ok,true);
@@ -100,7 +101,7 @@ assert.match(consumables.getRange(4,8).getFormula(),/\(7\)\+IFNA\(SUMIFS\(Вик
 assert.equal(consumables.getRange(5,8).getFormula(),"","fixture formula is owned by the separate fixture ledger");
 assert.match(consumables.getRange(6,8).getFormula(),/^=4\+IFNA/);
 assert.equal(context.__test.setupOrderComponentUsage().already_applied,true);
-const expenses=crm.insertSheet("Витрати"),expenseFormulas=context.__test.expenseProjectionFormulas3dp_();
+const expenses=crm.insertSheet("Витрати"),expenseFormulas=context.__test.expenseProjectionFormulas3dp_(expenses.getMaxRows());
 expenses.getRange(3,1,3,13).setValues([
   [new Date(),"Реклама","",1,"Ні","","","","","","","#REF!","#REF!"],
   [new Date(),"Пакування","",1,"Ні","","","","","","","Ні","Розхідник: не в операційці"],
@@ -142,6 +143,13 @@ const audit=context.__test.replaceOrderComponentAudit_("FIFO; order_components_p
 assert.equal(audit,"FIFO; order_components_prro=15,mgmt=20");
 assert.equal(context.__test.normalizeRepeatedExactNote_("Паковання: Інше; Паковання: Інше; Паковання: Інше"),"Паковання: Інше");
 assert.equal(context.__test.normalizeRepeatedExactNote_("Паковання: Інше; крихке"),"Паковання: Інше; крихке","mixed notes are never collapsed");
+const writeoffCapacity = new Sheet("Списання");
+writeoffCapacity.maxRows = 216;
+writeoffCapacity.getRange(3,1,199,1).setValues(Array.from({length:199},(_,index)=>["WRT-"+(index+1)]));
+assert.equal(context.__test.writeoffLastWritableRow_(writeoffCapacity),216,"the writable limit follows the actual sheet grid");
+assert.equal(context.__test.nextWriteoffRow_(writeoffCapacity,2),202,"two component writeoffs fit into the first blank grid rows");
+writeoffCapacity.maxRows = 202;
+assert.throws(()=>context.__test.nextWriteoffRow_(writeoffCapacity,2),/not enough rows in writeoff sheet/,"a real full grid remains a hard stop");
 const saleSnapshot=context.__test.crm3dpAccountingSnapshot_({row:268,values:["MAN-FOP-0005","Вручну",new Date(),"","","BR-CHARM-100","Брелок",1,25,0,25,"","","","",0.29]},"MAN-FOP-0005",{production_cost:4.89,buyout:20,profit_share:0.5},{owner_total:2.96,serhiy_total:0,owner_per_unit:2.96,serhiy_per_unit:0},"Продаж","dashboard-test");
 assert.equal(saleSnapshot.serhiy_payout,13.32);
 assert.equal(saleSnapshot.mgmt_cost,16.28);

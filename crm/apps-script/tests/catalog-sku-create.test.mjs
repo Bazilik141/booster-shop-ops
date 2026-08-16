@@ -34,11 +34,12 @@ class MockRange {
 }
 
 class MockSheet {
-  constructor(name) { this.name=name;this.cells=new Map(); }
+  constructor(name) { this.name=name;this.cells=new Map();this.maxRows=201; }
   key(row,column){return row+":"+column;}
   cell(row,column){const key=this.key(row,column);if(!this.cells.has(key))this.cells.set(key,{value:"",formula:""});return this.cells.get(key);}
   getRange(...args){if(typeof args[0]==="string"){const x=parseA1(args[0]);return new MockRange(this,x.row,x.column,x.rows,x.columns);}return new MockRange(this,args[0],args[1],args[2]||1,args[3]||1);}
   getLastRow(){let last=0;for(const [key,cell] of this.cells){if(cell.value!=="" || cell.formula)last=Math.max(last,Number(key.split(":")[0]));}return last;}
+  getMaxRows(){return this.maxRows;}
   getName(){return this.name;}
 }
 
@@ -48,18 +49,19 @@ class MockSpreadsheet {
 }
 
 function makeEnvironment({ missingProductPriceFormula = false } = {}) {
-  const products=new MockSheet("Товари"),rrc=new MockSheet("РРЦ"),settings=new MockSheet("Налаштування"),master=new MockSheet("Майстер_Товарів");
+  const products=new MockSheet("Товари"),rrc=new MockSheet("РРЦ"),stock=new MockSheet("Склад"),settings=new MockSheet("Налаштування"),master=new MockSheet("Майстер_Товарів");
   products.getRange(3,1,1,15).setValues([["EXISTING-001","","Existing","Booster Shop","UA","Pokemon","Бустер","","","",0,"Так","","",""]]);
   products.getRange(3,10).setFormula("=price");
   rrc.getRange(3,1,1,8).setValues([["EXISTING-001","Existing","Booster Shop","3D аксесуар",10,new Date("2026-08-12"),"",""]]);
   rrc.getRange(3,8).setFormula("=dynamic");
+  stock.getRange(3,1).setValue("EXISTING-001");
   if(!missingProductPriceFormula)products.getRange(4,10).setFormula("=price");
   rrc.getRange(4,8).setFormula("=dynamic");
   settings.getRange(4,4).setValue("Booster Shop");
   settings.getRange(4,7).setValue("UA");
   settings.getRange(4,10).setValue("3D аксесуар");
   settings.getRange(4,30).setValue("3D-друк");
-  const crm=new MockSpreadsheet([products,rrc,settings]);
+  const crm=new MockSpreadsheet([products,rrc,stock,settings]);
   const automation=new MockSpreadsheet([master]);
   const properties={};
   const context=vm.createContext({
