@@ -6,6 +6,15 @@ import { fileURLToPath } from "node:url";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const code = fs.readFileSync(path.resolve(here, "../Code.gs"), "utf8");
+const repositoryRoot = path.resolve(here, "../../..");
+
+function resolveV23ExportPath() {
+  const matches = fs.readdirSync(repositoryRoot, { withFileTypes: true })
+    .filter((entry) => entry.isFile() && /^Версія 23.*\.txt$/u.test(entry.name))
+    .map((entry) => path.join(repositoryRoot, entry.name));
+  assert.equal(matches.length, 1, `Expected exactly one V23 export matching "Версія 23*.txt" in ${repositoryRoot}; found ${matches.length}.`);
+  return matches[0];
+}
 
 function columnNumber(column) {
   return [...column.toUpperCase()].reduce((value, char) => value * 26 + char.charCodeAt(0) - 64, 0);
@@ -173,13 +182,12 @@ const ownerReadCases = [
   ["3dp_print_log", {}], ["3dp_fixtures", {}], ["3dp_batch_draft", { sku: "FIG-001" }],
   ["3dp_stock_adjustments", {}],
 ];
-const v23SourcePath = process.argv[2];
-if (v23SourcePath) {
-  const v23 = loadApi(fs.readFileSync(v23SourcePath, "utf8"));
-  ownerReadCases.forEach(([action, params]) => {
-    assert.deepEqual(call(api, action, owner, params), call(v23, action, owner, params), `V23 owner response: ${action}`);
-  });
-}
+const v23SourcePath = resolveV23ExportPath();
+const v23Source = fs.readFileSync(v23SourcePath, "utf8");
+const v23 = loadApi(v23Source);
+ownerReadCases.forEach(([action, params]) => {
+  assert.deepEqual(call(api, action, owner, params), call(v23, action, owner, params), `V23 owner response: ${action}`);
+});
 
 const ownerSales = call(api, "3dp_sales", owner);
 assert.deepEqual(ownerSales.rows[0], Object.fromEntries([["row_number", 2], ...salesHeaders.map((header, index) => [header, salesRow[index]])]));
@@ -193,20 +201,39 @@ assert.equal(call(api, "3dp_batch_draft", owner, { sku: "FIG-001" }).values.spoo
 assert.equal(call(api, "3dp_stock_adjustments", owner).rows[0]["Причина"], "owner only");
 
 const serhiySales = call(api, "3dp_sales", serhiy);
-assert.deepEqual(Object.keys(serhiySales.rows[0]), ["row_number", "Дата", "SKU", "Кількість", "% прибутку Сергію", "Нараховано Сергію, грн", "РРЦ на момент продажу, грн", "Платник фурнітури", "Режим CRM", "Фурнітура Сергія за од., грн (заморожена)", "Ціна викупу за од., грн (заморожена)"]);
+const serhiySalesHeaders = salesHeaders.filter((header) => !["№ замовлення", "Примітки", "CRM row number"].includes(header));
+assert.deepEqual(Object.keys(serhiySales.rows[0]), ["row_number", ...serhiySalesHeaders]);
 assert.equal(Object.hasOwn(serhiySales.rows[0], "№ замовлення"), false);
+assert.equal(Object.hasOwn(serhiySales.rows[0], "Примітки"), false);
 assert.equal(Object.hasOwn(serhiySales.rows[0], "CRM row number"), false);
-assert.equal(Object.hasOwn(serhiySales.rows[0], "Вартість фурнітури за од., грн (заморожена)"), false);
-assert.equal(Object.hasOwn(serhiySales.rows[0], "Фурнітура власника за од., грн (заморожена)"), false);
-assert.equal(Object.hasOwn(serhiySales.rows[0], "Маржинальний прибуток за од., грн"), false);
-assert.equal(Object.hasOwn(call(api, "3dp_plyushky", serhiy).rows[0], "До замовлення №"), false);
-assert.equal(Object.hasOwn(call(api, "3dp_get_row", serhiy, { sheet: "Номенклатура", sku: "FIG-001" }).row, "API_історія_змін"), false);
+assert.equal(serhiySales.rows[0]["Витрати BoosterShop за од., грн"], 20);
+assert.equal(serhiySales.rows[0]["Вартість фурнітури за од., грн (заморожена)"], 25);
+assert.equal(serhiySales.rows[0]["Фурнітура власника за од., грн (заморожена)"], 10);
+assert.equal(serhiySales.rows[0]["Маржинальний прибуток за од., грн"], 80);
+const serhiyPlyushky = call(api, "3dp_plyushky", serhiy).rows[0];
+assert.deepEqual(Object.keys(serhiyPlyushky), ["row_number", "Дата", "SKU", "Закуплено в Друга, шт", "Ціна закупівлі за од., грн", "Сума закупівлі, грн", "Видано як бонус, шт"]);
+assert.equal(Object.hasOwn(serhiyPlyushky, "До замовлення №"), false);
+assert.equal(Object.hasOwn(serhiyPlyushky, "Примітки"), false);
+assert.equal(serhiyPlyushky["Сума закупівлі, грн"], 0);
+assert.equal(call(api, "3dp_get_row", serhiy, { sheet: "Номенклатура", sku: "FIG-001" }).row["API_історія_змін"], "owner history");
 assert.equal(call(api, "3dp_print_log", serhiy).rows[0]["API_історія_змін"], "history");
 assert.equal(call(api, "3dp_batch_draft", serhiy, { sku: "FIG-001" }).found, false);
 assert.equal(call(api, "3dp_bootstrap", serhiy).settings.range, "B2:B5");
-assert.equal(call(api, "3dp_bootstrap", serhiy).analytics.values[0].length, 8);
-codeOf(() => call(api, "3dp_get_range", serhiy, { sheet: "Продажі", range: "A1:AA1" }), "RANGE_NOT_PROJECTED");
+const serhiyAnalytics = call(api, "3dp_bootstrap", serhiy).analytics;
+assert.equal(serhiyAnalytics.values[0].length, 11);
+assert.deepEqual(serhiyAnalytics.values[0], ["SKU", "Назва", "Собівартість Сергія, грн", "Витрати BoosterShop (фурнітура), грн", "Час друку, год", "% прибутку Сергію", "РРЦ фактична", "Маржа BoosterShop, грн", "Маржа BoosterShop, %", "Нараховано Сергію, грн", "Прибуток Сергію/год друку, грн"]);
+assert.equal(serhiyAnalytics.values[1][3], 10);
+assert.equal(serhiyAnalytics.values[1][7], 80);
+assert.equal(serhiyAnalytics.values[1][8], 0.23);
 assert.equal(call(api, "3dp_get_range", serhiy, { sheet: "Продажі", range: "A1:B2" }).values[1][1], "FIG-001");
+codeOf(() => call(api, "3dp_get_range", serhiy, { sheet: "Продажі", range: "N1:N2" }), "RANGE_NOT_PROJECTED");
+codeOf(() => call(api, "3dp_get_range", serhiy, { sheet: "Продажі", range: "O1:O2" }), "RANGE_NOT_PROJECTED");
+codeOf(() => call(api, "3dp_get_range", serhiy, { sheet: "Продажі", range: "T1:T2" }), "RANGE_NOT_PROJECTED");
+assert.equal(call(api, "3dp_get_range", serhiy, { sheet: "Продажі", range: "U1:AA2" }).values[1][1], 25);
+assert.equal(call(api, "3dp_get_range", serhiy, { sheet: "Маркетингові_плюшки", range: "A1:F2" }).values[1][4], 0);
+codeOf(() => call(api, "3dp_get_range", serhiy, { sheet: "Маркетингові_плюшки", range: "G1:G2" }), "RANGE_NOT_PROJECTED");
+codeOf(() => call(api, "3dp_get_range", serhiy, { sheet: "Маркетингові_плюшки", range: "H1:H2" }), "RANGE_NOT_PROJECTED");
+codeOf(() => call(api, "3dp_get_range", serhiy, { sheet: "Аналітика", range: "H3:H4" }), "RANGE_NOT_PROJECTED");
 codeOf(() => call(api, "3dp_get_range", serhiy, { sheet: "Налаштування", range: "A1:B5" }), "RANGE_NOT_PROJECTED");
 codeOf(() => call(api, "3dp_stock_adjustments", serhiy), "READ_PROJECTION_FORBIDDEN");
 
@@ -230,15 +257,18 @@ plain(api.context.saveBatchDraftAction3dp_(api.workbook, { sku: "FIG-001", value
 assert.equal(call(api, "3dp_batch_draft", serhiy, { sku: "FIG-001" }).values.quantity, 4);
 assert.equal(call(api, "3dp_batch_draft", owner, { sku: "FIG-001" }).values.quantity, 2);
 assert.equal(api.workbook.getSheetByName("_Чернетки_партій").getRange("A3").getDisplayValue(), "serhiy::FIG-001");
-if (v23SourcePath) {
-  const v23AfterSerhiyDraft = loadApi(fs.readFileSync(v23SourcePath, "utf8"), api.workbook);
-  assert.equal(call(v23AfterSerhiyDraft, "3dp_batch_draft", owner, { sku: "FIG-001" }).values.quantity, 2);
-}
+const v23AfterSerhiyDraft = loadApi(v23Source, api.workbook);
+assert.equal(call(v23AfterSerhiyDraft, "3dp_batch_draft", owner, { sku: "FIG-001" }).values.quantity, 2);
 
-const fullCode = code.replace("const SERHIY_FULL_ECONOMICS_VISIBLE_3DP = false;", "const SERHIY_FULL_ECONOMICS_VISIBLE_3DP = true;");
-const full = loadApi(fullCode);
-assert.deepEqual(call(full, "3dp_sales", serhiy), call(full, "3dp_sales", owner));
-assert.deepEqual(call(full, "3dp_get_range", serhiy, { sheet: "Продажі", range: "A1:AA1" }), call(full, "3dp_get_range", owner, { sheet: "Продажі", range: "A1:AA1" }));
-assert.deepEqual(call(full, "3dp_stock_adjustments", serhiy), call(full, "3dp_stock_adjustments", owner));
+const restrictedCode = code.replace("const SERHIY_FULL_ECONOMICS_VISIBLE_3DP = true;", "const SERHIY_FULL_ECONOMICS_VISIBLE_3DP = false;");
+const restricted = loadApi(restrictedCode);
+const restrictedSales = call(restricted, "3dp_sales", serhiy).rows[0];
+assert.equal(Object.hasOwn(restrictedSales, "Витрати BoosterShop за од., грн"), false);
+assert.equal(Object.hasOwn(restrictedSales, "Вартість фурнітури за од., грн (заморожена)"), false);
+assert.equal(Object.hasOwn(restrictedSales, "Фурнітура власника за од., грн (заморожена)"), false);
+assert.equal(Object.hasOwn(restrictedSales, "№ замовлення"), false);
+assert.equal(Object.hasOwn(restrictedSales, "Примітки"), false);
+assert.equal(Object.hasOwn(restrictedSales, "CRM row number"), false);
+codeOf(() => call(restricted, "3dp_stock_adjustments", serhiy), "READ_PROJECTION_FORBIDDEN");
 
-console.log(JSON.stringify({ ok: true, owner_paths_preserved: 9, v23_owner_responses_compared: v23SourcePath ? ownerReadCases.length : 0, serhiy_projection_checks: 18, settings_journal_checks: 8, full_economics_checks: 3 }));
+console.log(JSON.stringify({ ok: true, owner_paths_preserved: 9, v23_owner_responses_compared: ownerReadCases.length, serhiy_projection_checks: 34, settings_journal_checks: 8, full_economics_checks: 7 }));

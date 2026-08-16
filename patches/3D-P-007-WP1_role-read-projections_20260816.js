@@ -142,42 +142,83 @@ const SERHIY_MANUAL_COLUMNS_3DP = Object.freeze({
   'Налаштування': Object.freeze(['B']),
 });
 
-// Owner-controlled disclosure switch. Keep this as the sole full-economics switch.
-const SERHIY_FULL_ECONOMICS_VISIBLE_3DP = false;
+// Owner-controlled disclosure switch. It changes only the economics subset;
+// the Serhiy read projection itself always stays active to protect external
+// order/customer links.
+const SERHIY_FULL_ECONOMICS_VISIBLE_3DP = true;
 
 // Header-name projections are intentional: column letters change as the 3D-P
 // accounting model evolves, while a renamed/missing approved header must stop
 // the read rather than silently disclose or omit another column.
 const SERHIY_READ_PROJECTION_3DP = Object.freeze({
-  'Номенклатура': Object.freeze([
-    'SKU', 'Назва виробу', 'Час друку за од., год', 'Вага виробу за од., г',
-    'Вага котушки, г', 'Ціна котушки, грн', 'Собівартість Сергія (виробнича), грн',
-    'РРЦ фактична, грн',
-  ]),
-  'Друк-лог': Object.freeze([
-    'Дата', 'SKU', 'Надруковано, шт', 'Час друку факт, год', 'Брак, шт',
-    'Витрачено матеріалу, г (факт)', 'Собівартість партії, грн', 'Хто друкував',
-    'Примітки', 'API_статус_запису', 'API_історія_змін',
-  ]),
-  'Наявність': Object.freeze([
-    'SKU', 'Назва', 'Надруковано всього, шт', 'Брак всього, шт',
-    'Продано на сайті, шт', 'Видано як плюшка, шт', 'Наявно зараз, шт',
-  ]),
-  'Продажі': Object.freeze([
-    'Дата', 'SKU', 'Кількість', '% прибутку Сергію', 'Нараховано Сергію, грн',
-    'РРЦ на момент продажу, грн', 'Платник фурнітури', 'Режим CRM',
-    'Фурнітура Сергія за од., грн (заморожена)', 'Ціна викупу за од., грн (заморожена)',
-  ]),
-  'Виплати': Object.freeze([
-    'Період (РРРР-ММ)', 'Нараховано Сергію за період, грн', 'Термін перевірки Сергієм',
-    'Дата фактичної виплати', 'Статус', 'Примітки',
-  ]),
-  'Маркетингові_плюшки': Object.freeze(['Дата', 'SKU', 'Видано як бонус, шт']),
-  'Фурнітура_довідник': Object.freeze(['Назва фурнітури', 'Ціна, грн/шт']),
-  'Аналітика': Object.freeze([
-    'SKU', 'Назва', 'Собівартість Сергія, грн', 'Час друку, год', '% прибутку Сергію',
-    'РРЦ фактична', 'Нараховано Сергію, грн', 'Прибуток Сергію/год друку, грн',
-  ]),
+  'Номенклатура': Object.freeze({
+    baseline: Object.freeze([
+      'SKU', 'Назва виробу', 'Час друку за од., год', 'Вага виробу за од., г',
+      'Вага котушки, г', 'Ціна котушки, грн', 'Собівартість Сергія (виробнича), грн',
+      'РРЦ фактична, грн',
+    ]),
+    fullEconomics: Object.freeze([
+      'Франшиза', 'Тип', 'Трек', 'Статус', 'Дата оновлення', 'Примітки',
+      'Фурнітура (ціна-довідка), грн/шт', 'API_статус_запису', 'API_історія_змін',
+      'Ціна під викуп, грн', 'Посилання на модель',
+    ]),
+  }),
+  'Друк-лог': Object.freeze({
+    baseline: Object.freeze([
+      'Дата', 'SKU', 'Надруковано, шт', 'Час друку факт, год', 'Брак, шт',
+      'Витрачено матеріалу, г (факт)', 'Собівартість партії, грн', 'Хто друкував',
+      'Примітки', 'API_статус_запису', 'API_історія_змін',
+    ]),
+    fullEconomics: Object.freeze([]),
+  }),
+  'Наявність': Object.freeze({
+    baseline: Object.freeze([
+      'SKU', 'Назва', 'Надруковано всього, шт', 'Брак всього, шт',
+      'Продано на сайті, шт', 'Видано як плюшка, шт', 'Наявно зараз, шт',
+    ]),
+    fullEconomics: Object.freeze([]),
+  }),
+  'Продажі': Object.freeze({
+    baseline: Object.freeze([
+      'Дата', 'SKU', 'Кількість', '% прибутку Сергію', 'Нараховано Сергію, грн',
+      'РРЦ на момент продажу, грн', 'Платник фурнітури', 'Режим CRM',
+      'Фурнітура Сергія за од., грн (заморожена)', 'Ціна викупу за од., грн (заморожена)',
+    ]),
+    fullEconomics: Object.freeze([
+      'Назва', 'Фактична ціна за од., грн (після знижки)',
+      'Собівартість Сергія за од., грн', 'Витрати BoosterShop за од., грн',
+      'Маржинальний прибуток за од., грн', 'Статус', 'Дохід Booster Shop, грн', 'Канал',
+      'Тип знижки', 'Параметр знижки', 'Погоджено з Сергієм (Так/Ні)',
+      'Період (авто, РРРР-ММ)', 'Вартість фурнітури за од., грн (заморожена)',
+      'Фурнітура власника за од., грн (заморожена)',
+    ]),
+  }),
+  'Виплати': Object.freeze({
+    baseline: Object.freeze([
+      'Період (РРРР-ММ)', 'Нараховано Сергію за період, грн', 'Термін перевірки Сергієм',
+      'Дата фактичної виплати', 'Статус', 'Примітки',
+    ]),
+    fullEconomics: Object.freeze([]),
+  }),
+  'Маркетингові_плюшки': Object.freeze({
+    baseline: Object.freeze(['Дата', 'SKU', 'Видано як бонус, шт']),
+    fullEconomics: Object.freeze([
+      'Закуплено в Друга, шт', 'Ціна закупівлі за од., грн', 'Сума закупівлі, грн',
+    ]),
+  }),
+  'Фурнітура_довідник': Object.freeze({
+    baseline: Object.freeze(['Назва фурнітури', 'Ціна, грн/шт']),
+    fullEconomics: Object.freeze([]),
+  }),
+  'Аналітика': Object.freeze({
+    baseline: Object.freeze([
+      'SKU', 'Назва', 'Собівартість Сергія, грн', 'Час друку, год', '% прибутку Сергію',
+      'РРЦ фактична', 'Нараховано Сергію, грн', 'Прибуток Сергію/год друку, грн',
+    ]),
+    fullEconomics: Object.freeze([
+      'Витрати BoosterShop (фурнітура), грн', 'Маржа BoosterShop, грн', 'Маржа BoosterShop, %',
+    ]),
+  }),
 });
 
 const SERHIY_READ_ACTIONS_3DP = Object.freeze([
@@ -483,9 +524,6 @@ function getRowAction3dp_(spreadsheet, params, actor) {
     if (String(values[index][0] || '').trim() === sku) {
       const row = rowObject3dp_(headers, values[index], index + 2);
       if (sheetName === SHEETS_3DP.nomenclature) row['% прибутку Сергію'] = profitShareForSku3dp_(spreadsheet, sku);
-      if (isSerhiyProjectionActive3dp_(actor) && sheetName === SHEETS_3DP.nomenclature && isArchivedNomenclatureRow3dp_(row)) {
-        throw apiError3dp_('ROW_FILTERED', 'Archived SKU is not available to this caller.');
-      }
       if (isExampleRow3dp_(row)) throw apiError3dp_('ROW_FILTERED', 'Illustrative rows are not returned.');
       return { action: '3dp_get_row', sheet: sheetName, row: projectRow3dp_(sheetName, headers, row, actor) };
     }
@@ -575,11 +613,12 @@ function overviewFromTables3dp_(nomenclature, availability, sales) {
 
 function bootstrapAction3dp_(spreadsheet, params, actor) {
   if (isSerhiyProjectionActive3dp_(actor)) {
+    const includeArchived = String((params && params.include_archived) || 'true').toLowerCase() === 'true';
     return {
       ok: true,
       action: '3dp_bootstrap',
       overview: overviewAction3dp_(spreadsheet, actor),
-      skus: skusAction3dp_(spreadsheet, { include_archived: 'false' }, actor),
+      skus: skusAction3dp_(spreadsheet, { include_archived: String(includeArchived) }, actor),
       settings: getRangeAction3dp_(spreadsheet, { sheet: SHEETS_3DP.settings, range: 'B2:B5' }, actor),
       analytics: projectedRangeAction3dp_(spreadsheet, SHEETS_3DP.analytics, 3, 17, 3, actor),
     };
@@ -612,7 +651,7 @@ function skusAction3dp_(spreadsheet, params, actor) {
   const includeArchived = String((params && params.include_archived) || '').toLowerCase() === 'true';
   const nomenclature = readTable3dp_(spreadsheet, SHEETS_3DP.nomenclature, { requireHeader: 'SKU' });
   const availability = readTable3dp_(spreadsheet, SHEETS_3DP.availability, { requireHeader: 'SKU' });
-  const result = skusFromTables3dp_(nomenclature, availability, isSerhiyProjectionActive3dp_(actor) ? false : includeArchived);
+  const result = skusFromTables3dp_(nomenclature, availability, includeArchived);
   if (!isSerhiyProjectionActive3dp_(actor)) return result;
   return Object.assign({}, result, {
     rows: result.rows.map(function (row) {
@@ -660,7 +699,7 @@ function tableAction3dp_(spreadsheet, sheetName, options, actor) {
 }
 
 function isSerhiyProjectionActive3dp_(actor) {
-  return Boolean(actor && actor.role === 'serhiy' && !SERHIY_FULL_ECONOMICS_VISIBLE_3DP);
+  return Boolean(actor && actor.role === 'serhiy');
 }
 
 function isSerhiyFullEconomics3dp_(actor) {
@@ -674,14 +713,14 @@ function assertReadActionAllowed3dp_(action, actor) {
   }
 }
 
-function projectionHeadersForSheet3dp_(sheetName) {
-  const headers = SERHIY_READ_PROJECTION_3DP[sheetName];
-  if (!headers) throw apiError3dp_('READ_PROJECTION_FORBIDDEN', 'No Serhiy read projection is configured for sheet ' + sheetName + '.');
-  return headers;
+function projectionHeadersForSheet3dp_(sheetName, actor) {
+  const projection = SERHIY_READ_PROJECTION_3DP[sheetName];
+  if (!projection) throw apiError3dp_('READ_PROJECTION_FORBIDDEN', 'No Serhiy read projection is configured for sheet ' + sheetName + '.');
+  return projection.baseline.concat(isSerhiyFullEconomics3dp_(actor) ? projection.fullEconomics : []);
 }
 
-function assertProjectionHeaders3dp_(sheetName, headers) {
-  const allowed = projectionHeadersForSheet3dp_(sheetName);
+function assertProjectionHeaders3dp_(sheetName, headers, actor) {
+  const allowed = projectionHeadersForSheet3dp_(sheetName, actor);
   const missing = allowed.filter(function (header) { return headers.indexOf(header) === -1; });
   if (missing.length) {
     throw apiError3dp_(
@@ -694,10 +733,11 @@ function assertProjectionHeaders3dp_(sheetName, headers) {
 
 function projectRow3dp_(sheetName, headers, row, actor) {
   if (!isSerhiyProjectionActive3dp_(actor)) return row;
-  const allowed = assertProjectionHeaders3dp_(sheetName, headers);
+  const allowed = assertProjectionHeaders3dp_(sheetName, headers, actor);
   const projected = {};
   if (Object.prototype.hasOwnProperty.call(row, 'row_number')) projected.row_number = row.row_number;
-  allowed.forEach(function (header) {
+  headers.forEach(function (header) {
+    if (allowed.indexOf(header) === -1) return;
     if (Object.prototype.hasOwnProperty.call(row, header)) projected[header] = row[header];
   });
   return projected;
@@ -705,7 +745,7 @@ function projectRow3dp_(sheetName, headers, row, actor) {
 
 function projectRows3dp_(sheetName, headers, rows, actor) {
   if (!isSerhiyProjectionActive3dp_(actor)) return rows;
-  assertProjectionHeaders3dp_(sheetName, headers);
+  assertProjectionHeaders3dp_(sheetName, headers, actor);
   return rows.map(function (row) { return projectRow3dp_(sheetName, headers, row, actor); });
 }
 
@@ -723,7 +763,7 @@ function assertSerhiyRangeReadAllowed3dp_(sheetName, sheet, parsed, actor) {
   }
   const headerRow = projectionHeaderRow3dp_(sheetName);
   const headers = sheet.getRange(headerRow, 1, 1, sheet.getLastColumn()).getDisplayValues()[0];
-  const allowed = assertProjectionHeaders3dp_(sheetName, headers);
+  const allowed = assertProjectionHeaders3dp_(sheetName, headers, actor);
   for (let column = parsed.startColumn; column <= parsed.endColumn; column += 1) {
     const header = headers[column - 1];
     if (allowed.indexOf(header) === -1) {
@@ -736,8 +776,10 @@ function projectedRangeAction3dp_(spreadsheet, sheetName, startRow, endRow, head
   const sheet = getSheet3dp_(spreadsheet, sheetName);
   const lastColumn = sheet.getLastColumn();
   const headers = sheet.getRange(headerRow, 1, 1, lastColumn).getDisplayValues()[0];
-  const allowed = assertProjectionHeaders3dp_(sheetName, headers);
-  const indexes = allowed.map(function (header) { return headers.indexOf(header); });
+  const allowed = assertProjectionHeaders3dp_(sheetName, headers, actor);
+  const indexes = headers.map(function (header, index) {
+    return allowed.indexOf(header) !== -1 ? index : -1;
+  }).filter(function (index) { return index !== -1; });
   const range = sheet.getRange(startRow, 1, endRow - startRow + 1, lastColumn);
   const values = range.getValues().map(function (row) {
     return indexes.map(function (index) { return row[index]; });
@@ -1540,7 +1582,7 @@ function setNomenclatureArchiveAction3dp_(spreadsheet, body, actor, archive) {
 }
 
 function stockAdjustmentsAction3dp_(spreadsheet, params, actor) {
-  if (!actor || (actor.role !== 'owner' && !isSerhiyFullEconomics3dp_(actor))) {
+  if (!actor || actor.role !== 'owner') {
     throw apiError3dp_('FORBIDDEN', 'Caller may not read stock adjustments.');
   }
   const sku = String(params.sku || '').trim();
