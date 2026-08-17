@@ -23,33 +23,46 @@ class MockRange {
   getValues() { return this.matrix((cell) => cell.value ?? ""); }
   getDisplayValues() { return this.matrix((cell) => String(cell.value ?? "")); }
   getFormulas() { return this.matrix((cell) => cell.formula || ""); }
+  getDataValidations() { return this.matrix((cell) => cell.validation || null); }
   getValue() { return this.sheet.cell(this.row, this.column).value ?? ""; }
   getDisplayValue() { return String(this.getValue()); }
   getFormula() { return this.sheet.cell(this.row, this.column).formula || ""; }
+  getDataValidation() { return this.sheet.cell(this.row, this.column).validation || null; }
   getCell(row, column) { return new MockRange(this.sheet, this.row + row - 1, this.column + column - 1); }
+  getSheet() { return this.sheet; }
+  getRow() { return this.row; }
+  getColumn() { return this.column; }
+  getNumRows() { return this.rows; }
+  getNumColumns() { return this.columns; }
   setValue(value) { const cell = this.sheet.cell(this.row, this.column);cell.value=value;cell.formula="";return this; }
   setFormula(formula) { const cell = this.sheet.cell(this.row, this.column);cell.formula=formula;cell.value="";return this; }
   setValues(values) { values.forEach((row, r) => row.forEach((value, c) => { const cell=this.sheet.cell(this.row+r,this.column+c);cell.value=value;cell.formula=""; }));return this; }
+  setDataValidation(rule) { this.matrix((cell) => { cell.validation=rule;return null; });return this; }
   clearContent() { this.matrix((cell) => { cell.value="";cell.formula="";return null; });return this; }
+  copyTo(destination) { return destination; }
 }
 
 class MockSheet {
-  constructor(name) { this.name=name;this.cells=new Map();this.maxRows=201; }
+  constructor(name, maxRows = 201) { this.name=name;this.cells=new Map();this.maxRows=maxRows; }
   key(row,column){return row+":"+column;}
-  cell(row,column){const key=this.key(row,column);if(!this.cells.has(key))this.cells.set(key,{value:"",formula:""});return this.cells.get(key);}
+  cell(row,column){const key=this.key(row,column);if(!this.cells.has(key))this.cells.set(key,{value:"",formula:"",validation:null});return this.cells.get(key);}
   getRange(...args){if(typeof args[0]==="string"){const x=parseA1(args[0]);return new MockRange(this,x.row,x.column,x.rows,x.columns);}return new MockRange(this,args[0],args[1],args[2]||1,args[3]||1);}
   getLastRow(){let last=0;for(const [key,cell] of this.cells){if(cell.value!=="" || cell.formula)last=Math.max(last,Number(key.split(":")[0]));}return last;}
   getMaxRows(){return this.maxRows;}
+  getMaxColumns(){return 32;}
+  getSheetId(){return this.name;}
+  insertRowsAfter(row,count){assert.equal(row,this.maxRows,`${this.name}: rows are appended only at the grid end`);this.maxRows+=count;return this;}
   getName(){return this.name;}
 }
 
 class MockSpreadsheet {
-  constructor(sheets){this.sheets=new Map(sheets.map((sheet)=>[sheet.name,sheet]));}
+  constructor(sheets){this.sheets=new Map(sheets.map((sheet)=>[sheet.name,sheet]));this.toasts=[];}
   getSheetByName(name){return this.sheets.get(name)||null;}
+  toast(message,title,timeoutSeconds){this.toasts.push({message,title,timeoutSeconds});}
 }
 
-function makeEnvironment({ missingProductPriceFormula = false } = {}) {
-  const products=new MockSheet("Товари"),rrc=new MockSheet("РРЦ"),stock=new MockSheet("Склад"),settings=new MockSheet("Налаштування"),master=new MockSheet("Майстер_Товарів");
+function makeEnvironment({ missingProductPriceFormula = false, settingsRows = 201 } = {}) {
+  const products=new MockSheet("Товари"),rrc=new MockSheet("РРЦ"),stock=new MockSheet("Склад"),settings=new MockSheet("Налаштування",settingsRows),master=new MockSheet("Майстер_Товарів");
   products.getRange(3,1,1,15).setValues([["EXISTING-001","","Existing","Booster Shop","UA","Pokemon","Бустер","","","",0,"Так","","",""]]);
   products.getRange(3,10).setFormula("=price");
   rrc.getRange(3,1,1,8).setValues([["EXISTING-001","Existing","Booster Shop","3D аксесуар",10,new Date("2026-08-12"),"",""]]);
@@ -64,15 +77,20 @@ function makeEnvironment({ missingProductPriceFormula = false } = {}) {
   const crm=new MockSpreadsheet([products,rrc,stock,settings]);
   const automation=new MockSpreadsheet([master]);
   const properties={};
+  class RuleBuilder {
+    requireValueInRange(range) { this.range=range;return this; }
+    setAllowInvalid(value) { this.allowInvalid=value;return this; }
+    build() { const range=this.range,allowInvalid=Boolean(this.allowInvalid);return {getCriteriaType:()=>"VALUE_IN_RANGE",getCriteriaValues:()=>[range],getAllowInvalid:()=>allowInvalid}; }
+  }
   const context=vm.createContext({
     JSON,Math,Number,String,Boolean,Array,Object,RegExp,Date,Error,isFinite,
     Logger:{log(){}},Session:{getScriptTimeZone:()=>"Europe/Kyiv"},Utilities:{formatDate:()=>"2026-08-12"},
     PropertiesService:{getScriptProperties:()=>({getProperty:(key)=>properties[key]||"",setProperty:(key,value)=>{properties[key]=value;}})},
-    SpreadsheetApp:{openById:(id)=>String(id).includes("1PvlSlg3")?crm:automation,flush:()=>{for(let row=3;row<=201;row++){const sku=products.getRange(row,1).getValue();rrc.getRange(row,1).setValue(sku);rrc.getRange(row,2).setValue(products.getRange(row,3).getValue());rrc.getRange(row,3).setValue(products.getRange(row,4).getValue());rrc.getRange(row,4).setValue(products.getRange(row,7).getValue());}}},
+    SpreadsheetApp:{openById:(id)=>String(id).includes("1PvlSlg3")?crm:automation,getActive:()=>crm,getUi:()=>({alert(){}}),CopyPasteType:{PASTE_FORMAT:"format",PASTE_DATA_VALIDATION:"validation"},DataValidationCriteria:{VALUE_IN_RANGE:"VALUE_IN_RANGE"},newDataValidation:()=>new RuleBuilder(),flush:()=>{for(let row=3;row<=201;row++){const sku=products.getRange(row,1).getValue();rrc.getRange(row,1).setValue(sku);rrc.getRange(row,2).setValue(products.getRange(row,3).getValue());rrc.getRange(row,3).setValue(products.getRange(row,4).getValue());rrc.getRange(row,4).setValue(products.getRange(row,7).getValue());}}},
     ContentService:{MimeType:{JSON:"JSON"},createTextOutput:(text)=>({text,setMimeType(){return this;}})},
   });
-  vm.runInContext(code+'\nglobalThis.__test={apiAddSku_,apiUpdateRrpBatch_};',context,{filename:"Code.gs"});
-  return { apiAddSku:context.__test.apiAddSku_,apiUpdateRrpBatch:context.__test.apiUpdateRrpBatch_,crm,products,rrc,settings };
+  vm.runInContext(code+'\napiIntegrityCheck_=function(){return {clean:true,problems:[]};};globalThis.__test={apiAddSku_,apiUpdateRrpBatch_,setupCrmCatalogOptionInfrastructure};',context,{filename:"Code.gs"});
+  return { apiAddSku:context.__test.apiAddSku_,apiUpdateRrpBatch:context.__test.apiUpdateRrpBatch_,setupCatalogOptions:context.__test.setupCrmCatalogOptionInfrastructure,crm,products,rrc,settings };
 }
 
 const payload={sku:"BR-CHARM-100",full_name:"Брелок Чармандер (Pokémon) — 3D-друк",brand:"Booster Shop",language:"UA",set:"3D-друк",format:"3D аксесуар",rrp:25,active:true,source:"3d",short_name_mode:"full_name",allow_new_options:true};
@@ -135,6 +153,57 @@ const payload={sku:"BR-CHARM-100",full_name:"Брелок Чармандер (Po
   assert.equal(env.rrc.getRange(3,5).getValue(),15);
   assert.equal(env.rrc.getRange(3,5).getFormula(),"");
   assert.equal(env.rrc.getRange(3,8).getFormula(),"=dynamic");
+}
+
+{
+  const env=makeEnvironment({settingsRows:60});
+  env.settings.getRange(4,30,41,1).setValues(Array.from({length:41},(_,index)=>[index===0?"3D-друк":"SET-"+index]));
+  const created=env.apiAddSku(env.crm,{...payload,sku:"YGO-JP-BETB-BST",full_name:"Yu-Gi-Oh! — BEYOND THE BRAVE — JP — Booster",set:"BEYOND THE BRAVE",cards_per_booster:5});
+  assert.equal(created.ok,true,"a new set uses existing Settings grid capacity beyond the legacy AD44 boundary");
+  assert.equal(env.settings.getRange(45,30).getValue(),"BEYOND THE BRAVE");
+  assert.equal(env.settings.getMaxRows(),60,"unused Settings rows are used before the grid grows");
+  const setRule=env.products.getRange(3,6).getDataValidation();
+  const setSource=setRule.getCriteriaValues()[0];
+  assert.equal(setRule.getAllowInvalid(),false,"Set keeps strict validation");
+  assert.equal(setSource.getRow(),4);
+  assert.equal(setSource.getColumn(),30);
+  assert.equal(setSource.getNumRows(),57,"Set validation covers the current Settings grid, not AD4:AD44");
+}
+
+{
+  const env=makeEnvironment({settingsRows:60});
+  const setup=env.setupCatalogOptions();
+  assert.equal(setup.ok,true);
+  assert.deepEqual(JSON.parse(JSON.stringify(setup.validation_fields)),["brand","language","set","format"]);
+  assert.equal(setup.integrity_before_clean,true);
+  assert.equal(setup.integrity_after_clean,true);
+  assert.deepEqual(JSON.parse(JSON.stringify(env.crm.toasts)),[{message:"Довідники SKU перевірено. Валідації оновлено: brand, language, set, format",title:"Booster CRM",timeoutSeconds:10}],"the menu reports completion without blocking the execution");
+  assert.equal(env.setupCatalogOptions().already_applied,true,"the public one-time validation migration is idempotent");
+}
+
+[
+  { field:"brand", settingsColumn:4, legacyRows:7, value:"New Brand", sku:"TST-BRAND-001", payload:{brand:"New Brand"} },
+  { field:"language", settingsColumn:7, legacyRows:5, value:"XX", sku:"TST-LANGUAGE-001", payload:{language:"XX"} },
+  { field:"format", settingsColumn:10, legacyRows:12, value:"New Format", sku:"TST-FORMAT-001", payload:{format:"New Format"} }
+].forEach(({field,settingsColumn,legacyRows,value,sku,payload:overrides}) => {
+  const env=makeEnvironment({settingsRows:60});
+  env.settings.getRange(4,settingsColumn,legacyRows,1).setValues(Array.from({length:legacyRows},(_,index)=>[index===0?(field==="brand"?"Booster Shop":field==="language"?"UA":"3D аксесуар"):field+"-"+index]));
+  const created=env.apiAddSku(env.crm,{...payload,...overrides,sku,full_name:"Reference option capacity test — "+field});
+  assert.equal(created.ok,true,"a full legacy "+field+" list accepts one new value");
+  assert.equal(env.settings.getRange(4+legacyRows,settingsColumn).getValue(),value);
+  assert.ok(created.options_added.includes(value));
+});
+
+{
+  const env=makeEnvironment({settingsRows:44});
+  env.settings.getRange(4,30,41,1).setValues(Array.from({length:41},(_,index)=>[index===0?"3D-друк":"SET-"+index]));
+  const created=env.apiAddSku(env.crm,{...payload,sku:"YGO-JP-BETB-BST",full_name:"Yu-Gi-Oh! — BEYOND THE BRAVE — JP — Booster",set:"BEYOND THE BRAVE",cards_per_booster:5});
+  assert.equal(created.ok,true,"a full Settings grid grows before the new option is written");
+  assert.equal(created.option_capacity.settings_rows_added,50);
+  assert.equal(env.settings.getMaxRows(),94);
+  assert.equal(env.settings.getRange(45,30).getValue(),"BEYOND THE BRAVE");
+  const setSource=env.products.getRange(3,6).getDataValidation().getCriteriaValues()[0];
+  assert.equal(setSource.getNumRows(),91,"validation is rebuilt after Settings growth");
 }
 
 console.log("CRM catalog SKU create tests passed");

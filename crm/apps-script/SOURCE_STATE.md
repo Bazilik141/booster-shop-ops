@@ -10,8 +10,8 @@ new Web App version.
 | Mirror file | `crm/apps-script/Code.gs` — local working copy, **owner-reported published as CRM V118 at 2026-08-13 23:18 Kyiv**. The companion 3D-P mirror is owner-reported live as **V23**. |
 | Baseline pulled from live | 2026-08-08, 11:41 Kyiv (owner export `CodeJS - CRM.txt`) |
 | **Mirror content deployed to live** | **CRM V118 at 2026-08-13 23:18 Kyiv and 3D-P V23 at 20:17 Kyiv, owner-reported.** Provenance is the owner pasting these exact repository files; this is publication evidence, not a fresh byte-for-byte export comparison. |
-| Deployed Web App version number | **CRM V118 / 3D-P V23, owner-reported published 2026-08-13.** V117 (22:48, bulk RRP editing) and V115 (20:16, universal test-order cleanup + one-off archive) are the two prior publications of the same evening. V98 remains the last independently byte-compared CRM source export; the repository holds owner exports only up to CRM V102 and 3D-P V10. |
-| Live-verified after deploy | Post-V118 `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:7672`. Post-V117 the same check returned `clean:true` with `elapsed_ms:8523` and owner QA OK. The universal dashboard test-order cleanup has still not been executed live. The exact `MAN-FOP-0006` purge remains separately verified at V114/V22. |
+| Deployed Web App version number | **Latest owner-reported: CRM V128 at 2026-08-17 18:36 Kyiv (source scope not byte-verified — see Mirror status).** Prior anchor: **CRM V118 / 3D-P V23, owner-reported published 2026-08-13.** V117 (22:48, bulk RRP editing) and V115 (20:16, universal test-order cleanup + one-off archive) are the two prior publications of the same evening. V98 remains the last independently byte-compared CRM source export; the repository holds owner exports only up to CRM V102 and 3D-P V10. |
+| Live-verified after deploy | Post-V128 (2026-08-17 18:36) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:12564`. FIFO migration flows are outside this check and remain unproven live. Post-V118 `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:7672`. Post-V117 the same check returned `clean:true` with `elapsed_ms:8523` and owner QA OK. The universal dashboard test-order cleanup has still not been executed live. The exact `MAN-FOP-0006` purge remains separately verified at V114/V22. |
 
 > ⚠ **2026-08-12, 16:45–16:46 — V106 migration succeeded; repeat exposed ARRAYFORMULA spill detection.**
 > First setup: three schemas added, one fixture target backfilled, and two verified literal blockers
@@ -29,6 +29,34 @@ new Web App version.
 | Previous repo copy | `Booster Shop CRM - Apps_Script_код 29.07.2026.csv` (2026-07-29, pre-V87/V89) — superseded, keep for history only |
 
 ## Mirror status
+
+> ⚠ **2026-08-17, 18:36 — owner-reported publication of CRM Web App Version 128; scope of the published source is NOT byte-verified.**
+> The owner reported the live bound script as "Версія 128, 17 серп. 2026 р., 18:36" and pasted an
+> `integrity_check` run immediately after: `clean=true`, `problems=[]`,
+> `rrp_mismatch_3dp.compared=3`, `skipped_missing_crm_rrp=0`, `deferred=null`,
+> `elapsed_ms=12564`, checked sheets `Товари`, `РРЦ`, `Розхідники`, `Майстер_Товарів`,
+> `Налаштування`.
+> What this proves: a Web App version 128 exists and the schema/formula/relationship checks pass
+> against the live sheets.
+> What this does NOT prove: **which** of the local 2026-08-16/17 changes are inside V128. No fresh
+> owner export was compared byte-for-byte against this repository mirror after the FIFO-migration,
+> catalog-option-capacity, writeoff-capacity and row-capacity work landed locally. In particular
+> `integrity_check` cannot detect a missing FIFO-migration code path, because
+> `Міграції_Складу` behaviour is not part of its checked surface.
+> Required to close this gap: an owner export of the live script compared against
+> `crm/apps-script/Code.gs`, plus a live smoke of one box→single-pack migration and one
+> single-pack→`PKM-JP-OUTL-BST` migration on the dashboard.
+
+> ⚠ **2026-08-17, 14:30 — owner reported the initial CRM-CATALOG-OPTIONS candidate deployed; a local follow-up is not deployed.**
+> The owner-pasted Apps Script export received at this time matched the pre-edit
+> repository mirror after end-of-line normalization; no Web App version is
+> inferred from that comparison. The owner then reported deployment; an execution
+> screenshot shows the bound-sheet menu as `Head` and contemporaneous `doGet`
+> requests as Web App Version 126. That does not prove a publication version for
+> the bound-sheet menu. `Code.gs` now contains a local follow-up that replaces
+> the menu's blocking completion dialog with a toast and bounds clean validation
+> checks to twelve exact source probes. Owner review, paste, and publication
+> remain required before that follow-up exists live.
 
 > ✅ **2026-08-13, 23:18 — CRM V118 owner-reported publication (monthly-profit / preorder parity).**
 > `integrity_check` immediately after: `clean=true`, `problems=[]`, three 3D-P RRP comparisons,

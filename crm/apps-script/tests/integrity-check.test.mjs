@@ -40,20 +40,31 @@ class MockRange {
   getValues() { return this.matrix((row, column) => this.sheet.value(row, column)); }
   getDisplayValues() { return this.matrix((row, column) => String(this.sheet.value(row, column) ?? "")); }
   getFormulas() { return this.matrix((row, column) => this.sheet.formula(row, column)); }
+  getDataValidations() { return this.matrix((row, column) => this.sheet.validation(row, column)); }
   getFormula() { return this.sheet.formula(this.row, this.column); }
+  getSheet() { return this.sheet; }
+  getRow() { return this.row; }
+  getColumn() { return this.column; }
+  getNumRows() { return this.rows; }
+  getNumColumns() { return this.columns; }
   matrix(getter) { return Array.from({ length: this.rows }, (_, rowOffset) => Array.from({ length: this.columns }, (_, columnOffset) => getter(this.row + rowOffset, this.column + columnOffset))); }
 }
 
 class MockSheet {
-  constructor(name, columns) { this.name = name; this.columns = columns; this.values = new Map(); this.formulas = new Map(); }
+  constructor(name, columns, maxRows = 220) { this.name = name; this.columns = columns; this.maxRows = maxRows; this.values = new Map(); this.formulas = new Map(); this.validations = new Map(); }
   key(row, column) { return row + ":" + column; }
   value(row, column) { return this.values.get(this.key(row, column)) ?? ""; }
   formula(row, column) { return this.formulas.get(this.key(row, column)) ?? ""; }
+  validation(row, column) { return this.validations.get(this.key(row, column)) ?? null; }
   setValue(row, column, value) { this.values.set(this.key(row, column), value); }
   setFormula(row, column, formula, effective = "") { this.formulas.set(this.key(row, column), formula); this.values.set(this.key(row, column), effective); }
+  setValidation(row, column, rule) { this.validations.set(this.key(row, column), rule); }
   getRange(row, column, rows = 1, columns = 1) { return new MockRange(this, row, column, rows, columns); }
   getLastRow() { const rows = [...this.values.keys(), ...this.formulas.keys()].map((key) => Number(key.split(":")[0])); return rows.length ? Math.max(...rows) : 0; }
   getLastColumn() { return this.columns; }
+  getMaxRows() { return this.maxRows; }
+  getMaxColumns() { return this.columns; }
+  getSheetId() { return this.name; }
   getName() { return this.name; }
 }
 
@@ -69,10 +80,11 @@ function setMasterFormulas(sheet, sku, active) {
   sheet.setValue(2, 1, sku); sheet.setValue(2, 16, active ? "Так" : "Ні");
 }
 
-function makeEnvironment({ productCount = 1, rrcEnabled = true, brokenRrcRows = [], missingMaster = false, masterActive = true, productActive = true, literalProductPrice = false, literalProductShortName = false, productSku = null, duplicateProductSku = false, consumableUsageName = null, literalConsumableUsage = false, remoteMode = 'none' } = {}) {
+function makeEnvironment({ productCount = 1, rrcEnabled = true, brokenRrcRows = [], missingMaster = false, masterActive = true, productActive = true, literalProductPrice = false, literalProductShortName = false, productSku = null, duplicateProductSku = false, consumableUsageName = null, literalConsumableUsage = false, remoteMode = 'none', catalogValidationDrift = false, catalogInteriorRangeDrift = false, catalogOptionDuplicate = false } = {}) {
   const products = new MockSheet("Товари", 15);
   const rrc = new MockSheet("РРЦ", 8);
   const consumables = new MockSheet("Розхідники", 14);
+  const settings = new MockSheet("Налаштування", 31, 60);
   const master = new MockSheet("Майстер_Товарів", 21);
   setHeaders(products, 2, ["SKU", "Коротка назва", "Повна назва для сайту", "Бренд", "Мова", "Сет", "Формат", "Карт у бустері", "Бустерів у боксі", "Поточна ціна продажу", "Мінімальний залишок", "Активний товар", "Посилання на товар", "Примітка", "Фіксована собівартість"]);
   setHeaders(rrc, 2, ["SKU", "Назва товару", "Бренд", "Формат", "РРЦ, грн", "Дата оновлення", "Примітка", "Динамічна РРЦ"]);
@@ -80,6 +92,22 @@ function makeEnvironment({ productCount = 1, rrcEnabled = true, brokenRrcRows = 
   setHeaders(master, 1, ["SKU", "Назва", "Повна назва на сайті", "Бренд", "Мова", "Сет", "Формат", "Карт у бустері", "Бустерів у боксі", "Ціна CRM", "Ціна OpenCart", "Залишок", "Статус складу", "Очікується", "URL товару", "Активний", "Якість даних", "Статус автоматизації", "Нотатки", "Джерело даних", "Оновлено"]);
   [1, 2, 3, 4].forEach((column) => rrc.setFormula(3, column, "=ARRAYFORMULA(\"ok\")", ""));
   [6, 7, 8, 9, 11, 14].forEach((column) => consumables.setFormula(4, column, "=IF(TRUE;0;0)", 0));
+  settings.setValue(4, 4, "Pokémon"); settings.setValue(4, 7, "JP"); settings.setValue(4, 10, "Booster"); settings.setValue(4, 30, "Test Set");
+  if (catalogOptionDuplicate) settings.setValue(5, 30, "test set");
+  let catalogValidationCriteriaReads = 0;
+  const catalogValidationRule = (settingsColumn, allowInvalid) => {
+    const range = settings.getRange(4, settingsColumn, 57, 1);
+    return { getCriteriaType: () => "VALUE_IN_RANGE", getCriteriaValues: () => { catalogValidationCriteriaReads += 1; return [range]; }, getAllowInvalid: () => allowInvalid };
+  };
+  [[4, 4, true], [7, 5, true], [30, 6, false], [10, 7, true]].forEach(([settingsColumn, productColumn, allowInvalid]) => {
+    const rule = catalogValidationRule(settingsColumn, allowInvalid);
+    for (let row = 3; row <= products.getMaxRows(); row += 1) products.setValidation(row, productColumn, rule);
+  });
+  if (catalogValidationDrift) {
+    const wrongRule = catalogValidationRule(10, false);
+    for (let row = 3; row <= products.getMaxRows(); row += 1) products.setValidation(row, 6, wrongRule);
+  }
+  if (catalogInteriorRangeDrift) products.setValidation(111, 6, catalogValidationRule(10, false));
   consumables.setValue(4, 1, consumableUsageName || "Пакет");
   if (literalConsumableUsage) {
     consumables.setValue(4, 8, 0);
@@ -98,7 +126,7 @@ function makeEnvironment({ productCount = 1, rrcEnabled = true, brokenRrcRows = 
   }
   brokenRrcRows.forEach((row) => { rrc.setValue(row, 5, 100); rrc.setValue(row, 6, "2026-08-09"); rrc.setValue(row, 7, "manual price before SKU"); });
 
-  const crm = new MockSpreadsheet([products, rrc, consumables]);
+  const crm = new MockSpreadsheet([products, rrc, consumables, settings]);
   const automation = new MockSpreadsheet([master]);
   const remoteProperties = remoteMode === 'none' ? {} : { BOOSTER_3DP_URL: 'https://3dp.example/exec', BOOSTER_3DP_SYNC_TOKEN: 'test-token' };
   const context = vm.createContext({
@@ -107,20 +135,24 @@ function makeEnvironment({ productCount = 1, rrcEnabled = true, brokenRrcRows = 
     Utilities: { formatDate: () => "2026-08-09 12:00:00" },
     PropertiesService: { getScriptProperties: () => ({ getProperty: (key) => remoteProperties[key] || "" }) },
     UrlFetchApp: { fetch() { if (remoteMode === 'deferred') throw new Error('REMOTE_DOWN'); return { getResponseCode: () => 200, getContentText: () => JSON.stringify({ ok: true, rows: remoteMode === 'mismatch' ? [{ SKU: 'ACC-3D-TEST-001', 'РРЦ фактична, грн': 90 }] : [] }) }; } },
-    SpreadsheetApp: { openById: (id) => id === "1PvlSlg3UoPw8Fbj98lHL-VGLB0HP8hgKUxsXPW1GkRg" ? crm : automation },
+    SpreadsheetApp: { DataValidationCriteria: { VALUE_IN_RANGE: "VALUE_IN_RANGE" }, openById: (id) => id === "1PvlSlg3UoPw8Fbj98lHL-VGLB0HP8hgKUxsXPW1GkRg" ? crm : automation },
     ContentService: { MimeType: { JSON: "JSON" }, createTextOutput: (text) => ({ text, setMimeType() { return this; } }) },
   });
   vm.runInContext(`${code}\nglobalThis.__test = { apiIntegrityCheck_ };`, context, { filename: "Code.gs" });
-  return context.__test.apiIntegrityCheck_;
+  const check = context.__test.apiIntegrityCheck_;
+  check.catalogValidationCriteriaReads = () => catalogValidationCriteriaReads;
+  return check;
 }
 
 {
-  const result = makeEnvironment()();
+  const check = makeEnvironment();
+  const result = check();
   assert.equal(result.ok, true);
   assert.equal(result.clean, true);
   assert.deepEqual(JSON.parse(JSON.stringify(result.problems)), []);
   assert.equal(typeof result.elapsed_ms, 'number');
   assert.ok(result.elapsed_ms >= 0);
+  assert.equal(check.catalogValidationCriteriaReads(), 12, 'a clean catalog validation check reads exact source metadata only at three positions per field');
 }
 
 {
@@ -145,6 +177,9 @@ assertOnlyProblem(makeEnvironment({ missingMaster: true })(), 'missing_master_ro
 assertOnlyProblem(makeEnvironment({ masterActive: false })(), 'master_row_inactive');
 assertOnlyProblem(makeEnvironment({ literalProductPrice: true })(), 'formula_column_literal');
 assertOnlyProblem(makeEnvironment({ productCount: 2, duplicateProductSku: true })(), 'duplicate_sku');
+assertOnlyProblem(makeEnvironment({ catalogValidationDrift: true })(), 'catalog_option_validation_drift');
+assertOnlyProblem(makeEnvironment({ catalogInteriorRangeDrift: true })(), 'catalog_option_validation_drift');
+assertOnlyProblem(makeEnvironment({ catalogOptionDuplicate: true })(), 'catalog_option_duplicate');
 
 {
   const manualShortNameSkus = [

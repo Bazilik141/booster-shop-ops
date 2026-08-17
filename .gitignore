@@ -9,6 +9,9 @@ desktop.ini
 .env.review
 scripts/.env
 client_secret.json
+# payment-gateway setting dumps (contain live store secrets)
+pumb-settings.txt
+*-settings.txt
 
 # autosync runtime pause flag (local only)
 .autosync-pause

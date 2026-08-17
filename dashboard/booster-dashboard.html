@@ -817,6 +817,7 @@ const accountingState = {
   purchaseSeq: 0,
   writeoffSeq: 0,
   mysterySeq: 0,
+  migration: { context: null, loading: false, saving: '', message: null, requestIds: { box: '', outlet: '' } },
   selectedPurchaseLots: {},
   recent: { sales: [], purchases: [] },
   recentLoaded: { sales: false, purchases: false },
@@ -3591,6 +3592,50 @@ function togglePurchaseChannelFields() {
   if (order) order.required = isZen;
 }
 
+function inventoryMigrationQty(value) { return Number(value || 0).toLocaleString('uk-UA',{maximumFractionDigits:6}); }
+function inventoryMigrationOptions(items, selected) { return '<option value="">Оберіть SKU</option>' + (items || []).map(function(item) { const label=item.sku+' · '+(item.name || '—')+' · доступно: '+inventoryMigrationQty(item.available); return '<option value="'+recEsc(item.sku)+'"'+(item.sku===selected?' selected':'')+'>'+recEsc(label)+'</option>'; }).join(''); }
+function inventoryMigrationFind(items, sku) { return (items || []).find(function(item) { return item.sku===sku; }) || null; }
+function inventoryMigrationRequestId() { return 'migration_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,12); }
+function inventoryMigrationResetRequest(mode) { accountingState.migration.requestIds[mode]=''; }
+function inventoryMigrationMessageHtml() { const message=accountingState.migration.message; return message ? '<div class="records-message '+recEsc(message.kind || '')+'" style="margin-top:10px">'+recEsc(message.text || '')+'</div>' : ''; }
+
+function renderInventoryMigrationWorkspace() {
+  const root=document.getElementById('inventoryMigrationWorkspace'),state=accountingState.migration;if(!root)return;
+  if(state.loading){root.innerHTML='<div class="loading"><div class="spinner"></div><br>Завантажую фактичні FIFO-залишки…</div>';return;}
+  if(!state.context){root.innerHTML=inventoryMigrationMessageHtml()||'<div class="records-message">Немає даних для міграції.</div>';return;}
+  const context=state.context,boxes=context.boxes||[],sources=context.pack_sources||[],targets=context.pack_targets||[],outlet=context.outlet||{},boxSaving=state.saving==='box',outletSaving=state.saving==='outlet';
+  root.innerHTML='<div class="three-dp-note">Історичні «Закупки» не редагуються. Кожен перенос створює зрозумілий рядок у «Міграції_Складу» з FIFO-джерелом і переносить ту саму суму собівартості в цільовий SKU. Повтор того самого запиту не створює дубль.</div>'+
+    '<div class="grid2" style="margin-top:14px">'+
+      '<div class="write-form"><h4>📦 Бокс → поштучні паки</h4><div class="form-row"><label>SKU бокса (доступний залишок)</label><select id="migrationBoxSource" onchange="inventoryMigrationResetRequest(\'box\')">'+inventoryMigrationOptions(boxes,'')+'</select></div><div class="form-row"><label>SKU поштучного пака</label><select id="migrationBoxTarget" onchange="inventoryMigrationResetRequest(\'box\')">'+inventoryMigrationOptions(targets,'')+'</select></div><div class="form-row"><label>Кількість паків із 1 бокса *</label><input id="migrationBoxTargetQty" type="number" min="1" step="1" oninput="inventoryMigrationResetRequest(\'box\')"></div><div class="form-actions"><button id="saveBoxMigrationButton" class="btn-primary" type="button" onclick="submitInventoryMigration(\'box\')"'+(boxSaving?' disabled':'')+'>'+(boxSaving?'Переношу…':'Перенести 1 бокс')+'</button></div>'+(boxes.length?'':'<div class="field-hint">Немає доступних SKU з форматом box / бокс / display.</div>')+'</div>'+
+      '<div class="write-form"><h4>🔀 Поштучні паки → Outlet Mix</h4><div class="form-row"><label>SKU поштучного пака (доступний залишок)</label><select id="migrationOutletSource" onchange="inventoryMigrationResetRequest(\'outlet\')">'+inventoryMigrationOptions(sources,'')+'</select></div><div class="form-row"><label>SKU цілі</label><div class="three-dp-readonly mono">'+recEsc(outlet.sku || 'PKM-JP-OUTL-BST')+' · '+recEsc(outlet.name || 'Outlet Mix')+' · зараз: '+inventoryMigrationQty(outlet.available)+'</div></div><div class="form-row"><label>Кількість паків *</label><input id="migrationOutletQty" type="number" min="1" step="1" oninput="inventoryMigrationResetRequest(\'outlet\')"></div><div class="form-actions"><button id="saveOutletMigrationButton" class="btn-primary" type="button" onclick="submitInventoryMigration(\'outlet\')"'+(outletSaving?' disabled':'')+'>'+(outletSaving?'Переношу…':'Перенести в Outlet Mix')+'</button></div>'+(sources.length?'':'<div class="field-hint">Немає доступних поштучних паків для перенесення.</div>')+'</div>'+
+    '</div>'+inventoryMigrationMessageHtml();
+}
+
+async function loadInventoryMigrationContext() {
+  const state=accountingState.migration;state.loading=true;renderInventoryMigrationWorkspace();
+  try { state.context=await call('inventory_migration_context'); }
+  catch(e) { state.context=null;state.message={kind:'error',text:'Не вдалося завантажити FIFO-залишки: '+e.message}; }
+  finally { state.loading=false;renderInventoryMigrationWorkspace(); }
+}
+
+async function submitInventoryMigration(mode) {
+  const state=accountingState.migration,context=state.context;if(!context||state.saving)return;
+  const isBox=mode==='box',sourceSku=editValue(isBox?'migrationBoxSource':'migrationOutletSource'),sourceItems=isBox?(context.boxes||[]):(context.pack_sources||[]),source=inventoryMigrationFind(sourceItems,sourceSku);
+  const targetSku=isBox?editValue('migrationBoxTarget'):(context.outlet||{}).sku,quantity=Number(editValue(isBox?'migrationBoxTargetQty':'migrationOutletQty'));
+  if(!source||!targetSku||!Number.isInteger(quantity)||quantity<=0){state.message={kind:'error',text:'Обери SKU та вкажи цілу кількість більше нуля.'};renderInventoryMigrationWorkspace();return;}
+  if((!isBox&&quantity>Number(source.available))||(isBox&&Number(source.available)<1)){state.message={kind:'error',text:'Кількість перевищує завантажений фактичний залишок. Онови форму.'};renderInventoryMigrationWorkspace();return;}
+  const sourceQty=isBox?1:quantity,targetQty=isBox?quantity:quantity,question=isBox?'Перенести 1 × '+sourceSku+' у '+targetQty+' × '+targetSku+'?':'Перенести '+sourceQty+' × '+sourceSku+' у '+targetQty+' × '+targetSku+' (Outlet Mix)?';
+  if(!confirm(question+' Історичні закупки не будуть змінені; CRM збереже FIFO-походження.'))return;
+  if(!state.requestIds[mode])state.requestIds[mode]=inventoryMigrationRequestId();state.saving=mode;state.message={kind:'',text:'Перенесення за FIFO… не натискай повторно.'};renderInventoryMigrationWorkspace();
+  try {
+    const payload={action:'inventory_migration',type:isBox?'box_to_packs':'packs_to_outlet',source_sku:sourceSku,expected_source_available:Number(source.available),request_id:state.requestIds[mode]};
+    if(isBox){payload.target_sku=targetSku;payload.target_qty=targetQty;}else payload.source_qty=sourceQty;
+    const result=await callPost(payload),v=result.verification||{};state.requestIds[mode]='';state.message={kind:'success',text:(result.already_applied?'Міграція вже була записана: ':'Міграцію записано: ')+result.operation_id+' · '+result.source_qty+' → '+result.target_qty+' · перенесено '+inventoryMigrationQty(v.management_transferred)+' грн управлінської собівартості.'};
+    delete cache.skus;invalidateAccountingCaches();
+  } catch(e) { state.message={kind:'error',text:'Міграцію не записано: '+e.message}; }
+  finally { state.saving='';await loadInventoryMigrationContext(); }
+}
+
 async function loadAccounting() {
   try {
     if (!cache.skus) { const d = await call('sku_list'); cache.skus = d; }
@@ -3647,6 +3692,7 @@ async function loadAccounting() {
           '<div class="form-actions"><button class="btn-secondary" onclick="writeoffAddItem()">&#10133; Додати SKU</button>' +
             '<button class="btn-primary" onclick="submitWriteoff()">&#128190; Зберегти списання</button><div id="woMsg" class="form-msg"></div></div>' +
         '</div></div>' +
+        '<div class="write-section wide"><h3>&#8644; Внутрішня міграція товару</h3><div id="inventoryMigrationWorkspace"><div class="loading"><div class="spinner"></div><br>Завантаження…</div></div></div>' +
       '</div>' +
       '<div class="records-section"><div class="records-head"><h3>Оновлення записів</h3><div id="recordsMsg" class="records-message"></div></div>' +
         '<div class="records-tabs"><button class="rec-tab active" onclick="showRecTab(\'sales\',this)">Продажі</button>' +
@@ -3666,6 +3712,7 @@ async function loadAccounting() {
     purAddItem();
     togglePurchaseChannelFields();
     writeoffAddItem();
+    loadInventoryMigrationContext();
     loadRecTab('sales');
   } catch(e) {
     document.getElementById('accountingContent').innerHTML = '<div style="color:var(--red)">Помилка: ' + e.message + '</div>';
