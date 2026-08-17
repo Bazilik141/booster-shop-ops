@@ -88,6 +88,7 @@ assert.match(html,/Очікуємо відповідь CRM…/);
 assert.match(html,/THREE_DP_SALES_COLUMNS/);
 assert.match(html,/Колонки продажів/);
 assert.match(html,/% прибутку Сергію/);
+assert.match(html,/UA \+ замовлено \+ в дорозі \+ JP \+ виграно/,'asset scope describes confirmed ordered stock');
 assert.match(html,/action:'3dp_payout_create'/);
 assert.match(html,/action:'3dp_payout_mark_paid'/);
 assert.match(html,/Позначити виплачено/);

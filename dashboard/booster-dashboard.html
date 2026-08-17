@@ -1575,9 +1575,9 @@ async function loadOverview() {
       { label:'Собівартість складу (UA)', value: warehouseCost != null ? fmt(warehouseCost) : '—', sub:'На складі в Україні', cls:'' },
       { label:'Потенційний прибуток складу', value: warehouseProfit != null ? fmt(warehouseProfit) : '—',
         sub: warehouseProfit != null ? `При продажу залишку${whMarginPct != null ? '<br>Маржа ' + fmtP(whMarginPct) : ''}` : '⏳ Потрібен Apps Script', cls: warehouseProfit > 0 ? 'c-accent' : '' },
-      { label:'Собівартість активів', value: assetCost != null ? fmt(assetCost) : '—', sub:'UA + в дорозі + JP + виграно', cls:'' },
+      { label:'Собівартість активів', value: assetCost != null ? fmt(assetCost) : '—', sub:'UA + замовлено + в дорозі + JP + виграно', cls:'' },
       { label:'Потенційний прибуток активів', value: assetProfit != null ? fmt(assetProfit) : '—',
-        sub: assetProfit != null ? `Всі нереалізовані залишки${assetMarginPct != null ? '<br>Маржа ' + fmtP(assetMarginPct) : ''}` : '⏳ Потрібен Apps Script', cls: assetProfit > 0 ? 'c-accent' : '' },
+        sub: assetProfit != null ? `UA + замовлено + в дорозі + JP + виграно${assetMarginPct != null ? '<br>Маржа ' + fmtP(assetMarginPct) : ''}` : '⏳ Потрібен Apps Script', cls: assetProfit > 0 ? 'c-accent' : '' },
     ];
 
     document.getElementById('summaryCards').innerHTML = cards.map(c =>

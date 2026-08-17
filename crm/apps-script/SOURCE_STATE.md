@@ -10,8 +10,8 @@ new Web App version.
 | Mirror file | `crm/apps-script/Code.gs` — local working copy, **owner-reported published as CRM V118 at 2026-08-13 23:18 Kyiv**. The companion 3D-P mirror is owner-reported live as **V23**. |
 | Baseline pulled from live | 2026-08-08, 11:41 Kyiv (owner export `CodeJS - CRM.txt`) |
 | **Mirror content deployed to live** | **CRM V118 at 2026-08-13 23:18 Kyiv and 3D-P V23 at 20:17 Kyiv, owner-reported.** Provenance is the owner pasting these exact repository files; this is publication evidence, not a fresh byte-for-byte export comparison. |
-| Deployed Web App version number | **Latest owner-reported: CRM V128 at 2026-08-17 18:36 Kyiv (source scope not byte-verified — see Mirror status).** Prior anchor: **CRM V118 / 3D-P V23, owner-reported published 2026-08-13.** V117 (22:48, bulk RRP editing) and V115 (20:16, universal test-order cleanup + one-off archive) are the two prior publications of the same evening. V98 remains the last independently byte-compared CRM source export; the repository holds owner exports only up to CRM V102 and 3D-P V10. |
-| Live-verified after deploy | Post-V128 (2026-08-17 18:36) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:12564`. FIFO migration flows are outside this check and remain unproven live. Post-V118 `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:7672`. Post-V117 the same check returned `clean:true` with `elapsed_ms:8523` and owner QA OK. The universal dashboard test-order cleanup has still not been executed live. The exact `MAN-FOP-0006` purge remains separately verified at V114/V22. |
+| Deployed Web App version number | **Latest owner-reported: CRM V129 at 2026-08-17 22:41 Kyiv (source scope not byte-verified — see Mirror status).** Prior owner-reported V128 was at 18:36. The repository mirror has not been byte-compared with either version. Prior anchor: **CRM V118 / 3D-P V23, owner-reported published 2026-08-13.** V98 remains the last independently byte-compared CRM source export; the repository holds owner exports only up to CRM V102 and 3D-P V10. |
+| Live-verified after deploy | Post-V129 (2026-08-17 22:41) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:9698`. This proves schema/formula relationships covered by `integrity_check`, not the expected-stock rule: a direct formula read immediately after still found the legacy `Склад!Q3:Q201` rule without `Замовлено`. FIFO migration flows are outside this check and remain unproven live. Post-V128 (18:36) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:12564`. Post-V118 (23:18) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:7672`. |
 
 > ⚠ **2026-08-12, 16:45–16:46 — V106 migration succeeded; repeat exposed ARRAYFORMULA spill detection.**
 > First setup: three schemas added, one fixture target backfilled, and two verified literal blockers
@@ -30,22 +30,20 @@ new Web App version.
 
 ## Mirror status
 
-> ⚠ **2026-08-17, 18:36 — owner-reported publication of CRM Web App Version 128; scope of the published source is NOT byte-verified.**
-> The owner reported the live bound script as "Версія 128, 17 серп. 2026 р., 18:36" and pasted an
+> ⚠ **2026-08-17, 22:41 — owner-reported publication of CRM Web App Version 129; source scope is NOT byte-verified.**
+> The owner reported the live bound script as "Версія 129, 17 серп. 2026 р., 22:41" and pasted an
 > `integrity_check` run immediately after: `clean=true`, `problems=[]`,
 > `rrp_mismatch_3dp.compared=3`, `skipped_missing_crm_rrp=0`, `deferred=null`,
-> `elapsed_ms=12564`, checked sheets `Товари`, `РРЦ`, `Розхідники`, `Майстер_Товарів`,
+> `elapsed_ms=9698`, checked sheets `Товари`, `РРЦ`, `Розхідники`, `Майстер_Товарів`,
 > `Налаштування`.
-> What this proves: a Web App version 128 exists and the schema/formula/relationship checks pass
-> against the live sheets.
-> What this does NOT prove: **which** of the local 2026-08-16/17 changes are inside V128. No fresh
-> owner export was compared byte-for-byte against this repository mirror after the FIFO-migration,
-> catalog-option-capacity, writeoff-capacity and row-capacity work landed locally. In particular
-> `integrity_check` cannot detect a missing FIFO-migration code path, because
-> `Міграції_Складу` behaviour is not part of its checked surface.
-> Required to close this gap: an owner export of the live script compared against
-> `crm/apps-script/Code.gs`, plus a live smoke of one box→single-pack migration and one
-> single-pack→`PKM-JP-OUTL-BST` migration on the dashboard.
+> What this proves: a Web App version 129 exists and the schema/formula/relationship checks covered
+> by `integrity_check` pass against the live sheets.
+> What this does NOT prove: **which** local changes are in V129, or that the expected-stock formula
+> was applied. A direct read after this report found `Склад!Q3` and `Q201` still use the legacy
+> `Закупки!3:290` formula with only `В дорозі`, `На складі в Японії`, and `Виграно` — no `Замовлено`.
+> Required next: refresh the CRM spreadsheet, use the public menu item `Booster CRM → Оновити
+> очікуваний залишок`, then read back `Склад!Q` and the ordered-SKU totals. A fresh owner export is
+> still required for byte comparison with `crm/apps-script/Code.gs`.
 
 > ⚠ **2026-08-17, 14:30 — owner reported the initial CRM-CATALOG-OPTIONS candidate deployed; a local follow-up is not deployed.**
 > The owner-pasted Apps Script export received at this time matched the pre-edit

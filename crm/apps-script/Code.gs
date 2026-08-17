@@ -17,6 +17,7 @@ SpreadsheetApp.getUi()
 .addItem('Очистити форму витрат', 'clearExpenseForm')
 .addSeparator()
 .addItem('Оновити довідники SKU', 'setupCrmCatalogOptionInfrastructure')
+.addItem('Оновити очікуваний залишок', 'updateExpectedStockFormulaMenu')
 .addItem('Налаштувати OpenAI ключ', 'setupOpenAiApiKey')
 .addToUi();
 }
@@ -4570,6 +4571,52 @@ function updateSkuCurrentCostMenu() {
 const ss = SpreadsheetApp.getActiveSpreadsheet();
 updateSkuCurrentCost_(ss);
 SpreadsheetApp.getUi().alert('Собівартість складу оновлено.');
+}
+
+function updateExpectedStockFormulaMenu() {
+const ss = SpreadsheetApp.getActiveSpreadsheet();
+const result = updateExpectedStockFormulas_(ss);
+SpreadsheetApp.flush();
+invalidateDoGetCache_();
+SpreadsheetApp.getUi().alert('Очікуваний залишок оновлено: ' + result.updated + ' рядків.');
+}
+
+// Owner rule (2026-08-17): a confirmed order is expected stock, even before it is in transit.
+function expectedStockFormula_(stockRow, purchaseLastRow) {
+const row = Math.max(3, Math.floor(Number(stockRow) || 3));
+const lastPurchaseRow = Math.max(3, Math.floor(Number(purchaseLastRow) || 3));
+const purchaseSku = "'Закупки'!$E$3:$E$" + lastPurchaseRow;
+const purchaseQty = "'Закупки'!$H$3:$H$" + lastPurchaseRow;
+const purchaseStatus = "'Закупки'!$Q$3:$Q$" + lastPurchaseRow;
+return '=IF($A' + row + '="";"";SUMPRODUCT((' + purchaseSku + '=$A' + row + ')*' + purchaseQty + '*(((' + purchaseStatus + '="Замовлено")+(' + purchaseStatus + '="В дорозі")+(' + purchaseStatus + '="На складі в Японії")+(' + purchaseStatus + '="Виграно"))>0)))';
+}
+
+function updateExpectedStockFormulas_(ss) {
+if (!ss) ss = SpreadsheetApp.getActiveSpreadsheet();
+const purchases = ss.getSheetByName('Закупки');
+const sklad = ss.getSheetByName('Склад');
+if (!purchases) throw new Error('Не знайдено вкладку Закупки.');
+if (!sklad) throw new Error('Не знайдено вкладку Склад.');
+const firstRow = 3;
+const purchaseLastRow = crmCapacitySheetLastRow_(purchases, firstRow);
+const stockLastRow = crmCapacitySheetLastRow_(sklad, firstRow);
+const rowCount = stockLastRow - firstRow + 1;
+if (rowCount <= 0) return { updated: 0, purchase_last_row: purchaseLastRow, stock_last_row: stockLastRow };
+const range = sklad.getRange(firstRow, 17, rowCount, 1); // Q: Очікується / Японія
+const current = range.getFormulas();
+const values = range.getValues();
+const next = [];
+let updated = 0;
+for (let index = 0; index < rowCount; index++) {
+const formula = expectedStockFormula_(firstRow + index, purchaseLastRow);
+if (!current[index][0] && String(values[index][0] == null ? '' : values[index][0]).trim() !== '') {
+throw new Error('У Склад!Q' + (firstRow + index) + ' очікувалась формула, але знайдено ручне значення. Виправлення зупинено.');
+}
+next.push([formula]);
+if (String(current[index][0] || '') !== formula) updated++;
+}
+if (updated) range.setFormulas(next);
+return { updated: updated, purchase_last_row: purchaseLastRow, stock_last_row: stockLastRow };
 }
 
 function updateSkuCurrentCost_(ss) {
