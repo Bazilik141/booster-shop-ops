@@ -7,11 +7,11 @@ new Web App version.
 
 | Field | Value |
 |---|---|
-| Mirror file | `crm/apps-script/Code.gs` — local working copy, **owner-reported published as CRM V118 at 2026-08-13 23:18 Kyiv**. The companion 3D-P mirror is owner-reported live as **V23**. |
+| Mirror file | `crm/apps-script/Code.gs` — local working copy, **owner-reported published as CRM V131 at 2026-08-18 14:52 Kyiv**. The companion 3D-P mirror is owner-reported live as **V23**. |
 | Baseline pulled from live | 2026-08-08, 11:41 Kyiv (owner export `CodeJS - CRM.txt`) |
-| **Mirror content deployed to live** | **CRM V118 at 2026-08-13 23:18 Kyiv and 3D-P V23 at 20:17 Kyiv, owner-reported.** Provenance is the owner pasting these exact repository files; this is publication evidence, not a fresh byte-for-byte export comparison. |
-| Deployed Web App version number | **Latest owner-reported: CRM V129 at 2026-08-17 22:41 Kyiv (source scope not byte-verified — see Mirror status).** Prior owner-reported V128 was at 18:36. The repository mirror has not been byte-compared with either version. Prior anchor: **CRM V118 / 3D-P V23, owner-reported published 2026-08-13.** V98 remains the last independently byte-compared CRM source export; the repository holds owner exports only up to CRM V102 and 3D-P V10. |
-| Live-verified after deploy | Post-V129 (2026-08-17 22:41) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:9698`. This proves schema/formula relationships covered by `integrity_check`, not the expected-stock rule: a direct formula read immediately after still found the legacy `Склад!Q3:Q201` rule without `Замовлено`. FIFO migration flows are outside this check and remain unproven live. Post-V128 (18:36) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:12564`. Post-V118 (23:18) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:7672`. |
+| **Mirror content deployed to live** | **CRM V131 at 2026-08-18 14:52 Kyiv and 3D-P V23 at 20:17 Kyiv, owner-reported.** Provenance is the owner reporting that the repository candidate was pasted and published; this is publication evidence, not a fresh byte-for-byte export comparison. |
+| Deployed Web App version number | **Latest owner-reported: CRM V131 at 2026-08-18 14:52 Kyiv (source scope not byte-verified — see Mirror status).** Prior owner-reported V130 was at 14:36. The repository mirror has not been freshly byte-compared with either version. Prior anchor: **CRM V118 / 3D-P V23, owner-reported published 2026-08-13.** V98 remains the last independently byte-compared CRM source export; the repository holds owner exports only up to CRM V102 and 3D-P V10. |
+| Live-verified after deploy | Post-V131 (2026-08-18 14:52) owner reported `QA - ok`; `integrity_check`: `clean:true`, `problems:[]`, checked `Товари`, `РРЦ`, `Розхідники`, `Майстер_Товарів`, `Налаштування`; `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:55853`. This proves the schema/formula relationships covered by `integrity_check`, not unrelated FIFO/warehouse flows or a byte match with the mirror. Post-V130 (2026-08-18 14:36) `integrity_check`: `clean:true`, `problems:[]`, checked `Товари`, `РРЦ`, `Розхідники`, `Майстер_Товарів`, `Налаштування`; `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:12184`. Owner reported dashboard QA done for the recent-purchases fix. Post-V129 (2026-08-17 22:41) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:9698`. This proves schema/formula relationships covered by `integrity_check`, not the expected-stock rule: a direct formula read immediately after still found the legacy `Склад!Q3:Q201` rule without `Замовлено`. FIFO migration flows are outside this check and remain unproven live. Post-V128 (18:36) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:12564`. Post-V118 (23:18) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:7672`. |
 
 > ⚠ **2026-08-12, 16:45–16:46 — V106 migration succeeded; repeat exposed ARRAYFORMULA spill detection.**
 > First setup: three schemas added, one fixture target backfilled, and two verified literal blockers
@@ -29,6 +29,22 @@ new Web App version.
 | Previous repo copy | `Booster Shop CRM - Apps_Script_код 29.07.2026.csv` (2026-07-29, pre-V87/V89) — superseded, keep for history only |
 
 ## Mirror status
+
+> ✅ **2026-08-18, 14:52 — owner-reported publication of CRM Web App Version 131; QA OK.**
+> The owner reported `QA - ok` and supplied `integrity_check`: `ok=true`, `clean=true`,
+> `problems=[]`, checked `Товари`, `РРЦ`, `Розхідники`, `Майстер_Товарів`, `Налаштування`;
+> `rrp_mismatch_3dp.compared=3`, `skipped_missing_crm_rrp=0`, `deferred=null`,
+> `elapsed_ms=55853`.
+> This is live publication and integrity evidence. No fresh post-V131 Apps Script export was provided,
+> so the exact source scope remains **not byte-verified** against `crm/apps-script/Code.gs`.
+
+> ✅ **2026-08-18, 14:36 — owner-reported publication of CRM Web App Version 130; recent-purchases dashboard QA done.**
+> The owner reported V130 and supplied an `integrity_check` result immediately after publication:
+> `ok=true`, `clean=true`, `problems=[]`, checked `Товари`, `РРЦ`, `Розхідники`,
+> `Майстер_Товарів`, `Налаштування`; `rrp_mismatch_3dp.compared=3`,
+> `skipped_missing_crm_rrp=0`, `deferred=null`, `elapsed_ms=12184`.
+> This is live publication and integrity evidence. No fresh post-V130 Apps Script export was provided,
+> so the exact source scope remains **not byte-verified** against `crm/apps-script/Code.gs`.
 
 > ⚠ **2026-08-17, 22:41 — owner-reported publication of CRM Web App Version 129; source scope is NOT byte-verified.**
 > The owner reported the live bound script as "Версія 129, 17 серп. 2026 р., 22:41" and pasted an
