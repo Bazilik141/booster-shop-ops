@@ -71,3 +71,20 @@ data rollback is needed because this change is read-only.
 Low. The limit remains 20; only its ordering changes from supplier-reference
 order to CRM insertion order. The Web App publication gate and owner QA remain
 required.
+
+## Follow-up after V131 — tracked parcel completeness (not deployed)
+
+Read-only live evidence on 2026-08-18 found six open `Закупки` rows with
+`LX328130128JP`: `LOT-0093` at row 88 and `LOT-0123` through `LOT-0127` at
+rows 114–118. The dashboard showed only the latter five because the API selected
+the newest twenty open lots before client-side parcel grouping.
+
+The local `apiRecentPurchasesForUpdate_()` follow-up retains the twenty newest
+rows and adds every open sibling that has the same non-empty track number as one
+of those rows. This prevents partial tracked parcels without merging unrelated
+lots whose track numbers are blank. The focused regression test now covers the
+six-lot parcel where the oldest sibling falls outside the initial twenty.
+
+This follow-up is not in CRM V131. It requires a new Apps Script Web App
+publication and a dashboard refresh; success is `LX328130128JP` displaying
+`6 лот.` including `PKM-JP-MSYM-BBX`.
