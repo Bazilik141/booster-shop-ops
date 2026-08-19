@@ -251,6 +251,15 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
 .write-section h3 { margin:0 0 14px;font-size:15px; }
 .write-section.purchase { grid-column:span 2; }
 .write-section.wide { grid-column:1 / -1; }
+.migration-details { padding:0;overflow:hidden; }
+.migration-details > summary { display:flex;align-items:center;gap:8px;padding:20px;cursor:pointer;list-style:none; }
+.migration-details > summary::-webkit-details-marker { display:none; }
+.migration-details > summary::before { content:'▸';color:var(--accent);transition:transform .15s ease; }
+.migration-details[open] > summary::before { transform:rotate(90deg); }
+.migration-details > summary h3 { flex:1;margin:0; }
+.migration-details > summary:hover h3 { color:var(--text); }
+.migration-details > summary:focus-visible { outline:2px solid var(--accent);outline-offset:-2px; }
+.migration-details-content { padding:0 20px 20px; }
 .write-form { display:grid;gap:11px; }
 .form-row { display:flex;flex-direction:column;gap:5px;min-width:0; }
 .form-row label { font-size:12px;color:var(--muted); }
@@ -2584,8 +2593,8 @@ const ROADMAP_TASKS = [
     warn: '2026-07-28: власник залив v1 у Google Sheets. ChatGPT-хендофф рев\'юнуто — повна модель сутностей (Product/Variant/CostVersion/...) свідомо НЕ переноситься в таблицю зараз, чекає рішення по архітектурі (3D-P-005/план §11.4). Того ж дня: власник закрив фінмодель — лише Model B (собівартість+50/50 прибутку). v2 переписує формули Продажі/Аналітика під Model B, Model A знято. 2026-07-31: v3 в роботі — перший реальний SKU FIG-CHARM-001 (Чармандер), фурнітура в собівартості; live Sheet v3 підтверджено через Drive-пошук, власник — єдиний editor. Того ж дня власник закрив 2 останні відкриті пункти легенди: графік виплат Сергію (раз/міс, кінець місяця, без авансу) і ліміт знижки без узгодження (ліміту немає, все централізовано з Сергієм) — рішення підтверджено остаточно. Claude зібрав v4 (3d-print/3D-P_nomenclature-tracker_v4_20260731.xlsx): нова вкладка «Виплати» (трекінг періодів нарахувань/виплат) + допоміжна Продажі!S (авто-період РРРР-ММ); 637 формул, 0 помилок (LibreOffice headless recalc). Owner-рішення того ж дня: Сергій НЕ отримує прямий editor-доступ до Sheet, лише через власний сервер (Apps Script Web API, 3D-P-007) — узгоджено з планом §13. Власник сам залив v4 у Google Sheets (docs.google.com/spreadsheets/d/13FwH5YH7ju0_854jpzzS08E6c7PGUroiE-Z6UnaAlYk); Claude перевірив вміст через Drive read_file_content — формули рахують правильно (напр. Виплати: нараховано 207 грн, термін перевірки 2026-08-02), доступ лише у власника. Старий v3-файл у Drive лишається, але застарілий (без «Виплати»/Продажі!S) — не використовувати, власник може заархівувати пізніше. Хендофф 3D-P-006 (Codex, дашборд-вкладка) оновлено на v4 URL, додано 5-ту дію 3dp_payouts.', subtasks: []
   },
   {
-    id: '3D-P-002', title: 'Каталог: підкатегорія «Фігурки» (Pokémon)', status: 'done', tool: 'Claude + Codex', priority: 'Medium',
-    lastUpdated: '2026-08-16', blockedBy: [],
+    id: '3D-P-002', title: 'Каталог: чотири підкатегорії (Фігурки та декор, Протектори, Підставки)', status: 'done', tool: 'Claude + Codex', priority: 'Medium',
+    lastUpdated: '2026-08-19', blockedBy: [],
     simple: 'Рекомендація (bs-seo-risk-gate): НЕ перейменовувати/зливати «Аксесуари» — додати «Фігурки» як підкатегорію Pokémon (ID 59), за зразком «Набори Pokémon». Generic (не IP) 3D-друк лишається в «Аксесуари».',
     why: '«Аксесуари» вже має SEO-вагу на функціональних запитах (протектори/топлоадери); усі референс-товари — IP-мерч (Пікачу/Генгар/Мяу/Дітто/Онікс), інший інтент пошуку.',
     warn: '2026-08-16 ЗАКРИТО за рішенням власника. Задача структурна (розміщення в каталозі), структура існує; матеріал підтверджено — PLA. Публікація карток іде поступово і ведеться в 3D-P-CARDCONTENT, не тут. ⚠ ДВА ПУНКТИ ПЕРЕНЕСЕНО, А НЕ ЗАКРИТО: (1) фото готового ЗІБРАНОГО брелока потрібне перед перемиканням якірного товару з Disabled на Enabled — поточне фото показує незібрані заготовки; (2) включення 3D-SKU в Merchant-фід лишається відкритим рішенням власника (план §9.3) — ризикова зона, GTIN для цих товарів не існує і вигадувати його не можна. Іменна нотатка: текст блокера від 31.07 згадує BR-CHARM-001, канонічний SKU за plans/3D-P_sku-naming-convention_20260807.md — BR-CHARM-100. || 2026-08-11 СИНХРОНІЗАЦІЯ З NOTION: статус був помилково «todo», у Notion — In progress з 31.07. || 2026-07-31: адмін-гайд фіналізовано (plans/3D-P-002_catalog-placement-admin-guide_20260731.md), власник схвалив створення категорії + BR-CHARM-001 (перейменовано з FIG-CHARM-001) як Disabled структурний якір. Гейти до Enable: підтверджений тип пластику/вартість матеріалу від Сергія і фото зібраного брелока. Включення в Merchant-фід — відкрите рішення власника (план §9.3). || Ризик Medium загалом, High для Product JSON-LD/Merchant-фіда (немає GTIN — не вигадувати).', subtasks: []
@@ -2771,8 +2780,8 @@ const ROADMAP_TASKS = [
   },
   {
     id: '3D-P-CARDCONTENT', title: 'Наповнення карток товару та категорій для 3D-SKU', status: 'active', tool: 'Claude (правила + рев\'ю) + ChatGPT (чернетки)', priority: 'High',
-    lastUpdated: '2026-08-16', blockedBy: ['CHECKOUT-011 (ввімкнення товарів)', 'SEO-008 (масштабування за межі поточних партій)'],
-    simple: 'Назви, описи та значення атрибутів по кожному 3D-друкованому SKU для карток товару і категорій.',
+    lastUpdated: '2026-08-19', blockedBy: ['CHECKOUT-011 (ввімкнення товарів)', 'SEO-008 (масштабування за межі поточних партій)'],
+    simple: '19 товарів заведені на проді 2026-08-19 (id 125–143), усі невидимі: 5 брелоків, 7 фігурок, 7 підставок. Лишається ввімкнення (ціни, фото, CRM) і 7 карток BR- без хендофу.',
     why: 'Без цього SKU неможливо опублікувати на сайті, навіть коли категорія і бекенд готові.',
     warn: '2026-08-16 ЗРУШИЛА З DISCOVERY, три ітерації чернеток ChatGPT із рев\'ю через bs-3dp-card-qa. ЄДИНИЙ ДОКУМЕНТ ПРАВИЛ ДЛЯ ChatGPT: handoffs/handoff_3D-P-CARDCONTENT_chatgpt-master_20260816.md — замінив три попередні (принцип SKU 07.08, контент-бриф 06.08, правила ред.1-4), усі три мають банер заміщення й лишились як історія. || ГОТОВЕ ДО ВИКОНАННЯ: handoffs/handoff_3D-P-CARDCONTENT_five-pokemon-keychains_20260816.md — пʼять Pokémon-брелоків (BR-MEW-100, BR-CHARM-100, BR-SQUIR-100, BR-BULB-100, BR-PIKA-100), фінальні тексти + alt-тексти + вага 50 г + габарити + ціна-заглушка 1 грн; тексти НЕ переписувати. handoffs/handoff_3D-P-002_subcategories-and-content_20260816.md — чотири підкатегорії з повним контентом. || РІШЕННЯ ВЛАСНИКА В КАНОНІ: категорія BR-4__ брелок-спінер (BR-DITTO-200 → BR-DITTO-400); мнемоніки SQUIR/BULB/PIKA; порядок осей для пласких виробів ширина×висота×товщина; матеріал Пластик PLA; маса без фурнітури; тип фурнітури не гарантується і розкривається в описі; колір фіксований для SKU і є обовʼязковою характеристикою; SEO URL — латинська назва персонажа; каталог ділиться за предметом, один товар = одна категорія. Канон: plans/3D-P_sku-naming-convention_20260807.md + handoffs/handoff_LEGAL-002b-3DP_3d-attribute-schema_20260806.md. || ДОКАЗОВА БАЗА: diagnostics/3D-P-CARDCONTENT_chatgpt-draft-review_20260816.md (раунди 2 і 3). || ⚠ ПОТРІБЕН НОВИЙ РОАДМАП-РЯДОК під чотири підкатегорії: рядок 3D-P-002 закритий Done 16.08 в іншій сесії зі старим рішенням про «Фігурки», а нова структура інша. || ЩЕ ЗА ВЛАСНИКОМ: фото, реальні ціни, заведення SKU в CRM ДО ввімкнення видимості (інакше перше замовлення ляже в Продажі без собівартості), призначення виконавця патчу. || ІСТОРІЯ: було помилково заведено як «3D-P-015» 06.08 — номер уже зайнятий, перейменовано на нечисловий ярлик.',
     subtasks: []
@@ -3598,6 +3607,11 @@ function inventoryMigrationFind(items, sku) { return (items || []).find(function
 function inventoryMigrationRequestId() { return 'migration_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,12); }
 function inventoryMigrationResetRequest(mode) { accountingState.migration.requestIds[mode]=''; }
 function inventoryMigrationMessageHtml() { const message=accountingState.migration.message; return message ? '<div class="records-message '+recEsc(message.kind || '')+'" style="margin-top:10px">'+recEsc(message.text || '')+'</div>' : ''; }
+function toggleInventoryMigrationWorkspace(details) {
+  if (!details || !details.open) return;
+  const state = accountingState.migration;
+  if (!state.context && !state.loading) loadInventoryMigrationContext();
+}
 
 function renderInventoryMigrationWorkspace() {
   const root=document.getElementById('inventoryMigrationWorkspace'),state=accountingState.migration;if(!root)return;
@@ -3692,7 +3706,7 @@ async function loadAccounting() {
           '<div class="form-actions"><button class="btn-secondary" onclick="writeoffAddItem()">&#10133; Додати SKU</button>' +
             '<button class="btn-primary" onclick="submitWriteoff()">&#128190; Зберегти списання</button><div id="woMsg" class="form-msg"></div></div>' +
         '</div></div>' +
-        '<div class="write-section wide"><h3>&#8644; Внутрішня міграція товару</h3><div id="inventoryMigrationWorkspace"><div class="loading"><div class="spinner"></div><br>Завантаження…</div></div></div>' +
+        '<details class="write-section wide migration-details" id="inventoryMigrationDetails" ontoggle="toggleInventoryMigrationWorkspace(this)"><summary><h3>&#8644; Внутрішня міграція товару</h3></summary><div class="migration-details-content"><div id="inventoryMigrationWorkspace"></div></div></details>' +
       '</div>' +
       '<div class="records-section"><div class="records-head"><h3>Оновлення записів</h3><div id="recordsMsg" class="records-message"></div></div>' +
         '<div class="records-tabs"><button class="rec-tab active" onclick="showRecTab(\'sales\',this)">Продажі</button>' +
@@ -3712,7 +3726,6 @@ async function loadAccounting() {
     purAddItem();
     togglePurchaseChannelFields();
     writeoffAddItem();
-    loadInventoryMigrationContext();
     loadRecTab('sales');
   } catch(e) {
     document.getElementById('accountingContent').innerHTML = '<div style="color:var(--red)">Помилка: ' + e.message + '</div>';
@@ -3949,7 +3962,7 @@ async function loadRecTab(name, force) {
   pane.innerHTML = '<div class="loading"><div class="spinner"></div><br>Завантаження...</div>';
   try {
     const cfg = recTableConfig(name);
-    const data = await call(cfg.action, { limit: 20 });
+    const data = await call(cfg.action, { limit: 20, include_all_open:'true' });
     accountingState.recent[name] = data.rows || [];
     if (name === 'sales') {
       accountingState.recent[name].forEach(function(row) {

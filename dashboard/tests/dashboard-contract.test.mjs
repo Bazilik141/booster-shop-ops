@@ -58,6 +58,9 @@ assert.match(html,/action:'add_consumable_purchase'/);
 assert.match(html,/action:'update_consumable_purchase'/);
 assert.match(html,/Закупки розхідників і фурнітури/);
 assert.match(html,/Внутрішня міграція товару/);
+assert.match(html,/<details class="write-section wide migration-details" id="inventoryMigrationDetails" ontoggle="toggleInventoryMigrationWorkspace\(this\)">/,'inventory migration is a collapsed native disclosure by default');
+assert.match(html,/function toggleInventoryMigrationWorkspace\(details\)/,'opening the migration disclosure loads its FIFO context on demand');
+assert.doesNotMatch(html,/writeoffAddItem\(\);\s*loadInventoryMigrationContext\(\);/,'migration FIFO context is not fetched while the disclosure remains closed');
 assert.match(html,/Бокс → поштучні паки/);
 assert.match(html,/Поштучні паки → Outlet Mix/);
 assert.match(html,/action:'inventory_migration'/);
@@ -67,6 +70,7 @@ assert.match(html,/requestIds: \{ box: '', outlet: '' \}/,'migration retries ret
 assert.match(html,/const PURCHASE_BATCH_LIMIT = 10;/,'purchase batch selection limit is ten lots');
 assert.match(html,/selectedPurchaseLots\)\.length >= PURCHASE_BATCH_LIMIT/,'purchase selection enforces the shared batch limit');
 assert.match(html,/rows\.length > PURCHASE_BATCH_LIMIT/,'purchase submission enforces the shared batch limit');
+assert.match(html,/call\(cfg\.action, \{ limit: 20, include_all_open:'true' \}\)/,'the purchases tab explicitly requests every open purchase');
 assert.match(html,/Відновити тільки 3D-P після помилки/);
 assert.match(html,/action:'retry_3dp_sync'/);
 assert.match(html,/retry_3dp_sync'[\s\S]*clearPendingOrderEdit_\(accountingState\.editRequestId\)/);
