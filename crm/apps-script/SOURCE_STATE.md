@@ -7,10 +7,10 @@ new Web App version.
 
 | Field | Value |
 |---|---|
-| Mirror file | `crm/apps-script/Code.gs` — local working copy, **owner-reported published as CRM V131 at 2026-08-18 14:52 Kyiv**. The companion 3D-P mirror is owner-reported live as **V23**. |
+| Mirror file | `crm/apps-script/Code.gs` — local working source is based on owner-reported **CRM V137, 2026-08-20 15:39 Kyiv** and now includes an unpublished CRM-012 follow-up for migration stock reservations and write-offs. V133 was byte-compared with the mirror before CRM-010; the companion 3D-P mirror is owner-reported live as **V23**. |
 | Baseline pulled from live | 2026-08-08, 11:41 Kyiv (owner export `CodeJS - CRM.txt`) |
-| **Mirror content deployed to live** | **CRM V131 at 2026-08-18 14:52 Kyiv and 3D-P V23 at 20:17 Kyiv, owner-reported.** Provenance is the owner reporting that the repository candidate was pasted and published; this is publication evidence, not a fresh byte-for-byte export comparison. |
-| Deployed Web App version number | **Latest owner-reported: CRM V131 at 2026-08-18 14:52 Kyiv (source scope not byte-verified — see Mirror status).** Prior owner-reported V130 was at 14:36. The repository mirror has not been freshly byte-compared with either version. Prior anchor: **CRM V118 / 3D-P V23, owner-reported published 2026-08-13.** V98 remains the last independently byte-compared CRM source export; the repository holds owner exports only up to CRM V102 and 3D-P V10. |
+| **Mirror content deployed to live** | **CRM V137 at 2026-08-20 15:39 Kyiv, owner-reported.** The owner reported a clean integrity check. The local CRM-012 follow-up after V137 is not pasted or published. |
+| Deployed Web App version number | **Latest owner-reported: CRM V137 at 2026-08-20 15:39 Kyiv.** The immediately preceding V134 was at 09:08, V133 (2026-08-19 12:24) was byte-compared with the mirror before CRM-010, and 3D-P V23 is owner-reported. |
 | Live-verified after deploy | Post-V131 (2026-08-18 14:52) owner reported `QA - ok`; `integrity_check`: `clean:true`, `problems:[]`, checked `Товари`, `РРЦ`, `Розхідники`, `Майстер_Товарів`, `Налаштування`; `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:55853`. This proves the schema/formula relationships covered by `integrity_check`, not unrelated FIFO/warehouse flows or a byte match with the mirror. Post-V130 (2026-08-18 14:36) `integrity_check`: `clean:true`, `problems:[]`, checked `Товари`, `РРЦ`, `Розхідники`, `Майстер_Товарів`, `Налаштування`; `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:12184`. Owner reported dashboard QA done for the recent-purchases fix. Post-V129 (2026-08-17 22:41) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:9698`. This proves schema/formula relationships covered by `integrity_check`, not the expected-stock rule: a direct formula read immediately after still found the legacy `Склад!Q3:Q201` rule without `Замовлено`. FIFO migration flows are outside this check and remain unproven live. Post-V128 (18:36) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:12564`. Post-V118 (23:18) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:7672`. |
 
 > ⚠ **2026-08-12, 16:45–16:46 — V106 migration succeeded; repeat exposed ARRAYFORMULA spill detection.**
@@ -25,10 +25,104 @@ new Web App version.
 > The owner-run result returned all schema/formula/backfill counters at zero and
 > `already_applied=true`. The owner clarified that V107 had been published at 16:54, so dashboard
 > API calls and the setup function now use the corrected source. The CRM deploy/setup gate is closed.
-| Local syntax check | Node VM parse + local CRM/3D regression suites passed 2026-08-12 |
+| Local syntax check | Node VM parse of `Code.gs` OK + CRM suite 19/19 and 3D-P suite 2/2 passed 2026-08-20 (CRM-010). Previous anchor: 2026-08-12. |
 | Previous repo copy | `Booster Shop CRM - Apps_Script_код 29.07.2026.csv` (2026-07-29, pre-V87/V89) — superseded, keep for history only |
 
 ## Mirror status
+
+> ✅ **2026-08-20 — LIVE↔MIRROR BYTE COMPARISON PASSED. The first one since V98; the "not byte-verified" caveat that has been carried in this file since then is now discharged.**
+> Evidence: the owner exported the live bound `Код.gs` (Apps Script editor, select-all copy) as
+> `Версія 133, 19 серп. 2026 р., 1224` — 493 567 bytes raw, CRLF, no trailing newline; md5 of the raw upload
+> `1c0c247fcccd3268dd0642e02d6e4be9`. Normalised to LF it is **485 638 bytes, 7 930 lines, 454 top-level
+> `function` declarations**. `diff` against the mirror (485 907 / 7 935 / 454) returns exactly three hunks and
+> nothing else: the `onOpen` `.addItem` line, the `updateSkuCurrentCostMenu` body, and the trailing newline.
+> All three are `CRM-010`, which is deliberately not live yet.
+> **Therefore:** the live bound source equals the mirror minus `CRM-010`. The parcel-completeness follow-up,
+> the inventory migrations, the catalog-option infrastructure, the 10-lot purchase editor, the `Виграно`
+> expected-stock rule and the `OC-FOP-0320` repair are **all live**. There is no other undeployed work in the mirror.
+> `CRM-010` section 9 option **(a)** is now proven rather than assumed: the owner may paste the whole mirror file.
+> Scope of the proof: **source only**. It says nothing about which Web App version is published — bound-source
+> edits do not publish. The last owner-reported publication remains V131 (2026-08-18 14:52); the live source is
+> labelled V133 (2026-08-19 12:24).
+> ⚠ **Trap in the repository root:** the file `Версія 133, 19 серп. 2026 р., 1224.csv`
+> (422 717 bytes, md5 `dac28f9058efa80021fd97e7501d2f32`) is **mislabelled**. Its content is an older export —
+> 382 functions, ~1 190 lines short of the mirror, missing the inventory migrations, catalog-option
+> infrastructure, 10-lot purchase editor, `Виграно` rule and `OC-FOP-0320` repair. It is roughly V122, not V133.
+> Do not use it for a byte comparison. Rename or remove it; the real V133 export is the one described above.
+
+> ⚠ **2026-08-20 — CRM-011 local candidate: bounded FIFO drift diagnostic + one-order repair, not yet pasted or run live.**
+> The owner reassigned CRM-011 to Codex after `LOT-0113` was corrected from 4 to 5 units. Bounded live reads found one matching sale: `OC-FOP-0324` / `PKM-EN-Q2-MTIN-SAL` at `Продажі!289`; it still has frozen `689.88 / 731.27` while `LOT-0113` and `Склад!I:J` now show `551.90 / 585.01`. The local candidate adds a read-only `diagnoseCrm011FifoCostDrift()` (capped at 50 rows) plus preview/apply wrappers that resolve the exact order+SKU at run time and write only `Продажі!L:M,AD:AF` when FIFO differs. 3D-P, Mystery Box, non-actual and invalid-quantity rows are rejected. The repair is idempotent: a matching repeat returns `rows_written=0` and does not invalidate cache. Local Node parse passed; CRM suite 20/20 passed. Live paste, preview, owner-named workbook copy, apply, read-back and `integrity_check` remain required.
+
+> ✅ **2026-08-20 — CRM-010 DEPLOYED AND LIVE-VERIFIED as V134 (09:08 Kyiv). Owner QA passed.**
+> Two anchors in `crm/apps-script/Code.gs`, both verified against the actual file before editing
+> (the handoff line numbers were marked "likely, not confirmed" and both happened to be correct):
+> `onOpen` gains `.addItem('Оновити собівартість складу', 'updateSkuCurrentCostMenu')` immediately after the
+> expected-stock item (mirror line 21); `updateSkuCurrentCostMenu` (mirror 4682–4690) now captures the
+> `updateSkuCurrentCost_(ss)` result, calls `SpreadsheetApp.flush()` then `invalidateDoGetCache_()`, builds
+> `Собівартість складу оновлено: <N> SKU.`, guards the alert with the same
+> `try { ... } catch (e) { Logger.log(message); }` shape as `createDailyInventoryMaintenanceTrigger`, and
+> returns the result so the editor execution log shows it. `updateSkuCurrentCost_` itself is unchanged.
+> Mirror after the edit: **7 935 lines, 485 907 bytes, 454 top-level `function` declarations**, LF preserved
+> (was 7 930 / 485 639 / 454; +5 lines, +268 bytes — both figures counted with `grep -c ''`). New test `crm/apps-script/tests/sku-current-cost-menu.test.mjs`.
+> Local evidence: Node VM parse of `Code.gs` OK; CRM suite 19/19 pass; 3D-P suite 2/2 pass; negative
+> control — the new test run against the pre-fix `Code.gs` from `HEAD` throws the exact live error
+> `Cannot call SpreadsheetApp.getUi() from this context`, reproducing the 08:04 Kyiv owner failure.
+> **Live QA, owner-run 2026-08-20 09:15:59–09:16:03 Kyiv.** Spreadsheet menu: the new item
+> `Booster CRM → Оновити собівартість складу` is present and works. Apps Script editor run of
+> `updateSkuCurrentCostMenu`: `Виконання почато` → `updateSkuCurrentCost_: updated 32 SKUs` →
+> `Собівартість складу оновлено: 32 SKU.` → `Виконання завершено`. No exception. The message reached
+> `Logger.log` rather than an alert, which is exactly the guard behaving as designed in a UI-less context,
+> and the SKU count matches the 08:04 pre-fix run. The 2026-08-20 08:04 defect is closed. Diagnostic: `diagnostics/CRM-010_sku-cost-menu-ui-guard_report_20260820.md`.
+> Handoff: `handoffs/handoff_CRM-010_sku-cost-menu-ui-guard_20260820.md`.
+> ⚠ **Live-vs-mirror question is still open** (`CRM-010` section 9). The 2026-08-20 owner paste was
+> compared on ten structural markers only — no byte comparison exists. Option **(b)** — fresh owner
+> export, rebase the two anchors onto it, then paste — is the safe default and is what this executor
+> states applies. Do not paste the whole mirror over the live script until that is resolved.
+
+> ✅ **2026-08-20 — CLOSED. Former live defect: `updateSkuCurrentCostMenu` could not be run by the owner at all.**
+> **Fixed live in V134 (2026-08-20 09:08), owner QA passed — see the CRM-010 block above.** Original defect text follows for history.
+> It calls `SpreadsheetApp.getUi().alert(...)` unguarded (mirror ~4681–4685) and has **no entry in
+> `onOpen`** (~line 20), so its only invocation route is the Apps Script editor — exactly where that
+> call throws `Cannot call SpreadsheetApp.getUi() from this context`. Owner run at 08:04 Kyiv:
+> `updateSkuCurrentCost_: updated 32 SKUs` was logged (the final statement of `updateSkuCurrentCost_`),
+> so the `Склад!I:J` write completed and only the alert failed. The function also never calls
+> `invalidateDoGetCache_()`, so dashboard figures stay cached for up to 300 s after a manual run.
+> Handoff: `handoffs/handoff_CRM-010_sku-cost-menu-ui-guard_20260820.md`.
+> Sibling `updateExpectedStockFormulaMenu` carries the same unguarded pattern but has a working menu
+> entry, so it does not fail in practice; deliberately left out of scope.
+
+> ✅ **2026-08-20, ~08:10 Kyiv — owner supplied the current live bound source in chat; the parcel-completeness follow-up IS present live. Not a byte comparison.**
+> Provenance: the owner pasted the script into the Cowork conversation as "актуальний скрипт" while
+> reporting the `updateSkuCurrentCostMenu` failure. It was a chat paste, **not a file export**, so no
+> byte-for-byte diff against `crm/apps-script/Code.gs` was possible or performed.
+> Ten structural markers were compared and all ten are present in both the paste and the mirror:
+> `include_all_open` (mirror line 2573), `apiRetry3dpOrderSync_` (last function in both),
+> `apiUpdatePurchaseBatch10_` / `maximum 10 lots`, `repairOCFOP0320MysteryBoxCost`,
+> `CRM_INVENTORY_MIGRATION_OUTLET_SKU_`, `CRM_PACKAGING_TYPES_`, `setup3dpOrderLineAccountingCRM`,
+> `expectedStockFormula_` including `Виграно`, the `onOpen` menu item list, and the
+> `updateSkuCurrentCostMenu` body. Mirror at the time of comparison: 7 930 lines, 485 639 bytes,
+> 454 top-level `function` declarations.
+> **What this proves:** the live bound *source* contains the parcel-completeness follow-up, so the
+> "not deployed" warning immediately below is superseded as a statement about source.
+> **What this does NOT prove:** byte identity between live and mirror, and it says nothing about the
+> published **Web App version** — bound-source edits do not publish. Whether a Web App version was
+> published carrying that follow-up is still unconfirmed; the last owner-reported version remains
+> **V131 (2026-08-18 14:52)**.
+> **Still required for byte verification:** a fresh owner file export of the live script.
+> Note: `crm/apps-script/Code.gs` was still uncommitted in the local clone at this time.
+
+> ⚠ **Local follow-up after V131 — all open purchases and complete tracked parcels; not deployed.**
+> **SUPERSEDED 2026-08-20 as a source statement — see the block above.** The live bound source
+> contains this follow-up. The publication status of a Web App version carrying it remains
+> unconfirmed. Original text retained below for history.
+> Live `Закупки` has six open rows with `LX328130128JP`: `LOT-0093` at row 88 and
+> `LOT-0123` through `LOT-0127` at rows 114–118. It also has two older, untracked open lots omitted
+> from the dashboard: `LOT-0097` / `yskh284` at row 92 and `LOT-0122` / `yskh289` at row 113.
+> The current screen asks for only the newest twenty open rows. The local dashboard now explicitly
+> requests `include_all_open=true`; the local helper returns every eligible open lot for that request.
+> Its regular recent mode still retains complete non-empty tracked parcels. `crm/apps-script/tests/recent-purchases.test.mjs`
+> covers both the six-lot parcel and an older untracked open lot. Owner paste, Web App publication,
+> dashboard refresh, and QA remain required; V131 does **not** include this follow-up.
 
 > ✅ **2026-08-18, 14:52 — owner-reported publication of CRM Web App Version 131; QA OK.**
 > The owner reported `QA - ok` and supplied `integrity_check`: `ok=true`, `clean=true`,

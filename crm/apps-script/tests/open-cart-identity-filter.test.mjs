@@ -30,7 +30,7 @@ const spreadsheet = { getSheetByName: name => name === 'Продажі' ? sales 
 const context = vm.createContext({
   Array, Boolean, Date, Error, JSON, Math, Number, Object, RegExp, String, console, isFinite,
   Logger: { log() {} },
-  SpreadsheetApp: { getActive: () => spreadsheet },
+  SpreadsheetApp: { getActive: () => spreadsheet, flush() {} },
   PropertiesService: { getScriptProperties: () => ({ getProperty: () => '' }) },
   Utilities: { formatDate: () => '2026-08-14' },
   Session: { getScriptTimeZone: () => 'Europe/Kyiv' },
@@ -38,6 +38,7 @@ const context = vm.createContext({
 });
 vm.runInContext(code + '\nglobalThis.__test = { upsertOpenCartOrder_ };', context, { filename: 'Code.gs' });
 context.fixSaleCostForRow_ = () => {};
+context.updateSkuCurrentCost_ = () => ({ updated: 1 });
 context.invalidateDoGetCache_ = () => {};
 
 const payload = {
@@ -54,6 +55,13 @@ assert.deepEqual(JSON.parse(JSON.stringify(inserted)), { action: 'inserted', ord
 assert.equal(sales.getRange(3, 1).getValue(), 'OC-FOP-1003');
 assert.equal(sales.getRange(3, 4).getValue(), '+380 50 000 0001');
 assert.equal(sales.getRange(3, 5).getValue(), 'Owner Test Checkout');
-assert.equal(context.__test.upsertOpenCartOrder_(spreadsheet, payload).action, 'ignored_existing_order', 'dedupe still prevents a repeated delivery from creating a second sale');
+assert.equal(context.__test.upsertOpenCartOrder_(spreadsheet, payload).action, 'unchanged_existing_order', 'identical delivery remains a no-op without a duplicate sale');
+const quantityChanged = JSON.parse(JSON.stringify(payload));
+quantityChanged.products[0].quantity = 3;
+quantityChanged.products[0].total = 300;
+const synced = context.__test.upsertOpenCartOrder_(spreadsheet, quantityChanged);
+assert.equal(synced.action, 'updated_existing_order', 'an OpenCart quantity revision updates the existing CRM order instead of being ignored');
+assert.equal(synced.quantities_changed, 1);
+assert.equal(sales.getRange(3, 8).getValue(), 3, 'the revised quantity reaches the stock-reservation row');
 assert.doesNotMatch(code, /isIgnoredOpenCartOrder_|getOpenCartIgnoreRules_|ignored_test_order/);
-console.log('OpenCart test-order import tests passed');
+console.log('OpenCart order identity and quantity-sync tests passed');

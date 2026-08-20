@@ -53,6 +53,13 @@ function makeEnvironment(){
   [3,4,5].forEach(row=>stock.getRange(row,8).setFormula('=IF($A'+row+'="";"";$E'+row+'-$F'+row+'-$G'+row+')'));
   const lot=Array(18).fill("");lot[0]="LOT-0001";lot[3]=new Date("2026-08-01");lot[4]="BOX-001";lot[7]=2;lot[12]=100;lot[15]=110;lot[16]="На складі";
   purchases.getRange(3,1,1,18).setValues([lot]);
+  // A live preorder reserves two packs before the box is opened. The target
+  // SKU has no landed lot yet, so this is the regression that previously
+  // disappeared from the migration snapshot and made 28 look available.
+  const preorder=Array(32).fill("");preorder[0]="OC-FOP-0268";preorder[2]=new Date("2026-08-19");preorder[5]="PACK-001";preorder[7]=2;preorder[22]="Не оплачено";preorder[23]="Передзамовлення";
+  sales.getRange(3,1,1,32).setValues([preorder]);
+  const writeoff=Array(12).fill("");writeoff[0]="WRT-0208";writeoff[1]=new Date("2026-08-20");writeoff[3]="PACK-001";writeoff[5]=1;
+  writeoffs.getRange(3,1,1,12).setValues([writeoff]);
   const ss=new Spreadsheet([products,stock,purchases,sales,writeoffs]);
   const context=vm.createContext({
     JSON,Math,Number,String,Boolean,Array,Object,RegExp,Date,Error,isFinite,
@@ -61,10 +68,10 @@ function makeEnvironment(){
   });
   vm.runInContext(code+`\napiIntegrityCheck_=function(){return {clean:true,problems:[]};};resetMemoForMutation_=function(){};updateSkuCurrentCost_=function(){};invalidateDoGetCache_=function(){};_getCrmSs=function(){return globalThis.__crm;};inventoryMigrationVerify_=function(ss,request,before,plans,rows){const after=inventoryMigrationStockSnapshot_(ss).available;if(Math.abs(after[request.sourceSku]-(before[request.sourceSku]-request.sourceQty))>0.000001)throw new Error('source snapshot mismatch');if(Math.abs(after[request.targetSku]-((before[request.targetSku]||0)+request.targetQty))>0.000001)throw new Error('target snapshot mismatch');return {source_available:after[request.sourceSku],target_available:after[request.targetSku],management_transferred:rows.reduce(function(sum,row){return sum+Number(row[11]||0);},0)};};globalThis.__test={apiInventoryMigration_,apiInventoryMigrationContext_,inventoryMigrationStockSnapshot_,getFifoCostBatches_};`,context,{filename:"Code.gs"});
   context.__crm=ss;
-  return {ss,stock,context};
+  return {ss,stock,sales,context};
 }
 
-const {ss,stock,context}=makeEnvironment();
+const {ss,stock,sales,context}=makeEnvironment();
 const first=context.__test.apiInventoryMigration_(ss,{action:"inventory_migration",type:"box_to_packs",source_sku:"BOX-001",target_sku:"PACK-001",target_qty:36,expected_source_available:2,request_id:"migration_box_to_pack_001"});
 assert.equal(first.ok,true);
 assert.equal(first.operation_id,"MIG-0001");
@@ -82,19 +89,23 @@ assert.equal(ledger.getRange(2,11).getValue(),100,"full box cost is carried once
 assert.equal(ledger.getRange(2,12).getValue(),110);
 assert.match(stock.getRange(3,8).getFormula(),/Міграції_Складу/);
 assert.match(stock.getRange(4,8).getFormula(),/Міграції_Складу/);
+assert.match(stock.getRange(4,8).getFormula(),/Передзамовлення/,'stock formula subtracts active preorder reservations after migration');
+assert.match(stock.getRange(4,8).getFormula(),/Списання/,'stock formula subtracts write-offs after migration');
 let snapshot=context.__test.inventoryMigrationStockSnapshot_(ss).available;
 assert.equal(snapshot["BOX-001"],1);
-assert.equal(snapshot["PACK-001"],36);
+assert.equal(snapshot["PACK-001"],33,"preorder and WRT-0208 remain reserved after 36 packs arrive");
 const packBatches=context.__test.getFifoCostBatches_(ss,"PACK-001",null);
 assert.equal(packBatches.length,1);
 assert.equal(packBatches[0].lotId,"MIG-0001/LOT-0001");
 assert.equal(packBatches[0].qty,36);
 assert.ok(Math.abs(packBatches[0].prroUnit-(100/36))<0.000001);
+assert.equal(sales.getRange(3,12).getValue(),2.78,"migration prices the previously deferred preorder from its FIFO source");
+assert.equal(sales.getRange(3,30).getValue(),"FIFO (резерв через міграцію)");
 const repeated=context.__test.apiInventoryMigration_(ss,{action:"inventory_migration",type:"box_to_packs",source_sku:"BOX-001",target_sku:"PACK-001",target_qty:36,expected_source_available:1,request_id:"migration_box_to_pack_001"});
 assert.equal(repeated.ok,true);
 assert.equal(repeated.already_applied,true);
 assert.equal(ledger.getLastRow(),2,"a repeated request does not append a second movement");
-const outlet=context.__test.apiInventoryMigration_(ss,{action:"inventory_migration",type:"packs_to_outlet",source_sku:"PACK-001",source_qty:5,expected_source_available:36,request_id:"migration_pack_to_outlet_001"});
+const outlet=context.__test.apiInventoryMigration_(ss,{action:"inventory_migration",type:"packs_to_outlet",source_sku:"PACK-001",source_qty:5,expected_source_available:33,request_id:"migration_pack_to_outlet_001"});
 assert.equal(outlet.ok,true);
 assert.equal(outlet.operation_id,"MIG-0002");
 assert.equal(ledger.getRange(3,4).getValue(),"PACK-001");
@@ -103,7 +114,7 @@ assert.equal(ledger.getRange(3,7).getValue(),5);
 assert.equal(ledger.getRange(3,8).getValue(),5);
 snapshot=context.__test.inventoryMigrationStockSnapshot_(ss).available;
 assert.equal(snapshot["BOX-001"],1);
-assert.equal(snapshot["PACK-001"],31);
+assert.equal(snapshot["PACK-001"],28,"outlet migration cannot spend the preorder reserve or restore a write-off");
 assert.equal(snapshot["PKM-JP-OUTL-BST"],5);
 const outletBatches=context.__test.getFifoCostBatches_(ss,"PKM-JP-OUTL-BST",null);
 assert.equal(outletBatches.length,1);
@@ -111,5 +122,5 @@ assert.ok(Math.abs(outletBatches[0].prroUnit-(100/36))<0.000001,"outlet receives
 const contextResult=context.__test.apiInventoryMigrationContext_();
 assert.equal(contextResult.outlet.sku,"PKM-JP-OUTL-BST");
 assert.equal(contextResult.boxes[0].available,1);
-assert.equal(contextResult.pack_sources[0].available,31);
-console.log("Inventory migration FIFO and idempotency tests passed");
+assert.equal(contextResult.pack_sources[0].available,28);
+console.log("Inventory migration FIFO, preorder, write-off reservation, and idempotency tests passed");
