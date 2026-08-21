@@ -1636,10 +1636,13 @@ const fixedCost = String(payload.fixed_cost == null ? '' : payload.fixed_cost).t
 const url = String(payload.url || '').trim();
 const note = String(payload.note || '').trim();
 const active = payload.active === false || String(payload.active || '').toLowerCase() === 'false' || String(payload.active || '').toLowerCase() === 'ні' ? 'Ні' : 'Так';
-const fullNameShort = String(payload.short_name_mode || '').trim() === 'full_name' || String(payload.source || '').trim() === '3d';
+const catalogKind = String(payload.catalog_kind || 'tcg').trim().toLowerCase();
+if (catalogKind !== 'tcg' && catalogKind !== 'accessory') throw new Error('invalid catalog_kind');
+const isAccessory = catalogKind === 'accessory';
+const fullNameShort = String(payload.short_name_mode || '').trim() === 'full_name' || String(payload.source || '').trim() === '3d' || isAccessory;
 if (!/^[A-Z0-9][A-Z0-9-]{2,63}$/.test(sku)) throw new Error('invalid sku');
 if (!fullName) throw new Error('full_name required');
-if (!brand || !language || !setName || !format) throw new Error('brand, language, set and format required');
+if (!brand || !format || (!isAccessory && (!language || !setName))) throw new Error(isAccessory ? 'brand and format required for accessory' : 'brand, language, set and format required');
 if (!isFinite(rrpValue) || rrpValue <= 0) throw new Error('rrp must be > 0');
 if (cards && (!/^\d+$/.test(cards) || Number(cards) < 0)) throw new Error('cards_per_booster must be a non-negative integer');
 if (boosters && (!/^\d+$/.test(boosters) || Number(boosters) < 0)) throw new Error('boosters_per_box must be a non-negative integer');
@@ -1666,7 +1669,7 @@ const optionRequests = [
 { key: 'language', value: language },
 { key: 'set', value: setName },
 { key: 'format', value: format }
-];
+].filter(function(request) { return Boolean(request.value); });
 const optionCapacity = crmEnsureCatalogOptionCapacity_(ss, optionRequests, allowNew);
 const optionPlans = optionRequests.map(function(request) {
 return apiCatalogOptionPlan_(settings, request.key, request.value, allowNew);
@@ -1683,7 +1686,7 @@ rrc.getRange(row, 5, 1, 3).setValues([[round2_(rrpValue), new Date(), 'Ство�
 SpreadsheetApp.flush();
 if (String(products.getRange(row, 1).getDisplayValue() || '').trim() !== sku || Math.abs(Number(rrc.getRange(row, 5).getValue()) - rrpValue) >= 0.009) throw new Error('new SKU verification failed');
 invalidateDoGetCache_();
-return { ok: true, action: 'add_sku', sku: sku, product_row: row, rrp_row: row, options_added: optionPlans.map(function(plan) { return plan.value; }), option_capacity: optionCapacity, already_applied: false, master_visible: apiMasterHasSku_(sku), integrity_check_required: true };
+return { ok: true, action: 'add_sku', sku: sku, catalog_kind: catalogKind, product_row: row, rrp_row: row, options_added: optionPlans.map(function(plan) { return plan.value; }), option_capacity: optionCapacity, already_applied: false, master_visible: apiMasterHasSku_(sku), integrity_check_required: true };
 } catch (error) {
 products.getRange(row, 1, 1, 9).clearContent();
 products.getRange(row, 11, 1, 5).clearContent();

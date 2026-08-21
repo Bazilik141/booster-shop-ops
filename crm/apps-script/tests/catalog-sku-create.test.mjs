@@ -113,6 +113,25 @@ const payload={sku:"BR-CHARM-100",full_name:"Брелок Чармандер (Po
 }
 
 {
+  const env=makeEnvironment();
+  const accessory={sku:"ACC-ALBUM-001",full_name:"Альбом для карток 9 кишень",brand:"Ultra PRO",language:"",set:"",format:"Альбом",rrp:280,active:true,catalog_kind:"accessory",allow_new_options:true};
+  const created=env.apiAddSku(env.crm,accessory);
+  assert.equal(created.ok,true);
+  assert.equal(created.catalog_kind,"accessory");
+  assert.equal(env.products.getRange(4,5).getValue(),"");
+  assert.equal(env.products.getRange(4,6).getValue(),"");
+  assert.equal(env.products.getRange(4,7).getValue(),"Альбом");
+  assert.equal(env.products.getRange(4,2).getFormula(),'=IF($A4="";"";$C4)');
+  assert.deepEqual(JSON.parse(JSON.stringify(created.options_added)),["Ultra PRO","Альбом"],"an accessory never writes blank language or set options");
+  const repeated=env.apiAddSku(env.crm,accessory);
+  assert.equal(repeated.ok,true);
+  assert.equal(repeated.already_applied,true);
+  const tcgMissingFields=env.apiAddSku(env.crm,{...accessory,sku:"PKM-JP-TEST-001",catalog_kind:"tcg"});
+  assert.equal(tcgMissingFields.ok,false);
+  assert.match(tcgMissingFields.error,/brand, language, set and format required/);
+}
+
+{
   const env=makeEnvironment({missingProductPriceFormula:true});
   const rejected=env.apiAddSku(env.crm,payload);
   assert.equal(rejected.ok,false);

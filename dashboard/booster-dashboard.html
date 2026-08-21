@@ -1530,7 +1530,6 @@ async function loadOverview() {
     const sp = d.sales_prev_month || null;
     const st = d.stock || {};
     const dq = d.data_quality || {};
-    const po = d.pending_orders || {};
     let mtd = { current: d.sales_current_month || {}, previous: d.sales_prev_month || null };
     let ordersData = { orders: [] };
     let ordersForUnpaidOk = false;
@@ -1550,21 +1549,15 @@ async function loadOverview() {
       console.warn('orders unpaid card:', e.message);
     }
     const activeOrders = ordersData.orders || [];
-    const preorderOrders = activeOrders.filter(r => r.order_status === 'Передзамовлення');
-    const ordinaryActiveOrders = activeOrders.filter(r => r.order_status !== 'Передзамовлення');
-    const unpaids = ordinaryActiveOrders.filter(r =>
+    // Overview only: preorders stay active and visible in Accounting, but do not add operational noise here.
+    const overviewActiveOrders = activeOrders.filter(r => !isPreorderOrder(r));
+    const unpaids = overviewActiveOrders.filter(r =>
       r.order_status === 'Відправлено' && r.payment_status === 'Не оплачено'
     );
-    const unpaidTotal = unpaids.reduce((s, r) => s + (Number(r.amount) || 0), 0);
-    const activePaidTotal = ordersForUnpaidOk ? ordinaryActiveOrders.filter(r => r.payment_status !== 'Не оплачено').reduce((s, r) => s + (Number(r.amount) || 0), 0) : null;
-    const activeUnpaidTotal = ordersForUnpaidOk ? ordinaryActiveOrders.filter(r => r.payment_status === 'Не оплачено').reduce((s, r) => s + (Number(r.amount) || 0), 0) : null;
-    const preorderPaidTotal = preorderOrders.filter(r => r.payment_status === 'Оплачено').reduce((s, r) => s + (Number(r.amount) || 0), 0);
-    const preorderUnpaidTotal = preorderOrders.filter(r => r.payment_status !== 'Оплачено').reduce((s, r) => s + (Number(r.amount) || 0), 0);
-    const activeCount = ordersForUnpaidOk ? (ordersData.count || activeOrders.length) : (po.count || 0);
-    const preorderSub = preorderOrders.length
-      ? `<br><span style="font-size:10px;color:var(--muted)">Передзам.: ${preorderOrders.length} · опл. ${fmt(preorderPaidTotal)}${preorderUnpaidTotal ? ' · не опл. ' + fmt(preorderUnpaidTotal) : ''}</span>`
-      : '';
-    const activeSub = ordersForUnpaidOk ? `Оплачено ${fmt(activePaidTotal)}<br>Не оплачено ${fmt(activeUnpaidTotal)}${preorderSub}` : 'Немає даних';
+    const activePaidTotal = ordersForUnpaidOk ? overviewActiveOrders.filter(r => r.payment_status !== 'Не оплачено').reduce((s, r) => s + (Number(r.amount) || 0), 0) : null;
+    const activeUnpaidTotal = ordersForUnpaidOk ? overviewActiveOrders.filter(r => r.payment_status === 'Не оплачено').reduce((s, r) => s + (Number(r.amount) || 0), 0) : null;
+    const activeCount = ordersForUnpaidOk ? overviewActiveOrders.length : 0;
+    const activeSub = ordersForUnpaidOk ? `Оплачено ${fmt(activePaidTotal)}<br>Не оплачено ${fmt(activeUnpaidTotal)}` : 'Немає даних';
     const warehouseProfit = d.potential_profit_warehouse != null ? Number(d.potential_profit_warehouse) : null;
     const warehouseCost  = d.warehouse_cost          != null ? Number(d.warehouse_cost)          : null;
     const assetCost      = d.asset_cost              != null ? Number(d.asset_cost)              : null;
@@ -1730,7 +1723,7 @@ async function loadOverview() {
   try {
     const allOrders = cache.ordersAll || await p_ordersAll;
     cache.ordersAll = allOrders;
-    const o = (allOrders.orders || []).filter(isActiveOrder);
+    const o = (allOrders.orders || []).filter(r => isActiveOrder(r) && !isPreorderOrder(r));
     const badge = document.getElementById('pendingBadge');
     badge.textContent = o.length;
     badge.className = 'badge ' + (o.length > 0 ? 'b-yellow' : 'b-green');
@@ -1768,7 +1761,7 @@ async function loadOverview() {
     // 1. Відправлено 5+ днів тому — follow up on delivery
     const now5dMs = Date.now() - 5 * 86400000;
     const shipped5d = ((cache.orders && cache.orders.orders) || []).filter(r =>
-      r.order_status === 'Відправлено' && orderDateMs(r) > 0 && orderDateMs(r) <= now5dMs
+      !isPreorderOrder(r) && r.order_status === 'Відправлено' && orderDateMs(r) > 0 && orderDateMs(r) <= now5dMs
     );
     if (shipped5d.length) {
       sections.push({
@@ -2023,6 +2016,10 @@ function isCompletedOrder(order) {
   return String((order && order.order_status) || '').trim() === 'Отримано';
 }
 
+function isPreorderOrder(order) {
+  return String((order && order.order_status) || '').trim() === 'Передзамовлення';
+}
+
 function isActiveOrder(order) {
   const orderStatus = String((order && order.order_status) || '').trim();
   const paymentStatus = String((order && order.payment_status) || '').trim();
@@ -2215,7 +2212,7 @@ async function loadOrders(mode = orderState.mode) {
   }
 }
 // ════════════ SKUs ════════════
-const skuCreateState = { open:false, loading:false, options:null, message:{} };
+const skuCreateState = { open:false, loading:false, options:null, message:{}, kind:'tcg' };
 const skuRrpState = { pending:Object.create(null), saving:false, message:{} };
 function skuRrpMessage() { return skuRrpState.message && skuRrpState.message.text ? threeDpMessage(skuRrpState.message) : ''; }
 function renderSkuRrpControls() {
@@ -2252,12 +2249,14 @@ async function toggleSkuCreateForm() {
 function renderSkuCreateForm() {
   const root=document.getElementById('skuCreateWorkspace');if(!root)return;root.classList.toggle('hidden',!skuCreateState.open);if(!skuCreateState.open){root.innerHTML='';return;}if(skuCreateState.loading){root.innerHTML=spin();return;}
   const o=skuCreateState.options || {brands:[],languages:[],sets:[],formats:[]};
-  root.innerHTML='<div class="three-dp-product-form"><div class="three-dp-form-grid"><label>SKU *<input id="newSkuCode" placeholder="PKM-JP-... / ACC-..."></label><label>Повна назва *<input id="newSkuName"></label><label>Бренд *<input id="newSkuBrand" list="newSkuBrands"></label><label>Мова *<input id="newSkuLanguage" list="newSkuLanguages"></label><label>Сет / група *<input id="newSkuSet" list="newSkuSets"></label><label>Формат *<input id="newSkuFormat" list="newSkuFormats"></label><label>РРЦ, грн *<input id="newSkuRrp" type="number" min="0.01" step="0.01"></label><label>Мінімальний залишок<input id="newSkuMinStock" type="number" min="0" step="1"></label><label>Карт у бустері<input id="newSkuCards" type="number" min="0" step="1"></label><label>Бустерів у боксі<input id="newSkuBoosters" type="number" min="0" step="1"></label><label>Посилання на товар<input id="newSkuUrl" type="url" placeholder="https://…"></label><label>Фіксована собівартість<input id="newSkuFixedCost" type="number" min="0" step="0.01"></label><label>Примітка<textarea id="newSkuNote"></textarea></label><label><span class="three-dp-readonly"><input id="newSkuActive" type="checkbox" checked> Активний SKU</span></label></div>'+skuCreateOptionList('newSkuBrands',o.brands)+skuCreateOptionList('newSkuLanguages',o.languages)+skuCreateOptionList('newSkuSets',o.sets)+skuCreateOptionList('newSkuFormats',o.formats)+'<div class="three-dp-note">Нове значення бренду, мови, сету або формату буде додано до відповідного CRM-довідника в цій самій операції.</div><div class="form-actions" style="margin-top:14px"><button class="btn-primary" type="button" onclick="saveNewSku()">Створити SKU</button></div>'+skuCreateMessage()+'</div>';
+  root.innerHTML='<div class="three-dp-product-form"><div class="three-dp-form-grid"><label>Тип товару *<select id="newSkuKind" onchange="toggleNewSkuKind(this.value)"><option value="tcg"'+(skuCreateState.kind==='tcg'?' selected':'')+'>TCG товар</option><option value="accessory"'+(skuCreateState.kind==='accessory'?' selected':'')+'>Аксесуар</option></select></label><label>SKU *<input id="newSkuCode" placeholder="PKM-JP-... / ACC-..."></label><label>Повна назва *<input id="newSkuName"></label><label>Бренд *<input id="newSkuBrand" list="newSkuBrands"></label><label id="newSkuLanguageRow"><span id="newSkuLanguageLabel">Мова *</span><input id="newSkuLanguage" list="newSkuLanguages"></label><label id="newSkuSetRow"><span id="newSkuSetLabel">Сет / група *</span><input id="newSkuSet" list="newSkuSets"></label><label>Формат *<input id="newSkuFormat" list="newSkuFormats"></label><label>РРЦ, грн *<input id="newSkuRrp" type="number" min="0.01" step="0.01"></label><label>Мінімальний залишок<input id="newSkuMinStock" type="number" min="0" step="1"></label><label id="newSkuCardsRow">Карт у бустері<input id="newSkuCards" type="number" min="0" step="1"></label><label id="newSkuBoostersRow">Бустерів у боксі<input id="newSkuBoosters" type="number" min="0" step="1"></label><label>Посилання на товар<input id="newSkuUrl" type="url" placeholder="https://…"></label><label>Фіксована собівартість<input id="newSkuFixedCost" type="number" min="0" step="0.01"></label><label>Примітка<textarea id="newSkuNote"></textarea></label><label><span class="three-dp-readonly"><input id="newSkuActive" type="checkbox" checked> Активний SKU</span></label></div>'+skuCreateOptionList('newSkuBrands',o.brands)+skuCreateOptionList('newSkuLanguages',o.languages)+skuCreateOptionList('newSkuSets',o.sets)+skuCreateOptionList('newSkuFormats',o.formats)+'<div id="newSkuCatalogHint" class="three-dp-note">Нове значення бренду, мови, сету або формату буде додано до відповідного CRM-довідника в цій самій операції.</div><div class="form-actions" style="margin-top:14px"><button class="btn-primary" type="button" onclick="saveNewSku()">Створити SKU</button></div>'+skuCreateMessage()+'</div>';
+  toggleNewSkuKind(skuCreateState.kind);
 }
 function newSkuValue(id){const field=document.getElementById(id);return field?String(field.value || '').trim():'';}
+function toggleNewSkuKind(kind){const isAccessory=String(kind||'').toLowerCase()==='accessory',languageLabel=document.getElementById('newSkuLanguageLabel'),setLabel=document.getElementById('newSkuSetLabel'),cardsRow=document.getElementById('newSkuCardsRow'),boostersRow=document.getElementById('newSkuBoostersRow'),hint=document.getElementById('newSkuCatalogHint');skuCreateState.kind=isAccessory?'accessory':'tcg';if(languageLabel)languageLabel.textContent=isAccessory?'Мова (за наявності)':'Мова *';if(setLabel)setLabel.textContent=isAccessory?'Лінійка / серія (за наявності)':'Сет / група *';if(cardsRow)cardsRow.hidden=isAccessory;if(boostersRow)boostersRow.hidden=isAccessory;if(hint)hint.textContent=isAccessory?'Для аксесуара мова й лінійка необов’язкові та залишаться порожніми, якщо їх немає. Коротка назва в CRM візьметься з повної назви товару.':'Нове значення бренду, мови, сету або формату буде додано до відповідного CRM-довідника в цій самій операції.';}
 async function saveNewSku() {
-  const payload={action:'add_sku',sku:newSkuValue('newSkuCode').toUpperCase(),full_name:newSkuValue('newSkuName'),brand:newSkuValue('newSkuBrand'),language:newSkuValue('newSkuLanguage'),set:newSkuValue('newSkuSet'),format:newSkuValue('newSkuFormat'),rrp:newSkuValue('newSkuRrp'),min_stock:newSkuValue('newSkuMinStock'),cards_per_booster:newSkuValue('newSkuCards'),boosters_per_box:newSkuValue('newSkuBoosters'),url:newSkuValue('newSkuUrl'),fixed_cost:newSkuValue('newSkuFixedCost'),note:newSkuValue('newSkuNote'),active:Boolean((document.getElementById('newSkuActive') || {}).checked),allow_new_options:true};
-  if(!payload.sku || !payload.full_name || !payload.brand || !payload.language || !payload.set || !payload.format || !(Number(payload.rrp)>0)){skuCreateState.message={text:'Заповни SKU, назву, бренд, мову, сет, формат і РРЦ більше нуля.',kind:'error'};renderSkuCreateForm();return;}
+  const isAccessory=newSkuValue('newSkuKind')==='accessory',payload={action:'add_sku',catalog_kind:isAccessory?'accessory':'tcg',short_name_mode:isAccessory?'full_name':'',sku:newSkuValue('newSkuCode').toUpperCase(),full_name:newSkuValue('newSkuName'),brand:newSkuValue('newSkuBrand'),language:newSkuValue('newSkuLanguage'),set:newSkuValue('newSkuSet'),format:newSkuValue('newSkuFormat'),rrp:newSkuValue('newSkuRrp'),min_stock:newSkuValue('newSkuMinStock'),cards_per_booster:newSkuValue('newSkuCards'),boosters_per_box:newSkuValue('newSkuBoosters'),url:newSkuValue('newSkuUrl'),fixed_cost:newSkuValue('newSkuFixedCost'),note:newSkuValue('newSkuNote'),active:Boolean((document.getElementById('newSkuActive') || {}).checked),allow_new_options:true};
+  if(!payload.sku || !payload.full_name || !payload.brand || !payload.format || (!isAccessory && (!payload.language || !payload.set)) || !(Number(payload.rrp)>0)){skuCreateState.message={text:isAccessory?'Заповни SKU, назву, бренд, формат і РРЦ більше нуля.':'Заповни SKU, назву, бренд, мову, сет, формат і РРЦ більше нуля.',kind:'error'};renderSkuCreateForm();return;}
   if(!confirm('Створити '+payload.sku+' в основній CRM? Будуть записані «Товари» і ручні поля РРЦ.'))return;
   skuCreateState.message={text:'Створення…',kind:''};renderSkuCreateForm();
   try{const result=await callPost(payload);skuCreateState.message={text:'SKU '+result.sku+' створено: Товари рядок '+result.product_row+', РРЦ рядок '+result.rrp_row+(result.master_visible?'; Майстер уже бачить SKU.':'; Майстер оновиться з формульного джерела.'),kind:'success'};delete cache.skus;await loadSkus();runCrmIntegrityCheck();}
