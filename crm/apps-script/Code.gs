@@ -4169,6 +4169,10 @@ return { ok: true, waiting: true };
 function tgHandleAwaitingNewsInput_(chatId, rawText) {
 const waiting = tgGetNewsInputWait_(chatId);
 if (!waiting) return false;
+if (waiting._news_input_wait_expired) {
+tgSendMessage_(chatId, 'Час очікування минув. Надішли /post або вибери «Чернетка за посиланням» ще раз.');
+return true;
+}
 
 const text = String(rawText || '').trim();
 if (/^\/cancel(?:@\w+)?$/i.test(text)) {
@@ -4203,17 +4207,30 @@ return 'MKT_TG_008_INPUT_WAIT_' + String(chatId);
 }
 
 function tgSetNewsInputWait_(chatId, value) {
-CacheService.getScriptCache().put(tgNewsInputWaitKey_(chatId), JSON.stringify(value || {}), 600);
+const record = { expires_at: Date.now() + 10 * 60 * 1000, value: value || {} };
+PropertiesService.getScriptProperties().setProperty(tgNewsInputWaitKey_(chatId), JSON.stringify(record));
 }
 
 function tgGetNewsInputWait_(chatId) {
-const raw = CacheService.getScriptCache().get(tgNewsInputWaitKey_(chatId));
+const raw = PropertiesService.getScriptProperties().getProperty(tgNewsInputWaitKey_(chatId));
 if (!raw) return null;
-try { return JSON.parse(raw); } catch (err) { tgClearNewsInputWait_(chatId); return null; }
+try {
+const record = JSON.parse(raw);
+const expiresAt = Number(record && record.expires_at);
+if (!record || typeof record !== 'object' || !record.value || typeof record.value !== 'object' || !isFinite(expiresAt)) {
+tgClearNewsInputWait_(chatId);
+return null;
+}
+if (expiresAt <= Date.now()) {
+tgClearNewsInputWait_(chatId);
+return { _news_input_wait_expired: true };
+}
+return record.value;
+} catch (err) { tgClearNewsInputWait_(chatId); return null; }
 }
 
 function tgClearNewsInputWait_(chatId) {
-CacheService.getScriptCache().remove(tgNewsInputWaitKey_(chatId));
+PropertiesService.getScriptProperties().deleteProperty(tgNewsInputWaitKey_(chatId));
 }
 
 function tgBeginNewsTextFallback_(chatId, value) {
