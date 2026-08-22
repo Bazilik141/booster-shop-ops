@@ -60,6 +60,11 @@ class Range {
   getNumberFormat() { return "0.##########"; }
   setNumberFormat() { return this; }
   setFontColor() { return this; }
+  clearContent() { this.sheet.setValueAt(this.startRow, this.startColumn, ""); return this; }
+  getCell(row, column) { return new Range(this.sheet, this.startRow + row - 1, this.startColumn + column - 1); }
+  offset(row, column, rows = this.rows, columns = this.columns) {
+    return new Range(this.sheet, this.startRow + row, this.startColumn + column, rows, columns);
+  }
   getFontColors() { return Array.from({ length: this.rows }, () => Array.from({ length: this.columns }, () => "#0000ff")); }
   setValue(value) { this.sheet.setValueAt(this.startRow, this.startColumn, value); return this; }
   setValues(values) {
@@ -161,6 +166,7 @@ function loadApi(source = code, workbook = makeSpreadsheet()) {
     Utilities: { formatDate: () => "2026-08-16 12:00:00" },
     SpreadsheetApp: { getActiveSpreadsheet: () => workbook, flush() {} },
     PropertiesService: { getScriptProperties: () => ({ getProperty: () => "" }) },
+    LockService: { getScriptLock: () => ({ tryLock: () => true, releaseLock() {} }) },
   };
   vm.createContext(context);
   vm.runInContext(source, context, { filename: "Code.gs" });
@@ -235,7 +241,7 @@ codeOf(() => call(api, "3dp_get_range", serhiy, { sheet: "Маркетингов
 codeOf(() => call(api, "3dp_get_range", serhiy, { sheet: "Маркетингові_плюшки", range: "H1:H2" }), "RANGE_NOT_PROJECTED");
 codeOf(() => call(api, "3dp_get_range", serhiy, { sheet: "Аналітика", range: "H3:H4" }), "RANGE_NOT_PROJECTED");
 codeOf(() => call(api, "3dp_get_range", serhiy, { sheet: "Налаштування", range: "A1:B5" }), "RANGE_NOT_PROJECTED");
-codeOf(() => call(api, "3dp_stock_adjustments", serhiy), "READ_PROJECTION_FORBIDDEN");
+codeOf(() => call(api, "3dp_stock_adjustments", serhiy), "STOCK_ADJUSTMENT_SCHEMA_NOT_READY");
 
 api.workbook.getSheetByName("Продажі").setValueAt(1, 21, "Змінена РРЦ");
 codeOf(() => call(api, "3dp_sales", serhiy), "READ_PROJECTION_HEADER_MISSING");
@@ -243,7 +249,7 @@ api.workbook.getSheetByName("Продажі").setValueAt(1, 21, "РРЦ на м�
 
 plain(api.context.writeAction3dp_(api.workbook, { sheet: "Налаштування", column: "B", sku_or_row: 2, expected_current: 0.11, value: "0,12" }, serhiy));
 assert.equal(api.workbook.getSheetByName("Налаштування").getRange("B2").getValue(), 0.12);
-assert.deepEqual(api.workbook.getSheetByName("_Журнал_налаштувань_3DP").getRange("A2:E2").getValues()[0], ["2026-08-16 12:00:00", "serhiy", "Потужність принтера, кВт", "0.11", "0.12"]);
+assert.deepEqual(api.workbook.getSheetByName("_Журнал_налаштувань_3DP").getRange("A2:F2").getValues()[0], ["2026-08-16 12:00:00", "serhiy", "Потужність принтера, кВт", "0.11", "0.12", ""]);
 const journalLength = api.workbook.getSheetByName("_Журнал_налаштувань_3DP").getLastRow();
 codeOf(() => api.context.writeAction3dp_(api.workbook, { sheet: "Налаштування", column: "B", sku_or_row: 1, value: 1 }, serhiy), "INVALID_ROW");
 codeOf(() => api.context.writeAction3dp_(api.workbook, { sheet: "Налаштування", column: "B", sku_or_row: 2, value: 8 }, serhiy), "SETTINGS_VALUE_OUT_OF_BOUNDS");
@@ -253,6 +259,30 @@ assert.equal(call(api, "3dp_settings_journal", serhiy).rows.length, 1);
 plain(api.context.writeAction3dp_(api.workbook, { sheet: "Номенклатура", column: "J", sku_or_row: "FIG-001", expected_current: 600, value: 700 }, serhiy));
 assert.match(api.workbook.getSheetByName("Номенклатура").getRange("P2").getDisplayValue(), /\[serhiy\] Ціна котушки: 600 → 700/);
 
+const nomenclatureJournal = api.workbook.getSheetByName("_Журнал_налаштувань_3DP");
+const nomenclatureJournalBefore = nomenclatureJournal.getLastRow();
+plain(api.context.writeAction3dp_(api.workbook, { sheet: "Номенклатура", column: "Q", sku_or_row: "FIG-001", expected_current: 350, value: "360,5" }, serhiy));
+plain(api.context.writeAction3dp_(api.workbook, { sheet: "Номенклатура", column: "R", sku_or_row: "FIG-001", expected_current: 120, value: 130 }, owner));
+plain(api.context.writeAction3dp_(api.workbook, { sheet: "Номенклатура", column: "S", sku_or_row: "FIG-001", expected_current: "https://private", value: "https://models.example/FIG-001" }, serhiy));
+assert.deepEqual(nomenclatureJournal.getRange("A3:F5").getValues(), [
+  ["2026-08-16 12:00:00", "serhiy", "РРЦ фактична, грн", "350", "360.5", "FIG-001"],
+  ["2026-08-16 12:00:00", "owner", "Ціна під викуп, грн", "120", "130", "FIG-001"],
+  ["2026-08-16 12:00:00", "serhiy", "Посилання на модель", "https://private", "https://models.example/FIG-001", "FIG-001"],
+]);
+codeOf(() => api.context.writeAction3dp_(api.workbook, { sheet: "Номенклатура", column: "Q", sku_or_row: "FIG-001", value: "not a number" }, serhiy), "NOMENCLATURE_PRICE_INVALID");
+codeOf(() => api.context.writeAction3dp_(api.workbook, { sheet: "Номенклатура", column: "R", sku_or_row: "FIG-001", value: -1 }, serhiy), "NOMENCLATURE_PRICE_INVALID");
+codeOf(() => api.context.writeAction3dp_(api.workbook, { sheet: "Номенклатура", column: "S", sku_or_row: "FIG-001", value: "ftp://models.example/FIG-001" }, serhiy), "MODEL_URL_INVALID");
+assert.equal(nomenclatureJournal.getLastRow(), nomenclatureJournalBefore + 3);
+plain(api.context.appendRowAction3dp_(api.workbook, {
+  sheet: "Номенклатура",
+  values: { A: "FIG-002", Q: 400, R: 150, S: "https://models.example/FIG-002" },
+}, owner));
+assert.deepEqual(nomenclatureJournal.getRange("A6:F8").getValues(), [
+  ["2026-08-16 12:00:00", "owner", "РРЦ фактична, грн", "∅", "400", "FIG-002"],
+  ["2026-08-16 12:00:00", "owner", "Ціна під викуп, грн", "∅", "150", "FIG-002"],
+  ["2026-08-16 12:00:00", "owner", "Посилання на модель", "∅", "https://models.example/FIG-002", "FIG-002"],
+]);
+
 plain(api.context.saveBatchDraftAction3dp_(api.workbook, { sku: "FIG-001", values: { quantity: 4 }, expected_current: { quantity: "" } }, serhiy));
 assert.equal(call(api, "3dp_batch_draft", serhiy, { sku: "FIG-001" }).values.quantity, 4);
 assert.equal(call(api, "3dp_batch_draft", owner, { sku: "FIG-001" }).values.quantity, 2);
@@ -260,8 +290,98 @@ assert.equal(api.workbook.getSheetByName("_Чернетки_партій").getRa
 const v23AfterSerhiyDraft = loadApi(v23Source, api.workbook);
 assert.equal(call(v23AfterSerhiyDraft, "3dp_batch_draft", owner, { sku: "FIG-001" }).values.quantity, 2);
 
+const migration = plain(api.context.setup3dpWp1bSchema());
+assert.equal(migration.already_applied, false);
+assert.deepEqual(api.workbook.getSheetByName("Виплати").getRange("G1:H1").getValues()[0], [
+  "Згода Сергія із сумою (Київ, роль)", "Кошти надійшли Сергію (Київ, роль)",
+]);
+assert.deepEqual(api.workbook.getSheetByName("_Коригування_наявності").getRange("A1:E2").getValues(), [[
+  "SKU", "Зміна наявності, шт", "Причина", "Дата коригування (Київ)", "Роль",
+], ["FIG-001", 1, "owner only", "2026-08-16", "owner"]]);
+assert.equal(api.workbook.getSheetByName("_Коригування_наявності").isSheetHidden(), true);
+assert.equal(plain(api.context.setup3dpWp1bSchema()).already_applied, true);
+
+const manualColumns = JSON.parse(vm.runInContext("JSON.stringify(SERHIY_MANUAL_COLUMNS_3DP)", api.context));
+const projections = JSON.parse(vm.runInContext("JSON.stringify(SERHIY_READ_PROJECTION_3DP)", api.context));
+Object.entries(manualColumns).forEach(([sheetName, columns]) => {
+  if (sheetName === "Налаштування") return;
+  const headers = api.workbook.getSheetByName(sheetName).getRange(1, 1, 1, api.workbook.getSheetByName(sheetName).getLastColumn()).getDisplayValues()[0];
+  columns.forEach((column) => {
+    const header = headers[columnNumber(column) - 1];
+    assert.ok(projections[sheetName].baseline.includes(header), `${sheetName}!${column} (${header}) must be in the Serhiy baseline projection`);
+  });
+});
+assert.ok(projections["Виплати"].baseline.includes("Згода Сергія із сумою (Київ, роль)"));
+assert.ok(projections["Виплати"].baseline.includes("Кошти надійшли Сергію (Київ, роль)"));
+const serhiyPayout = call(api, "3dp_payouts", serhiy).rows[0];
+assert.equal(serhiyPayout["Згода Сергія із сумою (Київ, роль)"], "");
+assert.equal(serhiyPayout["Кошти надійшли Сергію (Київ, роль)"], "");
+
+const availability = api.workbook.getSheetByName("Наявність");
+availability.getRange("G2").setFormula("=SUMIF('_Коригування_наявності'!$A:$A;A2;'_Коригування_наявності'!$B:$B)");
+const stockCorrection = plain(api.context.adjustStockAction3dp_(api.workbook, {
+  sku: "FIG-001", expected_current: 0, new_value: 5, reason: "counted stock",
+}, serhiy));
+assert.deepEqual(stockCorrection, {
+  action: "3dp_adjust_stock", sku: "FIG-001", row: 2, old_value: 0, new_value: 5, delta: 5,
+  ledger_row: 3, warning: null,
+});
+assert.deepEqual(api.workbook.getSheetByName("_Коригування_наявності").getRange("A3:E3").getValues()[0], [
+  "FIG-001", 5, "counted stock", "2026-08-16 12:00:00", "serhiy",
+]);
+assert.equal(call(api, "3dp_stock_adjustments", serhiy, { sku: "FIG-001" }).rows[0]["Роль"], "serhiy");
+codeOf(() => api.context.adjustStockAction3dp_(api.workbook, {
+  sku: "FIG-001", expected_current: 1, new_value: 5, reason: "stale count",
+}, serhiy), "STALE_WRITE");
+
+codeOf(() => api.context.createPayoutAction3dp_(api.workbook, { period: "2026-09" }, serhiy), "FORBIDDEN");
+codeOf(() => api.context.markPayoutPaidAction3dp_(api.workbook, {
+  row_number: 2, expected_period: "2026-08", paid_date: "2026-08-20",
+}, serhiy), "FORBIDDEN");
+const payoutSheet = api.workbook.getSheetByName("Виплати");
+payoutSheet.getRange(3, 1, 1, 8).setValues([["2026-09", 100, "", "", "", "", "", ""]]);
+codeOf(() => api.context.acknowledgePayoutAction3dp_(api.workbook, {
+  row_number: 3, expected_period: "2026-09", acknowledgement: "amount_agreed",
+}, serhiy, false), "PAYOUT_NOT_PUBLISHED");
+const amountAcknowledgement = plain(api.context.acknowledgePayoutAction3dp_(api.workbook, {
+  row_number: 2, expected_period: "2026-08", acknowledgement: "amount_agreed",
+}, serhiy, false)).new_value;
+assert.match(amountAcknowledgement, /^2026-08-16 12:00:00 · serhiy$/);
+codeOf(() => api.context.acknowledgePayoutAction3dp_(api.workbook, {
+  row_number: 2, expected_period: "2026-08", acknowledgement: "amount_agreed",
+}, serhiy, false), "ACKNOWLEDGEMENT_ALREADY_SET");
+codeOf(() => api.context.acknowledgePayoutAction3dp_(api.workbook, {
+  row_number: 2, expected_period: "2026-08", acknowledgement: "money_received",
+}, serhiy, false), "PAYOUT_NOT_PAID");
+plain(api.context.markPayoutPaidAction3dp_(api.workbook, {
+  row_number: 2, expected_period: "2026-08", paid_date: "2026-08-20", note: "paid",
+}, owner));
+const moneyAcknowledgement = plain(api.context.acknowledgePayoutAction3dp_(api.workbook, {
+  row_number: 2, expected_period: "2026-08", acknowledgement: "money_received",
+}, serhiy, false)).new_value;
+assert.match(moneyAcknowledgement, /^2026-08-16 12:00:00 · serhiy$/);
+codeOf(() => api.context.acknowledgePayoutAction3dp_(api.workbook, {
+  row_number: 2, expected_period: "2026-08", acknowledgement: "amount_agreed",
+}, owner, false), "FORBIDDEN");
+plain(api.context.acknowledgePayoutAction3dp_(api.workbook, {
+  row_number: 2, expected_period: "2026-08", acknowledgement: "amount_agreed",
+  expected_current: amountAcknowledgement, reason: "explicit correction",
+}, serhiy, true));
+const payoutJournal = api.workbook.getSheetByName("_Журнал_підтверджень_виплат_3DP");
+assert.equal(payoutJournal.isSheetHidden(), true);
+assert.deepEqual(payoutJournal.getRange("A2:G4").getValues(), [
+  ["2026-08-16 12:00:00", "serhiy", "2026-08", "amount agreement", "∅", amountAcknowledgement, ""],
+  ["2026-08-16 12:00:00", "serhiy", "2026-08", "money received", "∅", moneyAcknowledgement, ""],
+  ["2026-08-16 12:00:00", "serhiy", "2026-08", "amount agreement", amountAcknowledgement, amountAcknowledgement, "explicit correction"],
+]);
+
+const v23AfterWp1b = loadApi(v23Source, api.workbook);
+ownerReadCases.filter(([action]) => !["3dp_payouts", "3dp_stock_adjustments"].includes(action)).forEach(([action, params]) => {
+  assert.deepEqual(call(api, action, owner, params), call(v23AfterWp1b, action, owner, params), `V23 owner response after WP1b: ${action}`);
+});
+
 const restrictedCode = code.replace("const SERHIY_FULL_ECONOMICS_VISIBLE_3DP = true;", "const SERHIY_FULL_ECONOMICS_VISIBLE_3DP = false;");
-const restricted = loadApi(restrictedCode);
+const restricted = loadApi(restrictedCode, api.workbook);
 const restrictedSales = call(restricted, "3dp_sales", serhiy).rows[0];
 assert.equal(Object.hasOwn(restrictedSales, "Витрати BoosterShop за од., грн"), false);
 assert.equal(Object.hasOwn(restrictedSales, "Вартість фурнітури за од., грн (заморожена)"), false);
@@ -269,6 +389,9 @@ assert.equal(Object.hasOwn(restrictedSales, "Фурнітура власника
 assert.equal(Object.hasOwn(restrictedSales, "№ замовлення"), false);
 assert.equal(Object.hasOwn(restrictedSales, "Примітки"), false);
 assert.equal(Object.hasOwn(restrictedSales, "CRM row number"), false);
-codeOf(() => call(restricted, "3dp_stock_adjustments", serhiy), "READ_PROJECTION_FORBIDDEN");
+assert.equal(call(restricted, "3dp_stock_adjustments", serhiy, { sku: "FIG-001" }).rows[0]["Роль"], "serhiy");
+assert.equal(call(restricted, "3dp_get_row", serhiy, { sheet: "Номенклатура", sku: "FIG-001" }).row["Ціна під викуп, грн"], 130);
+assert.equal(call(restricted, "3dp_get_row", serhiy, { sheet: "Номенклатура", sku: "FIG-001" }).row["Посилання на модель"], "https://models.example/FIG-001");
+assert.equal(call(restricted, "3dp_payouts", serhiy).rows[0]["Кошти надійшли Сергію (Київ, роль)"], moneyAcknowledgement);
 
-console.log(JSON.stringify({ ok: true, owner_paths_preserved: 9, v23_owner_responses_compared: ownerReadCases.length, serhiy_projection_checks: 34, settings_journal_checks: 8, full_economics_checks: 7 }));
+console.log(JSON.stringify({ ok: true, owner_paths_preserved: 11, v23_owner_responses_compared: ownerReadCases.length, serhiy_projection_checks: 54, settings_journal_checks: 12, wp1b_write_checks: 23, payout_acknowledgement_checks: 17, full_economics_checks: 10 }));
