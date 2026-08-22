@@ -67,6 +67,38 @@ Keep code-level review evidence in `diagnostics/` or the active task context.
 Do not repeat the diff or list every inspected file unless the owner asks for
 detail.
 
+## Output economy (owner decision 2026-08-22)
+
+Applies to every surface — chat, diagnostics, handoffs, reports, patch headers.
+
+**Say a thing once.** Never restate in chat what a delivered file already says.
+Name the file; give only what the owner must decide or run.
+
+Do not:
+
+- summarise or re-narrate a file you just delivered;
+- explain reasoning after a conclusion nobody questioned;
+- justify a choice that was not challenged;
+- state a finding in a section and again in a summary table;
+- open with what you checked before saying what you found;
+- close by offering the next step when it is already written down.
+
+There is no line limit. The test is repetition, not length: if a sentence
+restates something already on screen or already in the delivered file, cut it.
+
+**Three things stay in full, but only their substance:**
+
+1. commands the owner runs — complete and copy-paste ready, no prose around them;
+2. anything that can break production or block work — plainly, once;
+3. a question that needs an owner decision — enough context to decide without
+   opening a file, and nothing more.
+
+**In durable artifacts** one finding lives in one place. A verdict, a findings
+list and a work order are different content, not the same content at three
+depths. A summary table replaces the prose it summarises or it does not belong.
+Keep a «what is already right» section only where an executor could break it by
+not knowing.
+
 ## Tool boundaries
 
 - Terminal and the VS Code extension may inspect the local repository.
