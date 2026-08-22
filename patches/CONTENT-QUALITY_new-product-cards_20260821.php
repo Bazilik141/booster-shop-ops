@@ -14,7 +14,8 @@ declare(strict_types=1);
  *   CONTENT-QUALITY_3D-card-fixes_20260821.md — «Додаток 2026-08-21», 9 cards
  *   diagnostics/CONTENT-QUALITY_corrections_20260821.md — OVERRIDES the payload
  *     for categories (§1.2), SEO URLs (§2), attributes (§3.1/§3.2) and the
- *     ACC-007-400 body + FAQ (§4.2) and the QCAC paragraph (§4.9).
+ *     ACC-007-400 body + FAQ (§4.2). Its §4.9 (QCAC/QCSR) was overruled by the
+ *     owner on 2026-08-22 — see the QCAC block below.
  *   DB baseline: backup-8.21.2026_22-06-47_boosters.tar.gz -> mysql/boosters_ocart49.sql
  *
  * WHAT THIS DOES — INSERT ONLY, NOT ONE UPDATE
@@ -90,18 +91,28 @@ declare(strict_types=1);
  *   - product 83 (Yu-Gi-Oh-boosters-Quarter-Century-Art-Collection) is not
  *     touched, although it is the same set as YGO-JP-QCAC-BBX.
  *
- * ONE EXECUTOR-APPLIED TEXT FIX BEYOND THE CORRECTIONS — flagged for review
- *   corrections §4.9 removed the QCAC sentence about «Secret Rare та Quarter
- *   Century Secret Rare варіанти» because QCSR variants did not verify. The
- *   payload's FAQ [3] on the same card repeated the same unverified token:
- *     was: «Чи гарантується конкретна QCSR або альтернативна ілюстрація?» /
- *          «Ні. Офіційна сторінка описує доступні варіанти карт, але не
- *           гарантує конкретну карту або варіант в окремому боксі.»
- *     now: «Чи гарантується конкретна карта або рідкість?» /
- *          «Ні. Офіційна сторінка описує пул сету, але не гарантує конкретну
- *           карту чи рідкість в окремому боксі.»
- *   Same protective meaning, no unverified token. `meta_keyword` still carries
- *   «QCSR QCAC» as a search token — left as the payload wrote it, flagged.
+ * QCAC / QCSR — OWNER DECISION 2026-08-22 OVERRULES corrections §4.9
+ *   corrections §4.9 had removed the sentence about «Secret Rare та Quarter
+ *   Century Secret Rare варіанти» from the YGO-JP-QCAC-BBX description, on the
+ *   grounds that QCSR variants did not verify against Konami's product page.
+ *   An earlier revision of this patch also rewrote FAQ [3] on the same card to
+ *   drop the token, for consistency.
+ *
+ *   The owner has decided otherwise. Both are restored to the payload wording:
+ *     body §2  «Офіційний пул налічує 100 типів карт: 40 Ultra Rare і 60 Super
+ *               Rare. Для карт передбачені Secret Rare та Quarter Century
+ *               Secret Rare варіанти, а частина позицій має альтернативні
+ *               ілюстрації.»
+ *     FAQ [3]  «Чи гарантується конкретна QCSR або альтернативна ілюстрація?» /
+ *              «Ні. Офіційна сторінка описує доступні варіанти карт, але не
+ *               гарантує конкретну карту або варіант в окремому боксі.»
+ *   `meta_keyword` keeps «QCSR QCAC», as the payload wrote it.
+ *
+ *   This also settles the mismatch with the live sibling card: product 83
+ *   (YGO-JP-QCAC-BST, the booster of the same set) already describes QCSR in
+ *   visible copy, names QCAC-JP018/019/021 and carries QCSR keywords. Box and
+ *   pack now say the same thing about the same set. Product 83 stays untouched
+ *   (handoff §3.6).
  *
  * APOSTROPHES — ASCII ('), matching the 2026-08-19 wave and the category texts.
  *
@@ -272,15 +283,15 @@ const PRODUCTS = [
         'body'       => [
             '<h2>Quarter Century Art Collection — арт-реліз Yu-Gi-Oh! OCG у форматі боксу</h2>',
             '<p>Бустер бокс Quarter Century Art Collection містить <strong>15 японських бустерів по 4 карти</strong>. QCAC — спеціальний реліз Yu-Gi-Oh! OCG від 22 лютого 2025 року з акцентом на відомі карти, альтернативні ілюстрації та колекційний формат сету.</p>',
-            // corrections §4.9 — the QCSR sentence is removed, only the verified pool stays
-            '<p>Офіційний пул налічує 100 типів карт: 40 Ultra Rare і 60 Super Rare.</p>',
+            // Owner decision 2026-08-22 — corrections §4.9 is overruled, payload wording restored in full.
+            '<p>Офіційний пул налічує 100 типів карт: 40 Ultra Rare і 60 Super Rare. Для карт передбачені Secret Rare та Quarter Century Secret Rare варіанти, а частина позицій має альтернативні ілюстрації.</p>',
             '<p>Бокс продається новим і в заводському шрінку. Один бокс не містить усі 100 типів карт, а конкретні карти, рідкісності й альтернативні ілюстрації в окремому боксі не гарантуються.</p>',
         ],
         'faq'        => [
             ['Скільки бустерів у Quarter Century Art Collection box?', '15 бустерів по 4 карти в кожному.'],
             ['Чи можна зібрати всі 100 типів карт з одного боксу?', 'Ні. Konami прямо зазначає, що один бокс не містить усі 100 типів карт.'],
-            // executor fix, see the header: no unverified QCSR token
-            ['Чи гарантується конкретна карта або рідкість?', 'Ні. Офіційна сторінка описує пул сету, але не гарантує конкретну карту чи рідкість в окремому боксі.'],
+            // Owner decision 2026-08-22 — payload wording restored, see the header.
+            ['Чи гарантується конкретна QCSR або альтернативна ілюстрація?', 'Ні. Офіційна сторінка описує доступні варіанти карт, але не гарантує конкретну карту або варіант в окремому боксі.'],
         ],
         'attributes' => [
             13 => 'Quarter Century Art Collection',
