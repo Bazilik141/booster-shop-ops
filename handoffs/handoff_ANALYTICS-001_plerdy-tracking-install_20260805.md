@@ -95,3 +95,26 @@ touched.
 ## Recommended status after execution
 Move to "In Review" (Claude) pending owner QA above; owner closes to "Done"
 after confirming the green check in Plerdy admin.
+
+---
+
+## 2026-08-22 — REVERTED on production (owner decision)
+
+The Plerdy tag re-requests the current URL ~4–5 s after every page load
+(same-origin, with cookies, route re-encoded as `%2F`). That second render
+overwrites OpenCart's per-render `login_token` / `register_token`, so the form
+the customer is looking at submits a dead token and is silently bounced back to
+the login/registration page with no error message.
+
+Production access log 31/Jul–21/Aug: 44 silent login failures out of 70 attempts
+and 19 silent registration failures out of 22, all starting 06–07/Aug. Zero
+before the tag was installed on 05/Aug.
+
+Owner removed the `<!-- BEGIN PLERDY CODE -->` … `<!-- END PLERDY CODE -->`
+block from `catalog/view/template/common/footer.twig` on 2026-08-22.
+
+Do not reinstate this tag until `ACC-003` has shipped and been QA'd —
+`handoffs/handoff_ACC-003_login-register-token-rotation_20260822.md` holds the
+full evidence chain and the fix scope. Even after ACC-003, a tag that re-fetches
+every page doubles server load per view; that trade-off is a separate owner
+decision.
