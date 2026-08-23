@@ -89,8 +89,8 @@ function makeEnvironment({ missingProductPriceFormula = false, settingsRows = 20
     SpreadsheetApp:{openById:(id)=>String(id).includes("1PvlSlg3")?crm:automation,getActive:()=>crm,getUi:()=>({alert(){}}),CopyPasteType:{PASTE_FORMAT:"format",PASTE_DATA_VALIDATION:"validation"},DataValidationCriteria:{VALUE_IN_RANGE:"VALUE_IN_RANGE"},newDataValidation:()=>new RuleBuilder(),flush:()=>{for(let row=3;row<=201;row++){const sku=products.getRange(row,1).getValue();rrc.getRange(row,1).setValue(sku);rrc.getRange(row,2).setValue(products.getRange(row,3).getValue());rrc.getRange(row,3).setValue(products.getRange(row,4).getValue());rrc.getRange(row,4).setValue(products.getRange(row,7).getValue());}}},
     ContentService:{MimeType:{JSON:"JSON"},createTextOutput:(text)=>({text,setMimeType(){return this;}})},
   });
-  vm.runInContext(code+'\napiIntegrityCheck_=function(){return {clean:true,problems:[]};};globalThis.__test={apiAddSku_,apiUpdateRrpBatch_,setupCrmCatalogOptionInfrastructure};',context,{filename:"Code.gs"});
-  return { apiAddSku:context.__test.apiAddSku_,apiUpdateRrpBatch:context.__test.apiUpdateRrpBatch_,setupCatalogOptions:context.__test.setupCrmCatalogOptionInfrastructure,crm,products,rrc,settings };
+  vm.runInContext(code+'\napiIntegrityCheck_=function(){return {clean:true,problems:[]};};globalThis.__test={apiAddSku_,apiUpdateRrpBatch_,apiSync3dpCatalogRrp_,setupCrmCatalogOptionInfrastructure};',context,{filename:"Code.gs"});
+  return { apiAddSku:context.__test.apiAddSku_,apiUpdateRrpBatch:context.__test.apiUpdateRrpBatch_,apiSync3dpCatalogRrp:context.__test.apiSync3dpCatalogRrp_,setupCatalogOptions:context.__test.setupCrmCatalogOptionInfrastructure,crm,products,rrc,settings };
 }
 
 const payload={sku:"BR-CHARM-100",full_name:"Брелок Чармандер (Pokémon) — 3D-друк",brand:"Booster Shop",language:"UA",set:"3D-друк",format:"3D аксесуар",rrp:25,active:true,source:"3d",short_name_mode:"full_name",allow_new_options:true};
@@ -163,6 +163,34 @@ const payload={sku:"BR-CHARM-100",full_name:"Брелок Чармандер (Po
   assert.equal(legacyBlocked.ok,false);
   assert.match(legacyBlocked.error,/3D SKU must be edited/);
 }
+
+{
+  const env=makeEnvironment();
+  const created=env.apiAddSku(env.crm,payload);
+  assert.equal(created.ok,true);
+  const synced=env.apiSync3dpCatalogRrp(env.crm,{sku:"BR-CHARM-100",rrp:30,expected_rrp:25});
+  assert.equal(synced.ok,true);
+  assert.equal(synced.action,"sync_3dp_catalog_rrp");
+  assert.equal(synced.previous_rrp,25);
+  assert.equal(synced.rrp,30);
+  assert.equal(synced.integrity_check_required,true);
+  assert.equal(env.rrc.getRange(4,5).getValue(),30);
+  assert.match(String(env.rrc.getRange(4,7).getValue()),/РРЦ 3D синхронізовано/);
+  assert.equal(env.rrc.getRange(4,8).getFormula(),"=dynamic");
+  assert.equal(env.products.getRange(4,3).getValue(),payload.full_name,"3D RRP sync must not alter product data");
+  const repeated=env.apiSync3dpCatalogRrp(env.crm,{sku:"BR-CHARM-100",rrp:30,expected_rrp:30});
+  assert.equal(repeated.ok,true);
+  assert.equal(repeated.already_applied,true);
+  const stale=env.apiSync3dpCatalogRrp(env.crm,{sku:"BR-CHARM-100",rrp:35,expected_rrp:25});
+  assert.equal(stale.ok,false);
+  assert.match(stale.error,/refresh and retry/);
+  assert.equal(env.rrc.getRange(4,5).getValue(),30);
+  const non3d=env.apiSync3dpCatalogRrp(env.crm,{sku:"EXISTING-001",rrp:15,expected_rrp:10});
+  assert.equal(non3d.ok,false);
+  assert.match(non3d.error,/canonical 3D SKU required/);
+}
+
+assert.match(code,/action === 'sync_3dp_catalog_rrp'/,"the owner-only 3D RRP action must be routed by doPost");
 
 {
   const env=makeEnvironment();

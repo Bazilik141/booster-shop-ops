@@ -24,6 +24,8 @@ const API_3DP = Object.freeze({
   nomenclatureHistoryColumn: 'P',
   activeStatus: 'Активний',
   archivedStatus: 'Архів',
+  draftStatus: 'Чернетка',
+  draftSkuPrefix: 'DRAFT-',
   maxRangeCells: 500,
   maxReadRows: 500,
   maxStockAdjustmentReasonChars: 250,
@@ -44,6 +46,8 @@ const SHEETS_3DP = Object.freeze({
   fixtures: 'Фурнітура_довідник',
   drafts: '_Чернетки_партій',
   stockAdjustments: '_Коригування_наявності',
+  settingsJournal: '_Журнал_налаштувань_3DP',
+  payoutAcknowledgementJournal: '_Журнал_підтверджень_виплат_3DP',
 });
 
 const PRINT_TIME_ENTRY_3DP = Object.freeze({
@@ -76,6 +80,41 @@ const STOCK_ADJUSTMENT_HEADERS_3DP = Object.freeze([
   'Зміна наявності, шт',
   'Причина',
   'Дата коригування (Київ)',
+  'Роль',
+]);
+const STOCK_ADJUSTMENT_LEGACY_HEADERS_3DP = Object.freeze([
+  'SKU',
+  'Зміна наявності, шт',
+  'Причина',
+  'Дата коригування (Київ)',
+]);
+
+const PAYOUT_BASE_HEADERS_3DP = Object.freeze([
+  'Період (РРРР-ММ)',
+  'Нараховано Сергію за період, грн',
+  'Термін перевірки Сергієм',
+  'Дата фактичної виплати',
+  'Статус',
+  'Примітки',
+]);
+const PAYOUT_ACKNOWLEDGEMENT_HEADERS_3DP = Object.freeze([
+  'Згода Сергія із сумою (Київ, роль)',
+  'Кошти надійшли Сергію (Київ, роль)',
+]);
+const PAYOUT_ACKNOWLEDGEMENTS_3DP = Object.freeze({
+  amount_agreed: Object.freeze({
+    header: PAYOUT_ACKNOWLEDGEMENT_HEADERS_3DP[0],
+    label: 'amount agreement',
+    requiresPaid: false,
+  }),
+  money_received: Object.freeze({
+    header: PAYOUT_ACKNOWLEDGEMENT_HEADERS_3DP[1],
+    label: 'money received',
+    requiresPaid: true,
+  }),
+});
+const PAYOUT_ACKNOWLEDGEMENT_JOURNAL_HEADERS_3DP = Object.freeze([
+  'Час (Київ)', 'Роль', 'Період', 'Підтвердження', 'Було', 'Стало', 'Причина',
 ]);
 
 const TECHNICAL_APPEND_COLUMNS_3DP = Object.freeze({
@@ -118,6 +157,15 @@ const PRICE_MODEL_COLUMNS_3DP = Object.freeze({
   ]),
 });
 
+const ANALYTICS_CALCULATOR_3DP = Object.freeze({
+  headerRange: 'A3:N3',
+  firstDataRow: 4,
+  lastDataRow: 17,
+  columnCount: 14,
+  profitShareColumn: 6,
+  defaultProfitShare: 0.5,
+});
+
 const SALES_FROZEN_COLUMNS_3DP = Object.freeze(['F', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA']);
 const SALES_CORRECTABLE_FROZEN_COLUMNS_3DP = Object.freeze(['V', 'W', 'X', 'Y', 'Z', 'AA']);
 const SALES_3DP015_REQUIRED_COLUMNS_3DP = Object.freeze(['F', 'T', 'U', 'V', 'W']);
@@ -136,9 +184,149 @@ const OWNER_MANUAL_COLUMNS_3DP = Object.freeze({
 });
 
 const SERHIY_MANUAL_COLUMNS_3DP = Object.freeze({
-  'Номенклатура': Object.freeze(['G', 'H', 'I', 'J', 'L', 'M', 'N']),
+  'Номенклатура': Object.freeze(['G', 'H', 'I', 'J', 'L', 'M', 'N', 'Q', 'R', 'S']),
   'Друк-лог': Object.freeze(['A', 'B', 'C', 'D', 'E', 'F', 'H', 'I']),
+  'Налаштування': Object.freeze(['B']),
 });
+
+// A draft is created through a dedicated action, not through the generic write
+// path. B:F is deliberately creation-only: after creation Serhiy still edits
+// only the approved manual columns above.
+const NOMENCLATURE_DRAFT_CREATE_COLUMNS_3DP = Object.freeze([
+  'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'L', 'M', 'N', 'Q', 'R', 'S',
+]);
+const NOMENCLATURE_DRAFT_REQUIRED_COLUMNS_3DP = Object.freeze(['B', 'D']);
+const NOMENCLATURE_SKU_PATTERN_3DP = /^(BR|FIG|ACC-3D)-[A-Z0-9]{2,5}-\d{3}$/;
+const NOMENCLATURE_DRAFT_SUGGESTIONS_3DP = Object.freeze({
+  'Брелок': Object.freeze({ prefix: 'BR', category_digits: '100', category_label: 'Звичайний брелок-підвіска' }),
+  'Брелок-клікер': Object.freeze({ prefix: 'BR', category_digits: '200', category_label: 'Брелок-клікер' }),
+  'Набір брелоків': Object.freeze({ prefix: 'BR', category_digits: '300', category_label: 'Набір брелоків' }),
+  'Брелок-спінер': Object.freeze({ prefix: 'BR', category_digits: '400', category_label: 'Брелок-спінер' }),
+  'Фігурка в покеболі': Object.freeze({ prefix: 'FIG', category_digits: '100', category_label: 'Фігурка-в-покеболі' }),
+  'Фігурка статична': Object.freeze({ prefix: 'FIG', category_digits: '200', category_label: 'Статична декоративна фігурка' }),
+  'Фігурка-конструктор': Object.freeze({ prefix: 'FIG', category_digits: '300', category_label: 'Фігурка-конструктор' }),
+  'Панно': Object.freeze({ prefix: 'FIG', category_digits: '400', category_label: 'Пласка настінна форма' }),
+  'Рухома фігурка': Object.freeze({ prefix: 'FIG', category_digits: '500', category_label: 'Рухома фігурка' }),
+  'Фігурка fidget': Object.freeze({ prefix: 'FIG', category_digits: '600', category_label: 'Фігурка з fidget-механікою' }),
+  'Підставка для карток': Object.freeze({ prefix: 'ACC-3D', category_digits: '100', category_label: 'Підставка для карток' }),
+  'Підставка для грейджених слабів': Object.freeze({ prefix: 'ACC-3D', category_digits: '200', category_label: 'Підставка для грейджених слабів' }),
+  'Підставка для грейджених слабів на ніжці': Object.freeze({ prefix: 'ACC-3D', category_digits: '300', category_label: 'Підставка для грейджених слабів на ніжці' }),
+  'Побутовий аксесуар': Object.freeze({ prefix: 'ACC-3D', category_digits: '400', category_label: 'Побутовий аксесуар' }),
+  'Світильник': Object.freeze({ prefix: 'ACC-3D', category_digits: '500', category_label: 'Світильник' }),
+  'Плаский пластиковий аксесуар': Object.freeze({ prefix: 'ACC-3D', category_digits: '600', category_label: 'Плаский пластиковий аксесуар' }),
+  'Обертовий дисплей': Object.freeze({ prefix: 'ACC-3D', category_digits: '700', category_label: 'Обертовий дисплей' }),
+});
+
+// Owner-controlled disclosure switch. It changes only the economics subset;
+// the Serhiy read projection itself always stays active to protect external
+// order/customer links.
+const SERHIY_FULL_ECONOMICS_VISIBLE_3DP = true;
+
+// Header-name projections are intentional: column letters change as the 3D-P
+// accounting model evolves, while a renamed/missing approved header must stop
+// the read rather than silently disclose or omit another column.
+const SERHIY_READ_PROJECTION_3DP = Object.freeze({
+  'Номенклатура': Object.freeze({
+    baseline: Object.freeze([
+      'SKU', 'Назва виробу', 'Франшиза', 'Тип', 'Трек', 'Статус', 'Час друку за од., год', 'Вага виробу за од., г',
+      'Вага котушки, г', 'Ціна котушки, грн', 'Собівартість Сергія (виробнича), грн',
+      'Дата оновлення', 'Примітки', 'Фурнітура (ціна-довідка), грн/шт',
+      'РРЦ фактична, грн', 'Ціна під викуп, грн', 'Посилання на модель',
+    ]),
+    fullEconomics: Object.freeze([
+      'API_статус_запису', 'API_історія_змін',
+    ]),
+  }),
+  'Друк-лог': Object.freeze({
+    baseline: Object.freeze([
+      'Дата', 'SKU', 'Надруковано, шт', 'Час друку факт, год', 'Брак, шт',
+      'Витрачено матеріалу, г (факт)', 'Собівартість партії, грн', 'Хто друкував',
+      'Примітки', 'API_статус_запису', 'API_історія_змін',
+    ]),
+    fullEconomics: Object.freeze([]),
+  }),
+  'Наявність': Object.freeze({
+    baseline: Object.freeze([
+      'SKU', 'Назва', 'Надруковано всього, шт', 'Брак всього, шт',
+      'Продано на сайті, шт', 'Видано як плюшка, шт', 'Наявно зараз, шт',
+    ]),
+    fullEconomics: Object.freeze([]),
+  }),
+  'Продажі': Object.freeze({
+    baseline: Object.freeze([
+      'Дата', 'SKU', 'Кількість', '% прибутку Сергію', 'Нараховано Сергію, грн',
+      'РРЦ на момент продажу, грн', 'Платник фурнітури', 'Режим CRM',
+      'Фурнітура Сергія за од., грн (заморожена)', 'Ціна викупу за од., грн (заморожена)',
+    ]),
+    fullEconomics: Object.freeze([
+      'Назва', 'Фактична ціна за од., грн (після знижки)',
+      'Собівартість Сергія за од., грн', 'Витрати BoosterShop за од., грн',
+      'Маржинальний прибуток за од., грн', 'Статус', 'Дохід Booster Shop, грн', 'Канал',
+      'Тип знижки', 'Параметр знижки', 'Погоджено з Сергієм (Так/Ні)',
+      'Період (авто, РРРР-ММ)', 'Вартість фурнітури за од., грн (заморожена)',
+      'Фурнітура власника за од., грн (заморожена)',
+    ]),
+  }),
+  'Виплати': Object.freeze({
+    baseline: Object.freeze([
+      'Період (РРРР-ММ)', 'Нараховано Сергію за період, грн', 'Термін перевірки Сергієм',
+      'Дата фактичної виплати', 'Статус', 'Примітки',
+      'Згода Сергія із сумою (Київ, роль)', 'Кошти надійшли Сергію (Київ, роль)',
+    ]),
+    fullEconomics: Object.freeze([]),
+  }),
+  '_Коригування_наявності': Object.freeze({
+    baseline: Object.freeze([
+      'SKU', 'Зміна наявності, шт', 'Причина', 'Дата коригування (Київ)', 'Роль',
+    ]),
+    fullEconomics: Object.freeze([]),
+  }),
+  'Маркетингові_плюшки': Object.freeze({
+    baseline: Object.freeze(['Дата', 'SKU', 'Видано як бонус, шт']),
+    fullEconomics: Object.freeze([
+      'Закуплено в Друга, шт', 'Ціна закупівлі за од., грн', 'Сума закупівлі, грн',
+    ]),
+  }),
+  'Фурнітура_довідник': Object.freeze({
+    baseline: Object.freeze(['Назва фурнітури', 'Ціна, грн/шт']),
+    fullEconomics: Object.freeze([]),
+  }),
+  'Аналітика': Object.freeze({
+    baseline: Object.freeze([
+      'SKU', 'Назва', 'Собівартість Сергія, грн', 'Час друку, год', '% прибутку Сергію',
+      'РРЦ фактична', 'Нараховано Сергію, грн', 'Прибуток Сергію/год друку, грн',
+    ]),
+    fullEconomics: Object.freeze([
+      'Витрати BoosterShop (фурнітура), грн', 'Маржа BoosterShop, грн', 'Маржа BoosterShop, %',
+    ]),
+  }),
+});
+
+const SERHIY_READ_ACTIONS_3DP = Object.freeze([
+  '3dp_get_row', '3dp_get_range', '3dp_overview', '3dp_bootstrap',
+  '3dp_information_bootstrap', '3dp_skus', '3dp_sales', '3dp_plyushky',
+  '3dp_payouts', '3dp_print_log', '3dp_fixtures', '3dp_batch_draft',
+  '3dp_settings_journal', '3dp_stock_adjustments',
+]);
+
+const SETTINGS_VALUE_BOUNDS_3DP = Object.freeze({
+  2: Object.freeze({ label: 'Потужність принтера, кВт', min: 0.01, max: 5 }),
+  3: Object.freeze({ label: 'Ціна електроенергії, грн/кВт·год', min: 0.01, max: 100 }),
+  4: Object.freeze({ label: 'Амортизація принтера, грн/год', min: 0, max: 1000 }),
+  5: Object.freeze({ label: 'Планований брак, частка', min: 0, max: 0.5 }),
+});
+const NOMENCLATURE_PRICE_BOUNDS_3DP = Object.freeze({
+  Q: Object.freeze({ label: 'РРЦ фактична, грн', min: 0, max: 100000 }),
+  R: Object.freeze({ label: 'Ціна під викуп, грн', min: 0, max: 100000 }),
+});
+
+const SETTINGS_JOURNAL_HEADERS_3DP = Object.freeze([
+  'Час (Київ)', 'Роль', 'Параметр', 'Було', 'Стало', 'SKU',
+]);
+const SETTINGS_JOURNAL_LEGACY_HEADERS_3DP = Object.freeze([
+  'Час (Київ)', 'Роль', 'Параметр', 'Було', 'Стало',
+]);
+const BATCH_DRAFT_ACTOR_HEADER_3DP = 'Роль автора чернетки';
 
 const FORMULA_COLUMNS_3DP = Object.freeze({
   'Номенклатура': Object.freeze(['K']),
@@ -185,6 +373,36 @@ function doPost(e) {
     return withScriptLock3dp_(function () {
       return handlePost3dp_(body, actor);
     });
+  });
+}
+
+/**
+ * Owner-run repair for the fixed 14-row analytics calculator. Use this once
+ * after deploying the WP1c analytics hotfix to initialise already-active SKUs.
+ */
+function repair3dpActiveNomenclatureAnalytics() {
+  return withScriptLock3dp_(function () {
+    const spreadsheet = getSpreadsheet3dp_();
+    const analyticsSnapshot = snapshotRange3dp_(getSheet3dp_(spreadsheet, SHEETS_3DP.analytics), 'A4:N17');
+    try {
+      const result = syncActiveNomenclatureAnalytics3dp_(spreadsheet);
+      if (result.changed) {
+        appendAudit3dp_(spreadsheet, { role: 'owner', identity: 'owner-manual-repair' }, 'NOMENCLATURE_ANALYTICS_SYNC', SHEETS_3DP.analytics, 'A4:N17', {}, {
+          active_sku_count: result.active_sku_count,
+          initialized_skus: result.initialized_skus,
+        }, 'Owner-run repair: synchronized Analytics with active Номенклатура SKUs and initialized missing profit shares.');
+      }
+      return {
+        action: 'repair3dp_active_nomenclature_analytics',
+        ok: true,
+        already_applied: !result.changed,
+        active_sku_count: result.active_sku_count,
+        initialized_skus: result.initialized_skus,
+      };
+    } catch (error) {
+      restoreRange3dp_(analyticsSnapshot);
+      throw error;
+    }
   });
 }
 
@@ -283,34 +501,37 @@ function printTimeWarning3dp_(hours) {
 function handleGet3dp_(params, actor) {
   const action = String(params.action || '').trim();
   const spreadsheet = getSpreadsheet3dp_();
+  assertReadActionAllowed3dp_(action, actor);
 
   switch (action) {
     case '3dp_get_row':
-      return getRowAction3dp_(spreadsheet, params);
+      return getRowAction3dp_(spreadsheet, params, actor);
     case '3dp_get_range':
       return getRangeAction3dp_(spreadsheet, params, actor);
     case '3dp_overview':
-      return overviewAction3dp_(spreadsheet);
+      return overviewAction3dp_(spreadsheet, actor);
     case '3dp_bootstrap':
       return bootstrapAction3dp_(spreadsheet, params, actor);
     case '3dp_information_bootstrap':
-      return informationBootstrapAction3dp_(spreadsheet);
+      return informationBootstrapAction3dp_(spreadsheet, actor);
     case '3dp_skus':
-      return skusAction3dp_(spreadsheet, params);
+      return skusAction3dp_(spreadsheet, params, actor);
     case '3dp_sales':
-      return tableAction3dp_(spreadsheet, SHEETS_3DP.sales, { requireHeader: 'SKU' });
+      return tableAction3dp_(spreadsheet, SHEETS_3DP.sales, { requireHeader: 'SKU' }, actor);
     case '3dp_plyushky':
-      return tableAction3dp_(spreadsheet, SHEETS_3DP.plyushky, { requireHeader: 'SKU' });
+      return tableAction3dp_(spreadsheet, SHEETS_3DP.plyushky, { requireHeader: 'SKU' }, actor);
     case '3dp_payouts':
-      return tableAction3dp_(spreadsheet, SHEETS_3DP.payouts, { requireHeader: 'Період (РРРР-ММ)' });
+      return tableAction3dp_(spreadsheet, SHEETS_3DP.payouts, { requireHeader: 'Період (РРРР-ММ)' }, actor);
     case '3dp_print_log':
-      return printLogAction3dp_(spreadsheet, params);
+      return printLogAction3dp_(spreadsheet, params, actor);
     case '3dp_fixtures':
-      return tableAction3dp_(spreadsheet, SHEETS_3DP.fixtures, { requireHeader: 'Назва фурнітури' });
+      return tableAction3dp_(spreadsheet, SHEETS_3DP.fixtures, { requireHeader: 'Назва фурнітури' }, actor);
     case '3dp_batch_draft':
       return getBatchDraftAction3dp_(spreadsheet, params, actor);
     case '3dp_stock_adjustments':
       return stockAdjustmentsAction3dp_(spreadsheet, params, actor);
+    case '3dp_settings_journal':
+      return settingsJournalAction3dp_(spreadsheet, params, actor);
     default:
       throw apiError3dp_('UNKNOWN_ACTION', 'Unknown read action.');
   }
@@ -325,6 +546,10 @@ function handlePost3dp_(body, actor) {
       return writeAction3dp_(spreadsheet, body, actor);
     case '3dp_append_row':
       return appendRowAction3dp_(spreadsheet, body, actor);
+    case '3dp_nomenclature_draft_create':
+      return createNomenclatureDraftAction3dp_(spreadsheet, body, actor);
+    case '3dp_nomenclature_assign_sku':
+      return assignNomenclatureSkuAction3dp_(spreadsheet, body, actor);
     case '3dp_manufacture_batch':
       return manufactureBatchAction3dp_(spreadsheet, body, actor);
     case '3dp_print_log_update':
@@ -339,6 +564,10 @@ function handlePost3dp_(body, actor) {
       return createPayoutAction3dp_(spreadsheet, body, actor);
     case '3dp_payout_mark_paid':
       return markPayoutPaidAction3dp_(spreadsheet, body, actor);
+    case '3dp_payout_acknowledge':
+      return acknowledgePayoutAction3dp_(spreadsheet, body, actor, false);
+    case '3dp_payout_acknowledgement_correct':
+      return acknowledgePayoutAction3dp_(spreadsheet, body, actor, true);
     case '3dp_order_gifts_append':
       return appendOrderGiftsAction3dp_(spreadsheet, body, actor);
     case '3dp_test_order_cleanup':
@@ -401,7 +630,7 @@ function getSheet3dp_(spreadsheet, sheetName) {
   return sheet;
 }
 
-function getRowAction3dp_(spreadsheet, params) {
+function getRowAction3dp_(spreadsheet, params, actor) {
   const sheetName = String(params.sheet || '');
   if ([SHEETS_3DP.nomenclature, SHEETS_3DP.availability].indexOf(sheetName) === -1) {
     throw apiError3dp_('SHEET_NOT_ALLOWED', '3dp_get_row supports only SKU-keyed sheets.');
@@ -420,9 +649,16 @@ function getRowAction3dp_(spreadsheet, params) {
   for (let index = 0; index < values.length; index += 1) {
     if (String(values[index][0] || '').trim() === sku) {
       const row = rowObject3dp_(headers, values[index], index + 2);
-      if (sheetName === SHEETS_3DP.nomenclature) row['% прибутку Сергію'] = profitShareForSku3dp_(spreadsheet, sku);
       if (isExampleRow3dp_(row)) throw apiError3dp_('ROW_FILTERED', 'Illustrative rows are not returned.');
-      return { action: '3dp_get_row', sheet: sheetName, row: row };
+      if (sheetName === SHEETS_3DP.nomenclature &&
+          nomenclatureStatusForRow3dp_(row) === API_3DP.draftStatus &&
+          String(params.include_drafts || '').toLowerCase() !== 'true') {
+        throw apiError3dp_('ROW_FILTERED', 'Draft SKUs require include_drafts=true.');
+      }
+      if (sheetName === SHEETS_3DP.nomenclature && isActiveNomenclatureRow3dp_(row)) {
+        row['% прибутку Сергію'] = profitShareForSku3dp_(spreadsheet, sku);
+      }
+      return { action: '3dp_get_row', sheet: sheetName, row: projectRow3dp_(sheetName, headers, row, actor) };
     }
   }
   throw apiError3dp_('ROW_NOT_FOUND', 'SKU not found.');
@@ -450,6 +686,7 @@ function getRangeAction3dp_(spreadsheet, params, actor) {
   if (parsed.endRow > sheet.getMaxRows() || parsed.endColumn > sheet.getMaxColumns()) {
     throw apiError3dp_('RANGE_OUT_OF_BOUNDS', 'Requested range is outside the sheet grid.');
   }
+  assertSerhiyRangeReadAllowed3dp_(sheetName, sheet, parsed, actor);
 
   const range = sheet.getRange(parsed.a1);
   return {
@@ -461,7 +698,7 @@ function getRangeAction3dp_(spreadsheet, params, actor) {
   };
 }
 
-function overviewAction3dp_(spreadsheet) {
+function overviewAction3dp_(spreadsheet, actor) {
   const nomenclature = readTable3dp_(spreadsheet, SHEETS_3DP.nomenclature, { requireHeader: 'SKU' });
   const availability = readTable3dp_(spreadsheet, SHEETS_3DP.availability, { requireHeader: 'SKU' });
   const sales = readTable3dp_(spreadsheet, SHEETS_3DP.sales, { requireHeader: 'SKU' });
@@ -508,6 +745,17 @@ function overviewFromTables3dp_(nomenclature, availability, sales) {
 }
 
 function bootstrapAction3dp_(spreadsheet, params, actor) {
+  if (isSerhiyProjectionActive3dp_(actor)) {
+    const includeArchived = String((params && params.include_archived) || 'true').toLowerCase() === 'true';
+    return {
+      ok: true,
+      action: '3dp_bootstrap',
+      overview: overviewAction3dp_(spreadsheet, actor),
+      skus: skusAction3dp_(spreadsheet, { include_archived: String(includeArchived) }, actor),
+      settings: getRangeAction3dp_(spreadsheet, { sheet: SHEETS_3DP.settings, range: 'B2:B5' }, actor),
+      analytics: projectedRangeAction3dp_(spreadsheet, SHEETS_3DP.analytics, 3, 17, 3, actor),
+    };
+  }
   const includeArchived = String((params && params.include_archived) || 'true').toLowerCase() === 'true';
   const nomenclature = readTable3dp_(spreadsheet, SHEETS_3DP.nomenclature, { requireHeader: 'SKU' });
   const availability = readTable3dp_(spreadsheet, SHEETS_3DP.availability, { requireHeader: 'SKU' });
@@ -521,22 +769,35 @@ function bootstrapAction3dp_(spreadsheet, params, actor) {
   };
 }
 
-function informationBootstrapAction3dp_(spreadsheet) {
+function informationBootstrapAction3dp_(spreadsheet, actor) {
   return {
     ok: true,
     action: '3dp_information_bootstrap',
-    sales: tableAction3dp_(spreadsheet, SHEETS_3DP.sales, { requireHeader: 'SKU' }),
-    plyushky: tableAction3dp_(spreadsheet, SHEETS_3DP.plyushky, { requireHeader: 'SKU' }),
-    payouts: tableAction3dp_(spreadsheet, SHEETS_3DP.payouts, { requireHeader: 'Період (РРРР-ММ)' }),
-    fixtures: tableAction3dp_(spreadsheet, SHEETS_3DP.fixtures, { requireHeader: 'Назва фурнітури' }),
+    sales: tableAction3dp_(spreadsheet, SHEETS_3DP.sales, { requireHeader: 'SKU' }, actor),
+    plyushky: tableAction3dp_(spreadsheet, SHEETS_3DP.plyushky, { requireHeader: 'SKU' }, actor),
+    payouts: tableAction3dp_(spreadsheet, SHEETS_3DP.payouts, { requireHeader: 'Період (РРРР-ММ)' }, actor),
+    fixtures: tableAction3dp_(spreadsheet, SHEETS_3DP.fixtures, { requireHeader: 'Назва фурнітури' }, actor),
   };
 }
 
-function skusAction3dp_(spreadsheet, params) {
+function skusAction3dp_(spreadsheet, params, actor) {
+  // Kept under its established parameter name for dashboard compatibility. With
+  // three states, an explicit non-active request returns both archived and draft
+  // rows; the default remains the sellable active catalogue only.
   const includeArchived = String((params && params.include_archived) || '').toLowerCase() === 'true';
   const nomenclature = readTable3dp_(spreadsheet, SHEETS_3DP.nomenclature, { requireHeader: 'SKU' });
   const availability = readTable3dp_(spreadsheet, SHEETS_3DP.availability, { requireHeader: 'SKU' });
-  return skusFromTables3dp_(nomenclature, availability, includeArchived);
+  const result = skusFromTables3dp_(nomenclature, availability, includeArchived);
+  if (!isSerhiyProjectionActive3dp_(actor)) return result;
+  return Object.assign({}, result, {
+    rows: result.rows.map(function (row) {
+      const projected = projectRow3dp_(SHEETS_3DP.nomenclature, nomenclature.headers, row, actor);
+      projected.availability = row.availability
+        ? projectRow3dp_(SHEETS_3DP.availability, availability.headers, row.availability, actor)
+        : null;
+      return projected;
+    }),
+  });
 }
 
 function skusFromTables3dp_(nomenclature, availability, includeArchived) {
@@ -546,7 +807,7 @@ function skusFromTables3dp_(nomenclature, availability, includeArchived) {
   });
   const rows = nomenclature.rows
     .filter(function (row) { return !isPlaceholderSku3dp_(row.SKU); })
-    .filter(function (row) { return includeArchived || !isArchivedNomenclatureRow3dp_(row); })
+    .filter(function (row) { return includeArchived || isActiveNomenclatureRow3dp_(row); })
     .map(function (row) {
       return Object.assign({}, row, { availability: bySku[String(row.SKU || '')] || null });
     });
@@ -555,17 +816,125 @@ function skusFromTables3dp_(nomenclature, availability, includeArchived) {
 
 function activeNomenclatureRows3dp_(rows) {
   return rows.filter(function (row) {
-    return !isPlaceholderSku3dp_(row.SKU) && !isArchivedNomenclatureRow3dp_(row);
+    return !isPlaceholderSku3dp_(row.SKU) && isActiveNomenclatureRow3dp_(row);
   });
 }
 
-function isArchivedNomenclatureRow3dp_(row) {
-  return String(row['API_статус_запису'] || '') === API_3DP.archivedStatus;
+function nomenclatureStatusForRow3dp_(row) {
+  return String(row['API_статус_запису'] || API_3DP.activeStatus).trim();
 }
 
-function tableAction3dp_(spreadsheet, sheetName, options) {
+function isActiveNomenclatureRow3dp_(row) {
+  // Unknown or malformed values intentionally fail closed for catalogue reads.
+  return nomenclatureStatusForRow3dp_(row) === API_3DP.activeStatus;
+}
+
+function tableAction3dp_(spreadsheet, sheetName, options, actor) {
   const table = readTable3dp_(spreadsheet, sheetName, options || {});
-  return { action: actionNameForSheet3dp_(sheetName), sheet: sheetName, rows: table.rows, count: table.rows.length };
+  return {
+    action: actionNameForSheet3dp_(sheetName),
+    sheet: sheetName,
+    rows: projectRows3dp_(sheetName, table.headers, table.rows, actor),
+    count: table.rows.length,
+  };
+}
+
+function isSerhiyProjectionActive3dp_(actor) {
+  return Boolean(actor && actor.role === 'serhiy');
+}
+
+function isSerhiyFullEconomics3dp_(actor) {
+  return Boolean(actor && actor.role === 'serhiy' && SERHIY_FULL_ECONOMICS_VISIBLE_3DP);
+}
+
+function assertReadActionAllowed3dp_(action, actor) {
+  if (!isSerhiyProjectionActive3dp_(actor)) return;
+  if (SERHIY_READ_ACTIONS_3DP.indexOf(action) === -1) {
+    throw apiError3dp_('READ_PROJECTION_FORBIDDEN', 'This read action has no approved Serhiy projection.');
+  }
+}
+
+function projectionHeadersForSheet3dp_(sheetName, actor) {
+  const projection = SERHIY_READ_PROJECTION_3DP[sheetName];
+  if (!projection) throw apiError3dp_('READ_PROJECTION_FORBIDDEN', 'No Serhiy read projection is configured for sheet ' + sheetName + '.');
+  return projection.baseline.concat(isSerhiyFullEconomics3dp_(actor) ? projection.fullEconomics : []);
+}
+
+function assertProjectionHeaders3dp_(sheetName, headers, actor) {
+  const allowed = projectionHeadersForSheet3dp_(sheetName, actor);
+  const missing = allowed.filter(function (header) { return headers.indexOf(header) === -1; });
+  if (missing.length) {
+    throw apiError3dp_(
+      'READ_PROJECTION_HEADER_MISSING',
+      'Serhiy projection header missing in ' + sheetName + ': ' + missing.join(', ') + '.'
+    );
+  }
+  return allowed;
+}
+
+function projectRow3dp_(sheetName, headers, row, actor) {
+  if (!isSerhiyProjectionActive3dp_(actor)) return row;
+  const allowed = assertProjectionHeaders3dp_(sheetName, headers, actor);
+  const projected = {};
+  if (Object.prototype.hasOwnProperty.call(row, 'row_number')) projected.row_number = row.row_number;
+  headers.forEach(function (header) {
+    if (allowed.indexOf(header) === -1) return;
+    if (Object.prototype.hasOwnProperty.call(row, header)) projected[header] = row[header];
+  });
+  return projected;
+}
+
+function projectRows3dp_(sheetName, headers, rows, actor) {
+  if (!isSerhiyProjectionActive3dp_(actor)) return rows;
+  assertProjectionHeaders3dp_(sheetName, headers, actor);
+  return rows.map(function (row) { return projectRow3dp_(sheetName, headers, row, actor); });
+}
+
+function projectionHeaderRow3dp_(sheetName) {
+  return sheetName === SHEETS_3DP.analytics ? 3 : 1;
+}
+
+function assertSerhiyRangeReadAllowed3dp_(sheetName, sheet, parsed, actor) {
+  if (!isSerhiyProjectionActive3dp_(actor)) return;
+  if (sheetName === SHEETS_3DP.settings) {
+    if (parsed.startColumn !== 2 || parsed.endColumn !== 2 || parsed.startRow < 2 || parsed.endRow > 5) {
+      throw apiError3dp_('RANGE_NOT_PROJECTED', 'Serhiy may read only Налаштування!B2:B5.');
+    }
+    return;
+  }
+  const headerRow = projectionHeaderRow3dp_(sheetName);
+  const headers = sheet.getRange(headerRow, 1, 1, sheet.getLastColumn()).getDisplayValues()[0];
+  const allowed = assertProjectionHeaders3dp_(sheetName, headers, actor);
+  for (let column = parsed.startColumn; column <= parsed.endColumn; column += 1) {
+    const header = headers[column - 1];
+    if (allowed.indexOf(header) === -1) {
+      throw apiError3dp_('RANGE_NOT_PROJECTED', 'Serhiy may not read ' + sheetName + ' column ' + numberToColumn3dp_(column) + '.');
+    }
+  }
+}
+
+function projectedRangeAction3dp_(spreadsheet, sheetName, startRow, endRow, headerRow, actor) {
+  const sheet = getSheet3dp_(spreadsheet, sheetName);
+  const lastColumn = sheet.getLastColumn();
+  const headers = sheet.getRange(headerRow, 1, 1, lastColumn).getDisplayValues()[0];
+  const allowed = assertProjectionHeaders3dp_(sheetName, headers, actor);
+  const indexes = headers.map(function (header, index) {
+    return allowed.indexOf(header) !== -1 ? index : -1;
+  }).filter(function (index) { return index !== -1; });
+  const range = sheet.getRange(startRow, 1, endRow - startRow + 1, lastColumn);
+  const values = range.getValues().map(function (row) {
+    return indexes.map(function (index) { return row[index]; });
+  });
+  const formulas = range.getFormulas().map(function (row) {
+    return indexes.map(function (index) { return row[index]; });
+  });
+  return {
+    action: '3dp_get_range',
+    sheet: sheetName,
+    range: 'projected:' + sheetName + '!' + startRow + ':' + endRow,
+    values: normalizeMatrix3dp_(values),
+    formulas: formulas,
+  };
 }
 
 function profitShareForSku3dp_(spreadsheet, sku) {
@@ -580,6 +949,138 @@ function profitShareForSku3dp_(spreadsheet, sku) {
     throw apiError3dp_('INVALID_PROFIT_SHARE', 'Serhiy profit share must stay between 0 and 1 for SKU ' + sku + '.');
   }
   throw apiError3dp_('PROFIT_SHARE_NOT_FOUND', 'Serhiy profit share is not configured in Analytics for SKU ' + sku + '.');
+}
+
+/**
+ * The calculator has a fixed A4:N17 area. It is a derived representation of
+ * active Номенклатура rows, not a second SKU registry. A draft must never be
+ * synchronized here: it has no sellable canonical article yet.
+ */
+function syncActiveNomenclatureAnalytics3dp_(spreadsheet) {
+  const nomenclature = getSheet3dp_(spreadsheet, SHEETS_3DP.nomenclature);
+  const analytics = getSheet3dp_(spreadsheet, SHEETS_3DP.analytics);
+  const headers = analytics.getRange(ANALYTICS_CALCULATOR_3DP.headerRange).getDisplayValues()[0];
+  if (JSON.stringify(headers) !== JSON.stringify(PRICE_MODEL_COLUMNS_3DP.analytics)) {
+    throw apiError3dp_('ANALYTICS_SCHEMA_NOT_READY', 'Аналітика!A3:N3 does not match the approved calculator schema.');
+  }
+
+  const sourceRows = activeNomenclatureAnalyticsRows3dp_(nomenclature);
+  const capacity = ANALYTICS_CALCULATOR_3DP.lastDataRow - ANALYTICS_CALCULATOR_3DP.firstDataRow + 1;
+  if (sourceRows.length > capacity) {
+    throw apiError3dp_('ANALYTICS_CAPACITY_EXCEEDED', 'Аналітика!A4:N17 has room for only ' + capacity + ' active SKU rows.');
+  }
+
+  const sharesBySku = analyticsProfitSharesBySku3dp_(analytics);
+  const sharePlan = sourceRows.map(function (sourceRow) {
+    const sku = String(nomenclature.getRange(sourceRow, 1).getDisplayValue() || '').trim();
+    const existing = sharesBySku[sku];
+    return {
+      sku: sku,
+      value: normalizedAnalyticsProfitShare3dp_(existing ? existing.value : '', sku),
+      initialized: !existing || isBlank3dp_(existing.value),
+    };
+  });
+  let changed = false;
+  const initializedSkus = [];
+  sourceRows.forEach(function (sourceRow, index) {
+    const row = ANALYTICS_CALCULATOR_3DP.firstDataRow + index;
+    const entries = analyticsFormulaEntries3dp_(row, sourceRow);
+    const formulasMatch = entries.every(function (entry) {
+      return canonicalFormula3dp_(analytics.getRange(row, entry.column).getFormula()) === canonicalFormula3dp_(entry.formula);
+    });
+    if (!formulasMatch) {
+      analytics.getRange(row, 1, 1, ANALYTICS_CALCULATOR_3DP.columnCount).clearContent();
+      entries.forEach(function (entry) {
+        analytics.getRange(row, entry.column).setFormula(entry.formula);
+      });
+      changed = true;
+    }
+
+    const share = sharePlan[index];
+    if (share.initialized) initializedSkus.push(share.sku);
+    const shareRange = analytics.getRange(row, ANALYTICS_CALCULATOR_3DP.profitShareColumn);
+    if (!equalCellValue3dp_(shareRange.getValue(), share.value)) {
+      shareRange.setValue(share.value);
+      changed = true;
+    }
+  });
+
+  for (let row = ANALYTICS_CALCULATOR_3DP.firstDataRow + sourceRows.length; row <= ANALYTICS_CALCULATOR_3DP.lastDataRow; row += 1) {
+    if (!analyticsCalculatorRowHasContent3dp_(analytics, row)) continue;
+    analytics.getRange(row, 1, 1, ANALYTICS_CALCULATOR_3DP.columnCount).clearContent();
+    changed = true;
+  }
+
+  return {
+    changed: changed,
+    active_sku_count: sourceRows.length,
+    initialized_skus: initializedSkus,
+  };
+}
+
+function activeNomenclatureAnalyticsRows3dp_(sheet) {
+  const lastRow = Math.max(sheet.getLastRow(), 2);
+  const rows = sheet.getRange(2, 1, lastRow - 1, columnToNumber3dp_(API_3DP.nomenclatureStatusColumn)).getValues();
+  return rows.reduce(function (result, values, index) {
+    const sku = String(values[0] || '').trim();
+    const status = String(values[columnToNumber3dp_(API_3DP.nomenclatureStatusColumn) - 1] || API_3DP.activeStatus).trim();
+    if (sku && !isPlaceholderSku3dp_(sku) && status === API_3DP.activeStatus) result.push(index + 2);
+    return result;
+  }, []);
+}
+
+function analyticsProfitSharesBySku3dp_(sheet) {
+  const rows = sheet.getRange(
+    ANALYTICS_CALCULATOR_3DP.firstDataRow,
+    1,
+    ANALYTICS_CALCULATOR_3DP.lastDataRow - ANALYTICS_CALCULATOR_3DP.firstDataRow + 1,
+    ANALYTICS_CALCULATOR_3DP.profitShareColumn
+  ).getValues();
+  return rows.reduce(function (result, values, index) {
+    const sku = String(values[0] || '').trim();
+    if (!sku || sku === '#REF!' || isPlaceholderSku3dp_(sku)) return result;
+    if (Object.prototype.hasOwnProperty.call(result, sku)) {
+      throw apiError3dp_('ANALYTICS_DUPLICATE_SKU', 'Аналітика has more than one profit-share row for SKU ' + sku + '.');
+    }
+    result[sku] = { value: values[ANALYTICS_CALCULATOR_3DP.profitShareColumn - 1], row: ANALYTICS_CALCULATOR_3DP.firstDataRow + index };
+    return result;
+  }, {});
+}
+
+function normalizedAnalyticsProfitShare3dp_(value, sku) {
+  if (isBlank3dp_(value)) return ANALYTICS_CALCULATOR_3DP.defaultProfitShare;
+  const raw = typeof value === 'string' ? value.trim().replace(',', '.') : value;
+  if ((typeof raw !== 'number' && typeof raw !== 'string') ||
+      (typeof raw === 'string' && !/^(?:\d+(?:\.\d+)?|\.\d+)$/.test(raw))) {
+    throw apiError3dp_('INVALID_PROFIT_SHARE', 'Serhiy profit share must be a decimal between 0 and 1 for SKU ' + sku + '.');
+  }
+  const share = typeof raw === 'number' ? raw : Number(raw);
+  if (!Number.isFinite(share) || share < 0 || share > 1) {
+    throw apiError3dp_('INVALID_PROFIT_SHARE', 'Serhiy profit share must stay between 0 and 1 for SKU ' + sku + '.');
+  }
+  return share;
+}
+
+function analyticsFormulaEntries3dp_(row, sourceRow) {
+  return [
+    { column: 1, formula: '=\'Номенклатура\'!A' + sourceRow },
+    { column: 2, formula: '=IF(A' + row + '=\"\";\"\";\'Номенклатура\'!B' + sourceRow + ')' },
+    { column: 3, formula: '=IF(A' + row + '=\"\";\"\";\'Номенклатура\'!K' + sourceRow + ')' },
+    { column: 4, formula: '=IF(A' + row + '=\"\";\"\";N(\'Номенклатура\'!N' + sourceRow + '))' },
+    { column: 5, formula: '=IF(A' + row + '=\"\";\"\";\'Номенклатура\'!G' + sourceRow + ')' },
+    { column: 7, formula: '=IF(A' + row + '=\"\";\"\";\'Номенклатура\'!Q' + sourceRow + ')' },
+    { column: 8, formula: '=IF(A' + row + '=\"\";\"\";\"pending\")' },
+    { column: 9, formula: '=IF(OR(A' + row + '=\"\";NOT(ISNUMBER(C' + row + '));NOT(ISNUMBER(G' + row + ')));\"\";IF(G' + row + '-C' + row + '-N(D' + row + ')<0;\"збиток\";(G' + row + '-C' + row + '-N(D' + row + '))*(1-F' + row + ')))' },
+    { column: 10, formula: '=IF(OR(NOT(ISNUMBER(I' + row + '));NOT(ISNUMBER(G' + row + '));G' + row + '=0);\"\";I' + row + '/G' + row + ')' },
+    { column: 11, formula: '=IF(OR(A' + row + '=\"\";NOT(ISNUMBER(C' + row + '));NOT(ISNUMBER(G' + row + ')));\"\";IF(G' + row + '-C' + row + '-N(D' + row + ')<0;\"збиток\";C' + row + '+F' + row + '*(G' + row + '-C' + row + '-N(D' + row + '))))' },
+    { column: 12, formula: '=IF(OR(E' + row + '=\"\";E' + row + '=0;K' + row + '=\"\");\"\";IF(ISNUMBER(K' + row + ');K' + row + '/E' + row + ';\"збиток\"))' },
+  ];
+}
+
+function analyticsCalculatorRowHasContent3dp_(sheet, row) {
+  const range = sheet.getRange(row, 1, 1, ANALYTICS_CALCULATOR_3DP.columnCount);
+  return range.getValues()[0].some(function (value) { return !isBlank3dp_(value); }) ||
+    range.getFormulas()[0].some(function (formula) { return Boolean(formula); });
 }
 
 function createPayoutAction3dp_(spreadsheet, body, actor) {
@@ -625,6 +1126,140 @@ function markPayoutPaidAction3dp_(spreadsheet, body, actor) {
     throw error;
   }
   return { action: '3dp_payout_mark_paid', row: row, period: period, paid_date: paidDate, already_applied: false };
+}
+
+function payoutAcknowledgementSchemaState3dp_(sheet) {
+  const baseHeaders = sheet.getRange(1, 1, 1, PAYOUT_BASE_HEADERS_3DP.length).getDisplayValues()[0];
+  if (JSON.stringify(baseHeaders) !== JSON.stringify(PAYOUT_BASE_HEADERS_3DP)) {
+    throw apiError3dp_('PAYOUT_SCHEMA_MISMATCH', 'Виплати!A1:F1 headers do not match the approved payout schema.');
+  }
+  const acknowledgementHeaders = sheet.getRange(1, PAYOUT_BASE_HEADERS_3DP.length + 1, 1, PAYOUT_ACKNOWLEDGEMENT_HEADERS_3DP.length).getDisplayValues()[0];
+  const blank = acknowledgementHeaders.every(function (header) { return !String(header || '').trim(); });
+  if (blank) return { ready: false, headers: acknowledgementHeaders };
+  if (JSON.stringify(acknowledgementHeaders) !== JSON.stringify(PAYOUT_ACKNOWLEDGEMENT_HEADERS_3DP)) {
+    throw apiError3dp_('PAYOUT_ACKNOWLEDGEMENT_SCHEMA_MISMATCH', 'Виплати!G1:H1 acknowledgement headers do not match the approved schema.');
+  }
+  return { ready: true, headers: acknowledgementHeaders };
+}
+
+function ensurePayoutAcknowledgementColumns3dp_(sheet, changes) {
+  const state = payoutAcknowledgementSchemaState3dp_(sheet);
+  if (state.ready) return false;
+  sheet.getRange(1, PAYOUT_BASE_HEADERS_3DP.length + 1, 1, PAYOUT_ACKNOWLEDGEMENT_HEADERS_3DP.length)
+    .setValues([PAYOUT_ACKNOWLEDGEMENT_HEADERS_3DP]);
+  changes.push('Виплати!G1:H1 acknowledgement columns added; historical acknowledgement cells remain blank');
+  return true;
+}
+
+function assertPayoutAcknowledgementSchemaReady3dp_(sheet) {
+  if (!payoutAcknowledgementSchemaState3dp_(sheet).ready) {
+    throw apiError3dp_('PAYOUT_ACKNOWLEDGEMENT_SCHEMA_NOT_READY', 'Run setup3dpWp1bSchema before recording payout acknowledgements.');
+  }
+}
+
+function getOrCreatePayoutAcknowledgementJournal3dp_(spreadsheet) {
+  let sheet = spreadsheet.getSheetByName(SHEETS_3DP.payoutAcknowledgementJournal);
+  if (!sheet) {
+    sheet = spreadsheet.insertSheet(SHEETS_3DP.payoutAcknowledgementJournal);
+    sheet.getRange(1, 1, 1, PAYOUT_ACKNOWLEDGEMENT_JOURNAL_HEADERS_3DP.length).setValues([PAYOUT_ACKNOWLEDGEMENT_JOURNAL_HEADERS_3DP]);
+    sheet.setFrozenRows(1);
+    sheet.hideSheet();
+    return sheet;
+  }
+  const headers = sheet.getRange(1, 1, 1, PAYOUT_ACKNOWLEDGEMENT_JOURNAL_HEADERS_3DP.length).getDisplayValues()[0];
+  if (JSON.stringify(headers) !== JSON.stringify(PAYOUT_ACKNOWLEDGEMENT_JOURNAL_HEADERS_3DP)) {
+    throw apiError3dp_('PAYOUT_ACKNOWLEDGEMENT_JOURNAL_SCHEMA_MISMATCH', 'Payout acknowledgement journal headers do not match the approved schema.');
+  }
+  if (!sheet.isSheetHidden()) sheet.hideSheet();
+  return sheet;
+}
+
+function appendPayoutAcknowledgementJournal3dp_(spreadsheet, actor, period, acknowledgement, oldValue, newValue, reason) {
+  const journal = getOrCreatePayoutAcknowledgementJournal3dp_(spreadsheet);
+  journal.appendRow([
+    now3dp_(),
+    actor.role,
+    period,
+    acknowledgement.label,
+    displayAuditValue3dp_(oldValue),
+    displayAuditValue3dp_(newValue),
+    String(reason || ''),
+  ]);
+}
+
+function assertPayoutAcknowledgementRole3dp_(actor) {
+  if (!actor || actor.role !== 'serhiy') {
+    throw apiError3dp_('FORBIDDEN', 'Only Serhiy may record his payout acknowledgements.');
+  }
+}
+
+function payoutAcknowledgementForKey3dp_(value) {
+  const acknowledgement = PAYOUT_ACKNOWLEDGEMENTS_3DP[String(value || '').trim()];
+  if (!acknowledgement) {
+    throw apiError3dp_('ACKNOWLEDGEMENT_NOT_ALLOWED', 'acknowledgement must be amount_agreed or money_received.');
+  }
+  return acknowledgement;
+}
+
+function assertPublishedPayout3dp_(sheet, row, period, acknowledgement) {
+  const status = String(sheet.getRange(row, 5).getValue() || '').trim();
+  if (['Очікує перевірки', 'Виплачено'].indexOf(status) === -1) {
+    throw apiError3dp_('PAYOUT_NOT_PUBLISHED', 'The owner has not published this payout period.');
+  }
+  if (acknowledgement.requiresPaid) {
+    const paidDate = String(sheet.getRange(row, 4).getDisplayValue() || '').trim();
+    if (status !== 'Виплачено' || !paidDate) {
+      throw apiError3dp_('PAYOUT_NOT_PAID', 'Money-received acknowledgement is available only after the owner marks the payout paid.');
+    }
+  }
+  return { period: period, status: status };
+}
+
+function acknowledgePayoutAction3dp_(spreadsheet, body, actor, correction) {
+  assertPayoutAcknowledgementRole3dp_(actor);
+  const sheet = getSheet3dp_(spreadsheet, SHEETS_3DP.payouts);
+  assertPayoutAcknowledgementSchemaReady3dp_(sheet);
+  const row = positiveRowNumber3dp_(body.row_number);
+  if (row > sheet.getLastRow()) throw apiError3dp_('ROW_NOT_FOUND', 'Payout row was not found.');
+  const period = String(sheet.getRange(row, 1).getDisplayValue() || '').trim();
+  if (!period || period !== String(body.expected_period || '').trim()) {
+    throw apiError3dp_('STALE_WRITE', 'Payout period changed after it was read. Refresh and retry.');
+  }
+  const acknowledgement = payoutAcknowledgementForKey3dp_(body.acknowledgement);
+  assertPublishedPayout3dp_(sheet, row, period, acknowledgement);
+  const column = PAYOUT_BASE_HEADERS_3DP.length + 1 + PAYOUT_ACKNOWLEDGEMENT_HEADERS_3DP.indexOf(acknowledgement.header);
+  const range = sheet.getRange(row, column);
+  if (range.getFormula()) throw apiError3dp_('FORMULA_CELL', 'Payout acknowledgement cells must remain manual cells.');
+  const oldRawValue = range.getValue();
+  const oldValue = normalizeCellValue3dp_(oldRawValue);
+  if (correction) {
+    if (isBlank3dp_(oldValue)) throw apiError3dp_('ACKNOWLEDGEMENT_NOT_SET', 'There is no acknowledgement to correct.');
+    if (!Object.prototype.hasOwnProperty.call(body, 'expected_current') || !equalCellValue3dp_(oldValue, body.expected_current)) {
+      throw apiError3dp_('STALE_WRITE', 'The acknowledgement changed after it was read. Refresh and retry.');
+    }
+  } else if (!isBlank3dp_(oldValue)) {
+    throw apiError3dp_('ACKNOWLEDGEMENT_ALREADY_SET', 'This acknowledgement is already set. Use the explicit correction action if a correction is needed.');
+  }
+  const reason = correction ? requiredReason3dp_(body.reason) : '';
+  const newValue = now3dp_() + ' · ' + actor.role;
+  try {
+    setCellValue3dp_(range, newValue);
+    appendPayoutAcknowledgementJournal3dp_(spreadsheet, actor, period, acknowledgement, oldValue, newValue, reason);
+    appendAudit3dp_(spreadsheet, actor, correction ? 'PAYOUT_ACKNOWLEDGEMENT_CORRECT' : 'PAYOUT_ACKNOWLEDGEMENT',
+      SHEETS_3DP.payouts, numberToColumn3dp_(column) + row, oldValue, newValue,
+      'period=' + period + '; acknowledgement=' + body.acknowledgement + (reason ? '; reason=' + reason : ''));
+  } catch (error) {
+    setCellValue3dp_(range, oldRawValue);
+    throw error;
+  }
+  return {
+    action: correction ? '3dp_payout_acknowledgement_correct' : '3dp_payout_acknowledge',
+    row: row,
+    period: period,
+    acknowledgement: body.acknowledgement,
+    old_value: oldValue,
+    new_value: newValue,
+  };
 }
 
 function testOrderCleanupPlan3dp_(spreadsheet, order) {
@@ -708,10 +1343,15 @@ function testOrderCleanupAction3dp_(spreadsheet, body, actor) {
   return report;
 }
 
-function printLogAction3dp_(spreadsheet, params) {
+function printLogAction3dp_(spreadsheet, params, actor) {
   const includeArchived = String(params.include_archived || '').toLowerCase() === 'true';
   const table = readTable3dp_(spreadsheet, SHEETS_3DP.printLog, { requireHeader: 'SKU', includeArchived: includeArchived });
-  return { action: '3dp_print_log', rows: table.rows, count: table.rows.length, include_archived: includeArchived };
+  return {
+    action: '3dp_print_log',
+    rows: projectRows3dp_(SHEETS_3DP.printLog, table.headers, table.rows, actor),
+    count: table.rows.length,
+    include_archived: includeArchived,
+  };
 }
 
 function readTable3dp_(spreadsheet, sheetName, options) {
@@ -771,6 +1411,9 @@ function writeAction3dp_(spreadsheet, body, actor) {
 
   const range = sheet.getRange(row, columnToNumber3dp_(column));
   if (range.getFormula()) throw apiError3dp_('FORMULA_CELL', 'Formula cells cannot be changed.');
+  if (sheetName === SHEETS_3DP.nomenclature && column === 'A') {
+    throw apiError3dp_('SPECIALIZED_ACTION_REQUIRED', 'Use 3dp_nomenclature_assign_sku for a draft SKU assignment.');
+  }
   if (sheetName === SHEETS_3DP.sales && SALES_CORRECTABLE_FROZEN_COLUMNS_3DP.indexOf(column) !== -1) {
     assertTechnicalSaleFixtureCorrectionWriteAllowed3dp_(sheet, column, row, body.value, actor);
   } else {
@@ -789,16 +1432,46 @@ function writeAction3dp_(spreadsheet, body, actor) {
   }
 
   assertManualValue3dp_(body.value);
-  setCellValue3dp_(range, body.value);
+  const isSettingsWrite = sheetName === SHEETS_3DP.settings && column === 'B';
+  const isMaterialPriceWrite = sheetName === SHEETS_3DP.nomenclature && column === 'J';
+  const isJournalledNomenclatureWrite = sheetName === SHEETS_3DP.nomenclature && ['Q', 'R', 'S'].indexOf(column) !== -1;
+  const nomenclatureSku = isJournalledNomenclatureWrite ? assertRealNomenclatureRow3dp_(sheet, row) : '';
+  const newValue = isSettingsWrite
+    ? normalizedSettingsValue3dp_(row, body.value)
+    : (isJournalledNomenclatureWrite ? normalizedNomenclaturePriceModelValue3dp_(column, body.value) : body.value);
+  let materialHistoryRange = null;
+  let oldMaterialHistory = null;
+  if (isMaterialPriceWrite) {
+    materialHistoryRange = sheet.getRange(row, columnToNumber3dp_(API_3DP.nomenclatureHistoryColumn));
+    if (materialHistoryRange.getFormula()) {
+      throw apiError3dp_('FORMULA_CELL', 'Номенклатура history must remain a manual system field.');
+    }
+    oldMaterialHistory = String(materialHistoryRange.getValue() || '');
+  }
+
+  setCellValue3dp_(range, newValue);
   if (printTimeTarget) range.setNumberFormat(PRINT_TIME_ENTRY_3DP.numberFormat);
   try {
-    appendAudit3dp_(spreadsheet, actor, 'WRITE', sheetName, column + row, oldValue, body.value, '');
+    if (materialHistoryRange) {
+      materialHistoryRange.setValue(appendHistory3dp_(
+        oldMaterialHistory,
+        historyLine3dp_(actor, 'Ціна котушки: ' + displayAuditValue3dp_(oldValue) + ' → ' + displayAuditValue3dp_(newValue))
+      ));
+    }
+    if (isSettingsWrite) {
+      appendSettingsJournal3dp_(spreadsheet, actor, SETTINGS_VALUE_BOUNDS_3DP[row].label, '', oldValue, newValue);
+    }
+    if (isJournalledNomenclatureWrite) {
+      appendSettingsJournal3dp_(spreadsheet, actor, sheet.getRange(1, columnToNumber3dp_(column)).getDisplayValue(), nomenclatureSku, oldValue, newValue);
+    }
+    appendAudit3dp_(spreadsheet, actor, 'WRITE', sheetName, column + row, oldValue, newValue, '');
   } catch (error) {
     setCellValue3dp_(range, oldRawValue);
     range.setNumberFormat(oldNumberFormat);
+    if (materialHistoryRange) materialHistoryRange.setValue(oldMaterialHistory);
     throw error;
   }
-  return { action: '3dp_write', sheet: sheetName, cell: column + row, old_value: oldValue, new_value: normalizeCellValue3dp_(body.value) };
+  return { action: '3dp_write', sheet: sheetName, cell: column + row, old_value: oldValue, new_value: normalizeCellValue3dp_(newValue) };
 }
 
 function appendRowAction3dp_(spreadsheet, body, actor) {
@@ -825,9 +1498,18 @@ function appendRowAction3dp_(spreadsheet, body, actor) {
       throw apiError3dp_('DUPLICATE_COLUMN', 'The same target column was supplied more than once.');
     }
     assertManualValue3dp_(values[key]);
-    normalized[column] = values[key];
+    normalized[column] = sheetName === SHEETS_3DP.nomenclature && ['Q', 'R', 'S'].indexOf(column) !== -1
+      ? normalizedNomenclaturePriceModelValue3dp_(column, values[key])
+      : values[key];
   });
   if (!Object.keys(normalized).length) throw apiError3dp_('VALUES_REQUIRED', 'At least one value is required.');
+  const nomenclatureJournalColumns = sheetName === SHEETS_3DP.nomenclature
+    ? Object.keys(normalized).filter(function (column) { return ['Q', 'R', 'S'].indexOf(column) !== -1; })
+    : [];
+  if (nomenclatureJournalColumns.length && !Object.prototype.hasOwnProperty.call(normalized, 'A')) {
+    throw apiError3dp_('SKU_REQUIRED', 'Номенклатура Q/R/S entries require SKU in column A so the journal remains attributable.');
+  }
+  if (nomenclatureJournalColumns.length) requiredSku3dp_(normalized.A);
   if (sheetName === SHEETS_3DP.sales) {
     const required = is3dpOrderLineAccountingSchemaReady3dp_(sheet)
       ? SALES_ORDER_LINE_REQUIRED_COLUMNS_3DP
@@ -888,6 +1570,14 @@ function appendRowAction3dp_(spreadsheet, body, actor) {
       applied.push({ column: API_3DP.printLogHistoryColumn, range: historyRange, oldValue: '', newValue: historyRange.getValue() });
     }
 
+    if (nomenclatureJournalColumns.length) {
+      nomenclatureJournalColumns.forEach(function (column) {
+        const change = applied.filter(function (item) { return item.column === column; })[0];
+        appendSettingsJournal3dp_(spreadsheet, actor, sheet.getRange(1, columnToNumber3dp_(column)).getDisplayValue(), normalized.A,
+          change.oldValue, change.newValue);
+      });
+    }
+
     appendAudit3dp_(
       spreadsheet,
       actor,
@@ -913,6 +1603,141 @@ function appendRowAction3dp_(spreadsheet, body, actor) {
   return { action: '3dp_append_row', sheet: sheetName, row: row };
 }
 
+/**
+ * Serhiy creates a non-sellable product candidate under a generated DRAFT key.
+ * The key keeps Nomenclature joins stable until the owner supplies the canonical
+ * article through 3dp_nomenclature_assign_sku.
+ */
+function createNomenclatureDraftAction3dp_(spreadsheet, body, actor) {
+  if (!actor || actor.role !== 'serhiy') {
+    throw apiError3dp_('FORBIDDEN', 'Only Serhiy may create a nomenclature draft.');
+  }
+  const sheet = getSheet3dp_(spreadsheet, SHEETS_3DP.nomenclature);
+  assertNomenclatureArchiveSystemReady3dp_(sheet);
+  const values = normalizeNomenclatureDraftValues3dp_(sheet, body.values);
+  const row = findFirstBusinessEmptyRow3dp_(sheet, SHEETS_3DP.nomenclature, { role: 'owner' });
+  const draftSku = nextDraftSku3dp_(sheet);
+  const applied = [];
+
+  try {
+    copyFormulaCells3dp_(sheet, SHEETS_3DP.nomenclature, row);
+    const withSku = Object.assign({ A: draftSku }, values);
+    Object.keys(withSku).forEach(function (column) {
+      const range = sheet.getRange(row, columnToNumber3dp_(column));
+      if (range.getFormula()) throw apiError3dp_('FORMULA_CELL', 'Draft fields must remain manual cells.');
+      const oldRawValue = range.getValue();
+      const oldNumberFormat = range.getNumberFormat();
+      setCellValue3dp_(range, withSku[column]);
+      if (printTimeEntryTarget3dp_(SHEETS_3DP.nomenclature, columnToNumber3dp_(column))) {
+        range.setNumberFormat(PRINT_TIME_ENTRY_3DP.numberFormat);
+      }
+      applied.push({ range: range, oldRawValue: oldRawValue, oldNumberFormat: oldNumberFormat });
+    });
+
+    const statusRange = sheet.getRange(row, columnToNumber3dp_(API_3DP.nomenclatureStatusColumn));
+    const historyRange = sheet.getRange(row, columnToNumber3dp_(API_3DP.nomenclatureHistoryColumn));
+    if (statusRange.getFormula() || historyRange.getFormula()) {
+      throw apiError3dp_('FORMULA_CELL', 'SKU status and history must remain manual system fields.');
+    }
+    const oldStatus = statusRange.getValue();
+    const oldHistory = historyRange.getValue();
+    const newHistory = appendHistory3dp_('', historyLine3dp_(actor, 'Створено чернетку; очікує на присвоєння артикула'));
+    statusRange.setValue(API_3DP.draftStatus);
+    historyRange.setValue(newHistory);
+    applied.push({ range: statusRange, oldRawValue: oldStatus, oldNumberFormat: statusRange.getNumberFormat() });
+    applied.push({ range: historyRange, oldRawValue: oldHistory, oldNumberFormat: historyRange.getNumberFormat() });
+
+    ['Q', 'R', 'S'].filter(function (column) { return Object.prototype.hasOwnProperty.call(values, column); }).forEach(function (column) {
+      appendSettingsJournal3dp_(spreadsheet, actor, sheet.getRange(1, columnToNumber3dp_(column)).getDisplayValue(), draftSku, '', values[column]);
+    });
+    appendAudit3dp_(spreadsheet, actor, 'NOMENCLATURE_DRAFT_CREATE', SHEETS_3DP.nomenclature, 'row:' + row, {}, {
+      sku: draftSku,
+      status: API_3DP.draftStatus,
+      values: values,
+    }, 'row=' + row);
+  } catch (error) {
+    applied.reverse().forEach(function (change) {
+      setCellValue3dp_(change.range, change.oldRawValue);
+      change.range.setNumberFormat(change.oldNumberFormat);
+    });
+    throw error;
+  }
+
+  return {
+    action: '3dp_nomenclature_draft_create',
+    row: row,
+    sku: draftSku,
+    status: API_3DP.draftStatus,
+    sku_suggestion: draftSkuSuggestion3dp_(values.D),
+  };
+}
+
+/**
+ * Canonical assignment is intentionally owner-only and atomically changes both
+ * the temporary key and its status. Key migration after print/sales history is
+ * unsafe and deliberately rejected rather than guessed.
+ */
+function assignNomenclatureSkuAction3dp_(spreadsheet, body, actor) {
+  assertOwner3dp_(actor, 'Only the owner may assign a canonical SKU.');
+  const sheet = getSheet3dp_(spreadsheet, SHEETS_3DP.nomenclature);
+  const draftSku = requiredSku3dp_(body.draft_sku);
+  const row = resolveTargetRow3dp_(sheet, draftSku);
+  assertRealNomenclatureRow3dp_(sheet, row);
+  const oldStatus = nomenclatureStatusAtRow3dp_(sheet, row);
+  if (oldStatus !== API_3DP.draftStatus) {
+    throw apiError3dp_('DRAFT_REQUIRED', 'Only a Чернетка row may receive a canonical SKU.');
+  }
+  if (Object.prototype.hasOwnProperty.call(body, 'expected_draft_sku') && String(body.expected_draft_sku || '') !== draftSku) {
+    throw apiError3dp_('STALE_WRITE', 'Draft SKU changed after it was read. Refresh and retry.');
+  }
+  const canonicalSku = canonicalNomenclatureSku3dp_(body.sku);
+  assertNomenclatureSkuUnused3dp_(sheet, canonicalSku, row);
+  const history = nomenclatureKeyHistory3dp_(spreadsheet, draftSku);
+  if (history.print_log_row || history.sales_row) {
+    throw apiError3dp_(
+      'SKU_HISTORY_EXISTS',
+      'Draft SKU has ' + [
+        history.print_log_row ? 'print-log row ' + history.print_log_row : '',
+        history.sales_row ? 'sales row ' + history.sales_row : '',
+      ].filter(Boolean).join(' and ') + '; key migration is out of scope.'
+    );
+  }
+
+  const skuRange = sheet.getRange(row, 1);
+  const statusRange = sheet.getRange(row, columnToNumber3dp_(API_3DP.nomenclatureStatusColumn));
+  const historyRange = sheet.getRange(row, columnToNumber3dp_(API_3DP.nomenclatureHistoryColumn));
+  if (skuRange.getFormula() || statusRange.getFormula() || historyRange.getFormula()) {
+    throw apiError3dp_('FORMULA_CELL', 'SKU, status, and history must remain manual fields.');
+  }
+  const oldSku = skuRange.getValue();
+  const oldHistory = String(historyRange.getValue() || '');
+  const newHistory = appendHistory3dp_(oldHistory, historyLine3dp_(actor, 'Артикул: ' + draftSku + ' → ' + canonicalSku + '; статус: ' + oldStatus + ' → ' + API_3DP.activeStatus));
+  const analyticsSnapshot = snapshotRange3dp_(getSheet3dp_(spreadsheet, SHEETS_3DP.analytics), 'A4:N17');
+  try {
+    skuRange.setValue(canonicalSku);
+    statusRange.setValue(API_3DP.activeStatus);
+    historyRange.setValue(newHistory);
+    syncActiveNomenclatureAnalytics3dp_(spreadsheet);
+    SpreadsheetApp.flush();
+    appendAudit3dp_(spreadsheet, actor, 'NOMENCLATURE_ASSIGN_SKU', SHEETS_3DP.nomenclature, 'row:' + row,
+      { sku: oldSku, status: oldStatus }, { sku: canonicalSku, status: API_3DP.activeStatus }, 'row=' + row);
+  } catch (error) {
+    restoreRange3dp_(analyticsSnapshot);
+    skuRange.setValue(oldSku);
+    statusRange.setValue(oldStatus);
+    historyRange.setValue(oldHistory);
+    throw error;
+  }
+  return {
+    action: '3dp_nomenclature_assign_sku',
+    row: row,
+    old_sku: draftSku,
+    sku: canonicalSku,
+    status: API_3DP.activeStatus,
+    sku_suggestion: draftSkuSuggestion3dp_(sheet.getRange(row, 4).getDisplayValue()),
+  };
+}
+
 function appendOrderGiftsAction3dp_(spreadsheet, body, actor) {
   assertOwner3dp_(actor, 'Caller may not append CRM order gifts.');
   const requestId = String(body.request_id || '').trim();
@@ -935,9 +1760,9 @@ function appendOrderGiftsAction3dp_(spreadsheet, body, actor) {
     if (qty < 1) throw apiError3dp_('INVALID_QUANTITY', 'Gift quantity must be a positive whole number.');
     const nomenclatureRow = resolveTargetRow3dp_(nomenclature, sku);
     assertRealNomenclatureRow3dp_(nomenclature, nomenclatureRow);
-    if (nomenclatureStatusAtRow3dp_(nomenclature, nomenclatureRow) === API_3DP.archivedStatus) {
-      throw apiError3dp_('SKU_ARCHIVED', 'Archived SKU cannot be issued as a gift: ' + sku + '.');
-    }
+    assertNomenclatureActiveForOperation3dp_(nomenclature, nomenclatureRow, 'SKU_ARCHIVED',
+      'Archived SKU cannot be issued as a gift: ' + sku + '.',
+      'Only active SKU can be issued as a gift: ' + sku + '.');
     const buyoutRaw = nomenclature.getRange(nomenclatureRow, columnToNumber3dp_('R')).getValue();
     if (isBlank3dp_(buyoutRaw)) throw apiError3dp_('BUYOUT_NOT_FOUND', 'Booster Shop buyout price is blank for SKU ' + sku + '.');
     const buyout = number3dp_(buyoutRaw);
@@ -1003,9 +1828,8 @@ function manufactureBatchAction3dp_(spreadsheet, body, actor) {
   const sku = requiredSku3dp_(body.sku);
   const nomenclature = getSheet3dp_(spreadsheet, SHEETS_3DP.nomenclature);
   const nomenclatureRow = resolveTargetRow3dp_(nomenclature, sku);
-  if (nomenclatureStatusAtRow3dp_(nomenclature, nomenclatureRow) === API_3DP.archivedStatus) {
-    throw apiError3dp_('ROW_ARCHIVED', 'Archived SKU cannot receive a manufactured batch.');
-  }
+  assertNomenclatureActiveForOperation3dp_(nomenclature, nomenclatureRow, 'ROW_ARCHIVED',
+    'Archived SKU cannot receive a manufactured batch.', 'Only active SKU can receive a manufactured batch.');
   const quantity = inventoryWholeNumber3dp_(body.quantity, 'quantity must be a non-negative whole number.');
   if (quantity < 1) throw apiError3dp_('INVALID_QUANTITY', 'quantity must be a positive whole number.');
   const defects = inventoryWholeNumber3dp_(body.defects == null ? 0 : body.defects, 'defects must be a non-negative whole number.');
@@ -1179,7 +2003,7 @@ function getBatchDraftAction3dp_(spreadsheet, params, actor) {
   const nomenclatureRow = resolveTargetRow3dp_(nomenclature, sku);
   assertRealNomenclatureRow3dp_(nomenclature, nomenclatureRow);
   const drafts = getInternalSheet3dp_(spreadsheet, SHEETS_3DP.drafts);
-  const draftRow = findBatchDraftRow3dp_(drafts, sku);
+  const draftRow = findBatchDraftRow3dp_(drafts, sku, actor, isSerhiyProjectionActive3dp_(actor));
   return {
     action: '3dp_batch_draft',
     sku: sku,
@@ -1194,9 +2018,8 @@ function saveBatchDraftAction3dp_(spreadsheet, body, actor) {
   const nomenclature = getSheet3dp_(spreadsheet, SHEETS_3DP.nomenclature);
   const nomenclatureRow = resolveTargetRow3dp_(nomenclature, sku);
   assertRealNomenclatureRow3dp_(nomenclature, nomenclatureRow);
-  if (nomenclatureStatusAtRow3dp_(nomenclature, nomenclatureRow) === API_3DP.archivedStatus) {
-    throw apiError3dp_('SKU_ARCHIVED', 'Restore the SKU before saving a new batch draft.');
-  }
+  assertNomenclatureActiveForOperation3dp_(nomenclature, nomenclatureRow, 'SKU_ARCHIVED',
+    'Restore the SKU before saving a new batch draft.', 'Only active SKU can receive a new batch draft.');
 
   const values = body.values;
   const expected = body.expected_current;
@@ -1208,7 +2031,9 @@ function saveBatchDraftAction3dp_(spreadsheet, body, actor) {
   }
 
   const drafts = getInternalSheet3dp_(spreadsheet, SHEETS_3DP.drafts);
-  const existingRow = findBatchDraftRow3dp_(drafts, sku);
+  const serhiyDraft = actor && actor.role === 'serhiy';
+  if (serhiyDraft) ensureBatchDraftActorColumn3dp_(drafts);
+  const existingRow = findBatchDraftRow3dp_(drafts, sku, actor, serhiyDraft);
   const oldValues = batchDraftValues3dp_(drafts, existingRow);
   const nextValues = Object.assign({}, oldValues);
   const supplied = [];
@@ -1246,8 +2071,15 @@ function saveBatchDraftAction3dp_(spreadsheet, body, actor) {
       const skuRange = drafts.getRange(row, 1);
       if (skuRange.getFormula()) throw apiError3dp_('FORMULA_CELL', 'Batch-draft SKU key must remain a manual cell.');
       const oldSku = normalizeCellValue3dp_(skuRange.getValue());
-      setCellValue3dp_(skuRange, sku);
+      setCellValue3dp_(skuRange, batchDraftStorageKey3dp_(sku, actor, serhiyDraft));
       applied.push({ range: skuRange, oldRawValue: oldSku });
+      if (serhiyDraft) {
+        const actorRange = drafts.getRange(row, batchDraftActorColumn3dp_());
+        if (actorRange.getFormula()) throw apiError3dp_('FORMULA_CELL', 'Batch-draft actor role must remain a manual system field.');
+        const oldActor = normalizeCellValue3dp_(actorRange.getValue());
+        actorRange.setValue(actor.role);
+        applied.push({ range: actorRange, oldRawValue: oldActor });
+      }
     }
     changed.forEach(function (field) {
       const range = drafts.getRange(row, BATCH_DRAFT_FIELDS_3DP.indexOf(field) + 2);
@@ -1285,6 +2117,9 @@ function setNomenclatureArchiveAction3dp_(spreadsheet, body, actor, archive) {
     throw apiError3dp_('FORMULA_CELL', 'SKU archive system fields must remain manual cells.');
   }
   const oldStatus = nomenclatureStatusAtRow3dp_(sheet, row);
+  if (oldStatus === API_3DP.draftStatus) {
+    throw apiError3dp_('DRAFT_ASSIGNMENT_REQUIRED', 'Assign the canonical SKU before changing draft status.');
+  }
   const newStatus = archive ? API_3DP.archivedStatus : API_3DP.activeStatus;
   if (oldStatus === newStatus) {
     return { action: archive ? '3dp_nomenclature_archive' : '3dp_nomenclature_restore', row: row, already_applied: true };
@@ -1319,7 +2154,7 @@ function setNomenclatureArchiveAction3dp_(spreadsheet, body, actor, archive) {
 }
 
 function stockAdjustmentsAction3dp_(spreadsheet, params, actor) {
-  assertOwner3dp_(actor, 'Caller may not read stock adjustments.');
+  assertStockAdjustmentRole3dp_(actor, 'Caller may not read stock adjustments.');
   const sku = String(params.sku || '').trim();
   if (sku) {
     const nomenclature = getSheet3dp_(spreadsheet, SHEETS_3DP.nomenclature);
@@ -1327,10 +2162,10 @@ function stockAdjustmentsAction3dp_(spreadsheet, params, actor) {
   }
   const limit = boundedLimit3dp_(params.limit, 50, 100);
   const sheet = getInternalSheet3dp_(spreadsheet, SHEETS_3DP.stockAdjustments);
+  const headers = stockAdjustmentHeaders3dp_(sheet, isSerhiyProjectionActive3dp_(actor));
   const lastRow = Math.min(sheet.getLastRow(), API_3DP.maxReadRows);
   if (lastRow < 2) return { action: '3dp_stock_adjustments', rows: [], count: 0 };
-  const headers = sheet.getRange(1, 1, 1, STOCK_ADJUSTMENT_HEADERS_3DP.length).getDisplayValues()[0];
-  const values = sheet.getRange(2, 1, lastRow - 1, STOCK_ADJUSTMENT_HEADERS_3DP.length).getValues();
+  const values = sheet.getRange(2, 1, lastRow - 1, headers.length).getValues();
   const reason = String(params.reason || '').trim();
   const rows = values.map(function (row, index) {
     return rowObject3dp_(headers, row, index + 2);
@@ -1338,7 +2173,52 @@ function stockAdjustmentsAction3dp_(spreadsheet, params, actor) {
     return !isBlank3dp_(row.SKU) && (!sku || String(row.SKU) === sku) &&
         (!reason || stockReasonMatches3dp_(row['Причина'], reason));
   }).reverse().slice(0, limit);
-  return { action: '3dp_stock_adjustments', rows: rows, count: rows.length, sku: sku || null };
+  return {
+    action: '3dp_stock_adjustments',
+    rows: projectRows3dp_(SHEETS_3DP.stockAdjustments, headers, rows, actor),
+    count: rows.length,
+    sku: sku || null,
+  };
+}
+
+function assertStockAdjustmentRole3dp_(actor, message) {
+  if (!actor || ['owner', 'serhiy'].indexOf(actor.role) === -1) {
+    throw apiError3dp_('FORBIDDEN', message || 'Caller may not adjust stock.');
+  }
+}
+
+function stockAdjustmentHeaders3dp_(sheet, requireActorColumn) {
+  const legacyHeaders = sheet.getRange(1, 1, 1, STOCK_ADJUSTMENT_LEGACY_HEADERS_3DP.length).getDisplayValues()[0];
+  if (JSON.stringify(legacyHeaders) !== JSON.stringify(STOCK_ADJUSTMENT_LEGACY_HEADERS_3DP)) {
+    throw apiError3dp_('STOCK_ADJUSTMENT_SCHEMA_MISMATCH', 'Stock-adjustment ledger base headers do not match the approved schema.');
+  }
+  const actorHeader = String(sheet.getRange(1, STOCK_ADJUSTMENT_HEADERS_3DP.length).getDisplayValue() || '').trim();
+  if (!actorHeader) {
+    if (requireActorColumn) {
+      throw apiError3dp_('STOCK_ADJUSTMENT_SCHEMA_NOT_READY', 'Run setup3dpWp1bSchema before Serhiy reads or writes stock adjustments.');
+    }
+    return STOCK_ADJUSTMENT_LEGACY_HEADERS_3DP;
+  }
+  if (actorHeader !== STOCK_ADJUSTMENT_HEADERS_3DP[4]) {
+    throw apiError3dp_('STOCK_ADJUSTMENT_SCHEMA_MISMATCH', 'Stock-adjustment ledger actor header does not match the approved schema.');
+  }
+  return STOCK_ADJUSTMENT_HEADERS_3DP;
+}
+
+function ensureStockAdjustmentActorColumn3dp_(sheet, changes) {
+  const headers = stockAdjustmentHeaders3dp_(sheet, false);
+  if (headers.length === STOCK_ADJUSTMENT_HEADERS_3DP.length) return false;
+  const historicalRows = Math.max(sheet.getLastRow() - 1, 0);
+  const actorRange = sheet.getRange(1, STOCK_ADJUSTMENT_HEADERS_3DP.length, Math.max(historicalRows + 1, 1), 1);
+  actorRange.getCell(1, 1).setValue(STOCK_ADJUSTMENT_HEADERS_3DP[4]);
+  if (historicalRows) {
+    const existingActors = actorRange.offset(1, 0, historicalRows, 1).getValues();
+    const backfill = existingActors.map(function (row) { return [isBlank3dp_(row[0]) ? 'owner' : row[0]]; });
+    actorRange.offset(1, 0, historicalRows, 1).setValues(backfill);
+  }
+  if (!sheet.isSheetHidden()) sheet.hideSheet();
+  changes.push(SHEETS_3DP.stockAdjustments + '!E1:E' + Math.max(historicalRows + 1, 1) + ' actor-role column added; pre-WP1b API rows backfilled owner');
+  return true;
 }
 
 function stockReasonMatches3dp_(stored, requested) {
@@ -1364,14 +2244,13 @@ function findExistingStockAdjustment3dp_(ledger, sku, reason) {
 }
 
 function adjustStockAction3dp_(spreadsheet, body, actor) {
-  assertOwner3dp_(actor, 'Caller may not adjust stock.');
+  assertStockAdjustmentRole3dp_(actor, 'Caller may not adjust stock.');
   const sku = requiredSku3dp_(body.sku);
   const nomenclature = getSheet3dp_(spreadsheet, SHEETS_3DP.nomenclature);
   const nomenclatureRow = resolveTargetRow3dp_(nomenclature, sku);
   assertRealNomenclatureRow3dp_(nomenclature, nomenclatureRow);
-  if (nomenclatureStatusAtRow3dp_(nomenclature, nomenclatureRow) === API_3DP.archivedStatus) {
-    throw apiError3dp_('SKU_ARCHIVED', 'Restore the SKU before adjusting its stock.');
-  }
+  assertNomenclatureActiveForOperation3dp_(nomenclature, nomenclatureRow, 'SKU_ARCHIVED',
+    'Restore the SKU before adjusting its stock.', 'Only active SKU may receive a stock adjustment.');
   if (!Object.prototype.hasOwnProperty.call(body, 'expected_current')) {
     throw apiError3dp_('EXPECTED_REQUIRED', 'expected_current is required for a stock adjustment.');
   }
@@ -1386,6 +2265,7 @@ function adjustStockAction3dp_(spreadsheet, body, actor) {
   }
 
   const ledger = getInternalSheet3dp_(spreadsheet, SHEETS_3DP.stockAdjustments);
+  stockAdjustmentHeaders3dp_(ledger, true);
   const existingLedgerRow = findExistingStockAdjustment3dp_(ledger, sku, reason);
   if (existingLedgerRow) {
     return { action: '3dp_adjust_stock', sku: sku, already_applied: true, ledger_row: existingLedgerRow, reason: reason };
@@ -1413,14 +2293,17 @@ function adjustStockAction3dp_(spreadsheet, body, actor) {
   }
 
   const ledgerRow = nextInternalRow3dp_(ledger);
-  const ranges = [ledger.getRange(ledgerRow, 1), ledger.getRange(ledgerRow, 2), ledger.getRange(ledgerRow, 3), ledger.getRange(ledgerRow, 4)];
+  const ranges = [
+    ledger.getRange(ledgerRow, 1), ledger.getRange(ledgerRow, 2), ledger.getRange(ledgerRow, 3),
+    ledger.getRange(ledgerRow, 4), ledger.getRange(ledgerRow, 5),
+  ];
   ranges.forEach(function (range) {
     if (range.getFormula()) throw apiError3dp_('FORMULA_CELL', 'Stock-adjustment ledger must remain manual cells.');
   });
   const oldRawValues = ranges.map(function (range) { return range.getValue(); });
   const warning = newValue < 0 ? 'insufficient_stock' : '';
   const ledgerReason = warning ? reason + '; WARNING: insufficient stock' : reason;
-  const ledgerValues = [sku, delta, ledgerReason, now3dp_()];
+  const ledgerValues = [sku, delta, ledgerReason, now3dp_(), actor.role];
   try {
     ranges.forEach(function (range, index) { setCellValue3dp_(range, ledgerValues[index]); });
     appendAudit3dp_(spreadsheet, actor, 'STOCK_ADJUSTMENT', SHEETS_3DP.availability, 'G' + availabilityRow, oldValue, newValue,
@@ -1572,10 +2455,218 @@ function assertCellWriteAllowed3dp_(sheetName, column, actor) {
   }
 }
 
+function normalizeNomenclatureDraftValues3dp_(sheet, values) {
+  if (!values || typeof values !== 'object' || Array.isArray(values)) {
+    throw apiError3dp_('VALUES_REQUIRED', 'values must be an object keyed by draft field.');
+  }
+  const normalized = {};
+  Object.keys(values).forEach(function (key) {
+    const column = resolveColumn3dp_(sheet, key);
+    if (NOMENCLATURE_DRAFT_CREATE_COLUMNS_3DP.indexOf(column) === -1) {
+      throw apiError3dp_('COLUMN_NOT_ALLOWED', 'This field is not allowed during draft creation.');
+    }
+    if (Object.prototype.hasOwnProperty.call(normalized, column)) {
+      throw apiError3dp_('DUPLICATE_COLUMN', 'The same draft field was supplied more than once.');
+    }
+    assertManualValue3dp_(values[key]);
+    normalized[column] = ['Q', 'R', 'S'].indexOf(column) !== -1
+      ? normalizedNomenclaturePriceModelValue3dp_(column, values[key])
+      : values[key];
+  });
+  NOMENCLATURE_DRAFT_REQUIRED_COLUMNS_3DP.forEach(function (column) {
+    if (!Object.prototype.hasOwnProperty.call(normalized, column) || isBlank3dp_(normalized[column])) {
+      throw apiError3dp_('DRAFT_FIELD_REQUIRED', 'Draft field ' + column + ' is required.');
+    }
+  });
+  return normalized;
+}
+
+function nextDraftSku3dp_(sheet) {
+  const draftSku = API_3DP.draftSkuPrefix + String(Utilities.getUuid()).replace(/-/g, '').toUpperCase();
+  if (!/^DRAFT-[A-F0-9]{32}$/.test(draftSku)) {
+    throw apiError3dp_('DRAFT_SKU_GENERATION_FAILED', 'Could not generate a safe temporary draft key.');
+  }
+  assertNomenclatureSkuUnused3dp_(sheet, draftSku, 0);
+  return draftSku;
+}
+
+function canonicalNomenclatureSku3dp_(value) {
+  const sku = String(value || '').trim();
+  if (!NOMENCLATURE_SKU_PATTERN_3DP.test(sku)) {
+    throw apiError3dp_('INVALID_SKU', 'SKU must match BR|FIG|ACC-3D + mnemonic (2–5 A-Z/0-9) + three digits.');
+  }
+  return sku;
+}
+
+function assertNomenclatureSkuUnused3dp_(sheet, sku, excludedRow) {
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2) return;
+  const values = sheet.getRange(2, 1, lastRow - 1, 1).getDisplayValues();
+  values.forEach(function (row, index) {
+    if (index + 2 !== excludedRow && String(row[0] || '').trim() === sku) {
+      throw apiError3dp_('SKU_DUPLICATE', 'SKU is already present in Номенклатура: ' + sku + '.');
+    }
+  });
+}
+
+function nomenclatureKeyHistory3dp_(spreadsheet, sku) {
+  return {
+    print_log_row: findSkuHistoryRow3dp_(getSheet3dp_(spreadsheet, SHEETS_3DP.printLog), sku),
+    sales_row: findSkuHistoryRow3dp_(getSheet3dp_(spreadsheet, SHEETS_3DP.sales), sku),
+  };
+}
+
+function findSkuHistoryRow3dp_(sheet, sku) {
+  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getDisplayValues()[0];
+  const skuColumn = headers.indexOf('SKU') + 1;
+  if (!skuColumn) throw apiError3dp_('SKU_HEADER_MISSING', sheet.getName() + ' is missing the SKU header.');
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2) return 0;
+  const values = sheet.getRange(2, skuColumn, lastRow - 1, 1).getDisplayValues();
+  for (let index = 0; index < values.length; index += 1) {
+    if (String(values[index][0] || '').trim() === sku) return index + 2;
+  }
+  return 0;
+}
+
+function draftSkuSuggestion3dp_(type) {
+  const suggestion = NOMENCLATURE_DRAFT_SUGGESTIONS_3DP[String(type || '').trim()];
+  return suggestion ? {
+    prefix: suggestion.prefix,
+    category_digits: suggestion.category_digits,
+    category_label: suggestion.category_label,
+  } : null;
+}
+
 function assertWriteTargetAllowed3dp_(sheetName, column, row) {
   if (sheetName === SHEETS_3DP.settings && (column !== 'B' || row < 2 || row > 5)) {
     throw apiError3dp_('ROW_NOT_ALLOWED', 'Only Налаштування!B2:B5 can be changed through the API.');
   }
+}
+
+function normalizedSettingsValue3dp_(row, value) {
+  const rule = SETTINGS_VALUE_BOUNDS_3DP[row];
+  if (!rule) throw apiError3dp_('ROW_NOT_ALLOWED', 'Only approved settings rows may be changed.');
+  const raw = typeof value === 'string' ? value.trim().replace(',', '.') : value;
+  if (raw === '' || raw === null || typeof raw === 'undefined' ||
+      (typeof raw !== 'number' && typeof raw !== 'string')) {
+    throw apiError3dp_('SETTINGS_VALUE_INVALID', rule.label + ' must be a number.');
+  }
+  if (typeof raw === 'string' && !/^(?:\d+(?:\.\d+)?|\.\d+)$/.test(raw)) {
+    throw apiError3dp_('SETTINGS_VALUE_INVALID', rule.label + ' must be a decimal number.');
+  }
+  const numeric = typeof raw === 'number' ? raw : Number(raw);
+  if (!Number.isFinite(numeric)) throw apiError3dp_('SETTINGS_VALUE_INVALID', rule.label + ' must be a finite number.');
+  if (numeric < rule.min || numeric > rule.max) {
+    throw apiError3dp_(
+      'SETTINGS_VALUE_OUT_OF_BOUNDS',
+      rule.label + ' must be between ' + rule.min + ' and ' + rule.max + '.'
+    );
+  }
+  return numeric;
+}
+
+function normalizedNomenclaturePriceModelValue3dp_(column, value) {
+  if (column === 'S') {
+    if (typeof value !== 'string') {
+      throw apiError3dp_('MODEL_URL_INVALID', 'Посилання на модель must be an http(s) URL.');
+    }
+    const url = value.trim();
+    if (!/^https?:\/\/[^\s]+$/i.test(url) || url.length > 2048) {
+      throw apiError3dp_('MODEL_URL_INVALID', 'Посилання на модель must be an http(s) URL no longer than 2048 characters.');
+    }
+    return url;
+  }
+  const rule = NOMENCLATURE_PRICE_BOUNDS_3DP[column];
+  if (!rule) throw apiError3dp_('COLUMN_NOT_ALLOWED', 'Only Номенклатура Q/R/S values use this validator.');
+  const raw = typeof value === 'string' ? value.trim().replace(',', '.') : value;
+  if (raw === '' || raw === null || typeof raw === 'undefined' ||
+      (typeof raw !== 'number' && typeof raw !== 'string')) {
+    throw apiError3dp_('NOMENCLATURE_PRICE_INVALID', rule.label + ' must be a non-negative number.');
+  }
+  if (typeof raw === 'string' && !/^(?:\d+(?:\.\d+)?|\.\d+)$/.test(raw)) {
+    throw apiError3dp_('NOMENCLATURE_PRICE_INVALID', rule.label + ' must be a non-negative decimal number.');
+  }
+  const numeric = typeof raw === 'number' ? raw : Number(raw);
+  if (!Number.isFinite(numeric) || numeric < rule.min) {
+    throw apiError3dp_('NOMENCLATURE_PRICE_INVALID', rule.label + ' must be a non-negative finite number.');
+  }
+  if (numeric > rule.max) {
+    throw apiError3dp_('NOMENCLATURE_PRICE_OUT_OF_BOUNDS', rule.label + ' must not exceed ' + rule.max + '.');
+  }
+  return numeric;
+}
+
+function getOrCreateSettingsJournal3dp_(spreadsheet) {
+  let sheet = spreadsheet.getSheetByName(SHEETS_3DP.settingsJournal);
+  if (!sheet) {
+    sheet = spreadsheet.insertSheet(SHEETS_3DP.settingsJournal);
+    sheet.getRange(1, 1, 1, SETTINGS_JOURNAL_HEADERS_3DP.length).setValues([SETTINGS_JOURNAL_HEADERS_3DP]);
+    sheet.setFrozenRows(1);
+    sheet.hideSheet();
+    return sheet;
+  }
+  settingsJournalHeaders3dp_(sheet, true);
+  if (!sheet.isSheetHidden()) sheet.hideSheet();
+  return sheet;
+}
+
+function settingsJournalHeaders3dp_(sheet, upgradeLegacy) {
+  const legacyHeaders = sheet.getRange(1, 1, 1, SETTINGS_JOURNAL_LEGACY_HEADERS_3DP.length).getDisplayValues()[0];
+  if (JSON.stringify(legacyHeaders) !== JSON.stringify(SETTINGS_JOURNAL_LEGACY_HEADERS_3DP)) {
+    throw apiError3dp_('SETTINGS_JOURNAL_SCHEMA_MISMATCH', 'Settings journal base headers do not match the approved schema.');
+  }
+  const skuHeader = String(sheet.getRange(1, SETTINGS_JOURNAL_HEADERS_3DP.length).getDisplayValue() || '').trim();
+  if (!skuHeader) {
+    if (upgradeLegacy) sheet.getRange(1, SETTINGS_JOURNAL_HEADERS_3DP.length).setValue(SETTINGS_JOURNAL_HEADERS_3DP[5]);
+    return upgradeLegacy ? SETTINGS_JOURNAL_HEADERS_3DP : SETTINGS_JOURNAL_LEGACY_HEADERS_3DP;
+  }
+  if (skuHeader !== SETTINGS_JOURNAL_HEADERS_3DP[5]) {
+    throw apiError3dp_('SETTINGS_JOURNAL_SCHEMA_MISMATCH', 'Settings journal SKU header does not match the approved schema.');
+  }
+  return SETTINGS_JOURNAL_HEADERS_3DP;
+}
+
+function upgradeSettingsJournalSchema3dp_(spreadsheet, changes) {
+  const journal = spreadsheet.getSheetByName(SHEETS_3DP.settingsJournal);
+  if (!journal) return false;
+  const headers = settingsJournalHeaders3dp_(journal, false);
+  if (headers.length === SETTINGS_JOURNAL_HEADERS_3DP.length) {
+    if (!journal.isSheetHidden()) journal.hideSheet();
+    return false;
+  }
+  settingsJournalHeaders3dp_(journal, true);
+  if (!journal.isSheetHidden()) journal.hideSheet();
+  changes.push(SHEETS_3DP.settingsJournal + '!F1 SKU context column added; historical settings rows remain blank in SKU');
+  return true;
+}
+
+function appendSettingsJournal3dp_(spreadsheet, actor, parameter, sku, oldValue, newValue) {
+  const journal = getOrCreateSettingsJournal3dp_(spreadsheet);
+  journal.appendRow([
+    now3dp_(),
+    actor.role,
+    parameter,
+    displayAuditValue3dp_(oldValue),
+    displayAuditValue3dp_(newValue),
+    sku || '',
+  ]);
+}
+
+function settingsJournalAction3dp_(spreadsheet, params, actor) {
+  const journal = spreadsheet.getSheetByName(SHEETS_3DP.settingsJournal);
+  if (!journal) return { action: '3dp_settings_journal', rows: [], count: 0 };
+  const headers = settingsJournalHeaders3dp_(journal, false);
+  const limit = boundedLimit3dp_(params.limit, 50, 100);
+  const lastRow = Math.min(journal.getLastRow(), API_3DP.maxReadRows);
+  if (lastRow < 2) return { action: '3dp_settings_journal', rows: [], count: 0 };
+  const values = journal.getRange(2, 1, lastRow - 1, SETTINGS_JOURNAL_HEADERS_3DP.length).getValues();
+  const rows = values.map(function (row, index) {
+    return rowObject3dp_(headers, row, index + 2);
+  }).filter(function (row) {
+    return !isSerhiyProjectionActive3dp_(actor) || row['Роль'] === 'serhiy';
+  }).reverse().slice(0, limit);
+  return { action: '3dp_settings_journal', rows: rows, count: rows.length };
 }
 
 function assertOwner3dp_(actor, message) {
@@ -1628,13 +2719,45 @@ function normalizeBatchDraftValue3dp_(value, field) {
   return parsed;
 }
 
-function findBatchDraftRow3dp_(sheet, sku) {
+function batchDraftActorColumn3dp_() {
+  return BATCH_DRAFT_FIELDS_3DP.length + 2;
+}
+
+function batchDraftActorColumnReady3dp_(sheet) {
+  return String(sheet.getRange(1, batchDraftActorColumn3dp_()).getDisplayValue() || '') === BATCH_DRAFT_ACTOR_HEADER_3DP;
+}
+
+function ensureBatchDraftActorColumn3dp_(sheet) {
+  const range = sheet.getRange(1, batchDraftActorColumn3dp_());
+  const current = String(range.getDisplayValue() || '');
+  if (!current) {
+    range.setValue(BATCH_DRAFT_ACTOR_HEADER_3DP);
+    return;
+  }
+  if (current !== BATCH_DRAFT_ACTOR_HEADER_3DP) {
+    throw apiError3dp_('BATCH_DRAFT_SCHEMA_MISMATCH', 'Batch-draft actor column does not match the approved schema.');
+  }
+}
+
+function batchDraftStorageKey3dp_(sku, actor, scopeToActor) {
+  return scopeToActor ? String((actor && actor.role) || '') + '::' + sku : sku;
+}
+
+function findBatchDraftRow3dp_(sheet, sku, actor, scopeToActor) {
   const lastRow = sheet.getLastRow();
   if (lastRow < 2) return 0;
-  const values = sheet.getRange(2, 1, lastRow - 1, 1).getValues();
+  const hasActorColumn = batchDraftActorColumnReady3dp_(sheet);
+  if (scopeToActor && !hasActorColumn) return 0;
+  const values = sheet.getRange(2, 1, lastRow - 1, hasActorColumn ? batchDraftActorColumn3dp_() : 1).getValues();
+  const storageKey = batchDraftStorageKey3dp_(sku, actor, scopeToActor);
   let found = 0;
   values.forEach(function (row, index) {
-    if (String(row[0] || '').trim() === sku) {
+    if (String(row[0] || '').trim() !== storageKey) return;
+    const actorRole = hasActorColumn ? String(row[batchDraftActorColumn3dp_() - 1] || '').trim() : '';
+    const matchesRole = scopeToActor
+      ? actorRole === String((actor && actor.role) || '')
+      : (!actorRole || actorRole === 'owner');
+    if (matchesRole) {
       if (found) throw apiError3dp_('DUPLICATE_KEY', 'Batch-draft storage has duplicate SKU keys.');
       found = index + 2;
     }
@@ -1665,10 +2788,17 @@ function assertNomenclatureArchiveSystemReady3dp_(sheet) {
 function nomenclatureStatusAtRow3dp_(sheet, row) {
   assertNomenclatureArchiveSystemReady3dp_(sheet);
   const status = String(sheet.getRange(row, columnToNumber3dp_(API_3DP.nomenclatureStatusColumn)).getValue() || API_3DP.activeStatus);
-  if ([API_3DP.activeStatus, API_3DP.archivedStatus].indexOf(status) === -1) {
-    throw apiError3dp_('INVALID_STATUS', 'SKU status must be Активний or Архів.');
+  if ([API_3DP.activeStatus, API_3DP.archivedStatus, API_3DP.draftStatus].indexOf(status) === -1) {
+    throw apiError3dp_('INVALID_STATUS', 'SKU status must be Активний, Архів, or Чернетка.');
   }
   return status;
+}
+
+function assertNomenclatureActiveForOperation3dp_(sheet, row, archivedCode, archivedMessage, inactiveMessage) {
+  const status = nomenclatureStatusAtRow3dp_(sheet, row);
+  if (status === API_3DP.activeStatus) return;
+  if (status === API_3DP.archivedStatus) throw apiError3dp_(archivedCode, archivedMessage);
+  throw apiError3dp_('SKU_NOT_ACTIVE', inactiveMessage);
 }
 
 function optionalReason3dp_(value) {
@@ -1966,6 +3096,94 @@ function preview3dpApiSetup() {
   };
 }
 
+function wp1bSchemaPreflight3dp_(spreadsheet) {
+  const payouts = getSheet3dp_(spreadsheet, SHEETS_3DP.payouts);
+  const adjustments = getInternalSheet3dp_(spreadsheet, SHEETS_3DP.stockAdjustments);
+  const payoutState = payoutAcknowledgementSchemaState3dp_(payouts);
+  const stockHeaders = stockAdjustmentHeaders3dp_(adjustments, false);
+  const settingsJournal = spreadsheet.getSheetByName(SHEETS_3DP.settingsJournal);
+  const settingsHeaders = settingsJournal ? settingsJournalHeaders3dp_(settingsJournal, false) : null;
+  return {
+    already_applied: payoutState.ready && stockHeaders.length === STOCK_ADJUSTMENT_HEADERS_3DP.length &&
+      (!settingsHeaders || settingsHeaders.length === SETTINGS_JOURNAL_HEADERS_3DP.length),
+    planned_changes: [
+      payoutState.ready ? null : 'Виплати!G1:H1 add two Serhiy acknowledgement columns; existing rows remain blank',
+      stockHeaders.length === STOCK_ADJUSTMENT_HEADERS_3DP.length ? null :
+        '_Коригування_наявності!E add Роль; pre-WP1b API rows are labelled owner',
+      !settingsJournal || settingsHeaders.length === SETTINGS_JOURNAL_HEADERS_3DP.length ? null :
+        '_Журнал_налаштувань_3DP!F add SKU; historical settings rows remain blank in SKU',
+    ].filter(Boolean),
+  };
+}
+
+/**
+ * Read-only WP1b preflight. It validates the two narrowly-scoped schema
+ * extensions before the owner chooses to add them.
+ */
+function preview3dpWp1bSchema() {
+  const spreadsheet = getSpreadsheet3dp_();
+  return Object.assign({ ok: true, spreadsheet_id: spreadsheet.getId() }, wp1bSchemaPreflight3dp_(spreadsheet));
+}
+
+/**
+ * Owner-run, idempotent WP1b migration. It adds only the acknowledged
+ * payout/ledger headers and the shared journal SKU context column.
+ */
+function setup3dpWp1bSchema() {
+  return withScriptLock3dp_(function () {
+    const spreadsheet = getSpreadsheet3dp_();
+    // Validate every target before the first write. A drifted later target must
+    // never leave the earlier payout migration half-applied.
+    wp1bSchemaPreflight3dp_(spreadsheet);
+    const changes = [];
+    ensurePayoutAcknowledgementColumns3dp_(getSheet3dp_(spreadsheet, SHEETS_3DP.payouts), changes);
+    ensureStockAdjustmentActorColumn3dp_(getInternalSheet3dp_(spreadsheet, SHEETS_3DP.stockAdjustments), changes);
+    upgradeSettingsJournalSchema3dp_(spreadsheet, changes);
+    return { ok: true, already_applied: changes.length === 0, changes: changes };
+  });
+}
+
+function wp1cStatusPreflight3dp_(spreadsheet) {
+  const nomenclature = getSheet3dp_(spreadsheet, SHEETS_3DP.nomenclature);
+  const availability = getSheet3dp_(spreadsheet, SHEETS_3DP.availability);
+  assertNomenclatureArchiveSystemReady3dp_(nomenclature);
+  const availabilityHeaders = availability.getRange('A1:D1').getDisplayValues()[0];
+  if (JSON.stringify(availabilityHeaders) !== JSON.stringify(['SKU', 'Назва', 'Надруковано всього, шт', 'Брак всього, шт'])) {
+    throw apiError3dp_('SETUP_ANCHOR_MISMATCH', 'Наявність!A1:D1 does not match the approved formula target.');
+  }
+  const lastRow = Math.max(findLastFormulaRow3dp_(availability, 'C'), findLastFormulaRow3dp_(availability, 'D'), 2);
+  const formulaReady = Array.from({ length: lastRow - 1 }, function (_, index) {
+    const row = index + 2;
+    return canonicalFormula3dp_(availability.getRange(row, 3).getFormula()) === canonicalFormula3dp_(availabilityFormulaForActiveSku3dp_(row, 'C')) &&
+      canonicalFormula3dp_(availability.getRange(row, 4).getFormula()) === canonicalFormula3dp_(availabilityFormulaForActiveSku3dp_(row, 'E'));
+  }).every(Boolean);
+  return {
+    already_applied: formulaReady,
+    formula_last_row: lastRow,
+    planned_changes: formulaReady ? [] : [
+      'Наявність!C2:D' + lastRow + ' will count print-log rows only when the matching Номенклатура SKU status is Активний',
+    ],
+  };
+}
+
+/** Read-only WP1c preflight. It does not add columns or modify rows. */
+function preview3dpWp1cStatusSchema() {
+  const spreadsheet = getSpreadsheet3dp_();
+  return Object.assign({ ok: true, spreadsheet_id: spreadsheet.getId() }, wp1cStatusPreflight3dp_(spreadsheet));
+}
+
+/** Owner-run, idempotent WP1c formula migration. It touches only Наявність!C:D. */
+function setup3dpWp1cStatusSchema() {
+  return withScriptLock3dp_(function () {
+    const spreadsheet = getSpreadsheet3dp_();
+    const preflight = wp1cStatusPreflight3dp_(spreadsheet);
+    if (preflight.already_applied) return { ok: true, already_applied: true, changes: [] };
+    const changes = [];
+    setupAvailabilityArchiveAwareFormulas3dp_(spreadsheet, changes);
+    return { ok: true, already_applied: false, changes: changes };
+  });
+}
+
 /**
  * Owner-run, idempotent setup. This changes only the approved 3D-P Sheet schema.
  */
@@ -2065,8 +3283,8 @@ function validateNomenclatureArchiveState3dp_(spreadsheet) {
       blankStatusRows.push(index + 2);
       return;
     }
-    if ([API_3DP.activeStatus, API_3DP.archivedStatus].indexOf(status) === -1) {
-      throw apiError3dp_('SETUP_ANCHOR_MISMATCH', SHEETS_3DP.nomenclature + '!' + API_3DP.nomenclatureStatusColumn + (index + 2) + ' has an unsupported archive state.');
+    if ([API_3DP.activeStatus, API_3DP.archivedStatus, API_3DP.draftStatus].indexOf(status) === -1) {
+      throw apiError3dp_('SETUP_ANCHOR_MISMATCH', SHEETS_3DP.nomenclature + '!' + API_3DP.nomenclatureStatusColumn + (index + 2) + ' has an unsupported SKU state.');
     }
   });
   return blankStatusRows;
@@ -2106,7 +3324,7 @@ function setupBatchDraftStorage3dp_(spreadsheet, changes) {
   let sheet = spreadsheet.getSheetByName(SHEETS_3DP.drafts);
   if (!sheet) {
     sheet = spreadsheet.insertSheet(SHEETS_3DP.drafts);
-    sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+    sheet.getRange(1, 1, 1, headers.length + 1).setValues([headers.concat([BATCH_DRAFT_ACTOR_HEADER_3DP])]);
     sheet.setFrozenRows(1);
     sheet.hideSheet();
     changes.push(SHEETS_3DP.drafts + ' created and hidden for keyed raw batch drafts');
@@ -2115,6 +3333,13 @@ function setupBatchDraftStorage3dp_(spreadsheet, changes) {
   const currentHeaders = sheet.getRange(1, 1, 1, headers.length).getDisplayValues()[0];
   if (JSON.stringify(currentHeaders) !== JSON.stringify(headers)) {
     throw apiError3dp_('SETUP_ANCHOR_MISMATCH', SHEETS_3DP.drafts + '!A1:F1 headers do not match the approved batch-draft schema.');
+  }
+  const actorHeader = String(sheet.getRange(1, batchDraftActorColumn3dp_()).getDisplayValue() || '');
+  if (!actorHeader) {
+    sheet.getRange(1, batchDraftActorColumn3dp_()).setValue(BATCH_DRAFT_ACTOR_HEADER_3DP);
+    changes.push(SHEETS_3DP.drafts + ' actor-role column added for private Serhiy drafts');
+  } else if (actorHeader !== BATCH_DRAFT_ACTOR_HEADER_3DP) {
+    throw apiError3dp_('SETUP_ANCHOR_MISMATCH', SHEETS_3DP.drafts + '!G1 does not match the approved actor-role schema.');
   }
   if (!sheet.isSheetHidden()) {
     sheet.hideSheet();
@@ -2132,10 +3357,7 @@ function setupStockAdjustmentLedger3dp_(spreadsheet, changes) {
     changes.push(SHEETS_3DP.stockAdjustments + ' created and hidden as append-only stock ledger');
     return;
   }
-  const currentHeaders = sheet.getRange(1, 1, 1, STOCK_ADJUSTMENT_HEADERS_3DP.length).getDisplayValues()[0];
-  if (JSON.stringify(currentHeaders) !== JSON.stringify(STOCK_ADJUSTMENT_HEADERS_3DP)) {
-    throw apiError3dp_('SETUP_ANCHOR_MISMATCH', SHEETS_3DP.stockAdjustments + '!A1:D1 headers do not match the approved stock-ledger schema.');
-  }
+  ensureStockAdjustmentActorColumn3dp_(sheet, changes);
   if (!sheet.isSheetHidden()) {
     sheet.hideSheet();
     changes.push(SHEETS_3DP.stockAdjustments + ' hidden');
@@ -2308,8 +3530,8 @@ function setupAvailabilityArchiveAwareFormulas3dp_(spreadsheet, changes) {
   const lastRow = Math.max(findLastFormulaRow3dp_(sheet, 'C'), findLastFormulaRow3dp_(sheet, 'D'), 2);
   let formulaChanged = false;
   for (let row = 2; row <= lastRow; row += 1) {
-    const expectedC = '=IF(A' + row + '="";"";SUMIFS(\'Друк-лог\'!$C:$C;\'Друк-лог\'!$B:$B;A' + row + ';\'Друк-лог\'!$J:$J;"<>Архів"))';
-    const expectedD = '=IF(A' + row + '="";"";SUMIFS(\'Друк-лог\'!$E:$E;\'Друк-лог\'!$B:$B;A' + row + ';\'Друк-лог\'!$J:$J;"<>Архів"))';
+    const expectedC = availabilityFormulaForActiveSku3dp_(row, 'C');
+    const expectedD = availabilityFormulaForActiveSku3dp_(row, 'E');
     const rangeC = sheet.getRange(row, 3);
     const rangeD = sheet.getRange(row, 4);
     if (canonicalFormula3dp_(rangeC.getFormula()) !== canonicalFormula3dp_(expectedC)) {
@@ -2321,7 +3543,11 @@ function setupAvailabilityArchiveAwareFormulas3dp_(spreadsheet, changes) {
       formulaChanged = true;
     }
   }
-  if (formulaChanged) changes.push('Наявність!C2:D' + lastRow + ' made archive-aware');
+  if (formulaChanged) changes.push('Наявність!C2:D' + lastRow + ' made active-SKU-aware');
+}
+
+function availabilityFormulaForActiveSku3dp_(row, printLogColumn) {
+  return '=IF(A' + row + '="";"";IF(IFERROR(INDEX(\'Номенклатура\'!$O:$O;MATCH(A' + row + ';\'Номенклатура\'!$A:$A;0));"")<>"' + API_3DP.activeStatus + '";0;SUMIFS(\'Друк-лог\'!$' + printLogColumn + ':$' + printLogColumn + ';\'Друк-лог\'!$B:$B;A' + row + ';\'Друк-лог\'!$J:$J;"<>Архів")))';
 }
 
 function normalizeManualInputColors3dp_(spreadsheet, changes) {

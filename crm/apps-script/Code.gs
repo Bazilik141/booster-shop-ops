@@ -1384,6 +1384,7 @@ if (action === 'retry_3dp_sync') return boosterCrmJson_(apiRetry3dpOrderSync_(ss
 if (action === 'update_purchase') return boosterCrmJson_(apiUpdatePurchaseBatch10_(ss, payload));
 if (action === 'add_news_candidate') return boosterCrmJson_(apiAddNewsCandidate_(ss, payload));
 if (action === 'add_sku') return boosterCrmJson_(apiAddSku_(ss, payload));
+if (action === 'sync_3dp_catalog_rrp') return boosterCrmJson_(apiSync3dpCatalogRrp_(ss, payload));
 if (action === 'update_rrp_batch') return boosterCrmJson_(apiUpdateRrpBatch_(ss, payload));
 if (action === 'inventory_migration') return boosterCrmJson_(apiInventoryMigration_(ss, payload));
   if (action === 'add_consumable_purchase') return boosterCrmJson_(apiAddConsumablePurchase_(ss, payload));
@@ -1806,6 +1807,72 @@ already_applied: false
 };
 } catch (err) {
 return { ok: false, action: 'update_rrp_batch', error: String(err && err.message ? err.message : err) };
+}
+}
+
+/**
+ * Owner-dashboard bridge for an already-created canonical 3D SKU.
+ * Unlike add_sku, this action never creates or changes a product row. It only
+ * mirrors the confirmed 3D-P actual RRP into the CRM RRP manual cells.
+ */
+function apiSync3dpCatalogRrp_(ss, payload) {
+try {
+resetMemoForMutation_();
+const products = ss.getSheetByName('Товари');
+const rrc = ss.getSheetByName('РРЦ');
+const stock = ss.getSheetByName('Склад');
+if (!products || !rrc || !stock) throw new Error('catalog sheet missing');
+
+const sku = String(payload && payload.sku || '').trim().toUpperCase();
+const nextRrp = Number(payload && payload.rrp);
+const expectedRrp = Number(payload && payload.expected_rrp);
+if (!is3dpPackagingSku_(sku)) throw new Error('canonical 3D SKU required');
+if (!isFinite(nextRrp) || nextRrp <= 0) throw new Error('RRP must be > 0 for ' + sku);
+if (!isFinite(expectedRrp) || expectedRrp <= 0) throw new Error('current CRM RRP is required for ' + sku);
+
+const firstRow = 3;
+const lastRow = crmCatalogLastWritableRow_(products, rrc, stock);
+const productRow = apiFindSkuRow_(products, sku, firstRow, lastRow);
+const rrpRow = apiFindSkuRow_(rrc, sku, firstRow, lastRow);
+if (!productRow) throw new Error('SKU is missing from Товари: ' + sku);
+if (!rrpRow) throw new Error('SKU is missing from РРЦ: ' + sku);
+
+const productValues = products.getRange(productRow, 1, 1, 7).getValues()[0];
+if (!is3dpCatalogSku_(sku, productValues[5], productValues[6])) {
+  throw new Error('CRM SKU is not classified as 3D: ' + sku);
+}
+if (!products.getRange(productRow, 10).getFormula()) throw new Error('Товари!J' + productRow + ' price formula is missing');
+if (!rrc.getRange(rrpRow, 8).getFormula()) throw new Error('РРЦ!H' + rrpRow + ' dynamic price formula is missing');
+if (rrc.getRange(rrpRow, 6, 1, 2).getFormulas()[0].some(function(formula) { return !!formula; })) {
+  throw new Error('РРЦ!F:G must remain manual-value columns for ' + sku);
+}
+
+const currentRrp = Number(rrc.getRange(rrpRow, 5).getValue());
+if (!isFinite(currentRrp) || currentRrp <= 0) throw new Error('current CRM RRP is invalid for ' + sku);
+if (Math.abs(currentRrp - expectedRrp) >= 0.009) {
+  throw new Error('CRM RRP changed for ' + sku + '; refresh and retry before overwriting it');
+}
+const roundedRrp = round2_(nextRrp);
+if (Math.abs(currentRrp - roundedRrp) < 0.009) {
+  return { ok: true, action: 'sync_3dp_catalog_rrp', sku: sku, product_row: productRow, rrp_row: rrpRow, previous_rrp: currentRrp, rrp: currentRrp, already_applied: true, integrity_check_required: false };
+}
+
+const range = rrc.getRange(rrpRow, 5, 1, 3);
+const previousValues = range.getValues();
+try {
+  range.setValues([[roundedRrp, new Date(), 'РРЦ 3D синхронізовано через owner dashboard: ' + sku + '; ' + currentRrp + ' -> ' + roundedRrp]]);
+  SpreadsheetApp.flush();
+  const saved = Number(rrc.getRange(rrpRow, 5).getValue());
+  if (!isFinite(saved) || Math.abs(saved - roundedRrp) >= 0.009) throw new Error('3D RRP verification failed for ' + sku);
+} catch (error) {
+  range.setValues(previousValues);
+  SpreadsheetApp.flush();
+  throw error;
+}
+invalidateDoGetCache_();
+return { ok: true, action: 'sync_3dp_catalog_rrp', sku: sku, product_row: productRow, rrp_row: rrpRow, previous_rrp: currentRrp, rrp: roundedRrp, already_applied: false, integrity_check_required: true };
+} catch (err) {
+return { ok: false, action: 'sync_3dp_catalog_rrp', error: String(err && err.message ? err.message : err) };
 }
 }
 // BEGIN 3D-P-010 helper block — insert before apiAddSale_ in main CRM Code.gs

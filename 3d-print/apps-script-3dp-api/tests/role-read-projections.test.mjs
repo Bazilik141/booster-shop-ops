@@ -61,12 +61,25 @@ class Range {
   getNumberFormat() { return "0.##########"; }
   setNumberFormat() { return this; }
   setFontColor() { return this; }
-  clearContent() { this.sheet.setValueAt(this.startRow, this.startColumn, ""); return this; }
+  clearContent() {
+    for (let row = 0; row < this.rows; row += 1) {
+      for (let column = 0; column < this.columns; column += 1) {
+        this.sheet.setValueAt(this.startRow + row, this.startColumn + column, "");
+        this.sheet.setFormulaAt(this.startRow + row, this.startColumn + column, "");
+      }
+    }
+    return this;
+  }
   getCell(row, column) { return new Range(this.sheet, this.startRow + row - 1, this.startColumn + column - 1); }
   offset(row, column, rows = this.rows, columns = this.columns) {
     return new Range(this.sheet, this.startRow + row, this.startColumn + column, rows, columns);
   }
   getFontColors() { return Array.from({ length: this.rows }, () => Array.from({ length: this.columns }, () => "#0000ff")); }
+  getNotes() { return Array.from({ length: this.rows }, () => Array.from({ length: this.columns }, () => "")); }
+  getNumberFormats() { return Array.from({ length: this.rows }, () => Array.from({ length: this.columns }, () => "0.##########")); }
+  setNotes() { return this; }
+  setFontColors() { return this; }
+  setNumberFormats() { return this; }
   setValue(value) { this.sheet.setValueAt(this.startRow, this.startColumn, value); return this; }
   setValues(values) {
     values.forEach((row, rowIndex) => row.forEach((value, columnIndex) =>
@@ -84,7 +97,14 @@ class Sheet {
     this.hidden = false;
   }
 
-  valueAt(row, column) { return this.rows[row - 1]?.[column - 1] ?? ""; }
+  valueAt(row, column) {
+    const formula = this.formulaAt(row, column);
+    const directSkuReference = /^='Номенклатура'!A(\d+)$/.exec(formula);
+    if (directSkuReference && this.workbook) {
+      return this.workbook.getSheetByName("Номенклатура").valueAt(Number(directSkuReference[1]), 1);
+    }
+    return this.rows[row - 1]?.[column - 1] ?? "";
+  }
   formulaAt(row, column) { return this.formulas[row - 1]?.[column - 1] ?? ""; }
   setValueAt(row, column, value) {
     while (this.rows.length < row) this.rows.push([]);
@@ -118,7 +138,10 @@ class Sheet {
 }
 
 class Spreadsheet {
-  constructor(sheets) { this.sheets = new Map(Object.entries(sheets)); }
+  constructor(sheets) {
+    this.sheets = new Map(Object.entries(sheets));
+    this.sheets.forEach((sheet) => { sheet.workbook = this; });
+  }
   getId() { return "1yp15H3YJGkqI4Rx89G4QZHkD9m67gnWh58TsTTi-jjo"; }
   getSheetByName(name) { return this.sheets.get(name) || null; }
   insertSheet(name) { const sheet = new Sheet(name); this.sheets.set(name, sheet); return sheet; }
@@ -185,6 +208,27 @@ function codeOf(fn, code) { assert.throws(fn, (error) => error && error.code ===
 const owner = { role: "owner", identity: "dashboard" };
 const serhiy = { role: "serhiy", identity: "serhiy" };
 const api = loadApi();
+const repairApi = loadApi();
+const repairNomenclature = repairApi.workbook.getSheetByName("Номенклатура");
+repairNomenclature.setValueAt(3, 1, "BR-BULB-100");
+repairNomenclature.setValueAt(3, 2, "Брелок Бульбазавр");
+repairNomenclature.setValueAt(3, 15, "Активний");
+const initialRepair = plain(repairApi.context.repair3dpActiveNomenclatureAnalytics());
+assert.equal(initialRepair.initialized_skus.includes("BR-BULB-100"), true,
+  "the public repair initializes an already-active SKU missing from Analytics");
+assert.equal(repairApi.workbook.getSheetByName("Аналітика").getRange(5, 6).getValue(), 0.5,
+  "the public repair applies the approved 50% share to that existing SKU");
+assert.equal(call(repairApi, "3dp_get_row", owner, { sheet: "Номенклатура", sku: "BR-BULB-100" }).row["% прибутку Сергію"], 0.5,
+  "the repaired active SKU no longer throws a missing-profit-share error");
+const ownerCreateRollbackApi = loadApi();
+ownerCreateRollbackApi.workbook.getSheetByName("Аналітика").setValueAt(3, 1, "unexpected analytics header");
+codeOf(() => ownerCreateRollbackApi.context.createNomenclatureOwnerAction3dp_(ownerCreateRollbackApi.workbook, {
+  sku: "BR-ROLL-100", values: { B: "Rollback test", D: "Брелок", Q: 200 },
+}, owner), "ANALYTICS_SCHEMA_NOT_READY");
+assert.equal(ownerCreateRollbackApi.workbook.getSheetByName("Номенклатура").getRange(3, 1).getDisplayValue(), "",
+  "a failed owner quick-create must not leave a canonical SKU behind");
+assert.equal(ownerCreateRollbackApi.workbook.getSheetByName("Номенклатура").getRange(3, 15).getDisplayValue(), "",
+  "a failed owner quick-create must not leave an active status behind");
 const ownerReadCases = [
   ["3dp_get_row", { sheet: "Номенклатура", sku: "FIG-001" }],
   ["3dp_get_range", { sheet: "Продажі", range: "A1:AA2" }],
@@ -278,15 +322,33 @@ codeOf(() => api.context.writeAction3dp_(api.workbook, { sheet: "Номенкл�
 codeOf(() => api.context.writeAction3dp_(api.workbook, { sheet: "Номенклатура", column: "R", sku_or_row: "FIG-001", value: -1 }, serhiy), "NOMENCLATURE_PRICE_INVALID");
 codeOf(() => api.context.writeAction3dp_(api.workbook, { sheet: "Номенклатура", column: "S", sku_or_row: "FIG-001", value: "ftp://models.example/FIG-001" }, serhiy), "MODEL_URL_INVALID");
 assert.equal(nomenclatureJournal.getLastRow(), nomenclatureJournalBefore + 3);
-plain(api.context.appendRowAction3dp_(api.workbook, {
+codeOf(() => api.context.appendRowAction3dp_(api.workbook, {
   sheet: "Номенклатура",
   values: { A: "FIG-002", Q: 400, R: 150, S: "https://models.example/FIG-002" },
+}, owner), "SPECIALIZED_ACTION_REQUIRED");
+codeOf(() => api.context.createNomenclatureOwnerAction3dp_(api.workbook, {
+  sku: "BR-FAIL-100", values: { B: "Неавторизований", D: "Брелок", Q: 400 },
+}, serhiy), "FORBIDDEN");
+codeOf(() => api.context.createNomenclatureOwnerAction3dp_(api.workbook, {
+  sku: "BR-FAIL-100", values: { B: "Невідповідний тип", D: "Фігурка", Q: 400 },
+}, owner), "SKU_TYPE_MISMATCH");
+const ownerCreated = plain(api.context.handlePost3dp_({
+  action: "3dp_nomenclature_owner_create", sku: "FIG-OWNR-002",
+  values: { B: "Швидко створена фігурка", D: "Фігурка", M: "owner quick create", Q: 400, R: 150, S: "https://models.example/FIG-OWNR-002" },
 }, owner));
-assert.deepEqual(nomenclatureJournal.getRange("A6:F8").getValues(), [
-  ["2026-08-16 12:00:00", "owner", "РРЦ фактична, грн", "∅", "400", "FIG-002"],
-  ["2026-08-16 12:00:00", "owner", "Ціна під викуп, грн", "∅", "150", "FIG-002"],
-  ["2026-08-16 12:00:00", "owner", "Посилання на модель", "∅", "https://models.example/FIG-002", "FIG-002"],
-]);
+assert.deepEqual(ownerCreated, {
+  action: "3dp_nomenclature_owner_create", row: 3, sku: "FIG-OWNR-002", status: "Активний", analytics_initialized: true,
+});
+const ownerCreatedNomenclature = api.workbook.getSheetByName("Номенклатура");
+assert.equal(ownerCreatedNomenclature.getRange(ownerCreated.row, 15).getDisplayValue(), "Активний");
+assert.match(ownerCreatedNomenclature.getRange(ownerCreated.row, 16).getDisplayValue(), /Швидко створено власником/);
+[7, 8, 9, 10, 11].forEach((column) => assert.equal(ownerCreatedNomenclature.getRange(ownerCreated.row, column).getValue(), "",
+  "owner quick-create must not write production cost inputs or K"));
+assert.equal(call(api, "3dp_get_row", owner, { sheet: "Номенклатура", sku: "FIG-OWNR-002" }).row["% прибутку Сергію"], 0.5,
+  "owner quick-create provisions the Analytics share before the SKU can be read");
+assert.equal(nomenclatureJournal.getLastRow(), nomenclatureJournalBefore + 3,
+  "owner quick-create records initial data in the audit trail, not the Q/R/S change journal");
+assert.equal(api.workbook.getSheetByName("_Аудит_API").getRange(api.workbook.getSheetByName("_Аудит_API").getLastRow(), 3).getDisplayValue(), "NOMENCLATURE_OWNER_CREATE");
 
 plain(api.context.saveBatchDraftAction3dp_(api.workbook, { sku: "FIG-001", values: { quantity: 4 }, expected_current: { quantity: "" } }, serhiy));
 assert.equal(call(api, "3dp_batch_draft", serhiy, { sku: "FIG-001" }).values.quantity, 4);
@@ -482,9 +544,34 @@ assert.deepEqual(assigned, {
   sku_suggestion: { prefix: "BR", category_digits: "100", category_label: "Звичайний брелок-підвіска" },
 });
 assert.equal(api.workbook.getSheetByName("Номенклатура").getRange(draft.row, 1).getDisplayValue(), "BR-NEWD-100");
+const analytics = api.workbook.getSheetByName("Аналітика");
+const analyticsRow = Array.from({ length: 14 }, (_, index) => index + 4).find((row) =>
+  analytics.getRange(row, 1).getFormula() === `='Номенклатура'!A${draft.row}`);
+assert.ok(analyticsRow, "canonical assignment must create an Analytics formula row");
+assert.equal(analytics.getRange(analyticsRow, 6).getValue(), 0.5, "a newly active SKU receives the approved 50% default");
+assert.equal(call(api, "3dp_get_row", owner, { sheet: "Номенклатура", sku: "BR-NEWD-100" }).row["% прибутку Сергію"], 0.5,
+  "the assigned SKU is readable without a missing Analytics profit-share error");
+analytics.getRange(4, 6).setValue(0.4);
+plain(api.context.syncActiveNomenclatureAnalytics3dp_(api.workbook));
+assert.equal(analytics.getRange(4, 6).getValue(), 0.4, "an explicit owner profit share survives a later sync");
 const duplicateDraft = plain(api.context.createNomenclatureDraftAction3dp_(api.workbook, { values: draftValues }, serhiy));
+const repair = plain(api.context.repair3dpActiveNomenclatureAnalytics());
+assert.equal(repair.already_applied, true, "the public repair is idempotent after assignment synchronization");
+assert.equal(Array.from({ length: 14 }, (_, index) => index + 4).some((row) =>
+  analytics.getRange(row, 1).getFormula() === `='Номенклатура'!A${duplicateDraft.row}`), false,
+  "a remaining draft must not consume an Analytics calculator row");
+const blockedDraft = plain(api.context.createNomenclatureDraftAction3dp_(api.workbook, { values: draftValues }, serhiy));
+analytics.getRange(3, 1).setValue("unexpected analytics header");
+codeOf(() => api.context.assignNomenclatureSkuAction3dp_(api.workbook, {
+  draft_sku: blockedDraft.sku, sku: "BR-BLOCK-102",
+}, owner), "ANALYTICS_SCHEMA_NOT_READY");
+assert.equal(api.workbook.getSheetByName("Номенклатура").getRange(blockedDraft.row, 1).getDisplayValue(), blockedDraft.sku,
+  "an analytics schema failure rolls the canonical SKU assignment back to the draft key");
+assert.equal(api.workbook.getSheetByName("Номенклатура").getRange(blockedDraft.row, 15).getDisplayValue(), "Чернетка",
+  "an analytics schema failure does not activate the draft");
+analytics.getRange(3, 1).setValue("SKU");
 codeOf(() => api.context.assignNomenclatureSkuAction3dp_(api.workbook, {
   draft_sku: duplicateDraft.sku, sku: "BR-NEWD-100",
 }, owner), "SKU_DUPLICATE");
 
-console.log(JSON.stringify({ ok: true, owner_paths_preserved: 11, v23_owner_responses_compared: ownerReadCases.length, serhiy_projection_checks: 54, settings_journal_checks: 12, wp1b_write_checks: 23, payout_acknowledgement_checks: 17, wp1c_draft_status_checks: 31, full_economics_checks: 10 }));
+console.log(JSON.stringify({ ok: true, owner_paths_preserved: 11, v23_owner_responses_compared: ownerReadCases.length, serhiy_projection_checks: 54, settings_journal_checks: 12, wp1b_write_checks: 23, payout_acknowledgement_checks: 17, wp1c_draft_status_checks: 31, analytics_provisioning_checks: 11, full_economics_checks: 10 }));

@@ -26,6 +26,15 @@ assert.match(dashboard, /\(РРЦ − собівартість Сергія\) ÷
 assert.match(dashboard, /\['Q',rrp,'РРЦ фактична, грн'\]/);
 assert.match(dashboard, /\['R',buyout,'Ціна під викуп, грн'\]/);
 assert.match(dashboard, /\['S',model,'Посилання на модель'\]/);
+assert.match(dashboard, /action:'3dp_nomenclature_owner_create'/);
+assert.doesNotMatch(dashboard, /action:'3dp_append_row',sheet:'Номенклатура'/,
+  "the dashboard must not bypass the atomic owner SKU creation action");
+assert.match(dashboard, /Собівартість не вводиться тут: її розрахує калькулятор після першої партії/);
+assert.match(dashboard, /function threeDpCrmSkuSnapshot\(sku\)/);
+assert.match(dashboard, /action:'sync_3dp_catalog_rrp'/);
+assert.match(dashboard, /expected_rrp:expectedRrp/);
+assert.match(dashboard, /Синхронізувати РРЦ \/ додати CRM/);
+assert.match(dashboard, /назву CRM вона не змінює/);
 assert.match(dashboard, /\['defect_rate',5,'Планований брак, частка','частка \(0\.1 = 10%\)'\]/);
 assert.equal((dashboard.match(/range:'A1:C5'/g) || []).length, 1);
 assert.doesNotMatch(dashboard, /range:'A1:C4'/);
