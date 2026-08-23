@@ -28,8 +28,17 @@ render and store it in the session:
 
 | File | Mints | Compares | On mismatch |
 |---|---|---|---|
-| `catalog/controller/account/login.php` | `:96` `$this->session->data['login_token'] = oc_token(26);` | `:120` | `:121` `$json['redirect'] = account/login` |
+| `catalog/controller/account/login.php` | `:87` `$this->session->data['login_token'] = oc_token(26);` | `:124` | `:125` `$json['redirect'] = account/login` |
 | `catalog/controller/account/register.php` | `:50` `$this->session->data['register_token'] = oc_token(26);` | `:145` | `:146` `$json['redirect'] = account/register` |
+
+**Correction 2026-08-22 (Claude, chat).** The `login.php` line numbers in the row
+above originally read `:96` / `:120` / `:121` and were wrong — a miscount by the
+handoff author, not a different file. Claude Code caught it before patching and
+verified the statements are otherwise verbatim; corrected to `:87` / `:124` /
+`:125` against `backup-8.21.2026_22-06-47_boosters.tar.gz`. The `register.php`
+row and the `common.js` references were correct as written. The shipped patch
+anchors on literal strings, not line numbers, so nothing downstream depended on
+the wrong values.
 
 `catalog/view/javascript/common.js:127-129` then runs
 `location = json['redirect']`. The customer sees the page reload, the form
