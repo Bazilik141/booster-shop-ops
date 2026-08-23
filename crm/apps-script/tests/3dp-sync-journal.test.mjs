@@ -79,6 +79,7 @@ function makeEnvironment(options = {}) {
     outage: !!options.outage,
     schemaReady: options.schemaReady !== false,
     existingRows: options.existingRows || [],
+    catalogRows: options.catalogRows || [],
     nomenclatureRows: options.nomenclatureRows || {},
     nomenclatureFailures: options.nomenclatureFailures || {},
     writeFailures: options.writeFailures || {},
@@ -114,6 +115,7 @@ function makeEnvironment(options = {}) {
           return response({ ok: true, values: [remote.schemaReady ? headers : ["wrong header"]] });
         }
         if (action === "3dp_sales") return response({ ok: true, rows: remote.existingRows });
+        if (action === "3dp_skus") return response({ ok: true, rows: remote.catalogRows });
         if (action === "3dp_stock_adjustments") return response({ ok: true, rows: remote.stockAlreadyApplied ? [{ "Причина": new URL(url).searchParams.get("reason") }] : [] });
         if (action === "3dp_get_row") {
           const params = new URL(url).searchParams;
@@ -147,7 +149,7 @@ function makeEnvironment(options = {}) {
       },
     },
   });
-  vm.runInContext(`${code}\nglobalThis.__test = { sync3dpSales_, sync3dpPackagingCost_, is3dpPackagingSku_, crm3dpAppendJournal_, crm3dpSanitizeJournalDetail_, crm3dpFetchJson_, crm3dpWriteFrozenForExistingSale_, apiSyncJournal_, doGet };`, context, { filename: codePath });
+  vm.runInContext(`${code}\nglobalThis.__test = { sync3dpSales_, sync3dpPackagingCost_, is3dpPackagingSku_, crm3dpAppendJournal_, crm3dpSanitizeJournalDetail_, crm3dpFetchJson_, crm3dpWriteFrozenForExistingSale_, apiOrderComponentCatalog_, apiSyncJournal_, doGet };`, context, { filename: codePath });
   return { context, spreadsheet, properties, remote, logs };
 }
 
@@ -167,6 +169,20 @@ assert.doesNotMatch(fs.readFileSync(path.resolve(here, "../../../3d-print/apps-s
   for (const sku of ['ACC-001', 'MBX-STD-001', 'ACC-3D-']) {
     assert.equal(env.context.__test.is3dpPackagingSku_(sku), false, sku + ' must not trigger 3D-P sync');
   }
+  assert.equal(env.context.__test.is3dpPackagingSku_("DRAFT-00000000000040008000000000000001"), false, "temporary draft key must not trigger 3D-P sync");
+}
+
+{
+  const env = makeEnvironment({ catalogRows: [
+    { SKU: "FIG-DRAFT-100", "Назва виробу": "Чернетка", "API_статус_запису": "Чернетка", availability: { "Наявно зараз, шт": 7 } },
+    { SKU: "FIG-ACTIVE-100", "Назва виробу": "Активний", "API_статус_запису": "Активний", availability: { "Наявно зараз, шт": 5 } },
+  ] });
+  env.spreadsheet.insertSheet("Склад");
+  env.spreadsheet.insertSheet("Розхідники");
+  const catalog = env.context.__test.apiOrderComponentCatalog_();
+  assert.equal(catalog.ok, true);
+  assert.equal(catalog.components.some((item) => item.code === "FIG-DRAFT-100"), false, "draft 3D SKU must not enter the CRM component catalog");
+  assert.equal(catalog.components.some((item) => item.code === "FIG-ACTIVE-100"), true, "active 3D SKU remains available to CRM");
 }
 
 {

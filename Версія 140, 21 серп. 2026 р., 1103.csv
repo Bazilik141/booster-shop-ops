@@ -7505,7 +7505,7 @@ function apiOrderComponentCatalog_() {
         const sku = String(row.SKU || '').trim();
         const availability = row.availability || {};
         const qty = num_(availability[CRM_3DP_STOCK_HEADER_]);
-        if (!sku || !is3dpPackagingSku_(sku) || qty <= 0 || String(row.API_статус_запису || '').trim() !== 'Активний') return;
+        if (!sku || !is3dpPackagingSku_(sku) || qty <= 0 || String(row.API_статус_запису || '').trim() === 'Архів') return;
         const buyout = round2_(num_(row[CRM_3DP_BUYOUT_HEADER_]));
         components.push({ id: '3dp:' + sku, kind: '3D-P', code: sku, name: String(row['Назва виробу'] || sku), stock: round2_(qty), prro_unit: 0, mgmt_unit: buyout });
       });

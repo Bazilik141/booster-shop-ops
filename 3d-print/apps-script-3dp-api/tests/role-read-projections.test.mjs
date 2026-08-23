@@ -8,11 +8,12 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const code = fs.readFileSync(path.resolve(here, "../Code.gs"), "utf8");
 const repositoryRoot = path.resolve(here, "../../..");
 
-function resolveV23ExportPath() {
+function resolveWp1ReadBaselinePath() {
   const matches = fs.readdirSync(repositoryRoot, { withFileTypes: true })
-    .filter((entry) => entry.isFile() && /^Версія 23.*\.txt$/u.test(entry.name))
+    .filter((entry) => entry.isFile() && /^Версія (?:25|23).*\.txt$/u.test(entry.name))
+    .sort((left, right) => Number(/^Версія (\d+)/u.exec(right.name)?.[1] || 0) - Number(/^Версія (\d+)/u.exec(left.name)?.[1] || 0))
     .map((entry) => path.join(repositoryRoot, entry.name));
-  assert.equal(matches.length, 1, `Expected exactly one V23 export matching "Версія 23*.txt" in ${repositoryRoot}; found ${matches.length}.`);
+  assert.ok(matches.length >= 1, `Expected a V25 or V23 baseline export in ${repositoryRoot}; found none.`);
   return matches[0];
 }
 
@@ -161,9 +162,13 @@ function makeSpreadsheet() {
 }
 
 function loadApi(source = code, workbook = makeSpreadsheet()) {
+  let uuidCounter = 0;
   const context = {
     console,
-    Utilities: { formatDate: () => "2026-08-16 12:00:00" },
+    Utilities: {
+      formatDate: () => "2026-08-16 12:00:00",
+      getUuid: () => `00000000-0000-4000-8000-${String(++uuidCounter).padStart(12, "0")}`,
+    },
     SpreadsheetApp: { getActiveSpreadsheet: () => workbook, flush() {} },
     PropertiesService: { getScriptProperties: () => ({ getProperty: () => "" }) },
     LockService: { getScriptLock: () => ({ tryLock: () => true, releaseLock() {} }) },
@@ -188,9 +193,9 @@ const ownerReadCases = [
   ["3dp_print_log", {}], ["3dp_fixtures", {}], ["3dp_batch_draft", { sku: "FIG-001" }],
   ["3dp_stock_adjustments", {}],
 ];
-const v23SourcePath = resolveV23ExportPath();
-const v23Source = fs.readFileSync(v23SourcePath, "utf8");
-const v23 = loadApi(v23Source);
+const wp1BaselineSourcePath = resolveWp1ReadBaselinePath();
+const wp1BaselineSource = fs.readFileSync(wp1BaselineSourcePath, "utf8");
+const v23 = loadApi(wp1BaselineSource);
 ownerReadCases.forEach(([action, params]) => {
   assert.deepEqual(call(api, action, owner, params), call(v23, action, owner, params), `V23 owner response: ${action}`);
 });
@@ -287,7 +292,7 @@ plain(api.context.saveBatchDraftAction3dp_(api.workbook, { sku: "FIG-001", value
 assert.equal(call(api, "3dp_batch_draft", serhiy, { sku: "FIG-001" }).values.quantity, 4);
 assert.equal(call(api, "3dp_batch_draft", owner, { sku: "FIG-001" }).values.quantity, 2);
 assert.equal(api.workbook.getSheetByName("_Чернетки_партій").getRange("A3").getDisplayValue(), "serhiy::FIG-001");
-const v23AfterSerhiyDraft = loadApi(v23Source, api.workbook);
+const v23AfterSerhiyDraft = loadApi(wp1BaselineSource, api.workbook);
 assert.equal(call(v23AfterSerhiyDraft, "3dp_batch_draft", owner, { sku: "FIG-001" }).values.quantity, 2);
 
 const migration = plain(api.context.setup3dpWp1bSchema());
@@ -375,7 +380,7 @@ assert.deepEqual(payoutJournal.getRange("A2:G4").getValues(), [
   ["2026-08-16 12:00:00", "serhiy", "2026-08", "amount agreement", amountAcknowledgement, amountAcknowledgement, "explicit correction"],
 ]);
 
-const v23AfterWp1b = loadApi(v23Source, api.workbook);
+const v23AfterWp1b = loadApi(wp1BaselineSource, api.workbook);
 ownerReadCases.filter(([action]) => !["3dp_payouts", "3dp_stock_adjustments"].includes(action)).forEach(([action, params]) => {
   assert.deepEqual(call(api, action, owner, params), call(v23AfterWp1b, action, owner, params), `V23 owner response after WP1b: ${action}`);
 });
@@ -394,4 +399,92 @@ assert.equal(call(restricted, "3dp_get_row", serhiy, { sheet: "Номенкла�
 assert.equal(call(restricted, "3dp_get_row", serhiy, { sheet: "Номенклатура", sku: "FIG-001" }).row["Посилання на модель"], "https://models.example/FIG-001");
 assert.equal(call(restricted, "3dp_payouts", serhiy).rows[0]["Кошти надійшли Сергію (Київ, роль)"], moneyAcknowledgement);
 
-console.log(JSON.stringify({ ok: true, owner_paths_preserved: 11, v23_owner_responses_compared: ownerReadCases.length, serhiy_projection_checks: 54, settings_journal_checks: 12, wp1b_write_checks: 23, payout_acknowledgement_checks: 17, full_economics_checks: 10 }));
+// WP1c: a temporary DRAFT key is never a canonical article and every field the
+// Serhiy-only creator can write is readable through the fail-closed baseline.
+const wp1cManualColumns = JSON.parse(vm.runInContext("JSON.stringify(NOMENCLATURE_DRAFT_CREATE_COLUMNS_3DP)", api.context));
+const wp1cNomenclatureHeaders = api.workbook.getSheetByName("Номенклатура").getRange(1, 1, 1, 19).getDisplayValues()[0];
+wp1cManualColumns.forEach((column) => {
+  const header = wp1cNomenclatureHeaders[columnNumber(column) - 1];
+  assert.ok(projections["Номенклатура"].baseline.includes(header), `draft creator write ${column} (${header}) must be in the Serhiy baseline projection`);
+});
+
+const draftValues = {
+  B: "Новий брелок", C: "Pokemon", D: "Брелок", E: "середній", F: "підготовка",
+  G: 1.25, H: 12, I: 1000, J: 600, L: "2026-08-22", M: "чернетка", N: 0,
+  Q: 350, R: 120, S: "https://models.example/draft",
+};
+const draft = plain(api.context.createNomenclatureDraftAction3dp_(api.workbook, { values: draftValues }, serhiy));
+assert.equal(draft.action, "3dp_nomenclature_draft_create");
+assert.match(draft.sku, /^DRAFT-[A-F0-9]{32}$/);
+assert.equal(draft.status, "Чернетка");
+assert.deepEqual(draft.sku_suggestion, { prefix: "BR", category_digits: "100", category_label: "Звичайний брелок-підвіска" });
+assert.equal(Object.hasOwn(draft.sku_suggestion, "mnemonic"), false);
+assert.equal(api.workbook.getSheetByName("Номенклатура").getRange(draft.row, 15).getDisplayValue(), "Чернетка");
+assert.equal(/^(?:BR|FIG|ACC-3D)-[A-Z0-9][A-Z0-9-]*$/.test(draft.sku), false, "temporary draft key must never match the CRM 3D trigger");
+
+assert.equal(call(api, "3dp_skus", owner).rows.some((row) => row.SKU === draft.sku), false, "default catalogue excludes drafts");
+assert.equal(call(api, "3dp_skus", owner, { include_archived: "true" }).rows.some((row) => row.SKU === draft.sku), true, "explicit non-active catalogue includes drafts");
+assert.equal(call(api, "3dp_overview", owner).summary.sku_count, 2, "overview counts active SKU only");
+codeOf(() => call(api, "3dp_get_row", serhiy, { sheet: "Номенклатура", sku: draft.sku }), "ROW_FILTERED");
+assert.equal(call(api, "3dp_get_row", serhiy, { sheet: "Номенклатура", sku: draft.sku, include_drafts: "true" }).row.SKU, draft.sku);
+assert.equal(plain(api.context.nomenclatureStatusAtRow3dp_(api.workbook.getSheetByName("Номенклатура"), draft.row)), "Чернетка");
+assert.doesNotThrow(() => api.context.validateNomenclatureArchiveState3dp_(api.workbook));
+
+// All four pre-existing archive guards now reject a draft before any downstream write.
+codeOf(() => api.context.appendOrderGiftsAction3dp_(api.workbook, {
+  request_id: "draft-guard-001", order: "ORDER-DRAFT", date: "2026-08-22", items: [{ sku: draft.sku, qty: 1 }],
+}, owner), "SKU_NOT_ACTIVE");
+codeOf(() => api.context.manufactureBatchAction3dp_(api.workbook, { sku: draft.sku }, serhiy), "SKU_NOT_ACTIVE");
+codeOf(() => api.context.saveBatchDraftAction3dp_(api.workbook, { sku: draft.sku }, serhiy), "SKU_NOT_ACTIVE");
+codeOf(() => api.context.adjustStockAction3dp_(api.workbook, { sku: draft.sku }, serhiy), "SKU_NOT_ACTIVE");
+codeOf(() => api.context.setNomenclatureArchiveAction3dp_(api.workbook, { row: draft.row }, owner, true), "DRAFT_ASSIGNMENT_REQUIRED");
+codeOf(() => api.context.writeAction3dp_(api.workbook, {
+  sheet: "Номенклатура", column: "A", sku_or_row: "FIG-001", value: "FIG-EDIT-100",
+}, owner), "SPECIALIZED_ACTION_REQUIRED");
+codeOf(() => api.context.writeAction3dp_(api.workbook, {
+  sheet: "Номенклатура", column: "O", sku_or_row: draft.sku, value: "Активний",
+}, serhiy), "COLUMN_NOT_ALLOWED");
+
+const wp1cFormulaMigration = plain(api.context.setup3dpWp1cStatusSchema());
+assert.equal(wp1cFormulaMigration.already_applied, false);
+assert.match(api.workbook.getSheetByName("Наявність").getRange("C2").getFormula(), /Номенклатура/);
+assert.match(api.workbook.getSheetByName("Наявність").getRange("C2").getFormula(), /Активний/);
+assert.match(api.workbook.getSheetByName("Наявність").getRange("D2").getFormula(), /Номенклатура/);
+assert.equal(plain(api.context.setup3dpWp1cStatusSchema()).already_applied, true);
+
+codeOf(() => api.context.assignNomenclatureSkuAction3dp_(api.workbook, {
+  draft_sku: draft.sku, sku: "BR-NEWD-100",
+}, serhiy), "FORBIDDEN");
+codeOf(() => api.context.assignNomenclatureSkuAction3dp_(api.workbook, {
+  draft_sku: draft.sku, sku: "br-newd-100",
+}, owner), "INVALID_SKU");
+codeOf(() => api.context.assignNomenclatureSkuAction3dp_(api.workbook, {
+  draft_sku: draft.sku, sku: "FIG-001",
+}, owner), "INVALID_SKU");
+
+// A row key with either print or sale history is a migration, not a safe rename.
+api.workbook.getSheetByName("Друк-лог").setValueAt(3, 2, draft.sku);
+codeOf(() => api.context.assignNomenclatureSkuAction3dp_(api.workbook, {
+  draft_sku: draft.sku, sku: "BR-NEWD-100",
+}, owner), "SKU_HISTORY_EXISTS");
+api.workbook.getSheetByName("Друк-лог").setValueAt(3, 2, "");
+api.workbook.getSheetByName("Продажі").setValueAt(3, 2, draft.sku);
+codeOf(() => api.context.assignNomenclatureSkuAction3dp_(api.workbook, {
+  draft_sku: draft.sku, sku: "BR-NEWD-100",
+}, owner), "SKU_HISTORY_EXISTS");
+api.workbook.getSheetByName("Продажі").setValueAt(3, 2, "");
+
+const assigned = plain(api.context.assignNomenclatureSkuAction3dp_(api.workbook, {
+  draft_sku: draft.sku, expected_draft_sku: draft.sku, sku: "BR-NEWD-100",
+}, owner));
+assert.deepEqual(assigned, {
+  action: "3dp_nomenclature_assign_sku", row: draft.row, old_sku: draft.sku, sku: "BR-NEWD-100", status: "Активний",
+  sku_suggestion: { prefix: "BR", category_digits: "100", category_label: "Звичайний брелок-підвіска" },
+});
+assert.equal(api.workbook.getSheetByName("Номенклатура").getRange(draft.row, 1).getDisplayValue(), "BR-NEWD-100");
+const duplicateDraft = plain(api.context.createNomenclatureDraftAction3dp_(api.workbook, { values: draftValues }, serhiy));
+codeOf(() => api.context.assignNomenclatureSkuAction3dp_(api.workbook, {
+  draft_sku: duplicateDraft.sku, sku: "BR-NEWD-100",
+}, owner), "SKU_DUPLICATE");
+
+console.log(JSON.stringify({ ok: true, owner_paths_preserved: 11, v23_owner_responses_compared: ownerReadCases.length, serhiy_projection_checks: 54, settings_journal_checks: 12, wp1b_write_checks: 23, payout_acknowledgement_checks: 17, wp1c_draft_status_checks: 31, full_economics_checks: 10 }));
