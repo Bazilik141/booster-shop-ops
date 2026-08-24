@@ -23,3 +23,8 @@ __pycache__/
 
 # Claude Code local tool-permission cache (machine-local, not shared config)
 .claude/settings.local.json
+
+# Staging area for files the owner still has to delete by hand
+# (device_bash cannot unlink). Nothing here belongs in history.
+_to_delete/
+**/_to_delete/
