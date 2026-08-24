@@ -10,10 +10,10 @@ const repositoryRoot = path.resolve(here, "../../..");
 
 function resolveWp1ReadBaselinePath() {
   const matches = fs.readdirSync(repositoryRoot, { withFileTypes: true })
-    .filter((entry) => entry.isFile() && /^Версія (?:25|23).*\.txt$/u.test(entry.name))
+    .filter((entry) => entry.isFile() && /^Версія (?:29|25|23).*\.txt$/u.test(entry.name))
     .sort((left, right) => Number(/^Версія (\d+)/u.exec(right.name)?.[1] || 0) - Number(/^Версія (\d+)/u.exec(left.name)?.[1] || 0))
     .map((entry) => path.join(repositoryRoot, entry.name));
-  assert.ok(matches.length >= 1, `Expected a V25 or V23 baseline export in ${repositoryRoot}; found none.`);
+  assert.ok(matches.length >= 1, `Expected a V29, V25, or V23 baseline export in ${repositoryRoot}; found none.`);
   return matches[0];
 }
 
@@ -162,7 +162,7 @@ const salesRow = [
 ];
 
 function makeSpreadsheet() {
-  return new Spreadsheet({
+  const workbook = new Spreadsheet({
     "Номенклатура": new Sheet("Номенклатура", [[
       "SKU", "Назва виробу", "Франшиза", "Тип", "Трек", "Статус", "Час друку за од., год", "Вага виробу за од., г",
       "Вага котушки, г", "Ціна котушки, грн", "Собівартість Сергія (виробнича), грн", "Дата оновлення", "Примітки",
@@ -182,6 +182,9 @@ function makeSpreadsheet() {
     "_Коригування_наявності": new Sheet("_Коригування_наявності", [["SKU", "Зміна наявності, шт", "Причина", "Дата коригування (Київ)"], ["FIG-001", 1, "owner only", "2026-08-16"]]),
     "_Аудит_API": new Sheet("_Аудит_API", [["timestamp_kyiv", "identity", "operation", "sheet", "target", "old_value", "new_value", "details"]]),
   });
+  workbook.getSheetByName("Наявність").setFormulaAt(2, 1, "='Номенклатура'!A2");
+  workbook.getSheetByName("Аналітика").setFormulaAt(4, 1, "='Номенклатура'!A2");
+  return workbook;
 }
 
 function loadApi(source = code, workbook = makeSpreadsheet()) {
@@ -203,7 +206,15 @@ function loadApi(source = code, workbook = makeSpreadsheet()) {
 
 function plain(value) { return JSON.parse(JSON.stringify(value)); }
 function call(api, action, actor, params = {}) { return plain(api.context.handleGet3dp_({ action, ...params }, actor)); }
-function codeOf(fn, code) { assert.throws(fn, (error) => error && error.code === code); }
+function errorOf(fn, code) {
+  try { fn(); }
+  catch (error) {
+    assert.equal(error && error.code, code);
+    return error;
+  }
+  assert.fail(`Expected ${code}.`);
+}
+function codeOf(fn, code) { errorOf(fn, code); }
 
 const owner = { role: "owner", identity: "dashboard" };
 const serhiy = { role: "serhiy", identity: "serhiy" };
@@ -524,17 +535,31 @@ codeOf(() => api.context.assignNomenclatureSkuAction3dp_(api.workbook, {
   draft_sku: draft.sku, sku: "FIG-001",
 }, owner), "INVALID_SKU");
 
-// A row key with either print or sale history is a migration, not a safe rename.
-api.workbook.getSheetByName("Друк-лог").setValueAt(3, 2, draft.sku);
-codeOf(() => api.context.assignNomenclatureSkuAction3dp_(api.workbook, {
-  draft_sku: draft.sku, sku: "BR-NEWD-100",
-}, owner), "SKU_HISTORY_EXISTS");
-api.workbook.getSheetByName("Друк-лог").setValueAt(3, 2, "");
-api.workbook.getSheetByName("Продажі").setValueAt(3, 2, draft.sku);
-codeOf(() => api.context.assignNomenclatureSkuAction3dp_(api.workbook, {
-  draft_sku: draft.sku, sku: "BR-NEWD-100",
-}, owner), "SKU_HISTORY_EXISTS");
-api.workbook.getSheetByName("Продажі").setValueAt(3, 2, "");
+const archivedStatusApi = loadApi();
+archivedStatusApi.workbook.getSheetByName("Номенклатура").setValueAt(2, 15, "Архів");
+codeOf(() => archivedStatusApi.context.assignNomenclatureSkuAction3dp_(archivedStatusApi.workbook, {
+  draft_sku: "FIG-001", expected_draft_sku: "FIG-001", sku: "FIG-RENAM-200",
+}, owner), "SKU_STATUS_NOT_EDITABLE");
+
+// Every stored cross-sheet key is history. Formula mirrors are intentionally
+// excluded because they follow the Nomenclature row automatically.
+[
+  { sheet: "Друк-лог", row: 3, column: 2, value: draft.sku },
+  { sheet: "Продажі", row: 3, column: 2, value: draft.sku },
+  { sheet: "_Чернетки_партій", row: 3, column: 1, value: "serhiy::" + draft.sku },
+  { sheet: "_Коригування_наявності", row: 3, column: 1, value: draft.sku },
+  { sheet: "Маркетингові_плюшки", row: 3, column: 2, value: draft.sku },
+  { sheet: "Аналітика", row: 17, column: 1, value: draft.sku },
+  { sheet: "Наявність", row: 3, column: 1, value: draft.sku },
+].forEach((blocker) => {
+  const blockerSheet = api.workbook.getSheetByName(blocker.sheet);
+  blockerSheet.setValueAt(blocker.row, blocker.column, blocker.value);
+  const error = errorOf(() => api.context.assignNomenclatureSkuAction3dp_(api.workbook, {
+    draft_sku: draft.sku, sku: "BR-NEWD-100",
+  }, owner), "SKU_HISTORY_EXISTS");
+  assert.match(error.message, new RegExp(blocker.sheet.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")), blocker.sheet + " is named in the refusal");
+  blockerSheet.setValueAt(blocker.row, blocker.column, "");
+});
 
 const assigned = plain(api.context.assignNomenclatureSkuAction3dp_(api.workbook, {
   draft_sku: draft.sku, expected_draft_sku: draft.sku, sku: "BR-NEWD-100",
@@ -551,6 +576,43 @@ assert.ok(analyticsRow, "canonical assignment must create an Analytics formula r
 assert.equal(analytics.getRange(analyticsRow, 6).getValue(), 0.5, "a newly active SKU receives the approved 50% default");
 assert.equal(call(api, "3dp_get_row", owner, { sheet: "Номенклатура", sku: "BR-NEWD-100" }).row["% прибутку Сергію"], 0.5,
   "the assigned SKU is readable without a missing Analytics profit-share error");
+
+// An active SKU with no stored history can be renamed. Its status stays active,
+// formula mirrors follow it, and the history line is an article edit rather
+// than a fake status transition.
+const renameApi = loadApi();
+[
+  ["Друк-лог", 2], ["Продажі", 2], ["_Чернетки_партій", 1],
+  ["_Коригування_наявності", 1], ["Маркетингові_плюшки", 2],
+].forEach(([sheetName, column]) => renameApi.workbook.getSheetByName(sheetName).setValueAt(2, column, ""));
+const renamed = plain(renameApi.context.assignNomenclatureSkuAction3dp_(renameApi.workbook, {
+  draft_sku: "FIG-001", expected_draft_sku: "FIG-001", sku: "FIG-RENAM-200",
+}, owner));
+assert.equal(renamed.status, "Активний");
+assert.equal(renameApi.workbook.getSheetByName("Номенклатура").getRange(2, 15).getDisplayValue(), "Активний");
+assert.match(renameApi.workbook.getSheetByName("Номенклатура").getRange(2, 16).getDisplayValue(), /Артикул змінено: FIG-001 → FIG-RENAM-200/);
+assert.doesNotMatch(renameApi.workbook.getSheetByName("Номенклатура").getRange(2, 16).getDisplayValue(), /статус: Активний →/);
+assert.equal(renameApi.workbook.getSheetByName("Аналітика").getRange(4, 1).getDisplayValue(), "FIG-RENAM-200",
+  "the Analytics formula row follows the renamed article");
+assert.equal(renameApi.workbook.getSheetByName("Наявність").getRange(2, 1).getDisplayValue(), "FIG-RENAM-200",
+  "the Availability formula mirror follows the renamed article");
+assert.equal(renameApi.workbook.getSheetByName("_Аудит_API").getRange(2, 3).getDisplayValue(), "NOMENCLATURE_ASSIGN_SKU");
+assert.match(renameApi.workbook.getSheetByName("_Аудит_API").getRange(2, 6).getDisplayValue(), /FIG-001/);
+assert.match(renameApi.workbook.getSheetByName("_Аудит_API").getRange(2, 7).getDisplayValue(), /FIG-RENAM-200/);
+
+const auditRollbackApi = loadApi();
+[
+  ["Друк-лог", 2], ["Продажі", 2], ["_Чернетки_партій", 1],
+  ["_Коригування_наявності", 1], ["Маркетингові_плюшки", 2],
+].forEach(([sheetName, column]) => auditRollbackApi.workbook.getSheetByName(sheetName).setValueAt(2, column, ""));
+auditRollbackApi.context.appendAudit3dp_ = function () { throw auditRollbackApi.context.apiError3dp_("AUDIT_FAILED", "forced audit failure"); };
+codeOf(() => auditRollbackApi.context.assignNomenclatureSkuAction3dp_(auditRollbackApi.workbook, {
+  draft_sku: "FIG-001", expected_draft_sku: "FIG-001", sku: "FIG-ROLL-200",
+}, owner), "AUDIT_FAILED");
+assert.equal(auditRollbackApi.workbook.getSheetByName("Номенклатура").getRange(2, 1).getDisplayValue(), "FIG-001");
+assert.equal(auditRollbackApi.workbook.getSheetByName("Номенклатура").getRange(2, 15).getDisplayValue(), "Активний");
+assert.equal(auditRollbackApi.workbook.getSheetByName("Номенклатура").getRange(2, 16).getDisplayValue(), "owner history");
+
 analytics.getRange(4, 6).setValue(0.4);
 plain(api.context.syncActiveNomenclatureAnalytics3dp_(api.workbook));
 assert.equal(analytics.getRange(4, 6).getValue(), 0.4, "an explicit owner profit share survives a later sync");

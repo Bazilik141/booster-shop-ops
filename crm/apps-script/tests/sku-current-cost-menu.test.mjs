@@ -101,6 +101,7 @@ assert.deepEqual(menuItems, [
   ['Оновити довідники SKU', 'setupCrmCatalogOptionInfrastructure'],
   ['Оновити очікуваний залишок', 'updateExpectedStockFormulaMenu'],
   ['Оновити собівартість складу', 'updateSkuCurrentCostMenu'],
+  ['Налаштувати автооновлення формул CRM', 'setupCrmRowCapacityMaintenanceMenu'],
   ['Налаштувати OpenAI ключ', 'setupOpenAiApiKey']
 ], 'the Booster CRM menu gains the warehouse-cost item and keeps every existing item in place');
 

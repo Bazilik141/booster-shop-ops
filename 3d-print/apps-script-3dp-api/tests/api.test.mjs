@@ -16,6 +16,14 @@ assert.match(code, /manualSalesColumns/);
 assert.match(code, /appendAudit3dp_\(spreadsheet, actor, 'CLEANUP_TEST_ORDER'/);
 assert.match(code, /function preview3dpApiSetup\(/, "owner kept this setup preview");
 assert.match(code, /function setup3dpApi\(/, "active baseline setup remains available");
+assert.match(code, /oldStatus === API_3DP\.draftStatus \? API_3DP\.activeStatus : oldStatus/,
+  "draft assignment activates while active article editing preserves status");
+assert.match(code, /blocking_locations/,
+  "article editing checks every stored SKU-key location");
+assert.match(code, /actorPrefixed: true/,
+  "actor-prefixed batch-draft keys participate in the history guard");
+assert.match(code, /headerRow: 3, storedOnly: true/,
+  "manual Analytics keys block editing while formula mirrors can follow the row");
 
 [
   "3dp_setup_3dp010", "3dp_setup_3dp015", "3dp_setup_3dp024",
@@ -25,4 +33,6 @@ assert.match(code, /function setup3dpApi\(/, "active baseline setup remains avai
   "function preview3dpApiAddendum2(", "function repair3dpAvailabilityFormulas(",
 ].forEach((needle) => assert.equal(code.includes(needle), false, needle + " is archived, not deployed"));
 
-console.log(JSON.stringify({ ok: true, active_cleanup_route: true, archived_setup_routes_removed: 5, preview3dpApiSetup_retained: true }));
+await import("./role-read-projections.test.mjs");
+
+console.log(JSON.stringify({ ok: true, active_cleanup_route: true, archived_setup_routes_removed: 5, preview3dpApiSetup_retained: true, wp2b_article_edit_cases: true }));

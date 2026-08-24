@@ -61,8 +61,9 @@ class MockSpreadsheet {
   toast(message,title,timeoutSeconds){this.toasts.push({message,title,timeoutSeconds});}
 }
 
-function makeEnvironment({ missingProductPriceFormula = false, settingsRows = 201 } = {}) {
+function makeEnvironment({ missingProductPriceFormula = false, settingsRows = 201, projectStock = true } = {}) {
   const products=new MockSheet("Товари"),rrc=new MockSheet("РРЦ"),stock=new MockSheet("Склад"),settings=new MockSheet("Налаштування",settingsRows),master=new MockSheet("Майстер_Товарів");
+  const sales=new MockSheet("Продажі"),purchases=new MockSheet("Закупки"),writeoffs=new MockSheet("Списання"),migrations=new MockSheet("Міграції_Складу"),accounting=new MockSheet("3D_облік_замовлень"),components=new MockSheet("Використання_компонентів"),fixtures=new MockSheet("Використання_фурнітури");
   products.getRange(3,1,1,15).setValues([["EXISTING-001","","Existing","Booster Shop","UA","Pokemon","Бустер","","","",0,"Так","","",""]]);
   products.getRange(3,10).setFormula("=price");
   rrc.getRange(3,1,1,8).setValues([["EXISTING-001","Existing","Booster Shop","3D аксесуар",10,new Date("2026-08-12"),"",""]]);
@@ -74,7 +75,7 @@ function makeEnvironment({ missingProductPriceFormula = false, settingsRows = 20
   settings.getRange(4,7).setValue("UA");
   settings.getRange(4,10).setValue("3D аксесуар");
   settings.getRange(4,30).setValue("3D-друк");
-  const crm=new MockSpreadsheet([products,rrc,stock,settings]);
+  const crm=new MockSpreadsheet([products,rrc,stock,settings,sales,purchases,writeoffs,migrations,accounting,components,fixtures]);
   const automation=new MockSpreadsheet([master]);
   const properties={};
   class RuleBuilder {
@@ -86,11 +87,11 @@ function makeEnvironment({ missingProductPriceFormula = false, settingsRows = 20
     JSON,Math,Number,String,Boolean,Array,Object,RegExp,Date,Error,isFinite,
     Logger:{log(){}},Session:{getScriptTimeZone:()=>"Europe/Kyiv"},Utilities:{formatDate:()=>"2026-08-12"},
     PropertiesService:{getScriptProperties:()=>({getProperty:(key)=>properties[key]||"",setProperty:(key,value)=>{properties[key]=value;}})},
-    SpreadsheetApp:{openById:(id)=>String(id).includes("1PvlSlg3")?crm:automation,getActive:()=>crm,getUi:()=>({alert(){}}),CopyPasteType:{PASTE_FORMAT:"format",PASTE_DATA_VALIDATION:"validation"},DataValidationCriteria:{VALUE_IN_RANGE:"VALUE_IN_RANGE"},newDataValidation:()=>new RuleBuilder(),flush:()=>{for(let row=3;row<=201;row++){const sku=products.getRange(row,1).getValue();rrc.getRange(row,1).setValue(sku);rrc.getRange(row,2).setValue(products.getRange(row,3).getValue());rrc.getRange(row,3).setValue(products.getRange(row,4).getValue());rrc.getRange(row,4).setValue(products.getRange(row,7).getValue());}}},
+    SpreadsheetApp:{openById:(id)=>String(id).includes("1PvlSlg3")?crm:automation,getActive:()=>crm,getUi:()=>({alert(){}}),CopyPasteType:{PASTE_FORMAT:"format",PASTE_DATA_VALIDATION:"validation"},DataValidationCriteria:{VALUE_IN_RANGE:"VALUE_IN_RANGE"},newDataValidation:()=>new RuleBuilder(),flush:()=>{for(let row=3;row<=201;row++){const sku=products.getRange(row,1).getValue();rrc.getRange(row,1).setValue(sku);rrc.getRange(row,2).setValue(products.getRange(row,3).getValue());rrc.getRange(row,3).setValue(products.getRange(row,4).getValue());rrc.getRange(row,4).setValue(products.getRange(row,7).getValue());if(projectStock)stock.getRange(row,1).setValue(sku);}}},
     ContentService:{MimeType:{JSON:"JSON"},createTextOutput:(text)=>({text,setMimeType(){return this;}})},
   });
   vm.runInContext(code+'\napiIntegrityCheck_=function(){return {clean:true,problems:[]};};globalThis.__test={apiAddSku_,apiUpdateRrpBatch_,apiSync3dpCatalogRrp_,setupCrmCatalogOptionInfrastructure};',context,{filename:"Code.gs"});
-  return { apiAddSku:context.__test.apiAddSku_,apiUpdateRrpBatch:context.__test.apiUpdateRrpBatch_,apiSync3dpCatalogRrp:context.__test.apiSync3dpCatalogRrp_,setupCatalogOptions:context.__test.setupCrmCatalogOptionInfrastructure,crm,products,rrc,settings };
+  return { apiAddSku:context.__test.apiAddSku_,apiUpdateRrpBatch:context.__test.apiUpdateRrpBatch_,apiSync3dpCatalogRrp:context.__test.apiSync3dpCatalogRrp_,setupCatalogOptions:context.__test.setupCrmCatalogOptionInfrastructure,crm,products,rrc,stock,settings,sales };
 }
 
 const payload={sku:"BR-CHARM-100",full_name:"Брелок Чармандер (Pokémon) — 3D-друк",brand:"Booster Shop",language:"UA",set:"3D-друк",format:"3D аксесуар",rrp:25,active:true,source:"3d",short_name_mode:"full_name",allow_new_options:true};
@@ -188,6 +189,44 @@ const payload={sku:"BR-CHARM-100",full_name:"Брелок Чармандер (Po
   const non3d=env.apiSync3dpCatalogRrp(env.crm,{sku:"EXISTING-001",rrp:15,expected_rrp:10});
   assert.equal(non3d.ok,false);
   assert.match(non3d.error,/canonical 3D SKU required/);
+}
+
+{
+  const env=makeEnvironment();
+  const oldPayload={...payload,sku:"FIG-LUFFY-411",full_name:"Картина Луффі (One Piece) — 3D-друк",rrp:222};
+  assert.equal(env.apiAddSku(env.crm,oldPayload).ok,true);
+  const renamed=env.apiSync3dpCatalogRrp(env.crm,{previous_sku:"FIG-LUFFY-411",sku:"FIG-LUFFY-410",expected_name:oldPayload.full_name,rrp:222,expected_rrp:222});
+  assert.equal(renamed.ok,true);
+  assert.equal(renamed.renamed,true);
+  assert.equal(renamed.old_sku,"FIG-LUFFY-411");
+  assert.equal(env.products.getRange(4,1).getValue(),"FIG-LUFFY-410");
+  assert.equal(env.rrc.getRange(4,1).getValue(),"FIG-LUFFY-410","РРЦ formula projection follows the renamed product key");
+  assert.equal(env.stock.getRange(4,1).getValue(),"FIG-LUFFY-410","Склад formula projection follows the renamed product key");
+  assert.equal(env.products.getRange(4,10).getFormula(),"=price");
+  assert.equal(env.rrc.getRange(4,8).getFormula(),"=dynamic");
+  assert.match(String(env.rrc.getRange(4,7).getValue()),/FIG-LUFFY-411 -> FIG-LUFFY-410/);
+}
+
+{
+  const env=makeEnvironment();
+  const oldPayload={...payload,sku:"FIG-LUFFY-411",full_name:"Картина Луффі (One Piece) — 3D-друк",rrp:222};
+  env.apiAddSku(env.crm,oldPayload);
+  env.sales.getRange(3,6).setValue("FIG-LUFFY-411");
+  const blocked=env.apiSync3dpCatalogRrp(env.crm,{previous_sku:"FIG-LUFFY-411",sku:"FIG-LUFFY-410",expected_name:oldPayload.full_name,rrp:222,expected_rrp:222});
+  assert.equal(blocked.ok,false);
+  assert.match(blocked.error,/CRM SKU history exists in Продажі row 3/);
+  assert.equal(env.products.getRange(4,1).getValue(),"FIG-LUFFY-411","history refusal leaves the CRM key untouched");
+}
+
+{
+  const env=makeEnvironment({projectStock:false});
+  const oldPayload={...payload,sku:"FIG-LUFFY-411",full_name:"Картина Луффі (One Piece) — 3D-друк",rrp:222};
+  env.apiAddSku(env.crm,oldPayload);env.stock.getRange(4,1).setValue("FIG-LUFFY-411");
+  const rolledBack=env.apiSync3dpCatalogRrp(env.crm,{previous_sku:"FIG-LUFFY-411",sku:"FIG-LUFFY-410",expected_name:oldPayload.full_name,rrp:223,expected_rrp:222});
+  assert.equal(rolledBack.ok,false);
+  assert.match(rolledBack.error,/formula projections did not follow/);
+  assert.equal(env.products.getRange(4,1).getValue(),"FIG-LUFFY-411","projection failure restores the old CRM key");
+  assert.equal(env.rrc.getRange(4,5).getValue(),222,"projection failure restores the old CRM RRP");
 }
 
 assert.match(code,/action === 'sync_3dp_catalog_rrp'/,"the owner-only 3D RRP action must be routed by doPost");

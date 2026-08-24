@@ -19,6 +19,7 @@ SpreadsheetApp.getUi()
 .addItem('Оновити довідники SKU', 'setupCrmCatalogOptionInfrastructure')
 .addItem('Оновити очікуваний залишок', 'updateExpectedStockFormulaMenu')
 .addItem('Оновити собівартість складу', 'updateSkuCurrentCostMenu')
+.addItem('Налаштувати автооновлення формул CRM', 'setupCrmRowCapacityMaintenanceMenu')
 .addItem('Налаштувати OpenAI ключ', 'setupOpenAiApiKey')
 .addToUi();
 }
@@ -1812,9 +1813,36 @@ return { ok: false, action: 'update_rrp_batch', error: String(err && err.message
 
 /**
  * Owner-dashboard bridge for an already-created canonical 3D SKU.
- * Unlike add_sku, this action never creates or changes a product row. It only
- * mirrors the confirmed 3D-P actual RRP into the CRM RRP manual cells.
+ * Unlike add_sku, this action never creates a product row. It mirrors the
+ * confirmed 3D-P actual RRP and may rename one history-free 3D catalogue key.
  */
+const CRM_3DP_CATALOG_HISTORY_COLUMNS_ = Object.freeze([
+  Object.freeze({ sheet: 'Продажі', column: 6, first_row: 3 }),
+  Object.freeze({ sheet: 'Закупки', column: 5, first_row: 3 }),
+  Object.freeze({ sheet: 'Списання', column: 4, first_row: 3 }),
+  Object.freeze({ sheet: 'Міграції_Складу', column: 4, first_row: 2 }),
+  Object.freeze({ sheet: 'Міграції_Складу', column: 5, first_row: 2 }),
+  Object.freeze({ sheet: '3D_облік_замовлень', column: 5, first_row: 2 }),
+  Object.freeze({ sheet: 'Використання_компонентів', column: 15, first_row: 2 }),
+  Object.freeze({ sheet: 'Використання_фурнітури', column: 13, first_row: 2 }),
+]);
+
+function crm3dpCatalogSkuHistory_(ss, sku) {
+const target = String(sku || '').trim().toUpperCase();
+const locations = [];
+CRM_3DP_CATALOG_HISTORY_COLUMNS_.forEach(function(config) {
+  const sheet = ss.getSheetByName(config.sheet);
+  if (!sheet || sheet.getLastRow() < config.first_row) return;
+  const values = sheet.getRange(config.first_row, config.column, sheet.getLastRow() - config.first_row + 1, 1).getDisplayValues();
+  for (let index = 0; index < values.length; index++) {
+    if (String(values[index][0] || '').trim().toUpperCase() !== target) continue;
+    locations.push({ sheet: config.sheet, row: config.first_row + index, column: config.column });
+    break;
+  }
+});
+return locations;
+}
+
 function apiSync3dpCatalogRrp_(ss, payload) {
 try {
 resetMemoForMutation_();
@@ -1824,53 +1852,87 @@ const stock = ss.getSheetByName('Склад');
 if (!products || !rrc || !stock) throw new Error('catalog sheet missing');
 
 const sku = String(payload && payload.sku || '').trim().toUpperCase();
+const previousSku = String(payload && payload.previous_sku || '').trim().toUpperCase();
+const renaming = Boolean(previousSku && previousSku !== sku);
+const lookupSku = renaming ? previousSku : sku;
 const nextRrp = Number(payload && payload.rrp);
 const expectedRrp = Number(payload && payload.expected_rrp);
 if (!is3dpPackagingSku_(sku)) throw new Error('canonical 3D SKU required');
+if (previousSku && !is3dpPackagingSku_(previousSku)) throw new Error('previous canonical 3D SKU required');
 if (!isFinite(nextRrp) || nextRrp <= 0) throw new Error('RRP must be > 0 for ' + sku);
-if (!isFinite(expectedRrp) || expectedRrp <= 0) throw new Error('current CRM RRP is required for ' + sku);
+if (!isFinite(expectedRrp) || expectedRrp <= 0) throw new Error('current CRM RRP is required for ' + lookupSku);
 
 const firstRow = 3;
 const lastRow = crmCatalogLastWritableRow_(products, rrc, stock);
-const productRow = apiFindSkuRow_(products, sku, firstRow, lastRow);
-const rrpRow = apiFindSkuRow_(rrc, sku, firstRow, lastRow);
-if (!productRow) throw new Error('SKU is missing from Товари: ' + sku);
-if (!rrpRow) throw new Error('SKU is missing from РРЦ: ' + sku);
+const productRow = apiFindSkuRow_(products, lookupSku, firstRow, lastRow);
+const rrpRow = apiFindSkuRow_(rrc, lookupSku, firstRow, lastRow);
+const stockRow = apiFindSkuRow_(stock, lookupSku, firstRow, lastRow);
+if (!productRow) throw new Error('SKU is missing from Товари: ' + lookupSku);
+if (!rrpRow) throw new Error('SKU is missing from РРЦ: ' + lookupSku);
+if (renaming && !stockRow) throw new Error('SKU is missing from Склад: ' + lookupSku);
+if (renaming && (productRow !== rrpRow || productRow !== stockRow)) throw new Error('CRM catalogue rows are not aligned for ' + lookupSku);
 
 const productValues = products.getRange(productRow, 1, 1, 7).getValues()[0];
-if (!is3dpCatalogSku_(sku, productValues[5], productValues[6])) {
-  throw new Error('CRM SKU is not classified as 3D: ' + sku);
+if (!is3dpCatalogSku_(lookupSku, productValues[5], productValues[6])) {
+  throw new Error('CRM SKU is not classified as 3D: ' + lookupSku);
 }
 if (!products.getRange(productRow, 10).getFormula()) throw new Error('Товари!J' + productRow + ' price formula is missing');
 if (!rrc.getRange(rrpRow, 8).getFormula()) throw new Error('РРЦ!H' + rrpRow + ' dynamic price formula is missing');
 if (rrc.getRange(rrpRow, 6, 1, 2).getFormulas()[0].some(function(formula) { return !!formula; })) {
-  throw new Error('РРЦ!F:G must remain manual-value columns for ' + sku);
+  throw new Error('РРЦ!F:G must remain manual-value columns for ' + lookupSku);
+}
+if (renaming) {
+  const expectedName = String(payload && payload.expected_name || '').trim();
+  if (!expectedName || String(productValues[2] || '').trim() !== expectedName) throw new Error('CRM product name changed for ' + lookupSku + '; refresh and retry');
+  const duplicates = [
+    { sheet: 'Товари', row: apiFindSkuRow_(products, sku, firstRow, lastRow) },
+    { sheet: 'РРЦ', row: apiFindSkuRow_(rrc, sku, firstRow, lastRow) },
+    { sheet: 'Склад', row: apiFindSkuRow_(stock, sku, firstRow, lastRow) },
+  ].filter(function(item) { return Boolean(item.row); });
+  if (duplicates.length) throw new Error('New SKU already exists in ' + duplicates.map(function(item) { return item.sheet + ' row ' + item.row; }).join(', ') + ': ' + sku);
+  const history = crm3dpCatalogSkuHistory_(ss, previousSku);
+  if (history.length) throw new Error('CRM SKU history exists in ' + history.map(function(item) { return item.sheet + ' row ' + item.row; }).join(', ') + '; rename refused for ' + previousSku);
 }
 
 const currentRrp = Number(rrc.getRange(rrpRow, 5).getValue());
-if (!isFinite(currentRrp) || currentRrp <= 0) throw new Error('current CRM RRP is invalid for ' + sku);
+if (!isFinite(currentRrp) || currentRrp <= 0) throw new Error('current CRM RRP is invalid for ' + lookupSku);
 if (Math.abs(currentRrp - expectedRrp) >= 0.009) {
-  throw new Error('CRM RRP changed for ' + sku + '; refresh and retry before overwriting it');
+  throw new Error('CRM RRP changed for ' + lookupSku + '; refresh and retry before overwriting it');
 }
 const roundedRrp = round2_(nextRrp);
-if (Math.abs(currentRrp - roundedRrp) < 0.009) {
+if (!renaming && Math.abs(currentRrp - roundedRrp) < 0.009) {
   return { ok: true, action: 'sync_3dp_catalog_rrp', sku: sku, product_row: productRow, rrp_row: rrpRow, previous_rrp: currentRrp, rrp: currentRrp, already_applied: true, integrity_check_required: false };
 }
 
 const range = rrc.getRange(rrpRow, 5, 1, 3);
 const previousValues = range.getValues();
+const productSkuCell = products.getRange(productRow, 1);
 try {
-  range.setValues([[roundedRrp, new Date(), 'РРЦ 3D синхронізовано через owner dashboard: ' + sku + '; ' + currentRrp + ' -> ' + roundedRrp]]);
+  if (renaming) {
+    productSkuCell.setValue(sku);
+    SpreadsheetApp.flush();
+    if (String(productSkuCell.getDisplayValue() || '').trim().toUpperCase() !== sku ||
+        String(rrc.getRange(rrpRow, 1).getDisplayValue() || '').trim().toUpperCase() !== sku ||
+        String(stock.getRange(stockRow, 1).getDisplayValue() || '').trim().toUpperCase() !== sku) {
+      throw new Error('CRM formula projections did not follow the SKU rename');
+    }
+  }
+  const note = renaming
+    ? '3D артикул змінено через owner dashboard: ' + previousSku + ' -> ' + sku + '; РРЦ ' + currentRrp + ' -> ' + roundedRrp
+    : 'РРЦ 3D синхронізовано через owner dashboard: ' + sku + '; ' + currentRrp + ' -> ' + roundedRrp;
+  range.setValues([[roundedRrp, new Date(), note]]);
   SpreadsheetApp.flush();
   const saved = Number(rrc.getRange(rrpRow, 5).getValue());
   if (!isFinite(saved) || Math.abs(saved - roundedRrp) >= 0.009) throw new Error('3D RRP verification failed for ' + sku);
 } catch (error) {
+  if (renaming) productSkuCell.setValue(previousSku);
+  SpreadsheetApp.flush();
   range.setValues(previousValues);
   SpreadsheetApp.flush();
   throw error;
 }
 invalidateDoGetCache_();
-return { ok: true, action: 'sync_3dp_catalog_rrp', sku: sku, product_row: productRow, rrp_row: rrpRow, previous_rrp: currentRrp, rrp: roundedRrp, already_applied: false, integrity_check_required: true };
+return { ok: true, action: 'sync_3dp_catalog_rrp', old_sku: renaming ? previousSku : '', sku: sku, product_row: productRow, rrp_row: rrpRow, stock_row: stockRow, previous_rrp: currentRrp, rrp: roundedRrp, renamed: renaming, already_applied: false, integrity_check_required: true };
 } catch (err) {
 return { ok: false, action: 'sync_3dp_catalog_rrp', error: String(err && err.message ? err.message : err) };
 }
@@ -5015,6 +5077,13 @@ try { SpreadsheetApp.getUi().alert(message); } catch (e) { Logger.log(message); 
 return result;
 }
 
+function setupCrmRowCapacityMaintenanceMenu() {
+  const result = setupCrmRowCapacityTrigger();
+  const message = result.created ? 'Щоденне автооновлення формул CRM налаштовано.' : 'Щоденне автооновлення формул CRM вже налаштоване.';
+  try { SpreadsheetApp.getUi().alert(message); } catch (e) { Logger.log(message); }
+  return result;
+}
+
 function updateExpectedStockFormulaMenu() {
 const ss = SpreadsheetApp.getActiveSpreadsheet();
 const result = updateExpectedStockFormulas_(ss);
@@ -7831,39 +7900,6 @@ function componentWriteoffRowsForOrder_(ss, order) {
     if (ids[String(values[0] || '').trim()]) rows.push(index + 3);
     return rows;
   }, []);
-}
-
-function repairMysteryBoxOrderComponentCost_(ss, order) {
-  order = String(order || '').trim(); if (!order) throw new Error('order is required');
-  const sales = ss.getSheetByName('Продажі');
-  if (!sales) throw new Error('sales sheet missing');
-  const values = sales.getRange(3, 1, Math.max(sales.getLastRow() - 2, 1), 32).getValues();
-  const rows = []; const mysteryRows = [];
-  values.forEach(function(row, index) {
-    if (String(row[0] || '').trim() !== order) return;
-    const rowNumber = index + 3; rows.push(rowNumber);
-    if (isMysteryBoxSale_(row[5], row[6])) mysteryRows.push(rowNumber);
-  });
-  if (!rows.length || !mysteryRows.length) throw new Error('Mystery Box sale rows not found for ' + order);
-  const snapshot = function() { return rows.map(function(row) { const costs = sales.getRange(row, 12, 1, 2).getValues()[0]; return { row: row, prro_unit: round2_(num_(costs[0])), mgmt_unit: round2_(num_(costs[1])) }; }); };
-  const before = snapshot();
-  const formulaRowsRepaired = ensureComponentWriteoffFormulaRows_(ss.getSheetByName('Списання'), componentWriteoffRowsForOrder_(ss, order));
-  SpreadsheetApp.flush();
-  const mystery = recalculateMysteryBoxOrderCost_(ss, order);
-  if (!mystery) throw new Error('Mystery Box cost could not be recalculated for ' + order);
-  const components = applyOrderComponentCost_(ss, order, rows);
-  SpreadsheetApp.flush();
-  const after = snapshot();
-  const changed = before.some(function(item, index) { return item.prro_unit !== after[index].prro_unit || item.mgmt_unit !== after[index].mgmt_unit; });
-  const result = { ok: true, order_id: order, sale_rows: rows, mystery_rows: mysteryRows, before: before, after: after, writeoff_formula_rows_repaired: formulaRowsRepaired, mystery_cost: mystery, component_overlay: components, already_applied: !changed && formulaRowsRepaired === 0 };
-  Logger.log(JSON.stringify(result));
-  return result;
-}
-
-// Exact owner-run recovery for the only confirmed affected order. It changes
-// only this order's sale cost cells and blank linked-writeoff formula cells.
-function repairOCFOP0320MysteryBoxCost() {
-  return repairMysteryBoxOrderComponentCost_(SpreadsheetApp.getActive(), 'OC-FOP-0320');
 }
 
 // CRM-011 — a quantity correction on LOT-0113 changed the unit cost that had

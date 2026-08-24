@@ -6,8 +6,21 @@ import { fileURLToPath } from "node:url";
 
 const here=path.dirname(fileURLToPath(import.meta.url));
 const html=fs.readFileSync(path.resolve(here,"../booster-dashboard.html"),"utf8");
+const apiCode=fs.readFileSync(path.resolve(here,"../../3d-print/apps-script-3dp-api/Code.gs"),"utf8");
 const inline=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)].map((match)=>match[1]).filter((source)=>source.trim());
 inline.forEach((source,index)=>new vm.Script(source,{filename:"booster-dashboard.inline-"+index+".js"}));
+const apiContext=vm.createContext({});
+vm.runInContext(apiCode,apiContext,{filename:"Code.gs"});
+const apiArticleSuggestions=JSON.parse(vm.runInContext("JSON.stringify(NOMENCLATURE_DRAFT_SUGGESTIONS_3DP)",apiContext));
+const dashboardArticleSource=html.match(/const THREE_DP_ARTICLE_CATEGORIES = Object\.freeze\(\[[\s\S]*?\n\]\);/)?.[0];
+assert.ok(dashboardArticleSource,'dashboard article category list is present');
+const dashboardArticleExpression=dashboardArticleSource.replace(/^const THREE_DP_ARTICLE_CATEGORIES = /,'').replace(/;$/,'');
+const dashboardArticleCategories=JSON.parse(vm.runInNewContext('JSON.stringify('+dashboardArticleExpression+')'));
+assert.deepEqual(dashboardArticleCategories.map((category)=>category[0]),Object.keys(apiArticleSuggestions),'dashboard categories stay aligned with the API mapping');
+dashboardArticleCategories.forEach(([name,prefix,digits])=>{
+  assert.equal(prefix,apiArticleSuggestions[name].prefix,`${name} keeps the API prefix in its dropdown label`);
+  assert.equal(digits,apiArticleSuggestions[name].category_digits,`${name} keeps the API category digits in its dropdown label`);
+});
 assert.match(html,/call3dp\('3dp_bootstrap'/);
 assert.doesNotMatch(html,/call3dp\('3dp_information_bootstrap'/);
 assert.match(html,/loadThreeDpInformationSection\('sales'\)/);
@@ -26,8 +39,36 @@ assert.match(html,/id="applyRrpChangesButton"/);
 assert.match(html,/Нова РРЦ, грн/);
 assert.match(html,/У вкладці 3D/);
 assert.match(html,/Частковий результат: 3D-P рядок/);
-assert.match(html,/Синхронізувати РРЦ \/ додати CRM/);
+assert.match(html,/Синхронізувати артикул \/ РРЦ з CRM/);
 assert.match(html,/action:'sync_3dp_catalog_rrp'/);
+assert.match(html,/previous_sku:oldSku,sku:result\.sku/,
+  'an active 3D-P article rename immediately requests the matching CRM catalogue rename');
+assert.match(html,/threeDpCrmRenameCandidates_\(crmRows,row\['Назва виробу'\],row\.SKU\)/,
+  'the sync button reconciles an already-split SKU by exact 3D product name');
+assert.match(html,/previous_sku:previous\.sku,sku:row\.SKU/,
+  'the reconciliation path renames the existing CRM row instead of creating a duplicate');
+assert.match(html,/function threeDpDraftRows_\(\)[\s\S]*?threeDpStatus\(row\)==='Чернетка'[\s\S]*?Number\(b\.row_number\|\|0\)-Number\(a\.row_number\|\|0\)/,
+  'draft queue includes every draft newest first');
+assert.match(html,/Механіка \/ категорія<select id="threeDpArticleType-/,
+  'mechanic selection uses the requested native dropdown');
+assert.match(html,/category\[0\]\+' · '\+category\[1\]\+'-…-'\+category\[2\]/,
+  'every dropdown option keeps its complete prefix and category digits');
+assert.doesNotMatch(html,/threeDpArticleCategories-|threeDpArticleType-[^\n]*type="search"/,
+  'the temporary searchable datalist control is gone');
+assert.match(html,/Вставити новий артикул<input id="threeDpArticleSku-/,
+  'the owner pastes the complete article into one unrestricted field');
+assert.doesNotMatch(html,/Mnemonic, 2–5 символів|previewThreeDpArticle|threeDpArticleMnemonic|maxlength="5"/,
+  'the mnemonic generator, truncation, and preview helper are removed');
+assert.match(html,/sku=String\(skuInput&&skuInput\.value\|\|''\)\.trim\(\)/,
+  'the complete pasted article is read directly from the owner input');
+assert.doesNotMatch(html,/skuInput[^;]*toUpperCase\(|threeDpArticleSku-[^\n]*maxlength=/,
+  'the dashboard does not rewrite, uppercase, or truncate the pasted article');
+assert.match(html,/action:'3dp_nomenclature_assign_sku',draft_sku:oldSku,expected_draft_sku:oldSku,sku:sku/,
+  'draft assignment and active rename reuse the specialized action with the current key repeated explicitly');
+assert.match(html,/catch\(e\)\{threeDpUi\.product\.msg=\{text:e\.message,kind:'error'\}/,
+  'the dashboard shows the API history-blocking message without replacing it');
+assert.match(html,/function threeDpActiveSkus\(\) \{ return threeDpState\.skus\.filter\(function\(r\) \{ return threeDpStatus\(r\) === 'Активний'; \}\); \}/,
+  'drafts never enter active calculator controls');
 assert.match(html,/Фурнітура 3D-друку, до 10/);
 assert.match(html,/Додати фурнітуру/);
 assert.match(html,/Кожен рядок фурнітури прив’язується до конкретного 3D SKU/);
@@ -50,6 +91,8 @@ assert.match(html,/call3dp\('3dp_skus'\)/);
 assert.match(html,/Значення CRM не підставляються як начебто актуальні/);
 assert.match(html,/id="saveSaleButton"/);
 assert.match(html,/button\.disabled=true;button\.textContent='Зберігаю…'/);
+assert.match(html,/\.writeoff-line \.line-item-grid \{ grid-template-columns:repeat\(2,minmax\(160px,1fr\)\); \}/,'write-off line details use a separate row below the full-width SKU picker');
+assert.match(html,/div\.className = 'line-item' \+ \(kind === 'writeoff' \? ' writeoff-line' : ''\);/,'the write-off-only layout is applied without changing sales or mystery lines');
 assert.match(html,/Облік 3D-рядків/);
 assert.match(html,/Галочка завжди під твоїм контролем/);
 assert.match(html,/зніми галочку для Маркетингу/);

@@ -1742,9 +1742,9 @@ function createNomenclatureOwnerAction3dp_(spreadsheet, body, actor) {
 }
 
 /**
- * Canonical assignment is intentionally owner-only and atomically changes both
- * the temporary key and its status. Key migration after print/sales history is
- * unsafe and deliberately rejected rather than guessed.
+ * Canonical assignment and history-free article editing are owner-only. A
+ * draft becomes active; an already-active row keeps its status. Any stored
+ * cross-sheet key turns the operation into a migration and is refused.
  */
 function assignNomenclatureSkuAction3dp_(spreadsheet, body, actor) {
   assertOwner3dp_(actor, 'Only the owner may assign a canonical SKU.');
@@ -1753,22 +1753,21 @@ function assignNomenclatureSkuAction3dp_(spreadsheet, body, actor) {
   const row = resolveTargetRow3dp_(sheet, draftSku);
   assertRealNomenclatureRow3dp_(sheet, row);
   const oldStatus = nomenclatureStatusAtRow3dp_(sheet, row);
-  if (oldStatus !== API_3DP.draftStatus) {
-    throw apiError3dp_('DRAFT_REQUIRED', 'Only a Чернетка row may receive a canonical SKU.');
+  if ([API_3DP.draftStatus, API_3DP.activeStatus].indexOf(oldStatus) === -1) {
+    throw apiError3dp_('SKU_STATUS_NOT_EDITABLE', 'Only a Чернетка or Активний row may receive a canonical article.');
   }
   if (Object.prototype.hasOwnProperty.call(body, 'expected_draft_sku') && String(body.expected_draft_sku || '') !== draftSku) {
-    throw apiError3dp_('STALE_WRITE', 'Draft SKU changed after it was read. Refresh and retry.');
+    throw apiError3dp_('STALE_WRITE', 'SKU changed after it was read. Refresh and retry.');
   }
   const canonicalSku = canonicalNomenclatureSku3dp_(body.sku);
   assertNomenclatureSkuUnused3dp_(sheet, canonicalSku, row);
   const history = nomenclatureKeyHistory3dp_(spreadsheet, draftSku);
-  if (history.print_log_row || history.sales_row) {
+  if (history.blocking_locations.length) {
     throw apiError3dp_(
       'SKU_HISTORY_EXISTS',
-      'Draft SKU has ' + [
-        history.print_log_row ? 'print-log row ' + history.print_log_row : '',
-        history.sales_row ? 'sales row ' + history.sales_row : '',
-      ].filter(Boolean).join(' and ') + '; key migration is out of scope.'
+      'SKU ' + draftSku + ' has keyed history in ' + history.blocking_locations.map(function (location) {
+        return location.sheet + ' row ' + location.row;
+      }).join(', ') + '; key migration is out of scope.'
     );
   }
 
@@ -1780,16 +1779,21 @@ function assignNomenclatureSkuAction3dp_(spreadsheet, body, actor) {
   }
   const oldSku = skuRange.getValue();
   const oldHistory = String(historyRange.getValue() || '');
-  const newHistory = appendHistory3dp_(oldHistory, historyLine3dp_(actor, 'Артикул: ' + draftSku + ' → ' + canonicalSku + '; статус: ' + oldStatus + ' → ' + API_3DP.activeStatus));
+  const newStatus = oldStatus === API_3DP.draftStatus ? API_3DP.activeStatus : oldStatus;
+  const historyDescription = oldStatus === API_3DP.draftStatus
+    ? 'Артикул: ' + draftSku + ' → ' + canonicalSku + '; статус: ' + oldStatus + ' → ' + newStatus
+    : 'Артикул змінено: ' + draftSku + ' → ' + canonicalSku;
+  const newHistory = appendHistory3dp_(oldHistory, historyLine3dp_(actor, historyDescription));
   const analyticsSnapshot = snapshotRange3dp_(getSheet3dp_(spreadsheet, SHEETS_3DP.analytics), 'A4:N17');
   try {
     skuRange.setValue(canonicalSku);
-    statusRange.setValue(API_3DP.activeStatus);
+    if (oldStatus === API_3DP.draftStatus) statusRange.setValue(newStatus);
     historyRange.setValue(newHistory);
     syncActiveNomenclatureAnalytics3dp_(spreadsheet);
     SpreadsheetApp.flush();
     appendAudit3dp_(spreadsheet, actor, 'NOMENCLATURE_ASSIGN_SKU', SHEETS_3DP.nomenclature, 'row:' + row,
-      { sku: oldSku, status: oldStatus }, { sku: canonicalSku, status: API_3DP.activeStatus }, 'row=' + row);
+      { sku: oldSku, status: oldStatus }, { sku: canonicalSku, status: newStatus },
+      'row=' + row + '; ' + (oldStatus === API_3DP.draftStatus ? 'draft article assigned' : 'active article renamed'));
   } catch (error) {
     restoreRange3dp_(analyticsSnapshot);
     skuRange.setValue(oldSku);
@@ -1802,7 +1806,7 @@ function assignNomenclatureSkuAction3dp_(spreadsheet, body, actor) {
     row: row,
     old_sku: draftSku,
     sku: canonicalSku,
-    status: API_3DP.activeStatus,
+    status: newStatus,
     sku_suggestion: draftSkuSuggestion3dp_(sheet.getRange(row, 4).getDisplayValue()),
   };
 }
@@ -2618,21 +2622,47 @@ function assertNomenclatureSkuUnused3dp_(sheet, sku, excludedRow) {
 }
 
 function nomenclatureKeyHistory3dp_(spreadsheet, sku) {
+  const locations = [
+    { sheet: SHEETS_3DP.printLog, row: findSkuHistoryRow3dp_(getSheet3dp_(spreadsheet, SHEETS_3DP.printLog), sku) },
+    { sheet: SHEETS_3DP.sales, row: findSkuHistoryRow3dp_(getSheet3dp_(spreadsheet, SHEETS_3DP.sales), sku) },
+    { sheet: SHEETS_3DP.drafts, row: findSkuHistoryRow3dp_(getInternalSheet3dp_(spreadsheet, SHEETS_3DP.drafts), sku, { actorPrefixed: true }) },
+    { sheet: SHEETS_3DP.stockAdjustments, row: findSkuHistoryRow3dp_(getInternalSheet3dp_(spreadsheet, SHEETS_3DP.stockAdjustments), sku) },
+    { sheet: SHEETS_3DP.plyushky, row: findSkuHistoryRow3dp_(getSheet3dp_(spreadsheet, SHEETS_3DP.plyushky), sku) },
+    // Analytics and Availability are formula mirrors in the approved schema.
+    // Only a manually stored key is history; a formula reference follows the
+    // Nomenclature row and is refreshed after a successful rename.
+    { sheet: SHEETS_3DP.analytics, row: findSkuHistoryRow3dp_(getSheet3dp_(spreadsheet, SHEETS_3DP.analytics), sku, { headerRow: 3, storedOnly: true, allowMissingHeader: true }) },
+    { sheet: SHEETS_3DP.availability, row: findSkuHistoryRow3dp_(getSheet3dp_(spreadsheet, SHEETS_3DP.availability), sku, { storedOnly: true }) },
+  ];
   return {
-    print_log_row: findSkuHistoryRow3dp_(getSheet3dp_(spreadsheet, SHEETS_3DP.printLog), sku),
-    sales_row: findSkuHistoryRow3dp_(getSheet3dp_(spreadsheet, SHEETS_3DP.sales), sku),
+    print_log_row: locations[0].row,
+    sales_row: locations[1].row,
+    batch_draft_row: locations[2].row,
+    stock_adjustment_row: locations[3].row,
+    marketing_gift_row: locations[4].row,
+    analytics_stored_row: locations[5].row,
+    availability_stored_row: locations[6].row,
+    blocking_locations: locations.filter(function (location) { return Boolean(location.row); }),
   };
 }
 
-function findSkuHistoryRow3dp_(sheet, sku) {
-  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getDisplayValues()[0];
+function findSkuHistoryRow3dp_(sheet, sku, options) {
+  const settings = options || {};
+  const headerRow = settings.headerRow || 1;
+  const headers = sheet.getRange(headerRow, 1, 1, sheet.getLastColumn()).getDisplayValues()[0];
   const skuColumn = headers.indexOf('SKU') + 1;
+  if (!skuColumn && settings.allowMissingHeader) return 0;
   if (!skuColumn) throw apiError3dp_('SKU_HEADER_MISSING', sheet.getName() + ' is missing the SKU header.');
   const lastRow = sheet.getLastRow();
-  if (lastRow < 2) return 0;
-  const values = sheet.getRange(2, skuColumn, lastRow - 1, 1).getDisplayValues();
+  if (lastRow <= headerRow) return 0;
+  const range = sheet.getRange(headerRow + 1, skuColumn, lastRow - headerRow, 1);
+  const values = range.getDisplayValues();
+  const formulas = settings.storedOnly ? range.getFormulas() : [];
   for (let index = 0; index < values.length; index += 1) {
-    if (String(values[index][0] || '').trim() === sku) return index + 2;
+    if (settings.storedOnly && String(formulas[index][0] || '').trim()) continue;
+    const value = String(values[index][0] || '').trim();
+    const matches = value === sku || (settings.actorPrefixed && value.slice(-(sku.length + 2)) === '::' + sku);
+    if (matches) return index + headerRow + 1;
   }
   return 0;
 }

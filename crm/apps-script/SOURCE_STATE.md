@@ -7,10 +7,10 @@ new Web App version.
 
 | Field | Value |
 |---|---|
-| Mirror file | `crm/apps-script/Code.gs` — refreshed from owner-supplied complete `Code.gs` text received 2026-08-23 16:16 Kyiv (supplied SHA-256 `2D8EE2F178EA7C58266D04F586FA45328600340DC2B0618454B14786CD3EAA08`). The source itself has no trustworthy version label, so no version is inferred from this refresh. The local mirror then received the scoped pending `sync_3dp_catalog_rrp` change. |
-| Baseline pulled from live | 2026-08-23, 16:16 Kyiv (owner-pasted complete current bound source) |
-| **Mirror content deployed to live** | The source was freshly supplied by the owner on 2026-08-23. This is source evidence only: the local pending `sync_3dp_catalog_rrp` change is not published. |
-| Deployed Web App version number | Last historical record in this file is CRM V140 at 2026-08-21 11:03 Kyiv. The version corresponding to the 2026-08-23 supplied source was not labelled in the pasted code and is therefore unverified. |
+| Mirror file | `crm/apps-script/Code.gs` — based on the owner-supplied complete V148 export `Версія 148, 24 серп. 2026 р., 1306.csv`, then extended locally with the pending history-free 3D catalogue SKU rename path requested during WP2b owner QA. |
+| Baseline pulled from live | 2026-08-24, 13:06 Kyiv (owner-supplied complete V148 export). |
+| **Mirror content deployed to live** | ⚠ **V148 byte comparison PASSED before the current local candidate.** The V148 export is 521 761 raw bytes (CRLF). After BOM removal, LF normalisation, and removal of one terminal newline, it is **513 365 bytes, 8395 lines**, SHA-256 `688f7a6476aea597f76fae7f307bf3a5f3a79b465e33b401098fae57317bea57`, MD5 `09080796f2a7fe818d0fb6e0ef3e9696`. It matched the mirror before the pending 3D catalogue SKU rename code was added. The current mirror is therefore **not deployed**. A bounded secret-literal scan of V148 found no Google/OpenAI/GitHub key, bearer token, or JWT signature. |
+| Deployed Web App version number | CRM V148 — owner-reported publication 2026-08-24 13:06 Kyiv and source-verified against the mirror the same day. Export retained in the repository root. |
 | Live-verified after deploy | Post-V131 (2026-08-18 14:52) owner reported `QA - ok`; `integrity_check`: `clean:true`, `problems:[]`, checked `Товари`, `РРЦ`, `Розхідники`, `Майстер_Товарів`, `Налаштування`; `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:55853`. This proves the schema/formula relationships covered by `integrity_check`, not unrelated FIFO/warehouse flows or a byte match with the mirror. Post-V130 (2026-08-18 14:36) `integrity_check`: `clean:true`, `problems:[]`, checked `Товари`, `РРЦ`, `Розхідники`, `Майстер_Товарів`, `Налаштування`; `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:12184`. Owner reported dashboard QA done for the recent-purchases fix. Post-V129 (2026-08-17 22:41) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:9698`. This proves schema/formula relationships covered by `integrity_check`, not the expected-stock rule: a direct formula read immediately after still found the legacy `Склад!Q3:Q201` rule without `Замовлено`. FIFO migration flows are outside this check and remain unproven live. Post-V128 (18:36) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:12564`. Post-V118 (23:18) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:7672`. |
 
 > ⚠ **2026-08-12, 16:45–16:46 — V106 migration succeeded; repeat exposed ARRAYFORMULA spill detection.**
@@ -25,10 +25,44 @@ new Web App version.
 > The owner-run result returned all schema/formula/backfill counters at zero and
 > `already_applied=true`. The owner clarified that V107 had been published at 16:54, so dashboard
 > API calls and the setup function now use the corrected source. The CRM deploy/setup gate is closed.
-| Local syntax check | Node VM parse of `Code.gs` OK + CRM Apps Script suite 21/21 passed 2026-08-21 (MKT-TG-008). The deployed source has not been run through this new test. |
+| Local syntax check | Node VM parse of `Code.gs` OK + all 20 currently present CRM Apps Script test files passed 2026-08-24. The catalogue suite includes successful history-free rename, stored-history refusal, and formula-projection rollback. This local post-V148 candidate has not been run live. |
 | Previous repo copy | `Booster Shop CRM - Apps_Script_код 29.07.2026.csv` (2026-07-29, pre-V87/V89) — superseded, keep for history only |
 
 ## Mirror status
+
+> ⚠ **2026-08-24 — local post-V148 candidate, not deployed.**
+> Owner QA proved that a 3D-P article rename left the old SKU in main CRM and the existing sync
+> button then offered to create a duplicate. The local candidate extends `sync_3dp_catalog_rrp`
+> with an atomic history-free catalogue rename: it changes only `Товари!A`, requires the aligned
+> `РРЦ` and `Склад` formula projections to follow in the same row, updates the RRP audit note, and
+> restores the old SKU/RRP if verification fails. Stored history, duplicate targets, a changed
+> product name, or dirty CRM integrity refuse the operation. Dashboard deployment and live QA are
+> still owner-gated.
+
+> ⚠ **2026-08-24, 12:53 Kyiv — first live recovery attempt stopped before any write.**
+> Direct read of the live workbook confirmed that `Склад!G3` is the write-off formula
+> (`SUMIF('Списання'!$D$3:$D$197;...;'Списання'!$F$3:$F$197)`), while `Склад!H3` is the separate
+> available-stock formula. The first candidate incorrectly targeted `H` and therefore stopped at
+> its preflight; no duplicate or formula row was changed. The local candidate now targets `G` and
+> its regression fixture uses the exact live formula shape. The owner must paste this corrected
+> local candidate before retrying. Publication/version for the failed candidate was not supplied.
+
+> ✅ **2026-08-24, 12:59 Kyiv — live Mystery Box write-off recovery succeeded.**
+> Owner-run result: `kept_writeoff_row:208`, `duplicate_rows_cleared:16`,
+> `stock_formula_rows_updated:94`, `writeoff_formula_last_row:236`, and clean integrity before and
+> after. A direct read immediately afterwards confirmed one remaining `WRT-0206` and that all 94
+> `Склад!G` formulas now reference `Списання!$D$3:$D$236` / `$F$3:$F$236`. The local mirror now
+> removes the temporary recovery menu/helper/test as required after successful one-off use. The
+> permanent `Налаштувати автооновлення формул CRM` wrapper remains.
+
+> ℹ **2026-08-24, 13:06 Kyiv — V148 and final actions owner-reported.**
+> The owner reported replacing the script, running all prescribed actions (including current-cost
+> refresh), and publishing CRM Web App V148. Direct live read-back still confirms the recovery
+> data state: exactly one `WRT-0206` and `Склад!G` formulas through row 236; a bounded sample had
+> numeric `Склад!I:J` values without formula errors. The subsequently supplied complete V148
+> export is byte-equivalent to the current local mirror after newline normalisation (see the table
+> above). No current-cost result payload was provided, so this remains short of a full FIFO cost
+> reconciliation.
 
 > ✅ **2026-08-20 — LIVE↔MIRROR BYTE COMPARISON PASSED. The first one since V98; the "not byte-verified" caveat that has been carried in this file since then is now discharged.**
 > Evidence: the owner exported the live bound `Код.gs` (Apps Script editor, select-all copy) as

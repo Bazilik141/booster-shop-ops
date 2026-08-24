@@ -33,8 +33,9 @@ assert.match(dashboard, /Собівартість не вводиться тут
 assert.match(dashboard, /function threeDpCrmSkuSnapshot\(sku\)/);
 assert.match(dashboard, /action:'sync_3dp_catalog_rrp'/);
 assert.match(dashboard, /expected_rrp:expectedRrp/);
-assert.match(dashboard, /Синхронізувати РРЦ \/ додати CRM/);
-assert.match(dashboard, /назву CRM вона не змінює/);
+assert.match(dashboard, /Синхронізувати артикул \/ РРЦ з CRM/);
+assert.match(dashboard, /перейменовує точний history-free CRM SKU з тією самою назвою/);
+assert.match(dashboard, /previous_sku:previous\.sku,sku:row\.SKU/);
 assert.match(dashboard, /\['defect_rate',5,'Планований брак, частка','частка \(0\.1 = 10%\)'\]/);
 assert.equal((dashboard.match(/range:'A1:C5'/g) || []).length, 1);
 assert.doesNotMatch(dashboard, /range:'A1:C4'/);
