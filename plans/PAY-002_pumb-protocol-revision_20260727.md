@@ -478,6 +478,45 @@ resolved before enabling. Two ways to close it, not mutually exclusive:
      back — it's a trigger to start test-contour QA (`PAY-001-SMOKE` Stage 2
      prerequisites).
 
+## 7e. Bank answers, round 5 (2026-08-26) — TTL and term list, both closed
+
+Roman Nazarenko, integration chat, 12:00–12:01.
+
+**Application lifetime → 7 days, and it is being set for us now.**
+*"По строку життя заявки для Інет магазину налаштуємо 7 днів"* … *"Тоді заявка
+буде в порядку і буде час на доставку поштою."*
+
+Note the future tense — **`налаштуємо`**. This is not a restatement of an
+existing setting; the bank is configuring it for our point of sale as a result
+of this exchange. That resolves the §7b (24 h) vs §7c (7 days) conflict in
+favour of **7 days**, and it also explains the `FAIL` on `19039895`: that
+application sat ~22 hours between creation and shipment confirmation, under a
+window that had not yet been widened. `19040054` completed inside seven minutes
+and was unaffected.
+
+Practical consequence: the owner's flow — signal shipment at the moment goods
+are handed to Nova Poshta — is safe once the 7-day window is live. Until the
+bank confirms it is applied, treat a long gap as risky and keep the 24-hour
+habit. **Re-test with a deliberately delayed shipment confirmation before
+go-live**; do not assume the setting landed.
+
+**Term list on production is 3 / 4 / 5 — confirmed.**
+Owner: *"І по кількості платежів на проді, як я розумію питання вирішено —
+3/4/5. Так?"* → Roman: *"На проді так"*.
+
+So the deployed `payment_pumb_credit_terms = [3,4,5]` is **correct for
+production and needs no change**. The `400 "Term 5 is not supported"` seen on
+2026-08-25 is a stage-only limitation — consistent with the bank's earlier
+remark that *"на проді зазвичай одна класична [схема], на стейдж деякі можуть
+бути не включені"*.
+
+⚠️ Consequence for testing, not for config: **term 5 cannot be exercised on the
+test contour at all.** Any end-to-end rehearsal of the 5-payment path — including
+`PAY-001-SMOKE` — can only ever run on 3 or 4 until the bank enables 5 on stage.
+The first real 5-payment application will therefore be a production one. Decide
+before go-live whether to ask the bank to enable term 5 on stage, or to accept
+that gap knowingly.
+
 ## 8. Open owner decisions
 
 1. ~~Test callback URL host~~ ✅ Resolved 2026-07-27 — Variant A, section 5.1.
