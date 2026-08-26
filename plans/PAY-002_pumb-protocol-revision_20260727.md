@@ -104,8 +104,19 @@ Body fields relevant to our configuration:
 - `store_order_id` — OpenCart order id (unique)
 - `point_of_sale_code` — `1700001669IN020147`
 - `partner_name` — `Boostershop Digital SF Internet`
-- `channel_type` — `"INTERNET"` (so `store_user_login` is **not** mandatory; it is
-  required only for `"POS"`)
+- `channel_type` — `"INTERNET"`
+- `store_user_login` — ⚠️ **corrected 2026-08-25.** The protocol field table says
+  this is required only for `"POS"`, and the first implementation omitted it for
+  `INTERNET`. Oleksiy Berlizov (PUMB), in the integration chat on 2026-08-25:
+  *"store_user_login передавайте сюди будь який айді юзера хто створив заявки, ну
+  або айді системи хто створив заявку, там не має ввалідації"* — send it anyway;
+  any user id or system id; no server-side validation. Treat the bank's chat
+  statement as authoritative over the field table here. **Not** the cause of the
+  `403 "The partner login does not match the chain of store"` — tested 2026-08-25
+  08:47:44 UTC with `store_user_login = boostershop-oc` present in the payload
+  (`X-Flow-Id f6ee1b606b59906e17f78a369963e384`); the response was byte-identical
+  to the runs without the field. Keep sending it because the bank asked for it,
+  but it changes nothing about the 403
 - `flow.type` — `"DIGITAL_SF"`
 - `customer` — `phone` required in `+XXXXXXXXXXX` format; name fields optional
 - `invoices[]` — `date` (must equal the current date), `invoice_number`,
@@ -293,8 +304,8 @@ the bank's own reply numbering (the bank did not reuse our numbering).
 
 | Original Q | Status | Answer |
 |---|---|---|
-| Q3 (SLA/retry) | **Resolved** | The bank's system performs **no automatic retries** on a failed/unreachable callback delivery. The bank explicitly says the hybrid scheme (callback + our `GET /sf-credits/{id}` poll fallback) is the right fit for exactly this gap — a missed callback is recovered by our own polling, not by a bank-side retry. Validates the architecture decision made 2026-07-27 |
-| Q5 (`amount` type) | **Resolved** | Authoritative format is **Integer, in kopiykas** (1000.00 UAH → `100000`). The `<6 digits>.<2 digits>` error-table wording does not override this — kopiykas/Integer is what to implement |
+| Q3 (SLA/retry) | ~~Resolved~~ **PARTLY OVERTURNED 2026-08-25 — the bank does retry** | Live production access log, 2026-08-25, source `194.44.66.21`, agent `Java/17.0.20`: **3 attempts at ~10-second intervals** per state change (12:23:22 / :32 / :42 for `WAITING_CLIENT`; 12:29:58 / 12:30:08 / :18 for `WAITING_STORE_CONFIRM`; 12:37:24 / :35 after `goods_shipped`). All returned `401` from our side. So a retry policy does exist — roughly 3× / 10s — even though the bank's own written answer denied it. The poll fallback remains necessary (three attempts over 20 seconds will not survive an outage), but "no retries at all" is factually wrong. **Also discovered in the same log: the bank delivers *test-contour* callbacks to the *production* route** `...pumb_credit.callback`, never to `...pumb_credit.callbackTest`. See the callback finding below. Original answer follows. — The bank's system performs **no automatic retries** on a failed/unreachable callback delivery. The bank explicitly says the hybrid scheme (callback + our `GET /sf-credits/{id}` poll fallback) is the right fit for exactly this gap — a missed callback is recovered by our own polling, not by a bank-side retry. Validates the architecture decision made 2026-07-27 |
+| Q5 (`amount` type) | ~~Resolved~~ **OVERTURNED 2026-08-25 — hryvnia, not kopiykas** | The 2026-07-28 written answer said Integer kopiykas (1000.00 UAH → `100000`). **Live evidence contradicts it.** First successful create on the test contour, 2026-08-25 09:23:05 UTC (`X-Flow-Id b3baeffe02e57ef056e158fc1e2467e3`), sent `"amount":700.0` / `"total_amount":700.0` as hryvnia decimals and was accepted: `HTTP 201 {"id":19039867}`. Had the bank parsed `700.0` as kopiykas it would be 7 UAH, below the documented 500 UAH minimum, and the create would have been rejected. The deployed module already sends hryvnia — **no code change is needed**. ⚠️ Still worth one visual confirmation that the client-facing application shows 700 ₴ and not another figure, during the first pushed test scenario |
 | Q7 (`promo_product_code`) | **Corrected — see note below** | Confirmed: `NEW_3` / `NEW_4` / `NEW_5` (contract Додаток №2) are valid `promo_product_code` values. The field is **optional** — if omitted, the bank auto-selects the standard product by `term` and charges the **base contract commission**, which is the same 3.00/4.50/5.80% schedule. Net effect: omitting the field is safe and gives the same commission outcome as sending it explicitly, so the skeleton's current omission is fine for MVP; no code change required |
 | Q8 (duplicate `store_order_id`) | **Resolved — new risk identified** | The bank has **no unique constraint** on `store_order_id`. A repeated `POST /sf-credits` with the same `store_order_id` creates a **new, separate application** with a new `cap_id` — it is not treated as a duplicate or an error. See finding below: our own `confirm()` does not currently guard against this |
 | Q10 (rate limits) | **Resolved** | No hard rate limit. Bank asks partners to keep fallback `GET` polling to **no more than once per 30 seconds per pending application** |
@@ -407,10 +418,31 @@ resolved before enabling. Two ways to close it, not mutually exclusive:
    Live `grep` confirmed this was the only `FUNDED`/`FOUNDED` comparison in
    the extension; now accepts both spellings, mapped to the same `funded`
    status key. No downside either way this resolves.
-2. **Still open, informational only:** once test OAuth2 credentials arrive,
-   capture the exact `state` string from a real `GET /sf-credits/{id}` or
-   callback response and record it here for the record — already tracked as
-   a `PAY-001-SMOKE` dependency, no longer a code blocker.
+2. ✅ **Resolved 2026-08-25 — `FUNDED`, primary evidence.** First successful
+   authenticated read against the bank's test contour, via
+   `patches/PAY-002_bank-test-drive_diagnostic_20260824.php` run by the owner
+   on production. Verbatim API responses:
+
+   ```
+   fixture_1_response_body={"id":1,"state":"IN_PROGRESS"}
+   fixture_13_response_body={"id":13,"state":"FUNDED"}
+   ```
+
+   The API returns **`FUNDED`**, uppercase. The two human sources that spelled
+   it `FOUNDED` (the 21.07 archive document and Roman Nazarenko in chat,
+   §7d) were wrong. The deployed controller's `$state === 'FUNDED'` comparison
+   is correct as written, and the defensive dual-spelling patch
+   (`patches/PAY-002_founded-state-defensive-fix_20260730.php`) — which §7d
+   item 1 recorded as deployed on 2026-07-30 but which was **never actually
+   applied to production** (verified 2026-08-19 against both
+   `pumb-live_2026-08-14.tar.gz` and the 2026-08-16 backup: no
+   `.pay002-founded-state-marker`, no `FOUNDED` in the controller) — is no
+   longer needed. Leave it unapplied.
+
+   Also confirmed in the same run: OAuth 2 password grant against
+   `auth.dts.fuib.com` returns `200` with `expires_in=300`, and
+   `GET /sf-credits/{id}` requires the `X-Flow-Id` header — without it the
+   bank answers `400`.
 
 ### Owner status (2026-07-29)
 
