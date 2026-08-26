@@ -80,6 +80,10 @@ assert.match(html,/Порожня прив’язка = подарунок на 
 assert.match(html,/Оплата клієнтом не змінюється/);
 assert.match(html,/order_component_catalog/);
 assert.match(html,/Список включає CRM-SKU, розхідники й наявні 3D-вироби/);
+assert.match(html,/function loadOrderComponentCatalog_\(\)/,'the component catalogue has a shared background loader');
+assert.match(html,/async function openEditRow[\s\S]*const catalogLoad=loadOrderComponentCatalog_\(\);[\s\S]*await call\('order_edit_context'/,'order fields render from their own request while the catalogue loads separately');
+assert.doesNotMatch(html,/Promise\.all\(requests\)/,'the editor no longer blocks on the remote component catalogue');
+assert.match(html,/addEditComponentButton[\s\S]*componentCatalogLoaded/,'component controls stay disabled until their catalogue is ready');
 assert.match(html,/if\(key==='Дата'\)return threeDpEsc\(String\(value\)\.slice\(0,10\)\)/,"3D Sales renders a date without the midnight timestamp");
 assert.match(html,/result\.retry_action==='retry_3dp_sync'/,"the sync-only recovery button appears only for a remote frozen-row sync failure");
 assert.match(html,/той самий ID допише лише незавершене/,"a partial component writer tells the owner to resume the idempotent order update");

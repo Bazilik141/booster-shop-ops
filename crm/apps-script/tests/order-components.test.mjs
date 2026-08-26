@@ -53,7 +53,7 @@ const context=vm.createContext({JSON,Math,Number,String,Boolean,Array,Object,Reg
   Logger:{log(){}},SpreadsheetApp:{openById:()=>crm,getActive:()=>crm,flush(){}},PropertiesService:{getScriptProperties:()=>({getProperty:key=>scriptProperties[key]||"",setProperty(key,value){scriptProperties[key]=value;}})},
   Utilities:{formatDate:()=>"2026-08-12"},Session:{getScriptTimeZone:()=>"Europe/Kyiv"},ContentService:{MimeType:{JSON:"JSON"},createTextOutput:()=>({setMimeType(){return this;}})}
 });
-vm.runInContext(code+"\nglobalThis.__test={apiOrderComponentCatalog_,buildOrderComponentPlan_,replaceOrderComponentAudit_,normalizeRepeatedExactNote_,setupOrderComponentUsage,orderUpdateRequestState_,orderComponentMarketingByOrder_,crm3dpAccountingSnapshot_,repair3dpExpenseProjectionFormulas_,expenseProjectionFormulas3dp_,apiAddConsumablePurchase_,apiUpdateConsumablePurchase_,allocateAmount_,writeoffLastWritableRow_,nextWriteoffRow_};",context,{filename:"Code.gs"});
+vm.runInContext(code+"\nglobalThis.__test={apiOrderComponentCatalog_,buildOrderComponentPlan_,replaceOrderComponentAudit_,normalizeRepeatedExactNote_,setupOrderComponentUsage,orderUpdateRequestState_,orderComponentMarketingByOrder_,crm3dpAccountingSnapshot_,repair3dpExpenseProjectionFormulas_,expenseProjectionFormulas3dp_,apiAddConsumablePurchase_,apiUpdateConsumablePurchase_,allocateAmount_,writeoffLastWritableRow_,nextWriteoffRow_,applyOrderComponentCost_,reapplyOrderComponentCostAfterBaseRefresh_,resetOrderComponentCostProjectionBeforeBaseRefresh_};",context,{filename:"Code.gs"});
 
 const catalog=context.__test.apiOrderComponentCatalog_();
 assert.equal(catalog.ok,true);
@@ -139,6 +139,19 @@ const requestState=context.__test.orderUpdateRequestState_(crm,"MAN-FOP-0005","d
 assert.equal(requestState.component,true);
 assert.equal(requestState.fixture,false);
 
+sales.getRange(3,12,2,2).setValues([[1,2],[1,2]]);
+const replay=context.__test.reapplyOrderComponentCostAfterBaseRefresh_(crm,"MAN-FOP-0005",[3,4]);
+assert.equal(replay.rows_updated,2);
+assert.equal(sales.getRange(3,13).getValue(),11.5,"order-level and line-targeted components are restored after a base-cost refresh");
+assert.equal(sales.getRange(4,13).getValue(),40.5,"order-level marketing is allocated by order revenue");
+const reset=context.__test.resetOrderComponentCostProjectionBeforeBaseRefresh_(crm,[3,4]);
+assert.equal(reset.rows_reset,2);
+assert.equal(sales.getRange(3,13).getValue(),2,"the prior component projection is removed before FIFO writes its base");
+assert.equal(sales.getRange(4,13).getValue(),2,"all order rows are rebased before allocation changes");
+context.__test.reapplyOrderComponentCostAfterBaseRefresh_(crm,"MAN-FOP-0005",[3,4]);
+assert.equal(sales.getRange(3,13).getValue(),11.5,"a second base-cost refresh does not double-charge components");
+assert.equal(sales.getRange(4,13).getValue(),40.5,"the replay remains idempotent after FIFO overwrites the line cost");
+
 const audit=context.__test.replaceOrderComponentAudit_("FIFO; order_components_prro=10,mgmt=12",15,20);
 assert.equal(audit,"FIFO; order_components_prro=15,mgmt=20");
 assert.equal(context.__test.normalizeRepeatedExactNote_("Паковання: Інше; Паковання: Інше; Паковання: Інше"),"Паковання: Інше");
@@ -167,7 +180,10 @@ assert.deepEqual(JSON.parse(JSON.stringify(context.__test.allocateAmount_(120,[1
 assert.match(code,/update_sale'\) return boosterCrmJson_\(apiUpdateSaleWithComponents_/);
 assert.match(code,/if \(!item\.targetRow && !item\.targetSku\) return;/,"blank component target is accepted as order-level allocation");
 assert.match(code,/recalculateMysteryBoxOrderCost_\(ss, orderKey\)/,"later order edits restore Mystery Box cost from linked writeoffs");
-assert.match(code,/\? applyOrderComponentCost_\(ss, order, rows\)[\s\S]*if \(componentCost\.rows_updated\)/,"existing order components are reapplied after every base-cost refresh");
+assert.match(code,/\? reapplyOrderComponentCostAfterBaseRefresh_\(ss, order, rows\)[\s\S]*if \(componentCost\.rows_updated\)/,"existing order components are reapplied after every dashboard base-cost refresh");
+assert.match(code,/function updateSaleStatus\(\)[\s\S]*sync3dpPackagingCost_\(sales, order, rows, 'updateSaleStatus'\); reapplyOrderComponentCostAfterBaseRefresh_\(ss, order, rows\)/,"CRM menu status updates restore component cost after FIFO/3D recalculation");
+assert.match(code,/function syncExistingOpenCartOrder_\([\s\S]*reapplyOrderComponentCostAfterBaseRefresh_\(ss, orderKey, rows\)/,"OpenCart order refreshes restore component cost after FIFO recalculation");
+assert.match(code,/function tgUpdateOrderStatus_\([\s\S]*reapplyOrderComponentCostAfterBaseRefresh_\(ss, orderId, rows\)/,"Telegram status updates restore component cost after FIFO recalculation");
 assert.match(code,/desiredPackaging = crm3dpRound2_\(entryQuantity > 0 \? crm3dpNumber_\(entry\.values\[15\]\) \/ entryQuantity : 0\)/,"3D-P G remains a per-unit packaging value");
 assert.match(code,/add_consumable_purchase'\) return boosterCrmJson_\(apiAddConsumablePurchase_/);
 assert.match(code,/update_consumable_purchase'\) return boosterCrmJson_\(apiUpdateConsumablePurchase_/);

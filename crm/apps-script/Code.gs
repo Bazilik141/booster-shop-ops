@@ -902,6 +902,7 @@ const rows = matches.map(function(match) { return match.row; });
 const weights = orderRowWeights_(sales, rows);
 const packagingAllocations = packagingChanged ? allocateAmount_(packaging, weights) : [];
 const deliveryAllocations = shopDelivery === null ? [] : allocateAmount_(shopDelivery, weights);
+resetOrderComponentCostProjectionBeforeBaseRefresh_(ss, rows);
 const costRunState = {}; rows.forEach(function(row, index) {
 if (paymentChanged) sales.getRange(row, 23).setValue(newPaymentStatus);
 if (orderChanged) sales.getRange(row, 24).setValue(newOrderStatus);
@@ -911,7 +912,7 @@ if (shopDelivery !== null) sales.getRange(row, 20).setValue(deliveryAllocations[
 if (!isBlank_(note)) appendCellText_(sales.getRange(row, 27), note); fixSaleCostForRow_(ss, row, costRunState, { clearPending: false });
 });
 if (fixturePlan.entries.length) append3dp019FixtureUsage_(ss, fixturePlan, current[2], fixturePlan.ledger_source, order, note);
-invalidateDoGetCache_(); sync3dpPackagingCost_(sales, order, rows, 'updateSaleStatus'); clearSaleUpdateForm();
+invalidateDoGetCache_(); sync3dpPackagingCost_(sales, order, rows, 'updateSaleStatus'); reapplyOrderComponentCostAfterBaseRefresh_(ss, order, rows); clearSaleUpdateForm();
 const fixtureWarning = fixturePlan.warning ? '\n' + fixturePlan.warning : '';
 SpreadsheetApp.getUi().alert('Продаж оновлено: ' + order + ' / рядків: ' + rows.length + fixtureWarning);
 }
@@ -3676,6 +3677,7 @@ const grossValues = incomingSkus.map(function(sku) { const product = incomingByS
 const discounts = allocateAmount_(context.discountTotal, grossValues);
 const changedSkus = {}, costRunState = {};
 let rowsUpdated = 0, quantitiesChanged = 0, statusChanged = 0;
+resetOrderComponentCostProjectionBeforeBaseRefresh_(ss, rows);
 incomingSkus.forEach(function(sku, index) {
   const product = incomingBySku[sku], item = existingBySku[sku], values = item.values;
   const qty = num_(product.quantity), price = num_(product.price), discount = discounts[index] || 0;
@@ -3696,7 +3698,11 @@ incomingSkus.forEach(function(sku, index) {
   if (quantityChanged) quantitiesChanged++;
   if (String(values[22] || '').trim() !== context.paymentStatus || String(values[23] || '').trim() !== context.orderStatus) statusChanged++;
 });
-if (!rowsUpdated) return { action: 'unchanged_existing_order', order: orderKey, rows: rows.length };
+if (!rowsUpdated) {
+  reapplyOrderComponentCostAfterBaseRefresh_(ss, orderKey, rows);
+  return { action: 'unchanged_existing_order', order: orderKey, rows: rows.length };
+}
+reapplyOrderComponentCostAfterBaseRefresh_(ss, orderKey, rows);
 const preorderCosts = Object.keys(changedSkus).map(function(sku) {
   return inventoryMigrationBackfillPreorderCosts_(ss, sku, new Date());
 });
@@ -4442,12 +4448,14 @@ const ss = _getCrmSs();
 const sales = ss.getSheetByName('Продажі');
 const rows = findSaleRowsByOrder_(sales, orderId);
 if (!rows.length) return { found: false, rows: 0 };
+resetOrderComponentCostProjectionBeforeBaseRefresh_(ss, rows);
 const costRunState = {};
 rows.forEach(function(row) {
 if (mode === 'payment' || mode === 'all') sales.getRange(row, 23).setValue('Оплачено');
 if (mode === 'delivery' || mode === 'all') sales.getRange(row, 24).setValue('Отримано');
 if (typeof fixSaleCostForRow_ === 'function') fixSaleCostForRow_(ss, row, costRunState, { clearPending: true });
 });
+reapplyOrderComponentCostAfterBaseRefresh_(ss, orderId, rows);
 return { found: true, rows: rows.length };
 }
 
@@ -7886,6 +7894,49 @@ function applyOrderComponentCost_(ss, order, rows) {
   return { rows_updated: rows.length, prro_total: totals.prro, mgmt_total: totals.mgmt };
 }
 
+// Base FIFO/status writers must call this after they finish their own cost work.
+// The ledger is the source of truth; the audit marker in applyOrderComponentCost_
+// removes the previous projection first, so a retry cannot double-charge a gift.
+function reapplyOrderComponentCostAfterBaseRefresh_(ss, order, rows) {
+  const orderKey = String(order || '').trim();
+  const uniqueRows = Array.from(new Set((Array.isArray(rows) ? rows : []).map(function(row) {
+    return Math.floor(num_(row));
+  }).filter(function(row) { return row >= 3; }))).sort(function(a, b) { return a - b; });
+  if (!orderKey || !uniqueRows.length) return { rows_updated: 0, prro_total: 0, mgmt_total: 0 };
+  const ledger = ss && ss.getSheetByName(CRM_ORDER_COMPONENT_USAGE_SHEET_);
+  if (!ledger || ledger.getLastRow() < 2) return { rows_updated: 0, prro_total: 0, mgmt_total: 0 };
+  return applyOrderComponentCost_(ss, orderKey, uniqueRows);
+}
+
+// Remove only the prior component projection before a FIFO/status writer changes
+// the base values. Reapplying afterwards then uses the ledger exactly once,
+// including when row quantities change and allocations must be redistributed.
+function resetOrderComponentCostProjectionBeforeBaseRefresh_(ss, rows) {
+  const ledger = ss && ss.getSheetByName(CRM_ORDER_COMPONENT_USAGE_SHEET_);
+  const sales = ss && ss.getSheetByName('Продажі');
+  if (!ledger || ledger.getLastRow() < 2 || !sales) return { rows_reset: 0 };
+  const uniqueRows = Array.from(new Set((Array.isArray(rows) ? rows : []).map(function(row) {
+    return Math.floor(num_(row));
+  }).filter(function(row) { return row >= 3; }))).sort(function(a, b) { return a - b; });
+  let rowsReset = 0;
+  uniqueRows.forEach(function(row) {
+    const auditCell = sales.getRange(row, 31);
+    const audit = String(auditCell.getValue() || '');
+    const prior = CRM_ORDER_COMPONENT_AUDIT_RE_.exec(audit);
+    if (!prior) return;
+    const qty = Math.max(num_(sales.getRange(row, 8).getValue()), 0);
+    if (qty <= 0) return;
+    const current = sales.getRange(row, 12, 1, 2).getValues()[0];
+    sales.getRange(row, 12, 1, 2).setValues([[
+      round2_(num_(current[0]) - num_(prior[1]) / qty),
+      round2_(num_(current[1]) - num_(prior[2]) / qty)
+    ]]);
+    auditCell.setValue(replaceOrderComponentAudit_(audit, 0, 0));
+    rowsReset++;
+  });
+  return { rows_reset: rowsReset };
+}
+
 function componentWriteoffRowsForOrder_(ss, order) {
   const ledger = ss.getSheetByName(CRM_ORDER_COMPONENT_USAGE_SHEET_);
   const writeOffs = ss.getSheetByName('Списання');
@@ -8372,6 +8423,7 @@ function apiUpdateSaleWithComponents_(ss, payload) {
     const weights = orderRowWeights_(sales, rows);
     const packagingAllocations = packaging === null ? [] : allocateAmount_(packaging, weights);
     const deliveryAllocations = shopDelivery === null ? [] : allocateAmount_(shopDelivery, weights);
+    resetOrderComponentCostProjectionBeforeBaseRefresh_(ss, rows);
     const costRunState = {};
     // Repair only the known CRM-004 validation defect and do it before any sale, gift,
     // component, or fixture mutation. A retry therefore remains append-idempotent.
@@ -8414,7 +8466,7 @@ function apiUpdateSaleWithComponents_(ss, payload) {
     // on a 3D line would be overwritten by the freshly calculated Sale/Marketing cost.
     SpreadsheetApp.flush();
     const componentCost = ss.getSheetByName(CRM_ORDER_COMPONENT_USAGE_SHEET_)
-      ? applyOrderComponentCost_(ss, order, rows)
+      ? reapplyOrderComponentCostAfterBaseRefresh_(ss, order, rows)
       : { rows_updated: 0 };
     if (componentCost.rows_updated) {
       updateSkuCurrentCost_(ss);
@@ -8443,7 +8495,13 @@ function apiRetry3dpOrderSync_(ss, payload) {
     for (let row = rowIndex + 1; row <= sales.getLastRow(); row++) { if (String(sales.getRange(row, 1).getValue() || '').trim() !== order) break; rows.push(row); }
     const requestId = String(payload.request_id || '').trim();
     if (!/^[A-Za-z0-9_-]{8,80}$/.test(requestId)) throw new Error('valid request_id required');
-    const result = sync3dpPackagingCost_(sales, order, rows, 'apiRetry3dpOrderSync_', { request_id: requestId });
+    resetOrderComponentCostProjectionBeforeBaseRefresh_(ss, rows);
+    let result;
+    try {
+      result = sync3dpPackagingCost_(sales, order, rows, 'apiRetry3dpOrderSync_', { request_id: requestId });
+    } finally {
+      reapplyOrderComponentCostAfterBaseRefresh_(ss, order, rows);
+    }
     SpreadsheetApp.flush();
     invalidateDoGetCache_();
     const failureDetail = result && result.failures && result.failures.length
