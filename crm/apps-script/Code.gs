@@ -4792,7 +4792,7 @@ return { ok: true, count: data.alerts.length, alerts: data.alerts };
 
 function apiSkuList_(params, salesRows) { params = params || {};
 const ss = _getAutoSs();
-const objects = apiSheetObjects_(ss.getSheetByName('Майстер_Товарів'), ['SKU']); const metrics = apiSkuProfitMetrics_(salesRows); const stockMetrics = apiSkuStockMetrics_(); const rrcMetrics = apiSkuRrcMetrics_();
+const objects = apiSheetObjects_(ss.getSheetByName('Майстер_Товарів'), ['SKU']); const metrics = apiSkuProfitMetrics_(salesRows); const stockMetrics = apiSkuStockMetrics_(); const rrcMetrics = apiSkuRrcMetrics_(); const currentCostMetrics = apiSkuCurrentCostMetrics_();
 const skus = [];
 objects.rows.forEach(function(row) {
 const sku = apiObjVal_(row, ['SKU', 'Артикул']);
@@ -4800,9 +4800,43 @@ if (!sku) return;
 const active = String(apiObjVal_(row, ['Активний', 'Active']) || '').trim().toLowerCase();
 if (['так', 'true', 'yes', '1'].indexOf(active) === -1) return;
 const issuesText = apiObjVal_(row, ['Якість даних', 'Проблеми', 'Issues']);
-const skuName = row['Назва'] || row['Назва товару'] || row['Повна назва на сайті'] || ''; const metric = metrics[sku] || {}; const stockMetric = stockMetrics[sku] || {}; const rrcMetric = rrcMetrics[sku] || {}; const currentRrc = rrcMetric.rrc || apiNum_(apiObjVal_(row, ['Ціна CRM', 'РРЦ', 'Ціна'])); const format = apiObjVal_(row, ['Формат', 'Format']); const setName = apiObjVal_(row, ['Сет', 'Сет / група', 'Набір', 'Set']); skus.push({ sku: sku, name: skuName, full_name: row['Повна назва на сайті'] || skuName, brand: apiObjVal_(row, ['Бренд', 'Brand']), format: format, is_3dp: is3dpCatalogSku_(sku, setName, format), rrc: currentRrc, price_crm: currentRrc, dynamic_rrc: rrcMetric.dynamic_rrc || 0, current_rrc_margin_pct: rrcMetric.margin_pct, rrc_cost_base_60d: rrcMetric.cost_base_60d || 0, price_opencart: apiNum_(apiObjVal_(row, ['Ціна OpenCart', 'OpenCart ціна', 'Feed price'])), stock: stockMetric.stock != null ? stockMetric.stock : apiNum_(apiObjVal_(row, ['Залишок', 'На складі', 'Stock'])), expected: stockMetric.expected != null ? stockMetric.expected : apiNum_(apiObjVal_(row, ['Очікується', 'В дорозі', 'Expected'])), stock_status: apiObjVal_(row, ['Статус залишку', 'Статус', 'Stock status']), url: apiObjVal_(row, ['URL', 'Посилання', 'Link']), issues: splitTags_(issuesText), sold_30d: metric.sold_30d != null ? metric.sold_30d : (stockMetric.sold_30d || 0), profit_30d: metric.profit_30d || 0, sold_60d: metric.sold_60d != null ? metric.sold_60d : (stockMetric.sold_60d || 0), profit_60d: metric.profit_60d || 0, action: stockMetric.action || '', urgency: stockMetric.urgency || '', max_buy_price: stockMetric.max_buy_price, margin_pct: stockMetric.margin_pct });
+const skuName = row['Назва'] || row['Назва товару'] || row['Повна назва на сайті'] || ''; const metric = metrics[sku] || {}; const stockMetric = stockMetrics[sku] || {}; const rrcMetric = rrcMetrics[sku] || {}; const currentCostMetric = currentCostMetrics[sku] || null; const currentRrc = rrcMetric.rrc || apiNum_(apiObjVal_(row, ['Ціна CRM', 'РРЦ', 'Ціна'])); const format = apiObjVal_(row, ['Формат', 'Format']); const setName = apiObjVal_(row, ['Сет', 'Сет / група', 'Набір', 'Set']); skus.push({ sku: sku, name: skuName, full_name: row['Повна назва на сайті'] || skuName, brand: apiObjVal_(row, ['Бренд', 'Brand']), format: format, is_3dp: is3dpCatalogSku_(sku, setName, format), rrc: currentRrc, price_crm: currentRrc, dynamic_rrc: rrcMetric.dynamic_rrc || 0, current_rrc_margin_pct: rrcMetric.margin_pct, rrc_cost_base_60d: rrcMetric.cost_base_60d || 0, current_cost: currentCostMetric ? currentCostMetric.cost : null, price_opencart: apiNum_(apiObjVal_(row, ['Ціна OpenCart', 'OpenCart ціна', 'Feed price'])), stock: stockMetric.stock != null ? stockMetric.stock : apiNum_(apiObjVal_(row, ['Залишок', 'На складі', 'Stock'])), expected: stockMetric.expected != null ? stockMetric.expected : apiNum_(apiObjVal_(row, ['Очікується', 'В дорозі', 'Expected'])), stock_status: apiObjVal_(row, ['Статус залишку', 'Статус', 'Stock status']), url: apiObjVal_(row, ['URL', 'Посилання', 'Link']), issues: splitTags_(issuesText), sold_30d: metric.sold_30d != null ? metric.sold_30d : (stockMetric.sold_30d || 0), profit_30d: metric.profit_30d || 0, sold_60d: metric.sold_60d != null ? metric.sold_60d : (stockMetric.sold_60d || 0), profit_60d: metric.profit_60d || 0, action: stockMetric.action || '', urgency: stockMetric.urgency || '', max_buy_price: stockMetric.max_buy_price, margin_pct: stockMetric.margin_pct });
 });
 if (String(params.sort || '').toLowerCase() === 'profit') skus.sort(function(a, b) { return (b.profit_30d || 0) - (a.profit_30d || 0); }); const limit = Math.max(0, Math.min(apiNum_(params.limit) || 0, 500)); const resultSkus = limit ? skus.slice(0, limit) : skus; return { ok: true, count: resultSkus.length, skus: resultSkus };
+}
+
+function apiSkuCurrentCostMetrics_() {
+const ss = _getCrmSs();
+const result = {};
+const sklad = ss.getSheetByName('Склад');
+if (sklad) {
+const rows = sklad.getRange(3, 1, Math.max(sklad.getLastRow() - 2, 1), 10).getValues();
+rows.forEach(function(row) {
+const sku = String(row[0] || '').trim();
+const cost = num_(row[9]) || num_(row[8]);
+if (sku && cost > 0) result[sku] = { cost: round2_(cost), source: 'warehouse_fifo' };
+});
+}
+const purchases = ss.getSheetByName('Закупки');
+if (!purchases) return result;
+const allowed = { 'На складі UA': true, 'На складі': true, 'Частково продано': true, 'Продано': true };
+const latest = {};
+const rows = purchases.getRange(3, 1, Math.max(purchases.getLastRow() - 2, 1), 17).getValues();
+rows.forEach(function(row, index) {
+const sku = String(row[4] || '').trim();
+const qty = num_(row[7]);
+if (!sku || qty <= 0 || !allowed[String(row[16] || '').trim()]) return;
+const prro = num_(row[12]) || (qty ? num_(row[11]) / qty : 0);
+const cost = num_(row[15]) || (qty ? num_(row[14]) / qty : 0) || prro;
+if (!(cost > 0)) return;
+const candidate = { cost: round2_(cost), sort: dateSortValue_(row[3]) || 0, row: index + 3 };
+const previous = latest[sku];
+if (!previous || candidate.sort > previous.sort || (candidate.sort === previous.sort && candidate.row > previous.row)) latest[sku] = candidate;
+});
+Object.keys(latest).forEach(function(sku) {
+if (!result[sku]) result[sku] = { cost: latest[sku].cost, source: 'last_fifo_lot' };
+});
+return result;
 }
 function crmGetOrders_(status, limit, params) {
 params = params || {}; const st = String(status || 'active').toLowerCase(); const days = Math.max(0, Math.min(num_(params.days) || 0, 3650)); const sortDir = String(params.sort || 'date_desc').toLowerCase() === 'date_asc' ? 'date_asc' : 'date_desc';

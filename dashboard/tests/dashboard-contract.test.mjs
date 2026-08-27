@@ -37,6 +37,8 @@ assert.match(html,/action:'update_rrp_batch'/);
 assert.match(html,/Пакетна зміна РРЦ/);
 assert.match(html,/id="applyRrpChangesButton"/);
 assert.match(html,/Нова РРЦ, грн/);
+assert.match(html,/Поточна собівартість/,'the SKU table exposes the current FIFO cost column');
+assert.match(html,/r\.current_cost != null \? fmt\(r\.current_cost\) : '—'/,'an SKU without any calculable cost renders a dash');
 assert.match(html,/У вкладці 3D/);
 assert.match(html,/Частковий результат: 3D-P рядок/);
 assert.match(html,/Синхронізувати артикул \/ РРЦ з CRM/);

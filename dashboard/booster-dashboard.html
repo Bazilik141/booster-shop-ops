@@ -2358,13 +2358,14 @@ async function loadSkus() {
     const s = d.skus || [];
     const visibleBySku={};s.forEach(function(item){visibleBySku[String(item.sku || '').trim().toUpperCase()]=item;});Object.keys(skuRrpState.pending).forEach(function(sku){if(!visibleBySku[sku] || visibleBySku[sku].is_3dp)delete skuRrpState.pending[sku];});renderSkuRrpControls();
     document.getElementById('skuTable').innerHTML = `<div class="tbl-wrap"><table>
-      <tr><th>SKU</th><th>Назва</th><th>РРЦ</th><th>Дин. РРЦ</th><th>Гранична закупка</th><th>Маржа</th><th>30д</th><th>60д</th><th>Залишок</th><th>Очікується</th><th>Днів запасу</th><th>Терм.</th><th>Нова РРЦ, грн</th></tr>
+      <tr><th>SKU</th><th>Назва</th><th>РРЦ</th><th>Дин. РРЦ</th><th>Гранична закупка</th><th>Поточна собівартість</th><th>Маржа</th><th>30д</th><th>60д</th><th>Залишок</th><th>Очікується</th><th>Днів запасу</th><th>Терм.</th><th>Нова РРЦ, грн</th></tr>
       ${s.map(r => `<tr>
         <td><span class="chip mono">${r.sku}</span></td>
         <td style="font-size:12px;max-width:180px;line-height:1.3">${skuName(r.name, r.sku)}</td>
         <td>${rrcPriceCell(r.rrc ?? r.price_crm, r.current_rrc_margin_pct)}</td>
         <td>${r.dynamic_rrc ? fmt(r.dynamic_rrc) : '<span style="color:var(--muted)">—</span>'}</td>
         <td>${r.max_buy_price != null ? fmt(r.max_buy_price) : '—'}</td>
+        <td>${r.current_cost != null ? fmt(r.current_cost) : '—'}</td>
         <td>${stockMarginDisplay(r)}</td>
         <td><b>${r.sold_30d??'—'}</b></td>
         <td><b>${r.sold_60d??'—'}</b></td>
