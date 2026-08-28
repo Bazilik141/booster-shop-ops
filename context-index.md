@@ -163,6 +163,7 @@ status and priority from the verified Notion card. Use dashboard
 | PAY-001-DISCLOSURE | Юридична згадка «Покупка частинами» на `information/oplata-i-dostavka` — вимога monobank sales-supervайзера перед тестом оплати (26.07.2026); текст банку копіюється без змін | handoffs/handoff_PAY-001-DISCLOSURE_mono-installment-disclosure_20260726.md |
 | PAY-002 | ПУМБ «Сплачуйте частинами» — другий провайдер розстрочки, окремий extension `pumb_credit` | **Читати першим:** `plans/PAY-002_pumb-protocol-revision_20260727.md` (реальний протокол банку + §7a/§7b/§7c відповіді банку) → `plans/PAY_decomposition_mono-pumb-preorder_20260721.md` §5, §6.5, §7, §10 (факти договору, флоу власника, QA, ризики) → `handoffs/handoff_PAY-002_pumb-credit-skeleton_20260727.md` (Codex-хендофф на скелет, 2026-07-27) → `diagnostics/PAY-002_pumb-credit-skeleton_review_20260728.md` (Claude-review, §6 — знайдений дефект) → `handoffs/handoff_PAY-002_confirm-idempotency-guard_20260729.md` (Codex-хендофф на фікс дефекту §6) → `diagnostics/PAY-002_confirm-idempotency-guard_review_20260729.md` (Claude-review раунд 2: **Review OK, cleared to deploy**; §7 — фікси незалежно перевірені та задеплоєні, QA пройдено) → `handoffs/handoff_PAY-002_founded-state-defensive-fix_20260730.md` + `diagnostics/PAY-002_founded-state-defensive-fix_review_20260730.md` (Claude-review: **Review OK, cleared to deploy** — приймає і FUNDED, і FOUNDED) |
 | PAY-003 | Спільна проміжна сторінка очікування підтвердження кредиту (mono + ПУМБ), між checkout confirm і checkout success | `plans/PAY_decomposition_mono-pumb-preorder_20260721.md` §10 — blockedBy PAY-002, не стартує до активної розробки ПУМБ |
+| PAY-002-CONT | Точка входу для продовження роботи над ПУМБ у новій сесії — стан справ, доведені факти, що лишилось | **Читати першим і замість історії:** `handoffs/handoff_PAY-002_session-continuation_20260826.md` |
 | PAY-004 | ПУМБ передає в банк фіксовані 3 платежі замість обраного клієнтом терміну — дефект знайдено власником 2026-08-24, виконавець Codex | **Читати першим:** `handoffs/handoff_PAY-004_pumb-customer-selected-term_20260824.md` (ТЗ, precedent — mono читає термін з `payment_method` коду) → `plans/PAY-002_pumb-protocol-revision_20260727.md` §3 (діапазон термінів, який приймає банк) §10 (суміжні ризики: суми в копійках, звірка `sum(total_amount)`) → живий код: `pumb-live_2026-08-14.tar.gz` + `pumb-settings.txt` у корені репозиторію |
 | PAY-001-SMOKE | Фінальний спільний QA-гейт кредитної покупки (mono + ПУМБ), заведена після закриття PAY-001 | **Читати першим:** `plans/PAY-001-SMOKE_unified-credit-qa_20260727.md` (повний 5-стадійний план) → `plans/PAY_decomposition_mono-pumb-preorder_20260721.md` §9 |
 | CHECKOUT-001 | Реєстрація акаунту при замовленні (Done) | handoffs/handoff_CHECKOUT-001_phase1_guest-account-creation_2026-07-04.md |
@@ -230,10 +231,17 @@ status and priority from the verified Notion card. Use dashboard
 | CRM-004 | Валідації в **основній** CRM: `Паковання` dropdown тягне назву товару в список; нові SKU дають `Недійсне значення` | З Finding 10 у `diagnostics/3D-P_live-schema-audit_20260803.md` (датовано 04.08). Помилки конфігурації, не скрипта. НЕ складати з 3D-P-014/015. Notion: `3b56bf20-bdb4-812c-99a8-ceb7d3ee89fd` |
 
 **СТАРТ НОВОЇ СЕСІЇ ПО КОНТЕНТУ — читати першим:**
-`handoffs/handoff_CONTENT-QUALITY_session-continuation_20260822.md` (чинний, 22.08).
-Стан: тексти 19 карток 3D і 4 категорій переписані й задеплоєні, 9 нових товарів
-(id 144–152) заведені, атрибут 44 перейменований. Усі 28 товарів невидимі.
-Замінює `handoffs/handoff_3D-P_session-continuation_20260819.md`.
+`handoffs/handoff_CONTENT-QUALITY_patch-30-cards_20260827.md` (чинний, 27.08) —
+хендоф на патч, три work packages. Стан: на проді без змін з 22.08 — 19 карток
+3D (125–143) і 9 нових товарів (144–152), усі невидимі. Чинний контент-артефакт —
+`BOOSTER-SHOP_CONTENT-QUALITY_RELEASE_20260825_v2.zip` у корені репо (копія з
+уже застосованим префіксом `/product/`, див. `LINK_PREFIX_APPLIED.md` усередині);
+пакет 24.08 і будь-яка зовнішня копія v2 — не використовувати. Аудит v2 від 27.08:
+`Review OK` (`diagnostics/CONTENT-QUALITY_release-package-v2-audit_20260827.md`).
+Рішення власника 27.08: заливаємо як є; просідання глибини FAQ прийняте свідомо,
+`PKM-JP-SVEL-SET` лишається поза патчем (немає слага, ціни, CRM-рядка).
+Передісторія сесії: `handoffs/handoff_CONTENT-QUALITY_session-continuation_20260825.md`.
+Замінює `handoffs/handoff_CONTENT-QUALITY_session-continuation_20260822.md`.
 
 **СТАРТ НОВОЇ СЕСІЇ ПО АВТОМАТИЗАЦІЇ 3D-P (CRM, ціни, дашборд) — читати першим:**
 `handoffs/handoff_3D-P_session-continuation_20260809.md` (чинний, 09.08). Стан:
