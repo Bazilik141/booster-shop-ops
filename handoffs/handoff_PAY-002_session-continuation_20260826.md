@@ -138,3 +138,41 @@ reaching `confirm()`.
 
 Do not read the whole task history. Do not re-read the 2026-07 rounds unless a
 specific question needs them.
+
+---
+
+## 10. Update 2026-08-28 (owner, verbal)
+
+Two items listed in §4 as pre-go-live checks are **closed by the bank**; they
+are no longer open work:
+
+- **7-day application window** — resolved by the bank. The delayed-shipment
+  test described in §4 is no longer required.
+- **Term 5 (5 payments)** — enabled and confirmed by the bank on the
+  production contour. The "first 5-payment application will be a production
+  one" risk in §4 is withdrawn.
+
+Source: owner statement, 2026-08-28. Not independently reproduced against the
+bank API in this session.
+
+### Checkout entry point — correction to §4 item 1
+
+§4 item 1 assumed a customer-group gate (`customer_group_id = 3`). The owner
+proposed instead a duplicated checkout reachable only by a special URL. Two
+repository-proven facts constrain both options:
+
+- **`getMethods()` is a shared OC4 payment model**, consumed by any checkout
+  controller regardless of route (`handoff_PAY-001_RESET_checkout-architecture-correction_20260721.md`
+  §0 and §8; the reason `patches/PAY-001_simple_checkout_isolation_20260721.php`
+  had to exist). A separate checkout URL therefore does **not** hide or expose a
+  payment method by itself — a server-side condition is required either way.
+- **ST-2c cutover is done (2026-07-25)**: there is now exactly one live
+  checkout, `checkout/checkout`. SimpleCheckout remains installed only as the
+  ST-6 fallback. §0 of the RESET handoff, which describes SimpleCheckout as the
+  customer-facing checkout, is stale from that date onward.
+
+Consequence: the useful half of the owner's proposal is the **URL-based entry
+token**, not the checkout copy. Recommended shape — one checkout, PUMB
+visibility gated server-side in both `getMethods()` and `confirm()` on a
+session flag set by a tokenised entry URL, plus an admin switch to open it to
+everyone. Awaiting owner decision before scope is written.

@@ -1,5 +1,7 @@
 # Handoff — стан контенту на 2026-08-22, точка продовження
 
+> ⚠ **ЗАМІЩЕНО 2026-08-25.** Чинна точка входу — `handoffs/handoff_CONTENT-QUALITY_session-continuation_20260825.md`. Цей файл лишається як історія стану на 22.08.
+
 Date: 2026-08-22 | Задачі: `3D-P-CARDCONTENT`, `3D-P-002`, `CONTENT-QUALITY`, `SEO-DUP61`
 Автор: Claude (chat)
 

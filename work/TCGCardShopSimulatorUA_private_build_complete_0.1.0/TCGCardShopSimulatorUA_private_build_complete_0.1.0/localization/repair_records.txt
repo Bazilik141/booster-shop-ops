@@ -1,0 +1,6 @@
+Interact Put Item|Взаємодіяти / Покласти предмет
+Items will be lost if checkout is not finished. Are you sure about proceeding to the next day?|Предмети буде втрачено, якщо оформлення покупки не завершено. Ви впевнені, що хочете перейти до наступного дня?
+Jump Checkout|Стрибок / Оформлення покупки
+There are items in the box. Are you sure about throwing it away?|У коробці є предмети. Ви впевнені, що хочете їх викинути?
+The card has high value. Are you sure about throwing it away?|Картка має високу вартість. Ви впевнені, що хочете її викинути?
+Canceling will reset the registered players. Are you sure about canceling the tournament?|Скасування скине зареєстрованих гравців. Ви впевнені, що хочете скасувати турнір?

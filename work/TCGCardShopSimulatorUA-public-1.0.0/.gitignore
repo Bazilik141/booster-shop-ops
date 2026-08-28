@@ -1,0 +1,7 @@
+bin/
+obj/
+release/
+references/
+*.zip
+*.pdb
+missing-known-terms.txt

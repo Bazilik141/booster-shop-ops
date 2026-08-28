@@ -13,7 +13,6 @@ if (!printTime) throw new Error("Shared print-time parser did not load.");
 const apiUrl = requiredEnv("BOOSTER_3DP_URL");
 const serhiyToken = requiredEnv("BOOSTER_3DP_SERHIY_TOKEN");
 const port = requestedPort(process.env.PORT || "3107");
-const LEGEND_OPEN_QUESTIONS = Object.freeze({ sheet: "Легенда", range: "A32:A38" });
 const BATCH_DRAFT_KEYS = Object.freeze([
   "quantity",
   "total_weight_g",
@@ -21,6 +20,15 @@ const BATCH_DRAFT_KEYS = Object.freeze([
   "spool_weight_g",
   "spool_price_uah",
 ]);
+const SETTINGS_ROWS = Object.freeze({
+  2: "printer_power_kw",
+  3: "electricity_price_uah_per_kwh",
+  4: "amortization_uah_per_hour",
+  5: "planned_defect_fraction",
+});
+const PRODUCT_FIELDS = Object.freeze({ Q: true, R: true, S: true });
+const DRAFT_FIELDS = Object.freeze(["B", "C", "D", "E", "F", "G", "H", "I", "J", "L", "M", "N", "Q", "R", "S"]);
+const REQUEST_ID_PATTERN = /^[A-Za-z0-9_-]{8,80}$/;
 
 const MIME = Object.freeze({
   ".css": "text/css; charset=utf-8",
@@ -31,13 +39,13 @@ const MIME = Object.freeze({
 
 function requiredEnv(name) {
   const value = String(process.env[name] || "").trim();
-  if (!value) throw new Error(`${name} is required. Set it locally; never put a real token in a file.`);
+  if (!value) throw new Error(`Не задано ${name}. Запусти файл «Запустити.bat» ще раз.`);
   return value;
 }
 
 function requestedPort(value) {
   const parsed = Number(value);
-  if (!Number.isInteger(parsed) || parsed < 0 || parsed > 65535) throw new Error("PORT must be an integer from 0 to 65535.");
+  if (!Number.isInteger(parsed) || parsed < 0 || parsed > 65535) throw new Error("Невірний номер локального порту.");
   return parsed;
 }
 
@@ -49,9 +57,11 @@ function fail(message, status = 400, code = "LOCAL_VALIDATION") {
 }
 
 function apiError(payload, fallback) {
-  const error = new Error(payload?.error || fallback);
+  const code = payload?.code || "API_ERROR";
+  const tokenHelp = code === "UNAUTHORIZED" ? " Запусти «Змінити токен.bat» і введи новий токен." : "";
+  const error = new Error(`${payload?.error || fallback}${tokenHelp}`);
   error.status = 502;
-  error.code = payload?.code || "API_ERROR";
+  error.code = code;
   return error;
 }
 
@@ -86,7 +96,7 @@ async function parseJson(response) {
 }
 
 async function getSettings() {
-  const payload = await call3dpGet("3dp_get_range", { sheet: "Налаштування", range: "A1:C4" });
+  const payload = await call3dpGet("3dp_get_range", { sheet: "Налаштування", range: "B2:B5" });
   return settingsFromRange(payload.values);
 }
 
@@ -108,6 +118,19 @@ function optionalNonNegative(value, label) {
   const parsed = Number(value);
   if (!Number.isFinite(parsed) || parsed < 0) throw fail(`${label} має бути числом не менше нуля.`);
   return parsed;
+}
+
+function wholeNonNegative(value, label) {
+  const parsed = Number(value);
+  if (!Number.isInteger(parsed) || parsed < 0) throw fail(`${label} має бути цілим числом не менше нуля.`);
+  return parsed;
+}
+
+function requiredText(value, label, maxLength = 500) {
+  const text = String(value || "").trim();
+  if (!text) throw fail(`${label} обов’язкове.`);
+  if (text.length > maxLength) throw fail(`${label} задовге.`);
+  return text;
 }
 
 function decimalPrintTime(value, label) {
@@ -197,7 +220,8 @@ async function saveBatch(body) {
 async function saveFixture(body) {
   const sku = cleanSku(body.sku);
   const fixtureName = String(body.fixture_name || "").trim();
-  const [row, fixtures] = await Promise.all([readSku(sku), call3dpGet("3dp_fixtures")]);
+  const [row, information] = await Promise.all([readSku(sku), call3dpGet("3dp_information_bootstrap")]);
+  const fixtures = information.fixtures || { rows: [] };
   let value = "";
   if (fixtureName) {
     const fixture = fixtures.rows.find((item) => String(item["Назва фурнітури"] || "").trim() === fixtureName);
@@ -217,21 +241,95 @@ async function saveFixture(body) {
   return { sku, price_uah: value, cell: result.cell };
 }
 
+async function saveSetting(body) {
+  const row = Number(body.row);
+  if (!Number.isInteger(row) || !SETTINGS_ROWS[row]) throw fail("Дозволені лише Налаштування!B2:B5.");
+  return call3dpPost({
+    action: "3dp_write",
+    sheet: "Налаштування",
+    sku_or_row: row,
+    column: "B",
+    value: body.value,
+    expected_current: body.expected_current ?? "",
+  });
+}
+
+async function readSettingsJournal() {
+  const payload = await call3dpGet("3dp_settings_journal", { limit: 50 });
+  return { rows: payload.rows || [], count: Number(payload.count || 0) };
+}
+
+async function saveProductField(body) {
+  const sku = cleanSku(body.sku);
+  const column = String(body.column || "").trim().toUpperCase();
+  if (!PRODUCT_FIELDS[column]) throw fail("Дозволені лише поля Q, R або S.");
+  return call3dpPost({
+    action: "3dp_write",
+    sheet: "Номенклатура",
+    sku_or_row: sku,
+    column,
+    value: body.value,
+    expected_current: body.expected_current ?? "",
+  });
+}
+
+async function correctStock(body) {
+  return call3dpPost({
+    action: "3dp_adjust_stock",
+    sku: cleanSku(body.sku),
+    new_value: wholeNonNegative(body.new_value, "Фактична кількість"),
+    expected_current: wholeNonNegative(body.expected_current, "Поточна кількість"),
+    reason: requiredText(body.reason, "Причина", 250),
+  });
+}
+
+function payoutInput(body) {
+  const row = Number(body.row_number);
+  const acknowledgement = String(body.acknowledgement || "").trim();
+  if (!Number.isInteger(row) || row < 2) throw fail("Невірний рядок виплати.");
+  if (!["amount_agreed", "money_received"].includes(acknowledgement)) throw fail("Невірний тип підтвердження.");
+  return { row_number: row, expected_period: requiredText(body.expected_period, "Період", 20), acknowledgement };
+}
+
+async function acknowledgePayout(body, correction) {
+  const payload = { action: correction ? "3dp_payout_acknowledgement_correct" : "3dp_payout_acknowledge", ...payoutInput(body) };
+  if (correction) {
+    payload.expected_current = body.expected_current ?? "";
+    payload.reason = requiredText(body.reason, "Причина виправлення", 250);
+  }
+  return call3dpPost(payload);
+}
+
+async function createDraft(body) {
+  const supplied = body?.values && typeof body.values === "object" && !Array.isArray(body.values) ? body.values : {};
+  const unknown = Object.keys(supplied).filter((column) => !DRAFT_FIELDS.includes(column));
+  if (unknown.length) throw fail(`Недозволені поля чернетки: ${unknown.join(", ")}.`);
+  const values = {};
+  DRAFT_FIELDS.forEach((column) => {
+    if (!Object.prototype.hasOwnProperty.call(supplied, column)) return;
+    const value = supplied[column];
+    if (value === "" || value === null || typeof value === "undefined") return;
+    values[column] = value;
+  });
+  if (!String(values.B || "").trim() || !String(values.D || "").trim()) throw fail("Для чернетки потрібні назва виробу і тип.");
+  return call3dpPost({ action: "3dp_nomenclature_draft_create", values });
+}
+
 async function appendPrintLog(body) {
   const sku = cleanSku(body.sku);
-  const today = new Date().toISOString().slice(0, 10);
-  const values = {
-    A: String(body.date || today).trim(),
-    B: sku,
-    C: finitePositive(body.printed_quantity, "Надруковано, шт"),
-    D: decimalPrintTime(body.actual_time_hours, "Час друку факт"),
-    E: optionalNonNegative(body.defects, "Брак"),
-    F: finitePositive(body.actual_material_g, "Витрачено матеріалу"),
-    H: String(body.printer || "Сергій").trim().slice(0, 120),
-    I: String(body.notes || "").trim().slice(0, 1000),
-  };
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(values.A)) throw fail("Дата має бути у форматі РРРР-ММ-ДД.");
-  return call3dpPost({ action: "3dp_append_row", sheet: "Друк-лог", values });
+  const requestId = String(body.request_id || "").trim();
+  if (!REQUEST_ID_PATTERN.test(requestId)) throw fail("Стабільний request_id для цієї спроби відсутній.");
+  return call3dpPost({
+    action: "3dp_manufacture_batch",
+    sku,
+    quantity: finitePositive(body.printed_quantity, "Надруковано, шт"),
+    defects: wholeNonNegative(body.defects ?? 0, "Брак"),
+    total_print_time_h: decimalPrintTime(body.actual_time_hours, "Час друку факт"),
+    total_weight_g: optionalNonNegative(body.actual_material_g, "Витрачено матеріалу"),
+    printed_by: "Сергій",
+    request_id: requestId,
+    note: String(body.notes || "").trim().slice(0, 220),
+  });
 }
 
 async function updateDefect(body) {
@@ -248,23 +346,22 @@ async function updateDefect(body) {
 }
 
 async function bootstrap() {
-  const [overview, skus, fixtures, settings, printLog, payouts, questions] = await Promise.all([
-    call3dpGet("3dp_overview"),
-    call3dpGet("3dp_skus"),
-    call3dpGet("3dp_fixtures"),
-    getSettings(),
+  const [core, information, printLog] = await Promise.all([
+    call3dpGet("3dp_bootstrap", { include_archived: "true" }),
+    call3dpGet("3dp_information_bootstrap"),
     call3dpGet("3dp_print_log", { include_archived: "false" }),
-    call3dpGet("3dp_payouts"),
-    call3dpGet("3dp_get_range", LEGEND_OPEN_QUESTIONS),
   ]);
   return {
-    overview: overview.summary,
-    skus: skus.rows,
-    fixtures: fixtures.rows,
-    settings,
-    print_log: printLog.rows,
-    payouts: payouts.rows,
-    open_questions: questions.values,
+    overview: core.overview?.summary || {},
+    skus: core.skus?.rows || [],
+    settings: settingsFromRange(core.settings?.values),
+    settings_values: (core.settings?.values || []).map((row) => row?.[0] ?? ""),
+    analytics: core.analytics?.values || [],
+    fixtures: information.fixtures?.rows || [],
+    print_log: printLog.rows || [],
+    sales: information.sales?.rows || [],
+    payouts: information.payouts?.rows || [],
+    plyushky: information.plyushky?.rows || [],
   };
 }
 
@@ -327,12 +424,19 @@ const server = http.createServer(async (request, response) => {
     const url = new URL(request.url, "http://127.0.0.1");
     if (request.method === "GET" && url.pathname === "/api/bootstrap") return json(response, 200, { ok: true, ...(await bootstrap()) });
     if (request.method === "GET" && url.pathname === "/api/batch-draft") return json(response, 200, { ok: true, ...(await readBatchDraft(cleanSku(url.searchParams.get("sku"))) ) });
+    if (request.method === "GET" && url.pathname === "/api/settings-journal") return json(response, 200, { ok: true, ...(await readSettingsJournal()) });
     if (request.method === "POST" && url.pathname === "/api/calculate") {
       const calculation = calculateBatchCost(batchInput(await readBody(request)), await getSettings());
       return json(response, 200, { ok: true, calculation });
     }
     if (request.method === "POST" && url.pathname === "/api/save-batch") return json(response, 200, { ok: true, ...(await saveBatch(await readBody(request))) });
     if (request.method === "POST" && url.pathname === "/api/save-fixture") return json(response, 200, { ok: true, ...(await saveFixture(await readBody(request))) });
+    if (request.method === "POST" && url.pathname === "/api/setting") return json(response, 200, { ok: true, ...(await saveSetting(await readBody(request))) });
+    if (request.method === "POST" && url.pathname === "/api/product-field") return json(response, 200, { ok: true, ...(await saveProductField(await readBody(request))) });
+    if (request.method === "POST" && url.pathname === "/api/stock-correction") return json(response, 200, { ok: true, ...(await correctStock(await readBody(request))) });
+    if (request.method === "POST" && url.pathname === "/api/payout-acknowledge") return json(response, 200, { ok: true, ...(await acknowledgePayout(await readBody(request), false)) });
+    if (request.method === "POST" && url.pathname === "/api/payout-acknowledgement-correct") return json(response, 200, { ok: true, ...(await acknowledgePayout(await readBody(request), true)) });
+    if (request.method === "POST" && url.pathname === "/api/draft") return json(response, 200, { ok: true, ...(await createDraft(await readBody(request))) });
     if (request.method === "POST" && url.pathname === "/api/print-log") return json(response, 200, { ok: true, ...(await appendPrintLog(await readBody(request))) });
     if (request.method === "POST" && url.pathname === "/api/defect") return json(response, 200, { ok: true, ...(await updateDefect(await readBody(request))) });
     if (request.method === "GET") return serveStatic(response, url.pathname);
@@ -344,6 +448,6 @@ const server = http.createServer(async (request, response) => {
 
 server.listen(port, "127.0.0.1", () => {
   const address = server.address();
-  console.log(`3D-P Serhiy server is running at http://127.0.0.1:${address.port}`);
-  console.log("Bound to localhost only. Press Ctrl+C to stop it.");
+  console.log(`Сторінка Сергія працює: http://127.0.0.1:${address.port}`);
+  console.log("Щоб зупинити її, закрий це вікно.");
 });

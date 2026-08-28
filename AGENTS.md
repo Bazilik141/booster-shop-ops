@@ -289,6 +289,7 @@ write `owner-held`.
 |---|---|
 | Base URL | `https://boostershop.website` |
 | Product lines | MTG · Pokemon · One Piece · Yu-Gi-Oh · 3D-printed |
+| Production PHP | `8.0` — all PHP code and patches must remain compatible with PHP 8.0 |
 | Web root on server | `~/public_html` |
 | Deploy command | `php <filename>` in `~/public_html`, run by the owner |
 | Staging / test environment | none — patches execute directly on production |

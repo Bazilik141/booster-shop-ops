@@ -1,0 +1,499 @@
+<fieldset>
+  <legend>{{ heading_title }}</legend>
+  <input type="hidden" name="payment_method_label" value="{{ payment_method }}" id="input-payment-method"/>
+  <input type="hidden" name="code" value="{{ code }}" id="input-payment-code"/>
+  <div id="bs-payment-methods" class="bs-checkout-inline-methods"></div>
+  <div id="error-payment-method" class="invalid-feedback"></div>
+  <div class="bs-checkout-inline-status" data-bs-payment-status></div>
+</fieldset>
+<br/>
+<div class="mb-2">
+  <label for="input-comment" class="form-label"><strong>{{ text_comments }}</strong></label>
+  <textarea name="comment" rows="4" id="input-comment" class="form-control">{{ comment }}</textarea>
+</div>
+{% if text_agree %}
+  <div class="form-check form-switch form-switch-lg form-check-reverse mt-3">
+    <label for="input-checkout-agree" class="form-check-label">{{ text_agree }}</label> <input type="checkbox" name="agree" value="1" id="input-checkout-agree" class="form-check-input"{% if agree %} checked{% endif %}/>
+  </div>
+{% endif %}
+{% if show_create_account_opt_in %}
+  <!-- CHECKOUT-001 START -->
+  <div class="form-check form-switch form-switch-lg form-check-reverse mt-3" data-checkout001-account-opt-in>
+    <label for="input-create-account-opt-in" class="form-check-label">
+      <strong>Зберегти дані для наступного разу</strong>
+      <span class="d-block small text-muted">Створимо обліковий запис і надішлемо одноразове посилання для встановлення пароля.{% if account_privacy %} Деталі — в <a href="{{ account_privacy }}" target="_blank" rel="noopener">умовах обробки персональних даних</a>.{% endif %}</span>
+    </label>
+    <input type="checkbox" name="create_account_opt_in" value="1" id="input-create-account-opt-in" class="form-check-input"{% if create_account_opt_in %} checked{% endif %}/>
+  </div>
+  <!-- CHECKOUT-001 END -->
+{% endif %}
+{# CHECKOUT-001: guest account opt-in UI. Draft microcopy requires owner sign-off before deploy. #}
+<script type="text/javascript"><!--
+(function() {
+
+  // PAY-001-CREDIT-PREVIEW-20260726: show credit before delivery, but keep it unavailable until checkout data is complete.
+  var bsPaymentPreviewMethods = [
+    { key: 'hutko', label: 'Оплата карткою, Google / Apple Pay' },
+    { key: 'cod', label: 'Оплата при доставці (післяплата)' },
+    { key: 'bank', label: 'Оплата за реквізитами' },
+    {
+      key: 'mono_chast',
+      label: 'Сплатити частинами',
+      disabled: true,
+      hint: 'Будь ласка, заповніть дані отримувача і адресу доставки'
+    }
+  ];
+  // ST-2b.6 Phase 1: explicit payment selection only.
+  var bsPaymentPendingChoice = '';
+  var bsPay001WasBlocked = false;
+
+  function escapeHtml(value) {
+    return String(value || '').replace(/[&<>"']/g, function(chr) {
+      return {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      }[chr];
+    });
+  }
+
+  function status(message, isError) {
+    var $status = $('[data-bs-payment-status]');
+    $status.toggleClass('text-danger', !!isError);
+    $status.text(message || '');
+  }
+
+  function hasShippingReady() {
+    return !!$('#input-shipping-code').val();
+  }
+
+  function normalizeChoice(choice) {
+    choice = String(choice || '').toLowerCase();
+
+    if (choice.indexOf('mono_chast') !== -1 || choice.indexOf('оплатити частинами') !== -1) {
+      return 'mono_chast';
+    }
+
+    if (choice.indexOf('hutko') !== -1 || choice.indexOf('mono') !== -1 || choice.indexOf('card') !== -1) {
+      return 'hutko';
+    }
+
+    if (choice.indexOf('cod') !== -1 || choice.indexOf('cash') !== -1 || choice.indexOf('after') !== -1) {
+      return 'cod';
+    }
+
+    if (choice.indexOf('bank') !== -1 || choice.indexOf('transfer') !== -1 || choice.indexOf('rekv') !== -1) {
+      return 'bank';
+    }
+
+    return choice || '';
+  }
+
+  function paymentMatchesChoice(code, choice) {
+    code = String(code || '').toLowerCase();
+    choice = normalizeChoice(choice);
+
+    if (!code) {
+      return false;
+    }
+
+    if (choice === 'mono_chast') {
+      return code.indexOf('mono_chast.') === 0;
+    }
+
+    if (choice === 'hutko') {
+      return code.indexOf('hutko') !== -1 || (code.indexOf('mono') !== -1 && code.indexOf('mono_chast') === -1) || code.indexOf('card') !== -1;
+    }
+
+    if (choice === 'cod') {
+      return code.indexOf('cod') !== -1 || code.indexOf('cash') !== -1 || code.indexOf('after') !== -1;
+    }
+
+    if (choice === 'bank') {
+      return code.indexOf('bank') !== -1 || code.indexOf('transfer') !== -1 || code.indexOf('rekv') !== -1;
+    }
+
+    return code === choice || code.indexOf(choice + '.') === 0 || code.indexOf(choice) === 0;
+  }
+
+  function flattenPaymentMethods(json) {
+    var options = [];
+
+    if (json && json.payment_methods) {
+      $.each(json.payment_methods, function(groupKey, group) {
+        if (group && group.pay001_credit && group.option) {
+          var monoOptions = [];
+          $.each(group.option, function(optionKey, option) {
+            var match = option && option.code ? String(option.code).match(/mono_chast_(\d)/) : null;
+            if (match) monoOptions.push({ code: option.code, count: Number(match[1]) });
+          });
+          monoOptions.sort(function(left, right) { return left.count - right.count; });
+          if (monoOptions.length) {
+            var preferred = Number(group.pay001_preferred) || monoOptions[0].count;
+            var preferredOption = monoOptions[0];
+            $.each(monoOptions, function(_, item) {
+              if (item.count === preferred) {
+                preferredOption = item;
+                return false;
+              }
+            });
+            options.push({
+              code: preferredOption.code,
+              label: 'Сплатити частинами',
+              id: 'mono_chast',
+              pay001Credit: true,
+              preferred: preferredOption.count,
+              fromModal: !!group.pay001_from_modal,
+              total: Number(group.pay001_total) || 0,
+              monoOptions: monoOptions
+            });
+          }
+        } else if (group && group.option) {
+          $.each(group.option, function(optionKey, option) {
+            if (option && option.code) options.push({ code: option.code, label: option.name || option.title || group.name || groupKey, id: optionKey, category: option.booster_category || '' });
+          });
+        } else if (group && group.code) {
+          options.push({ code: group.code, label: group.name || group.title || groupKey, id: groupKey });
+        }
+      });
+    }
+    return options;
+  }
+
+  function findPaymentOption(options, choice) {
+    var found = null;
+    var rawChoice = String(choice || '');
+    choice = normalizeChoice(choice);
+
+    $.each(options, function(index, option) {
+      if (!found && option.pay001Credit && option.monoOptions) {
+        $.each(option.monoOptions, function(_, monoOption) {
+          if (!found && monoOption.code === rawChoice) found = $.extend({}, option, { code: monoOption.code });
+        });
+      }
+      if (!found && (normalizeChoice(option.category) === choice || paymentMatchesChoice(option.code, choice))) {
+        found = option;
+      }
+    });
+
+    return found;
+  }
+
+  function refreshConfirmSummary() {
+    if (window.bsCheckoutState) {
+      window.bsCheckoutState.renderConfirm();
+    } else if (window.bsCheckoutRefreshConfirmIfPaymentReady) {
+      window.bsCheckoutRefreshConfirmIfPaymentReady();
+    }
+  }
+
+  function renderPaymentPreview() {
+    var current = normalizeChoice(bsPaymentPendingChoice || $('#input-payment-code').val());
+    var html = '';
+
+    $.each(bsPaymentPreviewMethods, function(index, method) {
+      // PAY-001-CREDIT-PREVIEW-CARD-20260726: muted two-line credit preview before delivery is complete.
+      var inputId = 'bs-payment-preview-' + method.key;
+      var checked = current === method.key ? ' checked' : '';
+      var disabled = method.disabled ? ' disabled aria-disabled="true"' : '';
+      var isCreditPreview = !!method.disabled;
+      var hint = method.hint ? '<small style="display:block; margin-top:8px; color:#7d8795; font-size:13px; font-weight:400; line-height:1.35;"><span aria-hidden="true" style="font-size:15px; margin-right:7px; vertical-align:-1px;">ⓘ</span>' + escapeHtml(method.hint) + '</small>' : '';
+      var title = method.hint ? ' title="' + escapeHtml(method.hint) + '"' : '';
+      var cardStyle = isCreditPreview ? ' style="display:flex; align-items:flex-start; gap:12px; padding:16px 20px; background:#f7f7f6; border:1px solid #e1e3e6; border-radius:6px; opacity:1; cursor:not-allowed;"' : '';
+      var inputStyle = isCreditPreview ? ' style="flex:0 0 auto; margin-top:2px;"' : '';
+      var label = isCreditPreview ? '<strong style="display:block; color:#a9b1bf; font-weight:600; line-height:1.2;">' + escapeHtml(method.label) + '</strong>' : escapeHtml(method.label);
+
+      html += '<label class="bs-checkout-method-option' + (isCreditPreview ? ' is-blocked pay001-credit-preview-card' : '') + '" for="' + inputId + '"' + title + cardStyle + '>' +
+        '<input type="radio" name="payment_method_preview" id="' + inputId + '" value="' + escapeHtml(method.key) + '"' + disabled + checked + inputStyle + ' />' +
+        '<span style="display:block; min-width:0;">' + label + hint + '</span>' +
+        '</label>';
+    });
+
+    $('#bs-payment-methods').html(html);
+    // ST-2c.3b: the three choices are self-explanatory before address entry.
+    status('');
+    refreshConfirmSummary();
+  }
+
+  window.bsCheckoutRenderPaymentPreview = renderPaymentPreview;
+
+  function pay001Money(value) {
+    return new Intl.NumberFormat('uk-UA', { maximumFractionDigits: 0 }).format(Math.ceil(Number(value) || 0)) + ' ₴';
+  }
+  window.pay001PaymentsWord = window.pay001PaymentsWord || function(count) {
+    count = Number(count) || 0;
+    return count >= 2 && count <= 4 ? 'платежі' : 'платежів';
+  };
+  function pay001GateMessage(gate, compact) {
+    gate = gate || {};
+    if (gate.reason === 'preorder') {
+      return compact
+        ? 'У замовленні є товар на передзамовленні — оплата частинами недоступна, доки він у кошику.'
+        : 'Оплата частинами доступна лише для товарів у наявності — вилучіть товар на передзамовленні з кошика, щоб скористатися розстрочкою.';
+    }
+    if (gate.reason === 'threshold') {
+      return 'Оплата частинами доступна від ' + pay001Money(gate.threshold) + ' — додайте товарів ще на ' + pay001Money(gate.remaining) + ' або оберіть інший спосіб оплати.';
+    }
+    return '';
+  }
+  function pay001PhoneValue() {
+    var $receiverPhone = $('#bs-co-recv-telephone').first();
+    if ($receiverPhone.length) {
+      return String($receiverPhone.val() || '').trim();
+    }
+    var $standardPhone = $('#input-telephone').first();
+    if ($standardPhone.length) {
+      return String($standardPhone.val() || '').trim();
+    }
+    return String($('#checkout-checkout').attr('data-bs-receiver-telephone') || '').trim();
+  }
+  function pay001SyncPhone(scope) {
+    var phone = pay001PhoneValue() || 'вказаний у формі';
+    $(scope || document).find('[data-pay001-phone]').text(phone);
+  }
+  function pay001Drawer(option, selectedCode) {
+    if (option.pay001Blocked) {
+      return $('<div class="pay001-checkout-drawer" data-pay001-drawer><div class="pay001-credit-warning" role="alert">' + escapeHtml(pay001GateMessage(option.gate, false)) + '</div></div>');
+    }
+    var selected = selectedCode || option.code;
+    var match = String(selected).match(/mono_chast_(\d)/);
+    var count = match ? Number(match[1]) : option.preferred;
+    var html = '<div class="pay001-checkout-drawer" data-pay001-drawer>' +
+      '<article class="pay001-checkout-provider"><div class="pay001-checkout-provider__head"><img src="catalog/view/image/payment/pay001-mono-label.png" alt="monobank"><strong>Покупка частинами monobank</strong></div>' +
+      '<div class="pay001-parts">';
+    $.each(option.monoOptions, function(_, item) { html += '<button type="button" data-pay001-checkout-part="' + item.count + '" data-pay001-code="' + escapeHtml(item.code) + '"' + (item.count === count ? ' class="is-active"' : '') + '>' + item.count + ' ' + window.pay001PaymentsWord(item.count) + '</button>'; });
+    html += '</div><div class="pay001-summary"><span>Сума в кредит<strong>' + pay001Money(option.total) + '</strong></span><span>Щомісячний платіж<strong data-pay001-monthly>' + pay001Money(option.total / count) + '</strong></span><span>Платежів до завершення<strong data-pay001-left>' + Math.max(count - 1, 0) + '</strong></span></div><p>Кредит буде оформлено на номер телефону: <strong data-pay001-phone></strong></p></article>' +
+      '<article class="pay001-checkout-provider pay001-checkout-provider--soon"><div class="pay001-checkout-provider__head"><img src="catalog/view/image/payment/pay001-pumb.svg" alt="ПУМБ"><strong>Сплачуйте частинами ПУМБ</strong><em>СКОРО БУДЕ</em></div><small>До 5 платежів</small></article></div>';
+    var $drawer = $(html);
+    pay001SyncPhone($drawer);
+    return $drawer;
+  }
+  function renderPaymentMethods(json, stateOptions) {
+    stateOptions = stateOptions || {};
+    if (window.bsCheckoutState && !window.bsCheckoutState.isCurrent(stateOptions.stateRevision)) return;
+    if (json && json.error) { status(json.error, true); return; }
+    var options = flattenPaymentMethods(json);
+    var current = $('#input-payment-code').val();
+    var gate = json && json.pay001_credit_gate ? json.pay001_credit_gate : {};
+    var creditIntent = normalizeChoice(bsPaymentPendingChoice || current) === 'mono_chast' || !!gate.selected;
+    var pay001Recovered = bsPay001WasBlocked && creditIntent && !gate.reason;
+    bsPay001WasBlocked = !!(creditIntent && gate.reason);
+    // PAY-001-PHASE2C-D4-UNAVAILABLE-CREDIT-ROW-20260725:
+    // keep the unavailable credit entry discoverable even without prior intent.
+    if (gate.configured && gate.reason) {
+      options.push({
+        code: gate.selected_code || current || 'mono_chast.mono_chast_3',
+        label: 'Сплатити частинами',
+        id: 'mono_chast_blocked',
+        pay001Credit: true,
+        pay001Blocked: true,
+        gate: gate,
+        preferred: 3,
+        monoOptions: []
+      });
+    }
+    if (typeof window.bsPay001SetCreditGate === 'function') {
+      window.bsPay001SetCreditGate(creditIntent && gate.reason ? $.extend({}, gate, { selected: true }) : {});
+    }
+    var selected = current ? findPaymentOption(options, current) : null;
+    var desiredChoice = normalizeChoice(bsPaymentPendingChoice || current);
+    if (current && !selected) {
+      current = '';
+      $('#input-payment-code, #input-payment-method').val('');
+    }
+    if (!selected && desiredChoice) {
+      var desiredOption = findPaymentOption(options, desiredChoice);
+      if (!desiredOption || !desiredOption.pay001Credit || desiredOption.fromModal) selected = desiredOption;
+    }
+    if (!selected && !current) {
+      $.each(options, function(_, option) { if (!selected && option.pay001Credit && option.fromModal) selected = option; });
+    }
+    if (!options.length) {
+      $('#bs-payment-methods').html('');
+      status('Немає доступних способів оплати для цієї доставки.', true);
+      refreshConfirmSummary();
+      return;
+    }
+    var html = '';
+    $.each(options, function(index, option) {
+      var inputId = 'input-payment-method-' + index;
+      var renderedCode = option.pay001Credit && selected && selected.pay001Credit ? selected.code : option.code;
+      var checked = selected && selected.code === renderedCode ? ' checked' : '';
+      var $pay001Drawer = null;
+      if (option.pay001Credit) {
+        $pay001Drawer = pay001Drawer(option, selected && selected.pay001Credit ? selected.code : renderedCode);
+        if (!checked) $pay001Drawer.attr('hidden', 'hidden');
+      }
+      html += '<label class="bs-checkout-method-option' + (option.pay001Credit ? ' pay001-checkout-method' : '') + (option.pay001Blocked ? ' is-blocked' : '') + '" for="' + inputId + '">' +
+        '<input type="radio" name="payment_method" id="' + inputId + '" value="' + escapeHtml(renderedCode) + '" data-label="' + escapeHtml(option.label) + '"' + (option.pay001Credit ? ' data-pay001-credit="1"' : '') + (option.pay001Blocked ? ' disabled' : '') + checked + ' />' +
+        '<span>' + (option.pay001Credit ? '<strong>Сплатити частинами</strong>' + (option.pay001Blocked ? '<small>' + escapeHtml(pay001GateMessage(option.gate, true)) + '</small>' : '') : escapeHtml(option.label)) + '</span></label>';
+      if ($pay001Drawer) html += $pay001Drawer.prop('outerHTML');
+    });
+    $('#bs-payment-methods').html(html);
+    if (selected && (selected.code !== current || pay001Recovered) && !selected.pay001Blocked) {
+      savePayment(selected.code, selected.label, true, null, stateOptions.stateRevision);
+      return;
+    }
+    status(selected && selected.pay001Blocked ? pay001GateMessage(selected.gate, true) : (current ? 'Оплату обрано.' : 'Оберіть спосіб оплати.'), !!(selected && selected.pay001Blocked));
+    if (window.bsCheckoutState) {
+      window.bsCheckoutState.paymentMethodsRendered(stateOptions.stateRevision);
+    } else {
+      refreshConfirmSummary();
+    }
+  }
+
+  function savePayment(code, label, isAuto, event, stateRevision) {
+    if (!code) {
+      return;
+    }
+
+    if (window.bsCheckoutState && stateRevision === undefined) {
+      stateRevision = window.bsCheckoutState.currentRevision();
+    }
+
+
+    bsPaymentPendingChoice = normalizeChoice(code);
+
+    if (!hasShippingReady()) {
+      renderPaymentPreview();
+      return;
+    }
+
+    status(isAuto ? 'Автоматично застосовуємо спосіб оплати.' : 'Зберігаємо спосіб оплати...');
+
+    $.ajax({
+      url: 'index.php?route=checkout/payment_method.save&language={{ language }}',
+      type: 'post',
+      data: { payment_method: code },
+      dataType: 'json',
+      success: function(json) {
+        if (window.bsCheckoutState && !window.bsCheckoutState.isCurrent(stateRevision)) {
+          return;
+        }
+
+        $('#error-payment-method').removeClass('d-block').text('');
+
+        if (json && json.error) {
+          $('#error-payment-method').addClass('d-block').text(json.error);
+          status(json.error, true);
+          refreshConfirmSummary();
+          return;
+        }
+
+        $('#input-payment-method').val(label || code);
+        $('#input-payment-code').val(code);
+        if (normalizeChoice(code) !== 'mono_chast' && typeof window.bsPay001SetCreditGate === 'function') {
+          window.bsPay001SetCreditGate({});
+          $('[data-pay001-drawer]').prop('hidden', true);
+        }
+        status('Оплату обрано.');
+        if (window.bsCheckoutState) {
+          window.bsCheckoutState.paymentSaved(code, label || code, stateRevision);
+        } else {
+          refreshConfirmSummary();
+        }
+      },
+      error: function(xhr, ajaxOptions, thrownError) {
+        status(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText, true);
+        refreshConfirmSummary();
+      }
+    });
+  }
+
+  window.bsCheckoutLoadPaymentMethods = function(options) {
+    options = options || {};
+    if (window.bsCheckoutState && options.stateRevision === undefined) {
+      options.stateRevision = window.bsCheckoutState.currentRevision();
+    }
+
+    if (!hasShippingReady()) {
+      renderPaymentPreview();
+      return;
+    }
+
+    status('Завантажуємо способи оплати...');
+
+    $.ajax({
+      url: 'index.php?route=checkout/payment_method.getMethods&language={{ language }}',
+      dataType: 'json',
+      success: function(json) {
+        renderPaymentMethods(json, options);
+      },
+      error: function(xhr, ajaxOptions, thrownError) {
+        status(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText, true);
+        refreshConfirmSummary();
+      }
+    });
+  };
+
+  $(document).on('change', '#bs-payment-methods input[name="payment_method_preview"]', function(event) {
+    bsPaymentPendingChoice = normalizeChoice(this.value);
+    renderPaymentPreview();
+  });
+
+  $(document).on('change', '#bs-payment-methods input[name="payment_method"]', function(event) {
+    var $input = $(this);
+    if ($input.data('pay001Credit')) {
+      $input.closest('label').next('[data-pay001-drawer]').prop('hidden', false);
+    }
+    savePayment($input.val(), $input.data('label'), false, event, window.bsCheckoutState ? window.bsCheckoutState.currentRevision() : undefined);
+  });
+  $(document).on('click', '[data-pay001-checkout-part]', function() {
+    var $button = $(this);
+    var count = Number($button.data('pay001-checkout-part'));
+    var code = String($button.data('pay001-code'));
+    var $drawer = $button.closest('[data-pay001-drawer]');
+    var total = Number(($drawer.find('.pay001-summary strong').first().text() || '0').replace(/[^\d]/g, '')) || 0;
+    $drawer.find('[data-pay001-checkout-part]').removeClass('is-active');
+    $button.addClass('is-active');
+    $drawer.find('[data-pay001-monthly]').text(pay001Money(total / count));
+    $drawer.find('[data-pay001-left]').text(Math.max(count - 1, 0));
+    savePayment(code, 'Сплатити частинами', false, null, window.bsCheckoutState ? window.bsCheckoutState.currentRevision() : undefined);
+  });
+  $(document).on('input change', '#bs-co-recv-telephone, #input-telephone', function() {
+    pay001SyncPhone(document);
+  });
+
+  $(document).on('change', 'input[name="agree"]', function() {
+    var $input = $(this);
+
+    $.ajax({
+      url: 'index.php?route=checkout/payment_method.comment&language={{ language }}',
+      type: 'post',
+      data: {
+        comment: $('textarea[name="comment"]').val(),
+        agree: $input.is(':checked') ? '1' : '',
+        create_account_opt_in: $('#input-create-account-opt-in').is(':checked') ? '1' : ''
+      },
+      dataType: 'json',
+      success: function(json) {
+        if (json && json.error) {
+          alert(json.error);
+          return;
+        }
+
+        refreshConfirmSummary();
+      }
+    });
+  });
+
+  $(document).on('change', '#input-create-account-opt-in', function() {
+    $.ajax({
+      url: 'index.php?route=checkout/payment_method.comment&language={{ language }}',
+      type: 'post',
+      data: {
+        comment: $('textarea[name="comment"]').val(),
+        create_account_opt_in: this.checked ? '1' : ''
+      },
+      dataType: 'json',
+      error: function() {
+        $('#input-create-account-opt-in').prop('checked', false);
+      }
+    });
+  });
+
+  bsPaymentPendingChoice = normalizeChoice($('#input-payment-code').val() || bsPaymentPendingChoice);
+})();
+//--></script>

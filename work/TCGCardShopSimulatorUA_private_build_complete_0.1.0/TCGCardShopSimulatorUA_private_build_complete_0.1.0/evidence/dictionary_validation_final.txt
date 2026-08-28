@@ -1,0 +1,9 @@
+physical_lines=2190
+valid_records=2190
+malformed_nonempty=0
+empty_sources=0
+duplicate_source_keys=0
+source_equals_target=7
+unexpected_source_equals_target=0
+placeholder_mismatches=0
+cjk_rows=0

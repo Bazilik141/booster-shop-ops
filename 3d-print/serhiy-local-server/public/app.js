@@ -1,258 +1,81 @@
-const state = { data: null, lastCalculation: null };
+const state = { data: null, lastCalculation: null, settingsJournal: null };
 const money = new Intl.NumberFormat("uk-UA", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const number = new Intl.NumberFormat("uk-UA", { maximumFractionDigits: 3 });
 const draftKeys = ["quantity", "total_weight_g", "total_print_time_h", "spool_weight_g", "spool_price_uah"];
+const settingRows = [2, 3, 4, 5];
+const productHeaders = { Q: "РРЦ фактична, грн", R: "Ціна під викуп, грн", S: "Посилання на модель" };
+const acknowledgementHeaders = { amount_agreed: "Згода Сергія із сумою (Київ, роль)", money_received: "Кошти надійшли Сергію (Київ, роль)" };
+const draftTypes = ["Брелок", "Брелок-клікер", "Набір брелоків", "Брелок-спінер", "Фігурка в покеболі", "Фігурка статична", "Фігурка-конструктор", "Панно", "Рухома фігурка", "Фігурка fidget", "Підставка для карток", "Підставка для грейджених слабів", "Підставка для грейджених слабів на ніжці", "Побутовий аксесуар", "Світильник", "Плаский пластиковий аксесуар", "Обертовий дисплей"];
 const printTime = globalThis.BoosterPrintTime;
-
 const byId = (id) => document.getElementById(id);
-const status = (message, error = false) => {
-  const element = byId("status");
-  element.textContent = message;
-  element.classList.toggle("error", error);
-};
 
+function status(message, error = false) { const node = byId("status");node.textContent = message;node.classList.toggle("error", error); }
+function errorText(error) { return error?.code ? `${error.code}: ${error.message}` : String(error?.message || error || "Запит не виконано."); }
 async function request(url, body) {
-  const response = await fetch(url, body ? {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  } : undefined);
-  const payload = await response.json().catch(() => ({ ok: false, error: "Некоректна відповідь локального сервера." }));
-  if (!response.ok || !payload.ok) throw new Error(payload.error || "Запит не виконано.");
+  const response = await fetch(url, body ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) } : undefined);
+  const payload = await response.json().catch(() => ({ ok: false, code: "LOCAL_INVALID_JSON", error: "Некоректна відповідь локального сервера." }));
+  if (!response.ok || !payload.ok) { const error = new Error(payload.error || "Запит не виконано.");error.code = payload.code || "LOCAL_REQUEST_FAILED";throw error; }
   return payload;
 }
+function formObject(form) { return Object.fromEntries(new FormData(form).entries()); }
+function escapeHtml(value) { return String(value ?? "").replace(/[&<>'"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#039;", '"': "&quot;" }[char])); }
+function display(value) { if (value === null || typeof value === "undefined" || value === "") return "—";if (typeof value === "object") return JSON.stringify(value);return String(value); }
+function sameValue(left, right) { return String(left ?? "") === String(right ?? ""); }
+function activeRows() { return (state.data?.skus || []).filter((row) => String(row["API_статус_запису"] || "Активний") === "Активний"); }
+function rowForSku(sku) { return (state.data?.skus || []).find((row) => String(row.SKU) === String(sku)); }
 
-function formObject(form) {
-  return Object.fromEntries(new FormData(form).entries());
+function printTimeResult(input) { if (!printTime) throw new Error("Не завантажився спільний парсер часу друку.");return printTime.parse(input.value); }
+function refreshPrintTimeHint(input) { const hint = document.querySelector(`[data-print-time-hint="${input.name}"]`);if (!hint) return;const parsed = printTimeResult(input);hint.textContent = parsed.blank ? "Можна: 1:30, 1 год 30 хв або 1,5." : (parsed.ok ? `= ${printTime.display(parsed.hours)}` : `⚠ ${parsed.error}`);hint.classList.toggle("error", !parsed.blank && !parsed.ok); }
+function normalisePrintTimeField(form, name) { const input = form.elements[name],parsed = printTimeResult(input);if (!parsed.ok || parsed.blank || !(parsed.hours > 0)) throw new Error(parsed.error || "Вкажіть час друку більше нуля.");input.value = String(parsed.hours);refreshPrintTimeHint(input);return parsed.hours; }
+function bindPrintTimeInputs() { document.querySelectorAll("[data-print-time-input]").forEach((input) => { input.addEventListener("input", () => refreshPrintTimeHint(input));input.addEventListener("blur", () => { const parsed = printTimeResult(input);if (parsed.ok && !parsed.blank) input.value = String(parsed.hours);refreshPrintTimeHint(input); });refreshPrintTimeHint(input); }); }
+
+function flattenRow(row) { const flat = {};Object.entries(row || {}).forEach(([key, value]) => { if (key === "row_number") return;if (value && typeof value === "object" && !Array.isArray(value)) Object.entries(value).forEach(([child, childValue]) => { flat[child] = childValue; });else flat[key] = value; });return flat; }
+function objectTable(rows, actionCell) {
+  const flattened = (rows || []).map(flattenRow),headers = [];
+  flattened.forEach((row) => Object.keys(row).forEach((key) => { if (!headers.includes(key)) headers.push(key); }));
+  if (!flattened.length) return '<p class="muted">Немає доступних записів.</p>';
+  return `<table><thead><tr>${headers.map((key) => `<th>${escapeHtml(key)}</th>`).join("")}${actionCell ? "<th>Дія</th>" : ""}</tr></thead><tbody>${flattened.map((row, index) => `<tr>${headers.map((key) => `<td>${escapeHtml(display(row[key]))}</td>`).join("")}${actionCell ? `<td>${actionCell(rows[index])}</td>` : ""}</tr>`).join("")}</tbody></table>`;
 }
+function matrixTable(matrix) { const rows = matrix || [];if (!rows.length) return '<p class="muted">Аналітика порожня.</p>';const headers = rows[0].map((value) => String(value || "")).filter(Boolean),data = rows.slice(1).filter((row) => row.some((value) => value !== "" && value !== null));if (!headers.length) return '<p class="muted">Проєкція аналітики не повернула заголовки.</p>';return `<table><thead><tr>${headers.map((header) => `<th>${escapeHtml(header)}</th>`).join("")}</tr></thead><tbody>${data.map((row) => `<tr>${headers.map((_, index) => `<td>${escapeHtml(display(row[index]))}</td>`).join("")}</tr>`).join("")}</tbody></table>`; }
 
-function printTimeResult(input) {
-  if (!printTime) throw new Error("Не завантажився спільний парсер часу друку.");
-  return printTime.parse(input.value);
-}
+function setSkuOptions() { const options = activeRows().map((row) => `<option value="${escapeHtml(row.SKU)}">${escapeHtml(row.SKU)} — ${escapeHtml(row["Назва виробу"] || "без назви")}</option>`).join("");document.querySelectorAll(".sku-select").forEach((select) => { const selected = select.value;select.innerHTML = `<option value="">Оберіть SKU</option>${options}`;if (activeRows().some((row) => String(row.SKU) === selected)) select.value = selected; }); }
+function setFixtureOptions() { const selected = byId("fixture-select").value;byId("fixture-select").innerHTML = `<option value="">Без фурнітури / очистити</option>${(state.data.fixtures || []).map((row) => `<option value="${escapeHtml(row["Назва фурнітури"])}">${escapeHtml(row["Назва фурнітури"])} — ${money.format(Number(row["Ціна, грн/шт"] || 0))} грн/шт</option>`).join("")}`;if ([...byId("fixture-select").options].some((option) => option.value === selected)) byId("fixture-select").value = selected; }
+function renderOverview() { const overview = state.data.overview || {};byId("sku-count").textContent = number.format(overview.sku_count || 0);byId("available").textContent = number.format(overview.available || 0);byId("printed").textContent = number.format(overview.printed || 0);byId("defects").textContent = number.format(overview.defects || 0);byId("accrued").textContent = `${money.format(overview.accrued_serhiy_current_month || 0)} грн`; }
+function fillSettings() { const values = state.data.settings_values || [];settingRows.forEach((row, index) => { const input = byId("settings-form").elements[String(row)];input.value = values[index] ?? "";input.dataset.expected = String(values[index] ?? ""); }); }
+function fillProductForm() { const form = byId("product-form"),row = rowForSku(form.elements.sku.value);Object.entries(productHeaders).forEach(([column, header]) => { form.elements[column].value = row?.[header] ?? "";form.elements[column].dataset.expected = String(row?.[header] ?? ""); }); }
+function fillStockForm() { const form = byId("stock-form"),row = rowForSku(form.elements.sku.value),current = row?.availability?.["Наявно зараз, шт"] ?? "";form.elements.expected_current.value = current;form.elements.new_value.value = current; }
 
-function refreshPrintTimeHint(input) {
-  const hint = document.querySelector(`[data-print-time-hint="${input.name}"]`);
-  if (!hint) return;
-  const parsed = printTimeResult(input);
-  if (parsed.blank) {
-    hint.textContent = "Можна: 1:30, 1 год 30 хв або 1,5.";
-    hint.classList.remove("error");
-    return;
-  }
-  hint.textContent = parsed.ok ? `= ${printTime.display(parsed.hours)}` : `⚠ ${parsed.error}`;
-  hint.classList.toggle("error", !parsed.ok);
-}
+function payoutButtons(row) { const period = row["Період (РРРР-ММ)"] || "",rowNumber = Number(row.row_number),statusValue = String(row.Статус || "");return Object.entries(acknowledgementHeaders).map(([key, header]) => { const value = String(row[header] || "");if (value) return `<span class="recorded">${escapeHtml(value)}</span><button class="small secondary payout-correct" data-row="${rowNumber}" data-period="${escapeHtml(period)}" data-key="${key}" data-current="${escapeHtml(value)}" type="button">Виправити</button>`;if (key === "money_received" && statusValue !== "Виплачено") return '<span class="muted">Після виплати</span>';return `<button class="small payout-ack" data-row="${rowNumber}" data-period="${escapeHtml(period)}" data-key="${key}" type="button">${key === "amount_agreed" ? "Погоджую суму" : "Кошти отримано"}</button>`; }).join(" "); }
+function renderAttention() { const entries = [];activeRows().forEach((row) => { const stock = Number(row.availability?.["Наявно зараз, шт"]);if (Number.isFinite(stock) && stock === 0) entries.push(`${row.SKU}: нульова наявність`);if (!(Number(row["Час друку за од., год"]) > 0)) entries.push(`${row.SKU}: не вказано час друку`); });(state.data.print_log || []).filter((row) => Number(row["Брак, шт"]) > 0).forEach((row) => entries.push(`${row.SKU}: у Друк-лозі записано брак ${row["Брак, шт"]} шт`));byId("attention").innerHTML = entries.length ? `<ul>${entries.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>` : '<p class="muted">Сигналів уваги немає.</p>'; }
+function renderInformation() { renderAttention();byId("analytics").innerHTML = matrixTable(state.data.analytics);byId("all-products").innerHTML = objectTable(state.data.skus);byId("sales").innerHTML = objectTable(state.data.sales);byId("payouts").innerHTML = objectTable(state.data.payouts, payoutButtons);byId("plyushky").innerHTML = objectTable(state.data.plyushky);byId("print-log").innerHTML = objectTable(state.data.print_log); }
+function render() { setSkuOptions();setFixtureOptions();renderOverview();fillSettings();fillProductForm();fillStockForm();renderInformation(); }
 
-function normalisePrintTimeField(form, name) {
-  const input = form.elements[name];
-  const parsed = printTimeResult(input);
-  if (!parsed.ok || parsed.blank || !(parsed.hours > 0)) {
-    throw new Error(parsed.error || `${input.closest("label")?.textContent || "Час друку"}: вкажіть значення більше нуля.`);
-  }
-  input.value = String(parsed.hours);
-  refreshPrintTimeHint(input);
-  return parsed.hours;
-}
+function renderCalculation(calculation) { state.lastCalculation = calculation;byId("save-batch").disabled = false;byId("calculation").classList.remove("empty");byId("calculation").innerHTML = `<strong>За одиницю:</strong><ul><li>Вага: ${number.format(calculation.per_unit.weight_g)} г</li><li>Час: ${escapeHtml(printTime.display(calculation.per_unit.time_hours))}</li><li>Матеріал: ${money.format(calculation.costs.material_uah)} грн</li><li>Електроенергія: ${money.format(calculation.costs.electricity_uah)} грн</li><li>Амортизація: ${money.format(calculation.costs.amortization_uah)} грн</li><li>База до браку: ${money.format(calculation.costs.base_uah)} грн</li><li><strong>Собівартість Сергія з планованим браком: ${money.format(calculation.costs.defect_adjusted_uah)} грн</strong></li></ul><p class="muted">Це відповідає формулі Номенклатура!K. Значення G/H/I/J не змінені.</p>`; }
+async function loadDraft(sku) { if (!sku) return;status("Завантажую чернетку партії…");const payload = await request(`/api/batch-draft?sku=${encodeURIComponent(sku)}`),form = byId("batch-form");draftKeys.forEach((key) => { form.elements[key].value = payload.values?.[key] ?? ""; });refreshPrintTimeHint(form.elements.total_print_time_h);state.lastCalculation = null;byId("save-batch").disabled = true;status(payload.found ? "Чернетку завантажено." : "Для SKU ще немає чернетки."); }
+async function loadSettingsJournal() { state.settingsJournal = await request("/api/settings-journal");byId("settings-journal").innerHTML = objectTable(state.settingsJournal.rows); }
+async function reload() { status("Оновлюю дані…");state.data = await request("/api/bootstrap");render();if (!byId("settings-panel").classList.contains("hidden")) await loadSettingsJournal();status("Дані отримано через 3D-P API."); }
 
-function bindPrintTimeInputs() {
-  document.querySelectorAll("[data-print-time-input]").forEach((input) => {
-    input.addEventListener("input", () => refreshPrintTimeHint(input));
-    input.addEventListener("blur", () => {
-      const parsed = printTimeResult(input);
-      if (parsed.ok && !parsed.blank) input.value = String(parsed.hours);
-      refreshPrintTimeHint(input);
-    });
-    refreshPrintTimeHint(input);
-  });
-}
+document.querySelectorAll(".zone-button").forEach((button) => button.addEventListener("click", () => { document.querySelectorAll(".zone-button").forEach((item) => item.classList.toggle("active", item === button));document.querySelectorAll(".zone").forEach((zone) => zone.classList.toggle("active", zone.id === `zone-${button.dataset.zoneTarget}`)); }));
+byId("settings-toggle").addEventListener("click", async () => { const panel = byId("settings-panel"),opening = panel.classList.contains("hidden");panel.classList.toggle("hidden", !opening);byId("settings-toggle").setAttribute("aria-expanded", String(opening));if (opening) try { await loadSettingsJournal(); } catch (error) { status(errorText(error), true); } });
+byId("reload").addEventListener("click", () => reload().catch((error) => status(errorText(error), true)));
+byId("batch-form").elements.sku.addEventListener("change", (event) => loadDraft(event.target.value).catch((error) => status(errorText(error), true)));
+byId("product-form").elements.sku.addEventListener("change", fillProductForm);
+byId("stock-form").elements.sku.addEventListener("change", fillStockForm);
 
-function escapeHtml(value) {
-  return String(value ?? "").replace(/[&<>'"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#039;", '"': "&quot;" }[char]));
-}
+byId("batch-form").addEventListener("submit", async (event) => { event.preventDefault();try { normalisePrintTimeField(event.currentTarget, "total_print_time_h");const payload = await request("/api/calculate", formObject(event.currentTarget));renderCalculation(payload.calculation);status("Розрахунок готовий."); } catch (error) { status(errorText(error), true); } });
+byId("save-batch").addEventListener("click", async () => { try { const form = byId("batch-form");normalisePrintTimeField(form, "total_print_time_h");const payload = await request("/api/save-batch", formObject(form));status(payload.already_current ? "Чернетка і SKU вже актуальні." : `Оновлено: ${payload.cells_updated.join(", ") || "без змін"}.`);await reload(); } catch (error) { status(errorText(error), true); } });
+byId("settings-form").addEventListener("submit", async (event) => { event.preventDefault();try { for (const row of settingRows) { const input = event.currentTarget.elements[String(row)];if (sameValue(input.value, input.dataset.expected)) continue;await request("/api/setting", { row, value: input.value, expected_current: input.dataset.expected }); }status("Налаштування збережено з журналом.");await reload(); } catch (error) { status(errorText(error), true); } });
+byId("product-form").addEventListener("submit", async (event) => { event.preventDefault();try { const form = event.currentTarget,sku = form.elements.sku.value;for (const column of Object.keys(productHeaders)) { const input = form.elements[column];if (sameValue(input.value, input.dataset.expected)) continue;await request("/api/product-field", { sku, column, value: input.value, expected_current: input.dataset.expected }); }status("Поля Q/R/S збережено з журналом.");await reload(); } catch (error) { status(errorText(error), true); } });
+byId("fixture-form").addEventListener("submit", async (event) => { event.preventDefault();try { const payload = await request("/api/save-fixture", formObject(event.currentTarget));status(payload.already_current ? "Фурнітура вже актуальна." : "Фурнітуру збережено.");await reload(); } catch (error) { status(errorText(error), true); } });
+byId("stock-form").addEventListener("submit", async (event) => { event.preventDefault();try { const payload = await request("/api/stock-correction", formObject(event.currentTarget));status(payload.already_applied ? "Фактична кількість уже записана." : `Наявність: ${payload.old_value} → ${payload.new_value}.`);await reload(); } catch (error) { status(errorText(error), true); } });
 
-function setSkuOptions() {
-  const options = state.data.skus.map((row) => `<option value="${escapeHtml(row.SKU)}">${escapeHtml(row.SKU)} — ${escapeHtml(row["Назва виробу"] || "без назви")}</option>`).join("");
-  document.querySelectorAll(".sku-select").forEach((select) => {
-    const selected = select.value;
-    select.innerHTML = `<option value="">Оберіть SKU</option>${options}`;
-    if (state.data.skus.some((row) => String(row.SKU) === selected)) select.value = selected;
-  });
-}
+function stableRequestId(form) { if (!form.dataset.requestId) { const raw = globalThis.crypto?.randomUUID?.() || `${Date.now()}_${Math.random().toString(16).slice(2)}`;form.dataset.requestId = `serhiy_${raw.replace(/[^A-Za-z0-9_-]/g, "_")}`.slice(0, 80); }return form.dataset.requestId; }
+byId("manufacture-form").addEventListener("submit", async (event) => { event.preventDefault();const form = event.currentTarget;try { normalisePrintTimeField(form, "actual_time_hours");const payload = await request("/api/print-log", { ...formObject(form), request_id: stableRequestId(form) });delete form.dataset.requestId;const success = payload.already_applied ? "Цю партію вже було записано; дубль не створено." : `Вироблену партію записано, рядок ${payload.row}.`;form.reset();form.elements.defects.value = "0";refreshPrintTimeHint(form.elements.actual_time_hours);try { await reload();status(success); } catch (refreshError) { status(`${success} Оновлення екрана не вдалося: ${errorText(refreshError)}`, true); } } catch (error) { status(errorText(error), true); } });
 
-function setFixtureOptions() {
-  const selected = byId("fixture-select").value;
-  byId("fixture-select").innerHTML = `<option value="">Без фурнітури / очистити</option>${state.data.fixtures.map((row) => {
-    const name = row["Назва фурнітури"];
-    const price = Number(row["Ціна, грн/шт"] || 0);
-    return `<option value="${escapeHtml(name)}">${escapeHtml(name)} — ${money.format(price)} грн/шт</option>`;
-  }).join("")}`;
-  if ([...byId("fixture-select").options].some((option) => option.value === selected)) byId("fixture-select").value = selected;
-}
+byId("draft-type").innerHTML = `<option value="">Оберіть тип</option>${draftTypes.map((type) => `<option value="${escapeHtml(type)}">${escapeHtml(type)}</option>`).join("")}`;
+byId("draft-form").addEventListener("submit", async (event) => { event.preventDefault();try { const values = formObject(event.currentTarget),payload = await request("/api/draft", { values }),suggestion = payload.sku_suggestion;byId("draft-result").classList.remove("empty");byId("draft-result").innerHTML = `<strong>Чернетку створено: ${escapeHtml(payload.sku)}</strong><p>Статус: ${escapeHtml(payload.status)}.</p>${suggestion ? `<p>Підказка власнику: префікс <strong>${escapeHtml(suggestion.prefix)}</strong>, категорія <strong>${escapeHtml(suggestion.category_digits)}</strong> — ${escapeHtml(suggestion.category_label)}.</p>` : "<p>Для цього типу API не повернув підказку.</p>"}<p class="warning">Це не готовий артикул. Його присвоює власник.</p>`;event.currentTarget.reset();status("Чернетку виробу створено.");await reload(); } catch (error) { status(errorText(error), true); } });
 
-function renderOverview() {
-  const overview = state.data.overview;
-  byId("sku-count").textContent = number.format(overview.sku_count || 0);
-  byId("available").textContent = number.format(overview.available || 0);
-  byId("printed").textContent = number.format(overview.printed || 0);
-  byId("defects").textContent = number.format(overview.defects || 0);
-  byId("accrued").textContent = `${money.format(overview.accrued_serhiy_current_month || 0)} грн`;
-  const settings = state.data.settings;
-  byId("settings").innerHTML = [
-    `Потужність: ${number.format(settings.printer_power_kw)} кВт`,
-    `Електроенергія: ${money.format(settings.electricity_price_uah_per_kwh)} грн/кВт·год`,
-    `Амортизація: ${money.format(settings.amortization_uah_per_hour)} грн/год`,
-  ].map((item) => `<span>${item}</span>`).join("");
-}
+byId("payouts").addEventListener("click", async (event) => { const button = event.target.closest(".payout-ack,.payout-correct");if (!button) return;try { const body = { row_number: Number(button.dataset.row), expected_period: button.dataset.period, acknowledgement: button.dataset.key };if (button.classList.contains("payout-correct")) { const reason = globalThis.prompt("Причина виправлення підтвердження:", "");if (!reason) return;body.expected_current = button.dataset.current;body.reason = reason;await request("/api/payout-acknowledgement-correct", body); } else await request("/api/payout-acknowledge", body);status("Підтвердження виплати записано.");await reload(); } catch (error) { status(errorText(error), true); } });
 
-function renderSkuRows() {
-  byId("sku-rows").innerHTML = state.data.skus.map((row) => `<tr>
-    <td>${escapeHtml(row.SKU)}</td>
-    <td>${escapeHtml(row["Назва виробу"] || "—")}</td>
-    <td>${escapeHtml(row.Статус || "—")}</td>
-    <td>${escapeHtml(row.availability?.["Наявно зараз, шт"] ?? "—")}</td>
-    <td>${escapeHtml(row["Фурнітура (ціна-довідка), грн/шт"] ?? "—")}</td>
-  </tr>`).join("") || '<tr><td colspan="5">Немає доступних SKU.</td></tr>';
-}
-
-function renderPrintLog() {
-  byId("print-log-rows").innerHTML = state.data.print_log.map((row) => `<tr data-row="${Number(row.row_number)}">
-    <td>${escapeHtml(row.Дата || "—")}</td>
-    <td>${escapeHtml(row.SKU || "—")}</td>
-    <td>${escapeHtml(row["Надруковано, шт"] ?? "—")}</td>
-    <td>${escapeHtml(printTime.display(row["Час друку факт, год"]))}</td>
-    <td><input class="defect-input" type="number" min="0" step="1" value="${escapeHtml(row["Брак, шт"] ?? 0)}"></td>
-    <td><button class="save-defect" type="button" data-expected="${escapeHtml(row["Брак, шт"] ?? "")}">Зберегти брак</button></td>
-  </tr>`).join("") || '<tr><td colspan="6">Активних записів ще немає.</td></tr>';
-}
-
-function renderPayouts() {
-  const rows = state.data.payouts || [];
-  const keys = rows.length ? Object.keys(rows[0]).filter((key) => key !== "row_number") : [];
-  byId("payout-head").innerHTML = keys.length ? `<tr>${keys.map((key) => `<th>${escapeHtml(key)}</th>`).join("")}</tr>` : "";
-  byId("payout-rows").innerHTML = rows.map((row) => `<tr>${keys.map((key) => `<td>${escapeHtml(row[key] ?? "—")}</td>`).join("")}</tr>`).join("") || '<tr><td>Немає доступних записів виплат.</td></tr>';
-}
-
-function renderOpenQuestions() {
-  const entries = (state.data.open_questions || []).map((row) => String(row?.[0] ?? "").trim()).filter(Boolean);
-  byId("open-questions").innerHTML = entries.map((entry) => `<li>${escapeHtml(entry)}</li>`).join("") || "<li>У вказаному діапазоні немає записів.</li>";
-}
-
-function render() {
-  setSkuOptions();
-  setFixtureOptions();
-  renderOverview();
-  renderSkuRows();
-  renderPrintLog();
-  renderPayouts();
-  renderOpenQuestions();
-}
-
-function renderCalculation(calculation) {
-  state.lastCalculation = calculation;
-  byId("save-batch").disabled = false;
-  const base = calculation.costs.base_uah;
-  byId("calculation").classList.remove("empty");
-  byId("calculation").innerHTML = `<strong>За одиницю:</strong>
-    <ul>
-      <li>Вага: ${number.format(calculation.per_unit.weight_g)} г</li>
-      <li>Час: ${escapeHtml(printTime.display(calculation.per_unit.time_hours))}</li>
-      <li>Матеріал: ${money.format(calculation.costs.material_uah)} грн</li>
-      <li>Електроенергія: ${money.format(calculation.costs.electricity_uah)} грн</li>
-      <li>Амортизація: ${money.format(calculation.costs.amortization_uah)} грн</li>
-      <li><strong>Базова собівартість Сергія: ${money.format(base)} грн</strong></li>
-    </ul><p class="muted">Фурнітура додається окремо після друку. Праця та брак у цю формулу не входять.</p>`;
-}
-
-async function loadDraft(sku) {
-  if (!sku) return;
-  status("Завантажую збережену чернетку партії…");
-  const payload = await request(`/api/batch-draft?sku=${encodeURIComponent(sku)}`);
-  const form = byId("batch-form");
-  draftKeys.forEach((key) => { form.elements[key].value = payload.values?.[key] ?? ""; });
-  refreshPrintTimeHint(form.elements.total_print_time_h);
-  state.lastCalculation = null;
-  byId("save-batch").disabled = true;
-  status(payload.found ? "Чернетку партії завантажено. Перевірте й розрахуйте." : "Для SKU ще немає чернетки. Введіть дані партії.");
-}
-
-async function reload() {
-  status("Оновлюю дані…");
-  state.data = await request("/api/bootstrap");
-  render();
-  status("Дані отримано через 3D-P API.");
-}
-
-byId("reload").addEventListener("click", () => reload().catch((error) => status(error.message, true)));
-
-byId("batch-form").elements.sku.addEventListener("change", (event) => {
-  loadDraft(event.target.value).catch((error) => status(error.message, true));
-});
-
-byId("batch-form").addEventListener("submit", async (event) => {
-  event.preventDefault();
-  try {
-    status("Розраховую за поточними глобальними налаштуваннями…");
-    normalisePrintTimeField(event.currentTarget, "total_print_time_h");
-    const payload = await request("/api/calculate", formObject(event.currentTarget));
-    renderCalculation(payload.calculation);
-    status("Розрахунок готовий. Перевірте значення перед збереженням.");
-  } catch (error) { status(error.message, true); }
-});
-
-byId("save-batch").addEventListener("click", async () => {
-  try {
-    const form = byId("batch-form");
-    status("Зберігаю raw-чернетку й per-unit значення у SKU…");
-    normalisePrintTimeField(form, "total_print_time_h");
-    const payload = await request("/api/save-batch", formObject(form));
-    const detail = payload.already_current ? "Чернетка і SKU вже актуальні." : `Чернетка збережена; оновлено SKU: ${payload.cells_updated.join(", ") || "без змін"}.`;
-    status(detail);
-    await reload();
-  } catch (error) { status(error.message, true); }
-});
-
-byId("fixture-form").addEventListener("submit", async (event) => {
-  event.preventDefault();
-  try {
-    status("Зберігаю фурнітуру…");
-    const payload = await request("/api/save-fixture", formObject(event.currentTarget));
-    status(payload.already_current ? "Фурнітура вже актуальна." : `Фурнітуру збережено: ${payload.price_uah || 0} грн/шт.`);
-    await reload();
-  } catch (error) { status(error.message, true); }
-});
-
-byId("print-log-form").addEventListener("submit", async (event) => {
-  event.preventDefault();
-  try {
-    status("Додаю сесію у Друк-лог…");
-    normalisePrintTimeField(event.currentTarget, "actual_time_hours");
-    const payload = await request("/api/print-log", formObject(event.currentTarget));
-    status(`Друк-лог: додано рядок ${payload.row}.`);
-    event.currentTarget.reset();
-    byId("print-log-form").elements.printer.value = "Сергій";
-    byId("print-log-form").elements.date.value = new Date().toISOString().slice(0, 10);
-    refreshPrintTimeHint(byId("print-log-form").elements.actual_time_hours);
-    await reload();
-  } catch (error) { status(error.message, true); }
-});
-
-byId("print-log-rows").addEventListener("click", async (event) => {
-  const button = event.target.closest(".save-defect");
-  if (!button) return;
-  const row = button.closest("tr");
-  try {
-    status("Оновлюю брак з історією змін…");
-    await request("/api/defect", {
-      row: Number(row.dataset.row),
-      defects: row.querySelector(".defect-input").value,
-      expected_current: button.dataset.expected,
-    });
-    status("Брак оновлено; API додало запис в історію.");
-    await reload();
-  } catch (error) { status(error.message, true); }
-});
-
-byId("print-log-form").elements.date.value = new Date().toISOString().slice(0, 10);
 bindPrintTimeInputs();
-reload().catch((error) => status(error.message, true));
+reload().catch((error) => status(errorText(error), true));

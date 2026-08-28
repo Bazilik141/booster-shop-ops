@@ -72,10 +72,6 @@ function normalize(value: unknown): string {
   return text(value).replace(/\s+/g, " ").toLocaleLowerCase("uk-UA");
 }
 
-function normalizePhone(value: unknown): string {
-  return text(value).replace(/\D/g, "");
-}
-
 function sameSecret(expected: string, actual: string): boolean {
   if (!expected || expected.length !== actual.length) return false;
 
@@ -86,25 +82,6 @@ function sameSecret(expected: string, actual: string): boolean {
   }
 
   return mismatch === 0;
-}
-
-function isTestOrder(payload: OpenCartPayload, items: OpenCartItem[]): boolean {
-  const lastname = normalize(payload.lastname);
-  const phone = normalizePhone(payload.telephone);
-
-  if (lastname.includes("леусенко") || phone.endsWith("0991119279")) {
-    return true;
-  }
-
-  const texts = [
-    payload.comment,
-    ...items.flatMap((item) => [item.name, item.sku, item.model]),
-  ];
-
-  return texts.some((value) => {
-    const normalized = normalize(value);
-    return normalized.includes("тест") || normalized.includes("test");
-  });
 }
 
 function canonicalSku(item: OpenCartItem): string {
@@ -331,9 +308,6 @@ Deno.serve(async (request) => {
 
   const validated = validatePayload(payload);
   if ("error" in validated) return json({ error: validated.error }, 400);
-  if (isTestOrder(payload, validated.items)) {
-    return json({ skipped: true, reason: "test-filter" });
-  }
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";

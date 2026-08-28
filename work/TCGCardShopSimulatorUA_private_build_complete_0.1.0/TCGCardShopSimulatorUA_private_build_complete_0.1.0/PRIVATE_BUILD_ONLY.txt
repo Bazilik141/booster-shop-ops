@@ -1,0 +1,17 @@
+PRIVATE BUILD WORKSPACE — DO NOT REDISTRIBUTE AS-IS
+
+Contains Translator.dll supplied by the user, BepInEx core, and the exact Doorstop root loader files supplied from the user's working installation.
+Translator 1.0.3 requires permission for asset use in another mod/file and prohibits upload to other sites.
+
+Private/local payload is structurally complete:
+  .doorstop_version
+  doorstop_config.ini
+  winhttp.dll
+  version.dll
+  BepInEx core
+  Translator.dll
+  Ukrainian localization_data.txt
+  shaklin.Translator.cfg
+
+No Windows installer executable has been built or runtime-tested in this environment.
+See ROOT_LOADER_AUDIT.md, VALIDATION.md, and RELEASE_BLOCKERS.md.

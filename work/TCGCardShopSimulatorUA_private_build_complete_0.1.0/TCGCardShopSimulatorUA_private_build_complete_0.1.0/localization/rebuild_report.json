@@ -1,0 +1,20 @@
+{
+  "input_physical_lines": 2196,
+  "output_records": 2190,
+  "distinct_source_keys": 2190,
+  "repair_count": 6,
+  "legacy_reuse_count": 240,
+  "manual_equal_table_hits": 285,
+  "english_residue_table_hits": 77,
+  "source_equals_target": [
+    "HP",
+    "TCG",
+    "2nd",
+    "3rd",
+    "1st",
+    "OMW",
+    "OOMW"
+  ],
+  "placeholder_errors_lightweight": [],
+  "sha256": "ad980b76dca03c38d8578312a8a9aea329fe3b742aff8c3318427a2aa9c99c3e"
+}

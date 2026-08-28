@@ -28,3 +28,19 @@ __pycache__/
 # (device_bash cannot unlink). Nothing here belongs in history.
 _to_delete/
 **/_to_delete/
+
+# work/ — side projects (TCG Card Shop Simulator UA localization, etc.).
+# Added 2026-08-28: `git add -A` was failing outright with "Filename too long"
+# on the .NET build output, and the tree holds 7.1 GB / 1873 files including a
+# 3.4 GB Unity asset and six 155 MB installers — GitHub rejects anything over
+# 100 MB, so this could never have been pushed. Source stays tracked; build
+# output, the game runtime copy and release binaries do not.
+work/**/bin/
+work/**/obj/
+work/**/release*/
+work/**/publication*/
+work/TCGCardShopSimulatorUA-runtime-smoke/
+
+# Extracted production database backup — live customer and order data.
+# The .tar.gz itself is already ignored above; the unpacked copy was not.
+work/crm-0336-source/

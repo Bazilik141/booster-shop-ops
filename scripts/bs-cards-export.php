@@ -47,6 +47,17 @@ function plain(string $html): string {
     $s = html_entity_decode($s, ENT_QUOTES | ENT_HTML5, 'UTF-8');
     return trim((string) preg_replace('~\s+~u', ' ', $s));
 }
+/**
+ * OpenCart stores product/category descriptions HTML-entity-encoded
+ * (&lt;h2&gt;, class=&quot;...&quot;). Every structural check below works on real
+ * tags, so the raw column must be decoded first. Conditional, so a row that is
+ * already stored as plain HTML is not double-decoded.
+ * Added 2026-08-28: without it h2/h3/strong/ul/a and faq_items were always 0 and
+ * NO_HEADING / NO_EMPHASIS / NO_FAQ fired on every product.
+ */
+function rawHtml(string $s): string {
+    return strpos($s, '&lt;') === false ? $s : html_entity_decode($s, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+}
 /** Body = description with the FAQ accordion removed. */
 function bodyOnly(string $html): string {
     return (string) preg_replace('~<section\b[^>]*bs-faq-accordion.*?</section>~is', ' ', $html);
@@ -140,7 +151,7 @@ $rows = [];
 foreach ($products as $r) {
     $id   = (int) $r['product_id'];
     $sku  = $codes[$id]['SKU'] ?? (string) ($r['sku'] ?: $r['model']);
-    $desc = (string) $r['description'];
+    $desc = rawHtml((string) $r['description']);
     $body = bodyOnly($desc);
     $faq  = faqOnly($desc);
     $bt   = plain($body);
@@ -212,7 +223,7 @@ usort($rows, function ($a, $b) {
 $catRows = [];
 foreach ($categories as $c) {
     $cid  = (int) $c['category_id'];
-    $desc = (string) $c['description'];
+    $desc = rawHtml((string) $c['description']);
     $body = bodyOnly($desc); $faq = faqOnly($desc); $bt = plain($body);
     $f = [];
     if ($bt === '')                                        $f[] = 'EMPTY_BODY';

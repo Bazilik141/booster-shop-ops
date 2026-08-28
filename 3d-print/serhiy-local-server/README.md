@@ -1,115 +1,95 @@
 # 3D-P Serhiy local server
 
-A standalone local-only UI for Serhiy. It is an API consumer: the browser talks
-only to this localhost process, and this process talks only to the deployed
-3D-P Apps Script Web App. It has no Google Sheets/Drive client, main-CRM URL,
-or `BOOSTER_CRM_TOKEN`.
+Local-only UI for Serhiy. The browser communicates only with the Node process on
+`127.0.0.1`; the process consumes the Serhiy-projected 3D-P Apps Script API. It
+has no Google Sheets client, Drive client, main-CRM URL, or CRM credential.
 
-## What it does
+## Three zones
 
-- Shows the bounded 3D-P overview, active SKU/availability, active print log,
-  fixture list, payout-status rows, and only `Легенда!A32:A38` (known open
-  questions).
-- Uses the final batch model: session total weight and print time are divided by
-  batch quantity before per-unit values are written to `Номенклатура!G:J`.
-- Loads and saves the five raw batch values with Addendum #2's
-  `3dp_batch_draft` / `3dp_batch_draft_save`, so a selected SKU's draft
-  survives refreshes and re-selection:
-  `quantity`, `total_weight_g`, `total_print_time_h`, `spool_weight_g`,
-  `spool_price_uah`.
-- Reads the three global settings from `Налаштування!A1:C4` and displays them
-  read-only. Serhiy cannot edit those owner-only constants.
-- Adds a print session through `3dp_append_row`, and changes `Брак, шт` only
-  through the history-preserving `3dp_print_log_update` action.
-- Assigns optional fixture price through the API. Fixture is a later,
-  independent step; it is not part of the base formula and does not block a
-  batch save.
+### Calculator
 
-There is no plastic-type field and no packaging-cost logic. Packaging is
-3D-P-010, not this local server.
+- Loads the projected bootstrap and the four `Налаштування!B2:B5` values.
+- Saves the five raw batch-draft inputs and writes only the established per-unit
+  values to `Номенклатура!G:J`.
+- Displays both the unchanged base cost and the defect-adjusted cost used by
+  `Номенклатура!K`: `base * (1 + planned defect fraction)`.
+- Allows edits to the four projected settings with `expected_current`; bounds
+  remain authoritative in Apps Script. The Serhiy-only settings journal is
+  available under the settings toggle.
 
-## Credential boundary
+### Products
 
-The process needs exactly these local environment variables:
+- Lists projected products and availability; write controls include active SKUs
+  only.
+- Edits actual RRP, buyout price, and model URL through the journalled Q/R/S API
+  grant.
+- Saves fixture price, records an actual counted stock value through
+  `new_value`, and logs manufactured batches through the active-SKU-aware,
+  idempotent manufacture action.
+- Creates nomenclature drafts. A draft receives a `DRAFT-` key. The returned
+  prefix/category is shown only as an owner suggestion; the UI never presents a
+  complete article as assigned.
+- Shows the active projected print log.
 
-- `BOOSTER_3DP_URL` — deployed Apps Script Web App URL ending in `/exec`.
-- `BOOSTER_3DP_SERHIY_TOKEN` — a Serhiy-only credential provisioned in Apps
-  Script separately from the owner/dashboard token.
+### Information
 
-Never set `BOOSTER_CRM_TOKEN` here. Do not reuse the owner/dashboard 3D-P
-token, put a real token in `.env.example`, commit one, display one in the
-browser, or send one in chat/screenshots. The server binds only to `127.0.0.1`;
-it is not reachable from the LAN.
+- Builds attention signals from zero stock, recorded defects, and missing print
+  time.
+- Renders projected analytics, all products, sales, payouts, and marketing gifts
+  using the headers returned by the API.
+- Payout rows expose Serhiy's two append-once acknowledgements and the explicit
+  correction route. An existing acknowledgement is displayed as recorded
+  instead of offering the same acknowledgement action again.
 
-## Start on Serhiy's PC
+The UI contains no shop CRM synchronization controls and no owner-only payout or
+article-assignment actions.
 
-Node.js 18+ is required. No `npm install` is needed: this package uses only
-Node's built-in modules.
+## Distribution and credentials
 
-In PowerShell, from this directory, define the variables for this PowerShell
-session and run the server:
+The Serhiy distribution is assembled with portable Node.js 24.19.0 LTS for
+Windows x64. Node is copied only into the generated zip; it must not be placed
+in this repository. The package uses Node built-ins only.
+
+`distribution/Запустити.bat` delegates to `distribution/launcher.ps1`. On first
+run the launcher asks once for the Apps Script URL and a masked Serhiy token,
+persists them as Windows user environment variables through `setx`, and also
+sets them for the current process. Later launches reuse those values. A rotated
+token is entered through `distribution/Змінити токен.bat`.
 
 ```powershell
-Set-Location 'C:\path\to\booster-shop-ops\3d-print\serhiy-local-server'
-$env:BOOSTER_3DP_URL = 'https://script.google.com/macros/s/DEPLOYMENT_ID/exec'
-$env:BOOSTER_3DP_SERHIY_TOKEN = 'Serhiy-only token from the owner'
-npm start
+.\scripts\build-serhiy-3dp-package.ps1 `
+  -NodePath 'C:\Downloads\node-v24.19.0-win-x64.zip' `
+  -OutputDirectory 'C:\Downloads'
 ```
 
-Open `http://127.0.0.1:3107`. Stop it with `Ctrl+C`; session environment
-variables disappear when that PowerShell window closes.
-
-## Normal workflow
-
-1. Select an active SKU. Its stored five-field batch draft loads automatically.
-2. Enter or amend batch quantity, total product weight, total print time, spool
-   weight, and spool price. Calculate and verify the per-unit values and three
-   cost lines.
-3. Click **Зберегти чернетку і per-unit у SKU**. The API saves the raw draft
-   first, then writes per-unit values to `G:J`. A concurrent edit returns
-   `STALE_WRITE`; refresh instead of trying to overwrite it.
-4. Add the real print session through **Друк-лог: нова сесія**. Correct
-   post-production defects with **Зберегти брак**, which preserves API history.
-5. Select fixture only after production if it applies. It can be cleared later
-   and does not change the base calculation.
+The launcher preflights the credential, refuses a non-Serhiy projection, checks
+that fixed port 3107 is free, starts the server, and opens
+`http://127.0.0.1:3107`. Closing its console window stops the local process.
+Never reuse the owner credential, add a real credential to a file, display it,
+or copy it into a screenshot or report. `.env.example` is documentation only;
+the runtime intentionally does not load `.env` files.
 
 ## Local verification
 
 ```powershell
-Set-Location 'C:\path\to\booster-shop-ops\3d-print\serhiy-local-server'
 npm test
 node --check .\server.mjs
 node --check .\public\app.js
 ```
 
-`npm test` uses a fake localhost 3D-P API. It verifies the local server sends
-only the Serhiy credential, reads bounded payout/Legend views, round-trips the
-five raw batch inputs, writes only computed per-unit `G:J`, and uses the
-specialized print-log actions. It does not call the live endpoint or change
-business data.
+The test suite uses a fake localhost API. It covers the two projected bootstrap
+actions, exact `B2:B5` settings reads, all WP1b/WP1c routes, stable manufacture
+request IDs, `new_value` stock semantics, the adjusted K-cost example, and
+unchanged propagation of `RANGE_NOT_PROJECTED`, `READ_PROJECTION_FORBIDDEN`,
+`STALE_WRITE`, and `FORBIDDEN`. It never calls the live workbook.
 
-## Owner + Serhiy live QA
+## Live QA boundary
 
-1. Start the server with the distinct Serhiy token and confirm the browser only
-   calls `127.0.0.1`; real data must load from the local server, not a direct
-   Sheets/Drive request.
-2. On a non-production test SKU, save a known batch (for example 36 units,
-   180 g and 18 h). Refresh/reselect the SKU and confirm all five raw values
-   reload, while `G:J` contain `0.5 h`, `5 g`, `1000 g`, and `800 грн` per unit
-   inputs where applicable — never 18 h or 180 g as per-unit data.
-3. Create a test `Друк-лог` row and change `Брак, шт`; owner checks the live
-   row history and `_Аудит_API` identity is `serhiy`.
-4. Check fixture change/clear is independent. Confirm payout/open-question
-   views show only the bounded data expected for this tool.
+Every write in a manual QA session reaches the production 3D-P workbook. Use a
+designated test SKU and a named workbook copy before testing settings, Q/R/S,
+stock correction, manufacture logging, draft creation, or payout
+acknowledgements. Local green tests prove the client contract only; installation
+and production-identity evidence belong to WP3.
 
-## Recovery and limits
-
-Rollback is stopping the local process. It has no dashboard, CRM, or
-Sheet-schema side effects. Approved API writes remain recoverable by the owner
-from `_Аудит_API`.
-
-The API's generic `3dp_write` action updates one cell at a time. The batch
-save therefore has a known bounded risk: if a later per-unit cell becomes stale
-after the raw draft has saved, the UI stops and reports the error; it never
-retries blindly or falls back to direct Sheet access. An atomic batch action
-would be a separate 3D-P-008 change.
+Stopping the Node process rolls back the local UI only. Already accepted API
+writes remain in the workbook and are recoverable through the API audit trails.

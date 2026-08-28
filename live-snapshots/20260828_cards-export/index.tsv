@@ -1,0 +1,110 @@
+n	type	id	sku	3d	status	flag_count	flags	notes	name	slug	mt_len	md_len	body_chars	h2	h3	strong	ul	a	we	passive	ty
+1	product	143	ACC-3D-PKM-710	3D	hidden	6	NAME_VS_TITLE NO_HEADING NO_EMPHASIS NO_FAQ PLACEHOLDER SUPERLATIVE	NO_IMAGE HIDDEN	Обертова підставка для грейджених карток — 3D-друк	obertova-pidstavka-dlia-slab-3d-druk	56	133	2420	0	0	0	0	0	1	0	0
+2	product	118	FIG-CHARM-001	3D	hidden	5	NO_HEADING NO_EMPHASIS MD_TOO_SHORT THIN_BODY NO_FAQ	HIDDEN	3д СКЮ	FIG-CHARM-001	3	0	9	0	0	0	0	0	0	0	0
+3	product	137	ACC-3D-PKM-110	3D	hidden	5	NAME_VS_TITLE NO_HEADING NO_EMPHASIS NO_FAQ SUPERLATIVE	NO_IMAGE HIDDEN	Підставка для карток, мала — 3D-друк	pidstavka-dlia-kartky-v-protektori-3d-druk	58	137	2654	0	0	0	0	0	1	0	0
+4	product	138	ACC-3D-PKM-120	3D	hidden	5	NAME_VS_TITLE NO_HEADING NO_EMPHASIS NO_FAQ VOICE_MIXED	NO_IMAGE HIDDEN	Підставка для карток, середня — 3D-друк	pidstavka-dlia-kartky-v-toploaderi-3d-druk	58	138	2689	0	0	0	0	0	1	1	0
+5	product	142	ACC-3D-PKM-700	3D	hidden	5	NO_HEADING NO_EMPHASIS NO_FAQ PLACEHOLDER VOICE_MIXED	NO_IMAGE HIDDEN	Обертова підставка для карток у топлоадерах — 3D-друк	obertova-pidstavka-dlia-toploaderiv-3d-druk	59	132	2405	0	0	0	0	0	1	1	0
+6	product	125	BR-MEW-100	3D	hidden	4	NO_HEADING NO_EMPHASIS NO_FAQ VOICE_MIXED	NO_IMAGE HIDDEN	Брелок Мью (Pokémon) — 3D-друк	brelok-mew-pokemon-3d-druk	45	139	2189	0	0	0	0	0	1	1	0
+7	product	127	BR-SQUIR-100	3D	hidden	4	NO_HEADING NO_EMPHASIS NO_FAQ VOICE_MIXED	NO_IMAGE HIDDEN	Брелок Сквіртл (Pokémon) — 3D-друк	brelok-squirtle-pokemon-3d-druk	49	133	2075	0	0	0	0	0	1	1	0
+8	product	129	BR-PIKA-100	3D	hidden	4	NO_HEADING NO_EMPHASIS NO_FAQ VOICE_MIXED	NO_IMAGE HIDDEN	Брелок Пікачу (Pokémon) — 3D-друк	brelok-pikachu-pokemon-3d-druk	48	134	2066	0	0	0	0	0	1	1	0
+9	product	130	FIG-ONIX-500	3D	hidden	4	NO_HEADING NO_EMPHASIS NO_FAQ VOICE_MIXED	NO_IMAGE HIDDEN	Фігурка Онікс (Pokémon) — 3D-друк	figurka-onix-pokemon-3d-druk	48	136	2669	0	0	0	0	0	1	1	0
+10	product	139	ACC-3D-PKM-130	3D	hidden	4	NAME_VS_TITLE NO_HEADING NO_EMPHASIS NO_FAQ	NO_IMAGE HIDDEN	Підставка для карток, велика — 3D-друк	pidstavka-dlia-kartky-v-mahnitnomu-keisi-3d-druk	53	132	2614	0	0	0	0	0	1	0	0
+11	product	140	ACC-3D-PKM-200	3D	hidden	4	NAME_VS_TITLE NO_HEADING NO_EMPHASIS NO_FAQ	NO_IMAGE HIDDEN	Підставка для оцінених PSA карток — 3D-друк	pidstavka-dlia-slab-3d-druk	60	136	2407	0	0	0	0	0	1	0	0
+12	product	141	ACC-3D-PKM-300	3D	hidden	4	NAME_VS_TITLE NO_HEADING NO_EMPHASIS NO_FAQ	NO_IMAGE HIDDEN	Підставка для оцінених PSA карток, на ніжці — 3D-друк	pidstavka-dlia-slab-na-nizhtsi-3d-druk	57	128	2559	0	0	0	0	0	1	0	0
+13	product	126	BR-CHARM-100	3D	hidden	3	NO_HEADING NO_EMPHASIS NO_FAQ	NO_IMAGE HIDDEN	Брелок Чармандер (Pokémon) — 3D-друк	brelok-charmander-pokemon-3d-druk	51	126	2065	0	0	0	0	0	1	0	0
+14	product	128	BR-BULB-100	3D	hidden	3	NO_HEADING NO_EMPHASIS NO_FAQ	NO_IMAGE HIDDEN	Брелок Бульбазавр (Pokémon) — 3D-друк	brelok-bulbasaur-pokemon-3d-druk	52	139	2148	0	0	0	0	0	1	0	0
+15	product	131	FIG-GEOD-511	3D	hidden	3	NO_HEADING NO_EMPHASIS NO_FAQ	NO_IMAGE HIDDEN	Фігурка Геодуд (Pokémon) — 3D-друк	figurka-geodude-pokemon-3d-druk	49	131	2709	0	0	0	0	0	1	0	0
+16	product	132	FIG-MEW-100	3D	hidden	3	NO_HEADING NO_EMPHASIS NO_FAQ	NO_IMAGE HIDDEN	Фігурка Мью в покеболі (Pokémon) — 3D-друк	figurka-mew-pokeball-pokemon-3d-druk	57	127	2667	0	0	0	0	0	1	0	0
+17	product	133	FIG-PKBL-600	3D	hidden	3	NO_HEADING NO_EMPHASIS NO_FAQ	NO_IMAGE HIDDEN	Фігурка-клікер Покебол (Pokémon) — 3D-друк	figurka-kliker-pokeball-pokemon-3d-druk	57	124	2450	0	0	0	0	0	1	0	0
+18	product	134	FIG-LUFFY-500	3D	hidden	3	NO_HEADING NO_EMPHASIS NO_FAQ	NO_IMAGE HIDDEN	Фігурка Луффі (One Piece) — 3D-друк	figurka-luffy-one-piece-3d-druk	50	132	2714	0	0	0	0	0	1	0	0
+19	product	135	FIG-LUFFY-400	3D	hidden	3	NO_HEADING NO_EMPHASIS NO_FAQ	NO_IMAGE HIDDEN	Панно Луффі (One Piece) — 3D-друк	panno-luffy-one-piece-3d-druk	48	131	2767	0	0	0	0	0	1	0	0
+20	product	136	FIG-LUFFY-410	3D	hidden	3	NO_HEADING NO_EMPHASIS NO_FAQ	NO_IMAGE HIDDEN	Картина Луффі (One Piece) — 3D-друк	kartyna-luffy-one-piece-3d-druk	50	124	2625	0	0	0	0	0	1	0	0
+21	product	63	PKM-JP-SPIN-BBX	-	visible	8	NAME_VS_TITLE NO_HEADING NO_EMPHASIS MT_TOO_LONG NO_FAQ INTERNAL_VOCAB SUPERLATIVE BATCH_SCOPED		Бустер бокс Pokémon TCG: Ninja Spinner (Японське видання)	Pokemon-booster-box-Ninja-Spinner	68	153	6125	0	0	0	0	0	0	0	0
+22	product	78	OP-JP-OP15-BST	-	visible	7	KEY_NOT_IN_BODY NAME_VS_TITLE NO_HEADING NO_EMPHASIS MD_TOO_LONG MT_TOO_LONG NO_FAQ		Бустер One Piece Card Game OP-15 (Японське видання)	One-Piece-Boosters-OP-15	62	156	5233	0	0	0	0	0	0	0	0
+23	product	80	OP-JP-OP15-BBX	-	visible	7	NO_HEADING NO_EMPHASIS MD_TOO_LONG MT_TOO_LONG NO_FAQ SUPERLATIVE BATCH_SCOPED		Бустер бокс One Piece TCG: Пригоди на острові богів OP-15 (Японське видання)	OnePiece-booster-box-OP15	91	157	4234	0	0	0	0	0	0	0	0
+24	product	89	PKM-JP-SVEX-BLR	-	visible	7	NAME_VS_TITLE NO_HEADING NO_EMPHASIS MD_TOO_LONG MT_TOO_LONG NO_FAQ SUPERLATIVE		Набір Pokémon S&amp;V ex Special Set — Snow Hazard &amp; Clay Burst (Японське видання)	Pokemon-Scarlet-Violet-ex-Special-Set	70	161	4951	0	0	0	0	0	0	0	0
+25	product	68	OP-JP-OP10-BST	-	visible	6	NAME_VS_TITLE NO_HEADING NO_EMPHASIS MD_TOO_LONG MT_TOO_LONG NO_FAQ		Бустер One Piece Card Game OP-10 (Японське видання)	One-Piece-Boosters-OP-10	61	160	4810	0	0	0	0	0	0	0	0
+26	product	69	OP-JP-OP07-BST	-	visible	6	NAME_VS_TITLE NO_HEADING NO_EMPHASIS MT_TOO_LONG NO_FAQ SUPERLATIVE		Бустер One Piece Card Game OP-07 (Японське видання)	One-Piece-Boosters-OP-07	64	154	4846	0	0	0	0	0	0	0	0
+27	product	75	TEST	-	hidden	6	KEY_NOT_IN_BODY NO_HEADING NO_EMPHASIS MD_TOO_SHORT THIN_BODY NO_FAQ	HIDDEN	Тестова позиція - TEST SKU	TEST-SKU	8	0	17	0	0	0	0	0	0	0	0
+28	product	83	YGO-JP-QCAC-BST	-	visible	6	NO_HEADING NO_EMPHASIS MT_TOO_LONG NO_FAQ SUPERLATIVE BATCH_SCOPED		Бустер Yu-Gi-Oh! OCG: Quarter Century Art Collection (Японське видання)	Yu-Gi-Oh-boosters-Quarter-Century-Art-Collection	65	150	5650	0	0	0	0	0	0	0	0
+29	product	84	OP-JP-OP08-BST	-	visible	6	NO_HEADING NO_EMPHASIS MT_TOO_LONG NO_FAQ SUPERLATIVE BATCH_SCOPED		Бустер One Piece Card Game OP-08 Two Legends (Японське видання)	One-Piece-Boosters-OP-08-Two-Legends	61	144	5256	0	0	0	0	0	0	0	0
+30	product	88	PKM-JP-MZERO-BLR	-	visible	6	NO_HEADING NO_EMPHASIS MD_TOO_LONG MT_TOO_LONG NO_FAQ SUPERLATIVE		Набір Pokémon TCG: Special Card Set MEGA Gallade EX (Японське видання)	Pokemon-Mega-Gallade-EX-Special-Set	63	157	5035	0	0	0	0	0	0	0	0
+31	product	91	MTG-JP-AFRS-BST	-	visible	6	NO_HEADING NO_EMPHASIS MD_TOO_LONG MT_TOO_LONG NO_FAQ SUPERLATIVE		Бустер MTG: Adventures in the Forgotten Realms (Японське видання)	Magic-the-Gathering-Adventures-in-the-Forgotten-Realms	63	157	6384	0	0	0	0	0	0	0	0
+32	product	98	ACC-004	-	visible	6	NAME_VS_TITLE NO_HEADING NO_EMPHASIS MT_TOO_LONG NO_FAQ SUPERLATIVE		Магнітний кейс для карт 35PT	mahnitnyy-keys-kart-35pt	64	123	1983	0	0	0	0	0	0	1	0
+33	product	99	ACC-005	-	visible	6	NAME_VS_TITLE NO_HEADING NO_EMPHASIS MT_TOO_LONG NO_FAQ SUPERLATIVE		Акрилова підставка для карток	akrylova-pidstavka-dlya-kart	70	144	1331	0	0	0	0	0	0	0	0
+34	product	119	PKM-EN-PBLK-BLR-SLP	-	visible	6	NO_HEADING NO_EMPHASIS MT_TOO_LONG NO_FAQ INTERNAL_VOCAB SUPERLATIVE		Pokémon TCG: Mega Evolution — Pitch Black Checklane Blister — Slowpoke (Англомовне видання)	pokemon-tcg-pitch-black-blister-slowpoke-en	68	154	5556	0	0	0	0	0	0	0	0
+35	product	65	PKM-KR-SEBK-BBX	-	visible	5	NO_HEADING NO_EMPHASIS MD_TOO_LONG MT_TOO_LONG NO_FAQ		Бустер бокс Pokémon TCG: Super Electric Breaker (Корейське видання)	Pokemon-booster-box-Super-Electro-Breaker	66	156	5033	0	0	0	0	0	0	0	0
+36	product	70	OP-JP-OP11-BST	-	visible	5	NAME_VS_TITLE NO_HEADING NO_EMPHASIS MT_TOO_LONG NO_FAQ		Бустер One Piece Card Game OP-11 (Японське видання)	One-Piece-Boosters-OP-11	63	153	4792	0	0	0	0	0	0	0	0
+37	product	71	OP-JP-OP12-BST	-	visible	5	NAME_VS_TITLE NO_HEADING NO_EMPHASIS MT_TOO_LONG NO_FAQ		Бустер One Piece Card Game OP-12 (Японське видання)	One-Piece-Boosters-OP-12	61	151	5083	0	0	0	0	0	0	0	0
+38	product	72	OP-JP-OP14-BST	-	visible	5	NAME_VS_TITLE NO_HEADING NO_EMPHASIS NO_FAQ SUPERLATIVE		Бустер One Piece Card Game OP-14 (Японське видання)	One-Piece-Boosters-OP-14	58	148	5068	0	0	0	0	0	0	0	0
+39	product	79	PKM-JP-MDEX-BST	-	visible	5	NO_HEADING NO_EMPHASIS MT_TOO_LONG NO_FAQ SUPERLATIVE		Бустер Pokémon TCG: Mega Dream EX (Японське видання)	Pokemon-boosters-Mega-Dream-EX	67	139	4129	0	0	0	0	0	0	0	0
+40	product	81	PKM-JP-BBLT-BST	-	visible	5	NO_HEADING NO_EMPHASIS MT_TOO_LONG NO_FAQ SUPERLATIVE		Бустер Pokémon TCG: Black Bolt (Японське видання)	Pokemon-boosters-Black-Bolt	64	152	4516	0	0	0	0	0	0	0	0
+41	product	82	PKM-JP-WFLR-BST	-	visible	5	NO_HEADING NO_EMPHASIS MT_TOO_LONG NO_FAQ SUPERLATIVE		Бустер Pokémon TCG: White Flare (Японське видання)	Pokemon-boosters-White-Flare	65	141	3919	0	0	0	0	0	0	0	0
+42	product	87	PKM-JP-INFX-BST	-	visible	5	NO_HEADING NO_EMPHASIS NO_FAQ SUPERLATIVE BATCH_SCOPED		Бустер Pokémon TCG: Inferno X (Японське видання)	Pokemon-boosters-Inferno-X	55	137	5475	0	0	0	0	0	0	0	0
+43	product	92	PKM-KR-HWA-BST	-	visible	5	NO_HEADING NO_EMPHASIS NO_FAQ SUPERLATIVE BATCH_SCOPED		Бустер Pokémon TCG: Hot Wind Arena (Корейське видання)	Pokemon-boosters-Hot-Wind-Arena	60	146	5286	0	0	0	0	0	0	0	0
+44	product	93	PKM-JP-ABYE-BST	-	visible	5	NO_HEADING NO_EMPHASIS NO_FAQ SUPERLATIVE BATCH_SCOPED		Бустер Pokémon TCG: Abyss Eye (Японське видання)	Pokemon-boosters-Abyss-Eye	55	138	5488	0	0	0	0	0	0	0	0
+45	product	102	YGO-JP-WPP5-BBX	-	visible	5	NO_HEADING NO_EMPHASIS MT_TOO_LONG NO_FAQ SUPERLATIVE		Бустер бокс Yu-Gi-Oh! OCG: World Premiere Pack 2024 (Японське видання)	YuGiOh-booster-box-World-Premiere-Pack-2024	64	154	6521	0	0	0	0	0	0	0	0
+46	product	106	PKM-EN-CHRS-BST	-	visible	5	NO_HEADING NO_EMPHASIS NO_FAQ INTERNAL_VOCAB SUPERLATIVE		Бустер Pokémon TCG: Mega Evolution — Chaos Rising (Англійське видання)	Pokemon-Chaos-Rising-Booster-EN	58	133	4467	0	0	0	0	0	0	0	0
+47	product	50	PKM-JP-MSYM-BST	-	visible	4	NO_HEADING NO_EMPHASIS MD_TOO_LONG NO_FAQ		Бустер Pokémon TCG: Mega Symphonia (Японське видання)	Pokemon-boosters-Mega-Symphonia	60	156	5021	0	0	0	0	0	0	0	0
+48	product	59	PKM-JP-MZERO-BST	-	visible	4	NO_HEADING NO_EMPHASIS NO_FAQ SUPERLATIVE		Бустер Pokémon TCG: Munikis Zero (Японське видання)	Pokemon-boosters-Munics-Zero	58	154	5014	0	0	0	0	0	0	0	0
+49	product	67	OP-JP-EB03-BST	-	visible	4	NO_HEADING NO_EMPHASIS MT_TOO_LONG NO_FAQ		Бустер One Piece Card Game EB-03 (Японське видання)	One-Piece-Boosters-EB-03	66	154	4935	0	0	0	0	0	0	0	0
+50	product	73	PKM-JP-OUTL-BST	-	visible	4	NO_HEADING NO_EMPHASIS NO_FAQ INTERNAL_VOCAB		Бустер Pokémon TCG: Outlet Mix (Японське видання)	Pokemon-Japanese-outlet-booster	56	132	6092	0	0	0	0	0	2	0	0
+51	product	74	PKM-JP-SPIN-BST	-	visible	4	NO_HEADING NO_EMPHASIS NO_FAQ SUPERLATIVE		Бустер Pokémon TCG: Ninja Spinner (Японське видання)	Pokemon-boosters-Ninja-Spinner	59	149	4142	0	0	0	0	0	0	0	0
+52	product	76	PKM-JP-PRTB-SET	-	visible	4	NO_HEADING NO_EMPHASIS MT_TOO_LONG NO_FAQ		Набір Pokémon TCG: Premium Trainer Box ex (Японське видання)	Pokemon-Trainer-Box-SVP	61	146	4814	0	0	0	0	0	0	0	0
+53	product	85	OP-JP-MIX-MBX	-	visible	4	NO_HEADING NO_EMPHASIS MT_TOO_LONG NO_FAQ		Містері бокс One Piece Card Game: Mystery Mix Standard (Японське видання)	One-Piece-Mystery-Box	61	136	5883	0	0	0	0	0	0	0	0
+54	product	90	YGO-JP-WPP5-BST	-	visible	4	NO_HEADING NO_EMPHASIS NO_FAQ SUPERLATIVE		Бустер Yu-Gi-Oh! OCG: World Premiere Pack 2024 (Японське видання)	Yu-Gi-Oh-boosters-World-Premiere-Pack-2024	59	147	5464	0	0	0	0	0	0	0	0
+55	product	94	PKM-JP-ABYE-BBX	-	visible	4	NO_HEADING NO_EMPHASIS NO_FAQ SUPERLATIVE		Бустер бокс Pokémon TCG: Abyss Eye (Японське видання)	Pokemon-booster-box-Abyss-Eye	59	141	5768	0	0	0	0	0	0	0	0
+56	product	95	ACC-001	-	visible	4	NO_HEADING NO_EMPHASIS MT_TOO_LONG NO_FAQ		Протектори для карток 63×89 мм, 100 шт Sleeves	protektory-kart-63x89-100sht	71	124	3169	0	0	0	0	0	0	0	0
+57	product	96	ACC-002	-	visible	4	NO_HEADING NO_EMPHASIS MT_TOO_LONG NO_FAQ		Протектори для карт Games 7 Days 63.5×88 мм Premium+, 50 шт Sleeves	protektory-games-7-days-63-5x88-premium-50sht	73	128	2705	0	0	0	0	0	0	0	0
+58	product	97	ACC-003	-	visible	4	NO_HEADING NO_EMPHASIS MT_TOO_LONG NO_FAQ		Топлоадери для карток 35PT, 25 шт toploaders	toploudery-kart-35pt-25sht	68	138	2233	0	0	0	0	0	0	0	0
+59	product	100	ACC-006	-	visible	4	NO_HEADING NO_EMPHASIS MT_TOO_LONG NO_FAQ		Аркуш для карток на 9 кишеньок Games 7 Days Premium Series	arkush-dlya-kart-9-games-7-days-premium	86	139	2368	0	0	0	0	0	0	0	0
+60	product	101	YGO-JP-BODE-BST	-	visible	4	NO_HEADING NO_EMPHASIS MT_TOO_LONG NO_FAQ		Бустер Yu-Gi-Oh! OCG: Blazing Dominion (Японське видання)	booster-ygo-ocg-blazing-dominion-jp	75	126	2661	0	0	0	0	0	0	0	0
+61	product	103	PKM-EN-PORD-BBN	-	visible	4	NO_HEADING NO_EMPHASIS NO_FAQ SUPERLATIVE		Pokémon TCG: Mega Evolution — Perfect Order Booster Bundle (Англомовне видання)	Pokemon-Perfect-Order-Booster-Bundle-EN	58	140	4940	0	0	0	0	0	0	0	0
+62	product	104	PKM-EN-PORD-BST	-	visible	4	NO_HEADING NO_EMPHASIS NO_FAQ INTERNAL_VOCAB		Бустер Pokémon TCG: Mega Evolution — Perfect Order (Англійське видання)	Pokemon-Perfect-Order-Booster-EN	59	134	4463	0	0	0	0	0	0	0	0
+63	product	107	OP-JP-OP16-BBX	-	visible	4	NO_HEADING NO_EMPHASIS NO_FAQ SUPERLATIVE		Бустер бокс One Piece Card Game OP-16: The Time of Battle (Японське видання)	One-Piece-OP-16-The-Time-of-Battle-Booster-Box-JP	57	137	5098	0	0	0	0	0	0	0	0
+64	product	108	OP-JP-OP16-BST	-	visible	4	NO_HEADING NO_EMPHASIS NO_FAQ SUPERLATIVE		Бустер One Piece Card Game OP-16: The Time of Battle (Японське видання)	One-Piece-OP-16-The-Time-of-Battle-Booster-JP	59	123	4647	0	0	0	0	0	0	0	0
+65	product	111	OP-JP-MBX-XL	-	hidden	4	NO_HEADING NO_EMPHASIS MT_TOO_LONG NO_FAQ	NO_IMAGE HIDDEN	Містері бокс One Piece Card Game: Mystery Mix XL (Японське видання)	One-Piece-tcg-nabory-MBOX-XL	62	131	6351	0	0	0	0	0	0	0	0
+66	product	114	ACC-009	-	visible	4	NO_HEADING NO_EMPHASIS NO_FAQ INTERNAL_VOCAB		Топлоадер для колекційної картки 35PT, 1 шт	toploudery-kart-35pt-1sht	46	123	2372	0	0	0	0	0	0	0	0
+67	product	115	PKM-JP-MDEX-BBX	-	visible	4	NO_HEADING NO_EMPHASIS NO_FAQ SUPERLATIVE		Бустер бокс Pokémon TCG: Mega Dream EX (Японське видання)	Pokemon-booster-box-Mega-Dream-EX	57	151	5344	0	0	0	0	0	0	0	0
+68	product	116	PKM-EN-Q2-MTIN-SAL	-	visible	4	NO_HEADING NO_EMPHASIS MT_TOO_LONG NO_FAQ		Pokémon TCG: Lumiose City Mini Tin — Salamence &amp; Litleo (Англомовне видання)	pokemon-lumiose-city-mini-tin-salamence-litleo-en	61	143	4059	0	0	0	0	0	0	0	0
+69	product	120	OP-JP-ST32-STD	-	visible	4	NO_HEADING NO_EMPHASIS NO_FAQ INTERNAL_VOCAB		Стартова колода One Piece ST-32 Зоро (Японське видання)	One-Piece-Starter-Deck-ST-32-Roronoa-Zoro	56	151	3777	0	0	0	0	0	0	0	0
+70	product	121	OP-JP-ST33-STD	-	visible	4	NO_HEADING NO_EMPHASIS NO_FAQ INTERNAL_VOCAB		Стартова колода One Piece ST-33 Кузан (Японське видання)	One-Piece-Starter-Deck-ST-33-Kuzan	57	143	3859	0	0	0	0	0	0	0	0
+71	product	122	OP-JP-ST34-STD	-	visible	4	NO_HEADING NO_EMPHASIS NO_FAQ INTERNAL_VOCAB		Стартова колода One Piece ST-34 Катакурі (Японське видання)	One-Piece-Starter-Deck-ST-34-Charlotte-Katakuri	60	139	3957	0	0	0	0	0	0	0	0
+72	product	123	OP-JP-ST35-STD	-	visible	4	NO_HEADING NO_EMPHASIS NO_FAQ INTERNAL_VOCAB		Стартова колода One Piece ST-35 Сабо (Японське видання)	One-Piece-Starter-Deck-ST-35-Sabo	56	140	3996	0	0	0	0	0	0	0	0
+73	product	124	OP-JP-ST36-STD	-	visible	4	NO_HEADING NO_EMPHASIS NO_FAQ INTERNAL_VOCAB		Стартова колода One Piece ST-36 Кід (Японське видання)	One-Piece-Starter-Deck-ST-36-Eustass-Kid	55	142	3875	0	0	0	0	0	0	0	0
+74	product	145	YGO-JP-QCAC-BBX	-	visible	4	NAME_VS_TITLE NO_HEADING NO_EMPHASIS NO_FAQ	NO_IMAGE	Бустер бокс Yu-Gi-Oh! OCG: Quarter Century Art Collection (Японське видання)	YuGiOh-booster-box-Quarter-Century-Art-Collection	57	143	2542	0	0	0	0	0	0	0	0
+75	product	146	PKM-JP-STES-BBX	-	hidden	4	NO_HEADING NO_EMPHASIS NO_FAQ INTERNAL_VOCAB	NO_IMAGE HIDDEN	Бустер бокс Pokémon TCG: Storm Emeralda (Японське видання)	Pokemon-booster-box-Storm-Emeralda	58	126	2528	0	0	0	0	0	0	0	0
+76	product	147	PKM-JP-STES-BST	-	hidden	4	NO_HEADING NO_EMPHASIS NO_FAQ INTERNAL_VOCAB	NO_IMAGE HIDDEN	Бустер Pokémon TCG: Storm Emeralda (Японське видання)	Pokemon-boosters-Storm-Emeralda	60	124	2464	0	0	0	0	0	0	0	0
+77	product	148	PKM-JP-INFX-BBX	-	hidden	4	NO_HEADING NO_EMPHASIS NO_FAQ INTERNAL_VOCAB	NO_IMAGE HIDDEN	Бустер бокс Pokémon TCG: Inferno X (Японське видання)	Pokemon-booster-box-Inferno-X	53	124	2385	0	0	0	0	0	0	0	0
+78	product	149	PKM-JP-TGTR-BBX	-	hidden	4	NO_HEADING NO_EMPHASIS NO_FAQ INTERNAL_VOCAB	NO_IMAGE HIDDEN	Бустер бокс Pokémon TCG: The Glory of Team Rocket (Японське видання)	Pokemon-booster-box-The-Glory-of-Team-Rocket	55	133	2335	0	0	0	0	0	0	0	0
+79	product	150	PKM-JP-TGTR-BST	-	hidden	4	NO_HEADING NO_EMPHASIS NO_FAQ INTERNAL_VOCAB	NO_IMAGE HIDDEN	Бустер Pokémon TCG: The Glory of Team Rocket (Японське видання)	Pokemon-boosters-The-Glory-of-Team-Rocket	57	109	2419	0	0	0	0	0	0	0	0
+80	product	151	YGO-JP-BETB-BBX	-	visible	4	NO_HEADING NO_EMPHASIS NO_FAQ INTERNAL_VOCAB		Бустер бокс Yu-Gi-Oh! OCG: BEYOND THE BRAVE (Японське видання)	YuGiOh-booster-box-Beyond-the-Brave	53	127	2276	0	0	0	0	0	0	0	0
+81	product	152	YGO-JP-BETB-BST	-	visible	4	NO_HEADING NO_EMPHASIS NO_FAQ INTERNAL_VOCAB		Бустер Yu-Gi-Oh! OCG: BEYOND THE BRAVE (Японське видання)	Yu-Gi-Oh-boosters-Beyond-the-Brave	55	125	2458	0	0	0	0	0	0	0	0
+82	product	56	PKM-MEGA-BOX	-	visible	3	NO_HEADING NO_EMPHASIS NO_FAQ		Бустер бокс Pokémon TCG: Mega Symphonia (Японське видання)	Pokemon-booster-box-Mega-Symphonia	58	154	4404	0	0	0	0	0	0	0	0
+83	product	57	PKM-JP-MBRV-BST	-	visible	3	NO_HEADING NO_EMPHASIS NO_FAQ		Бустер Pokémon TCG: Mega Brave (Японське видання)	Pokemon-boosters-Mega-Brave	56	143	4963	0	0	0	0	0	0	0	0
+84	product	58	PKM-KR-HWAK-BBX	-	visible	3	NO_HEADING NO_EMPHASIS NO_FAQ		Бустер бокс Pokémon TCG: Hot Wind Arena (Корейське видання)	Pokemon-booster-box-Hot-Wind-Arena	58	155	4409	0	0	0	0	0	0	0	0
+85	product	61	PKM-JP-MZERO-BBX	-	visible	3	NO_HEADING NO_EMPHASIS NO_FAQ		Бустер бокс Pokémon TCG: Munikis Zero (Японське видання)	Pokemon-booster-box-Munics-Zero	56	152	4259	0	0	0	0	0	0	0	0
+86	product	66	OP-JP-V7PR-BST	-	visible	3	NO_HEADING NO_EMPHASIS NO_FAQ		Promotion Pack Vol.7 One Piece Card Game (Японське видання)	One-Piece-Boosters-Promotion-Pack-V7	56	146	4177	0	0	0	0	0	0	0	0
+87	product	77	PKM-JP-MIX-MBX	-	visible	3	NO_HEADING NO_EMPHASIS NO_FAQ		Містері бокс Pokémon TCG: Mystery Mix Standard (Японське видання)	pokemon-tcg-nabory-MBOX	59	134	5915	0	0	0	0	0	0	0	0
+88	product	105	PKM-EN-CHRS-BBN	-	visible	3	NO_HEADING NO_EMPHASIS NO_FAQ		Pokémon TCG: Mega Evolution — Chaos Rising Booster Bundle (Англомовне видання)	Pokemon-Chaos-Rising-Booster-Bundle-EN	57	139	4945	0	0	0	0	0	0	0	0
+89	product	109	PKM-JP-MBRV-BBX	-	visible	3	NO_HEADING NO_EMPHASIS NO_FAQ		Бустер бокс Pokémon TCG: Mega Brave (Японське видання)	Pokemon-booster-box-Mega-Brave	54	135	4561	0	0	0	0	0	0	0	0
+90	product	110	PKM-JP-MBX-XL	-	visible	3	NO_HEADING NO_EMPHASIS NO_FAQ		Містері бокс Pokémon TCG: Mystery Mix XL (Японське видання)	pokemon-tcg-nabory-MBOX-XL	60	129	5964	0	0	0	0	0	0	0	0
+91	product	112	ACC-007-360	-	visible	3	NO_HEADING NO_EMPHASIS NO_FAQ		Альбом для колекційних карток на 360 карток, жовтий	albom-dlia-kartok-na-360-slotiv	53	134	2336	0	0	0	0	0	0	0	0
+92	product	113	ACC-008	-	visible	3	NO_HEADING NO_EMPHASIS NO_FAQ		Акриловий протектор-кейс для картки без магніта, 1 шт	protektor-case-akrylovyi	57	123	2485	0	0	0	0	0	0	0	0
+93	product	117	PKM-EN-Q2-MTIN-GAL	-	visible	3	NO_HEADING NO_EMPHASIS NO_FAQ		Pokémon TCG: Lumiose City Mini Tin — Gallade &amp; Goomy (Англомовне видання)	pokemon-lumiose-city-mini-tin-gallade-goomy-en	59	140	3999	0	0	0	0	0	0	0	0
+94	product	144	ACC-007-400	-	hidden	3	NO_HEADING NO_EMPHASIS NO_FAQ	NO_IMAGE HIDDEN	Альбом для колекційних карток на 400 карток, жовтий	albom-dlia-kartok-na-400-slotiv	53	135	2402	0	0	0	0	0	0	0	0
+	category	59		-	enabled	2	NO_HEADING NO_FAQ		Pokémon	Pokemon	56	151	5392								
+	category	60		-	enabled	2	NO_HEADING NO_FAQ		One Piece Card Game	One-Piece	59	153	5231								
+	category	66		-	enabled	2	NO_HEADING NO_FAQ		Інші TCG	more-tcg	52	150	2502								
+	category	70		-	enabled	3	THIN_BODY NO_HEADING NO_FAQ		Аксесуари	acsesuary	54	83	211								
+	category	61		-	enabled	3	MD_TOO_LONG NO_HEADING NO_FAQ		Бустери Pokémon	Pokemon-boosters	67	161	4383								
+	category	62		-	enabled	2	NO_HEADING NO_FAQ		Бустер бокси Pokémon	Pokemon/Pokemon-booster-box	54	154	3678								
+	category	64		-	enabled	3	MD_TOO_LONG NO_HEADING NO_FAQ		Набори	Pokemon/pokemon-tcg-nabory	60	158	2544								
+	category	73		-	disabled	2	NO_HEADING NO_FAQ		Фігурки та декор Pokémon	Pokemon/figurky-ta-dekor-pokemon	49	140	2829								
+	category	63		-	enabled	2	NO_HEADING NO_FAQ		Бустери One Piece	One-Piece/One-Piece-Boosters	57	153	2801								
+	category	68		-	enabled	3	MD_TOO_LONG NO_HEADING NO_FAQ		Набори та бокси One Piece	One-Piece/one-piece-nabory-ta-boksy	90	157	3995								
+	category	74		-	disabled	2	NO_HEADING NO_FAQ		Фігурки та декор One Piece	One-Piece/figurky-ta-dekor-one-piece	51	147	2822								
+	category	67		-	enabled	2	NO_HEADING NO_FAQ		Magic: The Gathering	more-tcg/magic-the-gathering	55	145	2765								
+	category	65		-	enabled	2	NO_HEADING NO_FAQ		Yu-Gi-Oh!	more-tcg/Yu-Gi-Oh	48	145	2942								
+	category	71		-	enabled	2	NO_HEADING NO_FAQ		Протектори та зберігання	acsesuary/protektory-ta-zberihannia	59	134	3340								
+	category	72		-	enabled	2	NO_HEADING NO_FAQ		Підставки та декор	acsesuary/pidstavky-ta-dekor	53	130	2884								

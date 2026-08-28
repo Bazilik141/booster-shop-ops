@@ -1,0 +1,108 @@
+{
+  "source_physical_lines": 2196,
+  "output_physical_lines": 2190,
+  "repair_hits": [
+    [
+      637,
+      "Interact Put Item"
+    ],
+    [
+      652,
+      "Items will be lost if checkout is not finished. Are you sure about proceeding to the next day?"
+    ],
+    [
+      660,
+      "Jump Checkout"
+    ],
+    [
+      1431,
+      "There are items in the box. Are you sure about throwing it away?"
+    ],
+    [
+      2032,
+      "The card has high value. Are you sure about throwing it away?"
+    ],
+    [
+      2175,
+      "Canceling will reset the registered players. Are you sure about canceling the tournament?"
+    ]
+  ],
+  "mappings": 2190,
+  "distinct_source_keys": 2190,
+  "duplicate_source_keys": {},
+  "malformed_nonempty": [],
+  "empty_source_keys": [],
+  "placeholder_errors": [],
+  "source_equals_target": [
+    [
+      600,
+      "HP"
+    ],
+    [
+      1404,
+      "TCG"
+    ],
+    [
+      1621,
+      "2nd"
+    ],
+    [
+      2124,
+      "3rd"
+    ],
+    [
+      2125,
+      "1st"
+    ],
+    [
+      2166,
+      "OMW"
+    ],
+    [
+      2167,
+      "OOMW"
+    ]
+  ],
+  "source_equals_target_count": 7,
+  "legacy_reuse_count": 240,
+  "manual_equal_table_hits": 285,
+  "english_residue_table_hits": 77,
+  "latin_only_targets": [
+    [
+      600,
+      "HP",
+      "HP"
+    ],
+    [
+      1404,
+      "TCG",
+      "TCG"
+    ],
+    [
+      1621,
+      "2nd",
+      "2nd"
+    ],
+    [
+      2124,
+      "3rd",
+      "3rd"
+    ],
+    [
+      2125,
+      "1st",
+      "1st"
+    ],
+    [
+      2166,
+      "OMW",
+      "OMW"
+    ],
+    [
+      2167,
+      "OOMW",
+      "OOMW"
+    ]
+  ],
+  "sha256": "ad980b76dca03c38d8578312a8a9aea329fe3b742aff8c3318427a2aa9c99c3e"
+}
