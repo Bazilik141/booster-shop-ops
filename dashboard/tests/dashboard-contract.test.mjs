@@ -134,7 +134,17 @@ assert.match(html,/retry_3dp_sync'[\s\S]*clearPendingOrderEdit_\(accountingState
 assert.match(html,/Компоненти й фурнітура повторно не записувались/);
 assert.match(html,/ORDER_EDIT_PENDING_KEY/);
 assert.match(html,/pendingOrderEditRequestId_/);
-assert.match(html,/showPage\('testcleanup'\)/);
+assert.match(html,/showPageByName\('settings'\)/,'settings is reachable from the logo gear');
+assert.match(html,/showPage\('updates'\)/,'updates and migration has a dedicated navigation item');
+assert.match(html,/Налаштування/,'settings page is present');
+assert.match(html,/Оновлення та міграція/,'updates and migration page is present');
+assert.match(html,/action:'crm_maintenance'/,'settings commands use the CRM maintenance API bridge');
+assert.equal((html.match(/when:'Коли /g)||[]).length,5,'every CRM maintenance command explains when the owner should use it');
+assert.equal((html.match(/result:'/g)||[]).length,5,'every CRM maintenance command explains the expected outcome');
+assert.match(html,/Якщо потрібний товар уже видно — натискати не треба/,'catalog guidance says when no action is needed');
+assert.match(html,/Регулярно натискати цю кнопку не потрібно/,'formula automation guidance is explicit about one-off use');
+assert.doesNotMatch(html,/showPage\('testcleanup'\)/,'test cleanup no longer has a sidebar page');
+assert.match(html,/action:'add_expense'/,'accounting exposes the expense entry API');
 assert.match(html,/action: 'test_order_cleanup', confirm: 'CLEAN TEST ORDERS'/);
 assert.match(html,/тестове замовлення/);
 assert.match(html,/Копіювати звіт/);

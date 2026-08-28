@@ -7,10 +7,10 @@ new Web App version.
 
 | Field | Value |
 |---|---|
-| Mirror file | `crm/apps-script/Code.gs` — based on the owner-supplied complete V148 export `Версія 148, 24 серп. 2026 р., 1306.csv`, then extended locally. The owner reported publishing the current post-V152 performance/status/SKU correction as V153 on 2026-08-28 at 09:46 Kyiv. No fresh V153 source export was supplied. |
-| Baseline pulled from live | 2026-08-24, 13:06 Kyiv (owner-supplied complete V148 export). |
-| **Mirror content deployed to live** | ✅ **V153 owner-paste/publication provenance reported 2026-08-28 09:46 Kyiv.** The owner reported the dashboard coherent and the guarded `OC-FOP-0336` repair successful. This is not an independent byte comparison; V148 remains the newest exported/source-compared baseline. |
-| Deployed Web App version number | CRM V153 — owner-reported publication 2026-08-28 09:46 Kyiv. Dashboard QA: owner reported it coherent. `OC-FOP-0336` was repaired and the temporary live script deleted. No fresh V153 export or independent bounded row read-back was supplied. |
+| Mirror file | `crm/apps-script/Code.gs` — based on the owner-supplied complete V153 export `Версія 153, 28 серп. 2026 р., 0946.csv` and extended locally with the dashboard maintenance/expense API bridge on 2026-08-28. |
+| Baseline pulled from live | 2026-08-28, 13:05 Kyiv (owner-supplied complete V153 export). |
+| **Mirror content deployed to live** | ✅ **V154 owner-paste/publication provenance reported 2026-08-28 14:40 Kyiv.** The owner reported publishing the then-current CRM script after the local dashboard-settings QA fixes. No fresh V154 export or independent byte comparison was supplied. |
+| Deployed Web App version number | CRM V154 — owner-reported publication 2026-08-28 14:40 Kyiv. Fresh V153 export remains the latest independently source-compared baseline; no independent V154 live QA or bounded row read-back was supplied. |
 | Live-verified after deploy | Post-V131 (2026-08-18 14:52) owner reported `QA - ok`; `integrity_check`: `clean:true`, `problems:[]`, checked `Товари`, `РРЦ`, `Розхідники`, `Майстер_Товарів`, `Налаштування`; `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:55853`. This proves the schema/formula relationships covered by `integrity_check`, not unrelated FIFO/warehouse flows or a byte match with the mirror. Post-V130 (2026-08-18 14:36) `integrity_check`: `clean:true`, `problems:[]`, checked `Товари`, `РРЦ`, `Розхідники`, `Майстер_Товарів`, `Налаштування`; `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:12184`. Owner reported dashboard QA done for the recent-purchases fix. Post-V129 (2026-08-17 22:41) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:9698`. This proves schema/formula relationships covered by `integrity_check`, not the expected-stock rule: a direct formula read immediately after still found the legacy `Склад!Q3:Q201` rule without `Замовлено`. FIFO migration flows are outside this check and remain unproven live. Post-V128 (18:36) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:12564`. Post-V118 (23:18) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:7672`. |
 
 > ⚠ **2026-08-12, 16:45–16:46 — V106 migration succeeded; repeat exposed ARRAYFORMULA spill detection.**
@@ -25,10 +25,15 @@ new Web App version.
 > The owner-run result returned all schema/formula/backfill counters at zero and
 > `already_applied=true`. The owner clarified that V107 had been published at 16:54, so dashboard
 > API calls and the setup function now use the corrected source. The CRM deploy/setup gate is closed.
-| Local syntax check | Before V153 publication: Node parse of `Code.gs`, PHP lint of the OpenCart SKU runner, all 23 CRM Apps Script test files, both dashboard test files, and `git diff --check` passed 2026-08-28. After owner-reported successful repair, the temporary local `.gs` and its dedicated test were removed; 22 permanent CRM test files remain. Coverage includes mixed-order KPI exclusion, OpenCart `Очікування товару` mapping, both Abyss Eye aliases, staged overview loading, preorder forecast/FIFO reconciliation, 75% RRP fallback, and negative-stock decoration. |
+| Local syntax check | Before owner-reported V154 publication: Node parse of `Code.gs`, all 23 permanent CRM Apps Script tests, all 3 dashboard tests, browser QA at 1440/1024/801/800/390 px, and `git diff --check` passed 2026-08-28. Coverage includes dashboard maintenance commands, expense retry idempotency, settings/report initialization, updates refresh, mixed-order KPI exclusion, preorder forecast/FIFO reconciliation, and stock-deficit handling. |
 | Previous repo copy | `Booster Shop CRM - Apps_Script_код 29.07.2026.csv` (2026-07-29, pre-V87/V89) — superseded, keep for history only |
 
 ## Mirror status
+
+> ✅ **2026-08-28, 14:40 Kyiv — dashboard settings/expense bridge owner-reported as CRM V154.**
+> The owner reported publishing the then-current main CRM script. This records publication provenance,
+> not an independent V154 source comparison or live behavior check. The subsequent plain-language
+> dashboard hint changes do not modify `Code.gs`.
 
 > ✅ **2026-08-28, 09:46 Kyiv — post-V152 correction owner-reported as CRM V153.**
 > The owner-reported V152 runtime launched seven concurrent dashboard `doGet` executions; the

@@ -36,6 +36,9 @@ body {
   padding: 20px; font-size: 15px; font-weight: 700;
   border-bottom: 1px solid var(--border); letter-spacing: -0.3px;
 }
+.logo-settings-button { float:right; margin:-3px 0 0 8px; border:0; background:transparent; color:var(--muted); cursor:pointer; font-size:17px; line-height:1; padding:2px; }
+.logo-settings-button:hover,.logo-settings-button:focus { color:var(--text); }
+.mobile-brandbar { display:none; }
 .logo em { color: var(--accent); font-style: normal; }
 .nav-section { padding: 12px 0; flex: 1; overflow-y: auto; }
 .nav-item {
@@ -70,6 +73,13 @@ body {
 
 /* ── Metric cards ── */
 .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 14px; margin-bottom: 22px; }
+.settings-command-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; }
+.settings-command { display:flex; flex-direction:column; align-items:flex-start; gap:8px; padding:15px; border:1px solid var(--border); border-radius:9px; background:var(--surface2); }
+.settings-command h3 { font-size:14px; }
+.settings-command .field-hint { min-height:92px;line-height:1.45; }
+.settings-command .field-hint b { color:var(--text); }
+.settings-command .command-result { display:block;margin-top:6px;color:var(--muted); }
+.settings-command button { margin-top:auto; }
 /* The integrity tile is appended by independent async branches; grid order keeps it last. */
 #crmIntegrityCard { order: 999; }
 .card {
@@ -393,6 +403,10 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
   .three-dp-top-row:last-child { border-bottom:0; }
 @media (max-width: 800px) {
   .sidebar { display: none; }
+  .mobile-brandbar { display:flex;position:sticky;top:0;z-index:20;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--surface);border-bottom:1px solid var(--border);font-weight:700; }
+  .mobile-brandbar em { color:var(--accent);font-style:normal; }
+  .mobile-brandbar button { border:0;background:transparent;color:var(--muted);cursor:pointer;font:inherit;padding:5px 7px;border-radius:6px; }
+  .mobile-brandbar button:hover,.mobile-brandbar button:focus { color:var(--text);background:var(--surface2); }
   .main { padding: 16px; }
   .grid2 { grid-template-columns: 1fr; }
   .trend-grid { grid-template-columns: 1fr; }
@@ -408,7 +422,7 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
 
 <!-- ══════════════════ SIDEBAR ══════════════════ -->
 <nav class="sidebar">
-  <div class="logo">🃏 Booster<em>Shop</em></div>
+  <div class="logo"><button class="logo-settings-button" type="button" onclick="showPageByName('settings')" title="Налаштування" aria-label="Налаштування">⚙</button>🃏 Booster<em>Shop</em></div>
   <div class="nav-section">
     <div class="nav-item active" onclick="showPage('overview')">
       <span class="nav-icon">📊</span> Огляд
@@ -434,11 +448,11 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
     <div class="nav-item" onclick="showPage('accounting')">
       <span class="nav-icon">➕</span> Облік
     </div>
+    <div class="nav-item" onclick="showPage('updates')">
+      <span class="nav-icon">🔄</span> Оновлення та міграція
+    </div>
     <div class="nav-item" onclick="showPage('3dprint')">
       <span class="nav-icon">🖨️</span> 3D-друк
-    </div>
-    <div class="nav-item" onclick="showPage('testcleanup')">
-      <span class="nav-icon">🧹</span> Тестові замовлення
     </div>
   </div>
   <div class="sidebar-footer">
@@ -446,6 +460,10 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
     <a class="refresh-link" onclick="hardRefresh()">↻ Оновити дані</a>
   </div>
 </nav>
+<div class="mobile-brandbar">
+  <button type="button" onclick="showPageByName('overview')" aria-label="Відкрити огляд">🃏 Booster<em>Shop</em></button>
+  <button type="button" onclick="showPageByName('settings')" title="Налаштування" aria-label="Налаштування">⚙</button>
+</div>
 
 <!-- ══════════════════ MAIN ══════════════════ -->
 <main class="main">
@@ -462,8 +480,6 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
     <div class="cards" id="summaryCards">
       <div class="card"><div class="loading"><div class="spinner"></div><br>Завантаження...</div></div>
     </div>
-
-    <div id="crmIntegrityDetail" style="display:none"></div>
 
     <div class="grid2">
       <div class="section">
@@ -628,16 +644,35 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
     <div id="accountingContent"><div class="loading"><div class="spinner"></div><br>Завантаження...</div></div>
   </div>
 
-  <!-- ─── TEST ORDER CLEANUP ─── -->
-  <div id="page-testcleanup" class="page">
+  <!-- ─── UPDATES AND MIGRATION ─── -->
+  <div id="page-updates" class="page">
     <div class="header">
-      <div class="page-title">Тестові замовлення</div>
-      <div class="page-sub">Очищення лише замовлень з явною позначкою в примітці</div>
+      <div class="page-title">Оновлення та міграція</div>
+      <div class="page-sub">Оновлення записів і контрольоване перенесення залишків</div>
+    </div>
+    <div id="updatesContent"><div class="loading"><div class="spinner"></div><br>Завантаження...</div></div>
+  </div>
+
+  <!-- ─── SETTINGS ─── -->
+  <div id="page-settings" class="page">
+    <div class="header">
+      <div class="page-title">Налаштування</div>
+      <div class="page-sub">Службові команди CRM та очищення тестових даних</div>
     </div>
     <div class="section">
-      <div class="section-header"><span class="section-title">Безпечне очищення тестових замовлень</span></div>
-      <div class="three-dp-note">Інструмент шукає в «Продажі» примітки з текстом «тестове замовлення» або «тест замовлення». Якщо позначена хоча б одна позиція, очищується все це замовлення: CRM-продажі, списання, витрати, 3D-облік і пов’язані 3D-P рухи. Спершу перевіряються всі знайдені замовлення; якщо перевірка зупиниться з помилкою, дані не змінюються.</div>
-      <div class="three-dp-note">Після запуску нижче лишається повний звіт. Його можна скопіювати й надіслати для розбору. Якщо виконання обірветься між CRM та 3D-P, у звіті буде видно конкретне замовлення; повторний запуск безпечний і продовжить очищення.</div>
+      <div class="section-header"><span class="section-title">Команди CRM</span><div id="crmMaintenanceMessage" class="records-message"></div></div>
+      <div class="settings-command-grid" id="crmMaintenanceCommands"></div>
+    </div>
+    <div id="crmIntegrityDetail" style="display:none"></div>
+    <div class="section">
+      <div class="section-header"><span class="section-title">Цілісність CRM</span><button id="crmIntegrityButton" class="btn-primary" type="button" onclick="runCrmIntegrityCheck()">Перевірити CRM</button></div>
+      <div class="three-dp-note">Read-only перевірка формул, ключів SKU, довідників і пов’язаних структур. Вона нічого не змінює.</div>
+      <div id="crmIntegrityCardHost" class="cards"></div>
+    </div>
+    <div class="section">
+      <div class="section-header"><span class="section-title">Тестові замовлення</span></div>
+      <div class="three-dp-note">Інструмент шукає в «Продажі» примітки з текстом «тестове замовлення» або «тест замовлення». Якщо позначена хоча б одна позиція, очищується все це замовлення: CRM-продажі, списання, витрати, 3D-облік і пов’язані 3D-P рухи.</div>
+      <div class="three-dp-note">Спершу перевіряються всі знайдені замовлення. Після запуску нижче лишається повний звіт; повторний запуск безпечно продовжує незавершене очищення.</div>
       <div class="form-actions" style="margin-top:14px"><button id="testOrderCleanupButton" class="btn-primary" type="button" onclick="runTestOrderCleanup()">🧹 Перевірити й очистити тестові замовлення</button></div>
       <div id="testOrderCleanupReport" style="margin-top:14px"></div>
     </div>
@@ -735,7 +770,7 @@ function crmIntegrityRender(result) {
   root.style.display='block';
 }
 function renderCrmIntegrityTile() {
-  const cards=document.getElementById('summaryCards');if(!cards)return;const existing=document.getElementById('crmIntegrityCard');if(existing)existing.remove();
+  const cards=document.getElementById('crmIntegrityCardHost') || document.getElementById('summaryCards');if(!cards)return;const existing=document.getElementById('crmIntegrityCard');if(existing)existing.remove();
   const card=document.createElement('div');card.id='crmIntegrityCard';card.className='card';card.style.cursor='pointer';card.setAttribute('role','button');card.setAttribute('tabindex','0');
   const result=crmIntegrityState.result,problems=(result && result.problems) || [],time=crmIntegrityState.time?(' · '+crmIntegrityState.time):'',elapsed=crmIntegrityElapsed(result);
   let value='Перевірити',sub='read-only · без вивантаження таблиць';
@@ -745,6 +780,29 @@ function renderCrmIntegrityTile() {
   else if(crmIntegrityState.status==='error'){value='—';sub=threeDpEsc(crmIntegrityState.error || 'Перевірка недоступна.');}
   card.innerHTML='<div class="card-label">ЦІЛІСНІСТЬ CRM</div><div class="card-value">'+value+'</div><div class="card-sub">'+sub+'</div>';
   card.onclick=runCrmIntegrityCheck;card.onkeydown=function(event){if(event.key==='Enter' || event.key===' '){event.preventDefault();runCrmIntegrityCheck();}};cards.appendChild(card);
+}
+
+const CRM_MAINTENANCE_COMMANDS = [
+  { command:'catalog_options', title:'Оновити довідники SKU', when:'Коли додав новий товар, але його немає у списку вибору в одній із форм CRM, або список товарів порожній.', result:'Поверне актуальні товари у списки. Якщо потрібний товар уже видно — натискати не треба.' },
+  { command:'expected_stock', title:'Оновити очікуваний залишок', when:'Коли після додавання або зміни закупки у «Склад» не змінилася цифра товару, який ще їде або вже замовлений.', result:'Відновить формули очікуваного товару. Для звичайного перегляду натискати не треба.' },
+  { command:'current_cost', title:'Оновити собівартість складу', when:'Коли після приходу закупки, виправлення лоту або міграції собівартість товару в «Склад» порожня чи виглядає застарілою.', result:'Перерахує собівартість залишку за фактичними закупками.' },
+  { command:'preorder_cost', title:'Заповнити собівартість передзамовлень', when:'Коли у передзамовленні собівартість порожня, але закупку цього товару вже внесено в CRM.', result:'Спробує взяти собівартість із доступної закупки. Якщо даних закупки ще немає — нічого не зміниться.' },
+  { command:'row_capacity', title:'Налаштувати автооновлення формул CRM', when:'Коли в нових рядках перестали з’являтися формули або після оновлення скрипту треба відновити щоденну автоперевірку.', result:'Налаштує автоматичну перевірку раз на день. Регулярно натискати цю кнопку не потрібно.' }
+];
+const crmMaintenanceState = { running:'', message:'', kind:'' };
+function renderCrmMaintenanceCommands() {
+  const root=document.getElementById('crmMaintenanceCommands');if(!root)return;
+  root.innerHTML=CRM_MAINTENANCE_COMMANDS.map(function(item){const running=crmMaintenanceState.running===item.command,hint='Коли натискати: '+item.when+' '+item.result;return '<div class="settings-command"><h3>'+recEsc(item.title)+'</h3><div class="field-hint"><b>Коли натискати:</b> '+recEsc(item.when)+'<span class="command-result"><b>Що станеться:</b> '+recEsc(item.result)+'</span></div><button class="btn-secondary" type="button" title="'+recEsc(hint)+'" onclick="runCrmMaintenance(\''+item.command+'\',this)"'+(crmMaintenanceState.running?' disabled':'')+'>'+(running?'Виконую…':'Виконати')+'</button></div>';}).join('');
+  const msg=document.getElementById('crmMaintenanceMessage');if(msg){msg.textContent=crmMaintenanceState.message||'';msg.className='records-message '+(crmMaintenanceState.kind||'');}
+}
+async function runCrmMaintenance(command, button) {
+  if(crmMaintenanceState.running)return;
+  const item=CRM_MAINTENANCE_COMMANDS.find(function(entry){return entry.command===command;});
+  if(!item || !confirm('Запустити: '+item.title+'?'))return;
+  crmMaintenanceState.running=command;crmMaintenanceState.message='Виконую «'+item.title+'»…';crmMaintenanceState.kind='';renderCrmMaintenanceCommands();
+  try { const result=await callPost({action:'crm_maintenance',command:command}); const details=[];if(result.updated!=null)details.push('оновлено: '+result.updated);if(result.priced!=null)details.push('заповнено: '+result.priced);if(result.settings_rows_added)details.push('додано рядків: '+result.settings_rows_added);crmMaintenanceState.message='Успішно: '+item.title+(details.length?' · '+details.join(', '):'')+'.';crmMaintenanceState.kind='success'; }
+  catch(e) { crmMaintenanceState.message='Помилка: '+e.message;crmMaintenanceState.kind='error'; }
+  finally { crmMaintenanceState.running='';renderCrmMaintenanceCommands(); }
 }
 async function runCrmIntegrityCheck() {
   if(crmIntegrityState.status==='running')return;crmIntegrityState.status='running';crmIntegrityState.error='';renderCrmIntegrityTile();
@@ -877,7 +935,7 @@ function showError(msg) {
 function clearError() { document.getElementById('errorBanner').classList.remove('show'); }
 
 // ════════════ NAV ════════════
-const titles = { overview: 'Огляд', stock: 'Склад', consumables: 'Розхідники', orders: 'Замовлення', skus: 'Товари', clients: 'Клієнти', roadmap: 'Роадмап', accounting: 'Облік', '3dprint': '3D-друк', testcleanup: 'Тестові замовлення' };
+const titles = { overview: 'Огляд', stock: 'Склад', consumables: 'Розхідники', orders: 'Замовлення', skus: 'Товари', clients: 'Клієнти', roadmap: 'Роадмап', accounting: 'Облік', updates: 'Оновлення та міграція', settings: 'Налаштування', '3dprint': '3D-друк' };
 
 function showPageByName(name, skipEvent) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -891,7 +949,8 @@ function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
-  event.currentTarget.classList.add('active');
+  const nav = event && event.currentTarget && event.currentTarget.closest ? event.currentTarget.closest('.nav-item') : null;
+  if (nav) nav.classList.add('active');
   if (!loaded[name]) { loaded[name] = true; loaders[name](); }
 }
 
@@ -3686,10 +3745,41 @@ const PURCHASE_CHANNELS = [
 const PURCHASE_STATUSES = ['Замовлено','В дорозі','На складі UA','Скасовано'];
 const PURCHASE_BATCH_LIMIT = 10;
 const WRITEOFF_TYPES = ['Власне відкриття','Подарунок','Промо','Брак','Тест','Втрата','Інше'];
+const EXPENSE_CATEGORIES = ['Операційні','Маркетинг','Пакування','Доставка','Комісія','Інше'];
+const CONSUMABLE_STATUSES = ['На складі','Їде','Замовлено'];
+const EXPENSE_PENDING_KEY = 'booster_expense_pending_v1';
 // Must match CRM_PACKAGING_TYPES_ in crm/apps-script/Code.gs. ASCII x avoids a
 // visually identical Cyrillic х from becoming a different Google Sheets value.
 const PACKAGING_TYPES = ['',"Мала м'яка 14x12 см",'Середня м\'яка 16x14 см','Велика пакет 17x30 см','Конверт Airpock 14x22 см','Інше'];
 function canonicalPackagingType(value){const raw=String(value==null?'':value).trim(),key=raw.replace(/[’`]/g,"'").replace(/[хx]/g,'x').replace(/\s+/g,' ').toLowerCase();return PACKAGING_TYPES.find(function(item){return String(item).replace(/[’`]/g,"'").replace(/[хx]/g,'x').replace(/\s+/g,' ').toLowerCase()===key;})||raw;}
+
+function toggleExpenseWorkspace() {
+  const root=document.getElementById('expenseWorkspace');if(!root)return;
+  if(!root.classList.contains('hidden')){root.classList.add('hidden');return;}
+  const today=new Date().toISOString().slice(0,10);
+  root.innerHTML='<div class="form-grid"><div class="form-row"><label>Дата *</label><input type="date" id="expenseDate" value="'+today+'"></div><div class="form-row"><label>Категорія *</label>'+formSelect('expenseCategory',EXPENSE_CATEGORIES,'Операційні')+'</div><div class="form-row"><label>Опис *</label><input id="expenseDescription" placeholder="Що оплачено"></div><div class="form-row"><label>Сума, грн *</label><input id="expenseAmount" type="number" min="0" step="0.01"></div><div class="form-row"><label>Пов’язано з продажем?</label>'+formSelect('expenseLinked',['Ні','Так'],'Ні')+'</div><div class="form-row"><label>Номер замовлення / операції</label><input id="expenseOrderId"></div><div class="form-row"><label>Тип розхідника (необов’язково)</label><input id="expenseConsumableType" placeholder="Наприклад, коробка"></div><div class="form-row"><label>Кількість розхідників</label><input id="expenseConsumableQty" type="number" min="0" step="0.01"></div><div class="form-row"><label>Статус розхідників</label>'+formSelect('expenseConsumableStatus',[''].concat(CONSUMABLE_STATUSES),'')+'</div><div class="form-row"><label>Примітка</label><input id="expenseNote"></div></div><div class="field-hint">Для «Пакування» або матеріалу заповни всі три поля розхідника: тип, кількість і статус.</div><div class="form-actions"><button id="saveExpenseButton" class="btn-primary" type="button" onclick="submitExpense()">Зберегти витрату</button><div id="expenseMsg" class="form-msg"></div></div>';
+  root.classList.remove('hidden');
+}
+function pendingExpenseRequestId_(payload) {
+  const signature=JSON.stringify(payload);
+  try { const pending=JSON.parse(localStorage.getItem(EXPENSE_PENDING_KEY)||'{}')||{};if(pending.signature===signature&&/^[A-Za-z0-9_-]{8,80}$/.test(String(pending.request_id||'')))return pending.request_id; } catch(e) {}
+  const requestId='expense-'+Date.now()+'-'+Math.random().toString(36).slice(2,10);
+  try { localStorage.setItem(EXPENSE_PENDING_KEY,JSON.stringify({signature:signature,request_id:requestId})); } catch(e) {}
+  return requestId;
+}
+function clearPendingExpense_(requestId) {
+  try { const pending=JSON.parse(localStorage.getItem(EXPENSE_PENDING_KEY)||'{}')||{};if(!requestId||pending.request_id===requestId)localStorage.removeItem(EXPENSE_PENDING_KEY); } catch(e) {}
+}
+async function submitExpense() {
+  const button=document.getElementById('saveExpenseButton'),msg=document.getElementById('expenseMsg');if(!button)return;
+  const payload={action:'add_expense',date:editValue('expenseDate'),category:editValue('expenseCategory'),description:editValue('expenseDescription'),amount:editValue('expenseAmount'),linked_to_sale:editValue('expenseLinked'),order_id:editValue('expenseOrderId'),consumable_type:editValue('expenseConsumableType'),consumable_qty:editValue('expenseConsumableQty'),consumable_status:editValue('expenseConsumableStatus'),note:editValue('expenseNote')};
+  if(!payload.date||!payload.category||!payload.description||payload.amount===''){if(msg){msg.textContent='Заповни дату, категорію, опис і суму.';msg.className='form-msg error';}return;}
+  payload.request_id=pendingExpenseRequestId_(payload);
+  button.disabled=true;if(msg){msg.textContent='Зберігаю…';msg.className='form-msg';}
+  try { const result=await callPost(payload);clearPendingExpense_(payload.request_id);if(msg){msg.textContent=(result.already_applied?'Витрата вже була збережена':'Витрату збережено')+' · рядок '+result.row_index+'.';msg.className='form-msg success';}delete cache.consumables; }
+  catch(e){if(msg){msg.textContent='Помилка: '+e.message;msg.className='form-msg error';}}
+  finally{button.disabled=false;}
+}
 
 function formSelect(id, options, value, attrs) {
   let html = '<select id="' + id + '"' + (attrs ? ' ' + attrs : '') + '>';
@@ -3764,11 +3854,13 @@ async function submitInventoryMigration(mode) {
 
 async function loadAccounting() {
   try {
+    const updates=document.getElementById('updatesContent');if(updates)updates.innerHTML='';
     if (!cache.skus) { const d = await call('sku_list'); cache.skus = d; }
     accountingState.skus = (cache.skus.skus || []).map(function(row){const copy=Object.assign({},row);if(isThreeDpAccountingSku_(copy)){copy.stock=null;copy.three_dp_stock_pending=true;copy.three_dp_stock_error=false;}return copy;});
     const today = new Date().toISOString().slice(0,10);
     document.getElementById('accountingContent').innerHTML =
       '<div class="write-grid">' +
+        '<div class="write-section wide"><div class="section-header"><h3>&#128184; Внести витрату</h3><button class="btn-secondary" type="button" onclick="toggleExpenseWorkspace()">Відкрити форму</button></div><div class="three-dp-note">Для разових операційних витрат, доставки, комісій або маркетингу. Збереження додає один рядок у «Витрати».</div><div id="expenseWorkspace" class="hidden"></div></div>' +
         '<div class="write-section wide"><h3>&#128176; Внести продаж</h3><div class="write-form">' +
           '<div class="form-grid">' +
             '<div class="form-row"><label>Номер замовлення / операції</label><input id="saleOrderId" placeholder="генерується автоматично"></div>' +
@@ -3842,10 +3934,24 @@ async function loadAccounting() {
     togglePurchaseChannelFields();
     writeoffAddItem();
     loadRecTab('regular');
+    moveAccountingToolsToUpdates_();
   } catch(e) {
     document.getElementById('accountingContent').innerHTML = '<div style="color:var(--red)">Помилка: ' + e.message + '</div>';
   }
 }
+
+function moveAccountingToolsToUpdates_() {
+  const target=document.getElementById('updatesContent');if(!target)return;
+  const migration=document.getElementById('inventoryMigrationDetails');if(migration)target.appendChild(migration);
+  const records=document.querySelector('.records-section');if(records)target.appendChild(records);
+}
+async function loadUpdates() {
+  const target=document.getElementById('updatesContent');if(target)target.innerHTML=spin();
+  loaded.accounting=true;
+  await loadAccounting();
+}
+
+function loadSettings() { renderCrmMaintenanceCommands();renderCrmIntegrityTile();loadTestOrderCleanup(); }
 
 function addSkuLine(kind, max, withPrice, withManualCost) {
   const stateKey = kind === 'sale' ? 'saleSeq' : (kind === 'writeoff' ? 'writeoffSeq' : 'mysterySeq');
@@ -4459,7 +4565,7 @@ async function runTestOrderCleanup() {
   try {
     const report = await callPost({ action: 'test_order_cleanup', confirm: 'CLEAN TEST ORDERS' });
     testOrderCleanupWriteSaved_(report); testOrderCleanupRender_();
-    ['overview','orders','stock','accounting','3dprint'].forEach(function(name) { delete loaded[name]; });
+    ['overview','orders','stock','accounting','updates','3dprint'].forEach(function(name) { delete loaded[name]; });
     if (!report.verification || !report.verification.ok) showError('Очищення виконалось не повністю. Скопіюй звіт з цієї сторінки та надішли його для розбору.');
   } catch (e) {
     if (host) host.innerHTML = '<div class="three-dp-note">⚠ Очищення не запущено або обірвалось: ' + threeDpEsc(e && e.message ? e.message : e) + '. Дані не вважай очищеними без звіту; повторний запуск безпечний.</div>';
@@ -4467,7 +4573,7 @@ async function runTestOrderCleanup() {
 }
 
 // ════════════ LOADERS MAP ════════════
-const loaders = { overview: loadOverview, stock: loadStock, consumables: loadConsumables, orders: loadOrders, skus: loadSkus, clients: loadClients, roadmap: loadRoadmap, accounting: loadAccounting, '3dprint': load3dPrint, testcleanup: loadTestOrderCleanup };
+const loaders = { overview: loadOverview, stock: loadStock, consumables: loadConsumables, orders: loadOrders, skus: loadSkus, clients: loadClients, roadmap: loadRoadmap, accounting: loadAccounting, updates: loadUpdates, settings: loadSettings, '3dprint': load3dPrint };
 
 // ════════════ INIT ════════════
 loaded.overview = true;

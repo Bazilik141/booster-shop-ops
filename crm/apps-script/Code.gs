@@ -1418,7 +1418,9 @@ if (action === 'update_rrp_batch') return boosterCrmJson_(apiUpdateRrpBatch_(ss,
 if (action === 'inventory_migration') return boosterCrmJson_(apiInventoryMigration_(ss, payload));
   if (action === 'add_consumable_purchase') return boosterCrmJson_(apiAddConsumablePurchase_(ss, payload));
   if (action === 'update_consumable_purchase') return boosterCrmJson_(apiUpdateConsumablePurchase_(ss, payload));
-  if (action === 'test_order_cleanup') return boosterCrmJson_(apiTestOrderCleanup_(ss, payload));
+if (action === 'test_order_cleanup') return boosterCrmJson_(apiTestOrderCleanup_(ss, payload));
+if (action === 'crm_maintenance') return boosterCrmJson_(apiCrmMaintenance_(ss, payload));
+if (action === 'add_expense') return boosterCrmJson_(apiAddExpense_(ss, payload));
 
 const result = upsertOpenCartOrder_(ss, payload);
 return boosterCrmJson_({ ok: true, result: result });
@@ -1428,6 +1430,80 @@ Logger.log('doPost error: ' + String(err && err.message ? err.message : err));
 if (isTelegramUpdate) throw err;
 return boosterCrmJson_({ ok: false, error: String(err && err.message ? err.message : err) });
 }
+}
+
+// Dashboard bridge for the safe, owner-triggered maintenance commands that
+// previously existed only in the Spreadsheet UI menu. OpenAI key setup stays
+// Spreadsheet-only and is intentionally not exposed here.
+function apiCrmMaintenance_(ss, payload) {
+  const command = String(payload && payload.command || '').trim();
+  if (!command) throw new Error('maintenance command required');
+  if (command === 'catalog_options') {
+    const before = apiIntegrityCheck_();
+    const result = crmEnsureCatalogOptionCapacity_(ss, [], false);
+    SpreadsheetApp.flush();
+    const integrity = crmAssertCapacityIntegrity_(before, apiIntegrityCheck_());
+    return { ok: true, command: command, settings_rows_added: result.settings_rows_added, validation_fields: result.validation_fields, integrity_before_clean: integrity.before_clean, integrity_after_clean: integrity.after_clean };
+  }
+  if (command === 'expected_stock') {
+    const result = updateExpectedStockFormulas_(ss);
+    SpreadsheetApp.flush(); invalidateDoGetCache_();
+    return { ok: true, command: command, updated: result.updated, purchase_last_row: result.purchase_last_row, stock_last_row: result.stock_last_row };
+  }
+  if (command === 'current_cost') {
+    const result = updateSkuCurrentCost_(ss);
+    SpreadsheetApp.flush(); invalidateDoGetCache_();
+    return { ok: true, command: command, updated: result.updated };
+  }
+  if (command === 'preorder_cost') {
+    const result = initializeMissingPreorderCosts_(ss);
+    if (result.priced) invalidateDoGetCache_();
+    return { ok: true, command: command, checked: result.checked, priced: result.priced, rows: result.rows || [] };
+  }
+  if (command === 'row_capacity') {
+    return { ok: true, command: command, result: setupCrmRowCapacityTrigger() };
+  }
+  throw new Error('unknown maintenance command: ' + command);
+}
+
+function apiAddExpense_(ss, payload) {
+  const expenses = ss.getSheetByName('Витрати');
+  if (!expenses) throw new Error('expense sheet missing');
+  const requestId = String(payload.request_id || '').trim();
+  if (!/^[A-Za-z0-9_-]{8,80}$/.test(requestId)) throw new Error('valid request_id required');
+  const requestMarker = '[dashboard_request:' + requestId + ']';
+  const lastRow = Math.max(expenses.getLastRow(), 2);
+  if (lastRow >= 3) {
+    const notes = expenses.getRange(3, 7, lastRow - 2, 1).getValues();
+    for (let index = 0; index < notes.length; index++) {
+      if (String(notes[index][0] || '').indexOf(requestMarker) !== -1) {
+        const existingRow = index + 3;
+        const existing = expenses.getRange(existingRow, 1, 1, 11).getValues()[0];
+        return { ok: true, row_index: existingRow, amount: round2_(num_(existing[3])), is_consumable: !!String(existing[7] || '').trim(), already_applied: true };
+      }
+    }
+  }
+  const date = apiNormalizeDateValue_(payload.date, 'date');
+  const category = String(payload.category || '').trim();
+  const description = String(payload.description || '').trim();
+  const amount = num_(payload.amount);
+  const linked = String(payload.linked_to_sale || 'Ні').trim() === 'Так' ? 'Так' : 'Ні';
+  const order = String(payload.order_id || '').trim();
+  const note = [String(payload.note || '').trim(), requestMarker].filter(Boolean).join(' ');
+  const consumableType = String(payload.consumable_type || '').trim();
+  const consumableQty = num_(payload.consumable_qty);
+  const consumableStatus = String(payload.consumable_status || '').trim();
+  if (!date) throw new Error('date required');
+  if (!category) throw new Error('category required');
+  if (!description) throw new Error('description required');
+  if (amount < 0) throw new Error('amount must be >= 0');
+  const isConsumable = !!consumableType || consumableQty > 0 || !!consumableStatus;
+  if ((category === 'Пакування' || isConsumable) && (!consumableType || consumableQty <= 0 || !consumableStatus)) throw new Error('Для розхідника потрібні тип, кількість і статус.');
+  const unitCost = consumableQty > 0 ? round2_(amount / consumableQty) : Math.max(0, num_(payload.unit_cost));
+  const row = crmNextAppendRow_(ss, 'Витрати', 1);
+  expenses.getRange(row, 1, 1, 11).setValues([[date, category, description, round2_(amount), linked, order, note, isConsumable ? consumableType : '', isConsumable ? consumableQty : '', isConsumable ? consumableStatus : '', isConsumable ? unitCost : '']]);
+  invalidateDoGetCache_();
+  return { ok: true, row_index: row, amount: round2_(amount), is_consumable: isConsumable, already_applied: false };
 }
 function getBoosterCrmToken_() {
 return PropertiesService.getScriptProperties().getProperty('BOOSTER_CRM_TOKEN') || '';
