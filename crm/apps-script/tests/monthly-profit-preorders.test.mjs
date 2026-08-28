@@ -39,7 +39,7 @@ const monthly = functionSource('apiMonthlySummary_');
 assert.match(monthly, /month_to_date:\s*apiAggregateSalesRows_\(rows, currentStart, currentEnd\)/, 'month card uses the same cost-confirmed source as the graph');
 assert.match(monthly, /previous_month_to_date:\s*apiAggregateSalesRows_\(rows, previousStart, previousEnd\)/, 'comparison period uses the same source');
 assert.doesNotMatch(monthly, /setValue|setValues|appendRow|deleteRow/, 'monthly summary remains read-only');
-assert.match(code, /action === 'monthly_summary'\) return 'bscrm_v2_' \+ version \+ '_' \+ action \+ '_v2'/, 'the new monthly payload uses a fresh server cache key after publication');
+assert.match(code, /action === 'monthly_summary'\) return 'bscrm_v2_' \+ version \+ '_' \+ action \+ '_v3'/, 'the new monthly payload uses a fresh server cache key after publication');
 assert.match(code, /const cacheKey = 'crm_orders_v4_'/, 'the order list uses a fresh server cache key after publication');
 
 console.log('Monthly profit and preorder visibility tests passed');

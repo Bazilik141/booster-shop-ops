@@ -14,6 +14,7 @@ assert.match(code, /function apiUpdatePurchaseBatch10_\(ss, payload\)[\s\S]*?raw
 function purchase(lotId) {
   const row = Array(18).fill("");
   row[0] = lotId;
+  row[4] = "SKU-" + lotId;
   row[7] = 1;
   row[8] = 100;
   row[16] = "Замовлено";
@@ -34,20 +35,34 @@ const purchases = {
   }
 };
 const ss = { getSheetByName: (name) => name === "Закупки" ? purchases : null };
-const context = vm.createContext({ JSON, Math, Number, String, Boolean, Array, Object, RegExp, Date, Error, Set, isFinite, console });
+const context = vm.createContext({ JSON, Math, Number, String, Boolean, Array, Object, RegExp, Date, Error, Set, isFinite, console, SpreadsheetApp: { flush() {} } });
 vm.runInContext(code + "\nglobalThis.__test = { apiUpdatePurchaseBatch10_ };", context, { filename: "Code.gs" });
 context.resetMemoForMutation_ = () => {};
 context.invalidateDoGetCache_ = () => {};
 context.getCurrencyRate_ = () => 1;
+let reconciledSkus = [], currentCostRefreshes = 0;
+context.preorderReconcileSkus_ = (inputSs, skus) => {
+  reconciledSkus = skus;
+  return Object.fromEntries(skus.map((sku) => [sku, { priced: 1 }]));
+};
+context.updateSkuCurrentCost_ = () => { currentCostRefreshes += 1; };
 
 const firstTen = rows.slice(0, 10).map((row) => ({ lot_id: row[0] }));
 const accepted = context.__test.apiUpdatePurchaseBatch10_(ss, { lots: firstTen, status: "В дорозі" });
 assert.deepEqual(JSON.parse(JSON.stringify(accepted)), {
   ok: true,
   rows_updated: 10,
-  lot_ids: firstTen.map((item) => item.lot_id)
+  lot_ids: firstTen.map((item) => item.lot_id),
+  preorder_costs: {}
 });
 assert.equal(rows.slice(0, 10).every((row) => row[16] === "В дорозі"), true, "all ten selected lots are updated");
+assert.deepEqual(reconciledSkus, [], "in-transit status does not run final FIFO reconciliation");
+
+const landed = context.__test.apiUpdatePurchaseBatch10_(ss, { lots: [firstTen[0]], status: "На складі" });
+assert.equal(landed.ok, true);
+assert.deepEqual(JSON.parse(JSON.stringify(reconciledSkus)), ["SKU-LOT-0001"], "landed purchase triggers reconciliation for its affected SKU");
+assert.equal(currentCostRefreshes, 1);
+assert.deepEqual(JSON.parse(JSON.stringify(landed.preorder_costs)), { "SKU-LOT-0001": { priced: 1 } });
 
 const rejected = context.__test.apiUpdatePurchaseBatch10_(ss, {
   lots: rows.map((row) => ({ lot_id: row[0] })),

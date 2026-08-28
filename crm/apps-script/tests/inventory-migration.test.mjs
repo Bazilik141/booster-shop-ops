@@ -100,7 +100,7 @@ assert.equal(packBatches[0].lotId,"MIG-0001/LOT-0001");
 assert.equal(packBatches[0].qty,36);
 assert.ok(Math.abs(packBatches[0].prroUnit-(100/36))<0.000001);
 assert.equal(sales.getRange(3,12).getValue(),2.78,"migration prices the previously deferred preorder from its FIFO source");
-assert.equal(sales.getRange(3,30).getValue(),"FIFO (резерв через міграцію)");
+assert.equal(sales.getRange(3,30).getValue(),"FIFO (резерв передзамовлення)");
 const repeated=context.__test.apiInventoryMigration_(ss,{action:"inventory_migration",type:"box_to_packs",source_sku:"BOX-001",target_sku:"PACK-001",target_qty:36,expected_source_available:1,request_id:"migration_box_to_pack_001"});
 assert.equal(repeated.ok,true);
 assert.equal(repeated.already_applied,true);

@@ -123,7 +123,11 @@ assert.match(html,/requestIds: \{ box: '', outlet: '' \}/,'migration retries ret
 assert.match(html,/const PURCHASE_BATCH_LIMIT = 10;/,'purchase batch selection limit is ten lots');
 assert.match(html,/selectedPurchaseLots\)\.length >= PURCHASE_BATCH_LIMIT/,'purchase selection enforces the shared batch limit');
 assert.match(html,/rows\.length > PURCHASE_BATCH_LIMIT/,'purchase submission enforces the shared batch limit');
-assert.match(html,/call\(cfg\.action, \{ limit: 20, include_all_open:'true' \}\)/,'the purchases tab explicitly requests every open purchase');
+assert.match(html,/call\(cfg\.action, \{ limit: 20, include_all_open:'true', kind:cfg\.kind \|\| '' \}\)/,'the purchases tab explicitly requests every open purchase while sales pass their order kind');
+assert.match(html,/showRecTab\(\\'regular\\',this\)">Звичайні замовлення</,'accounting separates regular orders');
+assert.match(html,/showRecTab\(\\'preorders\\',this\)">Передзамовлення</,'accounting separates preorders');
+assert.match(html,/preorder_reserved/,'stock UI exposes preorder reservations');
+assert.match(html,/preorder_deficit/,'stock UI exposes preorder deficit without a negative available value');
 assert.match(html,/Відновити тільки 3D-P після помилки/);
 assert.match(html,/action:'retry_3dp_sync'/);
 assert.match(html,/retry_3dp_sync'[\s\S]*clearPendingOrderEdit_\(accountingState\.editRequestId\)/);
@@ -138,6 +142,14 @@ assert.match(html,/TEST_ORDER_CLEANUP_REPORT_KEY/);
 assert.match(html,/window\.confirm\(message\)/);
 assert.match(html,/mtd\.current = ms\.month_to_date/,'month card uses the monthly-summary source');
 assert.match(html,/mtd\.previous = ms\.previous_month_to_date/,'month comparison uses the monthly-summary source');
+const overviewStart=html.indexOf('async function loadOverview()');
+const overviewSource=html.slice(overviewStart,html.indexOf('// ════════════ STOCK ════════════',overviewStart));
+assert.match(overviewSource,/call\('overview_bootstrap'\)/,'overview loads critical data through one shared Apps Script bootstrap');
+assert.match(overviewSource,/p_bootstrap\.then\(\(\) => call\('overview_secondary'\)\)/,
+  'secondary overview data starts only after the critical response');
+assert.doesNotMatch(overviewSource,/call\('(summary|orders|channel_stats|monthly_summary|sku_list|stock_alerts)'/,
+  'overview no longer starts seven competing Apps Script requests');
+assert.doesNotMatch(overviewSource,/status:'all', limit:500/,'overview does not fetch 500 orders to render an active-order preview');
 assert.match(html,/function isPreorderOrder\(order\)[\s\S]*Передзамовлення/,'the overview has an explicit preorder classifier');
 assert.match(html,/const overviewActiveOrders = activeOrders\.filter\(r => !isPreorderOrder\(r\)\)/,'the overview summary excludes preorders');
 assert.match(html,/filter\(r => isActiveOrder\(r\) && !isPreorderOrder\(r\)\)/,'the active-orders overview preview excludes preorders');

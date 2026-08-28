@@ -26,7 +26,8 @@ function functionSource(name) {
 const headers = [
   'Номер замовлення / операції', 'SKU', 'Назва товару', 'Кількість', 'Ціна за одиницю', 'Знижка',
   'Сума продажу', 'Управлінська собівартість 1 од.', 'Управлінська собівартість продажу',
-  'Пакування', 'Еквайринг', 'Нова Пей', 'Комісія маркетплейсу', 'Доставка за рахунок магазину', 'Чистий прибуток'
+  'Пакування', 'Еквайринг', 'Нова Пей', 'Комісія маркетплейсу', 'Доставка за рахунок магазину', 'Чистий прибуток',
+  'Метод собівартості', 'Аудит собівартості'
 ];
 
 function row(values) { return headers.map((header) => values[header] ?? ''); }
@@ -36,7 +37,8 @@ const rows = [
     'Номер замовлення / операції': 'OC-FOP-0312', SKU: 'SKU-A', 'Назва товару': 'Name A from Товари', 'Кількість': 1,
     'Ціна за одиницю': 1400, 'Знижка': 0, 'Сума продажу': 1400, 'Управлінська собівартість 1 од.': 1284.44,
     'Управлінська собівартість продажу': 1284.44, Пакування: 4.73, Еквайринг: 21, 'Нова Пей': 0,
-    'Комісія маркетплейсу': 0, 'Доставка за рахунок магазину': 34.43, 'Чистий прибуток': 55.40
+    'Комісія маркетплейсу': 0, 'Доставка за рахунок магазину': 34.43, 'Чистий прибуток': 55.40,
+    'Метод собівартості': 'Прогноз передзамовлення', 'Аудит собівартості': '{"estimated":true}'
   }),
   row({
     'Номер замовлення / операції': 'OC-FOP-0312', SKU: 'SKU-B', 'Назва товару': 'Name B from Товари', 'Кількість': 2,
@@ -85,7 +87,11 @@ assert.equal(multi.ok, true);
 assert.equal(multi.count, 3);
 assert.deepEqual(multi.totals, { amount: 7400, profit: 3839.76, marketing: 22.96 });
 assert.equal(multi.items[0].marketing, 22.96);
+assert.equal(multi.items[0].cost_is_forecast, true);
+assert.equal(multi.items[0].cost_method, 'Прогноз передзамовлення');
+assert.equal(multi.items[0].cost_audit, '{"estimated":true}');
 assert.equal(multi.items[1].marketing, 0);
+assert.equal(multi.items[1].cost_is_forecast, false);
 assert.equal(multi.items[1].mgmt_cost_unit, 1.05);
 assert.equal(multi.items[1].mgmt_cost_line, 2.10, 'line cost is returned directly and not reconstructed from quantity');
 assert.equal(multi.items[0].payment_fees, 21);
