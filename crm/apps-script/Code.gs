@@ -509,8 +509,27 @@ function crmCopyRowStructure_(sheet, templateRow, destinationRow, rowCount) {
   const source = sheet.getRange(templateRow, 1, 1, columns);
   const destination = sheet.getRange(destinationRow, 1, rowCount, columns);
   const copyTypes = SpreadsheetApp.CopyPasteType || {};
-  [copyTypes.PASTE_FORMAT, copyTypes.PASTE_DATA_VALIDATION, copyTypes.PASTE_FORMULA].filter(Boolean).forEach(function(type) {
+  [copyTypes.PASTE_FORMAT, copyTypes.PASTE_DATA_VALIDATION].filter(Boolean).forEach(function(type) {
     source.copyTo(destination, type, false);
+  });
+  // PASTE_FORMULA also copies literals from the template row. Live V156
+  // recovery proved that this cloned WRT-0226 into every new write-off row.
+  // Extend only cells that actually contain formulas, using Sheets' native
+  // autofill so localized formula text is never serialized and re-parsed.
+  const formulas = source.getFormulas()[0];
+  const autoFillSeries = SpreadsheetApp.AutoFillSeries || {};
+  if (!autoFillSeries.DEFAULT_SERIES) throw new Error('CRM capacity native autofill is unavailable');
+  formulas.forEach(function(formula, index) {
+    if (!formula) return;
+    const column = index + 1;
+    const formulaSource = sheet.getRange(templateRow, column, 1, 1);
+    const fillLastRow = destinationRow + rowCount - 1;
+    formulaSource.autoFill(sheet.getRange(templateRow, column, fillLastRow - templateRow + 1, 1), autoFillSeries.DEFAULT_SERIES);
+  });
+  const expectedFormulaCount = formulas.filter(function(formula) { return Boolean(formula); }).length;
+  [destinationRow, destinationRow + rowCount - 1].forEach(function(row) {
+    const actual = sheet.getRange(row, 1, 1, columns).getFormulas()[0].filter(function(formula) { return Boolean(formula); }).length;
+    if (actual !== expectedFormulaCount) throw new Error(sheet.getName() + ': formula structure verification failed at row ' + row + ' (' + actual + '/' + expectedFormulaCount + ')');
   });
   if (typeof sheet.getRowHeight === 'function' && typeof sheet.setRowHeights === 'function') sheet.setRowHeights(destinationRow, rowCount, sheet.getRowHeight(templateRow));
 }
@@ -615,8 +634,6 @@ function crmAssertCapacityIntegrity_(before, after) {
 }
 
 function crmNextAppendRow_(ss, sheetName, requiredRows) {
-  const needsExpansion = crmRowCapacityWillExpand_(ss, sheetName, requiredRows);
-  const integrityBefore = needsExpansion ? apiIntegrityCheck_() : null;
   let state;
   if (sheetName === 'Товари') {
     state = crmEnsureCatalogCapacity_(ss, requiredRows);
@@ -625,8 +642,21 @@ function crmNextAppendRow_(ss, sheetName, requiredRows) {
   }
   if (state.expanded) {
     crmRefreshCapacityFormulaRanges_(ss);
-    SpreadsheetApp.flush();
-    crmAssertCapacityIntegrity_(integrityBefore, apiIntegrityCheck_());
+  }
+  return state.first_empty_row;
+}
+
+// Interactive Web App writes must never expand a sheet or run the full CRM
+// integrity suite while holding the global mutation lock. The nightly capacity
+// trigger owns that structural work. An exhausted prepared area is an explicit,
+// fast error instead of a six-minute request timeout.
+function crmPreparedAppendRow_(ss, sheetName, requiredRows) {
+  const sheet = ss.getSheetByName(sheetName);
+  if (!sheet) throw new Error('CRM write sheet missing: ' + sheetName);
+  const required = Math.max(1, Math.floor(Number(requiredRows) || 1));
+  const state = crmCapacityState_(sheetName, sheet);
+  if (state.free_rows < required) {
+    throw new Error('CRM_CAPACITY_REQUIRED: ' + sheetName + ' має лише ' + state.free_rows + ' підготовлених рядків; запусти нічне обслуговування місткості й повтори той самий запит.');
   }
   return state.first_empty_row;
 }
@@ -671,13 +701,33 @@ function crmRefreshFormulaRange_(sheet, firstRow, firstColumn, rowCount, columnC
   const range = sheet.getRange(firstRow, firstColumn, rowCount, columnCount);
   const formulas = typeof range.getFormulas === 'function' ? range.getFormulas() : [];
   let updated = 0;
+  const changesByColumn = {};
   formulas.forEach(function(row, rowIndex) {
     row.forEach(function(formula, columnIndex) {
       if (!formula) return;
       let next = crmExpandSheetFormulaRanges_(formula, bounds);
       if (localFirstRow) next = crmExpandLocalFormulaRanges_(next, localFirstRow, crmCapacitySheetLastRow_(sheet, localFirstRow));
-      if (next !== formula) { sheet.getRange(firstRow + rowIndex, firstColumn + columnIndex).setFormula(next); updated++; }
+      if (next !== formula) {
+        if (!changesByColumn[columnIndex]) changesByColumn[columnIndex] = [];
+        changesByColumn[columnIndex].push({ row_index: rowIndex, formula: next });
+        updated++;
+      }
     });
+  });
+  Object.keys(changesByColumn).forEach(function(columnKey) {
+    const columnIndex = Number(columnKey);
+    const changes = changesByColumn[columnIndex];
+    let run = [];
+    function writeRun_() {
+      if (!run.length) return;
+      sheet.getRange(firstRow + run[0].row_index, firstColumn + columnIndex, run.length, 1).setFormulas(run.map(function(item) { return [item.formula]; }));
+      run = [];
+    }
+    changes.forEach(function(change) {
+      if (run.length && change.row_index !== run[run.length - 1].row_index + 1) writeRun_();
+      run.push(change);
+    });
+    writeRun_();
   });
   return updated;
 }
@@ -702,8 +752,6 @@ function crmRefreshCapacityFormulaRanges_(ss) {
 function maintainCrmRowCapacity_(ss, options) {
   const result = { ok: true, action: 'crm_row_capacity_maintenance', sheets: [], formulas: null };
   const settings = options || {};
-  const needsIntegrity = Boolean(settings.refresh_formulas) || crmRowCapacityMaintenanceWillExpand_(ss);
-  const integrityBefore = needsIntegrity ? apiIntegrityCheck_() : null;
   Object.keys(CRM_ROW_CAPACITY_CONFIG_).forEach(function(sheetName) {
     const state = crmEnsureSheetCapacity_(ss, sheetName, 1);
     if (state.expanded) result.sheets.push(state);
@@ -711,10 +759,7 @@ function maintainCrmRowCapacity_(ss, options) {
   const catalog = crmEnsureCatalogCapacity_(ss, 1);
   if (catalog.expanded) result.sheets.push(Object.assign({ sheet: 'Товари + РРЦ + Склад' }, catalog));
   if (result.sheets.length || settings.refresh_formulas) result.formulas = crmRefreshCapacityFormulaRanges_(ss);
-  if (needsIntegrity) {
-    SpreadsheetApp.flush();
-    result.integrity = crmAssertCapacityIntegrity_(integrityBefore, apiIntegrityCheck_());
-  }
+  result.verification = { mode: 'bounded_formula_structure', expanded_sheets: result.sheets.length, full_integrity: 'separate_dashboard_action' };
   return result;
 }
 
@@ -1039,7 +1084,7 @@ return _memo.salesRows;
 
 function keepWarm() { _getCrmSs(); try { _getAutoSs(); } catch (e) { /* non-fatal */ } }
 
-const CACHEABLE_ACTIONS = { overview_bootstrap: 90, overview_secondary: 120, sku_list: 300, order_component_catalog: 60, stock_alerts: 120, summary: 90, channel_stats: 120, monthly_summary: 300 };
+const CACHEABLE_ACTIONS = { overview_bootstrap: 90, overview_secondary: 120, overview_assets: 600, sku_list: 300, order_component_catalog: 60, stock_alerts: 120, summary: 90, channel_stats: 120, monthly_summary: 300 };
 const CRM_INTEGRITY_MAX_PROBLEMS_PER_CODE_ = 10;
 // Keep this SKU grammar aligned with plans/3D-P_sku-naming-convention_20260807.md.
 const CRM_INTEGRITY_3DP_SKU_RE_ = /^(?:BR|FIG|ACC-3D)-[A-Z0-9][A-Z0-9-]*$/;
@@ -1088,11 +1133,12 @@ function invalidateDoGetCache_() {
 const version = String(new Date().getTime()); PropertiesService.getScriptProperties().setProperty('CRM_DOGET_CACHE_VERSION', version); if (typeof _memo !== 'undefined' && _memo) _memo.doGetCacheVersion = version;
 }
 
-function apiDoGetCacheKey_(action, params) { const version = apiDoGetCacheVersion_(); if (action === 'sku_list') return 'bscrm_v2_' + version + '_' + action + '_' + String(params.sort || '').toLowerCase() + '_' + String(params.limit || ''); if (action === 'monthly_summary') return 'bscrm_v2_' + version + '_' + action + '_v3'; if (action === 'overview_bootstrap' || action === 'overview_secondary') return 'bscrm_v2_' + version + '_' + action + '_v1'; return 'bscrm_v2_' + version + '_' + action; }
+function apiDoGetCacheKey_(action, params) { const version = apiDoGetCacheVersion_(); if (action === 'overview_assets') return 'bscrm_overview_assets_v1'; if (action === 'sku_list') return 'bscrm_v2_' + version + '_' + action + '_' + String(params.sort || '').toLowerCase() + '_' + String(params.limit || ''); if (action === 'monthly_summary') return 'bscrm_v2_' + version + '_' + action + '_v3'; if (action === 'overview_bootstrap' || action === 'overview_secondary') return 'bscrm_v2_' + version + '_' + action + '_v2'; return 'bscrm_v2_' + version + '_' + action; }
 
 function handleApiAction_(action, params) {
 if (action === 'overview_bootstrap') return apiOverviewBootstrap_();
 if (action === 'overview_secondary') return apiOverviewSecondary_();
+if (action === 'overview_assets') return apiOverviewAssets_();
 if (action === 'summary') return apiSummary_();
 if (action === 'orders') return apiOrders_(params);
 if (action === 'order_items') return apiOrderItems_(params);
@@ -5038,13 +5084,48 @@ total_amount: round2_(pending.total_amount)
 };
 }
 
-function apiOverviewBootstrap_() {
-// The critical first response shares the sales/order reads. The previous
-// dashboard started seven concurrent doGet calls which repeatedly read them.
-const activeOrders = crmGetOrders_('active', 200, { sort: 'date_desc' });
+function apiOverviewFastSummary_(activeOrders) {
+const autoSs = _getAutoSs();
+const report = autoSs.getSheetByName('Звіт_Продажів').getRange('A1:H40').getDisplayValues();
+const quality = autoSs.getSheetByName('Якість_Даних').getRange('A1:E40').getDisplayValues();
+const salesRows = _getCrmSalesRows();
+const sales7 = apiFindRow_(report, 'Останні 7 днів');
+const month = apiFindRow_(report, 'Поточний місяць');
+const prevMonth = apiFindRow_(report, 'Попередній місяць');
+const period7d = apiSevenDayPeriodComparison_(salesRows);
+const pending = (activeOrders || []).reduce(function(acc, order) { acc.count++; acc.total_amount += num_(order.amount); return acc; }, { count: 0, total_amount: 0 });
 return {
 ok: true,
-summary: apiSummary_(),
+as_of: new Date().toISOString(),
+sales_7d: apiSalesSummary_(sales7),
+sales_7d_period: period7d.current,
+sales_prev_month_7d_period: period7d.previous,
+sales_7d_period_label: period7d.label,
+sales_prev_month_7d_period_label: period7d.prev_label,
+sales_current_month: apiSalesSummary_(month),
+sales_prev_month: prevMonth && prevMonth.length ? apiSalesSummary_(prevMonth) : null,
+potential_profit_warehouse: null,
+warehouse_cost: null,
+asset_cost: null,
+asset_potential_profit: null,
+stock: {},
+data_quality: {
+sales_without_sku: apiQualityCount_(quality, 'Продажі без SKU'),
+mystery_boxes_without_writeoffs: apiQualityCount_(quality, 'Містері бокси без списання бустерів'),
+negative_stock: apiQualityCount_(quality, 'Мінусовий залишок'),
+source_ok: apiSourcesOk_(quality)
+},
+pending_orders: { count: pending.count, total_amount: round2_(pending.total_amount) }
+};
+}
+
+function apiOverviewBootstrap_() {
+// The critical response performs only shared sales/order reads. Full FIFO asset
+// valuation is loaded separately and never holds the first dashboard paint.
+const activeOrders = crmGetOrders_('active', 200, { sort: 'date_desc', skip_marketing: true });
+return {
+ok: true,
+summary: apiOverviewFastSummary_(activeOrders),
 orders: { ok: true, filter: 'active', count: activeOrders.length, orders: activeOrders.slice(0, 100) },
 monthly: apiMonthlySummary_({ months: 6 })
 };
@@ -5057,6 +5138,19 @@ ok: true,
 channel: apiChannelStats_({ period: 'current_month' }),
 skus: apiSkuList_({ sort: 'profit' }, salesRows),
 stock: apiStockAlerts_()
+};
+}
+
+function apiOverviewAssets_() {
+const summary = apiSummary_();
+return {
+ok: true,
+as_of: summary.as_of,
+potential_profit_warehouse: summary.potential_profit_warehouse,
+warehouse_cost: summary.warehouse_cost,
+asset_cost: summary.asset_cost,
+asset_potential_profit: summary.asset_potential_profit,
+stock: summary.stock
 };
 }
 
@@ -5262,9 +5356,10 @@ return result;
 }
 function crmGetOrders_(status, limit, params) {
 params = params || {}; const st = String(status || 'active').toLowerCase(); const days = Math.max(0, Math.min(num_(params.days) || 0, 3650)); const sortDir = String(params.sort || 'date_desc').toLowerCase() === 'date_asc' ? 'date_asc' : 'date_desc';
+const skipMarketing = params.skip_marketing === true || String(params.skip_marketing || '').toLowerCase() === 'true';
 const cleanLimit = Math.max(1, Math.min(num_(limit) || 20, 500));
 const cache = CacheService.getScriptCache();
-const cacheKey = 'crm_orders_v4_' + crmOrdersCacheVersion_() + '_' + st + '_' + cleanLimit + '_' + days + '_' + sortDir;
+const cacheKey = 'crm_orders_v4_' + crmOrdersCacheVersion_() + '_' + st + '_' + cleanLimit + '_' + days + '_' + sortDir + '_' + (skipMarketing ? 'plain' : 'marketing');
 const cached = cache.get(cacheKey);
 if (cached) return JSON.parse(cached);
 const ss = _getCrmSs();
@@ -5274,7 +5369,7 @@ entries.forEach(function(entry, index) { const row = entry.values; const orderId
 const order = map[orderId]; order.amount = round2_(order.amount + num_(row[10])); order.profit = round2_(order.profit + num_(row[21])); order.items_count = round2_(order.items_count + num_(row[7]));
 if (isUnfinalizedPreorderCostMethod_(row[29])) order.forecast_lines++;
 const sku = String(row[5] || '').trim(); if (sku && order.skus.indexOf(sku) === -1) order.skus.push(sku); order.rows.push(entry.rowNumber); });
-const marketingByOrder = crm3dpMarketingByOrder_(ss).byOrder;
+const marketingByOrder = skipMarketing ? {} : crm3dpMarketingByOrder_(ss).byOrder;
 Object.keys(map).forEach(function(orderId) { map[orderId].marketing = round2_(marketingByOrder[orderId] || 0); });
 let orders = Object.keys(map).map(function(key) { return map[key]; });
 orders = orders.filter(function(order) { return crmOrderMatchesStatus_(order, st); }); if (days > 0) { const cutoff = new Date().getTime() - days * 86400000; orders = orders.filter(function(order) { return order.sort && order.sort >= cutoff; }); }
@@ -8135,10 +8230,54 @@ function apiOrderComponentCatalog_() {
   return { ok: true, components: components, fixtures: fixtures, three_dp_error: threeDpError };
 }
 
+// POST validation resolves only the IDs actually submitted. In particular, a
+// normal CRM SKU/consumable component must not wait for the remote 3D-P catalog.
+function apiOrderComponentCatalogForIds_(ss, ids) {
+  const requested = {};
+  (ids || []).forEach(function(id) { const key = String(id || '').trim(); if (key) requested[key] = true; });
+  const result = { ok: true, components: [], fixtures: [], three_dp_error: '' };
+  const needsSku = Object.keys(requested).some(function(id) { return id.indexOf('sku:') === 0; });
+  const needsConsumable = Object.keys(requested).some(function(id) { return id.indexOf('consumable:') === 0; });
+  const needs3dp = Object.keys(requested).some(function(id) { return id.indexOf('3dp:') === 0; });
+  if (needsSku) {
+    const stock = ss.getSheetByName('Склад');
+    if (!stock) return { ok: false, error: 'stock sheet missing', components: [] };
+    stock.getRange(3, 1, Math.max(stock.getLastRow() - 2, 1), 10).getValues().forEach(function(row) {
+      const sku = String(row[0] || '').trim(), id = 'sku:' + sku, qty = num_(row[7]);
+      if (!requested[id] || !sku || qty <= 0 || is3dpPackagingSku_(sku)) return;
+      result.components.push({ id: id, kind: 'SKU', code: sku, name: String(row[1] || sku), stock: round2_(qty), prro_unit: round2_(num_(row[8])), mgmt_unit: round2_(num_(row[9]) || num_(row[8])) });
+    });
+  }
+  if (needsConsumable) {
+    const consumables = ss.getSheetByName('Розхідники');
+    if (!consumables) return { ok: false, error: 'consumables sheet missing', components: [] };
+    consumables.getRange(4, 1, Math.max(consumables.getLastRow() - 3, 1), 15).getValues().forEach(function(row) {
+      const name = String(row[0] || '').trim(), id = 'consumable:' + name, category = String(row[1] || '').trim(), qty = num_(row[8]);
+      if (!requested[id] || !name || category === 'Фурнітура' || qty <= 0) return;
+      result.components.push({ id: id, kind: 'Розхідник', code: name, name: name, category: category, stock: round2_(qty), prro_unit: 0, mgmt_unit: round2_(num_(row[2])) });
+    });
+  }
+  if (needs3dp) {
+    const config = crm3dpConfig_();
+    if (!config) return { ok: false, error: '3D-P API не налаштовано: 3D-компонент не можна перевірити.', components: [] };
+    try {
+      const remote = crm3dpGet_(config, { action: '3dp_skus' });
+      (Array.isArray(remote.rows) ? remote.rows : []).forEach(function(row) {
+        const sku = String(row.SKU || '').trim(), id = '3dp:' + sku, availability = row.availability || {}, qty = num_(availability[CRM_3DP_STOCK_HEADER_]);
+        if (!requested[id] || !sku || !is3dpPackagingSku_(sku) || qty <= 0 || String(row.API_статус_запису || '').trim() !== 'Активний') return;
+        result.components.push({ id: id, kind: '3D-P', code: sku, name: String(row['Назва виробу'] || sku), stock: round2_(qty), prro_unit: 0, mgmt_unit: round2_(num_(row[CRM_3DP_BUYOUT_HEADER_])) });
+      });
+    } catch (error) {
+      return { ok: false, error: '3D-P компонент не перевірено: ' + crmIntegritySafeRemoteCode_(error), components: [] };
+    }
+  }
+  return result;
+}
+
 function buildOrderComponentPlan_(ss, rawItems) {
   const items = Array.isArray(rawItems) ? rawItems.slice(0, 10) : [];
   if (!items.length) return { ok: true, entries: [], prro_total: 0, mgmt_total: 0 };
-  const catalog = apiOrderComponentCatalog_();
+  const catalog = apiOrderComponentCatalogForIds_(ss, items.map(function(item) { return item && item.id; }));
   if (!catalog.ok) return { ok: false, error: catalog.error, entries: [] };
   const byId = {};
   catalog.components.forEach(function(item) { byId[item.id] = item; });
@@ -8185,11 +8324,12 @@ function ensureComponentWriteoffFormulaRows_(writeOffs, rows) {
   let repaired = 0;
   uniqueRows.forEach(function(row) {
     const expected = componentWriteoffFormulaSet_(row);
-    const ranges = [writeOffs.getRange(row, 5), writeOffs.getRange(row, 7), writeOffs.getRange(row, 8), writeOffs.getRange(row, 9), writeOffs.getRange(row, 10)];
-    const current = ranges.map(function(range) { return String(range.getFormula() || ''); });
-    if (current.every(function(formula, index) { return formula === expected[index]; })) return;
-    if (current.some(function(formula) { return formula !== ''; })) throw new Error('unexpected component writeoff formula at row ' + row);
-    ranges.forEach(function(range, index) { range.setFormula(expected[index]); });
+    const current = writeOffs.getRange(row, 5, 1, 6).getFormulas()[0];
+    const relevant = [current[0], current[2], current[3], current[4], current[5]].map(function(formula) { return String(formula || ''); });
+    if (relevant.every(function(formula, index) { return formula === expected[index]; })) return;
+    if (relevant.some(function(formula) { return formula !== ''; })) throw new Error('unexpected component writeoff formula at row ' + row);
+    writeOffs.getRange(row, 5).setFormula(expected[0]);
+    writeOffs.getRange(row, 7, 1, 4).setFormulas([expected.slice(1)]);
     repaired++;
   });
   return repaired;
@@ -8201,11 +8341,11 @@ function appendOrderComponents_(ss, plan, date, order, note) {
   const writeOffs = ss.getSheetByName('Списання');
   if (!writeOffs) throw new Error('writeoff sheet missing');
   const skuEntries = plan.entries.filter(function(item) { return item.kind === 'SKU'; });
-  const writeoffRow = skuEntries.length ? crmNextAppendRow_(ss, 'Списання', skuEntries.length) : 0;
+  const writeoffRow = skuEntries.length ? crmPreparedAppendRow_(ss, 'Списання', skuEntries.length) : 0;
   const startNumber = skuEntries.length ? nextIdNumber_('Списання', 1, 'WRT') : 0;
   const writeoffIds = skuEntries.map(function(_, index) { return 'WRT-' + String(startNumber + index).padStart(4, '0'); });
   const componentIds = nextOrderComponentUsageIds_(ledger, plan.entries.length);
-  const ledgerRow = crmNextAppendRow_(ss, CRM_ORDER_COMPONENT_USAGE_SHEET_, plan.entries.length);
+  const ledgerRow = crmPreparedAppendRow_(ss, CRM_ORDER_COMPONENT_USAGE_SHEET_, plan.entries.length);
   let writeoffsWritten = false;
   let ledgerWritten = false;
   try {
@@ -8810,8 +8950,29 @@ function orderUpdateRequestState_(ss, order, requestId) {
   return result;
 }
 
+// A TTN-only (or delivery-cost-only) edit must not fan out into the expensive
+// preorder reconciliation. Incoming purchases own that recovery path; an order
+// edit needs it only when this order is, or remains, a preorder-cost case.
+function orderNeedsPreorderCostRecovery_(matches, nextOrderStatus) {
+  if (String(nextOrderStatus || '').trim() === 'Передзамовлення') return true;
+  return (matches || []).some(function(match) {
+    const values = match && match.values || [];
+    const status = String(values[23] || '').trim();
+    const method = String(values[29] || '').trim();
+    return status === 'Передзамовлення' ||
+      method === 'Прогноз передзамовлення' ||
+      method === 'FIFO (резерв передзамовлення)' ||
+      method === 'FIFO (резерв через міграцію)';
+  });
+}
+
 function apiUpdateSaleWithComponents_(ss, payload) {
   const progress = { fields_updated: false, components_written: 0, fixtures_written: 0, three_dp_gifts_written: 0, cost_updated: false };
+  const startedAt = new Date().getTime(), timings = {};
+  function markPhase_(name) {
+    timings[name] = new Date().getTime() - startedAt;
+    Logger.log('apiUpdateSaleWithComponents_ phase=' + name + ' elapsed_ms=' + timings[name]);
+  }
   try {
     resetMemoForMutation_();
     const sales = ss.getSheetByName('Продажі');
@@ -8825,6 +8986,7 @@ function apiUpdateSaleWithComponents_(ss, payload) {
     for (let row = rowIndex - 1; row >= 3; row--) { if (String(sales.getRange(row, 1).getValue() || '').trim() !== order) break; rows.unshift(row); }
     for (let row = rowIndex + 1; row <= sales.getLastRow(); row++) { if (String(sales.getRange(row, 1).getValue() || '').trim() !== order) break; rows.push(row); }
     const matches = rows.map(function(row) { return { row: row, values: sales.getRange(row, 1, 1, 29).getValues()[0] }; });
+    markPhase_('order_loaded');
     const fixtureLines = (Array.isArray(payload.fixtures) ? payload.fixtures.slice(0, 10) : []).map(function(item, index) { return { selection: String(item && item.selection || '').trim(), qty: num_(item && item.qty), row: index + 1, target_row: Math.floor(num_(item && item.target_row)), target_sku: String(item && item.target_sku || '').trim() }; });
     const rawComponents = Array.isArray(payload.components) ? payload.components.slice(0, 10) : [];
     const raw3dpModes = Array.isArray(payload.three_dp_lines) ? payload.three_dp_lines.slice(0, 10) : [];
@@ -8832,9 +8994,12 @@ function apiUpdateSaleWithComponents_(ss, payload) {
     const fixtureRequested = fixtureLines.length > 0;
     const requestId = String(payload.request_id || '').trim();
     if ((componentRequested || fixtureRequested || raw3dpModes.length) && !/^[A-Za-z0-9_-]{8,80}$/.test(requestId)) throw new Error('valid request_id required for component, fixture, or 3D mode update');
-    const requestState = requestId ? orderUpdateRequestState_(ss, order, requestId) : { component: false, fixture: false, marker: '' };
+    const needsRequestStateLookup = componentRequested || fixtureRequested;
+    const requestState = needsRequestStateLookup && requestId ? orderUpdateRequestState_(ss, order, requestId) : { component: false, fixture: false, marker: '' };
+    markPhase_('request_state_checked');
     const componentPlan = requestState.component ? { ok: true, entries: [], prro_total: 0, mgmt_total: 0 } : buildOrderComponentPlan_(ss, rawComponents);
     if (!componentPlan.ok) throw new Error(componentPlan.error);
+    markPhase_('component_plan_ready');
     componentPlan.entries.forEach(function(item) {
       if (!item.targetRow && !item.targetSku) return;
       const target = matches.filter(function(match) { return match.row === item.targetRow; })[0];
@@ -8874,13 +9039,18 @@ function apiUpdateSaleWithComponents_(ss, payload) {
     const shopDelivery = hasDelivery ? Math.max(0, apiNum_(payload.shop_delivery)) : null;
     if (packagingType && !isKnownCrmPackagingType_(packagingType)) throw new Error('Недійсний тип паковання. Онови дашборд і вибери значення зі списку.');
     if (!paymentChanged && !orderChanged && !ttnChanged && packaging === null && shopDelivery === null && !noteChanged && !componentRequested && !fixtureRequested && !raw3dpModes.length) throw new Error('nothing changed');
+    // Status/payment, fixture, and 3D-mode changes can alter the base line cost.
+    // A component-only save reprojects its own frozen ledger after it is written;
+    // it does not need to recalculate the whole order before that write.
+    const needsBaseCostRefresh = paymentChanged || orderChanged || fixtureRequested || raw3dpModes.length;
+    const needsPreorderRecovery = needsBaseCostRefresh && orderNeedsPreorderCostRecovery_(matches, orderStatus);
     const reservationFormula = (orderStatus === 'Передзамовлення' || matches.some(function(match) { return String(match.values[23] || '').trim() === 'Передзамовлення'; }))
       ? inventoryMigrationEnsureReservationStockFormulas_(ss, matches.map(function(match) { return match.values[5]; }))
       : { updated: 0, integrity: null };
     const weights = orderRowWeights_(sales, rows);
     const packagingAllocations = packaging === null ? [] : allocateAmount_(packaging, weights);
     const deliveryAllocations = shopDelivery === null ? [] : allocateAmount_(shopDelivery, weights);
-    resetOrderComponentCostProjectionBeforeBaseRefresh_(ss, rows);
+    if (needsBaseCostRefresh) resetOrderComponentCostProjectionBeforeBaseRefresh_(ss, rows);
     const costRunState = {};
     const preorderCostVerification = [];
     // Repair only the known CRM-004 validation defect and do it before any sale, gift,
@@ -8894,14 +9064,17 @@ function apiUpdateSaleWithComponents_(ss, payload) {
       if (packaging !== null) { sales.getRange(row, 16).setValue(packagingAllocations[index]); sales.getRange(row, 29).setValue(packagingType); }
       if (shopDelivery !== null) sales.getRange(row, 20).setValue(deliveryAllocations[index]);
       if (noteChanged) sales.getRange(row, 27).setValue(note);
-      const costResult = fixSaleCostForRow_(ss, row, costRunState, { clearPending: false });
-      if (costResult && costResult.deferred) preorderCostVerification.push({ row: row, sku: String(sales.getRange(row, 6).getValue() || '').trim(), shortfall_qty: costResult.shortfall_qty });
+      if (needsBaseCostRefresh) {
+        const costResult = fixSaleCostForRow_(ss, row, costRunState, { clearPending: false });
+        if (costResult && costResult.deferred) preorderCostVerification.push({ row: row, sku: String(sales.getRange(row, 6).getValue() || '').trim(), shortfall_qty: costResult.shortfall_qty });
+      }
     });
-    // A harmless dashboard save is also the owner-facing recovery path for an
-    // already recorded migration: re-check only the order's SKU(s), and price
-    // any active preorder now covered by landed FIFO inventory.
+    markPhase_('base_fields_written');
+    // A preorder-cost edit may recover an already recorded migration: re-check
+    // only this order's SKU(s), and price any active preorder now covered by
+    // landed FIFO inventory. Ordinary TTN/status-only saves never enter this path.
     const preorderCosts = {};
-    matches.forEach(function(match) {
+    if (needsPreorderRecovery) matches.forEach(function(match) {
       const sku = String(match.values[5] || '').trim();
       if (sku && !preorderCosts[sku]) preorderCosts[sku] = inventoryMigrationBackfillPreorderCosts_(ss, sku, new Date());
     });
@@ -8913,30 +9086,40 @@ function apiUpdateSaleWithComponents_(ss, payload) {
       progress.components_written = written.rows_added;
       // The new ledger/writeoff pair must become the Mystery Box base before
       // order-level components are allocated below.
-      if (hasTargetedMysteryComponents) { SpreadsheetApp.flush(); recalculateMysteryBoxOrderCost_(ss, order); }
+      if (hasTargetedMysteryComponents) recalculateMysteryBoxOrderCost_(ss, order);
     }
+    markPhase_('components_written');
     if (fixturePlan.entries.length) {
       const written = append3dp019FixtureUsage_(ss, fixturePlan, current[2], fixturePlan.ledger_source, order, mutationNote);
       progress.fixtures_written = written.rows_added;
     }
-    const syncResult = sync3dpPackagingCost_(sales, order, rows, 'apiUpdateSale_', { modes: modeMap, request_id: requestId });
+    markPhase_('fixtures_written');
+    // A non-3D order must not write a 3D sync-journal "skip" row. Besides being
+    // irrelevant, that hidden append can trigger structural capacity work.
+    const has3dpOrderLine = matches.some(function(match) { return is3dpPackagingSku_(String(match.values[5] || '').trim()); });
+    const syncResult = has3dpOrderLine
+      ? sync3dpPackagingCost_(sales, order, rows, 'apiUpdateSale_', { modes: modeMap, request_id: requestId })
+      : { ok: true, skipped: 'no_3dp_sku' };
     if (syncResult && syncResult.accounting_rows) progress.cost_updated = true;
+    markPhase_('3dp_sync_finished');
     // Apply general components after the 3D base-cost projection. Otherwise a targeted component
     // on a 3D line would be overwritten by the freshly calculated Sale/Marketing cost.
-    SpreadsheetApp.flush();
-    const componentCost = ss.getSheetByName(CRM_ORDER_COMPONENT_USAGE_SHEET_)
+    const componentCost = (needsBaseCostRefresh || componentRequested) && ss.getSheetByName(CRM_ORDER_COMPONENT_USAGE_SHEET_)
       ? reapplyOrderComponentCostAfterBaseRefresh_(ss, order, rows)
       : { rows_updated: 0 };
     if (componentCost.rows_updated) {
-      updateSkuCurrentCost_(ss);
       progress.cost_updated = true;
     }
-    else if (progress.cost_updated) updateSkuCurrentCost_(ss);
+    // A full current-cost projection is not part of an interactive order write.
+    // Sales and component stock movements are canonical immediately; the derived
+    // catalog projection is refreshed by nightly inventory maintenance.
     invalidateDoGetCache_();
-    return { ok: true, row_index: rowIndex, order_id: order, rows_updated: rows.length, components_written: progress.components_written, fixtures_written: progress.fixtures_written, three_dp_gifts_written: progress.three_dp_gifts_written, component_prro_total: componentPlan.prro_total, component_mgmt_total: componentPlan.mgmt_total, fixture_warning: fixturePlan.warning || '', preorder_cost_warning: preorderCostVerification, packaging_validation: packagingValidation, stock_reservation_formula: reservationFormula, preorder_costs: preorderCosts, accounting: syncResult || null, already_applied: requestState.component || requestState.fixture, partial: !!(syncResult && syncResult.ok === false), retry_action: syncResult && syncResult.ok === false ? 'retry_3dp_sync' : '', error: syncResult && syncResult.ok === false ? 'Не всі 3D-рядки синхронізовано' : '' };
+    markPhase_('complete');
+    return { ok: true, row_index: rowIndex, order_id: order, rows_updated: rows.length, components_written: progress.components_written, fixtures_written: progress.fixtures_written, three_dp_gifts_written: progress.three_dp_gifts_written, component_prro_total: componentPlan.prro_total, component_mgmt_total: componentPlan.mgmt_total, fixture_warning: fixturePlan.warning || '', preorder_cost_warning: preorderCostVerification, packaging_validation: packagingValidation, stock_reservation_formula: reservationFormula, preorder_costs: preorderCosts, accounting: syncResult || null, current_cost_refresh: 'deferred_to_nightly_inventory_maintenance', timings_ms: timings, already_applied: requestState.component || requestState.fixture, partial: !!(syncResult && syncResult.ok === false), retry_action: syncResult && syncResult.ok === false ? 'retry_3dp_sync' : '', error: syncResult && syncResult.ok === false ? 'Не всі 3D-рядки синхронізовано' : '' };
   } catch (err) {
+    markPhase_('error');
     const changed = progress.fields_updated || progress.components_written || progress.fixtures_written || progress.three_dp_gifts_written || progress.cost_updated;
-    return { ok: changed, partial: changed, retry_action: changed ? 'resubmit_order_update' : '', error: String(err && err.message ? err.message : err), detail: progress };
+    return { ok: changed, partial: changed, retry_action: changed ? 'resubmit_order_update' : '', error: String(err && err.message ? err.message : err), detail: progress, timings_ms: timings };
   }
 }
 

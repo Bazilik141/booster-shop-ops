@@ -1668,6 +1668,7 @@ async function loadOverview() {
   const p_monthly   = p_bootstrap.then(d => d.monthly);
   const p_sku       = p_secondary.then(d => d.skus);
   const p_stock     = p_secondary.then(d => d.stock);
+  const p_assets    = p_secondary.then(() => call('overview_assets'));
   const skuMetrics  = {};  // populated by top-5 section; used by alerts section for accurate sold_30d
 
   // Summary cards
@@ -1725,16 +1726,16 @@ async function loadOverview() {
     const cards = [
       { label:'Місяць на сьогодні', value:(mtd.current.orders||0) + deltaTag(mtd.current.orders, mtd.previous?.orders), sub:`Виручка ${fmt(mtd.current.revenue)}${deltaTag(mtd.current.revenue, mtd.previous?.revenue)}<br>Прибуток ${fmt(mtd.current.profit)}${deltaTag(mtd.current.profit, mtd.previous?.profit)}` },
       { label:'Активні замовл.',  value:activeCount, sub:activeSub, cls: activeCount > 0 ? 'c-yellow' : '' },
-      { label:'Собівартість складу (UA)', value: warehouseCost != null ? fmt(warehouseCost) : '—', sub:'На складі в Україні', cls:'' },
-      { label:'Потенційний прибуток складу', value: warehouseProfit != null ? fmt(warehouseProfit) : '—',
+      { key:'warehouse_cost', label:'Собівартість складу (UA)', value: warehouseCost != null ? fmt(warehouseCost) : '⏳', sub:'На складі в Україні · оцінка завантажується окремо', cls:'' },
+      { key:'warehouse_profit', label:'Потенційний прибуток складу', value: warehouseProfit != null ? fmt(warehouseProfit) : '⏳',
         sub: warehouseProfit != null ? `При продажу залишку${whMarginPct != null ? '<br>Маржа ' + fmtP(whMarginPct) : ''}` : '⏳ Потрібен Apps Script', cls: warehouseProfit > 0 ? 'c-accent' : '' },
-      { label:'Собівартість активів', value: assetCost != null ? fmt(assetCost) : '—', sub:'UA + замовлено + в дорозі + JP + виграно', cls:'' },
-      { label:'Потенційний прибуток активів', value: assetProfit != null ? fmt(assetProfit) : '—',
+      { key:'asset_cost', label:'Собівартість активів', value: assetCost != null ? fmt(assetCost) : '⏳', sub:'UA + замовлено + в дорозі + JP + виграно', cls:'' },
+      { key:'asset_profit', label:'Потенційний прибуток активів', value: assetProfit != null ? fmt(assetProfit) : '⏳',
         sub: assetProfit != null ? `UA + замовлено + в дорозі + JP + виграно${assetMarginPct != null ? '<br>Маржа ' + fmtP(assetMarginPct) : ''}` : '⏳ Потрібен Apps Script', cls: assetProfit > 0 ? 'c-accent' : '' },
     ];
 
     document.getElementById('summaryCards').innerHTML = cards.map(c =>
-      `<div class="card ${c.cls||''}">
+      `<div class="card ${c.cls||''}"${c.key ? ` data-summary-key="${c.key}"` : ''}>
         <div class="card-label">${c.label}</div>
         <div class="card-value">${c.value}</div>
         ${c.sub ? `<div class="card-sub">${c.sub}</div>` : ''}
@@ -1744,6 +1745,22 @@ async function loadOverview() {
     const now = new Date().toLocaleTimeString('uk-UA', {hour:'2-digit',minute:'2-digit'});
     document.getElementById('overviewSub').textContent = `Оновлено о ${now}`;
     document.getElementById('sidebarUpdated').textContent = `Дані: ${now}`;
+    p_assets.then(a => {
+      const values = {
+        warehouse_cost: { value:a.warehouse_cost, sub:'На складі в Україні' },
+        warehouse_profit: { value:a.potential_profit_warehouse, cost:a.warehouse_cost, sub:'При продажу залишку' },
+        asset_cost: { value:a.asset_cost, sub:'UA + замовлено + в дорозі + JP + виграно' },
+        asset_profit: { value:a.asset_potential_profit, cost:a.asset_cost, sub:'UA + замовлено + в дорозі + JP + виграно' }
+      };
+      Object.keys(values).forEach(key => {
+        const card=document.querySelector(`[data-summary-key="${key}"]`),item=values[key];if(!card)return;
+        const value=card.querySelector('.card-value'),sub=card.querySelector('.card-sub');
+        if(value)value.textContent=item.value!=null?fmt(Number(item.value)):'—';
+        const margin=item.cost!=null&&item.value!=null?calcMarginPct(Number(item.value),Number(item.cost)):null;
+        if(sub)sub.innerHTML=item.sub+(margin!=null?'<br>Маржа '+fmtP(margin):'');
+        card.classList.toggle('c-accent',Number(item.value)>0&&(key==='warehouse_profit'||key==='asset_profit'));
+      });
+    }).catch(e => console.warn('overview assets:',e.message));
   } catch(e) {
     showError(e.message);
     document.getElementById('summaryCards').innerHTML = '';

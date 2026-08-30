@@ -18,11 +18,16 @@ class Range {
   setValues(values) { values.forEach((row, rowIndex) => row.forEach((value, columnIndex) => this.setCellValue_(rowIndex, columnIndex, value))); return this; }
   setCellValue_(rowIndex, columnIndex, value) { const cell = this.sheet.cell(this.row + rowIndex, this.column + columnIndex); cell.value = value; cell.formula = ""; }
   setFormula(formula) { const cell = this.sheet.cell(this.row, this.column); cell.formula = formula; return this; }
+  setFormulas(formulas) { formulas.forEach((row, rowIndex) => row.forEach((formula, columnIndex) => { this.sheet.cell(this.row + rowIndex, this.column + columnIndex).formula = formula || ""; })); return this; }
   copyTo(destination) {
     destination.cells().forEach((row, rowIndex) => row.forEach((cell, columnIndex) => {
       const source = this.sheet.cell(this.row + (rowIndex % this.rows), this.column + (columnIndex % this.columns));
       cell.formula = source.formula || "";
     }));
+    return destination;
+  }
+  autoFill(destination) {
+    destination.cells().forEach(row => row.forEach(cell => { cell.formula = this.sheet.cell(this.row, this.column).formula || ""; }));
     return destination;
   }
 }
@@ -66,7 +71,7 @@ sales.getRange(452, 11).setFormula("=SUM($A$3:$A$433)");
 
 const context = vm.createContext({
   JSON, Math, Number, String, Boolean, Array, Object, RegExp, Date, Error, isFinite, console,
-  SpreadsheetApp: { CopyPasteType: { PASTE_FORMAT: "format", PASTE_DATA_VALIDATION: "validation", PASTE_FORMULA: "formula" }, getActive: () => spreadsheet, flush() {} },
+  SpreadsheetApp: { CopyPasteType: { PASTE_FORMAT: "format", PASTE_DATA_VALIDATION: "validation", PASTE_FORMULA: "formula" }, AutoFillSeries: { DEFAULT_SERIES: "default" }, getActive: () => spreadsheet, flush() {} },
   PropertiesService: { getScriptProperties: () => ({ getProperty: key => scriptProperties[key] || "", setProperty: (key, value) => { scriptProperties[key] = value; } }) },
   ScriptApp: {
     getProjectTriggers: () => triggers.slice(),
@@ -80,6 +85,7 @@ vm.runInContext(code + "\nfunction apiIntegrityCheck_(){ return { clean:true, pr
 assert.equal(context.__test.crmNextAppendRow_(spreadsheet, "Продажі", 1), 453, "a full sales grid returns the first new row");
 assert.equal(sales.getMaxRows(), 552, "sales receives its configured 100-row refill");
 assert.ok(sales.getRange(453, 11).getFormula(), "the first new sales row receives the copied formula structure");
+assert.equal(sales.getRange(453, 1).getValue(), "", "capacity growth never clones the template row's literal order ID");
 assert.equal(sales.getRange(452, 11).getFormula(), "=SUM($A$3:$A$552)", "local formula ranges are extended to the new grid end");
 assert.equal(context.__test.crmExpandSheetFormulaRanges_("=SUM('Списання'!$A$3:$A$197)", { "Списання": 226 }), "=SUM('Списання'!$A$3:$A$226)");
 assert.equal(context.__test.crmExpandLocalFormulaRanges_("=SUM($A$3:$A$199)", 3, 218), "=SUM($A$3:$A$218)");
@@ -116,4 +122,7 @@ assert.match(code, /'Продажі': Object\.freeze\(\{ first_row: 3, key_colum
 assert.match(code, /'Закупки': Object\.freeze\(\{ first_row: 3, key_column: 1, min_free_rows: 20, add_rows: 50 \}\)/);
 assert.match(code, /function setupCrmRowCapacityTrigger\(\)/);
 assert.match(code, /everyDays\(1\)\.atHour\(CRM_ROW_CAPACITY_TRIGGER_HOUR_\)/);
+assert.doesNotMatch(code.match(/function crmCopyRowStructure_\([\s\S]*?\n\}/)[0], /copyTypes\.PASTE_FORMULA/, "capacity growth never uses literal-cloning PASTE_FORMULA");
+assert.match(code.match(/function crmCopyRowStructure_\([\s\S]*?\n\}/)[0], /autoFill/, "capacity growth uses native localized-formula autofill");
+assert.doesNotMatch(code.match(/function maintainCrmRowCapacity_\([\s\S]*?\n\}/)[0], /apiIntegrityCheck_|SpreadsheetApp\.flush/, "nightly capacity maintenance cannot block for six minutes on the full integrity scan");
 console.log("CRM row capacity tests passed");

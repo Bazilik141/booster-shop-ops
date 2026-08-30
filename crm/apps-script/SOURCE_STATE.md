@@ -7,10 +7,10 @@ new Web App version.
 
 | Field | Value |
 |---|---|
-| Mirror file | `crm/apps-script/Code.gs` — based on the owner-supplied complete V153 export `Версія 153, 28 серп. 2026 р., 0946.csv` and extended locally with the dashboard maintenance/expense API bridge on 2026-08-28. |
-| Baseline pulled from live | 2026-08-28, 13:05 Kyiv (owner-supplied complete V153 export). |
-| **Mirror content deployed to live** | ✅ **V154 owner-paste/publication provenance reported 2026-08-28 14:40 Kyiv.** The owner reported publishing the then-current CRM script after the local dashboard-settings QA fixes. No fresh V154 export or independent byte comparison was supplied. |
-| Deployed Web App version number | CRM V154 — owner-reported publication 2026-08-28 14:40 Kyiv. Fresh V153 export remains the latest independently source-compared baseline; no independent V154 live QA or bounded row read-back was supplied. |
+| Mirror file | `crm/apps-script/Code.gs` — rebased against the owner-supplied complete V156 export `Версія 156, 30 серп. 2026 р., 1204.csv`, then extended only with the local V157 timeout/capacity candidate. |
+| Baseline pulled from live | 2026-08-30, owner-supplied complete V156 export. Raw SHA-256 `6990a1387a184140a63524413eb6e42039389c328856f386f872526e7d194eb7`; normalized SHA-256 `7efa5ad00760a005db8a92265c07782d5e1a991b7b33175776fe09775b95e7c7`; 8,999 normalized lines. |
+| **Mirror content deployed to live** | ✅ **V156 owner-paste/publication provenance reported 2026-08-30 12:04 Kyiv.** V155/V156 were published during the `OC-FOP-0337` timeout investigation. No fresh V156 export or independent byte comparison was supplied. The current local file contains the subsequent V157 candidate and is not deployed. |
+| Deployed Web App version number | CRM V156 — owner-reported publication 2026-08-30 12:04 Kyiv and now backed by the complete owner-supplied V156 export. The local V157 candidate differs by 194 insertions / 36 deletions only in the reviewed timeout, capacity, and Overview paths. |
 | Live-verified after deploy | Post-V131 (2026-08-18 14:52) owner reported `QA - ok`; `integrity_check`: `clean:true`, `problems:[]`, checked `Товари`, `РРЦ`, `Розхідники`, `Майстер_Товарів`, `Налаштування`; `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:55853`. This proves the schema/formula relationships covered by `integrity_check`, not unrelated FIFO/warehouse flows or a byte match with the mirror. Post-V130 (2026-08-18 14:36) `integrity_check`: `clean:true`, `problems:[]`, checked `Товари`, `РРЦ`, `Розхідники`, `Майстер_Товарів`, `Налаштування`; `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:12184`. Owner reported dashboard QA done for the recent-purchases fix. Post-V129 (2026-08-17 22:41) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:9698`. This proves schema/formula relationships covered by `integrity_check`, not the expected-stock rule: a direct formula read immediately after still found the legacy `Склад!Q3:Q201` rule without `Замовлено`. FIFO migration flows are outside this check and remain unproven live. Post-V128 (18:36) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:12564`. Post-V118 (23:18) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:7672`. |
 
 > ⚠ **2026-08-12, 16:45–16:46 — V106 migration succeeded; repeat exposed ARRAYFORMULA spill detection.**
@@ -25,10 +25,23 @@ new Web App version.
 > The owner-run result returned all schema/formula/backfill counters at zero and
 > `already_applied=true`. The owner clarified that V107 had been published at 16:54, so dashboard
 > API calls and the setup function now use the corrected source. The CRM deploy/setup gate is closed.
-| Local syntax check | Before owner-reported V154 publication: Node parse of `Code.gs`, all 23 permanent CRM Apps Script tests, all 3 dashboard tests, browser QA at 1440/1024/801/800/390 px, and `git diff --check` passed 2026-08-28. Coverage includes dashboard maintenance commands, expense retry idempotency, settings/report initialization, updates refresh, mixed-order KPI exclusion, preorder forecast/FIFO reconciliation, and stock-deficit handling. |
+| Local syntax check | Post-V156 V157 candidate: complete Node parse via the test harness, all 23 CRM tests plus the dashboard contract test (24/24), and scoped `git diff --check` passed 2026-08-30. Coverage now includes prepared-row component writes, no remote 3D lookup for local components, no synchronous full-cost rebuild/flush on ordinary order updates, native formula-only row-capacity growth, literal-clone prevention, and deferred Overview asset valuation. |
 | Previous repo copy | `Booster Shop CRM - Apps_Script_код 29.07.2026.csv` (2026-07-29, pre-V87/V89) — superseded, keep for history only |
 
 ## Mirror status
+
+> ⚠ **2026-08-30 — local V157 timeout/capacity candidate, not deployed.**
+> V156 live evidence showed `doPost` reaching the six-minute ceiling and the old
+> capacity maintenance cloning literal write-off data through `PASTE_FORMULA`.
+> The workbook was recovered owner-side: V3 restored `Списання!317:636`; V5
+> natively prepared `Продажі!434:752` with 11 formulas per row and zero errors.
+> The local candidate keeps interactive updates on already-prepared rows, avoids
+> remote 3D/catalog/current-cost work for ordinary local-component orders, and
+> replaces literal-cloning capacity copies with formula-only native autofill.
+> Publication as Web App V157 and owner QA remain required.
+> Direct `git diff --no-index` against the complete V156 export confirms the
+> candidate delta is 194 insertions / 36 deletions; no assumed intermediate
+> source remains in the handoff.
 
 > ✅ **2026-08-28, 14:40 Kyiv — dashboard settings/expense bridge owner-reported as CRM V154.**
 > The owner reported publishing the then-current main CRM script. This records publication provenance,

@@ -15,9 +15,11 @@ class Range{
   getDisplayValue(){return String(this.getValue()??"");}
   getValue(){return this.sheet.cell(this.row,this.col).value??"";}
   getFormula(){return this.sheet.cell(this.row,this.col).formula||"";}
+  getFormulas(){return this.cells().map(row=>row.map(cell=>cell.formula||""));}
   setValue(value){const cell=this.sheet.cell(this.row,this.col);cell.value=value;cell.formula="";return this;}
   setValues(values){values.forEach((row,r)=>row.forEach((value,c)=>{const cell=this.sheet.cell(this.row+r,this.col+c);cell.value=value;cell.formula="";}));return this;}
   setFormula(formula){this.sheet.cell(this.row,this.col).formula=formula;return this;}
+  setFormulas(formulas){formulas.forEach((row,r)=>row.forEach((formula,c)=>{this.sheet.cell(this.row+r,this.col+c).formula=formula;}));return this;}
   clearContent(){this.cells().flat().forEach(cell=>{cell.value="";cell.formula="";});return this;}
 }
 class Sheet{
@@ -53,7 +55,7 @@ const context=vm.createContext({JSON,Math,Number,String,Boolean,Array,Object,Reg
   Logger:{log(){}},SpreadsheetApp:{openById:()=>crm,getActive:()=>crm,flush(){}},PropertiesService:{getScriptProperties:()=>({getProperty:key=>scriptProperties[key]||"",setProperty(key,value){scriptProperties[key]=value;}})},
   Utilities:{formatDate:()=>"2026-08-12"},Session:{getScriptTimeZone:()=>"Europe/Kyiv"},ContentService:{MimeType:{JSON:"JSON"},createTextOutput:()=>({setMimeType(){return this;}})}
 });
-vm.runInContext(code+"\nglobalThis.__test={apiOrderComponentCatalog_,buildOrderComponentPlan_,replaceOrderComponentAudit_,normalizeRepeatedExactNote_,setupOrderComponentUsage,orderUpdateRequestState_,orderComponentMarketingByOrder_,crm3dpAccountingSnapshot_,repair3dpExpenseProjectionFormulas_,expenseProjectionFormulas3dp_,apiAddConsumablePurchase_,apiUpdateConsumablePurchase_,allocateAmount_,writeoffLastWritableRow_,nextWriteoffRow_,applyOrderComponentCost_,reapplyOrderComponentCostAfterBaseRefresh_,resetOrderComponentCostProjectionBeforeBaseRefresh_};",context,{filename:"Code.gs"});
+vm.runInContext(code+"\nglobalThis.__test={apiOrderComponentCatalog_,apiOrderComponentCatalogForIds_,buildOrderComponentPlan_,replaceOrderComponentAudit_,normalizeRepeatedExactNote_,setupOrderComponentUsage,orderUpdateRequestState_,orderComponentMarketingByOrder_,crm3dpAccountingSnapshot_,repair3dpExpenseProjectionFormulas_,expenseProjectionFormulas3dp_,apiAddConsumablePurchase_,apiUpdateConsumablePurchase_,allocateAmount_,writeoffLastWritableRow_,nextWriteoffRow_,applyOrderComponentCost_,reapplyOrderComponentCostAfterBaseRefresh_,resetOrderComponentCostProjectionBeforeBaseRefresh_};",context,{filename:"Code.gs"});
 
 const catalog=context.__test.apiOrderComponentCatalog_();
 assert.equal(catalog.ok,true);
@@ -74,6 +76,13 @@ assert.equal(remote3d.stock,36);
 assert.equal(remote3d.mgmt_unit,20);
 context.crm3dpGet_=originalGet;
 delete scriptProperties.BOOSTER_3DP_URL;delete scriptProperties.BOOSTER_3DP_SYNC_TOKEN;
+let targetedRemoteCalls=0;
+context.crm3dpGet_=()=>{targetedRemoteCalls++;throw new Error("remote 3D-P must not be called");};
+const localOnlyCatalog=context.__test.apiOrderComponentCatalogForIds_(crm,["sku:PKM-TEST","consumable:Пакет"]);
+assert.equal(localOnlyCatalog.ok,true);
+assert.deepEqual(JSON.parse(JSON.stringify(localOnlyCatalog.components.map(item=>item.id).sort())),["consumable:Пакет","sku:PKM-TEST"]);
+assert.equal(targetedRemoteCalls,0,"an ordinary CRM component POST never calls the remote 3D-P catalogue");
+context.crm3dpGet_=originalGet;
 assert.match(code,/kind: '3D-P'/,"component catalog has a direct 3D-P source-truth path");
 assert.match(code,/append3dpOrderGifts_\(componentPlan, current\[2\], order, requestId\)/,"3D gifts are written remotely before the local component ledger");
 assert.match(code,/action: '3dp_order_gifts_append'/,"CRM uses the idempotent specialized 3D gift action");
@@ -178,6 +187,23 @@ assert.deepEqual(JSON.parse(JSON.stringify(context.__test.allocateAmount_(100,[1
 assert.deepEqual(JSON.parse(JSON.stringify(context.__test.allocateAmount_(80,[100,1000,700]))),[4.44,44.44,31.12]);
 assert.deepEqual(JSON.parse(JSON.stringify(context.__test.allocateAmount_(120,[100,1000,700]))),[6.67,66.67,46.66]);
 assert.match(code,/update_sale'\) return boosterCrmJson_\(apiUpdateSaleWithComponents_/);
+assert.match(code,/const needsRequestStateLookup = componentRequested \|\| fixtureRequested;/,"TTN-only saves do not scan component and fixture ledgers for a retry marker");
+assert.match(code,/const needsBaseCostRefresh = paymentChanged \|\| orderChanged \|\| fixtureRequested \|\| raw3dpModes\.length;/,"component-only saves skip unnecessary FIFO and Mystery Box base-cost refreshes");
+assert.match(code,/const needsPreorderRecovery = needsBaseCostRefresh && orderNeedsPreorderCostRecovery_\(matches, orderStatus\);/,"preorder recovery stays limited to base-cost preorder cases");
+const apiUpdateSaleWithComponentsSource = code.match(/function apiUpdateSaleWithComponents_\([\s\S]*?\n}\n\nfunction apiRetry3dpOrderSync_/)[0];
+assert.match(apiUpdateSaleWithComponentsSource,/current_cost_refresh: 'deferred_to_nightly_inventory_maintenance'/,"dashboard component saves defer the full catalog current-cost rebuild");
+assert.doesNotMatch(apiUpdateSaleWithComponentsSource,/updateSkuCurrentCost_\(/,"dashboard component saves never block on the full catalog current-cost rebuild");
+assert.doesNotMatch(apiUpdateSaleWithComponentsSource,/SpreadsheetApp\.flush\(\)/,"dashboard order updates do not force synchronous spreadsheet recalculation");
+assert.match(apiUpdateSaleWithComponentsSource,/markPhase_\('component_plan_ready'\)/,"runtime phase timings identify any remaining live bottleneck");
+assert.match(apiUpdateSaleWithComponentsSource,/timings_ms: timings/,"runtime phase timings are returned to the dashboard client");
+assert.match(apiUpdateSaleWithComponentsSource,/const has3dpOrderLine = matches\.some/,
+  "the update handler detects whether this order actually contains a 3D-P line");
+assert.match(apiUpdateSaleWithComponentsSource,/const syncResult = has3dpOrderLine[\s\S]*\? sync3dpPackagingCost_/,
+  "ordinary orders never enter the 3D sync or its hidden skip-journal append");
+const appendOrderComponentsSource = code.match(/function appendOrderComponents_\([\s\S]*?\n}\n\nfunction append3dpOrderGifts_/)[0];
+assert.match(appendOrderComponentsSource,/crmPreparedAppendRow_\(ss, 'Списання'/,"interactive component writes use prepared write-off rows");
+assert.match(appendOrderComponentsSource,/crmPreparedAppendRow_\(ss, CRM_ORDER_COMPONENT_USAGE_SHEET_/,"interactive component writes use prepared ledger rows");
+assert.doesNotMatch(appendOrderComponentsSource,/crmNextAppendRow_\(/,"interactive component writes never expand sheets or run full integrity scans");
 assert.match(code,/if \(!item\.targetRow && !item\.targetSku\) return;/,"blank component target is accepted as order-level allocation");
 assert.match(code,/recalculateMysteryBoxOrderCost_\(ss, orderKey\)/,"later order edits restore Mystery Box cost from linked writeoffs");
 assert.match(code,/\? reapplyOrderComponentCostAfterBaseRefresh_\(ss, order, rows\)[\s\S]*if \(componentCost\.rows_updated\)/,"existing order components are reapplied after every dashboard base-cost refresh");

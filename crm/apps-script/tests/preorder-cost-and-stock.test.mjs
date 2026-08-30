@@ -14,7 +14,7 @@ const context = vm.createContext({
   JSON, Math, Number, String, Boolean, Array, Object, RegExp, Date, Error, Set, isFinite,
   Logger: { log() {} }, SpreadsheetApp: {}, Utilities: {}, Session: {}, console
 });
-vm.runInContext(code + '\nglobalThis.__test={calculatePreorderForecastCost_,apiDecoratePreorderStock_,isActualSaleForCost_,apiRecentSalesForUpdate_,normalizeOpenCartSku_,mapOpenCartOrderStatus_,_getCrmSalesRows,resetMemo_};', context, { filename: 'Code.gs' });
+vm.runInContext(code + '\nglobalThis.__test={calculatePreorderForecastCost_,apiDecoratePreorderStock_,isActualSaleForCost_,apiRecentSalesForUpdate_,normalizeOpenCartSku_,mapOpenCartOrderStatus_,_getCrmSalesRows,orderNeedsPreorderCostRecovery_,resetMemo_};', context, { filename: 'Code.gs' });
 
 const incomingRows = [];
 function purchase({ lot, sku = 'SKU-MIX', qty, prro = 0, mgmt = 0, status }) {
@@ -100,6 +100,13 @@ assert.equal(context.__test.normalizeOpenCartSku_('PKM-JP-ABYSS-BST'), 'PKM-JP-A
 assert.equal(context.__test.normalizeOpenCartSku_('PKM-JP-ABYSS-BBX'), 'PKM-JP-ABYE-BBX');
 assert.equal(context.__test.mapOpenCartOrderStatus_('Очікування товару'), 'Передзамовлення',
   'the OpenCart waiting-for-stock status remains a preorder in CRM');
+
+assert.equal(context.__test.orderNeedsPreorderCostRecovery_([{ values: saleRow({ sku: 'OP-JP-MBX-ST', qty: 1, status: 'Відправлено', method: 'FIFO' }).values }], 'Відправлено'), false,
+  'a TTN-only Mystery Box edit never starts global preorder recovery');
+assert.equal(context.__test.orderNeedsPreorderCostRecovery_([{ values: saleRow({ sku: 'SKU-PRE', qty: 1, status: 'Передзамовлення', method: 'Прогноз передзамовлення' }).values }], 'Відправлено'), true,
+  'a transitioned preorder remains eligible for its bounded cost recovery');
+assert.equal(context.__test.orderNeedsPreorderCostRecovery_([{ values: saleRow({ sku: 'SKU-NEW', qty: 1, status: 'Нове', method: 'FIFO' }).values }], 'Передзамовлення'), true,
+  'a newly marked preorder keeps the cost-recovery path');
 
 const recentHeaders = [
   'Номер замовлення / операції', 'Дата продажу', 'Сума продажу', 'Управлінська собівартість продажу',

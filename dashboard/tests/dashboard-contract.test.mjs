@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 const here=path.dirname(fileURLToPath(import.meta.url));
 const html=fs.readFileSync(path.resolve(here,"../booster-dashboard.html"),"utf8");
 const apiCode=fs.readFileSync(path.resolve(here,"../../3d-print/apps-script-3dp-api/Code.gs"),"utf8");
+const crmCode=fs.readFileSync(path.resolve(here,"../../crm/apps-script/Code.gs"),"utf8");
 const inline=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)].map((match)=>match[1]).filter((source)=>source.trim());
 inline.forEach((source,index)=>new vm.Script(source,{filename:"booster-dashboard.inline-"+index+".js"}));
 const apiContext=vm.createContext({});
@@ -157,9 +158,15 @@ const overviewSource=html.slice(overviewStart,html.indexOf('// ═════�
 assert.match(overviewSource,/call\('overview_bootstrap'\)/,'overview loads critical data through one shared Apps Script bootstrap');
 assert.match(overviewSource,/p_bootstrap\.then\(\(\) => call\('overview_secondary'\)\)/,
   'secondary overview data starts only after the critical response');
+assert.match(overviewSource,/p_secondary\.then\(\(\) => call\('overview_assets'\)\)/,
+  'full asset valuation runs only as a background request after the visible secondary data');
+assert.match(overviewSource,/data-summary-key=/,
+  'background asset values update their existing cards without blocking the overview skeleton');
 assert.doesNotMatch(overviewSource,/call\('(summary|orders|channel_stats|monthly_summary|sku_list|stock_alerts)'/,
   'overview no longer starts seven competing Apps Script requests');
 assert.doesNotMatch(overviewSource,/status:'all', limit:500/,'overview does not fetch 500 orders to render an active-order preview');
+assert.match(crmCode,/crmGetOrders_\('active', 200, \{ sort: 'date_desc', skip_marketing: true \}\)/,
+  'critical overview order loading skips component and 3D marketing ledgers');
 assert.match(html,/function isPreorderOrder\(order\)[\s\S]*Передзамовлення/,'the overview has an explicit preorder classifier');
 assert.match(html,/const overviewActiveOrders = activeOrders\.filter\(r => !isPreorderOrder\(r\)\)/,'the overview summary excludes preorders');
 assert.match(html,/filter\(r => isActiveOrder\(r\) && !isPreorderOrder\(r\)\)/,'the active-orders overview preview excludes preorders');
