@@ -127,7 +127,7 @@ assert.match(html,/rows\.length > PURCHASE_BATCH_LIMIT/,'purchase submission enf
 assert.match(html,/call\(cfg\.action, \{ limit: 20, include_all_open:'true', kind:cfg\.kind \|\| '' \}\)/,'the purchases tab explicitly requests every open purchase while sales pass their order kind');
 assert.match(html,/showRecTab\(\\'regular\\',this\)">Звичайні замовлення</,'accounting separates regular orders');
 assert.match(html,/showRecTab\(\\'preorders\\',this\)">Передзамовлення</,'accounting separates preorders');
-assert.match(html,/preorder_reserved/,'stock UI exposes preorder reservations');
+assert.match(html,/reserved_total/,'stock UI exposes the total active stock reservation');
 assert.match(html,/preorder_deficit/,'stock UI exposes preorder deficit without a negative available value');
 assert.match(html,/Відновити тільки 3D-P після помилки/);
 assert.match(html,/action:'retry_3dp_sync'/);

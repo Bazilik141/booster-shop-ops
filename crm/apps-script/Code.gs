@@ -4376,6 +4376,16 @@ if (['Скасовано', 'Повернення'].indexOf(status) !== -1) retur
 return payment === 'Оплачено' || ['Нове', 'В обробці', 'Відправлено', 'Отримано', 'Передзамовлення'].indexOf(status) !== -1;
 }
 
+// This is deliberately narrower than isStockReservationSale_.  The latter is
+// shared by FIFO and sales reporting, where completed orders remain relevant.
+// A physical-stock reconstruction may restore only units still on the shelf:
+// new/processing orders and preorders.  Shipped, received, and historic paid
+// orders have already left stock and must never inflate `physical_stock`.
+function isPhysicalStockReservationSale_(values) {
+const status = String(values[23] || '').trim();
+return ['Нове', 'В обробці', 'Передзамовлення'].indexOf(status) !== -1;
+}
+
 function buildPendingCostAudit_(values) {
 return trimCostAudit_('Не зафіксовано: оплата=' + String(values[22] || '') + ', статус=' + String(values[23] || ''));
 }
@@ -5298,7 +5308,7 @@ function apiDecoratePreorderStock_(skus) {
   const reserved = {}, preorderReservedBySku = {};
   _getCrmSalesRowEntries().forEach(function(entry) {
     const row = entry.values;
-    if (!isStockReservationSale_(row)) return;
+    if (!isPhysicalStockReservationSale_(row)) return;
     const sku = String(row[5] || '').trim();
     if (!sku) return;
     reserved[sku] = round2_(num_(reserved[sku]) + num_(row[7]));

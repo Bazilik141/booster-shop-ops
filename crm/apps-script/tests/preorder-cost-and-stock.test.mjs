@@ -14,7 +14,7 @@ const context = vm.createContext({
   JSON, Math, Number, String, Boolean, Array, Object, RegExp, Date, Error, Set, isFinite,
   Logger: { log() {} }, SpreadsheetApp: {}, Utilities: {}, Session: {}, console
 });
-vm.runInContext(code + '\nglobalThis.__test={calculatePreorderForecastCost_,apiDecoratePreorderStock_,isActualSaleForCost_,apiRecentSalesForUpdate_,normalizeOpenCartSku_,mapOpenCartOrderStatus_,_getCrmSalesRows,orderNeedsPreorderCostRecovery_,resetMemo_};', context, { filename: 'Code.gs' });
+vm.runInContext(code + '\nglobalThis.__test={calculatePreorderForecastCost_,apiDecoratePreorderStock_,isActualSaleForCost_,isPhysicalStockReservationSale_,apiRecentSalesForUpdate_,normalizeOpenCartSku_,mapOpenCartOrderStatus_,_getCrmSalesRows,orderNeedsPreorderCostRecovery_,resetMemo_};', context, { filename: 'Code.gs' });
 
 const incomingRows = [];
 function purchase({ lot, sku = 'SKU-MIX', qty, prro = 0, mgmt = 0, status }) {
@@ -73,7 +73,10 @@ function saleRow({ order = '', sku, qty, status, payment = 'Оплачено', m
 }
 context._getCrmSalesRowEntries = () => [
   saleRow({ sku: 'SKU-STOCK', qty: 3, status: 'Передзамовлення' }),
-  saleRow({ sku: 'SKU-STOCK', qty: 2, status: 'Нове' })
+  saleRow({ sku: 'SKU-STOCK', qty: 2, status: 'Нове' }),
+  saleRow({ sku: 'SKU-STOCK', qty: 7, status: 'Відправлено' }),
+  saleRow({ sku: 'SKU-STOCK', qty: 277, status: 'Отримано' }),
+  saleRow({ sku: 'SKU-STOCK', qty: 11, status: '' })
 ];
 const decorated = [{ sku: 'SKU-STOCK', stock: -2 }];
 context.__test.apiDecoratePreorderStock_(decorated);
@@ -81,6 +84,14 @@ assert.deepEqual(JSON.parse(JSON.stringify(decorated[0])), {
   sku: 'SKU-STOCK', stock: 0, stock_raw: -2, reserved_total: 5, regular_reserved: 2,
   preorder_reserved: 3, physical_stock: 3, preorder_deficit: 2
 }, 'negative free stock becomes zero available plus an explicit preorder deficit');
+assert.equal(context.__test.isPhysicalStockReservationSale_(saleRow({ sku: 'SKU-STOCK', qty: 1, status: 'В обробці' }).values), true,
+  'a processing order remains on the shelf and is a physical-stock reservation');
+assert.equal(context.__test.isPhysicalStockReservationSale_(saleRow({ sku: 'SKU-STOCK', qty: 1, status: 'Відправлено' }).values), false,
+  'a shipped order never returns units to physical stock');
+assert.equal(context.__test.isPhysicalStockReservationSale_(saleRow({ sku: 'SKU-STOCK', qty: 1, status: 'Отримано' }).values), false,
+  'a completed historic sale never returns units to physical stock');
+assert.equal(context.__test.isPhysicalStockReservationSale_(saleRow({ sku: 'SKU-STOCK', qty: 1, status: '' }).values), false,
+  'payment without an active fulfilment status is not a physical-stock reservation');
 
 assert.equal(context.__test.isActualSaleForCost_(saleRow({ sku: 'SKU-STOCK', qty: 1, status: 'Відправлено', method: 'Прогноз передзамовлення' }).values), false,
   'forecasted cost remains outside actual reporting until FIFO reconciliation');

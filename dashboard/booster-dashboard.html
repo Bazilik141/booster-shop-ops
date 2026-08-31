@@ -1637,7 +1637,7 @@ function renderStockTable(resetFilter) {
       <td><b>${r.stock??'—'}</b></td>
       <td>${r.expected??'—'}</td>
       <td>${r.physical_stock??'—'}</td>
-      <td>${r.preorder_reserved??0}</td>
+      <td>${r.reserved_total??0}</td>
       <td style="color:${Number(r.preorder_deficit)>0?'var(--red)':'var(--muted)'}"><b>${r.preorder_deficit??0}</b></td>
       <td><b>${r.sold_30d??'—'}</b></td>
       <td><b>${r.sold_60d??'—'}</b></td>
