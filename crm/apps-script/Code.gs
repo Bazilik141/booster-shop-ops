@@ -3486,6 +3486,13 @@ function inventoryMigrationAppendRows_(sheet, rows) {
   return start;
 }
 
+function inventoryMigrationStockBalanceFormula_(stockRow) {
+  const row = Math.max(3, Math.floor(Number(stockRow) || 3));
+  const incoming = "SUMIFS('" + CRM_INVENTORY_MIGRATIONS_SHEET_ + "'!$H$2:$H;'" + CRM_INVENTORY_MIGRATIONS_SHEET_ + "'!$E$2:$E;$A" + row + ')';
+  const outgoing = "SUMIFS('" + CRM_INVENTORY_MIGRATIONS_SHEET_ + "'!$G$2:$G;'" + CRM_INVENTORY_MIGRATIONS_SHEET_ + "'!$D$2:$D;$A" + row + ')';
+  return '=IF($A' + row + '="";"";N(IF($D' + row + '="Mystery Box";0;$E' + row + '-$F' + row + '-$G' + row + '))+' + incoming + '-' + outgoing + '-N($S' + row + '))';
+}
+
 function inventoryMigrationStockFormulaPlans_(ss, skus) {
   const stock = ss.getSheetByName('Склад'); if (!stock) throw new Error('Не знайдено вкладку Склад.');
   const catalog = inventoryMigrationCatalog_(ss), unique = skus.filter(function(sku, index) { return skus.indexOf(sku) === index; });
@@ -3494,14 +3501,9 @@ function inventoryMigrationStockFormulaPlans_(ss, skus) {
     const cell = stock.getRange(item.stockRow, 8), originalFormula = String(cell.getFormula() || '');
     if (!originalFormula || originalFormula.charAt(0) !== '=') throw new Error('Склад!H' + item.stockRow + ' має містити формулу залишку; операцію зупинено.');
     const hasMigrationLedger = originalFormula.indexOf("'" + CRM_INVENTORY_MIGRATIONS_SHEET_ + "'") !== -1;
-    const hasPreorderReservation = originalFormula.indexOf('Передзамовлення') !== -1;
-    const hasWriteOffBalance = originalFormula.indexOf("'Списання'") !== -1;
-    const incoming = "SUMIFS('" + CRM_INVENTORY_MIGRATIONS_SHEET_ + "'!$H$2:$H;'" + CRM_INVENTORY_MIGRATIONS_SHEET_ + "'!$E$2:$E;$A" + item.stockRow + ')';
-    const outgoing = "SUMIFS('" + CRM_INVENTORY_MIGRATIONS_SHEET_ + "'!$G$2:$G;'" + CRM_INVENTORY_MIGRATIONS_SHEET_ + "'!$D$2:$D;$A" + item.stockRow + ')';
-    const preorderReserve = "SUMIFS('Продажі'!$H$3:$H;'Продажі'!$F$3:$F;$A" + item.stockRow + ";'Продажі'!$X$3:$X;\"Передзамовлення\")";
-    const writeOffBalance = "SUMIFS('Списання'!$F$3:$F;'Списання'!$D$3:$D;$A" + item.stockRow + ')';
-    const suffix = (hasMigrationLedger ? '' : '+' + incoming + '-' + outgoing) + (hasPreorderReservation ? '' : '-' + preorderReserve) + (hasWriteOffBalance ? '' : '-' + writeOffBalance);
-    const nextFormula = suffix ? '=IF($A' + item.stockRow + '="";"";N(' + originalFormula.slice(1) + ')' + suffix + ')' : originalFormula;
+    const hasPreorderReservation = originalFormula.indexOf('$S' + item.stockRow) !== -1 || originalFormula.indexOf('Передзамовлення') !== -1;
+    const hasWriteOffBalance = originalFormula.indexOf('$G' + item.stockRow) !== -1 || originalFormula.indexOf("'Списання'") !== -1;
+    const nextFormula = inventoryMigrationStockBalanceFormula_(item.stockRow);
     return { sku: sku, row: item.stockRow, originalFormula: originalFormula, nextFormula: nextFormula, changed: nextFormula !== originalFormula, preorderReservationAdded: !hasPreorderReservation, writeOffBalanceAdded: !hasWriteOffBalance, beforeQty: num_(cell.getValue()), beforeCosts: stock.getRange(item.stockRow, 9, 1, 2).getValues()[0] };
   });
 }
@@ -3559,6 +3561,196 @@ function inventoryMigrationEnsureReservationStockFormulas_(ss, skus) {
     changedPlans.forEach(function(plan) { ss.getSheetByName('Склад').getRange(plan.row, 8).setFormula(plan.originalFormula); });
     SpreadsheetApp.flush();
     throw err;
+  }
+}
+
+const CRM_STOCK_COUNTING_REPAIR_MARKER_ = '[CRM-STOCK-20260901-HWAK-MSYM]';
+
+function crmStockCountingFormulaPlans_(ss) {
+  const stock = ss.getSheetByName('Склад');
+  if (!stock) throw new Error('Не знайдено вкладку Склад.');
+  const lastRow = Math.max(stock.getLastRow(), 3), rowCount = lastRow - 2;
+  const values = stock.getRange(3, 1, rowCount, 10).getValues();
+  const formulas = stock.getRange(3, 8, rowCount, 1).getFormulas();
+  const plans = [];
+  values.forEach(function(row, index) {
+    const sku = String(row[0] || '').trim().toUpperCase(), sheetRow = index + 3;
+    if (!sku) return;
+    const originalFormula = String(formulas[index][0] || '');
+    if (!originalFormula || originalFormula.charAt(0) !== '=') throw new Error('Склад!H' + sheetRow + ' має містити формулу; repair зупинено.');
+    const nextFormula = inventoryMigrationStockBalanceFormula_(sheetRow);
+    plans.push({ row: sheetRow, sku: sku, originalFormula: originalFormula, nextFormula: nextFormula, changed: originalFormula !== nextFormula });
+  });
+  return { sheet: stock, firstRow: 3, rowCount: rowCount, plans: plans, originalFormulas: formulas, originalCosts: stock.getRange(3, 9, rowCount, 2).getValues() };
+}
+
+function crmStockCountingWriteoffState_(ss) {
+  const sheet = ss.getSheetByName('Списання');
+  if (!sheet) throw new Error('Не знайдено вкладку Списання.');
+  const lastRow = Math.max(sheet.getLastRow(), 3), values = sheet.getRange(3, 1, lastRow - 2, 12).getValues();
+  const ids = {}, markerRows = [];
+  values.forEach(function(row, index) {
+    const sheetRow = index + 3, id = String(row[0] || '').trim();
+    if (id) {
+      if (!ids[id]) ids[id] = [];
+      ids[id].push({ row: sheetRow, values: row.slice() });
+    }
+    if (String(row[11] || '').indexOf(CRM_STOCK_COUNTING_REPAIR_MARKER_) !== -1) markerRows.push({ row: sheetRow, values: row.slice() });
+  });
+  const duplicateIds = Object.keys(ids).filter(function(id) { return ids[id].length > 1; });
+  if (duplicateIds.some(function(id) { return id !== 'WRT-0226'; })) throw new Error('Знайдено неочікуваний дубль ID списання: ' + duplicateIds.join(', ') + '.');
+  const infx = ids['WRT-0226'] || [];
+  if (infx.length !== 1 && infx.length !== 80) throw new Error('WRT-0226: очікувався 1 очищений або 80 дубльованих записів, знайдено ' + infx.length + '.');
+  if (!infx.length || infx[0].row !== 228) throw new Error('WRT-0226: підтверджений оригінал має бути в рядку 228.');
+  if (infx.length === 80 && infx.slice(1).some(function(item, index) { return item.row !== 238 + index; })) throw new Error('WRT-0226: підтверджені копії мають займати рівно рядки 238–316.');
+  infx.forEach(function(item) {
+    const row = item.values;
+    if (apiDate_(row[1]) !== '2026-08-24' || String(row[2] || '').trim() !== 'Власне відкриття' || String(row[3] || '').trim() !== 'PKM-JP-INFX-BST' || Math.abs(num_(row[5]) - 10) > 0.000001 || String(row[10] || '').trim() !== 'Коригування складу' || String(row[11] || '').trim() !== '') {
+      throw new Error('WRT-0226 у рядку ' + item.row + ' не збігається з підтвердженим дубльованим записом.');
+    }
+  });
+  if (markerRows.length !== 0 && markerRows.length !== 2) throw new Error('Парне коригування HWAK/MSYM записано частково; рядків із marker: ' + markerRows.length + '.');
+  if (markerRows.length === 2) {
+    const pairs = {};
+    markerRows.forEach(function(item) { pairs[String(item.values[3] || '').trim()] = num_(item.values[5]); });
+    if (pairs['PKM-KR-HWAK-BST'] !== -1 || pairs['PKM-JP-MSYM-BST'] !== 1) throw new Error('Наявний marker HWAK/MSYM має неочікувані SKU або кількості.');
+  }
+  return { sheet: sheet, values: values, duplicateRecords: infx.length === 80 ? infx.slice(1) : [], retainedRecord: infx[0], markerRows: markerRows, duplicateIdCount: duplicateIds.length };
+}
+
+function crmStockCountingRuns_(records) {
+  const sorted = (records || []).slice().sort(function(a, b) { return a.row - b.row; }), runs = [];
+  sorted.forEach(function(record) {
+    const last = runs[runs.length - 1];
+    if (!last || record.row !== last.start + last.records.length) runs.push({ start: record.row, records: [record] });
+    else last.records.push(record);
+  });
+  return runs;
+}
+
+function crmStockCountingClearInputs_(sheet, records) {
+  crmStockCountingRuns_(records).forEach(function(run) {
+    const count = run.records.length;
+    sheet.getRange(run.start, 1, count, 4).clearContent();
+    sheet.getRange(run.start, 6, count, 1).clearContent();
+    sheet.getRange(run.start, 11, count, 2).clearContent();
+  });
+}
+
+function crmStockCountingRestoreInputs_(sheet, records) {
+  crmStockCountingRuns_(records).forEach(function(run) {
+    sheet.getRange(run.start, 1, run.records.length, 4).setValues(run.records.map(function(item) { return item.values.slice(0, 4); }));
+    sheet.getRange(run.start, 6, run.records.length, 1).setValues(run.records.map(function(item) { return [item.values[5]]; }));
+    sheet.getRange(run.start, 11, run.records.length, 2).setValues(run.records.map(function(item) { return item.values.slice(10, 12); }));
+  });
+}
+
+function crmStockCountingNextWriteoffNumber_(sheet) {
+  const values = sheet.getRange(3, 1, Math.max(sheet.getLastRow() - 2, 1), 1).getValues(), re = /^WRT-([0-9]+)$/i;
+  return values.reduce(function(max, row) { const match = String(row[0] || '').trim().match(re); return match ? Math.max(max, Number(match[1])) : max; }, 0) + 1;
+}
+
+function crmStockCountingAppendSubstitution_(ss, state) {
+  if (state.markerRows.length === 2) return [];
+  const sheet = state.sheet, firstRow = crmPreparedAppendRow_(ss, 'Списання', 2), rows = [firstRow, firstRow + 1], firstNumber = crmStockCountingNextWriteoffNumber_(sheet);
+  ensureComponentWriteoffFormulaRows_(sheet, rows);
+  const date = new Date(2026, 8, 1), reason = 'Коригування фактичного відвантаження';
+  const note = 'Підтверджено власником 2026-09-01: замість 1 PKM-KR-HWAK-BST відправлено 1 PKM-JP-MSYM-BST. ' + CRM_STOCK_COUNTING_REPAIR_MARKER_;
+  sheet.getRange(firstRow, 1, 2, 4).setValues([
+    ['WRT-' + String(firstNumber).padStart(4, '0'), date, 'Інше', 'PKM-KR-HWAK-BST'],
+    ['WRT-' + String(firstNumber + 1).padStart(4, '0'), date, 'Інше', 'PKM-JP-MSYM-BST']
+  ]);
+  sheet.getRange(firstRow, 6, 2, 1).setValues([[-1], [1]]);
+  sheet.getRange(firstRow, 11, 2, 2).setValues([[reason, note], [reason, note]]);
+  return rows.map(function(row) { return { row: row, values: [] }; });
+}
+
+function crmStockCountingSnapshot_(ss) {
+  const sheet = ss.getSheetByName('Склад'), lastRow = Math.max(sheet.getLastRow(), 3), rows = sheet.getRange(3, 1, lastRow - 2, 20).getValues(), result = {};
+  rows.forEach(function(row, index) {
+    const sku = String(row[0] || '').trim();
+    if (!sku) return;
+    const available = num_(row[7]), incoming = num_(row[16]);
+    result[sku] = { row: index + 3, available_after_reserve: round2_(available), incoming: round2_(incoming), preorder_reserved: round2_(num_(row[18])), incoming_after_preorder: round2_(num_(row[19])), projected_available: round2_(available + incoming) };
+  });
+  return result;
+}
+
+function crmStockCountingValidateBalances_(ss) {
+  const incoming = {}, outgoing = {};
+  inventoryMigrationRows_(ss).forEach(function(row) {
+    incoming[row.targetSku] = inventoryMigrationRound6_(num_(incoming[row.targetSku]) + row.targetQty);
+    outgoing[row.sourceSku] = inventoryMigrationRound6_(num_(outgoing[row.sourceSku]) + row.sourceQty);
+  });
+  const sheet = ss.getSheetByName('Склад'), lastRow = Math.max(sheet.getLastRow(), 3);
+  const rows = sheet.getRange(3, 1, lastRow - 2, 19).getValues();
+  let checked = 0;
+  rows.forEach(function(row, index) {
+    const sku = String(row[0] || '').trim();
+    if (!sku) return;
+    const base = String(row[3] || '').trim() === 'Mystery Box' ? 0 : num_(row[4]) - num_(row[5]) - num_(row[6]);
+    const expected = inventoryMigrationRound6_(base + num_(incoming[sku]) - num_(outgoing[sku]) - num_(row[18]));
+    const actual = num_(row[7]);
+    if (Math.abs(actual - expected) > 0.000001) throw new Error('Склад!H' + (index + 3) + ' (' + sku + ') не збігається з канонічним балансом: ' + actual + ' замість ' + expected + '.');
+    checked++;
+  });
+  return { checked: checked, mismatches: 0 };
+}
+
+function diagnoseCrmStockCounting20260901() {
+  const ss = _getCrmSs(), formulas = crmStockCountingFormulaPlans_(ss), writeoffs = crmStockCountingWriteoffState_(ss), snapshot = crmStockCountingSnapshot_(ss);
+  const selected = ['PKM-KR-HWAK-BST', 'PKM-JP-MSYM-BST', 'OP-JP-EB03-BST', 'OP-JP-OP10-BST', 'OP-JP-OP11-BST', 'PKM-EN-CHRS-BST', 'PKM-JP-INFX-BST', 'PKM-JP-MZERO-BST'];
+  const result = { ok: true, action: 'diagnose', formula_rows_checked: formulas.plans.length, formula_rows_to_repair: formulas.plans.filter(function(plan) { return plan.changed; }).length, duplicate_writeoff_rows_to_clear: writeoffs.duplicateRecords.length, substitution_rows_to_append: writeoffs.markerRows.length ? 0 : 2, selected: selected.reduce(function(result, sku) { result[sku] = snapshot[sku] || null; return result; }, {}) };
+  Logger.log(JSON.stringify(result));
+  return result;
+}
+
+function repairCrmStockCounting20260901() {
+  const lock = LockService.getDocumentLock();
+  if (!lock.tryLock(30000)) throw new Error('CRM зараз змінюється іншою операцією; повтори пізніше.');
+  let formulas = null, writeoffs = null, appended = [];
+  try {
+    resetMemoForMutation_();
+    const ss = _getCrmSs(), integrityBefore = apiIntegrityCheck_();
+    if (!integrityBefore.clean) throw new Error('CRM integrity check до repair не чистий; зміну зупинено.');
+    formulas = crmStockCountingFormulaPlans_(ss);
+    writeoffs = crmStockCountingWriteoffState_(ss);
+    const changedPlans = formulas.plans.filter(function(plan) { return plan.changed; });
+    crmStockCountingClearInputs_(writeoffs.sheet, writeoffs.duplicateRecords);
+    appended = crmStockCountingAppendSubstitution_(ss, writeoffs);
+    changedPlans.forEach(function(plan) { formulas.sheet.getRange(plan.row, 8).setFormula(plan.nextFormula); });
+    SpreadsheetApp.flush();
+    const costResult = updateSkuCurrentCost_(ss);
+    SpreadsheetApp.flush();
+    const afterWriteoffs = crmStockCountingWriteoffState_(ss), afterFormulas = crmStockCountingFormulaPlans_(ss), afterSnapshot = crmStockCountingSnapshot_(ss);
+    if (afterWriteoffs.duplicateRecords.length || afterWriteoffs.markerRows.length !== 2) throw new Error('Перевірка очищення списань або парного коригування не пройшла.');
+    if (afterFormulas.plans.some(function(plan) { return plan.changed; })) throw new Error('Не всі формули Склад!H стали канонічними.');
+    const balanceVerification = crmStockCountingValidateBalances_(ss);
+    const integrityAfter = apiIntegrityCheck_();
+    const integrity = crmAssertCapacityIntegrity_(integrityBefore, integrityAfter);
+    invalidateDoGetCache_();
+    const selected = ['PKM-KR-HWAK-BST', 'PKM-JP-MSYM-BST', 'OP-JP-EB03-BST', 'OP-JP-OP10-BST', 'OP-JP-OP11-BST', 'PKM-EN-CHRS-BST', 'PKM-JP-INFX-BST', 'PKM-JP-MZERO-BST'];
+    const result = { ok: true, already_applied: !writeoffs.duplicateRecords.length && !appended.length && !changedPlans.length, duplicate_writeoff_rows_cleared: writeoffs.duplicateRecords.length, substitution_rows_appended: appended.length, stock_formulas_repaired: changedPlans.length, stock_balances_verified: balanceVerification.checked, current_cost_skus_updated: num_(costResult && costResult.updated), integrity: integrity, selected: selected.reduce(function(result, sku) { result[sku] = afterSnapshot[sku] || null; return result; }, {}) };
+    Logger.log(JSON.stringify(result));
+    return result;
+  } catch (err) {
+    try {
+      const ss = _getCrmSs();
+      if (writeoffs) {
+        crmStockCountingRestoreInputs_(writeoffs.sheet, writeoffs.duplicateRecords);
+        crmStockCountingClearInputs_(writeoffs.sheet, appended);
+      }
+      if (formulas) {
+        formulas.sheet.getRange(formulas.firstRow, 8, formulas.rowCount, 1).setFormulas(formulas.originalFormulas);
+        formulas.sheet.getRange(formulas.firstRow, 9, formulas.rowCount, 2).setValues(formulas.originalCosts);
+      }
+      SpreadsheetApp.flush(); invalidateDoGetCache_();
+    } catch (rollbackError) {
+      throw new Error(String(err && err.message ? err.message : err) + '; rollback failed: ' + String(rollbackError && rollbackError.message ? rollbackError.message : rollbackError));
+    }
+    throw err;
+  } finally {
+    lock.releaseLock();
   }
 }
 
@@ -5298,7 +5490,7 @@ if (!sku) return;
 const active = String(apiObjVal_(row, ['Активний', 'Active']) || '').trim().toLowerCase();
 if (['так', 'true', 'yes', '1'].indexOf(active) === -1) return;
 const issuesText = apiObjVal_(row, ['Якість даних', 'Проблеми', 'Issues']);
-const skuName = row['Назва'] || row['Назва товару'] || row['Повна назва на сайті'] || ''; const metric = metrics[sku] || {}; const stockMetric = stockMetrics[sku] || {}; const rrcMetric = rrcMetrics[sku] || {}; const currentCostMetric = currentCostMetrics[sku] || null; const currentRrc = rrcMetric.rrc || apiNum_(apiObjVal_(row, ['Ціна CRM', 'РРЦ', 'Ціна'])); const format = apiObjVal_(row, ['Формат', 'Format']); const setName = apiObjVal_(row, ['Сет', 'Сет / група', 'Набір', 'Set']); skus.push({ sku: sku, name: skuName, full_name: row['Повна назва на сайті'] || skuName, brand: apiObjVal_(row, ['Бренд', 'Brand']), format: format, is_3dp: is3dpCatalogSku_(sku, setName, format), rrc: currentRrc, price_crm: currentRrc, dynamic_rrc: rrcMetric.dynamic_rrc || 0, current_rrc_margin_pct: rrcMetric.margin_pct, rrc_cost_base_60d: rrcMetric.cost_base_60d || 0, current_cost: currentCostMetric ? currentCostMetric.cost : null, price_opencart: apiNum_(apiObjVal_(row, ['Ціна OpenCart', 'OpenCart ціна', 'Feed price'])), stock: stockMetric.stock != null ? stockMetric.stock : apiNum_(apiObjVal_(row, ['Залишок', 'На складі', 'Stock'])), expected: stockMetric.expected != null ? stockMetric.expected : apiNum_(apiObjVal_(row, ['Очікується', 'В дорозі', 'Expected'])), stock_status: apiObjVal_(row, ['Статус залишку', 'Статус', 'Stock status']), url: apiObjVal_(row, ['URL', 'Посилання', 'Link']), issues: splitTags_(issuesText), sold_30d: metric.sold_30d != null ? metric.sold_30d : (stockMetric.sold_30d || 0), profit_30d: metric.profit_30d || 0, sold_60d: metric.sold_60d != null ? metric.sold_60d : (stockMetric.sold_60d || 0), profit_60d: metric.profit_60d || 0, action: stockMetric.action || '', urgency: stockMetric.urgency || '', max_buy_price: stockMetric.max_buy_price, margin_pct: stockMetric.margin_pct });
+const skuName = row['Назва'] || row['Назва товару'] || row['Повна назва на сайті'] || ''; const metric = metrics[sku] || {}; const stockMetric = stockMetrics[sku] || {}; const rrcMetric = rrcMetrics[sku] || {}; const currentCostMetric = currentCostMetrics[sku] || null; const currentRrc = rrcMetric.rrc || apiNum_(apiObjVal_(row, ['Ціна CRM', 'РРЦ', 'Ціна'])); const format = apiObjVal_(row, ['Формат', 'Format']); const setName = apiObjVal_(row, ['Сет', 'Сет / група', 'Набір', 'Set']); skus.push({ sku: sku, name: skuName, full_name: row['Повна назва на сайті'] || skuName, brand: apiObjVal_(row, ['Бренд', 'Brand']), format: format, is_3dp: is3dpCatalogSku_(sku, setName, format), rrc: currentRrc, price_crm: currentRrc, dynamic_rrc: rrcMetric.dynamic_rrc || 0, current_rrc_margin_pct: rrcMetric.margin_pct, rrc_cost_base_60d: rrcMetric.cost_base_60d || 0, current_cost: currentCostMetric ? currentCostMetric.cost : null, price_opencart: apiNum_(apiObjVal_(row, ['Ціна OpenCart', 'OpenCart ціна', 'Feed price'])), stock: stockMetric.stock != null ? stockMetric.stock : apiNum_(apiObjVal_(row, ['Залишок', 'На складі', 'Stock'])), expected: stockMetric.expected != null ? stockMetric.expected : apiNum_(apiObjVal_(row, ['Очікується', 'В дорозі', 'Expected'])), incoming_stock: stockMetric.incoming_stock, incoming_after_preorder: stockMetric.incoming_after_preorder, projected_available_source: stockMetric.projected_available, stock_status: apiObjVal_(row, ['Статус залишку', 'Статус', 'Stock status']), url: apiObjVal_(row, ['URL', 'Посилання', 'Link']), issues: splitTags_(issuesText), sold_30d: metric.sold_30d != null ? metric.sold_30d : (stockMetric.sold_30d || 0), profit_30d: metric.profit_30d || 0, sold_60d: metric.sold_60d != null ? metric.sold_60d : (stockMetric.sold_60d || 0), profit_60d: metric.profit_60d || 0, action: stockMetric.action || '', urgency: stockMetric.urgency || '', max_buy_price: stockMetric.max_buy_price, margin_pct: stockMetric.margin_pct });
 });
 apiDecoratePreorderStock_(skus);
 if (String(params.sort || '').toLowerCase() === 'profit') skus.sort(function(a, b) { return (b.profit_30d || 0) - (a.profit_30d || 0); }); const limit = Math.max(0, Math.min(apiNum_(params.limit) || 0, 500)); const resultSkus = limit ? skus.slice(0, limit) : skus; return { ok: true, count: resultSkus.length, skus: resultSkus };
@@ -5318,14 +5510,20 @@ function apiDecoratePreorderStock_(skus) {
   });
   (skus || []).forEach(function(item) {
     const raw = num_(item.stock);
+    const incoming = num_(item.incoming_stock != null ? item.incoming_stock : item.expected);
     const totalReserved = num_(reserved[item.sku]);
     const preorderReserved = num_(preorderReservedBySku[item.sku]);
+    const projected = round2_(raw + incoming);
     item.stock_raw = raw;
     item.reserved_total = totalReserved;
     item.regular_reserved = round2_(Math.max(0, totalReserved - preorderReserved));
     item.preorder_reserved = preorderReserved;
     item.physical_stock = round2_(raw + totalReserved);
-    item.preorder_deficit = round2_(Math.max(0, -raw));
+    item.current_shortfall = round2_(Math.max(0, -raw));
+    item.projected_available_raw = projected;
+    item.projected_stock = round2_(Math.max(0, projected));
+    item.projected_deficit = round2_(Math.max(0, -projected));
+    item.preorder_deficit = item.current_shortfall;
     item.stock = round2_(Math.max(0, raw));
   });
   return skus;
@@ -5410,6 +5608,7 @@ return (['Нове', 'В обробці', 'Відправлено', 'Перед�
 function apiReadStockAlertsAndCounts_() {
 const ss = _getAutoSs();
 const objects = apiSheetObjects_(ss.getSheetByName('Черга_Складу'), ['Артикул', 'Дія', 'Покриття, днів']);
+const direct = apiCrmStockProjectionMetrics_();
 const alerts = [];
 const counts = { action_buy: 0, action_watch: 0, action_no_promote: 0 };
 objects.rows.forEach(function(row) {
@@ -5420,7 +5619,8 @@ if (action.indexOf('Докупить') !== -1 || action.indexOf('Докупит�
 if (action.indexOf('Пильнувати') !== -1) counts.action_watch++;
 if (action === 'Не просувати') counts.action_no_promote++;
 if (action === 'Можна просувати' || action === 'Не просувати') return;
-alerts.push({ sku: sku, name: apiObjVal_(row, ['Товар', 'Назва', 'Назва товару']), action: action, urgency: apiObjVal_(row, ['Терміновість', 'Пріоритет', 'Urgency']), stock: apiNum_(apiObjVal_(row, ['Залишок', 'На складі', 'Stock'])), expected: apiNum_(apiObjVal_(row, ['Очікується', 'В дорозі', 'Expected'])), sold_30d: apiNum_(apiObjVal_(row, ['Продано 30 днів', 'Продажі 30д', '30 днів', 'sold_30d'])), price: apiNum_(apiObjVal_(row, ['Ціна продажу', 'Ціна', 'РРЦ', 'Price'])), max_buy_price: apiNum_(apiObjVal_(row, ['Гранична закупка', 'Макс. ціна закупки', 'Макс закупка', 'max_buy_price'])), margin_pct: apiPercent_(apiObjVal_(row, ['Маржа %', 'Маржа', 'margin_pct'])) });
+const projection = direct[sku] || null;
+alerts.push({ sku: sku, name: apiObjVal_(row, ['Товар', 'Назва', 'Назва товару']), action: action, urgency: apiObjVal_(row, ['Терміновість', 'Пріоритет', 'Urgency']), stock: projection ? projection.stock : apiNum_(apiObjVal_(row, ['Залишок', 'На складі', 'Stock'])), expected: projection ? projection.expected : apiNum_(apiObjVal_(row, ['Очікується / Японія', 'Очікується', 'В дорозі', 'Expected'])), sold_30d: apiNum_(apiObjVal_(row, ['Продано 30 днів', 'Продажі 30д', '30 днів', 'sold_30d'])), price: apiNum_(apiObjVal_(row, ['Ціна продажу', 'Ціна', 'РРЦ', 'Price'])), max_buy_price: apiNum_(apiObjVal_(row, ['Гранична закупка', 'Макс. ціна закупки', 'Макс закупка', 'max_buy_price'])), margin_pct: apiPercent_(apiObjVal_(row, ['Маржа %', 'Маржа', 'margin_pct'])) });
 });
 const urgencyOrder = { 'Терміново': 1, 'Висока': 2, 'Середня': 3, 'Низька': 4 };
 alerts.sort(function(a, b) { return (urgencyOrder[a.urgency] || 9) - (urgencyOrder[b.urgency] || 9); });
@@ -6041,14 +6241,30 @@ keys.sort(function(a, b) { return num_(channels[b]) - num_(channels[a]); });
 return keys[0];
 }
 
+function apiCrmStockProjectionMetrics_() {
+const sheet = _getCrmSs().getSheetByName('Склад');
+const result = {};
+if (!sheet || sheet.getLastRow() < 3) return result;
+const rows = sheet.getRange(3, 1, sheet.getLastRow() - 2, 20).getValues();
+rows.forEach(function(row) {
+const sku = String(row[0] || '').trim();
+if (!sku) return;
+const stock = round2_(num_(row[7])), incoming = round2_(num_(row[16]));
+result[sku] = { stock: stock, expected: incoming, incoming_stock: incoming, preorder_reserved_sheet: round2_(num_(row[18])), incoming_after_preorder: round2_(num_(row[19])), projected_available: round2_(stock + incoming) };
+});
+return result;
+}
+
 function apiSkuStockMetrics_() {
 const ss = _getAutoSs();
 const objects = apiSheetObjects_(ss.getSheetByName('Черга_Складу'), ['Артикул', 'Дія', 'Покриття, днів']);
-const result = {};
+const direct = apiCrmStockProjectionMetrics_(), result = {};
+Object.keys(direct).forEach(function(sku) { result[sku] = Object.assign({}, direct[sku]); });
 objects.rows.forEach(function(row) {
 const sku = apiObjVal_(row, ['SKU', 'Артикул']);
 if (!sku) return;
-result[sku] = { sold_30d: apiNum_(apiObjVal_(row, ['Продано 30д', 'Продано 30 днів', 'Продажі 30д', 'sold_30d'])), sold_60d: apiNum_(apiObjVal_(row, ['Продано 60д', 'Продано 60 днів', 'Продажі 60д', 'sold_60d'])), stock: apiNum_(apiObjVal_(row, ['Залишок', 'На складі', 'Stock'])), expected: apiNum_(apiObjVal_(row, ['Очікується після резерву', 'Очікується', 'В дорозі', 'Expected'])), max_buy_price: apiNum_(apiObjVal_(row, ['Гранична закупка', 'Макс. ціна закупки', 'max_buy_price'])), margin_pct: apiPercent_(apiObjVal_(row, ['Маржа %', 'Маржа', 'margin_pct'])), action: apiObjVal_(row, ['Дія', 'Рекомендована дія', 'Рішення', 'Що робити']), urgency: apiObjVal_(row, ['Терміновість', 'Пріоритет', 'Urgency']) };
+const current = result[sku] || {};
+result[sku] = Object.assign(current, { sold_30d: apiNum_(apiObjVal_(row, ['Продано 30д', 'Продано 30 днів', 'Продажі 30д', 'sold_30d'])), sold_60d: apiNum_(apiObjVal_(row, ['Продано 60д', 'Продано 60 днів', 'Продажі 60д', 'sold_60d'])), stock: current.stock != null ? current.stock : apiNum_(apiObjVal_(row, ['Залишок', 'На складі', 'Stock'])), expected: current.expected != null ? current.expected : apiNum_(apiObjVal_(row, ['Очікується / Японія', 'Очікується', 'В дорозі', 'Expected'])), max_buy_price: apiNum_(apiObjVal_(row, ['Гранична закупка', 'Макс. ціна закупки', 'max_buy_price'])), margin_pct: apiPercent_(apiObjVal_(row, ['Маржа %', 'Маржа', 'margin_pct'])), action: apiObjVal_(row, ['Дія', 'Рекомендована дія', 'Рішення', 'Що робити']), urgency: apiObjVal_(row, ['Терміновість', 'Пріоритет', 'Urgency']) });
 });
 return result;
 }

@@ -7,10 +7,10 @@ new Web App version.
 
 | Field | Value |
 |---|---|
-| Mirror file | `crm/apps-script/Code.gs` — rebased against the owner-supplied complete V156 export `Версія 156, 30 серп. 2026 р., 1204.csv`, then extended with the deployed V157 timeout/capacity and physical-stock fix. |
+| Mirror file | `crm/apps-script/Code.gs` — rebased against the owner-supplied complete V156 export `Версія 156, 30 серп. 2026 р., 1204.csv`, extended with the deployed V157 timeout/capacity and physical-stock fix, and now carrying a local post-V157 stock-counting repair candidate dated 2026-09-01. |
 | Baseline pulled from live | 2026-08-30, owner-supplied complete V156 export. Raw SHA-256 `6990a1387a184140a63524413eb6e42039389c328856f386f872526e7d194eb7`; normalized SHA-256 `7efa5ad00760a005db8a92265c07782d5e1a991b7b33175776fe09775b95e7c7`; 8,999 normalized lines. |
-| **Mirror content deployed to live** | ✅ **V157 owner-paste/publication reported 2026-08-31 10:26 Kyiv.** The owner reports pasting the complete local `Code.gs` file. No fresh V157 export or independent byte comparison was supplied. Owner screenshot confirms `PKM-JP-OUTL-BST`: `Доступно 0`, `Очікується 80`, `Фізично 0`, `Резерв 0`. |
-| Deployed Web App version number | CRM V157 — owner-reported publication 2026-08-31 10:26 Kyiv. Current local `Code.gs` differs from the complete V156 export by 205 insertions / 37 deletions, covering reviewed timeout/capacity/Overview work plus the physical-stock reservation correction. |
+| **Mirror content deployed to live** | ✅ **V159 owner-paste/publication reported 2026-09-01 17:55 Kyiv; stock repair live-verified at 17:58.** Preflight returned `95 / 95 / 79 / 2`. The supplied apply transcript is an idempotent repeat (`already_applied:true`, zero remaining mutations) and verifies all 95 stock balances, clean pre/post integrity, zero introduced problems, and the expected selected-SKU results. No fresh V159 export or independent byte comparison was supplied. |
+| Deployed Web App version number | CRM V159 — owner-reported publication 2026-09-01 17:55 Kyiv. Stock repair final state owner-verified 17:58 Kyiv. |
 | Live-verified after deploy | Post-V131 (2026-08-18 14:52) owner reported `QA - ok`; `integrity_check`: `clean:true`, `problems:[]`, checked `Товари`, `РРЦ`, `Розхідники`, `Майстер_Товарів`, `Налаштування`; `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:55853`. This proves the schema/formula relationships covered by `integrity_check`, not unrelated FIFO/warehouse flows or a byte match with the mirror. Post-V130 (2026-08-18 14:36) `integrity_check`: `clean:true`, `problems:[]`, checked `Товари`, `РРЦ`, `Розхідники`, `Майстер_Товарів`, `Налаштування`; `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:12184`. Owner reported dashboard QA done for the recent-purchases fix. Post-V129 (2026-08-17 22:41) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:9698`. This proves schema/formula relationships covered by `integrity_check`, not the expected-stock rule: a direct formula read immediately after still found the legacy `Склад!Q3:Q201` rule without `Замовлено`. FIFO migration flows are outside this check and remain unproven live. Post-V128 (18:36) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:12564`. Post-V118 (23:18) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:7672`. |
 
 > ⚠ **2026-08-12, 16:45–16:46 — V106 migration succeeded; repeat exposed ARRAYFORMULA spill detection.**
@@ -25,10 +25,49 @@ new Web App version.
 > The owner-run result returned all schema/formula/backfill counters at zero and
 > `already_applied=true`. The owner clarified that V107 had been published at 16:54, so dashboard
 > API calls and the setup function now use the corrected source. The CRM deploy/setup gate is closed.
-| Local syntax check | V157 source: complete Node parse via the test harness, all 26 CRM/dashboard tests, and scoped `git diff --check` passed 2026-08-31. Coverage includes prepared-row component writes, no remote 3D lookup for local components, no synchronous full-cost rebuild/flush on ordinary order updates, native formula-only row-capacity growth, literal-clone prevention, deferred Overview asset valuation, and exclusion of historical `Отримано` sales from physical stock. |
+| Local syntax check | Post-V157 stock-counting candidate: complete Node parse through all CRM test harnesses plus the dashboard contract test and scoped `git diff --check` passed 2026-09-01. New coverage includes canonical all-reservation/all-write-off stock formulas, exact `WRT-0226` duplicate refusal/idempotency, raw incoming `Q` mapping, EB03 physical/projected stock, and the dashboard's explicit post-arrival deficit. |
 | Previous repo copy | `Booster Shop CRM - Apps_Script_код 29.07.2026.csv` (2026-07-29, pre-V87/V89) — superseded, keep for history only |
 
 ## Mirror status
+
+> ✅ **2026-09-01, 17:58 Kyiv — stock-counting repair final state verified.**
+> The supplied `repairCrmStockCounting20260901()` transcript reports
+> `already_applied:true`, zero remaining duplicate/substitution/formula mutations,
+> 95/95 canonical balances verified, `before_clean:true`, `after_clean:true`, and
+> zero introduced integrity problems. Current cost recalculation updated 38 SKUs.
+> Selected results match the repair contract exactly: HWAK 0, MSYM 15, EB03 -11
+> available plus 12 incoming = 1 projected, OP10 0, OP11 1, CHRS 2, INFX 24,
+> and MZERO 28. The zero mutation counters prove this transcript is an
+> idempotent repeat; the original mutation-run counters were not supplied.
+> The owner subsequently refreshed the dashboard and reported visual QA as
+> successful; the live repair/dashboard gate is closed.
+
+> ✅ **2026-09-01, 17:55 Kyiv — V159 preflight matches exactly; live mutation remains pending.**
+> Owner-run `diagnoseCrmStockCounting20260901()` returned 95 populated formula
+> rows checked, 95 to canonicalize, 79 exact `WRT-0226` copies to clear, and two
+> HWAK/MSYM substitution rows to append. The selected snapshot also matches the
+> diagnosed pre-repair values: HWAK -1, MSYM 16, EB03 -26 with incoming 12 and
+> reserve 14, CHRS -2, INFX -766, and MZERO -54. This closes the preflight gate,
+> not the repair gate: a fresh workbook copy is required before running
+> `repairCrmStockCounting20260901()`.
+
+> ⚠ **2026-09-01, 17:49 Kyiv — V158 reported; diagnose completed but returned counts are absent.**
+> Apps Script recorded start and successful completion of
+> `diagnoseCrmStockCounting20260901()`, proving only that its guards did not
+> throw. Manual execution does not display a JavaScript return value, so this is
+> not evidence for the expected 95 formula rows, 79 duplicate rows, and two
+> substitution rows. The local post-V158 correction now writes the JSON result
+> to the execution log. Do not run the mutation wrapper until those counts are
+> visible and match.
+
+> ⚠ **2026-09-01 — local stock-counting repair candidate; not live.**
+> Bounded live QA found 79 false copies of `WRT-0226`, eight visibly wrapped
+> double-write-off formulas, and a mixed `Склад!H` reservation contract across
+> all 95 populated SKU rows. The local candidate adds read-only
+> `diagnoseCrmStockCounting20260901()`, idempotent
+> `repairCrmStockCounting20260901()`, canonical ledger arithmetic, direct CRM
+> incoming-stock API fields, and the matching dashboard contract. Owner backup,
+> live preflight output, apply, Web App publication, and dashboard QA remain gated.
 
 > ✅ **2026-08-31, 10:26 Kyiv — V157 owner-pasted and published.**
 > V156 live evidence showed `doPost` reaching the six-minute ceiling and the old

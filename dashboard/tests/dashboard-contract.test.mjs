@@ -128,7 +128,10 @@ assert.match(html,/call\(cfg\.action, \{ limit: 20, include_all_open:'true', kin
 assert.match(html,/showRecTab\(\\'regular\\',this\)">Звичайні замовлення</,'accounting separates regular orders');
 assert.match(html,/showRecTab\(\\'preorders\\',this\)">Передзамовлення</,'accounting separates preorders');
 assert.match(html,/reserved_total/,'stock UI exposes the total active stock reservation');
-assert.match(html,/preorder_deficit/,'stock UI exposes preorder deficit without a negative available value');
+assert.match(html,/projected_stock/,'stock UI exposes the available quantity after incoming stock');
+assert.match(html,/projected_deficit/,'stock UI exposes only the deficit that remains after incoming stock');
+assert.match(html,/Дефіцит після поставки/,'stock deficit label states its time horizon');
+assert.match(html,/Очікується<\/th>/,'incoming stock is shown as the raw shipment quantity');
 assert.match(html,/Відновити тільки 3D-P після помилки/);
 assert.match(html,/action:'retry_3dp_sync'/);
 assert.match(html,/retry_3dp_sync'[\s\S]*clearPendingOrderEdit_\(accountingState\.editRequestId\)/);

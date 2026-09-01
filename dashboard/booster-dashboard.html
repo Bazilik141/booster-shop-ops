@@ -1539,8 +1539,8 @@ function skuName(name, fallback) {
 }
 
 const stockSortState = { field: 'urgency', dir: 'asc' };
-const stockNumericSorts = { stock: true, expected: true, sold30: true, sold60: true, coverage: true, maxBuy: true, margin: true };
-const stockDefaultSortDir = { sku: 'asc', name: 'asc', urgency: 'asc', action: 'asc', stock: 'desc', expected: 'desc', sold30: 'desc', sold60: 'desc', coverage: 'asc', maxBuy: 'desc', margin: 'desc' };
+const stockNumericSorts = { stock: true, expected: true, projected: true, sold30: true, sold60: true, coverage: true, maxBuy: true, margin: true };
+const stockDefaultSortDir = { sku: 'asc', name: 'asc', urgency: 'asc', action: 'asc', stock: 'desc', expected: 'desc', projected: 'desc', sold30: 'desc', sold60: 'desc', coverage: 'asc', maxBuy: 'desc', margin: 'desc' };
 
 
 function stockUrgencyRank(value) {
@@ -1565,6 +1565,7 @@ function stockSortValue(row, field) {
   if (field === 'action') return stockActionRank(row.action || row.stock_status) + ' ' + String(row.action || row.stock_status || '').toLowerCase();
   if (field === 'stock') return Number(row.stock) || 0;
   if (field === 'expected') return Number(row.expected) || 0;
+  if (field === 'projected') return Number(row.projected_stock) || 0;
   if (field === 'sold30') return Number(row.sold_30d) || 0;
   if (field === 'sold60') return Number(row.sold_60d) || 0;
   if (field === 'coverage') {
@@ -1625,7 +1626,7 @@ function renderStockTable(resetFilter) {
   document.getElementById('stockTable').innerHTML = `<div class="tbl-wrap"><table>
     <tr>
       ${stockTh('sku', 'SKU')}${stockTh('name', 'Назва')}${stockTh('format', 'Формат')}${stockTh('urgency', 'Терм.')}${stockTh('action', 'Дія')}
-      ${stockTh('stock', 'Доступно')}${stockTh('expected', 'Очікується')}<th>Фізично</th><th>Резерв</th><th>Дефіцит</th>${stockTh('sold30', '30д')}${stockTh('sold60', '60д')}${stockTh('coverage', 'Днів запасу')}
+      ${stockTh('stock', 'Доступно')}${stockTh('expected', 'Очікується')}${stockTh('projected', 'Після поставки')}<th>Фізично</th><th>Резерв</th><th>Дефіцит після поставки</th>${stockTh('sold30', '30д')}${stockTh('sold60', '60д')}${stockTh('coverage', 'Днів запасу')}
       ${stockTh('status', 'Статус')}${stockTh('issues', 'Проблеми')}
     </tr>
     ${rows.map(r => `<tr>
@@ -1636,9 +1637,10 @@ function renderStockTable(resetFilter) {
       <td>${r.action ? actionBadge(r.action) : stockPill(r.stock_status)}</td>
       <td><b>${r.stock??'—'}</b></td>
       <td>${r.expected??'—'}</td>
+      <td><b>${r.projected_stock??'—'}</b></td>
       <td>${r.physical_stock??'—'}</td>
       <td>${r.reserved_total??0}</td>
-      <td style="color:${Number(r.preorder_deficit)>0?'var(--red)':'var(--muted)'}"><b>${r.preorder_deficit??0}</b></td>
+      <td style="color:${Number(r.projected_deficit)>0?'var(--red)':'var(--muted)'}"><b>${r.projected_deficit??0}</b></td>
       <td><b>${r.sold_30d??'—'}</b></td>
       <td><b>${r.sold_60d??'—'}</b></td>
       <td>${dayCoverage(r.stock, r.sold_30d, r.sold_60d)}</td>
@@ -2061,7 +2063,7 @@ async function loadStock() {
     // which would overwrite the correct values and make 30д column show '—' instead of 0
     const a = (skuData.skus || []).map(r => {
       const alert = alertBySku[r.sku] || {};
-      return { ...r, ...alert, stock:r.stock, stock_raw:r.stock_raw, physical_stock:r.physical_stock, preorder_reserved:r.preorder_reserved, preorder_deficit:r.preorder_deficit, sold_30d: r.sold_30d, sold_60d: r.sold_60d };
+      return { ...r, ...alert, stock:r.stock, expected:r.expected, stock_raw:r.stock_raw, physical_stock:r.physical_stock, reserved_total:r.reserved_total, preorder_reserved:r.preorder_reserved, current_shortfall:r.current_shortfall, projected_available_raw:r.projected_available_raw, projected_stock:r.projected_stock, projected_deficit:r.projected_deficit, sold_30d: r.sold_30d, sold_60d: r.sold_60d };
     });
     if (!a.length) {
       document.getElementById('stockTable').innerHTML = '<div style="color:var(--muted);padding:20px">Немає даних складу</div>';

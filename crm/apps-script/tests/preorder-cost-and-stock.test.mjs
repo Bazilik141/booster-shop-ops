@@ -14,7 +14,7 @@ const context = vm.createContext({
   JSON, Math, Number, String, Boolean, Array, Object, RegExp, Date, Error, Set, isFinite,
   Logger: { log() {} }, SpreadsheetApp: {}, Utilities: {}, Session: {}, console
 });
-vm.runInContext(code + '\nglobalThis.__test={calculatePreorderForecastCost_,apiDecoratePreorderStock_,isActualSaleForCost_,isPhysicalStockReservationSale_,apiRecentSalesForUpdate_,normalizeOpenCartSku_,mapOpenCartOrderStatus_,_getCrmSalesRows,orderNeedsPreorderCostRecovery_,resetMemo_};', context, { filename: 'Code.gs' });
+vm.runInContext(code + '\nglobalThis.__test={calculatePreorderForecastCost_,apiDecoratePreorderStock_,apiCrmStockProjectionMetrics_,isActualSaleForCost_,isPhysicalStockReservationSale_,apiRecentSalesForUpdate_,normalizeOpenCartSku_,mapOpenCartOrderStatus_,_getCrmSalesRows,orderNeedsPreorderCostRecovery_,resetMemo_};', context, { filename: 'Code.gs' });
 
 const incomingRows = [];
 function purchase({ lot, sku = 'SKU-MIX', qty, prro = 0, mgmt = 0, status }) {
@@ -78,12 +78,39 @@ context._getCrmSalesRowEntries = () => [
   saleRow({ sku: 'SKU-STOCK', qty: 277, status: 'Отримано' }),
   saleRow({ sku: 'SKU-STOCK', qty: 11, status: '' })
 ];
-const decorated = [{ sku: 'SKU-STOCK', stock: -2 }];
+const decorated = [{ sku: 'SKU-STOCK', stock: -2, expected: 4, incoming_stock: 4 }];
 context.__test.apiDecoratePreorderStock_(decorated);
 assert.deepEqual(JSON.parse(JSON.stringify(decorated[0])), {
-  sku: 'SKU-STOCK', stock: 0, stock_raw: -2, reserved_total: 5, regular_reserved: 2,
-  preorder_reserved: 3, physical_stock: 3, preorder_deficit: 2
-}, 'negative free stock becomes zero available plus an explicit preorder deficit');
+  sku: 'SKU-STOCK', stock: 0, expected: 4, incoming_stock: 4, stock_raw: -2,
+  reserved_total: 5, regular_reserved: 2, preorder_reserved: 3, physical_stock: 3,
+  current_shortfall: 2, projected_available_raw: 2, projected_stock: 2,
+  projected_deficit: 0, preorder_deficit: 2
+}, 'negative free stock is separated from incoming stock, physical stock, and the post-arrival projection');
+const eb03 = [{ sku: 'OP-JP-EB03-BST', stock: -11, expected: 12, incoming_stock: 12 }];
+context._getCrmSalesRowEntries = () => [saleRow({ sku: 'OP-JP-EB03-BST', qty: 14, status: 'Нове' })];
+context.__test.apiDecoratePreorderStock_(eb03);
+assert.deepEqual(JSON.parse(JSON.stringify(eb03[0])), {
+  sku: 'OP-JP-EB03-BST', stock: 0, expected: 12, incoming_stock: 12, stock_raw: -11,
+  reserved_total: 14, regular_reserved: 14, preorder_reserved: 0, physical_stock: 3,
+  current_shortfall: 11, projected_available_raw: 1, projected_stock: 1,
+  projected_deficit: 0, preorder_deficit: 11
+}, 'EB03-like data reports three physical units and no deficit after the incoming shipment');
+const stockProjectionRow = Array(20).fill('');
+stockProjectionRow[0] = 'OP-JP-EB03-BST';
+stockProjectionRow[7] = -11;
+stockProjectionRow[16] = 12;
+stockProjectionRow[18] = 14;
+stockProjectionRow[19] = -2;
+context._getCrmSs = () => ({
+  getSheetByName: (name) => name === 'Склад' ? {
+    getLastRow: () => 3,
+    getRange: () => ({ getValues: () => [stockProjectionRow] })
+  } : null
+});
+assert.deepEqual(JSON.parse(JSON.stringify(context.__test.apiCrmStockProjectionMetrics_()['OP-JP-EB03-BST'])), {
+  stock: -11, expected: 12, incoming_stock: 12, preorder_reserved_sheet: 14,
+  incoming_after_preorder: -2, projected_available: 1
+}, 'the API reads raw incoming Q and derives the post-arrival projection instead of relabeling T as incoming');
 assert.equal(context.__test.isPhysicalStockReservationSale_(saleRow({ sku: 'SKU-STOCK', qty: 1, status: 'В обробці' }).values), true,
   'a processing order remains on the shelf and is a physical-stock reservation');
 assert.equal(context.__test.isPhysicalStockReservationSale_(saleRow({ sku: 'SKU-STOCK', qty: 1, status: 'Відправлено' }).values), false,

@@ -89,8 +89,9 @@ assert.equal(ledger.getRange(2,11).getValue(),100,"full box cost is carried once
 assert.equal(ledger.getRange(2,12).getValue(),110);
 assert.match(stock.getRange(3,8).getFormula(),/Міграції_Складу/);
 assert.match(stock.getRange(4,8).getFormula(),/Міграції_Складу/);
-assert.match(stock.getRange(4,8).getFormula(),/Передзамовлення/,'stock formula subtracts active preorder reservations after migration');
-assert.match(stock.getRange(4,8).getFormula(),/Списання/,'stock formula subtracts write-offs after migration');
+assert.match(stock.getRange(4,8).getFormula(),/\$S4/,'stock formula subtracts the canonical active-reservation total after migration');
+assert.match(stock.getRange(4,8).getFormula(),/\$G4/,'stock formula subtracts the canonical write-off total exactly once');
+assert.doesNotMatch(stock.getRange(4,8).getFormula(),/SUMIFS\('Списання'/,'stock formula does not double-subtract write-offs from both G and the ledger');
 let snapshot=context.__test.inventoryMigrationStockSnapshot_(ss).available;
 assert.equal(snapshot["BOX-001"],1);
 assert.equal(snapshot["PACK-001"],33,"preorder and WRT-0208 remain reserved after 36 packs arrive");
