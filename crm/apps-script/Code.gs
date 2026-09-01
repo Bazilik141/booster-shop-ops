@@ -633,6 +633,27 @@ function crmAssertCapacityIntegrity_(before, after) {
   return { before_clean: before ? Boolean(before.clean) : null, after_clean: after ? Boolean(after.clean) : null, introduced_problems: 0 };
 }
 
+// A prepared row can have A blank while old literal FIFO state survives in
+// L:M / AD:AF.  Clear only those non-formula cost fields before any new sale
+// writer fills the row. RangeList keeps this to one Sheets service operation
+// per order, regardless of the number of product lines.
+function crmClearFreshSaleCostState_(ss, firstRow, requiredRows) {
+  const sales = ss.getSheetByName('Продажі');
+  if (!sales) throw new Error('Не знайдено вкладку Продажі.');
+  const start = Math.max(3, Math.floor(Number(firstRow) || 3));
+  const count = Math.max(1, Math.floor(Number(requiredRows) || 1));
+  const end = start + count - 1;
+  const ranges = ['L' + start + ':M' + end, 'AD' + start + ':AF' + end];
+  if (typeof sales.getRangeList === 'function') {
+    sales.getRangeList(ranges).clearContent();
+  } else {
+    // Local test fixtures predating RangeList use this equivalent path.
+    sales.getRange(start, 12, count, 2).setValues(Array.from({ length: count }, function() { return ['', '']; }));
+    sales.getRange(start, 30, count, 3).setValues(Array.from({ length: count }, function() { return ['', '', '']; }));
+  }
+  return { first_row: start, rows: count, ranges: ranges };
+}
+
 function crmNextAppendRow_(ss, sheetName, requiredRows) {
   let state;
   if (sheetName === 'Товари') {
@@ -642,6 +663,9 @@ function crmNextAppendRow_(ss, sheetName, requiredRows) {
   }
   if (state.expanded) {
     crmRefreshCapacityFormulaRanges_(ss);
+  }
+  if (sheetName === 'Продажі') {
+    crmClearFreshSaleCostState_(ss, state.first_empty_row, requiredRows);
   }
   return state.first_empty_row;
 }

@@ -19,6 +19,7 @@ class Range {
   setCellValue_(rowIndex, columnIndex, value) { const cell = this.sheet.cell(this.row + rowIndex, this.column + columnIndex); cell.value = value; cell.formula = ""; }
   setFormula(formula) { const cell = this.sheet.cell(this.row, this.column); cell.formula = formula; return this; }
   setFormulas(formulas) { formulas.forEach((row, rowIndex) => row.forEach((formula, columnIndex) => { this.sheet.cell(this.row + rowIndex, this.column + columnIndex).formula = formula || ""; })); return this; }
+  clearContent() { this.cells().forEach(row => row.forEach(cell => { cell.value = ""; cell.formula = ""; })); return this; }
   copyTo(destination) {
     destination.cells().forEach((row, rowIndex) => row.forEach((cell, columnIndex) => {
       const source = this.sheet.cell(this.row + (rowIndex % this.rows), this.column + (columnIndex % this.columns));
@@ -37,6 +38,17 @@ class Sheet {
   key(row, column) { return `${row}:${column}`; }
   cell(row, column) { const key = this.key(row, column); if (!this.map.has(key)) this.map.set(key, { value: "", formula: "" }); return this.map.get(key); }
   getRange(row, column, rows = 1, columns = 1) { return new Range(this, row, column, rows, columns); }
+  getRangeList(ranges) {
+    const columnNumber = letters => [...letters].reduce((value, letter) => value * 26 + letter.charCodeAt(0) - 64, 0);
+    const parsed = ranges.map(a1 => {
+      const match = /^([A-Z]+)(\d+):([A-Z]+)(\d+)$/.exec(a1);
+      if (!match) throw new Error(`Unsupported A1 range in fixture: ${a1}`);
+      const firstColumn = columnNumber(match[1]), firstRow = Number(match[2]);
+      const lastColumn = columnNumber(match[3]), lastRow = Number(match[4]);
+      return this.getRange(firstRow, firstColumn, lastRow - firstRow + 1, lastColumn - firstColumn + 1);
+    });
+    return { clearContent: () => { parsed.forEach(range => range.clearContent()); } };
+  }
   getMaxRows() { return this.maxRows; }
   getMaxColumns() { return this.maxColumns; }
   getLastColumn() { return this.maxColumns; }

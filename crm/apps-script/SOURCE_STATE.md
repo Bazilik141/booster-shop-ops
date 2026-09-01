@@ -7,10 +7,10 @@ new Web App version.
 
 | Field | Value |
 |---|---|
-| Mirror file | `crm/apps-script/Code.gs` — rebased against the owner-supplied complete V156 export `Версія 156, 30 серп. 2026 р., 1204.csv`, extended with the deployed V157 timeout/capacity and physical-stock fix, and now carrying a local post-V157 stock-counting repair candidate dated 2026-09-01. |
+| Mirror file | `crm/apps-script/Code.gs` — rebased against the owner-supplied complete V156 export `Версія 156, 30 серп. 2026 р., 1204.csv`, extended with the deployed V157 timeout/capacity and physical-stock fix, the owner-reported V159 stock-counting repair, and the owner-reported V160 fresh-sale cost-state guard. |
 | Baseline pulled from live | 2026-08-30, owner-supplied complete V156 export. Raw SHA-256 `6990a1387a184140a63524413eb6e42039389c328856f386f872526e7d194eb7`; normalized SHA-256 `7efa5ad00760a005db8a92265c07782d5e1a991b7b33175776fe09775b95e7c7`; 8,999 normalized lines. |
-| **Mirror content deployed to live** | ✅ **V159 owner-paste/publication reported 2026-09-01 17:55 Kyiv; stock repair live-verified at 17:58.** Preflight returned `95 / 95 / 79 / 2`. The supplied apply transcript is an idempotent repeat (`already_applied:true`, zero remaining mutations) and verifies all 95 stock balances, clean pre/post integrity, zero introduced problems, and the expected selected-SKU results. No fresh V159 export or independent byte comparison was supplied. |
-| Deployed Web App version number | CRM V159 — owner-reported publication 2026-09-01 17:55 Kyiv. Stock repair final state owner-verified 17:58 Kyiv. |
+| **Mirror content deployed to live** | ⚠ **V160 owner-paste/publication reported 2026-09-01 21:50 Kyiv.** The exact Black Bolt repair applied successfully with clean pre/post integrity; a later bounded read confirms the corrected base cost and reallocated order components. No fresh V160 export or independent byte comparison was supplied, so source-byte identity remains unverified. |
+| Deployed Web App version number | CRM V160 — owner-reported publication 2026-09-01 21:50 Kyiv. |
 | Live-verified after deploy | Post-V131 (2026-08-18 14:52) owner reported `QA - ok`; `integrity_check`: `clean:true`, `problems:[]`, checked `Товари`, `РРЦ`, `Розхідники`, `Майстер_Товарів`, `Налаштування`; `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:55853`. This proves the schema/formula relationships covered by `integrity_check`, not unrelated FIFO/warehouse flows or a byte match with the mirror. Post-V130 (2026-08-18 14:36) `integrity_check`: `clean:true`, `problems:[]`, checked `Товари`, `РРЦ`, `Розхідники`, `Майстер_Товарів`, `Налаштування`; `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:12184`. Owner reported dashboard QA done for the recent-purchases fix. Post-V129 (2026-08-17 22:41) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:9698`. This proves schema/formula relationships covered by `integrity_check`, not the expected-stock rule: a direct formula read immediately after still found the legacy `Склад!Q3:Q201` rule without `Замовлено`. FIFO migration flows are outside this check and remain unproven live. Post-V128 (18:36) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:12564`. Post-V118 (23:18) `integrity_check`: `clean:true`, `problems:[]`, `rrp_mismatch_3dp.compared:3`, `skipped_missing_crm_rrp:0`, `deferred:null`, `elapsed_ms:7672`. |
 
 > ⚠ **2026-08-12, 16:45–16:46 — V106 migration succeeded; repeat exposed ARRAYFORMULA spill detection.**
@@ -29,6 +29,31 @@ new Web App version.
 | Previous repo copy | `Booster Shop CRM - Apps_Script_код 29.07.2026.csv` (2026-07-29, pre-V87/V89) — superseded, keep for history only |
 
 ## Mirror status
+
+> ✅ **2026-09-01, 22:10 Kyiv — CRM-COST-0355 V2 order repair verified live.**
+> The one-row Black Bolt repair succeeded, but a bounded audit of `Продажі!315:318`
+> proved two more inherited foreign-lot costs: `PKM-JP-SVEX-BLR` names `LOT-0119`
+> (an `OP-JP-OP15-BST` lot), and `MTG-JP-AFRS-BST` names `LOT-0075`
+> (a `PKM-JP-MSYM-BST` lot). `PKM-JP-MBRV-BST` and the repaired Black Bolt row
+> are valid. The V2 temporary wrapper recalculates all four lines through the
+> canonical FIFO writer, removes/reapplies the component projection around that
+> refresh, preserves the ledger totals, and rolls all four rows back on any
+> read-back or integrity failure. The owner supplied matching preview/apply
+> transcripts: four rows written, component totals preserved at `30.18 / 31.99`,
+> clean pre/post integrity, and zero introduced problems. Final FIFO results are
+> `MBRV 91.55/97.24`, `BBLT 220.13/233.34`, `SVEX 1532.67/1624.63`, and
+> `AFRS 165.58/175.51`. The live data repair gate is closed.
+
+> ⚠ **2026-09-01 — CRM-COST-0355 original repair/guard evidence.**
+> A bounded live read proved `Продажі!316` for `OC-FOP-0355 / PKM-JP-BBLT-BST`
+> retained literal `2886.34 / 3074.02` plus an audit naming `LOT-0073`, while
+> `Закупки!68` proves that lot belongs to `PKM-JP-MZERO-BBX`. The bad cost was
+> frozen before the later V159 stock repair. The temporary exact wrapper previews
+> and repairs only `Продажі!L:M,AD:AF`; the permanent local guard clears those
+> fields in each newly allocated blank sales block using one `RangeList` operation
+> before FIFO runs. The owner supplied a successful preview/apply transcript for
+> the one-row repair and reported publishing V160. Temporary-file removal and a
+> controlled new-import QA remain owner-gated.
 
 > ✅ **2026-09-01, 17:58 Kyiv — stock-counting repair final state verified.**
 > The supplied `repairCrmStockCounting20260901()` transcript reports
