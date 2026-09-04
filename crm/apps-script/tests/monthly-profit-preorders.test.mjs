@@ -40,6 +40,16 @@ assert.match(monthly, /month_to_date:\s*apiAggregateSalesRows_\(rows, currentSta
 assert.match(monthly, /previous_month_to_date:\s*apiAggregateSalesRows_\(rows, previousStart, previousEnd\)/, 'comparison period uses the same source');
 assert.doesNotMatch(monthly, /setValue|setValues|appendRow|deleteRow/, 'monthly summary remains read-only');
 assert.match(code, /action === 'monthly_summary'\) return 'bscrm_v2_' \+ version \+ '_' \+ action \+ '_v3'/, 'the new monthly payload uses a fresh server cache key after publication');
+assert.match(code, /action === 'overview_assets'\) return 'bscrm_v2_' \+ version \+ '_' \+ action \+ '_v1'/, 'asset tiles use the cache-version key, so a purchase invalidation takes effect immediately');
+assert.doesNotMatch(code, /action === 'overview_assets'\) return 'bscrm_overview_assets_v1'/, 'asset tiles must not retain the fixed cache key');
 assert.match(code, /const cacheKey = 'crm_orders_v4_'/, 'the order list uses a fresh server cache key after publication');
+
+const assetCacheContext = vm.createContext({
+  String,
+  _memo: {},
+  PropertiesService: { getScriptProperties: () => ({ getProperty: () => 'purchase-change-1' }) },
+});
+vm.runInContext(functionSource('apiDoGetCacheVersion_') + '\n' + functionSource('apiDoGetCacheKey_') + '\nglobalThis.assetCacheKey = apiDoGetCacheKey_;', assetCacheContext, { filename: 'Code.gs' });
+assert.equal(assetCacheContext.assetCacheKey('overview_assets', {}), 'bscrm_v2_purchase-change-1_overview_assets_v1', 'overview asset cache key changes after invalidateDoGetCache_ advances the version');
 
 console.log('Monthly profit and preorder visibility tests passed');

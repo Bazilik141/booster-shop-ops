@@ -21,6 +21,7 @@ SpreadsheetApp.getUi()
 .addItem('Оновити собівартість складу', 'updateSkuCurrentCostMenu')
 .addItem('Заповнити собівартість передзамовлень', 'initializePreorderCostsMenu')
 .addItem('Налаштувати автооновлення формул CRM', 'setupCrmRowCapacityMaintenanceMenu')
+.addItem('Оновити діапазони дашборду', 'updateDashboardCapacityFormulaMenu')
 .addItem('Налаштувати OpenAI ключ', 'setupOpenAiApiKey')
 .addToUi();
 }
@@ -721,7 +722,7 @@ function crmExpandLocalFormulaRanges_(formula, firstRow, lastRow) {
   });
 }
 
-function crmRefreshFormulaRange_(sheet, firstRow, firstColumn, rowCount, columnCount, bounds, localFirstRow) {
+function crmRefreshFormulaRange_(sheet, firstRow, firstColumn, rowCount, columnCount, bounds, localFirstRow, snapshots) {
   const range = sheet.getRange(firstRow, firstColumn, rowCount, columnCount);
   const formulas = typeof range.getFormulas === 'function' ? range.getFormulas() : [];
   let updated = 0;
@@ -733,7 +734,7 @@ function crmRefreshFormulaRange_(sheet, firstRow, firstColumn, rowCount, columnC
       if (localFirstRow) next = crmExpandLocalFormulaRanges_(next, localFirstRow, crmCapacitySheetLastRow_(sheet, localFirstRow));
       if (next !== formula) {
         if (!changesByColumn[columnIndex]) changesByColumn[columnIndex] = [];
-        changesByColumn[columnIndex].push({ row_index: rowIndex, formula: next });
+        changesByColumn[columnIndex].push({ row_index: rowIndex, formula: next, original_formula: formula });
         updated++;
       }
     });
@@ -744,6 +745,12 @@ function crmRefreshFormulaRange_(sheet, firstRow, firstColumn, rowCount, columnC
     let run = [];
     function writeRun_() {
       if (!run.length) return;
+      if (snapshots) snapshots.push({
+        sheet: sheet,
+        row: firstRow + run[0].row_index,
+        column: firstColumn + columnIndex,
+        formulas: run.map(function(item) { return item.original_formula; })
+      });
       sheet.getRange(firstRow + run[0].row_index, firstColumn + columnIndex, run.length, 1).setFormulas(run.map(function(item) { return [item.formula]; }));
       run = [];
     }
@@ -756,7 +763,7 @@ function crmRefreshFormulaRange_(sheet, firstRow, firstColumn, rowCount, columnC
   return updated;
 }
 
-function crmRefreshCapacityFormulaRanges_(ss) {
+function crmRefreshCapacityFormulaRanges_(ss, snapshots) {
   const bounds = crmCapacityFormulaBounds_(ss);
   const scopes = [
     ['Продажі', 3, 1, 32, 3], ['Закупки', 3, 1, 20, 3], ['Списання', 3, 1, 12, 3],
@@ -768,9 +775,210 @@ function crmRefreshCapacityFormulaRanges_(ss) {
     const sheet = ss.getSheetByName(scope[0]);
     if (!sheet) return;
     const lastRow = crmCapacitySheetLastRow_(sheet, scope[1]);
-    formulasUpdated += crmRefreshFormulaRange_(sheet, scope[1], scope[2], lastRow - scope[1] + 1, scope[3], bounds, scope[4]);
+    formulasUpdated += crmRefreshFormulaRange_(sheet, scope[1], scope[2], lastRow - scope[1] + 1, scope[3], bounds, scope[4], snapshots);
+  });
+  formulasUpdated += crmRefreshDashboardCapacityFormulaRanges_(ss, snapshots).formulas_updated;
+  return { formulas_updated: formulasUpdated, bounds: bounds };
+}
+
+function crmRefreshDashboardCapacityFormulaRanges_(ss, snapshots) {
+  const dashboard = ss.getSheetByName('Дашборд');
+  if (!dashboard) throw new Error('Не знайдено вкладку Дашборд для оновлення діапазонів.');
+  const bounds = crmCapacityFormulaBounds_(ss);
+  // Only the compact warehouse-metric cards are capacity-bound. The dashboard
+  // detail grid has its own intentionally bounded reporting ranges.
+  let formulasUpdated = 0;
+  [[9, 2], [9, 9]].forEach(function(scope) {
+    formulasUpdated += crmRefreshFormulaRange_(dashboard, scope[0], scope[1], 9, 1, bounds, 0, snapshots);
   });
   return { formulas_updated: formulasUpdated, bounds: bounds };
+}
+
+function updateDashboardCapacityFormulaMenu() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const snapshots = [];
+  try {
+    const result = crmRefreshDashboardCapacityFormulaRanges_(ss, snapshots);
+    SpreadsheetApp.flush();
+    invalidateDoGetCache_();
+    const message = 'Діапазони дашборду оновлено: ' + result.formulas_updated + ' формул.';
+    try { SpreadsheetApp.getUi().alert(message); } catch (e) { Logger.log(message); }
+    return result;
+  } catch (error) {
+    crmRestoreFormulaRangeSnapshots_(snapshots);
+    SpreadsheetApp.flush();
+    throw error;
+  }
+}
+
+function crmRestoreFormulaRangeSnapshots_(snapshots) {
+  (snapshots || []).slice().reverse().forEach(function(snapshot) {
+    snapshot.sheet.getRange(snapshot.row, snapshot.column, snapshot.formulas.length, 1)
+      .setFormulas(snapshot.formulas.map(function(formula) { return [formula]; }));
+  });
+}
+
+// The first capacity version only refreshed formulas after inserting new grid
+// rows. Existing preallocated rows therefore retained stale upper bounds.
+// This explicit repair is owner-run, formula-only, and rolls back if the
+// bounded CRM integrity check becomes worse.
+function refreshCrmFormulaCoverageWithIntegrity_(ss) {
+  const integrityBefore = apiIntegrityCheck_();
+  if (!integrityBefore.clean) throw new Error('CRM integrity check до оновлення діапазонів формул не чистий; зміну зупинено.');
+  const snapshots = [];
+  try {
+    const refreshed = crmRefreshCapacityFormulaRanges_(ss, snapshots);
+    if (!refreshed.formulas_updated) return { formulas_updated: 0, bounds: refreshed.bounds, integrity: { before: integrityBefore, after: integrityBefore } };
+    SpreadsheetApp.flush();
+    const integrityAfter = apiIntegrityCheck_();
+    if (!integrityAfter.clean) throw new Error('CRM integrity check після оновлення діапазонів формул не чистий.');
+    return { formulas_updated: refreshed.formulas_updated, bounds: refreshed.bounds, integrity: { before: integrityBefore, after: integrityAfter } };
+  } catch (error) {
+    crmRestoreFormulaRangeSnapshots_(snapshots);
+    SpreadsheetApp.flush();
+    throw error;
+  }
+}
+
+const CRM_FORMULA_COVERAGE_STATE_PROPERTY_ = 'CRM_FORMULA_COVERAGE_STATE_V2';
+const CRM_FORMULA_COVERAGE_SPREADSHEET_ID_PROPERTY_ = 'CRM_FORMULA_COVERAGE_SPREADSHEET_ID_V2';
+const CRM_FORMULA_COVERAGE_TRIGGER_HANDLER_ = 'runCrmFormulaCoverageRepairBatch';
+const CRM_FORMULA_COVERAGE_BATCH_ROWS_ = 100;
+
+function crmFormulaCoverageScopes_() {
+  // РРЦ has no capacity-limited formulas of its own. Its consumers are covered
+  // by Товари, while omitting its 930-row blank tail keeps every batch short.
+  return [
+    ['Продажі', 3, 1, 32, 3], ['Закупки', 3, 1, 20, 3], ['Списання', 3, 1, 12, 3],
+    ['Витрати', 3, 1, 13, 3], ['Розхідники', 4, 1, 15, 4], ['Товари', 3, 1, 15, 3],
+    ['Склад', 3, 1, 20, 3]
+  ];
+}
+
+function crmFormulaCoverageReadState_() {
+  const raw = String(PropertiesService.getScriptProperties().getProperty(CRM_FORMULA_COVERAGE_STATE_PROPERTY_) || '');
+  if (!raw) return null;
+  try {
+    const state = JSON.parse(raw);
+    if (!state || state.version !== 2 || !isFinite(Number(state.scope_index)) || !isFinite(Number(state.next_row))) throw new Error('invalid state');
+    return state;
+  } catch (error) {
+    throw new Error('Стан пакетного оновлення формул CRM пошкоджений; зміну зупинено без запису. Відновіть таблицю з копії та зверніться з текстом помилки.');
+  }
+}
+
+function crmFormulaCoverageWriteState_(state) {
+  PropertiesService.getScriptProperties().setProperty(CRM_FORMULA_COVERAGE_STATE_PROPERTY_, JSON.stringify(state));
+}
+
+function crmFormulaCoverageSpreadsheet_() {
+  const id = String(PropertiesService.getScriptProperties().getProperty(CRM_FORMULA_COVERAGE_SPREADSHEET_ID_PROPERTY_) || '');
+  if (id) return SpreadsheetApp.openById(id);
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  if (!ss) throw new Error('Не вдалося визначити CRM-таблицю для пакетного оновлення формул.');
+  return ss;
+}
+
+function crmFormulaCoverageDeleteTriggers_() {
+  ScriptApp.getProjectTriggers().forEach(function(trigger) {
+    if (trigger.getHandlerFunction() === CRM_FORMULA_COVERAGE_TRIGGER_HANDLER_) ScriptApp.deleteTrigger(trigger);
+  });
+}
+
+function crmFormulaCoverageScheduleNextBatch_() {
+  crmFormulaCoverageDeleteTriggers_();
+  ScriptApp.newTrigger(CRM_FORMULA_COVERAGE_TRIGGER_HANDLER_).timeBased().after(60 * 1000).create();
+}
+
+function crmFormulaCoverageIntegritySummary_(result) {
+  return { clean: !!(result && result.clean), problem_count: ((result && result.problems) || []).length };
+}
+
+function crmFormulaCoverageApplyNextBatch_(ss, state) {
+  const scopes = crmFormulaCoverageScopes_();
+  const bounds = crmCapacityFormulaBounds_(ss);
+  while (state.scope_index < scopes.length) {
+    const scope = scopes[state.scope_index], sheet = ss.getSheetByName(scope[0]);
+    if (!sheet) throw new Error('Не знайдено вкладку ' + scope[0] + ' для пакетного оновлення формул.');
+    const lastRow = crmCapacitySheetLastRow_(sheet, scope[1]);
+    const firstRow = Math.max(scope[1], Math.floor(Number(state.next_row) || scope[1]));
+    if (firstRow > lastRow) {
+      state.scope_index += 1;
+      state.next_row = state.scope_index < scopes.length ? scopes[state.scope_index][1] : 0;
+      continue;
+    }
+    const rowCount = Math.min(CRM_FORMULA_COVERAGE_BATCH_ROWS_, lastRow - firstRow + 1);
+    const snapshots = [];
+    try {
+      const changed = crmRefreshFormulaRange_(sheet, firstRow, scope[2], rowCount, scope[3], bounds, scope[4], snapshots);
+      SpreadsheetApp.flush();
+      state.formulas_updated = Math.floor(Number(state.formulas_updated) || 0) + changed;
+      state.next_row = firstRow + rowCount;
+      return { done: false, state: state, sheet: scope[0], first_row: firstRow, last_row: firstRow + rowCount - 1, formulas_updated_in_batch: changed, bounds: bounds };
+    } catch (error) {
+      crmRestoreFormulaRangeSnapshots_(snapshots);
+      SpreadsheetApp.flush();
+      throw error;
+    }
+  }
+  if (!state.dashboard_refreshed) {
+    const snapshots = [];
+    try {
+      const refreshed = crmRefreshDashboardCapacityFormulaRanges_(ss, snapshots);
+      SpreadsheetApp.flush();
+      state.formulas_updated = Math.floor(Number(state.formulas_updated) || 0) + refreshed.formulas_updated;
+      state.dashboard_refreshed = true;
+      return { done: false, state: state, sheet: 'Дашборд', first_row: 9, last_row: 17, formulas_updated_in_batch: refreshed.formulas_updated, bounds: refreshed.bounds };
+    } catch (error) {
+      crmRestoreFormulaRangeSnapshots_(snapshots);
+      SpreadsheetApp.flush();
+      throw error;
+    }
+  }
+  state.phase = 'verify';
+  return { done: true, state: state, bounds: bounds };
+}
+
+function crmFormulaCoverageContinue_(ss) {
+  const properties = PropertiesService.getScriptProperties();
+  const state = crmFormulaCoverageReadState_();
+  if (!state) return { ok: true, status: 'already_complete', formulas_updated: 0 };
+  if (state.phase === 'verify') {
+    const integrityAfter = apiIntegrityCheck_();
+    if (!integrityAfter.clean) throw new Error('CRM integrity check після пакетного оновлення формул не чистий. Відновіть таблицю з копії перед ремонтом і надішліть результат перевірки.');
+    properties.deleteProperty(CRM_FORMULA_COVERAGE_STATE_PROPERTY_);
+    properties.deleteProperty(CRM_FORMULA_COVERAGE_SPREADSHEET_ID_PROPERTY_);
+    crmFormulaCoverageDeleteTriggers_();
+    invalidateDoGetCache_();
+    return { ok: true, status: 'complete', formulas_updated: Math.floor(Number(state.formulas_updated) || 0), integrity: { before: state.integrity_before, after: crmFormulaCoverageIntegritySummary_(integrityAfter) } };
+  }
+  const batch = crmFormulaCoverageApplyNextBatch_(ss, state);
+  crmFormulaCoverageWriteState_(batch.state);
+  if (batch.done) {
+    crmFormulaCoverageScheduleNextBatch_();
+    return { ok: true, status: 'verifying_next', formulas_updated: batch.state.formulas_updated, bounds: batch.bounds };
+  }
+  crmFormulaCoverageScheduleNextBatch_();
+  return { ok: true, status: 'batch_scheduled', formulas_updated: batch.state.formulas_updated, sheet: batch.sheet, first_row: batch.first_row, last_row: batch.last_row, formulas_updated_in_batch: batch.formulas_updated_in_batch };
+}
+
+function startCrmFormulaCoverageRepair_(ss) {
+  const properties = PropertiesService.getScriptProperties();
+  let state = crmFormulaCoverageReadState_();
+  if (!state) {
+    const integrityBefore = apiIntegrityCheck_();
+    if (!integrityBefore.clean) throw new Error('CRM integrity check до пакетного оновлення формул не чистий; зміну зупинено.');
+    if (ss && typeof ss.getId === 'function') properties.setProperty(CRM_FORMULA_COVERAGE_SPREADSHEET_ID_PROPERTY_, ss.getId());
+    state = { version: 2, phase: 'apply', scope_index: 0, next_row: crmFormulaCoverageScopes_()[0][1], formulas_updated: 0, integrity_before: crmFormulaCoverageIntegritySummary_(integrityBefore), started_at: new Date().toISOString() };
+    properties.setProperty(CRM_FORMULA_COVERAGE_STATE_PROPERTY_, JSON.stringify(state));
+  }
+  return crmFormulaCoverageContinue_(ss);
+}
+
+function runCrmFormulaCoverageRepairBatch() {
+  const result = crmFormulaCoverageContinue_(crmFormulaCoverageSpreadsheet_());
+  Logger.log(JSON.stringify(result));
+  return result;
 }
 
 function maintainCrmRowCapacity_(ss, options) {
@@ -1157,7 +1365,7 @@ function invalidateDoGetCache_() {
 const version = String(new Date().getTime()); PropertiesService.getScriptProperties().setProperty('CRM_DOGET_CACHE_VERSION', version); if (typeof _memo !== 'undefined' && _memo) _memo.doGetCacheVersion = version;
 }
 
-function apiDoGetCacheKey_(action, params) { const version = apiDoGetCacheVersion_(); if (action === 'overview_assets') return 'bscrm_overview_assets_v1'; if (action === 'sku_list') return 'bscrm_v2_' + version + '_' + action + '_' + String(params.sort || '').toLowerCase() + '_' + String(params.limit || ''); if (action === 'monthly_summary') return 'bscrm_v2_' + version + '_' + action + '_v3'; if (action === 'overview_bootstrap' || action === 'overview_secondary') return 'bscrm_v2_' + version + '_' + action + '_v2'; return 'bscrm_v2_' + version + '_' + action; }
+function apiDoGetCacheKey_(action, params) { const version = apiDoGetCacheVersion_(); if (action === 'overview_assets') return 'bscrm_v2_' + version + '_' + action + '_v1'; if (action === 'sku_list') return 'bscrm_v2_' + version + '_' + action + '_' + String(params.sort || '').toLowerCase() + '_' + String(params.limit || ''); if (action === 'monthly_summary') return 'bscrm_v2_' + version + '_' + action + '_v3'; if (action === 'overview_bootstrap' || action === 'overview_secondary') return 'bscrm_v2_' + version + '_' + action + '_v2'; return 'bscrm_v2_' + version + '_' + action; }
 
 function handleApiAction_(action, params) {
 if (action === 'overview_bootstrap') return apiOverviewBootstrap_();
@@ -5872,10 +6080,12 @@ return result;
 }
 
 function setupCrmRowCapacityMaintenanceMenu() {
-  const result = setupCrmRowCapacityTrigger();
-  const message = result.created ? 'Щоденне автооновлення формул CRM налаштовано.' : 'Щоденне автооновлення формул CRM вже налаштоване.';
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const coverage = startCrmFormulaCoverageRepair_(ss);
+  const trigger = setupCrmRowCapacityTrigger();
+  const message = (trigger.created ? 'Щоденне автооновлення формул CRM налаштовано.' : 'Щоденне автооновлення формул CRM вже налаштоване.') + ' Пакет формул: ' + coverage.status + '; оновлено: ' + coverage.formulas_updated + '.';
   try { SpreadsheetApp.getUi().alert(message); } catch (e) { Logger.log(message); }
-  return result;
+  return { trigger: trigger, formula_coverage: coverage };
 }
 
 function updateExpectedStockFormulaMenu() {
