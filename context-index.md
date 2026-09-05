@@ -94,6 +94,7 @@ status and priority from the verified Notion card. Use dashboard
 | TECH-032/033/034 | — | handoffs/codex-handoff-TECH032-033-034.md | — |
 | TECH-013 | Mobile Core Web Vitals pass, Stage 1 (об'єднує TECH-002/003/004; TECH-003 = підзадача WP2) | **handoffs/handoff_TECH-013_mobile-cwv-stage1_20260804.md** (Rev. 2026-08-05, канонічний, виконавець Claude Code) · handoffs/handoff_TECH-013_mobile-core-web-vitals_20260716.md (SUPERSEDED, бейзлайн 16.07) | — |
 | TECH-042 | Bot-challenge / AI-visibility read-only check | handoffs/handoff_TECH-042_bot-challenge-ai-visibility-check_20260716.md | — |
+| TECH-015 | GA4 ecommerce — `purchase` і `begin_checkout` не відправляються; причина: модуль вставляє снипети str_replace'ом по стокових twig, наші переписані шаблони прибрали зачіпки. Виконавець Codex (2026-09-05) | handoffs/handoff_TECH-015_ga4-purchase-begin-checkout_20260905.md | diagnostics/GA4-EM_purchase-and-funnel-audit_report_20260905.md |
 
 ---
 
