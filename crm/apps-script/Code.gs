@@ -1567,7 +1567,7 @@ if (!relevantSkus.length) { report.coverage.rrp_mismatch_3dp = coverage; return;
 const config = crm3dpConfig_();
 if (!config) { coverage.deferred = '3D-P API is not configured.'; report.coverage.rrp_mismatch_3dp = coverage; return; }
 let remote;
-try { remote = crm3dpGet_(config, { action: '3dp_skus' }); }
+try { remote = crm3dpGet_(config, { action: '3dp_skus', include_archived: true }); }
 catch (error) { coverage.deferred = '3D-P API is unavailable: ' + crmIntegritySafeRemoteCode_(error); report.coverage.rrp_mismatch_3dp = coverage; return; }
 const remoteBySku = {};
 (Array.isArray(remote.rows) ? remote.rows : []).forEach(function(row) { const sku = crmIntegrityText_(row.SKU); if (sku) remoteBySku[sku] = row; });
@@ -1691,6 +1691,7 @@ if (action === 'retry_3dp_sync') return boosterCrmJson_(apiRetry3dpOrderSync_(ss
 if (action === 'update_purchase') return boosterCrmJson_(apiUpdatePurchaseBatch10_(ss, payload));
 if (action === 'add_news_candidate') return boosterCrmJson_(apiAddNewsCandidate_(ss, payload));
 if (action === 'add_sku') return boosterCrmJson_(apiAddSku_(ss, payload));
+if (action === 'set_3dp_sku_active') return boosterCrmJson_(apiSet3dpSkuActive_(ss, payload));
 if (action === 'sync_3dp_catalog_rrp') return boosterCrmJson_(apiSync3dpCatalogRrp_(ss, payload));
 if (action === 'update_rrp_batch') return boosterCrmJson_(apiUpdateRrpBatch_(ss, payload));
 if (action === 'inventory_migration') return boosterCrmJson_(apiInventoryMigration_(ss, payload));
@@ -2082,6 +2083,40 @@ throw error;
 }
 } catch (err) {
 return { ok: false, action: 'add_sku', error: String(err && err.message ? err.message : err) };
+}
+}
+
+function apiSet3dpSkuActive_(ss, payload) {
+try {
+resetMemoForMutation_();
+const products = ss.getSheetByName('Товари');
+const rrc = ss.getSheetByName('РРЦ');
+const stock = ss.getSheetByName('Склад');
+if (!products || !rrc || !stock) throw new Error('catalog sheet missing');
+const sku = String(payload.sku || '').trim().toUpperCase();
+if (!is3dpPackagingSku_(sku)) throw new Error('set_3dp_sku_active supports only canonical 3D-P SKU');
+if (typeof payload.active !== 'boolean') throw new Error('active boolean required');
+const row = apiFindSkuRow_(products, sku, 3, crmCatalogLastWritableRow_(products, rrc, stock));
+if (!row) throw new Error('SKU not found in CRM: ' + sku);
+const range = products.getRange(row, 12);
+const current = String(range.getDisplayValue() || '').trim();
+const expected = String(payload.expected_active == null ? '' : payload.expected_active).trim();
+if (expected && current !== expected) throw new Error('STALE_WRITE: CRM active status changed; refresh and retry');
+const desired = payload.active ? 'Так' : 'Ні';
+if (current === desired) return { ok: true, action: 'set_3dp_sku_active', sku: sku, row: row, active: desired, already_applied: true, integrity_check_required: false };
+try {
+range.setValue(desired);
+SpreadsheetApp.flush();
+if (String(range.getDisplayValue() || '').trim() !== desired) throw new Error('CRM active status verification failed');
+invalidateDoGetCache_();
+return { ok: true, action: 'set_3dp_sku_active', sku: sku, row: row, previous_active: current, active: desired, already_applied: false, integrity_check_required: true };
+} catch (error) {
+range.setValue(current);
+SpreadsheetApp.flush();
+throw error;
+}
+} catch (err) {
+return { ok: false, action: 'set_3dp_sku_active', error: String(err && err.message ? err.message : err) };
 }
 }
 
@@ -2591,8 +2626,8 @@ function crm3dpFrozenSaleInputs_(config, sku, fixtureFrozen, requireBuyout) {
   const buyout = crm3dpFiniteNonNegative_(row[CRM_3DP_BUYOUT_HEADER_]);
   const profitShareRaw = row[CRM_3DP_PROFIT_SHARE_HEADER_];
   const profitShare = String(profitShareRaw == null ? '' : profitShareRaw).trim() === '' ? null : crm3dpNumber_(profitShareRaw);
-  if (productionCost === null || actualRrp === null || (requireBuyout && buyout === null)) {
-    return { ok: false, skipped: 'missing_cost_or_rrp', reason: '3D-P sync skipped: Номенклатура production cost, actual RRP, or buyout price is blank or invalid; CRM sale remains saved.' };
+  if (actualRrp === null || (requireBuyout && buyout === null)) {
+    return { ok: false, skipped: 'missing_cost_or_rrp', reason: '3D-P sync skipped: actual RRP or buyout price is blank or invalid; CRM sale remains saved.' };
   }
   if (profitShare === null || !Number.isFinite(profitShare) || profitShare < 0 || profitShare > 1) {
     return { ok: false, skipped: 'missing_profit_share', reason: '3D-P sync skipped: Serhiy profit share is blank or outside 0..1; CRM sale remains saved.' };
@@ -2978,9 +3013,42 @@ function sync3dpSalesV2_(sales, orderId, rowNumbers, source, options) {
     crm3dpLogSkip_(sales, journalSource, order, triggerRows[0], crm3dpSyncErrorOutcome_(message), message);
     return { ok: false, skipped: 'schema_or_api' };
   }
-  const result = { ok: true, order: order, created: 0, matched: 0, accounting_rows: 0, failures: [] };
+  const result = { ok: true, order: order, created: 0, matched: 0, reversed: 0, accounting_rows: 0, failures: [] };
   triggerRows.forEach(function(entry) {
     try {
+      const paymentStatus = String(entry.values[22] || '').trim();
+      const orderStatus = String(entry.values[23] || '').trim();
+      const terminalStatus = ['Скасовано', 'Повернення'].indexOf(paymentStatus) !== -1 ? paymentStatus : (['Скасовано', 'Повернення'].indexOf(orderStatus) !== -1 ? orderStatus : '');
+      if (terminalStatus) {
+        const originalOperationId = 'crm_sale:' + order + ':' + entry.row;
+        const reversalOperationId = 'crm_reverse:' + order + ':' + entry.row;
+        const latestAccounting = latest3dpAccountingByRow_(ss)[entry.row];
+        if (!latestAccounting) throw new Error('3D-P FIFO reversal blocked: CRM accounting snapshot is missing; reconcile before retrying.');
+        const reversed = crm3dpFetchJson_(config.url, { method: 'post', contentType: 'text/plain;charset=utf-8', payload: JSON.stringify({
+          action: '3dp_fifo_reverse', token: config.token, operation_id: reversalOperationId,
+          original_operation_id: originalOperationId, date: Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM-dd'),
+          reason: terminalStatus + ' у CRM; order=' + order + '; crm_row=' + entry.row,
+        }) });
+        if (crm3dpNumber_(latestAccounting.qty) > 0) {
+          const negative = Object.assign({}, latestAccounting, {
+            id: '', date: new Date(), qty: -Math.abs(crm3dpNumber_(latestAccounting.qty)),
+            net_revenue: -crm3dpNumber_(latestAccounting.net_revenue), owner_fixture: -crm3dpNumber_(latestAccounting.owner_fixture),
+            serhiy_fixture: -crm3dpNumber_(latestAccounting.serhiy_fixture), packaging: -crm3dpNumber_(latestAccounting.packaging),
+            serhiy_payout: -crm3dpNumber_(latestAccounting.serhiy_payout), mgmt_cost: -crm3dpNumber_(latestAccounting.mgmt_cost),
+            marketing: -crm3dpNumber_(latestAccounting.marketing), request_id: reversalOperationId,
+          });
+          append3dpAccountingSnapshot_(ss, negative, 'fifo_reversal=' + reversed.reversal_id + '; status=' + terminalStatus);
+          result.accounting_rows++;
+        }
+        result.reversed++;
+        crm3dpAppendJournal_(sales, journalSource, order, entry, reversed.already_applied ? 'noop' : 'reversed', '3D-P FIFO allocation reversed: ' + reversed.reversal_id + '.');
+        return;
+      }
+      const priorAccounting = latest3dpAccountingByRow_(ss)[entry.row];
+      if (priorAccounting && crm3dpNumber_(priorAccounting.qty) < 0) {
+        sales.getRange(entry.row, 24).setValue('Скасовано');
+        throw new Error('3D-P FIFO reactivation blocked: create a new sale operation for a fresh allocation.');
+      }
       const mode = crm3dpModeForEntry_(ss, entry, options || {});
       const fixture = crm3dpFixtureFrozenForLine_(sales, order, entry, triggerRows);
       const frozen = crm3dpFrozenSaleInputs_(config, String(entry.values[5] || '').trim(), fixture, true);
@@ -2990,45 +3058,31 @@ function sync3dpSalesV2_(sales, orderId, rowNumbers, source, options) {
         return;
       }
       frozen.mode = mode;
-      const found = crm3dpSaleMatches_(existingRows, order, entry.row);
-      let remote = found[0] || null;
-      const wasCreated = !remote;
-      let detail = '';
-      if (!remote) {
-        const appended = crm3dpFetchJson_(config.url, { method: 'post', contentType: 'text/plain;charset=utf-8', payload: JSON.stringify({
-          action: '3dp_append_row', token: config.token, sheet: CRM_3DP_SALES_SHEET_, values: crm3dpSaleAppendValues_(entry, order, frozen, mode),
-        }) });
-        remote = { row_number: appended.row };
-        remote[CRM_3DP_ORDER_HEADER_] = order;
-        remote[CRM_3DP_CRM_ROW_HEADER_] = entry.row;
-        remote[CRM_3DP_EXPENSE_HEADER_] = 0;
-        existingRows.push(remote);
-        result.created++;
-        detail = '3D-P row created.';
-      } else {
-        result.matched++;
-        const frozenWrite = crm3dpWriteFrozenForExistingSale_(config, remote, frozen);
-        detail = frozenWrite.detail;
-        if (!frozenWrite.ok) throw new Error('Frozen values incomplete: ' + frozenWrite.detail);
-      }
       const entryQuantity = crm3dpNumber_(entry.values[7]);
       const desiredPackaging = crm3dpRound2_(entryQuantity > 0 ? crm3dpNumber_(entry.values[15]) / entryQuantity : 0);
-      const currentPackaging = remote[CRM_3DP_EXPENSE_HEADER_] == null ? 0 : remote[CRM_3DP_EXPENSE_HEADER_];
-      if (Math.abs(crm3dpNumber_(currentPackaging) - desiredPackaging) >= 0.005) {
-        crm3dpFetchJson_(config.url, { method: 'post', contentType: 'text/plain;charset=utf-8', payload: JSON.stringify({
-          action: '3dp_write', token: config.token, sheet: CRM_3DP_SALES_SHEET_, sku_or_row: remote.row_number,
-          column: 'G', value: desiredPackaging, expected_current: currentPackaging,
-        }) });
-        remote[CRM_3DP_EXPENSE_HEADER_] = desiredPackaging;
-        detail += ' G updated.';
-      }
-      const adjustment = crm3dpEnsureStock_(config, sales, journalSource, order, entry);
+      const linePrice = crm3dpNumber_(entry.values[8]);
+      const lineDiscount = crm3dpNumber_(entry.values[9]);
+      const operationId = 'crm_sale:' + order + ':' + entry.row;
+      const committed = crm3dpFetchJson_(config.url, { method: 'post', contentType: 'text/plain;charset=utf-8', payload: JSON.stringify({
+        action: '3dp_crm_sale_commit', token: config.token, operation_id: operationId,
+        order: order, crm_row: entry.row, sku: String(entry.values[5] || '').trim(), quantity: entryQuantity,
+        sale_date: crm3dpDate_(entry.values[2]), sale_unit_price: crm3dpRound2_(entryQuantity ? linePrice - lineDiscount / entryQuantity : linePrice),
+        packaging_unit: desiredPackaging, profit_share: frozen.profit_share, actual_rrp: frozen.actual_rrp,
+        fixture_cost: frozen.fixture_cost, fixture_payer: frozen.fixture_payer,
+        owner_fixture_per_unit: frozen.owner_fixture_per_unit, serhiy_fixture_per_unit: frozen.serhiy_fixture_per_unit,
+        buyout: frozen.buyout, mode: mode, channel: String(entry.values[1] || '').trim(),
+      }) });
+      frozen.production_cost = crm3dpNumber_(committed.unit_cost_uah);
+      if (!(frozen.production_cost >= 0) || !committed.allocation_id) throw new Error('3D-P FIFO commit did not return a frozen cost/allocation.');
+      const wasCreated = !committed.already_applied;
+      if (wasCreated) result.created++; else result.matched++;
+      const detail = (wasCreated ? '3D-P FIFO sale committed.' : '3D-P FIFO sale replayed.') + ' allocation=' + committed.allocation_id + '.';
       const snapshot = crm3dpAccountingSnapshot_(entry, order, frozen, fixture, mode, options && options.request_id);
       const saved = append3dpAccountingSnapshot_(ss, snapshot, 'source=' + journalSource);
       project3dpAccountingToCrm_(ss, saved);
       result.accounting_rows++;
-      const outcome = adjustment.journal_outcome || (wasCreated ? 'created' : (detail ? 'updated' : 'noop'));
-      crm3dpAppendJournal_(sales, journalSource, order, entry, outcome, [detail, adjustment.journal_detail].filter(Boolean).join(' '));
+      const outcome = wasCreated ? 'created' : 'noop';
+      crm3dpAppendJournal_(sales, journalSource, order, entry, outcome, detail);
     } catch (error) {
       result.ok = false;
       const message = String(error && error.message ? error.message : error);
@@ -8663,7 +8717,7 @@ function apiOrderComponentCatalog_() {
         const qty = num_(availability[CRM_3DP_STOCK_HEADER_]);
         if (!sku || !is3dpPackagingSku_(sku) || qty <= 0 || String(row.API_статус_запису || '').trim() !== 'Активний') return;
         const buyout = round2_(num_(row[CRM_3DP_BUYOUT_HEADER_]));
-        components.push({ id: '3dp:' + sku, kind: '3D-P', code: sku, name: String(row['Назва виробу'] || sku), stock: round2_(qty), prro_unit: 0, mgmt_unit: buyout });
+        components.push({ id: '3dp:' + sku, kind: '3D-P', code: sku, name: String(row['Назва виробу'] || sku), stock: round2_(qty), prro_unit: 0, mgmt_unit: buyout, mystery_eligible: crm3dpMysteryEligibleRow_(row) });
       });
     } catch (error) {
       threeDpError = '3D-P каталог тимчасово недоступний: ' + crmIntegritySafeRemoteCode_(error);
@@ -8688,6 +8742,10 @@ function apiOrderComponentCatalog_() {
   components.sort(function(a, b) { return String(a.kind + a.name).localeCompare(String(b.kind + b.name), 'uk'); });
   fixtures.sort(function(a, b) { return String(a.name).localeCompare(String(b.name), 'uk'); });
   return { ok: true, components: components, fixtures: fixtures, three_dp_error: threeDpError };
+}
+
+function crm3dpMysteryEligibleRow_(row) {
+  return /(?:^|;\s*)mystery=yes(?:;|$)/i.test(String(row && row['Примітки'] || '').trim());
 }
 
 // POST validation resolves only the IDs actually submitted. In particular, a
@@ -8725,7 +8783,7 @@ function apiOrderComponentCatalogForIds_(ss, ids) {
       (Array.isArray(remote.rows) ? remote.rows : []).forEach(function(row) {
         const sku = String(row.SKU || '').trim(), id = '3dp:' + sku, availability = row.availability || {}, qty = num_(availability[CRM_3DP_STOCK_HEADER_]);
         if (!requested[id] || !sku || !is3dpPackagingSku_(sku) || qty <= 0 || String(row.API_статус_запису || '').trim() !== 'Активний') return;
-        result.components.push({ id: id, kind: '3D-P', code: sku, name: String(row['Назва виробу'] || sku), stock: round2_(qty), prro_unit: 0, mgmt_unit: round2_(num_(row[CRM_3DP_BUYOUT_HEADER_])) });
+        result.components.push({ id: id, kind: '3D-P', code: sku, name: String(row['Назва виробу'] || sku), stock: round2_(qty), prro_unit: 0, mgmt_unit: round2_(num_(row[CRM_3DP_BUYOUT_HEADER_])), mystery_eligible: crm3dpMysteryEligibleRow_(row) });
       });
     } catch (error) {
       return { ok: false, error: '3D-P компонент не перевірено: ' + crmIntegritySafeRemoteCode_(error), components: [] };
@@ -8751,7 +8809,7 @@ function buildOrderComponentPlan_(ss, rawItems) {
     if (qty <= 0) return { ok: false, error: 'Кількість компонента має бути більшою за нуль: ' + catalogItem.name + '.', entries: [] };
     requested[id] = round2_((requested[id] || 0) + qty);
     if (requested[id] > catalogItem.stock + 0.000001) return { ok: false, error: 'Недостатньо на складі: ' + catalogItem.name + ' — запит ' + requested[id] + ', залишок ' + catalogItem.stock + '.', entries: [] };
-    entries.push({ kind: catalogItem.kind, code: catalogItem.code, name: catalogItem.name, qty: qty, prroUnit: catalogItem.prro_unit, mgmtUnit: catalogItem.mgmt_unit,
+    entries.push({ kind: catalogItem.kind, code: catalogItem.code, name: catalogItem.name, qty: qty, prroUnit: catalogItem.prro_unit, mgmtUnit: catalogItem.mgmt_unit, mysteryEligible: catalogItem.mystery_eligible === true,
       note: String(items[index].note || '').trim(), targetRow: Math.floor(num_(items[index].target_row)), targetSku: String(items[index].target_sku || '').trim() });
   }
   return { ok: true, entries: entries, prro_total: round2_(entries.reduce(function(sum, item) { return sum + item.qty * item.prroUnit; }, 0)), mgmt_total: round2_(entries.reduce(function(sum, item) { return sum + item.qty * item.mgmtUnit; }, 0)) };
@@ -9464,6 +9522,9 @@ function apiUpdateSaleWithComponents_(ss, payload) {
       if (!item.targetRow && !item.targetSku) return;
       const target = matches.filter(function(match) { return match.row === item.targetRow; })[0];
       if (!item.targetRow || !item.targetSku || !target || String(target.values[5] || '').trim() !== item.targetSku) throw new Error('Ціль компонента має бути або порожня для всього замовлення, або точний рядок замовлення.');
+      if (item.kind === '3D-P' && isMysteryBoxSale_(target.values[5], target.values[6]) && !item.mysteryEligible) {
+        throw new Error('Цей 3D-виріб не дозволений як наповнення містері-бокса: ' + item.code + '.');
+      }
     });
     const hasTargetedMysteryComponents = componentPlan.entries.some(function(item) {
       const target = matches.filter(function(match) { return match.row === item.targetRow; })[0];

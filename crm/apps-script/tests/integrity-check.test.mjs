@@ -129,18 +129,20 @@ function makeEnvironment({ productCount = 1, rrcEnabled = true, brokenRrcRows = 
   const crm = new MockSpreadsheet([products, rrc, consumables, settings]);
   const automation = new MockSpreadsheet([master]);
   const remoteProperties = remoteMode === 'none' ? {} : { BOOSTER_3DP_URL: 'https://3dp.example/exec', BOOSTER_3DP_SYNC_TOKEN: 'test-token' };
+  let remoteRequestUrl = '';
   const context = vm.createContext({
     JSON, Math, Number, String, Boolean, Array, Object, RegExp, Date, Error, isFinite,
     Logger: { log() {} }, Session: { getScriptTimeZone: () => "Europe/Kyiv" },
     Utilities: { formatDate: () => "2026-08-09 12:00:00" },
     PropertiesService: { getScriptProperties: () => ({ getProperty: (key) => remoteProperties[key] || "" }) },
-    UrlFetchApp: { fetch() { if (remoteMode === 'deferred') throw new Error('REMOTE_DOWN'); return { getResponseCode: () => 200, getContentText: () => JSON.stringify({ ok: true, rows: remoteMode === 'mismatch' ? [{ SKU: 'ACC-3D-TEST-001', 'РРЦ фактична, грн': 90 }] : [] }) }; } },
+    UrlFetchApp: { fetch(url) { remoteRequestUrl = String(url); if (remoteMode === 'deferred') throw new Error('REMOTE_DOWN'); return { getResponseCode: () => 200, getContentText: () => JSON.stringify({ ok: true, rows: remoteMode === 'mismatch' ? [{ SKU: 'ACC-3D-TEST-001', 'РРЦ фактична, грн': 90 }] : [] }) }; } },
     SpreadsheetApp: { DataValidationCriteria: { VALUE_IN_RANGE: "VALUE_IN_RANGE" }, openById: (id) => id === "1PvlSlg3UoPw8Fbj98lHL-VGLB0HP8hgKUxsXPW1GkRg" ? crm : automation },
     ContentService: { MimeType: { JSON: "JSON" }, createTextOutput: (text) => ({ text, setMimeType() { return this; } }) },
   });
   vm.runInContext(`${code}\nglobalThis.__test = { apiIntegrityCheck_ };`, context, { filename: "Code.gs" });
   const check = context.__test.apiIntegrityCheck_;
   check.catalogValidationCriteriaReads = () => catalogValidationCriteriaReads;
+  check.remoteRequestUrl = () => remoteRequestUrl;
   return check;
 }
 
@@ -213,9 +215,11 @@ assertOnlyProblem(makeEnvironment({ catalogOptionDuplicate: true })(), 'catalog_
 }
 
 {
-  const result = makeEnvironment({ remoteMode: 'mismatch' })();
+  const check = makeEnvironment({ remoteMode: 'mismatch' });
+  const result = check();
   assertOnlyProblem(result, 'rrp_mismatch_3dp');
   assert.equal(result.coverage.rrp_mismatch_3dp.compared, 1);
+  assert.match(check.remoteRequestUrl(), /[?&]include_archived=true(?:&|$)/, '3D-P RRP integrity must include inactive catalogue rows');
 }
 
 {

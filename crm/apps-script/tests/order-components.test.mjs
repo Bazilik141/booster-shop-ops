@@ -67,13 +67,14 @@ assert.equal(catalog.components.some(item=>item.code==="BR-CHARM-001"),false,"st
 scriptProperties.BOOSTER_3DP_URL="https://example.test/exec";
 scriptProperties.BOOSTER_3DP_SYNC_TOKEN="test-token";
 const originalGet=context.crm3dpGet_;
-context.crm3dpGet_=()=>({rows:[{SKU:"BR-CHARM-001","Назва виробу":"Брелок Чармандер","Ціна під викуп, грн":20,API_статус_запису:"Активний",availability:{"Наявно зараз, шт":36}}]});
+context.crm3dpGet_=()=>({rows:[{SKU:"BR-CHARM-001","Назва виробу":"Брелок Чармандер","Ціна під викуп, грн":20,"Примітки":"source=test; mystery=no",API_статус_запису:"Активний",availability:{"Наявно зараз, шт":36}}]});
 const remoteCatalog=context.__test.apiOrderComponentCatalog_();
 const remote3d=remoteCatalog.components.find(item=>item.id==="3dp:BR-CHARM-001");
 assert.equal(remote3d.kind,"3D-P");
 assert.equal(remote3d.name,"Брелок Чармандер");
 assert.equal(remote3d.stock,36);
 assert.equal(remote3d.mgmt_unit,20);
+assert.equal(remote3d.mystery_eligible,false);
 context.crm3dpGet_=originalGet;
 delete scriptProperties.BOOSTER_3DP_URL;delete scriptProperties.BOOSTER_3DP_SYNC_TOKEN;
 let targetedRemoteCalls=0;
@@ -86,6 +87,7 @@ context.crm3dpGet_=originalGet;
 assert.match(code,/kind: '3D-P'/,"component catalog has a direct 3D-P source-truth path");
 assert.match(code,/append3dpOrderGifts_\(componentPlan, current\[2\], order, requestId\)/,"3D gifts are written remotely before the local component ledger");
 assert.match(code,/action: '3dp_order_gifts_append'/,"CRM uses the idempotent specialized 3D gift action");
+assert.match(code,/Цей 3D-виріб не дозволений як наповнення містері-бокса/,"a non-eligible 3D item is blocked when targeted to a mystery-box line");
 assert.match(code,/retry_action: changed \? 'resubmit_order_update'/,"a partial writer failure resumes the stable order update instead of offering a sync-only retry");
 
 const plan=context.__test.buildOrderComponentPlan_(crm,[{id:"sku:PKM-TEST",qty:2},{id:"consumable:Пакет",qty:1}]);

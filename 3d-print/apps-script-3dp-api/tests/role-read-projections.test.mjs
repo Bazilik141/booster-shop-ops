@@ -6,9 +6,16 @@ import { fileURLToPath } from "node:url";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const code = fs.readFileSync(path.resolve(here, "../Code.gs"), "utf8");
+const fifoCode = fs.readFileSync(path.resolve(here, "../CatalogFifo.gs"), "utf8");
+const deployedCode = code + "\n" + fifoCode;
 const repositoryRoot = path.resolve(here, "../../..");
 
 function resolveWp1ReadBaselinePath() {
+  const explicit = String(process.env.THREE_DP_WP1_BASELINE || "").trim();
+  if (explicit) {
+    assert.ok(fs.existsSync(explicit), `THREE_DP_WP1_BASELINE does not exist: ${explicit}`);
+    return explicit;
+  }
   const matches = fs.readdirSync(repositoryRoot, { withFileTypes: true })
     .filter((entry) => entry.isFile() && /^Версія (?:29|25|23).*\.txt$/u.test(entry.name))
     .sort((left, right) => Number(/^Версія (\d+)/u.exec(right.name)?.[1] || 0) - Number(/^Версія (\d+)/u.exec(left.name)?.[1] || 0))
@@ -176,6 +183,7 @@ function makeSpreadsheet() {
     "Маркетингові_плюшки": new Sheet("Маркетингові_плюшки", [["Дата", "SKU", "Закуплено в Друга, шт", "Ціна закупівлі за од., грн", "Сума закупівлі, грн", "Видано як бонус, шт", "До замовлення №", "Примітки"], ["2026-08-16", "FIG-001", 0, 0, 0, 1, "ORDER-SECRET", "customer secret"]]),
     "Наявність": new Sheet("Наявність", [["SKU", "Назва", "Надруковано всього, шт", "Брак всього, шт", "Продано на сайті, шт", "Видано як плюшка, шт", "Наявно зараз, шт"], ["FIG-001", "Тестовий виріб", 3, 1, 2, 0, 0]]),
     "Аналітика": new Sheet("Аналітика", [["Маржа-калькулятор"], [], ["SKU", "Назва", "Собівартість Сергія, грн", "Витрати BoosterShop (фурнітура), грн", "Час друку, год", "% прибутку Сергію", "РРЦ фактична", "РРЦ рекомендована", "Маржа BoosterShop, грн", "Маржа BoosterShop, %", "Нараховано Сергію, грн", "Прибуток Сергію/год друку, грн"], ["FIG-001", "Тестовий виріб", 50, 10, 1.5, 0.5, 350, 400, 80, 0.23, 200, 133.33]]),
+    "Аналітика_SKU": new Sheet("Аналітика_SKU", [["SKU", "Назва", "Собівартість Сергія, грн", "Витрати BoosterShop (фурнітура), грн", "Час друку, год", "% прибутку Сергію", "РРЦ фактична", "РРЦ рекомендована", "Маржа BoosterShop, грн", "Маржа BoosterShop, %", "Нараховано Сергію, грн", "Прибуток Сергію/год друку, грн", "", ""], ["FIG-001", "Тестовий виріб", 50, 10, 1.5, 0.5, 350, 400, 80, 0.23, 200, 133.33]]),
     "Налаштування": new Sheet("Налаштування", [["Глобальні константи 3D-друку", "", ""], ["Потужність принтера, кВт", 0.11, "кВт"], ["Ціна електроенергії, грн/кВт·год", 4.32, "грн/кВт·год"], ["Амортизація принтера, грн/год", 12, "грн/год"], ["Планований брак, частка", 0.08, "частка"]]),
     "Фурнітура_довідник": new Sheet("Фурнітура_довідник", [["Назва фурнітури", "Ціна, грн/шт"], ["Кільце", 5]]),
     "_Чернетки_партій": new Sheet("_Чернетки_партій", [["SKU", "Кількість у партії, шт", "Сумарна вага партії, г", "Сумарний час партії, год", "Вага котушки, г", "Ціна котушки, грн"], ["FIG-001", 2, 20, 3, 1000, 600]]),
@@ -183,17 +191,20 @@ function makeSpreadsheet() {
     "_Аудит_API": new Sheet("_Аудит_API", [["timestamp_kyiv", "identity", "operation", "sheet", "target", "old_value", "new_value", "details"]]),
   });
   workbook.getSheetByName("Наявність").setFormulaAt(2, 1, "='Номенклатура'!A2");
-  workbook.getSheetByName("Аналітика").setFormulaAt(4, 1, "='Номенклатура'!A2");
+  workbook.getSheetByName("Аналітика_SKU").setFormulaAt(2, 1, "='Номенклатура'!A2");
   return workbook;
 }
 
-function loadApi(source = code, workbook = makeSpreadsheet()) {
+function loadApi(source = deployedCode, workbook = makeSpreadsheet()) {
   let uuidCounter = 0;
   const context = {
     console,
     Utilities: {
       formatDate: () => "2026-08-16 12:00:00",
       getUuid: () => `00000000-0000-4000-8000-${String(++uuidCounter).padStart(12, "0")}`,
+      DigestAlgorithm: { SHA_256: "SHA_256" },
+      Charset: { UTF_8: "UTF_8" },
+      computeDigest: (_algorithm, value) => Array.from(Buffer.from(String(value), "utf8")).slice(0, 32),
     },
     SpreadsheetApp: { getActiveSpreadsheet: () => workbook, flush() {} },
     PropertiesService: { getScriptProperties: () => ({ getProperty: () => "" }) },
@@ -227,12 +238,12 @@ repairNomenclature.setValueAt(3, 15, "Активний");
 const initialRepair = plain(repairApi.context.repair3dpActiveNomenclatureAnalytics());
 assert.equal(initialRepair.initialized_skus.includes("BR-BULB-100"), true,
   "the public repair initializes an already-active SKU missing from Analytics");
-assert.equal(repairApi.workbook.getSheetByName("Аналітика").getRange(5, 6).getValue(), 0.5,
+assert.equal(repairApi.workbook.getSheetByName("Аналітика_SKU").getRange(3, 6).getValue(), 0.5,
   "the public repair applies the approved 50% share to that existing SKU");
 assert.equal(call(repairApi, "3dp_get_row", owner, { sheet: "Номенклатура", sku: "BR-BULB-100" }).row["% прибутку Сергію"], 0.5,
   "the repaired active SKU no longer throws a missing-profit-share error");
 const ownerCreateRollbackApi = loadApi();
-ownerCreateRollbackApi.workbook.getSheetByName("Аналітика").setValueAt(3, 1, "unexpected analytics header");
+ownerCreateRollbackApi.workbook.getSheetByName("Аналітика_SKU").setValueAt(1, 1, "unexpected analytics header");
 codeOf(() => ownerCreateRollbackApi.context.createNomenclatureOwnerAction3dp_(ownerCreateRollbackApi.workbook, {
   sku: "BR-ROLL-100", values: { B: "Rollback test", D: "Брелок", Q: 200 },
 }, owner), "ANALYTICS_SCHEMA_NOT_READY");
@@ -243,7 +254,7 @@ assert.equal(ownerCreateRollbackApi.workbook.getSheetByName("Номенклат�
 const ownerReadCases = [
   ["3dp_get_row", { sheet: "Номенклатура", sku: "FIG-001" }],
   ["3dp_get_range", { sheet: "Продажі", range: "A1:AA2" }],
-  ["3dp_overview", {}], ["3dp_bootstrap", {}], ["3dp_information_bootstrap", {}],
+  ["3dp_overview", {}], ["3dp_information_bootstrap", {}],
   ["3dp_skus", {}], ["3dp_sales", {}], ["3dp_plyushky", {}], ["3dp_payouts", {}],
   ["3dp_print_log", {}], ["3dp_fixtures", {}], ["3dp_batch_draft", { sku: "FIG-001" }],
   ["3dp_stock_adjustments", {}],
@@ -259,7 +270,7 @@ const ownerSales = call(api, "3dp_sales", owner);
 assert.deepEqual(ownerSales.rows[0], Object.fromEntries([["row_number", 2], ...salesHeaders.map((header, index) => [header, salesRow[index]])]));
 assert.equal(ownerSales.rows[0]["№ замовлення"], "ORDER-SECRET");
 assert.equal(call(api, "3dp_get_range", owner, { sheet: "Налаштування", range: "A1:C5" }).range, "A1:C5");
-assert.equal(call(api, "3dp_bootstrap", owner).analytics.range, "A3:N17");
+assert.equal(call(api, "3dp_bootstrap", owner).analytics.range, "A1:N2");
 assert.equal(call(api, "3dp_information_bootstrap", owner).sales.rows[0]["CRM row number"], 321);
 assert.equal(call(api, "3dp_skus", owner).rows[0].availability["Наявно зараз, шт"], 0);
 assert.equal(call(api, "3dp_print_log", owner).rows[0]["API_історія_змін"], "history");
@@ -299,7 +310,7 @@ assert.equal(call(api, "3dp_get_range", serhiy, { sheet: "Продажі", range
 assert.equal(call(api, "3dp_get_range", serhiy, { sheet: "Маркетингові_плюшки", range: "A1:F2" }).values[1][4], 0);
 codeOf(() => call(api, "3dp_get_range", serhiy, { sheet: "Маркетингові_плюшки", range: "G1:G2" }), "RANGE_NOT_PROJECTED");
 codeOf(() => call(api, "3dp_get_range", serhiy, { sheet: "Маркетингові_плюшки", range: "H1:H2" }), "RANGE_NOT_PROJECTED");
-codeOf(() => call(api, "3dp_get_range", serhiy, { sheet: "Аналітика", range: "H3:H4" }), "RANGE_NOT_PROJECTED");
+codeOf(() => call(api, "3dp_get_range", serhiy, { sheet: "Аналітика_SKU", range: "H1:H2" }), "RANGE_NOT_PROJECTED");
 codeOf(() => call(api, "3dp_get_range", serhiy, { sheet: "Налаштування", range: "A1:B5" }), "RANGE_NOT_PROJECTED");
 codeOf(() => call(api, "3dp_stock_adjustments", serhiy), "STOCK_ADJUSTMENT_SCHEMA_NOT_READY");
 
@@ -549,7 +560,7 @@ codeOf(() => archivedStatusApi.context.assignNomenclatureSkuAction3dp_(archivedS
   { sheet: "_Чернетки_партій", row: 3, column: 1, value: "serhiy::" + draft.sku },
   { sheet: "_Коригування_наявності", row: 3, column: 1, value: draft.sku },
   { sheet: "Маркетингові_плюшки", row: 3, column: 2, value: draft.sku },
-  { sheet: "Аналітика", row: 17, column: 1, value: draft.sku },
+  { sheet: "Аналітика_SKU", row: 17, column: 1, value: draft.sku },
   { sheet: "Наявність", row: 3, column: 1, value: draft.sku },
 ].forEach((blocker) => {
   const blockerSheet = api.workbook.getSheetByName(blocker.sheet);
@@ -569,8 +580,8 @@ assert.deepEqual(assigned, {
   sku_suggestion: { prefix: "BR", category_digits: "100", category_label: "Звичайний брелок-підвіска" },
 });
 assert.equal(api.workbook.getSheetByName("Номенклатура").getRange(draft.row, 1).getDisplayValue(), "BR-NEWD-100");
-const analytics = api.workbook.getSheetByName("Аналітика");
-const analyticsRow = Array.from({ length: 14 }, (_, index) => index + 4).find((row) =>
+const analytics = api.workbook.getSheetByName("Аналітика_SKU");
+const analyticsRow = Array.from({ length: 99 }, (_, index) => index + 2).find((row) =>
   analytics.getRange(row, 1).getFormula() === `='Номенклатура'!A${draft.row}`);
 assert.ok(analyticsRow, "canonical assignment must create an Analytics formula row");
 assert.equal(analytics.getRange(analyticsRow, 6).getValue(), 0.5, "a newly active SKU receives the approved 50% default");
@@ -592,7 +603,7 @@ assert.equal(renamed.status, "Активний");
 assert.equal(renameApi.workbook.getSheetByName("Номенклатура").getRange(2, 15).getDisplayValue(), "Активний");
 assert.match(renameApi.workbook.getSheetByName("Номенклатура").getRange(2, 16).getDisplayValue(), /Артикул змінено: FIG-001 → FIG-RENAM-200/);
 assert.doesNotMatch(renameApi.workbook.getSheetByName("Номенклатура").getRange(2, 16).getDisplayValue(), /статус: Активний →/);
-assert.equal(renameApi.workbook.getSheetByName("Аналітика").getRange(4, 1).getDisplayValue(), "FIG-RENAM-200",
+assert.equal(renameApi.workbook.getSheetByName("Аналітика_SKU").getRange(2, 1).getDisplayValue(), "FIG-RENAM-200",
   "the Analytics formula row follows the renamed article");
 assert.equal(renameApi.workbook.getSheetByName("Наявність").getRange(2, 1).getDisplayValue(), "FIG-RENAM-200",
   "the Availability formula mirror follows the renamed article");
@@ -613,17 +624,17 @@ assert.equal(auditRollbackApi.workbook.getSheetByName("Номенклатура"
 assert.equal(auditRollbackApi.workbook.getSheetByName("Номенклатура").getRange(2, 15).getDisplayValue(), "Активний");
 assert.equal(auditRollbackApi.workbook.getSheetByName("Номенклатура").getRange(2, 16).getDisplayValue(), "owner history");
 
-analytics.getRange(4, 6).setValue(0.4);
+analytics.getRange(analyticsRow, 6).setValue(0.4);
 plain(api.context.syncActiveNomenclatureAnalytics3dp_(api.workbook));
-assert.equal(analytics.getRange(4, 6).getValue(), 0.4, "an explicit owner profit share survives a later sync");
+assert.equal(analytics.getRange(analyticsRow, 6).getValue(), 0.4, "an explicit owner profit share survives a later sync");
 const duplicateDraft = plain(api.context.createNomenclatureDraftAction3dp_(api.workbook, { values: draftValues }, serhiy));
 const repair = plain(api.context.repair3dpActiveNomenclatureAnalytics());
 assert.equal(repair.already_applied, true, "the public repair is idempotent after assignment synchronization");
-assert.equal(Array.from({ length: 14 }, (_, index) => index + 4).some((row) =>
+assert.equal(Array.from({ length: 99 }, (_, index) => index + 2).some((row) =>
   analytics.getRange(row, 1).getFormula() === `='Номенклатура'!A${duplicateDraft.row}`), false,
   "a remaining draft must not consume an Analytics calculator row");
 const blockedDraft = plain(api.context.createNomenclatureDraftAction3dp_(api.workbook, { values: draftValues }, serhiy));
-analytics.getRange(3, 1).setValue("unexpected analytics header");
+analytics.getRange(1, 1).setValue("unexpected analytics header");
 codeOf(() => api.context.assignNomenclatureSkuAction3dp_(api.workbook, {
   draft_sku: blockedDraft.sku, sku: "BR-BLOCK-102",
 }, owner), "ANALYTICS_SCHEMA_NOT_READY");
@@ -631,7 +642,7 @@ assert.equal(api.workbook.getSheetByName("Номенклатура").getRange(bl
   "an analytics schema failure rolls the canonical SKU assignment back to the draft key");
 assert.equal(api.workbook.getSheetByName("Номенклатура").getRange(blockedDraft.row, 15).getDisplayValue(), "Чернетка",
   "an analytics schema failure does not activate the draft");
-analytics.getRange(3, 1).setValue("SKU");
+analytics.getRange(1, 1).setValue("SKU");
 codeOf(() => api.context.assignNomenclatureSkuAction3dp_(api.workbook, {
   draft_sku: duplicateDraft.sku, sku: "BR-NEWD-100",
 }, owner), "SKU_DUPLICATE");

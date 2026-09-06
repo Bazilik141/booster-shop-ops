@@ -22,7 +22,7 @@ assert.match(code, /blocking_locations/,
   "article editing checks every stored SKU-key location");
 assert.match(code, /actorPrefixed: true/,
   "actor-prefixed batch-draft keys participate in the history guard");
-assert.match(code, /headerRow: 3, storedOnly: true/,
+assert.match(code, /headerRow: 1, storedOnly: true/,
   "manual Analytics keys block editing while formula mirrors can follow the row");
 
 [

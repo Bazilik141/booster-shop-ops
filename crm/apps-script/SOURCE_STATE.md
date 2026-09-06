@@ -1,5 +1,60 @@
 # Main CRM Apps Script — repository mirror state
 
+## Deployed 3D catalogue/FIFO and integrity source — V166 (2026-09-06)
+
+The V164 export below remains the last byte-verified owner-supplied source
+identity. The owner copied the current repository `Code.gs` into the bound CRM
+project, ran the read-only `keepWarm` compile/access smoke successfully, and
+published `CRM Auto V166 — 3D-P FIFO reversal integration` at 20:47 Kyiv. The source uses the 3D-P
+atomic FIFO sale commit, freezes returned manufactured-batch cost, coordinates
+3D SKU activity with the 3D-P workbook, and enforces the reviewed Mystery Box
+eligibility marker. The owner
+completed the guarded catalogue data writes on 2026-09-06. The first CRM
+integrity result classified only 68/72 rows because the active-only `3dp_skus`
+request omitted four priced inactive products. After the owner saved
+`include_archived=true` in the bound editor, the 14:46–14:47 repeat returned
+`clean=true`, `problems=[]`, `compared=66`, `skipped_missing_crm_rrp=6`,
+`deferred=null`, and `elapsed_ms=13238`, accounting for all 72 rows. This is
+bound-source runtime evidence. The owner removed the three temporary CRM
+migration files and published `CRM Auto V165 — full 3D-P integrity coverage` on
+2026-09-06 at 17:38 Kyiv. V165 is owner-reported publication of the narrow
+integrity change relative to the verified V164 baseline; no fresh post-V165
+source export or byte comparison has been supplied. A dashboard-triggered
+post-publication check returned `clean=true`, `problems=[]`, `compared=66`,
+`skipped_missing_crm_rrp=6`, `deferred=null`, and `elapsed_ms=12653`. This closes
+the V165 endpoint integrity gate with all 72 catalogue rows accounted for.
+
+After V166 publication, the dashboard integrity check again returned
+`clean=true`, `problems=[]`, `compared=66`, `skipped_missing_crm_rrp=6`,
+`deferred=null`, and `elapsed_ms=12858`. A bound CRM remote smoke then called the
+deployed 3D-P V32 `3dp_fifo_reconcile` action through the saved production URL
+and token and received `ok=true`, `clean=true`, zero problems, zero batches and
+zero allocations. This proves the deployed cross-app read route; the first real
+manufacture/sale/reversal cycle remains operational QA.
+
+## Current source identity — verified 2026-09-04
+
+The owner-supplied `Версія 164, 4 вер. 2026 р., 0840.csv` export is identical to
+`Code.gs` after UTF-8 BOM and line-ending normalization (9,616 lines; SHA-256
+`2cc7bb7fcfd6c69bfff20d41378e11e33643871a4f5390483eefb3f9f9361344`). It also
+matches commit `55e93766659aeb1b422e9c871bcd20157b058f55` for the CRM source file.
+A redacted credential-literal scan found one expected placeholder/configuration
+object and no embedded credential value. Live bounded Sheet reads confirm the
+new formula coverage through current grid rows (Продажі 752, Закупки 309,
+Списання 636, Витрати 218, Товари/Склад 220) and the dashboard stock cards use
+the expanded bounds. This proves source identity plus those live formula cells;
+it does not independently prove the current Web App deployment number or replace
+the required live `integrity_check` before a catalogue mutation.
+
+## Superseded source identity — verified 2026-09-02
+
+The owner's fresh `Версія 160, 1 вер. 2026 р., 2150.csv` export is identical to
+`Code.gs` after UTF-8 BOM removal and CRLF/LF normalization (9,406 lines;
+SHA-256 `c730785c2b54b2a9c6284a333f52de039265e67d26d88b1b16b3eae54d6adab9`).
+This closes the source-byte identity uncertainty in the older notes below.
+No code was changed or published during this verification. Live behavior and
+the current published deployment are separate checks.
+
 **This folder is a MIRROR of the live bound Apps Script project of the main Booster CRM
 spreadsheet. It is evidence, not a deployment target.** Editing `Code.gs` here changes nothing on
 the live system. Deployment is always: owner pastes into the live script editor and publishes a

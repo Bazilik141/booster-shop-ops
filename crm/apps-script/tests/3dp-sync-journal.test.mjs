@@ -175,7 +175,7 @@ assert.doesNotMatch(fs.readFileSync(path.resolve(here, "../../../3d-print/apps-s
 {
   const env = makeEnvironment({ catalogRows: [
     { SKU: "FIG-DRAFT-100", "Назва виробу": "Чернетка", "API_статус_запису": "Чернетка", availability: { "Наявно зараз, шт": 7 } },
-    { SKU: "FIG-ACTIVE-100", "Назва виробу": "Активний", "API_статус_запису": "Активний", availability: { "Наявно зараз, шт": 5 } },
+    { SKU: "FIG-ACTIVE-100", "Назва виробу": "Активний", "API_статус_запису": "Активний", "Примітки": "source=test; mystery=yes; can_print=Так", availability: { "Наявно зараз, шт": 5 } },
   ] });
   env.spreadsheet.insertSheet("Склад");
   env.spreadsheet.insertSheet("Розхідники");
@@ -183,6 +183,7 @@ assert.doesNotMatch(fs.readFileSync(path.resolve(here, "../../../3d-print/apps-s
   assert.equal(catalog.ok, true);
   assert.equal(catalog.components.some((item) => item.code === "FIG-DRAFT-100"), false, "draft 3D SKU must not enter the CRM component catalog");
   assert.equal(catalog.components.some((item) => item.code === "FIG-ACTIVE-100"), true, "active 3D SKU remains available to CRM");
+  assert.equal(catalog.components.find((item) => item.code === "FIG-ACTIVE-100").mystery_eligible, true, "mystery eligibility is projected from the reviewed catalogue marker");
 }
 
 {

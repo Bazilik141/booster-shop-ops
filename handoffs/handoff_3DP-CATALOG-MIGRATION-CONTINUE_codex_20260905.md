@@ -31,11 +31,11 @@ The later read-only `catalogMigrationCrmPostApplyCheckV2` proved the actual CRM 
 - exact RRP notes: true;
 - related cleanup complete: true;
 - only expected temporary 3D-P RRP drift: true;
-- 72 products: 59 active, 13 inactive.
+- Historical post-check before the canonical correction: 72 products, 59 active and 13 inactive. This split was superseded by the owner-approved canonical mapping below.
 
-The CRM currently contains the proposed migration articles and mostly draft-oriented names. Treat them as data to correct after the canonical audit, not as canonical truth.
+At that checkpoint the CRM contained the proposed migration articles and mostly draft-oriented names. The later owner-run canonical correction replaced this historical state.
 
-Current CRM target articles:
+Historical pre-correction CRM target articles:
 
 ```text
 ACC-3D-CHARZ-800
@@ -132,6 +132,12 @@ The owner explicitly chose to discard `OC-FOP-0339`. Its components, linked writ
 
 ### CRM backups and recovery history
 
+The backup created immediately before the successful canonical CRM correction on 2026-09-06 is:
+
+`1Oa3lCzTIRV7MB9_8RABRLz36r_JiBIcFVV77NI7bWdI`
+
+The correction changed 42 rows and produced the approved 62 active / 10 inactive state.
+
 The backup created immediately before the successful V2 CRM write is:
 
 `1TOX7qnwydHjpHmhTUP1PtCGI_7B8CdUKoDksxrFPucI`
@@ -146,9 +152,13 @@ That recovery eventually restored `Товари!A3:O220` and `РРЦ!A3:H220`, r
 
 Never run `TemporaryCrmCatalogMigration.gs` or any old recovery function again. Never automatically restore a backup after a post-check failure. Diagnose the exact difference first.
 
-### 3D-P workbook: migration has not been applied
+### 3D-P workbook: catalogue migration applied
 
-The latest owner-run `catalogMigration3dpPreview` returned `ok=true`, `state=ready`, `target_count=72`.
+The owner-run live Apply succeeded on 2026-09-06 at 13:45 Kyiv with the exact 72 target rows, 62 active, 10 inactive and 62 analytics rows. Drive backup `1xIMVkT2TAHAlnrRC16AvnApJgh2gQjRZR05eSWZqwJ4` was created before the write. A subsequent preview returned `state=already_applied`.
+
+The following preview state and fingerprints are retained as historical pre-apply evidence.
+
+The pre-apply `catalogMigration3dpPreview` returned `ok=true`, `state=ready`, `target_count=72`.
 
 Current old/test articles:
 
@@ -179,11 +189,11 @@ Pre-apply business-state fingerprints:
 
 The migration preserves `_Аудит_API`, `_Журнал_налаштувань_3DP`, and `Аналітика`.
 
-`catalogMigration3dpRehearsalV2()` exists in the local temporary wrapper and passed local syntax validation, but there is no owner-provided execution result. Do not claim it ran. Confirm that the current Apps Script editor contains the exact repository version before asking the owner to execute it.
+`catalogMigration3dpRehearsalV2()` passed in an owner-run copy rehearsal at 13:40 Kyiv before the live Apply. It proved `live_unchanged=true`, exact 72 target rows, 62 active / 10 inactive, 62 analytics rows, 72 availability keys, empty reset business areas and empty FIFO journals; the rehearsal copy was trashed.
 
-### Expected temporary CRM integrity findings
+### Historical temporary CRM integrity findings
 
-Until the 3D-P catalogue is replaced, CRM correctly reports only these six old-catalogue RRP mismatches:
+Before the 3D-P catalogue was replaced, CRM correctly reported only these six old-catalogue RRP mismatches:
 
 - `BR-CHARM-100`: CRM 30 vs 3D-P 25;
 - `BR-BULB-100`: CRM 30 vs 3D-P 25;
@@ -194,10 +204,14 @@ Until the 3D-P catalogue is replaced, CRM correctly reports only these six old-c
 
 Coverage was `compared=7`, `skipped_missing_crm_rrp=6`, `deferred=null`. Any other problem code is a blocker.
 
+The post-migration check at 13:48 returned `clean=true`, `problems=[]`, `compared=62`, `skipped_missing_crm_rrp=6`, `deferred=null`. This classified only 68 of 72 catalogue rows: `FIG-MAGIK-300`, `ACC-3D-DITTO-420`, `ACC-3D-DITTO-430`, and `ACC-3D-LUFFY-500` were inactive but priced, and were omitted because CRM requested `3dp_skus` without `include_archived`. Treat that result as clean RRP evidence for 68/72 rows, not complete catalogue coverage.
+
+The owner then saved the reviewed `include_archived=true` change in the bound CRM editor and ran `catalogCanonicalCrmIntegrityCheck` at 14:46–14:47 Kyiv. It returned `ok=true`, `clean=true`, `problems=[]`, `compared=66`, `skipped_missing_crm_rrp=6`, `deferred=null`, `elapsed_ms=13238`. This closes full 72/72 catalogue coverage for the bound editor source. The owner removed the three temporary CRM migration files and published `CRM Auto V165 — full 3D-P integrity coverage` on 2026-09-06 at 17:38 Kyiv. The subsequent dashboard-triggered V165 check also returned `ok=true`, `clean=true`, `problems=[]`, `compared=66`, `skipped_missing_crm_rrp=6`, `deferred=null`, `elapsed_ms=12653`. Full post-publication endpoint coverage is closed.
+
 ## Fixed catalogue and costing decisions
 
 - Exactly 72 products from the five product tabs; no consumables.
-- Exactly 59 active and 13 inactive based on the source `can print` flag.
+- Exactly 62 active and 10 inactive in the owner-approved canonical mapping. The three owner overrides (`BR-BULB-100`, `BR-SQUIR-100`, `BR-PIKA-100`) supersede the source `can print` flags.
 - Import inactive products, keeping unresolved RRP/buyout as null where applicable.
 - Exclude source `Брелоки` rows 3 and 13, the two three-piece keychain sets.
 - `FIG-NAMI-201` / Nami L: RRP 750 UAH, buyout 500 UAH.
@@ -230,25 +244,19 @@ Reject the handoff as incomplete if it lacks any of these:
 - explicit resolution of `FIG-ZORO-410/400`, `FIG-PKBL-600/100`, and `BGC/BGS`;
 - collision checks against the full live catalogue;
 - explicit nulls and blockers where evidence is missing;
-- 72/59/13 count reconciliation and the fixed Nami L prices.
+- 72/62/10 count reconciliation and the fixed Nami L prices.
 
 If Claude reports `BLOCKED`, do not improvise a mapping. Ask only for the exact missing owner evidence listed there.
 
-## Continuation sequence
+## Continuation sequence from the 2026-09-06 checkpoint
 
-1. Read `AGENTS.md`, both source-state files, this checkpoint, Claude's decision file, the import manifest, payload, FIFO contract, and current relevant diffs.
-2. Parse Claude's machine-readable 72-row mapping and compare it by `source_tab + source_row` to `import-manifest.json`. Produce a bounded report of name/article changes and prove uniqueness.
-3. Update the canonical migration payload and review artifact from that approved mapping. Preserve source names and provenance separately; do not overwrite the source record.
-4. Build a narrow CRM correction operation keyed by the current CRM article/source identity. It may change only approved article/name/manual catalogue fields. Preserve formula columns, row placement, RRP history, statuses, and all unrelated CRM data.
-5. Run the CRM correction against a rehearsal copy first. Prove live CRM unchanged, exactly 72 targets, formulas intact, 59/13 status counts, no duplicate articles, and unchanged sale/component/accounting counts.
-6. Present the rehearsal output to the owner. A live CRM correction requires a fresh backup, owner-run apply, and a read-only post-check. Do not reuse the already-consumed full-catalogue Apply gate.
-7. Regenerate the 3D-P migration payload and temporary wrapper from the same approved canonical mapping. Confirm the bound source matches the repository wrapper.
-8. Run `catalogMigration3dpRehearsalV2()` on a copy. It must prove the live workbook is unchanged, exact 72-row catalogue output, expected preservation/cleanup, zero opening inventory, correct validation/formulas, and unchanged protected-sheet fingerprints.
-9. Only after the rehearsal passes and the owner supplies its exact output, proceed through the wrapper's guarded backup/apply flow. The owner performs the live Apps Script execution.
-10. Run read-only post-checks in 3D-P and CRM. The six temporary RRP mismatches must disappear, while inactive rows with null prices remain explicitly skipped rather than fabricated.
-11. Verify both dashboards against the exact contracts: allowed status values, active/inactive behavior, article/name lookups, RRP/buyout fields, manufacture flow, consumable payer logic, sale/gift allocations, retries/reversals, and payout calculations.
-12. Prove FIFO with a focused end-to-end scenario using actual manufactured batches. Allocation must be immutable, oldest available batch first, idempotent on retry, reversible without double allocation, and reconcilable to stock. Do not create opening batches from draft estimates.
-13. Remove temporary live wrapper files only after final evidence is captured, then refresh both repository mirrors and source-state records in the same session. Web App publication remains an owner gate.
+The canonical mapping, CRM correction rehearsal/apply, 3D-P rehearsal/apply, backups and catalogue post-checks are complete. Do not repeat either catalogue Apply.
+
+1. Read `AGENTS.md`, both source-state files, this checkpoint, Claude's decision file, the import manifest, payload, FIFO contract, final diagnostic, and current relevant diffs.
+2. Completed 2026-09-06: bound-editor verification, V165 publication and the dashboard endpoint check all account for 72/72 rows with no problems or deferral.
+3. Completed 2026-09-06: the FIFO copy rehearsal proved two-layer oldest-first allocation, sale/reversal retry, negative-row reversal, blocked old-id reactivation, counter repair, clean final reconciliation, unchanged live data and trashed rehearsal copy.
+4. Completed 2026-09-06: owner published 3D-P V32 at 20:17 and CRM V166 at 20:47. Post-V166 CRM integrity accounted for all 72 catalogue rows with no problems; CRM then called deployed `3dp_fifo_reconcile` successfully and received a clean zero-batch/zero-allocation state.
+5. Production use is allowed. Remove the two non-deployed read-only smoke wrappers from the bound editors, and treat the first real manufacture/sale/reversal cycle plus reconciliation as bounded operational QA. Do not create opening batches from draft estimates.
 
 ## Stop conditions
 
@@ -264,7 +272,7 @@ Stop before any write if:
 - a dashboard sends a value outside the receiving sheet/API validation contract;
 - a backup target is ambiguous.
 
-Do not run the legacy CRM Apply, legacy recovery, or a broad range restore. Do not reconstruct `OC-FOP-0339`. Do not apply the 3D-P migration before the canonical mapping is approved.
+Do not run the legacy CRM Apply, legacy recovery, the catalogue migration Apply again, or a broad range restore. Do not reconstruct `OC-FOP-0339`.
 
 ## Repository references
 
