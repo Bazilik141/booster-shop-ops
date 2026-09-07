@@ -76,10 +76,20 @@ by that rejected attempt.
 
 ## Production execution evidence
 
-Not deployed by Codex. Paste the complete owner-run output here after execution:
+Deployed by the owner on production at `2026-09-07T19:04:08+00:00`:
 
 ```text
-PENDING OWNER RUN
+cwd=/home2/boosters/public_html
+time=2026-09-07T19:04:08+00:00
+backup=/home2/boosters/public_html/_patch_backups/TECH-015_ga4-mini-cart-remove_wp3c_20260907-20260907-190408-1a0dad
+backup_file=/home2/boosters/public_html/_patch_backups/TECH-015_ga4-mini-cart-remove_wp3c_20260907-20260907-190408-1a0dad/original/catalog/view/template/common/cart.twig
+php_lint=not_applicable target=catalog/view/template/common/cart.twig
+changed_file=catalog/view/template/common/cart.twig
+after_sha256=020b8f2a9dfee24d8c55b386415ef31731d16586a70191cbd8266b54dfd27fec
+database_touched=no
+done=ok
+self_delete=ok
+cache cleared
 ```
 
 ## Rollback
@@ -104,18 +114,35 @@ php TECH-015_ga4-mini-cart-remove_wp3c_20260907.php && php -r 'require "config.p
 
 ## Post-deploy QA
 
-- [ ] Runner output ends with `done=ok` and `self_delete=ok`; paste it above.
-- [ ] Removing one item from the header mini-cart removes exactly that item.
-- [ ] One GA4 batch contains one `en=remove_from_cart` for the removed product
+- [x] Runner output ends with `done=ok` and `self_delete=ok`; recorded above.
+- [x] Removing one item from the header mini-cart removes exactly that item — owner-confirmed.
+- [x] One GA4 batch contains one `en=remove_from_cart` for the removed product
   with correct id, price, quantity and currency.
-- [ ] Inspect the GA4 request payload itself; do not rely on a narrow Network
+- [x] Inspect the GA4 request payload itself; do not rely on a narrow Network
   text filter because GA4 may batch several events into one request.
-- [ ] Cart line count and total are exact after fragment reload.
-- [ ] Quantity changes in the mini-cart and full cart still behave as before.
-- [ ] No duplicate event and no new console error.
-- [ ] All Tier 1 URLs from `AGENTS.md` pass.
+- [x] Cart line count and total are exact after fragment reload — owner-confirmed.
+- [x] Quantity changes in the mini-cart and full cart still behave as before — owner-confirmed.
+- [x] No duplicate event and no new console error — owner-confirmed.
+- [x] All Tier 1 URLs from `AGENTS.md` pass — owner-confirmed.
 
 Rollback immediately for any wrong cart line, total, duplicate event, failed
 removal or new console error.
 
 After all WP3c checks pass, deploy WP3b separately and run its cart-first QA.
+
+## Production runtime evidence
+
+Owner DevTools payload confirms the mini-cart event on 2026-09-07:
+
+```text
+tid=G-283QW89TX8
+en=remove_from_cart
+cu=UAH
+epn.value=1000
+pr1=id110 ... pr1000 ... qt1
+item_list_id=cart_products
+item_list_name=Cart products
+```
+
+The event uses the expected vendor-built cart payload. Functional cart state,
+console state and Tier 1 remain separate owner-confirmation gates.

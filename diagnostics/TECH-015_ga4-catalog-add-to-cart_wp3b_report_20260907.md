@@ -78,10 +78,20 @@ checks direct-add, option-product and missing-dataset branches.
 
 ## Production execution evidence
 
-Not deployed by Codex. Paste the complete owner-run output here after execution:
+Deployed by the owner on production at `2026-09-07T19:24:35+00:00`:
 
 ```text
-PENDING OWNER RUN
+cwd=/home2/boosters/public_html
+time=2026-09-07T19:24:35+00:00
+backup=/home2/boosters/public_html/_patch_backups/TECH-015_ga4-catalog-add-to-cart_wp3b_20260907-20260907-192435-f5bebe
+backup_file=/home2/boosters/public_html/_patch_backups/TECH-015_ga4-catalog-add-to-cart_wp3b_20260907-20260907-192435-f5bebe/original/catalog/view/template/product/thumb.twig
+php_lint=not_applicable target=catalog/view/template/product/thumb.twig
+changed_file=catalog/view/template/product/thumb.twig
+after_sha256=ee483c07b40bdd58a2b23e75793b9850aef61ed4efd9df8bf0944f7b538f9c5a
+database_touched=no
+done=ok
+self_delete=ok
+cache cleared
 ```
 
 ## Rollback
@@ -106,23 +116,29 @@ php TECH-015_ga4-catalog-add-to-cart_wp3b_20260907.php && php -r 'require "confi
 
 ## Post-deploy QA
 
-- [ ] Runner output ends with `done=ok` and `self_delete=ok`; paste it above.
-- [ ] One tile click adds exactly one line/unit and sends one
+- [x] Runner output ends with `done=ok` and `self_delete=ok`; recorded above.
+- [x] One tile click adds exactly one line/unit and sends one
   `en=add_to_cart` with correct id, price, quantity and currency.
-- [ ] Second click adds one more unit and sends exactly one more event.
-- [ ] Adding a second product preserves exact line count and total.
-- [ ] An option-bearing tile redirects/selects as before and does not mutate the
+- [x] Second click adds one more unit and sends exactly one more event.
+- [x] Adding a second product preserves exact line count and total.
+- [x] An option-bearing tile redirects/selects as before and does not mutate the
   cart prematurely.
-- [ ] Preorder and out-of-stock tiles behave exactly as before.
-- [ ] No new console error; `view-source:` contains one marker per rendered
+- [x] Preorder and out-of-stock tiles behave exactly as before.
+- [x] No new console error; `view-source:` contains one marker per rendered
   thumb but runtime has one delegated binding.
-- [ ] Inspect the GA4 request payload itself; do not rely on a narrow Network
+- [x] Inspect the GA4 request payload itself; do not rely on a narrow Network
   text filter because GA4 may batch several events into one request.
-- [ ] Full `bs-checkout-smoke` passes.
-- [ ] All Tier 1 URLs from `AGENTS.md` pass.
+- [x] Full `bs-checkout-smoke` passes — owner-confirmed.
+- [x] All Tier 1 URLs from `AGENTS.md` pass — owner-confirmed.
 
 Rollback immediately for any wrong line, quantity, total, duplicate event,
 non-working button or new console error.
 
 Cart correctness is the primary acceptance gate. Event presence is checked only
 after line count, quantities and totals are confirmed unchanged.
+
+## Production QA result
+
+Owner confirmed all WP3b cart-first scenarios, GA4 event checks, console check,
+Tier 1 URLs and the full checkout smoke as passing on 2026-09-07. No rollback
+trigger was observed.

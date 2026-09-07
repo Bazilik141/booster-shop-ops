@@ -122,16 +122,16 @@ php TECH-015_ga4-add-payment-info_wp3a_20260907.php && php -r 'require "config.p
 ## Post-deploy QA
 
 - [x] Runner output ends with `done=ok` and `self_delete=ok`; recorded above.
-- [ ] Enable both module toggles only after the runner succeeds.
-- [ ] Save/submit shipping once: one GA4 batch contains
+- [x] Enable both module toggles only after the runner succeeds.
+- [x] Save/submit shipping once: one GA4 batch contains
   `en=add_shipping_info`, correct UAH value and cart items.
 - [x] Save/submit payment once: one GA4 batch contains
   `en=add_payment_info`, correct UAH value and cart items.
-- [ ] Inspect the GA4 request payload itself; do not rely on a narrow Network
+- [x] Inspect the GA4 request payload itself; do not rely on a narrow Network
   text filter because GA4 may batch several events into one request.
-- [ ] No duplicated shipping/payment event and no new console error.
-- [ ] Full `bs-checkout-smoke` passes.
-- [ ] All Tier 1 URLs from `AGENTS.md` pass.
+- [x] No duplicated shipping/payment event and no new console error.
+- [x] Full `bs-checkout-smoke` passes — owner-confirmed.
+- [x] All Tier 1 URLs from `AGENTS.md` pass — owner-confirmed.
 
 Rollback immediately for any checkout regression, missing payment selection,
 duplicate event or new console error.
@@ -153,7 +153,21 @@ pr1=id110 ... pr1000 ... qt1
 
 The product metadata includes the vendor-built affiliation, brand, category and
 checkout-list fields, confirming that the installed WP3a consumer emitted the
-vendor payload. Shipping runtime evidence is still pending; the screenshot used
-a narrow `add_shipping_info` Network list filter and showed no matching row,
-which is not sufficient because GA4 can batch the event inside a `collect`
-request.
+vendor payload.
+
+## Production runtime evidence — shipping
+
+Owner DevTools evidence confirms `add_shipping_info` on 2026-09-07:
+
+```text
+tid=G-283QW89TX8
+en=add_shipping_info
+cu=UAH
+epn.value=1000
+ep.shipping_tier=extension_heading_title (pinta_nova_poshta)
+pr1=id110 ... pr1000 ... qt1
+```
+
+The GA4 request completed successfully and contains the expected vendor-built
+product metadata. Sensitive browser request cookies included in the pasted raw
+headers were deliberately not retained in this report.
