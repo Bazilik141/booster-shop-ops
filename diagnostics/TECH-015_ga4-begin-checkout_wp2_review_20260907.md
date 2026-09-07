@@ -145,3 +145,16 @@ anchor, so `add_shipping_info` would work from the toggle alone;
 `checkout/payment_method.twig` has lost its anchor and needs the WP2 pattern.
 Enabling both toggles without that patch would produce the half-data trap already
 flagged.
+
+## Owner confirmation, 2026-09-07
+
+Owner item 1 is closed by the owner's statement: the hotfix is deployed and
+working on production. The runner output was not captured in the Codex report;
+the owner supplied the execution facts to Codex, and recording them was the
+executor's responsibility. No further action — this note is the record.
+
+The rollback path in the Codex report still names only the first runner's backup
+directory. That is not wrong for a full revert to the pre-WP2 template, but the
+hotfix's own backup directory is unrecorded. If a partial revert to the
+`fb7d6a8a…` state is ever needed, read the directory name from
+`_patch_backups/TECH-015_ga4-begin-checkout_wp2-hotfix_20260907-*` on the host.
