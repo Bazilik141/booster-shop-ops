@@ -1028,7 +1028,7 @@ function threeDpEsc(value) { return String(value == null ? '—' : value).replac
 function threeDpNumber(value) { const n = Number(String(value == null ? '' : value).replace(',','.').replace(/[^0-9.-]/g,'')); return Number.isFinite(n) ? n : 0; }
 function threeDpHours(value) { if(typeof value==='number'&&Number.isFinite(value))return value;const legacy=/^\d{4}-\d{2}-\d{2}[ T](\d+):([0-5]?\d)(?::([0-5]?\d))?$/.exec(String(value||'').trim());if(legacy)return Number(((Number(legacy[1])+Number(legacy[2])/60+Number(legacy[3]||0)/3600)/24).toFixed(10));return threeDpNumber(value); }
 function threeDpPrintTime(value) { const parser=window.BoosterPrintTime;return parser ? parser.parse(value) : {ok:false,blank:false,kind:'invalid',error:'Не завантажився спільний парсер часу друку.'}; }
-function threeDpPrintTimeDisplay(value) { const parser=window.BoosterPrintTime;return parser ? parser.display(value) : '—'; }
+function threeDpPrintTimeDisplay(value) { const parser=window.BoosterPrintTime;return parser ? parser.human(value) : '—'; }
 function threeDpPrintTimeWarning(value) { const parser=window.BoosterPrintTime;return parser ? parser.warning(value) : ''; }
 function threeDpMoney(value) { return '₴' + threeDpNumber(value).toLocaleString('uk-UA',{minimumFractionDigits:2,maximumFractionDigits:2}); }
 function threeDpInput(id) { return document.getElementById(id); }
@@ -3491,8 +3491,8 @@ const ROADMAP_TASKS = [
     why: 'Без цього не видно ні доходу, ні конверсії. Уся воронка показує 0% конверсії технічно, а не поведінково — на цих даних не можна будувати рішення по рекламі, UX і цінах.',
     warn: 'Налаштування модуля ні до чого — вони правильні, тумблера-рятівника там немає. Вендорний модуль не правити. Два окремі патчі, не бандлити. Деплой через bs-checkout-smoke: сторінка успіху — останній крок оплати, помилка там лишає клієнта з пустою сторінкою після списання. Хендоф: handoffs/handoff_TECH-015_ga4-purchase-begin-checkout_20260905.md · діагностика: diagnostics/GA4-EM_purchase-and-funnel-audit_report_20260905.md',
     subtasks: [
-      { id: 'WP1', title: 'purchase зі сторінки успіху', status: 'todo', desc: 'Подія будується з даних замовлення, не з кошика (на поверненні з банку кошика вже немає). Гард «один раз на замовлення», щоб F5 не подвоював. Не спрацьовує на відновлювальному посиланні розстрочки.' },
-      { id: 'WP2', title: 'begin_checkout на сторінці оформлення', status: 'todo', desc: 'Тільки після перевірки WP1. Два варіанти: повернути зачіпку в шаблон (зміниться видимий заголовок і назва вкладки — треба твоє слово) або віддавати подію своїм кодом.' },
+      { id: 'WP1', title: 'purchase зі сторінки успіху — розгорнуто, чекає закриття', status: 'todo', desc: 'Розгорнуто на проді 06.09. Перевірено на замовленнях #365 (залогінений) і #366 (гість): по одній коректній події, F5 не подвоює, порожня сторінка успіху нічого не шле. Огляд Claude: Review OK. Лишилось два пункти на реальному трафіку — авторизоване відновлення розстрочки і повернення з Hutko (реальний платіж заради тесту не робимо). Тестові замовлення переведені в Повернено.' },
+      { id: 'WP2', title: 'begin_checkout на сторінці оформлення — розгорнуто, чекає закриття', status: 'todo', desc: 'Розгорнуто 07.09. Перший патч дав видиму регресію: заголовок оформлення відрендерився як «Мій кошик» — моя помилка в завданні, не Codex. Виправлено хотфіксом: заголовок «Оформлення замовлення» захардкоджено, а подія віддається напряму з даних модуля. Підтверджено в браузері: один запит до GA4 зі статусом 204 і коректним складом кошика. Огляд Claude: Review OK. Лишилось: підтвердити вивід хотфікс-раннера і прогнати Tier 1 сторінки вітрини.' },
       { id: 'WP3', title: 'Кроки «доставка» і «оплата» у воронці', status: 'todo', desc: 'Вимкнені в модулі. Увімкнення саме по собі дасть тільки крок доставки — зачіпка на сторінці оплати теж загублена. Робити після WP1/WP2, інакше здаватиметься що дані є, а їх не буде.' }
     ]
   },
