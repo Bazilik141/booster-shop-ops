@@ -123,22 +123,22 @@ deciding.
 | MKT-002 | Повторні продажі і промокоди |
 | OPS-002 | План задач на місяць |
 | R-13.1 | Сортування товарів у каталозі з урахуванням наявності |
-| TECH-005 | Sitemap / GSC «Не вдалось отримати» |
 | TECH-007 | Google Merchant Center setup |
 | UX-012 | Footer refinement |
 | UX-015 | Hutko return/session reliability |
 | UX-016 | Checkbox / fiscalization reliability |
 | UX-019 | Back-to-top / cookie polish |
 
-## Two of these need an owner answer before they can be closed
+## Owner answers
 
-- **TECH-005** — `sitemap_index.xml` and `sitemap-full.xml` are live on
-  production and TECH-005-DEEP (the root-cause task) plus TECH-029 sitemap
-  audit are both closed. The Definition of Done for SEO work requires GSC
-  evidence: does Search Console still report «Не вдалось отримати»?
-- **TECH-007** — Merchant Center account setup is external; no repository or
-  production artefact can prove it. TECH-008 (the feed itself) was closed on
-  2026-09-08 against the live `merchant-feed.tsv`.
+- **TECH-005** — resolved 2026-09-08. Search Console still reports the fetch
+  error; the owner chose to accept it rather than keep the row open. Closed
+  `Done` as a watch-only close under `ROADMAP_SOP.md` §6, with the acceptance
+  recorded on the Notion page. Removed from the In progress list above. Do not
+  cite that closure as evidence the sitemap error is fixed.
+- **TECH-007** — still open. Merchant Center account setup is external; no
+  repository or production artefact can prove it. TECH-008 (the feed itself)
+  was closed on 2026-09-08 against the live `merchant-feed.tsv`.
 
 ## Related structural findings
 
