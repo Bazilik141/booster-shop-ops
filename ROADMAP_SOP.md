@@ -288,6 +288,7 @@ NCRM-04 through NCRM-12 were renumbered/rescoped on 2026-07-11 under
 
 | 3D-P-023 | `3b66bf20-bdb4-81da-8569-f1d54a8d94b1` | Added 2026-08-08 during 3D-P-014 QA: the sync-journal timestamp column is labelled Kyiv but renders UTC, because the written string is auto-parsed by Sheets into a Date. Cosmetic, low priority |
 | 3D-P-025 | `3b76bf20-bdb4-81a6-838b-d6a27eff68bc` | Added 2026-08-09 during dashboard QA: the stock-correction field asks for a delta while the owner supplies the actual count, so `99` became `196`. Append-only ledger unchanged; only the input semantics move. Handoff: `handoffs/handoff_3D-P-025_stock-field-actual-count_20260809.md` |
+| 3D-P-026 | `3d56bf20-bdb4-81e1-a642-f04284530fe3` | Added 2026-09-08 on owner instruction as the Done record of the canonical catalogue reset and manufactured-batch FIFO. Catalogue reduced to exactly 72 SKUs across the main CRM and the 3D-P workbook against the owner-approved mapping in `handoffs/handoff_3DP-CATALOG-CANONICAL-DECISIONS_claude-to-codex_20260905.md` (3 article changes, 39 name changes, 3 status changes, 42 rows touched; the owner's 2026-09-05 status decision moved the fixed split from 59/13 to 62/10). Live applies were owner-run on 2026-09-06 with fresh Drive backups before each write. RRP integrity coverage gap closed the same day (`3dp_skus` was called without `include_archived`, hiding four withdrawn-but-priced SKUs): compared=66 + skipped=6 = 72. Published CRM Auto V165 and V166 and 3D-P API V32; deployed-route FIFO smoke returned ok=true. Evidence: `diagnostics/3DP-CATALOG_canonical-correction_report_20260906.md`. |
 | CRM-005 | `3b76bf20-bdb4-8140-8397-f14d1cc785dd` | Added 2026-08-09 after a repeat CRM breakage on SKU creation: a server-side, read-only integrity check returning a bounded problem list, plus rule `OPS-CRMINTEGRITY` and a new-SKU runbook. Owner constraint: the check must not stream sheet contents to an agent. Handoff: `handoffs/handoff_CRM-005_integrity-check-and-rule_20260809.md` |
 | CRM-007 | `3b86bf20-bdb4-814d-a838-fcd3e218601a` | Added 2026-08-10 after `OC-FOP-0314` showed an impossible cost: `LOT-0063` holds the two-box lot value against quantity 1, and the 2026-08-03 box→pack split copied that same value again into `LOT-0119` at 20/24. Owner confirmed the two-box reading and a physical count of 28 packs, and set the standing rule that an internal SKU transfer takes the oldest remaining lot (FIFO). Executor: Codex. Diagnostic: `diagnostics/CRM-COST-SPLIT_OP15-and-MZERO_claude-audit_20260810.md`. Handoff: `handoffs/handoff_CRM-007_op15-split-cost-repair_20260810.md` |
 | CRM-008 | `3b86bf20-bdb4-8129-bddf-e002b9e8cd87` | Added 2026-08-10 for purchase lot `yskh293`: five new `Starter Deck` / `STD` SKUs (`OP-JP-ST32-STD`…`OP-JP-ST36-STD`) plus the six-line purchase. Owner cost split: box ₴3 000, ₴251.40 per deck. Needs two structural additions to `Налаштування` (the format and five set codes), so `OPS-CRMINTEGRITY` applies in full. Must not repair `Товари!B/J` — that belongs to `CRM-006` pass 4. Executor: Codex. Handoff: `handoffs/handoff_CRM-008_starter-decks-sku-and-purchase_20260810.md` |
@@ -312,8 +313,9 @@ three failed attempts.
 issued and has no Notion page. It is referenced only in
 `handoffs/handoff_3D-P-010_crm-packaging-cost-pull_20260802.md`. Decision: the
 number stays permanently unused — do not recycle it. Numbering continued at
-`3D-P-016`; **the next free ID is `3D-P-026`** (`3D-P-022`, `3D-P-023` and
-`3D-P-024` were taken on 2026-08-08, `3D-P-025` on 2026-08-09). In the `CRM-`
+`3D-P-016`; **the next free ID is `3D-P-027`** (`3D-P-022`, `3D-P-023` and
+`3D-P-024` were taken on 2026-08-08, `3D-P-025` on 2026-08-09, `3D-P-026` on
+2026-09-08). In the `CRM-`
 series the next free ID is **`CRM-011`** and in the `CONTENT-` series
 **`CONTENT-007`** (updated 2026-08-28: `CRM-010` and `CONTENT-006` were both
 taken that day for the content-quality wave; live queries returned
