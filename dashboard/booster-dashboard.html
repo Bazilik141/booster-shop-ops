@@ -2585,8 +2585,8 @@ const ROADMAP_TASKS = [
     warn: 'Done 2026-07-04, owner протестував живо і задоволений. Codex вийшов за межі хендофу — owner проінформований, прийняв як є: (1) змінив tgShowMainMenu_ (був у Do-not-touch) — додав кнопки "Свіжий дайджест"/"Чернетка за посиланням"; (2) додав ще й stateful-флоу "бот чекає посилання 10 хв" (CacheService) на додачу до прямого /post <url>, хоча owner обрав тільки одне повідомлення; (3) 2 нові гілки в handleTelegramCallback_ (digest_run, post_start/post_help) — той самий router, що мав ReferenceError-інцидент 2026-06-29; (4) system prompt для OpenAI переписаний з нуля (інший тон/довжина/формат), а не перевикористаний з tgDraftPost_ — RSS-чернетки (Sonnet) і URL-чернетки (OpenAI) тепер звучать по-різному; (5) новий пункт меню Таблиці + setupOpenAiApiKey() для безпечного вводу ключа — не просили, низький ризик. Handoff: handoffs/MKT-TG-006_codex-handoff_openai-url-draft_20260704.md, репорт: diagnostics/MKT-TG-006_openai-url-draft_report_20260704.md', subtasks: []
   },
   {
-    id: 'MKT-TG-004', title: 'TG контент-автоматизація Phase 2: мультиджерело + бот-відбір + картинки + розклад', status: 'superseded', tool: 'Make + Codex', priority: 'Medium',
-    lastUpdated: '2026-07-03', blockedBy: ['MKT-TG-003'],
+    id: 'MKT-TG-004', title: 'TG контент-автоматизація Phase 2: мультиджерело + бот-відбір + картинки + розклад', status: 'done', tool: 'Make + Codex', priority: 'Medium',
+    lastUpdated: '2026-09-08', blockedBy: ['MKT-TG-003'],
     simple: '5 кандидатів/день, 1×/день о 10:00: 1 Pokémon + 1 One Piece + 1 MTG/YGO + 2 TCG-ринок. У бот текстом + 3 лінки картинок; постиш 1-2 вручну. Кнопка /pick_news: «ККГ · 2-3 слова-тег». Дедуп, Sheet-кандидати, /pick_news, /delete_news.',
     why: 'Перетворює сирий пайплайн на зручний щоденний робочий процес з кількома джерелами (Pokémon, One Piece, MTG, YGO).',
     warn: 'SUPERSEDED 2026-07-03 → MKT-TG-005 (Path A). Причина: вартість (AI генерує ВСІ ~5/день, поститься 1-2), картинки Serper не в тему (One Piece→Naruto), pubDate не парсився (нема freshness-фільтра). Owner рішення: перейти на lean RSS+on-demand AI замість Make v2 BLUEPRINT-імпорту. Стара warn-історія збережена нижче для довідки: СТАН: пайплайн був АКТИВНИЙ (jina→Claude(Sonnet)→OpenAI→Serper→Запис; дедуп guid OK; картинки 25.data.images[N].imageUrl OK). Перший прод-прогін був top-5 за релевантністю → вийшло MTG-важко (сплеск Marvel-сет+Prime Day). v2 blueprint існував (Booster Shop/Integration RSS.blueprint.v2.json) але НЕ імпортований — замінений Path A. Деталі: handoffs/MKT-TG-004_per-game-balance_20260627.md, нове рішення: handoffs/MKT-TG-005_path-A-lean-rss-digest_20260703.md', subtasks: []
@@ -2758,8 +2758,8 @@ const ROADMAP_TASKS = [
   },
   // ─── 3D-PRINT (3D-P) ───
   {
-    id: '3D-P-000', title: '3D-друк мерч: discovery & scoping', status: 'active', tool: 'Claude', priority: 'High',
-    lastUpdated: '2026-07-28', blockedBy: [],
+    id: '3D-P-000', title: '3D-друк мерч: discovery & scoping', status: 'done', tool: 'Claude', priority: 'High',
+    lastUpdated: '2026-09-08', blockedBy: [],
     simple: 'Друг власника 3D-друкує фігурки/аксесуари за мотивами ККГ. Два треки: продаж на сайті (% другу) і маркетингові «плюшки» (закупівля з мінімальною націнкою, бонус у великих замовленнях). Повний план: plans/3D-P-000_scoping-and-architecture_20260728.md.',
     why: 'Новий напрям бізнесу, потребує окремої номенклатури, каталожного розміщення і власної CRM-гілки — заведено як окрема серія на прохання власника 2026-07-28.',
     warn: 'Лише scoping — жодного запису в OpenCart/CRM/дашборд не зроблено. Відкрито: % другу (трек A), закупівельна ціна другу (трек B), поріг замовлення для бонусу, фінальна назва категорії. 2026-07-28: власник приніс глибокий хендофф від ChatGPT (plans/3D-P_handoff-chatgpt_v1_20260728.md) — рев\'ю в plans/3D-P-000_...§11. Бізнес/дата-модель прийнято (Model A ~70% revenue-share vs Model B собівартість+50% прибутку, версійна собівартість, 2 локації складу). Технічну архітектуру (окремий VPS-бекенд+2 UI) НЕ прийнято одразу — конфліктує з NCRM, окреме рішення власника. Побічно знайдено: живий TOKEN захардкожений у цьому файлі (рядок 522), закомічений у git з GitHub-remote — терміново до ротації, не залежить від 3D-P. 2026-07-28 (той самий день): власник закрив рішення — архітектура: Sheets + локальний сервер UI зараз, перехід на NCRM пізніше (відкрито: чи потрібен другу віддалений доступ до цього сервера); фінмодель: лише Model B (собівартість+50/50 прибутку), Model A знято; токен — власник підтвердив, що займається.', subtasks: []
@@ -3307,7 +3307,7 @@ const ROADMAP_TASKS = [
     simple: 'Список відділень обривався — замість 52 тис. завантажувалось лише 13 тис. Виправили, налаштували щоденне оновлення.', why: 'Клієнт не міг знайти своє відділення і оформити замовлення.', warn: null, subtasks: [] },
   { id: 'ST-2b.5', title: 'Промокоди і знижка -15% для нових клієнтів', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-14', blockedBy: [],
     simple: 'Запустили промокоди, автоматичну знижку -15% для нового покупця (First15) і аналітику Google без дублів.', why: 'Останній крок перед переключенням на новий чекаут.', warn: null, subtasks: [] },
-  { id: 'ST-2b.1-2b.4', title: 'Чекаут — серія виправлень', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-14', blockedBy: [],
+  { id: 'ST-2b.1–2b.4', title: 'Чекаут — серія виправлень', status: 'done', tool: 'Codex', priority: 'High', lastUpdated: '2026-06-14', blockedBy: [],
     simple: 'Чотири патчі: замовлення тепер створюється тільки при кліку «Оформити», а не раніше; сторінка подяки коректна для всіх способів оплати; підсумок кошика завжди видно.', why: 'В базі накопичувались зайві незавершені замовлення.', warn: null, subtasks: [] },
   // ─── REDESIGN / RD ───
   {
@@ -3477,8 +3477,8 @@ const ROADMAP_TASKS = [
     warn: 'Не чіпає карту сайту, robots.txt і Google-процеси. Handoff: TECH-035.', subtasks: []
   },
   {
-    id: 'TECH-009', title: 'Розширені результати Google (зірочки і ціни) — чекаємо', status: 'active', tool: 'Manual', priority: 'High',
-    lastUpdated: '2026-05-26', blockedBy: [],
+    id: 'TECH-009', title: 'Розширені результати Google (зірочки і ціни) — чекаємо', status: 'done', tool: 'Manual', priority: 'High',
+    lastUpdated: '2026-09-08', blockedBy: [],
     simple: 'Налаштували спеціальні мітки на сторінках товарів щоб Google показував ціну і наявність прямо в пошуку. Надіслали на перевірку в Google — чекаємо підтвердження.',
     why: 'Розширені результати Google привертають більше уваги і кліків.', warn: null,
     subtasks: [

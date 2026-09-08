@@ -216,6 +216,102 @@ changes.
 | UX-036-UI | `3cf6bf20-bdb4-8185-ad0a-fb58a80de250` | Added 2026-09-02 alongside UX-036; suffix pattern mirrors `PAY-001`/`PAY-001-UI`. Visual design brief for Claude Design (`handoffs/handoff_UI-CD_visual-design-brief_20260902.md`) covering credit-modal button sizing, homepage category tiles, subcategory chip row; result folds back into UX-036 once owner-approved |
 | UX-037 | `3cf6bf20-bdb4-8102-ac9c-e0f18d592bb0` | Added 2026-09-02, carved out of the same review as UX-036 because it is a pricing-accuracy defect (Pokémon TCG Inferno X booster box — home/product/category surfaces disagree), not cosmetic polish. Higher priority than UX-036; may need a DB-write approval gate per AGENTS.md convention C6 |
 
+### Page IDs recovered 2026-09-08 (Notion↔dashboard reconciliation sweep)
+
+Added while reconciling all 277 Notion rows against the 130 `ROADMAP_TASKS` rows
+on the dashboard. The Notion **Query Data Source** tool hit its workspace usage
+limit part-way through, so these were recovered one at a time with
+`notion-search` and verified by title. Recording them here means the next
+session does not have to spend search calls on the same lookups.
+
+| Roadmap ID | page_id |
+|---|---|
+| TECH-005 | `3666bf20-bdb4-8166-9519-f42a4015f0b0` |
+| TECH-008 | `3666bf20-bdb4-81ea-bdab-c5f614f91d59` |
+| TECH-009 | `3666bf20-bdb4-815c-a2d6-c1d997cf021e` |
+| TECH-011 | `3666bf20-bdb4-810c-aa4c-db1330d543e8` |
+| TECH-033 | `3786bf20-bdb4-81ce-9fbd-e8055ed547f0` |
+| RD-04 | `3706bf20-bdb4-81d2-8f83-d77c17262526` |
+| RD-12 | `3706bf20-bdb4-81f1-94ed-cf08fd3b7e11` |
+| RD-13 | `3706bf20-bdb4-81c2-82ea-edf0b5434c96` |
+| RD-14 | `3706bf20-bdb4-816e-83d9-d94c2aa2cc70` |
+| RD-15 | `3706bf20-bdb4-81a9-9686-c5c90366254a` |
+| RD-21 | `3706bf20-bdb4-815f-8965-f500d1f061c3` |
+| R-04 | `36a6bf20-bdb4-81a1-afa9-c23904919cd8` |
+| R-11 | `3696bf20-bdb4-81d9-9e9f-c4cf11dca805` |
+| R-11-UI-1 | `36f6bf20-bdb4-8142-b5e2-fadc47bc2172` |
+| R-11-UI-2 | `36f6bf20-bdb4-813a-aa6e-c5f94310f6c1` |
+| R-11b | `36f6bf20-bdb4-81fc-ae75-e075f4c74db3` |
+| R-12 | `36c6bf20-bdb4-819e-b000-d5460c13ce9a` |
+| R-13 | `36c6bf20-bdb4-8142-a02a-f66f9e09887f` |
+| R-14 | `36c6bf20-bdb4-81a8-8cd9-e6fc1b2b38c9` |
+| R-15 | `36c6bf20-bdb4-819e-be84-c47c382b7ab9` |
+| UX-007 | `3666bf20-bdb4-8148-8d34-cf9d57ca6503` |
+| UX-013 | `3666bf20-bdb4-8199-a15e-f8a89d825076` |
+| UX-014 | `3666bf20-bdb4-81f0-b409-c01c6f72377e` |
+| UX-026 | `3666bf20-bdb4-811f-b3bc-d63a9c4fdef9` |
+| AUTO-002 (партія 2026-05-20) | `3666bf20-bdb4-8137-824a-dc458cf95904` |
+| AUTO-002 (партія 2026-06-21) | `3866bf20-bdb4-8122-9b83-ccbb501239d5` |
+| AUTO-003 (партія 2026-05-20) | `3666bf20-bdb4-8193-b49e-c732d97636dc` |
+| AUTO-003 (партія 2026-06-21) | `3866bf20-bdb4-81a7-b8da-e1cdb86b0522` |
+| AUTO-004 (партія 2026-05-20) | `3666bf20-bdb4-81e7-ba5b-f497c3a7426a` |
+| AUTO-004 (партія 2026-06-21) | `3866bf20-bdb4-81b9-b111-e824601812ee` |
+| AUTO-005 (партія 2026-05-20) | `3666bf20-bdb4-81cf-9bac-e70af7a445b6` |
+| AUTO-005 (партія 2026-06-21) | `3866bf20-bdb4-81ae-8b4e-ce99685481d6` |
+| AUTO-006 (партія 2026-06-21) | `3866bf20-bdb4-81e0-830f-eb19f3b04fcc` |
+| AUTO-007 | `3666bf20-bdb4-8148-bc07-ebb561d17bae` |
+| AUTO-012 | `36d6bf20-bdb4-8137-9654-df98aa15f675` |
+| AUTO-013 | `36d6bf20-bdb4-817b-9fec-f03a749b5dad` |
+| BUG-002 | `3666bf20-bdb4-816f-98ae-c41bda2fbd72` |
+| OPS-003 (партія 2026-05-20, return form) | `3666bf20-bdb4-81af-8195-d93e257997d7` |
+| OPS-003 (партія 2026-05-26, workflow templates) | `36c6bf20-bdb4-818d-a6db-e88d8437f845` |
+| OPS-004 | `3aa6bf20-bdb4-81be-ac5b-fa13d3904970` |
+| TECH-029 (партія 2026-06-07, sitemap audit) | `3786bf20-bdb4-8116-8f66-c856e04a11df` |
+| TECH-029 (партія 2026-08-04, category description) | `3666bf20-bdb4-8157-acfd-c783f2000a3b` |
+| CONTENT-20260721-test (archived) | `3a46bf20-bdb4-81bf-be47-e8dd839e00a0` |
+| DASH-001 | `3886bf20-bdb4-811c-afb5-e603995026f5` |
+| SEO-CRIT-001 | `3666bf20-bdb4-81e1-b224-e089c1e41d6e` |
+| R-05 | `36a6bf20-bdb4-8104-973d-cff73625a5a5` |
+| R-07 | `36a6bf20-bdb4-8122-bf24-f1a5e6a2ea34` |
+| R-08 | `36a6bf20-bdb4-8174-9d84-cbd7934e4066` |
+| R-08.5 | `36c6bf20-bdb4-81fb-b054-edd6f25e6188` |
+
+### Known Roadmap ID collisions
+
+A query by `Roadmap ID` returns **two live pages** for each of the IDs below.
+Both pages are real, different tasks — they are not duplicates of one task, so
+neither may be archived away. Every colliding page carries an
+`[ID-колізія, партія YYYY-MM-DD]` prefix in its `Name`, so a search result shows
+which batch it belongs to. Always confirm which page you have before writing.
+
+| ID | Page A | Page B |
+|---|---|---|
+| AUTO-001 | партія 2026-05-20 — CRM-файл: аудит | партія 2026-06-21 — OLX/ручні замовлення |
+| AUTO-002 | партія 2026-05-20 — Master automation table | партія 2026-06-21 — Авто-ревʼю Codex-патчів |
+| AUTO-003 | партія 2026-05-20 — Звіти продажів | партія 2026-06-21 — Content Pipeline + SEO Monitor |
+| AUTO-004 | партія 2026-05-20 — Аналітика каналів | партія 2026-06-21 — SEO-моніторинг |
+| AUTO-005 | партія 2026-05-20 — Моніторинг конкурентів | партія 2026-06-21 — Авто-нагадування НП |
+| AUTO-006 | партія 2026-05-20 — Класифікація конкурентів | партія 2026-06-21 — Telegram/Viber бот |
+| OPS-003 | партія 2026-05-20 — Return request form | партія 2026-05-26 — Codex/Claude workflow templates |
+| TECH-029 | партія 2026-06-07 — Sitemap audit & fix | партія 2026-08-04 — category description + FAQ |
+
+`NCRM-07b` (three pages) and `TECH-013` (two pages) are a different case: those
+**are** duplicates of one task, and the redundant pages already carry an
+`[ARCHIVED]` prefix. Canonical: `NCRM-07b` = `39f6bf20-bdb4-8185-adc2-cf8c29f6e359`,
+`TECH-013` = `3a06bf20-bdb4-810c-b914-e518ca5f7188`.
+
+### Mirror coverage gap (open, 2026-09-08)
+
+The dashboard `ROADMAP_TASKS` array holds 130 rows; Notion holds 277. About 110
+**not-closed** Notion tasks have no dashboard row at all — the whole `AUTO-`
+series, `MKT-001…008`, `SEO-002…007`, `POLISH-`, `UX-001…034`, `TECH-001…034`,
+`CONTENT-001…004`, `CAT-001`, `CAT-003`, `PAY-001-SMOKE`, `PAY-003`. The owner
+reads the dashboard, so those tasks are invisible to him. The owner authorized
+adding every not-closed row to the mirror on 2026-09-08; the work is blocked
+until the Notion **Query Data Source** usage limit resets, because generating
+honest rows needs each task's full `Name`, `Priority`, `Primary Tool` and
+`Last Updated`, and search-based recovery would cost one call per task.
+
 ### NCRM series
 
 NCRM-04 through NCRM-12 were renumbered/rescoped on 2026-07-11 under
