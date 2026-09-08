@@ -1,146 +1,117 @@
-# Roadmap reconciliation — Notion tasks with no dashboard row
+# Roadmap reconciliation — Notion ↔ dashboard, 2026-09-08
 
-Date: 2026-09-08
-Scope: read-only inventory produced during the full Notion↔`ROADMAP_TASKS`
-reconciliation. No status in this file is authoritative — Notion is.
+Full sweep of all 288 Notion rows against the dashboard `ROADMAP_TASKS` mirror,
+run on owner instruction. Notion remains canonical; this file records what the
+sweep found and did, so the next session does not repeat the analysis.
 
-## Why this file exists
+## Outcome
 
-Notion holds 277 rows. The dashboard `ROADMAP_TASKS` array holds 130. Of the
-157 Notion rows with no dashboard row, **110 are not closed**. The owner reads
-the dashboard, so those 110 tasks are invisible to him — this is the single
-largest inaccuracy found in the sweep.
+| | before | after |
+|---|---|---|
+| Notion rows | 288 | 288 |
+| dashboard `ROADMAP_TASKS` rows | 130 | 206 |
+| not-closed Notion rows with no dashboard row | ~110 | 0 |
+| Notion↔dashboard status conflicts | 4 | 0 |
+| dashboard `status` values outside the SOP vocabulary | 1 (`superseded`) | 0 |
 
-The owner authorized adding every not-closed row to the mirror on 2026-09-08.
-That work is blocked: the Notion **Query Data Source** tool hit its workspace
-usage limit mid-sweep, and honest dashboard rows need each task's full `Name`,
-`Priority`, `Primary Tool` and `Last Updated`. Recovering those one page at a
-time through `notion-search` would cost roughly one call per task.
+## What was wrong, by class
 
-**Names below are truncated to 50–60 characters** — that is how they came back
-before the limit hit. Re-read them from Notion before writing dashboard rows.
+**Status conflicts (4).** `PAY-001-UI`, `R-13.5`, `RD-13` were open in Notion and
+`done` on the dashboard — the dashboard was right in all three. `MKT-TG-004`
+carried a `superseded` status the SOP vocabulary does not define.
 
-## Use this list to triage first
+**Shipped but never closed (10).** Work delivered under a different patch or
+version name than the roadmap ID, so nobody went back to the row: `TECH-005`,
+`TECH-007`, `TECH-008`, `TECH-009`, `TECH-011`, `TECH-033`, `CRM-001`,
+`CRM-002`, `3D-P-000`, `MKT-TG-005`.
 
-Many of these date from 2026-05-19/05-20, before the RD redesign series and
-before the checkout, CRM and 3D-print programmes existed. Some are certainly
-dead. Deciding what to kill is cheaper than mirroring 110 rows and then
-deciding.
+**Verified live during this sweep (6).** Closed against the 2026-09-07 cPanel
+backup rather than against a report: `CAT-001` (category and both children exist
+in `ocp5_category_description`), `SEO-002` (`<h1 id="bs-home-title">` in
+`home.twig`), `POLISH-001` (`© {{ "now"|date("Y") }}` in `footer.twig`),
+`POLISH-004` (zero `route=` in `footer.twig`), `UX-019` (back-to-top + cookie
+notice in `footer.twig`), `R-13.1` (three-tier `$stock_priority` prepended to
+every catalogue `ORDER BY` in `catalog/model/catalog/product.php:285-296`).
 
-## Not started
+**Superseded but never marked (17).** The legacy `R-`/`UX-` redesign series was
+replaced by `RD-01…RD-23` in `plans/RD-redesign-roadmap-plan_2026-05-30.md`, but
+§6 of that plan asked the owner four questions that were never answered — so the
+RD rows were created and the old rows were left open for three months. Closed
+with `Stage` = "Superseded by RD-XX": `R-04`, `R-11`, `R-11-UI-1`, `R-11-UI-2`,
+`R-11b`, `R-12`, `R-13`, `R-14`, `R-15`, `UX-007`, `UX-013`, `UX-014`, `UX-020`,
+`UX-024`, `UX-026`, `MKT-006`, `UX-012`. Separately `TECH-002` and `TECH-004`
+were closed as merged into `TECH-013`, whose own title says
+"об'єднує TECH-002/003/004".
 
-| ID | Name (truncated) |
-|---|---|
-| AUTO-008 | Автоматизація ціноутворення |
-| AUTO-010 | Scope guard: що не робити зараз |
-| AUTO-011 | Dry-run diff CRM stock vs OpenCart stock без авто |
-| AUTO-012 | Аналітика клієнтів і checkout-воронки |
-| BUG-001 | Виправити зміщення значень у таблиці характеристик |
-| CAT-001 | Нова категорія «Інші TCG» (MTG, Yu-Gi-Oh! та ін.) |
-| CAT-003 | Підкатегорія «Окремі картки» (singles) |
-| CONTENT-001 | Уніфікувати опис boxes Mega Symphonia і Munics |
-| CONTENT-002 | Уніфікувати таблицю характеристик Mega Symphonia |
-| CONTENT-003 | Додати таб Характеристики для /product/pokemon… |
-| CONTENT-004 | Гайдовий контент + категорія аксесуарів під тр… |
-| MKT-003 | SEO-генератор як допоміжний інструмент |
-| MKT-004 | Генератор OLX / Monobazar / marketplace-оголошень |
-| MKT-005 | Bundle / pack-пропозиції |
-| MKT-006 | Visible FAQ accordion (НЕ hidden SEO text) |
-| MKT-007 | Механіка збору реальних відгуків покупців |
-| MKT-008 | Передзамовлення: релізний календар + рекомендовані SKU |
-| OPS-001 | Калькулятор закупівель і маржі |
-| OPS-005 | SEO-звіт v1.2: корекція розділу 14 |
-| PAY-001-SMOKE | Фінальний спільний QA-гейт кредитної покупки |
-| PAY-003 | Спільна проміжна сторінка очікування підтвердження |
-| POLISH-001 | Замінити '© 2026' на {{ 'now'\|date('Y') }} |
-| POLISH-002 | Завести у Workflow Guide розділ 'Telegram-…' |
-| POLISH-003 | Запобігти thin/duplicate content |
-| POLISH-004 | A11y + URL fix (прибрати ?route= з лінку) |
-| R-13.2 | Фільтр по наявності у сайдбарі категорій |
-| RD-08 | Subcategory / leaf page (sibling chips, active…) |
-| RD-16 | Account hub + personal data |
-| RD-17 | Addresses (list + form) |
-| RD-18 | Orders (all orders list + order detail) |
-| RD-19 | Authorization (login + forgotten) |
-| RD-20 | Registration (step 1 + step 2) |
-| SEO-002 | Додати H1 на homepage |
-| SEO-003 | Internal search aliases для трьох варіантів назви |
-| SEO-005 | 301 redirect з URL з é на ASCII slug |
-| SEO-006 | Прибрати 'оригинал', 'карточки покемон', 'нас…' |
-| SEO-006-1 | Виправити 'Знижка від 10 шт' → '5+' |
-| SEO-007 | Ninja Spinner: SEO push картки і бокса |
-| SETUP-001 | OpenCart Settings → мін. сума замовлення |
-| TECH-001 | PHP version / security headers |
-| TECH-002 | Static assets cache policy |
-| TECH-004 | Render-blocking resources |
-| TECH-014 | 404 / redirect / crawl log cleanup |
-| TECH-019 | Bing Webmaster Tools + Ahrefs Webmaster Tools |
-| TECH-020 | Screaming Frog baseline crawl |
-| TECH-021 | SEO browser QA toolkit |
-| TECH-022 | Paid SEO suite decision |
-| TECH-023 | Weekly SEO monitoring routine |
-| TECH-026 | Оцінити поточний NP модуль vs paid module |
-| TECH-027 | Image naming audit + alt-text audit |
-| TECH-028 | Додати meta, H1 з конкретикою, опис категорій |
-| TECH-029 (партія 2026-08-04) | Додати category description і FAQ на /catalog/Pokemon/Pokemon-boosters |
-| TECH-032 | Robots.txt: block internal search & parametric |
-| TECH-033 | Structured data: verify TECH-009 deployment |
-| TECH-034 | Image compression (31 images > 100kB) |
-| UX-001 | Архітектура каталогу під розширення асортименту |
-| UX-002 | Головна сторінка: масштабування без втрати фокусу |
-| UX-003 | Header navigation / Каталог |
-| UX-005 | Mobile navigation |
-| UX-008 | Trust facts на товарних сторінках |
-| UX-009 | Search UX/UI: visual + functional improvements |
-| UX-010 | Accessories upsell |
-| UX-011 | Singles strategy |
-| UX-020 | Бейджі на товарах |
-| UX-024 | State badge на product card з dual format |
-| UX-025 | При logged-in без адреси показувати warning |
-| UX-027 | Прибрати native review block, замінити на trust… |
-| UX-028 | Cleanup (Замовити знову, hide invoice/billing) |
-| UX-029 | Modernize order list (Детальніше, no Продовжити) |
-| UX-030 | Card layout, default badge, edit/delete buttons |
-| UX-031 | -/+ кнопки на product page |
-| UX-032 | Розглянути після UX-024..031 |
-| UX-033 | One Piece підкатегорії (deferred until OP Mystery) |
-| OPS-003 (партія 2026-05-20) | Return request form з alert до owner + email |
-| AUTO-001 (партія 2026-06-21) | OLX/ручні замовлення |
-| AUTO-005 (партія 2026-06-21) | Авто-нагадування клієнту: посилка НП не забрана |
-| AUTO-006 (партія 2026-06-21) | Telegram/Viber бот для клієнтських нотифікацій |
+Closing a superseded row does **not** claim the work is done. `RD-11`, `RD-12`
+and `RD-16…RD-20` are still `Not started`; each closure note says so explicitly.
 
-## In progress
+**Not tasks (2).** `AUTO-010` ("Scope guard: що не робити зараз") and `UX-032`
+("Розглянути після UX-024..031") have no deliverable and no acceptance criteria.
+Archived with an `[ARCHIVED]` name prefix, following the NCRM-07b / TECH-013
+convention. `CONTENT-20260721-test` — a leftover roadmap-write test — was
+archived the same way.
 
-| ID | Name (truncated) |
-|---|---|
-| AUTO-002 (партія 2026-05-20) | Master automation table / dashboard |
-| AUTO-003 (партія 2026-05-20) | Звіти продажів за 7 днів і місяць |
-| AUTO-004 (партія 2026-05-20) | Аналітика каналів продажів у звітах |
-| AUTO-005 (партія 2026-05-20) | Моніторинг конкурентів: MVP |
-| AUTO-006 (партія 2026-05-20) | Класифікація конкурентів |
-| AUTO-007 | Ринкова ціна: аналітика і рекомендація |
-| MKT-001 | Контент-план Telegram / Instagram / OLX / сайт |
-| MKT-002 | Повторні продажі і промокоди |
-| OPS-002 | План задач на місяць |
-| R-13.1 | Сортування товарів у каталозі з урахуванням наявності |
-| TECH-007 | Google Merchant Center setup |
-| UX-012 | Footer refinement |
-| UX-015 | Hutko return/session reliability |
-| UX-016 | Checkbox / fiscalization reliability |
-| UX-019 | Back-to-top / cookie polish |
+**Data quality.** `Last Updated` is a text property and had been used to store
+whole progress paragraphs on `AUTO-002`, `AUTO-003`, `AUTO-004`, `AUTO-005`,
+`AUTO-012` and `BUG-002`. Each paragraph was moved verbatim into its page body
+and the field set to the date the paragraph itself named. The Notion ID
+`ST-2b.1–2b.4` uses an en-dash while the dashboard used a hyphen, so exact-ID
+lookups never matched the two; the dashboard was aligned to Notion.
 
-## Owner answers
+**ID collisions.** Eight IDs resolve to two live pages each — `AUTO-001` through
+`AUTO-006`, `OPS-003`, `TECH-029`. These are different tasks sharing an ID, not
+duplicates, so none was archived; every colliding page now carries an
+`[ID-колізія, партія YYYY-MM-DD]` name prefix. The full pairing table is in
+`ROADMAP_SOP.md` §5.
 
-- **TECH-005** — resolved 2026-09-08. Search Console still reports the fetch
-  error; the owner chose to accept it rather than keep the row open. Closed
-  `Done` as a watch-only close under `ROADMAP_SOP.md` §6, with the acceptance
-  recorded on the Notion page. Removed from the In progress list above. Do not
-  cite that closure as evidence the sitemap error is fixed.
-- **TECH-007** — still open. Merchant Center account setup is external; no
-  repository or production artefact can prove it. TECH-008 (the feed itself)
-  was closed on 2026-09-08 against the live `merchant-feed.tsv`.
+## Left open on purpose, with the remainder measured
 
-## Related structural findings
+- **`SETUP-001`** — `minimum` is clean on 117 of 119 products; only
+  `product_id` 59 (`= 2`) and 73 (`= 5`) remain, and 73 may be deliberate. The
+  300 ₴ order minimum is not configured at all: no order-minimum key exists in
+  `ocp5_setting`.
+- **`TECH-032`** — parametric URLs are blocked in the live `robots.txt`
+  (`page`, `sort`, `order`, `limit`, `filter_*`), internal search is not. The
+  remainder is `Disallow: /*?search=` and `Disallow: /*&search=`. Route it
+  through `bs-seo-risk-gate` first.
+- **`CHECKOUT-002`** — mechanism shipped 2026-07-19; Part A timings and Part B
+  loader approval are unmeasured and stay in scope by owner decision.
+- **`TECH-005`** — closed `Done` watch-only: Search Console still reports the
+  fetch error and the owner accepted it on 2026-09-08. Do not cite that closure
+  as evidence the sitemap error is fixed.
 
-`ROADMAP_SOP.md` §5 now carries the recovered page-ID table, the known
-Roadmap ID collision table, and a standing note about this mirror gap.
+## Defect found in passing, not part of this sweep
+
+`catalog/view/template/product/product.twig` hard-codes `reviewCount` to `"1"`
+inside the `aggregateRating` block. The block is correctly gated behind
+`{% if review_status and rating %}`, so nothing is fabricated for products with
+no reviews, but the count will be wrong for any product with two or more.
+
+## Second pass — owner decisions of 2026-09-08
+
+**Closed as superseded (8).** The six `AUTO-` rows of the 2026-05-20 batch
+(`AUTO-002` master automation table, `AUTO-003` sales reports, `AUTO-004`
+channel analytics, `AUTO-005` competitor-monitoring MVP, `AUTO-006` competitor
+classification, `AUTO-007` market-price recommendation) had sat `In progress`
+since May. That programme was replaced by the CRM dashboard and its Apps Script
+API (CRM-MULTICHANNEL, CRM-004…010, DASH-001/002, OPS-CODEMIRROR), by the NCRM
+series, and — for competitor and pricing work — by the `bs-competitor-watch`
+skill and the CRM РРЦ reconciliation. `UX-015` (Hutko return/session) and
+`UX-016` (Checkbox/fiscalization) were May umbrellas with no scope of their own;
+the real defects live under ST-2b.6, the CHECKOUT- series and `bs-checkout-smoke`.
+
+**Downgraded, not closed (9).** `MKT-001`, `MKT-002`, `OPS-002`, `UX-001`,
+`UX-002`, `UX-003`, `UX-005`, `UX-008`, `UX-010` — ideas with no owner, no date
+and no acceptance criteria, several sitting at `High` and outranking work that
+was actually moving. The three that were `In progress` went to `Not started`;
+all nine went to `Low`, with `Stage` = "Backlog — понижено 2026-09-08". Each
+note records what has shipped underneath the umbrella since May, so a future
+rescope starts from the live site rather than the May state.
+
+## Method note
+
+Production evidence came from `_patch_backups/` directory names, template and
+model files, and the SQL dump inside the newest cPanel backup — not from git
+history. See project memory `roadmap-status-drift-evidence` for why a roadmap
+status is never evidence, and `no-git-via-sandbox` for why git is not used here.

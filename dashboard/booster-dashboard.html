@@ -2569,6 +2569,30 @@ function rmToggleLane(laneId) { _rmCollapsed[laneId] = !_rmCollapsed[laneId]; re
 function rmToggle(card) { card.classList.toggle('open'); }
 
 const ROADMAP_TASKS = [
+  // ─── CRM / ДАШБОРД — АНАЛІТИЧНИЙ ШАР ───
+  {
+    id: 'CRM-011', title: 'Аналітичний шар дашборда: Фінанси, Замовлення, Клієнти, Повільний залишок, фільтри роадмапу', status: 'todo', tool: 'Claude (хендоф + рев\'ю) + Codex (реалізація) + власник (публікація Apps Script)', priority: 'High',
+    lastUpdated: '2026-09-08', blockedBy: [],
+    simple: 'Дашборд уміє вести облік, але не вміє показати, скільки бізнес заробив і де лежать заморожені гроші. Додаємо вкладку «Фінанси» з P&L і рухом коштів, пошук і фільтри в замовленнях з іменем клієнта, нормальну CRM-аналітику клієнтів із сегментами, блок повільного залишку на складі й фільтри по серіях у роадмапі.',
+    why: 'Зараз відповідь на питання «скільки заробили і куди пішли гроші» доводиться збирати вручну з кількох вкладок і таблиці. Замовлення не шукаються, вкладка «Клієнти» мовчки показує лише частину бази, а капітал у нерухомому товарі не видно взагалі.',
+    warn: 'Хендоф: handoffs/handoff_CRM-011_dashboard-finance-crm-upgrade_20260908.md. Шість окремо-деплойних пакетів, НЕ зливати в один. '
+        + '|| WP2 — це бекенд Apps Script: crm/apps-script/Code.gs є ДЗЕРКАЛОМ, патч-файлу і PHP-раннера немає; власник вставляє код у прив-язаний проєкт і публікує версію, після чого оновлюється SOURCE_STATE.md. WP1 і WP3-WP6 — це dashboard/booster-dashboard.html, деплою немає взагалі, Ctrl+F5. '
+        + '|| ⚠ Phase 0 по P&L уже виконаний у plans/crm-financial-model_2026-06-26.md §G/§K: поле «Чистий прибуток» (V) уже мінус управлінська собівартість, пакування, платіжні комісії й доставка магазину, а знижка вже всередині виручки (K). Не віднімати повторно. Літери колонок ЗАСТАРІЛИ — у Продажах зʼявились «Нова Пей» і «Комісія маркетплейсу»; звіряти формулу по назві заголовка, не по літері. '
+        + '|| ⚠ Правило антидублювання операційних витрат уже існує в даних: Витрати, колонка L (Так/Ні) і M (причина). Читати L, не вигадувати паралельне правило. '
+        + '|| ⚠ Маркетинг НЕ є order-level рядком P&L: order-level marketing у CRM це виключно 3D-P подарунки, вони вже позначені як excluded from operating expenses (Code.gs:9436). Реклама — звичайна операційна витрата. '
+        + '|| ⚠ Дві різні множини продажів: _getCrmSalesRows() викидає всі рядки замовлення з незакритим передзамовленням (нею користуються Фінанси), _getCrmSalesRowEntries() сира (нею користуються Замовлення). Розбіжність між вкладками має бути показана в UI, а не мовчазна. '
+        + '|| ⚠ WP2 додає колонки в Закупки (Дата створення) і Продажі (Дата оплати) → OPS-CRMINTEGRITY діє повністю: перевірка цілісності до і після. Колонки ТІЛЬКИ в кінець аркуша, вставка всередину зсуває формули. _getCrmSalesRowEntries() читає фіксовані 32 колонки — розширити. '
+        + '|| РІШЕННЯ ВЛАСНИКА 08.09: (1) маска ПІБ і телефону в дашборді знімається; додається identity_source phone|name, бо fallback по імені зливає різних людей; (2) дата приходу грошей: картка/передоплата = дата продажу, післяплата = дата замовлення + 3 дні, помічати як наближення; (3) реальний відтік грошей по товару = ПОПОВНЕННЯ балансу ZenMarket, а не оплата лоту — оплата лоту, комісії й доставка по Японії витрачають баланс, а не гроші власника; непокритий мінус балансу показувати окремо як заборгованість; (4) курс JPY у Курси виставлено 3.2 (¥7699 = 2397 грн зі сторінки поповнення), fallback у getCurrencyRate_ теж 3.2 — цей курс впливає і на собівартість майбутніх закупок, історичні рядки не міняються; (5) префікс серії в роадмапі різати по останньому дефісу перед числом, список серій виводити з даних; (6) Огляд не чіпати. '
+        + '|| Повний експорт історії ZenMarket НЕ блокує WP2: бекенд ставить колонки і починає писати дати наперед, історичний імпорт — окремий крок власника.',
+    subtasks: [
+      { id: 'WP1', title: 'Повільний залишок / заморожені кошти (Склад)', status: 'todo', desc: 'Лише фронт, бекенду не треба: sku_list уже віддає stock, current_cost, sold_30d, sold_60d, margin_pct, is_3dp. Топ-5 за stock_value = фізичний залишок × собівартість. Тільки фізичний залишок, ніякого incoming. current_cost = null дає прочерк, не нуль. Кожен рядок пояснює, чому він тут.' },
+      { id: 'WP2', title: 'Бекенд одним проходом (Apps Script)', status: 'todo', desc: 'Дата створення в Закупки, Дата оплати в Продажі (пишеться один раз при переході статусу в Оплачено), fallback курсу 3.5→3.2, новий finance_report, збагачення orders клієнтом і new/repeat, розширення ltv_report, нова дія client_orders, константи сегментації на сервері. Одна зміна Code.gs, одна публікація власником.' },
+      { id: 'WP3', title: 'Вкладка «Фінанси»', status: 'todo', desc: 'Sidebar 💰 Фінанси після Клієнтів, lazy-load, власний селектор періоду з порівнянням, межі за Europe/Kyiv. Пʼять KPI-плиток, не шість. P&L таблицею у дві колонки без графіка. Рух коштів ОКРЕМИМ блоком ПІД P&L, не поруч. Нові vs повторні класифікуються на рівні замовлення, не за lifetime-станом. Ніяких фальшивих нулів — прочерк або «Немає даних».' },
+      { id: 'WP4', title: 'Замовлення: пошук, фільтри, клієнт, colspan', status: 'todo', desc: 'Пошук по order ID, клієнту, телефону (з нормалізацією), ТТН, SKU. Фільтри канал/статус/оплата/тип клієнта/передзамовлення/прибутковість через AND + лічильник знайдених. Фільтр — це view, а не мутація fetched-масивів: expanded-кеш і order_items не втрачаються. Колонка «Клієнт» одна комірка: імʼя + бейдж NEW або ×N. Прибрати hardcoded colspan 11 у шести місцях через ORDER_SUMMARY_COLUMN_COUNT.' },
+      { id: 'WP5', title: 'Клієнти: режими, KPI, сегменти, картка', status: 'todo', desc: 'Перемикач Усі / Важливі; Важливі зберігають поточний backend-критерій qualified без змін (він OR-joined і мʼякший, ніж звучить). KPI рахуються по всій базі незалежно від режиму. Нові колонки: перша покупка, остання покупка, днів без покупки, сегмент. Сім сегментів, але нейтральний бейдж для всіх, колір лише Втрачений і Низькомаржинальний. VIP = топ 10% за lifetime profit + orders ≥ 2 + мінімальний поріг. Середній інтервал з реальних дат, а не orders_60d/2. Історія замовлень lazy при expand. Прибрати hardcoded colspan 10.' },
+      { id: 'WP6', title: 'Фільтри роадмапу за серією і стадією', status: 'todo', desc: 'ROADMAP_TASKS уже має id і status, бекенду не треба. Серія виводиться з даних: різати по останньому дефісу перед числом (RD-13 → RD, MKT-TG-005 → MKT-TG, 3D-P-007 → 3D-P). Список серій НЕ хардкодити, інакше нова серія потребуватиме правки коду. Серія + стадія через AND, плюс скидання.' }
+    ]
+  },
   // ─── КОНТЕНТ / TELEGRAM-АВТОМАТИЗАЦІЯ ───
   {
     id: 'MKT-TG-005', title: 'Path A: lean RSS→Telegram news digest (заміна Make-пайплайну)', status: 'active', tool: 'Claude + Codex (Apps Script)', priority: 'Medium',
@@ -3633,6 +3657,452 @@ const ROADMAP_TASKS = [
   },
   { id: 'BRAND-OUTLET-001', title: 'Outlet Booster — опис і SEO', status: 'done', tool: 'Codex', priority: 'Medium', lastUpdated: '2026-05-26', blockedBy: [],
     simple: 'Переписали опис, заголовок і мета-теги для товару «Бустер Pokemon TCG: Outlet Mix» — позиціонування як легітимний бюджетний варіант, не відходи.', why: 'Старий опис не відповідав позиціонуванню. Перевірка власника пройдена.', warn: 'Не додавати до карти сайту і Merchant feed.', subtasks: [] },
+  {
+    id: 'AUTO-001', title: '[ID-колізія, партія 2026-06-21] OLX/ручні замовлення → авто-генерація ТТН Nova Poshta (відправка як ФОП)', status: 'todo', tool: 'Claude API + NP API + Apps Script', priority: 'Medium',
+    lastUpdated: '2026-06-21', blockedBy: [],
+    simple: 'Категорія: Automation.',
+    subtasks: []
+  },
+  {
+    id: 'AUTO-002', title: '[ID-колізія, партія 2026-05-20] Master automation table / dashboard', status: 'done', tool: '—', priority: 'High',
+    lastUpdated: '2026-09-08', blockedBy: [],
+    simple: 'Категорія: Automation / Dashboard.',
+    subtasks: []
+  },
+  {
+    id: 'AUTO-003', title: '[ID-колізія, партія 2026-05-20] Звіти продажів за 7 днів і місяць', status: 'done', tool: '—', priority: 'High',
+    lastUpdated: '2026-09-08', blockedBy: [],
+    simple: 'Категорія: Analytics / Sales reporting.',
+    subtasks: []
+  },
+  {
+    id: 'AUTO-004', title: '[ID-колізія, партія 2026-05-20] Аналітика каналів продажів у звітах', status: 'done', tool: '—', priority: 'High',
+    lastUpdated: '2026-09-08', blockedBy: [],
+    simple: 'Категорія: Analytics / Sales channels.',
+    subtasks: []
+  },
+  {
+    id: 'AUTO-005', title: '[ID-колізія, партія 2026-05-20] Моніторинг конкурентів: MVP', status: 'done', tool: '—', priority: 'High',
+    lastUpdated: '2026-09-08', blockedBy: [],
+    simple: 'Категорія: Pricing / Competitor monitoring.',
+    subtasks: []
+  },
+  {
+    id: 'AUTO-005 (партія 2026-06-21)', title: 'Авто-нагадування клієнту: посилка НП не забрана (email D+3, резерв D+4)', status: 'todo', tool: 'NP API + Gmail/SMTP + Claude API', priority: 'High',
+    lastUpdated: '2026-06-21', blockedBy: [],
+    simple: 'Категорія: Automation / CRM.',
+    subtasks: []
+  },
+  {
+    id: 'AUTO-006', title: '[ID-колізія, партія 2026-05-20] Класифікація конкурентних товарів', status: 'done', tool: '—', priority: 'High',
+    lastUpdated: '2026-09-08', blockedBy: [],
+    simple: 'Категорія: Pricing / Data quality.',
+    subtasks: []
+  },
+  {
+    id: 'AUTO-006 (партія 2026-06-21)', title: 'Telegram/Viber бот для клієнтських нотифікацій (базова інфраструктура)', status: 'todo', tool: 'Telegram Bot API / Viber Bot API', priority: 'Medium',
+    lastUpdated: '2026-06-21', blockedBy: [],
+    simple: 'Категорія: Automation / CRM.',
+    subtasks: []
+  },
+  {
+    id: 'AUTO-007', title: 'Ринкова ціна: аналітика і рекомендація', status: 'done', tool: '—', priority: 'High',
+    lastUpdated: '2026-09-08', blockedBy: [],
+    simple: 'Категорія: Pricing / Analytics.',
+    subtasks: []
+  },
+  {
+    id: 'AUTO-008', title: 'Автоматизація ціноутворення', status: 'todo', tool: '—', priority: 'Medium',
+    lastUpdated: '', blockedBy: [],
+    simple: 'Категорія: Pricing / Automation.',
+    subtasks: []
+  },
+  {
+    id: 'AUTO-011', title: 'Dry-run diff CRM stock vs OpenCart stock без авто-змін', status: 'todo', tool: 'Codex (Apps Script + OpenCart API)', priority: 'Medium',
+    lastUpdated: '2026-05-19', blockedBy: [],
+    simple: 'Категорія: CRM / Data integrity.',
+    subtasks: []
+  },
+  {
+    id: 'AUTO-012', title: 'Аналітика клієнтів і checkout-воронки', status: 'todo', tool: 'OpenCart export + CRM + automation sheet', priority: 'High',
+    lastUpdated: '2026-05-27', blockedBy: [],
+    simple: 'Категорія: Analytics / Customer funnel.',
+    subtasks: []
+  },
+  {
+    id: 'BUG-001', title: 'Виправити зміщення значень у таблиці характеристик', status: 'todo', tool: 'Codex (OpenCart admin → attributes)', priority: 'High',
+    lastUpdated: '2026-05-19', blockedBy: [],
+    simple: 'Категорія: Bug / Catalog.',
+    subtasks: []
+  },
+  {
+    id: 'CAT-003', title: 'Підкатегорія «Окремі картки» (singles)', status: 'todo', tool: 'Manual', priority: 'Low',
+    lastUpdated: '2026-05-29', blockedBy: [],
+    simple: 'Категорія: Catalog / Content.',
+    subtasks: []
+  },
+  {
+    id: 'CONTENT-001', title: 'Уніфікувати опис boxes Mega Symphonia і Munics Zero під шаблон Hot Wind Arena / Super Electro Breaker', status: 'todo', tool: 'Claude (draft) + Codex (admin apply)', priority: 'High',
+    lastUpdated: '2026-05-19', blockedBy: [],
+    simple: 'Категорія: Content / SEO / Brand.',
+    subtasks: []
+  },
+  {
+    id: 'CONTENT-002', title: 'Уніфікувати таблицю характеристик Mega Symphonia і Munics Zero BB до повного 9-полевого формату', status: 'todo', tool: '—', priority: 'Medium',
+    lastUpdated: '2026-05-19', blockedBy: [],
+    subtasks: []
+  },
+  {
+    id: 'CONTENT-003', title: 'Додати таб Характеристики для /product/pokemon-tcg-nabory-MBOX', status: 'todo', tool: '—', priority: 'Medium',
+    lastUpdated: '2026-05-19', blockedBy: [],
+    subtasks: []
+  },
+  {
+    id: 'CONTENT-004', title: 'Гайдовий контент + категорія аксесуарів під тренд «папка»', status: 'todo', tool: '—', priority: 'Medium',
+    lastUpdated: '2026-08-04', blockedBy: [],
+    simple: 'Категорія: Content / SEO.',
+    subtasks: []
+  },
+  {
+    id: 'MKT-001', title: 'Контент-план Telegram / Instagram / OLX / сайт', status: 'todo', tool: '—', priority: 'Low',
+    lastUpdated: '2026-09-08', blockedBy: [],
+    simple: 'Категорія: Marketing / Content planning.',
+    subtasks: []
+  },
+  {
+    id: 'MKT-002', title: 'Повторні продажі і промокоди', status: 'todo', tool: '—', priority: 'Low',
+    lastUpdated: '2026-09-08', blockedBy: [],
+    simple: 'Категорія: Marketing / Retention.',
+    subtasks: []
+  },
+  {
+    id: 'MKT-003', title: 'SEO-генератор як допоміжний інструмент', status: 'todo', tool: '—', priority: 'Medium',
+    lastUpdated: '', blockedBy: [],
+    simple: 'Категорія: Marketing / SEO content.',
+    subtasks: []
+  },
+  {
+    id: 'MKT-004', title: 'Генератор OLX / Monobazar / marketplace-оголошень', status: 'todo', tool: '—', priority: 'Medium',
+    lastUpdated: '', blockedBy: [],
+    simple: 'Категорія: Marketing / Listings.',
+    subtasks: []
+  },
+  {
+    id: 'MKT-005', title: 'Bundle / pack-пропозиції', status: 'todo', tool: '—', priority: 'Low',
+    lastUpdated: '', blockedBy: [],
+    simple: 'Категорія: Marketing / Bundles.',
+    subtasks: []
+  },
+  {
+    id: 'MKT-007', title: 'Механіка збору реальних відгуків покупців', status: 'todo', tool: '—', priority: 'High',
+    lastUpdated: '2026-08-04', blockedBy: [],
+    simple: 'Категорія: Marketing / Trust / SEO.',
+    subtasks: []
+  },
+  {
+    id: 'MKT-008', title: 'Передзамовлення: релізний календар + рекомендовані SKU (ZenMarket)', status: 'todo', tool: '—', priority: 'Medium',
+    lastUpdated: '2026-08-04', blockedBy: [],
+    simple: 'Категорія: Marketing / Assortment.',
+    warn: 'Дати релізів з бізнес-звіту неверифіковані — перевірити перед закупівлею',
+    subtasks: []
+  },
+  {
+    id: 'OPS-001', title: 'Калькулятор закупівель і маржі', status: 'todo', tool: '—', priority: 'Low',
+    lastUpdated: '', blockedBy: [],
+    simple: 'Категорія: Operations / Purchasing.',
+    subtasks: []
+  },
+  {
+    id: 'OPS-002', title: 'План задач на місяць', status: 'todo', tool: '—', priority: 'Low',
+    lastUpdated: '2026-09-08', blockedBy: [],
+    simple: 'Категорія: Operations / Planning.',
+    subtasks: []
+  },
+  {
+    id: 'OPS-003', title: '[ID-колізія, партія 2026-05-20] Return request form з alert до owner + email до customer', status: 'todo', tool: 'Codex', priority: 'High',
+    lastUpdated: '2026-05-19', blockedBy: [],
+    simple: 'Категорія: Operations / Trust.',
+    subtasks: []
+  },
+  {
+    id: 'OPS-005', title: 'SEO-звіт v1.2: корекція розділу 14 (спростування «33/34 OOS»)', status: 'todo', tool: '—', priority: 'Low',
+    lastUpdated: '2026-08-04', blockedBy: [],
+    simple: 'Категорія: Reporting.',
+    subtasks: []
+  },
+  {
+    id: 'PAY-001-SMOKE', title: 'Фінальний спільний QA-гейт кредитної покупки (mono + ПУМБ)', status: 'todo', tool: 'Owner + Claude + Codex', priority: 'Medium',
+    lastUpdated: '2026-07-27', blockedBy: [],
+    simple: 'Категорія: Payment / Checkout / QA.',
+    warn: 'Потрібно все чотири разом: (1) extension/pumb_credit працює на тест-контурі банку, (2) PAY-003 спільна проміжна сторінка жива, (3) консолідація order-статусів задеплоєна, (4) NCRM-14 задеплоєна й перевірена на реальному ПУМБ-замовленні.',
+    subtasks: []
+  },
+  {
+    id: 'PAY-003', title: 'Спільна проміжна сторінка очікування підтвердження кредиту (mono + ПУМБ)', status: 'todo', tool: 'Claude Design + Codex', priority: 'Low',
+    lastUpdated: '2026-07-27', blockedBy: [],
+    simple: 'Категорія: Payment / Checkout / UX.',
+    warn: 'Залежить від готовності extension/pumb_credit (PAY-002) — спільна сторінка має читати стани обох транзакційних таблиць (mono вже є, ПУМБ ще ні).',
+    subtasks: []
+  },
+  {
+    id: 'POLISH-002', title: 'Завести у Workflow Guide розділ «Telegram-канали» з 3 ботами і їхніми use cases', status: 'todo', tool: '—', priority: 'Low',
+    lastUpdated: '2026-05-19', blockedBy: [],
+    subtasks: []
+  },
+  {
+    id: 'POLISH-003', title: 'Запобігти thin/duplicate content', status: 'todo', tool: '—', priority: 'Low',
+    lastUpdated: '2026-05-19', blockedBy: [],
+    subtasks: []
+  },
+  {
+    id: 'R-13.2', title: 'Фільтр по наявності у сайдбарі категорій', status: 'todo', tool: 'Codex', priority: 'Low',
+    lastUpdated: '2026-05-29', blockedBy: [],
+    simple: 'Категорія: Catalog / UX.',
+    subtasks: []
+  },
+  {
+    id: 'RD-08', title: 'Subcategory / leaf page (sibling chips, active filters)', status: 'todo', tool: 'Codex', priority: 'Medium',
+    lastUpdated: '', blockedBy: [],
+    simple: 'Категорія: Redesign (RD).',
+    subtasks: []
+  },
+  {
+    id: 'RD-16', title: 'Account hub + personal data', status: 'todo', tool: 'Codex', priority: 'Medium',
+    lastUpdated: '', blockedBy: [],
+    simple: 'Категорія: Redesign (RD).',
+    subtasks: []
+  },
+  {
+    id: 'RD-17', title: 'Addresses (list + form)', status: 'todo', tool: 'Codex', priority: 'Medium',
+    lastUpdated: '', blockedBy: [],
+    simple: 'Категорія: Redesign (RD).',
+    subtasks: []
+  },
+  {
+    id: 'RD-18', title: 'Orders (all orders list + order detail)', status: 'todo', tool: 'Codex', priority: 'Low',
+    lastUpdated: '', blockedBy: [],
+    simple: 'Категорія: Redesign (RD).',
+    subtasks: []
+  },
+  {
+    id: 'RD-19', title: 'Authorization (login + forgotten)', status: 'todo', tool: 'Codex', priority: 'Low',
+    lastUpdated: '', blockedBy: [],
+    simple: 'Категорія: Redesign (RD).',
+    subtasks: []
+  },
+  {
+    id: 'RD-20', title: 'Registration (step 1 + step 2)', status: 'todo', tool: 'Codex', priority: 'Medium',
+    lastUpdated: '', blockedBy: [],
+    simple: 'Категорія: Redesign (RD).',
+    subtasks: []
+  },
+  {
+    id: 'SEO-003', title: 'Internal search aliases для трьох варіантів написання', status: 'todo', tool: '—', priority: 'Medium',
+    lastUpdated: '2026-05-19', blockedBy: [],
+    subtasks: []
+  },
+  {
+    id: 'SEO-005', title: '301 redirect з URL з é на ASCII slug', status: 'todo', tool: 'Codex', priority: 'High',
+    lastUpdated: '2026-05-19', blockedBy: [],
+    simple: 'Категорія: Technical SEO.',
+    subtasks: []
+  },
+  {
+    id: 'SEO-006', title: 'Прибрати «оригинал», «карточки покемон», «настільні ігри для дітей» з усіх meta-keywords', status: 'todo', tool: '—', priority: 'Medium',
+    lastUpdated: '2026-05-19', blockedBy: [],
+    subtasks: []
+  },
+  {
+    id: 'SEO-006-1', title: 'Виправити «Знижка від 10 шт» → «5+»', status: 'todo', tool: '—', priority: 'Medium',
+    lastUpdated: '2026-05-19', blockedBy: [],
+    subtasks: []
+  },
+  {
+    id: 'SEO-007', title: 'Ninja Spinner: SEO push картки і бокса', status: 'todo', tool: '—', priority: 'High',
+    lastUpdated: '2026-08-04', blockedBy: [],
+    simple: 'Категорія: SEO / Product page.',
+    subtasks: []
+  },
+  {
+    id: 'SETUP-001', title: 'Налаштувати OpenCart Settings → мін. сума замовлення 300 грн. Прибрати поле minimum=2 на всіх бустерах.', status: 'todo', tool: 'Codex (OpenCart admin → Settings, bulk product update SQL)', priority: 'High',
+    lastUpdated: '2026-09-08', blockedBy: [],
+    simple: 'Категорія: Conversion / Setup.',
+    warn: 'Залишок точно виміряний 2026-09-08: minimum очищено на 117 з 119 товарів (лишились product_id 59 = 2 і 73 = 5); мін. сума замовлення 300 грн у налаштуваннях не виставлена взагалі.',
+    subtasks: []
+  },
+  {
+    id: 'TECH-001', title: 'PHP version / security headers', status: 'todo', tool: '—', priority: 'High',
+    lastUpdated: '', blockedBy: [],
+    simple: 'Категорія: Technical / Security.',
+    subtasks: []
+  },
+  {
+    id: 'TECH-014', title: '404 / redirect / crawl log cleanup', status: 'todo', tool: '—', priority: 'Medium',
+    lastUpdated: '', blockedBy: [],
+    simple: 'Категорія: Technical SEO.',
+    subtasks: []
+  },
+  {
+    id: 'TECH-019', title: 'Bing Webmaster Tools + Ahrefs Webmaster Tools', status: 'todo', tool: '—', priority: 'Medium',
+    lastUpdated: '', blockedBy: [],
+    simple: 'Категорія: SEO / External tools.',
+    subtasks: []
+  },
+  {
+    id: 'TECH-020', title: 'Screaming Frog baseline crawl', status: 'todo', tool: '—', priority: 'High',
+    lastUpdated: '', blockedBy: [],
+    simple: 'Категорія: Technical SEO / QA.',
+    subtasks: []
+  },
+  {
+    id: 'TECH-021', title: 'SEO browser QA toolkit', status: 'todo', tool: '—', priority: 'Medium',
+    lastUpdated: '', blockedBy: [],
+    simple: 'Категорія: SEO / QA tooling.',
+    subtasks: []
+  },
+  {
+    id: 'TECH-022', title: 'Paid SEO suite decision', status: 'todo', tool: '—', priority: 'Low',
+    lastUpdated: '', blockedBy: [],
+    simple: 'Категорія: SEO / Strategy.',
+    subtasks: []
+  },
+  {
+    id: 'TECH-023', title: 'Weekly SEO monitoring routine', status: 'todo', tool: '—', priority: 'Medium',
+    lastUpdated: '', blockedBy: [],
+    simple: 'Категорія: SEO / Process.',
+    subtasks: []
+  },
+  {
+    id: 'TECH-026', title: 'Оцінити поточний NP модуль vs paid module', status: 'todo', tool: 'Owner decision + Codex', priority: 'High',
+    lastUpdated: '2026-06-12', blockedBy: [],
+    simple: 'Категорія: Infrastructure / Checkout.',
+    subtasks: []
+  },
+  {
+    id: 'TECH-027', title: 'Image naming audit + alt-text audit', status: 'todo', tool: '—', priority: 'Medium',
+    lastUpdated: '2026-05-19', blockedBy: [],
+    simple: 'Категорія: SEO / Images.',
+    subtasks: []
+  },
+  {
+    id: 'TECH-028', title: 'Додати meta, H1 з конкретикою, опис категорії і 2-3 FAQ на /special', status: 'todo', tool: '—', priority: 'Medium',
+    lastUpdated: '2026-05-19', blockedBy: [],
+    subtasks: []
+  },
+  {
+    id: 'TECH-029', title: '[ID-колізія, партія 2026-08-04] Додати category description і FAQ на /catalog/Pokemon/Pokemon-boosters', status: 'todo', tool: '—', priority: 'High',
+    lastUpdated: '2026-08-04', blockedBy: [],
+    subtasks: []
+  },
+  {
+    id: 'TECH-032', title: 'Robots.txt: block internal search & parametric URLs', status: 'todo', tool: '—', priority: 'Medium',
+    lastUpdated: '2026-09-08', blockedBy: [],
+    simple: 'Категорія: Technical SEO.',
+    warn: 'Частково зроблено: параметричні URL перекриті, внутрішній пошук (?search=) — ні. Лишились два рядки Disallow. robots.txt — SEO-ризикова зона, спершу bs-seo-risk-gate.',
+    subtasks: []
+  },
+  {
+    id: 'TECH-034', title: 'Image compression (31 images > 100kB)', status: 'todo', tool: '—', priority: 'Medium',
+    lastUpdated: '2026-06-07', blockedBy: [],
+    simple: 'Категорія: Performance / SEO.',
+    subtasks: []
+  },
+  {
+    id: 'UX-001', title: 'Архітектура каталогу під розширення асортименту', status: 'todo', tool: '—', priority: 'Low',
+    lastUpdated: '', blockedBy: [],
+    simple: 'Категорія: Navigation.',
+    subtasks: []
+  },
+  {
+    id: 'UX-002', title: 'Головна сторінка: масштабування без втрати фокусу', status: 'todo', tool: '—', priority: 'Low',
+    lastUpdated: '', blockedBy: [],
+    simple: 'Категорія: Homepage.',
+    subtasks: []
+  },
+  {
+    id: 'UX-003', title: 'Header navigation / Каталог', status: 'todo', tool: '—', priority: 'Low',
+    lastUpdated: '', blockedBy: [],
+    simple: 'Категорія: Navigation.',
+    subtasks: []
+  },
+  {
+    id: 'UX-005', title: 'Mobile navigation', status: 'todo', tool: '—', priority: 'Low',
+    lastUpdated: '', blockedBy: [],
+    simple: 'Категорія: Mobile UX.',
+    subtasks: []
+  },
+  {
+    id: 'UX-008', title: 'Trust facts на товарних сторінках', status: 'todo', tool: '—', priority: 'Low',
+    lastUpdated: '', blockedBy: [],
+    simple: 'Категорія: Trust / Product page.',
+    subtasks: []
+  },
+  {
+    id: 'UX-009', title: 'Search UX/UI: visual + functional improvements', status: 'todo', tool: 'Codex', priority: 'Low',
+    lastUpdated: '2026-06-01', blockedBy: [],
+    simple: 'Категорія: Search.',
+    subtasks: []
+  },
+  {
+    id: 'UX-010', title: 'Accessories upsell', status: 'todo', tool: '—', priority: 'Low',
+    lastUpdated: '', blockedBy: [],
+    simple: 'Категорія: Conversion.',
+    subtasks: []
+  },
+  {
+    id: 'UX-011', title: 'Singles strategy', status: 'todo', tool: '—', priority: 'Medium',
+    lastUpdated: '', blockedBy: [],
+    simple: 'Категорія: Catalog / Future.',
+    subtasks: []
+  },
+  {
+    id: 'UX-015', title: 'Hutko return/session reliability', status: 'done', tool: '—', priority: 'High',
+    lastUpdated: '2026-09-08', blockedBy: [],
+    simple: 'Категорія: Payments.',
+    subtasks: []
+  },
+  {
+    id: 'UX-016', title: 'Checkbox / fiscalization reliability', status: 'done', tool: '—', priority: 'High',
+    lastUpdated: '2026-09-08', blockedBy: [],
+    simple: 'Категорія: Operations.',
+    subtasks: []
+  },
+  {
+    id: 'UX-025', title: 'При logged-in без адреси показувати warning на checkout', status: 'todo', tool: 'Codex', priority: 'High',
+    lastUpdated: '2026-05-19', blockedBy: [],
+    simple: 'Категорія: Checkout.',
+    subtasks: []
+  },
+  {
+    id: 'UX-027', title: 'Прибрати native review block, замінити на trust-блок з лінками', status: 'todo', tool: '—', priority: 'Medium',
+    lastUpdated: '2026-05-19', blockedBy: [],
+    subtasks: []
+  },
+  {
+    id: 'UX-028', title: 'Cleanup (Замовити знову, hide invoice/billing, hide pagination/Продовжити)', status: 'todo', tool: '—', priority: 'Medium',
+    lastUpdated: '2026-05-19', blockedBy: [],
+    subtasks: []
+  },
+  {
+    id: 'UX-029', title: 'Modernize order list (Детальніше, no Продовжити, mobile card layout)', status: 'todo', tool: '—', priority: 'Medium',
+    lastUpdated: '2026-05-19', blockedBy: [],
+    subtasks: []
+  },
+  {
+    id: 'UX-030', title: 'Card layout, default badge, edit/delete buttons', status: 'todo', tool: '—', priority: 'Medium',
+    lastUpdated: '2026-05-19', blockedBy: [],
+    subtasks: []
+  },
+  {
+    id: 'UX-031', title: '-/+ кнопки на product page', status: 'todo', tool: '—', priority: 'Medium',
+    lastUpdated: '2026-05-19', blockedBy: [],
+    subtasks: []
+  },
+  {
+    id: 'UX-033', title: 'One Piece підкатегорії (deferred until OP Mystery Box added)', status: 'todo', tool: '—', priority: 'Low',
+    lastUpdated: '2026-05-19', blockedBy: [],
+    subtasks: []
+  }
 ];
 
 

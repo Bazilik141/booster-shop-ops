@@ -300,17 +300,29 @@ which batch it belongs to. Always confirm which page you have before writing.
 `[ARCHIVED]` prefix. Canonical: `NCRM-07b` = `39f6bf20-bdb4-8185-adc2-cf8c29f6e359`,
 `TECH-013` = `3a06bf20-bdb4-810c-b914-e518ca5f7188`.
 
-### Mirror coverage gap (open, 2026-09-08)
+### Mirror coverage (closed 2026-09-08)
 
-The dashboard `ROADMAP_TASKS` array holds 130 rows; Notion holds 277. About 110
-**not-closed** Notion tasks have no dashboard row at all — the whole `AUTO-`
-series, `MKT-001…008`, `SEO-002…007`, `POLISH-`, `UX-001…034`, `TECH-001…034`,
-`CONTENT-001…004`, `CAT-001`, `CAT-003`, `PAY-001-SMOKE`, `PAY-003`. The owner
-reads the dashboard, so those tasks are invisible to him. The owner authorized
-adding every not-closed row to the mirror on 2026-09-08; the work is blocked
-until the Notion **Query Data Source** usage limit resets, because generating
-honest rows needs each task's full `Name`, `Priority`, `Primary Tool` and
-`Last Updated`, and search-based recovery would cost one call per task.
+The dashboard `ROADMAP_TASKS` array now mirrors **every not-closed Notion row**.
+Before the 2026-09-08 reconciliation it held 130 rows against 288 in Notion, and
+about 110 open tasks — the whole `AUTO-` series, `MKT-001…008`, `SEO-002…007`,
+`POLISH-`, `UX-001…034`, `TECH-001…034`, `CONTENT-001…004`, `CAT-003`,
+`PAY-001-SMOKE`, `PAY-003` — had no dashboard row at all and were therefore
+invisible to the owner, who reads the dashboard. 76 rows were generated from
+Notion in that pass; the array is now 206 rows.
+
+Rows created by that generation carry only fields that came from Notion: `id`,
+`title`, `status`, `tool`, `priority`, `lastUpdated`, a `simple` line holding the
+Notion `Category`, and `warn` where Notion has a real `Blocker`. They have no
+invented `simple`/`why` prose — the task body stays in Notion. If you flesh one
+out, take the text from its Notion page, not from the ID.
+
+**Keep it closed.** A Notion row created without its `ROADMAP_TASKS` row is
+invisible; a Notion row closed without its mirror leaves a stale card. Both
+writes belong to the same session — see §0 and the owner instruction of
+2026-08-16.
+
+Full record of the reconciliation:
+`diagnostics/ROADMAP-RECONCILE_notion-dashboard-gap_20260908.md`.
 
 ### NCRM series
 
@@ -396,6 +408,7 @@ NCRM-04 through NCRM-12 were renumbered/rescoped on 2026-07-11 under
 | CONTENT-005 | `3b86bf20-bdb4-81d6-acad-dc7d32b55500` | Added 2026-08-10 as the content half of `CRM-008`: ChatGPT drafts five starter-deck product cards → Claude reviews via `bs-content-qa` → Claude Code patches them onto the site → owner deploys. Blocked until the SKUs exist and the deck contents are verified; product specifications must not be invented |
 | CONTENT-006 | `3ca6bf20-bdb4-81d1-9bd1-d3df4853f35d` | Added 2026-08-28 on owner instruction ("пуш, коміт, апдейт роадмап і дашборд") as the Done record of the content-quality wave deployed that day. Six work packages in one handoff `handoffs/handoff_CONTENT-QUALITY_wave_20260828.md`: FAQ accordion recovery on 9 cards, the 28-card content payload from `BOOSTER-SHOP_CONTENT-QUALITY_RELEASE_20260825_v2.zip` with the `/product/` link prefix applied to 5 hrefs, attribute **verification** (owner scoped it to checking, not rewriting), categories 73/74 disabled with corrected keywords, 7 kit-card `BR-` SKUs, and the CRM RRP reconciliation tracked separately as `CRM-010`. DoD gate: production deployment plus read-only verification via `scripts/bs-wave-verify-20260828.sh` — 52 FAQ items, no raw HTML stored, attributes 43/44/55 correct, no capacity attributes created, products 154–162 created with correct status/quantity/price/categories/slug, SVEL at 400 g and 220×160×60, exactly 40 attribute definitions; owner confirmed QA. Two checks reported FAIL only because the script pinned `product_discount_id` values that an admin product save had renumbered — live rows 1177–1180 and 1182 are correct in substance, ⚠ but the WP6 `restore.sql` for the promotion half is therefore stale. Executor: Codex (patch), owner (deploy). Report: `diagnostics/CONTENT-QUALITY_wave_production-verification_20260828.md`. ⚠ Open follow-up: `scripts/bs-cards-export.php` parses descriptions without HTML-entity decoding, so `h2/h3/strong/ul/a = 0` and `faq_items = 0` and `NO_HEADING/NO_EMPHASIS/NO_FAQ` fire on all 94 products — one-line fix, not done. ID evidence: registry named `CONTENT-006` as next free; a live query of the series returned `CONTENT-001`…`CONTENT-005` plus the non-numeric `CONTENT-20260721-test`, so `CONTENT-006` was taken with no gap |
 | CRM-010 | `3ca6bf20-bdb4-81cb-a54c-ed92611e491e` | Added 2026-08-28 on owner instruction as the Done record of WP6 of the content-quality wave: reconcile column E `РРЦ, грн` of `Booster Shop CRM — облік товарів - РРЦ.csv` (95 SKUs, data from row 3) against live site prices and update **visible products only**; RRP is the pre-discount price. Owner decisions: specials untouched except four disabled outright (`MTG-JP-AFRS-BST`, `PKM-EN-PORD-BBN`, `PKM-EN-CHRS-BBN`, `PKM-EN-CHRS-BST`); `PKM-JP-OUTL-BST` keeps 90 base / 80 special as a permanent promotion already reflected in the CRM; the 21 CRM SKUs absent from the site are intentionally excluded; hidden products' placeholder prices are irrelevant. Owner-supplied SKU corrections: `PKM-JP-ABYSS-BST`→`PKM-JP-ABYE-BST`, `PKM-JP-ABYSS-BBX`→`PKM-JP-ABYE-BBX`, `PKM-KR-HWA-BST`→`PKM-KR-HWAK-BST`, `YGO-JP-BODE-BST`→`YGO-JP-BDOM-BST`, `PKM-MEGA-BOX`→`PKM-JP-MSYM-BBX`. DoD gate: all 25 price changes verified against plan by `scripts/bs-wave-verify-20260828.sh`; owner confirmed QA. ⚠ The `restore.sql` rollback for the promotion half is stale (renumbered `product_discount_id`s) — do not run as-is. Two corrections to my own earlier reporting are recorded in the page notes: bulk tiers at `quantity` 2/5 are not displayed specials (`catalog/model/catalog/product.php` requires `quantity = '1'`), and the correct change count is 24 price updates, not the 20 I stated in round 2. Executor: Codex (patch), owner (deploy). Report: `diagnostics/CONTENT-QUALITY_wave_production-verification_20260828.md`. ID evidence: registry named `CRM-010` as next free; a live query of the series returned `CRM-001`…`CRM-009` plus the non-numeric `CRM-006-ORDER`, so `CRM-010` was taken with no gap |
+| CRM-011 | `3d56bf20-bdb4-81b9-b397-d05e00557c12` | Added 2026-09-08 on owner instruction ("наступний вільний у серії CRM-", "одна задача з підпунктами"). Dashboard analytics layer in six independently deployable work packages: WP1 slow stock, WP2 one Apps Script backend pass (payment/creation date columns, `finance_report`, `orders` client enrichment, `ltv_report` extension, `client_orders`, segmentation constants, JPY fallback 3.5→3.2), WP3 Finance tab, WP4 Orders, WP5 Clients, WP6 roadmap filters. Handoff `handoffs/handoff_CRM-011_dashboard-finance-crm-upgrade_20260908.md`, executor Codex (Sol/xhigh). WP2 appends columns to `Закупки` and `Продажі` → `OPS-CRMINTEGRITY` applies in full |
 | 3D-P-024 | `3b66bf20-bdb4-8132-a8d5-f3078cf95abb` | Added 2026-08-08 during 3D-P-015 live QA: print time is stored as decimal hours everywhere and nothing said so, so `1:39` and `1,39` silently produced wrong costs. Storage unit unchanged; normalisation moved to every entry point. Deployed and live-verified the same day. Handoff: `handoffs/handoff_3D-P-024_print-time-entry-usability_20260808.md` |
 | ACC-003 | `3c46bf20-bdb4-8147-8107-e7a80c93baa3` | Added 2026-08-22 on owner instruction. P0: OpenCart 4.1 regenerates `login_token` / `register_token` on every render of `account/login` and `account/register` and keeps a single session value, so any second render of the page while the customer is filling the form kills it — the POST returns a bare redirect back to the same form with no message at all. Production access log 31/Jul–21/Aug: 44 silent login bounces out of 66 attempts and 18 out of 22 registrations, all from 06–07/Aug, zero before. Trigger was the Plerdy tag (installed 2026-08-05, re-requested every page ~4–5 s after load); owner removed it from production 2026-08-22, which removes the trigger but not the defect — Chrome speculative prefetch on the login page is already visible in the 21/Aug log. Executor: Claude Code (owner assignment 2026-08-22, override of the Codex recommendation in the handoff). Handoff: `handoffs/handoff_ACC-003_login-register-token-rotation_20260822.md`. ID evidence: registry named no next free `ACC-`; a live query of the series returned `ACC-001` and `ACC-002` only, so `ACC-003` was taken with no gap. ⚠ `ACC-003` is ALSO an unrelated CRM product SKU (see the `CRM-007` row) — the two namespaces collide in text search, they are not the same thing |
 
@@ -414,10 +427,14 @@ number stays permanently unused — do not recycle it. Numbering continued at
 `3D-P-016`; **the next free ID is `3D-P-027`** (`3D-P-022`, `3D-P-023` and
 `3D-P-024` were taken on 2026-08-08, `3D-P-025` on 2026-08-09, `3D-P-026` on
 2026-09-08). In the `CRM-`
-series the next free ID is **`CRM-011`** and in the `CONTENT-` series
-**`CONTENT-007`** (updated 2026-08-28: `CRM-010` and `CONTENT-006` were both
-taken that day for the content-quality wave; live queries returned
-`CRM-001`…`CRM-009` plus the non-numeric `CRM-006-ORDER`, and
+series the next free ID is **`CRM-012`** and in the `CONTENT-` series
+**`CONTENT-007`** (updated 2026-09-08: `CRM-011` was taken that day for the
+dashboard analytics layer; a live query of the whole `CRM-` series returned
+`CRM-001`…`CRM-010` plus the non-numeric `CRM-006-ORDER`, so `CRM-011` was
+assigned. Superseded 2026-08-28 wording, kept for history: the next free ID
+read `CRM-011` from 2026-08-28 until 2026-09-08, when `CRM-010` and
+`CONTENT-006` were both taken for the content-quality wave; live queries then
+returned `CRM-001`…`CRM-009` plus the non-numeric `CRM-006-ORDER`, and
 `CONTENT-001`…`CONTENT-005` plus the non-numeric `CONTENT-20260721-test`).
 Superseded wording, kept for history: the next free IDs read `CRM-010` and
 `CONTENT-006` from 2026-08-13 until 2026-08-28. Corrected 2026-08-10: this line still read `CRM-006` although
