@@ -1,5 +1,26 @@
 # Main CRM Apps Script — repository mirror state
 
+## CRM-011 internal migration expansion — LOCAL CANDIDATE, NOT PUBLISHED (2026-09-10)
+
+The repository mirror now expands the existing FIFO-safe internal migration
+from boxes only to a guarded `container_to_units` operation. Eligible sources
+are active boxes/displays, bundles, sets, blisters, and the canonical
+`ACC-003` pack of 25 toploaders. Targets remain constrained to individual
+booster-pack SKU, plus the exact `ACC-009` single-toploader SKU.
+
+`ACC-003` is allowed only as `1 × ACC-003 → 25 × ACC-009`; both the target and
+quantity are server-validated, while the dashboard auto-fills them. Existing
+`box_to_packs` API requests and ledger rows remain compatible. The operation
+still allocates the oldest remaining purchase cost through FIFO, appends the
+auditable `Міграції_Складу` movement, preserves preorder/write-off reserves,
+and does not edit historical purchases.
+
+The dashboard adds text search by SKU or product name above both source and
+target dropdowns. No shared CSS selector or visual override was added. Local
+focused backend and dashboard tests pass; the complete Apps Script test folder
+also passes. This source has not been pasted or published to the bound Apps
+Script project, and no live migration was executed.
+
 ## CRM-011 ZenMarket account — OWNER-RUNTIME-REPORTED; LATEST UAH LINE LOCAL (2026-09-10)
 
 The owner reported in the active task that the ZenMarket account feature appears

@@ -3329,8 +3329,12 @@ const CRM_INVENTORY_MIGRATION_HEADERS_ = Object.freeze([
 ]);
 const CRM_INVENTORY_MIGRATION_TYPE_LABELS_ = Object.freeze({
   box_to_packs: 'Бокс → поштучні паки',
+  container_to_units: 'Упаковка → поштучний SKU',
   packs_to_outlet: 'Паки → Outlet Mix'
 });
+const CRM_INVENTORY_MIGRATION_TOPLOADER_SOURCE_SKU_ = 'ACC-003';
+const CRM_INVENTORY_MIGRATION_TOPLOADER_TARGET_SKU_ = 'ACC-009';
+const CRM_INVENTORY_MIGRATION_TOPLOADER_QTY_ = 25;
 
 function inventoryMigrationRound6_(value) { return Math.round(num_(value) * 1000000) / 1000000; }
 
@@ -3409,7 +3413,16 @@ function inventoryMigrationCatalog_(ss) {
 }
 
 function inventoryMigrationIsBoxSku_(item) { return /(?:box|бокс|display)/i.test(String((item || {}).format || '')); }
-function inventoryMigrationIsPackSku_(item) { return !inventoryMigrationIsBoxSku_(item) && /(?:booster|бустер|pack|пак)/i.test(String((item || {}).format || '')); }
+function inventoryMigrationIsBundleSku_(item) {
+  item = item || {};
+  const text = [item.sku, item.name, item.format].join(' ');
+  return /(?:bundle|бандл|набір|blister|блістер)/i.test(text) || /(?:^|[\s/_-])set(?:$|[\s/_-])/i.test(text) || /-(?:BBN|BLR|SET)$/i.test(String(item.sku || ''));
+}
+function inventoryMigrationIsPackSku_(item) { return !inventoryMigrationIsBoxSku_(item) && !inventoryMigrationIsBundleSku_(item) && /(?:booster|бустер|pack|пак)/i.test(String((item || {}).format || '')); }
+function inventoryMigrationIsToploaderSource_(item) { return String((item || {}).sku || '').toUpperCase() === CRM_INVENTORY_MIGRATION_TOPLOADER_SOURCE_SKU_; }
+function inventoryMigrationIsToploaderTarget_(item) { return String((item || {}).sku || '').toUpperCase() === CRM_INVENTORY_MIGRATION_TOPLOADER_TARGET_SKU_; }
+function inventoryMigrationIsSplitSource_(item) { return inventoryMigrationIsBoxSku_(item) || inventoryMigrationIsBundleSku_(item) || inventoryMigrationIsToploaderSource_(item); }
+function inventoryMigrationIsSplitTarget_(item) { return inventoryMigrationIsPackSku_(item) || inventoryMigrationIsToploaderTarget_(item); }
 
 function inventoryMigrationStockSnapshot_(ss) {
   const purchases = ss.getSheetByName('Закупки');
@@ -3450,11 +3463,17 @@ function apiInventoryMigrationContext_() {
   const outlet = catalog[CRM_INVENTORY_MIGRATION_OUTLET_SKU_];
   if (!outlet) throw new Error('Не знайдено активний SKU Outlet Mix: ' + CRM_INVENTORY_MIGRATION_OUTLET_SKU_ + '.');
   const items = Object.keys(catalog).map(function(sku) { return decorate(catalog[sku]); }).sort(function(a, b) { return a.sku.localeCompare(b.sku); });
+  const splitSources = items.filter(function(item) { return inventoryMigrationIsSplitSource_(catalog[item.sku]) && item.available >= 1; }).map(function(item) {
+    if (!inventoryMigrationIsToploaderSource_(item)) return item;
+    return Object.assign({}, item, { fixed_target_sku: CRM_INVENTORY_MIGRATION_TOPLOADER_TARGET_SKU_, default_target_qty: CRM_INVENTORY_MIGRATION_TOPLOADER_QTY_ });
+  });
   return {
     ok: true, outlet: decorate(outlet),
     boxes: items.filter(function(item) { return inventoryMigrationIsBoxSku_(catalog[item.sku]) && item.available >= 1; }),
     pack_sources: items.filter(function(item) { return item.sku !== outlet.sku && inventoryMigrationIsPackSku_(catalog[item.sku]) && item.available >= 1; }),
-    pack_targets: items.filter(function(item) { return item.sku !== outlet.sku && inventoryMigrationIsPackSku_(catalog[item.sku]); })
+    pack_targets: items.filter(function(item) { return item.sku !== outlet.sku && inventoryMigrationIsPackSku_(catalog[item.sku]); }),
+    split_sources: splitSources,
+    split_targets: items.filter(function(item) { return item.sku !== outlet.sku && inventoryMigrationIsSplitTarget_(catalog[item.sku]); })
   };
 }
 
@@ -3464,14 +3483,17 @@ function inventoryMigrationNormalizeRequest_(payload, catalog) {
   const requestId = String(payload.request_id || '').trim();
   if (!/^migration_[A-Za-z0-9_-]{10,96}$/.test(requestId)) throw new Error('Некоректний Request ID міграції; онови форму та повтори.');
   if (!catalog[sourceSku] || !catalog[sourceSku].stockRow) throw new Error('SKU джерела відсутній у Товари або Склад: ' + sourceSku + '.');
-  if (type === 'box_to_packs') {
+  if (type === 'box_to_packs' || type === 'container_to_units') {
     const targetSku = String(payload.target_sku || '').trim().toUpperCase();
     const targetQty = Number(payload.target_qty);
-    if (!catalog[targetSku] || !catalog[targetSku].stockRow) throw new Error('SKU поштучних паків відсутній у Товари або Склад: ' + targetSku + '.');
-    if (!inventoryMigrationIsBoxSku_(catalog[sourceSku])) throw new Error('Для «бокс → паки» SKU джерела має формат box / бокс / display.');
-    if (!inventoryMigrationIsPackSku_(catalog[targetSku])) throw new Error('SKU цілі має бути поштучним паком (формат Booster / пак).');
+    if (!catalog[targetSku] || !catalog[targetSku].stockRow) throw new Error('Поштучний SKU цілі відсутній у Товари або Склад: ' + targetSku + '.');
+    if (type === 'box_to_packs' && !inventoryMigrationIsBoxSku_(catalog[sourceSku])) throw new Error('Для старого режиму «бокс → паки» SKU джерела має формат box / бокс / display.');
+    if (type === 'container_to_units' && !inventoryMigrationIsSplitSource_(catalog[sourceSku])) throw new Error('Джерелом має бути бокс, бандл, набір, блістер або упаковка топлоадерів ACC-003.');
+    if (!inventoryMigrationIsSplitTarget_(catalog[targetSku])) throw new Error('Ціллю має бути поштучний бустер або поштучний топлоадер ACC-009.');
     if (sourceSku === targetSku) throw new Error('SKU джерела й цілі не можуть збігатися.');
     if (!isFinite(targetQty) || targetQty <= 0 || Math.floor(targetQty) !== targetQty) throw new Error('Кількість поштучних паків має бути цілим числом більше нуля.');
+    if (inventoryMigrationIsToploaderSource_(catalog[sourceSku]) && (targetSku !== CRM_INVENTORY_MIGRATION_TOPLOADER_TARGET_SKU_ || targetQty !== CRM_INVENTORY_MIGRATION_TOPLOADER_QTY_)) throw new Error('ACC-003 можна роздерибанити лише в 25 × ACC-009.');
+    if (!inventoryMigrationIsToploaderSource_(catalog[sourceSku]) && inventoryMigrationIsToploaderTarget_(catalog[targetSku])) throw new Error('ACC-009 доступний як ціль лише для упаковки ACC-003.');
     return { type: type, label: CRM_INVENTORY_MIGRATION_TYPE_LABELS_[type], sourceSku: sourceSku, targetSku: targetSku, sourceQty: 1, targetQty: targetQty, requestId: requestId };
   }
   if (type === 'packs_to_outlet') {
@@ -3522,7 +3544,7 @@ function inventoryMigrationSourceAllocation_(ss, sku, requestedQty) {
 
 // A preorder is a stock reservation even before its final COGS is known.  The
 // normal sale-cost path leaves it pending, then a later incoming FIFO batch
-// (including box → pack and pack → Outlet migrations) can price that reserved
+// (including package → unit and pack → Outlet migrations) can price that reserved
 // line without allowing another sale or migration to consume the same units.
 function inventoryMigrationPreorderRows_(ss, sku) {
   const sales = ss.getSheetByName('Продажі');

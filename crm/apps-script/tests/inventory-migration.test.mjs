@@ -40,19 +40,30 @@ class Spreadsheet {
 
 function makeEnvironment(){
   const products=new Sheet("Товари"),stock=new Sheet("Склад"),purchases=new Sheet("Закупки"),sales=new Sheet("Продажі"),writeoffs=new Sheet("Списання");
-  products.getRange(3,1,3,12).setValues([
+  products.getRange(3,1,7,12).setValues([
     ["BOX-001","","Test box","","","","Booster Box","","","","","Так"],
     ["PACK-001","","Test pack","","","","Booster","","","","","Так"],
-    ["PKM-JP-OUTL-BST","","Outlet Mix","","","","Booster","","","","","Так"]
+    ["PKM-JP-OUTL-BST","","Outlet Mix","","","","Booster","","","","","Так"],
+    ["BUNDLE-001","","Test booster bundle","","","","Booster","","","","","Так"],
+    ["SET-001","","Test special set","","","","Booster","","","","","Так"],
+    ["ACC-003","","Топлоадери 35PT, 25 шт","","","","Accessory","","","","","Так"],
+    ["ACC-009","","Топлоадер 35PT, 1 шт","","","","Accessory","","","","","Так"]
   ]);
-  stock.getRange(3,1,3,10).setValues([
+  stock.getRange(3,1,7,10).setValues([
     ["BOX-001","","","","","","",2,100,110],
     ["PACK-001","","","","","","",0,0,0],
-    ["PKM-JP-OUTL-BST","","","","","","",0,0,0]
+    ["PKM-JP-OUTL-BST","","","","","","",0,0,0],
+    ["BUNDLE-001","","","","","","",1,60,66],
+    ["SET-001","","","","","","",1,70,77],
+    ["ACC-003","","","","","","",1,50,55],
+    ["ACC-009","","","","","","",0,0,0]
   ]);
-  [3,4,5].forEach(row=>stock.getRange(row,8).setFormula('=IF($A'+row+'="";"";$E'+row+'-$F'+row+'-$G'+row+')'));
+  [3,4,5,6,7,8,9].forEach(row=>stock.getRange(row,8).setFormula('=IF($A'+row+'="";"";$E'+row+'-$F'+row+'-$G'+row+')'));
   const lot=Array(18).fill("");lot[0]="LOT-0001";lot[3]=new Date("2026-08-01");lot[4]="BOX-001";lot[7]=2;lot[12]=100;lot[15]=110;lot[16]="На складі";
-  purchases.getRange(3,1,1,18).setValues([lot]);
+  const bundleLot=Array(18).fill("");bundleLot[0]="LOT-0002";bundleLot[3]=new Date("2026-08-02");bundleLot[4]="BUNDLE-001";bundleLot[7]=1;bundleLot[12]=60;bundleLot[15]=66;bundleLot[16]="На складі";
+  const setLot=Array(18).fill("");setLot[0]="LOT-0003";setLot[3]=new Date("2026-08-03");setLot[4]="SET-001";setLot[7]=1;setLot[12]=70;setLot[15]=77;setLot[16]="На складі";
+  const toploaderLot=Array(18).fill("");toploaderLot[0]="LOT-0004";toploaderLot[3]=new Date("2026-08-04");toploaderLot[4]="ACC-003";toploaderLot[7]=1;toploaderLot[12]=50;toploaderLot[15]=55;toploaderLot[16]="На складі";
+  purchases.getRange(3,1,4,18).setValues([lot,bundleLot,setLot,toploaderLot]);
   // A live preorder reserves two packs before the box is opened. The target
   // SKU has no landed lot yet, so this is the regression that previously
   // disappeared from the migration snapshot and made 28 look available.
@@ -124,4 +135,34 @@ const contextResult=context.__test.apiInventoryMigrationContext_();
 assert.equal(contextResult.outlet.sku,"PKM-JP-OUTL-BST");
 assert.equal(contextResult.boxes[0].available,1);
 assert.equal(contextResult.pack_sources[0].available,28);
+assert.deepEqual(Array.from(contextResult.split_sources,item=>item.sku),["ACC-003","BOX-001","BUNDLE-001","SET-001"]);
+assert.equal(contextResult.split_sources[0].fixed_target_sku,"ACC-009");
+assert.equal(contextResult.split_sources[0].default_target_qty,25);
+assert.deepEqual(Array.from(contextResult.split_targets,item=>item.sku),["ACC-009","PACK-001"]);
+
+const bundle=context.__test.apiInventoryMigration_(ss,{action:"inventory_migration",type:"container_to_units",source_sku:"BUNDLE-001",target_sku:"PACK-001",target_qty:6,expected_source_available:1,request_id:"migration_bundle_to_pack_001"});
+assert.equal(bundle.ok,true);
+assert.equal(bundle.operation_id,"MIG-0003");
+assert.equal(bundle.source_qty,1);
+assert.equal(bundle.target_qty,6);
+snapshot=context.__test.inventoryMigrationStockSnapshot_(ss).available;
+assert.equal(snapshot["BUNDLE-001"],0);
+assert.equal(snapshot["PACK-001"],34);
+
+const setSplit=context.__test.apiInventoryMigration_(ss,{action:"inventory_migration",type:"container_to_units",source_sku:"SET-001",target_sku:"PACK-001",target_qty:4,expected_source_available:1,request_id:"migration_set_to_pack_0001"});
+assert.equal(setSplit.ok,true);
+assert.equal(setSplit.operation_id,"MIG-0004");
+
+const wrongToploaderTarget=context.__test.apiInventoryMigration_(ss,{action:"inventory_migration",type:"container_to_units",source_sku:"ACC-003",target_sku:"PACK-001",target_qty:25,expected_source_available:1,request_id:"migration_toploader_wrong_target"});
+assert.equal(wrongToploaderTarget.ok,false);
+assert.match(wrongToploaderTarget.error,/25 × ACC-009/);
+const wrongToploaderQty=context.__test.apiInventoryMigration_(ss,{action:"inventory_migration",type:"container_to_units",source_sku:"ACC-003",target_sku:"ACC-009",target_qty:24,expected_source_available:1,request_id:"migration_toploader_wrong_qty_01"});
+assert.equal(wrongToploaderQty.ok,false);
+assert.match(wrongToploaderQty.error,/25 × ACC-009/);
+const toploaders=context.__test.apiInventoryMigration_(ss,{action:"inventory_migration",type:"container_to_units",source_sku:"ACC-003",target_sku:"ACC-009",target_qty:25,expected_source_available:1,request_id:"migration_toploader_to_single"});
+assert.equal(toploaders.ok,true);
+assert.equal(toploaders.operation_id,"MIG-0005");
+snapshot=context.__test.inventoryMigrationStockSnapshot_(ss).available;
+assert.equal(snapshot["ACC-003"],0);
+assert.equal(snapshot["ACC-009"],25);
 console.log("Inventory migration FIFO, preorder, write-off reservation, and idempotency tests passed");
