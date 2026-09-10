@@ -28,6 +28,7 @@ SpreadsheetApp.getUi()
 
 function addSale() {
 resetMemoForMutation_(); const ss = SpreadsheetApp.getActive();
+crm011RequireColumn_(ss, 'Продажі', 'Дата оплати');
 const formSheet = ss.getSheetByName('Внести_продаж');
 const sales = ss.getSheetByName('Продажі');
 const form = readFormRange_(formSheet, 'A4:B20');
@@ -103,6 +104,7 @@ sales.getRange(row, 20).setValue(lineDelivery);
 sales.getRange(row, 23, 1, 6).setValues([[form['Статус оплати'], form['Статус замовлення'], form['Пошта'], form['ТТН'], note, paymentType]]);
 sales.getRange(row, 29).setValue(packagingType); fixSaleCostForRow_(ss, row, costRunState, { clearPending: true });
 });
+if (String(form['Статус оплати'] || '').trim() === 'Оплачено') crm011StampRowsOnce_(sales, addedRows, 'Дата оплати', new Date());
 
 if (mysteryComponents.length) {
 addMysteryBoxWriteOffs_(ss, mysteryComponents, form['Дата продажу'], operation);
@@ -116,6 +118,8 @@ SpreadsheetApp.getUi().alert('Продаж додано: ' + operation + ' / п�
 
 function addPurchase() {
 resetMemoForMutation_(); const ss = SpreadsheetApp.getActive();
+crm011RequireColumn_(ss, 'Закупки', 'Дата створення');
+crm011ZenRequireSetup_(ss);
 const formSheet = ss.getSheetByName('Внести_закупку');
 const purchases = ss.getSheetByName('Закупки');
 const form = readFormRange_(formSheet, 'A4:B9');
@@ -153,9 +157,15 @@ const note = [form['Примітка'], item.note, costNote, items.length > 1 &&
 purchases.getRange(row, 1, 1, 5).setValues([[lotIds[index], order, '', '', item.sku]]);
 purchases.getRange(row, 8, 1, 4).setValues([[item.qty, lineCost, lineJapanFees, '']]);
 purchases.getRange(row, 17, 1, 3).setValues([[status, note, orderUrl]]);
+purchases.getRange(row, 20).setValue('zenmarket_jp');
 });
+crm011StampRowsOnce_(purchases, lotIds.map(function(_, index) { return firstRow + index; }), 'Дата створення', new Date());
+SpreadsheetApp.flush();
+let zenSyncWarning = '';
+try { crm011ZenSyncPurchaseLots_(ss, lotIds, { force_zenmarket: true }); }
+catch (zenError) { zenSyncWarning = String(zenError && zenError.message ? zenError.message : zenError); Logger.log('CRM-011 ZenMarket sync failed after direct purchase add: ' + zenSyncWarning); }
 
-invalidateDoGetCache_(); clearInputForm('Внести_закупку'); SpreadsheetApp.getUi().alert('Закупку додано: ' + order + ' / позицій: ' + items.length);
+invalidateDoGetCache_(); clearInputForm('Внести_закупку'); SpreadsheetApp.getUi().alert('Закупку додано: ' + order + ' / позицій: ' + items.length + (zenSyncWarning ? '\nУвага: Zen-баланс не синхронізовано — ' + zenSyncWarning : ''));
 }
 
 
@@ -195,7 +205,7 @@ return;
 }
 
 const lastRow = purchases.getLastRow();
-const data = purchases.getRange(3, 1, Math.max(lastRow - 2, 1), 18).getValues();
+const data = purchases.getRange(3, 1, Math.max(lastRow - 2, 1), 20).getValues();
 const matchingRows = [];
 const seenRows = {};
 const manualOrders = manualOrder.split(/[\n,;]+/).map(function(item) { return item.trim(); }).filter(Boolean);
@@ -233,6 +243,8 @@ if (!isBlank_(form[field])) matchingRows.forEach(function(match) { purchases.get
 });
 
 const jpyRate = getCurrencyRate_('JPY');
+crm011ZenRequireSetup_(ss);
+crm011ZenEnsurePurchaseBaselines_(ss, matchingRows, { force_zenmarket: true, jpy_rate: jpyRate });
 matchingRows.forEach(function(match) {
 if (match.lot && !isBlank_(match.lot.japanJpy)) purchases.getRange(match.row, 10).setValue(round2_(num_(match.lot.japanJpy) / jpyRate));
 });
@@ -250,6 +262,9 @@ matchingRows.forEach(function(match) { appendCellText_(purchases.getRange(match.
 }
 
 SpreadsheetApp.flush();
+let zenSyncWarning = '';
+try { crm011ZenSyncPurchaseLots_(ss, matchingRows.map(function(match) { return String(match.values[0] || '').trim(); }), { force_zenmarket: true }); }
+catch (zenError) { zenSyncWarning = String(zenError && zenError.message ? zenError.message : zenError); Logger.log('CRM-011 ZenMarket sync failed after direct purchase update: ' + zenSyncWarning); }
 const selectedStatus = isBlank_(form['Статус']) ? '' : String(form['Статус'] || '').trim();
 const landedSkus = matchingRows.filter(function(match) {
 const nextStatus = selectedStatus || String(match.values[16] || '').trim();
@@ -259,7 +274,7 @@ const preorderCosts = landedSkus.length ? preorderReconcileSkus_(ss, landedSkus,
 if (landedSkus.length) updateSkuCurrentCost_(ss);
 invalidateDoGetCache_(); clearInputForm('Оновити_закупку');
 const preorderPriced = Object.keys(preorderCosts).reduce(function(total, sku) { return total + num_(preorderCosts[sku].priced); }, 0);
-SpreadsheetApp.getUi().alert('Закупку оновлено. Рядків: ' + matchingRows.length + '. Курс JPY за 1 грн: ' + jpyRate + (preorderPriced ? '. FIFO передзамовлень оновлено: ' + preorderPriced + '.' : ''));
+SpreadsheetApp.getUi().alert('Закупку оновлено. Рядків: ' + matchingRows.length + '. Курс JPY за 1 грн: ' + jpyRate + (preorderPriced ? '. FIFO передзамовлень оновлено: ' + preorderPriced + '.' : '') + (zenSyncWarning ? '\nУвага: Zen-баланс не синхронізовано — ' + zenSyncWarning : ''));
 }
 function addWriteOff() {
 resetMemoForMutation_(); const ss = SpreadsheetApp.getActive();
@@ -1086,7 +1101,7 @@ return pipeIndex === -1 ? text : text.substring(0, pipeIndex).trim();
 }
 function getCurrencyRate_(currency) {
 const sheet = SpreadsheetApp.getActive().getSheetByName('Курси');
-if (!sheet) return currency === 'JPY' ? 3.5 : 1;
+if (!sheet) return currency === 'JPY' ? 3.2 : 1;
 const values = sheet.getRange(4, 1, Math.max(sheet.getLastRow() - 3, 1), 2).getValues();
 for (let i = 0; i < values.length; i++) {
 if (String(values[i][0] || '').trim() === currency) {
@@ -1094,7 +1109,7 @@ const rate = num_(values[i][1]);
 if (rate > 0) return rate;
 }
 }
-return currency === 'JPY' ? 3.5 : 1;
+return currency === 'JPY' ? 3.2 : 1;
 }
 
 function allocateAmount_(amount, basisValues) {
@@ -1198,6 +1213,7 @@ if (packagingChanged) { sales.getRange(row, 16).setValue(packagingAllocations[in
 if (shopDelivery !== null) sales.getRange(row, 20).setValue(deliveryAllocations[index]);
 if (!isBlank_(note)) appendCellText_(sales.getRange(row, 27), note); fixSaleCostForRow_(ss, row, costRunState, { clearPending: false });
 });
+if (paymentChanged && String(newPaymentStatus || '').trim() === 'Оплачено') crm011StampRowsOnce_(sales, rows, 'Дата оплати', new Date());
 if (fixturePlan.entries.length) append3dp019FixtureUsage_(ss, fixturePlan, current[2], fixturePlan.ledger_source, order, note);
 invalidateDoGetCache_(); sync3dpPackagingCost_(sales, order, rows, 'updateSaleStatus'); reapplyOrderComponentCostAfterBaseRefresh_(ss, order, rows); clearSaleUpdateForm();
 const fixtureWarning = fixturePlan.warning ? '\n' + fixturePlan.warning : '';
@@ -1289,7 +1305,7 @@ return _memo.autoSs;
 }
 
 function _getCrmSalesRowEntries() {
-if (!_memo.salesRowEntries) { const ss = _getCrmSs(); const sales = ss.getSheetByName('Продажі'); if (!sales) throw new Error('Не знайдено вкладку Продажі.'); const lastRow = Math.max(sales.getLastRow(), 3); const raw = sales.getRange(3, 1, lastRow - 2, 32).getValues(); _memo.salesRowEntries = raw.map(function(row, index) { return { rowNumber: index + 3, values: row }; }); }
+if (!_memo.salesRowEntries) { const ss = _getCrmSs(); const sales = ss.getSheetByName('Продажі'); if (!sales) throw new Error('Не знайдено вкладку Продажі.'); const lastRow = Math.max(sales.getLastRow(), 3); const raw = sales.getRange(3, 1, lastRow - 2, 33).getValues(); _memo.salesRowEntries = raw.map(function(row, index) { return { rowNumber: index + 3, values: row }; }); }
 return _memo.salesRowEntries;
 }
 function _getCrmSalesRows() {
@@ -1316,7 +1332,7 @@ return _memo.salesRows;
 
 function keepWarm() { _getCrmSs(); try { _getAutoSs(); } catch (e) { /* non-fatal */ } }
 
-const CACHEABLE_ACTIONS = { overview_bootstrap: 90, overview_secondary: 120, overview_assets: 600, sku_list: 300, order_component_catalog: 60, stock_alerts: 120, summary: 90, channel_stats: 120, monthly_summary: 300 };
+const CACHEABLE_ACTIONS = { overview_bootstrap: 90, overview_secondary: 120, overview_assets: 600, sku_list: 300, order_component_catalog: 60, stock_alerts: 120, summary: 90, channel_stats: 120, monthly_summary: 300, finance_report: 180, ltv_report: 180 };
 const CRM_INTEGRITY_MAX_PROBLEMS_PER_CODE_ = 10;
 // Keep this SKU grammar aligned with plans/3D-P_sku-naming-convention_20260807.md.
 const CRM_INTEGRITY_3DP_SKU_RE_ = /^(?:BR|FIG|ACC-3D)-[A-Z0-9][A-Z0-9-]*$/;
@@ -1365,7 +1381,7 @@ function invalidateDoGetCache_() {
 const version = String(new Date().getTime()); PropertiesService.getScriptProperties().setProperty('CRM_DOGET_CACHE_VERSION', version); if (typeof _memo !== 'undefined' && _memo) _memo.doGetCacheVersion = version;
 }
 
-function apiDoGetCacheKey_(action, params) { const version = apiDoGetCacheVersion_(); if (action === 'overview_assets') return 'bscrm_v2_' + version + '_' + action + '_v1'; if (action === 'sku_list') return 'bscrm_v2_' + version + '_' + action + '_' + String(params.sort || '').toLowerCase() + '_' + String(params.limit || ''); if (action === 'monthly_summary') return 'bscrm_v2_' + version + '_' + action + '_v3'; if (action === 'overview_bootstrap' || action === 'overview_secondary') return 'bscrm_v2_' + version + '_' + action + '_v2'; return 'bscrm_v2_' + version + '_' + action; }
+function apiDoGetCacheKey_(action, params) { const version = apiDoGetCacheVersion_(); if (action === 'overview_assets') return 'bscrm_v2_' + version + '_' + action + '_v1'; if (action === 'sku_list') return 'bscrm_v2_' + version + '_' + action + '_' + String(params.sort || '').toLowerCase() + '_' + String(params.limit || ''); if (action === 'monthly_summary') return 'bscrm_v2_' + version + '_' + action + '_v3'; if (action === 'overview_bootstrap' || action === 'overview_secondary') return 'bscrm_v2_' + version + '_' + action + '_v2'; if (action === 'finance_report') return 'bscrm_v2_' + version + '_' + action + '_v4_' + [params.date_from, params.date_to, params.compare_from, params.compare_to].join('_'); if (action === 'ltv_report') return 'bscrm_v2_' + version + '_' + action + '_v2_' + String(params.qualified || '') + '_' + String(params.limit || '') + '_' + String(params.period || ''); return 'bscrm_v2_' + version + '_' + action; }
 
 function handleApiAction_(action, params) {
 if (action === 'overview_bootstrap') return apiOverviewBootstrap_();
@@ -1381,6 +1397,9 @@ if (action === 'consumables') return apiConsumables_(params);
 if (action === 'channel_stats') return apiChannelStats_(params);
 if (action === 'monthly_summary') return apiMonthlySummary_(params);
 if (action === 'ltv_report') return apiLtvReport_(params);
+if (action === 'client_orders') return apiClientOrders_(params);
+if (action === 'finance_report') return apiFinanceReport_(params);
+if (action === 'payment_date_audit') return apiPaymentDateAudit_(params);
 if (action === 'recent_sales') return apiRecentSalesForUpdate_(params);
 if (action === 'recent_purchases') return apiRecentPurchasesForUpdate_(params);
 if (action === 'sync_journal') return apiSyncJournal_(params);
@@ -1683,8 +1702,8 @@ const lock = LockService.getScriptLock();
 if (!lock.tryLock(30000)) return boosterCrmJson_({ ok: false, error: 'crm busy, retry later' });
 try {
 const action = String(payload.action || '').trim().toLowerCase();
-if (action === 'add_sale') return boosterCrmJson_(apiAddSale_(ss, payload));
-if (action === 'add_purchase') return boosterCrmJson_(apiAddPurchase_(ss, payload));
+if (action === 'add_sale') return boosterCrmJson_(crm011ApiAddSale_(ss, payload));
+if (action === 'add_purchase') return boosterCrmJson_(crm011ApiAddPurchase_(ss, payload));
 if (action === 'add_writeoff') return boosterCrmJson_(apiAddWriteOff_(ss, payload));
 if (action === 'update_sale') return boosterCrmJson_(apiUpdateSaleWithComponents_(ss, payload));
 if (action === 'retry_3dp_sync') return boosterCrmJson_(apiRetry3dpOrderSync_(ss, payload));
@@ -1700,6 +1719,8 @@ if (action === 'inventory_migration') return boosterCrmJson_(apiInventoryMigrati
 if (action === 'test_order_cleanup') return boosterCrmJson_(apiTestOrderCleanup_(ss, payload));
 if (action === 'crm_maintenance') return boosterCrmJson_(apiCrmMaintenance_(ss, payload));
 if (action === 'add_expense') return boosterCrmJson_(apiAddExpense_(ss, payload));
+if (action === 'zenmarket_topup') return boosterCrmJson_(crm011ZenmarketTopup_(ss, payload));
+if (action === 'zenmarket_correct_balance') return boosterCrmJson_(crm011ZenmarketCorrectBalance_(ss, payload));
 
 const result = upsertOpenCartOrder_(ss, payload);
 return boosterCrmJson_({ ok: true, result: result });
@@ -3118,7 +3139,8 @@ function apiRecentSalesForUpdate_(params) {
     note: apiRecentCol_(table.headers, 'Примітка'),
     paymentType: apiRecentCol_(table.headers, 'Тип оплати'),
     packagingType: apiRecentCol_(table.headers, 'Паковання'),
-    costMethod: apiRecentCol_(table.headers, 'Метод собівартості')
+    costMethod: apiRecentCol_(table.headers, 'Метод собівартості'),
+    fiscalReceipt: apiRecentCol_(table.headers, 'Фіскальний чек')
   };
   const rows = [];
   let current = null;
@@ -3133,7 +3155,7 @@ function apiRecentSalesForUpdate_(params) {
         date: row[c.date] ? apiDate_(row[c.date]) : '',
         payment_status: row[c.paymentStatus] || '', payment_type: row[c.paymentType] || '',
         order_status: row[c.orderStatus] || '', ttn: row[c.ttn] || '', post: row[c.post] || '',
-        packaging_type: row[c.packagingType] || '', amount: 0, management_cost: 0,
+        packaging_type: row[c.packagingType] || '', fiscal_receipt: row[c.fiscalReceipt] || '', amount: 0, management_cost: 0,
         packaging_cost: 0, shop_delivery: 0, forecast_lines: 0, note: row[c.note] || ''
       };
       rows.push(current);
@@ -3237,7 +3259,7 @@ function apiUpdatePurchaseBatch10_(ss, payload) {
       if (lots[lotId]) throw new Error('duplicate lot_id');
       lots[lotId] = item;
     });
-    const data = purchases.getRange(3, 1, Math.max(purchases.getLastRow() - 2, 1), 18).getValues();
+    const data = purchases.getRange(3, 1, Math.max(purchases.getLastRow() - 2, 1), 20).getValues();
     const matches = [];
     data.forEach(function(values, index) {
       const lotId = String(values[0] || '').trim();
@@ -3252,6 +3274,11 @@ function apiUpdatePurchaseBatch10_(ss, payload) {
     const hasJapan = matches.some(function(match) { return Object.prototype.hasOwnProperty.call(match.lot, 'japan_fee_jpy') && String(match.lot.japan_fee_jpy) !== ''; });
     if (!hasTrack && !hasDate && !hasStatus && !hasUkraine && !note && !hasJapan) throw new Error('nothing changed');
     const jpyRate = getCurrencyRate_('JPY');
+    const zenMatches = matches.filter(function(match) { return crm011ZenIsPurchaseRow_(match.values); });
+    if (zenMatches.length) {
+      crm011ZenRequireSetup_(ss);
+      crm011ZenEnsurePurchaseBaselines_(ss, zenMatches, { jpy_rate: jpyRate });
+    }
     let ukraineAllocations = [];
     if (hasUkraine) {
       const totalUah = round2_(Math.max(0, apiNum_(payload.ukraine_delivery_jpy)) / jpyRate);
@@ -3266,6 +3293,11 @@ function apiUpdatePurchaseBatch10_(ss, payload) {
       if (note) appendCellText_(purchases.getRange(match.row, 18), note);
     });
     SpreadsheetApp.flush();
+    let zenSyncError = '';
+    if (zenMatches.length) {
+      try { crm011ZenSyncPurchaseLots_(ss, zenMatches.map(function(match) { return String(match.values[0] || '').trim(); })); }
+      catch (zenError) { zenSyncError = String(zenError && zenError.message ? zenError.message : zenError); Logger.log('CRM-011 ZenMarket sync failed after purchase update: ' + zenSyncError); }
+    }
     const landedSkus = matches.filter(function(match) {
       const nextStatus = hasStatus ? String(payload.status || '').trim() : String(match.values[16] || '').trim();
       return nextStatus === 'На складі UA' || nextStatus === 'На складі';
@@ -3273,7 +3305,9 @@ function apiUpdatePurchaseBatch10_(ss, payload) {
     const preorderCosts = landedSkus.length ? preorderReconcileSkus_(ss, landedSkus, new Date()) : {};
     if (landedSkus.length) updateSkuCurrentCost_(ss);
     invalidateDoGetCache_();
-    return { ok: true, rows_updated: matches.length, lot_ids: Object.keys(lots), preorder_costs: preorderCosts };
+    const response = { ok: true, rows_updated: matches.length, lot_ids: Object.keys(lots), preorder_costs: preorderCosts };
+    if (zenMatches.length) { response.zenmarket_synced = !zenSyncError; response.zenmarket_sync_error = zenSyncError || null; }
+    return response;
   } catch (err) {
     return { ok: false, error: String(err && err.message ? err.message : err) };
   }
@@ -4425,7 +4459,7 @@ function testOrderCleanupOrderReport_(ss, config, order, dryRun, allowMissingSal
   if (dryRun || report.already_applied) { Logger.log(JSON.stringify(report)); return report; }
   const snapshots = [];
   try {
-    plan.sale_rows.forEach(function(item) { const range = plan.sales.getRange(item.row, 1, 1, 32); snapshots.push(snapshotCrmRange_(range)); clearCrmRangePreservingFormulas_(range); });
+    plan.sale_rows.forEach(function(item) { const range = plan.sales.getRange(item.row, 1, 1, 34); snapshots.push(snapshotCrmRange_(range)); clearCrmRangePreservingFormulas_(range); });
     plan.component_rows.forEach(function(item) { const range = plan.components.getRange(item.row, 1, 1, 15); snapshots.push(snapshotCrmRange_(range)); clearCrmRangePreservingFormulas_(range); });
     plan.fixture_rows.forEach(function(item) { const range = plan.fixtures.getRange(item.row, 1, 1, 14); snapshots.push(snapshotCrmRange_(range)); clearCrmRangePreservingFormulas_(range); });
     plan.accounting_rows.forEach(function(item) { const range = plan.accounting.getRange(item.row, 1, 1, 20); snapshots.push(snapshotCrmRange_(range)); clearCrmRangePreservingFormulas_(range); });
@@ -5321,10 +5355,20 @@ try { tgAnswerCallback_(callbackId, 'Помилка'); } catch (answerErr) { Log
 }
 
 function tgCommandOrders_(chatId, messageId) {
-const orders = crmGetOrders_('active', 20);
+// The CRM-wide "active" status includes preorders and unpaid rows. Telegram is
+// a shipment queue, so it must show only parcels with an assigned TTN.
+const orders = crmGetOrders_('active', 200, { sort: 'date_desc', skip_marketing: true })
+  .filter(function(order) { return tgIsShippableOrder_(order); })
+  .slice(0, 20);
 let text = orders.length ? '<b>Активні замовлення: ' + orders.length + '</b>' : 'Активних замовлень немає';
 const keyboard = orders.map(function(order) { return [{ text: tgOrderButtonText_(order), callback_data: 'order_sel_' + order.order_id }]; }); keyboard.push([{ text: 'Назад', callback_data: 'main_menu' }]);
 if (messageId) tgEditMessage_(chatId, messageId, text, keyboard); else tgSendMessage_(chatId, text, keyboard);
+}
+
+function tgIsShippableOrder_(order) {
+const status = String(order && order.order_status || '').trim();
+const ttn = String(order && order.ttn || '').trim();
+return status !== 'Передзамовлення' && !!ttn;
 }
 
 function tgShowOrderDetails_(chatId, messageId, orderId, statusText) {
@@ -5624,8 +5668,7 @@ const salesRows = _getCrmSalesRows();
 return {
 ok: true,
 channel: apiChannelStats_({ period: 'current_month' }),
-skus: apiSkuList_({ sort: 'profit' }, salesRows),
-stock: apiStockAlerts_()
+skus: apiSkuList_({ sort: 'profit' }, salesRows)
 };
 }
 
@@ -5763,7 +5806,7 @@ function apiOrderEditContext_(params) {
 
 function apiStockAlerts_() {
 const data = apiReadStockAlertsAndCounts_();
-return { ok: true, count: data.alerts.length, alerts: data.alerts };
+return { ok: true, count: data.alerts.length, alerts: data.alerts, arrivals_by_sku: crm011PurchaseArrivalMap_() };
 }
 
 function apiSkuList_(params, salesRows) { params = params || {};
@@ -5776,7 +5819,7 @@ if (!sku) return;
 const active = String(apiObjVal_(row, ['Активний', 'Active']) || '').trim().toLowerCase();
 if (['так', 'true', 'yes', '1'].indexOf(active) === -1) return;
 const issuesText = apiObjVal_(row, ['Якість даних', 'Проблеми', 'Issues']);
-const skuName = row['Назва'] || row['Назва товару'] || row['Повна назва на сайті'] || ''; const metric = metrics[sku] || {}; const stockMetric = stockMetrics[sku] || {}; const rrcMetric = rrcMetrics[sku] || {}; const currentCostMetric = currentCostMetrics[sku] || null; const currentRrc = rrcMetric.rrc || apiNum_(apiObjVal_(row, ['Ціна CRM', 'РРЦ', 'Ціна'])); const format = apiObjVal_(row, ['Формат', 'Format']); const setName = apiObjVal_(row, ['Сет', 'Сет / група', 'Набір', 'Set']); skus.push({ sku: sku, name: skuName, full_name: row['Повна назва на сайті'] || skuName, brand: apiObjVal_(row, ['Бренд', 'Brand']), format: format, is_3dp: is3dpCatalogSku_(sku, setName, format), rrc: currentRrc, price_crm: currentRrc, dynamic_rrc: rrcMetric.dynamic_rrc || 0, current_rrc_margin_pct: rrcMetric.margin_pct, rrc_cost_base_60d: rrcMetric.cost_base_60d || 0, current_cost: currentCostMetric ? currentCostMetric.cost : null, price_opencart: apiNum_(apiObjVal_(row, ['Ціна OpenCart', 'OpenCart ціна', 'Feed price'])), stock: stockMetric.stock != null ? stockMetric.stock : apiNum_(apiObjVal_(row, ['Залишок', 'На складі', 'Stock'])), expected: stockMetric.expected != null ? stockMetric.expected : apiNum_(apiObjVal_(row, ['Очікується', 'В дорозі', 'Expected'])), incoming_stock: stockMetric.incoming_stock, incoming_after_preorder: stockMetric.incoming_after_preorder, projected_available_source: stockMetric.projected_available, stock_status: apiObjVal_(row, ['Статус залишку', 'Статус', 'Stock status']), url: apiObjVal_(row, ['URL', 'Посилання', 'Link']), issues: splitTags_(issuesText), sold_30d: metric.sold_30d != null ? metric.sold_30d : (stockMetric.sold_30d || 0), profit_30d: metric.profit_30d || 0, sold_60d: metric.sold_60d != null ? metric.sold_60d : (stockMetric.sold_60d || 0), profit_60d: metric.profit_60d || 0, action: stockMetric.action || '', urgency: stockMetric.urgency || '', max_buy_price: stockMetric.max_buy_price, margin_pct: stockMetric.margin_pct });
+const skuName = row['Назва'] || row['Назва товару'] || row['Повна назва на сайті'] || ''; const metric = metrics[sku] || {}; const stockMetric = stockMetrics[sku] || {}; const rrcMetric = rrcMetrics[sku] || {}; const currentCostMetric = currentCostMetrics[sku] || null; const currentRrc = rrcMetric.rrc || apiNum_(apiObjVal_(row, ['Ціна CRM', 'РРЦ', 'Ціна'])); const format = apiObjVal_(row, ['Формат', 'Format']); const setName = apiObjVal_(row, ['Сет', 'Сет / група', 'Набір', 'Set']); skus.push({ sku: sku, name: skuName, full_name: row['Повна назва на сайті'] || skuName, brand: apiObjVal_(row, ['Бренд', 'Brand']), format: format, is_3dp: is3dpCatalogSku_(sku, setName, format), is_mystery: isMysteryBoxSale_(sku, skuName), rrc: currentRrc, price_crm: currentRrc, dynamic_rrc: rrcMetric.dynamic_rrc || 0, current_rrc_margin_pct: rrcMetric.margin_pct, rrc_cost_base_60d: rrcMetric.cost_base_60d || 0, current_cost: currentCostMetric ? currentCostMetric.cost : null, price_opencart: apiNum_(apiObjVal_(row, ['Ціна OpenCart', 'OpenCart ціна', 'Feed price'])), stock: stockMetric.stock != null ? stockMetric.stock : apiNum_(apiObjVal_(row, ['Залишок', 'На складі', 'Stock'])), expected: stockMetric.expected != null ? stockMetric.expected : apiNum_(apiObjVal_(row, ['Очікується', 'В дорозі', 'Expected'])), incoming_stock: stockMetric.incoming_stock, incoming_after_preorder: stockMetric.incoming_after_preorder, projected_available_source: stockMetric.projected_available, stock_status: apiObjVal_(row, ['Статус залишку', 'Статус', 'Stock status']), url: apiObjVal_(row, ['URL', 'Посилання', 'Link']), issues: splitTags_(issuesText), sold_30d: metric.sold_30d != null ? metric.sold_30d : (stockMetric.sold_30d || 0), profit_30d: metric.profit_30d || 0, sold_60d: metric.sold_60d != null ? metric.sold_60d : (stockMetric.sold_60d || 0), profit_60d: metric.profit_60d || 0, action: stockMetric.action || '', urgency: stockMetric.urgency || '', max_buy_price: stockMetric.max_buy_price, margin_pct: stockMetric.margin_pct });
 });
 apiDecoratePreorderStock_(skus);
 if (String(params.sort || '').toLowerCase() === 'profit') skus.sort(function(a, b) { return (b.profit_30d || 0) - (a.profit_30d || 0); }); const limit = Math.max(0, Math.min(apiNum_(params.limit) || 0, 500)); const resultSkus = limit ? skus.slice(0, limit) : skus; return { ok: true, count: resultSkus.length, skus: resultSkus };
@@ -5848,32 +5891,6 @@ if (!result[sku]) result[sku] = { cost: latest[sku].cost, source: 'last_fifo_lot
 });
 return result;
 }
-function crmGetOrders_(status, limit, params) {
-params = params || {}; const st = String(status || 'active').toLowerCase(); const days = Math.max(0, Math.min(num_(params.days) || 0, 3650)); const sortDir = String(params.sort || 'date_desc').toLowerCase() === 'date_asc' ? 'date_asc' : 'date_desc';
-const skipMarketing = params.skip_marketing === true || String(params.skip_marketing || '').toLowerCase() === 'true';
-const cleanLimit = Math.max(1, Math.min(num_(limit) || 20, 500));
-const cache = CacheService.getScriptCache();
-const cacheKey = 'crm_orders_v4_' + crmOrdersCacheVersion_() + '_' + st + '_' + cleanLimit + '_' + days + '_' + sortDir + '_' + (skipMarketing ? 'plain' : 'marketing');
-const cached = cache.get(cacheKey);
-if (cached) return JSON.parse(cached);
-const ss = _getCrmSs();
-const entries = _getCrmSalesRowEntries();
-const map = {};
-entries.forEach(function(entry, index) { const row = entry.values; const orderId = String(row[0] || '').trim(); if (!orderId) return; if (!map[orderId]) map[orderId] = { order_id: orderId, date: apiDate_(row[2]), source: row[1] || '', payment_status: row[22] || '', order_status: row[23] || '', ttn: row[25] || '', post: row[24] || '', payment_type: row[27] || '', amount: 0, profit: 0, items_count: 0, forecast_lines: 0, skus: [], rows: [], sort: dateSortValue_(row[2]) || index };
-const order = map[orderId]; order.amount = round2_(order.amount + num_(row[10])); order.profit = round2_(order.profit + num_(row[21])); order.items_count = round2_(order.items_count + num_(row[7]));
-if (isUnfinalizedPreorderCostMethod_(row[29])) order.forecast_lines++;
-const sku = String(row[5] || '').trim(); if (sku && order.skus.indexOf(sku) === -1) order.skus.push(sku); order.rows.push(entry.rowNumber); });
-const marketingByOrder = skipMarketing ? {} : crm3dpMarketingByOrder_(ss).byOrder;
-Object.keys(map).forEach(function(orderId) { map[orderId].marketing = round2_(marketingByOrder[orderId] || 0); });
-let orders = Object.keys(map).map(function(key) { return map[key]; });
-orders = orders.filter(function(order) { return crmOrderMatchesStatus_(order, st); }); if (days > 0) { const cutoff = new Date().getTime() - days * 86400000; orders = orders.filter(function(order) { return order.sort && order.sort >= cutoff; }); }
-orders.sort(function(a, b) { return sortDir === 'date_asc' ? a.sort - b.sort : b.sort - a.sort; });
-const result = orders.slice(0, cleanLimit).map(function(order) { delete order.sort; delete order.rows; return order; });
-cache.put(cacheKey, JSON.stringify(result), 30);
-return result;
-}
-
-
 function crmFindOrder_(orderId) {
 const orders = crmGetOrders_('all', 500);
 for (let i = 0; i < orders.length; i++) if (orders[i].order_id === orderId) return orders[i];
@@ -6466,56 +6483,6 @@ return acc;
 function apiPeriodLabel_(startDate, endExclusive) {
 const endDate = new Date(endExclusive.getTime() - 86400000);
 return startDate.getDate() + '-' + endDate.getDate() + ' ' + apiMonthLabel_(startDate).toLowerCase();
-}
-
-function apiLtvReport_(params) {
-params = params || {};
-if (String(params.qualified || '').toLowerCase() === 'true') return apiQualifiedClientsReport_(params);
-const limit = Math.max(1, Math.min(apiNum_(params.limit) || 10, 50));
-const period = String(params.period || 'all_time').trim() === '60d' ? '60d' : 'all_time';
-const cutoff = new Date().getTime() - 60 * 86400000;
-const rows = apiReadCrmSalesRows_().filter(function(row) {
-if (period !== '60d') return true;
-const sort = dateSortValue_(row[2]);
-return !!sort && sort >= cutoff;
-});
-const clients = {};
-rows.forEach(function(row) {
-const key = apiCustomerKey_(row);
-if (!key) return;
-if (!clients[key]) clients[key] = { display: apiCustomerDisplay_(row), name: apiCustomerName_(row), channels: {}, orders: {}, units: 0, revenue: 0, profit: 0 };
-const channel = String(row[1] || 'Інше').trim() || 'Інше';
-const revenue = num_(row[10]); const profit = num_(row[21]);
-clients[key].orders[String(row[0] || '')] = true;
-clients[key].units = round2_(clients[key].units + num_(row[7]));
-clients[key].revenue = round2_(clients[key].revenue + revenue); clients[key].profit = round2_(clients[key].profit + profit);
-clients[key].channels[channel] = round2_(num_(clients[key].channels[channel]) + revenue);
-if (!clients[key].name || clients[key].name === '—') clients[key].name = apiCustomerName_(row);
-});
-const result = Object.keys(clients).map(function(key) { const c = clients[key]; return { identifier: c.display, display: c.display, name: c.name || '—', channel: apiTopChannel_(c.channels), orders: Object.keys(c.orders).length, units: c.units, revenue: round2_(c.revenue), profit: round2_(c.profit), ltv: round2_(c.revenue) }; });
-result.sort(function(a, b) { return b.ltv - a.ltv; });
-return { ok: true, period: period, limit: limit, clients: result.slice(0, limit) };
-}
-
-function apiQualifiedClientsReport_(params) {
-const limit = Math.max(1, Math.min(apiNum_(params.limit) || 200, 500));
-const cutoff = new Date().getTime() - 60 * 86400000;
-const clients = {};
-apiReadCrmSalesRows_().forEach(function(row) {
-const key = apiCustomerKey_(row); if (!key) return;
-if (!clients[key]) clients[key] = { display: apiCustomerDisplay_(row), name: apiCustomerName_(row), channels: {}, orders: {}, orders60: {}, units: 0, revenue: 0, profit: 0, spend60: 0 };
-const client = clients[key]; const order = String(row[0] || ''); const revenue = num_(row[10]); const profit = num_(row[21]); const channel = String(row[1] || 'Інше').trim() || 'Інше';
-client.orders[order] = true; client.units = round2_(client.units + num_(row[7])); client.revenue = round2_(client.revenue + revenue); client.profit = round2_(client.profit + profit); client.channels[channel] = round2_(num_(client.channels[channel]) + revenue);
-const sort = dateSortValue_(row[2]); if (sort && sort >= cutoff) { client.orders60[order] = true; client.spend60 = round2_(client.spend60 + revenue); }
-if (!client.name || client.name === '—') client.name = apiCustomerName_(row);
-});
-const result = Object.keys(clients).map(function(key) {
-const c = clients[key]; const orders = Object.keys(c.orders).length; const margin = c.revenue ? round2_(c.profit / c.revenue * 100) : 0; const reasons = [];
-if (orders > 1) reasons.push('repeat'); if (c.spend60 > 1500) reasons.push('spend_60d'); if (margin > 40) reasons.push('margin');
-return { identifier: c.display, display: c.display, name: c.name || '—', channel: apiTopChannel_(c.channels), orders: orders, orders_60d: Object.keys(c.orders60).length, units: c.units, revenue: round2_(c.revenue), ltv: round2_(c.revenue), profit: round2_(c.profit), margin_pct: margin, spend_60d: round2_(c.spend60), qualification: reasons };
-}).filter(function(client) { return client.qualification.length > 0; });
-result.sort(function(a, b) { return b.spend_60d - a.spend_60d || b.ltv - a.ltv || b.orders - a.orders || String(a.display).localeCompare(String(b.display), 'uk'); });
-return { ok: true, period: 'qualified', criteria: { min_orders_exclusive: 1, min_spend_60d_exclusive: 1500, min_margin_pct_exclusive: 40 }, limit: limit, total_matching: result.length, clients: result.slice(0, limit) };
 }
 
 function apiCustomerName_(row) {
@@ -9493,6 +9460,7 @@ function apiUpdateSaleWithComponents_(ss, payload) {
   }
   try {
     resetMemoForMutation_();
+    crm011RequireColumn_(ss, 'Продажі', 'Дата оплати');
     const sales = ss.getSheetByName('Продажі');
     if (!sales) throw new Error('sales sheet missing');
     const rowIndex = Math.floor(apiNum_(payload.row_index));
@@ -9543,6 +9511,17 @@ function apiUpdateSaleWithComponents_(ss, payload) {
     });
     const paymentStatus = String(payload.payment_status || '').trim();
     const orderStatus = String(payload.order_status || '').trim();
+    const fiscalColumn = crm011RequireColumn_(ss, 'Продажі', 'Фіскальний чек').column;
+    const fiscalConfirmed = payload.fiscal_receipt === true || ['так', 'true', 'yes', '1'].indexOf(String(payload.fiscal_receipt || '').trim().toLowerCase()) !== -1;
+    const fiscalRange = sales.getRange(rows[0], fiscalColumn, rows.length, 1);
+    const fiscalValues = fiscalRange.getDisplayValues();
+    const fiscalAlreadyRecorded = fiscalValues.every(function(row) {
+      return ['так', 'true', 'yes', '1'].indexOf(String(row[0] || '').trim().toLowerCase()) !== -1;
+    });
+    const fiscalChanged = fiscalConfirmed && !fiscalAlreadyRecorded;
+    if (paymentStatus === 'Оплачено' && orderStatus === 'Отримано' && !fiscalConfirmed && !fiscalAlreadyRecorded) {
+      throw new Error('FISCAL_RECEIPT_REQUIRED: постав галочку «Фіскальний чек» перед завершенням оплаченого замовлення.');
+    }
     const ttn = String(payload.ttn || '').trim();
     const packagingType = canonicalCrmPackagingType_(payload.packaging_type);
     const currentPackagingType = canonicalCrmPackagingType_(current[28]);
@@ -9559,7 +9538,7 @@ function apiUpdateSaleWithComponents_(ss, payload) {
     const hasDelivery = Object.prototype.hasOwnProperty.call(payload, 'shop_delivery') && String(payload.shop_delivery) !== '';
     const shopDelivery = hasDelivery ? Math.max(0, apiNum_(payload.shop_delivery)) : null;
     if (packagingType && !isKnownCrmPackagingType_(packagingType)) throw new Error('Недійсний тип паковання. Онови дашборд і вибери значення зі списку.');
-    if (!paymentChanged && !orderChanged && !ttnChanged && packaging === null && shopDelivery === null && !noteChanged && !componentRequested && !fixtureRequested && !raw3dpModes.length) throw new Error('nothing changed');
+    if (!paymentChanged && !orderChanged && !ttnChanged && packaging === null && shopDelivery === null && !noteChanged && !componentRequested && !fixtureRequested && !raw3dpModes.length && !fiscalChanged) throw new Error('nothing changed');
     // Status/payment, fixture, and 3D-mode changes can alter the base line cost.
     // A component-only save reprojects its own frozen ledger after it is written;
     // it does not need to recalculate the whole order before that write.
@@ -9577,7 +9556,7 @@ function apiUpdateSaleWithComponents_(ss, payload) {
     // Repair only the known CRM-004 validation defect and do it before any sale, gift,
     // component, or fixture mutation. A retry therefore remains append-idempotent.
     const packagingValidation = packagingChanged ? ensureCrmPackagingValidation_(ss) : null;
-    progress.fields_updated = paymentChanged || orderChanged || ttnChanged || packaging !== null || shopDelivery !== null || noteChanged || reservationFormula.updated > 0;
+    progress.fields_updated = paymentChanged || orderChanged || ttnChanged || packaging !== null || shopDelivery !== null || noteChanged || fiscalChanged || reservationFormula.updated > 0;
     rows.forEach(function(row, index) {
       if (paymentChanged) sales.getRange(row, 23).setValue(paymentStatus);
       if (orderChanged) sales.getRange(row, 24).setValue(orderStatus);
@@ -9590,6 +9569,7 @@ function apiUpdateSaleWithComponents_(ss, payload) {
         if (costResult && costResult.deferred) preorderCostVerification.push({ row: row, sku: String(sales.getRange(row, 6).getValue() || '').trim(), shortfall_qty: costResult.shortfall_qty });
       }
     });
+    if (fiscalConfirmed && !fiscalAlreadyRecorded) fiscalRange.setValues(rows.map(function() { return ['Так']; }));
     markPhase_('base_fields_written');
     // A preorder-cost edit may recover an already recorded migration: re-check
     // only this order's SKU(s), and price any active preorder now covered by
@@ -9635,8 +9615,9 @@ function apiUpdateSaleWithComponents_(ss, payload) {
     // Sales and component stock movements are canonical immediately; the derived
     // catalog projection is refreshed by nightly inventory maintenance.
     invalidateDoGetCache_();
+    if (String(paymentStatus || '').trim() === 'Оплачено') crm011StampRowsOnce_(sales, rows, 'Дата оплати', new Date());
     markPhase_('complete');
-    return { ok: true, row_index: rowIndex, order_id: order, rows_updated: rows.length, components_written: progress.components_written, fixtures_written: progress.fixtures_written, three_dp_gifts_written: progress.three_dp_gifts_written, component_prro_total: componentPlan.prro_total, component_mgmt_total: componentPlan.mgmt_total, fixture_warning: fixturePlan.warning || '', preorder_cost_warning: preorderCostVerification, packaging_validation: packagingValidation, stock_reservation_formula: reservationFormula, preorder_costs: preorderCosts, accounting: syncResult || null, current_cost_refresh: 'deferred_to_nightly_inventory_maintenance', timings_ms: timings, already_applied: requestState.component || requestState.fixture, partial: !!(syncResult && syncResult.ok === false), retry_action: syncResult && syncResult.ok === false ? 'retry_3dp_sync' : '', error: syncResult && syncResult.ok === false ? 'Не всі 3D-рядки синхронізовано' : '' };
+    return { ok: true, row_index: rowIndex, order_id: order, rows_updated: rows.length, fiscal_receipt: fiscalConfirmed || fiscalAlreadyRecorded, components_written: progress.components_written, fixtures_written: progress.fixtures_written, three_dp_gifts_written: progress.three_dp_gifts_written, component_prro_total: componentPlan.prro_total, component_mgmt_total: componentPlan.mgmt_total, fixture_warning: fixturePlan.warning || '', preorder_cost_warning: preorderCostVerification, packaging_validation: packagingValidation, stock_reservation_formula: reservationFormula, preorder_costs: preorderCosts, accounting: syncResult || null, current_cost_refresh: 'deferred_to_nightly_inventory_maintenance', timings_ms: timings, already_applied: requestState.component || requestState.fixture, partial: !!(syncResult && syncResult.ok === false), retry_action: syncResult && syncResult.ok === false ? 'retry_3dp_sync' : '', error: syncResult && syncResult.ok === false ? 'Не всі 3D-рядки синхронізовано' : '' };
   } catch (err) {
     markPhase_('error');
     const changed = progress.fields_updated || progress.components_written || progress.fixtures_written || progress.three_dp_gifts_written || progress.cost_updated;
@@ -9674,4 +9655,785 @@ function apiRetry3dpOrderSync_(ss, payload) {
   } catch (err) {
     return { ok: false, partial: false, error: String(err && err.message ? err.message : err) };
   }
+}
+
+// CRM-011: finance and client analytics. Keep all reads bounded to one pass per
+// sheet; mutation helpers refuse to run until the owner adds the append-only
+// date columns with setupCrm011FinanceColumns().
+const CRM011_CLIENT_RULES_ = Object.freeze({ repeat_orders: 2, dormant_days: 60, lost_days: 120, low_margin_pct: 15, low_margin_ltv: 5000, vip_profit_floor: 3000, vip_profit_percentile: 0.90 });
+const CRM011_ZEN_LEDGER_SHEET_ = 'ZenMarket_Рахунок';
+const CRM011_ZEN_LOTS_SHEET_ = 'ZenMarket_Лоти';
+const CRM011_ZEN_TOPUPS_SHEET_ = 'ZenMarket_Поповнення';
+const CRM011_ZEN_LEDGER_HEADERS_ = Object.freeze(['ID операції', 'Дата', 'Зміна JPY', 'Баланс після JPY', 'ID партії', 'Примітка', 'Сума UAH', 'Request ID', 'Створено', 'Джерело']);
+const CRM011_ZEN_LOT_HEADERS_ = Object.freeze(['ID партії', 'ZenMarket Order №', 'Товар JPY', 'Японія JPY', 'Доставка в Україну JPY', 'Витрата разом JPY', 'Оновлено']);
+const CRM011_ZEN_TOPUP_HEADERS_ = Object.freeze(['Payment ID', 'Дата', 'Сума JPY', 'Курс JPY за 1 UAH', 'Сума UAH', 'Gateway', 'Джерело оцінки', 'Примітка', 'Request ID', 'Створено']);
+const CRM011_ZEN_CORRECTION_NOTE_ = 'коригування балансу зен - курсова різниця';
+
+function crm011GameCode_(sku) {
+  const code = String(sku || '').trim().toUpperCase().split('-')[0];
+  return ['PKM', 'OP', 'MTG', 'YGO'].indexOf(code) !== -1 ? code : '';
+}
+
+function crm011HeaderColumn_(sheet, header) {
+  const width = Math.max(sheet.getLastColumn(), 1);
+  const headers = sheet.getRange(2, 1, 1, width).getDisplayValues()[0].map(apiNormalizeHeader_);
+  return headers.indexOf(apiNormalizeHeader_(header)) + 1;
+}
+
+function crm011RequireColumn_(ss, sheetName, header) {
+  const sheet = ss.getSheetByName(sheetName);
+  if (!sheet) throw new Error('Не знайдено вкладку ' + sheetName + '.');
+  const column = crm011HeaderColumn_(sheet, header);
+  if (!column) throw new Error('CRM-011_SETUP_REQUIRED: спочатку запусти setupCrm011FinanceColumns — відсутня колонка «' + header + '» у «' + sheetName + '».');
+  return { sheet: sheet, column: column };
+}
+
+function crm011StampRowsOnce_(sheet, rows, header, value) {
+  const column = crm011HeaderColumn_(sheet, header);
+  if (!column) throw new Error('CRM-011_SETUP_REQUIRED: відсутня колонка «' + header + '».');
+  (rows || []).forEach(function(row) {
+    const cell = sheet.getRange(row, column);
+    if (cell.isBlank()) cell.setValue(value);
+  });
+}
+
+function crm011BackfillPaymentDates_(sales) {
+  const column = crm011HeaderColumn_(sales, 'Дата оплати'), height = Math.max(sales.getLastRow() - 2, 1);
+  const rows = sales.getRange(3, 1, height, Math.max(33, column)).getValues(), dates = rows.map(function(row) { return [row[column - 1]]; });
+  let updated = 0;
+  rows.forEach(function(row, index) { const saleMs = dateSortValue_(row[2]); if (dates[index][0] || String(row[22] || '').trim() !== 'Оплачено' || !saleMs) return; let date = row[2]; if (/післяплат|накладен/i.test(String(row[27] || ''))) date = new Date(saleMs + 3 * 86400000); dates[index][0] = date; updated++; });
+  if (updated) sales.getRange(3, column, height, 1).setValues(dates);
+  return updated;
+}
+
+function setupCrm011FinanceColumns() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const before = apiIntegrityCheck_();
+  if (!before.clean) throw new Error('CRM_INTEGRITY_NOT_CLEAN: виправ проблеми перед зміною структури.');
+  const changes = [];
+  [['Закупки', 'Дата створення'], ['Продажі', 'Дата оплати'], ['Продажі', 'Фіскальний чек']].forEach(function(spec) {
+    const sheet = ss.getSheetByName(spec[0]);
+    if (!sheet) throw new Error('Не знайдено вкладку ' + spec[0] + '.');
+    if (crm011HeaderColumn_(sheet, spec[1])) return;
+    const column = sheet.getLastColumn() + 1;
+    sheet.getRange(2, column).setValue(spec[1]);
+    changes.push({ sheet: spec[0], header: spec[1], column: column });
+  });
+  const paymentDatesBackfilled = crm011BackfillPaymentDates_(ss.getSheetByName('Продажі'));
+  const rates = ss.getSheetByName('Курси');
+  if (!rates) throw new Error('Не знайдено вкладку Курси.');
+  const rateRows = rates.getRange(4, 1, Math.max(rates.getLastRow() - 3, 1), Math.max(rates.getLastColumn(), 2)).getDisplayValues();
+  let jpyRow = 0;
+  rateRows.some(function(row, index) { if (String(row[0] || '').trim() !== 'JPY') return false; jpyRow = index + 4; return true; });
+  if (!jpyRow) throw new Error('Не знайдено рядок JPY у Курси.');
+  let rateDateColumn = 0;
+  const rateHeaders = rates.getRange(3, 1, 1, Math.max(rates.getLastColumn(), 2)).getDisplayValues()[0].map(apiNormalizeHeader_);
+  rateDateColumn = rateHeaders.indexOf(apiNormalizeHeader_('Дата курсу')) + 1;
+  if (!rateDateColumn) { rateDateColumn = rates.getLastColumn() + 1; rates.getRange(3, rateDateColumn).setValue('Дата курсу'); }
+  if (rates.getRange(jpyRow, rateDateColumn).isBlank()) rates.getRange(jpyRow, rateDateColumn).setValue(new Date());
+  SpreadsheetApp.flush();
+  resetMemo_();
+  const after = apiIntegrityCheck_();
+  if (!after.clean) throw new Error('CRM_INTEGRITY_REGRESSION: перевірка після змін знайшла нові проблеми.');
+  const result = { ok: true, action: 'setup_crm011_finance_columns', changes: changes, payment_dates_backfilled: paymentDatesBackfilled, jpy_rate_date_row: jpyRow, jpy_rate_date_column: rateDateColumn, integrity_before: before, integrity_after: after };
+  console.log(JSON.stringify(result));
+  return result;
+}
+
+function crm011ZenEnsureSheet_(ss, name, headers, appendOnlyHeaders) {
+  let sheet = ss.getSheetByName(name);
+  let created = false;
+  if (!sheet) { sheet = ss.insertSheet(name); created = true; }
+  const width = Math.max(sheet.getLastColumn(), headers.length, 1);
+  const current = sheet.getRange(1, 1, 1, width).getDisplayValues()[0];
+  if (created || current.every(function(value) { return !String(value || '').trim(); })) {
+    sheet.getRange(1, 1, 1, headers.length).setValues([headers.slice()]);
+    sheet.setFrozenRows(1);
+    return { sheet: sheet, created: created, headers_added: headers.length };
+  }
+  if (appendOnlyHeaders) {
+    for (let index = 0; index < headers.length; index++) {
+      const actual = apiNormalizeHeader_(current[index] || '');
+      const expected = apiNormalizeHeader_(headers[index]);
+      if (!actual) sheet.getRange(1, index + 1).setValue(headers[index]);
+      else if (actual !== expected) throw new Error('ZENMARKET_SCHEMA_CONFLICT: ' + name + '!R1C' + (index + 1) + '.');
+    }
+    return { sheet: sheet, created: created, headers_added: Math.max(0, headers.length - current.filter(Boolean).length) };
+  }
+  for (let index = 0; index < headers.length; index++) {
+    if (apiNormalizeHeader_(current[index] || '') !== apiNormalizeHeader_(headers[index])) throw new Error('ZENMARKET_SCHEMA_CONFLICT: ' + name + '!R1C' + (index + 1) + '.');
+  }
+  return { sheet: sheet, created: created, headers_added: 0 };
+}
+
+function crm011ZenRequireSetup_(ss) {
+  const ledger = ss.getSheetByName(CRM011_ZEN_LEDGER_SHEET_);
+  const lots = ss.getSheetByName(CRM011_ZEN_LOTS_SHEET_);
+  const topups = ss.getSheetByName(CRM011_ZEN_TOPUPS_SHEET_);
+  if (!ledger || !lots || !topups) throw new Error('ZENMARKET_SETUP_REQUIRED: спочатку запусти setupCrm011ZenMarketAccount.');
+  crm011ZenEnsureSheet_(ss, CRM011_ZEN_LEDGER_SHEET_, CRM011_ZEN_LEDGER_HEADERS_, false);
+  crm011ZenEnsureSheet_(ss, CRM011_ZEN_LOTS_SHEET_, CRM011_ZEN_LOT_HEADERS_, false);
+  crm011ZenEnsureSheet_(ss, CRM011_ZEN_TOPUPS_SHEET_, CRM011_ZEN_TOPUP_HEADERS_, true);
+  return { ledger: ledger, lots: lots, topups: topups };
+}
+
+function crm011ZenHistoricalRows_() {
+  const localDate = function(year, month, day, hour, minute, second) { return new Date(year, month - 1, day, hour, minute, second); };
+  return [
+    ['ZEN-HIST-000', localDate(2026, 9, 7, 11, 23, 43), 0, -48260, '', 'Початковий баланс на початок обліку CRM', '', '', new Date(), 'historical_opening'],
+    ['ZEN-HIST-001', localDate(2026, 9, 7, 11, 23, 44), -960, -49220, '', 'Історія ZenMarket: доставка товару по Японії', '', '', new Date(), 'historical_expense'],
+    ['ZEN-HIST-002', localDate(2026, 9, 9, 1, 15, 0), -800, -50020, '', 'Історія ZenMarket: комісія', '', '', new Date(), 'historical_expense'],
+    ['ZEN-HIST-003', localDate(2026, 9, 9, 1, 15, 0), -7699, -57719, '', 'Історія ZenMarket: оплата товару', '', '', new Date(), 'historical_expense'],
+    ['ZEN-HIST-004', localDate(2026, 9, 9, 1, 15, 0), -800, -58519, '', 'Історія ZenMarket: комісія', '', '', new Date(), 'historical_expense'],
+    ['ZEN-HIST-005', localDate(2026, 9, 9, 1, 15, 0), -2700, -61219, '', 'Історія ZenMarket: оплата товару', '', '', new Date(), 'historical_expense'],
+    ['ZEN-HIST-006', localDate(2026, 9, 9, 1, 15, 0), -800, -62019, '', 'Історія ZenMarket: комісія', '', '', new Date(), 'historical_expense'],
+    ['ZEN-HIST-007', localDate(2026, 9, 9, 1, 15, 0), -3000, -65019, '', 'Історія ZenMarket: оплата товару', '', '', new Date(), 'historical_expense'],
+    ['ZEN-HIST-008', localDate(2026, 9, 10, 5, 28, 58), 70000, 4981, '', 'Історія ZenMarket: поповнення; UAH сума відсутня у HTML', '', '', new Date(), 'historical_topup'],
+    ['ZEN-HIST-009', localDate(2026, 9, 10, 5, 32, 52), -3366, 1615, '', 'Історія ZenMarket: міжнародна доставка', '', '', new Date(), 'historical_expense'],
+    ['ZEN-HIST-010', localDate(2026, 9, 10, 6, 43, 47), -800, 815, '', 'Історія ZenMarket: комісія', '', '', new Date(), 'historical_expense'],
+    ['ZEN-HIST-011', localDate(2026, 9, 10, 6, 43, 47), -4500, -3685, '', 'Історія ZenMarket: оплата товару', '', '', new Date(), 'historical_expense']
+  ];
+}
+
+function setupCrm011ZenMarketAccount() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const before = apiIntegrityCheck_();
+  if (!before.clean) throw new Error('CRM_INTEGRITY_NOT_CLEAN: виправ проблеми перед зміною структури.');
+  const ledgerResult = crm011ZenEnsureSheet_(ss, CRM011_ZEN_LEDGER_SHEET_, CRM011_ZEN_LEDGER_HEADERS_, false);
+  const lotsResult = crm011ZenEnsureSheet_(ss, CRM011_ZEN_LOTS_SHEET_, CRM011_ZEN_LOT_HEADERS_, false);
+  const topupsResult = crm011ZenEnsureSheet_(ss, CRM011_ZEN_TOPUPS_SHEET_, CRM011_ZEN_TOPUP_HEADERS_, true);
+  const ledger = ledgerResult.sheet;
+  let historySeeded = false;
+  if (ledger.getLastRow() === 1) {
+    const history = crm011ZenHistoricalRows_();
+    ledger.getRange(2, 1, history.length, CRM011_ZEN_LEDGER_HEADERS_.length).setValues(history);
+    historySeeded = true;
+  } else {
+    const ids = ledger.getRange(2, 1, ledger.getLastRow() - 1, 1).getDisplayValues().map(function(row) { return String(row[0] || '').trim(); });
+    if (ids.indexOf('ZEN-HIST-000') === -1 || ids.indexOf('ZEN-HIST-011') === -1) throw new Error('ZENMARKET_HISTORY_CONFLICT: журнал не порожній і не містить повний контрольний імпорт.');
+  }
+  SpreadsheetApp.flush();
+  resetMemo_();
+  const after = apiIntegrityCheck_();
+  if (!after.clean) throw new Error('CRM_INTEGRITY_REGRESSION: перевірка після змін знайшла нові проблеми.');
+  const result = { ok: true, action: 'setup_crm011_zenmarket_account', sheets_created: [ledgerResult, lotsResult, topupsResult].filter(function(item) { return item.created; }).length, history_seeded: historySeeded, current_balance_jpy: crm011ZenCurrentBalance_(ledger), historical_topup_uah_missing: 1, integrity_before: before, integrity_after: after };
+  console.log(JSON.stringify(result));
+  return result;
+}
+
+function crm011ZenCurrentBalance_(ledger) {
+  for (let row = ledger.getLastRow(); row >= 2; row--) {
+    const raw = ledger.getRange(row, 4).getValue();
+    if (raw !== '' && raw !== null && Number.isFinite(Number(raw))) return round2_(Number(raw));
+  }
+  throw new Error('ZENMARKET_BALANCE_MISSING: у журналі немає контрольного балансу.');
+}
+
+function crm011ZenFindRequestRow_(sheet, column, requestId) {
+  if (!requestId || sheet.getLastRow() < 2) return 0;
+  const values = sheet.getRange(2, column, sheet.getLastRow() - 1, 1).getDisplayValues();
+  for (let index = 0; index < values.length; index++) if (String(values[index][0] || '').trim() === requestId) return index + 2;
+  return 0;
+}
+
+function crm011ZenRequestId_(payload) {
+  const requestId = String(payload && payload.request_id || '').trim();
+  if (!/^[A-Za-z0-9_-]{8,80}$/.test(requestId)) throw new Error('valid request_id required');
+  return requestId;
+}
+
+function crm011ZenAppendOperation_(ledger, changeJpy, date, lotId, note, amountUah, requestId, source) {
+  const balance = round2_(crm011ZenCurrentBalance_(ledger) + changeJpy);
+  const operationId = 'ZEN-' + Utilities.getUuid();
+  ledger.appendRow([operationId, date || new Date(), round2_(changeJpy), balance, lotId || '', note || '', amountUah === '' || amountUah == null ? '' : round2_(amountUah), requestId || '', new Date(), source || 'manual']);
+  return { operation_id: operationId, balance_jpy: balance };
+}
+
+function crm011ZenmarketTopup_(ss, payload) {
+  try {
+    resetMemoForMutation_();
+    const setup = crm011ZenRequireSetup_(ss), requestId = crm011ZenRequestId_(payload);
+    const rawJpy = String(payload.amount_jpy == null ? '' : payload.amount_jpy).trim(), rawUah = String(payload.amount_uah == null ? '' : payload.amount_uah).trim();
+    if (!rawJpy || !rawUah) throw new Error('Вкажи суми поповнення в JPY і UAH.');
+    const amountJpy = apiNum_(rawJpy), amountUah = apiNum_(rawUah);
+    if (!(amountJpy > 0) || !(amountUah > 0)) throw new Error('Суми поповнення мають бути більші за нуль.');
+    const date = apiNormalizeDateValue_(payload.date, 'date');
+    if (!date) throw new Error('date required');
+    const note = String(payload.note || '').trim().slice(0, 500);
+    let ledgerRow = crm011ZenFindRequestRow_(setup.ledger, 8, requestId), topupRow = crm011ZenFindRequestRow_(setup.topups, 9, requestId);
+    const alreadyApplied = !!(ledgerRow && topupRow);
+    if (!topupRow) {
+      setup.topups.appendRow(['CRM-ZEN-' + requestId, date, round2_(amountJpy), round2_(amountJpy / amountUah), round2_(amountUah), 'Вручну', 'manual_actual', note, requestId, new Date()]);
+      topupRow = setup.topups.getLastRow();
+    }
+    if (!ledgerRow) {
+      crm011ZenAppendOperation_(setup.ledger, amountJpy, date, '', note || 'Поповнення ZenMarket', amountUah, requestId, 'manual_topup');
+      ledgerRow = setup.ledger.getLastRow();
+    }
+    invalidateDoGetCache_();
+    return { ok: true, already_applied: alreadyApplied, balance_jpy: crm011ZenCurrentBalance_(setup.ledger), ledger_row: ledgerRow, topup_row: topupRow };
+  } catch (err) { return { ok: false, error: String(err && err.message ? err.message : err) }; }
+}
+
+function crm011ZenmarketCorrectBalance_(ss, payload) {
+  try {
+    resetMemoForMutation_();
+    const setup = crm011ZenRequireSetup_(ss), requestId = crm011ZenRequestId_(payload);
+    const raw = String(payload.balance_jpy == null ? '' : payload.balance_jpy).trim();
+    if (!raw || !Number.isFinite(Number(raw.replace(/\s/g, '').replace(',', '.')))) throw new Error('Вкажи актуальний баланс у JPY.');
+    const wanted = round2_(apiNum_(raw)), current = crm011ZenCurrentBalance_(setup.ledger);
+    const existing = crm011ZenFindRequestRow_(setup.ledger, 8, requestId);
+    if (existing) return { ok: true, already_applied: true, balance_jpy: crm011ZenCurrentBalance_(setup.ledger), ledger_row: existing };
+    const difference = round2_(wanted - current), optional = String(payload.note || '').trim().slice(0, 500);
+    if (Math.abs(difference) < 0.0001) return { ok: true, already_balanced: true, balance_jpy: current, difference_jpy: 0 };
+    const note = CRM011_ZEN_CORRECTION_NOTE_ + (optional ? '; ' + optional : '');
+    const result = crm011ZenAppendOperation_(setup.ledger, difference, new Date(), '', note, '', requestId, 'manual_correction');
+    invalidateDoGetCache_();
+    return { ok: true, balance_jpy: result.balance_jpy, difference_jpy: difference, ledger_row: setup.ledger.getLastRow() };
+  } catch (err) { return { ok: false, error: String(err && err.message ? err.message : err) }; }
+}
+
+function crm011ZenIsPurchaseRow_(row, forceZenmarket) {
+  if (forceZenmarket) return true;
+  const source = String(row && row[19] || '').trim();
+  return source === 'zenmarket_jp' || source === 'ZenMarket';
+}
+
+function crm011ZenLotIndex_(lotsSheet) {
+  const result = {};
+  if (lotsSheet.getLastRow() < 2) return result;
+  lotsSheet.getRange(2, 1, lotsSheet.getLastRow() - 1, CRM011_ZEN_LOT_HEADERS_.length).getValues().forEach(function(row, index) {
+    const lotId = String(row[0] || '').trim();
+    if (lotId) result[lotId] = { row: index + 2, total_jpy: round2_(num_(row[5])) };
+  });
+  return result;
+}
+
+function crm011ZenPurchaseExpense_(row, jpyRate) {
+  const goods = round2_(Math.max(0, num_(row[8])) * jpyRate), japan = round2_(Math.max(0, num_(row[9])) * jpyRate), ukraine = round2_(Math.max(0, num_(row[10])) * jpyRate);
+  return { lot_id: String(row[0] || '').trim(), order_ref: String(row[1] || '').trim(), goods_jpy: goods, japan_jpy: japan, ukraine_jpy: ukraine, total_jpy: round2_(goods + japan + ukraine) };
+}
+
+function crm011ZenWriteLot_(sheet, index, expense) {
+  const values = [[expense.lot_id, expense.order_ref, expense.goods_jpy, expense.japan_jpy, expense.ukraine_jpy, expense.total_jpy, new Date()]];
+  if (index && index.row) sheet.getRange(index.row, 1, 1, CRM011_ZEN_LOT_HEADERS_.length).setValues(values);
+  else sheet.appendRow(values[0]);
+}
+
+function crm011ZenEnsurePurchaseBaselines_(ss, matches, options) {
+  options = options || {};
+  const setup = crm011ZenRequireSetup_(ss), index = crm011ZenLotIndex_(setup.lots), rate = options.jpy_rate || getCurrencyRate_('JPY');
+  let added = 0;
+  (matches || []).forEach(function(match) {
+    const row = match.values || match;
+    if (!crm011ZenIsPurchaseRow_(row, options.force_zenmarket)) return;
+    const expense = crm011ZenPurchaseExpense_(row, rate);
+    if (!expense.lot_id || index[expense.lot_id]) return;
+    crm011ZenWriteLot_(setup.lots, null, expense); index[expense.lot_id] = { row: setup.lots.getLastRow(), total_jpy: expense.total_jpy }; added++;
+  });
+  return added;
+}
+
+function crm011ZenSyncPurchaseLots_(ss, lotIds, options) {
+  options = options || {};
+  const setup = crm011ZenRequireSetup_(ss), wanted = {}, rate = getCurrencyRate_('JPY');
+  (lotIds || []).forEach(function(id) { const lotId = String(id || '').trim(); if (lotId) wanted[lotId] = true; });
+  if (!Object.keys(wanted).length) return { changed: 0, balance_jpy: crm011ZenCurrentBalance_(setup.ledger) };
+  const purchases = ss.getSheetByName('Закупки');
+  const rows = purchases.getRange(3, 1, Math.max(purchases.getLastRow() - 2, 1), 20).getValues();
+  const found = {}, index = crm011ZenLotIndex_(setup.lots);
+  rows.forEach(function(row) {
+    const lotId = String(row[0] || '').trim();
+    if (!wanted[lotId] || !crm011ZenIsPurchaseRow_(row, options.force_zenmarket)) return;
+    found[lotId] = true;
+    const expense = crm011ZenPurchaseExpense_(row, rate), previous = index[lotId] ? index[lotId].total_jpy : 0, delta = round2_(expense.total_jpy - previous);
+    crm011ZenWriteLot_(setup.lots, index[lotId], expense);
+    index[lotId] = { row: index[lotId] ? index[lotId].row : setup.lots.getLastRow(), total_jpy: expense.total_jpy };
+    if (Math.abs(delta) >= 0.0001) crm011ZenAppendOperation_(setup.ledger, -delta, new Date(), lotId, 'Автоматична витрата ZenMarket за LOT-ID', '', '', 'purchase_sync');
+  });
+  const missing = Object.keys(wanted).filter(function(lotId) { return !found[lotId]; });
+  if (missing.length) throw new Error('ZENMARKET_LOT_NOT_FOUND: ' + missing.join(','));
+  invalidateDoGetCache_();
+  return { changed: Object.keys(found).length, balance_jpy: crm011ZenCurrentBalance_(setup.ledger) };
+}
+
+function crm011ZenBalanceSnapshot_(ss) {
+  try {
+    const setup = crm011ZenRequireSetup_(ss), row = setup.ledger.getLastRow(), updated = row >= 2 ? setup.ledger.getRange(row, 9).getValue() : '';
+    const balanceJpy = crm011ZenCurrentBalance_(setup.ledger), jpyRate = getCurrencyRate_('JPY');
+    return { available: true, balance_jpy: balanceJpy, balance_uah: round2_(balanceJpy / jpyRate), jpy_rate: jpyRate, updated_at: updated ? Utilities.formatDate(new Date(updated), Session.getScriptTimeZone(), 'yyyy-MM-dd HH:mm') : '', correction_hint_jpy: 500, historical_topup_uah_missing: 1 };
+  } catch (err) { return { available: false, balance_jpy: null, balance_uah: null, jpy_rate: null, updated_at: '', correction_hint_jpy: 500, historical_topup_uah_missing: 1, setup_required: true }; }
+}
+
+function crm011ZenMarketVerificationForOwner() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet(), integrity = apiIntegrityCheck_(), setup = crm011ZenRequireSetup_(ss);
+  const ledgerRows = setup.ledger.getLastRow() < 2 ? [] : setup.ledger.getRange(2, 1, setup.ledger.getLastRow() - 1, CRM011_ZEN_LEDGER_HEADERS_.length).getValues();
+  const lotRows = setup.lots.getLastRow() < 2 ? [] : setup.lots.getRange(2, 1, setup.lots.getLastRow() - 1, CRM011_ZEN_LOT_HEADERS_.length).getValues();
+  const problems = [], lotsSeen = {};
+  let previousBalance = null;
+  ledgerRows.forEach(function(row, index) {
+    const change = num_(row[2]), balance = num_(row[3]);
+    if (previousBalance !== null && Math.abs(round2_(previousBalance + change - balance)) > 0.01) problems.push({ code: 'LEDGER_BALANCE_MISMATCH', row: index + 2 });
+    previousBalance = balance;
+  });
+  lotRows.forEach(function(row, index) {
+    const lotId = String(row[0] || '').trim();
+    if (!lotId) problems.push({ code: 'LOT_ID_MISSING', row: index + 2 });
+    else if (lotsSeen[lotId]) problems.push({ code: 'LOT_ID_DUPLICATE', row: index + 2 });
+    else lotsSeen[lotId] = true;
+    const componentTotal = round2_(num_(row[2]) + num_(row[3]) + num_(row[4]));
+    if (Math.abs(componentTotal - num_(row[5])) > 0.01) problems.push({ code: 'LOT_TOTAL_MISMATCH', row: index + 2 });
+  });
+  const result = { ok: integrity.clean === true && !problems.length, action: 'crm011_zenmarket_verification', current_balance_jpy: crm011ZenCurrentBalance_(setup.ledger), ledger_rows: ledgerRows.length, indexed_lots: lotRows.length, problems: problems.slice(0, 20), integrity: integrity };
+  console.log(JSON.stringify(result));
+  return result;
+}
+
+function crm011ApiAddSale_(ss, payload) {
+  crm011RequireColumn_(ss, 'Продажі', 'Дата оплати');
+  const result = apiAddSale_(ss, payload);
+  if (result && result.ok && String(payload.payment_status || '').trim() === 'Оплачено') crm011StampSaleOrderPaid_(ss, result.order_id, new Date());
+  return result;
+}
+
+function crm011ApiAddPurchase_(ss, payload) {
+  const required = crm011RequireColumn_(ss, 'Закупки', 'Дата створення');
+  const supplierChannel = String(payload.supplier_channel || 'zenmarket_jp').trim() || 'zenmarket_jp';
+  const isZenmarket = supplierChannel === 'zenmarket_jp' || supplierChannel === 'ZenMarket';
+  if (isZenmarket) crm011ZenRequireSetup_(ss);
+  const result = apiAddPurchase_(ss, payload);
+  if (result && result.ok) {
+    const wanted = {}; (result.lot_ids || []).forEach(function(id) { wanted[id] = true; });
+    const values = required.sheet.getRange(3, 1, Math.max(required.sheet.getLastRow() - 2, 1), 1).getDisplayValues();
+    const rows = []; values.forEach(function(row, index) { if (wanted[String(row[0] || '').trim()]) rows.push(index + 3); });
+    crm011StampRowsOnce_(required.sheet, rows, 'Дата створення', new Date());
+    if (isZenmarket) {
+      SpreadsheetApp.flush();
+      try { crm011ZenSyncPurchaseLots_(ss, result.lot_ids || []); result.zenmarket_synced = true; }
+      catch (zenError) { result.zenmarket_synced = false; result.zenmarket_sync_error = String(zenError && zenError.message ? zenError.message : zenError); Logger.log('CRM-011 ZenMarket sync failed after purchase add: ' + result.zenmarket_sync_error); }
+    }
+  }
+  return result;
+}
+
+function crm011ApiUpdateSale_(ss, payload) {
+  crm011RequireColumn_(ss, 'Продажі', 'Дата оплати');
+  const result = apiUpdateSaleWithComponents_(ss, payload);
+  if (result && result.ok && String(payload.payment_status || '').trim() === 'Оплачено') crm011StampSaleOrderPaid_(ss, result.order_id, new Date());
+  return result;
+}
+
+function crm011StampSaleOrderPaid_(ss, orderId, value) {
+  const required = crm011RequireColumn_(ss, 'Продажі', 'Дата оплати');
+  const ids = required.sheet.getRange(3, 1, Math.max(required.sheet.getLastRow() - 2, 1), 1).getDisplayValues();
+  const rows = []; ids.forEach(function(row, index) { if (String(row[0] || '').trim() === String(orderId || '').trim()) rows.push(index + 3); });
+  crm011StampRowsOnce_(required.sheet, rows, 'Дата оплати', value);
+}
+
+function crm011ClientModel_() {
+  const now = new Date().getTime(), cutoff60 = now - 60 * 86400000;
+  const clients = {}, orderOwner = {};
+  apiReadCrmSalesRows_().forEach(function(row) {
+    const key = apiCustomerKey_(row); if (!key) return;
+    const orderId = String(row[0] || '').trim();
+    if (!clients[key]) clients[key] = { key: key, identifier: key, display: String(row[3] || '').trim() || apiCustomerName_(row), name: apiCustomerName_(row), phone: String(row[3] || '').trim(), channels: {}, games: {}, orders_map: {}, units: 0, revenue: 0, profit: 0, spend_60d: 0 };
+    const c = clients[key], dateMs = dateSortValue_(row[2]) || 0, revenue = num_(row[10]), profit = num_(row[21]), channel = String(row[1] || 'Інше').trim() || 'Інше';
+    if (!c.orders_map[orderId]) c.orders_map[orderId] = { date_ms: dateMs, date: apiDate_(row[2]), revenue: 0, profit: 0, units: 0, source: channel, payment_status: row[22] || '', order_status: row[23] || '', ttn: row[25] || '', skus: [] };
+    const order = c.orders_map[orderId]; order.revenue = round2_(order.revenue + revenue); order.profit = round2_(order.profit + profit); order.units = round2_(order.units + num_(row[7]));
+    const sku = String(row[5] || '').trim(); if (sku && order.skus.indexOf(sku) === -1) order.skus.push(sku);
+    const game = crm011GameCode_(sku); if (game) c.games[game] = true;
+    c.units = round2_(c.units + num_(row[7])); c.revenue = round2_(c.revenue + revenue); c.profit = round2_(c.profit + profit); c.channels[channel] = round2_(num_(c.channels[channel]) + revenue);
+    if (dateMs >= cutoff60) c.spend_60d = round2_(c.spend_60d + revenue);
+    if (!c.name || c.name === '—') c.name = apiCustomerName_(row);
+    orderOwner[orderId] = key;
+  });
+  const profitValues = Object.keys(clients).map(function(key) { return clients[key].profit; }).sort(function(a, b) { return a - b; });
+  const decileIndex = profitValues.length ? Math.max(0, Math.ceil(profitValues.length * CRM011_CLIENT_RULES_.vip_profit_percentile) - 1) : 0;
+  const vipThreshold = Math.max(CRM011_CLIENT_RULES_.vip_profit_floor, profitValues[decileIndex] || 0);
+  const list = Object.keys(clients).map(function(key) {
+    const c = clients[key], orders = Object.keys(c.orders_map).map(function(id) { return Object.assign({ order_id: id }, c.orders_map[id]); }).sort(function(a, b) { return b.date_ms - a.date_ms; });
+    const lastMs = orders.length ? orders[0].date_ms : 0, firstMs = orders.length ? orders[orders.length - 1].date_ms : 0, ageDays = lastMs ? Math.floor((now - lastMs) / 86400000) : null;
+    const margin = c.revenue ? round2_(c.profit / c.revenue * 100) : null, orderCount = orders.length, daysSpan = orderCount > 1 ? Math.max(0, (lastMs - firstMs) / 86400000) : null;
+    const flags = { vip: c.profit >= vipThreshold && orderCount >= 2, lost: ageDays !== null && ageDays >= CRM011_CLIENT_RULES_.lost_days, dormant: ageDays !== null && ageDays >= CRM011_CLIENT_RULES_.dormant_days, low_margin: margin !== null && margin < CRM011_CLIENT_RULES_.low_margin_pct && c.revenue >= CRM011_CLIENT_RULES_.low_margin_ltv, new_client: orderCount === 1, repeat: orderCount >= CRM011_CLIENT_RULES_.repeat_orders };
+    const segment = flags.vip ? 'VIP' : flags.lost ? 'Втрачений' : flags.dormant ? 'Неактивний' : flags.low_margin ? 'Низькомаржинальний' : flags.new_client ? 'Новий' : flags.repeat ? 'Повторний' : 'Звичайний';
+    const qualification = []; if (orderCount > 1) qualification.push('repeat'); if (c.spend_60d > 1500) qualification.push('spend_60d'); if (margin !== null && margin > 40) qualification.push('margin');
+    return { key: key, identifier: c.identifier, display: c.display, name: c.name, phone: c.phone, channel: apiTopChannel_(c.channels), games: Object.keys(c.games).sort(), orders: orderCount, orders_60d: orders.filter(function(o) { return o.date_ms >= cutoff60; }).length, units: c.units, revenue: c.revenue, ltv: c.revenue, profit: c.profit, margin_pct: margin, spend_60d: c.spend_60d, first_order_date: firstMs ? apiDate_(new Date(firstMs)) : '', last_order_date: lastMs ? apiDate_(new Date(lastMs)) : '', days_since_last_order: ageDays, avg_order_value: orderCount ? round2_(c.revenue / orderCount) : null, avg_interval_days: orderCount > 1 ? round2_(daysSpan / (orderCount - 1)) : null, segment: segment, flags: flags, qualification: qualification, recent_orders: orders };
+  });
+  return { clients: list, by_key: clients, order_owner: orderOwner, vip_profit_threshold: vipThreshold };
+}
+
+function apiLtvReport_(params) {
+  params = params || {}; const qualifiedOnly = String(params.qualified || '').toLowerCase() === 'true';
+  const limit = Math.max(1, Math.min(apiNum_(params.limit) || (qualifiedOnly ? 500 : 2000), 2000));
+  const model = crm011ClientModel_(), distribution = {};
+  model.clients.forEach(function(client) { distribution[client.segment] = (distribution[client.segment] || 0) + 1; });
+  let clients = model.clients.filter(function(client) { return !qualifiedOnly || client.qualification.length > 0; });
+  clients.sort(function(a, b) { return qualifiedOnly ? (b.spend_60d - a.spend_60d || b.ltv - a.ltv || b.orders - a.orders) : (b.profit - a.profit || b.ltv - a.ltv) || String(a.display).localeCompare(String(b.display), 'uk'); });
+  return { ok: true, period: qualifiedOnly ? 'qualified' : 'all_time', criteria: CRM011_CLIENT_RULES_, vip_profit_threshold: model.vip_profit_threshold, total_clients: model.clients.length, total_matching: clients.length, distribution: distribution, limit: limit, clients: clients.slice(0, limit) };
+}
+
+function apiQualifiedClientsReport_(params) { params = Object.assign({}, params || {}, { qualified: 'true' }); return apiLtvReport_(params); }
+
+function apiClientOrders_(params) {
+  params = params || {}; const key = String(params.client_key || params.identifier || '').trim();
+  if (!key) throw new Error('client_key required');
+  const client = crm011ClientModel_().clients.filter(function(item) { return item.key === key || item.identifier === key; })[0];
+  if (!client) return { ok: true, client_key: key, orders: [] };
+  const limit = Math.max(1, Math.min(apiNum_(params.limit) || 10, 50));
+  return { ok: true, client_key: key, name: client.name, orders: client.recent_orders.slice(0, limit) };
+}
+
+function crmGetOrders_(status, limit, params) {
+  params = params || {}; const st = String(status || 'active').toLowerCase(), cleanLimit = Math.max(1, Math.min(num_(limit) || 20, 500));
+  const days = Math.max(0, Math.min(num_(params.days) || 0, 3650)), cutoff = days ? new Date().getTime() - days * 86400000 : 0;
+  const skipMarketing = params.skip_marketing === true || String(params.skip_marketing || '').toLowerCase() === 'true';
+  const cache = CacheService.getScriptCache(), cacheKey = 'crm_orders_v5_' + crmOrdersCacheVersion_() + '_' + st + '_' + cleanLimit + '_' + days + '_' + String(params.sort || 'date_desc') + '_' + (skipMarketing ? 'plain' : 'marketing');
+  const cached = cache.get(cacheKey); if (cached) return JSON.parse(cached);
+  const model = crm011ClientModel_(), map = {};
+  _getCrmSalesRowEntries().forEach(function(entry, index) { const row = entry.values, orderId = String(row[0] || '').trim(); if (!orderId) return;
+    if (!map[orderId]) { const clientKey = apiCustomerKey_(row), client = model.clients.filter(function(item) { return item.key === clientKey; })[0] || null; map[orderId] = { order_id: orderId, date: apiDate_(row[2]), source: row[1] || '', payment_status: row[22] || '', order_status: row[23] || '', ttn: row[25] || '', post: row[24] || '', payment_type: row[27] || '', customer_name: String(row[4] || '').trim(), customer_phone: String(row[3] || '').trim(), client_key: clientKey, client_type: client ? client.segment : 'Невідомий', client_orders: client ? client.orders : 0, client_identity_source: onlyDigits_(row[3]).length >= 7 ? 'phone' : (String(row[4] || '').trim() ? 'name' : 'missing'), is_new_client: client ? client.orders === 1 : null, amount: 0, profit: 0, items_count: 0, forecast_lines: 0, skus: [], sort: dateSortValue_(row[2]) || index }; }
+    const order = map[orderId]; order.amount = round2_(order.amount + num_(row[10])); order.profit = round2_(order.profit + num_(row[21])); order.items_count = round2_(order.items_count + num_(row[7])); if (isUnfinalizedPreorderCostMethod_(row[29])) order.forecast_lines++;
+    const sku = String(row[5] || '').trim(); if (sku && order.skus.indexOf(sku) === -1) order.skus.push(sku);
+  });
+  const marketingByOrder = skipMarketing ? {} : crm3dpMarketingByOrder_(_getCrmSs()).byOrder;
+  Object.keys(map).forEach(function(orderId) { map[orderId].marketing = round2_(marketingByOrder[orderId] || 0); });
+  let orders = Object.keys(map).map(function(key) { return map[key]; }).filter(function(order) { return crmOrderMatchesStatus_(order, st) && (!cutoff || order.sort >= cutoff); });
+  orders.sort(function(a, b) { return String(params.sort || 'date_desc') === 'date_asc' ? a.sort - b.sort : b.sort - a.sort; });
+  const result = orders.slice(0, cleanLimit).map(function(order) { delete order.sort; return order; });
+  try { cache.put(cacheKey, JSON.stringify(result), 30); } catch (cacheError) { Logger.log('CRM-011 order cache write failed: ' + cacheError); }
+  return result;
+}
+
+function crm011DateBounds_(from, to) {
+  const now = new Date(), defaultStart = new Date(now.getFullYear(), now.getMonth(), 1), defaultEnd = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  const start = from ? new Date(String(from) + 'T00:00:00') : defaultStart;
+  const end = to ? new Date(new Date(String(to) + 'T00:00:00').getTime() + 86400000) : defaultEnd;
+  if (isNaN(start.getTime()) || isNaN(end.getTime()) || start >= end) throw new Error('invalid finance date range');
+  return { start: start, end: end, from: apiDate_(start), to: apiDate_(new Date(end.getTime() - 86400000)) };
+}
+
+function crm011FinanceTable_(sheet, headerRow, firstDataRow) {
+  if (!sheet) throw new Error('CRM011_FINANCE_SHEET_NOT_FOUND');
+  const width = Math.max(sheet.getLastColumn(), 1), lastRow = Math.max(sheet.getLastRow(), firstDataRow);
+  return {
+    headers: sheet.getRange(headerRow, 1, 1, width).getDisplayValues()[0],
+    rows: sheet.getRange(firstDataRow, 1, Math.max(lastRow - firstDataRow + 1, 1), width).getValues(),
+    first_row: firstDataRow
+  };
+}
+
+function crm011FinanceColumn_(headers, names) {
+  const normalized = headers.map(apiNormalizeHeader_), candidates = Array.isArray(names) ? names : [names];
+  for (let i = 0; i < candidates.length; i++) {
+    const index = normalized.indexOf(apiNormalizeHeader_(candidates[i]));
+    if (index !== -1) return index;
+  }
+  throw new Error('CRM011_FINANCE_COLUMN_NOT_FOUND: ' + candidates.join(' | '));
+}
+
+function crm011FinanceNumber_(value) {
+  if (value === '' || value === null || value === undefined) return null;
+  if (typeof value === 'number') return isFinite(value) ? value : null;
+  const text = String(value).replace(/\s/g, '').replace(',', '.').replace(/[^0-9.\-]/g, '');
+  if (!text || !/^-?(?:\d+(?:\.\d+)?|\.\d+)$/.test(text)) return null;
+  const number = Number(text);
+  return isFinite(number) ? number : null;
+}
+
+function crm011FinanceClientKey_(row, columns) {
+  const phone = onlyDigits_(row[columns.phone]);
+  if (phone.length >= 7) return 'tel:' + phone;
+  const name = String(row[columns.name] || '').trim().toLowerCase();
+  return name ? 'name:' + name : '';
+}
+
+function crm011FinanceSalesModel_(ss) {
+  const table = crm011FinanceTable_(ss.getSheetByName('Продажі'), 2, 3);
+  const c = {
+    order: crm011FinanceColumn_(table.headers, 'Номер замовлення / операції'),
+    date: crm011FinanceColumn_(table.headers, 'Дата продажу'),
+    phone: crm011FinanceColumn_(table.headers, 'Телефон клієнта'),
+    name: crm011FinanceColumn_(table.headers, 'ПІБ клієнта'),
+    units: crm011FinanceColumn_(table.headers, 'Кількість'),
+    revenue: crm011FinanceColumn_(table.headers, 'Сума продажу'),
+    cogs: crm011FinanceColumn_(table.headers, 'Управлінська собівартість продажу'),
+    packaging: crm011FinanceColumn_(table.headers, 'Пакування'),
+    acquiring: crm011FinanceColumn_(table.headers, 'Еквайринг'),
+    novaPay: crm011FinanceColumn_(table.headers, 'Нова Пей'),
+    marketplaceFee: crm011FinanceColumn_(table.headers, 'Комісія маркетплейсу'),
+    delivery: crm011FinanceColumn_(table.headers, 'Доставка за рахунок магазину'),
+    sheetNet: crm011FinanceColumn_(table.headers, 'Чистий прибуток'),
+    paymentStatus: crm011FinanceColumn_(table.headers, 'Статус оплати'),
+    orderStatus: crm011FinanceColumn_(table.headers, 'Статус замовлення'),
+    paymentType: crm011FinanceColumn_(table.headers, 'Тип оплати'),
+    paymentDate: crm011FinanceColumn_(table.headers, 'Дата оплати'),
+    costMethod: crm011FinanceColumn_(table.headers, 'Метод собівартості')
+  };
+  const preorderOrders = {};
+  table.rows.forEach(function(row) {
+    const order = String(row[c.order] || '').trim();
+    if (order && (String(row[c.orderStatus] || '').trim() === 'Передзамовлення' || isUnfinalizedPreorderCostMethod_(row[c.costMethod]))) preorderOrders[order] = true;
+  });
+  const lines = [], orders = {};
+  table.rows.forEach(function(row, index) {
+    const orderId = String(row[c.order] || '').trim(), payment = String(row[c.paymentStatus] || '').trim(), status = String(row[c.orderStatus] || '').trim(), method = String(row[c.costMethod] || '').trim();
+    if (!orderId || preorderOrders[orderId] || ['Скасовано', 'Повернення'].indexOf(payment) !== -1 || ['Скасовано', 'Повернення', 'Передзамовлення'].indexOf(status) !== -1 || isUnfinalizedPreorderCostMethod_(method)) return;
+    if (payment !== 'Оплачено' && ['Нове', 'В обробці', 'Відправлено', 'Отримано'].indexOf(status) === -1) return;
+    const line = {
+      row_number: table.first_row + index, order_id: orderId, date_ms: dateSortValue_(row[c.date]), client_key: crm011FinanceClientKey_(row, c), payment_status: payment, payment_type: String(row[c.paymentType] || ''), payment_date_ms: dateSortValue_(row[c.paymentDate]),
+      units: crm011FinanceNumber_(row[c.units]), revenue: crm011FinanceNumber_(row[c.revenue]), cogs: crm011FinanceNumber_(row[c.cogs]), packaging: crm011FinanceNumber_(row[c.packaging]),
+      acquiring: crm011FinanceNumber_(row[c.acquiring]), nova_pay: crm011FinanceNumber_(row[c.novaPay]), marketplace_fee: crm011FinanceNumber_(row[c.marketplaceFee]), delivery: crm011FinanceNumber_(row[c.delivery]), sheet_net: crm011FinanceNumber_(row[c.sheetNet])
+    };
+    lines.push(line);
+    if (!orders[orderId]) orders[orderId] = { order_id: orderId, date_ms: line.date_ms, first_row: line.row_number, identity_keys: {} };
+    if (line.date_ms && (!orders[orderId].date_ms || line.date_ms < orders[orderId].date_ms)) orders[orderId].date_ms = line.date_ms;
+    orders[orderId].first_row = Math.min(orders[orderId].first_row, line.row_number);
+    if (line.client_key) orders[orderId].identity_keys[line.client_key] = true;
+  });
+  const ordered = Object.keys(orders).map(function(id) {
+    const order = orders[id], keys = Object.keys(order.identity_keys);
+    order.client_key = keys.length === 1 ? keys[0] : '';
+    order.identity_conflict = keys.length > 1;
+    delete order.identity_keys;
+    return order;
+  }).sort(function(a, b) { return a.date_ms - b.date_ms || a.first_row - b.first_row || String(a.order_id).localeCompare(String(b.order_id), 'uk', { numeric: true }); });
+  const seen = {};
+  ordered.forEach(function(order) {
+    if (!order.client_key) order.customer_group = 'unidentified';
+    else { order.customer_group = seen[order.client_key] ? 'repeat' : 'new'; seen[order.client_key] = true; }
+  });
+  return { lines: lines, orders: ordered, by_order: orders, headers: { revenue: table.headers[c.revenue], cogs: table.headers[c.cogs], packaging: table.headers[c.packaging], payment_fees: [table.headers[c.acquiring], table.headers[c.novaPay], table.headers[c.marketplaceFee]], delivery: table.headers[c.delivery], sheet_net: table.headers[c.sheetNet] } };
+}
+
+function crm011FinanceExpenseModel_(ss) {
+  const table = crm011FinanceTable_(ss.getSheetByName('Витрати'), 2, 3);
+  const c = { date: crm011FinanceColumn_(table.headers, 'Дата'), category: crm011FinanceColumn_(table.headers, 'Категорія'), amount: crm011FinanceColumn_(table.headers, 'Сума'), consumable: crm011FinanceColumn_(table.headers, 'Тип розхідника'), operating: crm011FinanceColumn_(table.headers, 'Рахувати в операційці?') };
+  return { rows: table.rows, columns: c, headers: { amount: table.headers[c.amount], operating: table.headers[c.operating] } };
+}
+
+function crm011FinanceWriteoffModel_(ss) {
+  const table = crm011FinanceTable_(ss.getSheetByName('Списання'), 2, 3);
+  const c = { id: crm011FinanceColumn_(table.headers, 'ID списання'), date: crm011FinanceColumn_(table.headers, 'Дата'), qty: crm011FinanceColumn_(table.headers, 'Кількість'), total: crm011FinanceColumn_(table.headers, 'Управлінська сума списання'), reason: crm011FinanceColumn_(table.headers, 'Причина'), note: crm011FinanceColumn_(table.headers, 'Примітка') };
+  return { rows: table.rows, columns: c, headers: { total: table.headers[c.total] } };
+}
+
+function crm011FinanceWriteoffsForPeriod_(model, bounds) {
+  let value = 0, missing = 0, linkedExcluded = 0, rows = 0;
+  model.rows.forEach(function(row) {
+    if (!String(row[model.columns.id] || '').trim()) return;
+    const ms = dateSortValue_(row[model.columns.date]);
+    if (!ms || ms < bounds.start.getTime() || ms >= bounds.end.getTime()) return;
+    const qty = crm011FinanceNumber_(row[model.columns.qty]); if (!(qty > 0)) return;
+    const reason = String(row[model.columns.reason] || ''), note = String(row[model.columns.note] || '');
+    if (/для формування містері бокса|для комплектації замовлення/i.test(reason) && /(?:^|;\s*)Продаж\s+\S+/i.test(note)) { linkedExcluded++; return; }
+    rows++;
+    const total = crm011FinanceNumber_(row[model.columns.total]);
+    if (!(total > 0)) { missing++; return; }
+    value = round2_(value + total);
+  });
+  return { value: value, rows: rows, missing_value_rows: missing, linked_order_rows_excluded: linkedExcluded };
+}
+
+function crm011FinanceOperatingExpenses_(model, bounds) {
+  let value = 0, missing = 0, rows = 0;
+  model.rows.forEach(function(row) {
+    const ms = dateSortValue_(row[model.columns.date]);
+    if (!ms || ms < bounds.start.getTime() || ms >= bounds.end.getTime() || String(row[model.columns.operating] || '').trim().toLowerCase() !== 'так') return;
+    rows++;
+    const amount = crm011FinanceNumber_(row[model.columns.amount]);
+    if (amount === null) { missing++; return; }
+    value = round2_(value + amount);
+  });
+  return { value: missing ? null : value, rows: rows, missing_value_rows: missing };
+}
+
+function crm011FinanceCashIn_(sales, bounds) {
+  let amount = 0, approximatedRows = 0, missingValueRows = 0;
+  sales.lines.forEach(function(line) {
+    if (line.payment_status !== 'Оплачено') return;
+    let receivedMs = line.payment_date_ms;
+    if (!receivedMs) { receivedMs = line.date_ms; if (/післяплат|накладен/i.test(line.payment_type)) receivedMs += 3 * 86400000; approximatedRows++; }
+    if (receivedMs >= bounds.start.getTime() && receivedMs < bounds.end.getTime()) { if (line.revenue === null) missingValueRows++; else amount = round2_(amount + line.revenue); }
+  });
+  return { amount: missingValueRows ? null : amount, approximated_rows: approximatedRows, missing_value_rows: missingValueRows };
+}
+
+function crm011FinancePeriod_(sales, expenses, writeoffs, bounds) {
+  const fields = ['units', 'revenue', 'cogs', 'packaging', 'acquiring', 'nova_pay', 'marketplace_fee', 'delivery', 'sheet_net'];
+  const sums = {}, missing = {}, periodOrders = {}, mismatches = [], sampleByOrder = {}; let reconciliationRows = 0;
+  fields.forEach(function(field) { sums[field] = 0; missing[field] = 0; });
+  sales.lines.forEach(function(line) {
+    if (!line.date_ms || line.date_ms < bounds.start.getTime() || line.date_ms >= bounds.end.getTime()) return;
+    periodOrders[line.order_id] = true;
+    fields.forEach(function(field) { if (line[field] === null) missing[field]++; else sums[field] = round2_(sums[field] + line[field]); });
+    const directFields = ['revenue', 'cogs', 'packaging', 'acquiring', 'nova_pay', 'marketplace_fee', 'delivery', 'sheet_net'];
+    if (directFields.every(function(field) { return line[field] !== null; })) {
+      reconciliationRows++;
+      const expected = round2_(line.revenue - line.cogs - line.packaging - line.acquiring - line.nova_pay - line.marketplace_fee - line.delivery), diff = round2_(expected - line.sheet_net);
+      if (Math.abs(diff) > 0.02) mismatches.push({ row: line.row_number, order_id: line.order_id, difference: diff });
+    }
+    if (!sampleByOrder[line.order_id]) sampleByOrder[line.order_id] = { order_id: line.order_id, revenue: 0, cogs: 0, packaging: 0, payment_fees: 0, delivery: 0, sheet_net: 0, complete: true };
+    const sample = sampleByOrder[line.order_id];
+    if (['revenue', 'cogs', 'packaging', 'acquiring', 'nova_pay', 'marketplace_fee', 'delivery', 'sheet_net'].some(function(field) { return line[field] === null; })) sample.complete = false;
+    else { sample.revenue = round2_(sample.revenue + line.revenue); sample.cogs = round2_(sample.cogs + line.cogs); sample.packaging = round2_(sample.packaging + line.packaging); sample.payment_fees = round2_(sample.payment_fees + line.acquiring + line.nova_pay + line.marketplace_fee); sample.delivery = round2_(sample.delivery + line.delivery); sample.sheet_net = round2_(sample.sheet_net + line.sheet_net); }
+  });
+  if (mismatches.length) throw new Error('CRM011_PNL_RECONCILIATION_FAILED: ' + JSON.stringify(mismatches.slice(0, 10)));
+  const metric = function(field) { return missing[field] ? null : round2_(sums[field]); };
+  const revenue = metric('revenue'), cogs = metric('cogs'), packaging = metric('packaging'), delivery = metric('delivery'), sheetNet = metric('sheet_net');
+  const paymentFees = missing.acquiring || missing.nova_pay || missing.marketplace_fee ? null : round2_(sums.acquiring + sums.nova_pay + sums.marketplace_fee);
+  const operating = crm011FinanceOperatingExpenses_(expenses, bounds), writeoff = crm011FinanceWriteoffsForPeriod_(writeoffs, bounds);
+  const grossProfit = revenue === null || cogs === null ? null : round2_(revenue - cogs);
+  const netProfit = revenue === null || cogs === null || packaging === null || delivery === null || paymentFees === null || operating.value === null ? null : round2_(revenue - cogs - packaging - delivery - paymentFees - operating.value - writeoff.value);
+  const orders = Object.keys(periodOrders).length, margin = revenue ? (netProfit === null ? null : round2_(netProfit / revenue * 100)) : null;
+  const groupBase = function() { return { orders: 0, revenue: 0, net_profit: 0, revenue_missing: false, net_profit_missing: false, avg_order: null, margin_pct: null }; }, mix = { new: groupBase(), repeat: groupBase(), unidentified_orders: 0 };
+  sales.orders.forEach(function(order) {
+    if (!periodOrders[order.order_id]) return;
+    if (order.customer_group === 'unidentified') { mix.unidentified_orders++; return; }
+    const group = mix[order.customer_group], sample = sampleByOrder[order.order_id]; group.orders++;
+    if (!sample || !sample.complete) { group.revenue_missing = true; group.net_profit_missing = true; return; }
+    group.revenue = round2_(group.revenue + sample.revenue); group.net_profit = round2_(group.net_profit + sample.sheet_net);
+  });
+  ['new', 'repeat'].forEach(function(key) { const group = mix[key]; if (group.revenue_missing) group.revenue = null; if (group.net_profit_missing) group.net_profit = null; group.avg_order = group.orders && group.revenue !== null ? round2_(group.revenue / group.orders) : null; group.margin_pct = group.revenue && group.net_profit !== null ? round2_(group.net_profit / group.revenue * 100) : null; delete group.revenue_missing; delete group.net_profit_missing; delete group.net_profit; });
+  const samples = Object.keys(sampleByOrder).map(function(id) { const item = sampleByOrder[id]; if (!item.complete) return null; item.calculated_sheet_net = round2_(item.revenue - item.cogs - item.packaging - item.payment_fees - item.delivery); item.difference = round2_(item.calculated_sheet_net - item.sheet_net); delete item.complete; return item; }).filter(Boolean).slice(0, 5);
+  return {
+    totals: { orders: orders, units: metric('units'), revenue: revenue, net_profit: netProfit, margin_pct: margin, avg_order: orders && revenue !== null ? round2_(revenue / orders) : null },
+    pnl: { revenue: revenue, cogs: cogs, gross_profit: grossProfit, packaging: packaging, delivery: delivery, payment_fees: paymentFees, operating_expenses: operating.value, writeoffs: writeoff.value, net_profit: netProfit, margin_pct: margin },
+    customer_mix: mix,
+    data_quality: { missing_sales_values: missing, operating_expense_missing_value_rows: operating.missing_value_rows, writeoff_missing_value_rows: writeoff.missing_value_rows, linked_order_writeoffs_excluded: writeoff.linked_order_rows_excluded, identity_conflict_orders: sales.orders.filter(function(order) { return order.identity_conflict; }).length, reconciliation_rows_checked: reconciliationRows, reconciliation_mismatches: 0, reconciliation_sample: samples }
+  };
+}
+
+function crm011CashIn_(rows, bounds) {
+  let amount = 0, approximatedRows = 0;
+  rows.forEach(function(row) {
+    if (String(row[22] || '').trim() !== 'Оплачено') return;
+    let receivedMs = dateSortValue_(row[32]);
+    if (!receivedMs) { receivedMs = dateSortValue_(row[2]); if (/післяплат|накладен/i.test(String(row[27] || ''))) receivedMs += 3 * 86400000; approximatedRows++; }
+    if (receivedMs >= bounds.start.getTime() && receivedMs < bounds.end.getTime()) amount = round2_(amount + num_(row[10]));
+  });
+  return { amount: amount, approximated_rows: approximatedRows };
+}
+
+function crm011PurchaseModel_() {
+  if (_memo.crm011PurchaseModel) return _memo.crm011PurchaseModel;
+  const sheet = _getCrmSs().getSheetByName('Закупки');
+  const result = { arrivals_by_sku: {}, outside_value: 0, outside_lots: 0, outside_missing_value: 0 };
+  if (!sheet || sheet.getLastRow() < 3) { _memo.crm011PurchaseModel = result; return result; }
+  const rows = sheet.getRange(3, 1, sheet.getLastRow() - 2, Math.max(17, sheet.getLastColumn())).getValues();
+  rows.forEach(function(row) {
+    const lot = String(row[0] || '').trim(), track = String(row[2] || '').trim(), sku = String(row[4] || '').trim(), status = String(row[16] || '').trim();
+    if (!lot || !sku) return;
+    const arrivedMs = dateSortValue_(row[3]);
+    if (arrivedMs) {
+      if (!result.arrivals_by_sku[sku]) result.arrivals_by_sku[sku] = { oldest_ms: arrivedMs, oldest_date: apiDate_(row[3]), lots: [] };
+      const entry = result.arrivals_by_sku[sku];
+      if (arrivedMs < entry.oldest_ms) { entry.oldest_ms = arrivedMs; entry.oldest_date = apiDate_(row[3]); }
+      entry.lots.push({ lot_id: lot, track_number: track, date: apiDate_(row[3]), qty: round2_(num_(row[7])), status: status });
+      return;
+    }
+    if (status === 'Скасовано') return;
+    result.outside_lots++;
+    const value = num_(row[14]) || num_(row[11]) || round2_(num_(row[8]) + num_(row[9]) + num_(row[10]));
+    if (value > 0) result.outside_value = round2_(result.outside_value + value); else result.outside_missing_value++;
+  });
+  Object.keys(result.arrivals_by_sku).forEach(function(sku) {
+    const entry = result.arrivals_by_sku[sku];
+    entry.lots.sort(function(a, b) { return dateSortValue_(a.date) - dateSortValue_(b.date) || String(a.lot_id).localeCompare(String(b.lot_id), 'uk', { numeric: true }); });
+    delete entry.oldest_ms;
+  });
+  _memo.crm011PurchaseModel = result;
+  return result;
+}
+
+function crm011PurchaseArrivalMap_() { return crm011PurchaseModel_().arrivals_by_sku; }
+
+function crm011ZenmarketTopups_(ss, bounds) {
+  const sheet = ss.getSheetByName('ZenMarket_Поповнення');
+  if (!sheet || sheet.getLastRow() < 2) return null;
+  const rows = sheet.getRange(2, 1, sheet.getLastRow() - 1, Math.max(7, sheet.getLastColumn())).getValues();
+  let amountJpy = 0, amountUah = 0, count = 0, approximate = 0;
+  rows.forEach(function(row) {
+    const ms = dateSortValue_(row[1]);
+    if (!ms || ms < bounds.start.getTime() || ms >= bounds.end.getTime()) return;
+    count++; amountJpy = round2_(amountJpy + num_(row[2])); amountUah = round2_(amountUah + num_(row[4]));
+    if (String(row[6] || '').toLowerCase().indexOf('approx') !== -1 || !num_(row[4])) approximate++;
+  });
+  return { count: count, amount_jpy: amountJpy, amount_uah: amountUah, approximate_rows: approximate };
+}
+
+function crm011ExpenseCashflow_(expenses, bounds) {
+  const out = { consumables: 0, marketing: 0, operating: 0, other: 0, total: 0 };
+  expenses.rows.forEach(function(row) {
+    const c = expenses.columns, ms = dateSortValue_(row[c.date]); if (!ms || ms < bounds.start.getTime() || ms >= bounds.end.getTime()) return;
+    const amount = crm011FinanceNumber_(row[c.amount]); if (amount === null || amount === 0) return;
+    const category = String(row[c.category] || '').trim(), hasConsumable = !!String(row[c.consumable] || '').trim(), operating = String(row[c.operating] || '').trim().toLowerCase() === 'так';
+    if (hasConsumable || /пакув/i.test(category)) out.consumables = round2_(out.consumables + amount);
+    else if (/маркет|реклам|google ads|facebook ads/i.test(category)) out.marketing = round2_(out.marketing + amount);
+    else if (operating) out.operating = round2_(out.operating + amount);
+    else out.other = round2_(out.other + amount);
+    out.total = round2_(out.total + amount);
+  });
+  return out;
+}
+
+function apiPaymentDateAudit_(params) {
+  const limit = Math.max(1, Math.min(Math.floor(apiNum_(params && params.limit) || 20), 50));
+  const scanRows = Math.max(50, Math.min(Math.floor(apiNum_(params && params.scan_rows) || 500), 1000));
+  const sheet = _getCrmSs().getSheetByName('Продажі');
+  const paymentColumn = crm011RequireColumn_(_getCrmSs(), 'Продажі', 'Дата оплати').column;
+  const lastRow = sheet.getLastRow(), startRow = Math.max(3, lastRow - scanRows + 1);
+  const values = sheet.getRange(startRow, 1, Math.max(lastRow - startRow + 1, 1), Math.max(33, paymentColumn)).getValues();
+  const byOrder = {};
+  values.forEach(function(row, index) {
+    const order = String(row[0] || '').trim(); if (!order) return;
+    if (!byOrder[order]) byOrder[order] = { order_id: order, first_row: startRow + index, last_row: startRow + index, payment_status: '', order_status: '', payment_date: '', payment_date_present: false };
+    const item = byOrder[order], paymentStatus = String(row[22] || '').trim(), orderStatus = String(row[23] || '').trim(), paymentDate = row[paymentColumn - 1];
+    item.last_row = startRow + index;
+    if (paymentStatus) item.payment_status = paymentStatus;
+    if (orderStatus) item.order_status = orderStatus;
+    if (dateSortValue_(paymentDate)) { item.payment_date = apiDate_(paymentDate); item.payment_date_present = true; }
+  });
+  const allOrders = Object.keys(byOrder).map(function(order) { return byOrder[order]; });
+  const statusCounts = {};
+  allOrders.forEach(function(item) { const status = item.payment_status || '(порожньо)'; statusCounts[status] = (statusCounts[status] || 0) + 1; });
+  const paidOrders = allOrders.filter(function(item) { return String(item.payment_status || '').trim().toLowerCase() === 'оплачено'; }).sort(function(a, b) { return b.last_row - a.last_row; });
+  const tomorrow = new Date(); tomorrow.setHours(24, 0, 0, 0);
+  const futurePaymentDates = paidOrders.filter(function(item) { return item.payment_date_present && dateSortValue_(item.payment_date) >= tomorrow.getTime(); }).map(function(item) { return { order_id: item.order_id, row: item.last_row, payment_date: item.payment_date }; });
+  return { ok: true, checked_range: 'Продажі!A' + startRow + ':AH' + lastRow, checked_rows: values.length, distinct_orders: allOrders.length, payment_status_counts: statusCounts, paid_orders_found: paidOrders.length, orders: paidOrders.slice(0, limit), missing_payment_date: paidOrders.filter(function(item) { return !item.payment_date_present; }).length, future_payment_dates_count: futurePaymentDates.length, future_payment_dates: futurePaymentDates.slice(0, 20) };
+}
+
+function crm011PaymentDateAuditForOwner() {
+  const result = apiPaymentDateAudit_({ limit: 50, scan_rows: 500 });
+  console.log(JSON.stringify({ ok: result.ok, checked_range: result.checked_range, checked_rows: result.checked_rows, distinct_orders: result.distinct_orders, payment_status_counts: result.payment_status_counts, paid_orders_found: result.paid_orders_found, missing_payment_date: result.missing_payment_date, future_payment_dates_count: result.future_payment_dates_count, future_payment_dates: result.future_payment_dates, orders_sample: result.orders.slice(0, 10) }));
+  return result;
+}
+
+function apiFinanceReport_(params) {
+  params = params || {}; const ss = _getCrmSs(), sales = crm011FinanceSalesModel_(ss), expenses = crm011FinanceExpenseModel_(ss), writeoffs = crm011FinanceWriteoffModel_(ss);
+  const bounds = crm011DateBounds_(params.date_from, params.date_to), current = crm011FinancePeriod_(sales, expenses, writeoffs, bounds);
+  const cashIn = crm011FinanceCashIn_(sales, bounds), topups = crm011ZenmarketTopups_(ss, bounds);
+  const cashflowFor = function(periodBounds) {
+    const periodCashIn = crm011FinanceCashIn_(sales, periodBounds), periodExpenseCash = crm011ExpenseCashflow_(expenses, periodBounds), periodTopups = crm011ZenmarketTopups_(ss, periodBounds), topupUah = periodTopups ? periodTopups.amount_uah : null;
+    const cashOut = topupUah == null ? null : round2_(topupUah + periodExpenseCash.total);
+    return { cash_in: periodCashIn.amount, cash_in_approximated_rows: periodCashIn.approximated_rows, cash_in_missing_value_rows: periodCashIn.missing_value_rows, inventory_topups: topupUah, inventory_topups_jpy: periodTopups ? periodTopups.amount_jpy : null, inventory_topups_count: periodTopups ? periodTopups.count : 0, inventory_topups_approximated_rows: periodTopups ? periodTopups.approximate_rows : 0, consumables: periodExpenseCash.consumables, marketing: periodExpenseCash.marketing, operating: periodExpenseCash.operating, other: periodExpenseCash.other, expense_cash_out: periodExpenseCash.total, cash_out: cashOut, net_cashflow: cashOut == null || periodCashIn.amount === null ? null : round2_(periodCashIn.amount - cashOut) };
+  };
+  const cashflow = cashflowFor(bounds);
+  let comparison = null;
+  if (params.compare_from || params.compare_to) {
+    const compareBounds = crm011DateBounds_(params.compare_from, params.compare_to), compared = crm011FinancePeriod_(sales, expenses, writeoffs, compareBounds);
+    comparison = { period: compareBounds, totals: compared.totals, pnl: compared.pnl, cashflow: cashflowFor(compareBounds), customer_mix: compared.customer_mix };
+  }
+  const skus = apiSkuList_({}).skus || []; let inventoryAssets = 0, excludedAssets = 0;
+  skus.forEach(function(item) { if (item.is_3dp || item.is_mystery || item.current_cost == null) { excludedAssets++; return; } inventoryAssets = round2_(inventoryAssets + Math.max(0, num_(item.physical_stock != null ? item.physical_stock : item.stock)) * num_(item.current_cost)); });
+  const purchases = crm011PurchaseModel_();
+  return { ok: true, period: bounds, totals: current.totals, comparison: comparison, pnl: current.pnl, cashflow: cashflow, zenmarket_account: crm011ZenBalanceSnapshot_(ss), inventory_assets: { value: inventoryAssets, in_stock: inventoryAssets, outside_stock: purchases.outside_value, total: round2_(inventoryAssets + purchases.outside_value), outside_lots: purchases.outside_lots, outside_missing_value: purchases.outside_missing_value, excluded_skus: excludedAssets }, customer_mix: current.customer_mix, data_quality: Object.assign({}, current.data_quality, { unreconciled_preorder_orders_excluded: true, inventory_topups_unavailable: topups === null, missing_values_are_not_zero: true, payment_date_approximated_rows: cashIn.approximated_rows, cash_in_missing_value_rows: cashIn.missing_value_rows, zenmarket_topup_approximated_rows: topups ? topups.approximate_rows : 0, zenmarket_historical_topup_uah_missing: 1, outside_asset_lots_missing_value: purchases.outside_missing_value, finance_headers: { sales: sales.headers, expenses: expenses.headers, writeoffs: writeoffs.headers } }) };
+}
+
+function crm011PassBVerificationForOwner(dateFrom, dateTo) {
+  const integrity = apiIntegrityCheck_(), report = apiFinanceReport_({ date_from: dateFrom || '', date_to: dateTo || '' }), clients = apiLtvReport_({ qualified: 'false', limit: 2000 });
+  const distribution = {}, total = Math.max(Number(clients.total_clients) || 0, 1);
+  Object.keys(clients.distribution || {}).sort().forEach(function(segment) { const count = clients.distribution[segment]; distribution[segment] = { count: count, percent: round2_(count / total * 100) }; });
+  const result = { ok: integrity.clean === true && report.ok === true, integrity: integrity, period: report.period, totals: report.totals, pnl: report.pnl, customer_mix: report.customer_mix, finance_headers: report.data_quality.finance_headers, reconciliation_sample: report.data_quality.reconciliation_sample, data_quality: { missing_sales_values: report.data_quality.missing_sales_values, cash_in_missing_value_rows: report.data_quality.cash_in_missing_value_rows, operating_expense_missing_value_rows: report.data_quality.operating_expense_missing_value_rows, writeoff_missing_value_rows: report.data_quality.writeoff_missing_value_rows, linked_order_writeoffs_excluded: report.data_quality.linked_order_writeoffs_excluded, identity_conflict_orders: report.data_quality.identity_conflict_orders }, segment_distribution: distribution };
+  console.log(JSON.stringify(result));
+  return result;
 }

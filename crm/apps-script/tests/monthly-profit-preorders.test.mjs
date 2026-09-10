@@ -42,7 +42,7 @@ assert.doesNotMatch(monthly, /setValue|setValues|appendRow|deleteRow/, 'monthly 
 assert.match(code, /action === 'monthly_summary'\) return 'bscrm_v2_' \+ version \+ '_' \+ action \+ '_v3'/, 'the new monthly payload uses a fresh server cache key after publication');
 assert.match(code, /action === 'overview_assets'\) return 'bscrm_v2_' \+ version \+ '_' \+ action \+ '_v1'/, 'asset tiles use the cache-version key, so a purchase invalidation takes effect immediately');
 assert.doesNotMatch(code, /action === 'overview_assets'\) return 'bscrm_overview_assets_v1'/, 'asset tiles must not retain the fixed cache key');
-assert.match(code, /const cacheKey = 'crm_orders_v4_'/, 'the order list uses a fresh server cache key after publication');
+assert.match(code, /cacheKey = 'crm_orders_v5_'/, 'the live CRM-011 order list uses its current cache key after the shadowed v4 implementation is removed');
 
 const assetCacheContext = vm.createContext({
   String,

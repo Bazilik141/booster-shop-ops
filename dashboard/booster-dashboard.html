@@ -401,6 +401,28 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
   .three-dp-top-list { display:grid;gap:7px; }
   .three-dp-top-row { display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:12px; }
   .three-dp-top-row:last-child { border-bottom:0; }
+  .crm011-toolbar { display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px; }
+  .crm011-toolbar input,.crm011-toolbar select { min-height:34px;padding:7px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text); }
+  .crm011-toolbar input[type="search"] { min-width:260px;flex:1; }
+  .crm011-kpis { display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:16px; }
+  .finance-kpis { grid-template-columns:repeat(6,minmax(0,1fr)); }
+  .finance-pair { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px; }
+  .finance-pair > .section { min-width:0; }
+  .zen-form-grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px; }
+  .zen-form-actions { display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px; }
+  .zen-divider { border:0;border-top:1px solid var(--border);margin:18px 0; }
+  .zen-current input[readonly] { color:var(--text);font-weight:700;background:var(--surface2); }
+  .crm011-note { color:var(--muted);font-size:12px;line-height:1.45; }
+  .crm011-segment { display:inline-block;padding:3px 7px;border:1px solid var(--border);border-radius:999px;color:var(--muted);font-size:11px; }
+  .crm011-segment.is-risk { color:var(--red);border-color:rgba(255,91,112,.45); }
+  .finance-breakdown td { padding-top:.55rem;padding-bottom:.55rem; }
+  .finance-breakdown tr.is-deduction td:first-child { color:var(--muted);padding-left:1.1rem; }
+  .finance-breakdown tr.is-subtotal td,.finance-breakdown tr.is-total td { border-top:1px solid var(--border);font-weight:700; }
+  .finance-breakdown tr.is-total td { font-size:1rem; }
+  .finance-mix th:not(:first-child),.finance-mix td:not(:first-child) { text-align:right; }
+@media (min-width: 801px) and (max-width: 1200px) {
+  .finance-kpis { grid-template-columns:repeat(3,minmax(0,1fr)); }
+}
 @media (max-width: 800px) {
   .sidebar { display: none; }
   .mobile-brandbar { display:flex;position:sticky;top:0;z-index:20;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--surface);border-bottom:1px solid var(--border);font-weight:700; }
@@ -415,6 +437,8 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
   .write-section.wide { grid-column:auto; }
   .purchase-cost-grid { grid-template-columns:1fr; }
   .line-item-grid,.selected-lot { grid-template-columns:1fr; }
+  .crm011-kpis { grid-template-columns:1fr 1fr; }
+  .finance-pair,.zen-form-grid { grid-template-columns:1fr; }
 }
 </style>
 </head>
@@ -426,6 +450,9 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
   <div class="nav-section">
     <div class="nav-item active" onclick="showPage('overview')">
       <span class="nav-icon">📊</span> Огляд
+    </div>
+    <div class="nav-item" onclick="showPage('alerts')">
+      <span class="nav-icon">⚠️</span> Увага
     </div>
     <div class="nav-item" onclick="showPage('stock')">
       <span class="nav-icon">📦</span> Склад
@@ -441,6 +468,9 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
     </div>
     <div class="nav-item" onclick="showPage('clients')">
       <span class="nav-icon">👥</span> Клієнти
+    </div>
+    <div class="nav-item" onclick="showPage('finance')">
+      <span class="nav-icon">💰</span> Фінанси
     </div>
     <div class="nav-item" onclick="showPage('roadmap')">
       <span class="nav-icon">🗺️</span> Роадмап
@@ -491,10 +521,10 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
       </div>
       <div class="section">
         <div class="section-header">
-          <span class="section-title">Потребують уваги</span>
-          <span class="badge b-red" id="alertsBadge">—</span>
+          <span class="section-title">Передзамовлення</span>
+          <span class="badge b-yellow" id="preordersBadge">—</span>
         </div>
-        <div id="alertsPreview"><div class="loading"><div class="spinner"></div></div></div>
+        <div id="preordersPreview"><div class="loading"><div class="spinner"></div></div></div>
       </div>
     </div>
 
@@ -531,12 +561,26 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
     </div>
   </div>
 
+  <!-- ─── ATTENTION ─── -->
+  <div id="page-alerts" class="page">
+    <div class="header"><div class="page-title">Увага</div><div class="page-sub">Актуальні проблеми з таблиці автоматизації та керування сповіщеннями Telegram</div></div>
+    <div class="section">
+      <div class="section-header"><span class="section-title">Алерти</span><button class="btn-secondary" type="button" onclick="configureAlertsAccess()">Налаштувати API</button></div>
+      <div class="crm011-toolbar"><button id="alertsModeActive" class="btn-secondary active" type="button" onclick="setAlertsMode('active')">Активні</button><button id="alertsModeDismissed" class="btn-secondary" type="button" onclick="setAlertsMode('dismissed')">Неактуальні</button><button class="btn-secondary" type="button" onclick="loadAlerts(true)">Оновити</button><span id="alertsCount" class="crm011-note"></span></div>
+      <div id="alertsTable"><div class="loading"><div class="spinner"></div></div></div>
+    </div>
+  </div>
+
   <!-- ─── STOCK ─── -->
   <div id="page-stock" class="page">
     <div class="header">
       <div class="page-title">Склад</div>
       <div class="page-sub">Черга дій по SKU</div>
     </div>
+    <details class="section" id="slowStockSection">
+      <summary class="section-title" style="cursor:pointer">Повільний склад · топ-5 заморожених коштів</summary>
+      <div id="slowStockTable"><div class="loading"><div class="spinner"></div></div></div>
+    </details>
     <div class="section">
       <div style="margin-bottom:14px">
         <input id="stockFilter" type="text" placeholder="🔍 Фільтр по SKU або назві…"
@@ -582,6 +626,16 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
         <button id="ordersModeCompleted" onclick="loadOrders('completed')">Завершені 60 днів</button>
         <button id="ordersSortDate" onclick="toggleOrdersDateSort()">Дата ↓</button>
       </div>
+      <div class="crm011-toolbar">
+        <input id="ordersSearch" type="search" placeholder="ID, клієнт, телефон, ТТН або SKU" aria-label="Пошук замовлень">
+        <select id="ordersChannel"><option value="">Усі канали</option></select>
+        <select id="ordersStatus"><option value="">Усі статуси</option></select>
+        <select id="ordersPayment"><option value="">Усі оплати</option></select>
+        <select id="ordersClientType"><option value="">Усі типи клієнтів</option></select>
+        <select id="ordersPreorder"><option value="">Усі замовлення</option><option value="yes">Передзамовлення</option><option value="no">Без передзамовлення</option></select>
+        <select id="ordersProfit"><option value="">Будь-який прибуток</option><option value="positive">Прибуткові</option><option value="negative">Збиткові</option><option value="low_margin">Маржа &lt; 15%</option></select>
+        <button class="btn-secondary" type="button" onclick="resetOrderFilters()">Скинути</button><span id="ordersFound" class="crm011-note"></span>
+      </div>
       <div id="ordersTable"><div class="loading"><div class="spinner"></div><br>Завантаження...</div></div>
     </div>
   </div>
@@ -620,7 +674,7 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
       <div class="page-sub" id="roadmapSub">Актуальні задачі проекту</div>
     </div>
 
-    <div style="margin-bottom:18px;"></div>
+    <div class="crm011-toolbar"><select id="roadmapSeries" onchange="renderRoadmap()"><option value="">Усі серії</option></select><select id="roadmapStage" onchange="renderRoadmap()"><option value="">Усі стадії</option><option value="active">В роботі</option><option value="todo">Заплановано</option><option value="done">Виконано</option></select><button class="btn-secondary" type="button" onclick="resetRoadmapFilters()">Скинути</button></div>
 
     <div id="roadmapBoard"></div>
   </div>
@@ -630,9 +684,20 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
       <div class="page-title">Клієнти</div>
       <div class="page-sub">Повторні, витрати за 60 днів понад ₴1 500 або маржа понад 40%</div>
     </div>
+    <div class="crm011-kpis" id="clientsKpis"></div>
     <div class="section">
+      <div class="crm011-toolbar"><button id="clientsModeAll" class="btn-secondary" type="button" onclick="setClientsMode('all')">Усі</button><button id="clientsModeImportant" class="btn-secondary" type="button" onclick="setClientsMode('important')">Важливі</button><span id="clientsModeNote" class="crm011-note"></span></div>
       <div id="clientsTable"><div class="loading"><div class="spinner"></div><br>Завантаження...</div></div>
     </div>
+  </div>
+
+  <!-- ─── FINANCE ─── -->
+  <div id="page-finance" class="page">
+    <div class="header"><div class="page-title">Фінанси</div><div class="page-sub">P&amp;L, рух коштів і активи складу без підміни відсутніх даних нулями</div></div>
+    <div class="section"><div class="crm011-toolbar"><select id="financePreset" onchange="applyFinancePreset()"><option value="7d">7 днів</option><option value="30d">30 днів</option><option value="month" selected>Цей місяць</option><option value="last_month">Минулий місяць</option><option value="90d">90 днів</option><option value="custom">Свій період</option></select><input id="financeFrom" type="date" onchange="setFinanceCustomPeriod_()"><input id="financeTo" type="date" onchange="setFinanceCustomPeriod_()"><label class="crm011-note"><input id="financeCompare" type="checkbox"> порівняти з попереднім періодом</label><button class="btn-primary" type="button" onclick="loadFinance(true)">Показати</button></div><div id="financeKpis" class="crm011-kpis finance-kpis"></div></div>
+    <div class="finance-pair"><div class="section"><div class="section-header"><span class="section-title">P&amp;L</span></div><div id="financePnl"></div></div><div class="section"><div class="section-header"><span class="section-title">Обліковий рух коштів</span></div><div id="financeCashflow"></div></div></div>
+    <div class="grid2"><div class="section"><div class="section-header"><span class="section-title">Нові та повторні клієнти</span></div><div id="financeCustomers"></div></div><div class="section"><div class="section-header"><span class="section-title">Якість даних</span></div><div id="financeQuality" class="crm011-note"></div></div></div>
+    <div class="finance-pair"><div class="section"><div class="section-header"><span class="section-title">Активи · станом на сьогодні</span></div><div id="financeAssets"></div></div><div class="section"><div class="section-header"><span class="section-title">Рахунок ZenMarket</span></div><div class="zen-form-grid"><div class="form-row zen-current"><label>Поточний баланс, JPY</label><input id="zenCurrentBalance" readonly value="Завантаження…"></div><div class="form-row"><label>Новий актуальний баланс, JPY</label><input id="zenCorrectBalance" type="number" step="1" oninput="updateZenCorrectionPreview_()"></div><div class="form-row" style="grid-column:1/-1"><label>Примітка до коригування (необов’язково)</label><input id="zenCorrectNote" maxlength="500"></div></div><div id="zenCorrectionPreview" class="crm011-note"></div><div class="zen-form-actions"><button id="zenCorrectButton" class="btn-secondary" type="button" onclick="submitZenCorrection()">Скоригувати баланс</button><div id="zenCorrectionMsg" class="form-msg"></div></div><hr class="zen-divider"><div class="zen-form-grid"><div class="form-row"><label>Дата поповнення</label><input id="zenTopupDate" type="date"></div><div class="form-row"><label>Сума, грн</label><input id="zenTopupUah" type="number" min="0" step="0.01"></div><div class="form-row"><label>Сума, JPY</label><input id="zenTopupJpy" type="number" min="0" step="1"></div><div class="form-row"><label>Примітка (необов’язково)</label><input id="zenTopupNote" maxlength="500"></div></div><div class="zen-form-actions"><button id="zenTopupButton" class="btn-primary" type="button" onclick="submitZenTopup()">Поповнити зен</button><div id="zenTopupMsg" class="form-msg"></div></div><div id="zenAccountHint" class="crm011-note" style="margin-top:10px"></div></div></div>
   </div>
 
   <!-- ACCOUNTING -->
@@ -719,6 +784,9 @@ const API = 'https://script.google.com/macros/s/AKfycbz2WIFlW7A-ta7HtewK-0wsklek
 const TOKEN_STORAGE_KEY = 'booster_crm_token';
 const API_3DP_STORAGE_KEY = 'booster_3dp_api_url';
 const TOKEN_3DP_STORAGE_KEY = 'booster_3dp_token';
+const ALERTS_API_DEFAULT = 'https://script.google.com/macros/s/AKfycbznPOLdAPc7wVk6ofVbfLff67BFLO1uPFaYFovYy8mLVJj9suLL3OMmcFCGeHmimQGSdQ/exec';
+const ALERTS_API_STORAGE_KEY = 'booster_alerts_api_url';
+const ALERTS_TOKEN_STORAGE_KEY = 'booster_alerts_token';
 
 let TOKEN = window.localStorage.getItem(TOKEN_STORAGE_KEY) || '';
 function ensureCrmToken_() {
@@ -730,14 +798,25 @@ function ensureCrmToken_() {
 }
 
 // ════════════ API ════════════
+const inflightGets = new Map();
+const dashboardPerf = { requests:0, deduped:0, lastFinanceMs:null };
 async function call(action, extra = {}) {
   if (!ensureCrmToken_()) throw new Error('CRM API token не налаштовано.');
+  const inflight = typeof inflightGets === 'undefined' ? (call._inflight || (call._inflight = new Map())) : inflightGets;
+  const perf = typeof dashboardPerf === 'undefined' ? (call._perf || (call._perf = { requests:0, deduped:0 })) : dashboardPerf;
   const p = new URLSearchParams({ action, token: TOKEN, ...extra });
-  const r = await fetch(`${API}?${p}`, { redirect: 'follow' });
-  if (!r.ok) throw new Error(`HTTP ${r.status}`);
-  const d = await r.json();
-  if (!d.ok) throw new Error(d.error || 'API error');
-  return d;
+  const key = action + '?' + new URLSearchParams(Object.entries(extra).sort()).toString();
+  if (inflight.has(key)) { perf.deduped++; return inflight.get(key); }
+  const request = (async function() {
+    perf.requests++;
+    const r = await fetch(`${API}?${p}`, { redirect: 'follow' });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.error || 'API error');
+    return d;
+  })();
+  inflight.set(key, request);
+  try { return await request; } finally { inflight.delete(key); }
 }
 
 const crmIntegrityState = { status:'idle', result:null, error:'', time:'' };
@@ -825,6 +904,22 @@ async function callPost(payload) {
   return d;
 }
 
+function getAlertsCredentials_() {
+  const api=window.localStorage.getItem(ALERTS_API_STORAGE_KEY)||ALERTS_API_DEFAULT;
+  const token=window.localStorage.getItem(ALERTS_TOKEN_STORAGE_KEY)||'';
+  if(!token)throw new Error('Налаштуй окремий token API алертів.');
+  return {api:api,token:token};
+}
+function configureAlertsAccess(){
+  const current=window.localStorage.getItem(ALERTS_API_STORAGE_KEY)||ALERTS_API_DEFAULT;
+  const api=window.prompt('Apps Script Web App URL алертів (/exec):',current);if(!api)return;
+  if(!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec(?:\?.*)?$/i.test(api.trim())){window.alert('Потрібен URL Apps Script, що закінчується на /exec.');return;}
+  const token=window.prompt('Окремий token API алертів:',window.localStorage.getItem(ALERTS_TOKEN_STORAGE_KEY)||'');if(!token)return;
+  window.localStorage.setItem(ALERTS_API_STORAGE_KEY,api.trim());window.localStorage.setItem(ALERTS_TOKEN_STORAGE_KEY,token.trim());delete loaded.alerts;loadAlerts(true);
+}
+async function callAlerts_(action,extra){const c=getAlertsCredentials_(),p=new URLSearchParams(Object.assign({action:action,token:c.token},extra||{})),r=await fetch(c.api+'?'+p,{redirect:'follow'});if(!r.ok)throw new Error('Alerts HTTP '+r.status);const d=await r.json();if(!d.ok)throw new Error(d.error||'Alerts API error');return d;}
+async function callAlertsPost_(payload){const c=getAlertsCredentials_(),r=await fetch(c.api,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({},payload,{token:c.token})),redirect:'follow'});if(!r.ok)throw new Error('Alerts HTTP '+r.status);const d=await r.json();if(!d.ok)throw new Error(d.error||'Alerts API error');return d;}
+
 // This client intentionally does not share the main CRM URL or token.
 function get3dpCredentials() {
   const api = window.localStorage.getItem(API_3DP_STORAGE_KEY) || '';
@@ -879,10 +974,18 @@ async function call3dpPost(payload) {
 // ════════════ STATE ════════════
 const cache = {};
 const loaded = {};
-const orderState = { mode: 'default', sort: 'date_desc' };
+const alertsState={mode:'active',rows:[],loading:false};
+const orderState = { mode: 'default', sort: 'date_desc', tableSort: { field:'', dir:'desc' }, filters: { search:'', channel:'', status:'', payment:'', clientType:'', preorder:'', profit:'' } };
+const financeState = { preset: 'month' };
+const ZEN_CORRECTION_PENDING_KEY = 'booster_zen_correction_pending_v1';
+const ZEN_TOPUP_PENDING_KEY = 'booster_zen_topup_pending_v1';
 const orderItemsState = { cache: Object.create(null), loading: Object.create(null), errors: Object.create(null), expanded: Object.create(null), activeRows: [], completedRows: [] };
+const ORDER_SUMMARY_COLUMN_COUNT = 12;
 let _clientsData = [];
-const clientSortState = { field: 'spend_60d', dir: 'desc' };
+let _clientsAllData = [];
+let _clientsReport = null;
+let clientsMode = 'all';
+const clientSortState = { field: 'profit', dir: 'desc' };
 const accountingState = {
   skus: [],
   componentCatalog: [],
@@ -911,7 +1014,7 @@ const accountingState = {
 const ORDER_EDIT_PENDING_KEY = 'booster_order_edit_pending_v1';
 
 function orderEditPayloadSignatureForPackaging_(payload,packagingType) {
-  const stable=JSON.stringify({row_index:payload.row_index,payment_status:payload.payment_status,order_status:payload.order_status,ttn:payload.ttn,packaging_type:packagingType,note:payload.note,custom_packaging_cost:payload.custom_packaging_cost,shop_delivery:payload.shop_delivery,components:payload.components,fixtures:payload.fixtures,three_dp_lines:payload.three_dp_lines});
+  const stable=JSON.stringify({row_index:payload.row_index,payment_status:payload.payment_status,order_status:payload.order_status,ttn:payload.ttn,packaging_type:packagingType,note:payload.note,fiscal_receipt:payload.fiscal_receipt,custom_packaging_cost:payload.custom_packaging_cost,shop_delivery:payload.shop_delivery,components:payload.components,fixtures:payload.fixtures,three_dp_lines:payload.three_dp_lines});
   let hash=2166136261;for(let index=0;index<stable.length;index++){hash^=stable.charCodeAt(index);hash=Math.imul(hash,16777619);}return String(hash>>>0);
 }
 function orderEditPayloadSignature_(payload){return orderEditPayloadSignatureForPackaging_(payload,canonicalPackagingType(payload.packaging_type));}
@@ -935,7 +1038,7 @@ function showError(msg) {
 function clearError() { document.getElementById('errorBanner').classList.remove('show'); }
 
 // ════════════ NAV ════════════
-const titles = { overview: 'Огляд', stock: 'Склад', consumables: 'Розхідники', orders: 'Замовлення', skus: 'Товари', clients: 'Клієнти', roadmap: 'Роадмап', accounting: 'Облік', updates: 'Оновлення та міграція', settings: 'Налаштування', '3dprint': '3D-друк' };
+const titles = { overview: 'Огляд', alerts: 'Увага', stock: 'Склад', consumables: 'Розхідники', orders: 'Замовлення', skus: 'Товари', clients: 'Клієнти', finance: 'Фінанси', roadmap: 'Роадмап', accounting: 'Облік', updates: 'Оновлення та міграція', settings: 'Налаштування', '3dprint': '3D-друк' };
 
 function showPageByName(name, skipEvent) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -955,13 +1058,15 @@ function showPage(name) {
 }
 
 function hardRefresh() {
+  inflightGets.clear();
   Object.keys(cache).forEach(k => delete cache[k]);
   Object.keys(loaded).forEach(k => delete loaded[k]);
+  alertsState.rows=[];
   clearOrderItemsState();
   threeDpState.informationLoaded=false;threeDpState.informationLoading=false;threeDpState.informationError='';threeDpState.syncJournalLoaded=false;
   Object.keys(threeDpState.informationSections).forEach(function(key){threeDpState.informationSections[key]={loaded:false,loading:false,error:''};});
   threeDpUi.calc.draftCache=Object.create(null);threeDpUi.calc.draftFound=null;
-  ['summaryCards','pendingPreview','alertsPreview','stockTable','consumablesTable','ordersTable','skuTable','clientsTable','topSkusList','threeDpCards','threeDpCalculator','threeDpSkuTable','threeDpSalesTable','threeDpPlyushkyTable','threeDpPayoutsTable']
+  ['summaryCards','pendingPreview','preordersPreview','alertsTable','slowStockTable','stockTable','consumablesTable','ordersTable','skuTable','clientsTable','financeKpis','financePnl','financeAssets','financeCashflow','financeCustomers','topSkusList','threeDpCards','threeDpCalculator','threeDpSkuTable','threeDpSalesTable','threeDpPlyushkyTable','threeDpPayoutsTable']
     .forEach(id => { const el = document.getElementById(id); if(el) el.innerHTML = spin(); });
   ['channelSection','trendGrid','topSkusSection'].forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
   clearError();
@@ -1362,9 +1467,10 @@ const fmtQty = n => n != null ? Number(n).toLocaleString('uk-UA', {maximumFracti
 const urgCls = u => 'urg-' + (u||'').toLowerCase();
 
 function orderProfitPct(order) {
+  if (!order || order.amount == null || order.profit == null || order.amount === '' || order.profit === '') return null;
   const amount = Number(order && order.amount);
   const profit = Number(order && order.profit);
-  if (!Number.isFinite(amount) || amount === 0 || !Number.isFinite(profit)) return null;
+  if (!Number.isFinite(amount) || amount <= 0 || !Number.isFinite(profit)) return null;
   return (profit / amount) * 100;
 }
 
@@ -1661,6 +1767,17 @@ function renderStockTable(resetFilter) {
   }
 }
 
+function renderSlowStock_(rows) {
+  const excluded = /outlet|аутлет|передзамов|preorder|під замовлення|assembled|комплектуємо/i;
+  const slow = (rows || []).filter(function(row) {
+    const physical = Number(row.physical_stock || 0), sold60 = Number(row.sold_60d || 0), cost = Number(row.current_cost);
+    const coverage = sold60 > 0 ? physical / (sold60 / 60) : Infinity;
+    return physical > 0 && Number.isFinite(cost) && cost > 0 && !row.is_3dp && !row.is_mystery && !excluded.test([row.name,row.format,row.stock_status].join(' ')) && (sold60 === 0 || coverage >= 60);
+  }).map(function(row) { return Object.assign({}, row, { frozen_value: Number(row.physical_stock || 0) * Number(row.current_cost), coverage_60d: Number(row.sold_60d || 0) ? Math.round(Number(row.physical_stock || 0) / (Number(row.sold_60d) / 60)) : null }); })
+    .sort(function(a,b) { return b.frozen_value - a.frozen_value; }).slice(0,5);
+  document.getElementById('slowStockTable').innerHTML = slow.length ? '<div class="tbl-wrap"><table><tr><th>SKU</th><th>Назва</th><th>Фізично</th><th>Продано 60д</th><th>Покриття</th><th>Поточна собівартість</th><th>Заморожено</th><th>Причина</th><th>Найстаріший прихід UA</th></tr>'+slow.map(function(row){const arrival=row.arrival||{},lots=arrival.lots||[],lotDetails=lots.length?'<details><summary>'+threeDpEsc(arrival.oldest_date||'—')+'</summary><div class="crm011-note">'+lots.map(function(lot){return threeDpEsc((lot.date||'—')+' · '+lot.lot_id+(lot.track_number?' · '+lot.track_number:'')+' · '+lot.qty+' шт');}).join('<br>')+'</div></details>':'—';return '<tr><td><span class="chip mono">'+threeDpEsc(row.sku)+'</span></td><td>'+threeDpEsc(row.name||'—')+'</td><td>'+threeDpEsc(row.physical_stock)+'</td><td>'+threeDpEsc(row.sold_60d||0)+'</td><td>'+(row.coverage_60d==null?'немає продажів':row.coverage_60d+' дн.')+'</td><td>'+fmt(row.current_cost)+'</td><td><b>'+fmt(row.frozen_value)+'</b></td><td>'+(Number(row.sold_60d||0)===0?'0 продажів за 60 днів':'запас ≥ 60 днів')+'</td><td>'+lotDetails+'</td></tr>';}).join('')+'</table></div>' : '<div class="crm011-note">Повільного складу за заданими правилами не знайдено.</div>';
+}
+
 // ════════════ OVERVIEW ════════════
 async function loadOverview() {
   clearError();
@@ -1673,9 +1790,7 @@ async function loadOverview() {
   const p_channel   = p_secondary.then(d => d.channel);
   const p_monthly   = p_bootstrap.then(d => d.monthly);
   const p_sku       = p_secondary.then(d => d.skus);
-  const p_stock     = p_secondary.then(d => d.stock);
   const p_assets    = p_secondary.then(() => call('overview_assets'));
-  const skuMetrics  = {};  // populated by top-5 section; used by alerts section for accurate sold_30d
 
   // Summary cards
   try {
@@ -1862,11 +1977,10 @@ async function loadOverview() {
     console.warn('monthly_summary:', e.message);
   }
 
-  // Top-5 SKUs by profit (also populates skuMetrics for sold_30d cross-reference in alerts)
+  // Top-5 SKUs by profit.
   try {
     const ts = await p_sku;
     cache.skus = ts;
-    (ts.skus || []).forEach(r => { skuMetrics[r.sku] = r; });
     const skus = (ts.skus || []).filter(s => s.profit_30d != null && Number(s.profit_30d) > 0).slice(0, 5);
     if (skus.length) {
       const maxProfit = Math.max(...skus.map(s => s.profit_30d || 0));
@@ -1919,131 +2033,33 @@ async function loadOverview() {
     }
   } catch(e) { document.getElementById('pendingPreview').innerHTML = `<div style="color:var(--muted)">—</div>`; }
 
-  // ── Потребують уваги ──
+  // Preorders reuse the already loaded order payload; no extra Overview request.
   try {
-    const d = await p_stock;
-    cache.stock = d;
-    // Exclude: assembled-on-demand MBX (stock=0 by design) + Outlet Mix (clearance, won't reorder)
-    const alerts = (d.alerts || []).filter(a =>
-      !String(a.sku || '').endsWith('-MBX') &&
-      !String(a.name || '').includes('Outlet Mix')
-    );
+    const allOrders=await p_ordersAll,preorders=(allOrders.orders||[]).filter(isPreorderOrder),badge=document.getElementById('preordersBadge'),root=document.getElementById('preordersPreview');
+    if(badge){badge.textContent=preorders.length;badge.className='badge '+(preorders.length?'b-yellow':'b-green');}
+    if(root)root.innerHTML=preorders.length?'<table><tr><th>Замовлення</th><th>Сума</th><th>Прибуток</th><th>Чистий прибуток %</th><th>Статус</th></tr>'+preorders.slice(0,9).map(function(r){return '<tr><td><span class="chip">'+threeDpEsc(r.order_id)+'</span><span style="font-size:11px;color:var(--muted);margin-left:6px">'+threeDpEsc((r.post||'')+' '+ttn4(r.ttn))+'</span></td><td><b>'+fmt(r.amount)+'</b></td><td>'+(r.profit==null?'—':fmt(r.profit))+'</td><td>'+profitPctCell(r)+'</td><td>'+payPill(r.payment_status,r.order_status)+'</td></tr>';}).join('')+'</table>':'<div style="color:var(--muted);padding:4px 0;font-size:13px">Передзамовлень немає</div>';
+  } catch(e) { const root=document.getElementById('preordersPreview');if(root)root.innerHTML='<div style="color:var(--muted)">—</div>'; }
 
-    const sections = [];
-
-    // 1. Відправлено 5+ днів тому — follow up on delivery
-    const now5dMs = Date.now() - 5 * 86400000;
-    const shipped5d = ((cache.orders && cache.orders.orders) || []).filter(r =>
-      !isPreorderOrder(r) && r.order_status === 'Відправлено' && orderDateMs(r) > 0 && orderDateMs(r) <= now5dMs
-    );
-    if (shipped5d.length) {
-      sections.push({
-        color: 'var(--yellow)',
-        icon: '📬',
-        title: `${shipped5d.length} відправлено 5+ днів — нагадати отримати`,
-        items: shipped5d.slice(0, 3).map(r =>
-          `<span class="chip" style="font-size:10px">${r.order_id}</span> ${ttn4(r.ttn)} <span style="color:var(--muted)">${r.date || ''}</span>`)
-      });
-    }
-
-    // 2. Терміново докупити
-    const critical = alerts.filter(a => a.urgency === 'Терміново');
-    if (critical.length) {
-      sections.push({
-        color: 'var(--red)',
-        icon: '📦',
-        title: `${critical.length} SKU — Терміново докупити`,
-        items: critical.slice(0, 3).map(a => {
-          const m = skuMetrics[a.sku];
-          const s30 = m != null ? m.sold_30d : a.sold_30d;
-          return `${skuName(a.name, a.sku)}${s30 != null ? ` <span style="color:var(--muted)">${s30} / 30д</span>` : ''}`;
-        })
-      });
-    }
-
-    // 3. Пильнувати (Висока)
-    const high = alerts.filter(a => a.urgency === 'Висока');
-    if (high.length) {
-      sections.push({
-        color: 'var(--yellow)',
-        icon: '⚠',
-        title: `${high.length} SKU — Пильнувати`,
-        items: high.slice(0, 2).map(a => skuName(a.name, a.sku))
-      });
-    }
-
-    // ── Рендер блоку «Потребують уваги» ──
-    const totalAttentionItems = shipped5d.length + critical.length + high.length;
-
-    const badge = document.getElementById('alertsBadge');
-    badge.textContent = totalAttentionItems;
-    badge.className = 'badge ' + (totalAttentionItems > 0 ? 'b-red' : 'b-green');
-
-    if (!totalAttentionItems) {
-      document.getElementById('alertsPreview').innerHTML =
-        '<div style="color:var(--muted);padding:4px 0;font-size:13px">✅ Все під контролем</div>';
-    } else {
-      let html = '';
-
-      // Замовлення — нагадати про отримання
-      if (shipped5d.length) {
-        html += `<div class="alert-section">
-          <div class="alert-section-label">📬 Замовлення — нагадати про отримання</div>
-          ${shipped5d.map(r => {
-            const ttnShort = r.ttn ? String(r.ttn).replace(/\D/g,'').slice(-4) : '';
-            const carrier = r.post ? r.post.replace('Нова Пошта','НП').replace('Укрпошта','УП') : '';
-            const dateStr = r.date || '';
-            return `<div class="alert-row">
-              <div class="alert-row-main">
-                <span class="chip mono" style="font-size:10px">${r.order_id}</span>
-                <span class="alert-amount">₴${fmt(r.amount)}</span>
-              </div>
-              <div class="alert-row-sub">Відправлено ${dateStr}${ttnShort ? ` · …${ttnShort}` : ''}${carrier ? ` ${carrier}` : ''}</div>
-              <button class="alert-cta" onclick="event.stopPropagation();loadOrders('active')">Переглянути →</button>
-            </div>`;
-          }).join('')}
-        </div>`;
-      }
-
-      // Залишки — потрібна закупка
-      const urgentBuy = critical;
-      const watchBuy  = high;
-      const totalBuy  = urgentBuy.length + watchBuy.length;
-      if (totalBuy) {
-        // Скільки рядків можна показати у віджеті
-        const shownOrderRows = shipped5d.length;
-        const maxSkuRows = Math.max(2, 5 - shownOrderRows);
-        const urgentShow  = urgentBuy.slice(0, maxSkuRows);
-        const watchShow   = watchBuy.slice(0, Math.max(0, maxSkuRows - urgentShow.length));
-        const hiddenCount = totalBuy - urgentShow.length - watchShow.length;
-
-        html += `<div class="alert-section">
-          <div class="alert-section-label">📦 Залишки — потрібна закупка</div>
-          <div class="alert-row-sub" style="margin-bottom:6px">
-            Потрібна закупка <b>${totalBuy}</b> SKU${urgentBuy.length ? `, з них негайно <b style="color:var(--red)">${urgentBuy.length}</b>` : ''}
-          </div>
-          ${urgentShow.map(a => `<div class="alert-row alert-row-urgent">
-            <div class="alert-row-main">
-              <span class="chip mono" style="font-size:10px">${a.sku}</span>
-              <span class="alert-sku-name">${skuName(a.name, a.sku)}</span>
-            </div>
-            <div class="alert-row-sub">Залишок: <b>${a.stock ?? '—'}</b> · ${a.sold_30d != null ? a.sold_30d + ' за 30д' : ''}</div>
-          </div>`).join('')}
-          ${watchShow.map(a => `<div class="alert-row">
-            <div class="alert-row-main">
-              <span class="chip mono" style="font-size:10px">${a.sku}</span>
-              <span class="alert-sku-name">${skuName(a.name, a.sku)}</span>
-            </div>
-            <div class="alert-row-sub">Залишок: <b>${a.stock ?? '—'}</b> · ${a.sold_30d != null ? a.sold_30d + ' за 30д' : ''}</div>
-          </div>`).join('')}
-          ${hiddenCount > 0 ? `<div style="font-size:11px;color:var(--muted);margin-top:4px">+ ще ${hiddenCount} SKU</div>` : ''}
-          <button class="alert-cta alert-cta-full" onclick="showPageByName('skus', true)">Переглянути всі →</button>
-        </div>`;
-      }
-
-      document.getElementById('alertsPreview').innerHTML = html;
-    }
-  } catch(e) { document.getElementById('alertsPreview').innerHTML = `<div style="color:var(--muted)">—</div>`; }
+  // Attention management is lazy-loaded on its own page.
+}
+// ════════════ ATTENTION ════════════
+function setAlertsMode(mode){alertsState.mode=mode==='dismissed'?'dismissed':'active';renderAlerts_();}
+function renderAlerts_(){
+  const root=document.getElementById('alertsTable');if(!root)return;
+  const rows=alertsState.rows.filter(function(item){return String(item.status||'active')===alertsState.mode;});
+  const active=document.getElementById('alertsModeActive'),dismissed=document.getElementById('alertsModeDismissed'),count=document.getElementById('alertsCount');
+  if(active)active.classList.toggle('active',alertsState.mode==='active');if(dismissed)dismissed.classList.toggle('active',alertsState.mode==='dismissed');if(count)count.textContent='Показано: '+rows.length;
+  if(!rows.length){root.innerHTML='<div class="crm011-note">'+(alertsState.mode==='active'?'Активних алертів немає.':'Неактуальних алертів немає.')+'</div>';return;}
+  root.innerHTML='<div class="tbl-wrap"><table><tr><th>Тип</th><th>SKU / позиція</th><th>Чому це алерт</th><th>Що зробити</th><th></th></tr>'+rows.map(function(item){const next=alertsState.mode==='active'?'dismissed':'active',label=next==='dismissed'?'Неактуально':'Повернути',position=item.sku?'<b class="mono">'+threeDpEsc(item.sku)+'</b>'+(item.name?'<br><span class="crm011-note">'+threeDpEsc(item.name)+'</span>':''):'<span class="crm011-note">Зведена перевірка</span>';return '<tr><td><b>'+threeDpEsc(item.title||'Проблема')+'</b></td><td>'+position+'</td><td>'+threeDpEsc(item.details||'Причину не деталізовано у джерелі')+'</td><td>'+threeDpEsc(item.action||'Перевірити джерело алерту')+'</td><td><button class="btn-secondary" type="button" onclick="setAlertStatus_(\''+threeDpEsc(item.id)+'\',\''+next+'\')">'+label+'</button></td></tr>';}).join('')+'</table></div>';
+}
+async function loadAlerts(force){
+  clearError();const root=document.getElementById('alertsTable');if(!root)return;if(alertsState.loading)return;if(!force&&alertsState.rows.length){renderAlerts_();return;}alertsState.loading=true;root.innerHTML=spin();
+  try{const d=await callAlerts_('alerts');alertsState.rows=d.alerts||[];loaded.alerts=true;renderAlerts_();}
+  catch(e){root.innerHTML='<div class="records-message error">API алертів недоступний: '+threeDpEsc(e.message)+'. Натисни «Налаштувати API» після публікації оновленого скрипту.</div>';}
+  finally{alertsState.loading=false;}
+}
+async function setAlertStatus_(id,status){
+  if(!id)return;try{await callAlertsPost_({action:'set_alert_status',alert_id:id,status:status});await loadAlerts(true);}catch(e){showError('Алерт не оновлено: '+e.message);}
 }
 
 // ════════════ STOCK ════════════
@@ -2063,17 +2079,19 @@ async function loadStock() {
     }
     const alertBySku = {};
     ((stockData && stockData.alerts) || []).forEach(r => { if (r.sku) alertBySku[r.sku] = r; });
+    const arrivalBySku=(stockData&&stockData.arrivals_by_sku)||{};
     // Preserve sold_30d/sold_60d from sku_list — stock_alerts can have null there (stale Черга_Складу)
     // which would overwrite the correct values and make 30д column show '—' instead of 0
     const a = (skuData.skus || []).map(r => {
       const alert = alertBySku[r.sku] || {};
-      return { ...r, ...alert, stock:r.stock, expected:r.expected, stock_raw:r.stock_raw, physical_stock:r.physical_stock, reserved_total:r.reserved_total, preorder_reserved:r.preorder_reserved, current_shortfall:r.current_shortfall, projected_available_raw:r.projected_available_raw, projected_stock:r.projected_stock, projected_deficit:r.projected_deficit, sold_30d: r.sold_30d, sold_60d: r.sold_60d };
+      return { ...r, ...alert, arrival:arrivalBySku[r.sku]||null, stock:r.stock, expected:r.expected, stock_raw:r.stock_raw, physical_stock:r.physical_stock, reserved_total:r.reserved_total, preorder_reserved:r.preorder_reserved, current_shortfall:r.current_shortfall, projected_available_raw:r.projected_available_raw, projected_stock:r.projected_stock, projected_deficit:r.projected_deficit, sold_30d: r.sold_30d, sold_60d: r.sold_60d };
     });
     if (!a.length) {
       document.getElementById('stockTable').innerHTML = '<div style="color:var(--muted);padding:20px">Немає даних складу</div>';
       return;
     }
     cache.stockRows = a;
+    renderSlowStock_(a);
     renderStockTable(true);
     loadThreeDpStockOverlay_(a);
   } catch(e) {
@@ -2263,11 +2281,11 @@ function orderItemsPaymentFeesHtml(item) {
 function renderOrderItemsPanel(order) {
   const orderId = String(order && order.order_id || '').trim();
   if (!orderItemsState.expanded[orderId]) return '';
-  if (orderItemsState.loading[orderId]) return '<tr class="order-items-row"><td colspan="11"><div class="order-items-panel">' + spin() + '</div></td></tr>';
-  if (orderItemsState.errors[orderId]) return '<tr class="order-items-row"><td colspan="11"><div class="order-items-panel"><div class="order-items-message error">Не вдалося завантажити позиції: ' + threeDpEsc(orderItemsState.errors[orderId]) + '</div></div></td></tr>';
+  if (orderItemsState.loading[orderId]) return '<tr class="order-items-row"><td colspan="' + ORDER_SUMMARY_COLUMN_COUNT + '"><div class="order-items-panel">' + spin() + '</div></td></tr>';
+  if (orderItemsState.errors[orderId]) return '<tr class="order-items-row"><td colspan="' + ORDER_SUMMARY_COLUMN_COUNT + '"><div class="order-items-panel"><div class="order-items-message error">Не вдалося завантажити позиції: ' + threeDpEsc(orderItemsState.errors[orderId]) + '</div></div></td></tr>';
   const result = orderItemsState.cache[orderId];
   const items = result && Array.isArray(result.items) ? result.items : [];
-  if (!items.length) return '<tr class="order-items-row"><td colspan="11"><div class="order-items-panel"><div class="order-items-message">Позицій для цього замовлення не знайдено.</div></div></td></tr>';
+  if (!items.length) return '<tr class="order-items-row"><td colspan="' + ORDER_SUMMARY_COLUMN_COUNT + '"><div class="order-items-panel"><div class="order-items-message">Позицій для цього замовлення не знайдено.</div></div></td></tr>';
   const showDiscount = items.some(function(item) { return Number(item.discount) !== 0; });
   const showPaymentFees = items.some(function(item) { return Number(item.payment_fees) !== 0; });
   const totals = items.reduce(function(sum, item) { sum.amount += Number(item.amount) || 0; sum.profit += Number(item.profit) || 0; sum.marketing += Number(item.marketing) || 0; return sum; }, { amount: 0, profit: 0, marketing: 0 });
@@ -2279,7 +2297,7 @@ function renderOrderItemsPanel(order) {
     return '<tr><td>' + threeDpEsc(item.name || '—') + '</td><td><code>' + threeDpEsc(item.sku || '—') + '</code></td><td>' + threeDpEsc(item.qty) + '</td><td>' + fmt(item.mgmt_cost_line) + '<br><span class="pill p-muted">' + fmt(item.mgmt_cost_unit) + '/од.</span>' + costLabel + '</td><td>' + fmt(item.marketing) + '</td><td>' + fmt(item.packaging) + '</td><td>' + fmt(item.shop_delivery) + '</td>' + (showPaymentFees ? '<td>' + orderItemsPaymentFeesHtml(item) + '</td>' : '') + (showDiscount ? '<td>' + fmt(item.discount) + '</td>' : '') + '<td>' + fmt(item.amount) + '</td><td><b style="color:' + profitColor + '">' + fmt(item.profit) + '</b></td><td><b style="color:' + profitColor + '">' + fmtP(item.profit_pct) + '</b></td></tr>';
   }).join('');
   const totalProfitColor = totals.profit < 0 ? 'var(--red)' : 'var(--green)';
-  return '<tr class="order-items-row"><td colspan="11"><div class="order-items-panel"><div class="tbl-wrap"><table><tr><th>Назва</th><th>SKU</th><th>К-сть</th><th>Собівартість (упр.)</th><th>Маркетинг</th><th>Пакування</th><th>Доставка</th>' + (showPaymentFees ? '<th>Платіжні комісії</th>' : '') + (showDiscount ? '<th>Знижка</th>' : '') + '<th>Сума</th><th>Прибуток ₴</th><th>%</th></tr>' + rows + '<tr class="order-items-totals"><td colspan="4">Разом</td><td>' + fmt(totals.marketing) + '</td><td colspan="' + (cols - 8) + '"></td><td>' + fmt(totals.amount) + '</td><td style="color:' + totalProfitColor + '">' + fmt(totals.profit) + '</td><td>' + fmtP(totals.amount ? totals.profit / totals.amount * 100 : null) + '</td></tr></table></div></div></td></tr>';
+  return '<tr class="order-items-row"><td colspan="' + ORDER_SUMMARY_COLUMN_COUNT + '"><div class="order-items-panel"><div class="tbl-wrap"><table><tr><th>Назва</th><th>SKU</th><th>К-сть</th><th>Собівартість (упр.)</th><th>Маркетинг</th><th>Пакування</th><th>Доставка</th>' + (showPaymentFees ? '<th>Платіжні комісії</th>' : '') + (showDiscount ? '<th>Знижка</th>' : '') + '<th>Сума</th><th>Прибуток ₴</th><th>%</th></tr>' + rows + '<tr class="order-items-totals"><td colspan="4">Разом</td><td>' + fmt(totals.marketing) + '</td><td colspan="' + (cols - 8) + '"></td><td>' + fmt(totals.amount) + '</td><td style="color:' + totalProfitColor + '">' + fmt(totals.profit) + '</td><td>' + fmtP(totals.amount ? totals.profit / totals.amount * 100 : null) + '</td></tr></table></div></div></td></tr>';
 }
 
 async function toggleOrderItems(orderId) {
@@ -2309,12 +2327,13 @@ async function toggleOrderItems(orderId) {
 }
 
 function renderOrderRows(rows) {
-  return sortOrderRows(rows).map(function(r) {
+  return rows.map(function(r) {
     const orderId = String(r.order_id || '').trim();
     const expanded = !!orderItemsState.expanded[orderId];
     return `<tr class="order-summary-row" data-order-id="${threeDpEsc(orderId)}" role="button" tabindex="0" aria-expanded="${expanded ? 'true' : 'false'}" onclick="toggleOrderItems(this.dataset.orderId)" onkeydown="orderItemsKeydown(event,this)">
         <td><span class="order-expand-chevron" aria-hidden="true">▸</span><span class="chip mono">${threeDpEsc(orderId)}</span></td>
         <td style="font-size:12px;color:var(--muted)">${threeDpEsc(r.date||'—')}</td>
+        <td style="font-size:12px">${threeDpEsc(r.customer_name||r.customer_phone||'—')}<br><span class="crm011-segment">${r.is_new_client===true?'NEW':(r.client_orders?'×'+r.client_orders:'—')}</span></td>
         <td style="font-size:12px">${threeDpEsc(r.source||'—')}</td>
         <td class="mono" style="font-size:12px">${threeDpEsc(ttn4(r.ttn))}</td>
         <td>${threeDpEsc(r.post||'—')}</td>
@@ -2328,13 +2347,31 @@ function renderOrderRows(rows) {
   }).join('');
 }
 
+function orderFilterSearch_(row) { return [row.order_id,row.customer_name,row.customer_phone,String(row.customer_phone||'').replace(/\D/g,''),row.ttn,(row.skus||[]).join(' ')].join(' ').toLowerCase().replace(/\s+/g,' '); }
+function orderTableSortValue_(row,field){if(field==='net_pct'){const pct=orderProfitPct(row);return pct==null?-Infinity:pct;}return Number(row[field]||0);}
+function sortOrderRows_(rows){const s=orderState.tableSort;if(!s.field)return sortOrderRows(rows);const factor=s.dir==='asc'?1:-1;return rows.slice().sort(function(a,b){return (orderTableSortValue_(a,s.field)-orderTableSortValue_(b,s.field))*factor||String(a.order_id||'').localeCompare(String(b.order_id||''),'uk',{numeric:true});});}
+function orderSortTh_(field,label){const s=orderState.tableSort,mark=s.field===field?(s.dir==='asc'?' ↑':' ↓'):' ↕';return '<th onclick="toggleOrderTableSort_(\''+field+'\')" style="cursor:pointer;user-select:none">'+label+mark+'</th>';}
+function toggleOrderTableSort_(field){if(orderState.tableSort.field===field)orderState.tableSort.dir=orderState.tableSort.dir==='asc'?'desc':'asc';else orderState.tableSort={field:field,dir:'desc'};renderOrdersTable(orderItemsState.activeRows,orderItemsState.completedRows);}
+function filterOrderRows_(rows) {
+  const f=orderState.filters;
+  return (rows||[]).filter(function(row){const search=orderFilterSearch_(row),raw=String(f.search||'').toLowerCase().trim(),digits=raw.replace(/\D/g,''),q=(digits.length>=5?digits:raw),profit=Number(row.profit),pct=orderProfitPct(row),profitMatch=!f.profit||(f.profit==='positive'?(Number.isFinite(profit)&&profit>=0):f.profit==='negative'?(Number.isFinite(profit)&&profit<0):(f.profit==='low_margin'&&pct!=null&&pct<15));return (!q||search.includes(q))&&(!f.channel||String(row.source||'')===f.channel)&&(!f.status||String(row.order_status||'')===f.status)&&(!f.payment||String(row.payment_status||'')===f.payment)&&(!f.clientType||String(row.client_type||'')===f.clientType)&&(!f.preorder||(f.preorder==='yes')===isPreorderOrder(row))&&profitMatch;});
+}
+function debounce_(fn,delay){let timer;return function(){const args=arguments;window.clearTimeout(timer);timer=window.setTimeout(function(){fn.apply(null,args);},delay);};}
+function bindOrderFilters_(){
+  const map={ordersSearch:'search',ordersChannel:'channel',ordersStatus:'status',ordersPayment:'payment',ordersClientType:'clientType',ordersPreorder:'preorder',ordersProfit:'profit'};
+  Object.keys(map).forEach(function(id){const el=document.getElementById(id);if(!el||el.dataset.bound)return;el.dataset.bound='1';const run=debounce_(function(){orderState.filters[map[id]]=el.value;renderOrdersTable(orderItemsState.activeRows,orderItemsState.completedRows);},id==='ordersSearch'?180:0);el.addEventListener(id==='ordersSearch'?'input':'change',run);});
+}
+function resetOrderFilters(){Object.keys(orderState.filters).forEach(function(key){orderState.filters[key]='';});['ordersSearch','ordersChannel','ordersStatus','ordersPayment','ordersClientType','ordersPreorder','ordersProfit'].forEach(function(id){const el=document.getElementById(id);if(el)el.value='';});renderOrdersTable(orderItemsState.activeRows,orderItemsState.completedRows);}
+function fillOrderFilterOptions_(rows){[['ordersChannel','source'],['ordersStatus','order_status'],['ordersPayment','payment_status'],['ordersClientType','client_type']].forEach(function(spec){const el=document.getElementById(spec[0]);if(!el)return;const first=el.options[0].outerHTML,current=el.value,values=Array.from(new Set((rows||[]).map(function(row){return String(row[spec[1]]||'').trim();}).filter(Boolean))).sort(function(a,b){return a.localeCompare(b,'uk');});el.innerHTML=first+values.map(function(value){return '<option value="'+threeDpEsc(value)+'">'+threeDpEsc(value)+'</option>';}).join('');el.value=current;});}
+
 function renderOrdersTable(activeRows, completedRows) {
-  const active = activeRows || [];
+  const rawActive = activeRows || [], rawCompleted = completedRows || [];
+  orderItemsState.activeRows = rawActive;
+  orderItemsState.completedRows = rawCompleted;
+  const active = sortOrderRows_(filterOrderRows_(rawActive));
   const regularActive = active.filter(function(row) { return !isPreorderOrder(row); });
   const preorderActive = active.filter(isPreorderOrder);
-  const completed = completedRows || [];
-  orderItemsState.activeRows = active;
-  orderItemsState.completedRows = completed;
+  const completed = sortOrderRows_(filterOrderRows_(rawCompleted));
   if (!active.length && !completed.length) {
     document.getElementById('ordersTable').innerHTML = '<div style="color:var(--muted);padding:20px">Замовлень для цього фільтра немає</div>';
     return;
@@ -2342,20 +2379,21 @@ function renderOrdersTable(activeRows, completedRows) {
 
   let body = '';
   if (orderState.mode !== 'completed') {
-    body += `<tr class="order-divider"><td colspan="11">Звичайні активні · ${regularActive.length}</td></tr>`;
+    body += `<tr class="order-divider"><td colspan="${ORDER_SUMMARY_COLUMN_COUNT}">Звичайні активні · ${regularActive.length}</td></tr>`;
     body += renderOrderRows(regularActive);
-    body += `<tr class="order-divider"><td colspan="11">Передзамовлення · ${preorderActive.length}</td></tr>`;
+    body += `<tr class="order-divider"><td colspan="${ORDER_SUMMARY_COLUMN_COUNT}">Передзамовлення · ${preorderActive.length}</td></tr>`;
     body += renderOrderRows(preorderActive);
   }
   if (orderState.mode === 'default') {
-    body += `<tr class="order-divider"><td colspan="11">Завершені за 60 днів · ${completed.length}</td></tr>`;
+    body += `<tr class="order-divider"><td colspan="${ORDER_SUMMARY_COLUMN_COUNT}">Завершені за 60 днів · ${completed.length}</td></tr>`;
   }
   if (orderState.mode !== 'active') body += renderOrderRows(completed);
 
   document.getElementById('ordersTable').innerHTML = `<div class="tbl-wrap"><table>
-      <tr><th>Замовлення</th><th onclick="toggleOrdersDateSort()" style="cursor:pointer;user-select:none">Дата ${orderState.sort === 'date_asc' ? '↑' : '↓'}</th><th>Канал</th><th>ТТН</th><th>Пошта</th><th>SKU</th><th>Сума</th><th>Маркетинг</th><th>Прибуток</th><th>Чистий прибуток %</th><th>Статус</th></tr>
+      <tr><th>Замовлення</th><th onclick="toggleOrdersDateSort()" style="cursor:pointer;user-select:none">Дата ${orderState.sort === 'date_asc' ? '↑' : '↓'}</th><th>Клієнт</th><th>Канал</th><th>ТТН</th><th>Пошта</th><th>SKU</th>${orderSortTh_('amount','Сума')}${orderSortTh_('marketing','Маркетинг')}${orderSortTh_('profit','Прибуток')}${orderSortTh_('net_pct','Чистий прибуток %')}<th>Статус</th></tr>
       ${body}
     </table></div>`;
+  const found=document.getElementById('ordersFound');if(found)found.textContent='Знайдено: '+(active.length+completed.length);
 }
 
 async function fetchCompletedOrders60() {
@@ -2383,6 +2421,7 @@ async function loadOrders(mode = orderState.mode) {
     const [activeData, completedRows] = await Promise.all([activePromise, completedPromise]);
     const activeRows = activeData.orders || [];
     cache.orders = activeData;
+    fillOrderFilterOptions_(activeRows.concat(completedRows));bindOrderFilters_();
     renderOrdersTable(activeRows, completedRows);
   } catch(e) {
     showError(e.message);
@@ -2486,93 +2525,154 @@ async function loadSkus() {
 }
 
 // ════════════ CLIENTS ════════════
-function toggleClientDetail(row) {
-  const idx = parseInt(row.dataset.ci);
-  const client = _clientsData[idx];
-  const existingDetail = row.nextElementSibling;
-  // Close any open detail rows
-  document.querySelectorAll('.client-detail-row').forEach(r => r.remove());
-  document.querySelectorAll('#clientsTable tbody tr[data-ci]').forEach(r => r.classList.remove('client-active'));
-  if (existingDetail && existingDetail.classList.contains('client-detail-row')) {
-    // Was open → toggled closed (already removed above)
-    return;
-  }
-  row.classList.add('client-active');
-  const avgCheck   = client.ltv > 0 && client.orders > 0 ? fmt(client.ltv / client.orders) : '—';
-  const avgProfit  = client.profit != null && client.orders > 0 ? fmt(client.profit / client.orders) : '—';
-  const marginPct  = client.ltv > 0 && client.profit != null ? fmtP((client.profit / client.ltv) * 100) : '—';
-  let freqHtml = '';
-  if (client.orders_60d > 0) {
-    const perMonth = (client.orders_60d / 2).toFixed(1);
-    freqHtml = `<div>
-      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Частота</div>
-      <div style="font-weight:700;margin-top:4px">${perMonth} / міс</div>
-    </div>`;
-  }
-  const tr = document.createElement('tr');
-  tr.className = 'client-detail-row';
-  tr.innerHTML = `<td colspan="10" style="background:rgba(124,111,255,.07);padding:14px 24px;border-top:none">
-    <div style="display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start">
-      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Середній чек</div><div style="font-weight:700;margin-top:4px">${avgCheck}</div></div>
-      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Прибуток / замовл.</div><div style="font-weight:700;margin-top:4px;color:var(--green)">${avgProfit}</div></div>
-      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Маржа</div><div style="font-weight:700;margin-top:4px">${marginPct}</div></div>
-      ${freqHtml}
-      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Товарів разом</div><div style="font-weight:700;margin-top:4px">${client.units ?? '—'}</div></div>
-    </div>
-  </td>`;
-  row.after(tr);
-}
-
-function clientMarginColor(ltv, profit) {
-  if (!ltv || profit == null) return 'var(--muted)';
-  const m = profit / ltv;
-  return m >= 0.25 ? 'var(--green)' : m >= 0.15 ? 'var(--yellow)' : 'var(--red)';
-}
-
-function clientSortValue_(client,field){if(field==='name'||field==='channel')return String(client[field]||'').toLowerCase();return Number(client[field]||0);}
 function clientSortMark_(field){return clientSortState.field===field?(clientSortState.dir==='asc'?' ▲':' ▼'):' ↕';}
 function clientTh_(field,label){return '<th onclick="sortClients(\''+field+'\')" style="cursor:pointer;user-select:none">'+label+clientSortMark_(field)+'</th>';}
-function sortClients(field){if(clientSortState.field===field)clientSortState.dir=clientSortState.dir==='asc'?'desc':'asc';else{clientSortState.field=field;clientSortState.dir=(field==='name'||field==='channel')?'asc':'desc';}renderClientsTable_();}
-function renderClientsTable_(){
-  const clients=_clientsData.slice(),factor=clientSortState.dir==='asc'?1:-1,field=clientSortState.field;
-  clients.sort(function(a,b){const av=clientSortValue_(a,field),bv=clientSortValue_(b,field),cmp=typeof av==='number'?av-bv:String(av).localeCompare(String(bv),'uk',{numeric:true,sensitivity:'base'});return (cmp||String(a.display||'').localeCompare(String(b.display||''),'uk'))*factor;});
-  _clientsData=clients;
-  document.getElementById('clientsTable').innerHTML = `<div class="tbl-wrap"><table>
-    <tr><th>#</th><th>Клієнт</th>${clientTh_('name','Прізвище імʼя')}${clientTh_('channel','Канал')}${clientTh_('orders','Замовлень')}${clientTh_('units','Товарів')}${clientTh_('spend_60d','Витрати 60д')}${clientTh_('ltv','Загальна сума')}${clientTh_('profit','Прибуток')}${clientTh_('margin_pct','Маржа %')}</tr>
-    ${clients.map((c, i) => `<tr data-ci="${i}" onclick="toggleClientDetail(this)" style="cursor:pointer">
-      <td style="color:var(--muted)">${i + 1}</td><td class="mono" style="font-size:12px">${c.display || '—'}</td><td style="font-size:12px">${c.name || '—'}</td><td style="font-size:12px">${c.channel || '—'}</td><td>${c.orders}</td><td>${c.units || '—'}</td><td><b>${fmt(c.spend_60d)}</b></td><td><b>${fmt(c.ltv)}</b></td><td><b style="color:var(--green)">${c.profit != null ? fmt(c.profit) : '—'}</b></td><td><b style="color:${clientMarginColor(c.ltv,c.profit)}">${fmtP(c.margin_pct)}</b></td>
-    </tr>`).join('')}
-  </table></div>`;
-}
+function sortClients(field){if(clientSortState.field===field)clientSortState.dir=clientSortState.dir==='asc'?'desc':'asc';else{clientSortState.field=field;clientSortState.dir=['identity','segment','last_order_date'].includes(field)?'asc':'desc';}renderClientsTable_();}
 
-async function loadClients() {
-  clearError();
-  document.getElementById('clientsTable').innerHTML = spin();
-  try {
-    const d = await call('ltv_report', { qualified:'true',limit:500 });
-    const clients = d.clients || [];
-    if (!clients.length) {
-      document.getElementById('clientsTable').innerHTML = '<div style="color:var(--muted);padding:20px">Немає даних</div>';
-      return;
-    }
-    _clientsData = clients;
-    renderClientsTable_();
-  } catch(e) {
-    document.getElementById('clientsTable').innerHTML =
-      '<div style="color:var(--muted);padding:20px">⏳ Очікується деплой API (ltv_report)</div>';
+// CRM-011 clients view: global KPI are independent from the All/Important mode;
+// order history is requested only when the owner expands one client.
+const CLIENT_COLUMN_COUNT = 8;
+const clientOrdersCache_ = Object.create(null);
+function setClientsMode(mode){clientsMode=mode==='important'?'important':'all';_clientsData=clientsMode==='important'?_clientsAllData.filter(function(c){return (c.qualification||[]).length;}):_clientsAllData.slice();renderClientsTable_();}
+function renderClientKpis_(){const d=_clientsReport||{},dist=d.distribution||{},root=document.getElementById('clientsKpis');if(!root)return;const repeat=_clientsAllData.filter(function(c){return c.orders>=2;}).length,profit=_clientsAllData.reduce(function(s,c){return s+Number(c.profit||0);},0);root.innerHTML=[['Клієнтів',d.total_clients||0,''],['Повторних',repeat,'2 або більше замовлень'],['VIP',dist.VIP||0,''],['Втрачено',dist['Втрачений']||0,''],['Прибуток із замовлень',fmt(profit),'за весь час; після прямих витрат замовлень, без загальних витрат бізнесу']].map(function(k){return '<div class="card"><div class="card-label">'+k[0]+'</div><div class="card-value">'+k[1]+'</div>'+(k[2]?'<div class="card-sub">'+k[2]+'</div>':'')+'</div>';}).join('');}
+async function toggleClientDetail(row){
+  const client=_clientsData[Number(row.dataset.ci)],existing=row.nextElementSibling;document.querySelectorAll('.client-detail-row').forEach(function(r){r.remove();});document.querySelectorAll('#clientsTable tbody tr[data-ci]').forEach(function(r){r.classList.remove('client-active');});if(existing&&existing.classList.contains('client-detail-row'))return;row.classList.add('client-active');
+  const tr=document.createElement('tr');tr.className='client-detail-row';tr.innerHTML='<td colspan="'+CLIENT_COLUMN_COUNT+'">'+spin()+'</td>';row.after(tr);
+  try{const key=client.key||client.identifier;if(!clientOrdersCache_[key])clientOrdersCache_[key]=await call('client_orders',{client_key:key,limit:10});const orders=clientOrdersCache_[key].orders||[];tr.innerHTML='<td colspan="'+CLIENT_COLUMN_COUNT+'" style="background:rgba(124,111,255,.07);padding:14px 24px"><div class="crm011-note"><b>Канал:</b> '+threeDpEsc(client.channel||'—')+' · <b>IP:</b> '+threeDpEsc((client.games||[]).join(', ')||'—')+' · <b>Перша покупка:</b> '+threeDpEsc(client.first_order_date||'—')+' · <b>Інтервал:</b> '+(client.avg_interval_days==null?'—':client.avg_interval_days+' дн.')+' · <b>Витрати 60д:</b> '+fmt(client.spend_60d)+' · <b>Телефон:</b> '+threeDpEsc(client.phone||'—')+' · <b>Середній чек:</b> '+fmt(client.avg_order_value)+'</div><div class="tbl-wrap" style="margin-top:10px"><table><tr><th>Дата</th><th>Замовлення</th><th>Канал</th><th>SKU</th><th>Сума</th><th>Прибуток</th><th>Статус</th></tr>'+orders.map(function(o){return '<tr><td>'+threeDpEsc(o.date||'—')+'</td><td>'+threeDpEsc(o.order_id)+'</td><td>'+threeDpEsc(o.source||'—')+'</td><td>'+threeDpEsc((o.skus||[]).join(', '))+'</td><td>'+fmt(o.revenue)+'</td><td>'+fmt(o.profit)+'</td><td>'+threeDpEsc(o.order_status||'—')+'</td></tr>';}).join('')+'</table></div></td>';}
+  catch(e){tr.innerHTML='<td colspan="'+CLIENT_COLUMN_COUNT+'" class="crm011-note">Не вдалося завантажити історію: '+threeDpEsc(e.message)+'</td>';}
+}
+function clientSortValue_(client,field){if(field==='identity')return String(client.name||client.display||client.phone||'').toLowerCase();if(['segment','last_order_date'].includes(field))return String(client[field]||'').toLowerCase();const value=client[field];return value==null?-Infinity:Number(value);}
+function renderClientsTable_(){
+  const clients=_clientsData.slice(),factor=clientSortState.dir==='asc'?1:-1,field=clientSortState.field;clients.sort(function(a,b){const av=clientSortValue_(a,field),bv=clientSortValue_(b,field),cmp=typeof av==='number'?av-bv:String(av).localeCompare(String(bv),'uk',{numeric:true,sensitivity:'base'});return (cmp||String(a.display||'').localeCompare(String(b.display||''),'uk'))*factor;});_clientsData=clients;
+  document.getElementById('clientsTable').innerHTML='<div class="tbl-wrap"><table><tbody><tr>'+clientTh_('identity','Клієнт')+clientTh_('segment','Сегмент')+clientTh_('orders','Замовлень')+clientTh_('ltv','LTV')+clientTh_('profit','Прибуток')+clientTh_('margin_pct','Маржа')+clientTh_('last_order_date','Остання покупка')+clientTh_('days_since_last_order','Днів без покупки')+'</tr>'+clients.map(function(c,i){const risk=c.segment==='Втрачений'||c.segment==='Низькомаржинальний',identity=threeDpEsc(c.name||c.display||c.phone||'—'),secondary=c.name&&c.display&&c.name!==c.display?'<br><span class="crm011-note">'+threeDpEsc(c.display)+'</span>':'';return '<tr data-ci="'+i+'" onclick="toggleClientDetail(this)" style="cursor:pointer"><td>'+identity+secondary+'</td><td><span class="crm011-segment'+(risk?' is-risk':'')+'">'+threeDpEsc(c.segment||'—')+'</span></td><td>'+c.orders+'</td><td>'+fmt(c.ltv)+'</td><td>'+fmt(c.profit)+'</td><td>'+fmtP(c.margin_pct)+'</td><td>'+threeDpEsc(c.last_order_date||'—')+'</td><td>'+(c.days_since_last_order==null?'—':c.days_since_last_order)+'</td></tr>';}).join('')+'</tbody></table></div>';renderClientKpis_();
+  const all=document.getElementById('clientsModeAll'),important=document.getElementById('clientsModeImportant'),note=document.getElementById('clientsModeNote'),importantCount=_clientsAllData.filter(function(c){return (c.qualification||[]).length;}).length,total=_clientsAllData.length;if(all){all.classList.toggle('active',clientsMode==='all');all.textContent='Усі ('+total+')';}if(important){important.classList.toggle('active',clientsMode==='important');important.textContent='Важливі ('+importantCount+')';}if(note)note.textContent='Важливі = 2+ замовлення АБО витрати за 60 днів понад ₴1 500 АБО маржа понад 40%. '+(importantCount===total&&total?'Зараз цим умовам відповідають усі клієнти.':'Зараз: '+importantCount+' із '+total+'.');
+}
+async function loadClients(){clearError();document.getElementById('clientsTable').innerHTML=spin();try{_clientsReport=await call('ltv_report',{qualified:'false',limit:2000});_clientsAllData=_clientsReport.clients||[];setClientsMode(clientsMode);}catch(e){document.getElementById('clientsTable').innerHTML='<div class="crm011-note">Очікується публікація CRM-011 API: '+threeDpEsc(e.message)+'</div>';}}
+
+function dateInputValue_(date){return date.getUTCFullYear()+'-'+String(date.getUTCMonth()+1).padStart(2,'0')+'-'+String(date.getUTCDate()).padStart(2,'0');}
+function financeDate_(year,month,day){return new Date(Date.UTC(year,month,day));}
+function financeParseDate_(value){const parts=String(value||'').split('-').map(Number);return parts.length===3&&parts.every(Number.isFinite)?financeDate_(parts[0],parts[1]-1,parts[2]):null;}
+function financeAddDays_(date,days){return new Date(date.getTime()+days*86400000);}
+function financeKyivToday_(){const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Kyiv',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()).reduce(function(out,part){if(part.type!=='literal')out[part.type]=Number(part.value);return out;},{});return financeDate_(parts.year,parts.month-1,parts.day);}
+function financeMonthEnd_(date){return financeDate_(date.getUTCFullYear(),date.getUTCMonth()+1,0);}
+function setFinanceCustomPeriod_(){financeState.preset='custom';const preset=document.getElementById('financePreset');if(preset)preset.value='custom';}
+function applyFinancePreset(){
+  const select=document.getElementById('financePreset'),preset=select.value,now=financeKyivToday_(),from=document.getElementById('financeFrom'),to=document.getElementById('financeTo');financeState.preset=preset;
+  if(preset==='custom')return;
+  let start=now,end=now;
+  if(preset==='7d')start=financeAddDays_(now,-6);
+  else if(preset==='30d')start=financeAddDays_(now,-29);
+  else if(preset==='month')start=financeDate_(now.getUTCFullYear(),now.getUTCMonth(),1);
+  else if(preset==='last_month'){start=financeDate_(now.getUTCFullYear(),now.getUTCMonth()-1,1);end=financeDate_(now.getUTCFullYear(),now.getUTCMonth(),0);}
+  else if(preset==='90d')start=financeAddDays_(now,-89);
+  from.value=dateInputValue_(start);to.value=dateInputValue_(end);
+}
+function financeComparisonRange_(preset,fromValue,toValue){
+  const start=financeParseDate_(fromValue),end=financeParseDate_(toValue);if(!start||!end)return null;
+  if(preset==='month'){
+    const previousStart=financeDate_(start.getUTCFullYear(),start.getUTCMonth()-1,1),previousEndDay=Math.min(end.getUTCDate(),financeMonthEnd_(previousStart).getUTCDate());
+    return {from:dateInputValue_(previousStart),to:dateInputValue_(financeDate_(previousStart.getUTCFullYear(),previousStart.getUTCMonth(),previousEndDay))};
   }
+  if(preset==='last_month'){
+    const previousEnd=financeAddDays_(start,-1),previousStart=financeDate_(previousEnd.getUTCFullYear(),previousEnd.getUTCMonth(),1);
+    return {from:dateInputValue_(previousStart),to:dateInputValue_(previousEnd)};
+  }
+  const days=Math.round((end-start)/86400000)+1,previousEnd=financeAddDays_(start,-1),previousStart=financeAddDays_(previousEnd,-(days-1));
+  return {from:dateInputValue_(previousStart),to:dateInputValue_(previousEnd)};
+}
+function financeValue_(value,type){if(value==null)return 'Немає даних';if(type==='count')return String(Math.round(Number(value)||0));if(type==='percent')return fmtP(value);if(type==='jpy'){const amount=Math.round(Number(value)||0);return (amount<0?'−':'')+'¥'+Math.abs(amount).toLocaleString('uk-UA');}return fmt(value);}
+function zenSignedValue_(value){const amount=Number(value)||0;return (amount>0?'+':'')+financeValue_(amount,'jpy');}
+function financeDeltaHtml_(value,comparison,type,polarity){
+  let deltaHtml='';
+  if(comparison!==undefined){
+    const currentNumber=Number(value),previousNumber=Number(comparison),available=value!=null&&comparison!=null&&Number.isFinite(currentNumber)&&Number.isFinite(previousNumber);
+    if(!available)deltaHtml='<div class="card-sub">зміна: —</div>';
+    else{
+      const absolute=currentNumber-previousNumber,percentage=previousNumber===0?null:absolute/Math.abs(previousNumber)*100,direction=absolute*(polarity==='down'?-1:1),color=direction>0?'var(--green)':direction<0?'var(--red)':'var(--muted)',sign=absolute>0?'+':'';
+      const arrow=absolute>0?'↑':absolute<0?'↓':'→';
+      deltaHtml='<div class="card-sub" style="color:'+color+'">'+arrow+' '+sign+financeValue_(absolute,type)+' · '+(percentage==null?'—':(percentage>0?'+':'')+percentage.toFixed(1)+'%')+'</div>';
+    }
+  }
+  return deltaHtml;
+}
+function financeMetric_(label,value,comparison,type,polarity,subtext){
+  const deltaHtml=financeDeltaHtml_(value,comparison,type,polarity);
+  return '<div class="card"><div class="card-label">'+label+'</div><div class="card-value">'+financeValue_(value,type)+'</div>'+(subtext?'<div class="card-sub">'+subtext+'</div>':'')+deltaHtml+'</div>';
+}
+function financeRows_(rows){return '<div class="tbl-wrap"><table class="finance-breakdown">'+rows.map(function(row){const value=row[1],type=row[2],variant=row[3]||'',polarity=row[4],comparison=row[5],color=variant==='total'&&value!=null?(Number(value)>=0?'var(--green)':'var(--red)'):'inherit';return '<tr class="'+(variant?'is-'+variant:'')+'"><td>'+row[0]+'</td><td style="text-align:right;color:'+color+'"><b>'+financeValue_(value,type)+'</b>'+financeDeltaHtml_(value,comparison,type,polarity)+'</td></tr>';}).join('')+'</table></div>';}
+function financeCustomerMix_(mix){
+  const fresh=mix&&mix.new||{},repeat=mix&&mix.repeat||{};
+  return '<div class="tbl-wrap"><table class="finance-mix"><thead><tr><th>Показник</th><th>Нові</th><th>Повторні</th></tr></thead><tbody>'+
+    [['Замовлень','orders','count'],['Виручка','revenue','money'],['Середній чек','avg_order','money'],['Маржа','margin_pct','percent']].map(function(row){return '<tr><td>'+row[0]+'</td><td>'+financeValue_(fresh[row[1]],row[2])+'</td><td>'+financeValue_(repeat[row[1]],row[2])+'</td></tr>';}).join('')+
+    '</tbody></table></div>'+((mix&&mix.unidentified_orders)>0?'<div class="crm011-note">'+mix.unidentified_orders+' замовлень не включено в New/Repeat через відсутність стабільного client identity.</div>':'');
+}
+function zenPendingRequestId_(storageKey,payload,prefix){
+  const signature=JSON.stringify(payload);
+  try{const pending=JSON.parse(localStorage.getItem(storageKey)||'{}')||{};if(pending.signature===signature&&/^[A-Za-z0-9_-]{8,80}$/.test(String(pending.request_id||'')))return pending.request_id;}catch(e){}
+  const requestId=prefix+'-'+Date.now()+'-'+Math.random().toString(36).slice(2,10);try{localStorage.setItem(storageKey,JSON.stringify({signature:signature,request_id:requestId}));}catch(e){}return requestId;
+}
+function zenClearPending_(storageKey,requestId){try{const pending=JSON.parse(localStorage.getItem(storageKey)||'{}')||{};if(!requestId||pending.request_id===requestId)localStorage.removeItem(storageKey);}catch(e){}}
+function updateZenCorrectionPreview_(){
+  const current=document.getElementById('zenCurrentBalance'),next=document.getElementById('zenCorrectBalance'),preview=document.getElementById('zenCorrectionPreview');if(!current||!next||!preview)return;
+  const currentNumber=Number(current.dataset.value),nextNumber=Number(next.value);preview.textContent=next.value!==''&&Number.isFinite(currentNumber)&&Number.isFinite(nextNumber)?'Зміна: '+zenSignedValue_(nextNumber-currentNumber)+'. Вона лише вирівняє довідковий Zen-баланс.':'';
+}
+function renderZenAccount_(account){
+  const current=document.getElementById('zenCurrentBalance'),correct=document.getElementById('zenCorrectButton'),topup=document.getElementById('zenTopupButton'),hint=document.getElementById('zenAccountHint');if(!current)return;
+  const available=!!(account&&account.available);current.dataset.value=available?String(account.balance_jpy):'';current.value=available?financeValue_(account.balance_jpy,'jpy'):'Потрібне налаштування';if(correct)correct.disabled=!available;if(topup)topup.disabled=!available;
+  if(hint)hint.textContent=available?'Оновлено: '+(account.updated_at||'—')+'. Коригуй, коли різниця з ZenMarket стане відчутною (орієнтир — понад ¥'+(account.correction_hint_jpy||500)+'). Це не змінює FIFO, собівартість або P&L.':'Спочатку один раз запусти setupCrm011ZenMarketAccount у Apps Script.';updateZenCorrectionPreview_();
+}
+async function submitZenCorrection(){
+  const button=document.getElementById('zenCorrectButton'),msg=document.getElementById('zenCorrectionMsg'),balance=editValue('zenCorrectBalance');if(!button)return;if(balance===''||!Number.isFinite(Number(balance))){msg.textContent='Введи актуальний баланс у єнах.';msg.className='form-msg error';return;}
+  const payload={action:'zenmarket_correct_balance',balance_jpy:balance,note:editValue('zenCorrectNote')};payload.request_id=zenPendingRequestId_(ZEN_CORRECTION_PENDING_KEY,payload,'zen-correct');button.disabled=true;msg.textContent='Зберігаю…';msg.className='form-msg';
+  try{const result=await callPost(payload);zenClearPending_(ZEN_CORRECTION_PENDING_KEY,payload.request_id);document.getElementById('zenCorrectBalance').value='';document.getElementById('zenCorrectNote').value='';msg.textContent=result.already_balanced?'Баланс уже збігається.':'Баланс скориговано на '+zenSignedValue_(result.difference_jpy)+'.';msg.className='form-msg success';await loadFinance(true);}
+  catch(e){msg.textContent='Помилка: '+e.message;msg.className='form-msg error';}
+  finally{button.disabled=false;}
+}
+async function submitZenTopup(){
+  const button=document.getElementById('zenTopupButton'),msg=document.getElementById('zenTopupMsg'),payload={action:'zenmarket_topup',date:editValue('zenTopupDate'),amount_jpy:editValue('zenTopupJpy'),amount_uah:editValue('zenTopupUah'),note:editValue('zenTopupNote')};if(!button)return;
+  if(!payload.date||payload.amount_jpy===''||payload.amount_uah===''||Number(payload.amount_jpy)<=0||Number(payload.amount_uah)<=0){msg.textContent='Вкажи дату та обидві суми, більші за нуль.';msg.className='form-msg error';return;}
+  payload.request_id=zenPendingRequestId_(ZEN_TOPUP_PENDING_KEY,payload,'zen-topup');button.disabled=true;msg.textContent='Зберігаю…';msg.className='form-msg';
+  try{const result=await callPost(payload);zenClearPending_(ZEN_TOPUP_PENDING_KEY,payload.request_id);document.getElementById('zenTopupJpy').value='';document.getElementById('zenTopupUah').value='';document.getElementById('zenTopupNote').value='';msg.textContent=result.already_applied?'Це поповнення вже було записане.':'Поповнення записано.';msg.className='form-msg success';await loadFinance(true);}
+  catch(e){msg.textContent='Помилка: '+e.message;msg.className='form-msg error';}
+  finally{button.disabled=false;}
+}
+async function loadFinance(force){
+  clearError();const from=document.getElementById('financeFrom'),to=document.getElementById('financeTo'),topupDate=document.getElementById('zenTopupDate');if(!from.value||!to.value)applyFinancePreset();if(topupDate&&!topupDate.value)topupDate.value=dateInputValue_(financeKyivToday_());const params={date_from:from.value,date_to:to.value},compare=document.getElementById('financeCompare').checked;
+  if(compare){const comparison=financeComparisonRange_(financeState.preset,from.value,to.value);if(comparison){params.compare_from=comparison.from;params.compare_to=comparison.to;}}
+  ['financeKpis','financePnl','financeAssets','financeCashflow','financeCustomers'].forEach(function(id){document.getElementById(id).innerHTML=spin();});const started=performance.now();
+  try{
+    const d=await call('finance_report',params);dashboardPerf.lastFinanceMs=Math.round(performance.now()-started);const t=d.totals||{},c=d.comparison&&d.comparison.totals||{},comparisonValue=function(field){return compare?(Object.prototype.hasOwnProperty.call(c,field)?c[field]:null):undefined;},cf=d.cashflow||{},ccf=d.comparison&&d.comparison.cashflow||{},pnl=d.pnl||{},cpnl=d.comparison&&d.comparison.pnl||{},assets=d.inventory_assets||{},zen=d.zenmarket_account||{};
+    const compared=function(container,field){return compare?(Object.prototype.hasOwnProperty.call(container,field)?container[field]:null):undefined;};
+    document.getElementById('financeKpis').innerHTML=financeMetric_('Виручка',t.revenue,comparisonValue('revenue'),'money')+financeMetric_('Чистий прибуток',t.net_profit,comparisonValue('net_profit'),'money')+financeMetric_('Чиста маржа',t.margin_pct,comparisonValue('margin_pct'),'percent')+financeMetric_('Замовлень',t.orders,comparisonValue('orders'),'count')+financeMetric_('Середній чек',t.avg_order,comparisonValue('avg_order'),'money')+financeMetric_('Баланс ZenMarket',zen.available?zen.balance_jpy:null,undefined,'jpy',undefined,zen.available?'≈ '+fmt(zen.balance_uah)+' за курсом CRM':'');
+    renderZenAccount_(zen);
+    document.getElementById('financePnl').innerHTML=financeRows_([['Виручка',pnl.revenue,'money','',undefined,compared(cpnl,'revenue')],['− Собівартість товарів',pnl.cogs,'money','deduction','down',compared(cpnl,'cogs')],['Валовий прибуток',pnl.gross_profit,'money','subtotal',undefined,compared(cpnl,'gross_profit')],['− Пакування',pnl.packaging,'money','deduction','down',compared(cpnl,'packaging')],['− Доставка коштом магазину',pnl.delivery,'money','deduction','down',compared(cpnl,'delivery')],['− Комісії оплат',pnl.payment_fees,'money','deduction','down',compared(cpnl,'payment_fees')],['− Операційні витрати',pnl.operating_expenses,'money','deduction','down',compared(cpnl,'operating_expenses')],['− Списання',pnl.writeoffs,'money','deduction','down',compared(cpnl,'writeoffs')],['Чистий прибуток',pnl.net_profit,'money','total',undefined,compared(cpnl,'net_profit')],['Чиста маржа',pnl.margin_pct,'percent','subtotal',undefined,compared(cpnl,'margin_pct')]])+'<div class="crm011-note"><b>Чистий прибуток</b> = виручка мінус собівартість товарів, пакування, доставку магазину, комісії оплат, операційні витрати та надійно оцінені списання.</div>';
+    const assetsReady=d.inventory_assets&&Object.prototype.hasOwnProperty.call(assets,'in_stock')&&Object.prototype.hasOwnProperty.call(assets,'outside_stock');
+    const assetsScopeNote='<div class="crm011-note" style="margin-bottom:10px"><b>Поточний баланс станом на сьогодні.</b> Вибраний фінансовий період не змінює ці цифри.</div>';
+    document.getElementById('financeAssets').innerHTML=assetsScopeNote+(assetsReady?financeRows_([['На складі UA',assets.in_stock,'money'],['Поза складом UA',assets.outside_stock,'money'],['Активи разом',assets.total,'money']])+'<div class="crm011-note">Поза складом: усі нескасовані лоти без дати приходу в Україну. Лотів: '+(assets.outside_lots||0)+'; без надійної оцінки: '+(assets.outside_missing_value||0)+'. Виключено складських SKU без надійної оцінки: '+(assets.excluded_skus||0)+'.</div>':'<div class="crm011-note">Ця версія CRM API ще не віддає розподіл активів. Дані зʼявляться після публікації Pass B; це не нульовий баланс.</div>');
+    const periodText=threeDpEsc((d.period&&d.period.from||params.date_from)+' — '+(d.period&&d.period.to||params.date_to));
+    const cashflowReady=d.cashflow&&Object.prototype.hasOwnProperty.call(cf,'inventory_topups')&&Object.prototype.hasOwnProperty.call(cf,'cash_out');
+    document.getElementById('financeCashflow').innerHTML='<div class="crm011-note" style="margin-bottom:10px"><b>Період:</b> '+periodText+'. Надходження — оплачені замовлення за датою оплати. Відтік — поповнення ZenMarket та фактичні витрати CRM за їхньою датою.</div>'+(cashflowReady?financeRows_([['Надходження від клієнтів',cf.cash_in,'money','',undefined,compared(ccf,'cash_in')],['Поповнення ZenMarket',cf.inventory_topups,'money','deduction','down',compared(ccf,'inventory_topups')],['Сума поповнень у єнах',cf.inventory_topups_jpy,'jpy','deduction','down',compared(ccf,'inventory_topups_jpy')],['Розхідники й пакування',cf.consumables,'money','deduction','down',compared(ccf,'consumables')],['Маркетинг і реклама',cf.marketing,'money','deduction','down',compared(ccf,'marketing')],['Операційні витрати',cf.operating,'money','deduction','down',compared(ccf,'operating')],['Інші фактичні витрати',cf.other,'money','deduction','down',compared(ccf,'other')],['Увесь відтік',cf.cash_out,'money','subtotal','down',compared(ccf,'cash_out')],['Чистий рух грошей',cf.net_cashflow,'money','total',undefined,compared(ccf,'net_cashflow')]])+'<div class="crm011-note"><b>Чистий рух грошей</b> = усі отримані від клієнтів гроші мінус поповнення ZenMarket та інші фактичні виплати за обраний період. Плюс означає, що отримали більше, ніж витратили; мінус — витратили більше, ніж отримали. Це рух грошей, а не бухгалтерський прибуток. Розрахункових дат надходжень: '+(cf.cash_in_approximated_rows||0)+'. Розрахункових конвертацій ZenMarket: '+(cf.inventory_topups_approximated_rows||0)+'. Якщо імпорт поповнень ще не виконано, відтік і чистий рух показуються як «Немає даних», а не як нуль.</div>':'<div class="crm011-note">Ця версія CRM API віддає надходження, але ще не віддає повний відтік коштів. Повний блок зʼявиться після публікації Pass B; відсутні поля не трактуються як нулі.</div>');
+    document.getElementById('financeCustomers').innerHTML=financeCustomerMix_(d.customer_mix||{});
+    const quality=d.data_quality||{};
+    document.getElementById('financeQuality').textContent='Незакриті передзамовлення виключено з фінансів. Відсутні дані не трактуються як нуль. Неоцінених списань: '+(quality.writeoff_missing_value_rows||0)+'. Списань, уже включених у собівартість замовлень і тому не віднятих повторно: '+(quality.linked_order_writeoffs_excluded||0)+'. Рядків чистого прибутку звірено: '+(quality.reconciliation_rows_checked||0)+'; розбіжностей: '+(quality.reconciliation_mismatches||0)+'. Завантаження: '+dashboardPerf.lastFinanceMs+' мс; запитів у сеансі: '+dashboardPerf.requests+'; обʼєднано дублів: '+dashboardPerf.deduped+'.';
+  }
+  catch(e){showError(e.message);document.getElementById('financeQuality').textContent='Очікується публікація CRM-011 API.';}
 }
 
 // ════════════ ROADMAP ════════════
 const _rmCollapsed = { archive: true };
 function rmToggleLane(laneId) { _rmCollapsed[laneId] = !_rmCollapsed[laneId]; renderRoadmapFlow(); }
 function rmToggle(card) { card.classList.toggle('open'); }
+function roadmapSeries_(id){const match=String(id||'').match(/^(.*)-\d+$/);return match?match[1]:String(id||'Без серії');}
+function roadmapFilteredTasks_(){const series=document.getElementById('roadmapSeries'),stage=document.getElementById('roadmapStage'),sv=series?series.value:'',tv=stage?stage.value:'';return ROADMAP_TASKS.filter(function(task){return (!sv||roadmapSeries_(task.id)===sv)&&(!tv||task.status===tv);});}
+function resetRoadmapFilters(){const series=document.getElementById('roadmapSeries'),stage=document.getElementById('roadmapStage');if(series)series.value='';if(stage)stage.value='';renderRoadmap();}
+function fillRoadmapSeries_(){const select=document.getElementById('roadmapSeries');if(!select)return;const current=select.value,series=Array.from(new Set(ROADMAP_TASKS.map(function(task){return roadmapSeries_(task.id);}))).sort(function(a,b){return a.localeCompare(b,'uk',{numeric:true});});select.innerHTML='<option value="">Усі серії</option>'+series.map(function(value){return '<option value="'+threeDpEsc(value)+'">'+threeDpEsc(value)+'</option>';}).join('');select.value=current;}
 
 const ROADMAP_TASKS = [
   // ─── CRM / ДАШБОРД — АНАЛІТИЧНИЙ ШАР ───
   {
     id: 'CRM-011', title: 'Аналітичний шар дашборда: Фінанси, Замовлення, Клієнти, Повільний залишок, фільтри роадмапу', status: 'todo', tool: 'Claude (хендоф + рев\'ю) + Codex (реалізація) + власник (публікація Apps Script)', priority: 'High',
-    lastUpdated: '2026-09-08', blockedBy: [],
+    lastUpdated: '2026-09-10', blockedBy: [],
     simple: 'Дашборд уміє вести облік, але не вміє показати, скільки бізнес заробив і де лежать заморожені гроші. Додаємо вкладку «Фінанси» з P&L і рухом коштів, пошук і фільтри в замовленнях з іменем клієнта, нормальну CRM-аналітику клієнтів із сегментами, блок повільного залишку на складі й фільтри по серіях у роадмапі.',
     why: 'Зараз відповідь на питання «скільки заробили і куди пішли гроші» доводиться збирати вручну з кількох вкладок і таблиці. Замовлення не шукаються, вкладка «Клієнти» мовчки показує лише частину бази, а капітал у нерухомому товарі не видно взагалі.',
     warn: 'Хендоф: handoffs/handoff_CRM-011_dashboard-finance-crm-upgrade_20260908.md. Шість окремо-деплойних пакетів, НЕ зливати в один. '
@@ -2583,11 +2683,12 @@ const ROADMAP_TASKS = [
         + '|| ⚠ Дві різні множини продажів: _getCrmSalesRows() викидає всі рядки замовлення з незакритим передзамовленням (нею користуються Фінанси), _getCrmSalesRowEntries() сира (нею користуються Замовлення). Розбіжність між вкладками має бути показана в UI, а не мовчазна. '
         + '|| ⚠ WP2 додає колонки в Закупки (Дата створення) і Продажі (Дата оплати) → OPS-CRMINTEGRITY діє повністю: перевірка цілісності до і після. Колонки ТІЛЬКИ в кінець аркуша, вставка всередину зсуває формули. _getCrmSalesRowEntries() читає фіксовані 32 колонки — розширити. '
         + '|| РІШЕННЯ ВЛАСНИКА 08.09: (1) маска ПІБ і телефону в дашборді знімається; додається identity_source phone|name, бо fallback по імені зливає різних людей; (2) дата приходу грошей: картка/передоплата = дата продажу, післяплата = дата замовлення + 3 дні, помічати як наближення; (3) реальний відтік грошей по товару = ПОПОВНЕННЯ балансу ZenMarket, а не оплата лоту — оплата лоту, комісії й доставка по Японії витрачають баланс, а не гроші власника; непокритий мінус балансу показувати окремо як заборгованість; (4) курс JPY у Курси виставлено 3.2 (¥7699 = 2397 грн зі сторінки поповнення), fallback у getCurrencyRate_ теж 3.2 — цей курс впливає і на собівартість майбутніх закупок, історичні рядки не міняються; (5) префікс серії в роадмапі різати по останньому дефісу перед числом, список серій виводити з даних; (6) Огляд не чіпати. '
-        + '|| Повний експорт історії ZenMarket НЕ блокує WP2: бекенд ставить колонки і починає писати дати наперед, історичний імпорт — окремий крок власника.',
+        + '|| Повний експорт історії ZenMarket НЕ блокує WP2: бекенд ставить колонки і починає писати дати наперед, історичний імпорт — окремий крок власника. '
+        + '|| РІШЕННЯ ВЛАСНИКА 10.09 замінює стару вимогу WP3 про пʼять KPI та вертикальні блоки: шостий KPI = поточний баланс ZenMarket; P&L поруч із рухом коштів; Активи поруч із компактним керуванням ZenMarket. У UI тільки поповнення й коригування, детальний Zen-журнал прихований. Zen-витрата закупки автоматично ведеться один раз на LOT-ID і не є повторним UAH-відтоком.',
     subtasks: [
       { id: 'WP1', title: 'Повільний залишок / заморожені кошти (Склад)', status: 'todo', desc: 'Лише фронт, бекенду не треба: sku_list уже віддає stock, current_cost, sold_30d, sold_60d, margin_pct, is_3dp. Топ-5 за stock_value = фізичний залишок × собівартість. Тільки фізичний залишок, ніякого incoming. current_cost = null дає прочерк, не нуль. Кожен рядок пояснює, чому він тут.' },
       { id: 'WP2', title: 'Бекенд одним проходом (Apps Script)', status: 'todo', desc: 'Дата створення в Закупки, Дата оплати в Продажі (пишеться один раз при переході статусу в Оплачено), fallback курсу 3.5→3.2, новий finance_report, збагачення orders клієнтом і new/repeat, розширення ltv_report, нова дія client_orders, константи сегментації на сервері. Одна зміна Code.gs, одна публікація власником.' },
-      { id: 'WP3', title: 'Вкладка «Фінанси»', status: 'todo', desc: 'Sidebar 💰 Фінанси після Клієнтів, lazy-load, власний селектор періоду з порівнянням, межі за Europe/Kyiv. Пʼять KPI-плиток, не шість. P&L таблицею у дві колонки без графіка. Рух коштів ОКРЕМИМ блоком ПІД P&L, не поруч. Нові vs повторні класифікуються на рівні замовлення, не за lifetime-станом. Ніяких фальшивих нулів — прочерк або «Немає даних».' },
+      { id: 'WP3', title: 'Вкладка «Фінанси»', status: 'todo', desc: 'Sidebar 💰 Фінанси після Клієнтів, lazy-load, власний селектор періоду з порівнянням, межі за Europe/Kyiv. Шість KPI-плиток, включно з поточним балансом ZenMarket. P&L поруч із рухом коштів; Активи поруч із компактним блоком поповнення/коригування ZenMarket. Детальний Zen-журнал у UI не показується. Нові vs повторні класифікуються на рівні замовлення, не за lifetime-станом. Ніяких фальшивих нулів — прочерк або «Немає даних».' },
       { id: 'WP4', title: 'Замовлення: пошук, фільтри, клієнт, colspan', status: 'todo', desc: 'Пошук по order ID, клієнту, телефону (з нормалізацією), ТТН, SKU. Фільтри канал/статус/оплата/тип клієнта/передзамовлення/прибутковість через AND + лічильник знайдених. Фільтр — це view, а не мутація fetched-масивів: expanded-кеш і order_items не втрачаються. Колонка «Клієнт» одна комірка: імʼя + бейдж NEW або ×N. Прибрати hardcoded colspan 11 у шести місцях через ORDER_SUMMARY_COLUMN_COUNT.' },
       { id: 'WP5', title: 'Клієнти: режими, KPI, сегменти, картка', status: 'todo', desc: 'Перемикач Усі / Важливі; Важливі зберігають поточний backend-критерій qualified без змін (він OR-joined і мʼякший, ніж звучить). KPI рахуються по всій базі незалежно від режиму. Нові колонки: перша покупка, остання покупка, днів без покупки, сегмент. Сім сегментів, але нейтральний бейдж для всіх, колір лише Втрачений і Низькомаржинальний. VIP = топ 10% за lifetime profit + orders ≥ 2 + мінімальний поріг. Середній інтервал з реальних дат, а не orders_60d/2. Історія замовлень lazy при expand. Прибрати hardcoded colspan 10.' },
       { id: 'WP6', title: 'Фільтри роадмапу за серією і стадією', status: 'todo', desc: 'ROADMAP_TASKS уже має id і status, бекенду не треба. Серія виводиться з даних: різати по останньому дефісу перед числом (RD-13 → RD, MKT-TG-005 → MKT-TG, 3D-P-007 → 3D-P). Список серій НЕ хардкодити, інакше нова серія потребуватиме правки коду. Серія + стадія через AND, плюс скидання.' }
@@ -4170,14 +4271,15 @@ function rmCard(t) {
 function renderRoadmapFlow() {
   var now = new Date();
   var MS_30D = 30 * 86400000;
-  var active  = sortByPriority(ROADMAP_TASKS.filter(function(t){ return t.status==='active'; }));
-  var blocked = sortByPriority(ROADMAP_TASKS.filter(function(t){ return t.status==='todo' && isBlocked(t); }));
-  var avail   = sortByPriority(ROADMAP_TASKS.filter(function(t){ return t.status==='todo' && !isBlocked(t); }));
-  var recent  = sortByPriority(ROADMAP_TASKS.filter(function(t){
+  var source = roadmapFilteredTasks_();
+  var active  = sortByPriority(source.filter(function(t){ return t.status==='active'; }));
+  var blocked = sortByPriority(source.filter(function(t){ return t.status==='todo' && isBlocked(t); }));
+  var avail   = sortByPriority(source.filter(function(t){ return t.status==='todo' && !isBlocked(t); }));
+  var recent  = sortByPriority(source.filter(function(t){
     if (t.status!=='done') return false;
     return (now - new Date(t.lastUpdated||'2000-01-01')) <= MS_30D;
   }));
-  var archive = sortByPriority(ROADMAP_TASKS.filter(function(t){
+  var archive = sortByPriority(source.filter(function(t){
     if (t.status!=='done') return false;
     return (now - new Date(t.lastUpdated||'2000-01-01')) > MS_30D;
   }));
@@ -4210,13 +4312,14 @@ function renderRoadmapFlow() {
 }
 
 function renderRoadmap() {
-  var cnt = function(s){ return ROADMAP_TASKS.filter(function(t){ return t.status===s; }).length; };
-  var blockedCnt = ROADMAP_TASKS.filter(function(t){ return t.status==='todo' && isBlocked(t); }).length;
+  var source=roadmapFilteredTasks_();
+  var cnt = function(s){ return source.filter(function(t){ return t.status===s; }).length; };
+  var blockedCnt = source.filter(function(t){ return t.status==='todo' && isBlocked(t); }).length;
   document.getElementById('roadmapSub').textContent =
     '🔵 В роботі: ' + cnt('active') + '  ·  ⛔ Заблоковано: ' + blockedCnt + '  ·  ✅ Доступно: ' + (cnt('todo')-blockedCnt) + '  ·  🟢 Виконано: ' + cnt('done');
   renderRoadmapFlow();
 }
-function loadRoadmap() { renderRoadmap(); }
+function loadRoadmap() { fillRoadmapSeries_(); renderRoadmap(); }
 
 
 // ════════════ ACCOUNTING ════════════
@@ -4685,11 +4788,11 @@ async function submitPurchase() {
   }
   formMsg('purMsg','Збереження…','');
   try {
-    await callPost({ action:'add_purchase', supplier_channel:supplier_channel, order_ref:order_ref, total_cost:total_cost,
+    const result=await callPost({ action:'add_purchase', supplier_channel:supplier_channel, order_ref:order_ref, total_cost:total_cost,
       japan_fees_jpy:isZen ? (Number(editValue('purJapanFees')) || 0) : 0,
       ukraine_delivery_uah:Number(editValue('purUkraineDeliveryUah')) || 0, status:editValue('purStatus'),
       order_url:editValue('purOrderUrl'), note:editValue('purNote'), items:items });
-    formMsg('purMsg','✅ Закупку збережено (' + items.length + ' SKU)','success');
+    formMsg('purMsg',result.zenmarket_sync_error?'⚠ Закупку збережено, але Zen-баланс не оновлено: '+result.zenmarket_sync_error:'✅ Закупку збережено (' + items.length + ' SKU)',result.zenmarket_sync_error?'error':'success');
     invalidateAccountingCaches();
   } catch(e) { formMsg('purMsg','❌ ' + e.message,'error'); }
 }
@@ -4713,7 +4816,7 @@ async function submitWriteoff() {
 
 function invalidateAccountingCaches() {
   delete cache.summary; delete cache.stock;
-  loaded.overview = false; loaded.stock = false;
+  loaded.overview = false; loaded.stock = false; loaded.finance = false;
 }
 
 function recEsc(value) {
@@ -4924,6 +5027,7 @@ async function openEditRow(type, rowIndex) {
     fields += recSelect('editPaymentStatus','Новий статус оплати',row.payment_status,['Не оплачено','Оплачено','Повернення','Скасовано']);
     fields += recReadOnly('Поточний статус замовлення', row.order_status);
     fields += recSelect('editOrderStatus','Новий статус замовлення',row.order_status,['Нове','В обробці','Відправлено','Отримано','Скасовано','Повернення','Передзамовлення']);
+    fields += '<div class="form-row"><label class="three-dp-readonly"><input id="editFiscalReceipt" type="checkbox"'+(String(row.fiscal_receipt||'').trim().toLowerCase()==='так'?' checked':'')+'> Фіскальний чек видано</label><div id="editFiscalReceiptError" class="records-message error" style="display:none">Спочатку видай фіскальний чек і постав галочку.</div></div>';
     fields += recField('editTtn','ТТН',row.ttn);
     fields += recSelect('editPackagingType','Паковання',canonicalPackagingType(row.packaging_type),PACKAGING_TYPES);
     fields += recField('editCustomPackaging','Якщо Інше, грн','','number','0.01');
@@ -4961,9 +5065,11 @@ async function saveEditRow() {
   const fixtures=collectEditFixtures();
   if(fixtures.some(function(item){return !item.selection||item.qty<=0||!item.target_row||!item.target_sku;})){const bad=document.getElementById('recordsMsg');if(bad){bad.textContent='Для кожної фурнітури обери 3D-рядок, назву і кількість';bad.className='records-message error';}return;}
   const threeDpLines=Array.from(document.querySelectorAll('.edit-3dp-mode')).map(function(input){return {crm_row:Number(input.dataset.row),mode:input.checked?'Продаж':'Маркетинг'};});
+  const fiscalField=document.getElementById('editFiscalReceipt'),fiscalConfirmed=Boolean(fiscalField&&fiscalField.checked),fiscalError=document.getElementById('editFiscalReceiptError');
+  if(editValue('editPaymentStatus')==='Оплачено'&&editValue('editOrderStatus')==='Отримано'&&!fiscalConfirmed){if(fiscalError)fiscalError.style.display='block';if(fiscalField)fiscalField.focus();return;}if(fiscalError)fiscalError.style.display='none';
   const payload = { action:'update_sale', row_index:edit.row_index, payment_status:editValue('editPaymentStatus'),
     order_status:editValue('editOrderStatus'), ttn:editValue('editTtn'), packaging_type:editValue('editPackagingType'),
-    note:editValue('editNote'),components:components,fixtures:fixtures,three_dp_lines:threeDpLines };
+    note:editValue('editNote'),fiscal_receipt:fiscalConfirmed,components:components,fixtures:fixtures,three_dp_lines:threeDpLines };
   if (editValue('editCustomPackaging') !== '') payload.custom_packaging_cost = Number(editValue('editCustomPackaging'));
   if (editValue('editShopDelivery') !== '') payload.shop_delivery = Number(editValue('editShopDelivery'));
   accountingState.editRequestId=pendingOrderEditRequestId_(edit.order_id,payload);payload.request_id=accountingState.editRequestId;
@@ -5089,7 +5195,7 @@ async function savePurchaseBatch() {
   try {
     const result = await callPost(payload);
     const preorderPriced = Object.keys(result.preorder_costs || {}).reduce(function(total, sku) { return total + Number((result.preorder_costs[sku] || {}).priced || 0); }, 0);
-    if (msg) { msg.textContent = 'Оновлено лотів: ' + (result.rows_updated || rows.length) + (preorderPriced ? ' · фактичний FIFO передзамовлень: ' + preorderPriced : ''); msg.className = 'records-message success'; }
+    if (msg) { msg.textContent = 'Оновлено лотів: ' + (result.rows_updated || rows.length) + (preorderPriced ? ' · фактичний FIFO передзамовлень: ' + preorderPriced : '') + (result.zenmarket_sync_error ? ' · Zen-баланс не оновлено: ' + result.zenmarket_sync_error : ''); msg.className = result.zenmarket_sync_error ? 'records-message error' : 'records-message success'; }
     accountingState.selectedPurchaseLots = {};
     accountingState.recentLoaded.regular = false;
     accountingState.recentLoaded.preorders = false;
@@ -5148,7 +5254,7 @@ async function runTestOrderCleanup() {
 }
 
 // ════════════ LOADERS MAP ════════════
-const loaders = { overview: loadOverview, stock: loadStock, consumables: loadConsumables, orders: loadOrders, skus: loadSkus, clients: loadClients, roadmap: loadRoadmap, accounting: loadAccounting, updates: loadUpdates, settings: loadSettings, '3dprint': load3dPrint };
+const loaders = { overview: loadOverview, alerts: loadAlerts, stock: loadStock, consumables: loadConsumables, orders: loadOrders, skus: loadSkus, clients: loadClients, finance: loadFinance, roadmap: loadRoadmap, accounting: loadAccounting, updates: loadUpdates, settings: loadSettings, '3dprint': load3dPrint };
 
 // ════════════ INIT ════════════
 loaded.overview = true;

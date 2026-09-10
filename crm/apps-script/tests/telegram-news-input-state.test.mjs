@@ -37,10 +37,10 @@ const context = vm.createContext({
 
 vm.runInContext(`${code}
 tgIsAllowedChat_ = function(chatId) { return chatId === '42'; };
-tgSendMessage_ = function(chatId, text) { globalThis.__sent.push({ chatId: String(chatId), text: String(text) }); };
+tgSendMessage_ = function(chatId, text, keyboard) { globalThis.__sent.push({ chatId: String(chatId), text: String(text), keyboard: keyboard || null }); };
 tgShowMainMenu_ = function(chatId) { globalThis.__menus.push(String(chatId)); };
 openaiDraftPostFromText_ = function(sourceLabel, text, sourceUrl) { globalThis.__drafts.push({ sourceLabel: String(sourceLabel), text: String(text), sourceUrl: String(sourceUrl) }); return { tag: 'Тест', text: 'Чернетка' }; };
-globalThis.__test = { handleTelegramUpdate_, tgSetNewsInputWait_, tgGetNewsInputWait_, tgClearNewsInputWait_, tgNewsInputWaitKey_ };`, context, { filename: 'Code.gs' });
+globalThis.__test = { handleTelegramUpdate_, tgSetNewsInputWait_, tgGetNewsInputWait_, tgClearNewsInputWait_, tgNewsInputWaitKey_, tgCommandOrders_, tgIsShippableOrder_ };`, context, { filename: 'Code.gs' });
 
 const chatId = '42';
 const key = context.__test.tgNewsInputWaitKey_(chatId);
@@ -70,5 +70,29 @@ assert.equal(properties[key], undefined, 'expired state is removed');
 assert.equal(drafts.length, 1, 'an expired state does not generate a draft');
 assert.match(sent.at(-1).text, /Час очікування минув/, 'expiry is explicit instead of showing the menu');
 assert.deepEqual(menus, [], 'expiry does not silently fall through to the main menu');
+
+const telegramOrders = [
+  { order_id: 'PRE-1', order_status: 'Передзамовлення', ttn: '204500000001', amount: 400, post: 'НП' },
+  { order_id: 'NO-TTN', order_status: 'В обробці', ttn: '', amount: 500, post: 'НП' },
+  { order_id: 'SHIP-1', order_status: 'Відправлено', ttn: '204500000002', amount: 600, post: 'НП' },
+  { order_id: 'READY-1', order_status: 'В обробці', ttn: '204500000003', amount: 700, post: 'УП' },
+];
+let orderQuery = null;
+context.crmGetOrders_ = (...args) => {
+  orderQuery = args;
+  return telegramOrders;
+};
+context.__test.tgCommandOrders_(chatId);
+const orderList = sent.at(-1);
+assert.deepEqual(orderQuery.slice(0, 2), ['active', 200], 'Telegram requests a bounded active-order source');
+assert.equal(orderQuery[2].sort, 'date_desc', 'Telegram requests newest orders first');
+assert.equal(orderQuery[2].skip_marketing, true, 'Telegram skips unrelated marketing-ledger reads');
+assert.match(orderList.text, /Активні замовлення: 2/, 'Telegram count excludes preorders and rows without a TTN');
+assert.deepEqual(
+  orderList.keyboard.slice(0, -1).flat().map(button => button.callback_data),
+  ['order_sel_SHIP-1', 'order_sel_READY-1'],
+  'Telegram shows only non-preorder orders with an assigned TTN',
+);
+assert.equal(context.__test.tgIsShippableOrder_({ order_status: 'Передзамовлення', ttn: '204500000004' }), false, 'a preorder stays hidden even if it already has a TTN');
 
 console.log('Telegram news input state tests passed');

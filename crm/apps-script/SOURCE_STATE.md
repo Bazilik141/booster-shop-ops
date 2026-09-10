@@ -1,5 +1,139 @@
 # Main CRM Apps Script — repository mirror state
 
+## CRM-011 ZenMarket account — OWNER-RUNTIME-REPORTED; LATEST UAH LINE LOCAL (2026-09-10)
+
+The owner reported in the active task that the ZenMarket account feature appears
+to work. No setup output, deployment version label, or fresh complete export was
+supplied in that message, so this is runtime feedback rather than independent
+source identity. The latest repository candidate additionally projects the JPY
+balance to UAH with the current CRM JPY rate and renders that value below the
+Finance KPI; this last UAH-line change is not yet owner-proven live.
+
+The candidate adds two internal sheets through the owner-run idempotent
+`setupCrm011ZenMarketAccount()` function: `ZenMarket_Рахунок` (balance-change
+journal) and `ZenMarket_Лоти` (one current JPY expense per CRM LOT-ID). It also
+extends the existing `ZenMarket_Поповнення` header by appending note, request ID,
+and creation timestamp columns without replacing its first seven columns. The
+setup runs the bounded CRM integrity check before and after the structural
+change.
+
+The seed is reconciled from the two owner-supplied ZenMarket HTML exports. It
+starts at JPY -48,260, applies JPY +44,575 of money-balance movements, excludes
+the JPY 165 ZenPoints payment, and ends at the latest supplied actual balance of
+JPY -3,685. The JPY 70,000 historical top-up is included in the reference
+balance, but its UAH amount was not present in the HTML and is deliberately not
+invented in `ZenMarket_Поповнення`; therefore it is not yet represented in UAH
+cashflow.
+
+New manual top-ups write actual JPY and UAH amounts to both the Zen balance
+journal and the existing cashflow source. Manual corrections write only the
+calculated JPY difference with the canonical note `коригування балансу зен -
+курсова різниця`. Both mutations use request IDs. ZenMarket purchase creation
+and updates maintain one indexed JPY expense per LOT-ID and apply only its
+change to the reference balance. These paths do not write sales, FIFO, RRP,
+inventory valuation, P&L, or other UAH cost fields beyond the purchase behavior
+that already existed.
+
+The dashboard candidate adds the current ZenMarket balance as the sixth Finance
+KPI, with a smaller approximate UAH equivalent at the CRM rate; it places P&L
+beside cashflow, places Assets beside the compact ZenMarket controls, and
+exposes only correction and top-up forms. No Zen journal or component
+transaction types are shown. Local syntax, focused ZenMarket tests, and all 31
+Apps Script test files pass; the focused ZenMarket file contains six passing
+checks. Browser visual QA remains owner-gated
+because the in-app browser blocked the local `file://` URL; responsive DOM/CSS
+contracts were checked statically at desktop, intermediate, and mobile rules.
+
+## CRM-011 R2 Pass B — OWNER-PUBLISHED, VERSION LABEL PENDING (2026-09-09)
+
+The owner confirmed in the active task that the local `Code.gs` is the current
+code Codex last supplied and authorised continuing without another export. The
+workspace also contains the complete owner export `Версія 168, 8 вер. 2026 р.,
+2005.csv` (9,678 normalized lines). Before Pass B, the local mirror differed
+from that V168 export only by the already documented CRM-011 follow-up work
+(375 inserted / 18 deleted lines). This is owner-confirmed provenance, not an
+independent post-publication byte comparison.
+
+The published Pass B source removes the three CRM-011 shadow declarations,
+expands `finance_report` with a header-resolved P&L, order-level New/Repeat
+analysis, comparison payloads for P&L and cashflow, bounded reconciliation
+samples, and real segment-distribution verification output. Finance now reuses
+one full `Продажі` read for P&L, customer mix, and cash-in; missing values remain
+unavailable rather than becoming zero. The dashboard renders the expanded
+contract.
+
+The owner published this source on 2026-09-09 before 21:12 Kyiv, but the exact
+Apps Script deployment version number/label was not included in the supplied
+runtime output and remains pending rather than inferred. At 21:12 the owner ran
+`crm011PassBVerificationForOwner()` successfully: `ok=true`, integrity was
+clean with `problems=[]`, all five bounded order reconciliations had zero
+difference, the intended finance headers resolved, and all reported missing
+finance-value counters were zero. A second supplied standalone integrity result
+was also clean. The live September sample returned 25 orders, UAH 20,505
+revenue, UAH 4,085.06 net profit, 19.92% net margin, and UAH 820.20 average
+order. Segment distribution across 131 clients was VIP 0.76%, Lost 7.63%,
+Inactive 39.69%, New 41.22%, and Repeat 10.69%; no segment approached the
+handoff's 80–90% concentration warning. Publication changed no Sheet schema and
+the Pass B read paths perform no Sheet writes. No repository commit or push has
+occurred.
+
+## CRM-011 follow-up local candidate — NOT PUBLISHED (2026-09-08)
+
+On 2026-09-09 at 08:58 Kyiv the owner ran
+`setupCrm011FinanceColumns()` in the bound editor. It added only
+`Продажі!AH2 = Фіскальний чек` (`column=34`), backfilled zero payment dates,
+and returned clean integrity before (`elapsed_ms=20987`) and after
+(`elapsed_ms=14380`) with the unchanged 66 compared / 6 skipped coverage. This
+proves the live sheet setup mutation, not Web App publication. The first
+follow-up data-import attempt stopped before writes because four supplied
+tracking numbers were absent from `Закупки`: `LX316494995JP`, `LX316339015JP`,
+`LX315072863JP`, and `LX314846403JP`. The local importer now reports absent
+tracks without touching unmatched rows, while date conflicts remain fatal.
+At 11:43 Kyiv the revised import completed: 108/108 ZenMarket payments were
+inserted, 17 supplied tracks matched, all matched rows already held the same
+arrival dates (`arrival_cells_written=0`), and integrity remained clean before
+and after. The owner confirmed the four missing tracks are not present in CRM,
+so they remain intentionally unmapped. The first payment-date audit returned no
+orders from 250 scanned rows; this is not payment-date proof. The local audit
+candidate now aggregates complete orders across 500 bounded rows and reports
+distinct-order and payment-status counts before evaluating missing dates.
+The owner reran that candidate at 11:57 Kyiv: 500 rows (`A253:AH752`), 60
+distinct orders, 51 paid and 9 unpaid were found. The execution log truncated
+before the final missing-date count, so this is meaningful coverage but not yet
+the final date gate. One visible record, `OLX-PHYS-0023` at row 347, had a
+future payment date `2026-09-10`. The local wrapper now logs a compact summary
+and reports future-dated payments explicitly.
+The compact 12:08 rerun completed without truncation: 500 rows, 60 distinct
+orders, 51 paid, 9 unpaid, and `missing_payment_date=0`. Date coverage is clean
+for the bounded sample. One future-dated record remains: `OLX-PHYS-0023`, row
+347, `2026-09-10`. On 2026-09-09 the owner explicitly accepted this date as a
+known one-day-forward value and waived correction; it is not a CRM-011
+publication blocker and must not be changed by this task.
+
+The owner reported main CRM Web App V168 at 20:05 Kyiv and supplied a clean
+post-publication integrity result: `problems=[]`, `compared=66`,
+`skipped_missing_crm_rrp=6`, `deferred=null`, `elapsed_ms=16254`. The repository
+now contains an additional local follow-up candidate for managed alerts,
+preorders on Overview, fiscal-receipt enforcement, purchase arrival dates,
+ZenMarket top-ups, sortable order metrics, client game/IP labels, split assets,
+and explicit cashflow semantics. The one-time file
+`one-time/CRM-011_followup_data_import_20260908.gs` embeds the 108 owner-supplied
+ZenMarket payments and 21 confirmed arrival dates. None of this follow-up source
+or data setup has been pasted, run, or published live. V168 is owner-reported;
+no fresh complete V168 export or byte comparison was supplied.
+
+## CRM-011 initial local candidate — superseded by follow-up (2026-09-08)
+
+The repository mirror now contains the local CRM-011 finance/client analytics
+candidate based on the owner-supplied V166 export and preserving the separate
+local Telegram shipment-queue change already present in `Code.gs`. It adds the
+append-only `Дата створення` / `Дата оплати` setup, JPY fallback 3.2 plus rate
+date, finance/client/order API contracts, and bounded caching. The owner-provided
+pre-change `integrity_check` was clean (`problems=[]`, `compared=66`,
+`skipped_missing_crm_rrp=6`, `elapsed_ms=15228`). This entry is local-source
+status only: no Apps Script paste, setup run, Web App version, live endpoint
+smoke, or post-change integrity result exists yet.
+
 ## Deployed 3D catalogue/FIFO and integrity source — V166 (2026-09-06)
 
 The V164 export below remains the last byte-verified owner-supplied source
