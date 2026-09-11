@@ -29,6 +29,7 @@ SpreadsheetApp.getUi()
 function addSale() {
 resetMemoForMutation_(); const ss = SpreadsheetApp.getActive();
 crm011RequireColumn_(ss, 'Продажі', 'Дата оплати');
+crm011RequireColumn_(ss, 'Продажі', 'Дата отримання');
 const formSheet = ss.getSheetByName('Внести_продаж');
 const sales = ss.getSheetByName('Продажі');
 const form = readFormRange_(formSheet, 'A4:B20');
@@ -105,6 +106,7 @@ sales.getRange(row, 23, 1, 6).setValues([[form['Статус оплати'], for
 sales.getRange(row, 29).setValue(packagingType); fixSaleCostForRow_(ss, row, costRunState, { clearPending: true });
 });
 if (String(form['Статус оплати'] || '').trim() === 'Оплачено') crm011StampRowsOnce_(sales, addedRows, 'Дата оплати', new Date());
+if (String(form['Статус замовлення'] || '').trim() === 'Отримано') crm011StampRowsOnce_(sales, addedRows, 'Дата отримання', new Date());
 
 if (mysteryComponents.length) {
 addMysteryBoxWriteOffs_(ss, mysteryComponents, form['Дата продажу'], operation);
@@ -119,11 +121,11 @@ SpreadsheetApp.getUi().alert('Продаж додано: ' + operation + ' / п�
 function addPurchase() {
 resetMemoForMutation_(); const ss = SpreadsheetApp.getActive();
 crm011RequireColumn_(ss, 'Закупки', 'Дата створення');
-crm011ZenRequireSetup_(ss);
 const formSheet = ss.getSheetByName('Внести_закупку');
 const purchases = ss.getSheetByName('Закупки');
-const form = readFormRange_(formSheet, 'A4:B9');
+const form = readFormRange_(formSheet, 'A4:B10');
 const order = String(form['ZenMarket Order №'] || '').trim(); const orderUrl = String(form['ZenMarket URL'] || '').trim();
+const supplier = String(form['Постачальник'] || '').trim();
 const totalCost = num_(form['Загальна вартість лоту, грн']);
 const japanFeesJpy = num_(form['Доставка / комісії по Японії, єни (JPY)']);
 const japanFees = japanFeesJpy > 0 ? round2_(japanFeesJpy / getCurrencyRate_('JPY')) : 0; const status = form['Статус'] || 'Виграно';
@@ -131,7 +133,9 @@ const items = formSheet.getRange('A12:E14').getValues()
 .filter(row => row[0] && num_(row[1]) > 0)
 .map(row => ({ sku: parseSku_(row[0]), qty: num_(row[1]), cost: num_(row[2]), manualCost: row[3], note: row[4] || '' }));
 
-if (!order || isBlank_(form['Загальна вартість лоту, грн']) || !items.length) { SpreadsheetApp.getUi().alert('Заповни ZenMarket Order №, загальну вартість лоту і хоча б один SKU з кількістю.'); return; }
+if (!['zenmarket_jp', 'supplier_ua', 'other'].includes(supplier)) { SpreadsheetApp.getUi().alert('Обери Постачальника: zenmarket_jp, supplier_ua або other.'); return; }
+if (!order || isBlank_(form['Загальна вартість лоту, грн']) || !items.length) { SpreadsheetApp.getUi().alert('Заповни № замовлення, загальну вартість лоту і хоча б один SKU з кількістю.'); return; }
+if (supplier === 'zenmarket_jp') crm011ZenRequireSetup_(ss);
 
 const totalQty = items.reduce((sum, item) => sum + item.qty, 0);
 if (totalQty <= 0) { SpreadsheetApp.getUi().alert('Кількість по позиціях має бути більше нуля.'); return; }
@@ -157,12 +161,12 @@ const note = [form['Примітка'], item.note, costNote, items.length > 1 &&
 purchases.getRange(row, 1, 1, 5).setValues([[lotIds[index], order, '', '', item.sku]]);
 purchases.getRange(row, 8, 1, 4).setValues([[item.qty, lineCost, lineJapanFees, '']]);
 purchases.getRange(row, 17, 1, 3).setValues([[status, note, orderUrl]]);
-purchases.getRange(row, 20).setValue('zenmarket_jp');
+purchases.getRange(row, 20).setValue(supplier);
 });
 crm011StampRowsOnce_(purchases, lotIds.map(function(_, index) { return firstRow + index; }), 'Дата створення', new Date());
 SpreadsheetApp.flush();
 let zenSyncWarning = '';
-try { crm011ZenSyncPurchaseLots_(ss, lotIds, { force_zenmarket: true }); }
+try { if (supplier === 'zenmarket_jp') crm011ZenSyncPurchaseLots_(ss, lotIds); }
 catch (zenError) { zenSyncWarning = String(zenError && zenError.message ? zenError.message : zenError); Logger.log('CRM-011 ZenMarket sync failed after direct purchase add: ' + zenSyncWarning); }
 
 invalidateDoGetCache_(); clearInputForm('Внести_закупку'); SpreadsheetApp.getUi().alert('Закупку додано: ' + order + ' / позицій: ' + items.length + (zenSyncWarning ? '\nУвага: Zen-баланс не синхронізовано — ' + zenSyncWarning : ''));
@@ -244,7 +248,7 @@ if (!isBlank_(form[field])) matchingRows.forEach(function(match) { purchases.get
 
 const jpyRate = getCurrencyRate_('JPY');
 crm011ZenRequireSetup_(ss);
-crm011ZenEnsurePurchaseBaselines_(ss, matchingRows, { force_zenmarket: true, jpy_rate: jpyRate });
+crm011ZenEnsurePurchaseBaselines_(ss, matchingRows, { jpy_rate: jpyRate });
 matchingRows.forEach(function(match) {
 if (match.lot && !isBlank_(match.lot.japanJpy)) purchases.getRange(match.row, 10).setValue(round2_(num_(match.lot.japanJpy) / jpyRate));
 });
@@ -263,7 +267,7 @@ matchingRows.forEach(function(match) { appendCellText_(purchases.getRange(match.
 
 SpreadsheetApp.flush();
 let zenSyncWarning = '';
-try { crm011ZenSyncPurchaseLots_(ss, matchingRows.map(function(match) { return String(match.values[0] || '').trim(); }), { force_zenmarket: true }); }
+try { crm011ZenSyncPurchaseLots_(ss, matchingRows.map(function(match) { return String(match.values[0] || '').trim(); })); }
 catch (zenError) { zenSyncWarning = String(zenError && zenError.message ? zenError.message : zenError); Logger.log('CRM-011 ZenMarket sync failed after direct purchase update: ' + zenSyncWarning); }
 const selectedStatus = isBlank_(form['Статус']) ? '' : String(form['Статус'] || '').trim();
 const landedSkus = matchingRows.filter(function(match) {
@@ -1214,6 +1218,7 @@ if (shopDelivery !== null) sales.getRange(row, 20).setValue(deliveryAllocations[
 if (!isBlank_(note)) appendCellText_(sales.getRange(row, 27), note); fixSaleCostForRow_(ss, row, costRunState, { clearPending: false });
 });
 if (paymentChanged && String(newPaymentStatus || '').trim() === 'Оплачено') crm011StampRowsOnce_(sales, rows, 'Дата оплати', new Date());
+if (orderChanged && String(newOrderStatus || '').trim() === 'Отримано') crm011StampRowsOnce_(sales, rows, 'Дата отримання', new Date());
 if (fixturePlan.entries.length) append3dp019FixtureUsage_(ss, fixturePlan, current[2], fixturePlan.ledger_source, order, note);
 invalidateDoGetCache_(); sync3dpPackagingCost_(sales, order, rows, 'updateSaleStatus'); reapplyOrderComponentCostAfterBaseRefresh_(ss, order, rows); clearSaleUpdateForm();
 const fixtureWarning = fixturePlan.warning ? '\n' + fixturePlan.warning : '';
@@ -1305,8 +1310,33 @@ return _memo.autoSs;
 }
 
 function _getCrmSalesRowEntries() {
-if (!_memo.salesRowEntries) { const ss = _getCrmSs(); const sales = ss.getSheetByName('Продажі'); if (!sales) throw new Error('Не знайдено вкладку Продажі.'); const lastRow = Math.max(sales.getLastRow(), 3); const raw = sales.getRange(3, 1, lastRow - 2, 33).getValues(); _memo.salesRowEntries = raw.map(function(row, index) { return { rowNumber: index + 3, values: row }; }); }
+if (!_memo.salesRowEntries) { const ss = _getCrmSs(); const sales = ss.getSheetByName('Продажі'); if (!sales) throw new Error('Не знайдено вкладку Продажі.'); const lastRow = Math.max(sales.getLastRow(), 3), width = crm012SalesReadWidth_(sales); const raw = sales.getRange(3, 1, lastRow - 2, width).getValues(); _memo.salesRowEntries = raw.map(function(row, index) { return { rowNumber: index + 3, values: row }; }); }
 return _memo.salesRowEntries;
+}
+
+function crm012SalesReadWidth_(sales) {
+return Math.max(typeof sales.getLastColumn === 'function' ? sales.getLastColumn() : 33, 33);
+}
+
+function crm012SalesRecognitionColumns_(sheet) {
+const sales = sheet || _getCrmSs().getSheetByName('Продажі');
+if (!sales) throw new Error('Не знайдено вкладку Продажі.');
+const index = function(header, fallback) { const column = crm011HeaderColumn_(sales, header); return column ? column - 1 : fallback; };
+return { sale: 2, payment: index('Дата оплати', 32), received: index('Дата отримання', -1), cost_finalized: 31, status: 23, cost_method: 29 };
+}
+
+function crm012WasPreorderRow_(row, columns) {
+const c = columns || { status: 23, cost_method: 29 };
+return String(row[c.status] || '').trim() === 'Передзамовлення' || /передзамовлення/i.test(String(row[c.cost_method] || '').trim());
+}
+
+function crm012RecognitionDateForSalesRow_(row, columns) {
+const c = columns || { sale: 2, payment: 32, received: -1, cost_finalized: 31, status: 23, cost_method: 29 };
+const saleMs = dateSortValue_(row[c.sale]), paymentMs = c.payment >= 0 ? dateSortValue_(row[c.payment]) : 0, receivedMs = c.received >= 0 ? dateSortValue_(row[c.received]) : 0, costFinalizedMs = c.cost_finalized >= 0 ? dateSortValue_(row[c.cost_finalized]) : 0;
+if (!crm012WasPreorderRow_(row, c)) return { ms: saleMs, source: 'sale_date', fallback: false, is_preorder: false };
+if (paymentMs && receivedMs) return { ms: Math.max(paymentMs, receivedMs), source: 'payment_and_received', fallback: false, is_preorder: true };
+if (costFinalizedMs) return { ms: costFinalizedMs, source: 'cost_finalized_history_proxy', fallback: false, is_preorder: true };
+return { ms: saleMs, source: 'sale_date_fallback', fallback: true, is_preorder: true };
 }
 function _getCrmSalesRows() {
 if (!_memo.salesRows) {
@@ -3550,7 +3580,7 @@ function inventoryMigrationPreorderRows_(ss, sku) {
   const sales = ss.getSheetByName('Продажі');
   if (!sales) throw new Error('Не знайдено вкладку Продажі.');
   const targetSku = String(sku || '').trim();
-  const values = sales.getRange(3, 1, Math.max(sales.getLastRow() - 2, 1), 32).getValues();
+  const values = sales.getRange(3, 1, Math.max(sales.getLastRow() - 2, 1), crm012SalesReadWidth_(sales)).getValues();
   return values.map(function(row, index) { return { row: index + 3, values: row }; }).filter(function(item) {
     return String(item.values[5] || '').trim() === targetSku &&
       String(item.values[23] || '').trim() === 'Передзамовлення' &&
@@ -3781,7 +3811,7 @@ function initializeMissingPreorderCosts_(ss) {
   const sales = ss.getSheetByName('Продажі');
   if (!sales) throw new Error('Не знайдено вкладку Продажі.');
   ensureSaleCostAuditColumns_(sales);
-  const rows = sales.getRange(3, 1, Math.max(sales.getLastRow() - 2, 1), 32).getValues();
+  const rows = sales.getRange(3, 1, Math.max(sales.getLastRow() - 2, 1), crm012SalesReadWidth_(sales)).getValues();
   const plans = [];
   const preflightState = {};
   rows.forEach(function(values, index) {
@@ -4177,7 +4207,7 @@ order = String(order || '').trim(); if (!order) return null;
 const sales = ss.getSheetByName('Продажі'); const writeOffs = ss.getSheetByName('Списання');
 if (!sales || !writeOffs) return null;
 ensureSaleCostAuditColumns_(sales);
-const saleValues = sales.getRange(3, 1, Math.max(sales.getLastRow() - 2, 1), 32).getValues();
+const saleValues = sales.getRange(3, 1, Math.max(sales.getLastRow() - 2, 1), crm012SalesReadWidth_(sales)).getValues();
 const mysteryRows = [];
 saleValues.forEach(function(values, index) { if (String(values[0] || '').trim() === order && isMysteryBoxSale_(values[5], values[6])) mysteryRows.push({ row: index + 3, values: values }); });
 if (!mysteryRows.length) return null;
@@ -4373,7 +4403,7 @@ function apiTestOrderCleanup_(ss, payload) {
 function testOrderCleanupOrderIds_(ss) {
   const sales = ss.getSheetByName('Продажі');
   if (!sales) throw new Error('Продажі sheet is required to scan test-order markers.');
-  const values = sales.getRange(3, 1, Math.max(sales.getLastRow() - 2, 1), 32).getValues();
+  const values = sales.getRange(3, 1, Math.max(sales.getLastRow() - 2, 1), crm012SalesReadWidth_(sales)).getValues();
   const found = {};
   values.forEach(function(row, index) {
     const note = String(row[CRM_TEST_ORDER_CLEANUP_.note_column - 1] || '').trim();
@@ -4793,7 +4823,7 @@ return { cost: round2_(total), audit: audit.join(', ') };
 function getExistingAutoConsumableAudit_(ss, orderKey, currentRow) {
 const sales = ss.getSheetByName('Продажі');
 const lastRow = Math.max(sales.getLastRow(), 3);
-const values = sales.getRange(3, 1, lastRow - 2, 31).getValues();
+const values = sales.getRange(3, 1, lastRow - 2, crm012SalesReadWidth_(sales)).getValues();
 const state = { sticker: false, blind: false, mysteryLabel: false };
 values.forEach(function(row, index) {
 const rowNumber = index + 3;
@@ -6132,7 +6162,7 @@ function getSoldQtyBySkuForLotStatuses_(ss) {
 const sales = ss.getSheetByName('Продажі');
 if (!sales) throw new Error('Не знайдено вкладку Продажі.');
 const lastRow = Math.max(sales.getLastRow(), 3);
-const values = sales.getRange(3, 1, lastRow - 2, 32).getValues();
+const values = sales.getRange(3, 1, lastRow - 2, crm012SalesReadWidth_(sales)).getValues();
 const soldBySku = {};
 const startSort = dateSortValue_(getCostStartDate_(ss));
 values.forEach(function(row) {
@@ -6346,10 +6376,11 @@ return null;
 
 function apiSkuProfitMetrics_(salesRows) {
 const rows = salesRows || _getCrmSalesRows();
+const recognitionColumns = crm012SalesRecognitionColumns_();
 const nowMs = new Date().getTime(); const cutoff30 = nowMs - 30 * 86400000; const cutoff60 = nowMs - 60 * 86400000;
 const result = {};
 rows.forEach(function(row) {
-const sort = dateSortValue_(row[2]);
+const sort = crm012RecognitionDateForSalesRow_(row, recognitionColumns).ms;
 if (!sort || sort < cutoff60) return;
 const sku = String(row[5] || '').trim();
 if (!sku) return;
@@ -6363,12 +6394,12 @@ return result;
 function apiChannelStats_(params) {
 params = params || {};
 const period = String(params.period || 'current_month').trim() === 'all_time' ? 'all_time' : 'current_month';
-const rows = apiReadCrmSalesRows_();
+const rows = apiReadCrmSalesRows_(), recognitionColumns = crm012SalesRecognitionColumns_();
 const now = new Date();
 const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
 const fixedChannels = ['OpenCart','OLX','Telegram','Monobazar']; const map = {}; fixedChannels.forEach(function(name) { map[name] = { name: name, revenue: 0, profit: 0, orders: {}, units: 0 }; });
 rows.forEach(function(row) {
-const sort = dateSortValue_(row[2]);
+const sort = crm012RecognitionDateForSalesRow_(row, recognitionColumns).ms;
 if (period === 'current_month' && (!sort || sort < monthStart)) return;
 const name = String(row[1] || 'Інше').trim() || 'Інше';
 if (!map[name]) map[name] = { name: name, revenue: 0, profit: 0, orders: {}, units: 0 };
@@ -6385,7 +6416,7 @@ return { ok: true, period: period, channels: channels };
 function apiMonthlySummary_(params) {
 params = params || {};
 const requested = Math.max(1, Math.min(apiNum_(params.months) || 6, 24));
-const rows = apiReadCrmSalesRows_();
+const rows = apiReadCrmSalesRows_(), recognitionColumns = crm012SalesRecognitionColumns_();
 const now = new Date();
 const byMonth = {};
 const months = [];
@@ -6396,7 +6427,7 @@ byMonth[key] = { month: key, label: apiMonthLabel_(d), revenue: 0, profit: 0, or
 months.push(byMonth[key]);
 }
 rows.forEach(function(row) {
-const sort = dateSortValue_(row[2]);
+const sort = crm012RecognitionDateForSalesRow_(row, recognitionColumns).ms;
 if (!sort) return;
 const key = apiMonthKey_(new Date(sort));
 const item = byMonth[key];
@@ -6420,8 +6451,8 @@ const previousEnd = new Date(now.getFullYear(), now.getMonth() - 1, comparablePr
 return {
 ok: true,
 months: months,
-month_to_date: apiAggregateSalesRows_(rows, currentStart, currentEnd),
-previous_month_to_date: apiAggregateSalesRows_(rows, previousStart, previousEnd),
+month_to_date: apiAggregateSalesRows_(rows, currentStart, currentEnd, recognitionColumns),
+previous_month_to_date: apiAggregateSalesRows_(rows, previousStart, previousEnd, recognitionColumns),
 repeat_rate_pct: apiRepeatRateFromRows_(rows)
 };
 }
@@ -6472,6 +6503,7 @@ return labels[date.getMonth()] || apiMonthKey_(date);
 
 function apiSevenDayPeriodComparison_(salesRows) {
 const rows = salesRows || _getCrmSalesRows();
+const recognitionColumns = crm012SalesRecognitionColumns_();
 const now = new Date();
 const day = now.getDate();
 const startDay = Math.floor((day - 1) / 7) * 7 + 1;
@@ -6483,14 +6515,14 @@ const prevLastDay = new Date(prevMonthDate.getFullYear(), prevMonthDate.getMonth
 const prevEndDay = Math.min(endDay, prevLastDay);
 const prevStart = new Date(prevMonthDate.getFullYear(), prevMonthDate.getMonth(), startDay);
 const prevEnd = new Date(prevMonthDate.getFullYear(), prevMonthDate.getMonth(), prevEndDay + 1);
-return { current: apiAggregateSalesRows_(rows, currentStart.getTime(), currentEnd.getTime()), previous: apiAggregateSalesRows_(rows, prevStart.getTime(), prevEnd.getTime()), label: apiPeriodLabel_(currentStart, currentEnd), prev_label: apiPeriodLabel_(prevStart, prevEnd) };
+return { current: apiAggregateSalesRows_(rows, currentStart.getTime(), currentEnd.getTime(), recognitionColumns), previous: apiAggregateSalesRows_(rows, prevStart.getTime(), prevEnd.getTime(), recognitionColumns), label: apiPeriodLabel_(currentStart, currentEnd), prev_label: apiPeriodLabel_(prevStart, prevEnd) };
 }
 
-function apiAggregateSalesRows_(rows, startMs, endMs) {
+function apiAggregateSalesRows_(rows, startMs, endMs, recognitionColumns) {
 const orderMap = {};
 const acc = { orders: 0, units: 0, revenue: 0, profit: 0, margin_pct: 0 };
 rows.forEach(function(row) {
-const sort = dateSortValue_(row[2]);
+const sort = crm012RecognitionDateForSalesRow_(row, recognitionColumns).ms;
 if (!sort || sort < startMs || sort >= endMs) return;
 orderMap[String(row[0] || '')] = true;
 acc.units = round2_(acc.units + num_(row[7]));
@@ -6751,7 +6783,7 @@ const usageOrders = {};
 if (!salesSheet) return {};
 const names = Object.keys(namesMap);
 const lastRow = Math.max(salesSheet.getLastRow(), 3);
-const values = salesSheet.getRange(3, 1, lastRow - 2, 31).getValues();
+const values = salesSheet.getRange(3, 1, lastRow - 2, crm012SalesReadWidth_(salesSheet)).getValues();
 const cutoff = apiConsumableCutoff_(days);
 values.forEach(function(row) {
 const orderId = String(row[0] || '').trim();
@@ -9103,7 +9135,7 @@ function diagnoseCrm011FifoCostDrift_(ss, sku, limit) {
   if (!requestedSku) throw new Error('SKU is required.');
   const cap = Math.max(1, Math.min(Math.floor(num_(limit) || CRM011_FIFO_COST_MAX_ROWS_), CRM011_FIFO_COST_MAX_ROWS_));
   const lastRow = Math.max(sales.getLastRow(), 3);
-  const rows = sales.getRange(3, 1, lastRow - 2, 32).getValues();
+  const rows = sales.getRange(3, 1, lastRow - 2, crm012SalesReadWidth_(sales)).getValues();
   const matching = [];
   rows.forEach(function(values, index) {
     if (String(values[5] || '').trim() === requestedSku) matching.push(crm011FifoCostDiagnosticRow_(ss, index + 3, values));
@@ -9133,7 +9165,7 @@ function crm011ResolveExactSaleRow_(ss, order, sku) {
   const expectedSku = String(sku || '').trim();
   const lastRow = Math.max(sales.getLastRow(), 3);
   const matches = [];
-  sales.getRange(3, 1, lastRow - 2, 32).getValues().forEach(function(values, index) {
+  sales.getRange(3, 1, lastRow - 2, crm012SalesReadWidth_(sales)).getValues().forEach(function(values, index) {
     if (String(values[0] || '').trim() === expectedOrder && String(values[5] || '').trim() === expectedSku) matches.push({ row: index + 3, values: values });
   });
   if (matches.length !== 1) throw new Error('Очікувався рівно один рядок продажу ' + expectedOrder + ' / ' + expectedSku + ', знайдено: ' + matches.length + '.');
@@ -9762,6 +9794,45 @@ function setupCrm011FinanceColumns() {
   return result;
 }
 
+function setupCrm012RevenueRecognition() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet(), before = apiIntegrityCheck_();
+  if (!before.clean) throw new Error('CRM_INTEGRITY_NOT_CLEAN: виправ проблеми перед зміною структури.');
+  const sales = ss.getSheetByName('Продажі');
+  if (!sales) throw new Error('Не знайдено вкладку Продажі.');
+  let column = crm011HeaderColumn_(sales, 'Дата отримання');
+  let added = false;
+  if (!column) {
+    column = sales.getLastColumn() + 1;
+    sales.getRange(2, column).setValue('Дата отримання');
+    added = true;
+  }
+  SpreadsheetApp.flush();
+  resetMemo_();
+  const after = apiIntegrityCheck_();
+  if (!after.clean) throw new Error('CRM_INTEGRITY_REGRESSION: перевірка після змін знайшла нові проблеми.');
+  const result = { ok: true, action: 'setup_crm012_revenue_recognition', date_received_column: column, added: added, integrity_before: before, integrity_after: after };
+  console.log(JSON.stringify(result));
+  return result;
+}
+
+function setupCrm012PurchaseSupplierForm() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet(), before = apiIntegrityCheck_();
+  if (!before.clean) throw new Error('CRM_INTEGRITY_NOT_CLEAN: виправ проблеми перед зміною структури.');
+  const form = ss.getSheetByName('Внести_закупку');
+  if (!form) throw new Error('Не знайдено вкладку Внести_закупку.');
+  const label = String(form.getRange('A10').getDisplayValue() || '').trim(), value = String(form.getRange('B10').getDisplayValue() || '').trim();
+  if (label && label !== 'Постачальник') throw new Error('CRM012_PURCHASE_FORM_CONFLICT: A10 already contains another field.');
+  if (value && ['zenmarket_jp', 'supplier_ua', 'other'].indexOf(value) === -1) throw new Error('CRM012_PURCHASE_FORM_VALUE_CONFLICT: B10 has an unrecognised value.');
+  form.getRange('A10').setValue('Постачальник');
+  form.getRange('B10').setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['zenmarket_jp', 'supplier_ua', 'other'], true).setAllowInvalid(false).build());
+  SpreadsheetApp.flush();
+  const after = apiIntegrityCheck_();
+  if (!after.clean) throw new Error('CRM_INTEGRITY_REGRESSION: перевірка після змін знайшла нові проблеми.');
+  const result = { ok: true, action: 'setup_crm012_purchase_supplier_form', field: 'Внести_закупку!B10', allowed_values: ['zenmarket_jp', 'supplier_ua', 'other'], integrity_before: before, integrity_after: after };
+  console.log(JSON.stringify(result));
+  return result;
+}
+
 function crm011ZenEnsureSheet_(ss, name, headers, appendOnlyHeaders) {
   let sheet = ss.getSheetByName(name);
   let created = false;
@@ -9838,7 +9909,7 @@ function setupCrm011ZenMarketAccount() {
   resetMemo_();
   const after = apiIntegrityCheck_();
   if (!after.clean) throw new Error('CRM_INTEGRITY_REGRESSION: перевірка після змін знайшла нові проблеми.');
-  const result = { ok: true, action: 'setup_crm011_zenmarket_account', sheets_created: [ledgerResult, lotsResult, topupsResult].filter(function(item) { return item.created; }).length, history_seeded: historySeeded, current_balance_jpy: crm011ZenCurrentBalance_(ledger), historical_topup_uah_missing: 1, integrity_before: before, integrity_after: after };
+  const result = { ok: true, action: 'setup_crm011_zenmarket_account', sheets_created: [ledgerResult, lotsResult, topupsResult].filter(function(item) { return item.created; }).length, history_seeded: historySeeded, current_balance_jpy: crm011ZenCurrentBalance_(ledger), historical_topup_uah_missing: crm012ZenMissingTopupUah_(ledger).count, integrity_before: before, integrity_after: after };
   console.log(JSON.stringify(result));
   return result;
 }
@@ -9849,6 +9920,38 @@ function crm011ZenCurrentBalance_(ledger) {
     if (raw !== '' && raw !== null && Number.isFinite(Number(raw))) return round2_(Number(raw));
   }
   throw new Error('ZENMARKET_BALANCE_MISSING: у журналі немає контрольного балансу.');
+}
+
+function crm012ZenMissingTopupUah_(ledger) {
+  const rows = ledger.getLastRow() < 2 ? [] : ledger.getRange(2, 1, ledger.getLastRow() - 1, CRM011_ZEN_LEDGER_HEADERS_.length).getValues();
+  const missing = [];
+  rows.forEach(function(row, index) {
+    const source = String(row[9] || '').trim();
+    if (source !== 'historical_topup' && source !== 'manual_topup') return;
+    if (row[6] === '' || row[6] === null || row[6] === undefined) missing.push({ row: index + 2, operation_id: String(row[0] || '').trim(), amount_jpy: round2_(num_(row[2])) });
+  });
+  return { count: missing.length, rows: missing };
+}
+
+function crm012ZenRecordHistoricalTopupUahForOwner() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet(), setup = crm011ZenRequireSetup_(ss), operationId = 'ZEN-HIST-008', amountJpy = 70000, amountUah = 22000;
+  const rows = setup.ledger.getLastRow() < 2 ? [] : setup.ledger.getRange(2, 1, setup.ledger.getLastRow() - 1, CRM011_ZEN_LEDGER_HEADERS_.length).getValues();
+  const matches = rows.map(function(row, index) { return { row: row, number: index + 2 }; }).filter(function(item) { return String(item.row[0] || '').trim() === operationId; });
+  if (matches.length !== 1) throw new Error('CRM012_EXPECTED_ONE_HISTORICAL_TOPUP: ' + operationId + ', found ' + matches.length + '.');
+  const historical = matches[0], storedJpy = round2_(num_(historical.row[2])), source = String(historical.row[9] || '').trim(), currentUah = historical.row[6];
+  if (storedJpy !== amountJpy || source !== 'historical_topup') throw new Error('CRM012_HISTORICAL_TOPUP_PRECONDITION_FAILED: ' + operationId + '.');
+  if (currentUah !== '' && currentUah !== null && Math.abs(round2_(num_(currentUah)) - amountUah) > 0.009) throw new Error('CRM012_HISTORICAL_TOPUP_UAH_CONFLICT: existing value differs.');
+  const topupRows = setup.topups.getLastRow() < 2 ? [] : setup.topups.getRange(2, 1, setup.topups.getLastRow() - 1, CRM011_ZEN_TOPUP_HEADERS_.length).getValues();
+  const topupMatches = topupRows.filter(function(row) { return String(row[0] || '').trim() === operationId; });
+  if (topupMatches.length > 1) throw new Error('CRM012_HISTORICAL_TOPUP_DUPLICATE: ' + operationId + '.');
+  const alreadyApplied = Math.abs(round2_(num_(currentUah)) - amountUah) < 0.009 && topupMatches.length === 1;
+  if (currentUah === '' || currentUah === null) setup.ledger.getRange(historical.number, 7).setValue(amountUah);
+  if (!topupMatches.length) setup.topups.appendRow([operationId, historical.row[1], amountJpy, round2_(amountJpy / amountUah), amountUah, 'ZenMarket history', 'manual_actual', 'Історичне поповнення: UAH сума підтверджена власником', 'crm012-hist-008', new Date()]);
+  SpreadsheetApp.flush();
+  invalidateDoGetCache_();
+  const result = { ok: true, already_applied: alreadyApplied, operation_id: operationId, amount_jpy: amountJpy, amount_uah: amountUah, missing_uah_after: crm012ZenMissingTopupUah_(setup.ledger).count };
+  console.log(JSON.stringify(result));
+  return result;
 }
 
 function crm011ZenFindRequestRow_(sheet, column, requestId) {
@@ -9915,8 +10018,7 @@ function crm011ZenmarketCorrectBalance_(ss, payload) {
   } catch (err) { return { ok: false, error: String(err && err.message ? err.message : err) }; }
 }
 
-function crm011ZenIsPurchaseRow_(row, forceZenmarket) {
-  if (forceZenmarket) return true;
+function crm011ZenIsPurchaseRow_(row) {
   const source = String(row && row[19] || '').trim();
   return source === 'zenmarket_jp' || source === 'ZenMarket';
 }
@@ -9928,6 +10030,61 @@ function crm011ZenLotIndex_(lotsSheet) {
     const lotId = String(row[0] || '').trim();
     if (lotId) result[lotId] = { row: index + 2, total_jpy: round2_(num_(row[5])) };
   });
+  return result;
+}
+
+function crm012ZenSheetFormMislabelScanForOwner() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet(), setup = crm011ZenRequireSetup_(ss), purchases = ss.getSheetByName('Закупки');
+  if (!purchases) throw new Error('Не знайдено вкладку Закупки.');
+  const rows = purchases.getLastRow() < 3 ? [] : purchases.getRange(3, 1, purchases.getLastRow() - 2, 20).getValues(), index = crm011ZenLotIndex_(setup.lots);
+  const indexedNonZen = rows.filter(function(row) { const lotId = String(row[0] || '').trim(); return !!index[lotId] && !crm011ZenIsPurchaseRow_(row); }).map(function(row) { return { lot_id: String(row[0] || '').trim(), order_ref: String(row[1] || '').trim(), supplier: String(row[19] || '').trim(), indexed_jpy: index[String(row[0] || '').trim()].total_jpy }; });
+  const lot0181 = rows.filter(function(row) { return String(row[0] || '').trim() === 'LOT-0181'; }).map(function(row) { return { lot_id: 'LOT-0181', order_ref: String(row[1] || '').trim(), supplier: String(row[19] || '').trim(), indexed_jpy: index['LOT-0181'] ? index['LOT-0181'].total_jpy : null }; })[0] || null;
+  const result = { ok: true, action: 'crm012_zen_sheet_form_mislabel_scan', indexed_non_zen_lots: indexedNonZen, known_lot_0181: lot0181, provenance_limit: 'The historic sheet does not record whether a row came from the sheet form or dashboard. Existing rows still stamped zenmarket_jp cannot be identified as non-ZenMarket safely; owner confirmation is required before any lot beyond LOT-0181 is repaired.' };
+  console.log(JSON.stringify(result));
+  return result;
+}
+
+function crm012RepairLot0181AfterOwnerApproval(confirmation) {
+  if (String(confirmation || '').trim() !== 'CONFIRM_LOT-0181_ONLY') throw new Error('CRM012_OWNER_CONFIRMATION_REQUIRED: pass CONFIRM_LOT-0181_ONLY after reviewing the scan.');
+  const ss = SpreadsheetApp.getActiveSpreadsheet(), setup = crm011ZenRequireSetup_(ss), purchases = ss.getSheetByName('Закупки');
+  if (!purchases) throw new Error('Не знайдено вкладку Закупки.');
+  const rows = purchases.getLastRow() < 3 ? [] : purchases.getRange(3, 1, purchases.getLastRow() - 2, 20).getValues();
+  const matches = rows.map(function(row, index) { return { row: row, number: index + 3 }; }).filter(function(item) { return String(item.row[0] || '').trim() === 'LOT-0181' && String(item.row[1] || '').trim() === '1158736408'; });
+  if (matches.length !== 1) throw new Error('CRM012_LOT0181_PRECONDITION_FAILED: expected one LOT-0181 / 1158736408, found ' + matches.length + '.');
+  const purchase = matches[0], index = crm011ZenLotIndex_(setup.lots), indexed = index['LOT-0181'];
+  if (!indexed) {
+    const correctionRow = crm011ZenFindRequestRow_(setup.ledger, 8, 'crm012-lot0181-correction');
+    if (String(purchase.row[19] || '').trim() === 'other' && correctionRow) return { ok: true, already_applied: true, lot_id: 'LOT-0181', supplier: 'other', correction_ledger_row: correctionRow, balance_after_jpy: crm011ZenCurrentBalance_(setup.ledger) };
+    throw new Error('CRM012_LOT0181_INDEX_MISSING: stop and inspect before any repair.');
+  }
+  const balanceBefore = crm011ZenCurrentBalance_(setup.ledger), correction = crm011ZenmarketCorrectBalance_(ss, { request_id: 'crm012-lot0181-correction', balance_jpy: round2_(balanceBefore + indexed.total_jpy), note: 'Компенсація помилкового Zen-списання за LOT-0181 (OLX)' });
+  if (!correction.ok) throw new Error(correction.error || 'CRM012_LOT0181_CORRECTION_FAILED');
+  purchases.getRange(purchase.number, 20).setValue('other');
+  setup.lots.deleteRow(indexed.row);
+  SpreadsheetApp.flush();
+  invalidateDoGetCache_();
+  const result = { ok: true, lot_id: 'LOT-0181', supplier: 'other', compensation_jpy: indexed.total_jpy, balance_before_jpy: balanceBefore, balance_after_jpy: crm011ZenCurrentBalance_(setup.ledger), correction_already_applied: !!correction.already_applied };
+  console.log(JSON.stringify(result));
+  return result;
+}
+
+function crm0123dpNameDivergenceReportForOwner() {
+  const crm = _getCrmSs(), automation = _getAutoSs(), products = crmIntegrityTable_(crm.getSheetByName('Товари'), 2, 3), master = crmIntegrityTable_(automation.getSheetByName('Майстер_Товарів'), 1, 2), config = crm3dpConfig_();
+  if (!products.sheet || !master.sheet) throw new Error('CRM012_3DP_NAME_REPORT_REQUIRES_PRODUCTS_AND_MASTER');
+  if (!config) throw new Error('CRM012_3DP_NAME_REPORT_REQUIRES_3DP_API');
+  const remote = crm3dpGet_(config, { action: '3dp_skus', include_archived: true });
+  const productSku = products.headerIndex.SKU, productName = products.headerIndex['Коротка назва'], productSet = products.headerIndex['Сет / група'], productFormat = products.headerIndex['Формат'];
+  const masterSku = master.headerIndex.SKU, masterName = master.headerIndex['Назва'];
+  if (productSku == null || productName == null || masterSku == null || masterName == null) throw new Error('CRM012_3DP_NAME_REPORT_HEADERS_MISSING');
+  const productBySku = {}, masterBySku = {}, remoteBySku = {};
+  products.values.forEach(function(row, index) { const sku = String(row[productSku] || '').trim().toUpperCase(); if (sku && is3dpCatalogSku_(sku, productSet == null ? '' : row[productSet], productFormat == null ? '' : row[productFormat])) productBySku[sku] = { row: products.dataStartRow + index, name: String(row[productName] || '').trim() }; });
+  master.values.forEach(function(row, index) { const sku = String(row[masterSku] || '').trim().toUpperCase(); if (sku) masterBySku[sku] = { row: master.dataStartRow + index, name: String(row[masterName] || '').trim() }; });
+  (Array.isArray(remote.rows) ? remote.rows : []).forEach(function(row) { const sku = String(row.SKU || '').trim().toUpperCase(); if (sku) remoteBySku[sku] = { name: String(row['Назва виробу'] || '').trim(), status: String(row.API_статус_запису || '').trim() }; });
+  const skus = Object.keys(productBySku).concat(Object.keys(remoteBySku)).filter(function(sku, index, all) { return all.indexOf(sku) === index; }).sort();
+  const placeholder = function(value) { return /^(?:3d[- ]?друк|3d print|друк)$/i.test(String(value || '').trim()); };
+  const rows = skus.map(function(sku) { const product = productBySku[sku] || null, masterRow = masterBySku[sku] || null, remoteRow = remoteBySku[sku] || null, productNameValue = product ? product.name : '', masterNameValue = masterRow ? masterRow.name : '', remoteName = remoteRow ? remoteRow.name : ''; return { sku: sku, products_name: productNameValue || null, master_name: masterNameValue || null, catalog_3dp_name: remoteName || null, live_site_name: null, live_site_evidence: 'not fetched: live card must be verified separately before an owner-approved rename', placeholder_name: placeholder(productNameValue) || placeholder(masterNameValue), divergent: [productNameValue, masterNameValue, remoteName].filter(Boolean).some(function(name, index, names) { return index > 0 && name !== names[0]; }) || !!(productNameValue && remoteName && productNameValue !== remoteName), convention_status: 'OWNER_REVIEW_REQUIRED' }; });
+  const result = { ok: true, action: 'crm012_3dp_name_divergence_report', rows: rows, total: rows.length, placeholders: rows.filter(function(row) { return row.placeholder_name; }).length, divergent: rows.filter(function(row) { return row.divergent; }).length, write_performed: false, next_gate: 'Owner must approve a canonical name per SKU; live-card evidence is required before any rename.' };
+  console.log(JSON.stringify(result));
   return result;
 }
 
@@ -9948,7 +10105,7 @@ function crm011ZenEnsurePurchaseBaselines_(ss, matches, options) {
   let added = 0;
   (matches || []).forEach(function(match) {
     const row = match.values || match;
-    if (!crm011ZenIsPurchaseRow_(row, options.force_zenmarket)) return;
+    if (!crm011ZenIsPurchaseRow_(row)) return;
     const expense = crm011ZenPurchaseExpense_(row, rate);
     if (!expense.lot_id || index[expense.lot_id]) return;
     crm011ZenWriteLot_(setup.lots, null, expense); index[expense.lot_id] = { row: setup.lots.getLastRow(), total_jpy: expense.total_jpy }; added++;
@@ -9966,7 +10123,7 @@ function crm011ZenSyncPurchaseLots_(ss, lotIds, options) {
   const found = {}, index = crm011ZenLotIndex_(setup.lots);
   rows.forEach(function(row) {
     const lotId = String(row[0] || '').trim();
-    if (!wanted[lotId] || !crm011ZenIsPurchaseRow_(row, options.force_zenmarket)) return;
+    if (!wanted[lotId] || !crm011ZenIsPurchaseRow_(row)) return;
     found[lotId] = true;
     const expense = crm011ZenPurchaseExpense_(row, rate), previous = index[lotId] ? index[lotId].total_jpy : 0, delta = round2_(expense.total_jpy - previous);
     crm011ZenWriteLot_(setup.lots, index[lotId], expense);
@@ -9983,8 +10140,8 @@ function crm011ZenBalanceSnapshot_(ss) {
   try {
     const setup = crm011ZenRequireSetup_(ss), row = setup.ledger.getLastRow(), updated = row >= 2 ? setup.ledger.getRange(row, 9).getValue() : '';
     const balanceJpy = crm011ZenCurrentBalance_(setup.ledger), jpyRate = getCurrencyRate_('JPY');
-    return { available: true, balance_jpy: balanceJpy, balance_uah: round2_(balanceJpy / jpyRate), jpy_rate: jpyRate, updated_at: updated ? Utilities.formatDate(new Date(updated), Session.getScriptTimeZone(), 'yyyy-MM-dd HH:mm') : '', correction_hint_jpy: 500, historical_topup_uah_missing: 1 };
-  } catch (err) { return { available: false, balance_jpy: null, balance_uah: null, jpy_rate: null, updated_at: '', correction_hint_jpy: 500, historical_topup_uah_missing: 1, setup_required: true }; }
+    return { available: true, balance_jpy: balanceJpy, balance_uah: round2_(balanceJpy / jpyRate), jpy_rate: jpyRate, updated_at: updated ? Utilities.formatDate(new Date(updated), Session.getScriptTimeZone(), 'yyyy-MM-dd HH:mm') : '', correction_hint_jpy: 500, historical_topup_uah_missing: crm012ZenMissingTopupUah_(setup.ledger).count };
+  } catch (err) { return { available: false, balance_jpy: null, balance_uah: null, jpy_rate: null, updated_at: '', correction_hint_jpy: 500, historical_topup_uah_missing: null, setup_required: true }; }
 }
 
 function crm011ZenMarketVerificationForOwner() {
@@ -10006,15 +10163,17 @@ function crm011ZenMarketVerificationForOwner() {
     const componentTotal = round2_(num_(row[2]) + num_(row[3]) + num_(row[4]));
     if (Math.abs(componentTotal - num_(row[5])) > 0.01) problems.push({ code: 'LOT_TOTAL_MISMATCH', row: index + 2 });
   });
-  const result = { ok: integrity.clean === true && !problems.length, action: 'crm011_zenmarket_verification', current_balance_jpy: crm011ZenCurrentBalance_(setup.ledger), ledger_rows: ledgerRows.length, indexed_lots: lotRows.length, problems: problems.slice(0, 20), integrity: integrity };
+  const result = { ok: integrity.clean === true && !problems.length, action: 'crm011_zenmarket_verification', current_balance_jpy: crm011ZenCurrentBalance_(setup.ledger), historical_topup_uah_missing: crm012ZenMissingTopupUah_(setup.ledger).count, ledger_rows: ledgerRows.length, indexed_lots: lotRows.length, problems: problems.slice(0, 20), integrity: integrity };
   console.log(JSON.stringify(result));
   return result;
 }
 
 function crm011ApiAddSale_(ss, payload) {
   crm011RequireColumn_(ss, 'Продажі', 'Дата оплати');
+  crm011RequireColumn_(ss, 'Продажі', 'Дата отримання');
   const result = apiAddSale_(ss, payload);
   if (result && result.ok && String(payload.payment_status || '').trim() === 'Оплачено') crm011StampSaleOrderPaid_(ss, result.order_id, new Date());
+  if (result && result.ok && String(payload.order_status || '').trim() === 'Отримано') crm012StampSaleOrderReceived_(ss, result.order_id, new Date());
   return result;
 }
 
@@ -10040,8 +10199,10 @@ function crm011ApiAddPurchase_(ss, payload) {
 
 function crm011ApiUpdateSale_(ss, payload) {
   crm011RequireColumn_(ss, 'Продажі', 'Дата оплати');
+  crm011RequireColumn_(ss, 'Продажі', 'Дата отримання');
   const result = apiUpdateSaleWithComponents_(ss, payload);
   if (result && result.ok && String(payload.payment_status || '').trim() === 'Оплачено') crm011StampSaleOrderPaid_(ss, result.order_id, new Date());
+  if (result && result.ok && String(payload.order_status || '').trim() === 'Отримано') crm012StampSaleOrderReceived_(ss, result.order_id, new Date());
   return result;
 }
 
@@ -10050,6 +10211,13 @@ function crm011StampSaleOrderPaid_(ss, orderId, value) {
   const ids = required.sheet.getRange(3, 1, Math.max(required.sheet.getLastRow() - 2, 1), 1).getDisplayValues();
   const rows = []; ids.forEach(function(row, index) { if (String(row[0] || '').trim() === String(orderId || '').trim()) rows.push(index + 3); });
   crm011StampRowsOnce_(required.sheet, rows, 'Дата оплати', value);
+}
+
+function crm012StampSaleOrderReceived_(ss, orderId, value) {
+  const required = crm011RequireColumn_(ss, 'Продажі', 'Дата отримання');
+  const ids = required.sheet.getRange(3, 1, Math.max(required.sheet.getLastRow() - 2, 1), 1).getDisplayValues();
+  const rows = []; ids.forEach(function(row, index) { if (String(row[0] || '').trim() === String(orderId || '').trim()) rows.push(index + 3); });
+  crm011StampRowsOnce_(required.sheet, rows, 'Дата отримання', value);
 }
 
 function crm011ClientModel_() {
@@ -10189,6 +10357,8 @@ function crm011FinanceSalesModel_(ss) {
     orderStatus: crm011FinanceColumn_(table.headers, 'Статус замовлення'),
     paymentType: crm011FinanceColumn_(table.headers, 'Тип оплати'),
     paymentDate: crm011FinanceColumn_(table.headers, 'Дата оплати'),
+    receivedDate: crm011FinanceColumn_(table.headers, 'Дата отримання'),
+    costFinalizedDate: crm011FinanceColumn_(table.headers, 'Дата фіксації собівартості'),
     costMethod: crm011FinanceColumn_(table.headers, 'Метод собівартості')
   };
   const preorderOrders = {};
@@ -10201,8 +10371,9 @@ function crm011FinanceSalesModel_(ss) {
     const orderId = String(row[c.order] || '').trim(), payment = String(row[c.paymentStatus] || '').trim(), status = String(row[c.orderStatus] || '').trim(), method = String(row[c.costMethod] || '').trim();
     if (!orderId || preorderOrders[orderId] || ['Скасовано', 'Повернення'].indexOf(payment) !== -1 || ['Скасовано', 'Повернення', 'Передзамовлення'].indexOf(status) !== -1 || isUnfinalizedPreorderCostMethod_(method)) return;
     if (payment !== 'Оплачено' && ['Нове', 'В обробці', 'Відправлено', 'Отримано'].indexOf(status) === -1) return;
+    const recognition = crm012RecognitionDateForSalesRow_(row, { sale: c.date, payment: c.paymentDate, received: c.receivedDate, cost_finalized: c.costFinalizedDate, status: c.orderStatus, cost_method: c.costMethod });
     const line = {
-      row_number: table.first_row + index, order_id: orderId, date_ms: dateSortValue_(row[c.date]), client_key: crm011FinanceClientKey_(row, c), payment_status: payment, payment_type: String(row[c.paymentType] || ''), payment_date_ms: dateSortValue_(row[c.paymentDate]),
+      row_number: table.first_row + index, order_id: orderId, sale_date_ms: dateSortValue_(row[c.date]), date_ms: recognition.ms, recognition_source: recognition.source, recognition_fallback: recognition.fallback, client_key: crm011FinanceClientKey_(row, c), payment_status: payment, payment_type: String(row[c.paymentType] || ''), payment_date_ms: dateSortValue_(row[c.paymentDate]),
       units: crm011FinanceNumber_(row[c.units]), revenue: crm011FinanceNumber_(row[c.revenue]), cogs: crm011FinanceNumber_(row[c.cogs]), packaging: crm011FinanceNumber_(row[c.packaging]),
       acquiring: crm011FinanceNumber_(row[c.acquiring]), nova_pay: crm011FinanceNumber_(row[c.novaPay]), marketplace_fee: crm011FinanceNumber_(row[c.marketplaceFee]), delivery: crm011FinanceNumber_(row[c.delivery]), sheet_net: crm011FinanceNumber_(row[c.sheetNet])
     };
@@ -10274,7 +10445,7 @@ function crm011FinanceCashIn_(sales, bounds) {
   sales.lines.forEach(function(line) {
     if (line.payment_status !== 'Оплачено') return;
     let receivedMs = line.payment_date_ms;
-    if (!receivedMs) { receivedMs = line.date_ms; if (/післяплат|накладен/i.test(line.payment_type)) receivedMs += 3 * 86400000; approximatedRows++; }
+    if (!receivedMs) { receivedMs = line.sale_date_ms; if (/післяплат|накладен/i.test(line.payment_type)) receivedMs += 3 * 86400000; approximatedRows++; }
     if (receivedMs >= bounds.start.getTime() && receivedMs < bounds.end.getTime()) { if (line.revenue === null) missingValueRows++; else amount = round2_(amount + line.revenue); }
   });
   return { amount: missingValueRows ? null : amount, approximated_rows: approximatedRows, missing_value_rows: missingValueRows };
@@ -10321,7 +10492,7 @@ function crm011FinancePeriod_(sales, expenses, writeoffs, bounds) {
     totals: { orders: orders, units: metric('units'), revenue: revenue, net_profit: netProfit, margin_pct: margin, avg_order: orders && revenue !== null ? round2_(revenue / orders) : null },
     pnl: { revenue: revenue, cogs: cogs, gross_profit: grossProfit, packaging: packaging, delivery: delivery, payment_fees: paymentFees, operating_expenses: operating.value, writeoffs: writeoff.value, net_profit: netProfit, margin_pct: margin },
     customer_mix: mix,
-    data_quality: { missing_sales_values: missing, operating_expense_missing_value_rows: operating.missing_value_rows, writeoff_missing_value_rows: writeoff.missing_value_rows, linked_order_writeoffs_excluded: writeoff.linked_order_rows_excluded, identity_conflict_orders: sales.orders.filter(function(order) { return order.identity_conflict; }).length, reconciliation_rows_checked: reconciliationRows, reconciliation_mismatches: 0, reconciliation_sample: samples }
+    data_quality: { missing_sales_values: missing, operating_expense_missing_value_rows: operating.missing_value_rows, writeoff_missing_value_rows: writeoff.missing_value_rows, linked_order_writeoffs_excluded: writeoff.linked_order_rows_excluded, identity_conflict_orders: sales.orders.filter(function(order) { return order.identity_conflict; }).length, recognition_fallback_orders: Object.keys(periodOrders).filter(function(orderId) { return sales.lines.some(function(line) { return line.order_id === orderId && line.recognition_fallback; }); }).length, reconciliation_rows_checked: reconciliationRows, reconciliation_mismatches: 0, reconciliation_sample: samples }
   };
 }
 
@@ -10448,7 +10619,8 @@ function apiFinanceReport_(params) {
   const skus = apiSkuList_({}).skus || []; let inventoryAssets = 0, excludedAssets = 0;
   skus.forEach(function(item) { if (item.is_3dp || item.is_mystery || item.current_cost == null) { excludedAssets++; return; } inventoryAssets = round2_(inventoryAssets + Math.max(0, num_(item.physical_stock != null ? item.physical_stock : item.stock)) * num_(item.current_cost)); });
   const purchases = crm011PurchaseModel_();
-  return { ok: true, period: bounds, totals: current.totals, comparison: comparison, pnl: current.pnl, cashflow: cashflow, zenmarket_account: crm011ZenBalanceSnapshot_(ss), inventory_assets: { value: inventoryAssets, in_stock: inventoryAssets, outside_stock: purchases.outside_value, total: round2_(inventoryAssets + purchases.outside_value), outside_lots: purchases.outside_lots, outside_missing_value: purchases.outside_missing_value, excluded_skus: excludedAssets }, customer_mix: current.customer_mix, data_quality: Object.assign({}, current.data_quality, { unreconciled_preorder_orders_excluded: true, inventory_topups_unavailable: topups === null, missing_values_are_not_zero: true, payment_date_approximated_rows: cashIn.approximated_rows, cash_in_missing_value_rows: cashIn.missing_value_rows, zenmarket_topup_approximated_rows: topups ? topups.approximate_rows : 0, zenmarket_historical_topup_uah_missing: 1, outside_asset_lots_missing_value: purchases.outside_missing_value, finance_headers: { sales: sales.headers, expenses: expenses.headers, writeoffs: writeoffs.headers } }) };
+  const zenmarketAccount = crm011ZenBalanceSnapshot_(ss);
+  return { ok: true, period: bounds, totals: current.totals, comparison: comparison, pnl: current.pnl, cashflow: cashflow, zenmarket_account: zenmarketAccount, inventory_assets: { value: inventoryAssets, in_stock: inventoryAssets, outside_stock: purchases.outside_value, total: round2_(inventoryAssets + purchases.outside_value), outside_lots: purchases.outside_lots, outside_missing_value: purchases.outside_missing_value, excluded_skus: excludedAssets }, customer_mix: current.customer_mix, data_quality: Object.assign({}, current.data_quality, { unreconciled_preorder_orders_excluded: true, inventory_topups_unavailable: topups === null, missing_values_are_not_zero: true, payment_date_approximated_rows: cashIn.approximated_rows, cash_in_missing_value_rows: cashIn.missing_value_rows, zenmarket_topup_approximated_rows: topups ? topups.approximate_rows : 0, zenmarket_historical_topup_uah_missing: zenmarketAccount.historical_topup_uah_missing, outside_asset_lots_missing_value: purchases.outside_missing_value, finance_headers: { sales: sales.headers, expenses: expenses.headers, writeoffs: writeoffs.headers } }) };
 }
 
 function crm011PassBVerificationForOwner(dateFrom, dateTo) {

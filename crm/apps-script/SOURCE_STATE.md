@@ -1,5 +1,20 @@
 # Main CRM Apps Script — repository mirror state
 
+## CRM-012 baseline — V171 BYTE-VERIFIED (2026-09-10)
+
+The owner export `Версія 171, 10 вер. 2026 р., 1828.csv` was compared with
+`crm/apps-script/Code.gs` as CSV records, after rejoining CSV fields and
+normalising CRLF. The source is identical apart from the known lossy CSV
+representation of one regular-expression line containing double quotes; that
+is an export-format artefact, not a source difference. The normalised local
+baseline SHA-256 is
+`b9aaafcddf802d0578ddf60db5800008bfb24e64fcee14cc8d7f998e97863fdc`.
+
+Future source-identity checks must request a `.gs` or `.txt` export: the CSV
+format is lossy for source lines containing double quotes. This closes the
+previous V168-reported / V164-byte-verified provenance gap. V171 is the live
+baseline before CRM-012; local CRM-012 changes are not publication proof.
+
 ## CRM-011 internal migration expansion — LOCAL CANDIDATE, NOT PUBLISHED (2026-09-10)
 
 The repository mirror now expands the existing FIFO-safe internal migration
