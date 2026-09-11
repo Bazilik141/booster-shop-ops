@@ -15,6 +15,45 @@ Date: 2026-09-10
 
 ## Implemented
 
+### 2026-09-11 follow-up — actual payment type on sale update
+
+- The dashboard sale editor now offers `Фактичний тип оплати`. It changes the
+  payment type across every row of the selected order only when the value
+  differs from the existing one, so an untouched legacy value is preserved.
+- The Apps Script update path accepts only the four canonical CRM payment types.
+  The existing `Продажі` formulas then recalculate payment fees and net profit;
+  no FIFO cost, order ID, payment date, or historical sale amount is rewritten.
+- A historic unknown payment label remains visible but cannot be re-submitted as
+  a new value. Choose a canonical actual method, for example `Еквайринг` →
+  `Контроль оплати ФОП`, before saving.
+- The finance quality line now renders both review-returned counters:
+  `recognition_fallback_orders` and `identity_conflict_orders`.
+
+### 2026-09-11 repair-runner correction — LOT-0181
+
+- The Apps Script Run menu cannot pass the explicit confirmation argument to
+  `crm012RepairLot0181AfterOwnerApproval()`. The original function therefore
+  correctly rejected a menu launch without an argument.
+- `crm/apps-script/TEMP_CRM012_LOT0181_repair_20260911.gs` is a temporary,
+  public owner-run wrapper. It passes only the fixed confirmation literal,
+  delegates all target checks and writes to the existing guarded function, then
+  runs `crm011ZenMarketVerificationForOwner()` and returns both outputs.
+- Delete that temporary script file from the live Apps Script project and this
+  repository after an `ok: true` result. It must not become a standing writer.
+
+### 2026-09-11 report-runner correction — 3D-P name divergence
+
+- The full read-only 3D-P report can exceed Apps Script's log-size cap because
+  most rows repeat the same live-card-evidence note. It did not indicate a
+  failed scan.
+- `crm/apps-script/TEMP_CRM012_3dp_name_divergence_summary_20260911.gs` is a
+  temporary, read-only summary runner. It emits at most 20 compact flagged
+  rows (mismatch or placeholder), plus counts and omitted-row count; it makes
+  no Sheet, CRM, 3D-P, or storefront write.
+- Owner run result: `flagged: 0`, `placeholders: 0`, `divergent: 0`.
+  No internal CRM/3D-P rename is warranted. This does not replace the separate
+  canonical OpenCart mapping gate or verify storefront card titles.
+
 ### WP1–WP2 — UAH top-up gap
 
 - Replaced all four hardcoded missing-UAH counters with
@@ -76,16 +115,47 @@ Date: 2026-09-10
 ```text
 Code.gs syntax passed
 node --test crm\apps-script\tests\*.test.mjs
-tests 57
-pass 57
+tests 59
+pass 59
 fail 0
 ```
 
 `git diff --check` passed. The local CRM-012 test covers recognition-date
 selection, missing-UAH counting, supplier/force-flag removal, Cash Flow notice,
-and report-only 3D naming.
+both rendered recognition signals, canonical payment-type update, and report-only
+3D naming.
 
-## Required owner-run order after paste/publish
+## Owner-run completion evidence — 2026-09-11
+
+- The owner published CRM V172 and ran `apiIntegrityCheck_()` clean before the
+  structural setup: no problems; 66 3D-P RRP rows compared and six skipped for
+  missing CRM RRP.
+- `setupCrm012RevenueRecognition()` completed with `added: true` and created
+  `Продажі!Дата отримання` as column 35. Its integrity checks before and after
+  were both clean.
+- The owner reported successful completion of the supplier-form setup, the
+  mislabel scan, and the fixed historical ZenMarket UAH top-up procedure.
+- `LOT-0181 / 1158736408` repair completed: supplier is now `other`; the
+  one-time compensation was JPY 27,078.40; Zen balance changed from JPY
+  -30,763.40 to JPY -3,685.00. The repair was new, not an idempotent replay.
+- Post-repair `crm011ZenMarketVerificationForOwner()` returned `ok: true`,
+  `historical_topup_uah_missing: 0`, `ledger_rows: 14`, `indexed_lots: 0`,
+  no problems, and clean integrity.
+- The compact 3D-P name report returned `flagged: 0`, `placeholders: 0`,
+  `divergent: 0`, and `write_performed: false`. No internal CRM/3D-P rename is
+  warranted.
+
+## Remaining bounded owner actions
+
+1. Delete the two temporary files from the live Apps Script project:
+   `TEMP_CRM012_LOT0181_repair_20260911` and
+   `TEMP_CRM012_3dp_name_divergence_summary_20260911`. They are already removed
+   locally.
+2. At the next genuine payment correction, smoke-test the new dashboard control
+   by changing `Еквайринг` to `Контроль оплати ФОП` and confirming that payment
+   fees and net profit recalculate. Do not create artificial sales data for this.
+
+## Owner-run order after paste/publish — completed
 
 1. Run `apiIntegrityCheck_()` and retain its bounded output.
 2. Run `setupCrm012RevenueRecognition()` and
@@ -109,6 +179,6 @@ and report-only 3D naming.
 - No current-sheet provenance identifies every old non-ZenMarket purchase
   inserted through the old sheet form. The report must not be used to infer
   those suppliers.
-- Publication, all live data mutation, both integrity outputs, exact JPY
-  compensation, resulting balance, month before/after values, and the complete
-  3D divergence table remain owner-gated runtime evidence.
+- The live payment-type smoke test remains pending until the next genuine
+  correction. A separate OpenCart canonical mapping/live-card-title audit is
+  outside CRM-012 and remains separately owner-gated.

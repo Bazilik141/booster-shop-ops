@@ -5106,6 +5106,14 @@ const CRM_PACKAGING_TYPES_ = Object.freeze([
   'Конверт Airpock 14x22 см',
   'Інше'
 ]);
+// Payment type is an accounting input: its sheet formulas own the fee tariff.
+// Keep the update API constrained to the same canonical values as the dashboard.
+const CRM_PAYMENT_TYPES_ = Object.freeze([
+  'Контроль оплати ФОП',
+  'Післяплата фіз',
+  'За реквізитами',
+  'Еквайринг'
+]);
 const CRM_SALES_PACKAGING_COLUMN_ = 29; // AC
 const CRM_SALES_FIRST_DATA_ROW_ = 3;
 
@@ -9565,6 +9573,8 @@ function apiUpdateSaleWithComponents_(ss, payload) {
     });
     const paymentStatus = String(payload.payment_status || '').trim();
     const orderStatus = String(payload.order_status || '').trim();
+    const hasPaymentType = Object.prototype.hasOwnProperty.call(payload, 'payment_type');
+    const paymentType = String(payload.payment_type || '').trim();
     const fiscalColumn = crm011RequireColumn_(ss, 'Продажі', 'Фіскальний чек').column;
     const fiscalConfirmed = payload.fiscal_receipt === true || ['так', 'true', 'yes', '1'].indexOf(String(payload.fiscal_receipt || '').trim().toLowerCase()) !== -1;
     const fiscalRange = sales.getRange(rows[0], fiscalColumn, rows.length, 1);
@@ -9584,6 +9594,7 @@ function apiUpdateSaleWithComponents_(ss, payload) {
     const noteChanged = hasNote && note !== String(current[26] || '').trim();
     const mutationNote = [note, requestState.marker].filter(Boolean).join('; ');
     const paymentChanged = paymentStatus && paymentStatus !== String(current[22] || '').trim();
+    const paymentTypeChanged = hasPaymentType && paymentType !== String(current[27] || '').trim();
     const orderChanged = orderStatus && orderStatus !== String(current[23] || '').trim();
     const ttnChanged = Object.prototype.hasOwnProperty.call(payload, 'ttn') && ttn !== String(current[25] || '').trim();
     const packagingChanged = packagingType && crmPackagingComparisonKey_(packagingType) !== crmPackagingComparisonKey_(currentPackagingType);
@@ -9592,7 +9603,8 @@ function apiUpdateSaleWithComponents_(ss, payload) {
     const hasDelivery = Object.prototype.hasOwnProperty.call(payload, 'shop_delivery') && String(payload.shop_delivery) !== '';
     const shopDelivery = hasDelivery ? Math.max(0, apiNum_(payload.shop_delivery)) : null;
     if (packagingType && !isKnownCrmPackagingType_(packagingType)) throw new Error('Недійсний тип паковання. Онови дашборд і вибери значення зі списку.');
-    if (!paymentChanged && !orderChanged && !ttnChanged && packaging === null && shopDelivery === null && !noteChanged && !componentRequested && !fixtureRequested && !raw3dpModes.length && !fiscalChanged) throw new Error('nothing changed');
+    if (hasPaymentType && CRM_PAYMENT_TYPES_.indexOf(paymentType) === -1) throw new Error('Недійсний тип оплати. Онови дашборд і вибери значення зі списку.');
+    if (!paymentChanged && !paymentTypeChanged && !orderChanged && !ttnChanged && packaging === null && shopDelivery === null && !noteChanged && !componentRequested && !fixtureRequested && !raw3dpModes.length && !fiscalChanged) throw new Error('nothing changed');
     // Status/payment, fixture, and 3D-mode changes can alter the base line cost.
     // A component-only save reprojects its own frozen ledger after it is written;
     // it does not need to recalculate the whole order before that write.
@@ -9610,9 +9622,10 @@ function apiUpdateSaleWithComponents_(ss, payload) {
     // Repair only the known CRM-004 validation defect and do it before any sale, gift,
     // component, or fixture mutation. A retry therefore remains append-idempotent.
     const packagingValidation = packagingChanged ? ensureCrmPackagingValidation_(ss) : null;
-    progress.fields_updated = paymentChanged || orderChanged || ttnChanged || packaging !== null || shopDelivery !== null || noteChanged || fiscalChanged || reservationFormula.updated > 0;
+    progress.fields_updated = paymentChanged || paymentTypeChanged || orderChanged || ttnChanged || packaging !== null || shopDelivery !== null || noteChanged || fiscalChanged || reservationFormula.updated > 0;
     rows.forEach(function(row, index) {
       if (paymentChanged) sales.getRange(row, 23).setValue(paymentStatus);
+      if (paymentTypeChanged) sales.getRange(row, 28).setValue(paymentType);
       if (orderChanged) sales.getRange(row, 24).setValue(orderStatus);
       if (ttnChanged) sales.getRange(row, 26).setValue(ttn);
       if (packaging !== null) { sales.getRange(row, 16).setValue(packagingAllocations[index]); sales.getRange(row, 29).setValue(packagingType); }

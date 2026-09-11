@@ -2654,7 +2654,7 @@ async function loadFinance(force){
     document.getElementById('financeCashflow').innerHTML='<div class="crm011-note" style="margin-bottom:10px"><b>Період:</b> '+periodText+'. Надходження — оплачені замовлення за датою оплати. Відтік — поповнення ZenMarket та фактичні витрати CRM за їхньою датою.</div>'+(cashflowReady?financeRows_([['Надходження від клієнтів',cf.cash_in,'money','',undefined,compared(ccf,'cash_in')],['Поповнення ZenMarket',cf.inventory_topups,'money','deduction','down',compared(ccf,'inventory_topups')],['Сума поповнень у єнах',cf.inventory_topups_jpy,'jpy','deduction','down',compared(ccf,'inventory_topups_jpy')],['Розхідники й пакування',cf.consumables,'money','deduction','down',compared(ccf,'consumables')],['Маркетинг і реклама',cf.marketing,'money','deduction','down',compared(ccf,'marketing')],['Операційні витрати',cf.operating,'money','deduction','down',compared(ccf,'operating')],['Інші фактичні витрати',cf.other,'money','deduction','down',compared(ccf,'other')],['Увесь відтік',cf.cash_out,'money','subtotal','down',compared(ccf,'cash_out')],['Чистий рух грошей',cf.net_cashflow,'money','total',undefined,compared(ccf,'net_cashflow')]])+cashflowGapNote+'<div class="crm011-note"><b>Чистий рух грошей</b> = усі отримані від клієнтів гроші мінус поповнення ZenMarket та інші фактичні виплати за обраний період. Плюс означає, що отримали більше, ніж витратили; мінус — витратили більше, ніж отримали. Це рух грошей, а не бухгалтерський прибуток. Розрахункових дат надходжень: '+(cf.cash_in_approximated_rows||0)+'. Розрахункових конвертацій ZenMarket: '+(cf.inventory_topups_approximated_rows||0)+'. Якщо імпорт поповнень ще не виконано, відтік і чистий рух показуються як «Немає даних», а не як нуль.</div>':'<div class="crm011-note">Ця версія CRM API віддає надходження, але ще не віддає повний відтік коштів. Повний блок зʼявиться після публікації Pass B; відсутні поля не трактуються як нулі.</div>');
     document.getElementById('financeCustomers').innerHTML=financeCustomerMix_(d.customer_mix||{});
     const quality=d.data_quality||{};
-    document.getElementById('financeQuality').textContent='Незакриті передзамовлення виключено з фінансів. Відсутні дані не трактуються як нуль. Неоцінених списань: '+(quality.writeoff_missing_value_rows||0)+'. Списань, уже включених у собівартість замовлень і тому не віднятих повторно: '+(quality.linked_order_writeoffs_excluded||0)+'. Рядків чистого прибутку звірено: '+(quality.reconciliation_rows_checked||0)+'; розбіжностей: '+(quality.reconciliation_mismatches||0)+'. Завантаження: '+dashboardPerf.lastFinanceMs+' мс; запитів у сеансі: '+dashboardPerf.requests+'; обʼєднано дублів: '+dashboardPerf.deduped+'.';
+    document.getElementById('financeQuality').textContent='Незакриті передзамовлення виключено з фінансів. Відсутні дані не трактуються як нуль. Неоцінених списань: '+(quality.writeoff_missing_value_rows||0)+'. Списань, уже включених у собівартість замовлень і тому не віднятих повторно: '+(quality.linked_order_writeoffs_excluded||0)+'. Передзамовлень із розрахунковою датою визнання: '+(quality.recognition_fallback_orders||0)+'. Замовлень із конфліктом ідентифікації: '+(quality.identity_conflict_orders||0)+'. Рядків чистого прибутку звірено: '+(quality.reconciliation_rows_checked||0)+'; розбіжностей: '+(quality.reconciliation_mismatches||0)+'. Завантаження: '+dashboardPerf.lastFinanceMs+' мс; запитів у сеансі: '+dashboardPerf.requests+'; обʼєднано дублів: '+dashboardPerf.deduped+'.';
   }
   catch(e){showError(e.message);document.getElementById('financeQuality').textContent='Очікується публікація CRM-011 API.';}
 }
@@ -5020,6 +5020,11 @@ function recSelect(id, label, value, options) {
   return html + '</select></div>';
 }
 
+function paymentTypeOptions_(current) {
+  const value = String(current || '').trim();
+  return value && PAYMENT_TYPES.indexOf(value) === -1 ? [value].concat(PAYMENT_TYPES) : PAYMENT_TYPES;
+}
+
 function editFixtureOptions_(){return '<option value="">Не списувати фурнітуру</option>'+accountingState.fixtureCatalog.map(function(item){return '<option value="'+recEsc(item.selection)+'">'+recEsc(item.name+' · платник '+item.payer+' · склад '+item.stock+' · с/в '+fmt(item.unit_cost)+'/шт')+'</option>';}).join('');}
 function editTargetOptions_(only3dp){const lines=accountingState.editContext&&accountingState.editContext.lines||[];return '<option value="">'+(only3dp?'Оберіть 3D-рядок':'На все замовлення')+'</option>'+lines.filter(function(line){return !only3dp||line.is_3dp;}).map(function(line){return '<option value="'+Number(line.crm_row)+'" data-sku="'+recEsc(line.sku)+'">'+recEsc(line.sku+' · '+(line.name||'без назви')+' · '+line.qty+' шт')+'</option>';}).join('');}
 function editComponentOptions_(selectId,query){const select=document.getElementById(selectId);if(!select)return;const q=String(query||'').toLowerCase().trim();const rows=accountingState.componentCatalog.filter(function(item){return !q||String(item.name+' '+item.code+' '+item.kind).toLowerCase().includes(q);});select.innerHTML=rows.map(function(item){const mystery=item.kind==='3D-P'?(item.mystery_eligible?' · mystery ✓':' · mystery —'):'';return '<option value="'+recEsc(item.id)+'">'+recEsc(item.kind+' · '+item.name+(item.code!==item.name?' ('+item.code+')':'')+' · склад '+item.stock+' · с/в '+fmt(item.mgmt_unit)+'/шт'+mystery)+'</option>';}).join('');}
@@ -5037,7 +5042,7 @@ async function openEditRow(type, rowIndex) {
   });
   if (!row) return;
   if (type !== 'sales') return;
-  accountingState.edit = { type: type, row_index: Number(row.row_index), order_id: row.order_id };
+  accountingState.edit = { type: type, row_index: Number(row.row_index), order_id: row.order_id, payment_type: String(row.payment_type || '').trim() };
   const activePane = document.getElementById(recPaneId(accountingState.activeRecTab));
   const host = activePane ? activePane.querySelector('.edit-row-host') : null;
   if (!host) return;
@@ -5053,7 +5058,8 @@ async function openEditRow(type, rowIndex) {
   if (type === 'sales') {
     fields += recReadOnly('ТТН / замовлення', (row.ttn ? 'ТТН ' + row.ttn + ' | ' : '') + row.order_id);
     fields += recReadOnly('Поточний статус оплати', row.payment_status);
-    fields += recReadOnly('Тип оплати', row.payment_type);
+    fields += recSelect('editPaymentType','Фактичний тип оплати',row.payment_type,paymentTypeOptions_(row.payment_type));
+    fields += '<div class="field-hint">Зміна перераховує тариф комісії за формулами CRM для всього замовлення.</div>';
     fields += recReadOnly('Сума замовлення', fmt(row.amount));
     fields += recSelect('editPaymentStatus','Новий статус оплати',row.payment_status,['Не оплачено','Оплачено','Повернення','Скасовано']);
     fields += recReadOnly('Поточний статус замовлення', row.order_status);
@@ -5101,6 +5107,7 @@ async function saveEditRow() {
   const payload = { action:'update_sale', row_index:edit.row_index, payment_status:editValue('editPaymentStatus'),
     order_status:editValue('editOrderStatus'), ttn:editValue('editTtn'), packaging_type:editValue('editPackagingType'),
     note:editValue('editNote'),fiscal_receipt:fiscalConfirmed,components:components,fixtures:fixtures,three_dp_lines:threeDpLines };
+  if (editValue('editPaymentType') !== String(edit.payment_type || '').trim()) payload.payment_type = editValue('editPaymentType');
   if (editValue('editCustomPackaging') !== '') payload.custom_packaging_cost = Number(editValue('editCustomPackaging'));
   if (editValue('editShopDelivery') !== '') payload.shop_delivery = Number(editValue('editShopDelivery'));
   accountingState.editRequestId=pendingOrderEditRequestId_(edit.order_id,payload);payload.request_id=accountingState.editRequestId;
