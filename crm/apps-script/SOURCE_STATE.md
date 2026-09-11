@@ -1,3 +1,25 @@
+# CRM-012 baseline — V173 BYTE-VERIFIED (2026-09-11)
+
+The owner export `Версія 173, 11 вер. 2026 р., 1745` is byte-identical to
+`crm/apps-script/Code.gs` (10,646 lines) apart from one regex literal whose
+escaped quotes the CSV export format itself consumes — the same known artefact
+recorded for V171. It contains `setupCrm012RevenueRecognition`,
+`crm012RepairLot0181AfterOwnerApproval` and the `Постачальник` purchase-form
+field, so it is the CRM-012 head and not a stale snapshot.
+
+The first file sent under this label was byte-identical to the V171 export and
+carried none of that code. Before trusting any export, confirm it contains a
+string introduced only by the newest round; a version number in a filename is
+not evidence.
+
+Two temporary files were deleted from the live project before this export:
+`TEMP_CRM012_LOT0181_repair_20260911` and
+`TEMP_CRM012_3dp_name_divergence_summary_20260911`. Neither appears in the
+export or the mirror.
+
+Prefer `.gs`/`.txt` exports: the `.csv` form must be parsed as CSV and is lossy
+for lines containing double quotes.
+
 # Main CRM Apps Script — repository mirror state
 
 ## CRM-012 baseline — V171 BYTE-VERIFIED (2026-09-10)
