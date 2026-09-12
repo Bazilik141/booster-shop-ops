@@ -180,6 +180,13 @@ Rules:
 4. A mirror must never contain tokens. Both projects keep secrets in Script Properties; if a token
    appears in an export, stop and tell the owner rather than committing it.
 
+### Temporary maintenance scripts
+
+- Any one-time or task-specific repair/maintenance code must be created as a separate HTML file
+  named exactly after the task ID.
+- Do not add such code to existing production scripts.
+- After successful execution and verification, remove the task action from the Sheet API.
+
 ## CRM integrity check (OPS-CRMINTEGRITY, owner decision 2026-08-09)
 
 Any change that alters main-CRM sheet structure, adds or removes a row in
