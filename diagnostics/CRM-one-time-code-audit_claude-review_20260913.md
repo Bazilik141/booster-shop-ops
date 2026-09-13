@@ -337,3 +337,137 @@ So: **move** the block — `setupCrm011ZenMarketAccount`, `crm011ZenEnsureSheet_
 project, where it stays callable and both messages stay true. Do not delete it
 live. This is the same distinction as Question 4: a completed one-off repair is
 spent; a setup function is a standing recovery tool.
+
+---
+
+# Addendum 2 — 2026-09-13: the cleanup candidate itself
+
+Reviewed `diagnostics/CRM-one-time-main-code-cleanup_report_20260913.md`
+against the mirror (`Code.gs`, 643,353 bytes, 10,228 lines, staged
+2026-09-13 22:37) and 17 of the 31 test files.
+
+Verdict: **Review OK. Publish.** Two returned items, neither blocking, plus one
+adjacent finding for the next wave.
+
+## Deletion scope proved by count, not by reading the report
+
+Top-level function definitions now: **575**.
+
+V177 had 601 by the same anchored `^function name(` count; V178 added
+`crm011ZenValidateSheet_` → 602. The five removed families name exactly 27
+functions — 11 stock-counting (9 private helpers, 2 public wrappers), 8 FIFO,
+2 CRM-011 setup, 2 CRM-012 setup, 4 CRM-012 fixed targets.
+
+```
+602 − 27 = 575
+```
+
+Exact. Nothing was removed beyond the declared list, and nothing on the list
+was missed.
+
+Line arithmetic agrees independently: 10,722 → 10,228 = −494. The eight
+declared blocks total 483 lines in V177 numbering; one separating blank line
+each is 491; the three-line comment above `CRM011_CLIENT_RULES_` that was
+rewritten accounts for the remaining 3. No unexplained lines.
+
+## Verified directly
+
+- **No orphans.** All 27 deleted functions plus `CRM_STOCK_COUNTING_REPAIR_MARKER_`
+  and the four `CRM011_FIFO_COST_*` constants are absent from `Code.gs`, from
+  `booster-dashboard.html`, and from every test file.
+- **No danglers.** A full call-graph scan of `Code.gs` resolves every called
+  identifier to a definition. `new Function(source)` parses clean, which also
+  proves the FIFO block's closing brace at 9277 went with it.
+- **Keep list intact.** Present and unchanged: the V178 validator;
+  `setupCrm011ZenMarketAccount` with `crm011ZenEnsureSheet_` and
+  `crm011ZenHistoricalRows_`; `crm011ZenMarketVerificationForOwner` (the gate
+  command itself); `crm012ZenMissingTopupUah_`; `crm011StampRowsOnce_`,
+  `crm011HeaderColumn_`, `crm011RequireColumn_`; the recognition family
+  (`crm012SalesRecognitionColumns_`, `crm012RecognitionDateForSalesRow_`,
+  `crm012SalesReadWidth_`); `apiPaymentDateAudit_` and both read-only owner
+  diagnostics; the four older setup wrappers; `tgSetupCommands` and
+  `testNewsEditorialAudit` correctly deferred; and all four installed trigger
+  handlers.
+- **Error-message rewrite correct.** `crm011RequireColumn_` (`Code.gs:9456`) now
+  raises `CRM_SCHEMA_REQUIRED: … потрібне окреме owner-approved відновлення
+  структури CRM` and names no deleted function.
+- **Both dedicated test files removed**; no surviving test asserts on a deleted
+  symbol.
+- **Wider test run than the report's.** 17 of 31 files here: 40/42 subtests
+  pass. The two failures are `ENOENT` on `.gs` fixtures I did not stage
+  (`TEMP_CRM_COST_0355_repair_20260901.gs`,
+  `one-time/CRM-011_followup_data_import_20260908.gs`); both files exist on the
+  owner's disk. Not cleanup damage.
+
+## Returned 1 — the rewritten comment does not parse
+
+`Code.gs:9429-9431`:
+
+> // CRM-011: finance and client analytics. Keep all reads bounded to one pass per
+> // sheet; mutation helpers refuse to run until the owner adds the append-only
+> // **date columns are append-only schema fields maintained by the CRM.**
+
+The replacement was spliced into the middle of the old sentence instead of
+replacing it. The result is not a sentence, and its surviving first half still
+promises a setup step that no longer exists. Rewrite the whole comment in the
+same patch — the date columns are permanent schema, and a missing one needs
+owner-approved recovery.
+
+## Returned 2 — the test run is too narrow for the blast radius
+
+The report ran 5 test files. The deletions span lines 3975 to 10138 of the
+pre-cleanup file and touch stock counting, FIFO costing, finance schema,
+recognition and ZenMarket. Run **all 31 test files** before publishing. My 17
+are evidence, not a substitute.
+
+## Adjacent — rule 5 is already violated outside `Code.gs`
+
+The audit's scope was `Code.gs` alone, so it never looked at the directory
+around it. Its own rule 5 — every temporary repair lives in a task-named file
+and is deleted locally and live once its run is verified — is already broken by
+three standing files:
+
+```
+crm/apps-script/TEMP_CRM_COST_0355_repair_20260901.gs            7,671 B
+crm/apps-script/TEMP_CRM_COST_0355_order_repair_V2_20260901.gs   8,444 B
+crm/apps-script/one-time/CRM-011_followup_data_import_20260908.gs  11,456 B
+```
+
+Each is pinned by a live test, so none can be removed on its own. More
+importantly: if any of them is **also still present in the bound Apps Script
+project**, it is a standing writer in production — the same class of risk this
+cleanup just removed from `Code.gs`. Read the project's file list while
+publishing and record it. (`archive/one-off-migrations_20260813.gs` is
+correctly filed under `archive/` and is not part of this.)
+
+## Pre-existing, untouched, still open
+
+Two shadowing duplicate top-level declarations survive: `apiAddSale_` at
+`3190` and `4099`, `getDirectOrderExpense_` at `4379` and `9174`. In each pair
+the later definition wins and the earlier minified one is unreachable. Neither
+was in the deletion set, so this is not a cleanup defect — but a main-file
+hygiene round that leaves two dead shadowed functions in place has not finished
+the job. Fold them into the next wave with the three files above.
+
+## Baseline hashes — record these in `SOURCE_STATE.md`
+
+So the post-publication identity check is one comparison instead of another
+reconstruction:
+
+| Source | Normalized SHA-256 | Lines |
+| --- | --- | ---: |
+| V177, owner byte-verified | `5eaf9171fdfd4be5edf05c2037939e2fa16bd3a41fdcb72b5408604241fb8a5a` | 10,704 |
+| V178 as published (V177 + validator; derived and verified in review) | `1a7f76a6253594bc83d9430164cf9cf95fa1321c6d525d9750297a61c903feac` | 10,722 |
+| This cleanup candidate | `d905f11610e792bce3e94c7821269ede7f38572ad574159850493f9afdf28e41` | 10,228 |
+
+Normalization is: strip UTF-8 BOM, convert CRLF and CR to LF. The export taken
+after publishing must reduce to the third hash.
+
+## Gate
+
+The report's five steps are correct. Add two:
+
+- **Before step 2** — run all 31 test files, not 5, and fix the comment above.
+- **After step 5** — export the published source and confirm it normalizes to
+  `d905f116…f28e41`. That closes the identity gap V178 currently carries, since
+  V178 was never byte-exported.
