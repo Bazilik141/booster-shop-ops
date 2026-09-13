@@ -4,7 +4,7 @@ version: v1-draft
 date: 2026-09-13
 status: DRAFT — all blocking decisions closed 2026-09-13, Appendix A approved.
         Two non-blocking follow-ups open (§14). Ready to be put in force.
-supersedes: 01_CORE_SKILL.md v11.1, 06_3D_SKILL.md v11.1, 08_QA_SKILL.md v11.1 (treated as v0.5)
+supersedes: docs/canon/v0.5/01_CORE_SKILL.md, 06_3D_SKILL.md, 08_QA_SKILL.md (edition 2026-08-29 v11.1)
 ---
 
 # Booster Shop Content Canon v1 — draft
@@ -13,9 +13,9 @@ supersedes: 01_CORE_SKILL.md v11.1, 06_3D_SKILL.md v11.1, 08_QA_SKILL.md v11.1 (
 
 Three inputs were merged:
 
-1. **v0.5** — the ChatGPT skills `01_CORE_SKILL.md`, `06_3D_SKILL.md`, `08_QA_SKILL.md`
-   (edition 2026-08-29 v11.1). Good principles, weakly enforced: the 52 live cards in the
-   owner archive violate them almost uniformly.
+1. **v0.5** — the ChatGPT skills archived at `docs/canon/v0.5/`: `01_CORE_SKILL.md`,
+   `06_3D_SKILL.md`, `08_QA_SKILL.md` (edition 2026-08-29 v11.1). Good principles, weakly
+   enforced: the 52 live cards in the owner archive violate them almost uniformly.
 2. **Owner re-scoring, 2026-09-13** — free-form judgement of 52 live cards. This is the only
    direct evidence of what "good" means here, and it is what v1 is calibrated against.
 3. **The live news pipeline** in `crm/apps-script/Code.gs` (`newsDigest`, `newsAuditTelegramDraft_`,
