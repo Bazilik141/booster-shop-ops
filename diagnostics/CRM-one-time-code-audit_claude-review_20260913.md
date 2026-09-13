@@ -221,3 +221,119 @@ worth doing in this round.
 4. Publish the ZenMarket validator/setup split on its own, with integrity before/after.
 5. Only then: the confirmed-spent deletion patch, plus the three unclassified
    entries above, plus the error/hint text each deletion invalidates.
+
+---
+
+# Addendum — 2026-09-13, later: ZenMarket read-only validator candidate
+
+Reviewed `diagnostics/CRM-zenmarket-read-only-validator_report_20260913.md`
+against the mirror (`Code.gs`, 680,103 bytes, staged 2026-09-13 18:57).
+
+Verdict: **Review OK. Publish it — with one correction to the publication gate.**
+
+## Blocker A1 is closed, and closed properly
+
+`SOURCE_STATE.md` now records **V177 BYTE-VERIFIED (2026-09-13)**, normalized
+SHA-256 `5eaf9171…fb8a5a`, 10,704 lines, plus the CRM-013 cache outcome as it
+actually stands live (`value_too_large`, no gzip, no shards). That is the fresh
+export A1 required, and it closes the V173→V176 recording gap.
+
+Two further gaps from the main review are also closed with evidence:
+
+- **Installed triggers read from the project UI**: `maintainCrmRowCapacity`,
+  `runNightlyInventoryMaintenance`, `keepWarm`, `runNewsPruneOnce`. No deletion
+  candidate is among them. That was the one reachability dimension neither the
+  audit nor this review could prove statically.
+- **`previewCrm011OcFop0324Repair()` was run**: `Продажі!289`,
+  `would_change:false`, `already_applied:true`, both sides 551.90 / 585.01.
+  Question 2 is resolved as "spent"; the FIFO block joins the deletion wave and
+  needs no temporary wrapper. The line-range correction still stands: delete
+  **9136–9277**, not 9136–9276.
+
+## Scope of the diff — proven, not asserted
+
+Independently verified rather than taken from the report: reversing only the
+validator change in the current mirror — restoring the three
+`crm011ZenEnsureSheet_` calls inside `crm011ZenRequireSetup_`, deleting
+`crm011ZenValidateSheet_` and its two comment lines — reproduces exactly
+
+```
+5eaf9171fdfd4be5edf05c2037939e2fa16bd3a41fdcb72b5408604241fb8a5a
+```
+
+at 10,703 + 1 lines. The ZenMarket validator split is therefore the **only**
+change to `Code.gs` since live V177. Nothing else rides along in this paste.
+
+## The change itself
+
+Correct and minimal. `crm011ZenValidateSheet_` (`Code.gs:9913-9927`) reads and
+throws only. `crm011ZenRequireSetup_` (`9929-9939`) routes all three sheets
+through it. `crm011ZenEnsureSheet_` retains the writes but is now referenced
+only from `setupCrm011ZenMarketAccount()` (`9963-9965`) — no orphan, no second
+schema writer. The GET→`setValue` path documented in Question 3 is gone.
+
+The only behavioural delta is the append-only branch for
+`ZenMarket_Поповнення`: blank header cell, previously `setValue`, now throw.
+The strict branches for `ZenMarket_Рахунок` and `ZenMarket_Лоти` are unchanged —
+they threw on any mismatch before and still do.
+
+## Returned defect — the publication gate does not test what changed
+
+The gate's step 3 is "open Finance once, run `integrity_check`". That step
+**cannot fail**, whatever the sheet headers look like.
+
+`crm011ZenBalanceSnapshot_` (`Code.gs:10207-10213`) wraps its
+`crm011ZenRequireSetup_` call in `try/catch` and returns
+`{ available: false, setup_required… }` on any throw. Finance degrades to the
+"run setup once" hint (`booster-dashboard.html:2642`) and renders normally. So
+the one page the gate exercises is the one page that swallows the new error.
+
+Every other caller is unwrapped and now fails hard where it used to self-heal:
+`addPurchase` (138), `updatePurchase` (250), `apiUpdatePurchaseBatch10_` (3345),
+`crm011ZenmarketTopup_` (10048), `crm011ZenmarketCorrectBalance_` (10074),
+`crm011ZenEnsurePurchaseBaselines_` (10172), `crm011ZenSyncPurchaseLots_`
+(10186), `crm011ZenMarketVerificationForOwner` (10215), `crm011ApiAddPurchase_`
+(10252). A single blank header cell in `ZenMarket_Поповнення` would block the
+ZenMarket purchase path entirely while Finance keeps looking fine.
+
+Residual risk is low — on live V177 the old self-heal has already written any
+blank header permanently, and a *wrong* non-blank header would have thrown
+under the old code too. But low is not verified.
+
+### Corrected gate
+
+1. **Before publishing** — look at row 1 of `ZenMarket_Поповнення`. All ten
+   cells must be non-empty and read exactly: `Payment ID | Дата | Сума JPY |
+   Курс JPY за 1 UAH | Сума UAH | Gateway | Джерело оцінки | Примітка |
+   Request ID | Створено`. If any cell is blank, run
+   `setupCrm011ZenMarketAccount()` first, on the current live version.
+2. Paste and publish the reviewed candidate.
+3. `apiIntegrityCheck_()` — expect clean.
+4. **`crm011ZenMarketVerificationForOwner()` — expect `ok: true`.** This is the
+   step the report is missing: it is the only single command that runs the new
+   validator on all three sheets without a `try/catch` in front of it.
+5. Open Фінанси once and confirm the ZenMarket KPI still shows a real JPY
+   balance, not the "run setup once" hint. A hint there means step 4 lied or
+   was skipped.
+
+Report step 4 — never manufacture a broken header in production to test the
+failure path — is correct and should stay.
+
+## One correction to the report's closing sentence
+
+The report ends "…before this candidate becomes live **or the Zen setup/seed
+code can be deleted**." Deleted is the wrong word for this block.
+
+`setupCrm011ZenMarketAccount()` is now the sole schema writer *and* the recovery
+route named in two live strings: the validator's own
+`ZENMARKET_SETUP_REQUIRED` (`9933`) and the dashboard hint
+(`booster-dashboard.html:2642`). The historical seed is not separable from it
+either — `crm011ZenHistoricalRows_()` doubles as the re-run guard
+(`setupCrm011ZenMarketAccount` requires `ZEN-HIST-000` and `ZEN-HIST-011` to be
+present before it will accept a non-empty ledger).
+
+So: **move** the block — `setupCrm011ZenMarketAccount`, `crm011ZenEnsureSheet_`,
+`crm011ZenHistoricalRows_` — to its own file inside the same Apps Script
+project, where it stays callable and both messages stay true. Do not delete it
+live. This is the same distinction as Question 4: a completed one-off repair is
+spent; a setup function is a standing recovery tool.
