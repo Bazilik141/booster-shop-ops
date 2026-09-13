@@ -44,3 +44,23 @@ work/TCGCardShopSimulatorUA-runtime-smoke/
 # Extracted production database backup — live customer and order data.
 # The .tar.gz itself is already ignored above; the unpacked copy was not.
 work/crm-0336-source/
+
+# Patch backup directories created by patch runners — working artefacts, never history.
+# Added 2026-08-28 after work/pay002-wp2-fixture/_patch_backups/ was committed by accident.
+_patch_backups/
+**/_patch_backups/
+
+# --- Added 2026-09-13: data exports must never enter history ---
+
+# Database dumps (live customer, order and payment data).
+# *.tar.gz was already ignored above; compressed SQL dumps were not.
+*.sql
+*.sql.gz
+*.sql.bz2
+*.sql.xz
+
+# Owner data exports dropped in the repo root: CRM sheet version snapshots,
+# Zenmarket payment pages, marketplace downloads. Working inputs, not source.
+/*.csv
+/*.txt
+/*.html
