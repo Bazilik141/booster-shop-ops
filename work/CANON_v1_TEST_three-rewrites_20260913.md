@@ -200,10 +200,11 @@ that is a real purchase consideration the card never surfaced).
 вкладиш; разом усі п'ять стикуються в одну панораму. Ця бляшанка — з Salamence і Litleo на
 кришці.</p>
 
-<p>Усередині фіксований набір: два бустери Pokémon TCG, аркуш наліпок із тими самими
-персонажами та картка-ілюстрація з артом саме цієї бляшанки. Фіксована тут лише комплектація —
-вміст самих бустерів випадковий, як і завжди, залежить від виробника, тож конкретні карти чи
-рідкісності не гарантуються.</p>
+<p>Усередині фіксований набір: два бустери Pokémon TCG по 10 карт і одній базовій енергії,
+аркуш наліпок із тими самими персонажами, картка-ілюстрація з артом саме цієї бляшанки та
+код-картка для Pokémon TCG Live. Фіксована тут лише комплектація — вміст самих бустерів
+випадковий, як і завжди, залежить від виробника, тож конкретні карти чи рідкісності не
+гарантуються.</p>
 
 <p>Металева бляшанка лишається й після того, як бустери відкриті, тому Mini Tin частіше беруть
 як недорогий подарунок або як спосіб спробувати англомовні бустери, не заходячи одразу на цілий
@@ -260,19 +261,38 @@ panorama. That is the reason a collector buys more than one, and it was buried.
 
 ---
 
-## 4. Unverified facts — do not publish these two cards until closed
+## 4. Lumiose Mini Tin — package checked 2026-09-14, one gap remains
 
-**Lumiose Mini Tin, which two boosters are inside.** The live card states one
-`Mega Evolution — Perfect Order` and one `Mega Evolution — Chaos Rising`. The official product
-gallery is behind a bot wall and retail listings say only "2 Pokémon TCG Booster Packs" without
-naming expansions. Under §2 source hierarchy this is a first-party fact the owner can read off
-the package in his hand — but it is not re-authorized just because the live page already says it.
-Confirm from the box, then the FAQ answer above gets written and both boosters get internal links
+Owner photographed the back of the tin. Read directly off the label, so first-party and final:
+
+> In this Pokémon TCG: Lumiose City Mini Tin, you'll find: 2 Pokémon TCG booster packs · 1 sticker
+> sheet · A Pokémon art card showing the art from this Mini Tin — you can collect and combine all
+> 5! · A code card for Pokémon TCG Live
+>
+> Each Pokémon TCG booster pack contains [1]0 cards, 1 Basic Energy, and 1 Pokémon T[CG Live code
+> card]. **Booster packs vary by product.**
+
+Age rating 6+. Manufactured by The Pokémon Company International; printed in the Netherlands,
+Hungary and the Czech Republic, tin made in China.
+
+**Closed:** the code card is real — the live card was right, and it is now in the body, in
+Ukrainian per §5.1 (`код-картка для Pokémon TCG Live`). Pack composition 10 cards + 1 Basic
+Energy is also confirmed and now stated.
+
+**Still open — which two expansions.** The label does not name them in the legible portion; it
+says only "Booster packs vary by product", and the line that appears to name something in quotes
+is obscured by a price sticker and a thumb, ending `…ds" booster packs`. The live card's claim of
+one `Mega Evolution — Perfect Order` and one `Mega Evolution — Chaos Rising` therefore stays
+unverified and stays out of the copy.
+
+Two ways to close it: a clearer photo of that lower paragraph with the sticker moved, or opening
+one tin. Once closed, FAQ item 1 gets its answer and both boosters get internal links
 (`/product/Pokemon-Perfect-Order-Booster-EN`, `/product/Pokemon-Chaos-Rising-Booster-EN`).
 
-**Lumiose Mini Tin, the code card.** The live card claims `1 кодова картка для Pokémon TCG Live`.
-No retail listing found mentions a code card for this tin. Same check, same source. It is
-deliberately absent from the rewrite above.
+Worth noting for the canon: "Booster packs vary by product" is the manufacturer explicitly
+declining to fix the contents. If that sentence applies to this tin rather than to the Mini Tin
+line in general, then naming two specific expansions would be wrong even if one opened tin
+contained them — a single sample would not establish the rule.
 
 ---
 
