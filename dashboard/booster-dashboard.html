@@ -728,6 +728,11 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
       <div class="section-header"><span class="section-title">Команди CRM</span><div id="crmMaintenanceMessage" class="records-message"></div></div>
       <div class="settings-command-grid" id="crmMaintenanceCommands"></div>
     </div>
+    <div class="section">
+      <div class="section-header"><span class="section-title">Телеметрія завантаження CRM-013</span><div class="form-actions"><button class="btn-secondary" type="button" onclick="copyCrmLoadTelemetry()">Скопіювати JSON</button><button class="btn-secondary" type="button" onclick="clearCrmLoadTelemetry()">Очистити</button></div></div>
+      <div class="three-dp-note">Локальний журнал останніх 60 GET: час черги, мережі й рендеру, серверний час, cache hit, розмір відповіді та дедуплікація. Без токенів, параметрів і рядків таблиць.</div>
+      <div id="crmLoadTelemetry" style="margin-top:12px"></div>
+    </div>
     <div id="crmIntegrityDetail" style="display:none"></div>
     <div class="section">
       <div class="section-header"><span class="section-title">Цілісність CRM</span><button id="crmIntegrityButton" class="btn-primary" type="button" onclick="runCrmIntegrityCheck()">Перевірити CRM</button></div>
@@ -800,23 +805,38 @@ function ensureCrmToken_() {
 // ════════════ API ════════════
 const inflightGets = new Map();
 const dashboardPerf = { requests:0, deduped:0, lastFinanceMs:null };
+const CRM013_LOAD_TELEMETRY_LIMIT = 60;
+const crmLoadTelemetryState = { entries: [] };
+function crmLoadTelemetryPage_() { const active=document.querySelector('.page.active');return active ? active.id.replace('page-','') : 'unknown'; }
+function crmLoadTelemetryRound_(value) { const number=Number(value);return Number.isFinite(number) ? Math.max(0,Math.round(number)) : null; }
+function crmLoadTelemetryBytes_(text) { try { return new TextEncoder().encode(String(text || '')).length; } catch (e) { return String(text || '').length; } }
+function crmLoadTelemetryRecord_(entry) { crmLoadTelemetryState.entries.unshift(entry);if(crmLoadTelemetryState.entries.length>CRM013_LOAD_TELEMETRY_LIMIT)crmLoadTelemetryState.entries.length=CRM013_LOAD_TELEMETRY_LIMIT;renderCrmLoadTelemetry(); }
+function renderCrmLoadTelemetry() { const root=document.getElementById('crmLoadTelemetry');if(!root)return;const rows=crmLoadTelemetryState.entries;if(!rows.length){root.innerHTML='<div class="crm011-note">Ще немає вимірів у цьому сеансі.</div>';return;}const cell=function(value){return value==null?'—':threeDpEsc(value);};root.innerHTML='<div class="tbl-wrap"><table><tr><th>Час</th><th>Сторінка</th><th>Дія</th><th>Черга</th><th>Мережа</th><th>Рендер</th><th>Сервер</th><th>Кеш</th><th>Байт</th><th>Дедуп</th><th>Стан</th></tr>'+rows.map(function(row){const cacheState=row.cache_state||(row.cache_hit==null?'—':row.cache_hit?'hit':'miss');return '<tr><td>'+cell(row.at)+'</td><td>'+cell(row.page)+'</td><td><code>'+cell(row.action)+'</code></td><td>'+cell(row.queue_ms)+'</td><td>'+cell(row.network_ms)+'</td><td>'+cell(row.render_ms)+'</td><td>'+cell(row.server_elapsed_ms)+'</td><td>'+cell(cacheState)+'</td><td>'+cell(row.response_bytes)+'</td><td>'+cell(row.deduped?'так':'ні')+'</td><td>'+cell(row.ok?'ok':'error')+'</td></tr>';}).join('')+'</table></div>'; }
+async function copyCrmLoadTelemetry() { const payload=JSON.stringify({ action:'crm013_load_telemetry', entries:crmLoadTelemetryState.entries },null,2);try{if(navigator.clipboard&&navigator.clipboard.writeText)await navigator.clipboard.writeText(payload);else throw new Error('clipboard unavailable');}catch(e){window.prompt('Скопіюй JSON телеметрії:',payload);} }
+function clearCrmLoadTelemetry() { crmLoadTelemetryState.entries=[];renderCrmLoadTelemetry(); }
+function crmLoadTelemetryAfterPaint_(entry, parsedAt) { const finish=function(){entry.render_ms=crmLoadTelemetryRound_(performance.now()-parsedAt);crmLoadTelemetryRecord_(entry);};if(typeof requestAnimationFrame==='function')requestAnimationFrame(finish);else setTimeout(finish,0); }
 async function call(action, extra = {}) {
   if (!ensureCrmToken_()) throw new Error('CRM API token не налаштовано.');
   const inflight = typeof inflightGets === 'undefined' ? (call._inflight || (call._inflight = new Map())) : inflightGets;
   const perf = typeof dashboardPerf === 'undefined' ? (call._perf || (call._perf = { requests:0, deduped:0 })) : dashboardPerf;
+  const now=function(){return typeof performance!=='undefined'&&performance&&typeof performance.now==='function'?performance.now():Date.now();}, report=function(item,parsedAt){if(typeof crmLoadTelemetryAfterPaint_==='function')crmLoadTelemetryAfterPaint_(item,parsedAt);}, page=typeof crmLoadTelemetryPage_==='function'?crmLoadTelemetryPage_():'unknown', round=typeof crmLoadTelemetryRound_==='function'?crmLoadTelemetryRound_:function(value){const number=Number(value);return Number.isFinite(number)?Math.max(0,Math.round(number)):null;}, bytes=typeof crmLoadTelemetryBytes_==='function'?crmLoadTelemetryBytes_:function(value){return String(value||'').length;};
+  const startedAt=now(), entry={ at:new Date().toLocaleTimeString('uk-UA',{hour:'2-digit',minute:'2-digit',second:'2-digit'}), page:page, action:String(action||''), queue_ms:0, network_ms:null, render_ms:null, server_elapsed_ms:null, cache_hit:null, cache_state:null, response_bytes:null, deduped:false, ok:false };
   const p = new URLSearchParams({ action, token: TOKEN, ...extra });
   const key = action + '?' + new URLSearchParams(Object.entries(extra).sort()).toString();
-  if (inflight.has(key)) { perf.deduped++; return inflight.get(key); }
+  if (inflight.has(key)) { perf.deduped++;entry.deduped=true;return inflight.get(key).then(function(data){entry.network_ms=round(now()-startedAt);entry.server_elapsed_ms=round(data&&data.load_telemetry&&data.load_telemetry.elapsed_ms);entry.cache_hit=data&&data.load_telemetry?!!data.load_telemetry.cache_hit:null;entry.cache_state=data&&data.load_telemetry&&data.load_telemetry.cache_state||null;entry.ok=true;report(entry,now());return data;},function(error){entry.network_ms=round(now()-startedAt);entry.error='request_failed';report(entry,now());throw error;}); }
   const request = (async function() {
     perf.requests++;
+    const networkStartedAt=now();entry.queue_ms=round(networkStartedAt-startedAt);
     const r = await fetch(`${API}?${p}`, { redirect: 'follow' });
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
-    const d = await r.json();
+    const raw = typeof r.text==='function' ? await r.text() : JSON.stringify(await r.json());entry.network_ms=round(now()-networkStartedAt);entry.response_bytes=bytes(raw);
+    const d = JSON.parse(raw);
     if (!d.ok) throw new Error(d.error || 'API error');
+    entry.server_elapsed_ms=round(d.load_telemetry&&d.load_telemetry.elapsed_ms);entry.cache_hit=d.load_telemetry?!!d.load_telemetry.cache_hit:null;entry.cache_state=d.load_telemetry&&d.load_telemetry.cache_state||null;entry.ok=true;report(entry,now());
     return d;
   })();
   inflight.set(key, request);
-  try { return await request; } finally { inflight.delete(key); }
+  try { return await request; } catch(error) { if(entry.network_ms==null)entry.network_ms=round(now()-startedAt);entry.error='request_failed';report(entry,now());throw error; } finally { inflight.delete(key); }
 }
 
 const crmIntegrityState = { status:'idle', result:null, error:'', time:'' };
@@ -2669,6 +2689,27 @@ function resetRoadmapFilters(){const series=document.getElementById('roadmapSeri
 function fillRoadmapSeries_(){const select=document.getElementById('roadmapSeries');if(!select)return;const current=select.value,series=Array.from(new Set(ROADMAP_TASKS.map(function(task){return roadmapSeries_(task.id);}))).sort(function(a,b){return a.localeCompare(b,'uk',{numeric:true});});select.innerHTML='<option value="">Усі серії</option>'+series.map(function(value){return '<option value="'+threeDpEsc(value)+'">'+threeDpEsc(value)+'</option>';}).join('');select.value=current;}
 
 const ROADMAP_TASKS = [
+  {
+    id: 'CONTENT-007', title: 'Canon v1: ввести в дію + набір прапорців валідатора', status: 'active', tool: 'Claude', priority: 'High',
+    lastUpdated: '2026-09-13', blockedBy: [],
+    simple: 'Категорія: Content / SEO.',
+    warn: '2026-09-13 ЗАВЕДЕНО на пряме доручення власника. Парасолька над єдиним контентним каноном Booster Shop і валідатором, що його перевіряє. || ЗРОБЛЕНО, комміт 53a74fd: docs/CANON_v1_DRAFT_product-content_20260913.md (Canon v1 — злито зі скілів ChatGPT ред. 11.1, тепер docs/canon/v0.5/, переоцінки 52 живих карток власником 13.09 і словника прапорців діючого новинного пайплайну; усі блокуючі рішення закриті, Appendix A кириличних містків затверджений власником), diagnostics/CONTENT-PIPELINE_card-quality-tier-analysis_20260913.md (вимір 52 карток), work/CANON_v1_TEST_three-rewrites_20260913.md (шість ручних переписувань як калібрувальний тест). || КЛЮЧОВИЙ ВИСНОВОК, на якому стоїть канон: чотири папки якості від власника не розділяються за жодною вимірюваною ознакою тексту — ні довжиною, ні кількістю h2, абзаців чи FAQ, ні щільністю фактів, ні кількістю фото. Розділяє риторична функція абзацу. Тому структурні лічильники НЕ стають гейтом якості: на цьому архіві вони пропускали б і валили картки практично випадково відносно оцінки власника. || NEXT ACTION: перевірити, чи модель, що працює за тим самим каноном, дає результат, який власник оцінює так само, як ручні переписування. Ручний тест довів лише те, що канон здійсненний людиною з каноном перед очима. Цей тест передує будь-якій розробці пайплайну. || ДАЛІ ЗА НИМ: порт циклу analyse-draft-audit-edit-align із новинного пайплайну crm/apps-script/Code.gs — він уже працює і ловить шаблонну AI-воду — плюс кодовий шар валідатора за розділом 11.1 канону. || ПЕРЕДУМОВА: SEO-008, карта ключ-сторінка: без неї перевірка канібалізації і частина правил перелінковки в розділі 8 канону неповні. || ПОГЛИНАЄ: MKT-003 (SEO-генератор) і SEO-006 (чистка meta keywords — канон прибирає поле цілком).',
+    subtasks: []
+  },
+  {
+    id: 'CONTENT-008', title: 'Blazing Dominion: виправити картку на проді + звірити комплектацію Lumiose Mini Tin', status: 'todo', tool: 'Claude (хендоф) + Codex (патч) + власник (деплой)', priority: 'High',
+    lastUpdated: '2026-09-13', blockedBy: [],
+    simple: 'Категорія: Content.',
+    warn: '2026-09-13 ЗАВЕДЕНО на пряме доручення власника. Знайдено під час калібрувального тесту Canon v1 (CONTENT-007). || ДЕФЕКТ НА ПРОДІ, товар 101, booster-ygo-ocg-blazing-dominion-jp: живий опис змішує два різні сети. Він каже BODE, 15 січня 2022, 101 унікальна картка, вводить монстрів Xyz та Link; атрибут Рік випуску 2022. BODE — це код сету Burst of Destiny (OCG 2021). Цифра 101 належить англомовному релізу Blazing Dominion. Xyz і Link — механіки чужої епохи. || ДЖЕРЕЛО ІСТИНИ, обгортка пака сфотографована власником 13.09: BLAZING DOMINION, Konami, код товару CG 2063, штрихкод 4988602179415, MADE IN JAPAN, вік 9+. Пʼять карт у паку, випадкових із 80 типів. Розклад надрукований на звороті: Ultimate Rare 4, Ultra Rare 8, Super Rare 10, Rare 18, Normal 40 — разом 80. Плюс 20 із 80 мають також версії Prismatic Secret Rare, 20 із 80 — Secret Rare, а Ultimate Rare мають обидві. Дата OCG-релізу 25 січня 2026 — з YGOrganization, не з обгортки. || ОБСЯГ ЗМІН: тіло опису, FAQ, Meta Title (зараз 75 символів проти стелі 63; новий — 51), Meta Description, атрибут Рік випуску 2022 на 2026. Готовий текст: work/CANON_v1_TEST_three-rewrites_20260913.md розділ 5-bis. || ДРУГА ПОЛОВИНА ЗАДАЧІ — Lumiose City Mini Tin (Salamence & Litleo): два твердження на живій картці не підтверджені — які саме два бустери всередині (картка каже Perfect Order + Chaos Rising) і чи є кодова картка Pokemon TCG Live. Роздрібні лістинги пишуть лише 2 Pokemon TCG Booster Packs. Власник має коробку — звірити з пакованням. Перепис готовий у тому ж файлі, розділ 3, із явно заблокованою відповіддю FAQ. || ЧОМУ РАЗОМ: обидві картки — одна контентна хвиля, один патч, один деплой. || ЗАГАЛЬНИЙ УРОК, зафіксований у Canon v1 розділ 1: живий текст сайту — це референс тону, а не джерело фактів. Пайплайн, який бере живі описи за істину, цю помилку не побачить — він зробить із неї гарний текст.',
+    subtasks: []
+  },
+  {
+    id: 'CONTENT-009', title: 'Фото карток: мінімум 3 на товар (фронт, бек, вміст)', status: 'todo', tool: 'Власник', priority: 'Medium',
+    lastUpdated: '2026-09-13', blockedBy: [],
+    simple: 'Категорія: Content / Media.',
+    warn: '2026-09-13 ЗАВЕДЕНО на пряме доручення власника. || ПОТОЧНИЙ СТАН, виміряно по 52 живих картках: медіана 2 зображення на картку, 15 карток мають рівно одне. Показник однаковий у всіх чотирьох групах якості — тобто це стан каталогу, а не проблема окремих карток. || НОРМА за Canon v1 розділ 10: мінімум 3 зображення, цільова кількість 5-6 з різних ракурсів. Три обовʼязкові — фронт, бек, вміст. Тільки реальні фотографії реального товару; AI-графіка допустима для банерів, Telegram, блогу й реклами, але не на картці товару. || ЧОМУ ОКРЕМО ВІД CONTENT-007: від канону тексту не залежить узагалі й може йти паралельно з розробкою пайплайну. || ПРАКТИЧНИЙ НАСЛІДОК: порожня або одинока картинка сама по собі є причиною відхилення в Merchant Center — це вже фіксувалось у CONTENT-005.',
+    subtasks: []
+  },
   // ─── CRM / ДАШБОРД — ЦІЛІСНІСТЬ І ВИЗНАННЯ ДОХОДУ ───
   {
     id: 'CRM-012', title: 'ZenMarket: цілісність балансу, місяць визнання доходу передзамовлень, назви 3D-виробів', status: 'todo', tool: 'Claude (хендоф + рев\'ю) + Codex (реалізація) + власник (публікація)', priority: 'High',
@@ -3650,6 +3691,14 @@ const ROADMAP_TASKS = [
       { id: 'WP2', title: 'begin_checkout на сторінці оформлення — розгорнуто, закрито 08.09', status: 'done', desc: 'Розгорнуто 07.09. Перший патч дав видиму регресію: заголовок оформлення відрендерився як «Мій кошик» — моя помилка в завданні, не Codex. Виправлено хотфіксом: заголовок «Оформлення замовлення» захардкоджено, а подія віддається напряму з даних модуля. Підтверджено в браузері: один запит до GA4 зі статусом 204 і коректним складом кошика. Огляд Claude: Review OK. Власник підтвердив, що хотфікс залитий і працює. Лишилось прогнати вісім контрольних сторінок сайту після деплою.' },
       { id: 'WP3', title: 'Решта воронки: доставка, оплата, кошик, плитки каталогу — розгорнуто', status: 'done', desc: 'Хендоф готовий 07.09, виконавець Codex. Крім кроків доставки й оплати сюди зібрані всі хвости первинного аудиту: додавання в кошик з плиток каталогу і видалення з міні-кошика в шапці не рахуються. Перший крок — звірка по свіжому бекапу, бо вересневі візуальні правки чіпали частину шаблонів уже після того, на якому робився аудит. Кнопку купівлі чіпаємо обережно: штатний спосіб модуля перехоплює клік по ній, тому робимо інакше. 07.09 усі три патчі розгорнуті на проді в порядку оплата → міні-кошик → кнопка купівлі. Перевірено: події йдуть по одній на дію, кошик рахує правильно, повний смоук оплати пройдено двічі. Воронка вимірюється повністю.' }
     ]
+  },
+  {
+    id: 'TECH-046', title: 'GA4: зберігати спосіб оплати і тариф доставки', status: 'todo', tool: 'Owner (налаштування GA4)', priority: '',
+    lastUpdated: '2026-09-13', blockedBy: [],
+    simple: 'Сайт уже передає в аналітику, чим клієнт платив і як обрав доставку, але GA4 це не зберігає — у налаштуваннях порожній список кастомних параметрів. Треба один раз створити два параметри: payment_type і shipping_tier. Admin → Data display → Custom definitions, область Event.',
+    why: 'Без цього в GA4 неможливо подивитися, скільки покупок пройшло через Hutko, а скільки через накладений платіж. Перевірку 12.09 довелось робити вручну з бази сайту. Це налаштування GA4, а не патч — код чіпати не треба.',
+    warn: 'Заднім числом не працює: GA4 почне зберігати параметр тільки з трафіку після створення. Кожен день зволікання — це день втраченої розбивки, який уже не відновити. Нічого іншого це не блокує. Не плутати з відкритим питанням по Hutko — там подія purchase взагалі не приходить, це окрема історія в TECH-015. Підстава: diagnostics/TECH-015_ga4-live-traffic-verification_20260912.md, Finding 4.',
+    subtasks: []
   },
   { id: 'TECH-010', title: 'Перевірити які сторінки закриті від Google', status: 'todo', tool: 'Codex', priority: 'High',
     lastUpdated: '2026-05-20', blockedBy: ['TECH-005-DEEP'],
@@ -4660,7 +4709,7 @@ async function loadUpdates() {
   await loadAccounting();
 }
 
-function loadSettings() { renderCrmMaintenanceCommands();renderCrmIntegrityTile();loadTestOrderCleanup(); }
+function loadSettings() { renderCrmMaintenanceCommands();renderCrmIntegrityTile();renderCrmLoadTelemetry();loadTestOrderCleanup(); }
 
 function addSkuLine(kind, max, withPrice, withManualCost) {
   const stateKey = kind === 'sale' ? 'saleSeq' : (kind === 'writeoff' ? 'writeoffSeq' : 'mysterySeq');
