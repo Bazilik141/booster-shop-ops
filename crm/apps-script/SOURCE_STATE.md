@@ -1,3 +1,77 @@
+# CRM one-time cleanup baseline — V177 BYTE-VERIFIED (2026-09-13)
+
+The owner-supplied `Версія 177, 13 вер. 2026 р., 1845.csv` is a complete raw
+`Code.gs` export despite its `.csv` filename (its first line is
+`function onOpen() {`, not CSV data). At the time of comparison, after UTF-8
+BOM and line-ending normalisation, it was byte-identical to
+`crm/apps-script/Code.gs`:
+
+- normalized SHA-256: `5eaf9171fdfd4be5edf05c2037939e2fa16bd3a41fdcb72b5408604241fb8a5a`;
+- 10,704 normalized lines in both files;
+- source credential-literal scan: clear.
+
+This is the first complete source identity proof after V173. It includes the
+CRM-013 cache outcome used by the current main file: values above the cache
+size limit return `value_too_large`; they are not gzip-compressed or sharded.
+The owner's 18:46–18:47 runtime telemetry corroborates that large
+`overview_secondary` and `ltv_report` responses bypass cache writes while
+small responses use `stored_plain`.
+
+For the one-time-code cleanup audit, the owner also read the bound Apps Script
+trigger UI on 2026-09-13. The complete installed handler list is exactly:
+`maintainCrmRowCapacity`, `runNightlyInventoryMaintenance`, `keepWarm`, and
+`runNewsPruneOnce`. No candidate for deletion is an installed trigger handler.
+
+The owner ran the read-only `previewCrm011OcFop0324Repair()` at 20:13 Kyiv.
+The exact row `Продажі!289` / `OC-FOP-0324` / `PKM-EN-Q2-MTIN-SAL` returned
+`would_change:false`, `already_applied:true`, with current and recomputed FIFO
+units both `551.90 / 585.01`. The isolated CRM-011 FIFO diagnostic/repair block
+is therefore spent and may join the reviewed deletion wave; it needs no repair
+or temporary wrapper first.
+
+## CRM V178 — owner-published ZenMarket read-only validator (2026-09-13)
+
+The owner pasted the reviewed V177-plus-validator candidate and published CRM
+V178 at 22:08 Kyiv. This is owner runtime/publication evidence, not a new
+complete byte export, so V177 remains the latest independently byte-verified
+source identity.
+
+After publication, `apiIntegrityCheck_()` was clean (`problems: []`; 66 3D
+RRP rows compared; 6 legitimately skipped). The unwrapped
+`crm011ZenMarketVerificationForOwner()` returned `ok: true`, balance
+`-3685 JPY`, 14 ledger rows, one indexed lot, zero historical top-up UAH gaps,
+and no problems. The owner also supplied a Finance KPI screenshot showing the
+real `-¥3 685` balance rather than the setup fallback.
+
+V178 makes `crm011ZenRequireSetup_()` call the pure
+`crm011ZenValidateSheet_()` instead of schema-writing
+`crm011ZenEnsureSheet_()`. Ordinary Finance/purchase/verification paths now
+report a missing sheet/header rather than calling `insertSheet`, `setValue`, or
+`setFrozenRows`. `setupCrm011ZenMarketAccount()` remains the sole schema writer
+and the setup/seed family remains a standing recovery route: it must eventually
+move to its own callable Apps Script file, not be deleted.
+
+## CRM V179 — owner-published one-time main-code cleanup (2026-09-13)
+
+The owner reported publishing CRM V179 at 22:42 Kyiv. The version screenshot
+shows the surviving `onOpen` actions, including the callable ZenMarket setup
+and verification routes. This is publication evidence, not a new complete byte
+export, so V177 remains the latest independently byte-verified full source.
+
+V179 removes only completed stock-counting, CRM-011 FIFO, CRM-011/012 setup,
+and CRM-012 fixed-target diagnostic/repair functions. It retains V178's
+validator and all active ZenMarket recovery/setup code. See
+`diagnostics/CRM-one-time-main-code-cleanup_report_20260913.md` for the exact
+removal and verification boundary.
+
+After Claude addendum review, the finance-schema comment was rewritten in full
+and all 31 local test files passed (60 tests, zero failures). The current
+candidate normalised source identity is SHA-256
+`60d7b5cbf3ab3504628486792b8d823249daa3ca824d589238dd52c85eff5205`, with
+10,229 normalised lines and 575 top-level functions. This replaces the
+pre-comment-review candidate hash; use this exact value for the post-publish
+export comparison.
+
 # CRM-012 baseline — V173 BYTE-VERIFIED (2026-09-11)
 
 The owner export `Версія 173, 11 вер. 2026 р., 1745` is byte-identical to

@@ -30,7 +30,7 @@ function zenRuntime() {
     resetMemoForMutation_ = function() {};
     invalidateDoGetCache_ = function() {};
     return {
-      history: crm011ZenHistoricalRows_, topup: crm011ZenmarketTopup_, correct: crm011ZenmarketCorrectBalance_,
+      history: crm011ZenHistoricalRows_, requireSetup: crm011ZenRequireSetup_, topup: crm011ZenmarketTopup_, correct: crm011ZenmarketCorrectBalance_,
       ledgerHeaders: CRM011_ZEN_LEDGER_HEADERS_, lotHeaders: CRM011_ZEN_LOT_HEADERS_, topupHeaders: CRM011_ZEN_TOPUP_HEADERS_
     };
   `)({ getUuid: () => 'uuid-for-test' });
@@ -52,6 +52,22 @@ test('purchase expense contains goods, Japan fees, and delivery to Ukraine', () 
   assert.deepEqual(helpers.expense(row, 3.2), {
     lot_id: 'LOT-0001', order_ref: 'ORDER', goods_jpy: 320, japan_jpy: 32, ukraine_jpy: 16, total_jpy: 368
   });
+});
+
+test('ordinary ZenMarket setup checks validate without changing sheets or headers', () => {
+  const runtime = zenRuntime();
+  const ledger = new MockSheet([runtime.ledgerHeaders, ...runtime.history()]);
+  const lots = new MockSheet([runtime.lotHeaders]);
+  const topups = new MockSheet([runtime.topupHeaders]);
+  const sheets = {'ZenMarket_Рахунок':ledger, 'ZenMarket_Лоти':lots, 'ZenMarket_Поповнення':topups};
+  const ss = {getSheetByName:(name) => sheets[name] || null};
+  const before = JSON.stringify({ledger:ledger.rows, lots:lots.rows, topups:topups.rows});
+  assert.equal(runtime.requireSetup(ss).ledger, ledger);
+  assert.equal(JSON.stringify({ledger:ledger.rows, lots:lots.rows, topups:topups.rows}), before);
+  topups.rows[0][9] = '';
+  const missingHeaderBefore = JSON.stringify(topups.rows);
+  assert.throws(() => runtime.requireSetup(ss), /ZENMARKET_SCHEMA_CONFLICT/);
+  assert.equal(JSON.stringify(topups.rows), missingHeaderBefore, 'a read path must not restore a missing header');
 });
 
 test('top-up and correction write once and produce the expected balance', () => {
@@ -83,7 +99,8 @@ test('ZenMarket mutations are idempotent and isolated from P&L', () => {
   assert.match(source, /CRM011_ZEN_CORRECTION_NOTE_ = 'коригування балансу зен - курсова різниця'/);
   assert.match(source, /crm011ZenEnsurePurchaseBaselines_\(ss, zenMatches/);
   assert.match(source, /crm011ZenSyncPurchaseLots_\(ss, zenMatches/);
-  assert.match(source, /zenmarket_account: crm011ZenBalanceSnapshot_\(ss\)/);
+  assert.match(source, /const zenmarketAccount = crm011ZenBalanceSnapshot_\(ss\)/);
+  assert.match(source, /zenmarket_account: zenmarketAccount/);
   assert.match(source, /balance_uah: round2_\(balanceJpy \/ jpyRate\)/);
   assert.match(source, /jpy_rate: jpyRate/);
   assert.doesNotMatch(source, /pnl: \{[^}]*zenmarket_account/s);

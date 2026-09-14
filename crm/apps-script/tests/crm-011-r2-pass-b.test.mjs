@@ -81,7 +81,7 @@ test('header resolver follows names after columns are reordered', () => {
 });
 
 test('first and second order in one period classify as New then Repeat', () => {
-  const headers = ['Номер замовлення / операції','Дата продажу','Телефон клієнта','ПІБ клієнта','Кількість','Сума продажу','Управлінська собівартість продажу','Пакування','Еквайринг','Нова Пей','Комісія маркетплейсу','Доставка за рахунок магазину','Чистий прибуток','Статус оплати','Статус замовлення','Тип оплати','Дата оплати','Метод собівартості'];
+  const headers = ['Номер замовлення / операції','Дата продажу','Телефон клієнта','ПІБ клієнта','Кількість','Сума продажу','Управлінська собівартість продажу','Пакування','Еквайринг','Нова Пей','Комісія маркетплейсу','Доставка за рахунок магазину','Чистий прибуток','Статус оплати','Статус замовлення','Тип оплати','Дата оплати','Дата отримання','Дата фіксації собівартості','Метод собівартості'];
   const makeRow = values => headers.map(header => values[header] ?? '');
   const rows = [
     makeRow({'Номер замовлення / операції':'FIRST','Дата продажу':new Date('2026-09-03'),'Телефон клієнта':'+380501112233','Кількість':1,'Сума продажу':100,'Управлінська собівартість продажу':40,'Пакування':5,'Еквайринг':2,'Нова Пей':1,'Комісія маркетплейсу':0,'Доставка за рахунок магазину':2,'Чистий прибуток':50,'Статус оплати':'Оплачено','Статус замовлення':'Отримано'}),
@@ -91,8 +91,12 @@ test('first and second order in one period classify as New then Repeat', () => {
   const factory = new Function('sheet',`
     function apiNormalizeHeader_(value){return String(value||'').trim().toLowerCase();}
     function onlyDigits_(value){return String(value||'').replace(/\\D/g,'');}
+    function num_(value){const number=Number(value);return Number.isFinite(number)?number:0;}
     function dateSortValue_(value){return value instanceof Date?value.getTime():new Date(value).getTime();}
     function isUnfinalizedPreorderCostMethod_(value){return String(value||'').indexOf('Прогноз передзамовлення')!==-1;}
+    ${functionSource('isPhysicalStockReservationSale_')}
+    ${functionSource('crm012WasPreorderRow_')}
+    ${functionSource('crm012RecognitionDateForSalesRow_')}
     ${functionSource('crm011FinanceTable_')}
     ${functionSource('crm011FinanceColumn_')}
     ${functionSource('crm011FinanceNumber_')}
@@ -127,6 +131,8 @@ test('finance report reuses one header-resolved sales model', () => {
   const report = functionSource('apiFinanceReport_');
   assert.match(report,/crm011FinanceSalesModel_\(ss\)/);
   assert.doesNotMatch(report,/_getCrmSalesRows\(\)|_getCrmSalesRowEntries\(\)/);
+  assert.match(report,/crm011FinanceInventoryAssets_\(sales\)/);
+  assert.doesNotMatch(report,/apiSkuList_\(\{\}\)/);
   assert.match(source,/action === 'finance_report'\) return 'bscrm_v2_' \+ version \+ '_' \+ action \+ '_v4_/);
   assert.match(report,/comparison = \{ period: compareBounds, totals: compared\.totals, pnl: compared\.pnl, cashflow: cashflowFor\(compareBounds\)/);
 });

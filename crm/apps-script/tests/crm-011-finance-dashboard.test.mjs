@@ -9,13 +9,10 @@ test('CRM-011 Apps Script source compiles', () => {
 });
 
 test('append-only date columns are guarded and both mutation paths stamp them', () => {
-  assert.match(source, /setupCrm011FinanceColumns/);
-  assert.match(source, /\['Закупки', 'Дата створення'\], \['Продажі', 'Дата оплати'\], \['Продажі', 'Фіскальний чек'\]/);
-  assert.match(source, /CRM-011_SETUP_REQUIRED/);
+  assert.match(source, /CRM_SCHEMA_REQUIRED/);
   assert.match(source, /crm011ApiAddSale_/);
   assert.match(source, /crm011ApiAddPurchase_/);
   assert.match(source, /crm011ApiUpdateSale_/);
-  assert.match(source, /payment_dates_backfilled/);
 });
 
 test('finance uses canonical profit, cashflow sources, assets, and bounded cache', () => {

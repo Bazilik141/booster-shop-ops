@@ -36,8 +36,8 @@ assert.equal(active({ order_status: 'Отримано', payment_status: 'Опл�
 assert.equal(active({ order_status: 'Скасовано', payment_status: 'Не оплачено' }), false, 'cancellations remain outside the active list');
 
 const monthly = functionSource('apiMonthlySummary_');
-assert.match(monthly, /month_to_date:\s*apiAggregateSalesRows_\(rows, currentStart, currentEnd\)/, 'month card uses the same cost-confirmed source as the graph');
-assert.match(monthly, /previous_month_to_date:\s*apiAggregateSalesRows_\(rows, previousStart, previousEnd\)/, 'comparison period uses the same source');
+assert.match(monthly, /month_to_date:\s*apiAggregateSalesRows_\(rows, currentStart, currentEnd, recognitionColumns\)/, 'month card uses the canonical recognition-date source as the graph');
+assert.match(monthly, /previous_month_to_date:\s*apiAggregateSalesRows_\(rows, previousStart, previousEnd, recognitionColumns\)/, 'comparison period uses the same recognition-date source');
 assert.doesNotMatch(monthly, /setValue|setValues|appendRow|deleteRow/, 'monthly summary remains read-only');
 assert.match(code, /action === 'monthly_summary'\) return 'bscrm_v2_' \+ version \+ '_' \+ action \+ '_v3'/, 'the new monthly payload uses a fresh server cache key after publication');
 assert.match(code, /action === 'overview_assets'\) return 'bscrm_v2_' \+ version \+ '_' \+ action \+ '_v1'/, 'asset tiles use the cache-version key, so a purchase invalidation takes effect immediately');
