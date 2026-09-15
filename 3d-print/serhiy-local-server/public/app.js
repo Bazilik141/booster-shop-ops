@@ -2,7 +2,7 @@ import { changedSettingWrites, fillSettingsForm } from "./settings-controls.js";
 import { calculateBatchCost } from "/calculator.mjs";
 import { createOperationRunner, refreshUntilFresh } from "./operation-state.js";
 import { draftCategories, nomenclatureTypeForDraftCategory } from "./draft-categories.js";
-import { isPrintTimeHeader, matrixToObjects, prepareInformationTable } from "./information-tables.js";
+import { addPrintLogProductNames, isPrintTimeHeader, matrixToObjects, prepareInformationTable } from "./information-tables.js";
 import { collectAttentionSignals, reconcileHiddenSignalIds, splitAttention } from "./attention-signals.js";
 
 const informationPreferencesKey = "booster_3dp_serhiy_information_tables_v1";
@@ -23,7 +23,7 @@ const tableOptions = {
   analytics: { reorder: true, excludeHeaders: ["Маржа BoosterShop, %"] },
   "all-products": { reorder: true, excludeHeaders: ["Трек", "Вага виробу за од., г", "Вага котушки, г", "Ціна котушки, грн", "Примітки", "API_статус_запису", "API_історія_змін", "row_number"] },
   sales: { reorder: true, excludeHeaders: ["Статус", "Дохід Booster Shop, грн", "Нараховано Сергію, грн", "Канал", "Параметр знижки", "Погоджено з Сергієм (Так/Ні)", "Період (авто, РРРР-ММ)", "Режим CRM", "Фурнітура власника за од., грн (заморожена)", "Фурнітура Сергія за од., грн (заморожена)"] },
-  "print-log": { excludeHeaders: ["API_статус_запису"] },
+  "print-log": { reorder: true, excludeHeaders: ["API_статус_запису"] },
 };
 const printTime = globalThis.BoosterPrintTime;
 const byId = (id) => document.getElementById(id);
@@ -148,7 +148,7 @@ function renderInformation() {
   renderInformationTableInto("sales", state.data.sales, null, "sales");
   renderInformationTableInto("payouts", state.data.payouts, payoutButtons, "payouts");
   renderInformationTableInto("plyushky", state.data.plyushky, null, "plyushky");
-  renderInformationTableInto("print-log", state.data.print_log, null, "print-log");
+  renderInformationTableInto("print-log", addPrintLogProductNames(state.data.print_log, state.data.skus), null, "print-log");
   saveInformationPreferences();
 }
 function render() { setSkuOptions();setFixtureOptions();renderOverview();fillSettings();fillProductForm();fillStockForm();renderInformation();previewBatch(); }

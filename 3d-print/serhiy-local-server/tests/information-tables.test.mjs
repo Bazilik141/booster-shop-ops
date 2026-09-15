@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { informationPageSize, isPrintTimeHeader, matrixToObjects, paginateRecords, prepareInformationTable } from "../public/information-tables.js";
+import { addPrintLogProductNames, informationPageSize, isPrintTimeHeader, matrixToObjects, paginateRecords, prepareInformationTable } from "../public/information-tables.js";
 import { collectAttentionSignals, reconcileHiddenSignalIds, splitAttention } from "../public/attention-signals.js";
 
 const skus = [
@@ -52,6 +52,16 @@ test("information table filters and sorts before paginating", () => {
   assert.equal(view.page, 2);
   assert.deepEqual(view.records.map(({ flat }) => flat["Кількість"]), Array.from({ length: 15 }, (_, index) => 25 - index));
   assert.equal(view.allRecords[0].flat["Кількість"], 40);
+});
+
+test("print log receives the matching product name and keeps it orderable", () => {
+  const printLog = addPrintLogProductNames([{ SKU: "BR-002", "Дата": "2026-09-15" }], skus);
+  assert.deepEqual(Object.keys(printLog[0]), ["SKU", "Назва", "Дата"]);
+  assert.equal(printLog[0].Назва, "—");
+  const named = addPrintLogProductNames([{ SKU: "BR-001", "Дата": "2026-09-15" }], [{ SKU: "BR-001", "Назва виробу": "Брелок для тесту", "Тип": "Брелок" }]);
+  const view = prepareInformationTable(named, skus, { order: ["Назва", "SKU", "Дата"] });
+  assert.deepEqual(view.headers, ["Назва", "SKU", "Дата"]);
+  assert.equal(view.records[0].flat.Назва, "Брелок для тесту");
 });
 
 test("attention signals use stable IDs, hide independently, and clean up absent signals", () => {

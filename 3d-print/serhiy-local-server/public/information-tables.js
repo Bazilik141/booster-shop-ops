@@ -100,3 +100,19 @@ export function matrixToObjects(matrix) {
     return result;
   });
 }
+
+export function addPrintLogProductNames(rows, skuRows) {
+  const namesBySku = new Map(
+    (skuRows || []).map((row) => [
+      String(row.SKU || "").trim(),
+      row["Назва виробу"] || row.Назва || "",
+    ]),
+  );
+  return (rows || []).map((row) => {
+    const source = row || {};
+    const sku = String(source.SKU || "").trim();
+    const name = source.Назва || namesBySku.get(sku) || "—";
+    const { SKU, Назва, ...rest } = source;
+    return { SKU, "Назва": name, ...rest };
+  });
+}
