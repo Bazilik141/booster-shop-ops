@@ -3261,7 +3261,9 @@ function apiRecentPurchasesForUpdate_(params) {
     track: apiRecentCol_(table.headers, 'Трек-номер'),
     date: apiRecentCol_(table.headers, 'Дата доставки в Україну'),
     sku: apiRecentCol_(table.headers, 'SKU'),
+    name: apiRecentCol_(table.headers, 'Назва товару'),
     qty: apiRecentCol_(table.headers, 'Кількість одиниць'),
+    lotValue: apiRecentCol_(table.headers, 'Вартість лоту, грн'),
     japanFee: apiRecentCol_(table.headers, 'Доставка / комісії по Японії, грн'),
     status: apiRecentCol_(table.headers, 'Статус'),
     note: apiRecentCol_(table.headers, 'Примітка')
@@ -3280,7 +3282,9 @@ function apiRecentPurchasesForUpdate_(params) {
       track_number: row[c.track] || '',
       date: '',
       sku: row[c.sku] || '',
+      name: row[c.name] || '',
       qty: apiNum_(row[c.qty]),
+      lot_value_uah: round2_(apiNum_(row[c.lotValue])),
       japan_fee_jpy: round2_(apiNum_(row[c.japanFee]) * jpyRate),
       status: status,
       note: row[c.note] || ''

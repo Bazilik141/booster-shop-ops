@@ -125,6 +125,8 @@ assert.match(html,/const PURCHASE_BATCH_LIMIT = 10;/,'purchase batch selection l
 assert.match(html,/selectedPurchaseLots\)\.length >= PURCHASE_BATCH_LIMIT/,'purchase selection enforces the shared batch limit');
 assert.match(html,/rows\.length > PURCHASE_BATCH_LIMIT/,'purchase submission enforces the shared batch limit');
 assert.match(html,/call\(cfg\.action, \{ limit: 20, include_all_open:'true', kind:cfg\.kind \|\| '' \}\)/,'the purchases tab explicitly requests every open purchase while sales pass their order kind');
+assert.match(html,/\['order_ref','Order Ref'\],\['sku','SKU'\],\['name','Назва'\],\['qty','К-сть'\],\['lot_value_uah','Сума лоту, грн'\]/,'purchase list includes the SKU name and lot value');
+assert.match(html,/function togglePurchaseOrderSort_\(\)/,'purchase ORDER REF header can toggle sorting');
 assert.match(html,/showRecTab\(\\'regular\\',this\)">Звичайні замовлення</,'accounting separates regular orders');
 assert.match(html,/showRecTab\(\\'preorders\\',this\)">Передзамовлення</,'accounting separates preorders');
 assert.match(html,/reserved_total/,'stock UI exposes the total active stock reservation');

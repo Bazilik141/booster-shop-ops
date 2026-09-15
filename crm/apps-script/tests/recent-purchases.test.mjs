@@ -19,7 +19,9 @@ function purchase(lotId, orderRef, sku, trackNumber = "") {
   row[1] = orderRef;
   row[2] = trackNumber;
   row[4] = sku;
+  row[5] = "Тестова назва " + sku;
   row[7] = 1;
+  row[8] = 456.78;
   row[16] = "Замовлено";
   return row;
 }
@@ -62,6 +64,8 @@ assert.equal(result.rows.some((row) => row.lot_id === "LOT-0093"), true,
 assert.equal(result.rows.some((row) => row.lot_id === "LOT-0001"), false, "the oldest open purchase falls outside the recent limit");
 assert.equal(result.rows.some((row) => row.lot_id === "LOT-DELIVERED"), false, "delivered lots stay out of the update list");
 assert.equal(result.rows.some((row) => row.lot_id === "LOT-STOCKED"), false, "stocked lots stay out of the update list");
+assert.equal(result.rows.find((row) => row.lot_id === "LOT-0140").name, "Тестова назва PKM-JP-INFX-BBX", "purchase rows include the SKU name");
+assert.equal(result.rows.find((row) => row.lot_id === "LOT-0140").lot_value_uah, 456.78, "purchase rows include the lot value in UAH");
 
 const allOpen = context.__test.apiRecentPurchasesForUpdate_({ limit: 20, include_all_open: "true" });
 assert.equal(allOpen.rows.length, 23, "the accounting view can request every open purchase, not just the newest twenty");

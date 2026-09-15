@@ -1026,6 +1026,7 @@ const accountingState = {
   mysterySeq: 0,
   migration: { context: null, loading: false, saving: '', message: null, requestIds: { box: '', outlet: '' } },
   selectedPurchaseLots: {},
+  purchaseOrderSort: 'asc',
   recent: { regular: [], preorders: [], purchases: [] },
   recentLoaded: { regular: false, preorders: false, purchases: false },
   activeRecTab: 'regular',
@@ -4934,8 +4935,36 @@ function recTableConfig(name) {
   };
   return {
     action: 'recent_purchases',
-    columns: [['order_ref','Order Ref'],['sku','SKU'],['qty','К-сть'],['japan_fee_jpy','JP-комісія, JPY'],['status','Статус']]
+    columns: [['order_ref','Order Ref'],['sku','SKU'],['name','Назва'],['qty','К-сть'],['lot_value_uah','Сума лоту, грн'],['japan_fee_jpy','JP-комісія, JPY'],['status','Статус']]
   };
+}
+
+function purchaseOrderRefValue_(row) {
+  const ref = String(row && row.order_ref || '').trim();
+  const number = Number((ref.match(/\d+/) || [Number.MAX_SAFE_INTEGER])[0]);
+  return { number: Number.isFinite(number) ? number : Number.MAX_SAFE_INTEGER, text: ref };
+}
+
+function sortPurchaseRows_() {
+  const direction = accountingState.purchaseOrderSort === 'desc' ? -1 : 1;
+  accountingState.recent.purchases.sort(function(a, b) {
+    const av = purchaseOrderRefValue_(a);
+    const bv = purchaseOrderRefValue_(b);
+    const comparison = av.number - bv.number || av.text.localeCompare(bv.text, 'uk', { numeric: true, sensitivity: 'base' });
+    return comparison * direction;
+  });
+}
+
+function togglePurchaseOrderSort_() {
+  accountingState.purchaseOrderSort = accountingState.purchaseOrderSort === 'asc' ? 'desc' : 'asc';
+  sortPurchaseRows_();
+  renderRecTable('purchases');
+}
+
+function purchaseColumnHeaderHtml_(column) {
+  if (column[0] !== 'order_ref') return '<th>' + recEsc(column[1]) + '</th>';
+  const mark = accountingState.purchaseOrderSort === 'asc' ? ' ↑' : ' ↓';
+  return '<th onclick="togglePurchaseOrderSort_()" style="cursor:pointer;user-select:none" title="Сортувати за номером замовлення">' + recEsc(column[1]) + mark + '</th>';
 }
 
 async function loadRecTab(name, force) {
@@ -4958,11 +4987,7 @@ async function loadRecTab(name, force) {
       });
     }
     if (name === 'purchases') {
-      accountingState.recent[name].sort(function(a,b) {
-        const an = Number((String(a.order_ref || '').match(/\d+/) || [0])[0]);
-        const bn = Number((String(b.order_ref || '').match(/\d+/) || [0])[0]);
-        return an - bn || String(a.order_ref || '').localeCompare(String(b.order_ref || ''));
-      });
+      sortPurchaseRows_();
     }
     accountingState.recentLoaded[name] = true;
     renderRecTable(name);
@@ -5005,7 +5030,7 @@ function renderRecTable(name) {
 function purchaseTableHtml_(rows, cfg) {
   if (!rows.length) return '';
   let html = '<table class="rec-table"><thead><tr><th class="lot-select-cell">✓</th>';
-  cfg.columns.forEach(function(col) { html += '<th>' + recEsc(col[1]) + '</th>'; });
+  cfg.columns.forEach(function(col) { html += purchaseColumnHeaderHtml_(col); });
   html += '</tr></thead><tbody>';
   rows.forEach(function(row) {
     const eligible = purchaseBatchEligible_(row);
