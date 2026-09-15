@@ -1,13 +1,19 @@
-[CmdletBinding()]
+﻿[CmdletBinding()]
 param(
-  [ValidateSet("Start", "ChangeToken")]
+  [ValidateSet("Start", "FirstRun", "ChangeToken")]
   [string]$Mode = "Start"
 )
 
 $ErrorActionPreference = "Stop"
-[Console]::InputEncoding = [System.Text.UTF8Encoding]::new($false)
-[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false)
-$Host.UI.RawUI.WindowTitle = "Booster Shop — 3D-друк"
+[Console]::InputEncoding = New-Object System.Text.UTF8Encoding($false)
+[Console]::OutputEncoding = New-Object System.Text.UTF8Encoding($false)
+$localUrl = "http://127.0.0.1:3107"
+
+function Show-Message {
+  param([string]$Message, [string]$Title = "Booster Shop — 3D-друк")
+  $shell = New-Object -ComObject WScript.Shell
+  [void]$shell.Popup($Message, 0, $Title, 0x40)
+}
 
 function Read-MaskedValue {
   param([string]$Prompt)
@@ -23,9 +29,7 @@ function Read-MaskedValue {
 
 function Save-UserVariable {
   param([string]$Name, [string]$Value)
-  $setx = Join-Path $env:SystemRoot "System32\setx.exe"
-  & $setx $Name $Value *> $null
-  if ($LASTEXITCODE -ne 0) { throw "Не вдалося зберегти доступ у Windows." }
+  [Environment]::SetEnvironmentVariable($Name, $Value, "User")
   if ([string][Environment]::GetEnvironmentVariable($Name, "User") -ne $Value) {
     throw "Windows зберегла значення не повністю. Звернися до власника."
   }
@@ -45,7 +49,7 @@ function Test-WebAppUrl {
 
 function Test-PortInUse {
   param([int]$Port)
-  $client = [Net.Sockets.TcpClient]::new()
+  $client = New-Object Net.Sockets.TcpClient
   try {
     $attempt = $client.BeginConnect("127.0.0.1", $Port, $null, $null)
     if (-not $attempt.AsyncWaitHandle.WaitOne(300)) { return $false }
@@ -66,22 +70,22 @@ function Invoke-IdentityCheck {
   try {
     $payload = Invoke-RestMethod -Method Get -Uri $probeUrl -TimeoutSec 45
   } catch {
-    Write-Host "Не вдалося зв’язатися з 3D-таблицею. Перевір інтернет або звернися до власника." -ForegroundColor Red
-    return $false
+    throw "Не вдалося зв’язатися з 3D-таблицею. Перевір інтернет або звернися до власника."
   }
   if (-not $payload.ok) {
-    Write-Host ([string]$payload.error) -ForegroundColor Red
     if ([string]$payload.code -eq "UNAUTHORIZED") {
-      Write-Host "Запусти «Змінити токен.bat» і введи новий токен." -ForegroundColor Yellow
+      throw "Токен не прийнято. Запусти «Змінити токен.bat» і введи новий токен."
     }
-    return $false
+    throw ([string]$payload.error)
   }
   if ([string]$payload.settings.range -ne "B2:B5") {
-    Write-Host "Наданий доступ не є окремим доступом Сергія. Сторінку не запущено." -ForegroundColor Red
-    Write-Host "Звернися до власника й не використовуй цей токен." -ForegroundColor Yellow
-    return $false
+    throw "Наданий доступ не є окремим доступом Сергія. Звернися до власника й не використовуй цей токен."
   }
-  return $true
+}
+
+function Start-HiddenLauncher {
+  $vbsPath = Join-Path $PSScriptRoot "start-hidden.vbs"
+  Start-Process -FilePath "wscript.exe" -ArgumentList @('//B', ('"' + $vbsPath + '"'))
 }
 
 try {
@@ -89,30 +93,39 @@ try {
     $newToken = Read-MaskedValue "Встав новий токен (символи не показуються)"
     Save-UserVariable "BOOSTER_3DP_SERHIY_TOKEN" $newToken
     $newToken = $null
-    Write-Host "Новий токен збережено. Тепер запускай «Запустити.bat»." -ForegroundColor Green
+    Write-Host "Новий токен збережено. Закрий відкриту сторінку; після зупинки сервера запусти «Запустити.bat»." -ForegroundColor Green
     exit 0
   }
 
   if (Test-PortInUse 3107) {
-    Write-Host "Сторінка вже запущена або місце 3107 зайняте іншою програмою." -ForegroundColor Red
-    Write-Host "Закрий попереднє чорне вікно й спробуй ще раз." -ForegroundColor Yellow
-    exit 1
+    Start-Process $localUrl
+    exit 0
   }
 
   $apiUrl = Get-UserVariable "BOOSTER_3DP_URL"
+  $token = Get-UserVariable "BOOSTER_3DP_SERHIY_TOKEN"
+  if ($Mode -eq "Start" -and (-not $apiUrl -or -not $token)) {
+    $arguments = '-NoProfile -ExecutionPolicy Bypass -File "' + $PSCommandPath + '" -Mode FirstRun'
+    Start-Process -FilePath "powershell.exe" -ArgumentList $arguments
+    exit 0
+  }
+
   if (-not $apiUrl) {
     $apiUrl = ([string](Read-Host "Встав адресу, яку надав власник")).Trim()
     if (-not (Test-WebAppUrl $apiUrl)) { throw "Адреса має починатися з https://. Нічого не збережено." }
     Save-UserVariable "BOOSTER_3DP_URL" $apiUrl
   }
-
-  $token = Get-UserVariable "BOOSTER_3DP_SERHIY_TOKEN"
   if (-not $token) {
     $token = Read-MaskedValue "Встав токен (символи не показуються)"
     Save-UserVariable "BOOSTER_3DP_SERHIY_TOKEN" $token
   }
 
-  if (-not (Invoke-IdentityCheck $apiUrl $token)) { exit 1 }
+  Invoke-IdentityCheck $apiUrl $token
+  if ($Mode -eq "FirstRun") {
+    Write-Host "Доступ перевірено й збережено. Відкриваю сторінку без чорного вікна." -ForegroundColor Green
+    Start-HiddenLauncher
+    exit 0
+  }
 
   $nodePath = Join-Path $PSScriptRoot "runtime\node.exe"
   $serverPath = Join-Path $PSScriptRoot "app\server.mjs"
@@ -124,7 +137,6 @@ try {
   $env:BOOSTER_3DP_SERHIY_TOKEN = $token
   $env:PORT = "3107"
   $token = $null
-  $localUrl = "http://127.0.0.1:3107"
   $serverArgument = '"' + $serverPath + '"'
   $server = Start-Process -FilePath $nodePath -ArgumentList @($serverArgument) -WorkingDirectory (Join-Path $PSScriptRoot "app") -NoNewWindow -PassThru
   try {
@@ -134,16 +146,18 @@ try {
       if (Test-PortInUse 3107) { $ready = $true; break }
       Start-Sleep -Milliseconds 250
     }
-    if (-not $ready) { throw "Сторінка не запустилася. Закрий вікно й спробуй ще раз." }
+    if (-not $ready) { throw "Сторінка не запустилася. Спробуй ще раз." }
     Start-Process $localUrl
-    Write-Host "Сторінку відкрито в браузері." -ForegroundColor Green
-    Write-Host "Не закривай це вікно під час роботи. Закриття вікна зупинить сторінку."
     $server.WaitForExit()
     exit $server.ExitCode
   } finally {
     if ($server -and -not $server.HasExited) { Stop-Process -Id $server.Id -Force -ErrorAction SilentlyContinue }
   }
 } catch {
-  Write-Host $_.Exception.Message -ForegroundColor Red
+  if ($Mode -eq "Start") {
+    Show-Message $_.Exception.Message
+  } else {
+    Write-Host $_.Exception.Message -ForegroundColor Red
+  }
   exit 1
 }

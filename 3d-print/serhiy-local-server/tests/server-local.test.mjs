@@ -38,7 +38,7 @@ async function startFakeApi() {
     if (method === "GET" && action === "3dp_batch_draft") return respond(response, { ok: true, action, sku: state.sku.SKU, found: Boolean(state.draft.quantity), values: { ...state.draft } });
     if (method === "GET" && action === "3dp_settings_journal") return respond(response, { ok: true, action, rows: state.journal, count: state.journal.length });
 
-    if (method === "POST" && action === "3dp_batch_draft_save") { assert.deepEqual(body.expected_current, state.draft);state.draft = { ...body.values };return respond(response, { ok: true, action, sku: state.sku.SKU, row: 2, values: { ...state.draft } }); }
+    if (method === "POST" && action === "3dp_batch_draft_save") { assert.deepEqual(body.expected_current, state.draft);assert.deepEqual(Object.keys(body.values).sort(), ["quantity", "total_weight_g", "total_print_time_h", "spool_weight_g", "spool_price_uah"].sort());state.draft = { ...body.values };return respond(response, { ok: true, action, sku: state.sku.SKU, row: 2, values: { ...state.draft } }); }
     if (method === "POST" && action === "3dp_write") {
       if (body.sheet === "Налаштування") { const index = Number(body.sku_or_row) - 2;assert.equal(body.column, "B");assert.equal(String(state.settings[index]), String(body.expected_current));state.settings[index] = Number(body.value);return respond(response, { ok: true, action, cell: `B${body.sku_or_row}`, old_value: body.expected_current, new_value: state.settings[index] }); }
       const map = { G: "Час друку за од., год", H: "Вага виробу за од., г", I: "Вага котушки, г", J: "Ціна котушки, грн", N: "Фурнітура (ціна-довідка), грн/шт", Q: "РРЦ фактична, грн", R: "Ціна під викуп, грн", S: "Посилання на модель" };
@@ -70,8 +70,12 @@ async function expectApiError(url, body, code, message) { const result = await l
 test("WP2 local server uses projected bundles and exposes every Serhiy route", { timeout: 20000 }, async (context) => {
   const api = await startFakeApi();context.after(() => api.close());const local = await startLocalServer(api.url);context.after(() => local.close());
   const pageHtml = await (await fetch(local.url)).text(),appJs = fs.readFileSync(path.join(appRoot, "public", "app.js"), "utf8");
-  assert.match(pageHtml, /zone-calculator/);assert.match(pageHtml, /zone-products/);assert.match(pageHtml, /zone-information/);assert.equal(pageHtml.includes(["Синхронізація", " з CRM"].join("")), false);assert.match(pageHtml, /фінальний артикул призначає власник/);
-  assert.match(appJs, /new_value/);assert.doesNotMatch(appJs, /action:\s*["']3dp_payout_create/);assert.match(appJs, /defect_adjusted_uah/);
+  assert.match(pageHtml, /zone-calculator/);assert.match(pageHtml, /zone-products/);assert.match(pageHtml, /zone-information/);assert.equal(pageHtml.includes(["Синхронізація", " з CRM"].join("")), false);assert.match(pageHtml, /Зроблено індусами для Сергія/);assert.match(pageHtml, /Додати вартість розхідника грн/);assert.doesNotMatch(pageHtml, /name="[CEFL]"/);
+  assert.match(appJs, /new_value/);assert.doesNotMatch(appJs, /action:\s*["']3dp_payout_create/);assert.match(appJs, /defect_adjusted_uah/);assert.doesNotMatch(appJs, /C: "Не вказано"|E: "Не вказано"|F: "Не вказано"/);assert.match(appJs, /L: localDateIso\(\)/);
+
+  const favicon = await fetch(`${local.url}/favicon.ico`);assert.equal(favicon.status, 204);
+  const missing = await fetch(`${local.url}/missing-file.css`);assert.equal(missing.status, 404);assert.equal((await missing.json()).code, "NOT_FOUND");
+  const pageAfter404 = await fetch(local.url);assert.equal(pageAfter404.status, 200);assert.match(await pageAfter404.text(), /zone-calculator/);
 
   const bootstrap = await localJson(`${local.url}/api/bootstrap`);
   assert.equal(bootstrap.skus[0].SKU, "FIG-TEST-001");assert.equal(bootstrap.settings.planned_defect_fraction, 0.08);assert.equal(bootstrap.sales[0].SKU, "FIG-TEST-001");assert.equal(bootstrap.analytics[0][0], "SKU");
@@ -93,11 +97,11 @@ test("WP2 local server uses projected bundles and exposes every Serhiy route", {
   const draft = await localJson(`${local.url}/api/draft`, { values: { B: "Новий виріб", D: "Панно", M: "тест" } });assert.equal(draft.sku_suggestion.category_digits, "400");
 
   const requestId = "serhiy_test_batch_0001";
-  const manufactured = await localJson(`${local.url}/api/print-log`, { sku: "FIG-TEST-001", printed_quantity: 2, actual_time_hours: "1 год 39 хв", actual_material_g: 10, defects: 0, notes: "test", request_id: requestId });assert.equal(manufactured.already_applied, false);
-  const repeat = await localJson(`${local.url}/api/print-log`, { sku: "FIG-TEST-001", printed_quantity: 2, actual_time_hours: "1 год 39 хв", actual_material_g: 10, defects: 0, notes: "test", request_id: requestId });assert.equal(repeat.already_applied, true);
-  const manufactureRequests = api.state.requests.filter((item) => item.action === "3dp_manufacture_batch");assert.equal(manufactureRequests.length, 2);assert.equal(manufactureRequests[0].body.request_id, manufactureRequests[1].body.request_id);assert.equal(manufactureRequests[0].body.printed_by, "Сергій");
+  const manufactured = await localJson(`${local.url}/api/print-log`, { sku: "FIG-TEST-001", printed_quantity: 2, actual_time_hours: "1 год 39 хв", actual_material_g: 10, spool_weight_g: 1000, spool_price_uah: 800, serhiy_consumables_uah: 5, defects: 0, notes: "test", request_id: requestId });assert.equal(manufactured.already_applied, false);
+  const repeat = await localJson(`${local.url}/api/print-log`, { sku: "FIG-TEST-001", printed_quantity: 2, actual_time_hours: "1 год 39 хв", actual_material_g: 10, spool_weight_g: 1000, spool_price_uah: 800, serhiy_consumables_uah: 5, defects: 0, notes: "test", request_id: requestId });assert.equal(repeat.already_applied, true);
+  const manufactureRequests = api.state.requests.filter((item) => item.action === "3dp_manufacture_batch");assert.equal(manufactureRequests.length, 2);assert.equal(manufactureRequests[0].body.request_id, manufactureRequests[1].body.request_id);assert.equal(manufactureRequests[0].body.printed_by, "Сергій");assert.equal(manufactureRequests[0].body.spool_weight_g, 1000);assert.equal(manufactureRequests[0].body.spool_price_uah, 800);assert.equal(manufactureRequests[0].body.serhiy_consumables_uah, 5);
 
-  const saved = await localJson(`${local.url}/api/save-batch`, { sku: "FIG-TEST-001", quantity: 36, total_weight_g: 180, total_print_time_h: "18:00", spool_weight_g: 1000, spool_price_uah: 800 });assert.deepEqual(saved.cells_updated, ["G2", "H2", "I2", "J2"]);
+  const saved = await localJson(`${local.url}/api/save-batch`, { sku: "FIG-TEST-001", quantity: 36, total_weight_g: 180, total_print_time_h: "18:00", spool_weight_g: 1000, spool_price_uah: 800, serhiy_consumables_uah: 5, defects: 1 });assert.deepEqual(saved.cells_updated, ["G2", "H2", "I2", "J2"]);
   assert.ok(api.state.requests.every((item) => item.token === serhiyToken));
   assert.equal(api.state.requests.some((item) => ["3dp_payout_create", "3dp_payout_mark_paid", "3dp_nomenclature_owner_create"].includes(item.action)), false);
 });

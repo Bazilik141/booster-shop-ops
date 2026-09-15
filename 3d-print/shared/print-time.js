@@ -61,7 +61,7 @@
   function human(hours) {
     if (!Number.isFinite(Number(hours))) return '—';
     var totalMinutes = Math.round(Number(hours) * 60);
-    return Math.floor(totalMinutes / 60) + ' год ' + (totalMinutes % 60) + ' хв';
+    return Math.floor(totalMinutes / 60) + ' год ' + String(totalMinutes % 60).padStart(2, '0') + ' хв';
   }
 
   function display(hours) {

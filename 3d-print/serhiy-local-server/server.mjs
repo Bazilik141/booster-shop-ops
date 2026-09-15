@@ -8,6 +8,7 @@ import { calculateBatchCost, settingsFromRange } from "./lib/calculator.mjs";
 const here = path.dirname(fileURLToPath(import.meta.url));
 const publicDir = path.join(here, "public");
 const sharedPrintTimeScript = path.resolve(here, "../shared/print-time.js");
+const calculatorScript = path.join(here, "lib", "calculator.mjs");
 const printTime = globalThis.BoosterPrintTime;
 if (!printTime) throw new Error("Shared print-time parser did not load.");
 const apiUrl = requiredEnv("BOOSTER_3DP_URL");
@@ -34,7 +35,13 @@ const MIME = Object.freeze({
   ".css": "text/css; charset=utf-8",
   ".html": "text/html; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
+  ".mjs": "text/javascript; charset=utf-8",
   ".json": "application/json; charset=utf-8",
+});
+
+process.on("unhandledRejection", (reason) => {
+  const message = reason instanceof Error ? reason.message : "невідома помилка";
+  console.error(`Необроблена асинхронна помилка: ${message}`);
 });
 
 function requiredEnv(name) {
@@ -158,6 +165,8 @@ function batchInput(body) {
     total_print_time_h: decimalPrintTime(body.total_print_time_h, "Сумарний час"),
     spool_weight_g: finitePositive(body.spool_weight_g, "Вага котушки"),
     spool_price_uah: finitePositive(body.spool_price_uah, "Ціна котушки"),
+    serhiy_consumables_uah: optionalNonNegative(body.serhiy_consumables_uah ?? 0, "Додаткові розхідники Сергія"),
+    defects: wholeNonNegative(body.defects ?? 0, "Фактичний брак"),
   };
 }
 
@@ -185,7 +194,9 @@ async function saveBatch(body) {
   const rawDraft = await call3dpPost({
     action: "3dp_batch_draft_save",
     sku,
-    values: input,
+    // The draft API is intentionally limited to its five raw calculator inputs.
+    // Defects and Serhiy's consumables belong only to the manufactured batch.
+    values: draftValues({ values: input }),
     expected_current: currentDraft.values,
   });
   const writes = [
@@ -326,6 +337,9 @@ async function appendPrintLog(body) {
     defects: wholeNonNegative(body.defects ?? 0, "Брак"),
     total_print_time_h: decimalPrintTime(body.actual_time_hours, "Час друку факт"),
     total_weight_g: optionalNonNegative(body.actual_material_g, "Витрачено матеріалу"),
+    spool_weight_g: finitePositive(body.spool_weight_g, "Вага котушки"),
+    spool_price_uah: finitePositive(body.spool_price_uah, "Ціна котушки"),
+    serhiy_consumables_uah: optionalNonNegative(body.serhiy_consumables_uah ?? 0, "Додаткові розхідники Сергія"),
     printed_by: "Сергій",
     request_id: requestId,
     note: String(body.notes || "").trim().slice(0, 220),
@@ -390,10 +404,25 @@ function json(response, status, payload) {
 }
 
 async function serveStatic(response, pathname) {
+  if (pathname === "/favicon.ico") {
+    response.writeHead(204, { "Cache-Control": "no-store" });
+    response.end();
+    return;
+  }
   if (pathname === "/print-time.js") {
     const content = await fs.readFile(sharedPrintTimeScript);
     response.writeHead(200, {
       "Content-Type": MIME[".js"],
+      "Cache-Control": "no-store",
+      "X-Content-Type-Options": "nosniff",
+    });
+    response.end(content);
+    return;
+  }
+  if (pathname === "/calculator.mjs") {
+    const content = await fs.readFile(calculatorScript);
+    response.writeHead(200, {
+      "Content-Type": MIME[".mjs"],
       "Cache-Control": "no-store",
       "X-Content-Type-Options": "nosniff",
     });
@@ -419,9 +448,16 @@ async function serveStatic(response, pathname) {
   }
 }
 
+let lastHeartbeatAt = Date.now();
 const server = http.createServer(async (request, response) => {
   try {
     const url = new URL(request.url, "http://127.0.0.1");
+    if (request.method === "POST" && url.pathname === "/api/heartbeat") {
+      lastHeartbeatAt = Date.now();
+      response.writeHead(204, { "Cache-Control": "no-store" });
+      response.end();
+      return;
+    }
     if (request.method === "GET" && url.pathname === "/api/bootstrap") return json(response, 200, { ok: true, ...(await bootstrap()) });
     if (request.method === "GET" && url.pathname === "/api/batch-draft") return json(response, 200, { ok: true, ...(await readBatchDraft(cleanSku(url.searchParams.get("sku"))) ) });
     if (request.method === "GET" && url.pathname === "/api/settings-journal") return json(response, 200, { ok: true, ...(await readSettingsJournal()) });
@@ -439,7 +475,7 @@ const server = http.createServer(async (request, response) => {
     if (request.method === "POST" && url.pathname === "/api/draft") return json(response, 200, { ok: true, ...(await createDraft(await readBody(request))) });
     if (request.method === "POST" && url.pathname === "/api/print-log") return json(response, 200, { ok: true, ...(await appendPrintLog(await readBody(request))) });
     if (request.method === "POST" && url.pathname === "/api/defect") return json(response, 200, { ok: true, ...(await updateDefect(await readBody(request))) });
-    if (request.method === "GET") return serveStatic(response, url.pathname);
+    if (request.method === "GET") return await serveStatic(response, url.pathname);
     throw fail("Not found.", 404, "NOT_FOUND");
   } catch (error) {
     json(response, Number(error.status) || 500, { ok: false, code: error.code || "LOCAL_SERVER_ERROR", error: error.message || "Unexpected local-server error." });
@@ -449,5 +485,11 @@ const server = http.createServer(async (request, response) => {
 server.listen(port, "127.0.0.1", () => {
   const address = server.address();
   console.log(`Сторінка Сергія працює: http://127.0.0.1:${address.port}`);
-  console.log("Щоб зупинити її, закрий це вікно.");
+  console.log("Сервер автоматично зупиниться, якщо сторінка неактивна близько 5 хвилин.");
 });
+
+const idleTimer = setInterval(() => {
+  if (Date.now() - lastHeartbeatAt < 5 * 60 * 1000) return;
+  clearInterval(idleTimer);
+  server.close(() => process.exit(0));
+}, 30000);

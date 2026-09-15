@@ -4,6 +4,7 @@ import path from "node:path";
 import test from "node:test";
 import vm from "node:vm";
 import { fileURLToPath } from "node:url";
+import { draftCategories } from "../public/draft-categories.js";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const appPath = process.env.DRAFT_TYPE_APP_PATH
@@ -15,9 +16,8 @@ test("draft type labels match the 3D-P API mapping by value and order", () => {
   const appCode = fs.readFileSync(appPath, "utf8");
   const apiCode = fs.readFileSync(apiPath, "utf8");
 
-  const draftTypeSource = appCode.match(/const draftTypes = (\[[^\n]+\]);/)?.[1];
-  assert.ok(draftTypeSource, "public/app.js contains the draftTypes list");
-  const clientLabels = JSON.parse(draftTypeSource);
+  assert.match(appCode, /import \{ draftCategories, nomenclatureTypeForDraftCategory \} from "\.\/draft-categories\.js"/);
+  const clientLabels = draftCategories.map((item) => item.label);
 
   const apiContext = vm.createContext({});
   vm.runInContext(apiCode, apiContext, { filename: "Code.gs" });

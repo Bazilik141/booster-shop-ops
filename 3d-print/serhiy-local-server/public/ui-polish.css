@@ -1,0 +1,25 @@
+/* Second UI/UX pass: stable controls and compact table configuration. */
+.zones { flex-wrap: wrap; overflow: visible; }
+.column-picker { align-self: end; }
+.column-picker > fieldset { top: 100%; left: 0; }
+.column-picker label { align-items: center; }
+.column-control > span:not(.column-move) { min-width: 0; flex: 1; }
+.column-move { display: inline-flex; gap: 3px; margin-left: auto; }
+.column-move .small { min-height: 28px; padding: 3px 7px; }
+.sku-picker { position: relative; display: block; }
+.sku-picker .sku-select { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.sku-picker .sku-search { padding-right: 38px; background: #1b1d29 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23b3b5c2' stroke-width='2'%3E%3Cpath d='m3 6 5 5 5-5'/%3E%3C/svg%3E") no-repeat right 11px center; }
+.sku-options { position: absolute; z-index: 8; top: calc(100% + 4px); right: 0; left: 0; max-height: 260px; overflow-y: auto; border: 1px solid var(--accent); border-radius: 8px; background: var(--raised); box-shadow: 0 10px 28px #07081299; }
+.sku-options button { display: block; width: 100%; min-height: 38px; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; padding: 9px 11px; background: transparent; color: var(--text); text-align: left; font-weight: 500; overflow-wrap: anywhere; }
+.sku-options button:hover, .sku-options button[aria-selected="true"] { background: var(--accent-soft); color: var(--accent-text); }
+.sku-empty { margin: 0; padding: 11px; color: var(--muted); font-size: 13px; }
+.product-price-grid { grid-template-columns: minmax(250px, 2fr) repeat(2, minmax(160px, 1fr)) auto; }
+.price-submit { align-self: start; margin-top: 20px; }
+.model-link { grid-column: 1 / -1; }
+.feedback:not([hidden]) { border-left-width: 4px; box-shadow: 0 0 0 1px color-mix(in srgb, currentColor 18%, transparent); }
+button[aria-busy="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-text); }
+@media (max-width: 620px) {
+  .product-price-grid { grid-template-columns: 1fr; }
+  .model-link { grid-column: auto; }
+  .price-submit { align-self: auto; }
+}
