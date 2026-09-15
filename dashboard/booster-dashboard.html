@@ -1659,6 +1659,7 @@ function skuShort(name) {
   if (!name) return '—';
   const text = String(name).trim();
   if (!text || /^\d{4}-\d{2}-\d{2}T/.test(text)) return '—';
+  if (text.endsWith(' — 3D-друк')) return text;
   const parts = text.split(' — ');
   return parts.length > 1 ? parts.slice(1).join(' — ') : text;
 }
