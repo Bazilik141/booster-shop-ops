@@ -1026,7 +1026,6 @@ const accountingState = {
   mysterySeq: 0,
   migration: { context: null, loading: false, saving: '', message: null, requestIds: { box: '', outlet: '' } },
   selectedPurchaseLots: {},
-  purchaseOrderSort: 'asc',
   recent: { regular: [], preorders: [], purchases: [] },
   recentLoaded: { regular: false, preorders: false, purchases: false },
   activeRecTab: 'regular',
@@ -3922,7 +3921,7 @@ const ROADMAP_TASKS = [
     why: 'Облік по розмірах і кольорах у CRM можливий лише якщо кожна комбінація — окремий товар зі своїм артикулом. Опції OpenCart цього не дають у принципі: один товар має рівно один model, а кількість на значенні опції не є складом.',
     warn: 'SEO/schema гейт пройдено 2026-09-12 з вердиктом High risk (plans/3D-P-011_seo-schema-gate_20260912.md), схвалення власника обов\'язкове. Два виміри дають до 9 URL на виріб — кожна сторінка потребує власного тексту, власного рядка SEO URL і власного рядка у фіді, який наповнюється вручну. Подавати нові позиції у фід із наявним розходженням цін не можна до TECH-008. Артикул виду ACC-3D-110-21-BLK відхиляється чинним регексом у threeDpSkuTypeError і apiAddSale_ — не блокує сайт, блокує облік. У варіанта OpenCart поля успадковуються від майстра, доки не увімкнено override: збереження варіанта з вимкненим перемикачем затирає його ціну, склад або фото даними майстра — на живих товарах це втрата даних на проді без staging.',
     subtasks: [
-      { id: 'SD-1', title: 'Стартові колоди Pokémon ex (9 шт) — канон ідентифікаторів', status: 'todo', desc: 'Артикули, назви, H1, SEO URL і meta для дев\'яти колод серії exスタートデッキ. Чернетка готова: plans/CAT-004_pkm-ex-start-decks_identifier-canon-draft_20260915.md. Базовий код родини PKM-JP-EXSD-STD плюс закритий список токенів типу (GRS/FIR/WTR/LTG/PSY/FGT/DRK/MTL/RND). Формат узято з прецеденту One Piece ST-32…ST-36 (CONTENT-005). Рішення власника 2026-09-15: імена покемонів латинкою без перекладу; おまかせ лишається в родині значенням «Випадкова» (PKM-JP-EXSD-STD-RND) з трьома обов\'язковими умовами чесної подачі; ціна однакова на всі дев\'ять, тому в чипах селектора ціна не виводиться. Лишається відкритим офіційний код серії з коробки — може витіснити мнемонік EXSD.' },
+      { id: 'SD-1', title: 'Стартові колоди Pokémon ex (9 шт) — канон ідентифікаторів', status: 'todo', desc: 'Артикули, назви, H1, SEO URL і meta для дев\'яти колод серії exスタートデッキ. Чернетка готова: plans/CAT-004_pkm-ex-start-decks_identifier-canon-draft_20260915.md. Базовий код родини PKM-JP-EXSD-STD плюс закритий список токенів типу (GRS/FIR/WTR/LTG/PSY/FGT/DRK/MTL/RND). Формат узято з прецеденту One Piece ST-32…ST-36 (CONTENT-005). Рішення власника 2026-09-15: імена покемонів латинкою без перекладу; おまかせ лишається в родині значенням «Випадкова» (PKM-JP-EXSD-STD-RND) з трьома обов\'язковими умовами чесної подачі; ціна однакова на всі дев\'ять, тому в чипах селектора ціна не виводиться. Офіційного коду серії власник не має — мнемонік EXSD затверджено як канонічний і після заведення першого товару він не міняється. Відкритих питань по SD-1 не лишилось.' },
       { id: 'SD-2', title: 'Зняти фактичні дані з коробок', status: 'todo', desc: 'Склад колоди, дата виходу, вікове маркування, офіційний код серії, чи справді おまかせ випадкова. Плюс ціна і залишок по кожній колоді, власні фото. Без цього опис і таблиця характеристик не пишуться — вигадувати специфікації заборонено.' },
       { id: 'SD-3', title: 'Карта ключів на дев\'ять сторінок', status: 'todo', desc: 'bs-keyword-map до написання описів: один первинний ключ на сторінку, без перетину між колодами. Дев\'ять сторінок одного продуктового класу — головний ризик схлопування дублікатів.' },
       { id: 'SD-4', title: 'Описи, характеристики, FAQ + bs-content-qa', status: 'todo', desc: 'Власний текст на кожну сторінку, не шаблон із підставленим типом. QA перед публікацією.' },
@@ -4950,36 +4949,8 @@ function recTableConfig(name) {
   };
   return {
     action: 'recent_purchases',
-    columns: [['order_ref','Order Ref'],['sku','SKU'],['name','Назва'],['qty','К-сть'],['lot_value_uah','Сума лоту, грн'],['japan_fee_jpy','JP-комісія, JPY'],['status','Статус']]
+    columns: [['order_ref','Order Ref'],['sku','SKU'],['qty','К-сть'],['japan_fee_jpy','JP-комісія, JPY'],['status','Статус']]
   };
-}
-
-function purchaseOrderRefValue_(row) {
-  const ref = String(row && row.order_ref || '').trim();
-  const number = Number((ref.match(/\d+/) || [Number.MAX_SAFE_INTEGER])[0]);
-  return { number: Number.isFinite(number) ? number : Number.MAX_SAFE_INTEGER, text: ref };
-}
-
-function sortPurchaseRows_() {
-  const direction = accountingState.purchaseOrderSort === 'desc' ? -1 : 1;
-  accountingState.recent.purchases.sort(function(a, b) {
-    const av = purchaseOrderRefValue_(a);
-    const bv = purchaseOrderRefValue_(b);
-    const comparison = av.number - bv.number || av.text.localeCompare(bv.text, 'uk', { numeric: true, sensitivity: 'base' });
-    return comparison * direction;
-  });
-}
-
-function togglePurchaseOrderSort_() {
-  accountingState.purchaseOrderSort = accountingState.purchaseOrderSort === 'asc' ? 'desc' : 'asc';
-  sortPurchaseRows_();
-  renderRecTable('purchases');
-}
-
-function purchaseColumnHeaderHtml_(column) {
-  if (column[0] !== 'order_ref') return '<th>' + recEsc(column[1]) + '</th>';
-  const mark = accountingState.purchaseOrderSort === 'asc' ? ' ↑' : ' ↓';
-  return '<th onclick="togglePurchaseOrderSort_()" style="cursor:pointer;user-select:none" title="Сортувати за номером замовлення">' + recEsc(column[1]) + mark + '</th>';
 }
 
 async function loadRecTab(name, force) {
@@ -5002,7 +4973,11 @@ async function loadRecTab(name, force) {
       });
     }
     if (name === 'purchases') {
-      sortPurchaseRows_();
+      accountingState.recent[name].sort(function(a,b) {
+        const an = Number((String(a.order_ref || '').match(/\d+/) || [0])[0]);
+        const bn = Number((String(b.order_ref || '').match(/\d+/) || [0])[0]);
+        return an - bn || String(a.order_ref || '').localeCompare(String(b.order_ref || ''));
+      });
     }
     accountingState.recentLoaded[name] = true;
     renderRecTable(name);
@@ -5045,7 +5020,7 @@ function renderRecTable(name) {
 function purchaseTableHtml_(rows, cfg) {
   if (!rows.length) return '';
   let html = '<table class="rec-table"><thead><tr><th class="lot-select-cell">✓</th>';
-  cfg.columns.forEach(function(col) { html += purchaseColumnHeaderHtml_(col); });
+  cfg.columns.forEach(function(col) { html += '<th>' + recEsc(col[1]) + '</th>'; });
   html += '</tr></thead><tbody>';
   rows.forEach(function(row) {
     const eligible = purchaseBatchEligible_(row);
