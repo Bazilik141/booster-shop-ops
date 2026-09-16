@@ -273,6 +273,67 @@ how unrelated code gets overwritten — this has already happened once on CRM an
 - Format: `Pokemon-boosters-Set-Name`, `YuGiOh-boosters-Set-Name` (human-readable)
 - Box/display → use `booster-box` in URL; single packs → `boosters`
 - SKU/article goes ONLY into the SKU field, never into SEO URL
+- A variant family member appends its differentiator to the family's URL and leaves the
+  plain URL free for the base product (`One-Piece-boosters-OP-01-Romance-Dawn-Rare-Pack`
+  keeps `One-Piece-boosters-OP-01-Romance-Dawn` available). Every variant needs its own
+  `ocp5_seo_url` row — without one the selector links to a parametric route, which GSC
+  files as "alternate page with canonical" and the feed inherits.
+
+## Variant products (master/variant) — canonical rules
+
+Owner decisions of 2026-09-12…16 (`CAT-004`). Applies to every game and product type,
+not only 3D-print.
+
+- **Model.** Native OpenCart 4.1 master/variant. One combination = one real product = one
+  page = one article. Product **options** are never used to express a variation that needs
+  its own price, stock or SKU: one product has exactly one `model`, and option quantity is
+  not stock, so per-combination accounting is impossible in that model.
+- **Selector.** Options-style chips whose values are ordinary links to the sibling's URL.
+  No in-place swapping. Unavailable values render as non-links, greyed.
+- **Price in chips is a per-group rule, not per-value.** If any value in a characteristic
+  group has a different price, the price shows on every value of that group; if all match,
+  it shows on none.
+- **One family per game.** A Pokémon product is never a variant of a One Piece product. A
+  selector that asks the customer to choose a game is not a characteristic selector.
+- **Article suffixes.** Where every member has its own official set code, each gets its own
+  full article and no suffix (`OP-JP-ST32-STD`, `OP-JP-OP01-RPK`). Where the members share
+  one series and have no per-item official code, the family takes a base article plus one
+  closed-list token per varying characteristic (`PKM-JP-EXSD-STD-GRS`;
+  `ACC-3D-ONIX-110-21-BLK`). See `plans/3D-P_sku-naming-convention_20260807.md` ред. 9.
+- **Names and URLs carry the differentiator** for variant products. The ред. 2 prohibition
+  (2026-08-16) applied only while variations were expected to live as options on one page.
+- **Listing membership is data, not code.** What appears in a category is controlled by
+  `product_to_category` links: for TCG, only the master in the parent category and the whole
+  family in the subcategory; for every other product type, one card per family.
+- **Admin trap — this is where data is lost.** A variant inherits every field from its master
+  until that field's override is switched on. Saving a variant with an override off overwrites
+  its price, stock or images with the master's. Switch overrides on *before* entering values,
+  and re-open to confirm they held.
+- **A sold-out variant is not deleted.** The page keeps its accumulated search value; its chip
+  greys out by the general unavailable rule.
+
+## Product type registry (article type token, 4th segment)
+
+| Token | Meaning |
+|---|---|
+| `BBX` | Booster box / display |
+| `BST` | Single booster pack, normal supply |
+| `RPK` | Single booster pack, **Rare Pack line** — old set, limited supply, priced accordingly |
+| `STD` | Starter / constructed deck |
+| `SET` | Multi-item set |
+| `BLR` | Blister |
+| `MBX` | Mystery Box |
+
+`RPK` was added 2026-09-16 rather than reusing `BST`, so that a normal pack of the same set
+keeps its canonical article when it appears.
+
+**Rare Pack — claim boundary, binding on names, descriptions, attributes and FAQ.** The *set*
+is rare, not the pack's contents: a Rare Pack has the same odds as any other pack of that set.
+Every card in the line carries that sentence explicitly. Forbidden in this line: «лімітований»,
+«ексклюзивний», «гарантований», any promise about contents, and any weighing/sorting vocabulary
+outside the purpose-written origin paragraph. Claims about the publisher having stopped printing
+a set must be verified per set before publication. Full canon:
+`plans/CAT-004_op-rare-packs_identifier-canon_20260916.md`.
 
 ## Owner sync helpers
 `bspush` / `bsmain` / `bsreview` — PowerShell commit/push helpers
