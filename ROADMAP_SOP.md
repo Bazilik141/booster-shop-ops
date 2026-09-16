@@ -204,6 +204,7 @@ changes.
 | RD-11 | `3706bf20-bdb4-81a4-b3fa-f35e7610defa` | — |
 | CAT-002 | `36f6bf20-bdb4-817e-99ec-eecce853778c` | — |
 | CAT-004 | `3dc6bf20-bdb4-8164-b001-db2191f9f7e6` | Added 2026-09-15 on owner instruction ("Роби — завести окрему задачу в категорії каталогу"). Варіативність товарів: master/variant + селектор характеристик, скоуп 3D-друк + аксесуари + запечатаний TCG. Поглинає `3D-P-011`, яка того ж дня закрита як superseded (не як виконана). ID evidence: цей реєстр не фіксує наступного вільного для `CAT-`; живий запит усієї серії повернув `CAT-001`, `CAT-002`, `CAT-003` без пропусків, тому взято `CAT-004`. **Наступний вільний у серії `CAT-` — `CAT-005`.** |
+| 3D-P-027 | `3dd6bf20-bdb4-81a8-903b-d89f42510c20` | Added 2026-09-16 on owner instruction ("нова задача") as a follow-up to `3D-P-022`, not a reopening: 022 is Done since 2026-08-08 and its changes are live (verified by reading `crm/apps-script/Code.gs` and the dashboard, not by status). Variant SKU suffixes from ред. 9 of the naming convention are rejected by the create-form validator. ID evidence: registry stated next free `3D-P-027`; a live query of the whole series returned `3D-P-000`…`026` plus the non-numeric `3D-P-CARDCONTENT`, with `009` permanently unused, so `027` was taken. **Наступний вільний у серії `3D-P-` — `3D-P-028`.** |
 | CHECKOUT-001 | `3776bf20-bdb4-8130-bcbf-cbb6259d5654` | — |
 | CHECKOUT-002 | `3946bf20-bdb4-81bf-9f47-cda9044fd2f2` | — |
 | CHECKOUT-004 | `3a16bf20-bdb4-8119-902c-e42e2b56a8bb` | Added 2026-07-18; also covers CHECKOUT-005/006/007/007A |
