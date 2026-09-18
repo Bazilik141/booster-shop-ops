@@ -176,8 +176,27 @@ catalog/view/stylesheet/boostershop-ds.css   (after the terminal /* /UI-FIX-2026
 catalog/view/template/common/header.twig     (CSS cache-bust)
 ```
 
-Bump the cache-bust to a new value; `cat004-variant-20260916` is already the marker the current patch
-writes, and the idempotence check keys on it.
+### 3.6 · Cache-bust: read the token, do not hardcode it — added 2026-09-18
+
+The current patch hardcodes `$header_old = '…?v=uifix-tiles-20260904'`. That couples this patch to
+whatever the token happened to be on 2026-09-16, and it collides with `CAT-004/SD-7`, which needs the
+same token. `AGENTS.md` → "Patch conventions (PHP runner)" gained rule 8 for exactly this case. Follow
+it:
+
+- locate the reference by its path prefix `catalog/view/stylesheet/boostershop-ds.css?v=`;
+- assert that prefix occurs exactly once;
+- read whatever token follows it, validate its shape, echo the old and new values;
+- replace it **wholesale** with `cat004-variant-20260918`. Do not append, do not concatenate.
+
+And the half that makes it work — rule 5:
+
+- **the header token is not part of the idempotence marker set.** Key `already_applied` on the four
+  content markers only: the model method, the controller block, the twig block and the CSS block. A
+  re-run that finds those exits `already_applied` and never touches the token, which is correct: the
+  CSS is already live, so there is nothing to bust.
+
+With both halves in place the two patches are order-independent by construction rather than by a
+naming trick, and whichever runs second simply owns the token.
 
 ## 7. Acceptance criteria
 

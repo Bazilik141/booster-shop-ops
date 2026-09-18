@@ -125,9 +125,10 @@ Each patch must:
 2. **Anchor pre-check** — fail if anchor count != expected
 3. **Backup** to `_patch_backups/<patch>-<ts>/` before write
 4. **`php -l` gate** — restore-on-fail; no silent failures
-5. **Idempotent marker** — `already_applied=yes` on repeat run
+5. **Idempotent marker** — `already_applied=yes` on repeat run. Markers live in the files the patch adds content to, never in a shared value another patch also rewrites (see 8)
 6. **DB changes** — only with explicit owner approval + rollback SQL in patch header
 7. **Self-delete** after success
+8. **Asset cache-bust — read the token, never hardcode it.** A patch that must refresh a cached asset does not anchor on the token's current value and does not append to it. It locates the reference by its path prefix (`catalog/view/stylesheet/boostershop-ds.css?v=`), reads whatever token is there, validates its shape, and replaces it wholesale with its own. Patches then stop being coupled to each other's token values and run in any order. This only works together with 5: a patch whose content markers are already present exits `already_applied` without touching the token, which is correct — its CSS is already live, so nothing needs busting. Added 2026-09-18 after `CAT-004` and `CAT-004/SD-7` both wanted the same token and the second one worked around it by appending.
 
 Naming: `patches/<TASK-ID>_<slug>_<YYYYMMDD>.php`
 Drop to: `C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\patches\<same filename>`
