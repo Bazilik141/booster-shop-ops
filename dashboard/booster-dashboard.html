@@ -3942,7 +3942,8 @@ const ROADMAP_TASKS = [
       { id: 'SD-3', title: 'Карта ключів на дев\'ять сторінок', status: 'todo', desc: 'bs-keyword-map до написання описів: один первинний ключ на сторінку, без перетину між колодами. Дев\'ять сторінок одного продуктового класу — головний ризик схлопування дублікатів.' },
       { id: 'SD-4', title: 'Описи, характеристики, FAQ + bs-content-qa', status: 'todo', desc: 'Власний текст на кожну сторінку, не шаблон із підставленим типом. QA перед публікацією.' },
       { id: 'SD-5', title: 'Завести на сайт як родину варіантів і відкатати процес', status: 'todo', desc: 'Перший бойовий варіативний товар: одночасно обкатка процесу і ловля багів. План доказів і відкату з plans/3D-P-011_seo-schema-gate_20260912.md застосовується з першого товару. Дамп БД до початку. Override вмикати на кожному полі перед збереженням варіанта.' },
-      { id: 'SD-6', title: 'Фід: не подавати до TECH-008', status: 'todo', desc: 'Дев\'ять нових позицій у товарний фід не додаються, доки фід віддає передзнижкову ціну і параметричні посилання.' }
+      { id: 'SD-6', title: 'Фід: не подавати до TECH-008', status: 'todo', desc: 'Дев\'ять нових позицій у товарний фід не додаються, доки фід віддає передзнижкову ціну і параметричні посилання.' },
+      { id: 'SD-7', title: 'Ярлик «Rare Pack» на плитці товару в лістингу', status: 'todo', desc: 'Кут ярликів на плитці стає флекс-колоною (display:flex; flex-direction:column; align-items:flex-start; gap:6px) замість фіксованої позиції. Порядок у колоні = пріоритет: «Передзамовлення» перший, «Rare Pack» другий. Рішення власника 2026-09-18: обидва можуть бути одночасно; коли передзамовлення немає, Rare Pack піднімається на його місце сам, без окремої умови в шаблоні. Ярлик — позначка товарної лінійки магазину, не видавця і не обіцянка вмісту (межа з plans/CAT-004_op-rare-packs_identifier-canon_20260916.md §2). Дизайн: канва «Rare Pack badge», чотири кандидати кольору, жоден не збігається зі знижкою #B91C1C, «немає в наявності» #6B7280, брендом #1E3A8A, CTA #16A34A і категорійними акцентами; колір ще не затверджено. Не перевірено і потрібне до хендофу: реальний клас і вигляд ярлика «Передзамовлення» саме в лістингу — в експорті booster-debug-CAT-004.tar.gz шаблону плитки немає, а в boostershop-ds.css живуть дві різні системи ярликів (.bs-pcard__badge-tl + .bs-badge--* і body.bs .product-thumb .bs-pcard-badge--*). Потрібен catalog/view/template/product/thumb.twig. Виконавець: Claude Code. Від патча селектора не залежить.' }
     ]
   },
   {
@@ -4525,21 +4526,61 @@ const PURCHASE_CHANNELS = [
 ];
 const PURCHASE_STATUSES = ['Замовлено','В дорозі','На складі UA','Скасовано'];
 const PURCHASE_BATCH_LIMIT = 10;
+const PURCHASE_CREATE_ITEM_LIMIT = 10;
 const WRITEOFF_TYPES = ['Власне відкриття','Подарунок','Промо','Брак','Тест','Втрата','Інше'];
 const EXPENSE_CATEGORIES = ['Операційні','Маркетинг','Пакування','Доставка','Комісія','Інше'];
 const CONSUMABLE_STATUSES = ['На складі','Їде','Замовлено'];
 const EXPENSE_PENDING_KEY = 'booster_expense_pending_v1';
 // Must match CRM_PACKAGING_TYPES_ in crm/apps-script/Code.gs. ASCII x avoids a
 // visually identical Cyrillic х from becoming a different Google Sheets value.
-const PACKAGING_TYPES = ['',"Мала м'яка 14x12 см",'Середня м\'яка 16x14 см','Велика пакет 17x30 см','Конверт Airpock 14x22 см','Інше'];
-function canonicalPackagingType(value){const raw=String(value==null?'':value).trim(),key=raw.replace(/[’`]/g,"'").replace(/[хx]/g,'x').replace(/\s+/g,' ').toLowerCase();return PACKAGING_TYPES.find(function(item){return String(item).replace(/[’`]/g,"'").replace(/[хx]/g,'x').replace(/\s+/g,' ').toLowerCase()===key;})||raw;}
+const PACKAGING_TYPES = ['','Пакет S 125х190','Пакет M 190х240','Пакет XL 280х370','AirPack S 120х160','AirPack M 140х225','Інше'];
+const LEGACY_PACKAGING_TYPES = {"мала м'яка 14x12 см":'AirPack S 120х160','велика пакет 17x30 см':'Пакет XL 280х370','конверт airpock 14x22 см':'AirPack M 140х225'};
+function packagingComparisonKey(value){return String(value==null?'':value).trim().replace(/[’`]/g,"'").replace(/[хx]/g,'x').replace(/\s+/g,' ').toLowerCase();}
+function canonicalPackagingType(value){const raw=String(value==null?'':value).trim(),key=packagingComparisonKey(raw),aliased=LEGACY_PACKAGING_TYPES[key]||raw;return PACKAGING_TYPES.find(function(item){return packagingComparisonKey(item)===packagingComparisonKey(aliased);})||aliased;}
 
-function toggleExpenseWorkspace() {
+let expenseConsumableCatalog_ = null;
+let packagingChoices_ = null;
+let packagingChoicesWarning_ = '';
+async function loadExpenseConsumableCatalog_(){
+  if(expenseConsumableCatalog_)return expenseConsumableCatalog_;
+  const data=await call('consumable_catalog');
+  expenseConsumableCatalog_=Array.isArray(data&&data.consumables)?data.consumables:[];
+  return expenseConsumableCatalog_;
+}
+async function loadPackagingChoices_(){
+  if(packagingChoices_!==null)return packagingChoices_;
+  try {
+    const data=await call('packaging_choices');
+    packagingChoices_=Array.isArray(data&&data.choices)?data.choices:[];
+  } catch(error) {
+    // A dashboard update can reach an older published Web App for a short time.
+    // Do not make accounting, updates, and migration unusable in that state.
+    if(!/unknown action:\s*packaging_choices/i.test(String(error&&error.message||error)))throw error;
+    packagingChoices_=PACKAGING_TYPES.filter(function(name){return name&&name!=='Інше';}).map(function(name){return {name:name,stock:null};});
+    packagingChoicesWarning_='Опублікована версія CRM ще не повертає залишки паковання. Тимчасово показано повний список без кількості; після публікації онови сторінку.';
+  }
+  return packagingChoices_;
+}
+function packagingSelectOptions_(){
+  const choices=(packagingChoices_||[]).map(function(row){
+    const stock=Number(row.stock),hasStock=Number.isFinite(stock)&&stock>0,qty=hasStock?(Number.isInteger(stock)?String(stock):stock.toLocaleString('uk-UA',{maximumFractionDigits:3})):'';
+    return [row.name,row.name+(hasStock?' ('+qty+' шт)':'')];
+  });
+  return [['','']].concat(choices,[['Інше','Інше']]);
+}
+function expenseConsumableControlsHtml_(rows){
+  const options=['<option value="">Оберіть розхідник</option>'].concat((rows||[]).map(function(row){return '<option value="'+recEsc(row.name)+'">'+recEsc(row.name+(row.category?' · '+row.category:''))+'</option>'; }));
+  return '<div id="expenseConsumableFields" class="hidden"><div class="form-row"><label>Тип розхідника *</label><select id="expenseConsumableType">'+options.join('')+'</select></div><div class="form-row"><label>Кількість розхідників *</label><input id="expenseConsumableQty" type="number" min="0.01" step="0.01"></div><div class="form-row"><label>Статус розхідників *</label>'+formSelect('expenseConsumableStatus',[''].concat(CONSUMABLE_STATUSES),'')+'</div></div>';
+}
+function toggleExpenseConsumableFields_(){const checked=Boolean((document.getElementById('expenseIsConsumable')||{}).checked),fields=document.getElementById('expenseConsumableFields');if(fields)fields.classList.toggle('hidden',!checked);}
+
+async function toggleExpenseWorkspace() {
   const root=document.getElementById('expenseWorkspace');if(!root)return;
   if(!root.classList.contains('hidden')){root.classList.add('hidden');return;}
   const today=new Date().toISOString().slice(0,10);
-  root.innerHTML='<div class="form-grid"><div class="form-row"><label>Дата *</label><input type="date" id="expenseDate" value="'+today+'"></div><div class="form-row"><label>Категорія *</label>'+formSelect('expenseCategory',EXPENSE_CATEGORIES,'Операційні')+'</div><div class="form-row"><label>Опис *</label><input id="expenseDescription" placeholder="Що оплачено"></div><div class="form-row"><label>Сума, грн *</label><input id="expenseAmount" type="number" min="0" step="0.01"></div><div class="form-row"><label>Пов’язано з продажем?</label>'+formSelect('expenseLinked',['Ні','Так'],'Ні')+'</div><div class="form-row"><label>Номер замовлення / операції</label><input id="expenseOrderId"></div><div class="form-row"><label>Тип розхідника (необов’язково)</label><input id="expenseConsumableType" placeholder="Наприклад, коробка"></div><div class="form-row"><label>Кількість розхідників</label><input id="expenseConsumableQty" type="number" min="0" step="0.01"></div><div class="form-row"><label>Статус розхідників</label>'+formSelect('expenseConsumableStatus',[''].concat(CONSUMABLE_STATUSES),'')+'</div><div class="form-row"><label>Примітка</label><input id="expenseNote"></div></div><div class="field-hint">Для «Пакування» або матеріалу заповни всі три поля розхідника: тип, кількість і статус.</div><div class="form-actions"><button id="saveExpenseButton" class="btn-primary" type="button" onclick="submitExpense()">Зберегти витрату</button><div id="expenseMsg" class="form-msg"></div></div>';
-  root.classList.remove('hidden');
+  root.innerHTML='<div class="loading"><div class="spinner"></div><br>Завантажую список розхідників…</div>';root.classList.remove('hidden');
+  let catalog=[];try{catalog=await loadExpenseConsumableCatalog_();}catch(e){root.innerHTML='<div class="records-message error">Не вдалося завантажити розхідники: '+recEsc(e.message)+'. Спробуй ще раз.</div>';return;}
+  root.innerHTML='<div class="form-grid"><div class="form-row"><label>Дата *</label><input type="date" id="expenseDate" value="'+today+'"></div><div class="form-row"><label>Категорія *</label>'+formSelect('expenseCategory',EXPENSE_CATEGORIES,'Операційні')+'</div><div class="form-row"><label>Опис *</label><input id="expenseDescription" placeholder="Що оплачено"></div><div class="form-row"><label>Сума, грн *</label><input id="expenseAmount" type="number" min="0" step="0.01"></div><div class="form-row"><label>Пов’язано з продажем?</label>'+formSelect('expenseLinked',['Ні','Так'],'Ні')+'</div><div class="form-row"><label>Номер замовлення / операції</label><input id="expenseOrderId"></div><div class="form-row"><label class="three-dp-readonly"><input id="expenseIsConsumable" type="checkbox" onchange="toggleExpenseConsumableFields_()"> Це розхідник</label></div>'+expenseConsumableControlsHtml_(catalog)+'<div class="form-row"><label>Примітка</label><input id="expenseNote"></div></div><div class="field-hint">Познач «Це розхідник», обери існуючу назву, кількість і статус. Кількість буде зарахована до залишку цього розхідника.</div><div class="form-actions"><button id="saveExpenseButton" class="btn-primary" type="button" onclick="submitExpense()">Зберегти витрату</button><div id="expenseMsg" class="form-msg"></div></div>';
 }
 function pendingExpenseRequestId_(payload) {
   const signature=JSON.stringify(payload);
@@ -4553,11 +4594,12 @@ function clearPendingExpense_(requestId) {
 }
 async function submitExpense() {
   const button=document.getElementById('saveExpenseButton'),msg=document.getElementById('expenseMsg');if(!button)return;
-  const payload={action:'add_expense',date:editValue('expenseDate'),category:editValue('expenseCategory'),description:editValue('expenseDescription'),amount:editValue('expenseAmount'),linked_to_sale:editValue('expenseLinked'),order_id:editValue('expenseOrderId'),consumable_type:editValue('expenseConsumableType'),consumable_qty:editValue('expenseConsumableQty'),consumable_status:editValue('expenseConsumableStatus'),note:editValue('expenseNote')};
+  const isConsumable=Boolean((document.getElementById('expenseIsConsumable')||{}).checked),payload={action:'add_expense',date:editValue('expenseDate'),category:editValue('expenseCategory'),description:editValue('expenseDescription'),amount:editValue('expenseAmount'),linked_to_sale:editValue('expenseLinked'),order_id:editValue('expenseOrderId'),is_consumable:isConsumable,consumable_type:isConsumable?editValue('expenseConsumableType'):'',consumable_qty:isConsumable?editValue('expenseConsumableQty'):'',consumable_status:isConsumable?editValue('expenseConsumableStatus'):'',note:editValue('expenseNote')};
   if(!payload.date||!payload.category||!payload.description||payload.amount===''){if(msg){msg.textContent='Заповни дату, категорію, опис і суму.';msg.className='form-msg error';}return;}
+  if(isConsumable&&(!payload.consumable_type||Number(payload.consumable_qty)<=0||!payload.consumable_status)){if(msg){msg.textContent='Для розхідника обери тип, кількість і статус.';msg.className='form-msg error';}return;}
   payload.request_id=pendingExpenseRequestId_(payload);
   button.disabled=true;if(msg){msg.textContent='Зберігаю…';msg.className='form-msg';}
-  try { const result=await callPost(payload);clearPendingExpense_(payload.request_id);if(msg){msg.textContent=(result.already_applied?'Витрата вже була збережена':'Витрату збережено')+' · рядок '+result.row_index+'.';msg.className='form-msg success';}delete cache.consumables; }
+  try { const result=await callPost(payload);clearPendingExpense_(payload.request_id);if(msg){msg.textContent=(result.already_applied?'Витрата вже була збережена':'Витрату збережено')+' · рядок '+result.row_index+'.';msg.className='form-msg success';}delete cache.consumables;expenseConsumableCatalog_=null; }
   catch(e){if(msg){msg.textContent='Помилка: '+e.message;msg.className='form-msg error';}}
   finally{button.disabled=false;}
 }
@@ -4646,6 +4688,7 @@ async function loadAccounting() {
   try {
     const updates=document.getElementById('updatesContent');if(updates)updates.innerHTML='';
     if (!cache.skus) { const d = await call('sku_list'); cache.skus = d; }
+    await loadPackagingChoices_();
     accountingState.skus = (cache.skus.skus || []).map(function(row){const copy=Object.assign({},row);if(isThreeDpAccountingSku_(copy)){copy.stock=null;copy.three_dp_stock_pending=true;copy.three_dp_stock_error=false;}return copy;});
     const today = new Date().toISOString().slice(0,10);
     document.getElementById('accountingContent').innerHTML =
@@ -4660,7 +4703,7 @@ async function loadAccounting() {
             '<div class="form-row"><label>ПІБ клієнта</label><input id="saleCustomer"></div>' +
             '<div class="form-row"><label>Тип оплати</label>' + formSelect('salePaymentType',PAYMENT_TYPES,'За реквізитами') + '</div>' +
             '<div class="form-row"><label>Знижка на чек, грн</label><input type="number" min="0" step="0.01" id="saleDiscount"></div>' +
-            '<div class="form-row"><label>Паковання</label>' + formSelect('salePackaging',PACKAGING_TYPES,'') + '</div>' +
+            '<div class="form-row"><label>Паковання</label>' + formSelect('salePackaging',packagingSelectOptions_(),'') + (packagingChoicesWarning_?'<div class="field-hint">'+recEsc(packagingChoicesWarning_)+'</div>':'') + '</div>' +
             '<div class="form-row"><label>Якщо Інше, грн</label><input type="number" min="0" step="0.01" id="saleCustomPackaging"></div>' +
             '<div class="form-row"><label>Доставка за рахунок магазину</label><input type="number" min="0" step="0.01" id="saleShopDelivery"></div>' +
             '<div class="form-row"><label>Статус оплати</label>' + formSelect('salePaymentStatus',PAYMENT_STATUSES,'Не оплачено') + '</div>' +
@@ -4684,7 +4727,7 @@ async function loadAccounting() {
             '<div class="form-row"><label>URL замовлення</label><input type="url" id="purOrderUrl"></div>' +
             '<div class="form-row"><label>Примітка</label><input id="purNote"></div>' +
           '</div>' +
-          '<div class="form-section-title">Позиції закупки, до 3</div><div class="purchase-items" id="purchaseItems"></div>' +
+          '<div class="form-section-title">Позиції закупки, до '+PURCHASE_CREATE_ITEM_LIMIT+'</div><div class="purchase-items" id="purchaseItems"></div>' +
           '<div class="form-actions"><button class="btn-secondary" onclick="purAddItem()">&#10133; Додати SKU</button>' +
             '<button class="btn-primary" onclick="submitPurchase()">&#128190; Зберегти закупку</button><div id="purMsg" class="form-msg"></div></div>' +
         '</div></div>' +
@@ -4715,6 +4758,7 @@ async function loadAccounting() {
     accountingState.writeoffSeq = 0;
     accountingState.mysterySeq = 0;
     accountingState.selectedPurchaseLots = {};
+    accountingState.purchaseGroupsExpanded = {};
     accountingState.recentLoaded = { regular: false, preorders: false, purchases: false };
     accountingState.activeRecTab = 'regular';
     accountingState.edit = null;
@@ -4787,7 +4831,7 @@ function removeLine(kind, seq) {
 }
 
 function purAddItem() {
-  if (document.querySelectorAll('#purchaseItems .purchase-item').length >= 3) return;
+  if (document.querySelectorAll('#purchaseItems .purchase-item').length >= PURCHASE_CREATE_ITEM_LIMIT) return;
   const seq = ++accountingState.purchaseSeq;
   const id = 'pur' + seq;
   const div = document.createElement('div');
@@ -5038,7 +5082,24 @@ function purchaseTableHtml_(rows, cfg) {
   let html = '<table class="rec-table"><thead><tr><th class="lot-select-cell">✓</th>';
   cfg.columns.forEach(function(col) { html += '<th>' + recEsc(col[1]) + '</th>'; });
   html += '</tr></thead><tbody>';
+  const groups = {};
   rows.forEach(function(row) {
+    const orderRef=String(row.order_ref||'').trim();
+    const key=orderRef?'order:'+orderRef:'row:'+Number(row.row_index);
+    (groups[key]=groups[key]||[]).push(row);
+  });
+  Object.keys(groups).forEach(function(key) {
+    const group=groups[key],isGroup=group.length>1;
+    if(isGroup){
+      const allEligible=group.every(purchaseBatchEligible_),selectedCount=group.filter(function(row){return !!accountingState.selectedPurchaseLots[row.row_index];}).length;
+      const encoded=encodeURIComponent(key),expanded=!!(accountingState.purchaseGroupsExpanded||{})[key];
+      html += '<tr class="purchase-group-row" onclick="togglePurchaseGroupExpanded(decodeURIComponent(\''+encoded+'\'))"><td class="lot-select-cell" onclick="event.stopPropagation()">';
+      if(allEligible) html += '<input type="checkbox" data-purchase-group-checkbox="'+recEsc(encoded)+'"'+(selectedCount===group.length?' checked':'')+' onchange="togglePurchaseOrderGroup(decodeURIComponent(\''+encoded+'\'),this.checked)">';
+      else html += '<span class="field-hint" title="Batch update тільки для ZenMarket JP">—</span>';
+      html += '</td><td colspan="'+cfg.columns.length+'"><b>'+recEsc(group[0].order_ref)+'</b> · '+group.length+' SKU · '+(expanded?'▾ Згорнути':'▸ Розгорнути')+'</td></tr>';
+      if(!expanded)return;
+    }
+    group.forEach(function(row) {
     const eligible = purchaseBatchEligible_(row);
     const checked = accountingState.selectedPurchaseLots[row.row_index] ? ' checked' : '';
     html += '<tr><td class="lot-select-cell">';
@@ -5051,6 +5112,7 @@ function purchaseTableHtml_(rows, cfg) {
     html += '</td>';
     cfg.columns.forEach(function(col) { html += '<td>' + recEsc(row[col[0]]) + '</td>'; });
     html += '</tr>';
+    });
   });
   return html + '</tbody></table>';
 }
@@ -5081,6 +5143,12 @@ function renderPurchaseTables_(pane, rows, cfg) {
   }
   html += '<div id="editRowFormPurchases"></div>';
   pane.innerHTML = html;
+  pane.querySelectorAll('[data-purchase-group-checkbox]').forEach(function(box) {
+    const key=decodeURIComponent(box.getAttribute('data-purchase-group-checkbox'));
+    const group=(rows||[]).filter(function(row){return purchaseOrderGroupKey_(row)===key;});
+    const selected=group.filter(function(row){return !!accountingState.selectedPurchaseLots[row.row_index];}).length;
+    box.indeterminate=selected>0&&selected<group.length;
+  });
   renderPurchaseBatchEditor();
 }
 
@@ -5096,7 +5164,8 @@ function recReadOnly(label, value) {
 function recSelect(id, label, value, options) {
   let html = '<div class="form-row"><label>' + recEsc(label) + '</label><select id="' + id + '">';
   options.forEach(function(option) {
-    html += '<option value="' + recEsc(option) + '"' + (String(option) === String(value) ? ' selected' : '') + '>' + recEsc(option) + '</option>';
+    const optionValue=Array.isArray(option)?option[0]:option,optionLabel=Array.isArray(option)?option[1]:option;
+    html += '<option value="' + recEsc(optionValue) + '"' + (String(optionValue) === String(value) ? ' selected' : '') + '>' + recEsc(optionLabel) + '</option>';
   });
   return html + '</select></div>';
 }
@@ -5147,8 +5216,9 @@ async function openEditRow(type, rowIndex) {
     fields += recSelect('editOrderStatus','Новий статус замовлення',row.order_status,['Нове','В обробці','Відправлено','Отримано','Скасовано','Повернення','Передзамовлення']);
     fields += '<div class="form-row"><label class="three-dp-readonly"><input id="editFiscalReceipt" type="checkbox"'+(String(row.fiscal_receipt||'').trim().toLowerCase()==='так'?' checked':'')+'> Фіскальний чек видано</label><div id="editFiscalReceiptError" class="records-message error" style="display:none">Спочатку видай фіскальний чек і постав галочку.</div></div>';
     fields += recField('editTtn','ТТН',row.ttn);
-    fields += recSelect('editPackagingType','Паковання',canonicalPackagingType(row.packaging_type),PACKAGING_TYPES);
+    fields += recSelect('editPackagingType','Паковання',canonicalPackagingType(row.packaging_type),packagingSelectOptions_());
     fields += recField('editCustomPackaging','Якщо Інше, грн','','number','0.01');
+    fields += '<div class="form-row"><label class="three-dp-readonly"><input id="editShippingLabel" type="checkbox" checked> Списати 1 термоетикетку 101×101 мм при відправленні</label><div class="field-hint">Увімкнено за замовчуванням. Якщо зняти галочку до збереження — етикетка не списується і не додається до собівартості.</div></div>';
     fields += recField('editShopDelivery','Доставка за рахунок магазину',row.shop_delivery || '','number','0.01');
     fields += recField('editNote','Примітка',row.note);
   }
@@ -5185,9 +5255,9 @@ async function saveEditRow() {
   const threeDpLines=Array.from(document.querySelectorAll('.edit-3dp-mode')).map(function(input){return {crm_row:Number(input.dataset.row),mode:input.checked?'Продаж':'Маркетинг'};});
   const fiscalField=document.getElementById('editFiscalReceipt'),fiscalConfirmed=Boolean(fiscalField&&fiscalField.checked),fiscalError=document.getElementById('editFiscalReceiptError');
   if(editValue('editPaymentStatus')==='Оплачено'&&editValue('editOrderStatus')==='Отримано'&&!fiscalConfirmed){if(fiscalError)fiscalError.style.display='block';if(fiscalField)fiscalField.focus();return;}if(fiscalError)fiscalError.style.display='none';
-  const payload = { action:'update_sale', row_index:edit.row_index, payment_status:editValue('editPaymentStatus'),
+  const shippingLabel=Boolean((document.getElementById('editShippingLabel')||{}).checked),payload = { action:'update_sale', row_index:edit.row_index, payment_status:editValue('editPaymentStatus'),
     order_status:editValue('editOrderStatus'), ttn:editValue('editTtn'), packaging_type:editValue('editPackagingType'),
-    note:editValue('editNote'),fiscal_receipt:fiscalConfirmed,components:components,fixtures:fixtures,three_dp_lines:threeDpLines };
+    note:editValue('editNote'),fiscal_receipt:fiscalConfirmed,shipping_label:shippingLabel,components:components,fixtures:fixtures,three_dp_lines:threeDpLines };
   if (editValue('editPaymentType') !== String(edit.payment_type || '').trim()) payload.payment_type = editValue('editPaymentType');
   if (editValue('editCustomPackaging') !== '') payload.custom_packaging_cost = Number(editValue('editCustomPackaging'));
   if (editValue('editShopDelivery') !== '') payload.shop_delivery = Number(editValue('editShopDelivery'));
@@ -5253,7 +5323,33 @@ function togglePurchaseLot(rowIndex, checked) {
   }
   if (checked) accountingState.selectedPurchaseLots[rowIndex] = row;
   else delete accountingState.selectedPurchaseLots[rowIndex];
-  renderPurchaseBatchEditor();
+  renderRecTable('purchases');
+}
+
+function purchaseOrderGroupKey_(row) {
+  const orderRef=String(row&&row.order_ref||'').trim();
+  return orderRef?'order:'+orderRef:'row:'+Number(row&&row.row_index);
+}
+function togglePurchaseGroupExpanded(groupKey) {
+  const expanded=accountingState.purchaseGroupsExpanded||(accountingState.purchaseGroupsExpanded={});
+  expanded[groupKey]=!expanded[groupKey];
+  renderRecTable('purchases');
+}
+function togglePurchaseOrderGroup(groupKey, checked) {
+  const rows=(accountingState.recent.purchases||[]).filter(function(row){return purchaseOrderGroupKey_(row)===groupKey;});
+  const msg=document.getElementById('recordsMsg');
+  if(!rows.length)return;
+  if(checked&&!rows.every(purchaseBatchEligible_)){
+    if(msg){msg.textContent='У групі є лоти, недоступні для спільного оновлення';msg.className='records-message error';}
+    renderRecTable('purchases');return;
+  }
+  const add=rows.filter(function(row){return !accountingState.selectedPurchaseLots[row.row_index];});
+  if(checked&&Object.keys(accountingState.selectedPurchaseLots).length+add.length>PURCHASE_BATCH_LIMIT){
+    if(msg){msg.textContent='Не можна вибрати це замовлення: разом буде більше '+PURCHASE_BATCH_LIMIT+' лотів';msg.className='records-message error';}
+    renderRecTable('purchases');return;
+  }
+  rows.forEach(function(row){if(checked)accountingState.selectedPurchaseLots[row.row_index]=row;else delete accountingState.selectedPurchaseLots[row.row_index];});
+  renderRecTable('purchases');
 }
 
 function renderPurchaseBatchEditor() {
