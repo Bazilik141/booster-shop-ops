@@ -44,7 +44,7 @@ badge, and sits under it when there is.
 
 ## 3. Goal
 
-A product carrying the owner's `Тип паку` attribute with the value `Rare Pack` shows a `Rare Pack`
+A product carrying the `Тип товару` attribute with the value `Rare Pack` shows a `Rare Pack`
 badge in the left corner of its listing tile, below the pre-order or out-of-stock badge when one is
 present and in its place when none is. Every other product's tile is byte-identical to today.
 
@@ -57,14 +57,25 @@ category.
 
 | | value |
 |---|---|
-| attribute name | `Тип паку` |
-| `attribute_id` | `56` |
+| attribute name | `Тип товару` |
+| `attribute_id` | `27` |
+| attribute group | `Характеристики` |
 | matching value | `Rare Pack` |
 
-**Owner-stated, verify before writing code.** Confirm `attribute_id = 56` really is `Тип паку` in
+**Owner-stated, verify before writing code.** Confirm `attribute_id = 27` really is `Тип товару` in
 `ocp5_attribute_description` for `language_id = 4`. Chats on this project have invented attributes
 that do not exist; do not be the next one. If it does not match, stop and report — do not guess
 another id.
+
+`Тип товару` is an **existing, shared** attribute already carrying other values on other products; it
+was not created for this line. Two consequences:
+
+1. Matching on the value rather than on presence is not a stylistic choice here, it is the only
+   correct behaviour — presence would badge every product that has this attribute at all.
+2. `Тип товару` was moved into the group `Характеристики` by the owner on 2026-09-18, specifically
+   because `product.twig` renders the attribute **group name** as a header row above its rows
+   (`<tr><td colspan="2">{{ attribute_group.name }}</td></tr>`, around `:503`). The group name is
+   customer-visible on the product page. Do not move this attribute between groups.
 
 Inside the RD-04f block, after `$data['bs_eta']` is set, add a lookup in the same style as the
 stock-status one already there:
@@ -77,7 +88,7 @@ stock-status one already there:
   `mb_strtolower` where available exactly as the existing block does;
 - when `$data['product_id']` is empty or the row is absent, `$data['bs_is_rare']` is false.
 
-Match on the **value**, not on the attribute being present: `Тип паку` is a characteristic that will
+Match on the **value**, not on the attribute being present: `Тип товару` is a characteristic that will
 carry other values later, so presence alone would badge the wrong products.
 
 Put the `attribute_id` and the matching string in named constants at the top of the block with a
@@ -174,12 +185,12 @@ The executor never commits, pushes, uploads, runs or deploys. Report to `diagnos
 
 | case | expected |
 |---|---|
-| product with `Тип паку` = `Rare Pack`, in stock | one badge in the left corner: `RARE PACK` |
+| product with `Тип товару` = `Rare Pack`, in stock | one badge in the left corner: `RARE PACK` |
 | the same product on pre-order | `ПЕРЕДЗАМОВЛЕННЯ` on top, `RARE PACK` under it, 6px apart |
 | the same product sold out | `НЕМАЄ В НАЯВНОСТІ` on top, `RARE PACK` under it |
 | the same product with a discount | `RARE PACK` left, `−N%` right, unchanged |
 | product without the attribute | tile byte-identical to today |
-| product with `Тип паку` set to any other value | no badge |
+| product with `Тип товару` set to any other value | no badge |
 | product with the value in different case or with spaces | badge still shown |
 
 Plus:
@@ -197,9 +208,9 @@ Plus:
 Not a checkout, payment or fiscalization change — `bs-checkout-smoke` not required. Not an SEO,
 canonical, sitemap or schema change — no gate. Risk is confined to how the tile looks.
 
-1. Before running: set `Тип паку` = `Rare Pack` on each of the four `-RPK` products. **A product where
-   this is missed simply has no badge and nothing warns you** — this is the one failure mode of an
-   attribute-driven flag, so check all four.
+1. Before running: set `Тип товару` = `Rare Pack` on each of the four `-RPK` products. **A product
+   where this is missed simply has no badge and nothing warns you** — this is the one failure mode of
+   an attribute-driven flag, so check all four.
 2. Run the patch, clear the OpenCart cache, hard-refresh a category page.
 3. A non-Rare-Pack tile looks exactly as before.
 4. A Rare Pack tile shows the badge; on a pre-order or sold-out one, both badges stack correctly.
@@ -208,8 +219,11 @@ canonical, sitemap or schema change — no gate. Risk is confined to how the til
    tile width already runs close to the right edge. If it clips or wraps, report it — the fix is to
    reduce the corner offset from 18px to 10px under the existing mobile breakpoint, and it is a
    follow-up, not something to improvise during this patch.
-7. Confirm the attribute also appears in the product page's characteristics table, where it belongs as
-   honest disclosure of what the line is.
+7. Open a Rare Pack product page → tab «Характеристики». The row must read `Тип товару — Rare Pack`
+   under the group heading `Характеристики`. Any other heading above it means the attribute is back in
+   the wrong group.
+8. Open one existing product that already carries `Тип товару` with a different value and confirm its
+   tile and its characteristics table are unchanged.
 
 ## 9. Rollback
 
