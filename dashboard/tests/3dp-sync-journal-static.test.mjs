@@ -53,12 +53,29 @@ assert.doesNotMatch(dashboard, /function saveThreeDpModel\(/);
 
 const validatorSource = dashboard.match(/function threeDpSkuTypeError\(sku,type\) \{[^\n]+\}/)?.[0];
 assert.ok(validatorSource, "threeDpSkuTypeError must remain a standalone validator");
+assert.match(validatorSource, /\^\(BR\|FIG\|ACC-3D\)-\[A-Z0-9\]\{2,5\}-\\d\{3\}\(\?:-\[A-Z0-9\]\{1,5\}\)\*\$/,
+  "dashboard validator must use the rev. 9 suffix grammar shared with the 3D-P API");
+assert.match(dashboard, /const sku=String\(\(threeDpInput\('threeDpProductSku'\) \|\| \{\}\)\.value \|\| ''\)\.trim\(\)\.toUpperCase\(\),invalid=threeDpSkuTypeError\(sku,type\);/,
+  "create flow must normalize a lowercase suffix before validation");
 const validatorContext = vm.createContext({ String, RegExp });
 vm.runInContext(`${validatorSource}\nglobalThis.validate = threeDpSkuTypeError;`, validatorContext);
-assert.equal(validatorContext.validate("ACC-3D-DITTO-410", "Функціональний аксесуар"), "");
-assert.equal(validatorContext.validate("ACC-3D-OP-500", "Функціональний аксесуар"), "");
-assert.equal(validatorContext.validate("BR-CHARM-001", "Брелок"), "");
-assert.match(validatorContext.validate("ACC-3D-410", "Функціональний аксесуар"), /ACC-3D-PKM-130/);
+[
+  ["ACC-3D-PKM-130", "Функціональний аксесуар", true],
+  ["ACC-3D-DITTO-410", "Функціональний аксесуар", true],
+  ["BR-CHARM-100", "Брелок", true],
+  ["FIG-CHARM-001", "Фігурка", true],
+  ["ACC-3D-ONIX-110-21", "Функціональний аксесуар", true],
+  ["ACC-3D-ONIX-110-21-BLK", "Функціональний аксесуар", true],
+  ["FIG-ONIX-500-15-WHT", "Фігурка", true],
+  ["ACC-3D-410", "Функціональний аксесуар", false],
+  ["ACC-3D-ONIX-110-", "Функціональний аксесуар", false],
+  ["ACC-3D-ONIX-110-TOOLONG", "Функціональний аксесуар", false],
+  ["ACC-001", "Функціональний аксесуар", false],
+  ["PKM-JP-EXSD-STD-GRS", "Функціональний аксесуар", false],
+].forEach(([sku, type, accepted]) => {
+  assert.equal(validatorContext.validate(sku, type) === "", accepted, `dashboard validation: ${sku}`);
+});
+assert.match(validatorContext.validate("ACC-3D-410", "Функціональний аксесуар"), /ACC-3D-ONIX-110-21-BLK/);
 assert.match(validatorContext.validate("ACC-3D-DITTO-410", "Брелок"), /Префікс SKU/);
 
 console.log("3dp-sync-journal dashboard static tests passed");

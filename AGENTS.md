@@ -280,17 +280,53 @@ how unrelated code gets overwritten — this has already happened once on CRM an
   `ocp5_seo_url` row — without one the selector links to a parametric route, which GSC
   files as "alternate page with canonical" and the feed inherits.
 
-## Variant products (master/variant) — canonical rules
+## Variant products — canonical rules
 
-Owner decisions of 2026-09-12…16 (`CAT-004`). Applies to every game and product type,
+Owner decisions of 2026-09-12…19 (`CAT-004`). Applies to every game and product type,
 not only 3D-print.
 
-- **Model.** Native OpenCart 4.1 master/variant. One combination = one real product = one
-  page = one article. Product **options** are never used to express a variation that needs
-  its own price, stock or SKU: one product has exactly one `model`, and option quantity is
-  not stock, so per-combination accounting is impossible in that model.
+- **Model — owner decision 2026-09-19, supersedes the 2026-09-12 one.** A variant family is
+  a set of **ordinary, independent products**. No OpenCart master/variant, no `master_id`, no
+  product options. One combination = one real product = one page = one article = one row in
+  the accounting catalogue, and it owns its price, stock, photos and SEO outright.
+  Membership is declared in three product attributes (below).
+
+  Native master/variant was tried first and rejected on the evidence of a live test
+  2026-09-18/19. Three reasons, in order of weight: the master is a template and holds no
+  combination of its own, so either it is absent from its own family's selector or the code
+  has to guess which combination is "left over" — a guess that collapses the moment one
+  member is disabled; a variant inherits every field from its master until that field's
+  override switch is on, so one forgotten switch silently overwrites a live product's price
+  or stock, on a production shop with no staging; and the option rows carry price / points /
+  weight modifiers that exist for a different feature entirely and have no meaning here.
+
+- **Exactly one characteristic per family — owner decision 2026-09-19.** A family varies along
+  one axis only: colour, or size, or deck type, or set — never two at once. Two axes were
+  considered and dropped: they require combination matching (a colour chip must keep the
+  current size), a rule for combinations that do not exist, and a repeating admin UI. If the
+  3D-print line ever needs size × colour, that is a new task, not a silent extension of this
+  one. Until then, code that assumes one axis is correct, not a shortcut.
+
+- **Family membership lives in the shop's own table, not in product attributes.** Product
+  attributes are customer-facing characteristics and render in the specification table on the
+  product page; service data does not belong there. Membership is stored in a dedicated table
+  written from a dedicated tab on the admin product form.
+
+  | field | role | same across the family? |
+  |---|---|---|
+  | family key | groups siblings | yes, identical |
+  | axis label | the row label above the chips, e.g. `Розмір` | yes, identical |
+  | value label | the chip label, e.g. `21 см` | no, unique per member |
+  | sort order | chip order inside the row | no |
+
+  Chip order is this table's own `sort_order`, never the product's `sort_order` field, which
+  belongs to category listings. Values are never derived from the article: `OP-JP-OP01-RPK`
+  and `OP-JP-EB01-RPK` are one family and share no article prefix.
+
 - **Selector.** Options-style chips whose values are ordinary links to the sibling's URL.
-  No in-place swapping. Unavailable values render as non-links, greyed.
+  No in-place swapping. A value whose sibling exists is always a link, sold out or not;
+  `is-off` is styling only. Only a declared family member with no product renders as a
+  non-link.
 - **Price in chips is a per-group rule, not per-value.** If any value in a characteristic
   group has a different price, the price shows on every value of that group; if all match,
   it shows on none.
@@ -304,12 +340,18 @@ not only 3D-print.
 - **Names and URLs carry the differentiator** for variant products. The ред. 2 prohibition
   (2026-08-16) applied only while variations were expected to live as options on one page.
 - **Listing membership is data, not code.** What appears in a category is controlled by
-  `product_to_category` links: for TCG, only the master in the parent category and the whole
-  family in the subcategory; for every other product type, one card per family.
-- **Admin trap — this is where data is lost.** A variant inherits every field from its master
-  until that field's override is switched on. Saving a variant with an override off overwrites
-  its price, stock or images with the master's. Switch overrides on *before* entering values,
-  and re-open to confirm they held.
+  `product_to_category` links: for TCG, one chosen member in the parent category and the whole
+  family in the subcategory; for every other product type, one card per family. With no master
+  to default to, the member shown in the parent category is an explicit editorial choice.
+- **The admin trap is gone, and stays gone.** The master/variant override mechanism was the
+  single largest data-loss risk in this area: a variant saved with an override off took its
+  master's price, stock or images. Independent products have no inheritance, so there is
+  nothing to forget. Do not reintroduce `master_id` for a variant family.
+- **The failure mode moved, it did not disappear.** A member whose family key is missing or
+  mistyped silently drops out of its family, and nothing warns anyone. The admin field
+  therefore offers the existing keys as an autocomplete rather than plain free text, and
+  entering a family stays a checked step: after entering all members, open one page and
+  confirm the row shows every member.
 - **A sold-out variant is not deleted.** The page keeps its accumulated search value; its chip
   greys out by the general unavailable rule.
 

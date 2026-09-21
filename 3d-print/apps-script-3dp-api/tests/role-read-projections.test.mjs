@@ -230,6 +230,30 @@ function codeOf(fn, code) { errorOf(fn, code); }
 const owner = { role: "owner", identity: "dashboard" };
 const serhiy = { role: "serhiy", identity: "serhiy" };
 const api = loadApi();
+const skuPattern3dp = vm.runInContext("NOMENCLATURE_SKU_PATTERN_3DP.source", api.context);
+assert.equal(skuPattern3dp, "^(BR|FIG|ACC-3D)-[A-Z0-9]{2,5}-\\d{3}(?:-[A-Z0-9]{1,5})*$",
+  "3D-P API validator must use the same rev. 9 suffix grammar as the dashboard");
+[
+  ["ACC-3D-PKM-130", true],
+  ["ACC-3D-DITTO-410", true],
+  ["BR-CHARM-100", true],
+  ["FIG-CHARM-001", true],
+  ["ACC-3D-ONIX-110-21", true],
+  ["ACC-3D-ONIX-110-21-BLK", true],
+  ["FIG-ONIX-500-15-WHT", true],
+  ["ACC-3D-410", false],
+  ["ACC-3D-ONIX-110-", false],
+  ["ACC-3D-ONIX-110-TOOLONG", false],
+  ["ACC-001", false],
+  ["PKM-JP-EXSD-STD-GRS", false],
+].forEach(([sku, accepted]) => {
+  if (accepted) {
+    assert.equal(api.context.canonicalNomenclatureSku3dp_(sku), sku, "3D-P API validation: " + sku);
+  } else {
+    codeOf(() => api.context.canonicalNomenclatureSku3dp_(sku), "INVALID_SKU");
+  }
+});
+assert.match(errorOf(() => api.context.canonicalNomenclatureSku3dp_("ACC-3D-410"), "INVALID_SKU").message, /ACC-3D-ONIX-110-21-BLK/);
 const repairApi = loadApi();
 const repairNomenclature = repairApi.workbook.getSheetByName("Номенклатура");
 repairNomenclature.setValueAt(3, 1, "BR-BULB-100");
@@ -256,7 +280,7 @@ const ownerReadCases = [
   ["3dp_get_range", { sheet: "Продажі", range: "A1:AA2" }],
   ["3dp_overview", {}], ["3dp_information_bootstrap", {}],
   ["3dp_skus", {}], ["3dp_sales", {}], ["3dp_plyushky", {}], ["3dp_payouts", {}],
-  ["3dp_print_log", {}], ["3dp_fixtures", {}], ["3dp_batch_draft", { sku: "FIG-001" }],
+  ["3dp_print_log", {}], ["3dp_fixtures", {}], ["3dp_batch_draft", { sku: "FIG-001", quantity: 2 }],
   ["3dp_stock_adjustments", {}],
 ];
 const wp1BaselineSourcePath = resolveWp1ReadBaselinePath();
@@ -271,10 +295,16 @@ assert.deepEqual(ownerSales.rows[0], Object.fromEntries([["row_number", 2], ...s
 assert.equal(ownerSales.rows[0]["№ замовлення"], "ORDER-SECRET");
 assert.equal(call(api, "3dp_get_range", owner, { sheet: "Налаштування", range: "A1:C5" }).range, "A1:C5");
 assert.equal(call(api, "3dp_bootstrap", owner).analytics.range, "A1:N2");
+const largeOwnerBootstrapApi = loadApi();
+const largeAnalytics = largeOwnerBootstrapApi.workbook.getSheetByName("Аналітика_SKU");
+for (let row = 3; row <= 40; row += 1) largeAnalytics.setValueAt(row, 1, `FIG-${String(row).padStart(3, "0")}`);
+assert.equal(call(largeOwnerBootstrapApi, "3dp_bootstrap", owner).analytics.range, "A1:N40",
+  "the fixed owner bootstrap may read its audited 100x14 projection after it exceeds the public 500-cell range limit");
+codeOf(() => call(largeOwnerBootstrapApi, "3dp_get_range", owner, { sheet: "Аналітика_SKU", range: "A1:N40" }), "RANGE_TOO_LARGE");
 assert.equal(call(api, "3dp_information_bootstrap", owner).sales.rows[0]["CRM row number"], 321);
 assert.equal(call(api, "3dp_skus", owner).rows[0].availability["Наявно зараз, шт"], 0);
 assert.equal(call(api, "3dp_print_log", owner).rows[0]["API_історія_змін"], "history");
-assert.equal(call(api, "3dp_batch_draft", owner, { sku: "FIG-001" }).values.spool_price_uah, 600);
+assert.equal(call(api, "3dp_batch_draft", owner, { sku: "FIG-001", quantity: 2 }).values.spool_price_uah, 600);
 assert.equal(call(api, "3dp_stock_adjustments", owner).rows[0]["Причина"], "owner only");
 
 const serhiySales = call(api, "3dp_sales", serhiy);
@@ -294,7 +324,7 @@ assert.equal(Object.hasOwn(serhiyPlyushky, "Примітки"), false);
 assert.equal(serhiyPlyushky["Сума закупівлі, грн"], 0);
 assert.equal(call(api, "3dp_get_row", serhiy, { sheet: "Номенклатура", sku: "FIG-001" }).row["API_історія_змін"], "owner history");
 assert.equal(call(api, "3dp_print_log", serhiy).rows[0]["API_історія_змін"], "history");
-assert.equal(call(api, "3dp_batch_draft", serhiy, { sku: "FIG-001" }).found, false);
+assert.equal(call(api, "3dp_batch_draft", serhiy, { sku: "FIG-001", quantity: 4 }).found, false);
 assert.equal(call(api, "3dp_bootstrap", serhiy).settings.range, "B2:B5");
 const serhiyAnalytics = call(api, "3dp_bootstrap", serhiy).analytics;
 assert.equal(serhiyAnalytics.values[0].length, 11);
@@ -373,11 +403,14 @@ assert.equal(nomenclatureJournal.getLastRow(), nomenclatureJournalBefore + 3,
 assert.equal(api.workbook.getSheetByName("_Аудит_API").getRange(api.workbook.getSheetByName("_Аудит_API").getLastRow(), 3).getDisplayValue(), "NOMENCLATURE_OWNER_CREATE");
 
 plain(api.context.saveBatchDraftAction3dp_(api.workbook, { sku: "FIG-001", values: { quantity: 4 }, expected_current: { quantity: "" } }, serhiy));
-assert.equal(call(api, "3dp_batch_draft", serhiy, { sku: "FIG-001" }).values.quantity, 4);
-assert.equal(call(api, "3dp_batch_draft", owner, { sku: "FIG-001" }).values.quantity, 2);
-assert.equal(api.workbook.getSheetByName("_Чернетки_партій").getRange("A3").getDisplayValue(), "serhiy::FIG-001");
+plain(api.context.saveBatchDraftAction3dp_(api.workbook, { sku: "FIG-001", values: { quantity: 5 }, expected_current: { quantity: "" } }, serhiy));
+assert.equal(call(api, "3dp_batch_draft", serhiy, { sku: "FIG-001", quantity: 4 }).values.quantity, 4);
+assert.equal(call(api, "3dp_batch_draft", serhiy, { sku: "FIG-001", quantity: 5 }).values.quantity, 5);
+assert.equal(call(api, "3dp_batch_draft", owner, { sku: "FIG-001", quantity: 2 }).values.quantity, 2);
+assert.equal(api.workbook.getSheetByName("_Чернетки_партій").getRange("A3").getDisplayValue(), "serhiy::FIG-001::4");
+assert.equal(api.workbook.getSheetByName("_Чернетки_партій").getRange("A4").getDisplayValue(), "serhiy::FIG-001::5");
 const v23AfterSerhiyDraft = loadApi(wp1BaselineSource, api.workbook);
-assert.equal(call(v23AfterSerhiyDraft, "3dp_batch_draft", owner, { sku: "FIG-001" }).values.quantity, 2);
+assert.equal(call(v23AfterSerhiyDraft, "3dp_batch_draft", owner, { sku: "FIG-001", quantity: 2 }).values.quantity, 2);
 
 const migration = plain(api.context.setup3dpWp1bSchema());
 assert.equal(migration.already_applied, false);

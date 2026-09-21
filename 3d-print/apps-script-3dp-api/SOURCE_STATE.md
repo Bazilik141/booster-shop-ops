@@ -1,5 +1,45 @@
 # 3D-P Apps Script source state
 
+## Deployed — V34 (2026-09-16 17:26, owner-reported)
+
+Owner statement 2026-09-21: `Версія 34, 16 вер. 2026 р., 17:26` is published and
+carries the 3D-P-027 revision 9 SKU grammar correctly. The section below, which
+described that grammar as a pending local candidate, is therefore **superseded**
+and kept only as history.
+
+Two caveats, recorded rather than smoothed over:
+
+- V33 and V34 were published without a source-state entry at the time, so what
+  else travelled with them is not recorded here. The repository `Code.gs` was
+  last written 2026-09-16 09:18, eight hours before that publication, and cannot
+  by itself prove the deployed content.
+- No byte-verified export of V34 exists in the repository. Deployment identity
+  for V34 is owner-reported, the same status V32 carries below. The next task
+  touching this script should start by exporting the live source and proving the
+  mirror, not by trusting this file.
+
+## Superseded — local candidate addition, 3D-P-027 (2026-09-16)
+
+The repository Code.gs now accepts the owner-approved revision 9 SKU grammar:
+the existing BR|FIG|ACC-3D base plus zero or more uppercase/digit suffix
+segments of one to five characters. The same validation remains in the owner
+dashboard; both copies use the identical expression and are covered by the
+same accept/reject matrix. This local mirror has not been pasted into the bound
+3D-P Apps Script project or published as a Web App version. The pre-existing
+local V32 candidate changes below remain separate and are preserved.
+
+## Local candidate after V32 — pending publication (2026-09-06)
+
+The repository `Code.gs` is now ahead of the owner-reported V32 deployment by
+one bounded-read fix. The owner `3dp_bootstrap` keeps its audited
+`Аналітика_SKU!A1:N100` maximum but reads that fixed internal projection
+directly, instead of routing it through the 500-cell guard for caller-controlled
+`3dp_get_range`. The external range guard remains unchanged and a focused test
+proves that `A1:N40` still returns `RANGE_TOO_LARGE` through the public action
+while the owner bootstrap succeeds. This candidate is local only; the live Web
+App will keep returning the reported error until the owner publishes a new
+Apps Script version.
+
 ## Deployed catalogue/FIFO source — V32 (2026-09-06)
 
 The owner copied the repository `Code.gs` and `CatalogFifo.gs` into the bound
