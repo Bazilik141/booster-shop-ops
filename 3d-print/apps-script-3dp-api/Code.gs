@@ -2505,43 +2505,73 @@ function ensureSalesDerivedFormulas3dp_(sheet, row, apply) {
   return { changed: changed, blocked: blocked };
 }
 
-function salesFormulaRepairPlan3dp_(sheet, expectedSkus) {
+function salesFormulaRepairPlan3dp_(sheet, expectedSales) {
   const expected = {};
-  (expectedSkus || []).forEach(function(sku) { expected[requiredSku3dp_(sku)] = true; });
+  expectedSales.forEach(function(sale) {
+    const key = sale.sku + '\u0001' + sale.date + '\u0001' + sale.order;
+    expected[key] = sale;
+  });
   const rows = [];
   const blockers = [];
   const found = {};
+  const ambiguousSales = [];
   const lastRow = Math.min(sheet.getLastRow(), API_3DP.maxReadRows);
   for (let row = 2; row <= lastRow; row++) {
     const sku = String(sheet.getRange(row, 2).getValue() || '').trim();
-    if (!sku || (Object.keys(expected).length && !expected[sku])) continue;
-    found[sku] = true;
+    if (!sku) continue;
+    const rawDate = sheet.getRange(row, 1).getValue();
+    const date = Object.prototype.toString.call(rawDate) === '[object Date]'
+      ? Utilities.formatDate(rawDate, API_3DP.timezone, 'yyyy-MM-dd') : String(rawDate || '').trim().slice(0, 10);
+    const order = String(sheet.getRange(row, columnToNumber3dp_('N')).getValue() || '').trim();
+    const key = sku + '\u0001' + date + '\u0001' + order;
+    if (!expected[key]) continue;
+    found[key] = (found[key] || 0) + 1;
+    if (found[key] > 1) {
+      ambiguousSales.push({ row: row, sku: sku, date: date, order: order });
+      continue;
+    }
     const result = ensureSalesDerivedFormulas3dp_(sheet, row, false);
-    if (result.changed.length) rows.push({ row: row, sku: sku, cells: result.changed });
-    if (result.blocked.length) blockers.push({ row: row, sku: sku, cells: result.blocked });
+    if (result.changed.length) rows.push({ row: row, sku: sku, date: date, order: order, cells: result.changed });
+    if (result.blocked.length) blockers.push({ row: row, sku: sku, date: date, order: order, cells: result.blocked });
   }
-  const missingSkus = Object.keys(expected).filter(function(sku) { return !found[sku]; });
-  return { rows: rows, blockers: blockers, missing_skus: missingSkus };
+  const missingSales = Object.keys(expected).filter(function(key) { return !found[key]; }).map(function(key) { return expected[key]; });
+  return { rows: rows, blockers: blockers, missing_sales: missingSales, ambiguous_sales: ambiguousSales };
 }
 
 function salesFormulaRepairAction3dp_(spreadsheet, body, actor) {
   assertOwner3dp_(actor, 'Only the owner may repair Продажі formulas.');
   const sales = getSheet3dp_(spreadsheet, SHEETS_3DP.sales);
   if (!is3dpOrderLineAccountingSchemaReady3dp_(sales)) throw apiError3dp_('SCHEMA_NOT_READY', 'Run the approved Продажі schema setup before formula repair.');
-  const expectedSkus = Array.isArray(body.expected_skus) ? body.expected_skus.slice(0, 20) : [];
+  const expectedSales = Array.isArray(body.expected_sales) ? body.expected_sales : [];
+  if (!expectedSales.length || expectedSales.length > 20) throw apiError3dp_('EXPECTED_SALES_REQUIRED', 'Specify 1–20 exact sales before formula repair.');
+  const seen = {};
+  const canonicalSales = expectedSales.map(function(raw) {
+    const sku = requiredSku3dp_(raw && raw.sku);
+    const date = String(raw && raw.date || '').trim();
+    const order = String(raw && raw.order || '').trim();
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !order || order.length > 120) {
+      throw apiError3dp_('EXPECTED_SALE_INVALID', 'Each sale requires an ISO date and order number.');
+    }
+    const key = sku + '\u0001' + date + '\u0001' + order;
+    if (seen[key]) throw apiError3dp_('EXPECTED_SALE_DUPLICATE', 'The same expected sale was supplied twice.');
+    seen[key] = true;
+    return { sku: sku, date: date, order: order };
+  });
   const apply = body.apply === true || String(body.apply || '').toLowerCase() === 'true';
-  const plan = salesFormulaRepairPlan3dp_(sales, expectedSkus);
-  const fingerprint = fifo3dpFingerprint_({ rows: plan.rows, blockers: plan.blockers, missing_skus: plan.missing_skus });
+  const plan = salesFormulaRepairPlan3dp_(sales, canonicalSales);
+  const fingerprint = fifo3dpFingerprint_({ rows: plan.rows, blockers: plan.blockers, missing_sales: plan.missing_sales,
+    ambiguous_sales: plan.ambiguous_sales });
   if (!apply) {
     return { action: '3dp_sales_formula_repair', apply: false, fingerprint: fingerprint, rows: plan.rows,
-      blockers: plan.blockers, missing_skus: plan.missing_skus, cells_to_repair: plan.rows.reduce(function(sum, item) { return sum + item.cells.length; }, 0) };
+      blockers: plan.blockers, missing_sales: plan.missing_sales, ambiguous_sales: plan.ambiguous_sales,
+      cells_to_repair: plan.rows.reduce(function(sum, item) { return sum + item.cells.length; }, 0) };
   }
   const expectedFingerprint = String(body.expected_fingerprint || '').trim();
   if (!/^[a-f0-9]{64}$/.test(expectedFingerprint) || expectedFingerprint !== fingerprint) {
     throw apiError3dp_('STALE_FORMULA_REPAIR_PREVIEW', 'Продажі changed after preview; run preview again.');
   }
-  if (plan.blockers.length || plan.missing_skus.length) {
-    throw apiError3dp_('FORMULA_REPAIR_BLOCKED', 'Repair has manual-value conflicts or requested SKU rows are missing.');
+  if (plan.blockers.length || plan.missing_sales.length || plan.ambiguous_sales.length) {
+    throw apiError3dp_('FORMULA_REPAIR_BLOCKED', 'Repair has manual-value conflicts or missing/ambiguous expected sales.');
   }
   const snapshots = plan.rows.map(function(item) {
     return snapshotRange3dp_(sales, 'A' + item.row + ':' + numberToColumn3dp_(sales.getLastColumn()) + item.row);
@@ -2552,8 +2582,8 @@ function salesFormulaRepairAction3dp_(spreadsheet, body, actor) {
       if (result.blocked.length) throw apiError3dp_('FORMULA_REPAIR_BLOCKED', 'A target cell gained a manual value after preview.');
     });
     SpreadsheetApp.flush();
-    const after = salesFormulaRepairPlan3dp_(sales, expectedSkus);
-    if (after.rows.length || after.blockers.length || after.missing_skus.length) {
+    const after = salesFormulaRepairPlan3dp_(sales, canonicalSales);
+    if (after.rows.length || after.blockers.length || after.missing_sales.length || after.ambiguous_sales.length) {
       throw apiError3dp_('FORMULA_REPAIR_VERIFICATION_FAILED', 'One or more requested formulas are still missing.');
     }
     appendAudit3dp_(spreadsheet, actor, 'SALES_FORMULAS_REPAIRED', SHEETS_3DP.sales,

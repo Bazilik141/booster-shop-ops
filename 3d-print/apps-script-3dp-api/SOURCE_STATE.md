@@ -16,7 +16,9 @@ The local candidate adds an atomic manufactured-batch FIFO marketing writeoff,
 row-local deterministic formulas for `Продажі!C/I/J/K/L/S`, owner-only
 fingerprint-gated formula repair, reconciliation/reversal support for the new
 allocation source, and the temporary `CRM-015.html` preview/apply tool for the
-three affected rows. None of this is published. The repair route/action and
+three affected rows. The repair action now requires each target's exact date,
+SKU and order number; missing or duplicate matches block application. None of
+this is published. The repair route/action and
 temporary HTML are task-scoped: after successful owner QA both must be removed
 from the bound project and local mirror, then the clean 3D-P source republished.
 

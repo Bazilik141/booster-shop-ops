@@ -72,10 +72,11 @@ rewritten.
 - Clean bounded CRM integrity checks are required both before and after the CRM
   projection.
 - Formula repair is owner-only, preview-first, SHA-256 fingerprint-gated, refuses
-  manual-value conflicts or missing requested SKUs, verifies after apply, writes
-  an audit entry, and restores complete row snapshots on failure.
+  manual-value conflicts or missing/duplicate target sales, verifies after apply,
+  writes an audit entry, and restores complete row snapshots on failure. Targets
+  must be exact date + SKU + order triples; an empty list is rejected.
 - `CRM-015.html` and the `3dp_sales_formula_repair` route/action are temporary
-  maintenance code. The UI is fixed to the three reported SKUs, requires preview
+  maintenance code. The UI is fixed to the three reported date/SKU/order triples, requires preview
   before apply, and stores neither URL nor token. Both temporary parts must be
   removed after verified live repair; the row-local formula seeding remains.
 - Active component/fixture catalog reads now exclude `[ARCHIVED]` entries.
@@ -107,6 +108,10 @@ node --test --test-isolation=none tests/crm-015-3dp-marketing-writeoff.test.mjs 
 ```
 
 Result: **30 tests passed, 0 failed**.
+
+Continuation safety check (same command after exact-sale targeting): **32 tests
+passed, 0 failed**. Both 3D-P paste candidates and the local 3D-P source also
+passed JavaScript parsing. No live write or publication was performed.
 
 Additional gates passed:
 
@@ -160,9 +165,11 @@ reversal/reconciliation path; rows must not be manually deleted.
    `work/CRM-015_3dp_Code_from_V34.gs`; replace `CatalogFifo.gs` with the local
    `3d-print/apps-script-3dp-api/CatalogFifo.gs`. Publish a new 3D-P Web App
    version. Do not use the local 3D-P `Code.gs` mirror as the paste source.
-3. Call `3dp_sales_formula_repair` through a direct owner-held API POST, run
-   preview, and verify
-   that only the intended rows/cells appear. Apply only with the returned fresh
+3. Call `3dp_sales_formula_repair` through a direct owner-held API POST with
+   `expected_sales` set to exactly `2026-09-06 / ACC-3D-PKM-110 / OC-FOP-0364`,
+   `2026-09-19 / BR-CHARM-100 / OC-FOP-0389`, and
+   `2026-09-22 / FIG-ONIX-500 / OC-FOP-0391`. Run preview and verify that only
+   the intended rows/cells appear. Apply only with the returned fresh
    fingerprint, then preview again and require zero remaining cells. The
    `CRM-015.html` local-browser fetch has not been runtime proved, so use a
    direct HTTP client such as PowerShell for this step.
@@ -182,6 +189,9 @@ reversal/reconciliation path; rows must not be manually deleted.
    unlinked CRM `Маркетинг` expense, Serhiy accrual, and stock balance. Require a
    clean post-write CRM integrity check and clean `3dp_fifo_reconcile` result.
 
-Do not commit the temporary formula-repair route/action or `CRM-015.html`; their
-deletion after successful live repair is part of completion. Final publication,
-live writes, QA, and source-state version updates remain owner-gated.
+The temporary formula-repair route/action and `CRM-015.html` are versioned in
+the interim `codex/crm-015-accounting-candidate` branch for traceability. They
+must be removed from the bound project and repository in a follow-up change
+after successful live repair; do not treat this branch as a permanent merged
+state. Final publication, live writes, QA, and source-state version updates
+remain owner-gated.

@@ -12,6 +12,8 @@ const fifo = fs.readFileSync(path.join(root, '3d-print/apps-script-3dp-api/Catal
 const crm = fs.readFileSync(path.join(root, 'crm/apps-script/Code.gs'), 'utf8');
 const dashboard = fs.readFileSync(path.join(root, 'dashboard/booster-dashboard.html'), 'utf8');
 const repairTool = fs.readFileSync(path.join(root, '3d-print/apps-script-3dp-api/CRM-015.html'), 'utf8');
+const temporaryPaste = fs.readFileSync(path.join(root, 'work/CRM-015_3dp_Code_from_V34.gs'), 'utf8');
+const finalPaste = fs.readFileSync(path.join(root, 'work/CRM-015_3dp_Code_final.gs'), 'utf8');
 
 function functionSource(source, name) {
   const match = new RegExp('function\\s+' + name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*\\(').exec(source);
@@ -54,6 +56,42 @@ test('sales append rejects incomplete technical rows across schema versions', ()
       `schema orderLineReady=${orderLineReady}, legacyReady=${legacyReady}`,
     );
   }
+});
+
+test('formula repair targets exact date, SKU, and order and rejects a missing target list', () => {
+  const sales = [
+    null,
+    { date: '2026-09-06', sku: 'ACC-3D-PKM-110', order: 'OC-FOP-0364' },
+    { date: '2026-09-07', sku: 'ACC-3D-PKM-110', order: 'OC-FOP-0365' },
+    { date: '2026-09-06', sku: 'ACC-3D-PKM-110', order: 'OC-FOP-0364' },
+  ];
+  const sheet = {
+    getLastRow: () => sales.length,
+    getRange: (row, column) => ({ getValue: () => column === 1 ? sales[row - 1]?.date
+      : column === 2 ? sales[row - 1]?.sku : column === 14 ? sales[row - 1]?.order : '' }),
+  };
+  const context = vm.createContext({
+    API_3DP: { maxReadRows: 100, timezone: 'Europe/Kyiv' },
+    columnToNumber3dp_: column => column === 'N' ? 14 : 0,
+    ensureSalesDerivedFormulas3dp_: (_, row) => ({ changed: ['C' + row], blocked: [] }),
+    Utilities: { formatDate: () => '2026-09-06' },
+    assertOwner3dp_: () => {}, getSheet3dp_: () => sheet,
+    SHEETS_3DP: { sales: 'Продажі' },
+    is3dpOrderLineAccountingSchemaReady3dp_: () => true,
+    apiError3dp_: code => Object.assign(new Error(code), { code }),
+  });
+  vm.runInContext(functionSource(api, 'salesFormulaRepairPlan3dp_') + '\n' +
+    functionSource(api, 'salesFormulaRepairAction3dp_') +
+    '\nglobalThis.plan=salesFormulaRepairPlan3dp_;globalThis.repair=salesFormulaRepairAction3dp_;', context);
+  const expected = [{ sku: 'ACC-3D-PKM-110', date: '2026-09-06', order: 'OC-FOP-0364' }];
+  const plan = JSON.parse(JSON.stringify(context.plan(sheet, expected)));
+  assert.deepEqual(plan.rows.map(row => row.row), [2], 'a different date/order is not targeted');
+  assert.deepEqual(plan.ambiguous_sales.map(row => row.row), [4], 'duplicate exact sales block apply');
+  assert.deepEqual(plan.missing_sales, []);
+  assert.equal(context.plan(sheet, [{ ...expected[0], order: 'OC-FOP-9999' }]).missing_sales.length, 1);
+  assert.throws(() => context.repair({}, { expected_sales: [] }, {}), error => error.code === 'EXPECTED_SALES_REQUIRED');
+  assert.equal(functionSource(api, 'salesFormulaRepairAction3dp_'), functionSource(temporaryPaste, 'salesFormulaRepairAction3dp_'));
+  assert.doesNotMatch(finalPaste, /3dp_sales_formula_repair/);
 });
 
 test('sales derived formulas are row-local and include all six missing dashboard fields', () => {
@@ -140,6 +178,10 @@ test('temporary repair tool is fixed to preview then fingerprint-gated apply', (
   assert.match(repairTool, /ACC-3D-PKM-110/);
   assert.match(repairTool, /BR-CHARM-100/);
   assert.match(repairTool, /FIG-ONIX-500/);
+  assert.match(repairTool, /OC-FOP-0364/);
+  assert.match(repairTool, /OC-FOP-0389/);
+  assert.match(repairTool, /OC-FOP-0391/);
+  assert.match(repairTool, /expected_sales:expectedSales/);
   assert.match(repairTool, /apply:false/);
   assert.match(repairTool, /expected_fingerprint:fingerprint/);
   assert.doesNotMatch(repairTool, /localStorage|sessionStorage/);
