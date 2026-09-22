@@ -1431,6 +1431,8 @@ if (action === 'order_edit_context') return apiOrderEditContext_(params);
 if (action === 'stock_alerts') return apiStockAlerts_();
 if (action === 'sku_list') return apiSkuList_(params);
 if (action === 'consumables') return apiConsumables_(params);
+if (action === 'consumable_catalog') return apiConsumableCatalog_();
+if (action === 'packaging_choices') return apiPackagingChoices_();
 if (action === 'channel_stats') return apiChannelStats_(params);
 if (action === 'monthly_summary') return apiMonthlySummary_(params);
 if (action === 'ltv_report') return apiLtvReport_(params);
@@ -1771,6 +1773,7 @@ const action = String(payload.action || '').trim().toLowerCase();
 if (action === 'add_sale') return boosterCrmJson_(crm011ApiAddSale_(ss, payload));
 if (action === 'add_purchase') return boosterCrmJson_(crm011ApiAddPurchase_(ss, payload));
 if (action === 'add_writeoff') return boosterCrmJson_(apiAddWriteOff_(ss, payload));
+if (action === 'add_3dp_marketing_writeoff') return boosterCrmJson_(apiAdd3dpMarketingWriteoff_(ss, payload));
 if (action === 'update_sale') return boosterCrmJson_(apiUpdateSaleWithComponents_(ss, payload));
 if (action === 'retry_3dp_sync') return boosterCrmJson_(apiRetry3dpOrderSync_(ss, payload));
 if (action === 'update_purchase') return boosterCrmJson_(apiUpdatePurchaseBatch10_(ss, payload));
@@ -1863,13 +1866,167 @@ function apiAddExpense_(ss, payload) {
   if (!category) throw new Error('category required');
   if (!description) throw new Error('description required');
   if (amount < 0) throw new Error('amount must be >= 0');
-  const isConsumable = !!consumableType || consumableQty > 0 || !!consumableStatus;
+  const consumables = ss.getSheetByName('Розхідники');
+  const isConsumable = payload.is_consumable === true || payload.is_consumable === 'true' || !!consumableType || consumableQty > 0 || !!consumableStatus;
   if ((category === 'Пакування' || isConsumable) && (!consumableType || consumableQty <= 0 || !consumableStatus)) throw new Error('Для розхідника потрібні тип, кількість і статус.');
+  if (isConsumable) {
+    if (!consumables) throw new Error('Немає вкладки Розхідники');
+    const catalog = getConsumableCatalogRow_(consumables, consumableType);
+    if (!catalog || catalog.note.indexOf('[ARCHIVED]') !== -1) throw new Error('Обери наявний активний розхідник зі списку.');
+    if (CRM_CONSUMABLE_PURCHASE_STATUSES_.indexOf(consumableStatus) === -1) throw new Error('Недійсний статус розхідника.');
+  }
   const unitCost = consumableQty > 0 ? round2_(amount / consumableQty) : Math.max(0, num_(payload.unit_cost));
   const row = crmNextAppendRow_(ss, 'Витрати', 1);
   expenses.getRange(row, 1, 1, 11).setValues([[date, category, description, round2_(amount), linked, order, note, isConsumable ? consumableType : '', isConsumable ? consumableQty : '', isConsumable ? consumableStatus : '', isConsumable ? unitCost : '']]);
+  SpreadsheetApp.flush();
+  const written = expenses.getRange(row, 1, 1, 11).getValues()[0];
+  const fifo = isConsumable ? appendConsumableFifoLotForExpense_(ss, row, written) : { added: false, skipped: 'not_consumable' };
+  if (fifo.added) refreshConsumableFifoCatalogCosts_(ss);
   invalidateDoGetCache_();
-  return { ok: true, row_index: row, amount: round2_(amount), is_consumable: isConsumable, already_applied: false };
+  return { ok: true, row_index: row, amount: round2_(amount), is_consumable: isConsumable, fifo: fifo, already_applied: false };
+}
+
+function crm015Fingerprint_(value) {
+  const bytes = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, JSON.stringify(value), Utilities.Charset.UTF_8);
+  return bytes.map(function(byte) { return ('0' + ((byte + 256) % 256).toString(16)).slice(-2); }).join('');
+}
+
+function crm015FixtureFifoCost_(ss, name, qty, date, excludeReference) {
+  const fifo = ss.getSheetByName(CRM_CONSUMABLE_FIFO_SHEET_);
+  if (!fifo || fifo.getLastRow() < 2) throw new Error('FIFO_розхідники не має партій для фурнітури ' + name + '.');
+  const cutoff = dateSortValue_(date);
+  const lots = fifo.getRange(2, 1, fifo.getLastRow() - 1, 7).getValues().map(function(row, index) {
+    return { row: index + 2, date: dateSortValue_(row[1]), name: String(row[2] || '').trim(), qty: num_(row[3]), unit: num_(row[4]) };
+  }).filter(function(lot) {
+    return lot.name === name && lot.qty > 0 && lot.unit >= 0 && (!cutoff || !lot.date || lot.date <= cutoff);
+  }).sort(function(a, b) { return a.date - b.date || a.row - b.row; });
+  if (!lots.length) throw new Error('FIFO_розхідники не має придатної партії для ' + name + ' на обрану дату.');
+  const ledger = ss.getSheetByName(CRM_3DP019_FIXTURE_USAGE_SHEET_);
+  let consumed = 0;
+  if (ledger && ledger.getLastRow() >= 2) {
+    ledger.getRange(2, 1, ledger.getLastRow() - 1, 11).getValues().forEach(function(row) {
+      if (String(row[3] || '').trim() === excludeReference || String(row[4] || '').trim() !== name) return;
+      const usedAt = dateSortValue_(row[1]);
+      if (cutoff && usedAt && usedAt > cutoff) return;
+      consumed += num_(row[6]);
+    });
+  }
+  let skipped = Math.max(0, consumed), needed = qty, total = 0;
+  lots.forEach(function(lot) {
+    if (needed <= 0) return;
+    const skip = Math.min(skipped, lot.qty);
+    skipped -= skip;
+    const available = lot.qty - skip;
+    if (available <= 0) return;
+    const take = Math.min(needed, available);
+    total += take * lot.unit;
+    needed -= take;
+  });
+  if (needed > 0.000001) throw new Error('FIFO_розхідники не покриває ' + name + ': бракує ' + round2_(needed) + ' шт.');
+  return round2_(total / qty);
+}
+
+function crm015FixturePlan_(ss, rawFixtures, date, reference, fingerprint) {
+  const source = 'CRM-015 Маркетинг';
+  const ledger = ss.getSheetByName(CRM_3DP019_FIXTURE_USAGE_SHEET_);
+  if (!ledger) throw new Error('Спершу потрібна вкладка ' + CRM_3DP019_FIXTURE_USAGE_SHEET_ + '.');
+  const marker = '[crm015_fingerprint:' + fingerprint + ']';
+  const existing = ledger.getRange(2, 1, Math.max(ledger.getLastRow() - 1, 1), 11).getValues().filter(function(row) {
+    return String(row[2] || '').trim() === source && String(row[3] || '').trim() === reference;
+  });
+  if (existing.length) {
+    if (existing.some(function(row) { return String(row[9] || '').indexOf(marker) === -1; })) throw new Error('ID запиту вже використаний для іншого маркетингового списання фурнітури.');
+    const entries = existing.map(function(row) { return { name: String(row[4] || ''), payer: String(row[5] || ''), qty: num_(row[6]), unitCost: num_(row[7]) }; });
+    return { entries: entries, total: round2_(entries.reduce(function(sum, item) { return sum + item.qty * item.unitCost; }, 0)),
+      owner_total: round2_(entries.filter(function(item) { return item.payer === 'власник'; }).reduce(function(sum, item) { return sum + item.qty * item.unitCost; }, 0)),
+      serhiy_total: round2_(entries.filter(function(item) { return item.payer === 'Сергій'; }).reduce(function(sum, item) { return sum + item.qty * item.unitCost; }, 0)),
+      source: source, marker: marker, already_applied: true };
+  }
+  const fixtures = Array.isArray(rawFixtures) ? rawFixtures.slice(0, 10) : [];
+  if (!fixtures.length) return { entries: [], total: 0, owner_total: 0, serhiy_total: 0, source: source, marker: marker, already_applied: false };
+  const consumables = ss.getSheetByName('Розхідники');
+  if (!consumables) throw new Error('Не знайдено вкладку Розхідники.');
+  const rows = consumables.getRange(4, 1, Math.max(consumables.getLastRow() - 3, 1), 15).getValues();
+  const byKey = {};
+  rows.forEach(function(row, index) {
+    const name = String(row[0] || '').trim(), category = String(row[1] || '').trim(), note = String(row[11] || '').trim(), payer = String(row[14] || '').trim();
+    if (!name || category !== 'Фурнітура' || note.indexOf('[ARCHIVED]') !== -1) return;
+    if (['власник', 'Сергій'].indexOf(payer) === -1) throw new Error('Розхідники рядок ' + (index + 4) + ': для фурнітури потрібен платник.');
+    const key = name + '\u0001' + payer;
+    if (byKey[key]) throw new Error('Дубль фурнітури ' + name + ' / ' + payer + '.');
+    byKey[key] = { name: name, payer: payer, stock: num_(row[8]) };
+  });
+  const grouped = {};
+  fixtures.forEach(function(raw, index) {
+    const parsed = parse3dp019FixtureSelection_(raw && raw.selection);
+    const qty = num_(raw && raw.qty);
+    if (!parsed) throw new Error('Фурнітура ' + (index + 1) + ': обери чинне значення зі списку.');
+    if (!(qty > 0) || Math.abs(qty - Math.round(qty)) > 0.000001) throw new Error('Фурнітура ' + parsed.name + ': кількість має бути цілим числом більше нуля.');
+    const key = parsed.name + '\u0001' + parsed.payer;
+    if (!byKey[key]) throw new Error('Фурнітура ' + parsed.name + ' / ' + parsed.payer + ' неактивна або відсутня.');
+    grouped[key] = (grouped[key] || 0) + qty;
+  });
+  const entries = Object.keys(grouped).sort().map(function(key) {
+    const item = byKey[key], qty = grouped[key];
+    if (qty > item.stock + 0.000001) throw new Error('Недостатньо фурнітури ' + item.name + ': потрібно ' + qty + ', на складі ' + item.stock + '.');
+    return { name: item.name, payer: item.payer, qty: qty, unitCost: crm015FixtureFifoCost_(ss, item.name, qty, date, reference), stock: item.stock };
+  });
+  return { entries: entries, total: round2_(entries.reduce(function(sum, item) { return sum + item.qty * item.unitCost; }, 0)),
+    owner_total: round2_(entries.filter(function(item) { return item.payer === 'власник'; }).reduce(function(sum, item) { return sum + item.qty * item.unitCost; }, 0)),
+    serhiy_total: round2_(entries.filter(function(item) { return item.payer === 'Сергій'; }).reduce(function(sum, item) { return sum + item.qty * item.unitCost; }, 0)),
+    source: source, marker: marker, already_applied: false };
+}
+
+function apiAdd3dpMarketingWriteoff_(ss, payload) {
+  resetMemoForMutation_();
+  const requestId = String(payload.request_id || '').trim();
+  if (!/^CRM015-[A-Za-z0-9_-]{8,64}$/.test(requestId)) throw new Error('valid CRM015 request_id required');
+  const sku = parseSku_(payload.sku);
+  if (!sku || !is3dpPackagingSku_(sku)) throw new Error('valid 3D SKU required');
+  const quantity = num_(payload.quantity);
+  if (!(quantity > 0) || Math.abs(quantity - Math.round(quantity)) > 0.000001) throw new Error('quantity must be a positive whole number');
+  const rawDate = apiNormalizeDateValue_(payload.date, 'date');
+  if (!rawDate) throw new Error('date required');
+  const date = Utilities.formatDate(rawDate, Session.getScriptTimeZone(), 'yyyy-MM-dd');
+  const note = String(payload.note || '').trim();
+  if (!note || note.length > 220) throw new Error('marketing reason up to 220 characters required');
+  const fixtures = Array.isArray(payload.fixtures) ? payload.fixtures.slice(0, 10).map(function(item) {
+    return { selection: String(item && item.selection || '').trim(), qty: num_(item && item.qty) };
+  }) : [];
+  fixtures.sort(function(a, b) { return a.selection.localeCompare(b.selection, 'uk') || a.qty - b.qty; });
+  const fingerprint = crm015Fingerprint_({ request_id: requestId, sku: sku, quantity: quantity, date: date, note: note, fixtures: fixtures });
+  const integrityBefore = apiIntegrityCheck_();
+  if (!integrityBefore.clean) throw new Error('CRM integrity check має проблеми; маркетингове списання зупинено.');
+  const fixturePlan = crm015FixturePlan_(ss, fixtures, date, requestId, fingerprint);
+  const config = crm3dpConfig_();
+  if (!config) throw new Error('3D-P API не налаштовано у CRM.');
+  const remote = crm3dpPost_(config, {
+    action: '3dp_marketing_writeoff', operation_id: 'marketing:' + requestId, sku: sku, quantity: quantity, date: date, note: note,
+    owner_fixture_per_unit: Math.round(fixturePlan.owner_total / quantity * 1000000) / 1000000,
+    serhiy_fixture_per_unit: Math.round(fixturePlan.serhiy_total / quantity * 1000000) / 1000000,
+  });
+  const expectedExpense = round2_(num_(remote.buyout_unit) * quantity + fixturePlan.total);
+  if (Math.abs(expectedExpense - num_(remote.marketing_expense)) > 0.05) throw new Error('3D-P marketing expense does not match the approved buyout + fixture rule.');
+  let fixtureResult = { rows_added: 0, already_applied: fixturePlan.already_applied };
+  if (fixturePlan.entries.length && !fixturePlan.already_applied) {
+    fixtureResult = append3dp019FixtureUsage_(ss, fixturePlan, rawDate, fixturePlan.source, requestId, [note, fixturePlan.marker].join(' '));
+    fixtureResult.already_applied = false;
+  }
+  const expense = apiAddExpense_(ss, { request_id: requestId, date: date, category: 'Маркетинг',
+    description: '3D маркетингове списання ' + sku + ' × ' + quantity, amount: expectedExpense, linked_to_sale: 'Ні',
+    note: [note, '3D-P operation marketing:' + requestId, fixturePlan.marker,
+      'Викуп: ' + round2_(num_(remote.buyout_unit) * quantity), 'Фурнітура власника: ' + fixturePlan.owner_total,
+      'Фурнітура Сергія: ' + fixturePlan.serhiy_total].join('; ') });
+  SpreadsheetApp.flush();
+  const integrityAfter = apiIntegrityCheck_();
+  if (!integrityAfter.clean) throw new Error('Списання записано, але post-write CRM integrity check має проблеми. Не повторюй з новим ID; перевір цей request_id.');
+  invalidateDoGetCache_();
+  return { ok: true, action: 'add_3dp_marketing_writeoff', request_id: requestId, sku: sku, quantity: quantity, date: date,
+    sale_row_3dp: remote.sale_row, fifo_cost_uah: remote.total_cost_uah, buyout_unit: remote.buyout_unit,
+    serhiy_accrual: remote.serhiy_accrual, marketing_expense: expectedExpense, fixture_total: fixturePlan.total,
+    fixture_owner: fixturePlan.owner_total, fixture_serhiy: fixturePlan.serhiy_total, fixtures_written: fixtureResult.rows_added || 0,
+    expense_row: expense.row_index, already_applied: !!remote.already_applied && !!expense.already_applied && (!!fixturePlan.already_applied || !fixturePlan.entries.length),
+    integrity_before_clean: integrityBefore.clean, integrity_after_clean: integrityAfter.clean };
 }
 function getBoosterCrmToken_() {
 return PropertiesService.getScriptProperties().getProperty('BOOSTER_CRM_TOKEN') || '';
@@ -3187,7 +3344,7 @@ function sync3dpPackagingCost_(sales, orderId, rowNumbers) {
 }
 // END 3D-P-010 helper block
 
-function apiAddSale_(ss, payload) { try { resetMemoForMutation_(); const sales = ss.getSheetByName('Продажі'); if (!sales) throw new Error('sales sheet missing'); const date = apiNormalizeDateValue_(payload.date, 'date'); if (!date) throw new Error('date required'); const rawItems = Array.isArray(payload.items) ? payload.items.slice(0, 10) : []; if (!rawItems.length) throw new Error('items required'); const items = rawItems.map(function(item) { const sku = parseSku_(item && item.sku); const qty = num_(item && item.qty); const price = num_(item && item.price); if (!sku) throw new Error('sku required'); if (qty <= 0) throw new Error('qty must be > 0'); if (price < 0) throw new Error('price must be >= 0'); return { sku: sku, qty: qty, price: price, note: String(item.note || '').trim() }; }); const source = String(payload.channel || payload.source || 'Вручну').trim() || 'Вручну'; const paymentType = String(payload.payment_type || 'За реквізитами').trim() || 'За реквізитами'; const packagingType = String(payload.packaging_type || '').trim(); const operation = String(payload.order_id || '').trim() || generateOperationNumber(source, paymentType); const gross = items.reduce(function(sum, item) { return sum + item.qty * item.price; }, 0); const discount = Math.min(Math.max(0, num_(payload.discount)), gross); const customPackaging = Object.prototype.hasOwnProperty.call(payload, 'custom_packaging_cost') ? payload.custom_packaging_cost : ''; const packaging = packagingType ? getPackagingCost_(packagingType, customPackaging) : 0; const shopDelivery = Math.max(0, num_(payload.shop_delivery)); const baseNote = [String(payload.note || '').trim(), packagingType ? 'Паковання: ' + packagingType : ''].filter(Boolean).join('; '); const rawComponents = Array.isArray(payload.mystery_components) ? payload.mystery_components.slice(0, 10) : []; const components = rawComponents.map(function(item) { const sku = parseSku_(item && item.sku); const qty = num_(item && item.qty); if (!sku) throw new Error('mystery component sku required'); if (qty <= 0) throw new Error('mystery component qty must be > 0'); return { sku: sku, qty: qty, note: String(item.note || '').trim() }; }); const mysteryQty = items.filter(function(item) { return isMysteryBoxSale_(item.sku, ''); }).reduce(function(sum, item) { return sum + item.qty; }, 0); if (!mysteryQty && components.length) throw new Error('mystery components require an MBX sale'); if (mysteryQty) { const componentQty = components.reduce(function(sum, item) { return sum + item.qty; }, 0); if (!components.length || Math.abs(componentQty - mysteryQty * 5) > 0.0001) throw new Error('mystery components must total ' + (mysteryQty * 5)); } const firstRow = crmNextAppendRow_(ss, 'Продажі', items.length); const costRunState = {}; const addedRows = []; items.forEach(function(item, index) { const row = firstRow + index; addedRows.push(row); const weight = gross ? item.qty * item.price / gross : 0; const note = [baseNote, item.note].filter(Boolean).join('; '); sales.getRange(row, 1, 1, 6).setValues([[operation, source, date, String(payload.customer_phone || '').trim(), String(payload.customer_name || '').trim(), item.sku]]); sales.getRange(row, 8, 1, 3).setValues([[item.qty, item.price, round2_(discount * weight)]]); sales.getRange(row, 16).setValue(round2_(packaging * weight)); sales.getRange(row, 20).setValue(round2_(shopDelivery * weight)); sales.getRange(row, 23, 1, 6).setValues([[String(payload.payment_status || '').trim(), String(payload.order_status || '').trim(), String(payload.post || '').trim(), String(payload.ttn || '').trim(), note, paymentType]]); sales.getRange(row, 29).setValue(packagingType); fixSaleCostForRow_(ss, row, costRunState, { clearPending: true }); }); if (components.length) { addMysteryBoxWriteOffs_(ss, components, date, operation); SpreadsheetApp.flush(); recalculateMysteryBoxOrderCost_(ss, operation); } updateSkuCurrentCost_(ss); sync3dpPackagingCost_(sales, operation, addedRows, 'apiAddSale_'); invalidateDoGetCache_(); return { ok: true, rows_added: items.length, order_id: operation }; } catch (err) { return { ok: false, error: String(err && err.message ? err.message : err) }; } } function apiAddPurchase_(ss, payload) { try { resetMemoForMutation_(); const purchases = ss.getSheetByName('Закупки'); if (!purchases) throw new Error('purchases sheet missing'); const supplierChannel = String(payload.supplier_channel || 'zenmarket_jp').trim() || 'zenmarket_jp'; const isZenmarket = supplierChannel === 'zenmarket_jp' || supplierChannel === 'ZenMarket'; const rawOrder = String(payload.order_ref || '').trim(); const order = rawOrder || (isZenmarket ? '' : ('AUTO-' + supplierChannel.replace(/[^A-Za-z0-9]+/g, '-').toUpperCase() + '-' + Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyyMMdd-HHmmss') + '-' + Math.floor(Math.random() * 1000))); if (!order) throw new Error('order_ref required for zenmarket_jp'); if (!Object.prototype.hasOwnProperty.call(payload, 'total_cost')) throw new Error('total_cost required'); const totalCost = num_(payload.total_cost); if (totalCost < 0) throw new Error('total_cost must be >= 0'); const rawItems = Array.isArray(payload.items) ? payload.items.slice(0, 3) : []; if (!rawItems.length) throw new Error('items required'); const items = rawItems.map(function(item) { const sku = parseSku_(item && item.sku); const qty = num_(item && item.qty); const hasManual = item && item.manual_cost !== null && item.manual_cost !== '' && item.manual_cost !== undefined; const manualCost = hasManual ? num_(item.manual_cost) : null; if (!sku) throw new Error('sku required'); if (qty <= 0) throw new Error('qty must be > 0'); if (hasManual && manualCost < 0) throw new Error('manual_cost must be >= 0'); return { sku: sku, qty: qty, manualCost: manualCost, note: String(item.note || '').trim() }; }); const manualTotal = items.reduce(function(sum, item) { return sum + (item.manualCost === null ? 0 : item.manualCost); }, 0); const autoQty = items.reduce(function(sum, item) { return sum + (item.manualCost === null ? item.qty : 0); }, 0); if (manualTotal > totalCost + 0.05) throw new Error('manual costs exceed total_cost'); if (!autoQty && Math.abs(manualTotal - totalCost) > 0.05) throw new Error('manual costs must equal total_cost'); let allocatedCost = round2_(manualTotal); const autoItems = items.filter(function(item) { return item.manualCost === null; }); items.forEach(function(item) { if (item.manualCost !== null) item.cost = round2_(item.manualCost); else { const isLast = autoItems[autoItems.length - 1] === item; item.cost = isLast ? round2_(totalCost - allocatedCost) : round2_((totalCost - manualTotal) * item.qty / autoQty); allocatedCost = round2_(allocatedCost + item.cost); } if (item.cost < 0) throw new Error('line cost must be >= 0'); }); const lineTotal = round2_(items.reduce(function(sum, item) { return sum + item.cost; }, 0)); if (Math.abs(lineTotal - totalCost) > 0.05) throw new Error('line costs do not equal total_cost'); const japanFeesJpy = isZenmarket ? Math.max(0, num_(payload.japan_fees_jpy)) : 0; const japanFees = japanFeesJpy ? round2_(japanFeesJpy / getCurrencyRate_('JPY')) : 0; const ukraineDelivery = Math.max(0, num_(payload.ukraine_delivery_uah)); const totalQty = items.reduce(function(sum, item) { return sum + item.qty; }, 0); const firstRow = crmNextAppendRow_(ss, 'Закупки', items.length); const lotIds = generateLotIds_(items.length); let allocatedFees = 0; let allocatedUkraine = 0; const hasManual = items.some(function(item) { return item.manualCost !== null; }); items.forEach(function(item, index) { const row = firstRow + index; const lineFees = japanFees ? (index === items.length - 1 ? round2_(japanFees - allocatedFees) : round2_(japanFees * item.qty / totalQty)) : ''; const lineUkraine = ukraineDelivery ? (index === items.length - 1 ? round2_(ukraineDelivery - allocatedUkraine) : round2_(ukraineDelivery * item.qty / totalQty)) : ''; if (japanFees) allocatedFees = round2_(allocatedFees + lineFees); if (ukraineDelivery) allocatedUkraine = round2_(allocatedUkraine + lineUkraine); const note = [String(payload.note || '').trim(), item.note, hasManual ? 'Вартість рядків: авто/ручне коригування з форми' : (items.length > 1 ? 'Вартість лоту розподілена пропорційно кількості' : ''), items.length > 1 && japanFees ? 'JP доставка/комісії в JPY конвертовані в грн і розподілені пропорційно кількості' : ''].filter(Boolean).join('; '); purchases.getRange(row, 1, 1, 5).setValues([[lotIds[index], order, '', '', item.sku]]); purchases.getRange(row, 8, 1, 4).setValues([[item.qty, item.cost, lineFees, lineUkraine]]); purchases.getRange(row, 17, 1, 3).setValues([[String(payload.status || 'Замовлено').trim(), note, String(payload.order_url || '').trim()]]); purchases.getRange(row, 20).setValue(supplierChannel); }); invalidateDoGetCache_(); return { ok: true, rows_added: items.length, lot_ids: lotIds }; } catch (err) { return { ok: false, error: String(err && err.message ? err.message : err) }; } } function apiAddWriteOff_(ss, payload) { try { resetMemoForMutation_(); const writeOffs = ss.getSheetByName('Списання'); if (!writeOffs) throw new Error('writeoff sheet missing'); const date = apiNormalizeDateValue_(payload.date, 'date'); if (!date) throw new Error('date required'); const type = String(payload.writeoff_type || payload.type || '').trim(); const reason = String(payload.reason || '').trim(); if (!type) throw new Error('writeoff_type required'); if (!reason) throw new Error('reason required'); const rawItems = Array.isArray(payload.items) ? payload.items.slice(0, 10) : []; if (!rawItems.length) throw new Error('items required'); const items = rawItems.map(function(item) { const sku = parseSku_(item && item.sku); const qty = num_(item && item.qty); if (!sku) throw new Error('sku required'); if (qty <= 0) throw new Error('qty must be > 0'); return { sku: sku, qty: qty, note: String(item.note || '').trim() }; }); if (Object.prototype.hasOwnProperty.call(payload, 'expected_qty') && String(payload.expected_qty) !== '') { const expected = num_(payload.expected_qty); const actual = items.reduce(function(sum, item) { return sum + item.qty; }, 0); if (expected > 0 && Math.abs(actual - expected) > 0.000001) throw new Error('actual quantity ' + actual + ' does not match expected ' + expected); } const row = crmNextAppendRow_(ss, 'Списання', items.length); ensureComponentWriteoffFormulaRows_(writeOffs, items.map(function(item, index) { return row + index; })); const startNumber = nextIdNumber_('Списання', 1, 'WRT'); const ids = items.map(function(item, index) { return 'WRT-' + String(startNumber + index).padStart(4, '0'); }); writeOffs.getRange(row, 1, items.length, 4).setValues(items.map(function(item, index) { return [ids[index], date, type, item.sku]; })); writeOffs.getRange(row, 6, items.length, 1).setValues(items.map(function(item) { return [item.qty]; })); writeOffs.getRange(row, 11, items.length, 2).setValues(items.map(function(item) { return [reason, [String(payload.note || '').trim(), item.note].filter(Boolean).join('; ')]; })); SpreadsheetApp.flush(); recalculateMysteryBoxOrdersFromNote_(ss, String(payload.note || '').trim()); updateSkuCurrentCost_(ss); invalidateDoGetCache_(); return { ok: true, rows_added: items.length, ids: ids }; } catch (err) { return { ok: false, error: String(err && err.message ? err.message : err) }; } } function apiRecentTable_(sheet, requiredHeader) { if (!sheet) return { headerRow: 0, headers: [], rows: [] }; const lastRow = sheet.getLastRow(); const lastCol = Math.min(sheet.getLastColumn(), 50); if (lastRow < 1 || lastCol < 1) return { headerRow: 0, headers: [], rows: [] }; const values = sheet.getRange(1, 1, lastRow, lastCol).getValues(); const wanted = apiNormalizeHeader_(requiredHeader); let headerIndex = -1; for (let i = 0; i < Math.min(values.length, 20); i++) { if (values[i].map(apiNormalizeHeader_).indexOf(wanted) !== -1) { headerIndex = i; break; } } if (headerIndex === -1) throw new Error('header not found: ' + requiredHeader); return { headerRow: headerIndex + 1, headers: values[headerIndex], rows: values.slice(headerIndex + 1) }; } function apiRecentCol_(headers, name) { const index = headers.map(apiNormalizeHeader_).indexOf(apiNormalizeHeader_(name)); if (index === -1) throw new Error('column not found: ' + name); return index; } function apiRecentLimit_(params) { return Math.max(1, Math.min(Math.floor(apiNum_(params && params.limit) || 20), 50)); } function apiRecentSales_(params) { const table = apiRecentTable_(_getCrmSs().getSheetByName('Продажі'), 'Номер замовлення / операції'); if (!table.headerRow) return { ok: true, rows: [] }; const c = { order: apiRecentCol_(table.headers, 'Номер замовлення / операції'), date: apiRecentCol_(table.headers, 'Дата продажу'), amount: apiRecentCol_(table.headers, 'Сума продажу'), packagingCost: apiRecentCol_(table.headers, 'Пакування'), shopDelivery: apiRecentCol_(table.headers, 'Доставка за рахунок магазину'), paymentStatus: apiRecentCol_(table.headers, 'Статус оплати'), orderStatus: apiRecentCol_(table.headers, 'Статус замовлення'), ttn: apiRecentCol_(table.headers, 'ТТН'), post: apiRecentCol_(table.headers, 'Пошта'), note: apiRecentCol_(table.headers, 'Примітка'), paymentType: apiRecentCol_(table.headers, 'Тип оплати'), packagingType: apiRecentCol_(table.headers, 'Паковання') }; const rows = []; let current = null; for (let i = table.rows.length - 1; i >= 0; i--) { const row = table.rows[i]; const order = String(row[c.order] || '').trim(); if (!order) { current = null; continue; } if (!current || current.order_id !== order) { current = { row_index: table.headerRow + 1 + i, order_id: order, date: row[c.date] ? apiDate_(row[c.date]) : '', payment_status: row[c.paymentStatus] || '', payment_type: row[c.paymentType] || '', order_status: row[c.orderStatus] || '', ttn: row[c.ttn] || '', post: row[c.post] || '', packaging_type: row[c.packagingType] || '', amount: 0, packaging_cost: 0, shop_delivery: 0, note: row[c.note] || '' }; rows.push(current); } current.row_index = table.headerRow + 1 + i; current.amount += apiNum_(row[c.amount]); current.packaging_cost += apiNum_(row[c.packagingCost]); current.shop_delivery += apiNum_(row[c.shopDelivery]); } const result = rows.map(function(item) { item.amount = round2_(item.amount); item.packaging_cost = round2_(item.packaging_cost); item.shop_delivery = round2_(item.shop_delivery); return item; }).filter(function(item) { return ['Скасовано', 'Повернення'].indexOf(String(item.payment_status)) === -1 && ['Скасовано', 'Повернення'].indexOf(String(item.order_status)) === -1 && (String(item.payment_status) !== 'Оплачено' || String(item.order_status) !== 'Отримано'); }).sort(function(a, b) { return b.row_index - a.row_index; }).slice(0, apiRecentLimit_(params)); return { ok: true, rows: result }; } function apiRecentPurchases_(params) { const table = apiRecentTable_(_getCrmSs().getSheetByName('Закупки'), 'ID партії'); if (!table.headerRow) return { ok: true, rows: [] }; const c = { lot: apiRecentCol_(table.headers, 'ID партії'), order: apiRecentCol_(table.headers, 'ZenMarket Order №'), track: apiRecentCol_(table.headers, 'Трек-номер'), date: apiRecentCol_(table.headers, 'Дата доставки в Україну'), sku: apiRecentCol_(table.headers, 'SKU'), qty: apiRecentCol_(table.headers, 'Кількість одиниць'), japanFee: apiRecentCol_(table.headers, 'Доставка / комісії по Японії, грн'), status: apiRecentCol_(table.headers, 'Статус'), note: apiRecentCol_(table.headers, 'Примітка') }; const terminal = { 'На складі UA': true, 'На складі': true, 'Продано': true, 'Частково продано': true, 'Скасовано': true }; const rows = []; const jpyRate = getCurrencyRate_('JPY'); for (let i = 0; i < table.rows.length; i++) { const row = table.rows[i]; const lotId = String(row[c.lot] || '').trim(); const status = String(row[c.status] || '').trim(); if (!lotId || row[c.date] || terminal[status]) continue; rows.push({ row_index: table.headerRow + 1 + i, lot_id: lotId, order_ref: row[c.order] || '', track_number: row[c.track] || '', date: '', sku: row[c.sku] || '', qty: apiNum_(row[c.qty]), japan_fee_jpy: round2_(apiNum_(row[c.japanFee]) * jpyRate), status: status, note: row[c.note] || '' }); } rows.sort(function(a, b) { const an = Number((String(a.order_ref || '').match(/\d+/) || [0])[0]); const bn = Number((String(b.order_ref || '').match(/\d+/) || [0])[0]); return an - bn || String(a.order_ref || '').localeCompare(String(b.order_ref || '')); }); return { ok: true, rows: rows.slice(0, apiRecentLimit_(params)) }; } function apiUpdateSale_(ss, payload) { try { resetMemoForMutation_(); const sales = ss.getSheetByName('Продажі'); if (!sales) throw new Error('sales sheet missing'); const rowIndex = Math.floor(apiNum_(payload.row_index)); if (rowIndex < 3 || rowIndex > sales.getLastRow()) throw new Error('invalid row_index'); const current = sales.getRange(rowIndex, 1, 1, 29).getValues()[0]; const order = String(current[0] || '').trim(); if (!order) throw new Error('sale row is empty'); const rows = [rowIndex]; for (let row = rowIndex - 1; row >= 3; row--) { if (String(sales.getRange(row, 1).getValue() || '').trim() !== order) break; rows.unshift(row); } for (let row = rowIndex + 1; row <= sales.getLastRow(); row++) { if (String(sales.getRange(row, 1).getValue() || '').trim() !== order) break; rows.push(row); } const paymentStatus = String(payload.payment_status || '').trim(); const orderStatus = String(payload.order_status || '').trim(); const ttn = String(payload.ttn || '').trim(); const packagingType = String(payload.packaging_type || '').trim(); const note = String(payload.note || '').trim(); const paymentChanged = paymentStatus && paymentStatus !== String(current[22] || '').trim(); const orderChanged = orderStatus && orderStatus !== String(current[23] || '').trim(); const ttnChanged = Object.prototype.hasOwnProperty.call(payload, 'ttn') && ttn !== String(current[25] || '').trim(); const packagingChanged = packagingType && packagingType !== String(current[28] || '').trim(); const hasCustomPackaging = Object.prototype.hasOwnProperty.call(payload, 'custom_packaging_cost') && String(payload.custom_packaging_cost) !== ''; const packaging = packagingChanged || hasCustomPackaging ? getPackagingCost_(packagingType, payload.custom_packaging_cost) : null; const hasDelivery = Object.prototype.hasOwnProperty.call(payload, 'shop_delivery') && String(payload.shop_delivery) !== ''; const shopDelivery = hasDelivery ? Math.max(0, apiNum_(payload.shop_delivery)) : null; if (!paymentChanged && !orderChanged && !ttnChanged && packaging === null && shopDelivery === null && !note) { throw new Error('nothing changed'); } const weights = orderRowWeights_(sales, rows); const packagingAllocations = packaging === null ? [] : allocateAmount_(packaging, weights); const deliveryAllocations = shopDelivery === null ? [] : allocateAmount_(shopDelivery, weights); const costRunState = {}; rows.forEach(function(row, index) { if (paymentChanged) sales.getRange(row, 23).setValue(paymentStatus); if (orderChanged) sales.getRange(row, 24).setValue(orderStatus); if (ttnChanged) sales.getRange(row, 26).setValue(ttn); if (packaging !== null) { sales.getRange(row, 16).setValue(packagingAllocations[index]); sales.getRange(row, 29).setValue(packagingType); } if (shopDelivery !== null) sales.getRange(row, 20).setValue(deliveryAllocations[index]); if (note) appendCellText_(sales.getRange(row, 27), note); fixSaleCostForRow_(ss, row, costRunState, { clearPending: false }); }); sync3dpPackagingCost_(sales, order, rows, 'apiUpdateSale_'); invalidateDoGetCache_(); return { ok: true, row_index: rowIndex, order_id: order, rows_updated: rows.length }; } catch (err) { return { ok: false, error: String(err && err.message ? err.message : err) }; } } function apiUpdatePurchase_(ss, payload) { try { resetMemoForMutation_(); const purchases = ss.getSheetByName('Закупки'); if (!purchases) throw new Error('purchases sheet missing'); const rawLots = Array.isArray(payload.lots) ? payload.lots : []; if (!rawLots.length) throw new Error('lots required'); if (rawLots.length > 5) throw new Error('maximum 5 lots'); const lots = {}; rawLots.forEach(function(item) { const lotId = String(item && item.lot_id || '').trim(); if (!/^LOT-[0-9]+$/i.test(lotId)) throw new Error('invalid lot_id'); if (lots[lotId]) throw new Error('duplicate lot_id'); lots[lotId] = item; }); const data = purchases.getRange(3, 1, Math.max(purchases.getLastRow() - 2, 1), 18).getValues(); const matches = []; data.forEach(function(values, index) { const lotId = String(values[0] || '').trim(); if (lots[lotId]) matches.push({ row: index + 3, values: values, lot: lots[lotId] }); }); if (matches.length !== rawLots.length) throw new Error('one or more lots not found'); const hasTrack = Object.prototype.hasOwnProperty.call(payload, 'track_number'); const hasDate = Object.prototype.hasOwnProperty.call(payload, 'date') && String(payload.date || '').trim(); const hasStatus = Object.prototype.hasOwnProperty.call(payload, 'status') && String(payload.status || '').trim(); const hasUkraine = Object.prototype.hasOwnProperty.call(payload, 'ukraine_delivery_jpy') && String(payload.ukraine_delivery_jpy) !== ''; const note = String(payload.note || '').trim(); const hasJapan = matches.some(function(match) { return Object.prototype.hasOwnProperty.call(match.lot, 'japan_fee_jpy') && String(match.lot.japan_fee_jpy) !== ''; }); if (!hasTrack && !hasDate && !hasStatus && !hasUkraine && !note && !hasJapan) throw new Error('nothing changed'); const jpyRate = getCurrencyRate_('JPY'); let ukraineAllocations = []; if (hasUkraine) { const totalUah = round2_(Math.max(0, apiNum_(payload.ukraine_delivery_jpy)) / jpyRate); ukraineAllocations = matches.length > 1 ? allocateAmount_(totalUah, matches.map(function(match) { return apiNum_(match.values[8]); })) : [totalUah]; } matches.forEach(function(match, index) { if (hasTrack) purchases.getRange(match.row, 3).setValue(String(payload.track_number || '').trim()); if (hasDate) purchases.getRange(match.row, 4).setValue(apiNormalizeDateValue_(payload.date, 'date')); if (hasStatus) purchases.getRange(match.row, 17).setValue(String(payload.status).trim()); if (Object.prototype.hasOwnProperty.call(match.lot, 'japan_fee_jpy') && String(match.lot.japan_fee_jpy) !== '') purchases.getRange(match.row, 10).setValue(round2_(Math.max(0, apiNum_(match.lot.japan_fee_jpy)) / jpyRate)); if (hasUkraine) purchases.getRange(match.row, 11).setValue(ukraineAllocations[index]); if (note) appendCellText_(purchases.getRange(match.row, 18), note); }); invalidateDoGetCache_(); return { ok: true, rows_updated: matches.length, lot_ids: Object.keys(lots) }; } catch (err) { return { ok: false, error: String(err && err.message ? err.message : err) }; } }
+function apiAddSale_(ss, payload) { try { resetMemoForMutation_(); const sales = ss.getSheetByName('Продажі'); if (!sales) throw new Error('sales sheet missing'); const date = apiNormalizeDateValue_(payload.date, 'date'); if (!date) throw new Error('date required'); const rawItems = Array.isArray(payload.items) ? payload.items.slice(0, 10) : []; if (!rawItems.length) throw new Error('items required'); const items = rawItems.map(function(item) { const sku = parseSku_(item && item.sku); const qty = num_(item && item.qty); const price = num_(item && item.price); if (!sku) throw new Error('sku required'); if (qty <= 0) throw new Error('qty must be > 0'); if (price < 0) throw new Error('price must be >= 0'); return { sku: sku, qty: qty, price: price, note: String(item.note || '').trim() }; }); const source = String(payload.channel || payload.source || 'Вручну').trim() || 'Вручну'; const paymentType = String(payload.payment_type || 'За реквізитами').trim() || 'За реквізитами'; const packagingType = String(payload.packaging_type || '').trim(); const operation = String(payload.order_id || '').trim() || generateOperationNumber(source, paymentType); const gross = items.reduce(function(sum, item) { return sum + item.qty * item.price; }, 0); const discount = Math.min(Math.max(0, num_(payload.discount)), gross); const customPackaging = Object.prototype.hasOwnProperty.call(payload, 'custom_packaging_cost') ? payload.custom_packaging_cost : ''; const packaging = packagingType ? getPackagingCost_(packagingType, customPackaging) : 0; const shopDelivery = Math.max(0, num_(payload.shop_delivery)); const baseNote = [String(payload.note || '').trim(), packagingType ? 'Паковання: ' + packagingType : ''].filter(Boolean).join('; '); const rawComponents = Array.isArray(payload.mystery_components) ? payload.mystery_components.slice(0, 10) : []; const components = rawComponents.map(function(item) { const sku = parseSku_(item && item.sku); const qty = num_(item && item.qty); if (!sku) throw new Error('mystery component sku required'); if (qty <= 0) throw new Error('mystery component qty must be > 0'); return { sku: sku, qty: qty, note: String(item.note || '').trim() }; }); const mysteryQty = items.filter(function(item) { return isMysteryBoxSale_(item.sku, ''); }).reduce(function(sum, item) { return sum + item.qty; }, 0); if (!mysteryQty && components.length) throw new Error('mystery components require an MBX sale'); if (mysteryQty) { const componentQty = components.reduce(function(sum, item) { return sum + item.qty; }, 0); if (!components.length || Math.abs(componentQty - mysteryQty * 5) > 0.0001) throw new Error('mystery components must total ' + (mysteryQty * 5)); } const firstRow = crmNextAppendRow_(ss, 'Продажі', items.length); const costRunState = {}; const addedRows = []; items.forEach(function(item, index) { const row = firstRow + index; addedRows.push(row); const weight = gross ? item.qty * item.price / gross : 0; const note = [baseNote, item.note].filter(Boolean).join('; '); sales.getRange(row, 1, 1, 6).setValues([[operation, source, date, String(payload.customer_phone || '').trim(), String(payload.customer_name || '').trim(), item.sku]]); sales.getRange(row, 8, 1, 3).setValues([[item.qty, item.price, round2_(discount * weight)]]); sales.getRange(row, 16).setValue(round2_(packaging * weight)); sales.getRange(row, 20).setValue(round2_(shopDelivery * weight)); sales.getRange(row, 23, 1, 6).setValues([[String(payload.payment_status || '').trim(), String(payload.order_status || '').trim(), String(payload.post || '').trim(), String(payload.ttn || '').trim(), note, paymentType]]); sales.getRange(row, 29).setValue(packagingType); fixSaleCostForRow_(ss, row, costRunState, { clearPending: true }); }); if (components.length) { addMysteryBoxWriteOffs_(ss, components, date, operation); SpreadsheetApp.flush(); recalculateMysteryBoxOrderCost_(ss, operation); } updateSkuCurrentCost_(ss); sync3dpPackagingCost_(sales, operation, addedRows, 'apiAddSale_'); invalidateDoGetCache_(); return { ok: true, rows_added: items.length, order_id: operation }; } catch (err) { return { ok: false, error: String(err && err.message ? err.message : err) }; } } function apiAddPurchase_(ss, payload) { try { resetMemoForMutation_(); const purchases = ss.getSheetByName('Закупки'); if (!purchases) throw new Error('purchases sheet missing'); const supplierChannel = String(payload.supplier_channel || 'zenmarket_jp').trim() || 'zenmarket_jp'; const isZenmarket = supplierChannel === 'zenmarket_jp' || supplierChannel === 'ZenMarket'; const rawOrder = String(payload.order_ref || '').trim(); const order = rawOrder || (isZenmarket ? '' : ('AUTO-' + supplierChannel.replace(/[^A-Za-z0-9]+/g, '-').toUpperCase() + '-' + Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyyMMdd-HHmmss') + '-' + Math.floor(Math.random() * 1000))); if (!order) throw new Error('order_ref required for zenmarket_jp'); if (!Object.prototype.hasOwnProperty.call(payload, 'total_cost')) throw new Error('total_cost required'); const totalCost = num_(payload.total_cost); if (totalCost < 0) throw new Error('total_cost must be >= 0'); const rawItems = Array.isArray(payload.items) ? payload.items.slice(0, 10) : []; if (!rawItems.length) throw new Error('items required'); const items = rawItems.map(function(item) { const sku = parseSku_(item && item.sku); const qty = num_(item && item.qty); const hasManual = item && item.manual_cost !== null && item.manual_cost !== '' && item.manual_cost !== undefined; const manualCost = hasManual ? num_(item.manual_cost) : null; if (!sku) throw new Error('sku required'); if (qty <= 0) throw new Error('qty must be > 0'); if (hasManual && manualCost < 0) throw new Error('manual_cost must be >= 0'); return { sku: sku, qty: qty, manualCost: manualCost, note: String(item.note || '').trim() }; }); const manualTotal = items.reduce(function(sum, item) { return sum + (item.manualCost === null ? 0 : item.manualCost); }, 0); const autoQty = items.reduce(function(sum, item) { return sum + (item.manualCost === null ? item.qty : 0); }, 0); if (manualTotal > totalCost + 0.05) throw new Error('manual costs exceed total_cost'); if (!autoQty && Math.abs(manualTotal - totalCost) > 0.05) throw new Error('manual costs must equal total_cost'); let allocatedCost = round2_(manualTotal); const autoItems = items.filter(function(item) { return item.manualCost === null; }); items.forEach(function(item) { if (item.manualCost !== null) item.cost = round2_(item.manualCost); else { const isLast = autoItems[autoItems.length - 1] === item; item.cost = isLast ? round2_(totalCost - allocatedCost) : round2_((totalCost - manualTotal) * item.qty / autoQty); allocatedCost = round2_(allocatedCost + item.cost); } if (item.cost < 0) throw new Error('line cost must be >= 0'); }); const lineTotal = round2_(items.reduce(function(sum, item) { return sum + item.cost; }, 0)); if (Math.abs(lineTotal - totalCost) > 0.05) throw new Error('line costs do not equal total_cost'); const japanFeesJpy = isZenmarket ? Math.max(0, num_(payload.japan_fees_jpy)) : 0; const japanFees = japanFeesJpy ? round2_(japanFeesJpy / getCurrencyRate_('JPY')) : 0; const ukraineDelivery = Math.max(0, num_(payload.ukraine_delivery_uah)); const totalQty = items.reduce(function(sum, item) { return sum + item.qty; }, 0); const firstRow = crmNextAppendRow_(ss, 'Закупки', items.length); const lotIds = generateLotIds_(items.length); let allocatedFees = 0; let allocatedUkraine = 0; const hasManual = items.some(function(item) { return item.manualCost !== null; }); items.forEach(function(item, index) { const row = firstRow + index; const lineFees = japanFees ? (index === items.length - 1 ? round2_(japanFees - allocatedFees) : round2_(japanFees * item.qty / totalQty)) : ''; const lineUkraine = ukraineDelivery ? (index === items.length - 1 ? round2_(ukraineDelivery - allocatedUkraine) : round2_(ukraineDelivery * item.qty / totalQty)) : ''; if (japanFees) allocatedFees = round2_(allocatedFees + lineFees); if (ukraineDelivery) allocatedUkraine = round2_(allocatedUkraine + lineUkraine); const note = [String(payload.note || '').trim(), item.note, hasManual ? 'Вартість рядків: авто/ручне коригування з форми' : (items.length > 1 ? 'Вартість лоту розподілена пропорційно кількості' : ''), items.length > 1 && japanFees ? 'JP доставка/комісії в JPY конвертовані в грн і розподілені пропорційно кількості' : ''].filter(Boolean).join('; '); purchases.getRange(row, 1, 1, 5).setValues([[lotIds[index], order, '', '', item.sku]]); purchases.getRange(row, 8, 1, 4).setValues([[item.qty, item.cost, lineFees, lineUkraine]]); purchases.getRange(row, 17, 1, 3).setValues([[String(payload.status || 'Замовлено').trim(), note, String(payload.order_url || '').trim()]]); purchases.getRange(row, 20).setValue(supplierChannel); }); invalidateDoGetCache_(); return { ok: true, rows_added: items.length, lot_ids: lotIds }; } catch (err) { return { ok: false, error: String(err && err.message ? err.message : err) }; } } function apiAddWriteOff_(ss, payload) { try { resetMemoForMutation_(); const writeOffs = ss.getSheetByName('Списання'); if (!writeOffs) throw new Error('writeoff sheet missing'); const date = apiNormalizeDateValue_(payload.date, 'date'); if (!date) throw new Error('date required'); const type = String(payload.writeoff_type || payload.type || '').trim(); const reason = String(payload.reason || '').trim(); if (!type) throw new Error('writeoff_type required'); if (!reason) throw new Error('reason required'); const rawItems = Array.isArray(payload.items) ? payload.items.slice(0, 10) : []; if (!rawItems.length) throw new Error('items required'); const items = rawItems.map(function(item) { const sku = parseSku_(item && item.sku); const qty = num_(item && item.qty); if (!sku) throw new Error('sku required'); if (qty <= 0) throw new Error('qty must be > 0'); return { sku: sku, qty: qty, note: String(item.note || '').trim() }; }); if (Object.prototype.hasOwnProperty.call(payload, 'expected_qty') && String(payload.expected_qty) !== '') { const expected = num_(payload.expected_qty); const actual = items.reduce(function(sum, item) { return sum + item.qty; }, 0); if (expected > 0 && Math.abs(actual - expected) > 0.000001) throw new Error('actual quantity ' + actual + ' does not match expected ' + expected); } const row = crmNextAppendRow_(ss, 'Списання', items.length); ensureComponentWriteoffFormulaRows_(writeOffs, items.map(function(item, index) { return row + index; })); const startNumber = nextIdNumber_('Списання', 1, 'WRT'); const ids = items.map(function(item, index) { return 'WRT-' + String(startNumber + index).padStart(4, '0'); }); writeOffs.getRange(row, 1, items.length, 4).setValues(items.map(function(item, index) { return [ids[index], date, type, item.sku]; })); writeOffs.getRange(row, 6, items.length, 1).setValues(items.map(function(item) { return [item.qty]; })); writeOffs.getRange(row, 11, items.length, 2).setValues(items.map(function(item) { return [reason, [String(payload.note || '').trim(), item.note].filter(Boolean).join('; ')]; })); SpreadsheetApp.flush(); recalculateMysteryBoxOrdersFromNote_(ss, String(payload.note || '').trim()); updateSkuCurrentCost_(ss); invalidateDoGetCache_(); return { ok: true, rows_added: items.length, ids: ids }; } catch (err) { return { ok: false, error: String(err && err.message ? err.message : err) }; } } function apiRecentTable_(sheet, requiredHeader) { if (!sheet) return { headerRow: 0, headers: [], rows: [] }; const lastRow = sheet.getLastRow(); const lastCol = Math.min(sheet.getLastColumn(), 50); if (lastRow < 1 || lastCol < 1) return { headerRow: 0, headers: [], rows: [] }; const values = sheet.getRange(1, 1, lastRow, lastCol).getValues(); const wanted = apiNormalizeHeader_(requiredHeader); let headerIndex = -1; for (let i = 0; i < Math.min(values.length, 20); i++) { if (values[i].map(apiNormalizeHeader_).indexOf(wanted) !== -1) { headerIndex = i; break; } } if (headerIndex === -1) throw new Error('header not found: ' + requiredHeader); return { headerRow: headerIndex + 1, headers: values[headerIndex], rows: values.slice(headerIndex + 1) }; } function apiRecentCol_(headers, name) { const index = headers.map(apiNormalizeHeader_).indexOf(apiNormalizeHeader_(name)); if (index === -1) throw new Error('column not found: ' + name); return index; } function apiRecentLimit_(params) { return Math.max(1, Math.min(Math.floor(apiNum_(params && params.limit) || 20), 50)); } function apiRecentSales_(params) { const table = apiRecentTable_(_getCrmSs().getSheetByName('Продажі'), 'Номер замовлення / операції'); if (!table.headerRow) return { ok: true, rows: [] }; const c = { order: apiRecentCol_(table.headers, 'Номер замовлення / операції'), date: apiRecentCol_(table.headers, 'Дата продажу'), amount: apiRecentCol_(table.headers, 'Сума продажу'), packagingCost: apiRecentCol_(table.headers, 'Пакування'), shopDelivery: apiRecentCol_(table.headers, 'Доставка за рахунок магазину'), paymentStatus: apiRecentCol_(table.headers, 'Статус оплати'), orderStatus: apiRecentCol_(table.headers, 'Статус замовлення'), ttn: apiRecentCol_(table.headers, 'ТТН'), post: apiRecentCol_(table.headers, 'Пошта'), note: apiRecentCol_(table.headers, 'Примітка'), paymentType: apiRecentCol_(table.headers, 'Тип оплати'), packagingType: apiRecentCol_(table.headers, 'Паковання') }; const rows = []; let current = null; for (let i = table.rows.length - 1; i >= 0; i--) { const row = table.rows[i]; const order = String(row[c.order] || '').trim(); if (!order) { current = null; continue; } if (!current || current.order_id !== order) { current = { row_index: table.headerRow + 1 + i, order_id: order, date: row[c.date] ? apiDate_(row[c.date]) : '', payment_status: row[c.paymentStatus] || '', payment_type: row[c.paymentType] || '', order_status: row[c.orderStatus] || '', ttn: row[c.ttn] || '', post: row[c.post] || '', packaging_type: row[c.packagingType] || '', amount: 0, packaging_cost: 0, shop_delivery: 0, note: row[c.note] || '' }; rows.push(current); } current.row_index = table.headerRow + 1 + i; current.amount += apiNum_(row[c.amount]); current.packaging_cost += apiNum_(row[c.packagingCost]); current.shop_delivery += apiNum_(row[c.shopDelivery]); } const result = rows.map(function(item) { item.amount = round2_(item.amount); item.packaging_cost = round2_(item.packaging_cost); item.shop_delivery = round2_(item.shop_delivery); return item; }).filter(function(item) { return ['Скасовано', 'Повернення'].indexOf(String(item.payment_status)) === -1 && ['Скасовано', 'Повернення'].indexOf(String(item.order_status)) === -1 && (String(item.payment_status) !== 'Оплачено' || String(item.order_status) !== 'Отримано'); }).sort(function(a, b) { return b.row_index - a.row_index; }).slice(0, apiRecentLimit_(params)); return { ok: true, rows: result }; } function apiRecentPurchases_(params) { const table = apiRecentTable_(_getCrmSs().getSheetByName('Закупки'), 'ID партії'); if (!table.headerRow) return { ok: true, rows: [] }; const c = { lot: apiRecentCol_(table.headers, 'ID партії'), order: apiRecentCol_(table.headers, 'ZenMarket Order №'), track: apiRecentCol_(table.headers, 'Трек-номер'), date: apiRecentCol_(table.headers, 'Дата доставки в Україну'), sku: apiRecentCol_(table.headers, 'SKU'), qty: apiRecentCol_(table.headers, 'Кількість одиниць'), japanFee: apiRecentCol_(table.headers, 'Доставка / комісії по Японії, грн'), status: apiRecentCol_(table.headers, 'Статус'), note: apiRecentCol_(table.headers, 'Примітка') }; const terminal = { 'На складі UA': true, 'На складі': true, 'Продано': true, 'Частково продано': true, 'Скасовано': true }; const rows = []; const jpyRate = getCurrencyRate_('JPY'); for (let i = 0; i < table.rows.length; i++) { const row = table.rows[i]; const lotId = String(row[c.lot] || '').trim(); const status = String(row[c.status] || '').trim(); if (!lotId || row[c.date] || terminal[status]) continue; rows.push({ row_index: table.headerRow + 1 + i, lot_id: lotId, order_ref: row[c.order] || '', track_number: row[c.track] || '', date: '', sku: row[c.sku] || '', qty: apiNum_(row[c.qty]), japan_fee_jpy: round2_(apiNum_(row[c.japanFee]) * jpyRate), status: status, note: row[c.note] || '' }); } rows.sort(function(a, b) { const an = Number((String(a.order_ref || '').match(/\d+/) || [0])[0]); const bn = Number((String(b.order_ref || '').match(/\d+/) || [0])[0]); return an - bn || String(a.order_ref || '').localeCompare(String(b.order_ref || '')); }); return { ok: true, rows: rows.slice(0, apiRecentLimit_(params)) }; } function apiUpdateSale_(ss, payload) { try { resetMemoForMutation_(); const sales = ss.getSheetByName('Продажі'); if (!sales) throw new Error('sales sheet missing'); const rowIndex = Math.floor(apiNum_(payload.row_index)); if (rowIndex < 3 || rowIndex > sales.getLastRow()) throw new Error('invalid row_index'); const current = sales.getRange(rowIndex, 1, 1, 29).getValues()[0]; const order = String(current[0] || '').trim(); if (!order) throw new Error('sale row is empty'); const rows = [rowIndex]; for (let row = rowIndex - 1; row >= 3; row--) { if (String(sales.getRange(row, 1).getValue() || '').trim() !== order) break; rows.unshift(row); } for (let row = rowIndex + 1; row <= sales.getLastRow(); row++) { if (String(sales.getRange(row, 1).getValue() || '').trim() !== order) break; rows.push(row); } const paymentStatus = String(payload.payment_status || '').trim(); const orderStatus = String(payload.order_status || '').trim(); const ttn = String(payload.ttn || '').trim(); const packagingType = String(payload.packaging_type || '').trim(); const note = String(payload.note || '').trim(); const paymentChanged = paymentStatus && paymentStatus !== String(current[22] || '').trim(); const orderChanged = orderStatus && orderStatus !== String(current[23] || '').trim(); const ttnChanged = Object.prototype.hasOwnProperty.call(payload, 'ttn') && ttn !== String(current[25] || '').trim(); const packagingChanged = packagingType && packagingType !== String(current[28] || '').trim(); const hasCustomPackaging = Object.prototype.hasOwnProperty.call(payload, 'custom_packaging_cost') && String(payload.custom_packaging_cost) !== ''; const packaging = packagingChanged || hasCustomPackaging ? getPackagingCost_(packagingType, payload.custom_packaging_cost) : null; const hasDelivery = Object.prototype.hasOwnProperty.call(payload, 'shop_delivery') && String(payload.shop_delivery) !== ''; const shopDelivery = hasDelivery ? Math.max(0, apiNum_(payload.shop_delivery)) : null; if (!paymentChanged && !orderChanged && !ttnChanged && packaging === null && shopDelivery === null && !note) { throw new Error('nothing changed'); } const weights = orderRowWeights_(sales, rows); const packagingAllocations = packaging === null ? [] : allocateAmount_(packaging, weights); const deliveryAllocations = shopDelivery === null ? [] : allocateAmount_(shopDelivery, weights); const costRunState = {}; rows.forEach(function(row, index) { if (paymentChanged) sales.getRange(row, 23).setValue(paymentStatus); if (orderChanged) sales.getRange(row, 24).setValue(orderStatus); if (ttnChanged) sales.getRange(row, 26).setValue(ttn); if (packaging !== null) { sales.getRange(row, 16).setValue(packagingAllocations[index]); sales.getRange(row, 29).setValue(packagingType); } if (shopDelivery !== null) sales.getRange(row, 20).setValue(deliveryAllocations[index]); if (note) appendCellText_(sales.getRange(row, 27), note); fixSaleCostForRow_(ss, row, costRunState, { clearPending: false }); }); sync3dpPackagingCost_(sales, order, rows, 'apiUpdateSale_'); invalidateDoGetCache_(); return { ok: true, row_index: rowIndex, order_id: order, rows_updated: rows.length }; } catch (err) { return { ok: false, error: String(err && err.message ? err.message : err) }; } } function apiUpdatePurchase_(ss, payload) { try { resetMemoForMutation_(); const purchases = ss.getSheetByName('Закупки'); if (!purchases) throw new Error('purchases sheet missing'); const rawLots = Array.isArray(payload.lots) ? payload.lots : []; if (!rawLots.length) throw new Error('lots required'); if (rawLots.length > 5) throw new Error('maximum 5 lots'); const lots = {}; rawLots.forEach(function(item) { const lotId = String(item && item.lot_id || '').trim(); if (!/^LOT-[0-9]+$/i.test(lotId)) throw new Error('invalid lot_id'); if (lots[lotId]) throw new Error('duplicate lot_id'); lots[lotId] = item; }); const data = purchases.getRange(3, 1, Math.max(purchases.getLastRow() - 2, 1), 18).getValues(); const matches = []; data.forEach(function(values, index) { const lotId = String(values[0] || '').trim(); if (lots[lotId]) matches.push({ row: index + 3, values: values, lot: lots[lotId] }); }); if (matches.length !== rawLots.length) throw new Error('one or more lots not found'); const hasTrack = Object.prototype.hasOwnProperty.call(payload, 'track_number'); const hasDate = Object.prototype.hasOwnProperty.call(payload, 'date') && String(payload.date || '').trim(); const hasStatus = Object.prototype.hasOwnProperty.call(payload, 'status') && String(payload.status || '').trim(); const hasUkraine = Object.prototype.hasOwnProperty.call(payload, 'ukraine_delivery_jpy') && String(payload.ukraine_delivery_jpy) !== ''; const note = String(payload.note || '').trim(); const hasJapan = matches.some(function(match) { return Object.prototype.hasOwnProperty.call(match.lot, 'japan_fee_jpy') && String(match.lot.japan_fee_jpy) !== ''; }); if (!hasTrack && !hasDate && !hasStatus && !hasUkraine && !note && !hasJapan) throw new Error('nothing changed'); const jpyRate = getCurrencyRate_('JPY'); let ukraineAllocations = []; if (hasUkraine) { const totalUah = round2_(Math.max(0, apiNum_(payload.ukraine_delivery_jpy)) / jpyRate); ukraineAllocations = matches.length > 1 ? allocateAmount_(totalUah, matches.map(function(match) { return apiNum_(match.values[8]); })) : [totalUah]; } matches.forEach(function(match, index) { if (hasTrack) purchases.getRange(match.row, 3).setValue(String(payload.track_number || '').trim()); if (hasDate) purchases.getRange(match.row, 4).setValue(apiNormalizeDateValue_(payload.date, 'date')); if (hasStatus) purchases.getRange(match.row, 17).setValue(String(payload.status).trim()); if (Object.prototype.hasOwnProperty.call(match.lot, 'japan_fee_jpy') && String(match.lot.japan_fee_jpy) !== '') purchases.getRange(match.row, 10).setValue(round2_(Math.max(0, apiNum_(match.lot.japan_fee_jpy)) / jpyRate)); if (hasUkraine) purchases.getRange(match.row, 11).setValue(ukraineAllocations[index]); if (note) appendCellText_(purchases.getRange(match.row, 18), note); }); invalidateDoGetCache_(); return { ok: true, rows_updated: matches.length, lot_ids: Object.keys(lots) }; } catch (err) { return { ok: false, error: String(err && err.message ? err.message : err) }; } }
 function apiRecentSalesForUpdate_(params) {
   const table = apiRecentTable_(_getCrmSs().getSheetByName('Продажі'), 'Номер замовлення / операції');
   if (!table.headerRow) return { ok: true, rows: [] };
@@ -4124,7 +4281,7 @@ function apiAddSale_(ss, payload) {
     const gross = grossValues.reduce(function(sum, value) { return sum + value; }, 0);
     const discount = Math.min(Math.max(0, num_(payload.discount)), gross);
     const customPackaging = Object.prototype.hasOwnProperty.call(payload, 'custom_packaging_cost') ? payload.custom_packaging_cost : '';
-    const packaging = packagingType ? getPackagingCost_(packagingType, customPackaging) : 0;
+const packaging = packagingType ? getPackagingCost_(packagingType, customPackaging, { saleDate: date, excludeOrder: operation }) : 0;
     const shopDelivery = Math.max(0, num_(payload.shop_delivery));
     const discountAllocations = allocateAmount_(discount, grossValues);
     const packagingAllocations = allocateAmount_(packaging, grossValues);
@@ -4950,12 +5107,20 @@ return text.length > 450 ? text.slice(0, 447) + '...' : text;
 // AC merely because of that cosmetic legacy difference.
 const CRM_PACKAGING_TYPES_ = Object.freeze([
   '',
-  "Мала м'яка 14x12 см",
-  "Середня м'яка 16x14 см",
-  'Велика пакет 17x30 см',
-  'Конверт Airpock 14x22 см',
+  'Пакет S 125х190',
+  'Пакет M 190х240',
+  'Пакет XL 280х370',
+  'AirPack S 120х160',
+  'AirPack M 140х225',
   'Інше'
 ]);
+const CRM_PACKAGING_LEGACY_ALIASES_ = Object.freeze({
+  "мала м'яка 14x12 см": 'AirPack S 120х160',
+  'велика пакет 17x30 см': 'Пакет XL 280х370',
+  'конверт airpock 14x22 см': 'AirPack M 140х225'
+});
+const CRM_SHIPPING_LABEL_CONSUMABLE_ = 'Термоетикетка 101х101 мм';
+const CRM_CONSUMABLE_FIFO_SHEET_ = 'FIFO_розхідники';
 // Payment type is an accounting input: its sheet formulas own the fee tariff.
 // Keep the update API constrained to the same canonical values as the dashboard.
 const CRM_PAYMENT_TYPES_ = Object.freeze([
@@ -4980,10 +5145,11 @@ function canonicalCrmPackagingType_(value) {
   const raw = String(value == null ? '' : value).trim();
   if (!raw) return '';
   const key = crmPackagingComparisonKey_(raw);
+  const normalized = CRM_PACKAGING_LEGACY_ALIASES_[key] || raw;
   const canonical = CRM_PACKAGING_TYPES_.filter(function(item) {
-    return crmPackagingComparisonKey_(item) === key;
+    return crmPackagingComparisonKey_(item) === crmPackagingComparisonKey_(normalized);
   })[0];
-  return canonical === undefined ? raw : canonical;
+  return canonical === undefined ? normalized : canonical;
 }
 
 function isKnownCrmPackagingType_(value) {
@@ -5045,17 +5211,234 @@ function setupCrm004PackagingValidation() {
   return result;
 }
 
-function getPackagingCost_(packagingType, customValue) {
+function getPackagingCost_(packagingType, customValue, options) {
 packagingType = canonicalCrmPackagingType_(packagingType);
 if (!packagingType) return null;
 if (packagingType === 'Інше') return num_(customValue);
-const sheet = SpreadsheetApp.getActive().getSheetByName('Розхідники');
+const ss = SpreadsheetApp.getActive();
+const fifoCost = getConsumableFifoUnitCost_(ss, packagingType, options || {});
+if (fifoCost !== null) return fifoCost;
+const sheet = ss.getSheetByName('Розхідники');
 if (!sheet) return 0;
 const values = sheet.getRange(4, 1, Math.max(sheet.getLastRow() - 3, 1), 3).getValues();
 for (let i = 0; i < values.length; i++) {
 if (crmPackagingComparisonKey_(values[i][0]) === crmPackagingComparisonKey_(packagingType)) return num_(values[i][2]);
 }
 return 0;
+}
+
+function getConsumableFifoUnitCost_(ss, consumableName, options) {
+  const fifo = ss.getSheetByName(CRM_CONSUMABLE_FIFO_SHEET_);
+  if (!fifo || fifo.getLastRow() < 2) return null;
+  const name = String(consumableName || '').trim();
+  if (!name) return null;
+  const rows = fifo.getRange(2, 1, fifo.getLastRow() - 1, 7).getValues();
+  const saleDate = options && options.saleDate ? dateSortValue_(options.saleDate) : 0;
+  const lots = rows.map(function(row, index) {
+    return { row: index + 2, date: dateSortValue_(row[1]), name: String(row[2] || '').trim(), qty: num_(row[3]), unit: num_(row[4]), source: String(row[5] || '') };
+  }).filter(function(lot) {
+    return lot.qty > 0 && lot.unit >= 0 && lot.name === name && (!saleDate || !lot.date || lot.date <= saleDate);
+  }).sort(function(a, b) { return a.date - b.date || a.row - b.row; });
+  if (!lots.length) return null;
+  const consumed = consumableFifoConsumedBefore_(ss, name, options || {});
+  let skipped = consumed, needed = Math.max(0.000001, num_(options && options.qty) || 1), total = 0;
+  lots.forEach(function(lot) {
+    if (needed <= 0) return;
+    const skip = Math.min(skipped, lot.qty); skipped -= skip;
+    const available = lot.qty - skip;
+    if (available <= 0) return;
+    const take = Math.min(needed, available); total += take * lot.unit; needed -= take;
+  });
+  if (needed > 0) return null;
+  return round2_(total / (num_(options && options.qty) || 1));
+}
+
+function consumableFifoConsumedBefore_(ss, consumableName, options) {
+  const sales = ss.getSheetByName('Продажі');
+  if (!sales) return 0;
+  const saleSort = dateSortValue_(options && options.saleDate);
+  const excludedOrder = String(options && options.excludeOrder || '').trim();
+  const seenOrders = {};
+  const values = sales.getRange(3, 1, Math.max(sales.getLastRow() - 2, 1), 29).getValues();
+  values.forEach(function(row, index) {
+    const order = String(row[0] || '').trim();
+    if (!order || order === excludedOrder || seenOrders[order]) return;
+    if (String(row[22] || '').trim() === 'Скасовано' || String(row[22] || '').trim() === 'Повернення' || String(row[23] || '').trim() === 'Скасовано' || String(row[23] || '').trim() === 'Повернення') return;
+    const rowSort = dateSortValue_(row[2]);
+    if (saleSort && rowSort && rowSort > saleSort) return;
+    if (canonicalCrmPackagingType_(row[28]) !== consumableName) return;
+    seenOrders[order] = true;
+  });
+  return Object.keys(seenOrders).length;
+}
+
+function refreshConsumableFifoCatalogCosts_(ss) {
+  const catalog = ss.getSheetByName('Розхідники');
+  if (!catalog) return 0;
+  const values = catalog.getRange(4, 1, Math.max(catalog.getLastRow() - 3, 1), 1).getDisplayValues();
+  let updated = 0;
+  values.forEach(function(row, index) {
+    const cost = getConsumableFifoUnitCost_(ss, String(row[0] || '').trim(), {});
+    if (cost === null) return;
+    const cell = catalog.getRange(index + 4, 3);
+    if (Math.abs(num_(cell.getValue()) - cost) > 0.000001 || cell.getFormula()) { cell.setValue(cost); updated++; }
+  });
+  return updated;
+}
+
+function previewPackaging001Migration() {
+  const ss = SpreadsheetApp.getActive();
+  const catalog = ss.getSheetByName('Розхідники'), expenses = ss.getSheetByName('Витрати');
+  if (!catalog || !expenses) throw new Error('Потрібні вкладки Розхідники і Витрати.');
+  const existing = catalog.getRange(4, 1, Math.max(catalog.getLastRow() - 3, 1), 12).getValues();
+  const names = existing.map(function(row) { return String(row[0] || '').trim(); });
+  const todayRows = expenses.getRange(3, 1, Math.max(expenses.getLastRow() - 2, 1), 11).getValues();
+  const today = todayRows.filter(function(row) { return String(row[6] || '').indexOf('[dashboard_request:expense-178966') !== -1; });
+  return { ok: true, action: 'PACKAGING-001 preview', catalog_rows: names.length, rename_present: ["Мала м'яка 14х12 см", 'Велика пакет 17х30 см', 'Конверт Airpock 14х22 см'].filter(function(name) { return names.indexOf(name) !== -1; }), add_missing: ['Пакет S 125х190', 'Пакет M 190х240', CRM_SHIPPING_LABEL_CONSUMABLE_].filter(function(name) { return names.indexOf(name) === -1; }), today_expense_rows: today.length, fifo_sheet_exists: !!ss.getSheetByName(CRM_CONSUMABLE_FIFO_SHEET_) };
+}
+
+function applyPackaging001Migration() {
+  const ss = SpreadsheetApp.getActive();
+  const catalog = ss.getSheetByName('Розхідники'), expenses = ss.getSheetByName('Витрати'), sales = ss.getSheetByName('Продажі');
+  if (!catalog || !expenses || !sales) throw new Error('Потрібні вкладки Розхідники, Витрати і Продажі.');
+  const before = apiIntegrityCheck_();
+  // Validation must accept the new canonical values before historical AC cells are renamed.
+  ensureCrmPackagingValidation_(ss);
+  const renames = { "Мала м'яка 14х12 см": 'AirPack S 120х160', 'Велика пакет 17х30 см': 'Пакет XL 280х370', 'Конверт Airpock 14х22 см': 'AirPack M 140х225', 'Чорний пакет 125х190': 'Пакет S 125х190', 'Чорний пакет 190х240': 'Пакет M 190х240', 'Малий Airpack 120х175 мм': 'AirPack S 120х160' };
+  const catalogValues = catalog.getRange(4, 1, Math.max(catalog.getLastRow() - 3, 1), 12).getValues();
+  let renamedCatalog = 0, archived = 0;
+  catalogValues.forEach(function(row, index) {
+    const rowNumber = index + 4, oldName = String(row[0] || '').trim();
+    if (renames[oldName]) { catalog.getRange(rowNumber, 1).setValue(renames[oldName]); renamedCatalog++; }
+    if (oldName === "Середня м'яка 16х14 см") { catalog.getRange(rowNumber, 12).setValue('[ARCHIVED] Виведено з типів паковання PACKAGING-001; історія збережена.'); archived++; }
+  });
+  const expenseValues = expenses.getRange(3, 1, Math.max(expenses.getLastRow() - 2, 1), 11).getValues();
+  let renamedExpenses = 0;
+  expenseValues.forEach(function(row, index) {
+    const mapped = renames[String(row[7] || '').trim()];
+    if (!mapped) return;
+    expenses.getRange(index + 3, 8).setValue(mapped); renamedExpenses++;
+  });
+  const saleValues = sales.getRange(3, 1, Math.max(sales.getLastRow() - 2, 1), 29).getValues();
+  let renamedSales = 0;
+  saleValues.forEach(function(row, index) {
+    const mapped = renames[String(row[28] || '').trim()];
+    if (!mapped) return;
+    sales.getRange(index + 3, 29).setValue(mapped); renamedSales++;
+  });
+  SpreadsheetApp.flush();
+  const required = [
+    { name: 'Пакет S 125х190', category: 'Упаковка', note: 'PACKAGING-001: облік пакетів S.' },
+    { name: 'Пакет M 190х240', category: 'Упаковка', note: 'PACKAGING-001: облік пакетів M.' },
+    { name: CRM_SHIPPING_LABEL_CONSUMABLE_, category: 'Інше', note: 'PACKAGING-001: за замовчуванням 1 шт при відправленні; можна вимкнути в оновленні замовлення.' }
+  ];
+  let created = 0;
+  required.forEach(function(item) {
+    if (getConsumableCatalogRow_(catalog, item.name)) return;
+    const row = crmNextAppendRow_(ss, 'Розхідники', 1);
+    catalog.getRange(row, 1, 1, 2).setValues([[item.name, item.category]]);
+    catalog.getRange(row, 4, 1, 2).setValues([[0, 0]]);
+    catalog.getRange(row, 12).setValue(item.note);
+    if (item.category === 'Упаковка') setPackagingConsumableCatalogFormulas_(catalog, row, item.name, crmCapacitySheetLastRow_(expenses, 3));
+    else setConsumableCatalogFormulas_(catalog, row, item.name, item.category, '', crmCapacitySheetLastRow_(expenses, 3));
+    created++;
+  });
+  const fifo = packaging001EnsureFifoSheet_(ss);
+  const names = catalog.getRange(4, 1, Math.max(catalog.getLastRow() - 3, 1), 4).getValues();
+  const expenseAfter = expenses.getRange(3, 1, Math.max(expenses.getLastRow() - 2, 1), 11).getValues();
+  let lotsAdded = 0;
+  names.forEach(function(row, index) {
+    const name = String(row[0] || '').trim(), opening = num_(row[3]);
+    if (!name || opening <= 0) return;
+    lotsAdded += packaging001AppendFifoLot_(fifo, 'opening:' + (index + 4), new Date(2026, 0, 1), name, opening, num_(row[2]), 'Початковий залишок PACKAGING-001') ? 1 : 0;
+  });
+  expenseAfter.forEach(function(row, index) {
+    if (String(row[9] || '').trim() !== 'На складі' || !String(row[7] || '').trim() || num_(row[8]) <= 0) return;
+    lotsAdded += packaging001AppendFifoLot_(fifo, 'expense:' + (index + 3), row[0], String(row[7] || '').trim(), num_(row[8]), num_(row[10]) || round2_(num_(row[3]) / num_(row[8])), String(row[6] || '')) ? 1 : 0;
+  });
+  const fifoCostsUpdated = refreshConsumableFifoCatalogCosts_(ss);
+  SpreadsheetApp.flush();
+  const after = apiIntegrityCheck_();
+  const beforeProblems = {}; (before.problems || []).forEach(function(problem) { beforeProblems[JSON.stringify(problem)] = true; });
+  const introduced = (after.problems || []).filter(function(problem) { return !beforeProblems[JSON.stringify(problem)]; });
+  if (introduced.length) throw new Error('PACKAGING-001 створила проблему цілісності: ' + introduced[0].code);
+  invalidateDoGetCache_();
+  return { ok: true, action: 'PACKAGING-001 applied', renamed_catalog: renamedCatalog, archived: archived, renamed_expenses: renamedExpenses, renamed_sales: renamedSales, created: created, fifo_lots_added: lotsAdded, fifo_costs_updated: fifoCostsUpdated, integrity_before_clean: before.clean, integrity_after_clean: after.clean };
+}
+
+// PACKAGING-002 is a one-row correction, deliberately separate from the finished
+// PACKAGING-001 migration. It keeps the expense row and its FIFO source together.
+const PACKAGING_002_EXPENSE_ROW_ = 64;
+const PACKAGING_002_REQUEST_MARKER_ = '[dashboard_request:expense-1789663809612-2x264vd8]';
+const PACKAGING_002_NOTE_ = 'Тонкі чорні пакети 125х190 з Веллпакс ' + PACKAGING_002_REQUEST_MARKER_;
+const PACKAGING_002_NAME_ = 'Пакет S 125х190';
+
+function showPackaging002Dialog() {
+  SpreadsheetApp.getUi().showModalDialog(
+    HtmlService.createHtmlOutputFromFile('PACKAGING-002').setWidth(680).setHeight(430),
+    'PACKAGING-002 — виправлення витрати №64'
+  );
+}
+
+function previewPackaging002Expense64Correction() {
+  const ss = SpreadsheetApp.getActive(), expenses = ss.getSheetByName('Витрати'), fifo = ss.getSheetByName(CRM_CONSUMABLE_FIFO_SHEET_);
+  if (!expenses || !fifo) throw new Error('Потрібні вкладки Витрати і ' + CRM_CONSUMABLE_FIFO_SHEET_ + '.');
+  const values = expenses.getRange(PACKAGING_002_EXPENSE_ROW_, 1, 1, 11).getValues()[0];
+  const description = String(values[2] || '').trim(), note = String(values[6] || '').trim(), type = String(values[7] || '').trim();
+  const qty = num_(values[8]), status = String(values[9] || '').trim(), unit = num_(values[10]);
+  const sources = fifo.getRange(2, 1, Math.max(fifo.getLastRow() - 1, 1), 7).getValues().map(function(row, index) { return { row: index + 2, values: row }; }).filter(function(item) { return String(item.values[5] || '').trim() === 'expense:' + PACKAGING_002_EXPENSE_ROW_; });
+  const fifoName = sources.length === 1 ? String(sources[0].values[2] || '').trim() : '';
+  const ready = description === 'Чорний пакет 125х190' && note.indexOf(PACKAGING_002_REQUEST_MARKER_) !== -1 && qty === 100 && status === 'На складі' && Math.abs(unit - 0.64) < 0.000001 && (type === 'Пакет M 190х240' || type === PACKAGING_002_NAME_) && sources.length === 1 && (fifoName === 'Пакет M 190х240' || fifoName === PACKAGING_002_NAME_);
+  return { ok: ready, action: 'PACKAGING-002 preview', expense_row: PACKAGING_002_EXPENSE_ROW_, current_type: type, current_note: note, qty: qty, unit_cost: unit, fifo_source_matches: sources.length, fifo_current_type: fifoName, target_type: PACKAGING_002_NAME_, target_note: PACKAGING_002_NOTE_, already_applied: type === PACKAGING_002_NAME_ && note === PACKAGING_002_NOTE_ && fifoName === PACKAGING_002_NAME_ };
+}
+
+function applyPackaging002Expense64Correction() {
+  const preview = previewPackaging002Expense64Correction();
+  if (!preview.ok) throw new Error('PACKAGING-002 не застосовано: рядок 64 або FIFO-джерело не відповідає очікуваному стану. Запусти preview і не виправляй вручну.');
+  if (preview.already_applied) return Object.assign(preview, { ok: true, action: 'PACKAGING-002 already applied' });
+  const ss = SpreadsheetApp.getActive(), expenses = ss.getSheetByName('Витрати'), fifo = ss.getSheetByName(CRM_CONSUMABLE_FIFO_SHEET_);
+  const before = apiIntegrityCheck_();
+  const fifoRows = fifo.getRange(2, 1, Math.max(fifo.getLastRow() - 1, 1), 7).getValues();
+  let fifoRow = 0;
+  fifoRows.forEach(function(row, index) { if (String(row[5] || '').trim() === 'expense:' + PACKAGING_002_EXPENSE_ROW_) fifoRow = index + 2; });
+  if (!fifoRow) throw new Error('FIFO-лот expense:64 не знайдено.');
+  expenses.getRange(PACKAGING_002_EXPENSE_ROW_, 7, 1, 2).setValues([[PACKAGING_002_NOTE_, PACKAGING_002_NAME_]]);
+  fifo.getRange(fifoRow, 3).setValue(PACKAGING_002_NAME_);
+  fifo.getRange(fifoRow, 7).setValue(PACKAGING_002_NOTE_);
+  SpreadsheetApp.flush();
+  const fifoCostsUpdated = refreshConsumableFifoCatalogCosts_(ss);
+  SpreadsheetApp.flush();
+  const after = apiIntegrityCheck_(), beforeProblems = {};
+  (before.problems || []).forEach(function(problem) { beforeProblems[JSON.stringify(problem)] = true; });
+  const introduced = (after.problems || []).filter(function(problem) { return !beforeProblems[JSON.stringify(problem)]; });
+  if (introduced.length) throw new Error('PACKAGING-002 створила проблему цілісності: ' + introduced[0].code);
+  invalidateDoGetCache_();
+  return { ok: true, action: 'PACKAGING-002 applied', expense_row: PACKAGING_002_EXPENSE_ROW_, fifo_row: fifoRow, type: PACKAGING_002_NAME_, qty: 100, unit_cost: 0.64, fifo_costs_updated: fifoCostsUpdated, integrity_before_clean: before.clean, integrity_after_clean: after.clean };
+}
+
+function packaging001EnsureFifoSheet_(ss) {
+  let sheet = ss.getSheetByName(CRM_CONSUMABLE_FIFO_SHEET_);
+  const headers = ['ID', 'Дата', 'Розхідник', 'Кількість', 'Собівартість 1 шт', 'Джерело', 'Примітка'];
+  if (!sheet) { sheet = ss.insertSheet(CRM_CONSUMABLE_FIFO_SHEET_); sheet.getRange(1, 1, 1, headers.length).setValues([headers]); sheet.setFrozenRows(1); }
+  const actual = sheet.getRange(1, 1, 1, headers.length).getDisplayValues()[0].map(function(value) { return String(value || '').trim(); });
+  if (JSON.stringify(actual) !== JSON.stringify(headers)) throw new Error('FIFO_розхідники має несподівані заголовки.');
+  return sheet;
+}
+
+function packaging001AppendFifoLot_(sheet, source, date, name, qty, unit, note) {
+  const existing = sheet.getRange(2, 6, Math.max(sheet.getLastRow() - 1, 1), 1).getDisplayValues().flat();
+  if (existing.indexOf(source) !== -1) return false;
+  const row = sheet.getLastRow() + 1;
+  sheet.getRange(row, 1, 1, 7).setValues([['CFIFO-' + String(row - 1).padStart(5, '0'), date, name, qty, unit, source, note]]);
+  return true;
+}
+
+function setPackagingConsumableCatalogFormulas_(sheet, row, name, expenseLastRow) {
+  setConsumableCatalogFormulas_(sheet, row, name, 'Упаковка', '', expenseLastRow);
+  const sales = sheet.getParent().getSheetByName('Продажі');
+  const salesLastRow = Math.max(3, sales ? crmCapacitySheetLastRow_(sales, 3) : 3);
+  const escaped = String(name || '').replace(/"/g, '""');
+  sheet.getRange(row, 8).setFormula('=IF($A' + row + '="";"";IFNA(ROWS(UNIQUE(FILTER(\'Продажі\'!$A$3:$A$' + salesLastRow + ';\'Продажі\'!$AC$3:$AC$' + salesLastRow + '=$A' + row + ';\'Продажі\'!$A$3:$A$' + salesLastRow + '<>"";\'Продажі\'!$W$3:$W$' + salesLastRow + '<>"Скасовано";\'Продажі\'!$W$3:$W$' + salesLastRow + '<>"Повернення";\'Продажі\'!$X$3:$X$' + salesLastRow + '<>"Скасовано";\'Продажі\'!$X$3:$X$' + salesLastRow + '<>"Повернення")));0)+IFNA(SUMIFS(Використання_компонентів!$F$2:$F;Використання_компонентів!$D$2:$D;"Розхідник";Використання_компонентів!$E$2:$E;"' + escaped + '");0))');
 }
 
 function orderRowWeights_(sales, rows) {
@@ -6476,6 +6859,60 @@ return String(a.name).localeCompare(String(b.name), 'uk');
 return { ok: true, days: days, count: result.length, consumables: result, purchases: apiConsumableOpenPurchases_(expenseSheet) };
 }
 
+function apiConsumableCatalog_() {
+  const sheet = _getCrmSs().getSheetByName('Розхідники');
+  if (!sheet) throw new Error('Немає вкладки Розхідники');
+  const rows = sheet.getRange(4, 1, Math.max(sheet.getLastRow() - 3, 1), 12).getValues();
+  const consumables = rows.map(function(row) {
+    return { name: String(row[0] || '').trim(), category: String(row[1] || '').trim(), note: String(row[11] || '').trim() };
+  }).filter(function(row) { return row.name && row.note.indexOf('[ARCHIVED]') === -1; });
+  consumables.sort(function(a, b) { return a.name.localeCompare(b.name, 'uk'); });
+  return { ok: true, consumables: consumables };
+}
+
+// The dashboard displays only packaging that can actually be written to an order.
+// Keep the selected value canonical; the quantity is display-only in the client.
+function apiPackagingChoices_() {
+  const sheet = _getCrmSs().getSheetByName('Розхідники');
+  if (!sheet) throw new Error('Немає вкладки Розхідники');
+  const rows = sheet.getRange(4, 1, Math.max(sheet.getLastRow() - 3, 1), 12).getValues();
+  const byName = {};
+  rows.forEach(function(row) {
+    const name = String(row[0] || '').trim(), category = String(row[1] || '').trim(), note = String(row[11] || '').trim();
+    if (!name || category !== 'Упаковка' || note.indexOf('[ARCHIVED]') !== -1) return;
+    byName[name] = Math.max(0, num_(row[8]));
+  });
+  const choices = CRM_PACKAGING_TYPES_.filter(function(name) { return name && name !== 'Інше' && byName[name] > 0; }).map(function(name) {
+    return { name: name, stock: round2_(byName[name]) };
+  });
+  return { ok: true, choices: choices };
+}
+
+function getConsumableCatalogRow_(sheet, name) {
+  const rows = sheet.getRange(4, 1, Math.max(sheet.getLastRow() - 3, 1), 12).getValues();
+  let match = null;
+  rows.forEach(function(row, index) {
+    if (String(row[0] || '').trim() !== name) return;
+    if (match) throw new Error('duplicate consumable key: ' + name);
+    match = { row: index + 4, category: String(row[1] || '').trim(), note: String(row[11] || '').trim() };
+  });
+  return match;
+}
+
+function appendConsumableFifoLotForExpense_(ss, expenseRow, values) {
+  const fifo = ss.getSheetByName(CRM_CONSUMABLE_FIFO_SHEET_);
+  if (!fifo) return { added: false, skipped: 'fifo_not_setup' };
+  const name = String(values[7] || '').trim(), status = String(values[9] || '').trim(), qty = num_(values[8]);
+  if (!name || status !== 'На складі' || qty <= 0) return { added: false, skipped: 'not_landed_consumable' };
+  const source = 'expense:' + expenseRow;
+  const existing = fifo.getRange(2, 6, Math.max(fifo.getLastRow() - 1, 1), 1).getDisplayValues().flat();
+  if (existing.indexOf(source) !== -1) return { added: false, skipped: 'already_added' };
+  const unit = num_(values[10]) || round2_(num_(values[3]) / qty);
+  const row = fifo.getLastRow() + 1;
+  fifo.getRange(row, 1, 1, 7).setValues([['CFIFO-' + String(row - 1).padStart(5, '0'), values[0], name, qty, unit, source, String(values[6] || '')]]);
+  return { added: true, row: row };
+}
+
 const CRM_CONSUMABLE_PURCHASE_STATUSES_ = ['Замовлено', 'Їде', 'На складі', 'Скасовано'];
 const CRM_CONSUMABLE_CATEGORIES_ = ['Упаковка', 'Маркетинг', 'Фурнітура', 'Інше'];
 
@@ -6568,6 +7005,8 @@ try {
   expenses.getRange(expenseRow, 1, 1, 10).setValues([[date, consumableExpenseCategory_(category), description, round2_(total), 'Ні', String(payload.reference || '').trim(), String(payload.note || '').trim(), name, qty, status]]);
   expenses.getRange(expenseRow, 11).setFormula('=IFERROR($D' + expenseRow + '/$I' + expenseRow + ';0)');
   SpreadsheetApp.flush();
+  const fifo = appendConsumableFifoLotForExpense_(ss, expenseRow, expenses.getRange(expenseRow, 1, 1, 11).getValues()[0]);
+  if (fifo.added) refreshConsumableFifoCatalogCosts_(ss);
   let postIntegrity = null;
   if (createdCatalog) {
     postIntegrity = apiIntegrityCheck_();
@@ -6580,7 +7019,7 @@ try {
     }
   }
   invalidateDoGetCache_();
-  return { ok: true, row_index: expenseRow, catalog_row: catalogRow, catalog_created: createdCatalog, incoming_formulas_updated: incomingFormulasUpdated, integrity_before_clean: preIntegrity ? preIntegrity.clean : null, integrity_after_clean: postIntegrity ? postIntegrity.clean : null };
+  return { ok: true, row_index: expenseRow, catalog_row: catalogRow, catalog_created: createdCatalog, incoming_formulas_updated: incomingFormulasUpdated, fifo: fifo, integrity_before_clean: preIntegrity ? preIntegrity.clean : null, integrity_after_clean: postIntegrity ? postIntegrity.clean : null };
 } catch (err) {
   try {
     const rollbackSs = ss || _getCrmSs();
@@ -8607,9 +9046,10 @@ function apiOrderComponentCatalog_() {
   consumableValues.forEach(function(row) {
     const name = String(row[0] || '').trim();
     const category = String(row[1] || '').trim();
+    const note = String(row[11] || '').trim();
     const qty = num_(row[8]);
     const unitCost = round2_(num_(row[2]));
-    if (!name) return;
+    if (!name || note.indexOf('[ARCHIVED]') !== -1) return;
     if (category === 'Фурнітура') {
       const payer = String(row[14] || '').trim();
       if (['власник', 'Сергій'].indexOf(payer) !== -1) fixtures.push({ selection: name + ' | ' + payer, name: name, payer: payer, stock: round2_(qty), unit_cost: unitCost });
@@ -8671,7 +9111,15 @@ function apiOrderComponentCatalogForIds_(ss, ids) {
   return result;
 }
 
-function buildOrderComponentPlan_(ss, rawItems) {
+function orderHasConsumableComponent_(ss, order, name) {
+  const ledger = ss.getSheetByName(CRM_ORDER_COMPONENT_USAGE_SHEET_);
+  if (!ledger || ledger.getLastRow() < 2) return false;
+  return ledger.getRange(2, 3, ledger.getLastRow() - 1, 3).getDisplayValues().some(function(row) {
+    return String(row[0] || '').trim() === order && String(row[1] || '').trim() === 'Розхідник' && String(row[2] || '').trim() === name;
+  });
+}
+
+function buildOrderComponentPlan_(ss, rawItems, options) {
   const items = Array.isArray(rawItems) ? rawItems.slice(0, 10) : [];
   if (!items.length) return { ok: true, entries: [], prro_total: 0, mgmt_total: 0 };
   const catalog = apiOrderComponentCatalogForIds_(ss, items.map(function(item) { return item && item.id; }));
@@ -8688,7 +9136,8 @@ function buildOrderComponentPlan_(ss, rawItems) {
     if (qty <= 0) return { ok: false, error: 'Кількість компонента має бути більшою за нуль: ' + catalogItem.name + '.', entries: [] };
     requested[id] = round2_((requested[id] || 0) + qty);
     if (requested[id] > catalogItem.stock + 0.000001) return { ok: false, error: 'Недостатньо на складі: ' + catalogItem.name + ' — запит ' + requested[id] + ', залишок ' + catalogItem.stock + '.', entries: [] };
-    entries.push({ kind: catalogItem.kind, code: catalogItem.code, name: catalogItem.name, qty: qty, prroUnit: catalogItem.prro_unit, mgmtUnit: catalogItem.mgmt_unit, mysteryEligible: catalogItem.mystery_eligible === true,
+    const fifoUnit = catalogItem.kind === 'Розхідник' ? getConsumableFifoUnitCost_(ss, catalogItem.code, Object.assign({ qty: qty }, options || {})) : null;
+    entries.push({ kind: catalogItem.kind, code: catalogItem.code, name: catalogItem.name, qty: qty, prroUnit: catalogItem.prro_unit, mgmtUnit: fifoUnit === null ? catalogItem.mgmt_unit : fifoUnit, mysteryEligible: catalogItem.mystery_eligible === true,
       note: String(items[index].note || '').trim(), targetRow: Math.floor(num_(items[index].target_row)), targetSku: String(items[index].target_sku || '').trim() });
   }
   return { ok: true, entries: entries, prro_total: round2_(entries.reduce(function(sum, item) { return sum + item.qty * item.prroUnit; }, 0)), mgmt_total: round2_(entries.reduce(function(sum, item) { return sum + item.qty * item.mgmtUnit; }, 0)) };
@@ -9242,8 +9691,13 @@ function apiUpdateSaleWithComponents_(ss, payload) {
     const matches = rows.map(function(row) { return { row: row, values: sales.getRange(row, 1, 1, 29).getValues()[0] }; });
     markPhase_('order_loaded');
     const fixtureLines = (Array.isArray(payload.fixtures) ? payload.fixtures.slice(0, 10) : []).map(function(item, index) { return { selection: String(item && item.selection || '').trim(), qty: num_(item && item.qty), row: index + 1, target_row: Math.floor(num_(item && item.target_row)), target_sku: String(item && item.target_sku || '').trim() }; });
-    const rawComponents = Array.isArray(payload.components) ? payload.components.slice(0, 10) : [];
+    let rawComponents = Array.isArray(payload.components) ? payload.components.slice(0, 10) : [];
     const raw3dpModes = Array.isArray(payload.three_dp_lines) ? payload.three_dp_lines.slice(0, 10) : [];
+    const requestedOrderStatus = String(payload.order_status || current[23] || '').trim();
+    const shippingLabelRequested = (payload.shipping_label === true || String(payload.shipping_label || '').trim().toLowerCase() === 'true') && requestedOrderStatus === 'Відправлено';
+    if (shippingLabelRequested && !orderHasConsumableComponent_(ss, order, CRM_SHIPPING_LABEL_CONSUMABLE_)) {
+      rawComponents.push({ id: 'consumable:' + CRM_SHIPPING_LABEL_CONSUMABLE_, qty: 1, note: 'Авто: термоетикетка при відправленні' });
+    }
     const componentRequested = rawComponents.length > 0;
     const fixtureRequested = fixtureLines.length > 0;
     const requestId = String(payload.request_id || '').trim();
@@ -9251,7 +9705,7 @@ function apiUpdateSaleWithComponents_(ss, payload) {
     const needsRequestStateLookup = componentRequested || fixtureRequested;
     const requestState = needsRequestStateLookup && requestId ? orderUpdateRequestState_(ss, order, requestId) : { component: false, fixture: false, marker: '' };
     markPhase_('request_state_checked');
-    const componentPlan = requestState.component ? { ok: true, entries: [], prro_total: 0, mgmt_total: 0 } : buildOrderComponentPlan_(ss, rawComponents);
+    const componentPlan = requestState.component ? { ok: true, entries: [], prro_total: 0, mgmt_total: 0 } : buildOrderComponentPlan_(ss, rawComponents, { saleDate: current[2], excludeOrder: order });
     if (!componentPlan.ok) throw new Error(componentPlan.error);
     markPhase_('component_plan_ready');
     componentPlan.entries.forEach(function(item) {
@@ -9305,7 +9759,7 @@ function apiUpdateSaleWithComponents_(ss, payload) {
     const ttnChanged = Object.prototype.hasOwnProperty.call(payload, 'ttn') && ttn !== String(current[25] || '').trim();
     const packagingChanged = packagingType && crmPackagingComparisonKey_(packagingType) !== crmPackagingComparisonKey_(currentPackagingType);
     const hasCustomPackaging = Object.prototype.hasOwnProperty.call(payload, 'custom_packaging_cost') && String(payload.custom_packaging_cost) !== '';
-    const packaging = packagingChanged || hasCustomPackaging ? getPackagingCost_(packagingType, payload.custom_packaging_cost) : null;
+const packaging = packagingChanged || hasCustomPackaging ? getPackagingCost_(packagingType, payload.custom_packaging_cost, { saleDate: current[2], excludeOrder: order }) : null;
     const hasDelivery = Object.prototype.hasOwnProperty.call(payload, 'shop_delivery') && String(payload.shop_delivery) !== '';
     const shopDelivery = hasDelivery ? Math.max(0, apiNum_(payload.shop_delivery)) : null;
     if (packagingType && !isKnownCrmPackagingType_(packagingType)) throw new Error('Недійсний тип паковання. Онови дашборд і вибери значення зі списку.');
@@ -9384,6 +9838,7 @@ function apiUpdateSaleWithComponents_(ss, payload) {
     if (componentCost.rows_updated) {
       progress.cost_updated = true;
     }
+    refreshConsumableFifoCatalogCosts_(ss);
     // A full current-cost projection is not part of an interactive order write.
     // Sales and component stock movements are canonical immediately; the derived
     // catalog projection is refreshed by nightly inventory maintenance.

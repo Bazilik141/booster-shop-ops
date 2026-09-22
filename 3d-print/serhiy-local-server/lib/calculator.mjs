@@ -24,7 +24,7 @@ export function calculateBatchCost(input, settings) {
   const electricityPrice = number(settings.electricity_price_uah_per_kwh, "Electricity price");
   const amortizationRate = nonNegative(settings.amortization_uah_per_hour, "Amortization rate");
   const defectRate = nonNegative(settings.planned_defect_fraction, "Planned defect fraction");
-  const serhiyConsumablesUah = nonNegative(input.serhiy_consumables_uah || 0, "Serhiy consumables");
+  const serhiyConsumablesPerUnitUah = nonNegative(input.serhiy_consumables_uah || 0, "Serhiy consumables per unit");
   const defects = nonNegative(input.defects || 0, "Actual defects");
   if (!Number.isInteger(defects) || defects > quantity) throw new Error("Actual defects must be a whole number not greater than the batch quantity.");
 
@@ -35,6 +35,7 @@ export function calculateBatchCost(input, settings) {
   const amortizationUah = amortizationRate * timePerUnitHours;
 
   const baseUah = materialUah + electricityUah + amortizationUah;
+  const serhiyConsumablesUah = serhiyConsumablesPerUnitUah * quantity;
   const actualBatchTotalUah = baseUah * quantity + serhiyConsumablesUah;
   const goodQuantity = quantity - defects;
   return {
@@ -43,6 +44,7 @@ export function calculateBatchCost(input, settings) {
     total_print_time_h: totalTimeHours,
     spool_weight_g: spoolWeightG,
     spool_price_uah: spoolPriceUah,
+    serhiy_consumables_per_unit_uah: serhiyConsumablesPerUnitUah,
     serhiy_consumables_uah: serhiyConsumablesUah,
     actual_batch_total_uah: actualBatchTotalUah,
     actual_unit_uah: actualBatchTotalUah / quantity,

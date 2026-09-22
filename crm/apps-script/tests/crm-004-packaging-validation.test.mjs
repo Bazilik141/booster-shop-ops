@@ -62,7 +62,8 @@ const context = vm.createContext({
 });
 vm.runInContext(code + '\nglobalThis.__test = { canonicalCrmPackagingType_, crmPackagingComparisonKey_, getPackagingCost_, ensureCrmPackagingValidation_ };', context, { filename: 'Code.gs' });
 
-assert.equal(context.__test.canonicalCrmPackagingType_("Середня м'яка 16х14 см"), "Середня м'яка 16x14 см");
+assert.equal(context.__test.canonicalCrmPackagingType_("Мала м'яка 14х12 см"), 'AirPack S 120х160');
+assert.equal(context.__test.canonicalCrmPackagingType_('Велика пакет 17х30 см'), 'Пакет XL 280х370');
 assert.equal(context.__test.crmPackagingComparisonKey_('Мала м’яка 14х12 см'), context.__test.crmPackagingComparisonKey_("Мала м'яка 14x12 см"));
 
 const first = context.__test.ensureCrmPackagingValidation_(spreadsheet);
@@ -70,7 +71,7 @@ assert.equal(first.sales_rule_changed, true);
 assert.equal(first.update_form_rule_changed, true);
 assert.equal(first.already_applied, false);
 assert.equal(sales.getRange(274, 29).getDataValidation().getAllowInvalid(), false, 'AC274 receives the canonical strict rule');
-assert.deepEqual(JSON.parse(JSON.stringify(sales.getRange(274, 29).getDataValidation().getCriteriaValues()[0])), ['', "Мала м'яка 14x12 см", "Середня м'яка 16x14 см", 'Велика пакет 17x30 см', 'Конверт Airpock 14x22 см', 'Інше']);
+assert.deepEqual(JSON.parse(JSON.stringify(sales.getRange(274, 29).getDataValidation().getCriteriaValues()[0])), ['', 'Пакет S 125х190', 'Пакет M 190х240', 'Пакет XL 280х370', 'AirPack S 120х160', 'AirPack M 140х225', 'Інше']);
 
 const repeat = context.__test.ensureCrmPackagingValidation_(spreadsheet);
 assert.equal(repeat.already_applied, true, 'repeat only verifies the exact rule and does not change it');

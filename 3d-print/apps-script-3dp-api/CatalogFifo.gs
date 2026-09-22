@@ -199,8 +199,10 @@ function fifo3dpFindOperation_(sheet, operationId) {
 function fifo3dpReplayResult_(existing, fingerprint) {
   if (String(existing.values[11] || '') !== fingerprint) throw apiError3dp_('IDEMPOTENCY_CONFLICT', 'operation_id was already used with a different payload.');
   const breakdown = JSON.parse(String(existing.values[8] || '[]'));
+  const sourceType = String(existing.values[3] || '');
   return {
-    action: '3dp_crm_sale_commit', already_applied: true, operation_id: String(existing.values[1]),
+    action: sourceType === 'marketing_writeoff' ? '3dp_marketing_writeoff' : '3dp_crm_sale_commit',
+    already_applied: true, operation_id: String(existing.values[1]),
     allocation_id: String(existing.values[0]), quantity: Number(existing.values[6]),
     total_cost_uah: Number(existing.values[7]), unit_cost_uah: fifo3dpRound_(Number(existing.values[7]) / Number(existing.values[6]), 6),
     allocations: breakdown, sale_row: Number(existing.values[14]), crm_row: Number(existing.values[15]),
@@ -240,14 +242,14 @@ function fifo3dpFindReversal_(sheet, allocationId) {
 function fifo3dpAppendNegativeProjection_(spreadsheet, original, reversalId, returnDate, reason, actor) {
   const sourceType = String(original.values[3] || '');
   const originalRow = Number(original.values[14]);
-  const sheetName = sourceType === 'crm_sale' ? SHEETS_3DP.sales : sourceType === 'crm_gift' ? SHEETS_3DP.plyushky : '';
-  if (!sheetName || !(originalRow >= 2)) throw apiError3dp_('FIFO_REVERSAL_SOURCE_UNSUPPORTED', 'Only a committed CRM sale or gift allocation can be reversed.');
+  const sheetName = (sourceType === 'crm_sale' || sourceType === 'marketing_writeoff') ? SHEETS_3DP.sales : sourceType === 'crm_gift' ? SHEETS_3DP.plyushky : '';
+  if (!sheetName || !(originalRow >= 2)) throw apiError3dp_('FIFO_REVERSAL_SOURCE_UNSUPPORTED', 'Only a committed sale, marketing writeoff, or gift allocation can be reversed.');
   const sheet = getSheet3dp_(spreadsheet, sheetName);
   const row = findFirstBusinessEmptyRow3dp_(sheet, sheetName, actor);
   const snapshot = snapshotRange3dp_(sheet, 'A' + row + ':' + numberToColumn3dp_(sheet.getLastColumn()) + row);
   const source = sheet.getRange(originalRow, 1, 1, sheet.getLastColumn()).getValues()[0];
   copyFormulaCells3dp_(sheet, sheetName, row);
-  if (sourceType === 'crm_sale') {
+  if (sourceType === 'crm_sale' || sourceType === 'marketing_writeoff') {
     ['A','B','E','F','G','H','M','N','T','U','V','W','X','Y','Z','AA'].forEach(function (column) {
       sheet.getRange(row, columnToNumber3dp_(column)).setValue(source[columnToNumber3dp_(column) - 1]);
     });
@@ -389,7 +391,7 @@ function fifo3dpReconcileAction_(spreadsheet, actor) {
   const gifts = getSheet3dp_(spreadsheet, SHEETS_3DP.plyushky);
   const result = fifo3dpReconcileLedger_(batches, allocations, function (sourceType, row) {
     if (!(row >= 2)) return null;
-    if (sourceType === 'crm_sale') return sales.getRange(row, 4).getValue();
+    if (sourceType === 'crm_sale' || sourceType === 'marketing_writeoff') return sales.getRange(row, 4).getValue();
     if (sourceType === 'crm_gift') return gifts.getRange(row, 6).getValue();
     return null;
   });
@@ -577,6 +579,89 @@ function fifo3dpCrmSaleCommitAction_(spreadsheet, body, actor) {
   return { action: '3dp_crm_sale_commit', already_applied: false, operation_id: operationId, allocation_id: allocationId,
     quantity: quantity, total_cost_uah: plan.total_cost_uah, unit_cost_uah: plan.unit_cost_uah,
     allocations: plan.allocations, sale_row: saleRow, crm_row: canonical.crm_row };
+}
+
+function fifo3dpMarketingWriteoffAction_(spreadsheet, body, actor) {
+  assertOwner3dp_(actor, 'Only the owner/CRM token may commit a marketing writeoff.');
+  const operationId = String(body.operation_id || '').trim();
+  if (!/^[A-Za-z0-9:_-]{8,120}$/.test(operationId)) throw apiError3dp_('OPERATION_ID_REQUIRED', 'A stable operation_id is required.');
+  const sku = requiredSku3dp_(body.sku);
+  const quantity = inventoryWholeNumber3dp_(body.quantity, 'quantity must be a positive whole number.');
+  if (quantity < 1) throw apiError3dp_('INVALID_QUANTITY', 'quantity must be a positive whole number.');
+  const date = String(body.date || '').trim().slice(0, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) throw apiError3dp_('DATE_REQUIRED', 'Marketing date must use YYYY-MM-DD.');
+  const note = String(body.note || '').trim();
+  if (!note || note.length > 220) throw apiError3dp_('NOTE_REQUIRED', 'A marketing reason up to 220 characters is required.');
+  assertManualValue3dp_(note);
+  const ownerFixturePerUnit = fifo3dpRequiredNumber_(body.owner_fixture_per_unit == null ? 0 : body.owner_fixture_per_unit, 'INVALID_OWNER_FIXTURE', true);
+  const serhiyFixturePerUnit = fifo3dpRequiredNumber_(body.serhiy_fixture_per_unit == null ? 0 : body.serhiy_fixture_per_unit, 'INVALID_SERHIY_FIXTURE', true);
+  const canonical = { operation_id: operationId, sku: sku, quantity: quantity, date: date, note: note,
+    owner_fixture_per_unit: ownerFixturePerUnit, serhiy_fixture_per_unit: serhiyFixturePerUnit };
+  const fingerprint = fifo3dpFingerprint_(canonical);
+  const allocationState = fifo3dpEnsureHiddenSheet_(spreadsheet, CATALOG_FIFO_3DP.allocationsSheet, CATALOG_FIFO_3DP.allocationHeaders);
+  const allocationsSheet = allocationState.sheet;
+  const existing = fifo3dpFindOperation_(allocationsSheet, operationId);
+  if (existing) {
+    if (fifo3dpFindReversal_(allocationsSheet, String(existing.values[0]))) throw apiError3dp_('FIFO_ALLOCATION_REVERSED', 'This marketing allocation was reversed; create a new operation.');
+    const replay = fifo3dpReplayResult_(existing, fingerprint);
+    const salesReplay = getSheet3dp_(spreadsheet, SHEETS_3DP.sales);
+    const buyoutReplay = Number(salesReplay.getRange(replay.sale_row, columnToNumber3dp_('AA')).getValue() || 0);
+    replay.buyout_unit = buyoutReplay;
+    replay.serhiy_accrual = fifo3dpRound_(quantity * (buyoutReplay + serhiyFixturePerUnit), 2);
+    replay.marketing_expense = fifo3dpRound_(quantity * (buyoutReplay + ownerFixturePerUnit + serhiyFixturePerUnit), 2);
+    return replay;
+  }
+
+  const nomenclature = getSheet3dp_(spreadsheet, SHEETS_3DP.nomenclature);
+  const nomenclatureRow = resolveTargetRow3dp_(nomenclature, sku);
+  assertNomenclatureActiveForOperation3dp_(nomenclature, nomenclatureRow, 'SKU_ARCHIVED', 'Archived SKU cannot be written off.', 'Only active SKU can be written off.');
+  const buyoutRaw = nomenclature.getRange(nomenclatureRow, columnToNumber3dp_('R')).getValue();
+  if (isBlank3dp_(buyoutRaw) || number3dp_(buyoutRaw) < 0) throw apiError3dp_('BUYOUT_NOT_FOUND', 'Valid buyout price is required for SKU ' + sku + '.');
+  const buyout = number3dp_(buyoutRaw);
+  const actualRrp = number3dp_(nomenclature.getRange(nomenclatureRow, columnToNumber3dp_('Q')).getValue());
+  const plan = fifo3dpPlanAllocation_(fifo3dpBatchRows_(spreadsheet, sku), quantity);
+  const sales = getSheet3dp_(spreadsheet, SHEETS_3DP.sales);
+  const saleRow = findFirstBusinessEmptyRow3dp_(sales, SHEETS_3DP.sales, actor);
+  const saleSnapshot = snapshotRange3dp_(sales, 'A' + saleRow + ':' + numberToColumn3dp_(sales.getLastColumn()) + saleRow);
+  const allocationRow = allocationsSheet.getLastRow() + 1;
+  const now = Utilities.formatDate(new Date(), API_3DP.timezone, "yyyy-MM-dd'T'HH:mm:ssXXX");
+  const allocationId = '3DP-A-' + operationId.replace(/[^A-Za-z0-9_-]/g, '-').slice(0, 70);
+  const batchSheet = spreadsheet.getSheetByName(CATALOG_FIFO_3DP.batchesSheet);
+  const batchSnapshots = plan.allocations.map(function(item) { return { row: item.row, values: batchSheet.getRange(item.row, 19, 1, 2).getValues()[0] }; });
+  try {
+    plan.allocations.forEach(function(item) {
+      const range = batchSheet.getRange(item.row, 19, 1, 2);
+      const before = range.getValues()[0];
+      range.setValues([[Number(before[0] || 0) + item.quantity, Number(before[1] || 0) - item.quantity]]);
+    });
+    copyFormulaCells3dp_(sales, SHEETS_3DP.sales, saleRow);
+    const values = {
+      A: date, B: sku, D: quantity, E: 0, F: plan.unit_cost_uah, G: 0, H: CATALOG_FIFO_3DP.defaultProfitShare,
+      M: 'Маркетинг', N: 'CRM-015/' + operationId, O: note, U: actualRrp,
+      V: fifo3dpRound_(ownerFixturePerUnit + serhiyFixturePerUnit, 6), W: '', X: 'Маркетинг',
+      Y: ownerFixturePerUnit, Z: serhiyFixturePerUnit, AA: buyout,
+    };
+    Object.keys(values).forEach(function(column) { sales.getRange(saleRow, columnToNumber3dp_(column)).setValue(values[column]); });
+    allocationsSheet.getRange(allocationRow, 1, 1, CATALOG_FIFO_3DP.allocationHeaders.length).setValues([[
+      allocationId, operationId, now, 'marketing_writeoff', 'CRM-015/' + operationId, sku, quantity, plan.total_cost_uah,
+      JSON.stringify(plan.allocations), 'consume', actor.role, fingerprint, 'committed', '', saleRow, '',
+    ]]);
+    appendAudit3dp_(spreadsheet, actor, 'FIFO_MARKETING_WRITEOFF_COMMITTED', CATALOG_FIFO_3DP.allocationsSheet,
+      'A' + allocationRow + ':P' + allocationRow, {}, { allocation_id: allocationId, sku: sku, qty: quantity,
+        fifo_cost_uah: plan.total_cost_uah, buyout_uah: buyout * quantity,
+        owner_fixture_uah: ownerFixturePerUnit * quantity, serhiy_fixture_uah: serhiyFixturePerUnit * quantity },
+      'operation_id=' + operationId);
+  } catch (error) {
+    batchSnapshots.forEach(function(snapshot) { batchSheet.getRange(snapshot.row, 19, 1, 2).setValues([snapshot.values]); });
+    allocationsSheet.getRange(allocationRow, 1, 1, CATALOG_FIFO_3DP.allocationHeaders.length).clearContent();
+    restoreRange3dp_(saleSnapshot);
+    throw error;
+  }
+  return { action: '3dp_marketing_writeoff', already_applied: false, operation_id: operationId, allocation_id: allocationId,
+    quantity: quantity, total_cost_uah: plan.total_cost_uah, unit_cost_uah: plan.unit_cost_uah, allocations: plan.allocations,
+    sale_row: saleRow, buyout_unit: buyout,
+    serhiy_accrual: fifo3dpRound_(quantity * (buyout + serhiyFixturePerUnit), 2),
+    marketing_expense: fifo3dpRound_(quantity * (buyout + ownerFixturePerUnit + serhiyFixturePerUnit), 2) };
 }
 
 function fifo3dpOrderGiftsAppendAction_(spreadsheet, body, actor) {

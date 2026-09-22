@@ -11,7 +11,7 @@ let savedInformationTables = {};
 try { savedInformationTables = JSON.parse(localStorage.getItem(informationPreferencesKey) || "{}") || {}; } catch {}
 let savedAttentionHidden = [];
 try { const value = JSON.parse(localStorage.getItem(attentionHiddenKey) || "[]");savedAttentionHidden = Array.isArray(value) ? value.map(String) : []; } catch {}
-const state = { data: null, lastCalculation: null, settingsJournal: null, draftLoading: false, draftLoadId: 0, informationTables: savedInformationTables, attentionHidden: savedAttentionHidden, attentionView: "active" };
+const state = { data: null, lastCalculation: null, settingsJournal: null, draftLoading: false, draftLoadId: 0, draftQuantityTimer: null, informationTables: savedInformationTables, attentionHidden: savedAttentionHidden, attentionView: "active" };
 const renderedInformationTables = new Map();
 const operation = createOperationRunner();
 const money = new Intl.NumberFormat("uk-UA", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -153,33 +153,62 @@ function renderInformation() {
 }
 function render() { setSkuOptions();setFixtureOptions();renderOverview();fillSettings();fillProductForm();fillStockForm();renderInformation();previewBatch(); }
 
-function renderCalculation(calculation) { state.lastCalculation = calculation;byId("save-batch").disabled = operation.busy || state.draftLoading;byId("manufacture-batch").disabled = operation.busy || state.draftLoading;byId("calculation").classList.remove("empty");const usable=calculation.good_quantity?`${money.format(calculation.actual_usable_unit_uah)} грн/придатну шт.`:"партія повністю бракована — доступного FIFO-залишку не буде";byId("calculation").innerHTML = `<strong>За одиницю:</strong><ul><li>Вага: ${number.format(calculation.per_unit.weight_g)} г</li><li>Час: ${escapeHtml(printTime.human(calculation.per_unit.time_hours))}</li><li>Матеріал: ${money.format(calculation.costs.material_uah)} грн</li><li>Електроенергія: ${money.format(calculation.costs.electricity_uah)} грн</li><li>Амортизація: ${money.format(calculation.costs.amortization_uah)} грн</li><li>Прогноз із плановим браком: ${money.format(calculation.costs.defect_adjusted_uah)} грн/шт</li><li>Фактичний брак: ${number.format(calculation.actual_defects)} шт.; придатно: ${number.format(calculation.good_quantity)} шт.</li><li>Додаткові розхідники Сергія: ${money.format(calculation.serhiy_consumables_uah)} грн/партія</li><li><strong>Фактична партія для FIFO: ${money.format(calculation.actual_batch_total_uah)} грн (${usable})</strong></li></ul>`; }
+function renderCalculation(calculation) { state.lastCalculation = calculation;byId("save-batch").disabled = operation.busy || state.draftLoading;byId("manufacture-batch").disabled = operation.busy || state.draftLoading;byId("calculation").classList.remove("empty");const usable=calculation.good_quantity?`${money.format(calculation.actual_usable_unit_uah)} грн/придатну шт.`:"партія повністю бракована — доступного FIFO-залишку не буде";byId("calculation").innerHTML = `<strong>За одиницю:</strong><ul><li>Вага: ${number.format(calculation.per_unit.weight_g)} г</li><li>Час: ${escapeHtml(printTime.human(calculation.per_unit.time_hours))}</li><li>Матеріал: ${money.format(calculation.costs.material_uah)} грн</li><li>Електроенергія: ${money.format(calculation.costs.electricity_uah)} грн</li><li>Амортизація: ${money.format(calculation.costs.amortization_uah)} грн</li><li>Прогноз із плановим браком: ${money.format(calculation.costs.defect_adjusted_uah)} грн/шт</li><li>Фактичний брак: ${number.format(calculation.actual_defects)} шт.; придатно: ${number.format(calculation.good_quantity)} шт.</li><li>Додаткові розхідники Сергія: ${money.format(calculation.serhiy_consumables_per_unit_uah)} грн/шт × ${number.format(calculation.quantity)} шт = ${money.format(calculation.serhiy_consumables_uah)} грн/партія</li><li><strong>Фактична партія для FIFO: ${money.format(calculation.actual_batch_total_uah)} грн (${usable})</strong></li></ul>`; }
 function clearCalculation() { state.lastCalculation = null;byId("save-batch").disabled = true;byId("manufacture-batch").disabled = true;byId("calculation").classList.add("empty");byId("calculation").textContent = "Заповніть усі дані партії — результат з’явиться автоматично."; }
 function batchValuesForCalculation() { const form = byId("batch-form"),values = formObject(form),parsed = printTimeResult(form.elements.total_print_time_h);if (!values.sku || !parsed.ok || parsed.blank || !(parsed.hours > 0)) return null;return { ...values, total_print_time_h: parsed.hours }; }
 function previewBatch() { try { const values = batchValuesForCalculation();if (!values || !state.data?.settings) return clearCalculation();renderCalculation(calculateBatchCost(values, state.data.settings)); } catch { clearCalculation(); } }
-async function loadDraft(sku) {
-  if (operation.busy) return;
-  const form = byId("batch-form"), loadId = ++state.draftLoadId;
-  // SKU changes invalidate both the previous read and its pending retry key.
+function draftQuantity(value) { const quantity = Number(value);return Number.isInteger(quantity) && quantity > 0 ? quantity : null; }
+function resetBatchDraftForm(sku) {
+  clearTimeout(state.draftQuantityTimer);
+  state.draftLoadId += 1;
+  const form = byId("batch-form");
   delete form.dataset.requestId;
   draftKeys.forEach((key) => { form.elements[key].value = ""; });
+  form.elements.sku.value = sku || "";
   form.elements.defects.value = "0";
   form.elements.serhiy_consumables_uah.value = "0";
+  form.elements.manufacture_notes.value = "";
   refreshPrintTimeHint(form.elements.total_print_time_h);
-  state.draftLoading = Boolean(sku);
+  state.draftLoading = false;
+  [...form.elements].forEach((input) => { input.disabled = false; });
+  byId("reload").disabled = false;
+  feedback(byId("batch-feedback"), "");
+  clearCalculation();
+}
+function queueDraftLoadForQuantity(value) {
+  clearTimeout(state.draftQuantityTimer);
+  const form = byId("batch-form"),sku = form.elements.sku.value,quantity = draftQuantity(value);
+  if (!sku || quantity == null) return;
+  state.draftQuantityTimer = setTimeout(() => loadDraft(sku, quantity).catch((error) => status(errorText(error), true)), 350);
+}
+async function loadDraft(sku, quantityValue) {
+  if (operation.busy) return;
+  const form = byId("batch-form"), quantity = draftQuantity(quantityValue),loadId = ++state.draftLoadId;
+  // SKU or quantity changes invalidate both the previous read and its pending retry key.
+  delete form.dataset.requestId;
+  if (!sku || quantity == null) {
+    resetBatchDraftForm(sku);
+    status(!sku ? "Оберіть SKU для розрахунку." : "Вкажіть кількість у партії, щоб завантажити збережений розрахунок.", "info");
+    return;
+  }
+  // Keep the current calculation while checking the new quantity. A missing
+  // preset must never destroy values that Serhiy has just entered.
+  form.elements.quantity.value = String(quantity);
+  state.draftLoading = Boolean(sku && quantity != null);
   [...form.elements].forEach((input) => { if (input.name !== "sku") input.disabled = state.draftLoading; });
   byId("reload").disabled = state.draftLoading;
-  clearCalculation();
   feedback(byId("batch-feedback"), "");
-  if (!sku) { status("Оберіть SKU для розрахунку.", "info");return; }
-  operationFeedback("Завантажую розрахунок Сергія…", "busy", "batch-feedback");
+  operationFeedback(`Завантажую розрахунок Сергія для ${quantity} шт…`, "busy", "batch-feedback");
   try {
-    const payload = await request(`/api/batch-draft?sku=${encodeURIComponent(sku)}`);
-    if (loadId !== state.draftLoadId || form.elements.sku.value !== sku) return;
-    draftKeys.forEach((key) => { form.elements[key].value = payload.values?.[key] ?? ""; });
-    refreshPrintTimeHint(form.elements.total_print_time_h);
+    const payload = await request(`/api/batch-draft?sku=${encodeURIComponent(sku)}&quantity=${encodeURIComponent(quantity)}`);
+    if (loadId !== state.draftLoadId || form.elements.sku.value !== sku || form.elements.quantity.value !== String(quantity)) return;
+    if (payload.found) {
+      draftKeys.forEach((key) => { form.elements[key].value = payload.values?.[key] ?? ""; });
+      form.elements.quantity.value = String(quantity);
+      refreshPrintTimeHint(form.elements.total_print_time_h);
+    }
     feedback(byId("batch-feedback"), "");
-    status(payload.found ? "Розрахунок Сергія завантажено." : "Для SKU ще немає збереженого розрахунку Сергія.", payload.found ? "success" : "info");
+    status(payload.found ? `Розрахунок Сергія для ${quantity} шт завантажено.` : `Для ${quantity} шт ще немає збереженого розрахунку Сергія.`, payload.found ? "success" : "info");
   } catch (error) {
     if (loadId === state.draftLoadId) operationFeedback(errorText(error), "error", "batch-feedback");
   } finally {
@@ -283,7 +312,12 @@ byId("attention").addEventListener("click", (event) => {
 });
 byId("settings-toggle").addEventListener("click", async () => { const panel = byId("settings-panel"),opening = panel.classList.contains("hidden");panel.classList.toggle("hidden", !opening);byId("settings-toggle").setAttribute("aria-expanded", String(opening));if (opening) try { await loadSettingsJournal(); } catch (error) { status(errorText(error), true); } });
 byId("reload").addEventListener("click", () => reload().catch((error) => status(errorText(error), true)));
-byId("batch-form").elements.sku.addEventListener("change", (event) => loadDraft(event.target.value).catch((error) => status(errorText(error), true)));
+byId("batch-form").elements.sku.addEventListener("change", (event) => {
+  const sku = event.target.value;
+  resetBatchDraftForm(sku);
+  status(sku ? "Вкажіть кількість у партії. Новий розрахунок почнеться з порожніх полів." : "Оберіть SKU для розрахунку.", "info");
+});
+byId("batch-form").elements.quantity.addEventListener("input", (event) => queueDraftLoadForQuantity(event.target.value));
 byId("product-form").elements.sku.addEventListener("change", fillProductForm);
 byId("stock-form").elements.sku.addEventListener("change", fillStockForm);
 document.querySelectorAll(".sku-search").forEach((input, index) => {
@@ -335,7 +369,8 @@ byId("manufacture-batch").addEventListener("click", async () => {
     const values = batchValuesForCalculation();
     if (!values) throw new Error("Спочатку заповніть коректні дані партії.");
     const previousStock = rowForSku(values.sku)?.availability?.["Наявно зараз, шт"];
-    const body = { sku: values.sku, printed_quantity: values.quantity, actual_time_hours: values.total_print_time_h, actual_material_g: values.total_weight_g, spool_weight_g: values.spool_weight_g, spool_price_uah: values.spool_price_uah, serhiy_consumables_uah: values.serhiy_consumables_uah || 0, defects: values.defects || 0, notes: values.manufacture_notes || "", request_id: stableRequestId(form) };
+    const calculation = calculateBatchCost(values, state.data.settings);
+    const body = { sku: values.sku, printed_quantity: values.quantity, actual_time_hours: values.total_print_time_h, actual_material_g: values.total_weight_g, spool_weight_g: values.spool_weight_g, spool_price_uah: values.spool_price_uah, serhiy_consumables_uah: calculation.serhiy_consumables_uah, defects: values.defects || 0, notes: values.manufacture_notes || "", request_id: stableRequestId(form) };
     const success = (payload) => payload.already_applied ? "Цю партію вже було записано; дубль не створено." : `Вироблену партію записано, рядок ${payload.row}.`;
     await runOperation({
       form, button: byId("manufacture-batch"), resultId: "batch-feedback", pending: "Записую виготовлену партію… Не натискайте повторно.", buttonText: "Записую партію…",

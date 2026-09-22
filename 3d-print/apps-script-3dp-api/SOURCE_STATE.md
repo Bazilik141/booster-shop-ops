@@ -1,5 +1,35 @@
 # 3D-P Apps Script source state
 
+## CRM-015 local candidate — NOT PUBLISHED (2026-09-22)
+
+The owner supplied the complete published V34 export
+`Версія 34, 16 вер. 2026 р., 1726.txt` (3,787 split lines; normalized SHA-256
+`ca72e8c6f09489fac47beb99a74161e3997e6897a4615a59746d8eaa165e11f6`).
+Before CRM-015, the repository mirror contained an already-present local
+batch-draft quantity-keying follow-up. An unrelated local change that bypassed
+required sale fields when the order-line schema was absent has been reverted to
+the V34 behavior and covered by a focused regression test. CRM-015 preserves
+the quantity-keying follow-up; V34 therefore
+is an evidence baseline, not a byte-identical mirror claim.
+
+The local candidate adds an atomic manufactured-batch FIFO marketing writeoff,
+row-local deterministic formulas for `Продажі!C/I/J/K/L/S`, owner-only
+fingerprint-gated formula repair, reconciliation/reversal support for the new
+allocation source, and the temporary `CRM-015.html` preview/apply tool for the
+three affected rows. None of this is published. The repair route/action and
+temporary HTML are task-scoped: after successful owner QA both must be removed
+from the bound project and local mirror, then the clean 3D-P source republished.
+
+For owner paste, use `work/CRM-015_3dp_Code_from_V34.gs`: it is V34 plus only
+the CRM-015 change (113 added / 1 removed line). The mirror `Code.gs` also
+contains the preserved, unpublished batch-draft quantity-keying change and is
+not the deployment input for this task.
+
+After the owner verifies the three-row formula repair, replace bound `Code.gs`
+with `work/CRM-015_3dp_Code_final.gs` and republish the existing deployment.
+That final candidate is identical to the temporary candidate except that the
+repair route and its two task-only helpers have been removed.
+
 ## Deployed — V34 (2026-09-16 17:26, owner-reported)
 
 Owner statement 2026-09-21: `Версія 34, 16 вер. 2026 р., 17:26` is published and
@@ -13,10 +43,9 @@ Two caveats, recorded rather than smoothed over:
   else travelled with them is not recorded here. The repository `Code.gs` was
   last written 2026-09-16 09:18, eight hours before that publication, and cannot
   by itself prove the deployed content.
-- No byte-verified export of V34 exists in the repository. Deployment identity
-  for V34 is owner-reported, the same status V32 carries below. The next task
-  touching this script should start by exporting the live source and proving the
-  mirror, not by trusting this file.
+- This caveat predates the complete V34 export supplied for CRM-015 above. The
+  export verifies the source text; published deployment identity remains
+  owner-reported until live Web App QA.
 
 ## Superseded — local candidate addition, 3D-P-027 (2026-09-16)
 

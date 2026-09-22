@@ -218,7 +218,7 @@ Write-3dpSnapshot -Label 'before values' -Value ([pscustomobject]@{
 })
 
 Write-3dpStep '2/4: save and fresh-read all five batch-draft values'
-$draftBefore = Invoke-3dpGet -Query @{ action = '3dp_batch_draft'; sku = $TestSku }
+$draftBefore = Invoke-3dpGet -Query @{ action = '3dp_batch_draft'; sku = $TestSku; quantity = $BatchQuantity }
 Assert-3dpSuccess -Name 'read batch draft before save' -Response $draftBefore
 $draftValues = @{
     quantity = $BatchQuantity
@@ -242,7 +242,7 @@ $draftSave = Invoke-3dpPost -Payload @{
     expected_current = $draftExpected
 }
 Assert-3dpSuccess -Name 'save batch draft' -Response $draftSave
-$draftAfter = Invoke-3dpGet -Query @{ action = '3dp_batch_draft'; sku = $TestSku }
+$draftAfter = Invoke-3dpGet -Query @{ action = '3dp_batch_draft'; sku = $TestSku; quantity = $BatchQuantity }
 Assert-3dpSuccess -Name 'fresh-read batch draft after save' -Response $draftAfter
 if ($draftAfter.found -ne $true) {
     throw 'Batch draft was not found after a successful save.'

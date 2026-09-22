@@ -15,9 +15,10 @@ function respond(response, payload, status = 200) { response.writeHead(status, {
 async function readJson(request) { const chunks = [];for await (const chunk of request) chunks.push(chunk);return JSON.parse(Buffer.concat(chunks).toString("utf8")); }
 
 async function startFakeApi() {
+  const emptyDraft = () => ({ quantity: "", total_weight_g: "", total_print_time_h: "", spool_weight_g: "", spool_price_uah: "" });
   const state = {
     settings: [0.17, 4.32, 12, 0.08],
-    draft: { quantity: "", total_weight_g: "", total_print_time_h: "", spool_weight_g: "", spool_price_uah: "" },
+    drafts: {},
     sku: { SKU: "FIG-TEST-001", "Назва виробу": "Тестова фігурка", "Час друку за од., год": "", "Вага виробу за од., г": "", "Вага котушки, г": "", "Ціна котушки, грн": "", "Фурнітура (ціна-довідка), грн/шт": "", "РРЦ фактична, грн": 100, "Ціна під викуп, грн": 30, "Посилання на модель": "https://example.invalid/model", "API_статус_запису": "Активний", availability: { "Наявно зараз, шт": 3 } },
     payout: { row_number: 2, "Період (РРРР-ММ)": "2026-08", "Нараховано Сергію за період, грн": 12.5, "Дата фактичної виплати": "2026-08-23", Статус: "Виплачено", "Згода Сергія із сумою (Київ, роль)": "", "Кошти надійшли Сергію (Київ, роль)": "" },
     journal: [{ row_number: 2, "Час (Київ)": "2026-08-23 12:00", Роль: "serhiy", Параметр: "Потужність принтера, кВт", Було: 0.16, Стало: 0.17, SKU: "" }],
@@ -35,10 +36,10 @@ async function startFakeApi() {
     if (method === "GET" && action === "3dp_print_log") return respond(response, { ok: true, rows: [{ row_number: 7, Дата: "2026-08-02", SKU: state.sku.SKU, "Надруковано, шт": 4, "Час друку факт, год": 2, "Брак, шт": 1 }] });
     if (method === "GET" && action === "3dp_get_range") { assert.equal(url.searchParams.get("sheet"), "Налаштування");assert.equal(url.searchParams.get("range"), "B2:B5");return respond(response, { ok: true, values: state.settings.map((value) => [value]) }); }
     if (method === "GET" && action === "3dp_get_row") return respond(response, { ok: true, row: { ...state.sku } });
-    if (method === "GET" && action === "3dp_batch_draft") return respond(response, { ok: true, action, sku: state.sku.SKU, found: Boolean(state.draft.quantity), values: { ...state.draft } });
+    if (method === "GET" && action === "3dp_batch_draft") { const quantity = Number(url.searchParams.get("quantity")),draft = state.drafts[quantity] || emptyDraft();return respond(response, { ok: true, action, sku: state.sku.SKU, quantity, found: Boolean(draft.quantity), values: { ...draft } }); }
     if (method === "GET" && action === "3dp_settings_journal") return respond(response, { ok: true, action, rows: state.journal, count: state.journal.length });
 
-    if (method === "POST" && action === "3dp_batch_draft_save") { assert.deepEqual(body.expected_current, state.draft);assert.deepEqual(Object.keys(body.values).sort(), ["quantity", "total_weight_g", "total_print_time_h", "spool_weight_g", "spool_price_uah"].sort());state.draft = { ...body.values };return respond(response, { ok: true, action, sku: state.sku.SKU, row: 2, values: { ...state.draft } }); }
+    if (method === "POST" && action === "3dp_batch_draft_save") { const quantity = Number(body.values.quantity),current = state.drafts[quantity] || emptyDraft();assert.deepEqual(body.expected_current, current);assert.deepEqual(Object.keys(body.values).sort(), ["quantity", "total_weight_g", "total_print_time_h", "spool_weight_g", "spool_price_uah"].sort());state.drafts[quantity] = { ...body.values };return respond(response, { ok: true, action, sku: state.sku.SKU, row: 2, values: { ...state.drafts[quantity] } }); }
     if (method === "POST" && action === "3dp_write") {
       if (body.sheet === "Налаштування") { const index = Number(body.sku_or_row) - 2;assert.equal(body.column, "B");assert.equal(String(state.settings[index]), String(body.expected_current));state.settings[index] = Number(body.value);return respond(response, { ok: true, action, cell: `B${body.sku_or_row}`, old_value: body.expected_current, new_value: state.settings[index] }); }
       const map = { G: "Час друку за од., год", H: "Вага виробу за од., г", I: "Вага котушки, г", J: "Ціна котушки, грн", N: "Фурнітура (ціна-довідка), грн/шт", Q: "РРЦ фактична, грн", R: "Ціна під викуп, грн", S: "Посилання на модель" };
@@ -102,6 +103,8 @@ test("WP2 local server uses projected bundles and exposes every Serhiy route", {
   const manufactureRequests = api.state.requests.filter((item) => item.action === "3dp_manufacture_batch");assert.equal(manufactureRequests.length, 2);assert.equal(manufactureRequests[0].body.request_id, manufactureRequests[1].body.request_id);assert.equal(manufactureRequests[0].body.printed_by, "Сергій");assert.equal(manufactureRequests[0].body.spool_weight_g, 1000);assert.equal(manufactureRequests[0].body.spool_price_uah, 800);assert.equal(manufactureRequests[0].body.serhiy_consumables_uah, 5);
 
   const saved = await localJson(`${local.url}/api/save-batch`, { sku: "FIG-TEST-001", quantity: 36, total_weight_g: 180, total_print_time_h: "18:00", spool_weight_g: 1000, spool_price_uah: 800, serhiy_consumables_uah: 5, defects: 1 });assert.deepEqual(saved.cells_updated, ["G2", "H2", "I2", "J2"]);
+  const savedVariant = await localJson(`${local.url}/api/batch-draft?sku=FIG-TEST-001&quantity=36`);assert.equal(savedVariant.found, true);assert.equal(savedVariant.values.quantity, 36);
+  const absentVariant = await localJson(`${local.url}/api/batch-draft?sku=FIG-TEST-001&quantity=2`);assert.equal(absentVariant.found, false);
   assert.ok(api.state.requests.every((item) => item.token === serhiyToken));
   assert.equal(api.state.requests.some((item) => ["3dp_payout_create", "3dp_payout_mark_paid", "3dp_nomenclature_owner_create"].includes(item.action)), false);
 });

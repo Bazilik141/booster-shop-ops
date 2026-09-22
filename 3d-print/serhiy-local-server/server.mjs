@@ -181,15 +181,16 @@ async function readSku(sku) {
   return payload.row;
 }
 
-async function readBatchDraft(sku) {
-  const payload = await call3dpGet("3dp_batch_draft", { sku });
+async function readBatchDraft(sku, quantity) {
+  const draftQuantity = finitePositive(quantity, "Кількість у партії");
+  const payload = await call3dpGet("3dp_batch_draft", { sku, quantity: draftQuantity });
   return { ...payload, values: draftValues(payload) };
 }
 
 async function saveBatch(body) {
   const sku = cleanSku(body.sku);
   const input = batchInput(body);
-  const [settings, row, currentDraft] = await Promise.all([getSettings(), readSku(sku), readBatchDraft(sku)]);
+  const [settings, row, currentDraft] = await Promise.all([getSettings(), readSku(sku), readBatchDraft(sku, input.quantity)]);
   const calculation = calculateBatchCost(input, settings);
   const rawDraft = await call3dpPost({
     action: "3dp_batch_draft_save",
@@ -459,7 +460,7 @@ const server = http.createServer(async (request, response) => {
       return;
     }
     if (request.method === "GET" && url.pathname === "/api/bootstrap") return json(response, 200, { ok: true, ...(await bootstrap()) });
-    if (request.method === "GET" && url.pathname === "/api/batch-draft") return json(response, 200, { ok: true, ...(await readBatchDraft(cleanSku(url.searchParams.get("sku"))) ) });
+    if (request.method === "GET" && url.pathname === "/api/batch-draft") return json(response, 200, { ok: true, ...(await readBatchDraft(cleanSku(url.searchParams.get("sku")), url.searchParams.get("quantity")) ) });
     if (request.method === "GET" && url.pathname === "/api/settings-journal") return json(response, 200, { ok: true, ...(await readSettingsJournal()) });
     if (request.method === "POST" && url.pathname === "/api/calculate") {
       const calculation = calculateBatchCost(batchInput(await readBody(request)), await getSettings());

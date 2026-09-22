@@ -201,7 +201,6 @@ const NOMENCLATURE_DRAFT_REQUIRED_COLUMNS_3DP = Object.freeze(['B', 'D']);
 // Serhiy draft: production inputs G:J remain calculator-derived later.
 const NOMENCLATURE_OWNER_CREATE_COLUMNS_3DP = Object.freeze(['B', 'D', 'M', 'Q', 'R', 'S']);
 const NOMENCLATURE_OWNER_CREATE_REQUIRED_COLUMNS_3DP = Object.freeze(['B', 'D', 'Q']);
-// Keep in sync with threeDpSkuTypeError in dashboard/booster-dashboard.html; source: 3D-P SKU convention rev. 9.
 const NOMENCLATURE_SKU_PATTERN_3DP = /^(BR|FIG|ACC-3D)-[A-Z0-9]{2,5}-\d{3}(?:-[A-Z0-9]{1,5})*$/;
 const NOMENCLATURE_DRAFT_SUGGESTIONS_3DP = Object.freeze({
   'Брелок': Object.freeze({ prefix: 'BR', category_digits: '100', category_label: 'Звичайний брелок-підвіска' }),
@@ -569,8 +568,6 @@ function handlePost3dp_(body, actor) {
       return fifo3dpCrmSaleCommitAction_(spreadsheet, body, actor);
     case '3dp_marketing_writeoff':
       return fifo3dpMarketingWriteoffAction_(spreadsheet, body, actor);
-    case '3dp_sales_formula_repair':
-      return salesFormulaRepairAction3dp_(spreadsheet, body, actor);
     case '3dp_fifo_reverse':
       return fifo3dpReverseAction_(spreadsheet, body, actor);
     case '3dp_fifo_repair':
@@ -2106,16 +2103,14 @@ function setPrintLogArchiveAction3dp_(spreadsheet, body, actor, archive) {
 function getBatchDraftAction3dp_(spreadsheet, params, actor) {
   assertBatchDraftRole3dp_(actor);
   const sku = requiredSku3dp_(params.sku);
-  const quantity = batchDraftQuantity3dp_(params.quantity);
   const nomenclature = getSheet3dp_(spreadsheet, SHEETS_3DP.nomenclature);
   const nomenclatureRow = resolveTargetRow3dp_(nomenclature, sku);
   assertRealNomenclatureRow3dp_(nomenclature, nomenclatureRow);
   const drafts = getInternalSheet3dp_(spreadsheet, SHEETS_3DP.drafts);
-  const draftRow = findBatchDraftRow3dp_(drafts, sku, actor, isSerhiyProjectionActive3dp_(actor), quantity);
+  const draftRow = findBatchDraftRow3dp_(drafts, sku, actor, isSerhiyProjectionActive3dp_(actor));
   return {
     action: '3dp_batch_draft',
     sku: sku,
-    quantity: quantity,
     found: draftRow > 0,
     values: batchDraftValues3dp_(drafts, draftRow),
   };
@@ -2138,12 +2133,11 @@ function saveBatchDraftAction3dp_(spreadsheet, body, actor) {
   if (!expected || typeof expected !== 'object' || Array.isArray(expected)) {
     throw apiError3dp_('EXPECTED_REQUIRED', 'expected_current is required for every saved batch-draft field.');
   }
-  const quantity = batchDraftQuantity3dp_(Object.prototype.hasOwnProperty.call(values, 'quantity') ? values.quantity : expected.quantity);
 
   const drafts = getInternalSheet3dp_(spreadsheet, SHEETS_3DP.drafts);
   const serhiyDraft = actor && actor.role === 'serhiy';
   if (serhiyDraft) ensureBatchDraftActorColumn3dp_(drafts);
-  const existingRow = findBatchDraftRow3dp_(drafts, sku, actor, serhiyDraft, quantity);
+  const existingRow = findBatchDraftRow3dp_(drafts, sku, actor, serhiyDraft);
   const oldValues = batchDraftValues3dp_(drafts, existingRow);
   const nextValues = Object.assign({}, oldValues);
   const supplied = [];
@@ -2181,7 +2175,7 @@ function saveBatchDraftAction3dp_(spreadsheet, body, actor) {
       const skuRange = drafts.getRange(row, 1);
       if (skuRange.getFormula()) throw apiError3dp_('FORMULA_CELL', 'Batch-draft SKU key must remain a manual cell.');
       const oldSku = normalizeCellValue3dp_(skuRange.getValue());
-      setCellValue3dp_(skuRange, batchDraftStorageKey3dp_(sku, actor, serhiyDraft, quantity));
+      setCellValue3dp_(skuRange, batchDraftStorageKey3dp_(sku, actor, serhiyDraft));
       applied.push({ range: skuRange, oldRawValue: oldSku });
       if (serhiyDraft) {
         const actorRange = drafts.getRange(row, batchDraftActorColumn3dp_());
@@ -2505,68 +2499,6 @@ function ensureSalesDerivedFormulas3dp_(sheet, row, apply) {
   return { changed: changed, blocked: blocked };
 }
 
-function salesFormulaRepairPlan3dp_(sheet, expectedSkus) {
-  const expected = {};
-  (expectedSkus || []).forEach(function(sku) { expected[requiredSku3dp_(sku)] = true; });
-  const rows = [];
-  const blockers = [];
-  const found = {};
-  const lastRow = Math.min(sheet.getLastRow(), API_3DP.maxReadRows);
-  for (let row = 2; row <= lastRow; row++) {
-    const sku = String(sheet.getRange(row, 2).getValue() || '').trim();
-    if (!sku || (Object.keys(expected).length && !expected[sku])) continue;
-    found[sku] = true;
-    const result = ensureSalesDerivedFormulas3dp_(sheet, row, false);
-    if (result.changed.length) rows.push({ row: row, sku: sku, cells: result.changed });
-    if (result.blocked.length) blockers.push({ row: row, sku: sku, cells: result.blocked });
-  }
-  const missingSkus = Object.keys(expected).filter(function(sku) { return !found[sku]; });
-  return { rows: rows, blockers: blockers, missing_skus: missingSkus };
-}
-
-function salesFormulaRepairAction3dp_(spreadsheet, body, actor) {
-  assertOwner3dp_(actor, 'Only the owner may repair Продажі formulas.');
-  const sales = getSheet3dp_(spreadsheet, SHEETS_3DP.sales);
-  if (!is3dpOrderLineAccountingSchemaReady3dp_(sales)) throw apiError3dp_('SCHEMA_NOT_READY', 'Run the approved Продажі schema setup before formula repair.');
-  const expectedSkus = Array.isArray(body.expected_skus) ? body.expected_skus.slice(0, 20) : [];
-  const apply = body.apply === true || String(body.apply || '').toLowerCase() === 'true';
-  const plan = salesFormulaRepairPlan3dp_(sales, expectedSkus);
-  const fingerprint = fifo3dpFingerprint_({ rows: plan.rows, blockers: plan.blockers, missing_skus: plan.missing_skus });
-  if (!apply) {
-    return { action: '3dp_sales_formula_repair', apply: false, fingerprint: fingerprint, rows: plan.rows,
-      blockers: plan.blockers, missing_skus: plan.missing_skus, cells_to_repair: plan.rows.reduce(function(sum, item) { return sum + item.cells.length; }, 0) };
-  }
-  const expectedFingerprint = String(body.expected_fingerprint || '').trim();
-  if (!/^[a-f0-9]{64}$/.test(expectedFingerprint) || expectedFingerprint !== fingerprint) {
-    throw apiError3dp_('STALE_FORMULA_REPAIR_PREVIEW', 'Продажі changed after preview; run preview again.');
-  }
-  if (plan.blockers.length || plan.missing_skus.length) {
-    throw apiError3dp_('FORMULA_REPAIR_BLOCKED', 'Repair has manual-value conflicts or requested SKU rows are missing.');
-  }
-  const snapshots = plan.rows.map(function(item) {
-    return snapshotRange3dp_(sales, 'A' + item.row + ':' + numberToColumn3dp_(sales.getLastColumn()) + item.row);
-  });
-  try {
-    plan.rows.forEach(function(item) {
-      const result = ensureSalesDerivedFormulas3dp_(sales, item.row, true);
-      if (result.blocked.length) throw apiError3dp_('FORMULA_REPAIR_BLOCKED', 'A target cell gained a manual value after preview.');
-    });
-    SpreadsheetApp.flush();
-    const after = salesFormulaRepairPlan3dp_(sales, expectedSkus);
-    if (after.rows.length || after.blockers.length || after.missing_skus.length) {
-      throw apiError3dp_('FORMULA_REPAIR_VERIFICATION_FAILED', 'One or more requested formulas are still missing.');
-    }
-    appendAudit3dp_(spreadsheet, actor, 'SALES_FORMULAS_REPAIRED', SHEETS_3DP.sales,
-      plan.rows.map(function(item) { return item.cells.join(','); }).join(','), '', plan.rows, 'CRM-015');
-  } catch (error) {
-    snapshots.forEach(restoreRange3dp_);
-    throw error;
-  }
-  return { action: '3dp_sales_formula_repair', apply: true, fingerprint: fingerprint, rows_repaired: plan.rows.length,
-    cells_repaired: plan.rows.reduce(function(sum, item) { return sum + item.cells.length; }, 0), already_applied: plan.rows.length === 0 };
-}
-
-
 function snapshotRange3dp_(sheet, a1) {
   const range = sheet.getRange(a1);
   return { range: range, values: range.getValues(), formulas: range.getFormulas(), notes: range.getNotes(), fontColors: range.getFontColors(), numberFormats: range.getNumberFormats() };
@@ -2752,7 +2684,7 @@ function nextDraftSku3dp_(sheet) {
 function canonicalNomenclatureSku3dp_(value) {
   const sku = String(value || '').trim();
   if (!NOMENCLATURE_SKU_PATTERN_3DP.test(sku)) {
-    throw apiError3dp_('INVALID_SKU', 'SKU must match BR|FIG|ACC-3D + mnemonic (2–5 A-Z/0-9) + three digits, optionally followed by -TOKEN segments (1–5 A-Z/0-9; e.g. ACC-3D-ONIX-110-21-BLK).');
+  throw apiError3dp_('INVALID_SKU', 'SKU must match BR|FIG|ACC-3D + mnemonic (2–5 A-Z/0-9) + three digits, optionally followed by -TOKEN segments (1–5 A-Z/0-9; e.g. ACC-3D-ONIX-110-21-BLK).');
   }
   return sku;
 }
@@ -2808,8 +2740,7 @@ function findSkuHistoryRow3dp_(sheet, sku, options) {
   for (let index = 0; index < values.length; index += 1) {
     if (settings.storedOnly && String(formulas[index][0] || '').trim()) continue;
     const value = String(values[index][0] || '').trim();
-    const matches = value === sku || value.indexOf(sku + '::') === 0 ||
-      (settings.actorPrefixed && (value.slice(-(sku.length + 2)) === '::' + sku || value.indexOf('::' + sku + '::') > 0));
+    const matches = value === sku || (settings.actorPrefixed && value.slice(-(sku.length + 2)) === '::' + sku);
     if (matches) return index + headerRow + 1;
   }
   return 0;
@@ -3025,45 +2956,30 @@ function ensureBatchDraftActorColumn3dp_(sheet) {
   }
 }
 
-function batchDraftQuantity3dp_(value) {
-  const quantity = Number(value);
-  if (!Number.isInteger(quantity) || quantity < 1) {
-    throw apiError3dp_('INVALID_DRAFT_QUANTITY', 'Batch-draft quantity must be a positive whole number.');
-  }
-  return quantity;
+function batchDraftStorageKey3dp_(sku, actor, scopeToActor) {
+  return scopeToActor ? String((actor && actor.role) || '') + '::' + sku : sku;
 }
 
-function batchDraftStorageKey3dp_(sku, actor, scopeToActor, quantity) {
-  const base = scopeToActor ? String((actor && actor.role) || '') + '::' + sku : sku;
-  return quantity == null ? base : base + '::' + batchDraftQuantity3dp_(quantity);
-}
-
-function findBatchDraftRow3dp_(sheet, sku, actor, scopeToActor, quantity) {
+function findBatchDraftRow3dp_(sheet, sku, actor, scopeToActor) {
   const lastRow = sheet.getLastRow();
   if (lastRow < 2) return 0;
   const hasActorColumn = batchDraftActorColumnReady3dp_(sheet);
   if (scopeToActor && !hasActorColumn) return 0;
-  const values = sheet.getRange(2, 1, lastRow - 1, hasActorColumn ? batchDraftActorColumn3dp_() : 2).getValues();
-  const storageKey = batchDraftStorageKey3dp_(sku, actor, scopeToActor, quantity);
-  const legacyKey = batchDraftStorageKey3dp_(sku, actor, scopeToActor);
+  const values = sheet.getRange(2, 1, lastRow - 1, hasActorColumn ? batchDraftActorColumn3dp_() : 1).getValues();
+  const storageKey = batchDraftStorageKey3dp_(sku, actor, scopeToActor);
   let found = 0;
-  let legacyFound = 0;
   values.forEach(function (row, index) {
-    const key = String(row[0] || '').trim();
+    if (String(row[0] || '').trim() !== storageKey) return;
     const actorRole = hasActorColumn ? String(row[batchDraftActorColumn3dp_() - 1] || '').trim() : '';
     const matchesRole = scopeToActor
       ? actorRole === String((actor && actor.role) || '')
       : (!actorRole || actorRole === 'owner');
-    if (key === storageKey && matchesRole) {
+    if (matchesRole) {
       if (found) throw apiError3dp_('DUPLICATE_KEY', 'Batch-draft storage has duplicate SKU keys.');
       found = index + 2;
     }
-    if (key === legacyKey && matchesRole && Number(row[1]) === quantity) {
-      if (legacyFound) throw apiError3dp_('DUPLICATE_KEY', 'Batch-draft storage has duplicate legacy SKU keys.');
-      legacyFound = index + 2;
-    }
   });
-  return found || legacyFound;
+  return found;
 }
 
 function nextInternalRow3dp_(sheet) {

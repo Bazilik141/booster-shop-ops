@@ -91,7 +91,7 @@ Assert-3dpSuccess -Name 'read active SKU' -Response $skus
 if (-not $skus.rows -or $skus.rows.Count -lt 1) { throw 'No active real SKU is available for the Addendum #2 smoke.' }
 $sku = [string]$skus.rows[0].SKU
 
-$draft = Invoke-3dpGet -Query @{ action = '3dp_batch_draft'; sku = $sku }
+$draft = Invoke-3dpGet -Query @{ action = '3dp_batch_draft'; sku = $sku; quantity = 1 }
 Assert-3dpSuccess -Name 'read batch draft' -Response $draft
 
 $stockLog = Invoke-3dpGet -Query @{ action = '3dp_stock_adjustments'; sku = $sku; limit = '1' }

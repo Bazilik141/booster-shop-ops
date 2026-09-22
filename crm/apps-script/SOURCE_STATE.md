@@ -1,3 +1,19 @@
+# CRM-015 baseline — V185 BYTE-VERIFIED; LOCAL CANDIDATE NOT PUBLISHED (2026-09-22)
+
+The owner-supplied `Версія 185, 18 вер. 2026 р., 0834.csv` is a complete raw
+`Code.gs` export. Before CRM-015 edits it matched `crm/apps-script/Code.gs`
+exactly after BOM/line-ending normalization. The normalized export has 10,543
+split lines and SHA-256
+`36aaa7218d1d13d1affe8593755a7fd813705b01701552240ac363f202c1231b`.
+A bounded credential-literal scan was clear.
+
+The repository mirror now contains the local, unpublished CRM-015 candidate:
+an idempotent standalone 3D marketing-writeoff orchestrator, strict fixture
+stock checks, fixture FIFO costing from `FIFO_розхідники`, unlinked
+`Маркетинг` expense projection, and pre/post CRM integrity gates. This source
+is not deployment evidence. A new Web App version and owner-run live QA remain
+required.
+
 # CRM one-time cleanup baseline — V177 BYTE-VERIFIED (2026-09-13)
 
 The owner-supplied `Версія 177, 13 вер. 2026 р., 1845.csv` is a complete raw

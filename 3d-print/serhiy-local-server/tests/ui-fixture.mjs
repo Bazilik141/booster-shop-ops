@@ -13,6 +13,7 @@ const state = {
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const reply = (res, payload, status = 200) => { res.writeHead(status, { "Content-Type": "application/json", "Cache-Control": "no-store" });res.end(JSON.stringify(payload)); };
 const readBody = async (req) => { const chunks = [];for await (const chunk of req) chunks.push(chunk);return JSON.parse(Buffer.concat(chunks).toString() || "{}"); };
+const draftKey = (sku, quantity) => `${sku}::${Number(quantity)}`;
 function bootstrap() {
   const skus = Object.entries(state.stock).map(([SKU, available]) => ({
     SKU, "Назва виробу": SKU === "FIG-TEST-500" ? "Тестова рухома фігурка з дуже довгою українською назвою для перевірки форми" : "Тестовий брелок",
@@ -44,15 +45,16 @@ const server = http.createServer(async (req, res) => {
     }
     if (url.pathname === "/api/settings-journal") return reply(res, { ok: true, rows: [] });
     if (url.pathname === "/api/batch-draft") {
-      const sku = url.searchParams.get("sku");
+      const sku = url.searchParams.get("sku"),quantity = Number(url.searchParams.get("quantity"));
       await sleep(sku === "FIG-TEST-500" ? 900 : 150);
-      return reply(res, { ok: true, sku, found: Boolean(state.drafts[sku]), values: state.drafts[sku] || {} });
+      const draft = state.drafts[draftKey(sku, quantity)];
+      return reply(res, { ok: true, sku, quantity, found: Boolean(draft), values: draft || {} });
     }
     if (req.method === "POST" && url.pathname.startsWith("/api/")) {
       await sleep(state.delayMs);
       if (state.failWrite) { state.failWrite = false;return reply(res, { ok: false, code: "QA_WRITE_FAILED", error: "Тест: запис відхилено, дані форми збережені." }, 409); }
       if (url.pathname === "/api/save-batch") {
-        state.counters.saves++;state.drafts[body.sku] = body;
+        state.counters.saves++;state.drafts[draftKey(body.sku, body.quantity)] = body;
         return reply(res, { ok: true, cells_updated: ["G2", "H2"], already_current: false });
       }
       if (url.pathname === "/api/print-log") {
