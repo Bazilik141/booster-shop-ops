@@ -14,6 +14,10 @@ stock checks, fixture FIFO costing from `FIFO_розхідники`, unlinked
 is not deployment evidence. A new Web App version and owner-run live QA remain
 required.
 
+On 2026-09-23, before publishing this main-CRM candidate, the owner reported
+the dashboard CRM integrity tile returned `✓ OK`. This is an owner-reported
+clean preflight, not a raw API payload or post-write integrity check.
+
 # CRM one-time cleanup baseline — V177 BYTE-VERIFIED (2026-09-13)
 
 The owner-supplied `Версія 177, 13 вер. 2026 р., 1845.csv` is a complete raw

@@ -10,8 +10,36 @@ repaired the source defect that left six derived fields blank for the three
 reported `Продажі` rows (`ACC-3D-PKM-110`, `BR-CHARM-100`,
 `FIG-ONIX-500`).
 
-No Apps Script source, Web App version, dashboard, or workbook was published or
-changed live during this task.
+At the time of the initial local report, no Apps Script source, Web App version,
+dashboard, or workbook had been published or changed live. The subsequent
+owner-reported actions are recorded below.
+
+## Owner-reported live continuation (2026-09-22)
+
+After the initial local report, the owner published the temporary 3D-P code in
+the existing Web App as V35 (23:28 Kyiv). An owner-run preview matched only the
+three expected date/SKU/order rows, sheet rows 2–4, with exactly 18 missing
+formula cells and empty blocker/missing/ambiguous lists. The owner-run apply
+returned `ok=true`, `rows_repaired=3`, `cells_repaired=18`; an immediate second
+preview returned `cells_to_repair=0` and empty problem lists. These are supplied
+API outputs, not an independent source export or dashboard screenshot. Manual
+sales-tile QA later passed by owner report: all six fields display for all
+three rows. The temporary route and HTML were then removed from the local
+mirror, and the V35 paste artifact was removed locally as well. They remain
+recoverable from candidate-branch history. The bound V35 project still had the
+temporary route at that point; the clean republishing is recorded below.
+
+On 2026-09-23 the owner reported replacing bound `Code.gs` with the prepared
+`work/CRM-015_3dp_Code_final.gs` and deploying V36 at 11:05 Kyiv. The supplied
+editor screenshot shows only `Код.gs` and `CatalogFifo.gs`; it is not a
+byte-level source or active-version verification. No V36 API smoke or real
+marketing writeoff has yet been reported. Main CRM publication and owner QA
+for the new writeoff remain pending.
+
+The owner then reported the dashboard CRM integrity check as `✓ OK` before
+main-CRM publication. No raw API integrity payload was supplied. This is the
+pre-publication gate only; a clean post-write check is still required after a
+real marketing writeoff.
 
 ## Root cause
 
@@ -111,7 +139,11 @@ Result: **30 tests passed, 0 failed**.
 
 Continuation safety check (same command after exact-sale targeting): **32 tests
 passed, 0 failed**. Both 3D-P paste candidates and the local 3D-P source also
-passed JavaScript parsing. No live write or publication was performed.
+passed JavaScript parsing. Codex performed no live write or publication.
+
+Post-repair cleanup check: **31 focused tests passed, 0 failed**. The local
+`Code.gs` and final paste candidate both omit the one-time repair action,
+while retaining row-local formula seeding and marketing FIFO.
 
 Additional gates passed:
 

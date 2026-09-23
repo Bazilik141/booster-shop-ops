@@ -1,6 +1,40 @@
 # 3D-P Apps Script source state
 
-## CRM-015 local candidate — NOT PUBLISHED (2026-09-22)
+## Deployed — V36 (2026-09-23 11:05, owner-reported)
+
+The owner reports replacing bound `Code.gs` with
+`work/CRM-015_3dp_Code_final.gs` and publishing a new version of the existing
+3D-P Web App as V36. The supplied Apps Script screenshot shows `Код.gs` and
+`CatalogFifo.gs` and no separate temporary HTML file; it does not prove the
+file contents or active deployment version independently. The final candidate
+keeps permanent row-local sales formulas and marketing FIFO, and omits the
+one-time `3dp_sales_formula_repair` route/action. Live V36 API smoke remains
+unverified. Main CRM publication and real marketing-writeoff QA are separate
+pending gates.
+
+## Deployed — V35 (2026-09-22 23:28, owner-reported)
+
+The owner reports saving the CRM-015 deployment-safe `Code.gs` candidate and
+updated `CatalogFifo.gs`, then publishing a new version of the existing 3D-P
+Web App as V35 at 23:28 Kyiv. This records the owner's publication report, not
+an independently pulled or byte-verified deployed source. The owner exercised
+the temporary `3dp_sales_formula_repair` action through V35: its preview matched
+exactly three sales rows (2–4) and 18 missing formula
+cells with no blockers. The owner then reported `ok=true`,
+`rows_repaired=3`, `cells_repaired=18`; a second preview reported zero cells to
+repair and no missing or ambiguous targets. This is owner-supplied API output,
+not an independent source export. The owner then confirmed that the six fields
+are populated in the dashboard sales tile for all three rows. The temporary
+repair route remains live in V35 until the clean source is republished.
+
+The repository `Code.gs` is now cleaned of the one-time repair route but remains
+a local mirror with unpublished batch-draft quantity-keying changes. The clean
+paste source is `work/CRM-015_3dp_Code_final.gs`, not the mirror. The temporary
+`CRM-015.html` and V35 paste artifact were removed locally after owner QA; they
+remain recoverable from the candidate branch history. A fresh bound-project
+export is required for byte-level deployment identity.
+
+## CRM-015 candidate construction (historical, 2026-09-22)
 
 The owner supplied the complete published V34 export
 `Версія 34, 16 вер. 2026 р., 1726.txt` (3,787 split lines; normalized SHA-256
@@ -17,13 +51,14 @@ row-local deterministic formulas for `Продажі!C/I/J/K/L/S`, owner-only
 fingerprint-gated formula repair, reconciliation/reversal support for the new
 allocation source, and the temporary `CRM-015.html` preview/apply tool for the
 three affected rows. The repair action now requires each target's exact date,
-SKU and order number; missing or duplicate matches block application. None of
-this is published. The repair route/action and
+SKU and order number; missing or duplicate matches block application. This
+candidate is owner-reported as published in V35 above; live API behavior is
+still unverified. The repair route/action and
 temporary HTML are task-scoped: after successful owner QA both must be removed
 from the bound project and local mirror, then the clean 3D-P source republished.
 
-For owner paste, use `work/CRM-015_3dp_Code_from_V34.gs`: it is V34 plus only
-the CRM-015 change (113 added / 1 removed line). The mirror `Code.gs` also
+The V35 paste source was `work/CRM-015_3dp_Code_from_V34.gs` (now removed after
+the successful repair): it was V34 plus only the CRM-015 change. The mirror `Code.gs` also
 contains the preserved, unpublished batch-draft quantity-keying change and is
 not the deployment input for this task.
 
