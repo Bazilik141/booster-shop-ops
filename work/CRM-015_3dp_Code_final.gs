@@ -120,6 +120,7 @@ const PAYOUT_ACKNOWLEDGEMENT_JOURNAL_HEADERS_3DP = Object.freeze([
 
 const TECHNICAL_APPEND_COLUMNS_3DP = Object.freeze({
   'Продажі': Object.freeze(['F', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA']),
+  'Маркетингові_плюшки': Object.freeze(['I']),
 });
 
 const ORDER_LINE_ACCOUNTING_COLUMNS_3DP = Object.freeze({
@@ -291,6 +292,7 @@ const SERHIY_READ_PROJECTION_3DP = Object.freeze({
     baseline: Object.freeze(['Дата', 'SKU', 'Видано як бонус, шт']),
     fullEconomics: Object.freeze([
       'Закуплено в Друга, шт', 'Ціна закупівлі за од., грн', 'Сума закупівлі, грн',
+      'Фурнітура Сергія до виплати, грн',
     ]),
   }),
   'Фурнітура_довідник': Object.freeze({
@@ -568,6 +570,8 @@ function handlePost3dp_(body, actor) {
       return fifo3dpCrmSaleCommitAction_(spreadsheet, body, actor);
     case '3dp_marketing_writeoff':
       return fifo3dpMarketingWriteoffAction_(spreadsheet, body, actor);
+    case '3dp_sales_channel_validation_sync':
+      return salesChannelValidationSync3dp_(spreadsheet, body, actor);
     case '3dp_fifo_reverse':
       return fifo3dpReverseAction_(spreadsheet, body, actor);
     case '3dp_fifo_repair':
@@ -1117,6 +1121,7 @@ function createPayoutAction3dp_(spreadsheet, body, actor) {
   const period = String(body.period || '').trim();
   if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(period)) throw apiError3dp_('INVALID_PERIOD', 'period must use YYYY-MM.');
   const sheet = getSheet3dp_(spreadsheet, SHEETS_3DP.payouts);
+  assertMarketingPayoutSchema3dp_(spreadsheet);
   const existing = readTable3dp_(spreadsheet, SHEETS_3DP.payouts, { requireHeader: 'Період (РРРР-ММ)' }).rows.filter(function (row) {
     return String(row['Період (РРРР-ММ)'] || '').trim() === period;
   });
@@ -1125,8 +1130,27 @@ function createPayoutAction3dp_(spreadsheet, body, actor) {
     sheet: SHEETS_3DP.payouts,
     values: { A: period, E: 'Очікує перевірки', F: String(body.note || '').trim() },
   }, actor);
+  sheet.getRange(result.row, 2).setFormula(marketingPayoutFormula3dp_(result.row));
   SpreadsheetApp.flush();
   return { action: '3dp_payout_create', row: result.row, period: period, already_applied: false };
+}
+
+function marketingPayoutFormula3dp_(row) {
+  const monthStart = 'DATE(VALUE(LEFT(A' + row + ';4));VALUE(RIGHT(A' + row + ';2));1)';
+  const gifts = "'Маркетингові_плюшки'!";
+  const sales = "'Продажі'!";
+  const giftDate = gifts + '$A:$A';
+  const giftPeriod = giftDate + ';\">=\"&' + monthStart + ';' + giftDate + ';\"<\"&EDATE(' + monthStart + ';1)';
+  return '=IF(A' + row + '=\"\";\"\";SUMIFS(' + sales + '$K:$K;' + sales + '$S:$S;A' + row + ')' +
+    '+SUMIFS(' + gifts + '$E:$E;' + giftPeriod + ')' +
+    '+SUMIFS(' + gifts + '$I:$I;' + giftPeriod + '))';
+}
+
+function assertMarketingPayoutSchema3dp_(spreadsheet) {
+  const gifts = getSheet3dp_(spreadsheet, SHEETS_3DP.plyushky);
+  if (gifts.getRange('I1').getDisplayValue() !== 'Фурнітура Сергія до виплати, грн') {
+    throw apiError3dp_('MARKETING_PAYOUT_SCHEMA_NOT_READY', 'Run CRM-015 payout sync before marketing writeoffs or payout creation.');
+  }
 }
 
 function markPayoutPaidAction3dp_(spreadsheet, body, actor) {
@@ -2471,6 +2495,90 @@ function salesPeriodFormula3dp_(row) {
   return '=IF(A' + row + '="";"";LEFT(A' + row + ';7))';
 }
 
+// Stable owner-side schema maintenance: keep the Sheet's channel dropdown
+// compatible with both dashboard writes and historical channel labels.
+const SALES_CHANNELS_CANONICAL_3DP = Object.freeze(['OpenCart', 'Telegram', 'OLX', 'Monobazar', 'Вручну', 'Інше']);
+const SALES_CHANNELS_LEGACY_3DP = Object.freeze(['Сайт', 'Директ', 'Instagram']);
+
+function salesChannelValidationPlan3dp_(spreadsheet) {
+  const sheet = getSheet3dp_(spreadsheet, SHEETS_3DP.sales);
+  if (String(sheet.getRange('M1').getDisplayValue() || '').trim() !== 'Канал') {
+    throw apiError3dp_('SALES_CHANNEL_HEADER_MISMATCH', 'Продажі!M1 must be Канал.');
+  }
+  const rowCount = sheet.getMaxRows() - 1;
+  if (rowCount < 1) throw apiError3dp_('SALES_CHANNEL_RANGE_MISSING', 'No data rows exist for the sales channel.');
+  const range = sheet.getRange(2, 13, rowCount, 1);
+  const validations = range.getDataValidations();
+  const values = range.getDisplayValues();
+  const options = SALES_CHANNELS_CANONICAL_3DP.concat(SALES_CHANNELS_LEGACY_3DP);
+  const blockers = [];
+  const ruleState = [];
+  let allowInvalid = null;
+  let helpText = null;
+  let alreadyApplied = true;
+  for (let index = 0; index < rowCount; index += 1) {
+    const rule = validations[index][0];
+    const value = String(values[index][0] || '').trim();
+    if (value && options.indexOf(value) === -1) blockers.push('M' + (index + 2) + ': unexpected value');
+    if (!rule) {
+      ruleState.push(null);
+      alreadyApplied = false;
+      continue;
+    }
+    if (rule.getCriteriaType() !== SpreadsheetApp.DataValidationCriteria.VALUE_IN_LIST) {
+      blockers.push('M' + (index + 2) + ': unsupported validation');
+      ruleState.push('unsupported');
+      continue;
+    }
+    const current = rule.getCriteriaValues()[0].map(function (item) { return String(item || '').trim(); });
+    current.forEach(function (item) {
+      if (options.indexOf(item) === -1) blockers.push('M' + (index + 2) + ': unknown option ' + item);
+    });
+    const rowAllowInvalid = Boolean(rule.getAllowInvalid());
+    const rowHelpText = String(rule.getHelpText() || '');
+    if (allowInvalid !== null && allowInvalid !== rowAllowInvalid) blockers.push('M' + (index + 2) + ': validation strictness differs');
+    if (helpText !== null && helpText !== rowHelpText) blockers.push('M' + (index + 2) + ': validation help differs');
+    allowInvalid = rowAllowInvalid;
+    helpText = rowHelpText;
+    ruleState.push({ options: current, allow_invalid: rowAllowInvalid, help: rowHelpText });
+    if (current.join('\u001f') !== options.join('\u001f') || rule.getCriteriaValues()[1] === false) alreadyApplied = false;
+  }
+  return {
+    sheet: sheet, range: range, validations: validations, options: options,
+    allow_invalid: allowInvalid === null ? false : allowInvalid, help_text: helpText || '',
+    blockers: blockers.slice(0, 20), blocker_count: blockers.length,
+    already_applied: alreadyApplied && blockers.length === 0,
+    fingerprint: fifo3dpFingerprint_({ rows: rowCount, rules: ruleState, values: values }),
+    rows_checked: rowCount,
+  };
+}
+
+function salesChannelValidationSync3dp_(spreadsheet, body, actor) {
+  assertOwner3dp_(actor, 'Only the owner may sync sales channel validation.');
+  const plan = salesChannelValidationPlan3dp_(spreadsheet);
+  const preview = { action: '3dp_sales_channel_validation_sync', apply: false,
+    options: plan.options, rows_checked: plan.rows_checked, blockers: plan.blockers,
+    blocker_count: plan.blocker_count, already_applied: plan.already_applied, fingerprint: plan.fingerprint };
+  if (body.apply !== true) return preview;
+  if (plan.blocker_count) throw apiError3dp_('SALES_CHANNEL_VALIDATION_BLOCKED', 'Unexpected sales channel values or validation; no changes applied.');
+  if (String(body.expected_fingerprint || '') !== plan.fingerprint) {
+    throw apiError3dp_('STALE_SALES_CHANNEL_VALIDATION', 'Run the channel validation preview again.');
+  }
+  if (plan.already_applied) return Object.assign({}, preview, { apply: true });
+  const builder = SpreadsheetApp.newDataValidation().requireValueInList(plan.options, true).setAllowInvalid(plan.allow_invalid);
+  if (plan.help_text) builder.setHelpText(plan.help_text);
+  try {
+    plan.range.setDataValidation(builder.build());
+    const after = salesChannelValidationPlan3dp_(spreadsheet);
+    if (!after.already_applied) throw apiError3dp_('SALES_CHANNEL_VALIDATION_VERIFY_FAILED', 'Channel dropdown did not match the expected options.');
+    appendAudit3dp_(spreadsheet, actor, 'SALES_CHANNEL_VALIDATION_SYNC', SHEETS_3DP.sales,
+      'M2:M' + (plan.rows_checked + 1), {}, { options: plan.options, rows: plan.rows_checked }, 'dashboard and historical labels');
+  } catch (error) {
+    plan.range.setDataValidations(plan.validations);
+    throw error;
+  }
+  return Object.assign({}, preview, { apply: true, already_applied: false });
+}
 function salesDerivedFormulaMap3dp_(row) {
   return {
     C: salesProductNameFormula3dp_(row),

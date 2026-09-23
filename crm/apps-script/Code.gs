@@ -2022,7 +2022,7 @@ function apiAdd3dpMarketingWriteoff_(ss, payload) {
   if (!integrityAfter.clean) throw new Error('Списання записано, але post-write CRM integrity check має проблеми. Не повторюй з новим ID; перевір цей request_id.');
   invalidateDoGetCache_();
   return { ok: true, action: 'add_3dp_marketing_writeoff', request_id: requestId, sku: sku, quantity: quantity, date: date,
-    sale_row_3dp: remote.sale_row, fifo_cost_uah: remote.total_cost_uah, buyout_unit: remote.buyout_unit,
+    gift_row_3dp: remote.gift_row, fifo_cost_uah: remote.total_cost_uah, buyout_unit: remote.buyout_unit,
     serhiy_accrual: remote.serhiy_accrual, marketing_expense: expectedExpense, fixture_total: fixturePlan.total,
     fixture_owner: fixturePlan.owner_total, fixture_serhiy: fixturePlan.serhiy_total, fixtures_written: fixtureResult.rows_added || 0,
     expense_row: expense.row_index, already_applied: !!remote.already_applied && !!expense.already_applied && (!!fixturePlan.already_applied || !fixturePlan.entries.length),

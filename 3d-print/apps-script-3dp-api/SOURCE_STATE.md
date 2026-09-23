@@ -1,5 +1,42 @@
 # 3D-P Apps Script source state
 
+## CRM-015 correction — owner-reported live QA (2026-09-23)
+
+The owner published the correction candidate with the task-only `CRM-015.html`
+route; the deployment version number and bound-project bytes were not supplied.
+Owner-run API evidence: payout-formula sync updated 28 rows and verified zero
+remaining; the exact `ACC-3D-PKM-110` allocation was reclassified into gift row
+3 with a 25 UAH buyout, and a second preview returned `already_applied=true`
+with no blockers. Channel-validation sync checked 995 rows and verified
+`already_applied=true`, zero blockers. The owner confirmed the dropdown warning
+is gone and the CRM integrity check is OK.
+
+The temporary action has now been removed from the **local** `Code.gs` mirror
+and `work/CRM-015_3dp_Code_final.gs`; the local `CRM-015.html` was deleted.
+The owner must still replace bound `Code.gs` with the cleaned paste source,
+delete the bound `CRM-015.html`, and republish the existing Web App deployment.
+Until then the deployed temporary route remains live. The cleaned local source
+is not evidence of that later deployment.
+
+## Historical CRM-015 correction candidate — before live deployment
+
+The owner confirmed that V36 accepted one 25 UAH marketing writeoff but projected
+it into `Продажі`, not `Маркетингові_плюшки`. The owner deleted the entire
+marketing sales row. The owner-provided `3dp_fifo_reconcile` response now has
+exactly one missing-projection problem for allocation
+`3DP-A-marketing-CRM015-MUDW8DKS-EO12RHOR`; the CRM Marketing expense remains.
+Do not reverse or re-consume that allocation. The local candidate redirects new
+marketing writeoffs to a gift row and adds a task-scoped, fingerprint-gated
+`CRM-015.html` reclassification for this one allocation. Neither change has
+been uploaded, published, or live-tested. The temporary route and HTML must
+be removed after owner-run apply and verification. The local mirror still
+contains unrelated batch-draft work and is not a byte-identical V36 export.
+The owner-provided 2026-09-23 CSV and HTML workbook archive confirm that the
+gift sheet has only A:H headers and one incomplete historical bonus row (no
+purchase sum), while payout rows have no period and their old B formulas omit
+gift purchases. The local candidate now also has a guarded task-only payout
+formula/schema sync; it must run before the historical reclassification.
+
 ## Deployed — V36 (2026-09-23 11:05, owner-reported)
 
 The owner reports replacing bound `Code.gs` with

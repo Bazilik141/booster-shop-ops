@@ -1,4 +1,16 @@
-# CRM-015 baseline — V185 BYTE-VERIFIED; LOCAL CANDIDATE NOT PUBLISHED (2026-09-22)
+# Main CRM source state
+
+## Deployed — V186 (2026-09-23 12:17, owner-reported)
+
+The owner reported publishing the CRM-015 main-CRM candidate as V186. The
+subsequent live Marketing expense row for `ACC-3D-PKM-110 × 1` is 25 UAH and
+remains in `Витрати`; the owner confirmed it was not deleted with the mistaken
+3D sales projection. This is owner-reported runtime evidence, not a fresh
+byte-verified V186 export. A local CRM-015 correction candidate now changes
+only the returned 3D row key from `sale_row_3dp` to `gift_row_3dp`; it is not
+published.
+
+## CRM-015 baseline — V185 BYTE-VERIFIED; historical candidate (2026-09-22)
 
 The owner-supplied `Версія 185, 18 вер. 2026 р., 0834.csv` is a complete raw
 `Code.gs` export. Before CRM-015 edits it matched `crm/apps-script/Code.gs`
