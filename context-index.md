@@ -75,7 +75,8 @@ status and priority from the verified Notion card. Use dashboard
 | RD-06/07 | Empty state / category / breadcrumb | handoffs/handoff_RD-06-07_empty-state_category_breadcrumb_2026-06-04.md |
 | RD-10 | Сторінка товару — редизайн | handoffs/handoff_RD-10_product-page-parity_2026-06-09.md |
 | RD-10D2 | Breadcrumb mockup fix | handoffs/handoff_RD-10D2_breadcrumb-mockup-fix_2026-06-11.md |
-| RD-11 | Редизайн сторінки кошика | — |
+| RD-11 | Редизайн сторінки кошика. Notion blocker text stale — R-13.5 closed Done 2026-09-08, gate discharged; unblocked. | Design brief: handoffs/handoff_RD-11-RD-12_cart-minicart-toast_visual-design-brief_20260921.md → **Codex handoff (ready): handoffs/handoff_RD-11_cart-page_20260921.md** |
+| RD-12 | Mini-cart drawer (dropdown → drawer) + add-to-cart toast (`#alert`, stock Bootstrap, folded into RD-12 scope 2026-09-21 owner decision, no separate ID) | Design brief: handoffs/handoff_RD-11-RD-12_cart-minicart-toast_visual-design-brief_20260921.md → **Codex handoff (ready): handoffs/handoff_RD-12_minicart-toast_20260921.md** |
 | RD-13 | Checkout reskin — visual-only stock checkout | handoffs/HANDOFF-RD13-checkoutV2.md · handoffs/HANDOFF-RD13-checkout-FIXES-round2.md · diagnostics/RD-13_checkout-reskin-round2_report_20260706.md |
 | RD-01/02/03 | Shell DS parity | handoffs/handoff_RD-01-02-03_shell-ds-parity_2026-05-30.md |
 
