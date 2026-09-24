@@ -6,6 +6,8 @@
 *.ps1 text eol=crlf
 *.bat text eol=crlf
 *.cmd text eol=crlf
+*.vbs text eol=crlf
+3d-print/serhiy-local-server/distribution/*.txt text eol=crlf
 
 # Shell scripts must stay LF.
 *.sh text eol=lf

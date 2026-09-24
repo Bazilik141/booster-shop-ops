@@ -241,6 +241,7 @@ session does not have to spend search calls on the same lookups.
 | RD-14 | `3706bf20-bdb4-816e-83d9-d94c2aa2cc70` |
 | RD-15 | `3706bf20-bdb4-81a9-9686-c5c90366254a` |
 | RD-21 | `3706bf20-bdb4-815f-8965-f500d1f061c3` |
+| RD-24 | `3e36bf20-bdb4-81a4-a25c-e5e06dd2c2a3` |
 | R-04 | `36a6bf20-bdb4-81a1-afa9-c23904919cd8` |
 | R-11 | `3696bf20-bdb4-81d9-9e9f-c4cf11dca805` |
 | R-11-UI-1 | `36f6bf20-bdb4-8142-b5e2-fadc47bc2172` |
@@ -335,6 +336,7 @@ NCRM-04 through NCRM-12 were renumbered/rescoped on 2026-07-11 under
 
 | Roadmap ID | Notion page_id | Note |
 |---|---|---|
+| CRM-016 | `3e46bf20-bdb4-8161-92fc-f06c468a6967` | Added 2026-09-23 on owner instruction. Purchases tab, CRM order-line correction, ACC-001-BPJP rename, performance review and Telegram diagnosis. The canonical Roadmap ID query returned CRM-001…012; repository artifacts already use CRM-013…015, so 016 avoids identifier reuse. Dashboard mirror created in the same session; no live deployment or Sheet write implied. |
 | NCRM-00 | `38b6bf20-bdb4-81dc-89ba-ddf3ae182f37` | — |
 | NCRM-01 | `38b6bf20-bdb4-8165-b4bb-f9434ee07770` | — |
 | NCRM-02 | `38b6bf20-bdb4-8115-b0b3-c8c1e31be4f1` | — |
