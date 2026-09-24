@@ -132,3 +132,192 @@ and says so.
 `Перед 3D-P-007 WP3 QA — 2026-08-24`, a history-free test SKU, and explicitly
 forbids `FIG-LUFFY-410`. Keep the journal rows and refusal messages — that
 evidence is what closes the task.
+
+---
+
+# Blocking defect found in owner testing, 2026-08-28
+
+**Verdict revised: Return for changes.** The launcher cannot run. Found when the
+owner reached step 5 of the dry run and double-clicked `Запустити.bat`:
+
+```
+'Policy' is not recognized as an internal or external command,
+operable program or batch file.
+'?тисни' is not recognized as an internal or external command,
+operable program or batch file.
+```
+
+## Finding 6 — blocking
+
+**All three `.bat` files are written with bare LF line endings.** Verified on the
+owner's uploaded copy: 278 bytes, **0 CRLF, 9 bare LF**, no BOM. `cmd.exe`
+requires CRLF in batch files; with LF only it loses line boundaries, which is
+exactly why `-ExecutionPolicy` split into a phantom `Policy` command and why
+`echo Натисни…` lost its `echo` and its first character.
+
+The repository already states the correct rule. `.gitattributes` carries:
+
+```
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+```
+
+Those attributes apply on checkout and commit. **The WP3 files are uncommitted**,
+so git never normalised them, and `build-serhiy-3dp-package.ps1` copies the
+working-tree files verbatim into the zip. The package therefore ships broken
+launchers to a non-technical user on a machine where nobody can debug them.
+
+`launcher.ps1`, `negative-qa.ps1` and `build-serhiy-3dp-package.ps1` are LF too.
+PowerShell tolerates that, so it is not blocking — but it violates the same
+declared convention and should be fixed in the same pass.
+
+### Second defect in the same files
+
+Even with CRLF, `chcp 65001` on line 2 is followed by non-ASCII text on lines 3
+and 7 (`title Booster Shop — 3D-друк`, `echo Натисни…`). `cmd.exe` tracks its
+position in the batch file by byte offset and re-decodes after a codepage change,
+which desynchronises it on multi-byte characters — a long-standing cmd behaviour
+and a second, independent cause of the same class of error.
+
+**The `.bat` files must be ASCII-only.** All Ukrainian text belongs in the
+PowerShell scripts, which already set `[Console]::OutputEncoding` themselves and
+handle UTF-8 correctly. A bare `pause` prints the system-localised prompt and
+needs no literal text at all.
+
+### Why neither the executor nor this review caught it
+
+The report's verification block lists `PowerShell parser: 0 errors` for all three
+`.ps1` files and `node --check` for the JavaScript — nothing parses a `.bat`,
+because nothing can: cmd has no syntax checker. The report is explicit that
+"Windows SmartScreen behaviour, browser opening, user-variable persistence" were
+unproven, and double-clicking the launcher falls in that same unproven band.
+
+This review inspected the `.bat` contents and found them correct **as text**, and
+did not check their line endings. For a Windows launcher that is the one property
+that decides whether the file runs at all. Recorded so the next packaging review
+starts with `file`/byte-level checks on every `.cmd`/`.bat`, not with reading them.
+
+### Required fix
+
+- rewrite all three `.bat` files with **CRLF** and **ASCII-only** content;
+- move every Ukrainian string out of them and into the `.ps1` files;
+- normalise the three `.ps1` files to CRLF for consistency with `.gitattributes`;
+- add a guard to `build-serhiy-3dp-package.ps1` that **refuses to build** if any
+  file it is about to copy into the package has bare-LF endings or non-ASCII
+  bytes in a `.bat` — the packaging step is the last place this can be caught
+  before the zip reaches someone who cannot diagnose it;
+- re-run the assembly and confirm from the produced zip, not from the source
+  tree.
+
+Everything else in this review stands. The defect is in packaging only; no route,
+guard, projection or test behaviour is affected.
+
+## Finding 7 — blocking, same family
+
+After the `.bat` files were repaired locally and the launcher actually started,
+`launcher.ps1` failed to parse:
+
+```
+$Host.UI.RawUI.WindowTitle = "Booster Shop вЂ” 3D-РґСЂСѓРє"
+Unexpected token '3D-РґСЂСѓРє"…' in expression or statement.
+```
+
+`РґСЂСѓРє` is UTF-8 «друк» decoded as CP1251. **The `.ps1` files are UTF-8
+without a BOM.** `Запустити.bat` invokes `powershell.exe` — Windows PowerShell
+**5.1** — and 5.1 reads a BOM-less script using the system ANSI codepage, not
+UTF-8. Every Ukrainian string literal turns into mojibake, which breaks the
+quoting and cascades into the parse errors above.
+
+The fix is a **UTF-8 BOM** on `launcher.ps1` and `negative-qa.ps1`. Switching the
+`.bat` to `pwsh` is not an option: PowerShell 7 is not present on a stock Windows
+install and Serhiy will not have it.
+
+### Why the executor's check passed
+
+The report lists `PowerShell parser: launcher.ps1 — 0 errors`. That check almost
+certainly ran under PowerShell 7, which defaults to UTF-8 and parses the file
+fine. The script is then launched by 5.1, which does not. The artefact was
+validated in a different runtime from the one that runs it — the same shape of
+error as the line endings in finding 6, and the same lesson.
+
+### Required fix, consolidated with finding 6
+
+`build-serhiy-3dp-package.ps1` must refuse to build unless, for every file it is
+about to copy:
+
+- `.bat` — CRLF line endings **and** ASCII-only bytes;
+- `.ps1` — a UTF-8 BOM (`EF BB BF`), and CRLF for consistency with `.gitattributes`;
+- the built zip is then re-opened and the same checks re-run against its contents,
+  because the source tree passing is not evidence that the package does.
+
+Both defects are packaging-only. Nothing in the client, the API contract, the
+guards or the tests is affected — every one of those still stands as reviewed.
+
+## Finding 8 — blocking, and it is not packaging
+
+Running the server directly, so its output stayed visible, produced the real
+fault:
+
+```
+Сторінка Сергія працює: http://127.0.0.1:3107
+Error: Not found.
+    at fail (…/app/server.mjs:53:17)
+    at serveStatic (…/app/server.mjs:407:31)
+    at Server.<anonymous> (…/app/server.mjs:442:42)
+  status: 404, code: 'NOT_FOUND'
+Node.js v24.19.0
+```
+
+**The server process dies on any 404.** `server.mjs:442` is
+
+```js
+if (request.method === "GET") return serveStatic(response, url.pathname);
+```
+
+inside the request handler's `try`. In an `async` function, `return promise`
+leaves the `try` block before the promise settles, so the `catch` below **never
+sees the rejection** — it becomes an unhandled rejection and Node ≥15 terminates
+the process. Every other route in that handler is written `return json(…, await …)`
+and is correctly covered; this is the single line that is not.
+
+`serveStatic` throws `NOT_FOUND` for any path whose extension is outside `MIME`.
+`.ico` is outside `MIME`. **Every browser requests `/favicon.ico` immediately
+after loading a page**, so the sequence on every single launch is:
+
+1. `GET /` → `index.html` served;
+2. `GET /favicon.ico` → throw → unhandled rejection → **server exits**;
+3. the page's own `GET /api/bootstrap` finds nothing listening → «Failed to fetch»;
+4. any later request → `ERR_CONNECTION_REFUSED`.
+
+That is the complete explanation for both symptoms the owner reported, and it
+retracts the launcher hypothesis raised before this evidence arrived — the
+launcher was doing its job.
+
+**Fix:** `return await serveStatic(response, url.pathname);`. One word. Consider
+also serving a 204 for `/favicon.ico` so a normal browser request is not an error
+path at all, and adding `process.on('unhandledRejection')` so a future escape
+logs instead of killing the process.
+
+### Provenance and why every gate missed it
+
+The line is **not new**. It is identical in the WP2 file and in the original
+2026-08-01 package — `grep` confirms the same statement at line 440 in the WP2
+copy and 442 here. The package has carried this since the day it was written and
+nobody had ever opened it in a browser: the 2026-08-02 «4/4 tests» run, WP2's
+6/6, WP3's 7/7 and my own re-runs of all of them drive the API routes against a
+fake API and never request an unknown static path. A green suite proved the
+contract and said nothing about whether the thing runs.
+
+This review approved WP2 having read `serveStatic` and the handler, and did not
+notice that one `return` lacked its `await` while its fourteen neighbours had it.
+Recorded plainly: three rounds of review and three green suites did not find a
+defect that the first real browser load surfaced in seconds.
+
+### Consequence for the work package
+
+Findings 6 and 7 are packaging. **This one is the client**, so the WP3 fix scope
+now includes `server.mjs`, and the acceptance criterion for WP3 has to change:
+a green `npm test` is not sufficient evidence. The package must be started and a
+real browser pointed at it, with the page loading its data, before WP3 is
+delivered again.

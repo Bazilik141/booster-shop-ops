@@ -33,15 +33,13 @@ test("rejects zero or missing batch inputs", () => {
   }, settings), /Batch quantity/);
 });
 
-test("multiplies Serhiy consumables per unit by the printed batch quantity", () => {
+test("adds Serhiy consumables once to actual batch FIFO cost", () => {
   const result = calculateBatchCost({ quantity: 2, defects: 1, total_weight_g: 100, total_print_time_h: 4, spool_weight_g: 1000, spool_price_uah: 800, serhiy_consumables_uah: 10 }, settings);
   const expectedBaseBatch = (100 / 1000 * 800) + (settings.printer_power_kw * 4 * settings.electricity_price_uah_per_kwh) + (settings.amortization_uah_per_hour * 4);
-  assert.equal(result.serhiy_consumables_per_unit_uah, 10);
-  assert.equal(result.serhiy_consumables_uah, 20);
-  assert.equal(result.actual_batch_total_uah, expectedBaseBatch + 20);
-  assert.equal(result.actual_unit_uah, (expectedBaseBatch + 20) / 2);
+  assert.equal(result.actual_batch_total_uah, expectedBaseBatch + 10);
+  assert.equal(result.actual_unit_uah, (expectedBaseBatch + 10) / 2);
   assert.equal(result.good_quantity, 1);
-  assert.equal(result.actual_usable_unit_uah, expectedBaseBatch + 20);
+  assert.equal(result.actual_usable_unit_uah, expectedBaseBatch + 10);
 });
 
 test("reads the projected B2:B5 settings column", () => {

@@ -201,7 +201,8 @@ const NOMENCLATURE_DRAFT_REQUIRED_COLUMNS_3DP = Object.freeze(['B', 'D']);
 // Serhiy draft: production inputs G:J remain calculator-derived later.
 const NOMENCLATURE_OWNER_CREATE_COLUMNS_3DP = Object.freeze(['B', 'D', 'M', 'Q', 'R', 'S']);
 const NOMENCLATURE_OWNER_CREATE_REQUIRED_COLUMNS_3DP = Object.freeze(['B', 'D', 'Q']);
-const NOMENCLATURE_SKU_PATTERN_3DP = /^(BR|FIG|ACC-3D)-[A-Z0-9]{2,5}-\d{3}$/;
+// Keep in sync with threeDpSkuTypeError in dashboard/booster-dashboard.html; source: 3D-P SKU convention rev. 9.
+const NOMENCLATURE_SKU_PATTERN_3DP = /^(BR|FIG|ACC-3D)-[A-Z0-9]{2,5}-\d{3}(?:-[A-Z0-9]{1,5})*$/;
 const NOMENCLATURE_DRAFT_SUGGESTIONS_3DP = Object.freeze({
   'Брелок': Object.freeze({ prefix: 'BR', category_digits: '100', category_label: 'Звичайний брелок-підвіска' }),
   'Брелок-клікер': Object.freeze({ prefix: 'BR', category_digits: '200', category_label: 'Брелок-клікер' }),
@@ -566,6 +567,8 @@ function handlePost3dp_(body, actor) {
       return fifo3dpManufactureBatchAction_(spreadsheet, body, actor);
     case '3dp_crm_sale_commit':
       return fifo3dpCrmSaleCommitAction_(spreadsheet, body, actor);
+    case '3dp_marketing_writeoff':
+      return fifo3dpMarketingWriteoffAction_(spreadsheet, body, actor);
     case '3dp_fifo_reverse':
       return fifo3dpReverseAction_(spreadsheet, body, actor);
     case '3dp_fifo_repair':
@@ -785,7 +788,24 @@ function bootstrapAction3dp_(spreadsheet, params, actor) {
     overview: overviewFromTables3dp_(nomenclature, availability, null),
     skus: skusFromTables3dp_(nomenclature, availability, includeArchived),
     settings: getRangeAction3dp_(spreadsheet, { sheet: SHEETS_3DP.settings, range: 'A1:C5' }, actor),
-    analytics: getRangeAction3dp_(spreadsheet, { sheet: SHEETS_3DP.analyticsSku, range: 'A1:N' + Math.min(Math.max(getSheet3dp_(spreadsheet, SHEETS_3DP.analyticsSku).getLastRow(), 2), 100) }, actor),
+    analytics: dashboardAnalyticsAction3dp_(spreadsheet),
+  };
+}
+
+// The owner bootstrap has a fixed, audited analytics projection of at most
+// 100 rows by 14 columns. It must not pass through the 500-cell limit for the
+// caller-controlled 3dp_get_range action: once Analytics_SKU reached 36 rows,
+// that unrelated public-request guard made the whole owner dashboard fail.
+function dashboardAnalyticsAction3dp_(spreadsheet) {
+  const sheet = getSheet3dp_(spreadsheet, SHEETS_3DP.analyticsSku);
+  const endRow = Math.min(Math.max(sheet.getLastRow(), 2), 100);
+  const range = sheet.getRange(1, 1, endRow, 14);
+  return {
+    action: '3dp_get_range',
+    sheet: SHEETS_3DP.analyticsSku,
+    range: 'A1:N' + endRow,
+    values: normalizeMatrix3dp_(range.getValues()),
+    formulas: range.getFormulas(),
   };
 }
 
@@ -2084,14 +2104,16 @@ function setPrintLogArchiveAction3dp_(spreadsheet, body, actor, archive) {
 function getBatchDraftAction3dp_(spreadsheet, params, actor) {
   assertBatchDraftRole3dp_(actor);
   const sku = requiredSku3dp_(params.sku);
+  const quantity = batchDraftQuantity3dp_(params.quantity);
   const nomenclature = getSheet3dp_(spreadsheet, SHEETS_3DP.nomenclature);
   const nomenclatureRow = resolveTargetRow3dp_(nomenclature, sku);
   assertRealNomenclatureRow3dp_(nomenclature, nomenclatureRow);
   const drafts = getInternalSheet3dp_(spreadsheet, SHEETS_3DP.drafts);
-  const draftRow = findBatchDraftRow3dp_(drafts, sku, actor, isSerhiyProjectionActive3dp_(actor));
+  const draftRow = findBatchDraftRow3dp_(drafts, sku, actor, isSerhiyProjectionActive3dp_(actor), quantity);
   return {
     action: '3dp_batch_draft',
     sku: sku,
+    quantity: quantity,
     found: draftRow > 0,
     values: batchDraftValues3dp_(drafts, draftRow),
   };
@@ -2114,11 +2136,12 @@ function saveBatchDraftAction3dp_(spreadsheet, body, actor) {
   if (!expected || typeof expected !== 'object' || Array.isArray(expected)) {
     throw apiError3dp_('EXPECTED_REQUIRED', 'expected_current is required for every saved batch-draft field.');
   }
+  const quantity = batchDraftQuantity3dp_(Object.prototype.hasOwnProperty.call(values, 'quantity') ? values.quantity : expected.quantity);
 
   const drafts = getInternalSheet3dp_(spreadsheet, SHEETS_3DP.drafts);
   const serhiyDraft = actor && actor.role === 'serhiy';
   if (serhiyDraft) ensureBatchDraftActorColumn3dp_(drafts);
-  const existingRow = findBatchDraftRow3dp_(drafts, sku, actor, serhiyDraft);
+  const existingRow = findBatchDraftRow3dp_(drafts, sku, actor, serhiyDraft, quantity);
   const oldValues = batchDraftValues3dp_(drafts, existingRow);
   const nextValues = Object.assign({}, oldValues);
   const supplied = [];
@@ -2156,7 +2179,7 @@ function saveBatchDraftAction3dp_(spreadsheet, body, actor) {
       const skuRange = drafts.getRange(row, 1);
       if (skuRange.getFormula()) throw apiError3dp_('FORMULA_CELL', 'Batch-draft SKU key must remain a manual cell.');
       const oldSku = normalizeCellValue3dp_(skuRange.getValue());
-      setCellValue3dp_(skuRange, batchDraftStorageKey3dp_(sku, actor, serhiyDraft));
+      setCellValue3dp_(skuRange, batchDraftStorageKey3dp_(sku, actor, serhiyDraft, quantity));
       applied.push({ range: skuRange, oldRawValue: oldSku });
       if (serhiyDraft) {
         const actorRange = drafts.getRange(row, batchDraftActorColumn3dp_());
@@ -2432,6 +2455,14 @@ function salesOrderLineMarginFormula3dp_(row) {
   return '=IF(OR(B' + row + '="";E' + row + '="");"";IF(X' + row + '="Маркетинг";0;E' + row + '-F' + row + '-G' + row + '-Y' + row + '-Z' + row + '))';
 }
 
+function salesProductNameFormula3dp_(row) {
+  return '=IF(B' + row + '="";"";IFERROR(INDEX(\'Номенклатура\'!$B:$B;MATCH(B' + row + ';\'Номенклатура\'!$A:$A;0));""))';
+}
+
+function salesStatusFormula3dp_(row) {
+  return '=IF(I' + row + '="";"";IF(I' + row + '<0;"⚠ ЗБИТКОВИЙ — рішення власника";"ОК"))';
+}
+
 function salesOrderLineSerhiyAccrualFormula3dp_(row) {
   return '=IF(OR(B' + row + '="";E' + row + '="");"";IF(X' + row + '="Маркетинг";D' + row + '*(AA' + row + '+Z' + row + ');D' + row + '*(F' + row + '+H' + row + '*I' + row + '+Z' + row + ')))';
 }
@@ -2440,6 +2471,37 @@ function salesOrderLineBoosterIncomeFormula3dp_(row) {
   return '=IF(OR(B' + row + '="";E' + row + '="");"";IF(X' + row + '="Маркетинг";0;D' + row + '*I' + row + '*(1-H' + row + ')))';
 }
 
+function salesPeriodFormula3dp_(row) {
+  return '=IF(A' + row + '="";"";LEFT(A' + row + ';7))';
+}
+
+function salesDerivedFormulaMap3dp_(row) {
+  return {
+    C: salesProductNameFormula3dp_(row),
+    I: salesOrderLineMarginFormula3dp_(row),
+    J: salesStatusFormula3dp_(row),
+    K: salesOrderLineSerhiyAccrualFormula3dp_(row),
+    L: salesOrderLineBoosterIncomeFormula3dp_(row),
+    S: salesPeriodFormula3dp_(row),
+  };
+}
+
+function ensureSalesDerivedFormulas3dp_(sheet, row, apply) {
+  const formulas = salesDerivedFormulaMap3dp_(row);
+  const changed = [];
+  const blocked = [];
+  Object.keys(formulas).forEach(function(column) {
+    const cell = sheet.getRange(row, columnToNumber3dp_(column));
+    if (cell.getFormula()) return;
+    if (!isBlank3dp_(cell.getValue())) {
+      blocked.push(column + row);
+      return;
+    }
+    changed.push(column + row);
+    if (apply) cell.setFormula(formulas[column]);
+  });
+  return { changed: changed, blocked: blocked };
+}
 
 function snapshotRange3dp_(sheet, a1) {
   const range = sheet.getRange(a1);
@@ -2626,7 +2688,7 @@ function nextDraftSku3dp_(sheet) {
 function canonicalNomenclatureSku3dp_(value) {
   const sku = String(value || '').trim();
   if (!NOMENCLATURE_SKU_PATTERN_3DP.test(sku)) {
-    throw apiError3dp_('INVALID_SKU', 'SKU must match BR|FIG|ACC-3D + mnemonic (2–5 A-Z/0-9) + three digits.');
+    throw apiError3dp_('INVALID_SKU', 'SKU must match BR|FIG|ACC-3D + mnemonic (2–5 A-Z/0-9) + three digits, optionally followed by -TOKEN segments (1–5 A-Z/0-9; e.g. ACC-3D-ONIX-110-21-BLK).');
   }
   return sku;
 }
@@ -2682,7 +2744,8 @@ function findSkuHistoryRow3dp_(sheet, sku, options) {
   for (let index = 0; index < values.length; index += 1) {
     if (settings.storedOnly && String(formulas[index][0] || '').trim()) continue;
     const value = String(values[index][0] || '').trim();
-    const matches = value === sku || (settings.actorPrefixed && value.slice(-(sku.length + 2)) === '::' + sku);
+    const matches = value === sku || value.indexOf(sku + '::') === 0 ||
+      (settings.actorPrefixed && (value.slice(-(sku.length + 2)) === '::' + sku || value.indexOf('::' + sku + '::') > 0));
     if (matches) return index + headerRow + 1;
   }
   return 0;
@@ -2898,30 +2961,45 @@ function ensureBatchDraftActorColumn3dp_(sheet) {
   }
 }
 
-function batchDraftStorageKey3dp_(sku, actor, scopeToActor) {
-  return scopeToActor ? String((actor && actor.role) || '') + '::' + sku : sku;
+function batchDraftQuantity3dp_(value) {
+  const quantity = Number(value);
+  if (!Number.isInteger(quantity) || quantity < 1) {
+    throw apiError3dp_('INVALID_DRAFT_QUANTITY', 'Batch-draft quantity must be a positive whole number.');
+  }
+  return quantity;
 }
 
-function findBatchDraftRow3dp_(sheet, sku, actor, scopeToActor) {
+function batchDraftStorageKey3dp_(sku, actor, scopeToActor, quantity) {
+  const base = scopeToActor ? String((actor && actor.role) || '') + '::' + sku : sku;
+  return quantity == null ? base : base + '::' + batchDraftQuantity3dp_(quantity);
+}
+
+function findBatchDraftRow3dp_(sheet, sku, actor, scopeToActor, quantity) {
   const lastRow = sheet.getLastRow();
   if (lastRow < 2) return 0;
   const hasActorColumn = batchDraftActorColumnReady3dp_(sheet);
   if (scopeToActor && !hasActorColumn) return 0;
-  const values = sheet.getRange(2, 1, lastRow - 1, hasActorColumn ? batchDraftActorColumn3dp_() : 1).getValues();
-  const storageKey = batchDraftStorageKey3dp_(sku, actor, scopeToActor);
+  const values = sheet.getRange(2, 1, lastRow - 1, hasActorColumn ? batchDraftActorColumn3dp_() : 2).getValues();
+  const storageKey = batchDraftStorageKey3dp_(sku, actor, scopeToActor, quantity);
+  const legacyKey = batchDraftStorageKey3dp_(sku, actor, scopeToActor);
   let found = 0;
+  let legacyFound = 0;
   values.forEach(function (row, index) {
-    if (String(row[0] || '').trim() !== storageKey) return;
+    const key = String(row[0] || '').trim();
     const actorRole = hasActorColumn ? String(row[batchDraftActorColumn3dp_() - 1] || '').trim() : '';
     const matchesRole = scopeToActor
       ? actorRole === String((actor && actor.role) || '')
       : (!actorRole || actorRole === 'owner');
-    if (matchesRole) {
+    if (key === storageKey && matchesRole) {
       if (found) throw apiError3dp_('DUPLICATE_KEY', 'Batch-draft storage has duplicate SKU keys.');
       found = index + 2;
     }
+    if (key === legacyKey && matchesRole && Number(row[1]) === quantity) {
+      if (legacyFound) throw apiError3dp_('DUPLICATE_KEY', 'Batch-draft storage has duplicate legacy SKU keys.');
+      legacyFound = index + 2;
+    }
   });
-  return found;
+  return found || legacyFound;
 }
 
 function nextInternalRow3dp_(sheet) {
@@ -3048,7 +3126,14 @@ function findFirstBusinessEmptyRow3dp_(sheet, sheetName, actor) {
 
 function copyFormulaCells3dp_(sheet, sheetName, row) {
   let formulaColumns = FORMULA_COLUMNS_3DP[sheetName] || [];
-  if (sheetName === SHEETS_3DP.sales && !is3dp015SalesSchemaReady3dp_(sheet)) {
+  if (sheetName === SHEETS_3DP.sales && is3dp015SalesSchemaReady3dp_(sheet)) {
+    const result = ensureSalesDerivedFormulas3dp_(sheet, row, true);
+    if (result.blocked.length) {
+      throw apiError3dp_('SALES_FORMULA_VALUE_CONFLICT', 'Derived Продажі cells contain manual values: ' + result.blocked.join(', ') + '.');
+    }
+    return;
+  }
+  if (sheetName === SHEETS_3DP.sales) {
     formulaColumns = formulaColumns.concat(LEGACY_PRE_3DP015_SALES_FORMULA_COLUMNS_3DP);
   }
   if (row <= 2) return;

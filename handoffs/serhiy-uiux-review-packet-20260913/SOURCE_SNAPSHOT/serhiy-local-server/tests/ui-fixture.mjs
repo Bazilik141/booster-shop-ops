@@ -8,12 +8,11 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const state = {
   delayMs: 2400, failWrite: false, failRefresh: false, freezeStock: false,
   counters: { saves: 0, manufactures: 0, drafts: 0, bootstrap: 0 },
-  stock: { "FIG-TEST-500": 3, "BR-TEST-100": 0 }, drafts: {}, requestIds: new Set(), draftValues: null,
+  stock: { "FIG-TEST-500": 3, "BR-TEST-100": 5 }, drafts: {}, requestIds: new Set(), draftValues: null,
 };
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const reply = (res, payload, status = 200) => { res.writeHead(status, { "Content-Type": "application/json", "Cache-Control": "no-store" });res.end(JSON.stringify(payload)); };
 const readBody = async (req) => { const chunks = [];for await (const chunk of req) chunks.push(chunk);return JSON.parse(Buffer.concat(chunks).toString() || "{}"); };
-const draftKey = (sku, quantity) => `${sku}::${Number(quantity)}`;
 function bootstrap() {
   const skus = Object.entries(state.stock).map(([SKU, available]) => ({
     SKU, "Назва виробу": SKU === "FIG-TEST-500" ? "Тестова рухома фігурка з дуже довгою українською назвою для перевірки форми" : "Тестовий брелок",
@@ -24,7 +23,7 @@ function bootstrap() {
     ok: true, overview: { sku_count: 2, available: Object.values(state.stock).reduce((a, b) => a + b, 0), accrued_serhiy_current_month: 0 }, skus,
     settings: { printer_power_kw: .11, electricity_price_uah_per_kwh: 4.32, amortization_uah_per_hour: 12, planned_defect_fraction: .08 },
     settings_values: [.11, 4.32, 12, .08], analytics: [["SKU", "Собівартість", "Час друку, год"], ["FIG-TEST-500", 24.02, 1.016666667], ["BR-TEST-100", 8.5, 0.216666667]],
-    fixtures: [], print_log: [{ SKU: "FIG-TEST-500", "Час друку факт, год": 2.5, "Брак, шт": 1, Дата: "2026-09-01" }], sales: Array.from({ length: 17 }, (_, index) => ({ SKU: index % 2 ? "BR-TEST-100" : "FIG-TEST-500", "Кількість": index + 1 })), payouts: [{ "Період (РРРР-ММ)": "2026-09", "Статус": "Очікує" }], plyushky: [{ SKU: "BR-TEST-100", "Видано як бонус, шт": 1 }],
+    fixtures: [], print_log: [{ SKU: "FIG-TEST-500", "Час друку факт, год": 2.5 }], sales: [{ SKU: "FIG-TEST-500", "Кількість": 1 }, { SKU: "BR-TEST-100", "Кількість": 3 }], payouts: [{ "Період (РРРР-ММ)": "2026-09", "Статус": "Очікує" }], plyushky: [{ SKU: "BR-TEST-100", "Видано як бонус, шт": 1 }],
   };
 }
 
@@ -45,16 +44,15 @@ const server = http.createServer(async (req, res) => {
     }
     if (url.pathname === "/api/settings-journal") return reply(res, { ok: true, rows: [] });
     if (url.pathname === "/api/batch-draft") {
-      const sku = url.searchParams.get("sku"),quantity = Number(url.searchParams.get("quantity"));
+      const sku = url.searchParams.get("sku");
       await sleep(sku === "FIG-TEST-500" ? 900 : 150);
-      const draft = state.drafts[draftKey(sku, quantity)];
-      return reply(res, { ok: true, sku, quantity, found: Boolean(draft), values: draft || {} });
+      return reply(res, { ok: true, sku, found: Boolean(state.drafts[sku]), values: state.drafts[sku] || {} });
     }
     if (req.method === "POST" && url.pathname.startsWith("/api/")) {
       await sleep(state.delayMs);
       if (state.failWrite) { state.failWrite = false;return reply(res, { ok: false, code: "QA_WRITE_FAILED", error: "Тест: запис відхилено, дані форми збережені." }, 409); }
       if (url.pathname === "/api/save-batch") {
-        state.counters.saves++;state.drafts[draftKey(body.sku, body.quantity)] = body;
+        state.counters.saves++;state.drafts[body.sku] = body;
         return reply(res, { ok: true, cells_updated: ["G2", "H2"], already_current: false });
       }
       if (url.pathname === "/api/print-log") {
@@ -71,9 +69,9 @@ const server = http.createServer(async (req, res) => {
       return reply(res, { ok: true });
     }
     const files = {
-      "/": "public/index.html", "/index.html": "public/index.html", "/app.js": "public/app.js", "/styles.css": "public/styles.css", "/ui-polish.css": "public/ui-polish.css",
+      "/": "public/index.html", "/index.html": "public/index.html", "/app.js": "public/app.js", "/styles.css": "public/styles.css",
       "/operation-state.js": "public/operation-state.js", "/settings-controls.js": "public/settings-controls.js", "/calculator.mjs": "lib/calculator.mjs", "/print-time.js": "../shared/print-time.js",
-      "/draft-categories.js": "public/draft-categories.js", "/information-tables.js": "public/information-tables.js", "/attention-signals.js": "public/attention-signals.js",
+      "/draft-categories.js": "public/draft-categories.js", "/information-tables.js": "public/information-tables.js",
     };
     const relative = files[url.pathname];
     if (!relative) return reply(res, { ok: false, error: "Not found" }, 404);
