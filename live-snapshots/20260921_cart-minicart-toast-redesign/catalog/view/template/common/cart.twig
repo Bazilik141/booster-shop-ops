@@ -1,0 +1,390 @@
+{% set bs_cart_qty = 0 %}
+{% for product in products %}
+  {% set bs_cart_qty = bs_cart_qty + product.quantity %}
+{% endfor %}
+<div class="dropdown d-grid">
+  <button type="button" data-bs-toggle="dropdown" class="btn bs-btn bs-btn-primary bs-btn-sm d-block dropdown-toggle mini-cart-trigger" aria-label="{{ text_items }}">
+    <svg class="bs-cart-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4H6Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M3 6h18M16 10a4 4 0 0 1-8 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    {% if bs_cart_qty > 0 %}
+      <span class="bs-cart-qty">{{ bs_cart_qty }}</span>
+    {% endif %}
+    <span class="bs-btn-label">{{ text_items }}</span>
+  </button>
+<style>
+  #cart .mini-cart-trigger {
+    background: #1fa247;
+    border-color: #1fa247;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1.05rem;
+    line-height: 1.1;
+    padding: 0.85rem 1.15rem;
+  }
+
+  #cart .mini-cart-trigger:hover,
+  #cart .mini-cart-trigger:focus,
+  #cart .mini-cart-trigger.show {
+    background: #18853a;
+    border-color: #18853a;
+    color: #ffffff;
+  }
+
+  #cart .dropdown-menu {
+    min-width: 360px;
+  }
+
+  #cart .mini-cart-items-table,
+  #cart .mini-cart-items-table tbody,
+  #cart .mini-cart-items-table tr,
+  #cart .mini-cart-items-table td {
+    display: block;
+    width: 100%;
+  }
+
+  #cart .mini-cart-item {
+    display: flex;
+    gap: 12px;
+    padding: 10px 6px;
+  }
+
+  #cart .mini-cart-thumb {
+    flex: 0 0 100px;
+  }
+
+  #cart .mini-cart-thumb .img-thumbnail {
+    max-width: 100px;
+  }
+
+  #cart .mini-cart-details {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  #cart .mini-cart-product-name {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-height: 1.25;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  #cart .mini-cart-item-controls {
+    align-items: center;
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+    margin-top: 9px;
+    width: 100%;
+  }
+
+  #cart .mini-cart-quantity-form {
+    align-items: center;
+    display: inline-flex;
+    gap: 4px;
+    white-space: nowrap;
+  }
+
+  #cart .mini-cart-qty-label {
+    color: #222;
+    font-size: 0.9rem;
+  }
+
+  #cart .mini-cart-quantity-input {
+    height: 32px;
+    max-width: none;
+    min-width: 48px;
+    padding: 4px 6px;
+    text-align: center;
+    width: 52px;
+  }
+
+  #cart .mini-cart-actions {
+    margin: 10px 0 2px;
+    text-align: center;
+  }
+
+  #cart .mini-cart-checkout-btn {
+    background: #19a447;
+    border: 1px solid #168a3d;
+    border-radius: 7px;
+    box-shadow: 0 6px 14px rgba(25, 164, 71, 0.22);
+    color: #ffffff;
+    display: inline-block;
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1.1;
+    padding: 5px 11px;
+    text-decoration: none;
+    transition: background-color .16s ease, border-color .16s ease, box-shadow .16s ease, transform .16s ease;
+  }
+
+  #cart .mini-cart-checkout-btn:hover {
+    background: #158b3d;
+    border-color: #127a35;
+    color: #ffffff;
+    box-shadow: 0 8px 18px rgba(25, 164, 71, 0.3);
+    transform: translateY(-1px);
+  }
+
+  #cart .mini-cart-line-total {
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  #cart .mini-cart-remove-btn {
+    align-items: center;
+    display: inline-flex;
+    height: 32px;
+    justify-content: center;
+    padding: 0;
+    width: 32px;
+  }
+</style>
+
+  <ul class="dropdown-menu dropdown-menu-end p-2">
+    {% if products %}
+      <li>
+        <table class="table table-striped mb-2 mini-cart-items-table">
+          {% for product in products %}
+            <tr>
+              <td>
+                <div class="mini-cart-item">
+                  <div class="mini-cart-thumb">
+                    {% if product.thumb %}
+                      <a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-thumbnail"/></a>
+                    {% endif %}
+                  </div>
+                  <div class="mini-cart-details">
+                    <a href="{{ product.href }}" class="mini-cart-product-name" title="{{ product.name }}">{{ product.name }}</a>
+                    <ul class="list-unstyled mb-0">
+                      {% for option in product.option %}
+                        <li>
+                          <small> - {{ option.name }}: {{ option.value }}</small>
+                        </li>
+                      {% endfor %}
+
+                      {% if product.subscription %}
+                        <li>
+                          <small> - {{ text_subscription }}: {{ product.subscription }}</small>
+                        </li>
+                      {% endif %}
+                      {% if product.reward %}
+                        <li>
+                          <small> - {{ text_points }}: {{ product.reward }}</small>
+                        </li>
+                      {% endif %}
+                    </ul>
+                    <div class="mini-cart-item-controls">
+                      <form class="mini-cart-quantity-form" data-edit-url="index.php?route=checkout/cart.edit&language={{ language }}">
+                        <span class="mini-cart-qty-label">x</span>
+                        <input
+                          type="number"
+                          name="quantity"
+                          value="{{ product.quantity }}"
+                          min="1"
+                          step="1"
+                          class="form-control mini-cart-quantity-input"
+                          data-key="{{ product.cart_id }}"
+                          aria-label="Кількість">
+                      </form>
+                      <span class="mini-cart-line-total">{{ product.total }}</span>
+                      <button
+                        type="button"
+                        data-bs-toggle="tooltip"
+                        title="{{ button_remove }}"
+                        class="btn btn-danger mini-cart-remove-btn"
+                        data-remove-url="{{ remove }}"
+                        data-key="{{ product.cart_id }}">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+
+
+            </tr>
+          {% endfor %}
+        </table>
+        <div>
+          <table class="table table-sm table-bordered mb-2">
+            {% for total in totals %}
+              {% if 'Нова пошта' not in total.title and 'Нова Пошта' not in total.title and 'доставка' not in total.title %}
+              <tr>
+                <td class="text-end"><strong>{{ total.title }}</strong></td>
+                <td class="text-end">{{ total.text }}</td>
+              </tr>
+              {% endif %}
+            {% endfor %}
+          </table>
+          <p class="mini-cart-actions"><a href="{{ checkout }}" class="mini-cart-checkout-btn"><i class="fa-solid fa-share"></i> {{ text_checkout }}</a></p>
+        </div>
+      </li>
+    {% else %}
+      <li>
+        <div class="bs-empty" role="status">
+          <div class="bs-empty__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M6 7h12l-1 12H7L6 7Z" stroke-width="1.7" stroke-linejoin="round"/>
+              <path d="M9 7a3 3 0 0 1 6 0" stroke-width="1.7" stroke-linecap="round"/>
+              <path d="M9.5 13h5" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <p class="bs-empty__title">{{ text_no_results }}</p>
+        </div>
+      </li>
+    {% endif %}
+  </ul>
+  
+</div>
+<script type="text/javascript"><!--
+var miniCartUpdateTimers = window.miniCartUpdateTimers || {};
+window.miniCartUpdateTimers = miniCartUpdateTimers;
+
+function reloadMiniCartFragments(cartChanged) {
+    $('#cart').load('index.php?route=common/cart.info&language={{ language }}', function() {
+        $('#shopping-cart').load('index.php?route=checkout/cart.list&language={{ language }}');
+
+        if (cartChanged) {
+            $(document).trigger('bs:cart-updated');
+        }
+    });
+}
+
+function submitMiniCartQuantity(input) {
+    var value = $.trim(input.val());
+
+    if (value === '' || isNaN(value) || parseInt(value, 10) < 1) {
+        input.val(input.data('last-known-value') || 1);
+        return;
+    }
+
+    if (input.data('last-known-value') == value) {
+        return;
+    }
+
+    $.ajax({
+        url: input.closest('.mini-cart-quantity-form').data('edit-url'),
+        type: 'post',
+        data: {
+            key: input.data('key'),
+            quantity: value
+        },
+        dataType: 'json',
+        beforeSend: function() {
+            input.prop('disabled', true).addClass('loading');
+        },
+        complete: function() {
+            input.prop('disabled', false).removeClass('loading');
+        },
+        success: function(json) {
+            console.log(json);
+
+            if (json['redirect']) {
+                location = json['redirect'];
+                return;
+            }
+
+            input.data('last-known-value', value);
+            reloadMiniCartFragments(true);
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            reloadMiniCartFragments(false);
+            console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+}
+
+$(document).off('click.miniCartDropdown', '#cart .dropdown-menu').on('click.miniCartDropdown', '#cart .dropdown-menu', function(e) {
+    e.stopPropagation();
+});
+
+$(document).off('focus.miniCartQuantity', '#cart .mini-cart-quantity-input').on('focus.miniCartQuantity', '#cart .mini-cart-quantity-input', function() {
+    $(this).data('last-known-value', $(this).val());
+});
+
+$(document).off('input.miniCartQuantity', '#cart .mini-cart-quantity-input').on('input.miniCartQuantity', '#cart .mini-cart-quantity-input', function() {
+    var input = $(this);
+    var key = input.data('key');
+
+    if (miniCartUpdateTimers[key]) {
+        clearTimeout(miniCartUpdateTimers[key]);
+    }
+
+    miniCartUpdateTimers[key] = setTimeout(function() {
+        submitMiniCartQuantity(input);
+    }, 700);
+});
+
+$(document).off('blur.miniCartQuantity', '#cart .mini-cart-quantity-input').on('blur.miniCartQuantity', '#cart .mini-cart-quantity-input', function() {
+    var input = $(this);
+    var key = input.data('key');
+
+    if (miniCartUpdateTimers[key]) {
+        clearTimeout(miniCartUpdateTimers[key]);
+    }
+
+    submitMiniCartQuantity(input);
+});
+
+$(document).off('keydown.miniCartQuantity', '#cart .mini-cart-quantity-input').on('keydown.miniCartQuantity', '#cart .mini-cart-quantity-input', function(e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+
+        var input = $(this);
+        var key = input.data('key');
+
+        if (miniCartUpdateTimers[key]) {
+            clearTimeout(miniCartUpdateTimers[key]);
+        }
+
+        submitMiniCartQuantity(input);
+    }
+});
+
+$(document).off('submit.miniCartQuantity', '#cart .mini-cart-quantity-form').on('submit.miniCartQuantity', '#cart .mini-cart-quantity-form', function(e) {
+    e.preventDefault();
+    submitMiniCartQuantity($(this).find('.mini-cart-quantity-input'));
+});
+
+$(document).off('click.miniCartRemove', '#cart .mini-cart-remove-btn').on('click.miniCartRemove', '#cart .mini-cart-remove-btn', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    var button = $(this);
+
+    $.ajax({
+        url: button.data('remove-url'),
+        type: 'post',
+        data: {
+            key: button.data('key')
+        },
+        dataType: 'json',
+        beforeSend: function() {
+            button.prop('disabled', true).addClass('loading');
+        },
+        complete: function() {
+            button.prop('disabled', false).removeClass('loading');
+        },
+        success: function(json) {
+            console.log(json);
+
+            if (json['redirect']) {
+                location = json['redirect'];
+                return;
+            }
+
+            reloadMiniCartFragments(true);
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            reloadMiniCartFragments(false);
+
+            console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+//--></script>

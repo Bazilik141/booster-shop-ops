@@ -1,0 +1,148 @@
+/* Booster Shop — design tokens (per UX-034 design system doc).
+   This file is the single source of truth for every mockup in the audit canvas.
+   Keep it lean: colors, radii, shadows, type ramp, spacing. No component CSS. */
+
+:root {
+  /* Color — base surfaces */
+  --bs-bg:        #F7F7F5;
+  --bs-paper:     #FFFFFF;
+  --bs-line:      #E5E7EB;
+  --bs-line-2:    #EEF0F2;
+
+  /* Color — type */
+  --bs-ink:       #111827;   /* headings */
+  --bs-ink-2:     #1F2937;   /* body */
+  --bs-ink-3:     #6B7280;   /* secondary */
+  --bs-ink-4:    #9CA3AF;    /* placeholder */
+
+  /* Color — brand */
+  --bs-blue:      #1E3A8A;
+  --bs-blue-soft: #E8EEFB;
+  --bs-blue-light:#3B82F6;     /* lighter blue — for preorder & secondary actions */
+  --bs-gold:      #D4A017;
+  --bs-gold-soft: #FBF4DC;
+
+  /* Color — category accents */
+  --bs-pokemon:   #C68A00;
+  --bs-onepiece:  #1E40AF;
+
+  /* Color — brand: ПУМБ (Сплачуйте частинами), sampled from official product logo */
+  --bs-pumb-red:      #E60C2A;
+  --bs-pumb-red-soft: #FDECEE;
+
+  /* Color — CTA (purchase-only) */
+  --bs-green:       #16A34A;
+  --bs-green-soft:  #F3FBF6;
+  --bs-green-hover: #15803D;
+
+  /* Color — semantic */
+  --bs-danger:     #DC2626;
+  --bs-warning-bg: #FFFBEA;
+  --bs-warning-fg: #92400E;
+  --bs-warning-line: #FCD34D;
+
+  /* Radii */
+  --bs-r-sm:  6px;
+  --bs-r:     10px;
+  --bs-r-lg:  14px;
+  --bs-r-pill: 999px;
+
+  /* Shadows — kept subtle for premium-without-luxury-overkill */
+  --bs-sh-sm:   0 1px 0 rgba(17,24,39,0.03);
+  --bs-sh:      0 1px 2px rgba(17,24,39,0.04), 0 0 0 1px rgba(17,24,39,0.02);
+  --bs-sh-pop:  0 12px 32px rgba(17,24,39,0.10), 0 2px 6px rgba(17,24,39,0.06);
+
+  /* Type ramp */
+  --bs-h1:     32px;
+  --bs-h2:     24px;
+  --bs-h3:     18px;
+  --bs-body:   14.5px;
+  --bs-small:  13px;
+  --bs-micro:  11px;
+
+  /* Spacing — single 4px scale */
+  --bs-s1: 4px;
+  --bs-s2: 8px;
+  --bs-s3: 12px;
+  --bs-s4: 16px;
+  --bs-s5: 20px;
+  --bs-s6: 24px;
+  --bs-s8: 32px;
+  --bs-s10: 40px;
+}
+
+/* ---------- Resetish for mockup canvases (scoped to .bs-mock) ---------- */
+.bs-mock,
+.bs-mock * { box-sizing: border-box; }
+.bs-mock {
+  font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+  color: var(--bs-ink-2);
+  background: var(--bs-bg);
+}
+.bs-mock h1, .bs-mock h2, .bs-mock h3, .bs-mock h4 { color: var(--bs-ink); margin: 0; letter-spacing: -0.015em; }
+.bs-mock h1 { font-size: var(--bs-h1); font-weight: 800; }
+.bs-mock h2 { font-size: var(--bs-h2); font-weight: 700; }
+.bs-mock h3 { font-size: var(--bs-h3); font-weight: 700; }
+.bs-mock a  { color: var(--bs-blue); text-decoration: none; }
+.bs-mock p  { margin: 0; }
+.bs-mock button { font: inherit; cursor: pointer; }
+
+/* Striped image placeholder — used everywhere we'd put a real product photo */
+.bs-img-ph {
+  background:
+    repeating-linear-gradient(45deg,
+      #f0eee9 0 10px, #e8e5dc 10px 20px);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 10px; color: rgba(17,24,39,0.35);
+  text-transform: uppercase; letter-spacing: 0.08em;
+  border-radius: var(--bs-r);
+  position: relative;
+}
+.bs-img-ph::after {
+  content: attr(data-label);
+}
+
+/* Generic button styles used across mockups */
+.bs-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 8px;
+  font-weight: 600; font-size: 13.5px;
+  padding: 10px 16px; border-radius: var(--bs-r-sm);
+  border: 1px solid transparent;
+  transition: background .15s, border-color .15s, color .15s;
+  white-space: nowrap;
+}
+.bs-btn-primary {
+  background: var(--bs-green); color: #fff;
+}
+.bs-btn-primary:hover { background: var(--bs-green-hover); }
+.bs-btn-secondary {
+  background: transparent; color: var(--bs-ink); border-color: var(--bs-line);
+}
+.bs-btn-secondary:hover { background: var(--bs-line-2); }
+.bs-btn-ghost {
+  background: transparent; color: var(--bs-ink-2);
+}
+.bs-btn-ghost:hover { color: var(--bs-ink); background: var(--bs-line-2); }
+
+/* Badge primitives */
+.bs-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em;
+  padding: 3px 7px; border-radius: var(--bs-r-sm);
+  text-transform: uppercase;
+}
+.bs-badge-discount { background: var(--bs-ink); color: #fff; }
+.bs-badge-state    { background: #fff; color: var(--bs-ink-2); border: 1px solid var(--bs-line); }
+.bs-badge-out      { background: var(--bs-line-2); color: var(--bs-ink-3); }
+.bs-badge-soft-gold { background: var(--bs-gold-soft); color: var(--bs-pokemon); }
+.bs-badge-soft-blue { background: var(--bs-blue-soft); color: var(--bs-blue); }
+
+/* Card */
+.bs-card {
+  background: var(--bs-paper);
+  border: 1px solid var(--bs-line);
+  border-radius: var(--bs-r);
+  box-shadow: var(--bs-sh-sm);
+}

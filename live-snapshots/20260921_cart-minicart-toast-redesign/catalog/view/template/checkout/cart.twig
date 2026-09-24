@@ -1,0 +1,316 @@
+{{ header }}
+<div id="checkout-cart" class="container">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+      <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+  <div class="row">
+    {{ column_left }}
+    <div id="content" class="col">
+      {{ content_top }}
+      <div id="shopping-cart">{{ list }}</div>
+      {{ content_bottom }}
+    </div>
+    {{ column_right }}
+  </div>
+</div>
+<style>
+#checkout-cart .bs-table-model-hidden {
+    display: none !important;
+}
+
+#checkout-cart .bs-checkout-cta {
+    background: #19a447;
+    border-color: #168a3d;
+    border-radius: 7px;
+    box-shadow: 0 6px 14px rgba(25, 164, 71, 0.22);
+    font-weight: 700;
+    padding: 10px 18px;
+    transition: background-color .16s ease, border-color .16s ease, box-shadow .16s ease, transform .16s ease;
+}
+
+#checkout-cart .bs-checkout-cta:hover {
+    background: #158b3d;
+    border-color: #127a35;
+    box-shadow: 0 8px 18px rgba(25, 164, 71, 0.3);
+    transform: translateY(-1px);
+}
+
+#checkout-cart .bs-checkout-cta:active {
+    box-shadow: 0 3px 8px rgba(25, 164, 71, 0.22);
+    transform: translateY(0);
+}
+</style>
+<script type="text/javascript"><!--
+(function() {
+    var cartUpdateTimers = {};
+
+    function showCartAlert(type, message) {
+        $('#alert').prepend(
+            '<div class="alert alert-' + type + ' alert-dismissible">' +
+            '<i class="fa-solid fa-circle-exclamation"></i> ' + message +
+            ' <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>'
+        );
+    }
+
+    function normalizeText(value) {
+        return $.trim(String(value || '').replace(/\s+/g, ' '));
+    }
+
+    function hideModelColumns() {
+        $('#shopping-cart table').each(function() {
+            var table = $(this);
+
+            table.find('th, td').removeClass('bs-table-model-hidden');
+
+            table.find('tr').first().children('th, td').each(function(index) {
+                if (normalizeText($(this).text()).toLowerCase() === 'модель') {
+                    var column = index + 1;
+
+                    table.find('tr').each(function() {
+                        $(this).children('th, td').eq(column - 1).addClass('bs-table-model-hidden');
+                    });
+                }
+            });
+        });
+    }
+
+    function highlightCheckoutButtons() {
+        $('#shopping-cart a, #shopping-cart button, #shopping-cart input[type="submit"]').each(function() {
+            var button = $(this);
+            var text = normalizeText(button.is('input') ? button.val() : button.text()).toLowerCase();
+
+            if (text === 'оформити замовлення') {
+                button.addClass('bs-checkout-cta');
+            }
+        });
+    }
+
+    function enhanceCart() {
+        hideModelColumns();
+        highlightCheckoutButtons();
+    }
+
+    function reloadCartFragments(callback) {
+        $('#shopping-cart').load('index.php?route=checkout/cart.list&language={{ language }}', {}, function() {
+            enhanceCart();
+
+            $('#cart').load('index.php?route=common/cart.info&language={{ language }}', {}, function() {
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
+        });
+    }
+
+    function submitCartForm(element, button) {
+        button = button && button.length ? button : $(element).find('button[type="submit"], button[formaction]').first();
+
+        var url = $(button).attr('formaction') || $(element).attr('action');
+
+        if (!url) {
+            showCartAlert('danger', 'Не вдалося оновити кошик: відсутня адреса запиту.');
+            return;
+        }
+
+        var quantityInput = $(element).find('input[name="quantity"]');
+        var originalValue = quantityInput.data('last-known-value');
+
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: $(element).serialize(),
+            dataType: 'json',
+            beforeSend: function() {
+                quantityInput.prop('disabled', true);
+                $(button).prop('disabled', true).addClass('loading');
+            },
+            complete: function() {
+                quantityInput.prop('disabled', false);
+                $(button).prop('disabled', false).removeClass('loading');
+            },
+            success: function(json) {
+                console.log(json);
+
+                if (json['redirect']) {
+                    location = json['redirect'];
+                    return;
+                }
+
+                if (json['error']) {
+                    if (originalValue !== undefined) {
+                        quantityInput.val(originalValue);
+                    }
+
+                    showCartAlert('danger', json['error']);
+                    return;
+                }
+
+                if (json['success']) {
+                    quantityInput.data('last-known-value', quantityInput.val());
+
+                    reloadCartFragments(function() {
+                        showCartAlert('success', json['success']);
+                    });
+                }
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                if (originalValue !== undefined) {
+                    quantityInput.val(originalValue);
+                }
+
+                showCartAlert('danger', 'Не вдалося оновити кошик. Спробуйте ще раз.');
+                console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+            }
+        });
+    }
+
+    $('#shopping-cart').on('focus', '#output-cart input[name="quantity"]', function() {
+        $(this).data('last-known-value', $(this).val());
+    });
+
+    $('#shopping-cart').on('input', '#output-cart input[name="quantity"]', function() {
+        var input = $(this);
+        var form = input.closest('form');
+        var key = form.find('input[name="key"]').val();
+
+        if (cartUpdateTimers[key]) {
+            clearTimeout(cartUpdateTimers[key]);
+        }
+
+        cartUpdateTimers[key] = setTimeout(function() {
+            var value = $.trim(input.val());
+
+            if (value === '' || isNaN(value) || parseInt(value, 10) < 1) {
+                return;
+            }
+
+            submitCartForm(form[0], form.find('button[type="submit"], button[formaction]').first());
+        }, 800);
+    });
+
+    $('#shopping-cart').on('blur', '#output-cart input[name="quantity"]', function() {
+        var input = $(this);
+        var form = input.closest('form');
+        var key = form.find('input[name="key"]').val();
+
+        if (cartUpdateTimers[key]) {
+            clearTimeout(cartUpdateTimers[key]);
+        }
+
+        var value = $.trim(input.val());
+
+        if (value === '' || isNaN(value) || parseInt(value, 10) < 1) {
+            var originalValue = input.data('last-known-value');
+
+            if (originalValue !== undefined) {
+                input.val(originalValue);
+            }
+
+            return;
+        }
+
+        if (input.data('last-known-value') != input.val()) {
+            submitCartForm(form[0], form.find('button[type="submit"], button[formaction]').first());
+        }
+    });
+
+    $('#shopping-cart').on('keydown', '#output-cart input[name="quantity"]', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+
+            var input = $(this);
+            var form = input.closest('form');
+            var key = form.find('input[name="key"]').val();
+
+            if (cartUpdateTimers[key]) {
+                clearTimeout(cartUpdateTimers[key]);
+            }
+
+            submitCartForm(form[0], form.find('button[type="submit"], button[formaction]').first());
+        }
+    });
+
+    $('#shopping-cart').on('submit', '#output-cart form', function(e) {
+        e.preventDefault();
+
+        var element = this;
+        var button = '';
+
+        if (e.originalEvent !== undefined && e.originalEvent.submitter !== undefined) {
+            button = $(e.originalEvent.submitter);
+        } else {
+            button = $(element).find('button[type="submit"], button[formaction]').first();
+        }
+
+        submitCartForm(element, button);
+    });
+
+    $('#shopping-cart').on('click', '.btn-danger', function(e) {
+    e.preventDefault();
+
+    var element = this;
+    var requestUrl = $(element).attr('href');
+
+    if (!requestUrl) {
+        showCartAlert('danger', 'Не вдалося видалити товар із кошика: відсутня адреса запиту.');
+        return;
+    }
+
+    $.ajax({
+        url: requestUrl,
+        type: 'get',
+        dataType: 'json',
+        beforeSend: function() {
+            $(element).prop('disabled', true).addClass('loading');
+        },
+        complete: function() {
+            $(element).prop('disabled', false).removeClass('loading');
+        },
+        success: function(json) {
+            console.log(json);
+
+            if (json['redirect']) {
+                location = json['redirect'];
+                return;
+            }
+
+            if (json['error']) {
+                showCartAlert('danger', json['error']);
+
+                reloadCartFragments();
+                return;
+            }
+
+            reloadCartFragments(function() {
+                if (json && json['success']) {
+                    showCartAlert('success', json['success']);
+                }
+            });
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            showCartAlert('danger', 'Не вдалося видалити товар із кошика. Оновлюємо кошик і спробуйте ще раз.');
+            reloadCartFragments();
+            console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+
+
+    $('#shopping-cart').observe(function(e) {
+        enhanceCart();
+        $('#cart').load('index.php?route=common/cart.info&language={{ language }}');
+    });
+
+    $('#cart').on('submit', 'form', function(e) {
+        window.setTimeout(function() {
+            $('#shopping-cart').load('index.php?route=checkout/cart.list&language={{ language }}');
+        }, 3000);
+    });
+
+    $(enhanceCart);
+})();
+ //--></script>
+
+{{ footer }}
