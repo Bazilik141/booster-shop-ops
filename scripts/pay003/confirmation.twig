@@ -1,0 +1,29 @@
+<div id="{{ root_id }}">
+  <p data-pay003-create-status>Після створення заявки підтвердьте покупку у застосунку {{ provider_name }}.</p>
+  <button type="button" id="{{ button_id }}" class="btn btn-primary" data-pay003-create>Надіслати заявку в {{ provider_name }}</button>
+</div>
+<script>
+(function ($) {
+  var root = document.getElementById({{ root_json|raw }});
+  if (!root) return;
+  var confirmUrl = {{ confirm_json|raw }}, waitingUrl = {{ waiting_json|raw }}, busy = false;
+  $(root).on('click.pay003', '[data-pay003-create]', function (event) {
+    event.preventDefault();
+    if (busy) return;
+    busy = true;
+    var button = this;
+    button.disabled = true;
+    root.querySelector('[data-pay003-create-status]').textContent = 'Створюємо заявку. Не закривайте сторінку…';
+    $.ajax({url: confirmUrl, type: 'POST', dataType: 'json'}).done(function (json) {
+      if (json && json.redirect) { window.location.assign(json.redirect); return; }
+      root.querySelector('[data-pay003-create-status]').textContent = (json && json.error) || 'Не вдалося створити заявку. Зверніться до підтримки магазину.';
+      busy = false; button.disabled = false;
+      $('#bs-checkout-submit-loader').removeClass('bs-is-visible').attr('aria-hidden', 'true');
+      $('body').removeAttr('aria-busy');
+    }).fail(function () {
+      // An ambiguous response must never trigger another application POST.
+      window.location.assign(waitingUrl);
+    });
+  });
+})(jQuery);
+</script>

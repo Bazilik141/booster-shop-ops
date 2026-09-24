@@ -1,0 +1,24 @@
+{{ header }}
+<main id="pay003-credit" class="container bs" {% if allowed %}data-state-url="{{ state_url }}" data-complete-url="{{ complete_url }}" data-csrf="{{ csrf }}" data-poll="{{ poll ? '1' : '0' }}" data-confirmed="{{ confirmed ? '1' : '0' }}"{% endif %}>
+  <section class="pay003-panel" aria-labelledby="pay003-title">
+    <p class="pay003-eyebrow">Оплата частинами{% if allowed %} · {{ provider }} · Замовлення #{{ order_id }}{% endif %}</p>
+    {% if test %}<p class="pay003-test">Тестова заявка. Підтвердження проводить підтримка банку.</p>{% endif %}
+    <div role="status" aria-live="polite" aria-atomic="true">
+      <h1 id="pay003-title">{{ title }}</h1>
+      <p id="pay003-message">{{ message }}</p>
+    </div>
+    {% if allowed %}
+      <p class="pay003-note">Цю вкладку можна закрити. Поверніться за цим посиланням у тому самому браузері або відкрийте статус оплати в історії замовлень свого акаунта.</p>
+      <p id="pay003-network" role="status" aria-live="polite"></p>
+    {% endif %}
+    <div class="pay003-actions">
+      {% if allowed %}<button id="pay003-refresh" type="button" class="bs-btn bs-btn-primary">Перевірити статус</button>{% endif %}
+      <a class="bs-btn bs-btn-secondary" href="{{ account }}">Мої замовлення</a>
+      <a class="bs-btn bs-btn-secondary" href="https://t.me/BoosterShop_Support_bot" rel="noopener noreferrer">Підтримка магазину</a>
+    </div>
+    <a class="pay003-home" href="{{ home }}">Продовжити покупки</a>
+    {% if allowed %}<noscript><p>Автоматичне оновлення вимкнено. Оновіть сторінку, щоб побачити останній отриманий від банку стан.</p>{% if confirmed %}<a href="{{ complete_url }}">Перейти до замовлення</a>{% endif %}</noscript>{% endif %}
+  </section>
+</main>
+{% if allowed %}<script src="catalog/view/javascript/pay003-credit.js?v=20260831"></script>{% endif %}
+{{ footer }}
