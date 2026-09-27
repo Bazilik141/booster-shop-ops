@@ -359,6 +359,7 @@ NCRM-04 through NCRM-12 were renumbered/rescoped on 2026-07-11 under
 | NCRM-18 | `3aa6bf20-bdb4-819f-a83a-e4d2018362a1` | Added 2026-07-27: migrate roadmap tracking from Notion into NCRM; deferred to end of current backlog (blocked by NCRM-11–17), not yet scoped |
 | NCRM-19 | `3aa6bf20-bdb4-81a1-a1b9-e6863e5fd021` | Added 2026-07-27: Notion↔dashboard sync automation, nearer-term stand-in for NCRM-18; not yet scoped |
 | NCRM-20 | `3ac6bf20-bdb4-8120-a055-f0fa0683c53c` | Added 2026-07-29: backfill orders lost during the Mono sync bug (see NCRM-10) from Apps Script/Sheets into Supabase `sales`; owner-approved, not yet scoped/diagnosed |
+| NCRM-21 | `3e86bf20-bdb4-813e-b89e-c084bb647622` | Added 2026-09-27 on owner instruction ("Відкладаємо задачу на реалізацію в NCRM"): CRM→site stock correction (manual run, diff, per-SKU exclusion, rollback) and owner-selectable preorder ETA, on a shared CRM SKU ↔ OpenCart `product_id` registry. Scope: `plans/NCRM-21_site-stock-sync-and-preorder-eta_scope_20260927.md`. Not started, Medium, Blocker CRM-016. ID evidence: registry ended at NCRM-20; a live query returned NCRM-00…NCRM-20 plus three NCRM-07b pages, so NCRM-21 was taken. ⚠ `ROADMAP_TASKS` mirror row NOT yet created — the dashboard file was mid-edit by Codex for CRM-016; owner decision: add it after CRM-016 commits the dashboard |
 
 ### MKT-TG series
 
