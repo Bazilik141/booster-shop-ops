@@ -24,10 +24,19 @@ assert.equal(issues.some(issue => issue.sku === 'ACC-005'), false);
 const proxyIssues = run({ source_status:'ready', skus:[
   { sku:'BR-DITTO-400', is_3dp:true, name:'ditto', stock_raw:null,
     stock_error:'Fulfilled CRM sale is missing', issues:['3dp_sale_sync_missing','3dp_physical_unverified'] }
-], exceptions:[] });
+], exceptions:[{ sku:'BR-DITTO-400', code:'3dp_sale_sync_missing', missing_fulfilled:1,
+  missing_fulfilled_sources:[{ crm_row:387, order:'OC-FOP-0382', quantity:1 }] }] });
 assert.deepEqual(proxyIssues.map(issue => issue.kind), ['3dp_sale_sync_missing'],
   'unverified proxy sale keeps the sync alert but does not claim a print deficit');
 assert.match(proxyIssues[0].action, /не повторювати продаж/);
+assert.equal(proxyIssues[0].signature, '3dp_sale_sync_missing|BR-DITTO-400|387:OC-FOP-0382:1');
+const futureProxyIssues = run({ source_status:'ready', skus:[
+  { sku:'BR-DITTO-400', is_3dp:true, name:'ditto', stock_raw:null,
+    stock_error:'Fulfilled CRM sale is missing', issues:['3dp_sale_sync_missing','3dp_physical_unverified'] }
+], exceptions:[{ sku:'BR-DITTO-400', code:'3dp_sale_sync_missing', missing_fulfilled:2,
+  missing_fulfilled_sources:[{ crm_row:387, order:'OC-FOP-0382', quantity:1 },
+    { crm_row:400, order:'OC-FOP-0400', quantity:1 }] }] });
+assert.notEqual(futureProxyIssues[0].id, proxyIssues[0].id, 'a future unsynced sale must reappear after this one is dismissed');
 assert.deepEqual(run(new Error('timeout')).map(issue => issue.kind), ['3dp_source']);
 assert.deepEqual(run({ source_status:'unavailable', skus:[], exceptions:[] }).map(issue => issue.kind), ['3dp_source']);
 assert.ok(source.includes('if (/^(?:BR|FIG|ACC-3D)-[A-Z0-9]/i.test(sku)) continue;'));
@@ -54,4 +63,5 @@ const remaining = negative({ skus:[
   { sku:'ACC-005', stock_raw:-8, physical_stock:null },
 ] });
 assert.deepEqual(remaining.map(issue => issue.sku), ['ACC-005'], 'open preorder and 3D formula negatives are not physical shortage alerts');
+assert.match(remaining[0].details, /закуплено, ще не на складі UA: 0 шт/);
 console.log('CRM-016 alert selection: 3D source, sync and print exceptions OK');

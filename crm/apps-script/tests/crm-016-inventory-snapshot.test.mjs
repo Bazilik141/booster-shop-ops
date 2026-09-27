@@ -78,6 +78,15 @@ assert.deepEqual([marketingProxy.skus[0].stock, marketingProxy.skus[0].physical_
   'a separate 3D write-off plus unsynced sale must not assert a second physical deficit');
 assert.equal(marketingProxy.skus[0].issues.includes('3dp_sale_sync_missing'), true);
 assert.equal(marketingProxy.exceptions[0].missing_fulfilled, 1);
+assert.deepEqual(marketingProxy.exceptions[0].missing_fulfilled_sources,
+  [{ crm_row:387, order:'OC-FOP-0382', quantity:1 }], 'one-off alert dismissal must identify the exact sale');
+const nextSale = run([sku('BR-DITTO-400')], [remote('BR-DITTO-400', 1, 1)], [], [
+  sale(387, 'OC-FOP-0382', 'BR-DITTO-400', 1, 'Отримано'),
+  sale(400, 'OC-FOP-0400', 'BR-DITTO-400', 1, 'Отримано'),
+]);
+assert.deepEqual(nextSale.exceptions[0].missing_fulfilled_sources,
+  [{ crm_row:387, order:'OC-FOP-0382', quantity:1 }, { crm_row:400, order:'OC-FOP-0400', quantity:1 }],
+  'a new unsynced sale must have a different incident identity');
 
 const shortage = run([sku('FIG-ONIX-500')], [remote('FIG-ONIX-500', 0, 0)], [],
   [sale(15, 'O-3', 'FIG-ONIX-500', 1, 'Передзамовлення')]);

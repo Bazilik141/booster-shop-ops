@@ -901,8 +901,24 @@ async function call(action, extra = {}) {
   try { return await request; } catch(error) { if(entry.network_ms==null)entry.network_ms=round(now()-startedAt);entry.error='request_failed';report(entry,now());throw error; } finally { inflight.delete(key); }
 }
 
+const INVENTORY_SNAPSHOT_BROWSER_TTL_MS = 60000;
+const inventorySnapshotBrowserCache_ = { value:null, expiresAt:0, epoch:0 };
+function invalidateInventorySnapshotBrowserCache_() {
+  inventorySnapshotBrowserCache_.value = null;
+  inventorySnapshotBrowserCache_.expiresAt = 0;
+  inventorySnapshotBrowserCache_.epoch++;
+}
 async function loadInventorySnapshot_() {
-  try { return await call('inventory_snapshot'); }
+  if (inventorySnapshotBrowserCache_.value && Date.now() < inventorySnapshotBrowserCache_.expiresAt) return inventorySnapshotBrowserCache_.value;
+  const epoch = inventorySnapshotBrowserCache_.epoch;
+  try {
+    const result = await call('inventory_snapshot');
+    if (result.source_status === 'ready' && epoch === inventorySnapshotBrowserCache_.epoch) {
+      inventorySnapshotBrowserCache_.value = result;
+      inventorySnapshotBrowserCache_.expiresAt = Date.now() + INVENTORY_SNAPSHOT_BROWSER_TTL_MS;
+    }
+    return result;
+  }
   catch (error) {
     if (!/unknown action/i.test(String(error && error.message || error))) throw error;
     // During API rollout keep ordinary CRM rows visible, while never showing
@@ -1000,6 +1016,7 @@ async function callPost(payload) {
   if (!r.ok) throw new Error('HTTP ' + r.status);
   const d = await r.json();
   if (!d.ok) throw new Error(d.error || 'API error');
+  invalidateInventorySnapshotBrowserCache_();
   return d;
 }
 
@@ -1034,6 +1051,7 @@ function configure3dpAccess() {
   if (!token) return;
   window.localStorage.setItem(API_3DP_STORAGE_KEY, api.trim());
   window.localStorage.setItem(TOKEN_3DP_STORAGE_KEY, token.trim());
+  invalidateInventorySnapshotBrowserCache_();
   loaded['3dprint'] = false; load3dPrint();
 }
 async function call3dp(action, extra = {}) {
@@ -1072,7 +1090,7 @@ async function call3dpPost(payload) {
   const { api, token } = get3dpCredentials();
   const r = await fetch(api, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ ...payload, token }), redirect: 'follow' });
   if (!r.ok) throw new Error(`3D-P HTTP ${r.status}`);
-  const d = await r.json(); if (!d.ok) throw new Error(d.error || '3D-P API error'); return d;
+  const d = await r.json(); if (!d.ok) throw new Error(d.error || '3D-P API error'); invalidateInventorySnapshotBrowserCache_(); return d;
 }
 
 // ════════════ STATE ════════════
@@ -1180,6 +1198,7 @@ function showPage(name) {
 
 function hardRefresh() {
   inflightGets.clear();
+  invalidateInventorySnapshotBrowserCache_();
   Object.keys(cache).forEach(k => delete cache[k]);
   Object.keys(loaded).forEach(k => delete loaded[k]);
   alertsState.rows=[];
@@ -3107,9 +3126,9 @@ function fillRoadmapSeries_(){const select=document.getElementById('roadmapSerie
 const ROADMAP_TASKS = [
   {
     id: 'CRM-016', title: 'Закупки, коригування рядків замовлень, SKU та Telegram', status: 'todo', tool: '—', priority: '—',
-    lastUpdated: '2026-09-23', blockedBy: [],
+    lastUpdated: '2026-09-27', blockedBy: [],
     simple: 'Категорія: CRM. Окрема вкладка закупок, безпечне редагування CRM-замовлень, перейменування ACC-001-BPJP, аналіз швидкодії та діагностика Telegram.',
-    warn: 'Notion: https://app.notion.com/p/3e46bf20bdb4816192fcf06c468a6967. Власник повідомив про CRM API V192 та Alerts API V8 (27.09); живий експорт коду не звірено. Реалізовано вкладку закупок, зміну SKU в CRM, масові алерти, діагностику Telegram, покращення фінансів і 3D/складу. Відкрито: повторний живий тест видалення позиції OC-FOP-0335 (однолотовий FIFO-виняток додано після першої відмови); звірка BR-DITTO-400 без подвійного списання; ремонт старих формул Складу/Черги_Складу з перевірками до і після; жива QA та заміри швидкості. Не закривати задачу до цих перевірок і рішення власника.',
+    warn: 'Notion: https://app.notion.com/p/3e46bf20-bdb4-8161-92fc-f06c468a6967. Власник повідомив про CRM API V193 і Alerts API V9 (27.09); локальні дзеркала збігаються з переданими файлами, живий експорт не звірено. Реалізовано вкладку закупок, коригування замовлень, зміну SKU в CRM, масові алерти, фінансові та 3D-виправлення. Власник підтвердив видалення позиції OC-FOP-0335 і виправив Telegram; формули Складу та Черги_Складу виправлено з чистою перевіркою цілісності до і після. BR-DITTO-400: фізичний рух звірено, конкретний алерт позначено неактуальним; зв’язок CRM-продажу з 3D-списанням лишається непідтвердженим у складі. Відкрито: жива перевірка V193/V9, зокрема інформації про закуплене в дорозі та нового окремого алерта, вимір швидкості першого завантаження й рішення власника про закриття задачі.',
     subtasks: []
   },
   {

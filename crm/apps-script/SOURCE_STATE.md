@@ -1,3 +1,21 @@
+# Owner-reported CRM Web App V193 (2026-09-27 09:57)
+
+The owner reports publishing the latest CRM source as V193 and placing that
+source in the repository. The current `Code.gs` is byte-identical to
+`work/CRM-016_CRM_API_from_V192_alert_incident_identity.gs` (local SHA-256
+comparison, 2026-09-27). This establishes the local paste candidate identity,
+not an independent pull of the bound Apps Script version or runtime QA.
+
+# CRM-016 per-sale alert identity from owner-reported V192 (2026-09-27)
+
+The local mirror and complete paste source
+`work/CRM-016_CRM_API_from_V192_alert_incident_identity.gs` add the exact CRM
+sale row, order number and unmatched quantity to each fulfilled 3D sale-sync
+exception. This lets the Alerts API dismiss one investigated sale without
+hiding a later missing sale for the same SKU. It does not change stock math or
+write CRM sheets. Local syntax and focused inventory tests passed. The owner
+later reported publishing this source as V193.
+
 # Owner-reported CRM Web App V192 (2026-09-27 07:55)
 
 The owner reports publishing V192 after receiving the complete

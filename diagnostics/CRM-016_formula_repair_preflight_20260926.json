@@ -1,0 +1,794 @@
+{
+  "task": "CRM-016",
+  "captured_at_utc": "2026-09-26 10:58:37 UTC",
+  "mode": "read-only preflight; no live writes",
+  "crm_spreadsheet_id": "1PvlSlg3UoPw8Fbj98lHL-VGLB0HP8hgKUxsXPW1GkRg",
+  "automation_spreadsheet_id": "1YUGdtxHQJee6vY8MdwRsrUxudJCMtnghOGPVJXwO5ik",
+  "preconditions": {
+    "target_formula_count": 93,
+    "all_target_skus_match_20260925_csv": true,
+    "all_expected_value_deltas_zero": true,
+    "queue_source_q_matches_crm_q_for_190_skus": true
+  },
+  "stock_formula_targets": [
+    {
+      "cell": "H99",
+      "sku": "OP-JP-OP17-BBX",
+      "before_formula": "=IF($A99=\"\";\"\";IF($D99=\"Mystery Box\";0;$E99-$F99-$G99))",
+      "before_value": 0,
+      "after_formula": "=IF($A99=\"\";\"\";N(IF($D99=\"Mystery Box\";0;$E99-$F99-$G99))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A99)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A99)-N($S99))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H100",
+      "sku": "PKM-JP-BBLT-BBX",
+      "before_formula": "=IF($A100=\"\";\"\";IF($D100=\"Mystery Box\";0;$E100-$F100-$G100))",
+      "before_value": 0,
+      "after_formula": "=IF($A100=\"\";\"\";N(IF($D100=\"Mystery Box\";0;$E100-$F100-$G100))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A100)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A100)-N($S100))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H101",
+      "sku": "PKM-JP-WFLR-BBX",
+      "before_formula": "=IF($A101=\"\";\"\";IF($D101=\"Mystery Box\";0;$E101-$F101-$G101))",
+      "before_value": 0,
+      "after_formula": "=IF($A101=\"\";\"\";N(IF($D101=\"Mystery Box\";0;$E101-$F101-$G101))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A101)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A101)-N($S101))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H102",
+      "sku": "OP-JP-OP13-BBX",
+      "before_formula": "=IF($A102=\"\";\"\";IF($D102=\"Mystery Box\";0;$E102-$F102-$G102))",
+      "before_value": 0,
+      "after_formula": "=IF($A102=\"\";\"\";N(IF($D102=\"Mystery Box\";0;$E102-$F102-$G102))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A102)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A102)-N($S102))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H104",
+      "sku": "YGO-JP-BPRO-BST",
+      "before_formula": "=IF($A104=\"\";\"\";IF($D104=\"Mystery Box\";0;$E104-$F104-$G104))",
+      "before_value": 0,
+      "after_formula": "=IF($A104=\"\";\"\";N(IF($D104=\"Mystery Box\";0;$E104-$F104-$G104))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A104)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A104)-N($S104))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H105",
+      "sku": "BR-UMBRE-120",
+      "before_formula": "=IF($A105=\"\";\"\";IF($D105=\"Mystery Box\";0;$E105-$F105-$G105))",
+      "before_value": 0,
+      "after_formula": "=IF($A105=\"\";\"\";N(IF($D105=\"Mystery Box\";0;$E105-$F105-$G105))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A105)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A105)-N($S105))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H106",
+      "sku": "BR-CHARM-200",
+      "before_formula": "=IF($A106=\"\";\"\";IF($D106=\"Mystery Box\";0;$E106-$F106-$G106))",
+      "before_value": 0,
+      "after_formula": "=IF($A106=\"\";\"\";N(IF($D106=\"Mystery Box\";0;$E106-$F106-$G106))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A106)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A106)-N($S106))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H107",
+      "sku": "BR-OPMUS-100",
+      "before_formula": "=IF($A107=\"\";\"\";IF($D107=\"Mystery Box\";0;$E107-$F107-$G107))",
+      "before_value": 0,
+      "after_formula": "=IF($A107=\"\";\"\";N(IF($D107=\"Mystery Box\";0;$E107-$F107-$G107))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A107)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A107)-N($S107))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H108",
+      "sku": "BR-OPSTR-100",
+      "before_formula": "=IF($A108=\"\";\"\";IF($D108=\"Mystery Box\";0;$E108-$F108-$G108))",
+      "before_value": 0,
+      "after_formula": "=IF($A108=\"\";\"\";N(IF($D108=\"Mystery Box\";0;$E108-$F108-$G108))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A108)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A108)-N($S108))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H109",
+      "sku": "BR-OPFRT-100",
+      "before_formula": "=IF($A109=\"\";\"\";IF($D109=\"Mystery Box\";0;$E109-$F109-$G109))",
+      "before_value": 0,
+      "after_formula": "=IF($A109=\"\";\"\";N(IF($D109=\"Mystery Box\";0;$E109-$F109-$G109))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A109)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A109)-N($S109))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H110",
+      "sku": "BR-OP-100",
+      "before_formula": "=IF($A110=\"\";\"\";IF($D110=\"Mystery Box\";0;$E110-$F110-$G110))",
+      "before_value": 0,
+      "after_formula": "=IF($A110=\"\";\"\";N(IF($D110=\"Mystery Box\";0;$E110-$F110-$G110))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A110)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A110)-N($S110))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H111",
+      "sku": "BR-OPSHP-100",
+      "before_formula": "=IF($A111=\"\";\"\";IF($D111=\"Mystery Box\";0;$E111-$F111-$G111))",
+      "before_value": 0,
+      "after_formula": "=IF($A111=\"\";\"\";N(IF($D111=\"Mystery Box\";0;$E111-$F111-$G111))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A111)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A111)-N($S111))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H112",
+      "sku": "BR-OPSKL-100",
+      "before_formula": "=IF($A112=\"\";\"\";IF($D112=\"Mystery Box\";0;$E112-$F112-$G112))",
+      "before_value": 0,
+      "after_formula": "=IF($A112=\"\";\"\";N(IF($D112=\"Mystery Box\";0;$E112-$F112-$G112))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A112)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A112)-N($S112))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H113",
+      "sku": "BR-DITTO-400",
+      "before_formula": "=IF($A113=\"\";\"\";IF($D113=\"Mystery Box\";0;$E113-$F113-$G113))",
+      "before_value": -1,
+      "after_formula": "=IF($A113=\"\";\"\";N(IF($D113=\"Mystery Box\";0;$E113-$F113-$G113))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A113)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A113)-N($S113))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H114",
+      "sku": "BR-PKBL-200",
+      "before_formula": "=IF($A114=\"\";\"\";IF($D114=\"Mystery Box\";0;$E114-$F114-$G114))",
+      "before_value": 0,
+      "after_formula": "=IF($A114=\"\";\"\";N(IF($D114=\"Mystery Box\";0;$E114-$F114-$G114))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A114)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A114)-N($S114))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H115",
+      "sku": "ACC-3D-PKM-110",
+      "before_formula": "=IF($A115=\"\";\"\";IF($D115=\"Mystery Box\";0;$E115-$F115-$G115))",
+      "before_value": -1,
+      "after_formula": "=IF($A115=\"\";\"\";N(IF($D115=\"Mystery Box\";0;$E115-$F115-$G115))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A115)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A115)-N($S115))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H116",
+      "sku": "ACC-3D-PKM-120",
+      "before_formula": "=IF($A116=\"\";\"\";IF($D116=\"Mystery Box\";0;$E116-$F116-$G116))",
+      "before_value": 0,
+      "after_formula": "=IF($A116=\"\";\"\";N(IF($D116=\"Mystery Box\";0;$E116-$F116-$G116))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A116)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A116)-N($S116))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H117",
+      "sku": "ACC-3D-PKM-130",
+      "before_formula": "=IF($A117=\"\";\"\";IF($D117=\"Mystery Box\";0;$E117-$F117-$G117))",
+      "before_value": 0,
+      "after_formula": "=IF($A117=\"\";\"\";N(IF($D117=\"Mystery Box\";0;$E117-$F117-$G117))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A117)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A117)-N($S117))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H118",
+      "sku": "ACC-3D-PKM-200",
+      "before_formula": "=IF($A118=\"\";\"\";IF($D118=\"Mystery Box\";0;$E118-$F118-$G118))",
+      "before_value": -3,
+      "after_formula": "=IF($A118=\"\";\"\";N(IF($D118=\"Mystery Box\";0;$E118-$F118-$G118))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A118)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A118)-N($S118))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H119",
+      "sku": "ACC-3D-PKM-201",
+      "before_formula": "=IF($A119=\"\";\"\";IF($D119=\"Mystery Box\";0;$E119-$F119-$G119))",
+      "before_value": 0,
+      "after_formula": "=IF($A119=\"\";\"\";N(IF($D119=\"Mystery Box\";0;$E119-$F119-$G119))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A119)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A119)-N($S119))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H120",
+      "sku": "ACC-3D-PKM-202",
+      "before_formula": "=IF($A120=\"\";\"\";IF($D120=\"Mystery Box\";0;$E120-$F120-$G120))",
+      "before_value": 0,
+      "after_formula": "=IF($A120=\"\";\"\";N(IF($D120=\"Mystery Box\";0;$E120-$F120-$G120))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A120)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A120)-N($S120))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H121",
+      "sku": "ACC-3D-PKM-300",
+      "before_formula": "=IF($A121=\"\";\"\";IF($D121=\"Mystery Box\";0;$E121-$F121-$G121))",
+      "before_value": 0,
+      "after_formula": "=IF($A121=\"\";\"\";N(IF($D121=\"Mystery Box\";0;$E121-$F121-$G121))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A121)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A121)-N($S121))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H122",
+      "sku": "ACC-3D-PKM-700",
+      "before_formula": "=IF($A122=\"\";\"\";IF($D122=\"Mystery Box\";0;$E122-$F122-$G122))",
+      "before_value": 0,
+      "after_formula": "=IF($A122=\"\";\"\";N(IF($D122=\"Mystery Box\";0;$E122-$F122-$G122))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A122)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A122)-N($S122))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H123",
+      "sku": "ACC-3D-PKM-710",
+      "before_formula": "=IF($A123=\"\";\"\";IF($D123=\"Mystery Box\";0;$E123-$F123-$G123))",
+      "before_value": 0,
+      "after_formula": "=IF($A123=\"\";\"\";N(IF($D123=\"Mystery Box\";0;$E123-$F123-$G123))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A123)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A123)-N($S123))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H124",
+      "sku": "ACC-3D-PKM-711",
+      "before_formula": "=IF($A124=\"\";\"\";IF($D124=\"Mystery Box\";0;$E124-$F124-$G124))",
+      "before_value": 0,
+      "after_formula": "=IF($A124=\"\";\"\";N(IF($D124=\"Mystery Box\";0;$E124-$F124-$G124))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A124)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A124)-N($S124))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H125",
+      "sku": "ACC-3D-PKM-712",
+      "before_formula": "=IF($A125=\"\";\"\";IF($D125=\"Mystery Box\";0;$E125-$F125-$G125))",
+      "before_value": 0,
+      "after_formula": "=IF($A125=\"\";\"\";N(IF($D125=\"Mystery Box\";0;$E125-$F125-$G125))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A125)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A125)-N($S125))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H126",
+      "sku": "ACC-3D-PKM-800",
+      "before_formula": "=IF($A126=\"\";\"\";IF($D126=\"Mystery Box\";0;$E126-$F126-$G126))",
+      "before_value": 0,
+      "after_formula": "=IF($A126=\"\";\"\";N(IF($D126=\"Mystery Box\";0;$E126-$F126-$G126))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A126)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A126)-N($S126))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H127",
+      "sku": "ACC-3D-PKM-610",
+      "before_formula": "=IF($A127=\"\";\"\";IF($D127=\"Mystery Box\";0;$E127-$F127-$G127))",
+      "before_value": 0,
+      "after_formula": "=IF($A127=\"\";\"\";N(IF($D127=\"Mystery Box\";0;$E127-$F127-$G127))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A127)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A127)-N($S127))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H128",
+      "sku": "ACC-3D-PKM-150",
+      "before_formula": "=IF($A128=\"\";\"\";IF($D128=\"Mystery Box\";0;$E128-$F128-$G128))",
+      "before_value": 0,
+      "after_formula": "=IF($A128=\"\";\"\";N(IF($D128=\"Mystery Box\";0;$E128-$F128-$G128))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A128)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A128)-N($S128))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H129",
+      "sku": "FIG-ONIX-200",
+      "before_formula": "=IF($A129=\"\";\"\";IF($D129=\"Mystery Box\";0;$E129-$F129-$G129))",
+      "before_value": 0,
+      "after_formula": "=IF($A129=\"\";\"\";N(IF($D129=\"Mystery Box\";0;$E129-$F129-$G129))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A129)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A129)-N($S129))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H130",
+      "sku": "FIG-ONIX-500",
+      "before_formula": "=IF($A130=\"\";\"\";IF($D130=\"Mystery Box\";0;$E130-$F130-$G130))",
+      "before_value": -1,
+      "after_formula": "=IF($A130=\"\";\"\";N(IF($D130=\"Mystery Box\";0;$E130-$F130-$G130))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A130)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A130)-N($S130))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H131",
+      "sku": "FIG-ONIX-501",
+      "before_formula": "=IF($A131=\"\";\"\";IF($D131=\"Mystery Box\";0;$E131-$F131-$G131))",
+      "before_value": 0,
+      "after_formula": "=IF($A131=\"\";\"\";N(IF($D131=\"Mystery Box\";0;$E131-$F131-$G131))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A131)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A131)-N($S131))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H132",
+      "sku": "FIG-GEOD-500",
+      "before_formula": "=IF($A132=\"\";\"\";IF($D132=\"Mystery Box\";0;$E132-$F132-$G132))",
+      "before_value": 0,
+      "after_formula": "=IF($A132=\"\";\"\";N(IF($D132=\"Mystery Box\";0;$E132-$F132-$G132))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A132)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A132)-N($S132))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H133",
+      "sku": "FIG-GEOD-501",
+      "before_formula": "=IF($A133=\"\";\"\";IF($D133=\"Mystery Box\";0;$E133-$F133-$G133))",
+      "before_value": 0,
+      "after_formula": "=IF($A133=\"\";\"\";N(IF($D133=\"Mystery Box\";0;$E133-$F133-$G133))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A133)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A133)-N($S133))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H134",
+      "sku": "FIG-GEOD-510",
+      "before_formula": "=IF($A134=\"\";\"\";IF($D134=\"Mystery Box\";0;$E134-$F134-$G134))",
+      "before_value": 0,
+      "after_formula": "=IF($A134=\"\";\"\";N(IF($D134=\"Mystery Box\";0;$E134-$F134-$G134))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A134)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A134)-N($S134))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H135",
+      "sku": "FIG-GEOD-511",
+      "before_formula": "=IF($A135=\"\";\"\";IF($D135=\"Mystery Box\";0;$E135-$F135-$G135))",
+      "before_value": 0,
+      "after_formula": "=IF($A135=\"\";\"\";N(IF($D135=\"Mystery Box\";0;$E135-$F135-$G135))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A135)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A135)-N($S135))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H136",
+      "sku": "FIG-LUFFY-500",
+      "before_formula": "=IF($A136=\"\";\"\";IF($D136=\"Mystery Box\";0;$E136-$F136-$G136))",
+      "before_value": 0,
+      "after_formula": "=IF($A136=\"\";\"\";N(IF($D136=\"Mystery Box\";0;$E136-$F136-$G136))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A136)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A136)-N($S136))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H137",
+      "sku": "FIG-LUFFY-400",
+      "before_formula": "=IF($A137=\"\";\"\";IF($D137=\"Mystery Box\";0;$E137-$F137-$G137))",
+      "before_value": 0,
+      "after_formula": "=IF($A137=\"\";\"\";N(IF($D137=\"Mystery Box\";0;$E137-$F137-$G137))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A137)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A137)-N($S137))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H138",
+      "sku": "FIG-LUFFY-410",
+      "before_formula": "=IF($A138=\"\";\"\";IF($D138=\"Mystery Box\";0;$E138-$F138-$G138))",
+      "before_value": 0,
+      "after_formula": "=IF($A138=\"\";\"\";N(IF($D138=\"Mystery Box\";0;$E138-$F138-$G138))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A138)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A138)-N($S138))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H139",
+      "sku": "FIG-HNTR-200",
+      "before_formula": "=IF($A139=\"\";\"\";IF($D139=\"Mystery Box\";0;$E139-$F139-$G139))",
+      "before_value": 0,
+      "after_formula": "=IF($A139=\"\";\"\";N(IF($D139=\"Mystery Box\";0;$E139-$F139-$G139))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A139)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A139)-N($S139))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H140",
+      "sku": "FIG-HNTR-210",
+      "before_formula": "=IF($A140=\"\";\"\";IF($D140=\"Mystery Box\";0;$E140-$F140-$G140))",
+      "before_value": 0,
+      "after_formula": "=IF($A140=\"\";\"\";N(IF($D140=\"Mystery Box\";0;$E140-$F140-$G140))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A140)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A140)-N($S140))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H141",
+      "sku": "FIG-MEW-100",
+      "before_formula": "=IF($A141=\"\";\"\";IF($D141=\"Mystery Box\";0;$E141-$F141-$G141))",
+      "before_value": 0,
+      "after_formula": "=IF($A141=\"\";\"\";N(IF($D141=\"Mystery Box\";0;$E141-$F141-$G141))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A141)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A141)-N($S141))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H142",
+      "sku": "FIG-CHARZ-200",
+      "before_formula": "=IF($A142=\"\";\"\";IF($D142=\"Mystery Box\";0;$E142-$F142-$G142))",
+      "before_value": 0,
+      "after_formula": "=IF($A142=\"\";\"\";N(IF($D142=\"Mystery Box\";0;$E142-$F142-$G142))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A142)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A142)-N($S142))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H143",
+      "sku": "FIG-ZORO-410",
+      "before_formula": "=IF($A143=\"\";\"\";IF($D143=\"Mystery Box\";0;$E143-$F143-$G143))",
+      "before_value": 0,
+      "after_formula": "=IF($A143=\"\";\"\";N(IF($D143=\"Mystery Box\";0;$E143-$F143-$G143))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A143)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A143)-N($S143))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H144",
+      "sku": "FIG-LUFFY-411",
+      "before_formula": "=IF($A144=\"\";\"\";IF($D144=\"Mystery Box\";0;$E144-$F144-$G144))",
+      "before_value": 0,
+      "after_formula": "=IF($A144=\"\";\"\";N(IF($D144=\"Mystery Box\";0;$E144-$F144-$G144))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A144)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A144)-N($S144))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H145",
+      "sku": "FIG-OPSKL-600",
+      "before_formula": "=IF($A145=\"\";\"\";IF($D145=\"Mystery Box\";0;$E145-$F145-$G145))",
+      "before_value": 0,
+      "after_formula": "=IF($A145=\"\";\"\";N(IF($D145=\"Mystery Box\";0;$E145-$F145-$G145))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A145)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A145)-N($S145))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H146",
+      "sku": "FIG-OP-410",
+      "before_formula": "=IF($A146=\"\";\"\";IF($D146=\"Mystery Box\";0;$E146-$F146-$G146))",
+      "before_value": 0,
+      "after_formula": "=IF($A146=\"\";\"\";N(IF($D146=\"Mystery Box\";0;$E146-$F146-$G146))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A146)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A146)-N($S146))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H147",
+      "sku": "FIG-NAMI-200",
+      "before_formula": "=IF($A147=\"\";\"\";IF($D147=\"Mystery Box\";0;$E147-$F147-$G147))",
+      "before_value": 0,
+      "after_formula": "=IF($A147=\"\";\"\";N(IF($D147=\"Mystery Box\";0;$E147-$F147-$G147))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A147)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A147)-N($S147))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H148",
+      "sku": "FIG-NAMI-201",
+      "before_formula": "=IF($A148=\"\";\"\";IF($D148=\"Mystery Box\";0;$E148-$F148-$G148))",
+      "before_value": 0,
+      "after_formula": "=IF($A148=\"\";\"\";N(IF($D148=\"Mystery Box\";0;$E148-$F148-$G148))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A148)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A148)-N($S148))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H149",
+      "sku": "FIG-PKBL-600",
+      "before_formula": "=IF($A149=\"\";\"\";IF($D149=\"Mystery Box\";0;$E149-$F149-$G149))",
+      "before_value": 0,
+      "after_formula": "=IF($A149=\"\";\"\";N(IF($D149=\"Mystery Box\";0;$E149-$F149-$G149))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A149)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A149)-N($S149))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H150",
+      "sku": "FIG-JIGGL-300",
+      "before_formula": "=IF($A150=\"\";\"\";IF($D150=\"Mystery Box\";0;$E150-$F150-$G150))",
+      "before_value": 0,
+      "after_formula": "=IF($A150=\"\";\"\";N(IF($D150=\"Mystery Box\";0;$E150-$F150-$G150))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A150)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A150)-N($S150))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H151",
+      "sku": "FIG-MEW-300",
+      "before_formula": "=IF($A151=\"\";\"\";IF($D151=\"Mystery Box\";0;$E151-$F151-$G151))",
+      "before_value": 0,
+      "after_formula": "=IF($A151=\"\";\"\";N(IF($D151=\"Mystery Box\";0;$E151-$F151-$G151))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A151)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A151)-N($S151))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H152",
+      "sku": "FIG-UMBRE-300",
+      "before_formula": "=IF($A152=\"\";\"\";IF($D152=\"Mystery Box\";0;$E152-$F152-$G152))",
+      "before_value": 0,
+      "after_formula": "=IF($A152=\"\";\"\";N(IF($D152=\"Mystery Box\";0;$E152-$F152-$G152))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A152)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A152)-N($S152))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H153",
+      "sku": "FIG-GENG-300",
+      "before_formula": "=IF($A153=\"\";\"\";IF($D153=\"Mystery Box\";0;$E153-$F153-$G153))",
+      "before_value": 0,
+      "after_formula": "=IF($A153=\"\";\"\";N(IF($D153=\"Mystery Box\";0;$E153-$F153-$G153))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A153)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A153)-N($S153))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H154",
+      "sku": "FIG-MAGIK-300",
+      "before_formula": "=IF($A154=\"\";\"\";IF($D154=\"Mystery Box\";0;$E154-$F154-$G154))",
+      "before_value": 0,
+      "after_formula": "=IF($A154=\"\";\"\";N(IF($D154=\"Mystery Box\";0;$E154-$F154-$G154))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A154)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A154)-N($S154))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H155",
+      "sku": "FIG-PIKA-300",
+      "before_formula": "=IF($A155=\"\";\"\";IF($D155=\"Mystery Box\";0;$E155-$F155-$G155))",
+      "before_value": 0,
+      "after_formula": "=IF($A155=\"\";\"\";N(IF($D155=\"Mystery Box\";0;$E155-$F155-$G155))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A155)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A155)-N($S155))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H156",
+      "sku": "FIG-SQUIR-300",
+      "before_formula": "=IF($A156=\"\";\"\";IF($D156=\"Mystery Box\";0;$E156-$F156-$G156))",
+      "before_value": 0,
+      "after_formula": "=IF($A156=\"\";\"\";N(IF($D156=\"Mystery Box\";0;$E156-$F156-$G156))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A156)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A156)-N($S156))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H157",
+      "sku": "ACC-3D-OP-600",
+      "before_formula": "=IF($A157=\"\";\"\";IF($D157=\"Mystery Box\";0;$E157-$F157-$G157))",
+      "before_value": 0,
+      "after_formula": "=IF($A157=\"\";\"\";N(IF($D157=\"Mystery Box\";0;$E157-$F157-$G157))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A157)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A157)-N($S157))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H158",
+      "sku": "ACC-3D-DITTO-410",
+      "before_formula": "=IF($A158=\"\";\"\";IF($D158=\"Mystery Box\";0;$E158-$F158-$G158))",
+      "before_value": 0,
+      "after_formula": "=IF($A158=\"\";\"\";N(IF($D158=\"Mystery Box\";0;$E158-$F158-$G158))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A158)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A158)-N($S158))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H159",
+      "sku": "ACC-3D-DITTO-430",
+      "before_formula": "=IF($A159=\"\";\"\";IF($D159=\"Mystery Box\";0;$E159-$F159-$G159))",
+      "before_value": 0,
+      "after_formula": "=IF($A159=\"\";\"\";N(IF($D159=\"Mystery Box\";0;$E159-$F159-$G159))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A159)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A159)-N($S159))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H160",
+      "sku": "ACC-3D-DITTO-420",
+      "before_formula": "=IF($A160=\"\";\"\";IF($D160=\"Mystery Box\";0;$E160-$F160-$G160))",
+      "before_value": 0,
+      "after_formula": "=IF($A160=\"\";\"\";N(IF($D160=\"Mystery Box\";0;$E160-$F160-$G160))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A160)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A160)-N($S160))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H161",
+      "sku": "ACC-3D-OP-500",
+      "before_formula": "=IF($A161=\"\";\"\";IF($D161=\"Mystery Box\";0;$E161-$F161-$G161))",
+      "before_value": 0,
+      "after_formula": "=IF($A161=\"\";\"\";N(IF($D161=\"Mystery Box\";0;$E161-$F161-$G161))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A161)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A161)-N($S161))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H162",
+      "sku": "ACC-3D-LUFFY-500",
+      "before_formula": "=IF($A162=\"\";\"\";IF($D162=\"Mystery Box\";0;$E162-$F162-$G162))",
+      "before_value": 0,
+      "after_formula": "=IF($A162=\"\";\"\";N(IF($D162=\"Mystery Box\";0;$E162-$F162-$G162))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A162)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A162)-N($S162))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H163",
+      "sku": "ACC-3D-OPFRT-500",
+      "before_formula": "=IF($A163=\"\";\"\";IF($D163=\"Mystery Box\";0;$E163-$F163-$G163))",
+      "before_value": 0,
+      "after_formula": "=IF($A163=\"\";\"\";N(IF($D163=\"Mystery Box\";0;$E163-$F163-$G163))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A163)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A163)-N($S163))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H164",
+      "sku": "ACC-3D-PKM-600",
+      "before_formula": "=IF($A164=\"\";\"\";IF($D164=\"Mystery Box\";0;$E164-$F164-$G164))",
+      "before_value": 0,
+      "after_formula": "=IF($A164=\"\";\"\";N(IF($D164=\"Mystery Box\";0;$E164-$F164-$G164))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A164)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A164)-N($S164))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H165",
+      "sku": "ACC-3D-PKBL-400",
+      "before_formula": "=IF($A165=\"\";\"\";IF($D165=\"Mystery Box\";0;$E165-$F165-$G165))",
+      "before_value": 0,
+      "after_formula": "=IF($A165=\"\";\"\";N(IF($D165=\"Mystery Box\";0;$E165-$F165-$G165))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A165)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A165)-N($S165))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H166",
+      "sku": "ACC-3D-PKBL-401",
+      "before_formula": "=IF($A166=\"\";\"\";IF($D166=\"Mystery Box\";0;$E166-$F166-$G166))",
+      "before_value": 0,
+      "after_formula": "=IF($A166=\"\";\"\";N(IF($D166=\"Mystery Box\";0;$E166-$F166-$G166))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A166)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A166)-N($S166))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H167",
+      "sku": "ACC-3D-CHARZ-800",
+      "before_formula": "=IF($A167=\"\";\"\";IF($D167=\"Mystery Box\";0;$E167-$F167-$G167))",
+      "before_value": 0,
+      "after_formula": "=IF($A167=\"\";\"\";N(IF($D167=\"Mystery Box\";0;$E167-$F167-$G167))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A167)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A167)-N($S167))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H168",
+      "sku": "ACC-3D-PKBL-810",
+      "before_formula": "=IF($A168=\"\";\"\";IF($D168=\"Mystery Box\";0;$E168-$F168-$G168))",
+      "before_value": 0,
+      "after_formula": "=IF($A168=\"\";\"\";N(IF($D168=\"Mystery Box\";0;$E168-$F168-$G168))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A168)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A168)-N($S168))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H169",
+      "sku": "ACC-3D-PKBL-800",
+      "before_formula": "=IF($A169=\"\";\"\";IF($D169=\"Mystery Box\";0;$E169-$F169-$G169))",
+      "before_value": 0,
+      "after_formula": "=IF($A169=\"\";\"\";N(IF($D169=\"Mystery Box\";0;$E169-$F169-$G169))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A169)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A169)-N($S169))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H170",
+      "sku": "PKM-JP-GLVS-SET",
+      "before_formula": "=IF($A170=\"\";\"\";IF($D170=\"Mystery Box\";0;$E170-$F170-$G170))",
+      "before_value": 0,
+      "after_formula": "=IF($A170=\"\";\"\";N(IF($D170=\"Mystery Box\";0;$E170-$F170-$G170))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A170)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A170)-N($S170))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H171",
+      "sku": "PKM-JP-LFVS-SET",
+      "before_formula": "=IF($A171=\"\";\"\";IF($D171=\"Mystery Box\";0;$E171-$F171-$G171))",
+      "before_value": 0,
+      "after_formula": "=IF($A171=\"\";\"\";N(IF($D171=\"Mystery Box\";0;$E171-$F171-$G171))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A171)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A171)-N($S171))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H172",
+      "sku": "DM-JP-DM24RP3-BST",
+      "before_formula": "=IF($A172=\"\";\"\";IF($D172=\"Mystery Box\";0;$E172-$F172-$G172))",
+      "before_value": 0,
+      "after_formula": "=IF($A172=\"\";\"\";N(IF($D172=\"Mystery Box\";0;$E172-$F172-$G172))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A172)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A172)-N($S172))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H173",
+      "sku": "DM-JP-DM24RP3-BBX",
+      "before_formula": "=IF($A173=\"\";\"\";IF($D173=\"Mystery Box\";0;$E173-$F173-$G173))",
+      "before_value": 0,
+      "after_formula": "=IF($A173=\"\";\"\";N(IF($D173=\"Mystery Box\";0;$E173-$F173-$G173))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A173)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A173)-N($S173))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H174",
+      "sku": "OP-JP-OP09-BST",
+      "before_formula": "=IF($A174=\"\";\"\";IF($D174=\"Mystery Box\";0;$E174-$F174-$G174))",
+      "before_value": 0,
+      "after_formula": "=IF($A174=\"\";\"\";N(IF($D174=\"Mystery Box\";0;$E174-$F174-$G174))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A174)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A174)-N($S174))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H175",
+      "sku": "OP-JP-OP09-BBX",
+      "before_formula": "=IF($A175=\"\";\"\";IF($D175=\"Mystery Box\";0;$E175-$F175-$G175))",
+      "before_value": 0,
+      "after_formula": "=IF($A175=\"\";\"\";N(IF($D175=\"Mystery Box\";0;$E175-$F175-$G175))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A175)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A175)-N($S175))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H176",
+      "sku": "OP-JP-EB02-BST",
+      "before_formula": "=IF($A176=\"\";\"\";IF($D176=\"Mystery Box\";0;$E176-$F176-$G176))",
+      "before_value": 0,
+      "after_formula": "=IF($A176=\"\";\"\";N(IF($D176=\"Mystery Box\";0;$E176-$F176-$G176))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A176)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A176)-N($S176))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H177",
+      "sku": "PKM-JP-EXSD-STD-GRS",
+      "before_formula": "=IF($A177=\"\";\"\";IF($D177=\"Mystery Box\";0;$E177-$F177-$G177))",
+      "before_value": 0,
+      "after_formula": "=IF($A177=\"\";\"\";N(IF($D177=\"Mystery Box\";0;$E177-$F177-$G177))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A177)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A177)-N($S177))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H178",
+      "sku": "PKM-JP-EXSD-STD-FIR",
+      "before_formula": "=IF($A178=\"\";\"\";IF($D178=\"Mystery Box\";0;$E178-$F178-$G178))",
+      "before_value": 0,
+      "after_formula": "=IF($A178=\"\";\"\";N(IF($D178=\"Mystery Box\";0;$E178-$F178-$G178))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A178)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A178)-N($S178))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H179",
+      "sku": "PKM-JP-EXSD-STD-WTR",
+      "before_formula": "=IF($A179=\"\";\"\";IF($D179=\"Mystery Box\";0;$E179-$F179-$G179))",
+      "before_value": 0,
+      "after_formula": "=IF($A179=\"\";\"\";N(IF($D179=\"Mystery Box\";0;$E179-$F179-$G179))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A179)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A179)-N($S179))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H180",
+      "sku": "PKM-JP-EXSD-STD-LTG",
+      "before_formula": "=IF($A180=\"\";\"\";IF($D180=\"Mystery Box\";0;$E180-$F180-$G180))",
+      "before_value": 0,
+      "after_formula": "=IF($A180=\"\";\"\";N(IF($D180=\"Mystery Box\";0;$E180-$F180-$G180))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A180)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A180)-N($S180))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H181",
+      "sku": "PKM-JP-EXSD-STD-PSY",
+      "before_formula": "=IF($A181=\"\";\"\";IF($D181=\"Mystery Box\";0;$E181-$F181-$G181))",
+      "before_value": 0,
+      "after_formula": "=IF($A181=\"\";\"\";N(IF($D181=\"Mystery Box\";0;$E181-$F181-$G181))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A181)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A181)-N($S181))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H182",
+      "sku": "PKM-JP-EXSD-STD-FGT",
+      "before_formula": "=IF($A182=\"\";\"\";IF($D182=\"Mystery Box\";0;$E182-$F182-$G182))",
+      "before_value": 0,
+      "after_formula": "=IF($A182=\"\";\"\";N(IF($D182=\"Mystery Box\";0;$E182-$F182-$G182))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A182)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A182)-N($S182))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H183",
+      "sku": "PKM-JP-EXSD-STD-DRK",
+      "before_formula": "=IF($A183=\"\";\"\";IF($D183=\"Mystery Box\";0;$E183-$F183-$G183))",
+      "before_value": 0,
+      "after_formula": "=IF($A183=\"\";\"\";N(IF($D183=\"Mystery Box\";0;$E183-$F183-$G183))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A183)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A183)-N($S183))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H184",
+      "sku": "PKM-JP-EXSD-STD-MTL",
+      "before_formula": "=IF($A184=\"\";\"\";IF($D184=\"Mystery Box\";0;$E184-$F184-$G184))",
+      "before_value": 0,
+      "after_formula": "=IF($A184=\"\";\"\";N(IF($D184=\"Mystery Box\";0;$E184-$F184-$G184))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A184)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A184)-N($S184))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H185",
+      "sku": "PKM-JP-EXSD-STD-RND",
+      "before_formula": "=IF($A185=\"\";\"\";IF($D185=\"Mystery Box\";0;$E185-$F185-$G185))",
+      "before_value": 0,
+      "after_formula": "=IF($A185=\"\";\"\";N(IF($D185=\"Mystery Box\";0;$E185-$F185-$G185))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A185)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A185)-N($S185))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H186",
+      "sku": "OP-JP-OP06-RPK",
+      "before_formula": "=IF($A186=\"\";\"\";IF($D186=\"Mystery Box\";0;$E186-$F186-$G186))",
+      "before_value": 0,
+      "after_formula": "=IF($A186=\"\";\"\";N(IF($D186=\"Mystery Box\";0;$E186-$F186-$G186))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A186)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A186)-N($S186))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H187",
+      "sku": "OP-JP-EB01-RPK",
+      "before_formula": "=IF($A187=\"\";\"\";IF($D187=\"Mystery Box\";0;$E187-$F187-$G187))",
+      "before_value": 0,
+      "after_formula": "=IF($A187=\"\";\"\";N(IF($D187=\"Mystery Box\";0;$E187-$F187-$G187))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A187)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A187)-N($S187))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H188",
+      "sku": "OP-JP-OP05-RPK",
+      "before_formula": "=IF($A188=\"\";\"\";IF($D188=\"Mystery Box\";0;$E188-$F188-$G188))",
+      "before_value": 0,
+      "after_formula": "=IF($A188=\"\";\"\";N(IF($D188=\"Mystery Box\";0;$E188-$F188-$G188))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A188)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A188)-N($S188))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H189",
+      "sku": "OP-JP-OP01-RPK",
+      "before_formula": "=IF($A189=\"\";\"\";IF($D189=\"Mystery Box\";0;$E189-$F189-$G189))",
+      "before_value": 0,
+      "after_formula": "=IF($A189=\"\";\"\";N(IF($D189=\"Mystery Box\";0;$E189-$F189-$G189))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A189)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A189)-N($S189))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H190",
+      "sku": "FIG-ONIX-201-GREY",
+      "before_formula": "=IF($A190=\"\";\"\";IF($D190=\"Mystery Box\";0;$E190-$F190-$G190))",
+      "before_value": 0,
+      "after_formula": "=IF($A190=\"\";\"\";N(IF($D190=\"Mystery Box\";0;$E190-$F190-$G190))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A190)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A190)-N($S190))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H191",
+      "sku": "ACC-007-360-BLCK",
+      "before_formula": "=IF($A191=\"\";\"\";IF($D191=\"Mystery Box\";0;$E191-$F191-$G191))",
+      "before_value": 1,
+      "after_formula": "=IF($A191=\"\";\"\";N(IF($D191=\"Mystery Box\";0;$E191-$F191-$G191))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A191)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A191)-N($S191))",
+      "expected_value_delta": 0
+    },
+    {
+      "cell": "H192",
+      "sku": "ACC-001-BPEN",
+      "before_formula": "=IF($A192=\"\";\"\";IF($D192=\"Mystery Box\";0;$E192-$F192-$G192))",
+      "before_value": 100,
+      "after_formula": "=IF($A192=\"\";\"\";N(IF($D192=\"Mystery Box\";0;$E192-$F192-$G192))+SUMIFS('Міграції_Складу'!$H$2:$H;'Міграції_Складу'!$E$2:$E;$A192)-SUMIFS('Міграції_Складу'!$G$2:$G;'Міграції_Складу'!$D$2:$D;$A192)-N($S192))",
+      "expected_value_delta": 0
+    }
+  ],
+  "queue_formula": {
+    "cell": "Черга_Складу!H30",
+    "before_formula": "=ARRAYFORMULA(IF($A30:$A=\"\";\"\";N($E30:$E)+N($G30:$G)))",
+    "proposed_formula": "=ARRAYFORMULA(IF($A30:$A=\"\";\"\";N($E30:$E)+IFERROR(VLOOKUP($A30:$A;Source_CRM_Stock!$A$7:$T;17;FALSE);0)))",
+    "current_projection_changes": [
+      {
+        "sku": "OP-JP-OP07-BST",
+        "row": 39,
+        "before": 0,
+        "after": 1,
+        "delta": 1
+      },
+      {
+        "sku": "OP-JP-EB03-BST",
+        "row": 41,
+        "before": -3,
+        "after": 3,
+        "delta": 6
+      },
+      {
+        "sku": "OP-JP-OP17-BST",
+        "row": 125,
+        "before": 0,
+        "after": 7,
+        "delta": 7
+      },
+      {
+        "sku": "OP-JP-OP13-BST",
+        "row": 130,
+        "before": 33,
+        "after": 34,
+        "delta": 1
+      }
+    ]
+  }
+}

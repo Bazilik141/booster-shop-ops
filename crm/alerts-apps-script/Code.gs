@@ -183,7 +183,7 @@ function collectNegativeStockIssues_(inventorySnapshot) {
     if (issueText.indexOf('мінусовий_залишок') < 0 && !(balance !== null && balance < 0)) continue;
     const inbound = cell_(row, inboundCol), reserve = cell_(row, reserveCol), afterReserve = cell_(row, afterReserveCol);
     const facts = ['Баланс CRM: ' + (balanceText || 'нижче нуля')];
-    if (inbound) facts.push('в дорозі: ' + inbound);
+    if (inbound) facts.push('закуплено, ще не на складі UA: ' + inbound + ' шт');
     if (reserve) facts.push('резерв: ' + reserve);
     if (afterReserve) facts.push('після резерву: ' + afterReserve);
     const details = facts.join(' · '), action = 'Перевірити продажі, списання, резерви та приходи цього SKU.';
@@ -208,7 +208,8 @@ function collectStockQueueIssues_() {
       if (!sku || normalizeText_(sku) === 'артикул') return;
       if (/^(?:BR|FIG|ACC-3D)-[A-Z0-9]/i.test(sku)) return;
       const name = String(row[1] || '').trim();
-      const details = ['Продажі 30д: ' + (row[3] || '—'), 'залишок: ' + (row[4] || '—'), 'після резерву: ' + (row[5] || '—'), 'гранична закупка: ' + (row[6] || '—')].join(' · ');
+      const incoming = row[5] === '' ? '—' : row[5] + ' шт';
+      const details = ['Продажі 30д: ' + (row[3] || '—'), 'залишок: ' + (row[4] || '—'), 'закуплено, ще не на складі UA: ' + incoming].join(' · ');
       const signature = normalizeText_([group.kind, sku, details, group.action].join('|'));
       result.push({ id:hashText_(signature), signature:signature, kind:group.kind, title:group.title, sku:sku, name:name, count:'1', details:details, action:group.action, text:trimText_(group.title + ' · ' + sku + '\n   ' + details + '\n   Дія: ' + group.action, 500) });
     });
@@ -269,7 +270,13 @@ function collect3dpInventoryIssues_(snapshot, loadError) {
       issues.push({ id:hashText_(signature), signature:signature, kind:'3dp_print_needed', title:'Потрібен 3D-друк', sku:sku, name:name, count:String(Math.abs(Number(row.stock_raw))), details:'Після резерву: ' + row.stock_raw, action:'Надрукувати або перевірити резерв.', text:'Потрібен 3D-друк · ' + sku + ' · дефіцит ' + Math.abs(Number(row.stock_raw)) });
     }
     if (saleSyncMissing) {
-      const signature = '3dp_sale_sync_missing|' + sku;
+      const exception = (snapshot.exceptions || []).filter(function(item) { return item.code === '3dp_sale_sync_missing' && String(item.sku || '').trim() === sku; })[0];
+      const sources = exception && Array.isArray(exception.missing_fulfilled_sources) ? exception.missing_fulfilled_sources : [];
+      const incident = sources.map(function(item) {
+        return [String(item.crm_row || ''), String(item.order || ''), String(item.quantity || '')].join(':');
+      }).filter(Boolean).sort().join(',');
+      // Dismissal applies to these missing CRM sale rows; a later sale gets a new alert ID.
+      const signature = '3dp_sale_sync_missing|' + sku + (incident ? '|' + incident : '');
       const unverified = (row.issues || []).indexOf('3dp_physical_unverified') !== -1;
       issues.push({ id:hashText_(signature), signature:signature, kind:'3dp_sale_sync_missing', title:'Продаж не синхронізовано з 3D', sku:sku, name:name, count:'1', details:unverified?'Продаж CRM не прив’язаний до 3D-списання; фізичний залишок не підтверджено.':'CRM продаж не має відповідного списання у 3D-P.', action:unverified?'Звірити окреме списання з продажем; не повторювати продаж навмання.':'Перевірити журнал синхронізації та FIFO до повтору.', text:'Продаж не синхронізовано з 3D · ' + sku });
     }
@@ -447,8 +454,7 @@ function formatStockBlock_(title, rows, limit) {
     text += '- ' + row[0]
       + ': ' + row[3] + ' прод. 30д'
       + ', залишок ' + row[4]
-      + ', очікується ' + row[5]
-      + ', гранична закупка ' + row[6]
+      + ', закуплено, ще не на складі UA ' + row[5]
       + '\n';
   });
 

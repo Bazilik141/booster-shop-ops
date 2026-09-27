@@ -1,5 +1,34 @@
 # Alerts Apps Script — repository mirror state
 
+## Owner-reported Alerts Web App V9 (2026-09-27 09:58)
+
+The owner reports publishing the latest Alerts source as V9 and placing that
+source in the repository. The current `Code.gs` is byte-identical to
+`work/CRM-016_Alerts_API_from_V8_incoming_incident_ids.gs` (local SHA-256
+comparison, 2026-09-27). This verifies the local candidate identity only;
+the bound Apps Script bytes and live alert response were not independently
+read.
+
+## CRM-016 incident-specific dismissal from owner-reported V8 (2026-09-27)
+
+The mirror and complete paste source
+`work/CRM-016_Alerts_API_from_V8_incoming_incident_ids.gs` retain the pending
+incoming-quantity copy fix and add exact missing CRM sale rows to the
+`3dp_sale_sync_missing` alert signature when the CRM snapshot supplies them.
+The ordinary SKU-only signature remains a compatibility fallback. Dismissing
+`BR-DITTO-400` for sale `OC-FOP-0382` then leaves a later missing sale with a
+different alert ID. Local syntax and focused alert tests passed. The owner
+later reported publishing this source as V9.
+
+## CRM-016 local incoming-quantity fix from owner-reported V8 (2026-09-27)
+
+`Code.gs` and `work/CRM-016_Alerts_API_from_V8_incoming_fix.gs` contain the
+same complete local candidate. Stock-queue alerts label column F as the
+quantity purchased but not yet in the UA warehouse and omit column G's
+maximum purchase amount. The Telegram stock summary uses the same labels.
+This candidate is locally checked and included in the owner-reported V9 source
+above. No bound-project export was pulled.
+
 ## Owner-reported deployed V8 (2026-09-27 07:55)
 
 The owner reports publishing V8 after receiving the complete

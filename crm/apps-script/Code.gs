@@ -6497,7 +6497,7 @@ function crm016InventoryFromSources_(sourceSkus, remoteSkus, remoteSales, salesE
     const qty = crm016InventoryNumber_(row[7]);
     if (!order || !(qty > 0)) return;
     const match = committedByCrmRow[String(entry.rowNumber)] || null;
-    const state = demandBySku[sku] || (demandBySku[sku] = { open: 0, synced_open: 0, missing_open: 0, missing_fulfilled: 0, mismatch: false });
+    const state = demandBySku[sku] || (demandBySku[sku] = { open: 0, synced_open: 0, missing_open: 0, missing_fulfilled: 0, missing_fulfilled_sources: [], mismatch: false });
     const matched = match && match.order === order && match.sku === sku && !match.conflict ? match.qty : 0;
     if (match && (match.conflict || match.order !== order || match.sku !== sku || matched < 0 || matched > qty)) state.mismatch = true;
     if (open) {
@@ -6505,7 +6505,9 @@ function crm016InventoryFromSources_(sourceSkus, remoteSkus, remoteSales, salesE
       state.synced_open = round2_(state.synced_open + matched);
       state.missing_open = round2_(state.missing_open + qty - matched);
     } else {
-      state.missing_fulfilled = round2_(state.missing_fulfilled + qty - matched);
+      const missing = round2_(qty - matched);
+      state.missing_fulfilled = round2_(state.missing_fulfilled + missing);
+      if (missing > 0) state.missing_fulfilled_sources.push({ crm_row: entry.rowNumber, order: order, quantity: missing });
     }
   });
   const activeCrm = {};
@@ -6553,7 +6555,7 @@ function crm016InventoryFromSources_(sourceSkus, remoteSkus, remoteSales, salesE
       crm016InventoryUnavailable_(item, 'Fulfilled CRM sale is missing from the 3D-P sale ledger; physical stock needs reconciliation');
       item.reserved_total = demand.open;
       item.issues.push('3dp_sale_sync_missing', '3dp_physical_unverified');
-      result.exceptions.push({ sku: sku, code: '3dp_sale_sync_missing', missing_open: demand.missing_open, missing_fulfilled: demand.missing_fulfilled });
+      result.exceptions.push({ sku: sku, code: '3dp_sale_sync_missing', missing_open: demand.missing_open, missing_fulfilled: demand.missing_fulfilled, missing_fulfilled_sources: demand.missing_fulfilled_sources || [] });
       return;
     }
     const preorder = Math.min(demand.open, num_(item.preorder_reserved));
@@ -6578,7 +6580,7 @@ function crm016InventoryFromSources_(sourceSkus, remoteSkus, remoteSales, salesE
     item.issues = (item.issues || []).filter(function(issue) { return !/мінусовий_залишок|мало_на_складі/.test(String(issue)); });
     if (demand.missing_open || demand.missing_fulfilled) {
       item.issues.push('3dp_sale_sync_missing');
-      result.exceptions.push({ sku: sku, code: '3dp_sale_sync_missing', missing_open: demand.missing_open, missing_fulfilled: demand.missing_fulfilled });
+      result.exceptions.push({ sku: sku, code: '3dp_sale_sync_missing', missing_open: demand.missing_open, missing_fulfilled: demand.missing_fulfilled, missing_fulfilled_sources: demand.missing_fulfilled_sources || [] });
     }
     if (physical < 0) item.issues.push('3dp_physical_unverified');
     if (String(remote.API_статус_запису || '') !== 'Активний') {
