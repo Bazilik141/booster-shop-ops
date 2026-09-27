@@ -149,6 +149,7 @@ body {
 /* ── Tables ── */
 .tbl-wrap { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.purchase-register-table td[data-col="order_ref"] { min-width: 180px; overflow-wrap: anywhere; }
 th {
   text-align: left; padding: 8px 10px; color: var(--muted);
   font-size: 10.5px; text-transform: uppercase; letter-spacing: .5px;
@@ -350,6 +351,15 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
   .three-dp-product-form textarea { min-height:72px;resize:vertical; }
   .three-dp-form-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px; }
   .three-dp-form-grid label { display:flex;flex-direction:column;gap:5px;color:var(--muted);font-size:12px; }
+  .three-dp-sku-field { display:flex;flex-direction:column;gap:5px;min-width:0;flex:1;color:var(--muted);font-size:12px; }
+  .three-dp-sku-picker { position:relative;min-width:0;width:100%; }
+  .three-dp-sku-picker input { width:100%;min-width:0;box-sizing:border-box; }
+  .three-dp-sku-results { position:absolute;z-index:20;top:calc(100% + 3px);left:0;right:0;max-height:250px;overflow:auto;padding:4px;background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:0 12px 28px rgba(0,0,0,.35); }
+  .three-dp-sku-results[hidden] { display:none; }
+  .three-dp-sku-results button { display:block;width:100%;padding:8px;text-align:left;border:0;border-radius:5px;background:transparent;color:var(--text);cursor:pointer; }
+  .three-dp-sku-results button:hover,.three-dp-sku-results button:focus,.three-dp-sku-results button.active { background:var(--surface2);outline:none; }
+  .three-dp-sku-results button small { display:block;margin-top:2px;color:var(--muted);font-size:11px; }
+  .three-dp-sku-empty { padding:8px;color:var(--muted);font-size:12px; }
   .three-dp-readonly { display:block;min-height:34px;padding:8px 9px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:12px; }
   .three-dp-note { margin-top:10px;color:var(--muted);font-size:11px;line-height:1.45; }
   .three-dp-draft-status { margin-top:10px;padding:10px 12px;border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:12px;line-height:1.4; }
@@ -401,6 +411,18 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
   .three-dp-top-list { display:grid;gap:7px; }
   .three-dp-top-row { display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:12px; }
   .three-dp-top-row:last-child { border-bottom:0; }
+  .three-dp-top-row span { min-width:0;overflow-wrap:anywhere; }
+  .three-dp-summary-panels { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start; }
+  .three-dp-summary-panel { min-width:0;padding:15px;border:1px solid var(--border);border-radius:9px;background:var(--surface2); }
+  .three-dp-summary-panel h3 { margin:0 0 12px;font-size:13px; }
+  .three-dp-summary-panel .three-dp-note { margin:0; }
+  .three-dp-summary-bars { display:grid;gap:10px; }
+  .three-dp-summary-bar-row { display:grid;grid-template-columns:56px minmax(0,1fr) minmax(85px,max-content);align-items:center;gap:9px;font-size:11px; }
+  .three-dp-summary-bar-row .amount { text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap; }
+  .three-dp-summary-bar { height:8px;border-radius:5px;background:var(--bg);overflow:hidden; }
+  .three-dp-summary-bar > i { display:block;height:100%;border-radius:5px;background:var(--accent); }
+  .three-dp-summary-panel.profit .three-dp-summary-bar > i { background:var(--green); }
+  @media (max-width:800px) { .three-dp-summary-panels { grid-template-columns:1fr; } }
   .crm011-toolbar { display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px; }
   .crm011-toolbar input,.crm011-toolbar select { min-height:34px;padding:7px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text); }
   .crm011-toolbar input[type="search"] { min-width:260px;flex:1; }
@@ -408,6 +430,7 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
   .finance-kpis { grid-template-columns:repeat(6,minmax(0,1fr)); }
   .finance-pair { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px; }
   .finance-pair > .section { min-width:0; }
+  .finance-stack { min-width:0;display:flex;flex-direction:column;gap:18px;align-self:start; }
   .zen-form-grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px; }
   .zen-form-actions { display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px; }
   .zen-divider { border:0;border-top:1px solid var(--border);margin:18px 0; }
@@ -424,6 +447,7 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
   .finance-kpis { grid-template-columns:repeat(3,minmax(0,1fr)); }
 }
 @media (max-width: 800px) {
+  body { flex-direction: column; }
   .sidebar { display: none; }
   .mobile-brandbar { display:flex;position:sticky;top:0;z-index:20;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--surface);border-bottom:1px solid var(--border);font-weight:700; }
   .mobile-brandbar em { color:var(--accent);font-style:normal; }
@@ -462,6 +486,9 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
     </div>
     <div class="nav-item" onclick="showPage('orders')">
       <span class="nav-icon">🚚</span> Замовлення
+    </div>
+    <div class="nav-item" onclick="showPage('purchases')">
+      <span class="nav-icon">🛒</span> Закупки
     </div>
     <div class="nav-item" onclick="showPage('skus')">
       <span class="nav-icon">🗂️</span> Товари
@@ -566,7 +593,8 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
     <div class="header"><div class="page-title">Увага</div><div class="page-sub">Актуальні проблеми з таблиці автоматизації та керування сповіщеннями Telegram</div></div>
     <div class="section">
       <div class="section-header"><span class="section-title">Алерти</span><button class="btn-secondary" type="button" onclick="configureAlertsAccess()">Налаштувати API</button></div>
-      <div class="crm011-toolbar"><button id="alertsModeActive" class="btn-secondary active" type="button" onclick="setAlertsMode('active')">Активні</button><button id="alertsModeDismissed" class="btn-secondary" type="button" onclick="setAlertsMode('dismissed')">Неактуальні</button><button class="btn-secondary" type="button" onclick="loadAlerts(true)">Оновити</button><span id="alertsCount" class="crm011-note"></span></div>
+      <div class="crm011-toolbar"><button id="alertsModeActive" class="btn-secondary active" type="button" onclick="setAlertsMode('active')">Активні</button><button id="alertsModeDismissed" class="btn-secondary" type="button" onclick="setAlertsMode('dismissed')">Неактуальні</button><button class="btn-secondary" type="button" onclick="loadAlerts(true)">Оновити</button><button id="alertsDismissSelected" class="btn-secondary" type="button" onclick="dismissSelectedAlerts_()" disabled>Позначити неактуальними (0)</button><span id="alertsCount" class="crm011-note"></span></div>
+      <div class="crm011-note">«Вперше зафіксовано» — дата першого виявлення цією версією API; історичну дату старих алертів відновити неможливо.</div>
       <div id="alertsTable"><div class="loading"><div class="spinner"></div></div></div>
     </div>
   </div>
@@ -640,6 +668,24 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
     </div>
   </div>
 
+  <!-- ─── PURCHASES ─── -->
+  <div id="page-purchases" class="page">
+    <div class="header">
+      <div class="page-title">Закупки</div>
+      <div class="page-sub">Один рядок на замовлення; натисни ▸, щоб побачити SKU та технічні LOT-ID</div>
+    </div>
+    <div class="section">
+      <div class="section-header"><span class="section-title">Перегляд закупок</span><button class="btn-secondary" type="button" onclick="loadPurchases(true)">↻ Оновити</button></div>
+      <div class="crm011-toolbar">
+        <input id="purchasesSearch" type="search" placeholder="Пошук за назвою, SKU, лотом або посилкою" aria-label="Пошук закупок" oninput="renderPurchases()">
+        <details id="purchasesColumns"><summary>Стовпці та порядок</summary><div id="purchasesColumnPicker"></div></details>
+      </div>
+      <div id="purchasesMessage" class="crm011-note"></div>
+    </div>
+    <div class="section"><div class="section-header"><span class="section-title">Активні · замовлено та в дорозі</span><span id="purchasesActiveCount" class="badge b-yellow">—</span></div><div id="purchasesActiveTable"></div></div>
+    <div class="section"><div class="section-header"><span class="section-title">Архів · на складі, продано або скасовано</span><span id="purchasesArchiveCount" class="badge">—</span></div><div id="purchasesArchiveTable"></div></div>
+  </div>
+
   <!-- ─── SKUs ─── -->
   <div id="page-skus" class="page">
     <div class="header">
@@ -696,8 +742,8 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
     <div class="header"><div class="page-title">Фінанси</div><div class="page-sub">P&amp;L, рух коштів і активи складу без підміни відсутніх даних нулями</div></div>
     <div class="section"><div class="crm011-toolbar"><select id="financePreset" onchange="applyFinancePreset()"><option value="7d">7 днів</option><option value="30d">30 днів</option><option value="month" selected>Цей місяць</option><option value="last_month">Минулий місяць</option><option value="90d">90 днів</option><option value="custom">Свій період</option></select><input id="financeFrom" type="date" onchange="setFinanceCustomPeriod_()"><input id="financeTo" type="date" onchange="setFinanceCustomPeriod_()"><label class="crm011-note"><input id="financeCompare" type="checkbox"> порівняти з попереднім періодом</label><button class="btn-primary" type="button" onclick="loadFinance(true)">Показати</button></div><div id="financeKpis" class="crm011-kpis finance-kpis"></div></div>
     <div class="finance-pair"><div class="section"><div class="section-header"><span class="section-title">P&amp;L</span></div><div id="financePnl"></div></div><div class="section"><div class="section-header"><span class="section-title">Обліковий рух коштів</span></div><div id="financeCashflow"></div></div></div>
-    <div class="grid2"><div class="section"><div class="section-header"><span class="section-title">Нові та повторні клієнти</span></div><div id="financeCustomers"></div></div><div class="section"><div class="section-header"><span class="section-title">Якість даних</span></div><div id="financeQuality" class="crm011-note"></div></div></div>
-    <div class="finance-pair"><div class="section"><div class="section-header"><span class="section-title">Активи · станом на сьогодні</span></div><div id="financeAssets"></div></div><div class="section"><div class="section-header"><span class="section-title">Рахунок ZenMarket</span></div><div class="zen-form-grid"><div class="form-row zen-current"><label>Поточний баланс, JPY</label><input id="zenCurrentBalance" readonly value="Завантаження…"></div><div class="form-row"><label>Новий актуальний баланс, JPY</label><input id="zenCorrectBalance" type="number" step="1" oninput="updateZenCorrectionPreview_()"></div><div class="form-row" style="grid-column:1/-1"><label>Примітка до коригування (необов’язково)</label><input id="zenCorrectNote" maxlength="500"></div></div><div id="zenCorrectionPreview" class="crm011-note"></div><div class="zen-form-actions"><button id="zenCorrectButton" class="btn-secondary" type="button" onclick="submitZenCorrection()">Скоригувати баланс</button><div id="zenCorrectionMsg" class="form-msg"></div></div><hr class="zen-divider"><div class="zen-form-grid"><div class="form-row"><label>Дата поповнення</label><input id="zenTopupDate" type="date"></div><div class="form-row"><label>Сума, грн</label><input id="zenTopupUah" type="number" min="0" step="0.01"></div><div class="form-row"><label>Сума, JPY</label><input id="zenTopupJpy" type="number" min="0" step="1"></div><div class="form-row"><label>Примітка (необов’язково)</label><input id="zenTopupNote" maxlength="500"></div></div><div class="zen-form-actions"><button id="zenTopupButton" class="btn-primary" type="button" onclick="submitZenTopup()">Поповнити зен</button><div id="zenTopupMsg" class="form-msg"></div></div><div id="zenAccountHint" class="crm011-note" style="margin-top:10px"></div></div></div>
+    <div class="grid2"><div class="section"><div class="section-header"><span class="section-title">Нові та повторні клієнти</span></div><div id="financeCustomers"></div></div><div class="section"><div class="section-header"><span class="section-title">Рахунок ZenMarket</span></div><div class="zen-form-grid"><div class="form-row zen-current"><label>Поточний баланс, JPY</label><input id="zenCurrentBalance" readonly value="Завантаження…"></div><div class="form-row"><label>Новий актуальний баланс, JPY</label><input id="zenCorrectBalance" type="number" step="1" oninput="updateZenCorrectionPreview_()"></div><div class="form-row" style="grid-column:1/-1"><label>Примітка до коригування (необов’язково)</label><input id="zenCorrectNote" maxlength="500"></div></div><div id="zenCorrectionPreview" class="crm011-note"></div><div class="zen-form-actions"><button id="zenCorrectButton" class="btn-secondary" type="button" onclick="submitZenCorrection()">Скоригувати баланс</button><div id="zenCorrectionMsg" class="form-msg"></div></div><hr class="zen-divider"><div class="zen-form-grid"><div class="form-row"><label>Дата поповнення</label><input id="zenTopupDate" type="date"></div><div class="form-row"><label>Сума, грн</label><input id="zenTopupUah" type="number" min="0" step="0.01"></div><div class="form-row"><label>Сума, JPY</label><input id="zenTopupJpy" type="number" min="0" step="1"></div><div class="form-row"><label>Примітка (необов’язково)</label><input id="zenTopupNote" maxlength="500"></div></div><div class="zen-form-actions"><button id="zenTopupButton" class="btn-primary" type="button" onclick="submitZenTopup()">Поповнити зен</button><div id="zenTopupMsg" class="form-msg"></div></div><div id="zenAccountHint" class="crm011-note" style="margin-top:10px"></div></div></div>
+    <div class="finance-pair"><div class="finance-stack"><div class="section"><div class="section-header"><span class="section-title">Активи · станом на сьогодні</span></div><div id="financeAssets"></div></div><details class="section" id="zenStatementDetails"><summary class="section-title" style="cursor:pointer">Рух коштів ZenMarket · останні 15 операцій</summary><div id="zenStatement" style="margin-top:14px"></div></details></div><div class="section"><div class="section-header"><span class="section-title">Якість даних</span></div><div id="financeQuality" class="crm011-note"></div></div></div>
   </div>
 
   <!-- ACCOUNTING -->
@@ -733,18 +779,23 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
       <div class="three-dp-note">Локальний журнал останніх 60 GET: час черги, мережі й рендеру, серверний час, cache hit, розмір відповіді та дедуплікація. Без токенів, параметрів і рядків таблиць.</div>
       <div id="crmLoadTelemetry" style="margin-top:12px"></div>
     </div>
-    <div id="crmIntegrityDetail" style="display:none"></div>
     <div class="section">
-      <div class="section-header"><span class="section-title">Цілісність CRM</span><button id="crmIntegrityButton" class="btn-primary" type="button" onclick="runCrmIntegrityCheck()">Перевірити CRM</button></div>
+      <div class="section-header crm-integrity-header"><span class="section-title">Цілісність CRM</span><div class="form-actions"><button id="crmIntegrityCopyButton" class="btn-secondary crm-integrity-copy" type="button" onclick="crmIntegrityCopyResult(this)" style="display:none">Скопіювати результат</button><button id="crmIntegrityButton" class="btn-primary" type="button" onclick="runCrmIntegrityCheck()">Перевірити CRM</button></div></div>
       <div class="three-dp-note">Read-only перевірка формул, ключів SKU, довідників і пов’язаних структур. Вона нічого не змінює.</div>
       <div id="crmIntegrityCardHost" class="cards"></div>
+      <div id="crmIntegrityDetail" style="display:none"></div>
     </div>
     <div class="section">
       <div class="section-header"><span class="section-title">Тестові замовлення</span></div>
       <div class="three-dp-note">Інструмент шукає в «Продажі» примітки з текстом «тестове замовлення» або «тест замовлення». Якщо позначена хоча б одна позиція, очищується все це замовлення: CRM-продажі, списання, витрати, 3D-облік і пов’язані 3D-P рухи.</div>
-      <div class="three-dp-note">Спершу перевіряються всі знайдені замовлення. Після запуску нижче лишається повний звіт; повторний запуск безпечно продовжує незавершене очищення.</div>
+      <div class="three-dp-note">Спершу перевіряються всі знайдені замовлення. Після запуску можна скопіювати звіт; повторний запуск безпечно продовжує незавершене очищення.</div>
       <div class="form-actions" style="margin-top:14px"><button id="testOrderCleanupButton" class="btn-primary" type="button" onclick="runTestOrderCleanup()">🧹 Перевірити й очистити тестові замовлення</button></div>
       <div id="testOrderCleanupReport" style="margin-top:14px"></div>
+    </div>
+    <div class="section"><div class="section-header"><span class="section-title">Доступ до CRM API</span></div>
+      <div class="form-row"><label for="crmTokenInput">CRM API токен</label><input id="crmTokenInput" type="password" autocomplete="off" spellcheck="false" placeholder="Введіть токен у цьому браузері"></div>
+      <div class="form-actions" style="margin-top:12px"><button class="btn-primary" type="button" onclick="saveCrmToken_()">Зберегти та оновити дані</button><span id="crmTokenMessage" class="crm011-note"></span></div>
+      <div class="crm011-note" style="margin-top:10px">Токен зберігається лише в локальному сховищі цього браузера. Не надсилайте його в чат.</div>
     </div>
   </div>
 
@@ -801,12 +852,23 @@ function ensureCrmToken_() {
   if (TOKEN) window.localStorage.setItem(TOKEN_STORAGE_KEY, TOKEN);
   return Boolean(TOKEN);
 }
+function saveCrmToken_() {
+  const input=document.getElementById('crmTokenInput'),message=document.getElementById('crmTokenMessage');
+  const value=String(input&&input.value||'').trim();
+  if(!value){if(message)message.textContent='Введіть CRM API токен.';return;}
+  TOKEN=value;window.localStorage.setItem(TOKEN_STORAGE_KEY,value);input.value='';
+  if(message)message.textContent='Токен збережено в цьому браузері. Оновлюю дані…';
+  loaded.overview=true;showPageByName('overview');
+  hardRefresh();
+}
 
 // ════════════ API ════════════
 const inflightGets = new Map();
 const dashboardPerf = { requests:0, deduped:0, lastFinanceMs:null };
 const CRM013_LOAD_TELEMETRY_LIMIT = 60;
 const crmLoadTelemetryState = { entries: [] };
+let crmTelemetryVisibilityEpoch_ = 0;
+document.addEventListener('visibilitychange', function(){ crmTelemetryVisibilityEpoch_++; });
 function crmLoadTelemetryPage_() { const active=document.querySelector('.page.active');return active ? active.id.replace('page-','') : 'unknown'; }
 function crmLoadTelemetryRound_(value) { const number=Number(value);return Number.isFinite(number) ? Math.max(0,Math.round(number)) : null; }
 function crmLoadTelemetryBytes_(text) { try { return new TextEncoder().encode(String(text || '')).length; } catch (e) { return String(text || '').length; } }
@@ -814,7 +876,7 @@ function crmLoadTelemetryRecord_(entry) { crmLoadTelemetryState.entries.unshift(
 function renderCrmLoadTelemetry() { const root=document.getElementById('crmLoadTelemetry');if(!root)return;const rows=crmLoadTelemetryState.entries;if(!rows.length){root.innerHTML='<div class="crm011-note">Ще немає вимірів у цьому сеансі.</div>';return;}const cell=function(value){return value==null?'—':threeDpEsc(value);};root.innerHTML='<div class="tbl-wrap"><table><tr><th>Час</th><th>Сторінка</th><th>Дія</th><th>Черга</th><th>Мережа</th><th>Рендер</th><th>Сервер</th><th>Кеш</th><th>Байт</th><th>Дедуп</th><th>Стан</th></tr>'+rows.map(function(row){const cacheState=row.cache_state||(row.cache_hit==null?'—':row.cache_hit?'hit':'miss');return '<tr><td>'+cell(row.at)+'</td><td>'+cell(row.page)+'</td><td><code>'+cell(row.action)+'</code></td><td>'+cell(row.queue_ms)+'</td><td>'+cell(row.network_ms)+'</td><td>'+cell(row.render_ms)+'</td><td>'+cell(row.server_elapsed_ms)+'</td><td>'+cell(cacheState)+'</td><td>'+cell(row.response_bytes)+'</td><td>'+cell(row.deduped?'так':'ні')+'</td><td>'+cell(row.ok?'ok':'error')+'</td></tr>';}).join('')+'</table></div>'; }
 async function copyCrmLoadTelemetry() { const payload=JSON.stringify({ action:'crm013_load_telemetry', entries:crmLoadTelemetryState.entries },null,2);try{if(navigator.clipboard&&navigator.clipboard.writeText)await navigator.clipboard.writeText(payload);else throw new Error('clipboard unavailable');}catch(e){window.prompt('Скопіюй JSON телеметрії:',payload);} }
 function clearCrmLoadTelemetry() { crmLoadTelemetryState.entries=[];renderCrmLoadTelemetry(); }
-function crmLoadTelemetryAfterPaint_(entry, parsedAt) { const finish=function(){entry.render_ms=crmLoadTelemetryRound_(performance.now()-parsedAt);crmLoadTelemetryRecord_(entry);};if(typeof requestAnimationFrame==='function')requestAnimationFrame(finish);else setTimeout(finish,0); }
+function crmLoadTelemetryAfterPaint_(entry, parsedAt) { const epoch=crmTelemetryVisibilityEpoch_,visible=document.visibilityState==='visible';const finish=function(){entry.render_ms=visible&&document.visibilityState==='visible'&&epoch===crmTelemetryVisibilityEpoch_?crmLoadTelemetryRound_(performance.now()-parsedAt):null;crmLoadTelemetryRecord_(entry);};if(visible&&typeof requestAnimationFrame==='function')requestAnimationFrame(finish);else setTimeout(finish,0); }
 async function call(action, extra = {}) {
   if (!ensureCrmToken_()) throw new Error('CRM API token не налаштовано.');
   const inflight = typeof inflightGets === 'undefined' ? (call._inflight || (call._inflight = new Map())) : inflightGets;
@@ -839,6 +901,25 @@ async function call(action, extra = {}) {
   try { return await request; } catch(error) { if(entry.network_ms==null)entry.network_ms=round(now()-startedAt);entry.error='request_failed';report(entry,now());throw error; } finally { inflight.delete(key); }
 }
 
+async function loadInventorySnapshot_() {
+  try { return await call('inventory_snapshot'); }
+  catch (error) {
+    if (!/unknown action/i.test(String(error && error.message || error))) throw error;
+    // During API rollout keep ordinary CRM rows visible, while never showing
+    // the known-invalid CRM quantity as a confirmed 3D stock value.
+    const legacy = await call('sku_list');
+    return { ok:true, action:'inventory_snapshot', source_status:'unavailable', skus:(legacy.skus||[]).map(function(item) {
+      if (!item.is_3dp) return item;
+      const row={...item};
+      ['stock','stock_raw','physical_stock','expected','incoming_stock','projected_stock','projected_deficit','current_shortfall','preorder_deficit'].forEach(function(key){row[key]=null;});
+      row.issues=(row.issues||[]).filter(function(issue){return !/мінусовий_залишок|мало_на_складі/.test(String(issue));});
+      row.issues.push('3dp_inventory_unavailable');
+      row.stock_source='3dp_unavailable';row.stock_status='Невідомо';row.action='Перевірити 3D облік';row.stock_error='CRM inventory API ще не оновлено';
+      return row;
+    }) };
+  }
+}
+
 const crmIntegrityState = { status:'idle', result:null, error:'', time:'' };
 const CRM_INTEGRITY_COPY_CONFIRM_MS = 2000;
 function crmIntegrityLocalTime() { return new Date().toLocaleTimeString('uk-UA',{hour:'2-digit',minute:'2-digit'}); }
@@ -858,27 +939,25 @@ async function crmIntegrityCopyResult(button) {
   window.setTimeout(function(){button.textContent=original;},CRM_INTEGRITY_COPY_CONFIRM_MS);
 }
 function crmIntegrityRender(result) {
-  const root=document.getElementById('crmIntegrityDetail');if(!root)return;const problems=(result && result.problems) || [],truncated=(result && result.truncated) || {},coverage=(result && result.coverage && result.coverage.rrp_mismatch_3dp) || null;
-  root.style.display='none';root.innerHTML='';if(!result)return;
-  const copyButton='<button type="button" class="btn-secondary crm-integrity-copy" onclick="crmIntegrityCopyResult(this)">Скопіювати результат</button>';
-  if(!problems.length){root.innerHTML='<div class="section" style="margin-top:16px"><div class="section-header crm-integrity-header"><span class="section-title">Перевірка цілісності CRM</span>'+copyButton+'</div></div>';root.style.display='block';return;}
+  const root=document.getElementById('crmIntegrityDetail'),copyButton=document.getElementById('crmIntegrityCopyButton');if(!root)return;const problems=(result && result.problems) || [],truncated=(result && result.truncated) || {},coverage=(result && result.coverage && result.coverage.rrp_mismatch_3dp) || null;
+  root.style.display='none';root.innerHTML='';if(copyButton)copyButton.style.display=result?'':'none';if(!result || !problems.length)return;
   const rows=problems.map(function(problem){return '<tr><td>'+threeDpEsc(problem.sheet)+'</td><td>'+threeDpEsc(problem.rows)+'</td><td><code>'+threeDpEsc(problem.code)+'</code></td><td>'+threeDpEsc(problem.detail)+'</td></tr>';}).join('');
   const clipped=Object.keys(truncated).map(function(code){return '<div style="font-size:12px;color:var(--muted);margin-top:6px">Ще '+threeDpEsc(truncated[code])+' проблем(и) з кодом <code>'+threeDpEsc(code)+'</code> не показано.</div>';}).join('');
   const coverageNote=coverage && coverage.deferred?'<div style="font-size:12px;color:var(--muted);margin-top:6px">3D-P РРЦ: '+threeDpEsc(coverage.deferred)+'</div>':coverage && coverage.skipped_missing_crm_rrp?'<div style="font-size:12px;color:var(--muted);margin-top:6px">3D-P РРЦ: порівняно '+threeDpEsc(coverage.compared)+'; пропущено без SKU-ключа CRM РРЦ: '+threeDpEsc(coverage.skipped_missing_crm_rrp)+'.</div>':'';
-  root.innerHTML='<div class="section" style="margin-top:16px"><div class="section-header crm-integrity-header"><span class="section-title">Перевірка цілісності CRM</span>'+copyButton+'</div><div style="color:var(--red);font-weight:600;margin-bottom:8px">Потрібна увага: '+problems.length+' проблем(и).</div><div class="tbl-wrap"><table><tr><th>Вкладка</th><th>Рядки</th><th>Код</th><th>Деталь</th></tr>'+rows+'</table></div>'+clipped+coverageNote+'</div>';
+  root.innerHTML='<div style="color:var(--red);font-weight:600;margin:12px 0 8px">Потрібна увага: '+problems.length+' проблем(и).</div><div class="tbl-wrap"><table><tr><th>Вкладка</th><th>Рядки</th><th>Код</th><th>Деталь</th></tr>'+rows+'</table></div>'+clipped+coverageNote;
   root.style.display='block';
 }
 function renderCrmIntegrityTile() {
   const cards=document.getElementById('crmIntegrityCardHost') || document.getElementById('summaryCards');if(!cards)return;const existing=document.getElementById('crmIntegrityCard');if(existing)existing.remove();
-  const card=document.createElement('div');card.id='crmIntegrityCard';card.className='card';card.style.cursor='pointer';card.setAttribute('role','button');card.setAttribute('tabindex','0');
+  const card=document.createElement('div');card.id='crmIntegrityCard';card.className='card';
   const result=crmIntegrityState.result,problems=(result && result.problems) || [],time=crmIntegrityState.time?(' · '+crmIntegrityState.time):'',elapsed=crmIntegrityElapsed(result);
-  let value='Перевірити',sub='read-only · без вивантаження таблиць';
+  let value='—',sub='Ще не перевірено';
   if(crmIntegrityState.status==='running'){value=spin();sub='Перевірка…';}
   else if(crmIntegrityState.status==='clean'){card.className='card c-green';value='✓ OK';sub='Проблем не знайдено'+time+elapsed;}
-  else if(crmIntegrityState.status==='problems'){value='<span style="color:var(--red)">'+problems.length+'</span>';sub=problems.length+' проблем(и) · деталі нижче'+time+elapsed;}
+  else if(crmIntegrityState.status==='problems'){value='<span style="color:var(--red)">'+problems.length+'</span>';sub=problems.length+' проблем(и) · деталі в цьому блоці'+time+elapsed;}
   else if(crmIntegrityState.status==='error'){value='—';sub=threeDpEsc(crmIntegrityState.error || 'Перевірка недоступна.');}
   card.innerHTML='<div class="card-label">ЦІЛІСНІСТЬ CRM</div><div class="card-value">'+value+'</div><div class="card-sub">'+sub+'</div>';
-  card.onclick=runCrmIntegrityCheck;card.onkeydown=function(event){if(event.key==='Enter' || event.key===' '){event.preventDefault();runCrmIntegrityCheck();}};cards.appendChild(card);
+  cards.appendChild(card);
 }
 
 const CRM_MAINTENANCE_COMMANDS = [
@@ -961,9 +1040,12 @@ async function call3dp(action, extra = {}) {
   const { api, token } = get3dpCredentials();
   const url = `${api}?${new URLSearchParams({ action, token, ...extra })}`;
   let lastError = null;
-  for (let attempt = 0; attempt < 3; attempt++) {
+  for (let attempt = 0; attempt < 2; attempt++) {
+    let timeout = null;
     try {
-      const r = await fetch(url, { redirect: 'follow' });
+      const controller = new AbortController();
+      timeout = window.setTimeout(function(){ controller.abort(); }, 20000);
+      const r = await fetch(url, { redirect: 'follow', signal: controller.signal });
       if (!r.ok) {
         const error = new Error(`3D-P HTTP ${r.status}`);
         error.retryable = [404, 429, 500, 502, 503, 504].includes(r.status);
@@ -971,15 +1053,17 @@ async function call3dp(action, extra = {}) {
       }
       let d;
       try { d = await r.json(); }
-      catch (error) { const invalid = new Error('3D-P повернув не JSON');invalid.retryable=true;throw invalid; }
+      catch (error) { if(error && error.name === 'AbortError') throw error;const invalid = new Error('3D-P повернув не JSON');invalid.retryable=true;throw invalid; }
       if (!d.ok) throw new Error(d.error || '3D-P API error');
       return d;
     } catch (error) {
       lastError = error;
-      const retryable = Boolean(error && error.retryable) || error instanceof TypeError;
-      if (!retryable || attempt > 1) break;
-      // GET requests are read-only. Two bounded retries absorb transient Apps Script redirect/404 windows.
-      await new Promise(resolve => window.setTimeout(resolve, attempt === 0 ? 400 : 1200));
+      const retryable = Boolean(error && error.retryable) || error instanceof TypeError || (error && error.name === 'AbortError');
+      if (!retryable || attempt > 0) break;
+      // GET requests are read-only. One bounded retry absorbs transient Apps Script redirect/404 windows.
+      await new Promise(resolve => window.setTimeout(resolve, 400));
+    } finally {
+      if (timeout !== null) window.clearTimeout(timeout);
     }
   }
   throw lastError || new Error('3D-P API недоступний');
@@ -994,8 +1078,27 @@ async function call3dpPost(payload) {
 // ════════════ STATE ════════════
 const cache = {};
 const loaded = {};
-const alertsState={mode:'active',rows:[],loading:false};
+const alertsState={mode:'active',rows:[],loading:false,selected:new Set(),batchPending:false};
 const orderState = { mode: 'default', sort: 'date_desc', tableSort: { field:'', dir:'desc' }, filters: { search:'', channel:'', status:'', payment:'', clientType:'', preorder:'', profit:'' } };
+const PURCHASE_COLUMNS = [
+  ['order_ref','Референс / № замовлення'],['total_cost','Собівартість всього замовлення'],
+  ['purchase_date','Дата придбання'],['shipped_date','Відправлено в Україну'],
+  ['track_number','Номер посилки'],['qty','Кількість'],['sku_count','SKU'],['status','Статус']
+];
+const PURCHASE_PREFS_KEY = 'booster_purchase_columns_v2';
+function purchasePrefsLoad_() {
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(PURCHASE_PREFS_KEY) || '{}') || {}; } catch (error) {}
+  const allowed = PURCHASE_COLUMNS.map(function(column) { return column[0]; });
+  const order = Array.isArray(saved.order) ? saved.order.filter(function(key, index, array) { return allowed.indexOf(key) >= 0 && array.indexOf(key) === index; }) : [];
+  allowed.forEach(function(key) { if (order.indexOf(key) < 0) order.push(key); });
+  const visible = {};
+  allowed.forEach(function(key) { visible[key] = !saved.visible || saved.visible[key] !== false; });
+  if (!Object.keys(visible).some(function(key) { return visible[key]; })) visible.order_ref = true;
+  return { order: order, visible: visible };
+}
+const purchaseState = { rows: [], expanded: new Set(), loaded: false, loading: false, error: '', shipmentDateAvailable: false, sort: { field:'purchase_date', dir:'desc' }, prefs: purchasePrefsLoad_() };
+function purchasePrefsSave_() { try { localStorage.setItem(PURCHASE_PREFS_KEY, JSON.stringify(purchaseState.prefs)); } catch (error) {} }
 const financeState = { preset: 'month' };
 const ZEN_CORRECTION_PENDING_KEY = 'booster_zen_correction_pending_v1';
 const ZEN_TOPUP_PENDING_KEY = 'booster_zen_topup_pending_v1';
@@ -1049,16 +1152,14 @@ function clearPendingOrderEdit_(requestId) { try{const pending=JSON.parse(localS
 
 function showError(msg) {
   const el = document.getElementById('errorBanner');
-  el.innerHTML = `⚠ <b>Помилка завантаження даних:</b> ${msg}<br>
-    <small>Якщо файл відкрито через <code>file://</code>, запусти локальний сервер:<br>
-    <code>cd "C:\\Users\\14bez\\Downloads\\Booster Shop" && python -m http.server 8080</code><br>
-    Потім відкрий: <code>http://localhost:8080/booster-dashboard.html</code></small>`;
+  const missingToken=/CRM API token не налаштовано/i.test(String(msg||''));
+  el.innerHTML = '⚠ <b>Помилка завантаження даних:</b> '+threeDpEsc(msg)+(missingToken?'<br><button class="btn-secondary" type="button" onclick="showPageByName(\'settings\')">Ввести CRM API токен у Налаштуваннях</button>':'');
   el.classList.add('show');
 }
 function clearError() { document.getElementById('errorBanner').classList.remove('show'); }
 
 // ════════════ NAV ════════════
-const titles = { overview: 'Огляд', alerts: 'Увага', stock: 'Склад', consumables: 'Розхідники', orders: 'Замовлення', skus: 'Товари', clients: 'Клієнти', finance: 'Фінанси', roadmap: 'Роадмап', accounting: 'Облік', updates: 'Оновлення та міграція', settings: 'Налаштування', '3dprint': '3D-друк' };
+const titles = { overview: 'Огляд', alerts: 'Увага', stock: 'Склад', consumables: 'Розхідники', orders: 'Замовлення', purchases: 'Закупки', skus: 'Товари', clients: 'Клієнти', finance: 'Фінанси', roadmap: 'Роадмап', accounting: 'Облік', updates: 'Оновлення та міграція', settings: 'Налаштування', '3dprint': '3D-друк' };
 
 function showPageByName(name, skipEvent) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1083,10 +1184,11 @@ function hardRefresh() {
   Object.keys(loaded).forEach(k => delete loaded[k]);
   alertsState.rows=[];
   clearOrderItemsState();
+  purchaseState.loaded = false; purchaseState.rows = [];
   threeDpState.informationLoaded=false;threeDpState.informationLoading=false;threeDpState.informationError='';threeDpState.syncJournalLoaded=false;
   Object.keys(threeDpState.informationSections).forEach(function(key){threeDpState.informationSections[key]={loaded:false,loading:false,error:''};});
   threeDpUi.calc.draftCache=Object.create(null);threeDpUi.calc.draftFound=null;
-  ['summaryCards','pendingPreview','preordersPreview','alertsTable','slowStockTable','stockTable','consumablesTable','ordersTable','skuTable','clientsTable','financeKpis','financePnl','financeAssets','financeCashflow','financeCustomers','topSkusList','threeDpCards','threeDpCalculator','threeDpSkuTable','threeDpSalesTable','threeDpPlyushkyTable','threeDpPayoutsTable']
+  ['summaryCards','pendingPreview','preordersPreview','alertsTable','slowStockTable','stockTable','consumablesTable','ordersTable','purchasesActiveTable','purchasesArchiveTable','skuTable','clientsTable','financeKpis','financePnl','financeAssets','financeCashflow','financeCustomers','topSkusList','threeDpCards','threeDpCalculator','threeDpSkuTable','threeDpSalesTable','threeDpPlyushkyTable','threeDpPayoutsTable']
     .forEach(id => { const el = document.getElementById(id); if(el) el.innerHTML = spin(); });
   ['channelSection','trendGrid','topSkusSection'].forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
   clearError();
@@ -1136,6 +1238,9 @@ const THREE_DP_SALES_VISIBLE_DEFAULT = Object.freeze({
 const threeDpState = { skus: [], fixtures: [], settings: {}, analytics: [], sales: [], plyushky: [], payouts: [], overview: {}, informationSections: {
   sales:{loaded:false,loading:false,error:''},payouts:{loaded:false,loading:false,error:''},plyushky:{loaded:false,loading:false,error:''}
 } };
+threeDpState.orderShare = null;
+threeDpState.orderShareLoading = false;
+threeDpState.orderShareError = '';
 threeDpState.informationLoaded = false;
 threeDpState.informationLoading = false;
 threeDpState.informationError = '';
@@ -1147,7 +1252,7 @@ let threeDpLegacyModelLinks = {};
 let threeDpInfoPrefs = {};
 try { threeDpLegacyModelLinks = JSON.parse(localStorage.getItem(THREE_DP_LEGACY_MODEL_LINKS_KEY) || '{}') || {}; } catch (e) {}
 try { threeDpInfoPrefs = JSON.parse(localStorage.getItem(THREE_DP_INFO_PREFS_KEY) || '{}') || {}; } catch (e) {}
-const threeDpUi = { zone:'calculator', settingsOpen:false, settingsMsg:{}, calc:{ sku:'', values:{}, expected:{}, request:0, loading:false, saving:false, manufactureRequestId:'', draftFound:null, draftCache:Object.create(null), msg:{} }, product:{ sku:'', ledger:[], loading:false, msg:{} }, info:{ search:'', type:'all', status:'all', cost:'all', group:'none', sort:'sku', dir:'asc', visible:Object.assign({}, threeDpInfoPrefs.visible || {}), salesVisible:Object.assign({}, THREE_DP_SALES_VISIBLE_DEFAULT, threeDpInfoPrefs.salesVisible || {}), payoutMsg:{} } };
+const threeDpUi = { zone:'calculator', settingsOpen:false, settingsMsg:{}, calc:{ sku:'', values:{}, expected:{}, request:0, loading:false, saving:false, manufactureRequestId:'', draftFound:null, draftCache:Object.create(null), msg:{} }, product:{ sku:'', ledger:[], loading:false, msg:{}, marketing:{requestId:'',saving:false,msg:{},fixtureSeq:0} }, info:{ search:'', type:'all', status:'all', cost:'all', group:'none', sort:'sku', dir:'asc', visible:Object.assign({}, threeDpInfoPrefs.visible || {}), salesVisible:Object.assign({}, THREE_DP_SALES_VISIBLE_DEFAULT, threeDpInfoPrefs.salesVisible || {}), payoutMsg:{} } };
 
 function threeDpEsc(value) { return String(value == null ? '—' : value).replace(/[&<>'"]/g, function(c) { return ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'})[c]; }); }
 function threeDpNumber(value) { const n = Number(String(value == null ? '' : value).replace(',','.').replace(/[^0-9.-]/g,'')); return Number.isFinite(n) ? n : 0; }
@@ -1160,6 +1265,40 @@ function threeDpInput(id) { return document.getElementById(id); }
 function threeDpStatus(row) { return String((row || {})['API_статус_запису'] || 'Активний'); }
 function threeDpSku(sku) { return threeDpState.skus.find(function(r) { return String(r.SKU || '') === String(sku || ''); }) || null; }
 function threeDpActiveSkus() { return threeDpState.skus.filter(function(r) { return threeDpStatus(r) === 'Активний'; }); }
+function threeDpSkuPickerHtml_(kind,selectedSku) {
+  const row=threeDpSku(selectedSku),label=row?String(row.SKU)+' — '+String(row['Назва виробу']||''):'';
+  return '<div class="three-dp-sku-picker" data-kind="'+kind+'"><input id="threeDpSkuPicker-'+kind+'" type="search" role="combobox" aria-label="Пошук виробу за назвою або SKU" aria-autocomplete="list" aria-expanded="false" aria-controls="threeDpSkuResults-'+kind+'" autocomplete="off" placeholder="Введіть назву або SKU" value="'+threeDpEsc(label)+'" onfocus="threeDpSkuPickerSearch_(this,true)" oninput="threeDpSkuPickerSearch_(this,false)" onkeydown="threeDpSkuPickerKey_(event,this)" onblur="threeDpSkuPickerBlur_(event,this)"><div id="threeDpSkuResults-'+kind+'" class="three-dp-sku-results" role="listbox" hidden></div></div>';
+}
+function threeDpSkuPickerRows_(kind) { return (kind==='calc'?threeDpActiveSkus():threeDpState.skus.filter(function(r){return threeDpStatus(r)!=='Чернетка';})).slice().sort(function(a,b){return String(a.SKU).localeCompare(String(b.SKU),'uk',{numeric:true});}); }
+function threeDpSkuPickerSearch_(input,focused) {
+  const picker=input.closest('.three-dp-sku-picker'),kind=picker.dataset.kind,target=picker.querySelector('.three-dp-sku-results'),selected=kind==='calc'?threeDpUi.calc.sku:threeDpUi.product.sku,current=threeDpSku(selected),currentLabel=current?String(current.SKU)+' — '+String(current['Назва виробу']||''):'';
+  if(focused) input.select();
+  const query=(focused&&input.value===currentLabel?'':input.value).trim().toLocaleLowerCase('uk');
+  const rows=threeDpSkuPickerRows_(kind).filter(function(row){return !query||(String(row.SKU)+' '+String(row['Назва виробу']||'')).toLocaleLowerCase('uk').includes(query);}).slice(0,12);
+  target.innerHTML=rows.length?rows.map(function(row){return '<button type="button" role="option" data-sku="'+threeDpEsc(row.SKU)+'" onclick="threeDpSkuPickerChoose_(this)"><b>'+threeDpEsc(row.SKU)+'</b><small>'+threeDpEsc(row['Назва виробу']||'')+(threeDpStatus(row)==='Архів'?' · архів':'')+'</small></button>';}).join(''):'<div class="three-dp-sku-empty">Нічого не знайдено</div>';
+  target.hidden=false;input.setAttribute('aria-expanded','true');
+}
+function threeDpSkuPickerChoose_(button) {
+  const picker=button.closest('.three-dp-sku-picker'),kind=picker.dataset.kind,sku=button.dataset.sku;
+  if(kind==='calc')threeDpSelectCalcSku(sku);else threeDpSelectProduct(sku);
+}
+function threeDpSkuPickerKey_(event,input) {
+  const target=input.closest('.three-dp-sku-picker').querySelector('.three-dp-sku-results'),buttons=Array.from(target.querySelectorAll('button'));
+  if(event.key==='Escape'){target.hidden=true;input.setAttribute('aria-expanded','false');return;}
+  if(event.key==='Enter'&&buttons.length){event.preventDefault();threeDpSkuPickerChoose_(buttons.find(function(button){return button.classList.contains('active');})||buttons[0]);return;}
+  if(event.key!=='ArrowDown'&&event.key!=='ArrowUp')return;
+  event.preventDefault();if(target.hidden){threeDpSkuPickerSearch_(input,true);return;}
+  if(!buttons.length)return;
+  const index=buttons.findIndex(function(button){return button.classList.contains('active');}),next=event.key==='ArrowDown'?(index+1)%buttons.length:(index<1?buttons.length-1:index-1);
+  buttons.forEach(function(button,i){button.classList.toggle('active',i===next);});if(buttons[next])buttons[next].scrollIntoView({block:'nearest'});
+}
+function threeDpSkuPickerBlur_(event,input) {
+  const picker=input.closest('.three-dp-sku-picker');if(event.relatedTarget&&picker.contains(event.relatedTarget))return;
+  const selected=picker.dataset.kind==='calc'?threeDpUi.calc.sku:threeDpUi.product.sku,row=threeDpSku(selected),target=picker.querySelector('.three-dp-sku-results');
+  input.value=row?String(row.SKU)+' — '+String(row['Назва виробу']||''):'';
+  if(target)target.hidden=true;input.setAttribute('aria-expanded','false');
+}
+document.addEventListener('pointerdown',function(event){document.querySelectorAll('.three-dp-sku-picker').forEach(function(picker){if(picker.contains(event.target))return;const results=picker.querySelector('.three-dp-sku-results'),input=picker.querySelector('input');if(results)results.hidden=true;if(input)input.setAttribute('aria-expanded','false');});});
 function threeDpCurrentSku() { return threeDpSku(threeDpUi.calc.sku); }
 function threeDpSetting(label) { return threeDpState.settings[label] == null ? 0 : threeDpState.settings[label]; }
 function threeDpEqual(a,b) { const an=Number(a), bn=Number(b); return Number.isFinite(an) && Number.isFinite(bn) && String(a).trim() !== '' && String(b).trim() !== '' ? Math.abs(an-bn)<0.000001 : String(a == null ? '' : a) === String(b == null ? '' : b); }
@@ -1229,7 +1368,7 @@ async function saveThreeDpSettings() {
 function renderThreeDpCalculator() {
   const root=document.getElementById('threeDpCalculator'); if(!root) return;
   const values=Object.assign(threeDpBlankDraft(),threeDpUi.calc.values || {}),printTime=threeDpPrintTime(values.total_print_time_h),printTimeHint=printTime.blank?'Можна: 1:30, 1 год 30 хв або 1,5.':(printTime.ok?'= '+threeDpPrintTimeDisplay(printTime.hours):'⚠ '+printTime.error);
-  root.innerHTML='<div class="three-dp-form-grid"><label>SKU<select onchange="threeDpSelectCalcSku(this.value)"><option value="">Оберіть активний SKU</option>'+threeDpActiveSkus().map(function(row){return '<option value="'+threeDpEsc(row.SKU)+'"'+(row.SKU===threeDpUi.calc.sku?' selected':'')+'>'+threeDpEsc(row.SKU+' — '+(row['Назва виробу'] || ''))+'</option>';}).join('')+'</select></label><label>Кількість у партії, шт<input type="number" min="1" step="1" value="'+threeDpEsc(values.quantity)+'" oninput="threeDpCalcField(\'quantity\',this.value)"></label><label>Сумарна вага партії, г<input type="number" min="0" step="0.01" value="'+threeDpEsc(values.total_weight_g)+'" oninput="threeDpCalcField(\'total_weight_g\',this.value)"></label><label>Сумарний час партії, год<input type="text" inputmode="decimal" autocomplete="off" value="'+threeDpEsc(values.total_print_time_h)+'" oninput="threeDpCalcField(\'total_print_time_h\',this.value)"><small>'+threeDpEsc(printTimeHint)+'</small></label><label>Вага котушки, г<input type="number" min="0" step="0.01" value="'+threeDpEsc(values.spool_weight_g)+'" oninput="threeDpCalcField(\'spool_weight_g\',this.value)"></label><label>Ціна котушки, грн<input type="number" min="0" step="0.01" value="'+threeDpEsc(values.spool_price_uah)+'" oninput="threeDpCalcField(\'spool_price_uah\',this.value)"></label></div><div class="three-dp-note">Raw чернетка зберігається окремо для SKU. Фурнітура й РРЦ навмисно не входять у калькулятор.</div><div id="threeDpCalcResult" style="margin-top:16px"></div>';
+  root.innerHTML='<div class="three-dp-form-grid"><div class=\"three-dp-sku-field\"><label for=\"threeDpSkuPicker-calc\">SKU</label>'+threeDpSkuPickerHtml_('calc',threeDpUi.calc.sku)+'</div><label>Кількість у партії, шт<input type="number" min="1" step="1" value="'+threeDpEsc(values.quantity)+'" oninput="threeDpCalcField(\'quantity\',this.value)"></label><label>Сумарна вага партії, г<input type="number" min="0" step="0.01" value="'+threeDpEsc(values.total_weight_g)+'" oninput="threeDpCalcField(\'total_weight_g\',this.value)"></label><label>Сумарний час партії, год<input type="text" inputmode="decimal" autocomplete="off" value="'+threeDpEsc(values.total_print_time_h)+'" oninput="threeDpCalcField(\'total_print_time_h\',this.value)"><small>'+threeDpEsc(printTimeHint)+'</small></label><label>Вага котушки, г<input type="number" min="0" step="0.01" value="'+threeDpEsc(values.spool_weight_g)+'" oninput="threeDpCalcField(\'spool_weight_g\',this.value)"></label><label>Ціна котушки, грн<input type="number" min="0" step="0.01" value="'+threeDpEsc(values.spool_price_uah)+'" oninput="threeDpCalcField(\'spool_price_uah\',this.value)"></label></div><div class="three-dp-note">Raw чернетка зберігається окремо для SKU. Фурнітура й РРЦ навмисно не входять у калькулятор.</div><div id="threeDpCalcResult" style="margin-top:16px"></div>';
   renderThreeDpCalc();
 }
 function threeDpCalcField(field,value) { threeDpUi.calc.values[field]=value;renderThreeDpCalc(); }
@@ -1284,7 +1423,7 @@ async function manufactureThreeDpBatch() {
 }
 
 function threeDpMetrics(row) { const availability=(row || {}).availability || {};return { availability:availability['Наявно зараз, шт'],time:threeDpHours(row && row['Час друку за од., год']),cost:row && row['Собівартість Сергія (виробнича), грн'],rrp:row && row['РРЦ фактична, грн'],buyout:row && row['Ціна під викуп, грн'],model:row && row['Посилання на модель']}; }
-function threeDpSelectProduct(sku) { threeDpUi.product.sku=String(sku || '');threeDpUi.product.ledger=[];threeDpUi.product.msg={};renderThreeDpProducts();if(sku)loadThreeDpLedger(sku); }
+function threeDpSelectProduct(sku) { threeDpUi.product.sku=String(sku || '');threeDpUi.product.ledger=[];threeDpUi.product.msg={};threeDpUi.product.marketing={requestId:'',saving:false,msg:{},fixtureSeq:0};renderThreeDpProducts();if(sku)loadThreeDpLedger(sku); }
 function threeDpNewProduct() { threeDpSelectProduct(''); }
 function threeDpOptionalPrice(id) { const raw=String((threeDpInput(id) || {}).value || '').trim();if(!raw)return '';const value=Number(raw);return Number.isFinite(value) && value>=0?value:null; }
 function threeDpDraftRows_() { return threeDpState.skus.filter(function(row){return threeDpStatus(row)==='Чернетка';}).sort(function(a,b){return Number(b.row_number||0)-Number(a.row_number||0);}); }
@@ -1316,16 +1455,50 @@ async function assignThreeDpArticle(key,oldSku) {
   }
   catch(e){threeDpUi.product.msg={text:e.message,kind:'error'};renderThreeDpProducts();}
 }
+function threeDpToday_(){const now=new Date(),local=new Date(now.getTime()-now.getTimezoneOffset()*60000);return local.toISOString().slice(0,10);}
+function threeDpMarketingFixtureOptions_(){const rows=(typeof accountingState!=='undefined'&&accountingState.fixtureCatalog)||[];return '<option value="">Оберіть фурнітуру</option>'+rows.map(function(item){return '<option value="'+threeDpEsc(item.selection)+'">'+threeDpEsc(item.name+' · '+item.payer+' · склад '+item.stock+' · поточна с/в '+item.unit_cost+'/шт')+'</option>';}).join('');}
+function renderThreeDpMarketingWriteoff_(row,metrics,archived){
+  const state=threeDpUi.product.marketing||{msg:{}},catalogReady=typeof accountingState!=='undefined'&&accountingState.componentCatalogLoaded,msg=state.msg||{};
+  return '<div class="three-dp-product-form" style="margin-top:16px"><div class="form-section-title">Маркетингове списання · CRM-015</div><div class="three-dp-note">Окрема операція без замовлення. Склад 3D зменшується через партійний FIFO; у фінанси йде ціна під викуп плюс фактична FIFO-вартість фурнітури. Різниця інвентаризації автоматично маркетингом не вважається.</div>'+
+    '<div class="three-dp-form-grid" style="margin-top:12px"><label>Дата списання<input id="threeDpMarketingDate" type="date" value="'+threeDpToday_()+'"'+(archived?' disabled':'')+'><small>Якщо стара точна дата невідома — дата інвентаризації, а пояснення в примітці.</small></label><label>Підтверджена кількість, шт<input id="threeDpMarketingQty" type="number" min="1" max="'+threeDpEsc(Math.max(0,threeDpNumber(metrics.availability)))+'" step="1" value="1" oninput="previewThreeDpMarketingWriteoff_()"'+(archived?' disabled':'')+'><small>Доступно зараз: '+threeDpEsc(metrics.availability)+' шт.</small></label><label>Причина / кому передано<textarea id="threeDpMarketingNote" maxlength="220" placeholder="Напр.: виставковий зразок; дата інвентаризації, бо точна дата видачі невідома"'+(archived?' disabled':'')+'></textarea></label><label>Попередній розрахунок<span id="threeDpMarketingPreview" class="three-dp-readonly">Викуп: '+threeDpMoney(threeDpNumber(metrics.buyout))+' / шт</span></label></div>'+
+    '<div class="form-section-title">Фурнітура (необов’язково, до 10)</div><div id="threeDpMarketingFixtures" class="line-items"></div><div class="form-actions">'+(catalogReady?'<button class="btn-secondary" type="button" onclick="addThreeDpMarketingFixture_()"'+(archived?' disabled':'')+'>＋ Додати фурнітуру</button>':'<button class="btn-secondary" type="button" onclick="loadThreeDpMarketingFixtures_()"'+(archived?' disabled':'')+'>Завантажити активну фурнітуру</button>')+'</div><div class="field-hint">Платник береться з «Розхідники». Сергієва фурнітура збільшує його нарахування; фурнітура обох платників входить у маркетингові витрати Booster Shop. Сервер перевірить склад і FIFO.</div>'+
+    '<div class="form-actions"><button id="threeDpMarketingSubmit" class="btn-primary" type="button" onclick="saveThreeDpMarketingWriteoff_()"'+(archived||state.saving?' disabled':'')+'>Внести маркетингове списання</button></div><div id="threeDpMarketingMessage" class="form-msg '+threeDpEsc(msg.kind||'')+'" aria-live="polite">'+threeDpEsc(msg.text||'')+'</div></div>';
+}
+function setThreeDpMarketingStatus_(text,kind){const state=threeDpUi.product.marketing;state.msg={text:text||'',kind:kind||''};const target=document.getElementById('threeDpMarketingMessage');if(target){target.textContent=state.msg.text;target.className='form-msg '+state.msg.kind;}}
+async function loadThreeDpMarketingFixtures_(){
+  const state=threeDpUi.product.marketing;state.msg={text:'Завантажую активну фурнітуру…',kind:''};renderThreeDpProducts();
+  try{await loadOrderComponentCatalog_();state.msg={};renderThreeDpProducts();}
+  catch(e){state.msg={text:'Фурнітуру не завантажено: '+e.message,kind:'error'};renderThreeDpProducts();}
+}
+function addThreeDpMarketingFixture_(){
+  const host=document.getElementById('threeDpMarketingFixtures'),state=threeDpUi.product.marketing;if(!host||host.querySelectorAll('.line-item').length>=10)return;
+  const id='threeDpMarketingFixture'+(++state.fixtureSeq),row=document.createElement('div');row.className='line-item writeoff-line';row.id=id+'Row';row.innerHTML='<div class="purchase-item-head"><span class="purchase-item-title">Фурнітура '+state.fixtureSeq+'</span><button type="button" class="purchase-item-remove" aria-label="Видалити фурнітуру '+state.fixtureSeq+'" onclick="document.getElementById(\''+id+'Row\').remove();previewThreeDpMarketingWriteoff_()">&#215;</button></div><div class="line-item-grid"><div class="form-row"><label>Активна фурнітура *</label><select id="'+id+'Select" onchange="previewThreeDpMarketingWriteoff_()">'+threeDpMarketingFixtureOptions_()+'</select></div><div class="form-row"><label>Кількість *</label><input id="'+id+'Qty" type="number" min="1" step="1" value="1" oninput="previewThreeDpMarketingWriteoff_()"></div></div>';host.appendChild(row);previewThreeDpMarketingWriteoff_();
+}
+function collectThreeDpMarketingFixtures_(){return Array.from(document.querySelectorAll('#threeDpMarketingFixtures .line-item')).map(function(row){const id=row.id.replace('Row','');return {selection:String((document.getElementById(id+'Select')||{}).value||'').trim(),qty:Number((document.getElementById(id+'Qty')||{}).value||0)};});}
+function previewThreeDpMarketingWriteoff_(){
+  const target=document.getElementById('threeDpMarketingPreview'),row=threeDpSku(threeDpUi.product.sku);if(!target||!row)return;const qty=Number((document.getElementById('threeDpMarketingQty')||{}).value||0),buyout=threeDpNumber(threeDpMetrics(row).buyout),catalog=(typeof accountingState!=='undefined'&&accountingState.fixtureCatalog)||[],fixtures=collectThreeDpMarketingFixtures_();let owner=0,serhiy=0;
+  fixtures.forEach(function(item){const found=catalog.find(function(entry){return entry.selection===item.selection;});if(!found||!(item.qty>0))return;const total=threeDpNumber(found.unit_cost)*item.qty;if(found.payer==='Сергій')serhiy+=total;else owner+=total;});
+  target.innerHTML='Орієнтовно за поточною довідковою ціною: маркетинг <b>'+threeDpMoney(Math.max(0,qty)*buyout+owner+serhiy)+'</b>; нарахування Сергію <b>'+threeDpMoney(Math.max(0,qty)*buyout+serhiy)+'</b>.<br><small>Остаточну вартість фурнітури визначить FIFO на сервері.</small>';
+}
+function threeDpMarketingRequestId_(){return 'CRM015-'+Date.now().toString(36).toUpperCase()+'-'+Math.random().toString(36).slice(2,10).toUpperCase();}
+async function saveThreeDpMarketingWriteoff_(){
+  const row=threeDpSku(threeDpUi.product.sku),state=threeDpUi.product.marketing;if(!row||state.saving)return;const metrics=threeDpMetrics(row),date=String((document.getElementById('threeDpMarketingDate')||{}).value||'').trim(),quantity=Number((document.getElementById('threeDpMarketingQty')||{}).value||0),note=String((document.getElementById('threeDpMarketingNote')||{}).value||'').trim(),fixtures=collectThreeDpMarketingFixtures_();
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(date)){setThreeDpMarketingStatus_('Вкажи дату списання.','error');return;}if(!(quantity>0)||quantity!==Math.floor(quantity)){setThreeDpMarketingStatus_('Кількість має бути цілим числом більше нуля.','error');return;}if(quantity>threeDpNumber(metrics.availability)){setThreeDpMarketingStatus_('Підтверджена кількість більша за поточну наявність. Спочатку звір інвентаризацію.','error');return;}if(!note){setThreeDpMarketingStatus_('Опиши причину або кому передано виріб.','error');return;}if(fixtures.some(function(item){return !item.selection||!(item.qty>0)||item.qty!==Math.floor(item.qty);})){setThreeDpMarketingStatus_('Для кожної фурнітури обери позицію та цілу кількість більше нуля.','error');return;}
+  if(!confirm('Списати '+quantity+' шт '+row.SKU+' як маркетинг без замовлення? Це зменшить FIFO-склад і створить фінансові записи.'))return;
+  state.requestId=state.requestId||threeDpMarketingRequestId_();state.saving=true;let completed=false;const button=document.getElementById('threeDpMarketingSubmit');if(button){button.disabled=true;button.textContent='Записую…';}setThreeDpMarketingStatus_('Записую FIFO, фінанси та фурнітуру…','');
+  try{const result=await callPost({action:'add_3dp_marketing_writeoff',request_id:state.requestId,date:date,sku:row.SKU,quantity:quantity,note:note,fixtures:fixtures});state.requestId='';state.msg={text:'Списання внесено: '+quantity+' шт · маркетингові витрати '+threeDpMoney(result.marketing_expense)+' · Сергію '+threeDpMoney(result.serhiy_accrual)+(result.fixtures_written?' · фурнітура '+result.fixtures_written+' ряд.':'')+'.',kind:'success'};threeDpState.informationSections.sales.loaded=false;threeDpState.informationSections.plyushky.loaded=false;accountingState.componentCatalogLoaded=false;await reloadThreeDpData();completed=true;}
+  catch(e){setThreeDpMarketingStatus_('Не завершено: '+e.message+'. Для повтору не змінюй форму — буде використано той самий ID.','error');}
+  finally{state.saving=false;if(completed)renderThreeDpProducts();else if(button){button.disabled=false;button.textContent='Внести маркетингове списання';}}
+}
 function renderThreeDpProducts() {
   const root=document.getElementById('threeDpProductWorkspace');if(!root)return;
   const selectedRow=threeDpSku(threeDpUi.product.sku),row=selectedRow&&threeDpStatus(selectedRow)!=='Чернетка'?selectedRow:null,existing=Boolean(row),archived=existing && threeDpStatus(row)==='Архів',metrics=existing?threeDpMetrics(row):{};
-  const options=threeDpState.skus.filter(function(r){return threeDpStatus(r)!=='Чернетка';}).sort(function(a,b){return String(a.SKU).localeCompare(String(b.SKU),'uk');}).map(function(r){return '<option value="'+threeDpEsc(r.SKU)+'"'+(r.SKU===threeDpUi.product.sku?' selected':'')+'>'+threeDpEsc(r.SKU+' — '+(r['Назва виробу'] || '')+(threeDpStatus(r)==='Архів'?' (архів)':''))+'</option>';}).join('');
   const type=existing?row['Тип']:'';
   const rrp=existing?row['РРЦ фактична, грн']:'';
   const buyout=existing?row['Ціна під викуп, грн']:'';
   const model=existing?row['Посилання на модель']:'';
   const articleEditor=existing&&!archived?threeDpArticleEditorHtml_(row,'product','Змінити артикул'):'';
-  root.innerHTML=renderThreeDpDraftQueue_()+'<div class="three-dp-toolbar"><label>Оберіть SKU<select onchange="threeDpSelectProduct(this.value)"><option value="">Новий виріб</option>'+options+'</select></label><button class="btn-secondary" type="button" onclick="threeDpNewProduct()">+ Новий SKU</button></div><div class="three-dp-product-form"><div class="three-dp-form-grid"><label>SKU'+(existing?'<span class="three-dp-readonly mono">'+threeDpEsc(row.SKU)+'</span>':'<input id="threeDpProductSku" placeholder="BR-... / FIG-... / ACC-3D-...">')+'</label><label>Назва виробу<input id="threeDpProductName" value="'+threeDpEsc(existing?row['Назва виробу']:'')+'"></label><label>Категорія / тип<select id="threeDpProductType"><option value="">Оберіть тип</option>'+['Брелок','Фігурка','Функціональний аксесуар'].map(function(x){return '<option value="'+threeDpEsc(x)+'"'+(x===type?' selected':'')+'>'+threeDpEsc(x)+'</option>';}).join('')+'</select></label><label>РРЦ фактична, грн<input id="threeDpProductRrp" type="number" min="0" step="0.01" value="'+threeDpEsc(rrp)+'"></label><label>Ціна під викуп, грн<input id="threeDpProductBuyout" type="number" min="0" step="0.01" value="'+threeDpEsc(buyout)+'"><small>Не входить у 50/50.</small></label><label>Посилання на модель<input id="threeDpProductModel" type="url" placeholder="https://…" value="'+threeDpEsc(model)+'"></label><label>Примітки<textarea id="threeDpProductNotes">'+threeDpEsc(existing?row['Примітки']:'')+'</textarea></label><label>Час друку / од.<span class="three-dp-readonly">'+(existing?threeDpEsc(threeDpPrintTimeDisplay(metrics.time)):'—')+(existing && threeDpPrintTimeWarning(metrics.time)?'<br><small>'+threeDpEsc(threeDpPrintTimeWarning(metrics.time))+'</small>':'')+'</span></label><label>Собівартість Сергія<span class="three-dp-readonly">'+(existing?threeDpMoney(metrics.cost):'—')+'<br><small>З’явиться після даних партії в калькуляторі.</small></span></label><label>Наявність (read-only)<span class="three-dp-readonly">'+(existing?threeDpEsc(metrics.availability)+' шт':'—')+'</span></label>' +(existing?'<label>API-статус<span class="three-dp-readonly">'+threeDpStatusHtml(row)+'</span></label>':'')+'</div>'+articleEditor+'<div class="form-actions" style="margin-top:14px"><button class="btn-primary" type="button" onclick="saveThreeDpProduct()">'+(existing?'Зберегти поля виробу':'Створити активний SKU')+'</button>' +(existing?'<button class="btn-secondary" type="button" onclick="syncSelectedThreeDpProductToCrm()">Синхронізувати артикул / РРЦ з CRM</button><button class="btn-secondary" type="button" onclick="toggleThreeDpArchive()">'+(archived?'Відновити SKU':'Архівувати SKU')+'</button>':'')+'</div><div class="three-dp-note">Швидке створення власником одразу додає активний SKU в 3D-P, Аналітику та CRM. Собівартість не вводиться тут: її розрахує калькулятор після першої партії. Кнопка вище перейменовує точний history-free CRM SKU з тією самою назвою, синхронізує РРЦ або створює SKU лише коли кандидата на перейменування немає.</div>'+threeDpLegacyModelMigrationHtml()+threeDpMessage(threeDpUi.product.msg)+'</div>' +(existing?renderThreeDpStock(row,metrics,archived):'');
+  root.innerHTML=renderThreeDpDraftQueue_()+'<div class="three-dp-toolbar"><div class=\"three-dp-sku-field\"><label for=\"threeDpSkuPicker-product\">Оберіть SKU</label>'+threeDpSkuPickerHtml_('product',threeDpUi.product.sku)+'</div><button class="btn-secondary" type="button" onclick="threeDpNewProduct()">+ Новий SKU</button></div><div class="three-dp-product-form"><div class="three-dp-form-grid"><label>SKU'+(existing?'<span class="three-dp-readonly mono">'+threeDpEsc(row.SKU)+'</span>':'<input id="threeDpProductSku" placeholder="BR-... / FIG-... / ACC-3D-...">')+'</label><label>Назва виробу<input id="threeDpProductName" value="'+threeDpEsc(existing?row['Назва виробу']:'')+'"></label><label>Категорія / тип<select id="threeDpProductType"><option value="">Оберіть тип</option>'+['Брелок','Фігурка','Функціональний аксесуар'].map(function(x){return '<option value="'+threeDpEsc(x)+'"'+(x===type?' selected':'')+'>'+threeDpEsc(x)+'</option>';}).join('')+'</select></label><label>РРЦ фактична, грн<input id="threeDpProductRrp" type="number" min="0" step="0.01" value="'+threeDpEsc(rrp)+'"></label><label>Ціна під викуп, грн<input id="threeDpProductBuyout" type="number" min="0" step="0.01" value="'+threeDpEsc(buyout)+'"><small>Не входить у 50/50.</small></label><label>Посилання на модель<input id="threeDpProductModel" type="url" placeholder="https://…" value="'+threeDpEsc(model)+'"></label><label>Примітки<textarea id="threeDpProductNotes">'+threeDpEsc(existing?row['Примітки']:'')+'</textarea></label><label>Час друку / од.<span class="three-dp-readonly">'+(existing?threeDpEsc(threeDpPrintTimeDisplay(metrics.time)):'—')+(existing && threeDpPrintTimeWarning(metrics.time)?'<br><small>'+threeDpEsc(threeDpPrintTimeWarning(metrics.time))+'</small>':'')+'</span></label><label>Собівартість Сергія<span class="three-dp-readonly">'+(existing?threeDpMoney(metrics.cost):'—')+'<br><small>З’явиться після даних партії в калькуляторі.</small></span></label><label>Наявність (read-only)<span class="three-dp-readonly">'+(existing?threeDpEsc(metrics.availability)+' шт':'—')+'</span></label>' +(existing?'<label>API-статус<span class="three-dp-readonly">'+threeDpStatusHtml(row)+'</span></label>':'')+'</div>'+articleEditor+'<div class="form-actions" style="margin-top:14px"><button class="btn-primary" type="button" onclick="saveThreeDpProduct()">'+(existing?'Зберегти поля виробу':'Створити активний SKU')+'</button>' +(existing?'<button class="btn-secondary" type="button" onclick="syncSelectedThreeDpProductToCrm()">Синхронізувати артикул / РРЦ з CRM</button><button class="btn-secondary" type="button" onclick="toggleThreeDpArchive()">'+(archived?'Відновити SKU':'Архівувати SKU')+'</button>':'')+'</div><div class="three-dp-note">Швидке створення власником одразу додає активний SKU в 3D-P, Аналітику та CRM. Собівартість не вводиться тут: її розрахує калькулятор після першої партії. Кнопка вище перейменовує точний history-free CRM SKU з тією самою назвою, синхронізує РРЦ або створює SKU лише коли кандидата на перейменування немає.</div>'+threeDpLegacyModelMigrationHtml()+threeDpMessage(threeDpUi.product.msg)+'</div>' +(existing?renderThreeDpMarketingWriteoff_(row,metrics,archived)+renderThreeDpStock(row,metrics,archived):'');
 }
 // Keep in sync with NOMENCLATURE_SKU_PATTERN_3DP in 3d-print/apps-script-3dp-api/Code.gs; source: 3D-P SKU convention rev. 9.
 function threeDpSkuTypeError(sku,type) { const s=String(sku || '').trim();if(!/^(BR|FIG|ACC-3D)-[A-Z0-9]{2,5}-\d{3}(?:-[A-Z0-9]{1,5})*$/.test(s))return 'SKU має форму BR-CHARM-001, FIG-CHARM-001 або ACC-3D-ONIX-110-21-BLK.';if((s.indexOf('BR-')===0 && type!=='Брелок')||(s.indexOf('FIG-')===0 && type!=='Фігурка')||(s.indexOf('ACC-3D-')===0 && type!=='Функціональний аксесуар'))return 'Префікс SKU не відповідає обраному типу.';return ''; }
@@ -1348,7 +1521,23 @@ async function syncSelectedThreeDpProductToCrm() {
       if(candidates.length===1){const previous=candidates[0],expectedRrp=threeDpCrmRrp(previous),expectedName=String(previous.full_name||previous.name||'').trim();if(!(expectedRrp>0)||!expectedName)throw new Error('Старий CRM SKU не має назви або поточної РРЦ.');if(!confirm('CRM ще має старий артикул '+previous.sku+' для цього товару. Змінити його на '+row.SKU+' та синхронізувати РРЦ?')){threeDpUi.product.msg={};renderThreeDpProducts();return;}const integrityBefore=await call('integrity_check');if((integrityBefore.problems||[]).length)throw new Error('CRM integrity check має проблеми. Перейменування зупинено до їх перевірки.');threeDpUi.product.msg={text:'Перейменування артикула в CRM…',kind:''};renderThreeDpProducts();const renamed=await callPost({action:'sync_3dp_catalog_rrp',previous_sku:previous.sku,sku:row.SKU,expected_name:expectedName,rrp:rrp,expected_rrp:expectedRrp});delete cache.skus;threeDpUi.product.msg={text:'CRM артикул змінено: '+renamed.old_sku+' → '+renamed.sku+'. РРЦ: '+threeDpMoney(renamed.previous_rrp)+' → '+threeDpMoney(renamed.rrp)+'.',kind:'success'};renderThreeDpProducts();runCrmIntegrityCheck();return;}
       if(!confirm('SKU '+row.SKU+' відсутній у CRM. Створити його?')){threeDpUi.product.msg={};renderThreeDpProducts();return;}
       threeDpUi.product.msg={text:'SKU відсутній у CRM; створення…',kind:''};renderThreeDpProducts();
-      const created=await callPost(threeDpCrmPayload(row.SKU,name,type,rrp,notes));delete cache.skus;threeDpUi.product.msg={text:'CRM створено: Товари рядок '+created.product_row+', РРЦ рядок '+created.rrp_row+'.',kind:'success'};renderThreeDpProducts();runCrmIntegrityCheck();return;
+      let created;
+      try { created=await callPost(threeDpCrmPayload(row.SKU,name,type,rrp,notes)); }
+      catch(createError){
+        if(String(createError&&createError.message||'')!=='SKU already exists with different CRM fields or RRP')throw createError;
+        if(!confirm('SKU '+row.SKU+' уже є в CRM, але не в активному списку. Активувати наявну картку без зміни назви й РРЦ?')){threeDpUi.product.msg={};renderThreeDpProducts();return;}
+        const integrityBefore=await call('integrity_check');if(!integrityBefore.clean)throw new Error('CRM integrity check має проблеми. Активацію зупинено.');
+        let activated;
+        try { activated=await callPost({action:'set_3dp_sku_active',sku:row.SKU,active:true,expected_active:'Ні'}); }
+        catch(activationError){
+          if(String(activationError&&activationError.message||'').indexOf('STALE_WRITE: CRM active status changed')!==0)throw activationError;
+          threeDpUi.product.msg={text:'Статус SKU у CRM вже змінився. Список CRM може оновлюватися до 5 хвилин; після цього онови дашборд.',kind:''};renderThreeDpProducts();return;
+        }
+        delete cache.skus;
+        const integrityAfter=await call('integrity_check');if(!integrityAfter.clean)throw new Error('SKU активовано, але перевірка цілісності CRM знайшла проблеми. Звір статус перед повтором.');
+        threeDpUi.product.msg={text:activated.already_applied?'SKU вже активний у CRM. Онови сторінку.':'Наявний SKU активовано в CRM. Назву й РРЦ не змінено; за потреби синхронізуй РРЦ цією кнопкою ще раз.',kind:'success'};renderThreeDpProducts();return;
+      }
+      delete cache.skus;threeDpUi.product.msg={text:'CRM створено: Товари рядок '+created.product_row+', РРЦ рядок '+created.rrp_row+'.',kind:'success'};renderThreeDpProducts();runCrmIntegrityCheck();return;
     }
     const expectedRrp=threeDpCrmRrp(crmSku);
     if(!(expectedRrp>0))throw new Error('CRM не повернула поточну РРЦ. Онови сторінку та повтори.');
@@ -1383,10 +1572,28 @@ async function toggleThreeDpArchive() {
   const row=threeDpSku(threeDpUi.product.sku);if(!row)return;const archived=threeDpStatus(row)==='Архів',reason=archived?'':(prompt('Коротка причина архівації (необов’язково):','') || '');if(!confirm((archived?'Відновити':'Архівувати')+' SKU '+row.SKU+'? Це reversible API-статус, не видалення.'))return;
   try {
     threeDpUi.product.msg={text:'Перевіряю CRM перед зміною статусу…',kind:''};renderThreeDpProducts();const integrityBefore=await call('integrity_check');if((integrityBefore.problems||[]).length)throw new Error('CRM integrity check має проблеми. Зміна статусу зупинена.');
-    const desiredActive=archived,crmExpected=archived?'Ні':'Так';await callPost({action:'set_3dp_sku_active',sku:row.SKU,active:desiredActive,expected_active:crmExpected});delete cache.skus;
-    try { await call3dpPost({action:archived?'3dp_nomenclature_restore':'3dp_nomenclature_archive',row:row.row_number,expected_status:threeDpStatus(row),reason:reason}); }
-    catch(threeDpError){let rollback='';try{await callPost({action:'set_3dp_sku_active',sku:row.SKU,active:!desiredActive,expected_active:desiredActive?'Так':'Ні'});rollback=' CRM повернуто до попереднього статусу.';}catch(rollbackError){rollback=' CRM rollback не вдався: '+rollbackError.message+'.';}throw new Error('3D-P статус не змінено: '+threeDpError.message+'.'+rollback);}
-    await reloadThreeDpData();const integrityAfter=await call('integrity_check');if((integrityAfter.problems||[]).length)throw new Error('Статуси змінено, але післяопераційна перевірка CRM знайшла проблеми.');threeDpUi.product.msg={text:archived?'SKU активовано в CRM і 3D-P.':'SKU деактивовано в CRM і 3D-P.',kind:'success'};renderThreeDpAll();
+    const desiredActive=archived,crmExpected=archived?'Ні':'Так';let crmChanged=false,crmMissing=false;
+    try { await callPost({action:'set_3dp_sku_active',sku:row.SKU,active:desiredActive,expected_active:crmExpected});crmChanged=true;delete cache.skus; }
+    catch(crmError){
+      if(archived || String(crmError&&crmError.message||'')!=='SKU not found in CRM: '+row.SKU)throw crmError;
+      if(!confirm('SKU '+row.SKU+' відсутній у CRM. Архівувати його лише в 3D-P?')){threeDpUi.product.msg={};renderThreeDpProducts();return;}
+      crmMissing=true;
+    }
+    const previousStatus=threeDpStatus(row),targetStatus=archived?'Активний':'Архів';let confirmedAfterError=false;
+    try { await call3dpPost({action:archived?'3dp_nomenclature_restore':'3dp_nomenclature_archive',row:row.row_number,expected_status:previousStatus,reason:reason}); }
+    catch(threeDpError){
+      // Apps Script may commit a POST before its response fails. Read the exact SKU
+      // before claiming failure, retrying, or rolling back the CRM status.
+      let actualStatus='',readError=null;
+      try { const live=await call3dp('3dp_get_row',{sheet:'Номенклатура',sku:row.SKU});actualStatus=threeDpStatus(live.row); }
+      catch(error){readError=error;}
+      if(actualStatus===targetStatus)confirmedAfterError=true;
+      else if(actualStatus===previousStatus){
+        let rollback='';if(crmChanged){try{await callPost({action:'set_3dp_sku_active',sku:row.SKU,active:!desiredActive,expected_active:desiredActive?'Так':'Ні'});rollback=' CRM повернуто до попереднього статусу.';}catch(rollbackError){rollback=' CRM rollback не вдався: '+rollbackError.message+'.';}}
+        throw new Error('3D-P статус не змінено: '+threeDpError.message+'.'+rollback);
+      } else throw new Error('Не вдалося підтвердити статус 3D-P після відповіді «'+threeDpError.message+'»'+(readError?': '+readError.message:' (поточний статус: '+actualStatus+')')+'. Не повторюй дію до звірки SKU.');
+    }
+    await reloadThreeDpData();const integrityAfter=await call('integrity_check');if((integrityAfter.problems||[]).length)throw new Error('Статуси змінено, але післяопераційна перевірка CRM знайшла проблеми.');threeDpUi.product.msg={text:(crmMissing?'SKU архівовано лише в 3D-P: картки CRM немає.':archived?'SKU активовано в CRM і 3D-P.':'SKU деактивовано в CRM і 3D-P.')+(confirmedAfterError?' Статус підтверджено повторним читанням після помилки відповіді.':''),kind:'success'};renderThreeDpAll();
   } catch(e) { threeDpUi.product.msg={text:'Помилка: '+e.message,kind:'error'};renderThreeDpProducts(); }
 }function threeDpStockAdjustmentForActual(actual,current) {
   if(!Number.isInteger(actual) || actual<0)return {valid:false,delta:null,text:'Вкажіть фактичну наявність цілим невід’ємним числом.'};
@@ -1420,7 +1627,12 @@ function threeDpCell(record,key) {
   if(key==='sku')return '<span class="chip mono">'+threeDpEsc(record.sku)+'</span>';if(key==='name')return threeDpEsc(record.name || '—');if(key==='type')return threeDpEsc(record.type);if(key==='status')return threeDpStatusHtml(record.row);if(key==='availability')return '<b>'+threeDpEsc(record.availability)+'</b>';if(key==='cost')return threeDpMoney(record.cost);if(key==='time')return threeDpEsc(threeDpPrintTimeDisplay(record.time))+(threeDpPrintTimeWarning(record.time)?'<br><small>'+threeDpEsc(threeDpPrintTimeWarning(record.time))+'</small>':'');if(key==='rrp')return record.rrp==null?'<span style="color:var(--muted)">—</span>':threeDpMoney(record.rrp)+(record.margin?'<br><span class="three-dp-margin '+record.margin.tier+'" title="(РРЦ − собівартість Сергія) ÷ РРЦ, до поділу 50/50">Клас маржі до split · '+threeDpEsc(record.margin.label)+' · '+record.margin.pct.toFixed(1)+'%</span>':'');if(key==='recommended')return '<span style="color:var(--muted)">Очікує формулу власника</span>';if(key==='buyout')return record.buyout==null?'<span style="color:var(--muted)">—</span>':threeDpMoney(record.buyout);return '—';
 }
 function threeDpSortValue(record,key) { return ['availability','cost','time','rrp','buyout'].indexOf(key)!==-1?(record[key]==null?-1:Number(record[key])):String(record[key]==null?'':record[key]).toLowerCase(); }
-function setThreeDpInfo(key,value) { threeDpUi.info[key]=value;renderThreeDpInformation(); }
+function setThreeDpInfo(key,value) {
+  const active=key==='search'&&document.activeElement&&document.activeElement.closest('#threeDpInformationTable')?document.activeElement:null;
+  const start=active&&typeof active.selectionStart==='number'?active.selectionStart:null,end=active&&typeof active.selectionEnd==='number'?active.selectionEnd:null;
+  threeDpUi.info[key]=value;renderThreeDpInformation(key==='search');
+  if(active){const replacement=document.querySelector('#threeDpInformationTable input');if(replacement){replacement.focus({preventScroll:true});if(start!==null)replacement.setSelectionRange(start,end);}}
+}
 function sortThreeDpInfo(key) { if(threeDpUi.info.sort===key)threeDpUi.info.dir=threeDpUi.info.dir==='asc'?'desc':'asc';else{threeDpUi.info.sort=key;threeDpUi.info.dir=['availability','cost','time','rrp','buyout'].indexOf(key)!==-1?'desc':'asc';}renderThreeDpInformation(); }
 function saveThreeDpInfoPrefs_() { localStorage.setItem(THREE_DP_INFO_PREFS_KEY,JSON.stringify({visible:threeDpUi.info.visible,salesVisible:threeDpUi.info.salesVisible})); }
 function toggleThreeDpColumn(key,checked) { threeDpUi.info.visible[key]=checked;saveThreeDpInfoPrefs_();renderThreeDpInformation(); }
@@ -1450,36 +1662,66 @@ function renderThreeDpPayouts_(){
     (!rows.length?'<div class="three-dp-note">Періодів виплат ще немає.</div>':'<div class="tbl-wrap"><table><tr><th>Період</th><th>Нараховано Сергію</th><th>Строк перевірки</th><th>Дата виплати</th><th>Статус</th><th>Примітка</th><th>Дія</th></tr>'+rows.map(function(row){const paid=String(row['Статус']||'')==='Виплачено',number=Number(row.row_number);return '<tr><td><b>'+threeDpEsc(row['Період (РРРР-ММ)'])+'</b></td><td>'+threeDpMoney(row['Нараховано Сергію за період, грн'])+'</td><td>'+threeDpEsc(row['Термін перевірки Сергієм'])+'</td><td>'+(paid?threeDpEsc(row['Дата фактичної виплати']):'<input id="threeDpPayoutDate'+number+'" type="date" value="'+today+'">')+'</td><td>'+threeDpEsc(row['Статус'])+'</td><td>'+threeDpEsc(row['Примітки'])+'</td><td>'+(paid?'<span style="color:var(--green)">Виплачено</span>':'<button class="btn-primary" type="button" onclick="markThreeDpPayoutPaid_('+number+',\''+threeDpEsc(row['Період (РРРР-ММ)'])+'\')">Позначити виплачено</button>')+'</td></tr>';}).join('')+'</table></div>');
 }
 function renderThreeDpInfoSectionStatus_(id,state,prompt){const target=document.getElementById(id);if(!target)return;if(state.loading)target.innerHTML='<div class="three-dp-note">Завантаження цього підблоку…</div>';else if(state.error)target.innerHTML='<div class="records-message error">Помилка: '+threeDpEsc(state.error)+'</div>';else target.innerHTML='<div class="three-dp-note">'+threeDpEsc(prompt)+'</div>';}
-function renderThreeDpInformation() {
-  renderThreeDpSyncJournal();
-  const records=threeDpState.skus.map(threeDpInfoRecord);threeDpAttention(records);
+function renderThreeDpInformation(tableOnly) {
+  if(!tableOnly)renderThreeDpSyncJournal();
+  const records=threeDpState.skus.map(threeDpInfoRecord);if(!tableOnly)threeDpAttention(records);
   const salesState=threeDpState.informationSections.sales;
-  if(salesState.loaded)renderThreeDpSummary(records);else renderThreeDpInfoSectionStatus_('threeDpInformationSummary',salesState,'Розгорни підблок, щоб завантажити аналітику продажів.');
+  if(!tableOnly){if(salesState.loaded)renderThreeDpSummary(records);else renderThreeDpInfoSectionStatus_('threeDpInformationSummary',salesState,'Розгорни підблок, щоб завантажити аналітику продажів.');}
   const picker=document.getElementById('threeDpColumnPicker');if(picker)picker.innerHTML=THREE_DP_COLUMNS.map(function(c){return '<label><input type="checkbox" '+(threeDpVisible(c[0])?'checked':'')+' onchange="toggleThreeDpColumn(\''+c[0]+'\',this.checked)"> '+threeDpEsc(c[1])+'</label>';}).join('');
   const visible=THREE_DP_COLUMNS.filter(function(c){return threeDpVisible(c[0]);}),q=String(threeDpUi.info.search || '').trim().toLowerCase(),types=Array.from(new Set(records.map(function(r){return r.type;}).filter(function(x){return x && x!=='—';}))).sort();
   const rows=records.filter(function(r){return (!q || (r.sku+' '+r.name).toLowerCase().includes(q)) && (threeDpUi.info.type==='all' || r.type===threeDpUi.info.type) && (threeDpUi.info.status==='all' || r.status===threeDpUi.info.status) && threeDpCostMatch(r.cost);}),key=threeDpUi.info.sort,dir=threeDpUi.info.dir==='asc'?1:-1;
   rows.sort(function(a,b){const av=threeDpSortValue(a,key),bv=threeDpSortValue(b,key),compare=typeof av==='number' && typeof bv==='number'?av-bv:String(av).localeCompare(String(bv),'uk',{numeric:true,sensitivity:'base'});return compare===0?a.sku.localeCompare(b.sku,'uk'):compare*dir;});
   const output=[];let lastGroup=null;rows.forEach(function(r){const group=threeDpUi.info.group==='type'?r.type:threeDpUi.info.group==='status'?r.status:'';if(group && group!==lastGroup){output.push('<tr><td colspan="'+Math.max(1,visible.length)+'" style="background:var(--surface2);font-size:11px;font-weight:700;color:var(--muted)">'+threeDpEsc(group)+'</td></tr>');lastGroup=group;}output.push('<tr>'+visible.map(function(c){return '<td>'+threeDpCell(r,c[0])+'</td>';}).join('')+'</tr>');});
   const target=document.getElementById('threeDpInformationTable');if(target){const arrow=function(c){return threeDpUi.info.sort===c?(threeDpUi.info.dir==='asc'?' ▲':' ▼'):' ↕';},costOptions=[['all','Усі'],['0-10','до 10'],['10-25','10.01–25'],['25-60','25.01–60'],['60-99','60.01–99'],['100+','вище 99']];target.innerHTML='<div class="three-dp-toolbar"><label>Пошук SKU / назви<input value="'+threeDpEsc(threeDpUi.info.search)+'" placeholder="🔍 Пошук…" oninput="setThreeDpInfo(\'search\',this.value)"></label><label>Тип<select onchange="setThreeDpInfo(\'type\',this.value)"><option value="all">Усі</option>'+types.map(function(x){return '<option value="'+threeDpEsc(x)+'"'+(threeDpUi.info.type===x?' selected':'')+'>'+threeDpEsc(x)+'</option>';}).join('')+'</select></label><label>Статус<select onchange="setThreeDpInfo(\'status\',this.value)"><option value="all"'+(threeDpUi.info.status==='all'?' selected':'')+'>Усі</option><option value="Активний"'+(threeDpUi.info.status==='Активний'?' selected':'')+'>Активний</option><option value="Архів"'+(threeDpUi.info.status==='Архів'?' selected':'')+'>Архів</option></select></label><label>Собівартість<select onchange="setThreeDpInfo(\'cost\',this.value)">'+costOptions.map(function(option){return '<option value="'+option[0]+'"'+(threeDpUi.info.cost===option[0]?' selected':'')+'>'+option[1]+'</option>';}).join('')+'</select></label><label>Групувати<select onchange="setThreeDpInfo(\'group\',this.value)"><option value="none"'+(threeDpUi.info.group==='none'?' selected':'')+'>Без груп</option><option value="type"'+(threeDpUi.info.group==='type'?' selected':'')+'>За типом</option><option value="status"'+(threeDpUi.info.group==='status'?' selected':'')+'>За статусом</option></select></label></div><div class="tbl-wrap"><table><tr>'+visible.map(function(c){return '<th onclick="sortThreeDpInfo(\''+c[0]+'\')" style="cursor:pointer">'+threeDpEsc(c[1])+arrow(c[0])+'</th>';}).join('')+'</tr>'+(output.length?output.join(''):'<tr><td colspan="'+Math.max(1,visible.length)+'" style="color:var(--muted)">Немає виробів за цими фільтрами.</td></tr>')+'</table></div>';}
+  if(tableOnly)return;
   if(salesState.loaded)renderThreeDpSalesTable_();else renderThreeDpInfoSectionStatus_('threeDpSalesTable',salesState,'Розгорни підблок, щоб завантажити продажі.');
   const payoutsState=threeDpState.informationSections.payouts;if(payoutsState.loaded)renderThreeDpPayouts_();else renderThreeDpInfoSectionStatus_('threeDpPayoutsTable',payoutsState,'Розгорни підблок, щоб завантажити виплати.');
   const plyushkyState=threeDpState.informationSections.plyushky;if(plyushkyState.loaded)threeDpTable('threeDpPlyushkyTable',threeDpState.plyushky);else renderThreeDpInfoSectionStatus_('threeDpPlyushkyTable',plyushkyState,'Розгорни підблок, щоб завантажити маркетингові плюшки.');
 }function threeDpAttention(records) { const target=document.getElementById('threeDpAttention');if(!target)return;const rows=records.map(function(r){const issues=[];if(r.rrp==null)issues.push('немає РРЦ');if(!r.model)issues.push('немає посилання на модель');if(r.status==='Активний' && r.availability<=1)issues.push(r.availability<=0?'наявність = 0':'наявність наближається до 0');return {r:r,issues:issues};}).filter(function(x){return x.issues.length;});target.innerHTML=rows.length?'<div class="three-dp-attention">'+rows.map(function(x){return '<div class="three-dp-attention-row"><span class="chip mono">'+threeDpEsc(x.r.sku)+'</span><b>'+threeDpEsc(x.r.name || '—')+'</b>'+x.issues.map(function(i){return '<span class="issue-tag">'+threeDpEsc(i)+'</span>';}).join('')+'</div>';}).join('')+'</div>':'<div style="color:var(--muted)">Активні SKU не мають контрольних пропусків.</div>'; }
-function threeDpMonth(offset) { const d=new Date();d.setDate(1);d.setMonth(d.getMonth()+offset);return d.toISOString().slice(0,7); }
+function threeDpMonth(offset) { const d=new Date();d.setDate(1);d.setMonth(d.getMonth()+offset);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); }
 function threeDpMonthly(month) { return (threeDpState.sales || []).filter(function(r){return String(r['Дата'] || '').slice(0,7)===month;}).reduce(function(out,r){out.revenue+=threeDpNumber(r['Фактична ціна за од., грн (після знижки)'])*threeDpNumber(r['Кількість']);out.profit+=threeDpNumber(r['Дохід Booster Shop, грн']);return out;},{revenue:0,profit:0}); }
+function threeDpSummarySeries_(months,field) {
+  const max=Math.max(1,...months.map(function(item){return Math.max(0,item.values[field]);}));
+  return '<div class="three-dp-summary-bars">'+months.map(function(item){const value=item.values[field],width=value>0?Math.max(3,value/max*100):0;return '<div class="three-dp-summary-bar-row"><span>'+threeDpEsc(item.month.slice(5))+'</span><div class="three-dp-summary-bar" aria-hidden="true"><i style="width:'+width.toFixed(1)+'%"></i></div><b class="amount">'+threeDpMoney(value)+'</b></div>';}).join('')+'</div>';
+}
 function renderThreeDpSummary(records) {
-  const target=document.getElementById('threeDpInformationSummary');if(!target)return;const active=records.filter(function(r){return r.status==='Активний';}),warehouse=active.reduce(function(s,r){return s+r.availability*r.cost;},0),potential=active.reduce(function(s,r){return s+(r.rrp==null?0:r.availability*(r.rrp-r.cost));},0),now=threeDpMonthly(threeDpMonth(0)),previous=threeDpMonthly(threeDpMonth(-1)),profits={};
-  (threeDpState.sales || []).filter(function(r){return threeDpDate(r['Дата'])>=Date.now()-30*86400000;}).forEach(function(r){const sku=String(r.SKU || '');profits[sku]=(profits[sku] || 0)+threeDpNumber(r['Дохід Booster Shop, грн']);});const top=Object.keys(profits).map(function(sku){return {sku:sku,profit:profits[sku],name:(threeDpSku(sku) || {})['Назва виробу'] || ''};}).sort(function(a,b){return b.profit-a.profit;}).slice(0,5),months=[-5,-4,-3,-2,-1,0].map(function(x){const month=threeDpMonth(x);return {month:month,values:threeDpMonthly(month)};}),series=function(field){return '<div class="three-dp-top-list">'+months.map(function(x){return '<div class="three-dp-top-row"><span>'+threeDpEsc(x.month)+'</span><b>'+threeDpMoney(x.values[field])+'</b></div>';}).join('')+'</div>';};
-  target.innerHTML='<div class="three-dp-analytics-grid"><div class="three-dp-mini-card"><div class="label">Собівартість складу</div><div class="value">'+threeDpMoney(warehouse)+'</div><div class="sub">активна наявність × поточна собівартість</div></div><div class="three-dp-mini-card"><div class="label">Потенційний прибуток складу</div><div class="value">'+threeDpMoney(potential)+'</div><div class="sub">лише де є фактична РРЦ</div></div><div class="three-dp-mini-card"><div class="label">Виручка, '+threeDpEsc(threeDpMonth(0))+'</div><div class="value">'+threeDpMoney(now.revenue)+'</div><div class="sub">попередній місяць: '+threeDpMoney(previous.revenue)+'</div></div><div class="three-dp-mini-card"><div class="label">Чистий прибуток, '+threeDpEsc(threeDpMonth(0))+'</div><div class="value">'+threeDpMoney(now.profit)+'</div><div class="sub">попередній місяць: '+threeDpMoney(previous.profit)+'</div></div><div class="three-dp-mini-card"><div class="label">% замовлень з 3D</div><div class="value">—</div><div class="sub">Очікує спільний detection mechanism 3D-P-010.</div></div></div><div class="grid2"><div><b>Топ-5 SKU за прибутком · 30 днів</b><div class="three-dp-top-list" style="margin-top:8px">'+(top.length?top.map(function(x){return '<div class="three-dp-top-row"><span><span class="chip mono">'+threeDpEsc(x.sku)+'</span> '+threeDpEsc(x.name)+'</span><b>'+threeDpMoney(x.profit)+'</b></div>';}).join(''):'<div class="three-dp-note">Немає продажів за 30 днів.</div>')+'</div></div><div><b>Виручка · 6 місяців</b><div style="margin-top:8px">'+series('revenue')+'</div></div></div><div class="grid2" style="margin-top:18px"><div><b>Чистий прибуток · 6 місяців</b><div style="margin-top:8px">'+series('profit')+'</div></div><div><b>РРЦ рекомендована</b><div class="three-dp-note" style="margin-top:8px">Генератор навмисно не реалізований: формула target margin / interest weight чекає окремого підтвердження власника.</div></div></div>';
+  const target=document.getElementById('threeDpInformationSummary');if(!target)return;
+  const active=records.filter(function(r){return r.status==='Активний';}),warehouse=active.reduce(function(sum,r){return sum+r.availability*r.cost;},0),potential=active.reduce(function(sum,r){return sum+(r.rrp==null?0:r.availability*(r.rrp-r.cost));},0);
+  const month=threeDpMonth(0),now=threeDpMonthly(month),previous=threeDpMonthly(threeDpMonth(-1)),profits={};
+  (threeDpState.sales||[]).filter(function(row){return threeDpDate(row['Дата'])>=Date.now()-30*86400000;}).forEach(function(row){const sku=String(row.SKU||'');profits[sku]=(profits[sku]||0)+threeDpNumber(row['Дохід Booster Shop, грн']);});
+  const top=Object.keys(profits).map(function(sku){return {sku:sku,profit:profits[sku],name:(threeDpSku(sku)||{})['Назва виробу']||''};}).sort(function(a,b){return b.profit-a.profit;}).slice(0,5);
+  const months=[-5,-4,-3,-2,-1,0].map(function(offset){const key=threeDpMonth(offset);return {month:key,values:threeDpMonthly(key)};});
+  const share=threeDpState.orderShare&&threeDpState.orderShare.month===month?threeDpState.orderShare:null;
+  const shareValue=share&&share.share_pct!=null?Number(share.share_pct).toLocaleString('uk-UA',{maximumFractionDigits:1})+'%':'—';
+  const shareText=share?(share.orders_total?share.orders_with_3dp+' з '+share.orders_total+' замовлень · '+month:'У '+month+' немає замовлень'):threeDpState.orderShareLoading?'Рахую замовлення CRM…':threeDpState.orderShareError?'CRM: '+threeDpState.orderShareError:'Розгорни блок, щоб завантажити частку.';
+  const card=function(label,value,sub){return '<div class="three-dp-mini-card"><div class="label">'+threeDpEsc(label)+'</div><div class="value">'+threeDpEsc(value)+'</div><div class="sub">'+threeDpEsc(sub)+'</div></div>';};
+  target.innerHTML='<div class="three-dp-analytics-grid">'+
+    card('Собівартість складу',threeDpMoney(warehouse),'наявність × поточна собівартість')+
+    card('Потенційний прибуток складу',threeDpMoney(potential),'лише SKU з фактичною РРЦ')+
+    card('Виручка · '+month,threeDpMoney(now.revenue),'попередній місяць: '+threeDpMoney(previous.revenue))+
+    card('Чистий прибуток · '+month,threeDpMoney(now.profit),'попередній місяць: '+threeDpMoney(previous.profit))+
+    card('Замовлення з 3D · '+month,shareValue,shareText)+
+    '</div><div class="three-dp-summary-panels">'+
+    '<section class="three-dp-summary-panel"><h3>Топ-5 SKU за прибутком · 30 днів</h3><div class="three-dp-top-list">'+(top.length?top.map(function(item){return '<div class="three-dp-top-row"><span><span class="chip mono">'+threeDpEsc(item.sku)+'</span> '+threeDpEsc(item.name)+'</span><b>'+threeDpMoney(item.profit)+'</b></div>';}).join(''):'<div class="three-dp-note">Продажів за 30 днів немає.</div>')+'</div></section>'+
+    '<section class="three-dp-summary-panel"><h3>Виручка · 6 місяців</h3>'+threeDpSummarySeries_(months,'revenue')+'</section>'+
+    '<section class="three-dp-summary-panel profit"><h3>Чистий прибуток · 6 місяців</h3>'+threeDpSummarySeries_(months,'profit')+'</section>'+
+    '</div>';
 }
 async function reloadThreeDpData() {
   const x=await call3dp('3dp_bootstrap',{include_archived:'true'});threeDpState.overview=x.overview || {};threeDpState.skus=(x.skus || {}).rows || [];threeDpState.analytics=(x.analytics || {}).values || [];threeDpState.settings=((x.settings || {}).values || []).slice(1).reduce(function(out,row){out[row[0]]=row[1];return out;},{});if(threeDpUi.calc.sku && !threeDpActiveSkus().some(function(r){return r.SKU===threeDpUi.calc.sku;}))threeDpUi.calc.sku='';
 }
-function threeDpInfoToggle(details,key){if(!details.open)return;if(key==='sync'){if(!threeDpState.syncJournalLoaded)refreshThreeDpSyncJournal();return;}if(key==='summary'||key==='sales')loadThreeDpInformationSection('sales');else if(key==='payouts'||key==='plyushky')loadThreeDpInformationSection(key);else renderThreeDpInformation();}
+function threeDpInfoToggle(details,key){if(!details.open)return;if(key==='sync'){if(!threeDpState.syncJournalLoaded)refreshThreeDpSyncJournal();return;}if(key==='summary'){loadThreeDpOrderShare_();loadThreeDpInformationSection('sales');}else if(key==='sales')loadThreeDpInformationSection('sales');else if(key==='payouts'||key==='plyushky')loadThreeDpInformationSection(key);else renderThreeDpInformation();}
+async function loadThreeDpOrderShare_(){
+  if(threeDpState.orderShareLoading||(threeDpState.orderShare&&threeDpState.orderShare.month===threeDpMonth(0)))return;
+  threeDpState.orderShareLoading=true;threeDpState.orderShareError='';
+  try{threeDpState.orderShare=await call('3dp_order_share');}
+  catch(e){threeDpState.orderShareError=String(e&&e.message?e.message:e);}
+  finally{threeDpState.orderShareLoading=false;if(threeDpState.informationSections.sales.loaded)renderThreeDpSummary(threeDpState.skus.map(threeDpInfoRecord));}
+}
 async function loadThreeDpInformationSection(key){const state=threeDpState.informationSections[key];if(!state||state.loaded||state.loading)return;const actions={sales:'3dp_sales',payouts:'3dp_payouts',plyushky:'3dp_plyushky'};state.loading=true;state.error='';renderThreeDpInformation();try{const result=await call3dp(actions[key]);threeDpState[key]=result.rows||[];state.loaded=true;if(key==='sales'){const month=((threeDpState.overview||{}).month||new Date().toISOString().slice(0,7)),summary=(threeDpState.overview||{}).summary||{};summary.accrued_serhiy_current_month=threeDpState.sales.reduce(function(sum,row){return String(row['Період (авто, РРРР-ММ)']||'')===month?sum+threeDpNumber(row['Нараховано Сергію, грн']):sum;},0);renderThreeDpCards(summary);}}catch(e){state.error=String(e&&e.message?e.message:e);}finally{state.loading=false;renderThreeDpInformation();}}
 async function loadThreeDpInformation(){return loadThreeDpInformationSection('sales');}
 function renderThreeDpAll() { renderThreeDpCards((threeDpState.overview || {}).summary || {});renderThreeDpSettings();renderThreeDpCalculator();renderThreeDpProducts();renderThreeDpInformation(); }
-async function load3dPrint() { const root=document.getElementById('threeDpCalculator');try { await reloadThreeDpData();renderThreeDpAll();document.getElementById('threeDpSub').textContent='Оновлено одним bounded 3D-P bootstrap · '+((threeDpState.overview || {}).month || ''); } catch(e) { const message=String(e && e.message ? e.message : e),missing=message.indexOf('Вкажіть окремі URL')!==-1;if(root)root.innerHTML='<div style="color:var(--yellow)">'+(missing?'3D-P не налаштовано: ':'3D-P API тимчасово недоступний: ')+threeDpEsc(message)+'</div>';document.getElementById('threeDpSub').textContent=missing?'Потрібні окремі локальні URL і token 3D-P API':'З’єднання не пройшло після однієї безпечної повторної спроби'; } }
+async function load3dPrint() { const root=document.getElementById('threeDpCalculator');try { await reloadThreeDpData();renderThreeDpAll();document.getElementById('threeDpSub').textContent='Оновлено одним bounded 3D-P bootstrap · '+((threeDpState.overview || {}).month || ''); } catch(e) { const message=String(e && e.message ? e.message : e),missing=message.indexOf('Вкажіть окремі URL')!==-1;if(root)root.innerHTML='<div style="color:var(--yellow)">'+(missing?'3D-P не налаштовано: ':'3D-P API тимчасово недоступний: ')+threeDpEsc(message)+'</div>';const cards=document.getElementById('threeDpCards');if(cards)cards.innerHTML='<div class="card"><div class="crm011-note">3D-P: '+threeDpEsc(message)+'</div><button class="btn-secondary" type="button" onclick="load3dPrint()">Повторити</button></div>';document.getElementById('threeDpSub').textContent=missing?'Потрібні окремі локальні URL і token 3D-P API':'З’єднання з 3D-P API не пройшло'; } }
 // ════════════ FORMATTERS ════════════
 const fmt   = n => n != null ? '₴' + Number(n).toLocaleString('uk-UA', {maximumFractionDigits:0}) : '—';
 const fmtP  = n => n != null ? Number(n).toFixed(1) + '%' : '—';
@@ -1572,6 +1814,7 @@ function payPill(pay, ord) {
 
 function actionBadge(a) {
   if (!a) return '—';
+  if (a.includes('Друкувати'))          return '<span class="badge b-yellow">Друкувати</span>';
   if (a.includes('Докупити'))           return '<span class="badge b-red">Докупити</span>';
   if (a.includes('Пильнувати'))         return '<span class="badge b-yellow">Пильнувати</span>';
   if (a.toLowerCase().includes('не просувати')) return '<span class="badge b-muted">Не просувати</span>';
@@ -1583,6 +1826,7 @@ function stockPill(s) {
   if (s === 'ОК')    return '<span class="pill p-ok">ОК</span>';
   if (s === 'Мало')  return '<span class="pill p-warn">Мало</span>';
   if (s === 'Немає') return '<span class="pill p-err">Немає</span>';
+  if (s === 'Дефіцит') return '<span class="pill p-err">Дефіцит</span>';
   return `<span class="pill p-muted">${s||'—'}</span>`;
 }
 
@@ -1596,6 +1840,7 @@ function rrcPriceCell(price, margin) {
 }
 
 function stockCoverageDaysRaw(stock, sold30d, sold60d) {
+  if (stock === null || stock === undefined || stock === '') return null;
   const stockN = Number(stock) || 0;
   const sold30 = Number(sold30d) || 0;
   const sold60 = Number(sold60d) || 0;
@@ -1720,6 +1965,17 @@ function stockTh(field, label) {
   return `<th onclick="sortStock('${field}')" style="cursor:pointer;user-select:none;white-space:nowrap">${label}${stockSortMark(field)}</th>`;
 }
 
+function stockIssueLabel_(issue) {
+  const labels = {
+    '3dp_inventory_unavailable':'Немає підтвердженого 3D залишку',
+    '3dp_sale_sync_missing':'Продаж не синхронізовано з 3D',
+    '3dp_physical_unverified':'Фізичний залишок потребує звірки',
+    '3dp_catalog_status_mismatch':'Статуси каталогів різняться',
+    'crm_accounting_shortage':'Мінус в обліку — перевірити операції'
+  };
+  return labels[String(issue)] || String(issue);
+}
+
 function sortStock(field) {
   if (stockSortState.field === field) {
     stockSortState.dir = stockSortState.dir === 'asc' ? 'desc' : 'asc';
@@ -1758,7 +2014,7 @@ function renderStockTable(resetFilter) {
   document.getElementById('stockTable').innerHTML = `<div class="tbl-wrap"><table>
     <tr>
       ${stockTh('sku', 'SKU')}${stockTh('name', 'Назва')}${stockTh('format', 'Формат')}${stockTh('urgency', 'Терм.')}${stockTh('action', 'Дія')}
-      ${stockTh('stock', 'Доступно')}${stockTh('expected', 'Очікується')}${stockTh('projected', 'Після поставки')}<th>Фізично</th><th>Резерв</th><th>Дефіцит після поставки</th>${stockTh('sold30', '30д')}${stockTh('sold60', '60д')}${stockTh('coverage', 'Днів запасу')}
+      ${stockTh('stock', 'Доступно')}${stockTh('expected', 'Очікується')}${stockTh('projected', 'Після поставки')}<th title="Розраховано за обліковими операціями; фактична інвентаризація окрема">Фізично · облік</th><th>Резерв</th><th>Дефіцит після поставки</th>${stockTh('sold30', '30д')}${stockTh('sold60', '60д')}${stockTh('coverage', 'Днів запасу')}
       ${stockTh('status', 'Статус')}${stockTh('issues', 'Проблеми')}
     </tr>
     ${rows.map(r => `<tr>
@@ -1772,12 +2028,12 @@ function renderStockTable(resetFilter) {
       <td><b>${r.projected_stock??'—'}</b></td>
       <td>${r.physical_stock??'—'}</td>
       <td>${r.reserved_total??0}</td>
-      <td style="color:${Number(r.projected_deficit)>0?'var(--red)':'var(--muted)'}"><b>${r.projected_deficit??0}</b></td>
+      <td style="color:${Number(r.projected_deficit)>0?'var(--red)':'var(--muted)'}"><b>${r.projected_deficit??'—'}</b></td>
       <td><b>${r.sold_30d??'—'}</b></td>
       <td><b>${r.sold_60d??'—'}</b></td>
       <td>${dayCoverage(r.stock, r.sold_30d, r.sold_60d)}</td>
       <td>${stockPill(r.stock_status)}</td>
-      <td>${(r.issues||[]).filter(i => i !== 'немає_ціни_opencart').map(i=>'<span class="issue-tag">'+i+'</span>').join('')||'—'}</td>
+      <td>${(r.issues||[]).filter(i => i !== 'немає_ціни_opencart' && !(i === 'мінусовий_залишок' && r.physical_stock != null && Number(r.physical_stock) >= 0)).map(i=>'<span class="issue-tag">'+threeDpEsc(stockIssueLabel_(i))+'</span>').join('')||'—'}</td>
     </tr>`).join('')}
   </table></div>`;
 
@@ -2002,7 +2258,6 @@ async function loadOverview() {
   // Top-5 SKUs by profit.
   try {
     const ts = await p_sku;
-    cache.skus = ts;
     const skus = (ts.skus || []).filter(s => s.profit_30d != null && Number(s.profit_30d) > 0).slice(0, 5);
     if (skus.length) {
       const maxProfit = Math.max(...skus.map(s => s.profit_30d || 0));
@@ -2059,54 +2314,52 @@ async function loadOverview() {
   try {
     const allOrders=await p_ordersAll,preorders=(allOrders.orders||[]).filter(isPreorderOrder),badge=document.getElementById('preordersBadge'),root=document.getElementById('preordersPreview');
     if(badge){badge.textContent=preorders.length;badge.className='badge '+(preorders.length?'b-yellow':'b-green');}
-    if(root)root.innerHTML=preorders.length?'<table><tr><th>Замовлення</th><th>Сума</th><th>Прибуток</th><th>Чистий прибуток %</th><th>Статус</th></tr>'+preorders.slice(0,9).map(function(r){return '<tr><td><span class="chip">'+threeDpEsc(r.order_id)+'</span><span style="font-size:11px;color:var(--muted);margin-left:6px">'+threeDpEsc((r.post||'')+' '+ttn4(r.ttn))+'</span></td><td><b>'+fmt(r.amount)+'</b></td><td>'+(r.profit==null?'—':fmt(r.profit))+'</td><td>'+profitPctCell(r)+'</td><td>'+payPill(r.payment_status,r.order_status)+'</td></tr>';}).join('')+'</table>':'<div style="color:var(--muted);padding:4px 0;font-size:13px">Передзамовлень немає</div>';
+    if(root)root.innerHTML=preorders.length?'<table><tr><th>Замовлення</th><th>Сума</th><th>Прибуток</th><th>Чистий прибуток %</th><th>Статус</th></tr>'+preorders.slice(0,9).map(function(r){return '<tr><td><span class="chip">'+threeDpEsc(r.order_id)+'</span></td><td><b>'+fmt(r.amount)+'</b></td><td>'+(r.profit==null?'—':fmt(r.profit))+'</td><td>'+profitPctCell(r)+'</td><td>'+payPill(r.payment_status,r.order_status)+'</td></tr>';}).join('')+'</table>':'<div style="color:var(--muted);padding:4px 0;font-size:13px">Передзамовлень немає</div>';
   } catch(e) { const root=document.getElementById('preordersPreview');if(root)root.innerHTML='<div style="color:var(--muted)">—</div>'; }
 
   // Attention management is lazy-loaded on its own page.
 }
 // ════════════ ATTENTION ════════════
-function setAlertsMode(mode){alertsState.mode=mode==='dismissed'?'dismissed':'active';renderAlerts_();}
+function setAlertsMode(mode){alertsState.mode=mode==='dismissed'?'dismissed':'active';alertsState.selected.clear();renderAlerts_();}
+function toggleAlertSelection_(id,checked){if(checked)alertsState.selected.add(id);else alertsState.selected.delete(id);renderAlerts_();}
+function toggleAllAlerts_(checked){const rows=alertsState.rows.filter(function(item){return String(item.status||'active')==='active';});rows.forEach(function(item){if(checked)alertsState.selected.add(item.id);else alertsState.selected.delete(item.id);});renderAlerts_();}
 function renderAlerts_(){
   const root=document.getElementById('alertsTable');if(!root)return;
   const rows=alertsState.rows.filter(function(item){return String(item.status||'active')===alertsState.mode;});
   const active=document.getElementById('alertsModeActive'),dismissed=document.getElementById('alertsModeDismissed'),count=document.getElementById('alertsCount');
   if(active)active.classList.toggle('active',alertsState.mode==='active');if(dismissed)dismissed.classList.toggle('active',alertsState.mode==='dismissed');if(count)count.textContent='Показано: '+rows.length;
+  const batch=document.getElementById('alertsDismissSelected');if(batch){batch.style.display=alertsState.mode==='active'?'':'none';batch.textContent='Позначити неактуальними ('+alertsState.selected.size+')';batch.disabled=!alertsState.selected.size||alertsState.batchPending;}
   if(!rows.length){root.innerHTML='<div class="crm011-note">'+(alertsState.mode==='active'?'Активних алертів немає.':'Неактуальних алертів немає.')+'</div>';return;}
-  root.innerHTML='<div class="tbl-wrap"><table><tr><th>Тип</th><th>SKU / позиція</th><th>Чому це алерт</th><th>Що зробити</th><th></th></tr>'+rows.map(function(item){const next=alertsState.mode==='active'?'dismissed':'active',label=next==='dismissed'?'Неактуально':'Повернути',position=item.sku?'<b class="mono">'+threeDpEsc(item.sku)+'</b>'+(item.name?'<br><span class="crm011-note">'+threeDpEsc(item.name)+'</span>':''):'<span class="crm011-note">Зведена перевірка</span>';return '<tr><td><b>'+threeDpEsc(item.title||'Проблема')+'</b></td><td>'+position+'</td><td>'+threeDpEsc(item.details||'Причину не деталізовано у джерелі')+'</td><td>'+threeDpEsc(item.action||'Перевірити джерело алерту')+'</td><td><button class="btn-secondary" type="button" onclick="setAlertStatus_(\''+threeDpEsc(item.id)+'\',\''+next+'\')">'+label+'</button></td></tr>';}).join('')+'</table></div>';
+  const selecting=alertsState.mode==='active';
+  root.innerHTML='<div class="tbl-wrap"><table><tr>'+(selecting?'<th><input type="checkbox" aria-label="Вибрати всі активні алерти" onchange="toggleAllAlerts_(this.checked)"'+(rows.length&&rows.every(function(item){return alertsState.selected.has(item.id);})?' checked':'')+'></th>':'')+'<th>Тип</th><th>SKU / позиція</th><th>Вперше зафіксовано</th><th>Чому це алерт</th><th>Що зробити</th><th></th></tr>'+rows.map(function(item){const next=selecting?'dismissed':'active',label=next==='dismissed'?'Неактуально':'Повернути',position=item.sku?'<b class="mono">'+threeDpEsc(item.sku)+'</b>'+(item.name?'<br><span class="crm011-note">'+threeDpEsc(item.name)+'</span>':''):'<span class="crm011-note">Зведена перевірка</span>';return '<tr>'+(selecting?'<td><input type="checkbox" aria-label="Вибрати алерт '+threeDpEsc(item.title||item.id)+'" onchange="toggleAlertSelection_(\''+threeDpEsc(item.id)+'\',this.checked)"'+(alertsState.selected.has(item.id)?' checked':'')+'></td>':'')+'<td><b>'+threeDpEsc(item.title||'Проблема')+'</b></td><td>'+position+'</td><td>'+threeDpEsc(item.first_seen||'—')+'</td><td>'+threeDpEsc(item.details||'Причину не деталізовано у джерелі')+'</td><td>'+threeDpEsc(item.action||'Перевірити джерело алерту')+'</td><td><button class="btn-secondary" type="button" onclick="setAlertStatus_(\''+threeDpEsc(item.id)+'\',\''+next+'\')">'+label+'</button></td></tr>';}).join('')+'</table></div>';
 }
 async function loadAlerts(force){
   clearError();const root=document.getElementById('alertsTable');if(!root)return;if(alertsState.loading)return;if(!force&&alertsState.rows.length){renderAlerts_();return;}alertsState.loading=true;root.innerHTML=spin();
-  try{const d=await callAlerts_('alerts');alertsState.rows=d.alerts||[];loaded.alerts=true;renderAlerts_();}
+  try{const d=await callAlerts_('alerts');alertsState.rows=d.alerts||[];const live=new Set(alertsState.rows.filter(function(item){return item.status==='active';}).map(function(item){return item.id;}));alertsState.selected.forEach(function(id){if(!live.has(id))alertsState.selected.delete(id);});loaded.alerts=true;renderAlerts_();}
   catch(e){root.innerHTML='<div class="records-message error">API алертів недоступний: '+threeDpEsc(e.message)+'. Натисни «Налаштувати API» після публікації оновленого скрипту.</div>';}
   finally{alertsState.loading=false;}
 }
 async function setAlertStatus_(id,status){
   if(!id)return;try{await callAlertsPost_({action:'set_alert_status',alert_id:id,status:status});await loadAlerts(true);}catch(e){showError('Алерт не оновлено: '+e.message);}
 }
+async function dismissSelectedAlerts_(){
+  const ids=Array.from(alertsState.selected);if(!ids.length||alertsState.batchPending)return;
+  if(!window.confirm('Позначити '+ids.length+' алертів неактуальними?'))return;
+  alertsState.batchPending=true;renderAlerts_();
+  try{await callAlertsPost_({action:'set_alert_status_batch',alert_ids:ids});alertsState.selected.clear();await loadAlerts(true);}
+  catch(e){showError('Не вдалося оновити алерти: '+e.message);}
+  finally{alertsState.batchPending=false;renderAlerts_();}
+}
 
 // ════════════ STOCK ════════════
 async function loadStock() {
   clearError();
   try {
-    const skuData = cache.skus || await call('sku_list');
-    cache.skus = skuData;
-    let stockData = cache.stock || null;
-    if (!stockData) {
-      try {
-        stockData = await call('stock_alerts');
-        cache.stock = stockData;
-      } catch(e) {
-        console.warn('stock_alerts merge:', e.message);
-      }
-    }
-    const alertBySku = {};
-    ((stockData && stockData.alerts) || []).forEach(r => { if (r.sku) alertBySku[r.sku] = r; });
+    const skuData = await loadInventorySnapshot_();
+    const stockData = cache.stock || null;
     const arrivalBySku=(stockData&&stockData.arrivals_by_sku)||{};
-    // Preserve sold_30d/sold_60d from sku_list — stock_alerts can have null there (stale Черга_Складу)
-    // which would overwrite the correct values and make 30д column show '—' instead of 0
     const a = (skuData.skus || []).map(r => {
-      const alert = alertBySku[r.sku] || {};
-      return { ...r, ...alert, arrival:arrivalBySku[r.sku]||null, stock:r.stock, expected:r.expected, stock_raw:r.stock_raw, physical_stock:r.physical_stock, reserved_total:r.reserved_total, preorder_reserved:r.preorder_reserved, current_shortfall:r.current_shortfall, projected_available_raw:r.projected_available_raw, projected_stock:r.projected_stock, projected_deficit:r.projected_deficit, sold_30d: r.sold_30d, sold_60d: r.sold_60d };
+      return { ...r, arrival:arrivalBySku[r.sku]||null };
     });
     if (!a.length) {
       document.getElementById('stockTable').innerHTML = '<div style="color:var(--muted);padding:20px">Немає даних складу</div>';
@@ -2115,20 +2368,17 @@ async function loadStock() {
     cache.stockRows = a;
     renderSlowStock_(a);
     renderStockTable(true);
-    loadThreeDpStockOverlay_(a);
+    if (!stockData) call('stock_alerts').then(function(later) {
+      cache.stock=later;
+      if (cache.stockRows!==a) return;
+      const arrivals=later.arrivals_by_sku||{};
+      a.forEach(function(row){row.arrival=arrivals[row.sku]||null;});
+      renderSlowStock_(a);
+    }).catch(function(error){console.warn('stock arrivals:',error.message);});
   } catch(e) {
     showError(e.message);
     document.getElementById('stockTable').innerHTML = '';
   }
-}
-async function loadThreeDpStockOverlay_(baseRows) {
-  try {
-    const remote=await call3dp('3dp_skus');
-    if(cache.stockRows!==baseRows)return;
-    const bySku={};baseRows.forEach(function(row){bySku[String(row.sku||'')]=row;});
-    (remote.rows||[]).forEach(function(item){const sku=String(item.SKU||'').trim();if(!sku)return;const availability=item.availability||{},stock=Number(availability['Наявно зараз, шт']);let row=bySku[sku];if(!row){row={sku:sku,name:'',format:'3D аксесуар',stock:0,expected:0,sold_30d:0,sold_60d:0,issues:[]};baseRows.push(row);bySku[sku]=row;}row.name=String(item['Назва виробу']||row.name||'').trim();row.format=String(item['Тип']||row.format||'3D аксесуар').trim();if(Number.isFinite(stock))row.stock=stock;});
-    renderStockTable(false);
-  } catch(e) { console.warn('3D stock overlay:',e.message); }
 }
 // ════════════ CONSUMABLES ════════════
 function consumableDaysPill(days, daily) {
@@ -2218,6 +2468,140 @@ async function loadConsumables() {
     document.getElementById('consumablesTable').innerHTML = '';
   }
 }
+// ════════════ PURCHASES ════════════
+function purchaseColumnLabel_(key) { const column = PURCHASE_COLUMNS.find(function(item) { return item[0] === key; }); return column ? column[1] : key; }
+function setPurchaseColumnVisible_(key, checked) {
+  if (!checked && Object.keys(purchaseState.prefs.visible).filter(function(item) { return purchaseState.prefs.visible[item]; }).length <= 1) { renderPurchases(); return; }
+  purchaseState.prefs.visible[key] = checked;
+  purchasePrefsSave_(); renderPurchases();
+}
+function movePurchaseColumn_(key, direction) {
+  const order = purchaseState.prefs.order, index = order.indexOf(key), next = index + direction;
+  if (index < 0 || next < 0 || next >= order.length) return;
+  order.splice(index, 1); order.splice(next, 0, key);
+  purchasePrefsSave_(); renderPurchases();
+}
+function sortPurchases_(field) {
+  const sort = purchaseState.sort;
+  if (sort.field === field) sort.dir = sort.dir === 'asc' ? 'desc' : 'asc';
+  else { sort.field = field; sort.dir = field === 'unit_cost' || field === 'qty' ? 'desc' : 'asc'; }
+  renderPurchases();
+}
+async function editPurchaseShipmentDate_(lotId) {
+  const row = purchaseState.rows.find(function(item) { return item.lot_id === lotId; });
+  if (!row || !purchaseState.shipmentDateAvailable) return;
+  const entered = window.prompt('Дата відправки лоту '+lotId+' в Україну (РРРР-ММ-ДД)', row.shipped_date || '');
+  if (entered === null) return;
+  const date = entered.trim();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) { window.alert('Вкажи дату у форматі РРРР-ММ-ДД.'); return; }
+  try {
+    const result = await callPost({ action:'set_purchase_shipment_date', lot_id:lotId, shipped_date:date, expected_shipped_date:row.shipped_date || '' });
+    row.shipped_date = result.shipped_date;
+    renderPurchases();
+  } catch (error) { window.alert('Не вдалося зберегти дату: '+String(error && error.message ? error.message : error)); }
+}
+function purchaseSortValue_(row, field) {
+  if (field === 'total_cost' || field === 'qty' || field === 'sku_count') return row[field] == null ? -Infinity : Number(row[field]);
+  return String(row[field] || '');
+}
+function purchaseGroups_(items) {
+  const rows = items.slice().sort(function(a,b){ return Number(a.row_index)-Number(b.row_index); });
+  const groups = [], byReference = Object.create(null);
+  rows.forEach(function(item) {
+    const ref = String(item.order_ref || '').trim();
+    const referenceKey = ref ? String(item.supplier || '')+'|'+ref : '';
+    if (referenceKey && byReference[referenceKey]) byReference[referenceKey].items.push(item);
+    else {
+      const group = { key:item.lot_id, order_ref:ref || item.lot_id, items:[item] };
+      groups.push(group);
+      if (referenceKey) byReference[referenceKey] = group;
+    }
+  });
+  return groups.map(function(group) {
+    const parts = group.items;
+    const common = function(key) { const values = Array.from(new Set(parts.map(function(row){return String(row[key] || '');}))); return values.length === 1 ? values[0] : 'Різні'; };
+    const statuses = parts.map(function(row){return String(row.status || '');});
+    group.total_cost = parts.some(function(row){return row.total_cost == null;}) ? null : Math.round(parts.reduce(function(sum,row){return sum+Number(row.total_cost);},0)*100)/100;
+    group.qty = parts.reduce(function(sum,row){return sum+Number(row.qty || 0);},0);
+    group.sku_count = new Set(parts.map(function(row){return row.sku;})).size;
+    group.purchase_date = common('purchase_date');
+    group.shipped_date = common('shipped_date');
+    group.track_number = common('track_number');
+    group.status = common('status');
+    const terminal = { 'На складі UA':true, 'На складі':true, 'Продано':true, 'Частково продано':true, 'Скасовано':true };
+    group.active = statuses.some(function(status){return !terminal[status];});
+    return group;
+  });
+}
+function togglePurchaseGroup_(key) {
+  if (purchaseState.expanded.has(key)) purchaseState.expanded.delete(key);
+  else purchaseState.expanded.add(key);
+  renderPurchases();
+}
+function purchaseGroupDetailsHtml_(group) {
+  return '<div class="tbl-wrap"><table><thead><tr><th>Назва товару</th><th>Артикул</th><th>Собівартість/шт</th><th>Собівартість позиції</th><th>Кількість</th><th>Технічний LOT-ID</th><th>Дата придбання</th><th>Номер посилки</th><th>Статус</th><th>Відправлено в Україну</th></tr></thead><tbody>'+group.items.map(function(row){
+    const edit=purchaseState.shipmentDateAvailable?' <button type="button" class="btn-secondary" data-lot="'+threeDpEsc(row.lot_id)+'" onclick="editPurchaseShipmentDate_(this.dataset.lot)">✎</button>':'';
+    return '<tr><td>'+threeDpEsc(row.name||'—')+'</td><td class="mono">'+threeDpEsc(row.sku||'—')+'</td><td>'+threeDpEsc(row.unit_cost==null?'—':fmtMoney2(row.unit_cost))+'</td><td>'+threeDpEsc(row.total_cost==null?'—':fmtMoney2(row.total_cost))+'</td><td>'+threeDpEsc(fmtQty(row.qty))+'</td><td class="mono">'+threeDpEsc(row.lot_id)+'</td><td>'+threeDpEsc(row.purchase_date||'—')+'</td><td>'+threeDpEsc(row.track_number||'—')+'</td><td>'+threeDpEsc(row.status||'—')+'</td><td>'+threeDpEsc(row.shipped_date||'—')+edit+'</td></tr>';
+  }).join('')+'</tbody></table></div>';
+}
+function purchaseRegisterTableHtml_(rows) {
+  const columns = purchaseState.prefs.order.filter(function(key) { return purchaseState.prefs.visible[key]; });
+  if (!rows.length) return '<div class="crm011-note">Закупок для цього пошуку немає.</div>';
+  const sort = purchaseState.sort, factor = sort.dir === 'asc' ? 1 : -1;
+  const sorted = rows.slice().sort(function(a,b) {
+    const av = purchaseSortValue_(a,sort.field), bv = purchaseSortValue_(b,sort.field);
+    const diff = typeof av === 'number' ? av - bv : av.localeCompare(bv,'uk',{numeric:true});
+    return factor * diff || String(a.key).localeCompare(String(b.key),'uk',{numeric:true});
+  });
+  const headers = '<th aria-label="Розгорнути закупку"></th>'+columns.map(function(key) { return '<th scope="col" role="button" tabindex="0" data-sort="'+key+'" onclick="sortPurchases_(this.dataset.sort)" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();sortPurchases_(this.dataset.sort)}" style="cursor:pointer">'+threeDpEsc(purchaseColumnLabel_(key))+(sort.field===key?(sort.dir==='asc'?' ↑':' ↓'):' ↕')+'</th>'; }).join('');
+  const cells = sorted.map(function(row) { const open=purchaseState.expanded.has(row.key); return '<tr><td><button type="button" class="btn-secondary" data-group="'+threeDpEsc(row.key)+'" onclick="togglePurchaseGroup_(this.dataset.group)" aria-expanded="'+open+'" aria-label="'+(open?'Згорнути':'Розгорнути')+' закупку '+threeDpEsc(row.order_ref)+'">'+(open?'▾':'▸')+'</button></td>'+columns.map(function(key) {
+    const value = key === 'total_cost' ? (row.total_cost == null ? '—' : fmtMoney2(row.total_cost)) : key === 'qty' ? fmtQty(row.qty) : String(row[key] || '—');
+    return '<td data-col="'+key+'">'+threeDpEsc(value)+'</td>';
+  }).join('')+'</tr>'+(open?'<tr><td colspan="'+(columns.length+1)+'">'+purchaseGroupDetailsHtml_(row)+'</td></tr>':''); }).join('');
+  return '<div class="tbl-wrap"><table class="purchase-register-table"><thead><tr>'+headers+'</tr></thead><tbody>'+cells+'</tbody></table></div>';
+}
+function renderPurchases() {
+  const picker = document.getElementById('purchasesColumnPicker');
+  if (!picker) return;
+  const expanded = document.getElementById('purchasesColumns').open;
+  picker.innerHTML = purchaseState.prefs.order.map(function(key,index) {
+    return '<div class="selected-lot"><label><input type="checkbox" data-column="'+key+'" onchange="setPurchaseColumnVisible_(this.dataset.column,this.checked)"'+(purchaseState.prefs.visible[key]?' checked':'')+'> '+threeDpEsc(purchaseColumnLabel_(key))+'</label><div><button type="button" class="btn-secondary" data-column="'+key+'" onclick="movePurchaseColumn_(this.dataset.column,-1)"'+(index===0?' disabled':'')+' aria-label="Перемістити '+threeDpEsc(purchaseColumnLabel_(key))+' вліво">←</button> <button type="button" class="btn-secondary" data-column="'+key+'" onclick="movePurchaseColumn_(this.dataset.column,1)"'+(index===purchaseState.prefs.order.length-1?' disabled':'')+' aria-label="Перемістити '+threeDpEsc(purchaseColumnLabel_(key))+' вправо">→</button></div></div>';
+  }).join('');
+  document.getElementById('purchasesColumns').open = expanded;
+  const query = String((document.getElementById('purchasesSearch') || {}).value || '').toLowerCase().trim();
+  const groups = purchaseGroups_(purchaseState.rows);
+  const filtered = groups.filter(function(group) { return !query || [group.order_ref,group.track_number,group.status].concat(group.items.map(function(row){return [row.name,row.sku,row.lot_id].join(' ');})).join(' ').toLowerCase().includes(query); });
+  const active = filtered.filter(function(group) { return group.active; });
+  const archived = filtered.filter(function(group) { return !group.active; });
+  document.getElementById('purchasesActiveCount').textContent = String(active.length);
+  document.getElementById('purchasesArchiveCount').textContent = String(archived.length);
+  document.getElementById('purchasesActiveTable').innerHTML = purchaseRegisterTableHtml_(active);
+  document.getElementById('purchasesArchiveTable').innerHTML = purchaseRegisterTableHtml_(archived);
+  const message = document.getElementById('purchasesMessage');
+  message.textContent = 'Усього закупок: '+groups.length+'; SKU-позицій: '+purchaseState.rows.length+(purchaseState.shipmentDateAvailable?'':'. Колонка дати відправки ще не додана до CRM.');
+}
+async function loadPurchases(force) {
+  if (purchaseState.loading) return;
+  if (purchaseState.loaded && !force) { renderPurchases(); return; }
+  purchaseState.loading = true;
+  document.getElementById('purchasesActiveTable').innerHTML = spin();
+  document.getElementById('purchasesArchiveTable').innerHTML = spin();
+  try {
+    const result = await call('purchase_register');
+    purchaseState.rows = Array.isArray(result.rows) ? result.rows : [];
+    purchaseState.shipmentDateAvailable = !!result.shipment_date_available;
+    purchaseState.loaded = true; purchaseState.error = '';
+    renderPurchases();
+  } catch (error) {
+    purchaseState.error = String(error && error.message ? error.message : error);
+    const message = /unknown action:\s*purchase_register/i.test(purchaseState.error)
+      ? 'Поточний CRM API ще не опубліковано з реєстром закупок. Після публікації нового Web App онови сторінку.'
+      : purchaseState.error;
+    document.getElementById('purchasesActiveTable').innerHTML = '<div class="records-message error">'+threeDpEsc(message)+'</div>';
+    document.getElementById('purchasesArchiveTable').innerHTML = '';
+  } finally { purchaseState.loading = false; }
+}
+
 // ════════════ ORDERS ════════════
 function orderDateMs(order) {
   const raw = String((order && order.date) || '').trim();
@@ -2316,10 +2700,30 @@ function renderOrderItemsPanel(order) {
     const profit = Number(item.profit) || 0;
     const profitColor = profit < 0 ? 'var(--red)' : 'var(--green)';
     const costLabel = item.cost_is_forecast ? '<br><span class="badge b-yellow">прогноз</span>' : '';
-    return '<tr><td>' + threeDpEsc(item.name || '—') + '</td><td><code>' + threeDpEsc(item.sku || '—') + '</code></td><td>' + threeDpEsc(item.qty) + '</td><td>' + fmt(item.mgmt_cost_line) + '<br><span class="pill p-muted">' + fmt(item.mgmt_cost_unit) + '/од.</span>' + costLabel + '</td><td>' + fmt(item.marketing) + '</td><td>' + fmt(item.packaging) + '</td><td>' + fmt(item.shop_delivery) + '</td>' + (showPaymentFees ? '<td>' + orderItemsPaymentFeesHtml(item) + '</td>' : '') + (showDiscount ? '<td>' + fmt(item.discount) + '</td>' : '') + '<td>' + fmt(item.amount) + '</td><td><b style="color:' + profitColor + '">' + fmt(item.profit) + '</b></td><td><b style="color:' + profitColor + '">' + fmtP(item.profit_pct) + '</b></td></tr>';
+    const editable = ['Нове','В обробці','Відправлено','Передзамовлення'].includes(String(order.order_status || '')) && items.length > 1;
+    const remove = editable && item.crm_row ? '<button type="button" class="btn-secondary" data-order="'+threeDpEsc(orderId)+'" data-row="'+threeDpEsc(item.crm_row)+'" onclick="removeOrderLine_(this.dataset.order,Number(this.dataset.row),this)">Видалити з CRM</button>' : '—';
+    return '<tr><td>' + threeDpEsc(item.name || '—') + '</td><td><code>' + threeDpEsc(item.sku || '—') + '</code></td><td>' + threeDpEsc(item.qty) + '</td><td>' + fmt(item.mgmt_cost_line) + '<br><span class="pill p-muted">' + fmt(item.mgmt_cost_unit) + '/од.</span>' + costLabel + '</td><td>' + fmt(item.marketing) + '</td><td>' + fmt(item.packaging) + '</td><td>' + fmt(item.shop_delivery) + '</td>' + (showPaymentFees ? '<td>' + orderItemsPaymentFeesHtml(item) + '</td>' : '') + (showDiscount ? '<td>' + fmt(item.discount) + '</td>' : '') + '<td>' + fmt(item.amount) + '</td><td><b style="color:' + profitColor + '">' + fmt(item.profit) + '</b></td><td><b style="color:' + profitColor + '">' + fmtP(item.profit_pct) + '</b></td><td>'+remove+'</td></tr>';
   }).join('');
   const totalProfitColor = totals.profit < 0 ? 'var(--red)' : 'var(--green)';
-  return '<tr class="order-items-row"><td colspan="' + ORDER_SUMMARY_COLUMN_COUNT + '"><div class="order-items-panel"><div class="tbl-wrap"><table><tr><th>Назва</th><th>SKU</th><th>К-сть</th><th>Собівартість (упр.)</th><th>Маркетинг</th><th>Пакування</th><th>Доставка</th>' + (showPaymentFees ? '<th>Платіжні комісії</th>' : '') + (showDiscount ? '<th>Знижка</th>' : '') + '<th>Сума</th><th>Прибуток ₴</th><th>%</th></tr>' + rows + '<tr class="order-items-totals"><td colspan="4">Разом</td><td>' + fmt(totals.marketing) + '</td><td colspan="' + (cols - 8) + '"></td><td>' + fmt(totals.amount) + '</td><td style="color:' + totalProfitColor + '">' + fmt(totals.profit) + '</td><td>' + fmtP(totals.amount ? totals.profit / totals.amount * 100 : null) + '</td></tr></table></div></div></td></tr>';
+  return '<tr class="order-items-row"><td colspan="' + ORDER_SUMMARY_COLUMN_COUNT + '"><div class="order-items-panel"><div class="tbl-wrap"><table><tr><th>Назва</th><th>SKU</th><th>К-сть</th><th>Собівартість (упр.)</th><th>Маркетинг</th><th>Пакування</th><th>Доставка</th>' + (showPaymentFees ? '<th>Платіжні комісії</th>' : '') + (showDiscount ? '<th>Знижка</th>' : '') + '<th>Сума</th><th>Прибуток ₴</th><th>%</th><th>Дія</th></tr>' + rows + '<tr class="order-items-totals"><td colspan="4">Разом</td><td>' + fmt(totals.marketing) + '</td><td colspan="' + (cols - 8) + '"></td><td>' + fmt(totals.amount) + '</td><td style="color:' + totalProfitColor + '">' + fmt(totals.profit) + '</td><td>' + fmtP(totals.amount ? totals.profit / totals.amount * 100 : null) + '</td><td></td></tr></table></div></div></td></tr>';
+}
+
+async function removeOrderLine_(orderId, crmRow, button) {
+  if (!orderId || !crmRow || button.disabled) return;
+  button.disabled = true;
+  try {
+    const preview = await call('order_line_remove_preview', { order_id:orderId, crm_row:crmRow });
+    if (!preview.eligible) { window.alert('Видалення заблоковано: '+(preview.blockers || []).join(' ')); return; }
+    const reason = window.prompt('Причина видалення позиції '+preview.sku+' з CRM (мінімум 5 символів):', 'Помилково внесена позиція');
+    if (reason === null) return;
+    if (reason.trim().length < 5 || reason.trim().length > 300) { window.alert('Причина має містити від 5 до 300 символів.'); return; }
+    if (!window.confirm('Видалити з CRM '+preview.name+' ('+preview.sku+'), '+preview.qty+' шт із замовлення '+orderId+'? Дані OpenCart не зміняться.')) return;
+    const requestId = 'crm016-'+Date.now()+'-'+Math.random().toString(36).slice(2,10);
+    await callPost({ action:'remove_order_line', order_id:orderId, crm_row:crmRow, expected_fingerprint:preview.expected_fingerprint, reason:reason.trim(), request_id:requestId });
+    window.alert('Позицію видалено з CRM. Перевірку цілісності виконано до і після зміни.');
+    hardRefresh();
+  } catch (error) { window.alert('Не вдалося видалити позицію: '+String(error && error.message ? error.message : error)); }
+  finally { button.disabled = false; }
 }
 
 async function toggleOrderItems(orderId) {
@@ -2371,7 +2775,7 @@ function renderOrderRows(rows) {
 
 function orderFilterSearch_(row) { return [row.order_id,row.customer_name,row.customer_phone,String(row.customer_phone||'').replace(/\D/g,''),row.ttn,(row.skus||[]).join(' ')].join(' ').toLowerCase().replace(/\s+/g,' '); }
 function orderTableSortValue_(row,field){if(field==='net_pct'){const pct=orderProfitPct(row);return pct==null?-Infinity:pct;}return Number(row[field]||0);}
-function sortOrderRows_(rows){const s=orderState.tableSort;if(!s.field)return sortOrderRows(rows);const factor=s.dir==='asc'?1:-1;return rows.slice().sort(function(a,b){return (orderTableSortValue_(a,s.field)-orderTableSortValue_(b,s.field))*factor||String(a.order_id||'').localeCompare(String(b.order_id||''),'uk',{numeric:true});});}
+function sortOrderRows_(rows){const s=orderState.tableSort;if(!s.field)return rows.slice();const factor=s.dir==='asc'?1:-1;return rows.slice().sort(function(a,b){return (orderTableSortValue_(a,s.field)-orderTableSortValue_(b,s.field))*factor||String(a.order_id||'').localeCompare(String(b.order_id||''),'uk',{numeric:true});});}
 function orderSortTh_(field,label){const s=orderState.tableSort,mark=s.field===field?(s.dir==='asc'?' ↑':' ↓'):' ↕';return '<th onclick="toggleOrderTableSort_(\''+field+'\')" style="cursor:pointer;user-select:none">'+label+mark+'</th>';}
 function toggleOrderTableSort_(field){if(orderState.tableSort.field===field)orderState.tableSort.dir=orderState.tableSort.dir==='asc'?'desc':'asc';else orderState.tableSort={field:field,dir:'desc'};renderOrdersTable(orderItemsState.activeRows,orderItemsState.completedRows);}
 function filterOrderRows_(rows) {
@@ -2506,7 +2910,7 @@ async function loadSkus() {
   renderSkuCreateForm();
   renderSkuRrpControls();
   try {
-    const d = await call('sku_list');
+    const d = await loadInventorySnapshot_();
     cache.skus = d;
     const s = d.skus || [];
     const visibleBySku={};s.forEach(function(item){visibleBySku[String(item.sku || '').trim().toUpperCase()]=item;});Object.keys(skuRrpState.pending).forEach(function(sku){if(!visibleBySku[sku] || visibleBySku[sku].is_3dp)delete skuRrpState.pending[sku];});renderSkuRrpControls();
@@ -2658,6 +3062,15 @@ async function submitZenTopup(){
   catch(e){msg.textContent='Помилка: '+e.message;msg.className='form-msg error';}
   finally{button.disabled=false;}
 }
+function renderZenStatement_(account) {
+  const root=document.getElementById('zenStatement');if(!root)return;
+  if(!account.available){root.innerHTML='<div class="crm011-note">Журнал ZenMarket недоступний.</div>';return;}
+  if(!Array.isArray(account.statement)){root.innerHTML='<div class="crm011-note">Потрібна публікація оновленого CRM API для виписки.</div>';return;}
+  const rows=account.statement;
+  if(!rows.length){root.innerHTML='<div class="crm011-note">Операцій поки немає.</div>';return;}
+  const money=function(value){const n=Number(value);return Number.isFinite(n)?n.toLocaleString('uk-UA',{maximumFractionDigits:2}):'—';};
+  root.innerHTML='<div class="tbl-wrap"><table><tr><th>Дата</th><th>Операція</th><th>Сума</th><th>Валюта</th><th>Баланс після</th></tr>'+rows.map(function(row){return '<tr><td>'+threeDpEsc(row.date||'—')+'</td><td>'+threeDpEsc(row.note||row.id||'—')+'</td><td>'+threeDpEsc((Number(row.amount)>0?'+':'')+money(row.amount))+'</td><td>'+threeDpEsc(row.currency||'JPY')+'</td><td>'+threeDpEsc(money(row.balance_after))+'</td></tr>';}).join('')+'</table></div>';
+}
 async function loadFinance(force){
   clearError();const from=document.getElementById('financeFrom'),to=document.getElementById('financeTo'),topupDate=document.getElementById('zenTopupDate');if(!from.value||!to.value)applyFinancePreset();if(topupDate&&!topupDate.value)topupDate.value=dateInputValue_(financeKyivToday_());const params={date_from:from.value,date_to:to.value},compare=document.getElementById('financeCompare').checked;
   if(compare){const comparison=financeComparisonRange_(financeState.preset,from.value,to.value);if(comparison){params.compare_from=comparison.from;params.compare_to=comparison.to;}}
@@ -2667,6 +3080,7 @@ async function loadFinance(force){
     const compared=function(container,field){return compare?(Object.prototype.hasOwnProperty.call(container,field)?container[field]:null):undefined;},zenMissingTopups=Number(zen.historical_topup_uah_missing||0),cashflowGapNote=zenMissingTopups>0?'<div class="crm011-note" style="margin-top:10px"><b>Увага:</b> '+zenMissingTopups+' поповнення ZenMarket без суми UAH виключено з відтоку коштів. Це не нульова сума; внеси фактичну UAH-суму через контрольоване виправлення.</div>':'';
     document.getElementById('financeKpis').innerHTML=financeMetric_('Виручка',t.revenue,comparisonValue('revenue'),'money')+financeMetric_('Чистий прибуток',t.net_profit,comparisonValue('net_profit'),'money')+financeMetric_('Чиста маржа',t.margin_pct,comparisonValue('margin_pct'),'percent')+financeMetric_('Замовлень',t.orders,comparisonValue('orders'),'count')+financeMetric_('Середній чек',t.avg_order,comparisonValue('avg_order'),'money')+financeMetric_('Баланс ZenMarket',zen.available?zen.balance_jpy:null,undefined,'jpy',undefined,zen.available?'≈ '+fmt(zen.balance_uah)+' за курсом CRM':'');
     renderZenAccount_(zen);
+    renderZenStatement_(zen);
     document.getElementById('financePnl').innerHTML=financeRows_([['Виручка',pnl.revenue,'money','',undefined,compared(cpnl,'revenue')],['− Собівартість товарів',pnl.cogs,'money','deduction','down',compared(cpnl,'cogs')],['Валовий прибуток',pnl.gross_profit,'money','subtotal',undefined,compared(cpnl,'gross_profit')],['− Пакування',pnl.packaging,'money','deduction','down',compared(cpnl,'packaging')],['− Доставка коштом магазину',pnl.delivery,'money','deduction','down',compared(cpnl,'delivery')],['− Комісії оплат',pnl.payment_fees,'money','deduction','down',compared(cpnl,'payment_fees')],['− Операційні витрати',pnl.operating_expenses,'money','deduction','down',compared(cpnl,'operating_expenses')],['− Списання',pnl.writeoffs,'money','deduction','down',compared(cpnl,'writeoffs')],['Чистий прибуток',pnl.net_profit,'money','total',undefined,compared(cpnl,'net_profit')],['Чиста маржа',pnl.margin_pct,'percent','subtotal',undefined,compared(cpnl,'margin_pct')]])+'<div class="crm011-note"><b>Чистий прибуток</b> = виручка мінус собівартість товарів, пакування, доставку магазину, комісії оплат, операційні витрати та надійно оцінені списання.</div>';
     const assetsReady=d.inventory_assets&&Object.prototype.hasOwnProperty.call(assets,'in_stock')&&Object.prototype.hasOwnProperty.call(assets,'outside_stock');
     const assetsScopeNote='<div class="crm011-note" style="margin-bottom:10px"><b>Поточний баланс станом на сьогодні.</b> Вибраний фінансовий період не змінює ці цифри.</div>';
@@ -2691,6 +3105,13 @@ function resetRoadmapFilters(){const series=document.getElementById('roadmapSeri
 function fillRoadmapSeries_(){const select=document.getElementById('roadmapSeries');if(!select)return;const current=select.value,series=Array.from(new Set(ROADMAP_TASKS.map(function(task){return roadmapSeries_(task.id);}))).sort(function(a,b){return a.localeCompare(b,'uk',{numeric:true});});select.innerHTML='<option value="">Усі серії</option>'+series.map(function(value){return '<option value="'+threeDpEsc(value)+'">'+threeDpEsc(value)+'</option>';}).join('');select.value=current;}
 
 const ROADMAP_TASKS = [
+  {
+    id: 'CRM-016', title: 'Закупки, коригування рядків замовлень, SKU та Telegram', status: 'todo', tool: '—', priority: '—',
+    lastUpdated: '2026-09-23', blockedBy: [],
+    simple: 'Категорія: CRM. Окрема вкладка закупок, безпечне редагування CRM-замовлень, перейменування ACC-001-BPJP, аналіз швидкодії та діагностика Telegram.',
+    warn: 'Notion: https://app.notion.com/p/3e46bf20bdb4816192fcf06c468a6967. Власник повідомив про CRM API V192 та Alerts API V8 (27.09); живий експорт коду не звірено. Реалізовано вкладку закупок, зміну SKU в CRM, масові алерти, діагностику Telegram, покращення фінансів і 3D/складу. Відкрито: видалення позиції OC-FOP-0335 з пізнішими FIFO-продажами; звірка BR-DITTO-400 без подвійного списання; ремонт старих формул Складу/Черги_Складу з перевірками до і після; жива QA та заміри швидкості. Не закривати задачу до цих перевірок і рішення власника.',
+    subtasks: []
+  },
   {
     id: 'CONTENT-007', title: 'Canon v1: ввести в дію + набір прапорців валідатора', status: 'active', tool: 'Claude', priority: 'High',
     lastUpdated: '2026-09-13', blockedBy: [],
@@ -4103,6 +4524,13 @@ const ROADMAP_TASKS = [
     subtasks: []
   },
   {
+    id: 'RD-24', title: 'Картка товару в каталозі: зняття контейнера («без коробки»)', status: 'done', tool: 'Claude Code', priority: '—',
+    lastUpdated: '2026-09-22', blockedBy: [],
+    simple: 'Категорія: Redesign (RD).',
+    warn: '2026-09-22 ЗАВЕДЕНО ретроспективно на пряме доручення власника, одразу Done. Плитка товару в каталозі більше не біла картка: товар лежить на полотні сторінки, слот зображення 331/240, роздільник 1px, текст урівень із зображенням. Тільки CSS (boostershop-ds.css) + рядок cache-bust у header.twig, токен ui-pcard-d2-20260919; розмітка thumb.twig не змінювалась. Файли названі за робочим ID UI-PCARD-D. || УВАГА: відкат патча CAT-004 знімає і ці зміни — обидва патчі правлять boostershop-ds.css у місці. Після будь-якого відкату CAT-004 патч RD-24 треба заливати наново, бо він самовидаляється після запуску.',
+    subtasks: []
+  },
+  {
     id: 'SEO-003', title: 'Internal search aliases для трьох варіантів написання', status: 'todo', tool: '—', priority: 'Medium',
     lastUpdated: '2026-05-19', blockedBy: [],
     subtasks: []
@@ -4457,11 +4885,11 @@ async function loadAccountingThreeDpStockOverlay_() {
   const status=document.getElementById('accounting3dpStockStatus');accountingState.threeDpStockStatus='loading';accountingState.threeDpStockError='';
   if(status){status.textContent='Завантажую актуальний залишок 3D-P…';status.style.color='var(--muted)';}
   try {
-    const remote=await call3dp('3dp_skus'),bySku={};
-    (remote.rows||[]).forEach(function(row){const sku=String(row.SKU||'').trim(),stock=Number((row.availability||{})['Наявно зараз, шт']);if(sku&&Number.isFinite(stock))bySku[sku]=stock;});
-    accountingState.skus.forEach(function(row){if(!isThreeDpAccountingSku_(row))return;row.three_dp_stock_pending=false;if(Object.prototype.hasOwnProperty.call(bySku,row.sku)){row.stock=bySku[row.sku];row.three_dp_stock_error=false;}else{row.stock=null;row.three_dp_stock_error=true;}});
+    const remote=await loadInventorySnapshot_(),bySku={};
+    (remote.skus||[]).forEach(function(row){if(row.is_3dp)bySku[String(row.sku||'').trim()]=row;});
+    accountingState.skus.forEach(function(row){if(!isThreeDpAccountingSku_(row))return;const latest=bySku[row.sku];row.three_dp_stock_pending=false;if(latest&&latest.stock!==null&&latest.stock!==undefined){row.stock=latest.stock;row.three_dp_stock_error=false;}else{row.stock=null;row.three_dp_stock_error=true;}});
     accountingState.threeDpStockStatus='ready';refreshAccountingSkuSelectors_();
-    if(status){status.textContent='Залишок 3D-виробів оновлено напряму з 3D-P.';status.style.color='var(--green)';}
+    if(status){status.textContent=remote.source_status==='ready'?'Залишок 3D-виробів звірено між CRM і 3D-P.':'3D-P недоступний: залишки 3D-виробів приховано.';status.style.color=remote.source_status==='ready'?'var(--green)':'var(--yellow)';}
   } catch(e) {
     accountingState.threeDpStockStatus='error';accountingState.threeDpStockError=String(e&&e.message?e.message:e);
     accountingState.skus.forEach(function(row){if(isThreeDpAccountingSku_(row)){row.three_dp_stock_pending=false;row.three_dp_stock_error=true;row.stock=null;}});refreshAccountingSkuSelectors_();
@@ -4526,7 +4954,7 @@ const PURCHASE_CHANNELS = [
   ['other','Інше']
 ];
 const PURCHASE_STATUSES = ['Замовлено','В дорозі','На складі UA','Скасовано'];
-const PURCHASE_BATCH_LIMIT = 10;
+const PURCHASE_BATCH_LIMIT = 25;
 const PURCHASE_CREATE_ITEM_LIMIT = 10;
 const WRITEOFF_TYPES = ['Власне відкриття','Подарунок','Промо','Брак','Тест','Втрата','Інше'];
 const EXPENSE_CATEGORIES = ['Операційні','Маркетинг','Пакування','Доставка','Комісія','Інше'];
@@ -4686,10 +5114,13 @@ async function submitInventoryMigration(mode) {
 }
 
 async function loadAccounting() {
+  const loadGeneration = ++loadAccounting.generation;
   try {
+    const skuRequest = cache.skus ? Promise.resolve(cache.skus) : call('sku_list');
+    const results = await Promise.all([skuRequest, loadPackagingChoices_()]);
+    cache.skus = results[0];
+    if (loadGeneration !== loadAccounting.generation) return;
     const updates=document.getElementById('updatesContent');if(updates)updates.innerHTML='';
-    if (!cache.skus) { const d = await call('sku_list'); cache.skus = d; }
-    await loadPackagingChoices_();
     accountingState.skus = (cache.skus.skus || []).map(function(row){const copy=Object.assign({},row);if(isThreeDpAccountingSku_(copy)){copy.stock=null;copy.three_dp_stock_pending=true;copy.three_dp_stock_error=false;}return copy;});
     const today = new Date().toISOString().slice(0,10);
     document.getElementById('accountingContent').innerHTML =
@@ -4771,9 +5202,17 @@ async function loadAccounting() {
     loadRecTab('regular');
     moveAccountingToolsToUpdates_();
   } catch(e) {
-    document.getElementById('accountingContent').innerHTML = '<div style="color:var(--red)">Помилка: ' + e.message + '</div>';
+    if (loadGeneration === loadAccounting.generation) {
+      loaded.accounting = false;
+      loaded.updates = false;
+      const message = '<div class="records-message error">Помилка завантаження: ' + threeDpEsc(e.message) + '</div>';
+      document.getElementById('accountingContent').innerHTML = message;
+      const updates = document.getElementById('updatesContent');
+      if (updates && !updates.querySelector('.records-section')) updates.innerHTML = message;
+    }
   }
 }
+loadAccounting.generation = 0;
 
 function moveAccountingToolsToUpdates_() {
   const target=document.getElementById('updatesContent');if(!target)return;
@@ -4781,7 +5220,10 @@ function moveAccountingToolsToUpdates_() {
   const records=document.querySelector('.records-section');if(records)target.appendChild(records);
 }
 async function loadUpdates() {
-  const target=document.getElementById('updatesContent');if(target)target.innerHTML=spin();
+  const target=document.getElementById('updatesContent');
+  if(target&&target.querySelector('#inventoryMigrationDetails')&&target.querySelector('.records-section'))return;
+  if(target)target.innerHTML=spin();
+  if(document.querySelector('#accountingContent #inventoryMigrationDetails')){moveAccountingToolsToUpdates_();return;}
   loaded.accounting=true;
   await loadAccounting();
 }
@@ -5439,10 +5881,8 @@ function testOrderCleanupRender_() {
   if (!saved || !saved.report) { host.innerHTML = '<div class="three-dp-note">Ще не було запуску. Познач тестове замовлення в «Продажі» у колонці «Примітка» одним з маркерів вище, потім натисни кнопку.</div>'; return; }
   const report = saved.report, verification = report.verification || {}, status = verification.ok ? '✓ Перевірка після очищення пройшла' : '⚠ Потрібна увага: перевірка після очищення не пройшла';
   const selected = (report.selected_orders || []).join(', ') || 'немає';
-  const raw = JSON.stringify(report, null, 2);
   host.innerHTML = '<div class="three-dp-note"><b>' + threeDpEsc(status) + '</b><br>Статус: ' + threeDpEsc(report.status || '—') + '<br>Знайдені замовлення: ' + threeDpEsc(selected) + '<br>Очищено рядків: ' + threeDpEsc(report.rows_cleared || 0) + '<br>Звіт збережено у цьому браузері: ' + threeDpEsc(String(saved.saved_at || '').replace('T', ' ').replace('Z', ' UTC')) + '</div>' +
-    '<div class="form-actions" style="margin:10px 0"><button class="btn-secondary" type="button" onclick="copyTestOrderCleanupReport()">Копіювати звіт</button></div>' +
-    '<pre style="max-height:420px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;background:var(--surface2);border:1px solid var(--border);padding:12px;border-radius:8px;font-size:12px">' + threeDpEsc(raw) + '</pre>';
+    '<div class="form-actions" style="margin:10px 0"><button class="btn-secondary" type="button" onclick="copyTestOrderCleanupReport()">Копіювати звіт</button></div>';
 }
 function loadTestOrderCleanup() { testOrderCleanupSaved = testOrderCleanupReadSaved_(); testOrderCleanupRender_(); }
 async function copyTestOrderCleanupReport() {
@@ -5458,7 +5898,7 @@ async function runTestOrderCleanup() {
   const message = 'Будуть очищені лише замовлення, де в «Примітка» є «тестове замовлення» або «тест замовлення».\n\nCRM і 3D-P спочатку перевіряться; після цього очищення необоротне для знайдених рядків. Продовжити?';
   if (!window.confirm(message)) return;
   const button = document.getElementById('testOrderCleanupButton'); if (button) { button.disabled = true; button.textContent = 'Перевіряю й очищую…'; }
-  const host = document.getElementById('testOrderCleanupReport'); if (host) host.innerHTML = spin() + '<div class="three-dp-note">Перевіряю CRM та 3D-P. Не закривай сторінку до появи звіту.</div>';
+  const host = document.getElementById('testOrderCleanupReport'); if (host) host.innerHTML = spin() + '<div class="three-dp-note">Перевіряю CRM та 3D-P. Не закривай сторінку до завершення.</div>';
   try {
     const report = await callPost({ action: 'test_order_cleanup', confirm: 'CLEAN TEST ORDERS' });
     testOrderCleanupWriteSaved_(report); testOrderCleanupRender_();
@@ -5470,7 +5910,7 @@ async function runTestOrderCleanup() {
 }
 
 // ════════════ LOADERS MAP ════════════
-const loaders = { overview: loadOverview, alerts: loadAlerts, stock: loadStock, consumables: loadConsumables, orders: loadOrders, skus: loadSkus, clients: loadClients, finance: loadFinance, roadmap: loadRoadmap, accounting: loadAccounting, updates: loadUpdates, settings: loadSettings, '3dprint': load3dPrint };
+const loaders = { overview: loadOverview, alerts: loadAlerts, stock: loadStock, consumables: loadConsumables, orders: loadOrders, purchases: loadPurchases, skus: loadSkus, clients: loadClients, finance: loadFinance, roadmap: loadRoadmap, accounting: loadAccounting, updates: loadUpdates, settings: loadSettings, '3dprint': load3dPrint };
 
 // ════════════ INIT ════════════
 loaded.overview = true;

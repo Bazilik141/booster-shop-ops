@@ -26,15 +26,52 @@ class MockSheet {
 }
 
 function zenRuntime() {
-  return new Function('Utilities', source + `
+  return new Function('Utilities', 'Session', source + `
     resetMemoForMutation_ = function() {};
     invalidateDoGetCache_ = function() {};
+    getCurrencyRate_ = function() { return 3; };
     return {
-      history: crm011ZenHistoricalRows_, requireSetup: crm011ZenRequireSetup_, topup: crm011ZenmarketTopup_, correct: crm011ZenmarketCorrectBalance_,
+      history: crm011ZenHistoricalRows_, requireSetup: crm011ZenRequireSetup_, topup: crm011ZenmarketTopup_, correct: crm011ZenmarketCorrectBalance_, snapshot: crm011ZenBalanceSnapshot_,
       ledgerHeaders: CRM011_ZEN_LEDGER_HEADERS_, lotHeaders: CRM011_ZEN_LOT_HEADERS_, topupHeaders: CRM011_ZEN_TOPUP_HEADERS_
     };
-  `)({ getUuid: () => 'uuid-for-test' });
+  `)({ getUuid: () => 'uuid-for-test', formatDate: date => new Date(date).toISOString().slice(0,16).replace('T',' ') }, { getScriptTimeZone: () => 'Europe/Kyiv' });
 }
+
+test('ZenMarket statement returns latest 15 journal movements with balances and JPY', () => {
+  const runtime = zenRuntime();
+  const history = runtime.history();
+  const ledger = new MockSheet([runtime.ledgerHeaders, ...history, ...Array.from({length:20}, (_, index) => [
+    'TEST-' + index, new Date(2026, 8, 11 + index), index + 1, index + 100, '', 'Operation ' + index, '', '', new Date(), 'test'
+  ])]);
+  const sheets = {'ZenMarket_Рахунок':ledger, 'ZenMarket_Лоти':new MockSheet([runtime.lotHeaders]), 'ZenMarket_Поповнення':new MockSheet([runtime.topupHeaders])};
+  const snapshot = runtime.snapshot({ getSheetByName: name => sheets[name] || null });
+  assert.equal(snapshot.available, true);
+  assert.equal(snapshot.statement.length, 15);
+  assert.equal(snapshot.statement[0].id, 'TEST-19');
+  assert.equal(snapshot.statement[0].amount, 20);
+  assert.equal(snapshot.statement[0].balance_after, 119);
+  assert.equal(snapshot.statement[0].currency, 'JPY');
+  assert.equal(snapshot.statement.at(-1).id, 'TEST-5');
+});
+
+test('three SKU shares of one ZenMarket order display as one debit with the final balance', () => {
+  const runtime = zenRuntime();
+  const at = new Date('2026-09-24T07:53:30Z');
+  const ledger = new MockSheet([runtime.ledgerHeaders,
+    ['OP-1', at, -2453.32, -10179.37, 'LOT-0218', 'Автоматична витрата ZenMarket за LOT-ID', '', '', at, 'purchase_sync'],
+    ['OP-2', new Date(at.getTime() + 1000), -2453.32, -12632.69, 'LOT-0219', 'Автоматична витрата ZenMarket за LOT-ID', '', '', at, 'purchase_sync'],
+    ['OP-3', new Date(at.getTime() + 2000), -2453.38, -15086.07, 'LOT-0220', 'Автоматична витрата ZenMarket за LOT-ID', '', '', at, 'purchase_sync']
+  ]);
+  const lots = new MockSheet([runtime.lotHeaders,
+    ['LOT-0218','yskh374'],['LOT-0219','yskh374'],['LOT-0220','yskh374']]);
+  const sheets = {'ZenMarket_Рахунок':ledger, 'ZenMarket_Лоти':lots, 'ZenMarket_Поповнення':new MockSheet([runtime.topupHeaders])};
+  const snapshot = runtime.snapshot({ getSheetByName: name => sheets[name] || null });
+  assert.equal(snapshot.available, true);
+  assert.equal(snapshot.statement.length, 1);
+  assert.equal(snapshot.statement[0].amount, -7360.02);
+  assert.equal(snapshot.statement[0].balance_after, -15086.07);
+  assert.match(snapshot.statement[0].note, /yskh374 \(3 SKU\)/);
+});
 
 test('historical ZenMarket seed reconciles to the supplied current balance', () => {
   const helpers = new Function(source + '\nreturn { history: crm011ZenHistoricalRows_, expense: crm011ZenPurchaseExpense_ };')();

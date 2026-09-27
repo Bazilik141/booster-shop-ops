@@ -88,11 +88,8 @@ function collectDataQualityIssues_() {
     const action = cell_(row, actionCol);
 
     if (normalizeText_(title).indexOf('мінусовий залишок') >= 0) {
-      const stockIssues = collectNegativeStockIssues_();
-      if (stockIssues.length) {
-        Array.prototype.push.apply(issues, stockIssues);
-        continue;
-      }
+      // Read the SKU-level source unconditionally in collectManagedIssueCandidates_.
+      continue;
     }
     const formulaIssues = collectCountifQualityIssues_(countCol >= 0 ? cell_(formulas[r] || [], countCol) : '', title, details, action);
     if (formulaIssues.length) {
@@ -154,7 +151,9 @@ function collectCountifQualityIssues_(formula, title, details, action) {
   return result;
 }
 
-function collectNegativeStockIssues_() {
+function collectNegativeStockIssues_(inventorySnapshot) {
+  const reconciled = {};
+  ((inventorySnapshot && inventorySnapshot.skus) || []).forEach(function(item) { if (item.sku) reconciled[String(item.sku)] = item; });
   const sheet = SpreadsheetApp.getActive().getSheetByName('Майстер_Товарів');
   if (!sheet) return [];
   const lastRow = Math.min(sheet.getLastRow(), 2000), lastCol = Math.min(sheet.getLastColumn(), 20);
@@ -173,6 +172,11 @@ function collectNegativeStockIssues_() {
   for (let r = headerRow + 1; r < values.length; r++) {
     const row = values[r], sku = cell_(row, skuCol);
     if (!sku) continue;
+    // The CRM stock formula has no manufacturing receipts. 3D negatives are
+    // evaluated from the reconciled CRM/3D-P snapshot below.
+    if (/^(?:BR|FIG|ACC-3D)-[A-Z0-9]/i.test(sku)) continue;
+    const verified = reconciled[sku];
+    if (verified && ((verified.stock_raw !== null && verified.stock_raw !== undefined && Number(verified.stock_raw) >= 0) || (verified.physical_stock !== null && verified.physical_stock !== undefined && Number(verified.physical_stock) >= 0))) continue;
     const balanceText = cell_(row, balanceCol >= 0 ? balanceCol : 11);
     const issueText = normalizeText_(cell_(row, issueCol >= 0 ? issueCol : 16));
     const balance = alertDisplayNumber_(balanceText);
@@ -202,6 +206,7 @@ function collectStockQueueIssues_() {
     sheet.getRange(group.range).getDisplayValues().forEach(function(row) {
       const sku = String(row[0] || '').trim();
       if (!sku || normalizeText_(sku) === 'артикул') return;
+      if (/^(?:BR|FIG|ACC-3D)-[A-Z0-9]/i.test(sku)) return;
       const name = String(row[1] || '').trim();
       const details = ['Продажі 30д: ' + (row[3] || '—'), 'залишок: ' + (row[4] || '—'), 'після резерву: ' + (row[5] || '—'), 'гранична закупка: ' + (row[6] || '—')].join(' · ');
       const signature = normalizeText_([group.kind, sku, details, group.action].join('|'));
@@ -212,7 +217,70 @@ function collectStockQueueIssues_() {
 }
 
 function collectManagedIssueCandidates_() {
-  return collectDataQualityIssues_().concat(collectStockQueueIssues_()).slice(0, ALERT_API_MAX_);
+  let snapshot = null, loadError = null;
+  try { snapshot = crm016AlertInventorySnapshot_(); }
+  catch (error) { loadError = error; }
+  const stockIssues = snapshot ? collectNegativeStockIssues_(snapshot) : [];
+  return collectDataQualityIssues_().concat(stockIssues, collectStockQueueIssues_(), collect3dpInventoryIssues_(snapshot, loadError)).slice(0, ALERT_API_MAX_);
+}
+
+function crm016AlertInventorySnapshot_() {
+  const props = PropertiesService.getScriptProperties();
+  const url = String(props.getProperty('BOOSTER_CRM_URL') || '').trim();
+  const token = String(props.getProperty('BOOSTER_CRM_TOKEN') || '');
+  if (!/\/exec(?:\?|$)/.test(url) || !token) throw new Error('CRM inventory connection is not configured');
+  const response = UrlFetchApp.fetch(url + '?action=inventory_snapshot&token=' + encodeURIComponent(token), { method:'get', muteHttpExceptions:true });
+  if (response.getResponseCode() !== 200) throw new Error('CRM inventory HTTP ' + response.getResponseCode());
+  let payload;
+  try { payload = JSON.parse(response.getContentText()); }
+  catch (_) { throw new Error('CRM inventory did not return JSON'); }
+  if (!payload || payload.ok !== true || !Array.isArray(payload.skus)) throw new Error('CRM inventory snapshot is invalid');
+  return payload;
+}
+
+function collect3dpInventoryIssues_(snapshot, loadError) {
+  if (!snapshot && !loadError) {
+    try { snapshot = crm016AlertInventorySnapshot_(); }
+    catch (error) { loadError = error; }
+  }
+  if (loadError) {
+    const detail = String(loadError && loadError.message || loadError).slice(0, 120);
+    const signature = '3dp_inventory_source_unavailable';
+    return [{ id:hashText_(signature), signature:signature, kind:'3dp_source', title:'3D облік недоступний', count:'1', details:detail, action:'Перевірити підключення CRM та 3D-P.', text:'3D облік недоступний · ' + detail }];
+  }
+  if (snapshot.source_status !== 'ready') {
+    const signature = '3dp_inventory_source_unavailable';
+    return [{ id:hashText_(signature), signature:signature, kind:'3dp_source', title:'3D облік недоступний', count:'1', details:'CRM не отримала підтверджений залишок 3D-P.', action:'Перевірити підключення 3D-P і журнал виконань.', text:'3D облік недоступний · CRM не отримала підтверджений залишок 3D-P.' }];
+  }
+  const issues = [];
+  (snapshot.skus || []).forEach(function(row) {
+    if (!row.is_3dp) return;
+    const sku = String(row.sku || '').trim();
+    const name = String(row.name || '').trim();
+    if (!sku) return;
+    const saleSyncMissing = (row.issues || []).indexOf('3dp_sale_sync_missing') !== -1;
+    if ((row.stock_error || row.stock_raw === null || row.stock_raw === undefined) && !saleSyncMissing) {
+      const signature = '3dp_inventory_invalid|' + sku;
+      issues.push({ id:hashText_(signature), signature:signature, kind:'3dp_inventory_invalid', title:'Не підтверджено залишок 3D', sku:sku, name:name, count:'1', details:'Дані 3D-P відсутні або не збігаються.', action:'Звірити SKU в CRM і 3D-P.', text:'Не підтверджено залишок 3D · ' + sku });
+      return;
+    }
+    if (Number(row.stock_raw) < 0) {
+      const signature = '3dp_print_needed|' + sku;
+      issues.push({ id:hashText_(signature), signature:signature, kind:'3dp_print_needed', title:'Потрібен 3D-друк', sku:sku, name:name, count:String(Math.abs(Number(row.stock_raw))), details:'Після резерву: ' + row.stock_raw, action:'Надрукувати або перевірити резерв.', text:'Потрібен 3D-друк · ' + sku + ' · дефіцит ' + Math.abs(Number(row.stock_raw)) });
+    }
+    if (saleSyncMissing) {
+      const signature = '3dp_sale_sync_missing|' + sku;
+      const unverified = (row.issues || []).indexOf('3dp_physical_unverified') !== -1;
+      issues.push({ id:hashText_(signature), signature:signature, kind:'3dp_sale_sync_missing', title:'Продаж не синхронізовано з 3D', sku:sku, name:name, count:'1', details:unverified?'Продаж CRM не прив’язаний до 3D-списання; фізичний залишок не підтверджено.':'CRM продаж не має відповідного списання у 3D-P.', action:unverified?'Звірити окреме списання з продажем; не повторювати продаж навмання.':'Перевірити журнал синхронізації та FIFO до повтору.', text:'Продаж не синхронізовано з 3D · ' + sku });
+    }
+  });
+  (snapshot.exceptions || []).forEach(function(item) {
+    if (item.code !== '3dp_active_missing_from_crm_active_catalog') return;
+    const sku = String(item.sku || '').trim();
+    const signature = '3dp_catalog_gap|' + sku;
+    issues.push({ id:hashText_(signature), signature:signature, kind:'3dp_catalog_gap', title:'3D SKU відсутній в активному CRM каталозі', sku:sku, count:'1', details:'3D-P позначає SKU активним.', action:'Звірити статуси й картку товару.', text:'Розбіжність 3D каталогу · ' + sku });
+  });
+  return issues;
 }
 
 function installDailyTroubleAlertTrigger() {
@@ -427,11 +495,35 @@ function alertStatusMap_() {
 
 function managedDataQualityIssues_() {
   const statuses = alertStatusMap_();
-  return collectManagedIssueCandidates_().map(function(issue) {
+  const issues = collectManagedIssueCandidates_();
+  const dates = alertFirstSeenDates_(issues);
+  return issues.map(function(issue) {
     issue.id = issue.id || hashText_(issue.signature);
     issue.status = statuses[issue.id] || 'active';
+    issue.first_seen = dates[alertTrackingKey_(issue)] || '';
     return issue;
   });
+}
+
+// First observed by this API, not a reconstructed historical incident date.
+function alertTrackingKey_(issue) {
+  return 'ALERT_FIRST_SEEN_' + hashText_([issue.kind || issue.title || '', issue.sku || '', issue.title || ''].join('|')).slice(0, 24);
+}
+
+function alertFirstSeenDates_(issues) {
+  const properties = PropertiesService.getScriptProperties();
+  const stored = properties.getProperties();
+  const today = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM-dd');
+  const live = {}, additions = {}, dates = {};
+  (issues || []).forEach(function(issue) {
+    const key = alertTrackingKey_(issue);
+    live[key] = true;
+    dates[key] = /^\d{4}-\d{2}-\d{2}$/.test(stored[key] || '') ? stored[key] : today;
+    if (!stored[key]) additions[key] = today;
+  });
+  if (Object.keys(additions).length) properties.setProperties(additions, false);
+  Object.keys(stored).filter(function(key) { return key.indexOf('ALERT_FIRST_SEEN_') === 0 && !live[key]; }).forEach(function(key) { properties.deleteProperty(key); });
+  return dates;
 }
 
 function setManagedAlertStatus_(alertId, status) {
@@ -454,6 +546,34 @@ function setManagedAlertStatus_(alertId, status) {
   }
 }
 
+function setManagedAlertStatusBatch_(alertIds) {
+  if (!Array.isArray(alertIds) || !alertIds.length || alertIds.length > 100) throw new Error('INVALID_ALERT_BATCH');
+  const ids = Array.from(new Set(alertIds.map(function(id) { return String(id || '').trim(); })));
+  if (ids.some(function(id) { return !/^[a-f0-9]{64}$/.test(id); })) throw new Error('INVALID_ALERT_ID');
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const current = {};
+    collectManagedIssueCandidates_().forEach(function(issue) { current[issue.id || hashText_(issue.signature)] = issue; });
+    if (ids.some(function(id) { return !current[id]; })) throw new Error('ALERT_NOT_CURRENT');
+    const sheet = alertControlSheet_(), last = sheet.getLastRow();
+    const values = last < 2 ? [] : sheet.getRange(2, 1, last - 1, 4).getValues();
+    const byId = {};
+    values.forEach(function(row, index) { if (row[0]) byId[String(row[0])] = index; });
+    const changedAt = new Date();
+    ids.forEach(function(id) {
+      const next = [id, 'dismissed', changedAt, current[id].signature];
+      if (Object.prototype.hasOwnProperty.call(byId, id)) values[byId[id]] = next;
+      else { byId[id] = values.length; values.push(next); }
+    });
+    sheet.getRange(2, 1, values.length, 4).setValues(values);
+    PropertiesService.getScriptProperties().deleteProperty('LAST_DAILY_TROUBLE_SIGNATURE');
+    return { ok:true, action:'set_alert_status_batch', status:'dismissed', changed:ids.length, alert_ids:ids };
+  } finally {
+    lock.releaseLock();
+  }
+}
+
 function doGet(e) {
   try {
     const p = e && e.parameter || {};
@@ -469,6 +589,7 @@ function doPost(e) {
   try {
     const payload = JSON.parse(String(e && e.postData && e.postData.contents || '{}'));
     if (!alertApiAuthorized_(payload.token)) return alertJson_({ ok:false, error:'UNAUTHORIZED' });
+    if (payload.action === 'set_alert_status_batch') return alertJson_(setManagedAlertStatusBatch_(payload.alert_ids));
     if (payload.action !== 'set_alert_status') return alertJson_({ ok:false, error:'UNKNOWN_ACTION' });
     return alertJson_(setManagedAlertStatus_(payload.alert_id, payload.status));
   } catch (error) {

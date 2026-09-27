@@ -92,9 +92,9 @@ assert.match(html,/result\.retry_action==='retry_3dp_sync'/,"the sync-only recov
 assert.match(html,/той самий ID допише лише незавершене/,"a partial component writer tells the owner to resume the idempotent order update");
 assert.match(html,/qualified:'true',limit:500/);
 assert.match(html,/clientSortState = \{ field: 'spend_60d', dir: 'desc' \}/);
-assert.match(html,/loadThreeDpStockOverlay_/);
+assert.match(html,/loadInventorySnapshot_/);
 assert.match(html,/loadAccountingThreeDpStockOverlay_/);
-assert.match(html,/call3dp\('3dp_skus'\)/);
+assert.match(html,/call\('inventory_snapshot'\)/);
 assert.match(html,/Значення CRM не підставляються як начебто актуальні/);
 assert.match(html,/id="saveSaleButton"/);
 assert.match(html,/button\.disabled=true;button\.textContent='Зберігаю…'/);

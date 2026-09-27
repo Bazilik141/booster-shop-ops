@@ -1,3 +1,153 @@
+# Owner-reported CRM Web App V192 (2026-09-27 07:55)
+
+The owner reports publishing V192 after receiving the complete
+`work/CRM-016_CRM_API_from_V191_unverified_stock_fix.gs` file. No bound-project
+export was pulled, so byte-level identity and live inventory behaviour remain
+unverified. The local dashboard archive response issue reported after this
+publication is a dashboard/3D-P request issue, not evidence of a CRM API
+deployment failure.
+
+# CRM-016 local follow-up from owner-reported V191 (2026-09-26)
+
+The current `Code.gs` and complete paste file
+`work/CRM-016_CRM_API_from_V191_unverified_stock_fix.gs` add a narrow
+fail-closed rule: when a fulfilled CRM 3D sale is not matched to 3D-P and a
+second subtraction would make physical stock negative despite nonnegative
+3D-P availability, stock and deficit become unverified. The sale-sync
+exception stays visible. This addresses the owner-reported BR-DITTO-400 case
+after a separate marketing write-off consumed its 3D-P unit. Local contract
+tests passed. This file was later owner-reported published as V192. The
+separate one-cell CRM catalogue status correction for `ACC-3D-DITTO-420` is
+recorded in the CRM-016 diagnostic, not part of this source update.
+
+# Owner-reported CRM Web App V191 (2026-09-26 13:45)
+
+The owner reports publishing the full
+`work/CRM-016_CRM_API_from_V190_stock_issue_tag_fix.gs` follow-up as Web App
+V191. Before the local follow-up above, `Code.gs` matched that complete candidate
+byte for byte. The owner
+also supplied a screenshot of the dashboard's active Alerts list after this
+release: it has ACC-005, BR-DITTO-400, ACC-3D-DITTO-420 and ACC-3D-TCG-600;
+the earlier 3D source and EB-03 negative-stock alerts are absent. This is
+owner-reported publication plus screenshot QA, not a fresh bound-project export
+or a repeat of the `integrity_check` after V191.
+
+# CRM-016 follow-up candidate from owner-reported V190 (2026-09-25)
+
+The owner supplied a bounded live `inventory_snapshot` after V190. It reports
+`OP-JP-EB03-BST` with non-negative physical accounting stock but a carried
+`мінусовий_залишок` issue tag from the old CRM master. The mirror now filters
+that stale tag for ordinary SKUs whose reconciled physical balance is
+non-negative; it retains low-stock advice and true accounting shortages. The
+complete follow-up file is
+`work/CRM-016_CRM_API_from_V190_stock_issue_tag_fix.gs`. The owner later
+reported deploying it as V191. The previous V190 full source remains preserved at
+`work/CRM-016_CRM_API_from_V188_inventory_fix.gs`.
+
+# Owner-reported CRM Web App V190 (2026-09-25 22:17)
+
+The owner reports deploying the complete inventory candidate
+`work/CRM-016_CRM_API_from_V188_inventory_fix.gs` as Web App V190. The local
+`Code.gs` mirror was byte-identical to that file before the follow-up above.
+No fresh bound-script export or
+direct `inventory_snapshot` response has been supplied, so runtime stock QA is
+still open. The owner-reported post-deployment `integrity_check` was clean:
+`problems: []`, 67 3D-P RRP comparisons, 6 skipped for missing CRM RRP,
+9,354 ms. This check does not validate warehouse balances or 3D sale sync.
+
+# CRM-016 inventory candidate from owner-reported V188 plus deployed 3D share (2026-09-25)
+
+The owner confirms deploying `work/CRM-016_CRM_API_from_V188_3dp_share.gs` after
+the V188 release. This is owner-reported source provenance; the new deployment
+number and a fresh bound-script export have not been supplied. The local mirror
+was byte-identical to that file before this round. This round adds the read-only
+`inventory_snapshot` action and leaves the earlier API routes intact. The full
+local candidate is `work/CRM-016_CRM_API_from_V188_inventory_fix.gs`; it has not
+been deployed or live-tested. Its 3D stock reads use the configured 3D-P URL
+and token from Script Properties. Production Sheet formula/history repairs are
+separate owner-gated actions.
+
+# CRM-016 3D order-share candidate from owner-reported deployed V188 (2026-09-24)
+
+The owner confirms CRM Web App V188, deployed at 19:31 on 2026-09-24, uses
+the last API file supplied for deployment:
+`work/CRM-016_CRM_API_from_V187_followup.gs`. This is direct owner
+confirmation of the source, not an independently exported V188 snapshot.
+The current mirror starts from that exact file.
+The only new API change is the cached read-only `3dp_order_share` action for
+the dashboard. The complete candidate is
+`work/CRM-016_CRM_API_from_V188_3dp_share.gs`. It has not been deployed or
+verified against the live Web App. Owner-reported V188 integrity check was
+clean (`problems: []`, 14,503 ms).
+
+# CRM-016 follow-up candidate from owner-reported deployed V187 (2026-09-24)
+
+The owner reports CRM Web App V187 was deployed from
+`work/CRM-016_CRM_API_from_V186.gs` and confirms there were no subsequent
+manual code edits. This is owner-reported provenance, not a fresh V187 export.
+The current mirror adds the follow-up purchase grouping fields, 10-position
+create / 25-position update limits, four-range purchase batch writes, narrow
+preorder FIFO correction, grouped ZenMarket statement, empty expense-draft
+handling, and a five-SKU overview payload. The ready-to-paste candidate is
+`work/CRM-016_CRM_API_from_V187_followup.gs`. No follow-up deployment or
+live mutation test is claimed.
+
+# CRM-016 historical release candidate — V186 source preserved (2026-09-24)
+
+The owner supplied the currently deployed main-CRM `Code.gs` export,
+`Версія 186, 23 вер. 2026 р., 1217.csv`. It is raw Apps Script source despite
+the `.csv` extension (first line: `function onOpen() {`). After UTF-8 BOM and
+line-ending normalization it has 10,542 lines and SHA-256
+`72f87a02be549d46b69920c8c262befaed71e5bd58c77fab7932f34f0192cda1`.
+The current local `Code.gs` preserves every V186 line except the focused
+replacements for the finance statement cache key, OpenCart SKU alias and
+removed-line sync handling, archived fixture filtering, ZenMarket statement,
+and order-client lookup. Other differences are only the CRM-015 and CRM-016
+routes and helper blocks. No V186 block was dropped. The exact ready-to-paste
+copy is `work/CRM-016_CRM_API_from_V186.gs`, byte-identical to this mirror.
+This is source comparison and local validation, not a new Web App deployment.
+
+# CRM-015 historical baseline — V185 BYTE-VERIFIED; LOCAL CANDIDATE NOT PUBLISHED (2026-09-22)
+
+The owner-supplied `Версія 185, 18 вер. 2026 р., 0834.csv` is a complete raw
+`Code.gs` export. Before CRM-015 edits it matched `crm/apps-script/Code.gs`
+exactly after BOM/line-ending normalization. The normalized export has 10,543
+split lines and SHA-256
+`36aaa7218d1d13d1affe8593755a7fd813705b01701552240ac363f202c1231b`.
+A bounded credential-literal scan was clear.
+
+The repository mirror now contains the local, unpublished CRM-015 candidate:
+an idempotent standalone 3D marketing-writeoff orchestrator, strict fixture
+stock checks, fixture FIFO costing from `FIFO_розхідники`, unlinked
+`Маркетинг` expense projection, and pre/post CRM integrity gates. This source
+is not deployment evidence. A new Web App version and owner-run live QA remain
+required.
+
+On 2026-09-23, CRM-016 added local, unpublished purchase-register and
+order-line correction APIs plus a guarded shipment-date writer to the same
+mirror. On owner instruction, the live
+`Закупки` sheet was extended from 21 to 22 columns and its new V2 header is
+`Дата відправки в Україну`; historical values remain blank. The live CRM
+catalogue and one purchase lot were renamed from `ACC-001-BPJP` to
+`ACC-001-BPEN`; bounded readback confirmed the SKU, names, formulas, and
+100-unit stock projection. The owner reported a clean integrity precheck and
+supplied the post-edit `integrity_check` result on 2026-09-23: `clean=true`,
+`problems=[]`, `rrp_mismatch_3dp.compared=67`, six missing CRM RRP values
+skipped, `elapsed_ms=86150`. This proves the check's covered relationships;
+it does not prove the unpublished CRM-016 Web App actions. No CRM-016 Web App
+deployment is verified.
+The CRM-015 candidate and owner changes in this mirror remain present.
+
+The same unpublished local follow-up adds the latest 15 ZenMarket ledger
+movements to the finance response and replaces repeated per-order client scans
+with one first-match lookup map. The finance cache key is separated from the
+prior response shape. Local fixture checks passed; live latency and the new
+statement are not yet verified.
+
+On 2026-09-23, before publishing this main-CRM candidate, the owner reported
+the dashboard CRM integrity tile returned `✓ OK`. This is an owner-reported
+clean preflight, not a raw API payload or post-write integrity check.
+
 # CRM one-time cleanup baseline — V177 BYTE-VERIFIED (2026-09-13)
 
 The owner-supplied `Версія 177, 13 вер. 2026 р., 1845.csv` is a complete raw

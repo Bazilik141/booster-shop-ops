@@ -122,6 +122,17 @@ test('P&L reconciles direct deductions, operating expenses and valued writeoffs'
   assert.ok(result.data_quality.reconciliation_sample.every(row => row.difference === 0));
 });
 
+test('prefilled empty expense draft does not hide profit, but an incomplete real expense does', () => {
+  const finance = financeFactory();
+  const columns = {date:0,category:1,description:2,amount:3,order:4,note:5,consumable:6,operating:7};
+  const base = [[new Date('2026-09-05T00:00:00Z'),'Операційні','Послуга',30,'','','','Так']];
+  const draft = [new Date('2026-09-24T00:00:00Z'),'','','','','','','Так'];
+  const complete = finance.crm011FinancePeriod_(sales,{columns,rows:[...base,draft]},writeoffs,bounds);
+  assert.equal(complete.totals.net_profit, 135);
+  const incomplete = finance.crm011FinancePeriod_(sales,{columns,rows:[...base,[draft[0],'Операційні','','','','','','Так']]},writeoffs,bounds);
+  assert.equal(incomplete.totals.net_profit, null);
+});
+
 test('P&L stops instead of hiding a mismatch in sheet net profit', () => {
   const badSales = {...sales,lines:baseLines.map((line,index) => index === 1 ? {...line,sheet_net:99} : line)};
   assert.throws(() => financeFactory().crm011FinancePeriod_(badSales,expenses,writeoffs,bounds), /CRM011_PNL_RECONCILIATION_FAILED/);
@@ -133,7 +144,7 @@ test('finance report reuses one header-resolved sales model', () => {
   assert.doesNotMatch(report,/_getCrmSalesRows\(\)|_getCrmSalesRowEntries\(\)/);
   assert.match(report,/crm011FinanceInventoryAssets_\(sales\)/);
   assert.doesNotMatch(report,/apiSkuList_\(\{\}\)/);
-  assert.match(source,/action === 'finance_report'\) return 'bscrm_v2_' \+ version \+ '_' \+ action \+ '_v4_/);
+  assert.match(source,/action === 'finance_report'\) return 'bscrm_v2_' \+ version \+ '_' \+ action \+ '_v5_/);
   assert.match(report,/comparison = \{ period: compareBounds, totals: compared\.totals, pnl: compared\.pnl, cashflow: cashflowFor\(compareBounds\)/);
 });
 
