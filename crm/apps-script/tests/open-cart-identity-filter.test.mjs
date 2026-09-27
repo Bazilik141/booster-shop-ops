@@ -30,7 +30,7 @@ const spreadsheet = { getSheetByName: name => name === 'Продажі' ? sales 
 const context = vm.createContext({
   Array, Boolean, Date, Error, JSON, Math, Number, Object, RegExp, String, console, isFinite,
   Logger: { log() {} },
-  SpreadsheetApp: { getActive: () => spreadsheet, flush() {} },
+  SpreadsheetApp: { getActive: () => spreadsheet, openById: () => spreadsheet, flush() {} },
   PropertiesService: { getScriptProperties: () => ({ getProperty: () => '' }) },
   Utilities: { formatDate: () => '2026-08-14' },
   Session: { getScriptTimeZone: () => 'Europe/Kyiv' },

@@ -1,3 +1,45 @@
+# Owner-reported CRM Web App V195 and bounded live verification (2026-09-27 22:43)
+
+The owner reports publishing V195 and completing a name-only edit of
+`PKM-JP-MDEX-BBX`. A read-only connector check of the live CRM workbook found
+`Зміни_SKU!3` in `APPLIED` state with the same old/new SKU and the recorded
+name change. `Товари!B67` is now a formula referencing `C67`; both display the
+new name. The formula-derived names in `Продажі!G263`, `Закупки!F99/F176`,
+`РРЦ!B67`, and `Склад!B67` also display it. The sale's SKU, quantity and
+economic values still match the pre-edit row supplied by the owner. This
+verifies the observed live outcome of this one edit and implies the apply route
+passed its built-in before/after integrity gates, as recorded by `APPLIED`.
+The bound V195 script was not independently exported for a byte comparison,
+and no live SKU rename or old-OpenCart-SKU import was performed by Codex.
+
+# Local name-propagation follow-up after owner-reported CRM V194 (2026-09-27; published by owner as V195)
+
+The owner reported publishing CRM Web App V194 at 21:42 on 2026-09-27. A
+bounded read of the live CRM workbook found `PKM-JP-MDEX-BBX` in `Товари!67`
+and `Продажі!263`: the sale name formula reads `Товари!B67`, while the editor
+only changed the full name in `Товари!C67`. The local `Code.gs` candidate now
+switches a verified ordinary `Товари!B` formula to a formula referencing `C`
+when the full name changes; it checks affected sales and rolls back on failure.
+Manual/custom short-name rules remain blocked. The dashboard requires a new API
+capability flag before permitting an edit. This follow-up has not been copied
+to Apps Script or published. The owner-reported V194 source was not independently
+exported, so byte identity between the live bound source and this local mirror
+is unverified.
+
+# Local CRM catalogue identity editor candidate (2026-09-27; not published)
+
+The current `Code.gs` mirror now contains a CRM-only preview/apply route for
+editing a product's full name and SKU from the dashboard. It starts from the
+owner-reported V193 source below. The route refuses 3D-P products, unknown
+exact SKU dependencies, hardcoded SKU formulas, duplicate/reserved keys, stale
+previews, and a dirty CRM integrity baseline. It migrates known manual CRM key
+columns, preserves formula projections and frozen sale amounts, records a
+`PENDING`/`APPLIED`/rollback journal in `Зміни_SKU`, and resolves old OpenCart
+articles through applied journal aliases on future imports. The mirror is a
+local candidate: no Apps Script publication, live workbook migration, or
+runtime QA is claimed. The owner must back up the CRM workbook, publish a new
+Web App version, and verify an actual name edit and SKU migration before use.
+
 # Owner-reported CRM Web App V193 (2026-09-27 09:57)
 
 The owner reports publishing the latest CRM source as V193 and placing that

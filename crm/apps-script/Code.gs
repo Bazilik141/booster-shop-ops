@@ -36,7 +36,7 @@ const form = readFormRange_(formSheet, 'A4:B20');
 const itemRows = formSheet.getRange('A21:E30').getValues();
 const items = itemRows
 .filter(row => row[0] && num_(row[1]) > 0)
-.map(row => ({ sku: parseSku_(row[0]), qty: num_(row[1]), price: num_(row[2]), note: row[4] || '' }));
+.map(row => ({ sku: normalizeOpenCartSku_(parseSku_(row[0])), qty: num_(row[1]), price: num_(row[2]), note: row[4] || '' }));
 
 const mysteryQty = items
 .filter(item => isMysteryBoxSale_(item.sku, ''))
@@ -45,7 +45,7 @@ const mysteryQty = items
 const componentRows = formSheet.getRange('A36:C45').getValues();
 const mysteryComponents = componentRows
 .filter(row => row[0] && num_(row[1]) > 0)
-.map(row => ({ sku: parseSku_(row[0]), qty: num_(row[1]), note: row[2] || '' }));
+.map(row => ({ sku: normalizeOpenCartSku_(parseSku_(row[0])), qty: num_(row[1]), note: row[2] || '' }));
 const fixtureLines = read3dp019FixtureFormLines_(formSheet, 'Внести_продаж');
 
 if (!items.length) {
@@ -131,7 +131,7 @@ const japanFeesJpy = num_(form['Доставка / комісії по Япон�
 const japanFees = japanFeesJpy > 0 ? round2_(japanFeesJpy / getCurrencyRate_('JPY')) : 0; const status = form['Статус'] || 'Виграно';
 const items = formSheet.getRange('A12:E14').getValues()
 .filter(row => row[0] && num_(row[1]) > 0)
-.map(row => ({ sku: parseSku_(row[0]), qty: num_(row[1]), cost: num_(row[2]), manualCost: row[3], note: row[4] || '' }));
+.map(row => ({ sku: normalizeOpenCartSku_(parseSku_(row[0])), qty: num_(row[1]), cost: num_(row[2]), manualCost: row[3], note: row[4] || '' }));
 
 if (!['zenmarket_jp', 'supplier_ua', 'other'].includes(supplier)) { SpreadsheetApp.getUi().alert('Обери Постачальника: zenmarket_jp, supplier_ua або other.'); return; }
 if (!order || isBlank_(form['Загальна вартість лоту, грн']) || !items.length) { SpreadsheetApp.getUi().alert('Заповни № замовлення, загальну вартість лоту і хоча б один SKU з кількістю.'); return; }
@@ -183,13 +183,13 @@ const selectedLots = lotRows.map(function(row) {
 const parts = String(row[0] || '').split('|').map(function(part) { return part.trim(); });
 if (!parts[0]) return null;
 const lot = /^LOT-[0-9]+$/i.test(parts[0])
-? { lotId: parts[0], order: parts[1] || '', sku: parts[2] || '' }
-: { lotId: '', order: parts[0], sku: parseSku_(parts[1] || '') };
+? { lotId: parts[0], order: parts[1] || '', sku: normalizeOpenCartSku_(parseSku_(parts[2] || '')) }
+: { lotId: '', order: parts[0], sku: normalizeOpenCartSku_(parseSku_(parts[1] || '')) };
 lot.japanJpy = row[1];
 return lot;
 }).filter(Boolean);
 const manualOrder = String(form['ZenMarket Order № / список'] || form['ZenMarket Order №'] || '').trim();
-const manualSku = parseSku_(form['SKU (опц.)'] || '');
+const manualSku = normalizeOpenCartSku_(parseSku_(form['SKU (опц.)'] || ''));
 if (!selectedLots.length && !manualOrder) {
 SpreadsheetApp.getUi().alert('Обери хоча б один лот у B4:B11 або введи ZenMarket Order №.');
 return;
@@ -296,7 +296,7 @@ const rowValues = batchValues[i];
 const rawSku = rowValues[0];
 const rawQty = rowValues[1];
 const lineNote = rowValues[3] || '';
-const sku = parseSku_(rawSku);
+const sku = normalizeOpenCartSku_(parseSku_(rawSku));
 const qty = (rawQty === '' || rawQty === null) ? (sku ? 1 : 0) : num_(rawQty);
 if (!sku && (qty > 0 || lineNote)) {
 SpreadsheetApp.getUi().alert('У рядку ' + (13 + i) + ' вкажи SKU або очисти кількість/примітку.');
@@ -311,7 +311,7 @@ lines.push({ sku: sku, qty: qty, note: lineNote });
 }
 }
 } else {
-const sku = parseSku_(form['SKU']);
+const sku = normalizeOpenCartSku_(parseSku_(form['SKU']));
 const qty = num_(form['Кількість']);
 if (!sku || qty <= 0) {
 SpreadsheetApp.getUi().alert('Заповни SKU і кількість або внеси рядки в таблицю списань.');
@@ -1295,7 +1295,7 @@ _memo = createMemo_();
 
 function resetMemoForMutation_() {
 if (typeof _memo === 'undefined' || !_memo) resetMemo_();
-_memo.salesRows = null; _memo.salesRowEntries = null; _memo.autoConsumableStateByOrder = null; _memo.costAuditColumnsEnsured = false; _memo.doGetCacheVersion = null;
+_memo.salesRows = null; _memo.salesRowEntries = null; _memo.autoConsumableStateByOrder = null; _memo.costAuditColumnsEnsured = false; _memo.doGetCacheVersion = null; _memo.catalogIdentityAliases = null;
 }
 
 
@@ -1571,6 +1571,7 @@ if (missing.length) crmIntegrityAdd_(report, 'formula_column_literal', table.tit
 function crmIntegrityCheckRowFormulas_(report, table, headers) {
 if (!table.sheet || table.headerIndex['SKU'] == null && table.headerIndex['Тип розхідника'] == null) return;
 const identityIndex = table.headerIndex.SKU != null ? table.headerIndex.SKU : table.headerIndex['Тип розхідника'];
+const manualShortNames = table.title === 'Товари' ? crmCatalogIdentityManualShortNames_() : CRM_INTEGRITY_MANUAL_SHORT_NAME_SKUS_;
 headers.forEach(function(header) {
   const columnIndex = table.headerIndex[header];
   if (columnIndex == null) return;
@@ -1578,7 +1579,7 @@ headers.forEach(function(header) {
   table.values.forEach(function(row, index) {
     const identity = crmIntegrityText_(row[identityIndex]);
     if (!identity) return;
-    if (table.title === 'Товари' && header === 'Коротка назва' && Object.prototype.hasOwnProperty.call(CRM_INTEGRITY_MANUAL_SHORT_NAME_SKUS_, identity)) return;
+    if (table.title === 'Товари' && header === 'Коротка назва' && Object.prototype.hasOwnProperty.call(manualShortNames, identity)) return;
     if (table.title === 'Розхідники' && header === 'Використано в продажах' && Object.prototype.hasOwnProperty.call(CRM_INTEGRITY_MANUAL_CONSUMABLE_USAGE_NAMES_, identity)) return;
     if (!String((table.formulas[index] || [])[columnIndex] || '').trim()) badRows.push(table.dataStartRow + index);
   });
@@ -1774,6 +1775,12 @@ const lock = LockService.getScriptLock();
 if (!lock.tryLock(30000)) return boosterCrmJson_({ ok: false, error: 'crm busy, retry later' });
 try {
 const action = String(payload.action || '').trim().toLowerCase();
+if (action === 'add_sale' || action === 'add_purchase' || action === 'add_writeoff') {
+  // A saved old article must not create a new orphaned CRM key in future manual entries.
+  if (Array.isArray(payload.items)) payload.items = payload.items.map(function(item) { return item && item.sku ? Object.assign({}, item, { sku: normalizeOpenCartSku_(parseSku_(item.sku)) }) : item; });
+  if (action === 'add_sale' && Array.isArray(payload.mystery_components)) payload.mystery_components = payload.mystery_components.map(function(item) { return item && item.sku ? Object.assign({}, item, { sku: normalizeOpenCartSku_(parseSku_(item.sku)) }) : item; });
+  if (payload.sku) payload.sku = normalizeOpenCartSku_(parseSku_(payload.sku));
+}
 if (action === 'add_sale') return boosterCrmJson_(crm011ApiAddSale_(ss, payload));
 if (action === 'add_purchase') return boosterCrmJson_(crm011ApiAddPurchase_(ss, payload));
 if (action === 'add_writeoff') return boosterCrmJson_(apiAddWriteOff_(ss, payload));
@@ -1785,6 +1792,9 @@ if (action === 'update_purchase') return boosterCrmJson_(apiUpdatePurchaseBatch1
 if (action === 'set_purchase_shipment_date') return boosterCrmJson_(apiSetPurchaseShipmentDate_(ss, payload));
 if (action === 'add_news_candidate') return boosterCrmJson_(apiAddNewsCandidate_(ss, payload));
 if (action === 'add_sku') return boosterCrmJson_(apiAddSku_(ss, payload));
+if (action === 'catalog_identity_context') return boosterCrmJson_(apiCatalogIdentityContext_(ss, payload));
+if (action === 'catalog_identity_preview') return boosterCrmJson_(apiCatalogIdentityPreview_(ss, payload));
+if (action === 'catalog_identity_apply') return boosterCrmJson_(apiCatalogIdentityApply_(ss, payload));
 if (action === 'set_3dp_sku_active') return boosterCrmJson_(apiSet3dpSkuActive_(ss, payload));
 if (action === 'sync_3dp_catalog_rrp') return boosterCrmJson_(apiSync3dpCatalogRrp_(ss, payload));
 if (action === 'update_rrp_batch') return boosterCrmJson_(apiUpdateRrpBatch_(ss, payload));
@@ -2276,6 +2286,7 @@ if (catalogKind !== 'tcg' && catalogKind !== 'accessory') throw new Error('inval
 const isAccessory = catalogKind === 'accessory';
 const fullNameShort = String(payload.short_name_mode || '').trim() === 'full_name' || String(payload.source || '').trim() === '3d' || isAccessory;
 if (!/^[A-Z0-9][A-Z0-9-]{2,63}$/.test(sku)) throw new Error('invalid sku');
+if (CRM_LEGACY_OPENCART_SKU_ALIASES_[sku] || crmCatalogIdentityAliases_(ss)[sku]) throw new Error('SKU is reserved as an old article alias: ' + sku);
 if (!fullName) throw new Error('full_name required');
 if (!brand || !format || (!isAccessory && (!language || !setName))) throw new Error(isAccessory ? 'brand and format required for accessory' : 'brand, language, set and format required');
 if (!isFinite(rrpValue) || rrpValue <= 0) throw new Error('rrp must be > 0');
@@ -2334,6 +2345,267 @@ throw error;
 } catch (err) {
 return { ok: false, action: 'add_sku', error: String(err && err.message ? err.message : err) };
 }
+}
+
+// Catalogue identity is a CRM-only migration. Formula projections are never written;
+// unknown exact SKU references stop the operation before any cell is changed.
+const CRM_CATALOG_IDENTITY_LOG_ = 'Зміни_SKU';
+const CRM_LEGACY_OPENCART_SKU_ALIASES_ = Object.freeze({ 'PKM-KR-HWA-BST': 'PKM-KR-HWAK-BST', 'PKM-KR-HWA-BBX': 'PKM-KR-HWAK-BBX', 'PKM-JP-ABYSS-BST': 'PKM-JP-ABYE-BST', 'PKM-JP-ABYSS-BBX': 'PKM-JP-ABYE-BBX', 'ACC-001-BPJP': 'ACC-001-BPEN' });
+const CRM_CATALOG_IDENTITY_KEYS_ = Object.freeze({
+  'Товари': Object.freeze({ 1: 3 }),
+  'Продажі': Object.freeze({ 6: 3 }),
+  'Закупки': Object.freeze({ 5: 3 }),
+  'Списання': Object.freeze({ 4: 3 }),
+  'Міграції_Складу': Object.freeze({ 4: 2, 5: 2 }),
+  'Використання_компонентів': Object.freeze({ 15: 2 }),
+  'Використання_фурнітури': Object.freeze({ 13: 2 })
+});
+
+function crmCatalogIdentityAliases_(ss) {
+  const sheet = ss.getSheetByName(CRM_CATALOG_IDENTITY_LOG_);
+  const aliases = {};
+  if (!sheet || sheet.getLastRow() < 2) return aliases;
+  const rows = sheet.getRange(2, 2, sheet.getLastRow() - 1, 5).getDisplayValues();
+  rows.forEach(function(row) {
+    const oldSku = String(row[0] || '').trim().toUpperCase();
+    const newSku = String(row[1] || '').trim().toUpperCase();
+    const state = String(row[4] || '').trim();
+    if (!oldSku || !newSku || oldSku === newSku || state === 'ROLLED_BACK') return;
+    if (aliases[oldSku]) throw new Error('Duplicate SKU migration journal key: ' + oldSku);
+    aliases[oldSku] = { sku: newSku, state: state };
+  });
+  return aliases;
+}
+
+function crmCatalogIdentityManualShortNames_() {
+  const allowed = Object.assign({}, CRM_INTEGRITY_MANUAL_SHORT_NAME_SKUS_);
+  const aliases = crmCatalogIdentityAliases_(_getCrmSs());
+  Object.keys(CRM_INTEGRITY_MANUAL_SHORT_NAME_SKUS_).forEach(function(original) {
+    let current = original;
+    const seen = {};
+    while (aliases[current]) {
+      if (seen[current]) throw new Error('SKU alias cycle in manual short-name exceptions: ' + original);
+      seen[current] = true;
+      current = aliases[current].sku;
+      allowed[current] = true;
+    }
+  });
+  return allowed;
+}
+
+function crmCatalogIdentityProjection_(sheet, cell, productRow) {
+  const name = sheet.getName(), column = cell.getColumn(), row = cell.getRow();
+  if (name === 'РРЦ' && column === 1 && row === productRow) return !!sheet.getRange(3, 1).getFormula();
+  if (name === 'Склад' && column === 1 && row === productRow) return !!sheet.getRange(3, 1).getFormula();
+  if (name === 'Майстер_Товарів' && column === 1 && row >= 2) return !!sheet.getRange(2, 1).getFormula();
+  return false;
+}
+
+function crmCatalogIdentityShortNameFormulas_(row) {
+  return {
+    catalog: '=IF(OR($D' + row + '="";$F' + row + '="";$E' + row + '="";$G' + row + '="");"";$D' + row + '&" — "&$F' + row + '&" — "&$E' + row + '&" — "&$G' + row + ')',
+    full: '=IF($A' + row + '="";"";$C' + row + ')'
+  };
+}
+
+function apiCatalogIdentityContext_(ss, payload) {
+  try {
+    const products = ss.getSheetByName('Товари'), rrc = ss.getSheetByName('РРЦ'), stock = ss.getSheetByName('Склад');
+    if (!products || !rrc || !stock) throw new Error('CRM catalogue sheets are missing');
+    const sku = String(payload && payload.sku || '').trim().toUpperCase();
+    if (!/^[A-Z0-9][A-Z0-9-]{2,63}$/.test(sku)) throw new Error('Invalid SKU');
+    const row = apiFindSkuRow_(products, sku, 3, crmCatalogLastWritableRow_(products, rrc, stock));
+    if (!row) throw new Error('SKU is missing from Товари: ' + sku);
+    const values = products.getRange(row, 1, 1, 7).getValues()[0];
+    if (is3dpPackagingSku_(sku) || is3dpCatalogSku_(sku, values[5], values[6])) throw new Error('3D-P products must be edited through the separate 3D workflow');
+    return { ok: true, action: 'catalog_identity_context', sku: sku, full_name: String(values[2] || '').trim(), accounting_name: String(values[1] || '').trim(), name_sync_supported: true, product_row: row };
+  } catch (error) { return { ok: false, action: 'catalog_identity_context', error: String(error && error.message || error) }; }
+}
+
+function crmCatalogIdentityPlan_(ss, payload) {
+  const products = ss.getSheetByName('Товари');
+  const rrc = ss.getSheetByName('РРЦ');
+  const stock = ss.getSheetByName('Склад');
+  if (!products || !rrc || !stock) throw new Error('CRM catalogue sheets are missing');
+  const oldSku = String(payload && payload.old_sku || '').trim().toUpperCase();
+  const newSku = String(payload && payload.new_sku || '').trim().toUpperCase();
+  const newName = String(payload && payload.new_name || '').trim();
+  const expectedName = String(payload && payload.expected_name || '').trim();
+  if (!/^[A-Z0-9][A-Z0-9-]{2,63}$/.test(oldSku) || !/^[A-Z0-9][A-Z0-9-]{2,63}$/.test(newSku)) throw new Error('Invalid SKU');
+  if (!newName || newName.length > 250 || /[\r\n]/.test(newName)) throw new Error('Name must be one non-empty line of at most 250 characters');
+  const lastRow = crmCatalogLastWritableRow_(products, rrc, stock);
+  const row = apiFindSkuRow_(products, oldSku, 3, lastRow);
+  if (!row) throw new Error('SKU is missing from Товари: ' + oldSku);
+  const originalName = String(products.getRange(row, 3).getDisplayValue() || '').trim();
+  if (!expectedName || originalName !== expectedName) throw new Error('Product name changed; refresh the catalogue before saving');
+  const productValues = products.getRange(row, 1, 1, 7).getValues()[0];
+  if (is3dpPackagingSku_(oldSku) || is3dpPackagingSku_(newSku) || is3dpCatalogSku_(oldSku, productValues[5], productValues[6])) throw new Error('3D-P products must be edited through the separate 3D workflow');
+  if (products.getRange(row, 1).getFormula() || products.getRange(row, 3).getFormula()) throw new Error('Product SKU and full name must be manual cells');
+  if (!products.getRange(row, 10).getFormula() || !rrc.getRange(row, 8).getFormula()) throw new Error('Catalogue price formula is missing');
+  if (String(rrc.getRange(row, 1).getDisplayValue() || '').trim().toUpperCase() !== oldSku ||
+      String(stock.getRange(row, 1).getDisplayValue() || '').trim().toUpperCase() !== oldSku) throw new Error('Catalogue SKU projections are not aligned');
+  const rename = oldSku !== newSku;
+  const nameChange = originalName !== newName;
+  if (!rename && !nameChange) throw new Error('Nothing changed');
+  const shortCell = products.getRange(row, 2);
+  const oldShortName = String(shortCell.getDisplayValue() || '').trim();
+  const oldShortFormula = String(shortCell.getFormula() || '').trim();
+  const shortFormulas = crmCatalogIdentityShortNameFormulas_(row);
+  let syncShortName = false;
+  const saleNameRows = [];
+  if (nameChange) {
+    if (!oldShortName || (oldShortFormula !== shortFormulas.catalog && oldShortFormula !== shortFormulas.full)) throw new Error('Accounting name has a manual or custom rule; use a reviewed name migration for this product');
+    syncShortName = oldShortFormula === shortFormulas.catalog;
+    const sales = ss.getSheetByName('Продажі');
+    if (!sales) throw new Error('CRM sales sheet is missing');
+    const saleKeyCells = ss.createTextFinder(oldSku).matchEntireCell(true).findAll().filter(function(cell) { return cell.getSheet().getName() === 'Продажі' && cell.getColumn() === 6 && cell.getRow() >= 3; });
+    if (saleKeyCells.length > 500) throw new Error('More than 500 sale names; use a dedicated reviewed migration');
+    saleKeyCells.forEach(function(cell) {
+      const saleName = sales.getRange(cell.getRow(), 7);
+      if (!saleName.getFormula() || String(saleName.getDisplayValue() || '').trim() !== oldShortName) throw new Error('Sale name is not linked to the catalogue at Продажі!G' + cell.getRow());
+      saleNameRows.push(cell.getRow());
+    });
+    saleNameRows.sort(function(a, b) { return a - b; });
+  }
+  const aliases = crmCatalogIdentityAliases_(ss);
+  if (rename) {
+    if (apiFindSkuRow_(products, newSku, 3, lastRow)) throw new Error('New SKU already exists in Товари');
+    if (CRM_LEGACY_OPENCART_SKU_ALIASES_[newSku]) throw new Error('New SKU is reserved as a legacy OpenCart alias');
+    if (aliases[oldSku] || aliases[newSku]) throw new Error('SKU is already a source of a migration journal entry');
+  }
+  const cells = [];
+  if (rename) {
+    const formulas = ss.createTextFinder(oldSku).matchFormulaText(true).findAll().filter(function(cell) { return !!cell.getFormula(); });
+    if (formulas.length) throw new Error('SKU is hardcoded in formula at ' + formulas.slice(0, 3).map(function(cell) { return cell.getSheet().getName() + '!' + cell.getA1Notation(); }).join(', '));
+    const matches = ss.createTextFinder(oldSku).matchEntireCell(true).findAll();
+    matches.forEach(function(cell) {
+      const sheetName = cell.getSheet().getName();
+      if (sheetName === CRM_CATALOG_IDENTITY_LOG_) return;
+      if (crmCatalogIdentityProjection_(cell.getSheet(), cell, row)) return; // ARRAYFORMULA spill cells have no row-local formula.
+      if (cell.getFormula()) throw new Error('Unknown formula-derived SKU dependency at ' + sheetName + '!' + cell.getA1Notation());
+      const column = cell.getColumn(), rowNumber = cell.getRow();
+      const first = (CRM_CATALOG_IDENTITY_KEYS_[sheetName] || {})[column];
+      if (!first || rowNumber < first) throw new Error('Unknown SKU dependency at ' + sheetName + '!' + cell.getA1Notation());
+      if (String(cell.getDisplayValue() || '').trim().toUpperCase() !== oldSku) throw new Error('SKU reference changed while planning');
+      cells.push({ sheet: sheetName, row: rowNumber, column: column, a1: cell.getA1Notation() });
+    });
+    if (cells.filter(function(cell) { return cell.sheet === 'Товари' && cell.row === row && cell.column === 1; }).length !== 1) throw new Error('Product SKU source was not found exactly once');
+    const newMatches = ss.createTextFinder(newSku).matchEntireCell(true).findAll();
+    if (newMatches.some(function(cell) { return cell.getSheet().getName() !== CRM_CATALOG_IDENTITY_LOG_; })) throw new Error('New SKU already appears in the CRM workbook');
+    const auto = _getAutoSs();
+    if (auto !== ss) {
+      if (auto.createTextFinder(newSku).matchEntireCell(true).findAll().length) throw new Error('New SKU already appears in the automation workbook');
+      const hardcoded = auto.createTextFinder(oldSku).matchFormulaText(true).findAll().filter(function(cell) { return !!cell.getFormula(); });
+      if (hardcoded.length) throw new Error('SKU is hardcoded in automation formula at ' + hardcoded[0].getSheet().getName() + '!' + hardcoded[0].getA1Notation());
+      const unknown = auto.createTextFinder(oldSku).matchEntireCell(true).findAll().filter(function(cell) { return !crmCatalogIdentityProjection_(cell.getSheet(), cell, row); });
+      if (unknown.length) throw new Error('Unknown SKU dependency in automation workbook at ' + unknown[0].getSheet().getName() + '!' + unknown[0].getA1Notation());
+    }
+  }
+  if (cells.length > 500) throw new Error('More than 500 SKU references; migrate this product with a dedicated reviewed repair');
+  cells.sort(function(a, b) { return a.sheet.localeCompare(b.sheet) || a.row - b.row || a.column - b.column; });
+  const counts = {};
+  cells.forEach(function(cell) { counts[cell.sheet] = (counts[cell.sheet] || 0) + 1; });
+  const signature = JSON.stringify([oldSku, newSku, originalName, newName, oldShortName, oldShortFormula, saleNameRows, cells.map(function(cell) { return [cell.sheet, cell.a1]; })]);
+  return { old_sku: oldSku, new_sku: newSku, old_name: originalName, new_name: newName, old_short_name: oldShortName, old_short_formula: oldShortFormula, new_short_formula: shortFormulas.full, sync_short_name: syncShortName, sale_name_rows: saleNameRows, row: row, rename: rename, name_change: nameChange, cells: cells, counts: counts, signature: signature };
+}
+
+function apiCatalogIdentityPreview_(ss, payload) {
+  try {
+    const plan = crmCatalogIdentityPlan_(ss, payload);
+    return { ok: true, action: 'catalog_identity_preview', old_sku: plan.old_sku, new_sku: plan.new_sku, old_name: plan.old_name, new_name: plan.new_name, old_accounting_name: plan.old_short_name, new_accounting_name: plan.name_change ? plan.new_name : plan.old_short_name, sale_names_updated: plan.sale_name_rows.length, name_sync_supported: true, product_row: plan.row, reference_counts: plan.counts, references: plan.cells.length, preview_signature: plan.signature };
+  } catch (error) { return { ok: false, action: 'catalog_identity_preview', error: String(error && error.message || error) }; }
+}
+
+function crmCatalogIdentityJournal_(ss) {
+  let sheet = ss.getSheetByName(CRM_CATALOG_IDENTITY_LOG_);
+  if (!sheet) {
+    sheet = ss.insertSheet(CRM_CATALOG_IDENTITY_LOG_);
+    sheet.getRange(1, 1, 1, 8).setValues([['Час', 'Старий SKU', 'Новий SKU', 'Стара назва', 'Нова назва', 'Стан', 'Кількість посилань', 'Помилка']]);
+  }
+  const headers = sheet.getRange(1, 1, 1, 8).getDisplayValues()[0];
+  if (headers.join('|') !== 'Час|Старий SKU|Новий SKU|Стара назва|Нова назва|Стан|Кількість посилань|Помилка') throw new Error('SKU migration journal schema has changed');
+  return sheet;
+}
+
+function apiCatalogIdentityApply_(ss, payload) {
+  try {
+    resetMemoForMutation_();
+    const plan = crmCatalogIdentityPlan_(ss, payload);
+    if (String(payload && payload.preview_signature || '') !== plan.signature) throw new Error('Catalogue or SKU references changed; preview again');
+    const before = apiIntegrityCheck_();
+    if (!before.clean || (before.problems || []).length) throw new Error('CRM integrity precheck is not clean');
+    const journal = crmCatalogIdentityJournal_(ss);
+    const journalRow = journal.getLastRow() + 1;
+    journal.getRange(journalRow, 1, 1, 8).setValues([[new Date(), plan.old_sku, plan.new_sku, plan.old_name, plan.new_name, 'PENDING', JSON.stringify(plan.counts), '']]);
+    SpreadsheetApp.flush();
+    const products = ss.getSheetByName('Товари');
+    const groups = {};
+    plan.cells.forEach(function(cell) { if (!groups[cell.sheet]) groups[cell.sheet] = []; groups[cell.sheet].push(cell.a1); });
+    const changed = [];
+    try {
+      // Product source goes last; all exact historical keys are migrated under the POST lock.
+      Object.keys(groups).filter(function(name) { return name !== 'Товари'; }).forEach(function(name) {
+        changed.push(name);
+        ss.getSheetByName(name).getRangeList(groups[name]).setValue(plan.new_sku);
+       });
+       if (plan.rename) { changed.push('Товари'); products.getRange(plan.row, 1).setValue(plan.new_sku); }
+       if (plan.name_change) { changed.push('Назва'); products.getRange(plan.row, 3).setValue(plan.new_name); }
+       if (plan.sync_short_name) { changed.push('Коротка назва'); products.getRange(plan.row, 2).setFormula(plan.new_short_formula); }
+       SpreadsheetApp.flush();
+      plan.cells.forEach(function(cell) {
+        if (String(ss.getSheetByName(cell.sheet).getRange(cell.row, cell.column).getDisplayValue() || '').trim().toUpperCase() !== plan.new_sku) throw new Error('SKU readback failed at ' + cell.sheet + '!' + cell.a1);
+       });
+       if (String(products.getRange(plan.row, 3).getDisplayValue() || '').trim() !== plan.new_name) throw new Error('Product name readback failed');
+       if (plan.name_change) {
+         if (String(products.getRange(plan.row, 2).getDisplayValue() || '').trim() !== plan.new_name) throw new Error('Accounting name did not follow full name');
+         const sales = ss.getSheetByName('Продажі');
+         plan.sale_name_rows.forEach(function(row) { if (String(sales.getRange(row, 7).getDisplayValue() || '').trim() !== plan.new_name) throw new Error('Sale name did not follow new name at Продажі!G' + row); });
+       }
+      if (plan.rename) {
+        if (String(ss.getSheetByName('РРЦ').getRange(plan.row, 1).getDisplayValue() || '').trim().toUpperCase() !== plan.new_sku || String(ss.getSheetByName('Склад').getRange(plan.row, 1).getDisplayValue() || '').trim().toUpperCase() !== plan.new_sku) throw new Error('Catalogue projections did not follow new SKU');
+      }
+      resetMemoForMutation_();
+      const after = apiIntegrityCheck_();
+      if (!after.clean || (after.problems || []).length) throw new Error('CRM integrity postcheck found a new problem');
+      journal.getRange(journalRow, 6).setValue('APPLIED');
+      SpreadsheetApp.flush();
+      resetMemoForMutation_();
+      clearOrdersCache_();
+      invalidateDoGetCache_();
+       return { ok: true, action: 'catalog_identity_apply', old_sku: plan.old_sku, sku: plan.new_sku, name: plan.new_name, sale_names_updated: plan.sale_name_rows.length, product_row: plan.row, references_updated: plan.cells.length, reference_counts: plan.counts, journal_row: journalRow, integrity_clean: true };
+    } catch (error) {
+      let rollbackError = '';
+      try {
+         changed.filter(function(name) { return name !== 'Товари' && name !== 'Назва' && name !== 'Коротка назва'; }).reverse().forEach(function(name) { ss.getSheetByName(name).getRangeList(groups[name]).setValue(plan.old_sku); });
+         products.getRange(plan.row, 1).setValue(plan.old_sku);
+         products.getRange(plan.row, 3).setValue(plan.old_name);
+         if (plan.sync_short_name) products.getRange(plan.row, 2).setFormula(plan.old_short_formula);
+         SpreadsheetApp.flush();
+        plan.cells.forEach(function(cell) {
+          if (String(ss.getSheetByName(cell.sheet).getRange(cell.row, cell.column).getDisplayValue() || '').trim().toUpperCase() !== plan.old_sku) throw new Error('Rollback readback failed at ' + cell.sheet + '!' + cell.a1);
+         });
+         if (String(products.getRange(plan.row, 3).getDisplayValue() || '').trim() !== plan.old_name) throw new Error('Rollback name readback failed');
+         if (plan.name_change) {
+           if (String(products.getRange(plan.row, 2).getDisplayValue() || '').trim() !== plan.old_short_name) throw new Error('Rollback accounting name readback failed');
+           const sales = ss.getSheetByName('Продажі');
+           plan.sale_name_rows.forEach(function(row) { if (String(sales.getRange(row, 7).getDisplayValue() || '').trim() !== plan.old_short_name) throw new Error('Rollback sale name readback failed at Продажі!G' + row); });
+         }
+        if (plan.rename && (String(ss.getSheetByName('РРЦ').getRange(plan.row, 1).getDisplayValue() || '').trim().toUpperCase() !== plan.old_sku || String(ss.getSheetByName('Склад').getRange(plan.row, 1).getDisplayValue() || '').trim().toUpperCase() !== plan.old_sku)) throw new Error('Rollback projections did not return to old SKU');
+        resetMemoForMutation_();
+        const restored = apiIntegrityCheck_();
+        if (!restored.clean || (restored.problems || []).length) throw new Error('Rollback integrity check is not clean');
+        journal.getRange(journalRow, 6).setValue('ROLLED_BACK');
+      } catch (rollback) {
+        rollbackError = String(rollback && rollback.message || rollback);
+        journal.getRange(journalRow, 6).setValue('RECOVERY_REQUIRED');
+      }
+      journal.getRange(journalRow, 8).setValue(String(error && error.message || error).slice(0, 300) + (rollbackError ? '; rollback: ' + rollbackError.slice(0, 200) : ''));
+      SpreadsheetApp.flush();
+      resetMemoForMutation_();
+      invalidateDoGetCache_();
+      throw new Error(rollbackError ? 'Migration needs manual recovery; journal row ' + journalRow : 'Migration rolled back: ' + String(error && error.message || error));
+    }
+  } catch (error) { return { ok: false, action: 'catalog_identity_apply', error: String(error && error.message || error) }; }
 }
 
 function apiSet3dpSkuActive_(ss, payload) {
@@ -4662,7 +4934,22 @@ updateSkuCurrentCost_(ss);
 }
 invalidateDoGetCache_(); return { action: 'inserted', order: orderKey, rows: products.length };
 }
-function normalizeOpenCartSku_(sku) { const text = String(sku || '').trim(); const aliases = { 'PKM-KR-HWA-BST': 'PKM-KR-HWAK-BST', 'PKM-KR-HWA-BBX': 'PKM-KR-HWAK-BBX', 'PKM-JP-ABYSS-BST': 'PKM-JP-ABYE-BST', 'PKM-JP-ABYSS-BBX': 'PKM-JP-ABYE-BBX', 'ACC-001-BPJP': 'ACC-001-BPEN' }; return aliases[text] || text; }
+function normalizeOpenCartSku_(sku) {
+  const text = String(sku || '').trim().toUpperCase();
+  if (!text) return '';
+  if (!_memo.catalogIdentityAliases) _memo.catalogIdentityAliases = crmCatalogIdentityAliases_(_getCrmSs());
+  const aliases = _memo.catalogIdentityAliases;
+  let current = text;
+  const seen = {};
+  while (true) {
+    if (seen[current]) throw new Error('SKU alias cycle: ' + text);
+    seen[current] = true;
+    const next = CRM_LEGACY_OPENCART_SKU_ALIASES_[current] || (aliases[current] && aliases[current].sku);
+    if (!next) return current;
+    if (aliases[current] && aliases[current].state !== 'APPLIED') throw new Error('SKU migration is unfinished: ' + current);
+    current = next;
+  }
+}
 
 function findSaleRowsByOrder_(sales, orderKey) {
 const lastRow = Math.max(sales.getLastRow(), 3);

@@ -97,6 +97,19 @@ function makeEnvironment({ missingProductPriceFormula = false, settingsRows = 20
 const payload={sku:"BR-CHARM-100",full_name:"Брелок Чармандер (Pokémon) — 3D-друк",brand:"Booster Shop",language:"UA",set:"3D-друк",format:"3D аксесуар",rrp:25,active:true,source:"3d",short_name_mode:"full_name",allow_new_options:true};
 {
   const env=makeEnvironment();
+  const oldStatic=env.apiAddSku(env.crm,{...payload,sku:"ACC-001-BPJP"});
+  assert.equal(oldStatic.ok,false);
+  assert.match(oldStatic.error,/reserved as an old article alias/);
+  const journal=new MockSheet("Зміни_SKU");
+  journal.getRange(2,2,1,5).setValues([["PKM-JP-OLD-BST","PKM-JP-NEW-BST","old name","new name","APPLIED"]]);
+  env.crm.sheets.set(journal.name,journal);
+  const oldJournal=env.apiAddSku(env.crm,{...payload,sku:"PKM-JP-OLD-BST"});
+  assert.equal(oldJournal.ok,false);
+  assert.match(oldJournal.error,/reserved as an old article alias/);
+  assert.equal(env.products.getRange(4,1).getValue(),"", "retired articles remain unavailable for new products");
+}
+{
+  const env=makeEnvironment();
   const created=env.apiAddSku(env.crm,payload);
   assert.equal(created.ok,true);
   assert.equal(created.product_row,4);

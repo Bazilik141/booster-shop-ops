@@ -703,6 +703,12 @@ tr.client-active td { background: rgba(124,111,255,.08) !important; }
       <div id="skuCreateWorkspace" class="hidden"></div>
     </div>
     <div class="section">
+      <div class="section-header"><span class="section-title">Редагувати наявний товар</span></div>
+      <div class="form-row"><label>SKU, зокрема неактивний</label><input id="skuIdentityLookup" placeholder="Введи артикул товару"></div>
+      <div class="form-actions"><button class="btn-secondary" type="button" onclick="openSkuIdentityEditor(document.getElementById('skuIdentityLookup').value)">Відкрити редактор</button></div>
+    </div>
+    <div id="skuIdentityWorkspace" class="section hidden"></div>
+    <div class="section">
       <div style="margin-bottom:14px">
         <input id="skuFilter" type="text" placeholder="🔍 Фільтр по SKU або назві…"
           style="width:100%;padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none;transition:border-color .15s"
@@ -2876,6 +2882,42 @@ async function loadOrders(mode = orderState.mode) {
 // ════════════ SKUs ════════════
 const skuCreateState = { open:false, loading:false, options:null, message:{}, kind:'tcg' };
 const skuRrpState = { pending:Object.create(null), saving:false, message:{} };
+const skuIdentityState = { item:null, draft:null, preview:null, saving:false, message:{} };
+async function openSkuIdentityEditor(sku) {
+  const selectedSku=String(sku||'').trim().toUpperCase();if(!selectedSku){showError('Вкажи SKU товару.');return;}
+  const item=((cache.skus||{}).skus||[]).find(function(row){return String(row.sku||'').toUpperCase()===selectedSku;});
+  if(item&&item.is_3dp){showError('3D-P товари редагуються в окремій вкладці.');return;}
+  skuIdentityState.item={sku:selectedSku,full_name:'',loading:true};
+  skuIdentityState.draft=null;skuIdentityState.preview=null;skuIdentityState.message={};renderSkuIdentityEditor();
+  try{const source=await callPost({action:'catalog_identity_context',sku:selectedSku});if(!skuIdentityState.item||skuIdentityState.item.sku!==selectedSku)return;if(source.name_sync_supported!==true)throw new Error('Опублікована CRM API ще не підтримує оновлення назв продажів. Онови Web App перед редагуванням.');skuIdentityState.item={sku:selectedSku,full_name:String(source.full_name||'').trim(),accounting_name:String(source.accounting_name||'').trim()};skuIdentityState.draft={new_sku:selectedSku,new_name:skuIdentityState.item.full_name};renderSkuIdentityEditor();document.getElementById('skuIdentityWorkspace').scrollIntoView({block:'nearest',behavior:'smooth'});}
+  catch(error){if(skuIdentityState.item&&skuIdentityState.item.sku===selectedSku){closeSkuIdentityEditor();showError('Не вдалося відкрити редактор: '+error.message);}}
+}
+function closeSkuIdentityEditor(){skuIdentityState.item=null;skuIdentityState.draft=null;skuIdentityState.preview=null;skuIdentityState.message={};renderSkuIdentityEditor();}
+function invalidateSkuIdentityPreview(){skuIdentityState.draft={new_sku:String((document.getElementById('skuIdentityCode')||{}).value||''),new_name:String((document.getElementById('skuIdentityName')||{}).value||'')};skuIdentityState.preview=null;skuIdentityState.message={};const button=document.getElementById('skuIdentityApply');if(button)button.disabled=true;const summary=document.getElementById('skuIdentityPreview');if(summary)summary.textContent='Спочатку перевір зміни.';}
+function skuIdentityInput(){const draft=skuIdentityState.draft||{};return {old_sku:skuIdentityState.item.sku,new_sku:String(draft.new_sku||'').trim().toUpperCase(),new_name:String(draft.new_name||'').trim(),expected_name:skuIdentityState.item.full_name};}
+function renderSkuIdentityEditor(){
+  const root=document.getElementById('skuIdentityWorkspace');if(!root)return;root.classList.toggle('hidden',!skuIdentityState.item);if(!skuIdentityState.item){root.innerHTML='';return;}
+  if(skuIdentityState.item.loading){root.innerHTML=spin();return;}
+  const item=skuIdentityState.item,draft=skuIdentityState.draft||{},preview=skuIdentityState.preview,counts=preview&&preview.reference_counts||{};
+  const skuSummary=preview?(preview.old_sku===preview.new_sku?'SKU не змінюється — перенесення артикулу не потрібне.':'Клітинок зі старим SKU до перенесення: '+preview.references+(Object.keys(counts).length?' · '+Object.keys(counts).map(function(name){return threeDpEsc(name)+': '+counts[name];}).join(', '):'')):'';
+  const nameSummary=preview&&preview.old_name!==preview.new_name?'Облікова назва стане «'+threeDpEsc(preview.new_accounting_name)+'»; назва оновиться у '+preview.sale_names_updated+' історичних продажах через формули.':'';
+  root.innerHTML='<div class="section-header"><span class="section-title">Редагувати назву й артикул</span><button class="btn-secondary" type="button" onclick="closeSkuIdentityEditor()">Закрити</button></div><div class="three-dp-product-form"><div class="three-dp-form-grid"><label>Поточний SKU<span class="three-dp-readonly">'+threeDpEsc(item.sku)+'</span></label><label>Новий SKU *<input id="skuIdentityCode" value="'+threeDpEsc(draft.new_sku)+'" oninput="invalidateSkuIdentityPreview()"></label><label>Повна назва товару *<input id="skuIdentityName" value="'+threeDpEsc(draft.new_name)+'" oninput="invalidateSkuIdentityPreview()"></label><label>Поточна облікова назва<span class="three-dp-readonly">'+threeDpEsc(item.accounting_name)+'</span></label></div><div class="three-dp-note">Зміна назви оновить облікову назву та її відображення в історичних і майбутніх продажах. Формули й суми самих продажів не переписуються. Якщо змінити SKU, історичні продажі, закупки та списання отримають новий артикул; старий залишиться в журналі для імпорту з OpenCart. Картка OpenCart не змінюється. Товари 3D-P редагуються окремо.</div><div id="skuIdentityPreview" class="field-hint">'+(preview?[skuSummary,nameSummary].filter(Boolean).join('<br>'):'Спочатку перевір зміни.')+'</div><div class="form-actions" style="margin-top:14px"><button class="btn-secondary" type="button" onclick="previewSkuIdentity()"'+(skuIdentityState.saving?' disabled':'')+'>Перевірити зміни</button><button id="skuIdentityApply" class="btn-primary" type="button" onclick="applySkuIdentity()"'+(!preview||skuIdentityState.saving?' disabled':'')+'>'+(skuIdentityState.saving?'Зберігаю…':'Зберегти після перевірки')+'</button></div>'+threeDpMessage(skuIdentityState.message)+'</div>';
+}
+async function previewSkuIdentity(){
+  if(!skuIdentityState.item||skuIdentityState.saving)return;const payload=skuIdentityInput();skuIdentityState.preview=null;skuIdentityState.message={text:'Перевіряю залежні записи…',kind:''};renderSkuIdentityEditor();
+  try{const result=await callPost({action:'catalog_identity_preview',...payload});if(!skuIdentityState.item||JSON.stringify(skuIdentityInput())!==JSON.stringify(payload))return;if(result.name_sync_supported!==true)throw new Error('CRM API не підтримує оновлення назв продажів');skuIdentityState.preview=result;skuIdentityState.message={text:'Перевірка готова. Звір SKU, облікову назву й кількість історичних продажів.',kind:'success'};}
+  catch(error){if(!skuIdentityState.item||JSON.stringify(skuIdentityInput())!==JSON.stringify(payload))return;skuIdentityState.message={text:'Зміни заблоковано: '+error.message,kind:'error'};}
+  renderSkuIdentityEditor();
+}
+async function applySkuIdentity(){
+  const preview=skuIdentityState.preview;if(!preview||skuIdentityState.saving)return;const payload=skuIdentityInput();
+  if(payload.old_sku!==preview.old_sku||payload.new_sku!==preview.new_sku||payload.new_name!==preview.new_name){invalidateSkuIdentityPreview();return;}
+  if(!confirm('Зберегти товар '+preview.old_sku+'? '+(preview.old_sku===preview.new_sku?'SKU не зміниться.':'Новий SKU: '+preview.new_sku+'; клітинок до перенесення: '+preview.references+'. ')+(preview.old_name===preview.new_name?'':'Облікова назва оновиться у '+preview.sale_names_updated+' продажах. ')+'Перед записом і після нього буде перевірена цілісність.'))return;
+  skuIdentityState.saving=true;skuIdentityState.message={text:'Зберігаю зміни в CRM…',kind:''};renderSkuIdentityEditor();
+  try{const result=await callPost({action:'catalog_identity_apply',...payload,preview_signature:preview.preview_signature});skuIdentityState.item=null;skuIdentityState.draft=null;skuIdentityState.preview=null;skuIdentityState.message={};delete cache.skus;try{await loadSkus();runCrmIntegrityCheck();}catch(refreshError){showError('CRM збережено, але дашборд не оновився: '+refreshError.message);}alert('Збережено: '+result.sku+'. Перенесено клітинок SKU: '+result.references_updated+'; оновлено назв продажів: '+result.sale_names_updated+'; журнал рядок '+result.journal_row+'.');}
+  catch(error){skuIdentityState.message={text:'Збереження не підтверджено: '+error.message,kind:'error'};}
+  finally{skuIdentityState.saving=false;renderSkuIdentityEditor();}
+}
 function skuRrpMessage() { return skuRrpState.message && skuRrpState.message.text ? threeDpMessage(skuRrpState.message) : ''; }
 function renderSkuRrpControls() {
   const button=document.getElementById('applyRrpChangesButton');const message=document.getElementById('skuRrpMessage');const count=Object.keys(skuRrpState.pending).length;
@@ -2928,16 +2970,17 @@ async function loadSkus() {
   clearError();
   renderSkuCreateForm();
   renderSkuRrpControls();
+  renderSkuIdentityEditor();
   try {
     const d = await loadInventorySnapshot_();
     cache.skus = d;
     const s = d.skus || [];
     const visibleBySku={};s.forEach(function(item){visibleBySku[String(item.sku || '').trim().toUpperCase()]=item;});Object.keys(skuRrpState.pending).forEach(function(sku){if(!visibleBySku[sku] || visibleBySku[sku].is_3dp)delete skuRrpState.pending[sku];});renderSkuRrpControls();
     document.getElementById('skuTable').innerHTML = `<div class="tbl-wrap"><table>
-      <tr><th>SKU</th><th>Назва</th><th>РРЦ</th><th>Дин. РРЦ</th><th>Гранична закупка</th><th>Поточна собівартість</th><th>Маржа</th><th>30д</th><th>60д</th><th>Доступно</th><th>Дефіцит</th><th>Очікується</th><th>Днів запасу</th><th>Терм.</th><th>Нова РРЦ, грн</th></tr>
+      <tr><th>SKU</th><th>Повна назва</th><th>РРЦ</th><th>Дин. РРЦ</th><th>Гранична закупка</th><th>Поточна собівартість</th><th>Маржа</th><th>30д</th><th>60д</th><th>Доступно</th><th>Дефіцит</th><th>Очікується</th><th>Днів запасу</th><th>Терм.</th><th>Нова РРЦ, грн</th><th>Дія</th></tr>
       ${s.map(r => `<tr>
-        <td><span class="chip mono">${r.sku}</span></td>
-        <td style="font-size:12px;max-width:180px;line-height:1.3">${skuName(r.name, r.sku)}</td>
+        <td><span class="chip mono">${threeDpEsc(r.sku)}</span></td>
+        <td style="font-size:12px;max-width:220px;line-height:1.3">${threeDpEsc(r.full_name||r.name||r.sku)}</td>
         <td>${rrcPriceCell(r.rrc ?? r.price_crm, r.current_rrc_margin_pct)}</td>
         <td>${r.dynamic_rrc ? fmt(r.dynamic_rrc) : '<span style="color:var(--muted)">—</span>'}</td>
         <td>${r.max_buy_price != null ? fmt(r.max_buy_price) : '—'}</td>
@@ -2951,6 +2994,7 @@ async function loadSkus() {
         <td>${dayCoverage(r.stock, r.sold_30d, r.sold_60d)}</td>
         <td class="${urgCls(r.urgency)}">${r.urgency||'—'}</td>
         <td>${r.is_3dp?'<span style="color:var(--muted);font-size:12px">У вкладці 3D</span>':'<input type="number" min="0.01" step="0.01" inputmode="decimal" aria-label="Нова РРЦ для '+threeDpEsc(r.sku)+'" data-sku="'+threeDpEsc(r.sku)+'" data-current="'+Number(r.rrc ?? r.price_crm)+'" value="" placeholder="'+Number(r.rrc ?? r.price_crm)+'" oninput="queueRrpChange(this)" style="width:96px;padding:6px 7px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text)">'}</td>
+        <td>${r.is_3dp?'<span style="color:var(--muted);font-size:12px">У вкладці 3D</span>':'<button class="btn-secondary" type="button" onclick="openSkuIdentityEditor(\''+threeDpEsc(r.sku)+'\')">Редагувати</button>'}</td>
       </tr>`).join('')}
     </table></div>`;
     const skf = document.getElementById('skuFilter');
