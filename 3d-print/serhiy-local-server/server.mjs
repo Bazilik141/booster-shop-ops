@@ -324,6 +324,12 @@ async function createDraft(body) {
     values[column] = value;
   });
   if (!String(values.B || "").trim() || !String(values.D || "").trim()) throw fail("Для чернетки потрібні назва виробу і тип.");
+  if (Object.prototype.hasOwnProperty.call(values, "G")) {
+    const parsed = printTime.parse(values.G);
+    if (!parsed.ok) throw fail(`Час друку: ${parsed.error}`);
+    if (parsed.blank) delete values.G;
+    else values.G = parsed.hours;
+  }
   return call3dpPost({ action: "3dp_nomenclature_draft_create", values });
 }
 

@@ -1,0 +1,104 @@
+/* Temporary owner-editor repair. Plain Apps Script stored in HTML, not a web page.
+ * Only the two temporary editor wrappers load this file; no Web App route.
+ * Remove this file and both wrappers after live verification.
+ */
+(function (mode) {
+  'use strict';
+  if (['preview', 'apply'].indexOf(mode) === -1) throw new Error('Unsupported repair mode.');
+  return withScriptLock3dp_(function () {
+    const ss = getSpreadsheet3dp_();
+    const sku = 'FIG-SNRLX-500';
+    const batchId = '3DP-B-20260928231333-47e11cde';
+    const properties = PropertiesService.getScriptProperties();
+    const previewKey = 'TASK_3D_P_007_PREVIEW';
+    const backupKey = 'TASK_3D_P_007_BACKUP';
+    const source = getSheet3dp_(ss, SHEETS_3DP.nomenclature);
+    const row = resolveTargetRow3dp_(source, sku);
+    if (row !== 76) throw new Error('Target moved from row 76. Stop and re-review.');
+    const input = source.getRange(row, 7, 1, 2);
+    if (input.getFormulas()[0].some(Boolean)) throw new Error('G76:H76 must remain manual inputs.');
+    const plan = planNomenclatureAvailability3dp_(ss, row);
+    const batches = ss.getSheetByName(CATALOG_FIFO_3DP.batchesSheet);
+    if (!batches) throw new Error('Confirmed FIFO sheet is missing.');
+    fifo3dpAssertHeaders_(batches, CATALOG_FIFO_3DP.batchHeaders, 'FIFO_SCHEMA_MISMATCH');
+    const batchKeys = batches.getRange(2, 1, Math.max(batches.getLastRow() - 1, 1), 6).getValues();
+    const matches = batchKeys.map(function (v, i) { return { values: v, row: i + 2 }; }).filter(function (v) {
+      return String(v.values[0]) === batchId || String(v.values[5]) === sku;
+    });
+    if (matches.length !== 1 || String(matches[0].values[0]) !== batchId || String(matches[0].values[5]) !== sku) {
+      throw new Error('Expected exactly the confirmed Snorlax FIFO batch. Stop and re-review.');
+    }
+    const batch = batches.getRange(matches[0].row, 1, 1, 25).getValues()[0];
+    if (Number(batch[6]) !== 1 || Number(batch[7]) !== 0 || Number(batch[8]) !== 1 ||
+        Math.abs(Number(batch[10]) - 2.1166666667) > 1e-8 || Number(batch[9]) !== 50.99 || String(batch[20]) !== 'active') {
+      throw new Error('Confirmed batch inputs or status changed.');
+    }
+    const log = getSheet3dp_(ss, SHEETS_3DP.printLog);
+    const logRow = Number(batch[2]);
+    if (logRow !== 36) throw new Error('Confirmed print-log row changed.');
+    const printed = log.getRange(logRow, 2, 1, 9).getValues()[0];
+    if (String(printed[0]) !== sku || Number(printed[1]) !== 1 || Number(printed[3]) !== 0 ||
+        Math.abs(Number(printed[2]) - Number(batch[10])) > 1e-8 || Number(printed[4]) !== Number(batch[9]) ||
+        String(printed[7]).indexOf('[fifo_batch:' + batchId + ']') === -1 || String(printed[8]) !== API_3DP.activeStatus) {
+      throw new Error('Print log does not match the confirmed FIFO batch.');
+    }
+    const current = input.getValues()[0];
+    const hours = Number(batch[10]), weight = Number(batch[9]);
+    if (typeof current[0] !== 'number' || (current[0] !== 46205 && Math.abs(current[0] - hours) > 1e-8)) {
+      throw new Error('G76 differs from the reviewed old or repaired time.');
+    }
+    if (current[1] !== '50.99' && current[1] !== weight) throw new Error('H76 differs from the reviewed weight.');
+    const target = plan.sheet.getRange(row, 1, 1, 7);
+    const before = { input: current, input_formats: input.getNumberFormats(),
+      availability_values: target.getValues(), availability_formulas: target.getFormulas(),
+      availability_formats: target.getNumberFormats() };
+    const fingerprint = fifo3dpFingerprint_({ row: row, sku: sku, before: before, batch: batch, printed: printed });
+    const changes = plan.missing.map(function (col) { return 'Наявність!' + numberToColumn3dp_(col) + row; });
+    if (current[0] !== hours) changes.push('Номенклатура!G76');
+    if (current[1] !== weight) changes.push('Номенклатура!H76');
+    const summary = { task: '3D-P-007', sku: sku, mode: mode, changed_cells: changes,
+      old_hours: current[0], new_hours: hours, new_time: '2 год 07 хв',
+      old_weight: current[1], new_weight: weight, expected_available: Number(batch[19]),
+      fingerprint: fingerprint, already_applied: changes.length === 0 };
+    if (mode === 'preview') {
+      properties.setProperty(previewKey, fingerprint);
+      return summary;
+    }
+    if (!changes.length) {
+      if (Number(target.getValues()[0][6]) !== Number(batch[19])) throw new Error('Availability differs from FIFO; separate reconciliation required.');
+      return summary;
+    }
+    if (properties.getProperty(previewKey) !== fingerprint) throw new Error('Preview missing or stale. Run preview3dp007Repair again and review it.');
+    const backup = JSON.stringify({ task: '3D-P-007', sku: sku, row: row, before: before, fingerprint: fingerprint });
+    if (backup.length > 7500) throw new Error('Backup exceeds the bounded property budget.');
+    const existingBackup = properties.getProperty(backupKey);
+    if (existingBackup && existingBackup !== backup) throw new Error('A different repair backup already exists. Stop and review.');
+    properties.setProperty(backupKey, backup);
+    const inputSnapshot = snapshotRange3dp_(source, 'G76:H76');
+    const availabilitySnapshot = snapshotRange3dp_(plan.sheet, 'A76:G76');
+    try {
+      ensureNomenclatureAvailability3dp_(ss, row);
+      input.setValues([[hours, weight]]);
+      source.getRange(row, 7).setNumberFormat(PRINT_TIME_ENTRY_3DP.numberFormat);
+      SpreadsheetApp.flush();
+      const availability = target.getValues()[0];
+      if (String(availability[0]) !== sku || typeof availability[6] !== 'number' || availability[6] !== Number(batch[19])) {
+        throw new Error('Recalculated availability differs from the confirmed FIFO balance.');
+      }
+      if (input.getValues()[0][0] !== hours || input.getValues()[0][1] !== weight) throw new Error('Input read-back verification failed.');
+      appendAudit3dp_(ss, { role: 'owner', identity: 'owner-editor-3dp007' }, '3D_P_007_REPAIR',
+        SHEETS_3DP.nomenclature, 'G76:H76; Наявність!A76:G76', before,
+        { time_hours: hours, weight_g: weight, available: availability[6] },
+        'Existing FIFO batch unchanged; backup property ' + backupKey);
+      properties.deleteProperty(previewKey);
+      summary.available = availability[6];
+      summary.backup_property = backupKey;
+      return summary;
+    } catch (error) {
+      restoreRange3dp_(inputSnapshot);
+      restoreRange3dp_(availabilitySnapshot);
+      SpreadsheetApp.flush();
+      throw error;
+    }
+  });
+})

@@ -1,5 +1,43 @@
 # 3D-P Apps Script source state
 
+## V39 (2026-09-29 12:24, owner-reported; clean source owner-confirmed)
+
+The owner ran `preview3dp007Repair` at 12:23:22 and
+`apply3dp007Repair` at 12:23:43. The outputs had the same fingerprint and
+exactly the nine approved cells; apply reported `available: 1` and the
+`TASK_3D_P_007_BACKUP` property. Owner-provided screenshots show Snorlax
+availability as 1 unit in both Serhiy's view and the owner dashboard. The
+owner reports publishing V39 at 12:24. The owner subsequently confirmed that
+the temporary files were removed and the permanent code was installed. This
+is owner-provided source, runtime, and UI evidence, not an independently pulled
+deployment snapshot. The temporary HTML was removed from the repository's
+Apps Script mirror; its review artifact remains under
+`patches/3D-P-007_snorlax-stock_20260928/`. Serhiy has not yet installed the
+local-server updater.
+
+## 3D-P-007 owner-supplied bound-project export (2026-09-29; deployment unverified)
+
+The owner supplied complete `Code.gs` and `CatalogFifo.gs` text from the 3D-P
+project. Normalized UTF-8 SHA-256: `Code.gs`
+`8e6b7b1898d7538949036adb4f122f854d212c49174f519de698de573cf0696d`
+(3,942 lines); `CatalogFifo.gs`
+`aeedc5d9a604a37f74409f3811405fd0820fbe9b0244041e779d0e4a13d7d1b8`
+(812 lines). The source copies and hashes are under
+`work/3dp-snorlax-20260928/source/`; they are evidence, not a published
+deployment. The active Web App version was not independently verified.
+
+The 3D-P-007 deployment candidate is
+`patches/3D-P-007_snorlax-stock_20260928/Code_final.gs`, constructed from that
+supplied `Code.gs` with only availability provisioning and draft-number
+normalization changes. `Code_with_repair.gs` adds temporary editor wrappers for
+`3D-P-007.html`; remove both after owner-controlled repair and verification.
+The candidate `CatalogFifo.gs` is byte-identical to the normalized supplied
+export. The repository `Code.gs` received the same narrow permanent changes
+but still contains unrelated unpublished batch-draft quantity-keying work, so
+it is **not** the 3D-P-007 paste/deployment input. At the time the candidate
+was built, no 3D-P-007 live script save, data repair, or Web App publication
+had been reported; the later owner-reported V39 outcome is recorded above.
+
 ## Deployed — V36 (2026-09-23 11:05, owner-reported)
 
 The owner reports replacing bound `Code.gs` with

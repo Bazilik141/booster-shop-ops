@@ -109,6 +109,29 @@ test("WP2 local server uses projected bundles and exposes every Serhiy route", {
   assert.equal(api.state.requests.some((item) => ["3dp_payout_create", "3dp_payout_mark_paid", "3dp_nomenclature_owner_create"].includes(item.action)), false);
 });
 
+test("draft print time accepts clock/decimal hours as numbers and rejects invalid input before API writes", { timeout: 20000 }, async (context) => {
+  const api = await startFakeApi();context.after(() => api.close());const local = await startLocalServer(api.url);context.after(() => local.close());
+  const html = await (await fetch(local.url)).text();
+  assert.match(html, /name="G" type="text" inputmode="text" data-print-time-input="G"/);
+  for (const [input, expected] of [["2:07", 2.1166666667], ["00:13", 0.2166666667], ["1 год 30 хв", 1.5], ["1,5", 1.5], ["1.5", 1.5], [1.5, 1.5], ["0", 0]]) {
+    await localJson(`${local.url}/api/draft`, { values: { B: "Новий виріб", D: "Панно", G: input } });
+    const sent = api.state.requests.at(-1).body.values.G;
+    assert.equal(sent, expected);
+    assert.equal(typeof sent, "number");
+  }
+  for (const input of ["", "   ", null]) {
+    await localJson(`${local.url}/api/draft`, { values: { B: "Новий виріб", D: "Панно", G: input } });
+    assert.equal(Object.hasOwn(api.state.requests.at(-1).body.values, "G"), false);
+  }
+  const before = api.state.requests.length;
+  for (const input of ["2:75", "-1", "abc", "Infinity", "1e3"]) {
+    const response = await fetch(`${local.url}/api/draft`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ values: { B: "Новий виріб", D: "Панно", G: input } }) });
+    assert.equal(response.status, 400);
+    assert.equal((await response.json()).code, "LOCAL_VALIDATION");
+  }
+  assert.equal(api.state.requests.length, before, "invalid time must never reach the live API");
+});
+
 test("API errors cross the local boundary and token rejection adds the recovery hint", { timeout: 20000 }, async (context) => {
   const api = await startFakeApi();context.after(() => api.close());const local = await startLocalServer(api.url);context.after(() => local.close());
   api.state.failNext = { action: "3dp_settings_journal", code: "UNAUTHORIZED", error: "Invalid token." };await expectApiError(`${local.url}/api/settings-journal`, null, "UNAUTHORIZED", "Invalid token. Запусти «Змінити токен.bat» і введи новий токен.");

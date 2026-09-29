@@ -62,9 +62,11 @@ function refreshPrintTimeHint(input) {
   error.textContent = message;
   error.hidden = !message;
   input.setCustomValidity(message);
+  const preview = document.querySelector(`[data-print-time-preview="${input.name}"]`);
+  if (preview) preview.textContent = parsed.ok && !parsed.blank ? `Буде записано: ${printTime.human(parsed.hours)}. ${printTime.warning(parsed.hours)}`.trim() : "";
 }
 function normalisePrintTimeField(form, name) { const input = form.elements[name],parsed = printTimeResult(input);if (!parsed.ok || parsed.blank || !(parsed.hours > 0)) throw new Error(parsed.error || "Вкажіть час друку більше нуля.");input.value = String(parsed.hours);refreshPrintTimeHint(input);return parsed.hours; }
-function bindPrintTimeInputs() { document.querySelectorAll("[data-print-time-input]").forEach((input) => { input.addEventListener("input", () => refreshPrintTimeHint(input));input.addEventListener("blur", () => { const parsed = printTimeResult(input);if (parsed.ok && !parsed.blank) input.value = String(parsed.hours);refreshPrintTimeHint(input); });refreshPrintTimeHint(input); }); }
+function bindPrintTimeInputs() { document.querySelectorAll("[data-print-time-input]").forEach((input) => { input.addEventListener("input", () => refreshPrintTimeHint(input));input.addEventListener("blur", () => { const parsed = printTimeResult(input);if (parsed.ok && !parsed.blank && input.name !== "G") input.value = String(parsed.hours);refreshPrintTimeHint(input); });refreshPrintTimeHint(input); }); }
 
 function tablePreferences(tableId) { const preferences = state.informationTables[tableId] || (state.informationTables[tableId] = {});preferences.visible ||= {};preferences.order ||= [];preferences.type ||= "all";preferences.sort ||= "";preferences.direction ||= "asc";preferences.page = Number(preferences.page) || 1;return preferences; }
 function saveInformationPreferences() { localStorage.setItem(informationPreferencesKey, JSON.stringify(state.informationTables)); }
@@ -396,8 +398,11 @@ byId("draft-form").addEventListener("submit", async (event) => {
   // Unknown optional C/E/F values stay blank; invented placeholders can violate
   // the workbook's dropdown validation after owner promotion of the draft.
   const values = { ...formObject(form), L: localDateIso() };
+  const parsedTime = printTimeResult(form.elements.G);
+  if (!parsedTime.ok) { refreshPrintTimeHint(form.elements.G);form.reportValidity();return; }
+  values.G = parsedTime.blank ? "" : parsedTime.hours;
   values.D = nomenclatureTypeForDraftCategory(values.D);
-  await runOperation({ form, button, resultId: "draft-result", pending: "Створюю чернетку виробу… Зачекайте на підтвердження.", buttonText: "Створюю…", execute: () => request("/api/draft", { values }), success: () => "Чернетку виробу створено.", onConfirmed: () => form.reset() });
+  await runOperation({ form, button, resultId: "draft-result", pending: "Створюю чернетку виробу… Зачекайте на підтвердження.", buttonText: "Створюю…", execute: () => request("/api/draft", { values }), success: () => "Чернетку виробу створено.", onConfirmed: () => { form.reset();refreshPrintTimeHint(form.elements.G); } });
 });
 
 byId("payouts").addEventListener("click", async (event) => { const button = event.target.closest(".payout-ack,.payout-correct");if (!button) return;try { const body = { row_number: Number(button.dataset.row), expected_period: button.dataset.period, acknowledgement: button.dataset.key };if (button.classList.contains("payout-correct")) { const reason = globalThis.prompt("Причина виправлення підтвердження:", "");if (!reason) return;body.expected_current = button.dataset.current;body.reason = reason;await request("/api/payout-acknowledgement-correct", body); } else await request("/api/payout-acknowledge", body);status("Підтвердження виплати записано.");await reload(); } catch (error) { status(errorText(error), true); } });
