@@ -10,6 +10,18 @@ writer ownership, page-ID routing, and Definition of Done.
 
 ## 0. Core invariants
 
+> **GSS-only amendment (owner decision 2026-09-28):** follow
+> `docs/GSS_GOVERNANCE.md` and the GSS exception in root `AGENTS.md`.
+> Codex and Claude have equal architect/executor/reviewer and scoped
+> commit/push rights; the owner assigns tasks. Until GSS roadmap cutover,
+> the assigned executor creates/updates its approved GSS task records,
+> properties and statuses in both canonical Notion and the dashboard mirror.
+> One writer per task; required acceptance evidence and owner QA still apply.
+> GSS first delivers its own working roadmap after the necessary foundation;
+> other Booster tasks migrate later. This overrides conflicting legacy
+> writer/Git rules below for GSS only. No task migration or status change is
+> performed merely by recording this amendment.
+
 > **2026-07-27 amendment (owner-authorized, permanent):** the owner reassigned
 > the `ROADMAP_FLOW`/dashboard-mirror writer role from Codex-only to Claude,
 > in the same session that created NCRM-18/NCRM-19. This supersedes the
@@ -201,6 +213,11 @@ changes.
 | TECH-035 | `3936bf20-bdb4-81d4-a0ee-e21b32119066` | — |
 | TECH-042 | `3a06bf20-bdb4-812b-8cd7-dd45932ff09d` | — |
 | TECH-046 | `3da6bf20-bdb4-8109-a2c7-cd47100854b9` | Added 2026-09-13 on owner instruction ("Задачу в Notion роби") during the GA4 live-traffic verification of TECH-015. Register `payment_type` and `shipping_tier` as GA4 custom dimensions (Admin → Data display → Custom definitions, scope Event). Both are already sent by the live `add_payment_info` / `add_shipping_info` events from TECH-015 WP3, but Custom definitions is empty (`0 of 0`), so GA4 cannot segment by payment method or delivery tier; the 2026-09-12 audit had to rebuild the payment split from the OpenCart SQL dump. ⚠ Registration is NOT retroactive — only traffic collected after it exists carries the dimension. GA4 settings only: no patch, no deployment, and not a fix for the open Hutko `purchase` gap, which stays on TECH-015. Evidence: `diagnostics/TECH-015_ga4-live-traffic-verification_20260912.md` Finding 4. Priority left unset — owner decision. ID evidence: this registry names no next free `TECH-`; a live query of the series returned TECH-001…TECH-035, TECH-042, TECH-043, TECH-044, TECH-045 plus the suffixed TECH-005-DEEP and the known TECH-013 / TECH-029 collisions, so `TECH-046` was taken as max + 1 and the TECH-036…TECH-041 gap was not backfilled. `ROADMAP_TASKS` mirror row created in the same session |
+| TECH-047 | `3ea6bf20-bdb4-81d9-bf87-c7fccc198c4e` | Added 2026-09-29 on owner instruction ("Заведи задачу на перевірку/виправлення кількості відгуків та загалом на реалізацію системи відгуків від гугл"). Part A: live `product.twig` JSON-LD emits `aggregateRating` with literal `"reviewCount": "1"` — dormant today (`ocp5_review` empty on the 2026-09-12 dump, `config_review_status = 1`), fires on the first native review. Part B: Google Customer Reviews opt-in on the checkout success page. Owner sequencing: after TECH-044. Complements `MKT-007`, does not replace it. ID evidence: a live query of the whole `TECH-` series returned TECH-001…TECH-035, TECH-042…TECH-046 plus the suffixed TECH-005-DEEP and the known TECH-013 / TECH-029 collisions; max is 046, so `TECH-047` was taken and the TECH-036…041 gap was not backfilled. `ROADMAP_TASKS` mirror row created in the same session. **Наступний вільний у серії `TECH-` — `TECH-048`.** |
+| UX-008 | `3666bf20-bdb4-8173-b998-cf9ee7316af9` | Page ID recorded 2026-09-29 when closing Done on owner authorization (shipped under other patch IDs; evidence in the page note) |
+| UX-027 | `3666bf20-bdb4-8194-9ab9-d973a66f227f` | Page ID recorded 2026-09-29 when closing Done on owner authorization (shipped as `UI-FIX_mobile-desktop-polish_20260903`) |
+| UX-031 | `3666bf20-bdb4-812e-9375-fcc7773731a3` | Page ID recorded 2026-09-29 when closing Done on owner authorization (owner-confirmed live) |
+| TECH-044 | `3b46bf20-bdb4-81b9-9169-fa9657c0cab0` | Page ID recorded 2026-09-29 when the handoff was written |
 | RD-11 | `3706bf20-bdb4-81a4-b3fa-f35e7610defa` | — |
 | CAT-002 | `36f6bf20-bdb4-817e-99ec-eecce853778c` | — |
 | CAT-004 | `3dc6bf20-bdb4-8164-b001-db2191f9f7e6` | Added 2026-09-15 on owner instruction ("Роби — завести окрему задачу в категорії каталогу"). Варіативність товарів: master/variant + селектор характеристик, скоуп 3D-друк + аксесуари + запечатаний TCG. Поглинає `3D-P-011`, яка того ж дня закрита як superseded (не як виконана). ID evidence: цей реєстр не фіксує наступного вільного для `CAT-`; живий запит усієї серії повернув `CAT-001`, `CAT-002`, `CAT-003` без пропусків, тому взято `CAT-004`. **Наступний вільний у серії `CAT-` — `CAT-005`.** |
