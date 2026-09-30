@@ -1,0 +1,76 @@
+{{ header }}
+<div id="checkout-failure" class="container">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+      <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+  <div class="row">
+    {{ column_left }}
+    <div id="content" class="col">
+      {{ content_top }}
+
+      <div class="bs-failure-card">
+        <div class="bs-failure-icon" aria-hidden="true">⚠️</div>
+        <h1 class="bs-failure-title">{{ heading_title }}</h1>
+        <div class="bs-failure-message">{{ text_message }}</div>
+        <div class="bs-failure-actions">
+          <a href="{{ continue }}" class="bs-btn bs-btn-outline">← На головну</a>
+        </div>
+      </div>
+
+      {{ content_bottom }}
+    </div>
+    {{ column_right }}
+  </div>
+</div>
+
+<style>
+/* === R-11b: Checkout Failure === */
+.bs-failure-card {
+  background: var(--bs-surface, #fff);
+  border: 1px solid var(--bs-line, #E5E7EB);
+  border-radius: 12px;
+  padding: 2rem 2rem 1.75rem;
+  margin-bottom: 2rem;
+}
+.bs-failure-icon {
+  font-size: 1.75rem;
+  line-height: 1;
+  margin-bottom: 0.625rem;
+}
+.bs-failure-title {
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--bs-ink, #1F2937);
+  margin: 0 0 1.125rem;
+}
+.bs-failure-message {
+  font-size: 0.9375rem;
+  color: var(--bs-ink-2, #374151);
+  line-height: 1.65;
+}
+.bs-failure-message p { margin: 0 0 0.75rem; }
+.bs-failure-message p:last-child { margin-bottom: 0; }
+.bs-failure-message ul {
+  margin: 0.25rem 0 0.75rem 1.25rem;
+  padding: 0;
+}
+.bs-failure-message li { margin-bottom: 0.25rem; }
+.bs-failure-message a {
+  color: var(--bs-blue, #1E3A8A);
+  text-decoration: underline;
+}
+.bs-failure-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+@media (max-width: 480px) {
+  .bs-failure-card { padding: 1.25rem 1rem; }
+  .bs-failure-actions { justify-content: stretch; }
+  .bs-failure-actions .bs-btn { width: 100%; text-align: center; }
+}
+</style>
+
+{{ footer }}

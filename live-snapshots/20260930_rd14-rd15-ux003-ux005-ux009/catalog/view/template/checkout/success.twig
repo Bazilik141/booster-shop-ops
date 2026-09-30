@@ -1,0 +1,186 @@
+{{ header }}
+<div id="checkout-success" class="container bs bs-cp-page">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+      <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+
+  <div class="row">{{ column_left }}
+    <main id="content" class="col">{{ content_top }}
+      <section class="bs-success-hero">
+        <div class="bs-success-icon">✓</div>
+        {% if order_data.order_id is defined and order_data.order_id %}
+          <h1>Замовлення #{{ order_data.order_id }} прийнято</h1>
+          <p class="bs-success-subtitle">Замовлення в грі — ми вже збираємо ваш лут 🎴</p>
+        {% else %}
+          <h1>{{ heading_title }}</h1>
+        {% endif %}
+      </section>
+
+      {% if order_data.show_first15_offer|default(false) %}
+        {# CHECKOUT-007: First15 will be applied automatically on the next order. #}
+        <section class="bs-success-meta bs-card" role="status">
+          <strong>Дякуємо за реєстрацію!</strong>
+          <p>На ваше наступне замовлення ми автоматично застосуємо знижку 15%.</p>
+        </section>
+      {% endif %}
+
+      {% if order_data.order_id is defined and order_data.order_id %}
+        {% if order_data.shipping_method or order_data.payment_method %}
+          <section class="bs-success-meta bs-card">
+            {% if order_data.shipping_method %}
+              <div class="bs-success-meta-row">
+                <span class="bs-label">Доставка</span>
+                <span>{{ order_data.shipping_method }}{% if order_data.shipping_display_text %} · {{ order_data.shipping_display_text }}{% endif %}</span>
+              </div>
+            {% endif %}
+            {% if order_data.payment_method %}
+              <div class="bs-success-meta-row">
+                <span class="bs-label">Оплата</span>
+                <span>{{ order_data.payment_method }}</span>
+              </div>
+            {% endif %}
+          </section>
+        {% endif %}
+
+        {% if order_data.is_iban_bank_transfer|default(false) %}
+          {# CHECKOUT-008: copyable IBAN requisites for the just-created order. #}
+          <section class="bs-success-meta bs-card" aria-labelledby="checkout008-iban-title">
+            <h2 id="checkout008-iban-title" class="bs-success-section-title">Реквізити для оплати</h2>
+            <p>Отримувач: ФОП Леусенко Євгеній Андрійович<br>
+              ЄДРПОУ: 3485903435<br>
+              IBAN: UA063348510000000026003285008<br>
+              МФО: 334851<br>
+              Банк: АТ «ПУМБ»<br>
+              Призначення платежу: оплата за товар</p>
+            <button type="button" class="bs-btn bs-btn-secondary" data-checkout008-copy-requisites>Скопіювати реквізити</button>
+            <span data-checkout008-copy-status role="status" aria-live="polite" hidden></span>
+          </section>
+          <script>
+          (function () {
+            var button = document.querySelector('[data-checkout008-copy-requisites]');
+            var status = document.querySelector('[data-checkout008-copy-status]');
+            var requisites = 'Реквізити для оплати:\nОтримувач: ФОП Леусенко Євгеній Андрійович\nЄДРПОУ: 3485903435\nIBAN: UA063348510000000026003285008\nМФО: 334851\nБанк: АТ «ПУМБ»\nПризначення платежу: оплата за товар';
+
+            if (!button || !status) {
+              return;
+            }
+
+            function setStatus(message) {
+              status.textContent = message;
+              status.hidden = false;
+            }
+
+            function fallbackCopy() {
+              var textarea = document.createElement('textarea');
+              textarea.value = requisites;
+              textarea.setAttribute('readonly', '');
+              // A fixed invisible textarea prevents a visual jump while supporting browsers without Clipboard API.
+              textarea.style.position = 'fixed';
+              textarea.style.opacity = '0';
+              document.body.appendChild(textarea);
+              textarea.select();
+              var copied = document.execCommand('copy');
+              document.body.removeChild(textarea);
+              return copied;
+            }
+
+            button.addEventListener('click', function () {
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(requisites).then(function () {
+                  setStatus('Реквізити скопійовано.');
+                }).catch(function () {
+                  setStatus(fallbackCopy() ? 'Реквізити скопійовано.' : 'Не вдалося скопіювати реквізити.');
+                });
+              } else {
+                setStatus(fallbackCopy() ? 'Реквізити скопійовано.' : 'Не вдалося скопіювати реквізити.');
+              }
+            });
+          }());
+          </script>
+        {% endif %}
+
+        {% if order_items %}
+          <section class="bs-success-items bs-card">
+            <h2 class="bs-success-section-title">Ваше замовлення</h2>
+            <div class="table-responsive">
+              <table class="bs-success-table">
+                <tbody>
+                  {% for item in order_items %}
+                    <tr>
+                      <td class="bs-success-item-name">{{ item.quantity }}× {{ item.name }}</td>
+                      <td class="bs-success-item-price text-end">{{ item.total }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+                {% if order_totals %}
+                  <tfoot>
+                    {% for total in order_totals %}
+                      <tr class="{% if loop.last %}bs-success-grand-total{% endif %}">
+                        <td class="text-end"><strong>{{ total.title }}</strong></td>
+                        <td class="text-end">{{ total.text }}</td>
+                      </tr>
+                    {% endfor %}
+                  </tfoot>
+                {% endif %}
+              </table>
+            </div>
+          </section>
+        {% endif %}
+
+        <nav class="bs-success-actions" aria-label="Дії після замовлення">
+          <a href="{{ continue }}" class="bs-btn bs-btn-secondary">На головну</a>
+          {% if is_logged and history_url %}
+            <a href="{{ history_url }}" class="bs-btn bs-btn-primary">Переглянути замовлення</a>
+          {% endif %}
+        </nav>
+
+        <section class="bs-success-footer-msg">
+          {% if order_data.is_hutko|default(false) %}
+            <p>Фіскальний чек відправлено на ваш номер або на E-mail.</p>
+          {% elseif order_data.is_cod|default(false) %}
+            <p>Фіскальний чек буде відправлено на ваш номер або на E-mail в день отримання замовлення.</p>
+          {% else %}
+            <p>Фіскальний чек буде відправлено на ваш номер або на E-mail при відправці замовлення.</p>
+          {% endif %}
+          <p>Ми не телефонуємо і не пишемо для підтвердження без потреби. Якщо всі дані заповнені коректно — просто тихо і швидко відправляємо 🙂</p>
+          <p>Якщо є питання — <a href="https://telegram.me/boostershop_tcg" target="_blank" rel="noopener" class="bs-telegram-button">напишіть у Telegram</a>.</p>
+          <p><strong>Вдалого анпакінгу 🎁</strong></p>
+        </section>
+      {% else %}
+        <section class="bs-success-fallback bs-card">
+          {{ text_message }}
+          <div class="bs-success-actions">
+            <a href="{{ continue }}" class="bs-btn bs-btn-outline">На головну</a>
+          </div>
+        </section>
+      {% endif %}
+
+      {% if ga4_purchase_payload %}
+        {# TECH-015-WP1: server-side session dedup permits this purchase payload only once per order. #}
+        <script>ps_dataLayer.pushEventData('purchase', {{ ga4_purchase_payload|raw }});</script>
+      {% endif %}
+
+      {{ content_bottom }}</main>
+    {{ column_right }}</div>
+</div>
+<style>
+/* r11-spacing-fix */
+.bs-success-hero { margin-top: 1.5rem; }
+/* st2b2-success-spacing */
+#checkout-success { padding-bottom: 16px; }
+#checkout-success #content { padding-bottom: 8px !important; }
+/* st2b3-success-actions-compact */
+#checkout-success .bs-success-actions {
+  justify-content: center;
+  margin: 12px 0 14px;
+}
+#checkout-success .bs-success-footer-msg { margin: 10px 0 0; }
+@media (max-width: 480px) {
+  #checkout-success { padding-bottom: 14px; }
+  #checkout-success .bs-success-actions { margin: 10px 0 12px; }
+}
+</style>
+
+{{ footer }}
