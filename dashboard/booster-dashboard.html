@@ -1375,6 +1375,18 @@ function renderThreeDpCards(summary) {
   const values=[['SKU',summary.sku_count],['Наявно',summary.available],['Продано',summary.sold],['Нараховано Сергію',summary.accrued_serhiy_current_month==null?'—':threeDpMoney(summary.accrued_serhiy_current_month)]];
   target.innerHTML=values.map(function(x){return '<div class="card"><div class="card-label">'+threeDpEsc(x[0])+'</div><div class="card-value">'+threeDpEsc(x[1])+'</div></div>';}).join('');
 }
+function updateThreeDpSerhiyAccrual_() {
+  const overview=threeDpState.overview||{},summary=overview.summary||{},month=String(overview.month||'');
+  if(!month||!threeDpState.informationSections.plyushky.loaded){summary.accrued_serhiy_current_month=null;renderThreeDpCards(summary);return;}
+  const salesAccrual=threeDpNumber(summary.accrued_serhiy_sales_base);
+  const marketingAccrual=threeDpState.plyushky.reduce(function(sum,row){
+    return String(row['Дата']||'').slice(0,7)===month
+      ?sum+threeDpNumber(row['Сума закупівлі, грн'])+threeDpNumber(row['Фурнітура Сергія до виплати, грн'])
+      :sum;
+  },0);
+  summary.accrued_serhiy_current_month=salesAccrual+marketingAccrual;
+  renderThreeDpCards(summary);
+}
 
 function toggleThreeDpSettings() { threeDpUi.settingsOpen=!threeDpUi.settingsOpen; renderThreeDpSettings(); }
 function renderThreeDpSettings() {
@@ -1733,7 +1745,9 @@ function renderThreeDpSummary(records) {
     '</div>';
 }
 async function reloadThreeDpData() {
-  const x=await call3dp('3dp_bootstrap',{include_archived:'true'});threeDpState.overview=x.overview || {};threeDpState.skus=(x.skus || {}).rows || [];threeDpState.analytics=(x.analytics || {}).values || [];threeDpState.settings=((x.settings || {}).values || []).slice(1).reduce(function(out,row){out[row[0]]=row[1];return out;},{});if(threeDpUi.calc.sku && !threeDpActiveSkus().some(function(r){return r.SKU===threeDpUi.calc.sku;}))threeDpUi.calc.sku='';
+  const x=await call3dp('3dp_bootstrap',{include_archived:'true'});threeDpState.overview=x.overview || {};threeDpState.overview.summary=threeDpState.overview.summary||{};threeDpState.overview.summary.accrued_serhiy_sales_base=threeDpState.overview.summary.accrued_serhiy_current_month;threeDpState.skus=(x.skus || {}).rows || [];threeDpState.analytics=(x.analytics || {}).values || [];threeDpState.settings=((x.settings || {}).values || []).slice(1).reduce(function(out,row){out[row[0]]=row[1];return out;},{});if(threeDpUi.calc.sku && !threeDpActiveSkus().some(function(r){return r.SKU===threeDpUi.calc.sku;}))threeDpUi.calc.sku='';
+  try{const marketing=await call3dp('3dp_plyushky');threeDpState.plyushky=marketing.rows||[];threeDpState.informationSections.plyushky.loaded=true;threeDpState.informationSections.plyushky.error='';updateThreeDpSerhiyAccrual_();}
+  catch(e){threeDpState.informationSections.plyushky.loaded=false;threeDpState.informationSections.plyushky.error=String(e&&e.message?e.message:e);const summary=(threeDpState.overview||{}).summary||{};summary.accrued_serhiy_current_month=null;renderThreeDpCards(summary);}
 }
 function threeDpInfoToggle(details,key){if(!details.open)return;if(key==='sync'){if(!threeDpState.syncJournalLoaded)refreshThreeDpSyncJournal();return;}if(key==='summary'){loadThreeDpOrderShare_();loadThreeDpInformationSection('sales');}else if(key==='sales')loadThreeDpInformationSection('sales');else if(key==='payouts'||key==='plyushky')loadThreeDpInformationSection(key);else renderThreeDpInformation();}
 async function loadThreeDpOrderShare_(){
@@ -1743,10 +1757,10 @@ async function loadThreeDpOrderShare_(){
   catch(e){threeDpState.orderShareError=String(e&&e.message?e.message:e);}
   finally{threeDpState.orderShareLoading=false;if(threeDpState.informationSections.sales.loaded)renderThreeDpSummary(threeDpState.skus.map(threeDpInfoRecord));}
 }
-async function loadThreeDpInformationSection(key){const state=threeDpState.informationSections[key];if(!state||state.loaded||state.loading)return;const actions={sales:'3dp_sales',payouts:'3dp_payouts',plyushky:'3dp_plyushky'};state.loading=true;state.error='';renderThreeDpInformation();try{const result=await call3dp(actions[key]);threeDpState[key]=result.rows||[];state.loaded=true;if(key==='sales'){const month=((threeDpState.overview||{}).month||new Date().toISOString().slice(0,7)),summary=(threeDpState.overview||{}).summary||{};summary.accrued_serhiy_current_month=threeDpState.sales.reduce(function(sum,row){return String(row['Період (авто, РРРР-ММ)']||'')===month?sum+threeDpNumber(row['Нараховано Сергію, грн']):sum;},0);renderThreeDpCards(summary);}}catch(e){state.error=String(e&&e.message?e.message:e);}finally{state.loading=false;renderThreeDpInformation();}}
+async function loadThreeDpInformationSection(key){const state=threeDpState.informationSections[key];if(!state||state.loaded||state.loading)return;const actions={sales:'3dp_sales',payouts:'3dp_payouts',plyushky:'3dp_plyushky'};state.loading=true;state.error='';renderThreeDpInformation();try{const result=await call3dp(actions[key]);threeDpState[key]=result.rows||[];state.loaded=true;if(key==='sales'){const month=String((threeDpState.overview||{}).month||'');threeDpState.overview.summary.accrued_serhiy_sales_base=threeDpState.sales.reduce(function(sum,row){return String(row['Період (авто, РРРР-ММ)']||'')===month?sum+threeDpNumber(row['Нараховано Сергію, грн']):sum;},0);}if(key==='sales'||key==='plyushky')updateThreeDpSerhiyAccrual_();}catch(e){state.error=String(e&&e.message?e.message:e);if(key==='plyushky'){const summary=(threeDpState.overview||{}).summary||{};summary.accrued_serhiy_current_month=null;renderThreeDpCards(summary);}}finally{state.loading=false;renderThreeDpInformation();}}
 async function loadThreeDpInformation(){return loadThreeDpInformationSection('sales');}
 function renderThreeDpAll() { renderThreeDpCards((threeDpState.overview || {}).summary || {});renderThreeDpSettings();renderThreeDpCalculator();renderThreeDpProducts();renderThreeDpInformation(); }
-async function load3dPrint() { const root=document.getElementById('threeDpCalculator');try { await reloadThreeDpData();renderThreeDpAll();document.getElementById('threeDpSub').textContent='Оновлено одним bounded 3D-P bootstrap · '+((threeDpState.overview || {}).month || ''); } catch(e) { const message=String(e && e.message ? e.message : e),missing=message.indexOf('Вкажіть окремі URL')!==-1;if(root)root.innerHTML='<div style="color:var(--yellow)">'+(missing?'3D-P не налаштовано: ':'3D-P API тимчасово недоступний: ')+threeDpEsc(message)+'</div>';const cards=document.getElementById('threeDpCards');if(cards)cards.innerHTML='<div class="card"><div class="crm011-note">3D-P: '+threeDpEsc(message)+'</div><button class="btn-secondary" type="button" onclick="load3dPrint()">Повторити</button></div>';document.getElementById('threeDpSub').textContent=missing?'Потрібні окремі локальні URL і token 3D-P API':'З’єднання з 3D-P API не пройшло'; } }
+async function load3dPrint() { const root=document.getElementById('threeDpCalculator');try { await reloadThreeDpData();renderThreeDpAll();document.getElementById('threeDpSub').textContent='Оновлено з 3D-P · '+((threeDpState.overview || {}).month || ''); } catch(e) { const message=String(e && e.message ? e.message : e),missing=message.indexOf('Вкажіть окремі URL')!==-1;if(root)root.innerHTML='<div style="color:var(--yellow)">'+(missing?'3D-P не налаштовано: ':'3D-P API тимчасово недоступний: ')+threeDpEsc(message)+'</div>';const cards=document.getElementById('threeDpCards');if(cards)cards.innerHTML='<div class="card"><div class="crm011-note">3D-P: '+threeDpEsc(message)+'</div><button class="btn-secondary" type="button" onclick="load3dPrint()">Повторити</button></div>';document.getElementById('threeDpSub').textContent=missing?'Потрібні окремі локальні URL і token 3D-P API':'З’єднання з 3D-P API не пройшло'; } }
 // ════════════ FORMATTERS ════════════
 const fmt   = n => n != null ? '₴' + Number(n).toLocaleString('uk-UA', {maximumFractionDigits:0}) : '—';
 const fmtP  = n => n != null ? Number(n).toFixed(1) + '%' : '—';
@@ -4407,6 +4421,12 @@ const ROADMAP_TASKS = [
     id: 'BUG-001', title: 'Виправити зміщення значень у таблиці характеристик', status: 'todo', tool: 'Codex (OpenCart admin → attributes)', priority: 'High',
     lastUpdated: '2026-05-19', blockedBy: [],
     simple: 'Категорія: Bug / Catalog.',
+    subtasks: []
+  },
+  {
+    id: 'BUG-003', title: 'Фантомний залишок: склад повертається після зміни статусу замовлення', status: 'todo', tool: 'Claude (diagnosis)', priority: 'High',
+    lastUpdated: '2026-10-02', blockedBy: [],
+    simple: 'Категорія: Bug / Order status. PKM-JP-OUTL-BST: залишок 0 сам стає 7/28 після зміни статусу замовлення. Етап 2: статус «Скасовано», «Помилка»/«Протерміновано» прибрати зі списку завершених.',
     subtasks: []
   },
   {

@@ -285,6 +285,7 @@ session does not have to spend search calls on the same lookups.
 | AUTO-012 | `36d6bf20-bdb4-8137-9654-df98aa15f675` |
 | AUTO-013 | `36d6bf20-bdb4-817b-9fec-f03a749b5dad` |
 | BUG-002 | `3666bf20-bdb4-816f-98ae-c41bda2fbd72` |
+| BUG-003 | `3ed6bf20-bdb4-81b9-9428-c72fb23a7aba` | Added 2026-10-02: phantom stock after order-status change (PKM-JP-OUTL-BST) |
 | OPS-003 (партія 2026-05-20, return form) | `3666bf20-bdb4-81af-8195-d93e257997d7` |
 | OPS-003 (партія 2026-05-26, workflow templates) | `36c6bf20-bdb4-818d-a6db-e88d8437f845` |
 | OPS-004 | `3aa6bf20-bdb4-81be-ac5b-fa13d3904970` |

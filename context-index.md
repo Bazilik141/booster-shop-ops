@@ -26,6 +26,7 @@ status and priority from the verified Notion card. Use dashboard
 | ST-0 | Checkout preflight | handoffs/handoff_ST-0_checkout-preflight_2026-06-12.md | handoffs/st0_checkout_preflight_report_20260612.md |
 | ST-1 | НП відділення: синк виправлено | handoffs/handoff_ST-1_np-warehouse-sync-fix_2026-06-12.md | — |
 | ST-2 | Stock/checkout migration | handoffs/handoff_ST-2_stock-checkout-migration_2026-06-12.md | — |
+| BUG-003 | Phantom stock after order-status change (PKM-JP-OUTL-BST, product 73) | diagnostics/BUG-003_phantom-stock_diagnostic_20261002.md | Notion: `3ed6bf20-bdb4-81b9-9428-c72fb23a7aba` |
 | ST-2a1 | Checkout UX fixes | handoffs/handoff_ST-2a1_checkout-ux-fixes_2026-06-12.md | — |
 | ST-2a2 | Guest blocker / cards / COD | handoffs/handoff_ST-2a2_guest-blocker-cards-cod_2026-06-12.md | — |
 | ST-2a4 | Order void noise | handoffs/handoff_ST-2a4_order-void-noise_2026-06-12.md | — |
