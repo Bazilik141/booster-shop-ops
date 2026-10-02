@@ -98,6 +98,9 @@ const PAYOUT_BASE_HEADERS_3DP = Object.freeze([
   'Статус',
   'Примітки',
 ]);
+const PAYOUT_STATUS_PENDING_3DP = 'Очікує перевірки';
+const PAYOUT_STATUS_APPROVED_3DP = 'Затверджено';
+const PAYOUT_STATUS_PAID_3DP = 'Виплачено';
 const PAYOUT_ACKNOWLEDGEMENT_HEADERS_3DP = Object.freeze([
   'Згода Сергія із сумою (Київ, роль)',
   'Кошти надійшли Сергію (Київ, роль)',
@@ -1124,7 +1127,7 @@ function createPayoutAction3dp_(spreadsheet, body, actor) {
   if (existing.length) return { action: '3dp_payout_create', row: existing[0].row_number, period: period, already_applied: true };
   const result = appendRowAction3dp_(spreadsheet, {
     sheet: SHEETS_3DP.payouts,
-    values: { A: period, E: 'Очікує перевірки', F: String(body.note || '').trim() },
+    values: { A: period, E: PAYOUT_STATUS_PENDING_3DP, F: String(body.note || '').trim() },
   }, actor);
   SpreadsheetApp.flush();
   return { action: '3dp_payout_create', row: result.row, period: period, already_applied: false };
@@ -1143,14 +1146,14 @@ function markPayoutPaidAction3dp_(spreadsheet, body, actor) {
   const before = range.getValues()[0];
   const currentDate = normalizeCellValue3dp_(before[0]);
   const currentStatus = String(before[1] || '').trim();
-  if (currentStatus === 'Виплачено' && String(currentDate || '').slice(0, 10) === paidDate) {
+  if (currentStatus === PAYOUT_STATUS_PAID_3DP && String(currentDate || '').slice(0, 10) === paidDate) {
     return { action: '3dp_payout_mark_paid', row: row, period: period, paid_date: paidDate, already_applied: true };
   }
-  if (currentStatus === 'Виплачено') throw apiError3dp_('STALE_WRITE', 'Payout is already marked paid with another date. Refresh before changing it.');
+  if (currentStatus === PAYOUT_STATUS_PAID_3DP) throw apiError3dp_('STALE_WRITE', 'Payout is already marked paid with another date. Refresh before changing it.');
   const note = [String(before[2] || '').trim(), String(body.note || '').trim()].filter(Boolean).join('; ');
   try {
-    range.setValues([[paidDate, 'Виплачено', note]]);
-    appendAudit3dp_(spreadsheet, actor, 'PAYOUT_PAID', SHEETS_3DP.payouts, 'D' + row + ':F' + row, before, [paidDate, 'Виплачено', note], 'period=' + period);
+    range.setValues([[paidDate, PAYOUT_STATUS_PAID_3DP, note]]);
+    appendAudit3dp_(spreadsheet, actor, 'PAYOUT_PAID', SHEETS_3DP.payouts, 'D' + row + ':F' + row, before, [paidDate, PAYOUT_STATUS_PAID_3DP, note], 'period=' + period);
   } catch (error) {
     range.setValues([before]);
     throw error;
@@ -1233,12 +1236,12 @@ function payoutAcknowledgementForKey3dp_(value) {
 
 function assertPublishedPayout3dp_(sheet, row, period, acknowledgement) {
   const status = String(sheet.getRange(row, 5).getValue() || '').trim();
-  if (['Очікує перевірки', 'Виплачено'].indexOf(status) === -1) {
+  if ([PAYOUT_STATUS_PENDING_3DP, PAYOUT_STATUS_APPROVED_3DP, PAYOUT_STATUS_PAID_3DP].indexOf(status) === -1) {
     throw apiError3dp_('PAYOUT_NOT_PUBLISHED', 'The owner has not published this payout period.');
   }
   if (acknowledgement.requiresPaid) {
     const paidDate = String(sheet.getRange(row, 4).getDisplayValue() || '').trim();
-    if (status !== 'Виплачено' || !paidDate) {
+    if (status !== PAYOUT_STATUS_PAID_3DP || !paidDate) {
       throw apiError3dp_('PAYOUT_NOT_PAID', 'Money-received acknowledgement is available only after the owner marks the payout paid.');
     }
   }
@@ -1259,6 +1262,10 @@ function acknowledgePayoutAction3dp_(spreadsheet, body, actor, correction) {
   assertPublishedPayout3dp_(sheet, row, period, acknowledgement);
   const column = PAYOUT_BASE_HEADERS_3DP.length + 1 + PAYOUT_ACKNOWLEDGEMENT_HEADERS_3DP.indexOf(acknowledgement.header);
   const range = sheet.getRange(row, column);
+  const statusRange = sheet.getRange(row, 5);
+  const oldStatus = statusRange.getValue();
+  const shouldApprove = acknowledgement.header === PAYOUT_ACKNOWLEDGEMENT_HEADERS_3DP[0] &&
+    String(oldStatus || '').trim() === PAYOUT_STATUS_PENDING_3DP;
   if (range.getFormula()) throw apiError3dp_('FORMULA_CELL', 'Payout acknowledgement cells must remain manual cells.');
   const oldRawValue = range.getValue();
   const oldValue = normalizeCellValue3dp_(oldRawValue);
@@ -1272,13 +1279,21 @@ function acknowledgePayoutAction3dp_(spreadsheet, body, actor, correction) {
   }
   const reason = correction ? requiredReason3dp_(body.reason) : '';
   const newValue = now3dp_() + ' · ' + actor.role;
+  let statusChanged = false;
   try {
     setCellValue3dp_(range, newValue);
     appendPayoutAcknowledgementJournal3dp_(spreadsheet, actor, period, acknowledgement, oldValue, newValue, reason);
     appendAudit3dp_(spreadsheet, actor, correction ? 'PAYOUT_ACKNOWLEDGEMENT_CORRECT' : 'PAYOUT_ACKNOWLEDGEMENT',
       SHEETS_3DP.payouts, numberToColumn3dp_(column) + row, oldValue, newValue,
       'period=' + period + '; acknowledgement=' + body.acknowledgement + (reason ? '; reason=' + reason : ''));
+    if (shouldApprove) {
+      statusRange.setValue(PAYOUT_STATUS_APPROVED_3DP);
+      statusChanged = true;
+      appendAudit3dp_(spreadsheet, actor, 'PAYOUT_APPROVED', SHEETS_3DP.payouts, 'E' + row,
+        oldStatus, PAYOUT_STATUS_APPROVED_3DP, 'period=' + period + '; approved by Serhiy amount acknowledgement');
+    }
   } catch (error) {
+    if (statusChanged) statusRange.setValue(oldStatus);
     setCellValue3dp_(range, oldRawValue);
     throw error;
   }
@@ -1289,6 +1304,7 @@ function acknowledgePayoutAction3dp_(spreadsheet, body, actor, correction) {
     acknowledgement: body.acknowledgement,
     old_value: oldValue,
     new_value: newValue,
+    status: String(statusRange.getDisplayValue() || '').trim(),
   };
 }
 
@@ -1392,10 +1408,18 @@ function readTable3dp_(spreadsheet, sheetName, options) {
   const headers = sheet.getRange(1, 1, 1, lastColumn).getDisplayValues()[0];
   if (lastRow < 2) return { headers: headers, rows: [] };
   const values = sheet.getRange(2, 1, lastRow - 1, lastColumn).getValues();
+  const payoutPeriodHeader = 'Період (РРРР-ММ)';
+  const payoutPeriodIndex = sheetName === SHEETS_3DP.payouts ? headers.indexOf(payoutPeriodHeader) : -1;
+  const payoutPeriodDisplayValues = payoutPeriodIndex === -1 ? null :
+    sheet.getRange(2, payoutPeriodIndex + 1, lastRow - 1, 1).getDisplayValues();
   const rows = [];
 
   values.forEach(function (valuesRow, index) {
     const row = rowObject3dp_(headers, valuesRow, index + 2);
+    // The acknowledgement write guard also reads the period with getDisplayValue().
+    // Return the same representation so date-formatted YYYY-MM cells cannot
+    // turn into a timestamp in the client and falsely fail as STALE_WRITE.
+    if (payoutPeriodDisplayValues) row[payoutPeriodHeader] = payoutPeriodDisplayValues[index][0];
     if (options && options.requireHeader && isBlank3dp_(row[options.requireHeader])) return;
     if (isExampleRow3dp_(row)) return;
     if (!(options && options.includeArchived) && isArchivedPrintLogRow3dp_(sheetName, row)) return;

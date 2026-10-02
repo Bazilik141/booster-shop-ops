@@ -1,5 +1,15 @@
 # 3D-P Apps Script source state
 
+## V40 (2026-10-02 19:29, owner-reported; deployment source not re-exported)
+
+The owner reports publishing V40 after confirming V39 was the current source.
+The supplied screenshot shows the September payout amount acknowledgement
+recorded at 2026-10-02 19:30:52 Kyiv time and the row now offering the explicit
+correction action. This is owner-provided deployment and runtime evidence; a
+fresh V40 bound-project export has not been supplied. The repository candidate
+contains the V40 period-display fix plus unpublished follow-up changes for
+automatic approval status after Serhiy's amount acknowledgement.
+
 ## V39 (2026-09-29 12:24, owner-reported; clean source owner-confirmed)
 
 The owner ran `preview3dp007Repair` at 12:23:22 and
