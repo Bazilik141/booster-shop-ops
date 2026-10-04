@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UX-003 / UX-005 / UX-009 — аудит шапки, меню, пошуку</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bs-bg:#F7F7F5;--bs-paper:#FFFFFF;--bs-line:#E5E7EB;--bs-line-2:#EEF0F2;--bs-ink:#111827;--bs-ink-2:#1F2937;--bs-ink-3:#6B7280;--bs-ink-4:#9CA3AF;--bs-blue:#1E3A8A;--bs-blue-soft:#E8EEFB;--bs-buy:#12883E;--bs-danger:#DC2626;--bs-warning-bg:#FFFBEA;--bs-warning-fg:#92400E;--bs-warning-line:#FCD34D;--bs-r:10px;--bs-r-lg:14px;--bs-sh-md:0 4px 12px rgba(0,0,0,.10),0 2px 4px rgba(0,0,0,.06)}
+*{box-sizing:border-box}
+body{margin:0;font-family:Manrope,system-ui,sans-serif;background:var(--bs-bg);color:var(--bs-ink);font-size:15px;line-height:1.55}
+a{color:var(--bs-blue)}a:hover{color:var(--bs-ink)}
+.wrap{max-width:1040px;margin:0 auto;padding:32px 20px 120px}
+h1{margin:0 0 6px;font-size:26px;font-weight:800;line-height:1.25;text-wrap:balance}
+.lead{margin:0 0 24px;color:var(--bs-ink-3);max-width:70ch;text-wrap:pretty}
+h2{margin:36px 0 12px;font-size:18px;font-weight:800}
+.facts{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));margin:0 0 8px}
+.fact{background:var(--bs-paper);border:1px solid var(--bs-line);border-radius:var(--bs-r);padding:12px 14px;font-size:14px}
+.fact b{display:block;font-size:13px;color:var(--bs-ink-3);font-weight:600;margin-bottom:2px}
+.items{display:grid;gap:14px;counter-reset:it}
+.it{background:var(--bs-paper);border:1px solid var(--bs-line);border-radius:var(--bs-r-lg);padding:18px;display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
+.it.is-on{border-color:var(--bs-blue);box-shadow:0 0 0 1px var(--bs-blue)}
+.it-h{display:flex;gap:12px;align-items:flex-start}
+.it-n{flex:0 0 auto;width:32px;height:32px;border-radius:50%;background:var(--bs-blue-soft);color:var(--bs-blue);font-weight:800;display:inline-flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums}
+.it-t{flex:1;min-width:0}
+.it-t h3{margin:3px 0 6px;font-size:16.5px;font-weight:800;line-height:1.35;text-wrap:pretty}
+.meta{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;height:24px;padding:0 9px;border-radius:999px;font-size:12px;font-weight:700;border:1px solid var(--bs-line);background:var(--bs-line-2);color:var(--bs-ink-2)}
+.sev-f{background:var(--bs-warning-bg);border-color:var(--bs-warning-line);color:var(--bs-warning-fg)}
+.sev-c{background:var(--bs-paper);color:var(--bs-ink-3)}
+.sev-v{background:var(--bs-blue-soft);border-color:#C9D6F2;color:var(--bs-blue)}
+.pick{flex:0 0 auto;display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 14px;border:1px solid var(--bs-line);border-radius:8px;font-size:13.5px;font-weight:700;cursor:pointer;user-select:none;background:#fff}
+.pick input{width:18px;height:18px;accent-color:var(--bs-blue);margin:0}
+.it.is-on .pick{background:var(--bs-blue);border-color:var(--bs-blue);color:#fff}
+.it-b{display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
+.it-b dl{margin:0;display:grid;gap:10px}
+.it-b dt{font-size:12px;font-weight:700;color:var(--bs-ink-3);text-transform:uppercase;letter-spacing:.04em}
+.it-b dd{margin:2px 0 0;color:var(--bs-ink-2);text-wrap:pretty}
+.it-b code{font-size:12.5px;background:var(--bs-line-2);padding:1px 5px;border-radius:4px;overflow-wrap:anywhere}
+.prop{font-size:11px;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--bs-warning-bg);color:var(--bs-warning-fg);border:1px solid var(--bs-warning-line);white-space:nowrap}
+.opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.opts label{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid var(--bs-line);border-radius:8px;font-size:13.5px;cursor:pointer}
+.opts input{accent-color:var(--bs-blue);margin:0}
+.ev{display:flex;gap:8px;flex-wrap:wrap;align-content:flex-start}
+.ev button{padding:0;border:1px solid var(--bs-line);border-radius:8px;overflow:hidden;background:var(--bs-line-2);cursor:zoom-in;width:150px;height:110px;position:relative}
+.ev img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+.ev span{position:absolute;left:4px;bottom:4px;font-size:11px;font-weight:700;background:rgba(17,24,39,.82);color:#fff;padding:1px 6px;border-radius:4px}
+.ev .ev-code{display:inline-flex;align-items:center;font-size:12.5px;color:var(--bs-ink-3);height:auto}
+@media (min-width:820px){.it-b{grid-template-columns:minmax(0,1fr) 316px}.it{padding:20px 22px}}
+.notes{background:var(--bs-paper);border:1px solid var(--bs-line);border-radius:var(--bs-r-lg);padding:16px 20px}
+.notes ul{margin:0;padding-left:18px}.notes li{margin:0 0 8px;color:var(--bs-ink-2);text-wrap:pretty}.notes li:last-child{margin:0}
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--bs-paper);border-top:1px solid var(--bs-line);box-shadow:0 -4px 12px rgba(0,0,0,.06)}
+.bar-in{max-width:1040px;margin:0 auto;padding:12px 20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.bar-c{flex:1;font-weight:700;font-size:14px;min-width:180px}
+.bar-c small{display:block;font-weight:500;color:var(--bs-ink-3);font-size:12.5px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 18px;border-radius:8px;border:1px solid transparent;font:inherit;font-size:14.5px;font-weight:700;cursor:pointer}
+.btn-p{background:var(--bs-blue);color:#fff}.btn-p:hover{background:#172E6E}
+.btn-s{background:#fff;color:var(--bs-ink);border-color:var(--bs-line)}.btn-s:hover{background:var(--bs-line-2)}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.st{font-size:13px;font-weight:700;color:var(--bs-buy)}
+.lb{position:fixed;inset:0;z-index:40;background:rgba(17,24,39,.86);display:flex;align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+.lb[hidden]{display:none}
+.lb img{max-width:100%;max-height:100%;border-radius:6px;box-shadow:var(--bs-sh-md)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>UX-003 / UX-005 / UX-009 — аудит шапки, меню й пошуку</h1>
+<p class="lead">10 пунктів, ранжовано за впливом на покупку. Джерела: 13 скрінів власника (01.10.2026) і live-файли header.twig, search.twig, patch-mobile-search-menu-redesign.js, ps_live_search.css, boostershop-ds.css. Позначте пункти, які йдуть у макети, і скопіюйте список для Claude.</p>
+
+<h2>Факти з §6 брифу</h2>
+<div class="facts">
+<div class="fact"><b>Бургер — єдиний вхід у каталог</b>Підтверджено: на 1440, 760 і 390 інших входів немає (головна й категорія).</div>
+<div class="fact"><b>Стоковий #menu</b>На 1440 (головна, категорія) нічого не показує. DOM не перевірено.</div>
+<div class="fact"><b>Посилання бургера</b>Прописані вручну в header.twig. Склад підкатегорій — контентне рішення (див. «Поза списком»).</div>
+<div class="fact"><b>Sticky</b>Шапка не фіксується: правила sticky для .bs-header немає, на скріні 1440 після прокрутки шапки не видно.</div>
+</div>
+
+<h2>Список змін</h2>
+<div class="items" id="items"></div>
+
+<h2>Поза списком</h2>
+<div class="notes"><ul>
+<li>Бургер: у Pokémon 4 підкатегорії, а на сторінці категорії ще «Фігурки та декор» (21 товар). Посилання прописані вручну — додати чи ні вирішуєте ви, дизайн не міняється.</li>
+<li>Бургер: угорі синій текст «Booster Shop ⚡», а в шапці золотий логотип. Це косметика, пропоную не чіпати.</li>
+<li>576–767 px: Bootstrap-контейнер має 540 px, тому контент вужчий за шапку (скрін 760). Це глобальна сітка, у пакет B не входить.</li>
+<li>Фільтр категорії на desktop — стоковий Bootstrap (блакитна «Пошук», іконки Font Awesome). Це сторінка категорії, у пакет B не входить.</li>
+</ul></div>
+
+<h2>Чого бракує для макетів</h2>
+<div class="notes"><ul>
+<li>1440: живий пошук у шапці — фокус без тексту, набрано «pokemon», набрано «zzz». Без цих скрінів пункти 2, 3 і 9 на desktop я малюю лише з коду.</li>
+<li>390 з товаром у кошику — щоб закрити пункт 10.</li>
+</ul></div>
+</div>
+
+<div class="bar"><div class="bar-in">
+<div class="bar-c" id="cnt">Нічого не вибрано<small>Позначте пункти, які йдуть у макети</small></div>
+<span class="st" id="st" role="status" aria-live="polite"></span>
+<button class="btn btn-s" type="button" id="all">Вибрати всі</button>
+<button class="btn btn-p" type="button" id="cp" disabled>Скопіювати для Claude</button>
+</div></div>
+<div class="lb" id="lb" hidden><img alt=""></div>
+
+<script>
+const IMG = {
+  home1440: ['2026-10-01_21-44.png', '1440 · головна'],
+  cat1440: ['2026-10-01_21-44_1.png', '1440 · категорія'],
+  scroll1440: ['2026-10-01_21-44_2.png', '1440 · прокрутка'],
+  h760: ['2026-10-01_21-46.png', '760 · шапка'],
+  h390: ['2026-10-01_21-46_1.png', '390 · шапка'],
+  burger: ['2026-10-01_21-47.png', '390 · бургер'],
+  msEmpty: ['2026-10-01_21-47_1.png', '390 · пошук порожній'],
+  msRes: ['2026-10-01_21-47_2.png', '390 · «pokemon»'],
+  sp390: ['2026-10-01_21-47_3.png', '390 · сторінка пошуку'],
+  sp1440: ['2026-10-01_21-47_4.png', '1440 · сторінка пошуку'],
+  msNone: ['2026-10-01_21-48.png', '390 · «zzz»'],
+  spNone: ['2026-10-01_21-48_1.png', '390 · 0 результатів']
+};
+const P = '<span class="prop">копія — пропозиція</span>';
+const ITEMS = [
+ { id: 'search-page-fold', t: 'Сторінка пошуку: на 390 перший товар — нижче першого екрана', where: 'product/search · 390, 1440', sev: 'f', task: 'UX-009', ev: ['sp390', 'sp1440'],
+   p: 'Над результатами стоїть повна стокова форма OpenCart: поле, «Шукати в описі», категорія, «Пошук у підкатегоріях», кнопка «Пошук». Далі лінія, H2, кнопка «Порівняння товарів (0)» на всю ширину і сортування з лімітом. Запит уже набрано в шапці, а перший товар видно лише після прокрутки.',
+   f: 'Угорі — короткий рядок «Результати за «pokemon»» ' + P + ' і кнопка «Змінити пошук», яка розгортає розширені поля. Кнопку «Порівняння товарів» прибрати. Сортування й ліміт — в один рядок.',
+   h: 'Поля лишаються в DOM, ховаються лише візуально (<code>&lt;details&gt;</code>): <code>#input-search</code>, <code>#input-description</code>, <code>#input-category</code>, <code>#input-sub-category</code>, <code>#button-search</code>, <code>#input-sort</code>, <code>#input-limit</code>.' },
+ { id: 'ls-rows', t: 'Живий пошук на мобільному: рядок товару ~240 px, на екрані 2,5 товара', where: '#bs-msearch · 390', sev: 'f', task: 'UX-009', ev: ['msRes'],
+   p: 'Модуль показує опис товару (до 4 рядків, обрізаний «..»), назву до 4 рядків, а ціну — окремою колонкою на 20% ширини. Категорій під товарами не видно без прокрутки.',
+   f: 'Лише CSS: сховати <code>.description</code> у списку, назву обмежити 2 рядками, ціну перенести під назву, мініатюра 56 px. Знижка: <code>.price-new</code> + закреслена <code>.price-old</code>. Розмітку модуля не змінюємо.',
+   h: 'Модуль зараз стилізується лише через vendor CSS на змінних Bootstrap, правил DS для списку немає.' },
+ { id: 'ls-none', t: 'Немає результатів: три «Нічого не знайдено» і «Усі результати ▾» на порожню сторінку', where: 'живий пошук · усі ширини', sev: 'f', task: 'UX-009', ev: ['msNone'],
+   p: 'Під кожним заголовком (Товари, Категорії, Інформація) — своє «Нічого не знайдено». Посилання «Усі результати» має стрілку вниз і веде на сторінку з нулем результатів.',
+   f: 'Одне повідомлення «Нічого не знайдено за «zzz»» з підказкою ' + P + '. Коли товарів немає, «Усі результати» ховається.',
+   h: 'Booster-код поверх рендера (CSS <code>:has()</code> або JS в init у header.twig). ps_live_search.js не змінюємо.' },
+ { id: 'sticky', t: 'Шапка не фіксується при прокрутці', where: 'усі сторінки · 390 / 768 / 1440', sev: 'f', task: 'UX-003 / UX-005', ev: ['scroll1440', 'cat1440'],
+   p: 'Після прокрутки категорії чи пошуку пропадають кошик і поле пошуку, і щоб до них дістатися, треба гортати вгору.',
+   f: 'Sticky-шапка: на мобільному лише основний рядок (~60 px), на desktop — без смуги переваг. Тінь <code>--bs-sh-sm</code> з’являється після прокрутки.',
+   h: 'Перевірити разом зі шкалою <code>--bs-z-*</code> і з <code>--bs-header-h</code>: оверлей пошуку рахує цю висоту від низу шапки. header.twig рендериться і на checkout.' },
+ { id: 'catalog-desktop', t: 'На desktop у каталог веде лише іконка ☰ без підпису', where: '≥1024 · головна, категорії', sev: 'f', task: 'UX-003', ev: ['home1440', 'cat1440'],
+   p: 'На внутрішніх сторінках видимого входу в інші ігри та аксесуари немає. На головній є плитки категорій, а на сторінці категорії — лише її власні підкатегорії.',
+   f: 'Два варіанти на вибір:',
+   opts: [['a', 'a · підпис «Каталог» біля іконки бургера (≥1024) — мінімальна зміна'], ['b', 'b · рядок категорій під шапкою (≥1024): Pokémon TCG · One Piece · Інші TCG · Аксесуари · Акції, ті самі посилання, що в бургері']],
+   h: 'Поведінка <code>#bs-menu-open</code> / <code>#bs-menu</code> не змінюється.' },
+ { id: 'search-ds', t: 'Сторінка пошуку: елементи поза дизайн-системою', where: 'product/search · усі ширини', sev: 'c', task: 'UX-009', ev: ['sp1440', 'sp390'],
+   p: 'Кнопки «Пошук» і «Порівняння» — стоковий блакитний Bootstrap. Іконки списку/сітки — Font Awesome, а він вантажиться неблокуюче. H2 «Результати пошуку» стоїть впритул до панелі. На 390 поле сортування стиснуто до «З».',
+   f: '«Пошук» — синя DS-кнопка (<code>--bs-blue</code>). Перемикач список/сітка — inline SVG. Відступ під H2. Сортування й ліміт — по 50% ширини, підпис над полем.',
+   h: '<code>#button-list</code>, <code>#button-grid</code> зберігаються. Картки товарів (RD-04) не чіпаємо.' },
+ { id: 'ms-field', t: 'Мобільне поле пошуку: два хрестики і обрізаний placeholder', where: 'шапка й оверлей · 390', sev: 'c', task: 'UX-009 / UX-005', ev: ['msNone', 'h390'],
+   p: 'Через <code>type="search"</code> браузер показує свій × (синій) поруч із нашим <code>[data-bs-search-clear]</code>. Наш × — 24 px, менше за 44 px. У закритому стані placeholder обрізано: «Пошук бустер».',
+   f: 'Сховати <code>::-webkit-search-cancel-button</code>, зону дотику нашого × збільшити до 44 px. На ≤768 placeholder «Пошук» ' + P + ', на desktop — без змін.',
+   h: 'Placeholder міняє patch-mobile-search-menu-redesign.js (Booster-код).' },
+ { id: 'dead-end', t: 'Порожній результат пошуку — глухий кут', where: 'product/search без результатів · усі ширини', sev: 'f', task: 'UX-009', ev: ['spNone'],
+   p: '«Немає товарів, які відповідають критеріям пошуку.» — і далі нічого: ні посилань, ні наступного кроку.',
+   f: 'Під повідомленням — 4 основні розділи з бургера і рядок «Не знайшли? Напишіть у Telegram — привеземо під замовлення» ' + P + '. Послуга «Привеземо під замовлення» вже є у смузі переваг на головній.',
+   h: 'Блок <code>bs-empty</code> (RD-06) лишається, нові рядки додаються під ним.' },
+ { id: 'ls-error', t: 'У живому пошуку немає стану помилки', where: 'живий пошук · усі ширини', sev: 'f', task: 'UX-009', ev: [], code: 'header.twig: success без error · бриф §7',
+   p: 'Якщо запит не вдався, спінер крутиться безкінечно. Спінер — іконка Font Awesome, тож при першому швидкому наборі його може взагалі не бути видно.',
+   f: 'Booster-код в init (header.twig): після помилки або тайм-ауту ~8 с — рядок «Не вдалося завантажити підказки» і кнопка «Шукати на сторінці результатів» (відправляє форму) ' + P + '. Спінер замінити на SVG.',
+   h: 'Модуль не змінюємо, правиться тільки виклик <code>$.ajax</code> в init.' },
+ { id: 'cart-badge', t: 'Мобільний кошик: не видно кількості товарів', where: 'шапка · 390, 760', sev: 'v', task: 'UX-005', ev: ['h390', 'h760', 'cat1440'],
+   p: 'На ≤768 підпис кошика ховається, лишається бейдж <code>.bs-cart-qty</code>, але він рендериться тільки при <code>bs_cart_qty &gt; 0</code>. На скрінах 390/760 бейджа немає, хоча на desktop видно «Мій кошик - ₴230.00».',
+   f: 'Перевірте на телефоні з товаром у кошику. Якщо бейджа немає — це баг у даних шаблону, а не в дизайні; оформимо окремою задачею. Стиль бейджа вже є.',
+   h: '' }
+];
+const SEV = { f: ['Заважає', 'sev-f'], c: ['Косметика', 'sev-c'], v: ['Перевірити', 'sev-v'] };
+const KEY = 'ux003-audit-picks';
+let st = {}; try { st = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
+const root = document.getElementById('items');
+root.innerHTML = ITEMS.map((it, i) => `
+<article class="it" data-id="${it.id}" data-screen-label="Пункт ${i + 1}">
+ <div class="it-h"><span class="it-n">${i + 1}</span>
+  <div class="it-t"><h3>${it.t}</h3><div class="meta"><span class="chip ${SEV[it.sev][1]}">${SEV[it.sev][0]}</span><span class="chip">${it.where}</span><span class="chip">${it.task}</span></div></div>
+  <label class="pick"><input type="checkbox" data-pick="${it.id}"> У макети</label>
+ </div>
+ <div class="it-b">
+  <dl><div><dt>Проблема</dt><dd>${it.p}</dd></div><div><dt>Пропозиція</dt><dd>${it.f}${it.opts ? '<div class="opts">' + it.opts.map(o => `<label><input type="radio" name="opt-${it.id}" value="${o[0]}" data-opt="${it.id}"> ${o[1]}</label>`).join('') + '</div>' : ''}</dd></div>${it.h ? `<div><dt>Обмеження</dt><dd>${it.h}</dd></div>` : ''}</dl>
+  <div class="ev">${it.ev.map(k => `<button type="button" data-src="uploads/${IMG[k][0]}"><img src="uploads/${IMG[k][0]}" alt="${IMG[k][1]}" loading="lazy"><span>${IMG[k][1]}</span></button>`).join('')}${it.code ? `<span class="ev-code">Джерело: ${it.code}</span>` : ''}</div>
+ </div>
+</article>`).join('');
+const strip = h => h.replace(/<span class="prop">[^<]*<\/span>/g, '[копія — пропозиція]').replace(/<code>/g, '`').replace(/<\/code>/g, '`').replace(/<[^>]+>/g, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/\s+/g, ' ').trim();
+function sync() {
+  const on = ITEMS.filter(it => st[it.id]);
+  document.querySelectorAll('.it').forEach(el => { const v = !!st[el.dataset.id]; el.classList.toggle('is-on', v); el.querySelector('[data-pick]').checked = v; });
+  document.querySelectorAll('[data-opt]').forEach(r => { r.checked = st['opt-' + r.dataset.opt] === r.value; });
+  const c = document.getElementById('cnt');
+  c.innerHTML = on.length ? `Вибрано: ${on.length} з ${ITEMS.length}<small>${on.map(it => ITEMS.indexOf(it) + 1).join(', ')}</small>` : 'Нічого не вибрано<small>Позначте пункти, які йдуть у макети</small>';
+  document.getElementById('cp').disabled = !on.length;
+  localStorage.setItem(KEY, JSON.stringify(st));
+}
+root.addEventListener('change', e => {
+  const p = e.target.dataset.pick, o = e.target.dataset.opt;
+  if (p) st[p] = e.target.checked;
+  if (o) { st['opt-' + o] = e.target.value; st[o] = true; }
+  document.getElementById('st').textContent = '';
+  sync();
+});
+root.addEventListener('click', e => { const b = e.target.closest('[data-src]'); if (!b) return; const lb = document.getElementById('lb'); lb.querySelector('img').src = b.dataset.src; lb.hidden = false; });
+document.getElementById('lb').addEventListener('click', e => { e.currentTarget.hidden = true; });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('lb').hidden = true; });
+document.getElementById('all').addEventListener('click', () => { const all = ITEMS.every(it => st[it.id]); ITEMS.forEach(it => st[it.id] = !all); sync(); });
+document.getElementById('cp').addEventListener('click', async () => {
+  const on = ITEMS.filter(it => st[it.id]);
+  const lines = ['UX-003 / UX-005 / UX-009 — схвалені пункти аудиту (Claude Design, 01.10.2026)', ''];
+  on.forEach(it => {
+    const n = ITEMS.indexOf(it) + 1;
+    lines.push(`${n}. ${it.t} — ${it.where} — ${SEV[it.sev][0]} — ${it.task}`);
+    lines.push(`   Пропозиція: ${strip(it.f)}`);
+    if (it.opts) { const o = it.opts.find(x => x[0] === st['opt-' + it.id]); lines.push(`   Варіант: ${o ? strip(o[1]) : 'не вибрано'}`); }
+    if (it.h) lines.push(`   Обмеження: ${strip(it.h)}`);
+  });
+  const txt = lines.join('\n');
+  let ok = false;
+  try { await navigator.clipboard.writeText(txt); ok = true; } catch (e) {
+    const ta = document.createElement('textarea'); ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select();
+    try { ok = document.execCommand('copy'); } catch (e2) {} ta.remove();
+  }
+  document.getElementById('st').textContent = ok ? 'Скопійовано' : 'Не вдалося скопіювати';
+});
+sync();
+</script>
+</body>
+</html>
