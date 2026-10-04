@@ -1,0 +1,155 @@
+[
+ {
+  "url": "http://127.0.0.1:8790/?page=category",
+  "w": 390,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/before_scroll_category_390.png",
+  "eval": "{\"hdrTop\":-700,\"hdrH\":61,\"scrolled\":false,\"shadow\":false,\"var\":\"\",\"ph\":\"Пошук бустерів, сетів, виробників...\",\"burgerW\":40,\"label\":0,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8790/?page=search&search=pokemon",
+  "w": 390,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/before_scroll_search_390.png",
+  "eval": "{\"hdrTop\":-700,\"hdrH\":61,\"scrolled\":false,\"shadow\":false,\"var\":\"\",\"ph\":\"Пошук бустерів, сетів, виробників...\",\"burgerW\":40,\"label\":0,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8790/?page=info",
+  "w": 390,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/before_scroll_info_390.png",
+  "eval": "{\"hdrTop\":-700,\"hdrH\":61,\"scrolled\":false,\"shadow\":false,\"var\":\"\",\"ph\":\"Пошук бустерів, сетів, виробників...\",\"burgerW\":40,\"label\":0,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8790/?page=stack",
+  "w": 390,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/before_scroll_stack_390.png",
+  "eval": "{\"hdrTop\":-700,\"hdrH\":61,\"scrolled\":false,\"shadow\":false,\"var\":\"\",\"ph\":\"Пошук бустерів, сетів, виробників...\",\"burgerW\":40,\"label\":0,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8790/?page=checkout",
+  "w": 390,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/before_scroll_checkout_390.png",
+  "eval": "{\"hdrTop\":-700,\"hdrH\":61,\"scrolled\":false,\"shadow\":false,\"var\":\"\",\"ph\":\"Пошук бустерів, сетів, виробників...\",\"burgerW\":40,\"label\":0,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8790/?page=success&st=d",
+  "w": 390,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/before_scroll_success_390.png",
+  "eval": "{\"hdrTop\":-700,\"hdrH\":61,\"scrolled\":false,\"shadow\":false,\"var\":\"\",\"ph\":\"Пошук бустерів, сетів, виробників...\",\"burgerW\":40,\"label\":0,\"hscroll\":false}",
+  "logs": [
+   "log: GA4 purchase {\"transaction_id\":\"10485\",\"value\":1}"
+  ]
+ },
+ {
+  "url": "http://127.0.0.1:8790/?page=category",
+  "w": 390,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/before_top_category_390.png",
+  "eval": "{\"hdrTop\":0,\"hdrH\":61,\"scrolled\":false,\"shadow\":false,\"var\":\"\",\"ph\":\"Пошук бустерів, сетів, виробників...\",\"burgerW\":40,\"label\":0,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8790/?page=category",
+  "w": 768,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/before_scroll_category_768.png",
+  "eval": "{\"hdrTop\":-700,\"hdrH\":61,\"scrolled\":false,\"shadow\":false,\"var\":\"\",\"ph\":\"Пошук бустерів, сетів, виробників...\",\"burgerW\":40,\"label\":0,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8790/?page=search&search=pokemon",
+  "w": 768,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/before_scroll_search_768.png",
+  "eval": "{\"hdrTop\":-700,\"hdrH\":61,\"scrolled\":false,\"shadow\":false,\"var\":\"\",\"ph\":\"Пошук бустерів, сетів, виробників...\",\"burgerW\":40,\"label\":0,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8790/?page=info",
+  "w": 768,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/before_scroll_info_768.png",
+  "eval": "{\"hdrTop\":-700,\"hdrH\":61,\"scrolled\":false,\"shadow\":false,\"var\":\"\",\"ph\":\"Пошук бустерів, сетів, виробників...\",\"burgerW\":40,\"label\":0,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8790/?page=stack",
+  "w": 768,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/before_scroll_stack_768.png",
+  "eval": "{\"hdrTop\":-700,\"hdrH\":61,\"scrolled\":false,\"shadow\":false,\"var\":\"\",\"ph\":\"Пошук бустерів, сетів, виробників...\",\"burgerW\":40,\"label\":0,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8790/?page=checkout",
+  "w": 768,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/before_scroll_checkout_768.png",
+  "eval": "{\"hdrTop\":-700,\"hdrH\":61,\"scrolled\":false,\"shadow\":false,\"var\":\"\",\"ph\":\"Пошук бустерів, сетів, виробників...\",\"burgerW\":40,\"label\":0,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8790/?page=success&st=d",
+  "w": 768,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/before_scroll_success_768.png",
+  "eval": "{\"hdrTop\":-700,\"hdrH\":61,\"scrolled\":false,\"shadow\":false,\"var\":\"\",\"ph\":\"Пошук бустерів, сетів, виробників...\",\"burgerW\":40,\"label\":0,\"hscroll\":false}",
+  "logs": [
+   "log: GA4 purchase {\"transaction_id\":\"10485\",\"value\":1}"
+  ]
+ },
+ {
+  "url": "http://127.0.0.1:8790/?page=category",
+  "w": 768,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/before_top_category_768.png",
+  "eval": "{\"hdrTop\":0,\"hdrH\":61,\"scrolled\":false,\"shadow\":false,\"var\":\"\",\"ph\":\"Пошук бустерів, сетів, виробників...\",\"burgerW\":40,\"label\":0,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8790/?page=category",
+  "w": 1440,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/before_scroll_category_1440.png",
+  "eval": "{\"hdrTop\":-700,\"hdrH\":69,\"scrolled\":false,\"shadow\":false,\"var\":\"\",\"ph\":\"Пошук бустерів, сетів, виробників...\",\"burgerW\":42,\"label\":0,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8790/?page=search&search=pokemon",
+  "w": 1440,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/before_scroll_search_1440.png",
+  "eval": "{\"hdrTop\":-700,\"hdrH\":69,\"scrolled\":false,\"shadow\":false,\"var\":\"\",\"ph\":\"Пошук бустерів, сетів, виробників...\",\"burgerW\":42,\"label\":0,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8790/?page=info",
+  "w": 1440,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/before_scroll_info_1440.png",
+  "eval": "{\"hdrTop\":-700,\"hdrH\":69,\"scrolled\":false,\"shadow\":false,\"var\":\"\",\"ph\":\"Пошук бустерів, сетів, виробників...\",\"burgerW\":42,\"label\":0,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8790/?page=stack",
+  "w": 1440,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/before_scroll_stack_1440.png",
+  "eval": "{\"hdrTop\":-700,\"hdrH\":69,\"scrolled\":false,\"shadow\":false,\"var\":\"\",\"ph\":\"Пошук бустерів, сетів, виробників...\",\"burgerW\":42,\"label\":0,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8790/?page=checkout",
+  "w": 1440,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/before_scroll_checkout_1440.png",
+  "eval": "{\"hdrTop\":-700,\"hdrH\":69,\"scrolled\":false,\"shadow\":false,\"var\":\"\",\"ph\":\"Пошук бустерів, сетів, виробників...\",\"burgerW\":42,\"label\":0,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8790/?page=success&st=d",
+  "w": 1440,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/before_scroll_success_1440.png",
+  "eval": "{\"hdrTop\":-578,\"hdrH\":69,\"scrolled\":false,\"shadow\":false,\"var\":\"\",\"ph\":\"Пошук бустерів, сетів, виробників...\",\"burgerW\":42,\"label\":0,\"hscroll\":false}",
+  "logs": [
+   "log: GA4 purchase {\"transaction_id\":\"10485\",\"value\":1}"
+  ]
+ },
+ {
+  "url": "http://127.0.0.1:8790/?page=category",
+  "w": 1440,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/before_top_category_1440.png",
+  "eval": "{\"hdrTop\":0,\"hdrH\":69,\"scrolled\":false,\"shadow\":false,\"var\":\"\",\"ph\":\"Пошук бустерів, сетів, виробників...\",\"burgerW\":42,\"label\":0,\"hscroll\":false}",
+  "logs": []
+ }
+]

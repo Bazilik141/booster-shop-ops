@@ -1,0 +1,119 @@
+/* === RD-15: Checkout Failure — «Дві колонки» (2026-10-04) ===
+   Replaces the inline R-11b <style> of failure.twig (the page's only source rules until now). 600px card,
+   4px warning strip, SVG icon beside the text from 768px, above it below. No !important. */
+#checkout-failure {
+  padding-bottom: 8px;
+}
+
+#checkout-failure .bs-failure-card {
+  max-width: 600px;
+  margin: 20px auto 24px;
+  padding: 20px 16px;
+  border: 1px solid var(--bs-line);
+  border-top: 4px solid var(--bs-warning-line);
+  border-radius: var(--bs-r-lg);
+  background: var(--bs-paper);
+}
+
+#checkout-failure .bs-failure-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 12px;
+  border: 1px solid var(--bs-warning-line);
+  border-radius: 50%;
+  background: var(--bs-warning-bg);
+  color: var(--bs-warning-fg);
+}
+
+#checkout-failure .bs-failure-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+#checkout-failure .bs-failure-body {
+  min-width: 0;
+}
+
+#checkout-failure .bs-failure-title {
+  margin: 0 0 12px;
+  color: var(--bs-ink);
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+
+#checkout-failure .bs-failure-message {
+  color: var(--bs-ink-2);
+  font-size: 15px;
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
+#checkout-failure .bs-failure-message p {
+  margin: 0 0 10px;
+}
+
+#checkout-failure .bs-failure-message p:last-child {
+  margin-bottom: 0;
+}
+
+#checkout-failure .bs-failure-message a {
+  color: var(--bs-blue);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+#checkout-failure .bs-failure-nowrap {
+  white-space: nowrap;
+}
+
+#checkout-failure .bs-failure-actions {
+  display: grid;
+  gap: 10px;
+  margin: 20px 0 0;
+}
+
+#checkout-failure .bs-failure-actions .bs-btn {
+  width: 100%;
+}
+
+/* `.bs a` (0,1,1) would paint both link buttons navy and underline them on hover. */
+#checkout-failure .bs-btn-secondary,
+#checkout-failure .bs-btn-secondary:hover {
+  color: var(--bs-ink);
+  text-decoration: none;
+}
+
+#checkout-failure .bs-failure-tg {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+}
+
+@media (min-width: 768px) {
+  #checkout-failure .bs-failure-card {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 20px;
+    padding: 28px;
+  }
+
+  #checkout-failure .bs-failure-icon {
+    margin: 0;
+  }
+
+  #checkout-failure .bs-failure-actions {
+    display: flex;
+    justify-content: flex-start;
+    gap: 12px;
+  }
+
+  #checkout-failure .bs-failure-actions .bs-btn {
+    width: auto;
+  }
+}
+/* === /RD-15: Checkout Failure === */

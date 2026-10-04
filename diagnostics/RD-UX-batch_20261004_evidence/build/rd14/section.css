@@ -1,0 +1,558 @@
+/* === RD-14: Checkout Success — «Кроки» (2026-10-04) ===
+   Replaces the R-11 section that stood here and the inline <style> of success.twig (r11-spacing-fix,
+   st2b2-success-spacing, st2b3-success-actions-compact). One centred 620px column, SVG icons, IBAN card,
+   «Що далі» card, item table collapsed below 1024px (JS in success.twig; without JS it stays open).
+   No !important: the global `#content { padding-bottom: 40px !important }` (R07MOB2) is accepted as the
+   page's bottom spacing instead of being overridden again. */
+#checkout-success {
+  padding-bottom: 8px;
+}
+
+#checkout-success #content {
+  min-width: 0;
+}
+
+#checkout-success .bs-success-wrap {
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+#checkout-success .bs-success-ic {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+}
+
+#checkout-success .bs-success-ic-inl {
+  width: 1.05em;
+  height: 1.05em;
+  vertical-align: -0.17em;
+  color: var(--bs-ink-3);
+}
+
+#checkout-success .bs-success-tg {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+}
+
+/* Hero: white check on --bs-buy (4.55:1). */
+#checkout-success .bs-success-hero {
+  padding: 24px 0 20px;
+  text-align: center;
+}
+
+#checkout-success .bs-success-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 14px;
+  border-radius: 50%;
+  background: var(--bs-buy);
+  color: #fff;
+}
+
+#checkout-success .bs-success-icon .bs-success-ic {
+  width: 28px;
+  height: 28px;
+}
+
+#checkout-success .bs-success-hero h1 {
+  margin: 0 0 6px;
+  color: var(--bs-ink);
+  font-size: 23px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+
+#checkout-success .bs-success-subtitle {
+  margin: 0;
+  color: var(--bs-ink-3);
+  font-size: 15px;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+/* Cards */
+#checkout-success .bs-success-card {
+  margin: 0 0 12px;
+  padding: 16px;
+  border: 1px solid var(--bs-line);
+  border-radius: var(--bs-r-lg);
+  background: var(--bs-paper);
+}
+
+#checkout-success .bs-success-section-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  color: var(--bs-ink);
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: 0;
+}
+
+#checkout-success .bs-success-section-title .bs-success-ic {
+  color: var(--bs-blue);
+}
+
+/* First15 — variant A «рамка» */
+#checkout-success .bs-success-f15 {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin: 0 0 12px;
+  padding: 16px;
+  border: 2px solid var(--bs-buy);
+  border-radius: var(--bs-r-lg);
+  background: var(--bs-green-soft);
+}
+
+#checkout-success .bs-success-f15-ic {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bs-buy);
+  color: #fff;
+}
+
+#checkout-success .bs-success-f15-ic .bs-success-ic {
+  width: 20px;
+  height: 20px;
+}
+
+#checkout-success .bs-success-f15-k {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--bs-buy);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+#checkout-success .bs-success-f15-main {
+  margin: 0;
+  color: var(--bs-ink);
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.4;
+  text-wrap: pretty;
+}
+
+#checkout-success .bs-success-f15-main mark {
+  padding: 0;
+  background: none;
+  color: var(--bs-buy);
+  font-size: 1.25em;
+  font-weight: 800;
+}
+
+/* IBAN requisites (CHECKOUT-008 hooks and script unchanged) */
+#checkout-success .bs-success-req {
+  display: grid;
+  margin: 0 0 14px;
+  border: 1px solid var(--bs-line);
+  border-radius: var(--bs-r);
+  overflow: hidden;
+}
+
+#checkout-success .bs-success-req-row {
+  display: grid;
+  gap: 1px;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--bs-line-2);
+}
+
+#checkout-success .bs-success-req-row:last-child {
+  border-bottom: 0;
+}
+
+#checkout-success .bs-success-req dt {
+  color: var(--bs-ink-3);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+#checkout-success .bs-success-req dd {
+  margin: 0;
+  color: var(--bs-ink);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+#checkout-success .bs-success-req-row.is-iban {
+  background: var(--bs-blue-soft);
+}
+
+#checkout-success .bs-success-req-row.is-iban dd {
+  color: var(--bs-blue);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+#checkout-success .bs-success-iban-act {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+}
+
+#checkout-success .bs-success-iban-act .bs-btn {
+  width: 100%;
+}
+
+/* The CHECKOUT-008 script writes both the success and the failure message into this element, so it carries
+   no success colour or check icon of its own. */
+#checkout-success .bs-success-copy-status {
+  color: var(--bs-ink-2);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* «Що далі» */
+#checkout-success .bs-success-steplist {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#checkout-success .bs-success-steplist li {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--bs-line-2);
+}
+
+#checkout-success .bs-success-steplist li:first-child {
+  padding-top: 2px;
+  border-top: 0;
+}
+
+#checkout-success .bs-success-step-ic {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--bs-blue-soft);
+  color: var(--bs-blue);
+}
+
+#checkout-success .bs-success-steplist strong {
+  display: block;
+  margin: 6px 0 2px;
+  color: var(--bs-ink);
+  font-size: 15px;
+}
+
+#checkout-success .bs-success-steplist p {
+  margin: 0;
+  color: var(--bs-ink-2);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* «Ваше замовлення» */
+#checkout-success .bs-success-meta {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 4px;
+  padding: 0 0 12px;
+  border-bottom: 1px solid var(--bs-line);
+}
+
+#checkout-success .bs-success-meta-row {
+  display: grid;
+  align-content: start;
+  gap: 2px;
+  color: var(--bs-ink);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+#checkout-success .bs-label {
+  color: var(--bs-ink-3);
+  font-size: 13px;
+}
+
+#checkout-success .bs-success-meta-sum {
+  display: none;
+}
+
+#checkout-success .bs-success-items.is-collapsible .bs-success-meta-sum {
+  display: grid;
+}
+
+#checkout-success .bs-success-meta-sum span:last-child {
+  font-size: 16px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+#checkout-success .bs-success-items.is-collapsible .bs-success-meta {
+  padding-bottom: 4px;
+  border-bottom: 0;
+}
+
+#checkout-success .bs-success-items.is-collapsible:not(.is-open) .bs-success-table-wrap {
+  display: none;
+}
+
+#checkout-success .bs-success-items.is-collapsible .bs-success-table {
+  margin-top: 8px;
+  border-top: 1px solid var(--bs-line);
+}
+
+#checkout-success .bs-success-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--bs-ink-2);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+#checkout-success .bs-success-table td {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--bs-line-2);
+  vertical-align: top;
+}
+
+#checkout-success .bs-success-table td + td {
+  padding-left: 16px;
+}
+
+#checkout-success .bs-success-item-name {
+  color: var(--bs-ink);
+  overflow-wrap: anywhere;
+  text-wrap: pretty;
+}
+
+#checkout-success .bs-success-qty {
+  color: var(--bs-ink-3);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+#checkout-success .bs-success-item-price {
+  text-align: right;
+  white-space: nowrap;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+#checkout-success .bs-success-table tfoot td {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  border-bottom: 0;
+  color: var(--bs-ink-3);
+}
+
+#checkout-success .bs-success-table tfoot tr:first-child td {
+  padding-top: 12px;
+}
+
+#checkout-success .bs-success-table tfoot .bs-success-item-price {
+  color: var(--bs-ink-2);
+}
+
+#checkout-success .bs-success-table tfoot .bs-success-grand-total td {
+  padding-top: 12px;
+  border-top: 1px solid var(--bs-line);
+  color: var(--bs-ink);
+  font-size: 16px;
+  font-weight: 800;
+}
+
+#checkout-success .bs-success-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 44px;
+  margin-top: 10px;
+  padding: 0 12px;
+  border: 1px solid var(--bs-line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--bs-blue);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#checkout-success .bs-success-toggle[hidden] {
+  display: none;
+}
+
+#checkout-success .bs-success-toggle:hover {
+  background: var(--bs-line-2);
+}
+
+#checkout-success .bs-success-toggle .bs-success-ic {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s;
+}
+
+#checkout-success .bs-success-toggle[aria-expanded="true"] .bs-success-ic {
+  transform: rotate(180deg);
+}
+
+/* Actions: both secondary. `.bs a` (0,1,1) would paint link buttons navy and underline them on hover. */
+#checkout-success .bs-success-actions {
+  display: grid;
+  gap: 10px;
+  margin: 16px 0;
+}
+
+#checkout-success .bs-success-actions .bs-btn {
+  width: 100%;
+}
+
+#checkout-success .bs-btn-secondary,
+#checkout-success .bs-btn-secondary:hover {
+  color: var(--bs-ink);
+  text-decoration: none;
+}
+
+/* Footer note */
+#checkout-success .bs-success-footer-msg {
+  padding: 8px 0 4px;
+  color: var(--bs-ink-3);
+  font-size: 14px;
+  line-height: 1.65;
+  text-align: center;
+  text-wrap: pretty;
+}
+
+#checkout-success .bs-success-footer-msg p {
+  margin: 0 0 10px;
+}
+
+#checkout-success .bs-success-footer-msg p:last-child {
+  margin: 0;
+}
+
+#checkout-success .bs-success-bye {
+  color: var(--bs-ink);
+}
+
+#checkout-success .bs-success-tg-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--bs-blue);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Fallback (no order number): text_message unchanged. Its own Telegram link (`.bs-telegram-button` from the
+   language file) becomes a plain underlined link — the old white-on-#229ED9 pill was 3.0:1. */
+#checkout-success .bs-success-msg {
+  color: var(--bs-ink-2);
+  font-size: 14px;
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
+#checkout-success .bs-success-msg p {
+  margin: 0 0 10px;
+}
+
+#checkout-success .bs-success-msg p:last-child {
+  margin: 0;
+}
+
+#checkout-success .bs-success-msg a {
+  color: var(--bs-blue);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+#checkout-success .bs-success-fb-act {
+  margin: 16px 0 0;
+}
+
+@media (min-width: 768px) {
+  #checkout-success .bs-success-hero {
+    padding: 36px 0 28px;
+  }
+
+  #checkout-success .bs-success-hero h1 {
+    font-size: 26px;
+  }
+
+  #checkout-success .bs-success-card {
+    margin-bottom: 16px;
+    padding: 20px 22px;
+  }
+
+  #checkout-success .bs-success-f15 {
+    margin-bottom: 16px;
+    padding: 18px 22px;
+  }
+
+  #checkout-success .bs-success-req-row {
+    grid-template-columns: 160px minmax(0, 1fr);
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  #checkout-success .bs-success-iban-act .bs-btn {
+    width: auto;
+  }
+
+  #checkout-success .bs-success-meta {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  #checkout-success .bs-success-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  #checkout-success .bs-success-actions .bs-btn {
+    width: auto;
+    min-width: 220px;
+  }
+
+  #checkout-success .bs-success-fb-act {
+    justify-content: flex-start;
+  }
+
+  #checkout-success .bs-success-fb-act .bs-btn {
+    min-width: 0;
+  }
+}
+
+@media (min-width: 1200px) {
+  #checkout-success .bs-success-hero {
+    padding: 48px 0 32px;
+  }
+
+  #checkout-success .bs-success-hero h1 {
+    font-size: 28px;
+  }
+}
+/* === /RD-14: Checkout Success === */

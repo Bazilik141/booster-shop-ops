@@ -1,0 +1,204 @@
+[
+ {
+  "url": "http://127.0.0.1:8791/?page=category",
+  "w": 390,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/after_scroll_category_390.png",
+  "eval": "{\"hdrTop\":0,\"hdrH\":61,\"scrolled\":true,\"shadow\":true,\"var\":\"61px\",\"ph\":\"Пошук\",\"burgerW\":40,\"label\":1,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8791/?page=search&search=pokemon",
+  "w": 390,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/after_scroll_search_390.png",
+  "eval": "{\"hdrTop\":0,\"hdrH\":61,\"scrolled\":true,\"shadow\":true,\"var\":\"61px\",\"ph\":\"Пошук\",\"burgerW\":40,\"label\":1,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8791/?page=info",
+  "w": 390,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/after_scroll_info_390.png",
+  "eval": "{\"hdrTop\":0,\"hdrH\":61,\"scrolled\":true,\"shadow\":true,\"var\":\"61px\",\"ph\":\"Пошук\",\"burgerW\":40,\"label\":1,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8791/?page=stack",
+  "w": 390,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/after_scroll_stack_390.png",
+  "eval": "{\"hdrTop\":0,\"hdrH\":61,\"scrolled\":true,\"shadow\":true,\"var\":\"61px\",\"ph\":\"Пошук\",\"burgerW\":40,\"label\":1,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8791/?page=checkout",
+  "w": 390,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/after_scroll_checkout_390.png",
+  "eval": "{\"hdrTop\":0,\"hdrH\":61,\"scrolled\":true,\"shadow\":true,\"var\":\"61px\",\"ph\":\"Пошук\",\"burgerW\":40,\"label\":1,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8791/?page=success&st=d",
+  "w": 390,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/after_scroll_success_390.png",
+  "eval": "{\"hdrTop\":0,\"hdrH\":61,\"scrolled\":true,\"shadow\":true,\"var\":\"61px\",\"ph\":\"Пошук\",\"burgerW\":40,\"label\":1,\"hscroll\":false}",
+  "logs": [
+   "log: GA4 purchase {\"transaction_id\":\"10485\",\"value\":1}"
+  ]
+ },
+ {
+  "url": "http://127.0.0.1:8791/?page=category",
+  "w": 390,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/after_top_category_390.png",
+  "eval": "{\"hdrTop\":0,\"hdrH\":61,\"scrolled\":false,\"shadow\":false,\"var\":\"61px\",\"ph\":\"Пошук\",\"burgerW\":40,\"label\":1,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8791/?page=category",
+  "w": 768,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/after_scroll_category_768.png",
+  "eval": "{\"hdrTop\":0,\"hdrH\":61,\"scrolled\":true,\"shadow\":true,\"var\":\"61px\",\"ph\":\"Пошук\",\"burgerW\":40,\"label\":1,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8791/?page=search&search=pokemon",
+  "w": 768,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/after_scroll_search_768.png",
+  "eval": "{\"hdrTop\":0,\"hdrH\":61,\"scrolled\":true,\"shadow\":true,\"var\":\"61px\",\"ph\":\"Пошук\",\"burgerW\":40,\"label\":1,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8791/?page=info",
+  "w": 768,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/after_scroll_info_768.png",
+  "eval": "{\"hdrTop\":0,\"hdrH\":61,\"scrolled\":true,\"shadow\":true,\"var\":\"61px\",\"ph\":\"Пошук\",\"burgerW\":40,\"label\":1,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8791/?page=stack",
+  "w": 768,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/after_scroll_stack_768.png",
+  "eval": "{\"hdrTop\":0,\"hdrH\":61,\"scrolled\":true,\"shadow\":true,\"var\":\"61px\",\"ph\":\"Пошук\",\"burgerW\":40,\"label\":1,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8791/?page=checkout",
+  "w": 768,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/after_scroll_checkout_768.png",
+  "eval": "{\"hdrTop\":0,\"hdrH\":61,\"scrolled\":true,\"shadow\":true,\"var\":\"61px\",\"ph\":\"Пошук\",\"burgerW\":40,\"label\":1,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8791/?page=success&st=d",
+  "w": 768,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/after_scroll_success_768.png",
+  "eval": "{\"hdrTop\":0,\"hdrH\":61,\"scrolled\":true,\"shadow\":true,\"var\":\"61px\",\"ph\":\"Пошук\",\"burgerW\":40,\"label\":1,\"hscroll\":false}",
+  "logs": [
+   "log: GA4 purchase {\"transaction_id\":\"10485\",\"value\":1}"
+  ]
+ },
+ {
+  "url": "http://127.0.0.1:8791/?page=category",
+  "w": 768,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/after_top_category_768.png",
+  "eval": "{\"hdrTop\":0,\"hdrH\":61,\"scrolled\":false,\"shadow\":false,\"var\":\"61px\",\"ph\":\"Пошук\",\"burgerW\":40,\"label\":1,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8791/?page=category",
+  "w": 1440,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/after_scroll_category_1440.png",
+  "eval": "{\"hdrTop\":0,\"hdrH\":69,\"scrolled\":true,\"shadow\":true,\"var\":\"69px\",\"ph\":\"Пошук бустерів, сетів, виробників...\",\"burgerW\":114,\"label\":58,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8791/?page=search&search=pokemon",
+  "w": 1440,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/after_scroll_search_1440.png",
+  "eval": "{\"hdrTop\":0,\"hdrH\":69,\"scrolled\":true,\"shadow\":true,\"var\":\"69px\",\"ph\":\"Пошук бустерів, сетів, виробників...\",\"burgerW\":114,\"label\":58,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8791/?page=info",
+  "w": 1440,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/after_scroll_info_1440.png",
+  "eval": "{\"hdrTop\":0,\"hdrH\":69,\"scrolled\":true,\"shadow\":true,\"var\":\"69px\",\"ph\":\"Пошук бустерів, сетів, виробників...\",\"burgerW\":114,\"label\":58,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8791/?page=stack",
+  "w": 1440,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/after_scroll_stack_1440.png",
+  "eval": "{\"hdrTop\":0,\"hdrH\":69,\"scrolled\":true,\"shadow\":true,\"var\":\"69px\",\"ph\":\"Пошук бустерів, сетів, виробників...\",\"burgerW\":114,\"label\":58,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8791/?page=checkout",
+  "w": 1440,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/after_scroll_checkout_1440.png",
+  "eval": "{\"hdrTop\":0,\"hdrH\":69,\"scrolled\":true,\"shadow\":true,\"var\":\"69px\",\"ph\":\"Пошук бустерів, сетів, виробників...\",\"burgerW\":114,\"label\":58,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8791/?page=success&st=d",
+  "w": 1440,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/after_scroll_success_1440.png",
+  "eval": "{\"hdrTop\":0,\"hdrH\":69,\"scrolled\":true,\"shadow\":true,\"var\":\"69px\",\"ph\":\"Пошук бустерів, сетів, виробників...\",\"burgerW\":114,\"label\":58,\"hscroll\":false}",
+  "logs": [
+   "log: GA4 purchase {\"transaction_id\":\"10485\",\"value\":1}"
+  ]
+ },
+ {
+  "url": "http://127.0.0.1:8791/?page=category",
+  "w": 1440,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/after_top_category_1440.png",
+  "eval": "{\"hdrTop\":0,\"hdrH\":69,\"scrolled\":false,\"shadow\":false,\"var\":\"69px\",\"ph\":\"Пошук бустерів, сетів, виробників...\",\"burgerW\":114,\"label\":58,\"hscroll\":false}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8791/?page=category",
+  "w": 390,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/after_burger_390.png",
+  "eval": "{\"links\":[\"/catalog/Pokemon/figurky-ta-dekor-pokemon\",\"/catalog/One-Piece/figurky-ta-dekor-one-piece\"],\"brandImg\":true,\"brandW\":110,\"brandHref\":\"http://127.0.0.1:8791/\",\"menuOnTop\":true}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8791/?page=category",
+  "w": 1440,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/after_burger_1440.png",
+  "eval": "{\"links\":[\"/catalog/Pokemon/figurky-ta-dekor-pokemon\",\"/catalog/One-Piece/figurky-ta-dekor-one-piece\"],\"brandImg\":true,\"brandW\":110,\"brandHref\":\"http://127.0.0.1:8791/\",\"menuOnTop\":true}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8791/?page=category",
+  "w": 390,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/after_msearch_scrolled_390.png",
+  "eval": "{\"open\":false,\"dropTop\":49,\"hdrVar\":\"\",\"clear\":{\"hidden\":false,\"w\":44,\"h\":44},\"fieldTop\":10}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8791/?page=stack",
+  "w": 390,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/after_minicart_stack_390.png",
+  "eval": "{\"btnBottom\":799,\"hitIsBtn\":true,\"hit\":\"bs-btn bs-btn-primary\"}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8791/?page=checkout",
+  "w": 1440,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/after_checkout_aside_1440.png",
+  "eval": "{\"asideTop\":85,\"hdrBottom\":69}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8791/?page=info",
+  "w": 1440,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/after_info_anchor_1440.png",
+  "eval": "{\"h2Top\":85,\"hdrBottom\":69,\"tocTop\":-968}",
+  "logs": []
+ },
+ {
+  "url": "http://127.0.0.1:8791/?page=stack",
+  "w": 390,
+  "out": "C:/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/b642cb2c-7a6f-408d-92fd-9696b9c91a99/scratchpad/shots/hdr/after_review_anchor_390.png",
+  "eval": "{\"tabsTop\":77,\"hdrBottom\":61}",
+  "logs": []
+ }
+]

@@ -1,0 +1,37 @@
+{{ header }}
+{# RD-15 (2026-10-04): «Дві колонки». Copy comes from the uk-ua language file (heading_title, text_message);
+   styles live in boostershop-ds.css (section RD-15). Routing to this page is unchanged (CHECKOUT-012). #}
+<div id="checkout-failure" class="container">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+      {% if loop.last %}
+        <li class="breadcrumb-item" aria-current="page"><span>{{ breadcrumb.text }}</span></li>
+      {% else %}
+        <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+  <div class="row">
+    {{ column_left }}
+    <div id="content" class="col">
+      {{ content_top }}
+
+      <section class="bs-failure-card">
+        <div class="bs-failure-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg></div>
+        <div class="bs-failure-body">
+          <h1 class="bs-failure-title">{{ heading_title }}</h1>
+          <div class="bs-failure-message">{{ text_message }}</div>
+          <div class="bs-failure-actions">
+            <a href="{{ continue }}" class="bs-btn bs-btn-secondary">На головну</a>
+            <a href="https://telegram.me/boostershop_tcg" target="_blank" rel="noopener" class="bs-btn bs-btn-secondary"><svg class="bs-failure-tg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#229ED9" d="M21.2 4.3 2.9 11.4c-1 0.4-1 1.7 0 2l4.5 1.5 1.7 5.3c0.2 0.7 1.1 0.9 1.6 0.4l2.6-2.4 4.7 3.4c0.6 0.4 1.4 0.1 1.6-0.6l3-14.6c0.2-1-0.6-1.5-1.4-1.1Zm-3.4 3.5-7.9 7.1-0.3 3-1.2-3.9 9-6.4c0.3-0.2 0.6 0.1 0.4 0.2Z"/></svg> напишіть у Telegram</a>
+          </div>
+        </div>
+      </section>
+
+      {{ content_bottom }}
+    </div>
+    {{ column_right }}
+  </div>
+</div>
+
+{{ footer }}
