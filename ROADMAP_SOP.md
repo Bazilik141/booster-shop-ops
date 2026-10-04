@@ -286,6 +286,7 @@ session does not have to spend search calls on the same lookups.
 | AUTO-013 | `36d6bf20-bdb4-817b-9fec-f03a749b5dad` |
 | BUG-002 | `3666bf20-bdb4-816f-98ae-c41bda2fbd72` |
 | BUG-003 | `3ed6bf20-bdb4-81b9-9428-c72fb23a7aba` | Added 2026-10-02: phantom stock after order-status change (PKM-JP-OUTL-BST) |
+| BUG-004 | `3ef6bf20-bdb4-81ea-9798-f38226cccbec` | Added 2026-10-04 on owner instruction. Mobile mini-cart: A) the item-count badge on the cart trigger does not render (Claude Design header audit, item 10); B) a swipe down on the open drawer triggers pull-to-refresh instead of closing it (owner report). Diagnostic first. Priority Medium, executor not assigned. Build after the header package of the RD-14/15 + UX-003/005/009 batch. |
 | OPS-003 (партія 2026-05-20, return form) | `3666bf20-bdb4-81af-8195-d93e257997d7` |
 | OPS-003 (партія 2026-05-26, workflow templates) | `36c6bf20-bdb4-818d-a6db-e88d8437f845` |
 | OPS-004 | `3aa6bf20-bdb4-81be-ac5b-fa13d3904970` |

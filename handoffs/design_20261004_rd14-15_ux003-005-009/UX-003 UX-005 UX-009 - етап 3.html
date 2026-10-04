@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Етап 3 — варіанти: бренд у бургері, сітка 576–767, фільтр категорії</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="rd14-shared.css">
+<link rel="stylesheet" href="ux-b.css">
+<style>
+.s3-vl{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800;margin:0 0 8px;color:var(--bs-ink)}
+.s3-vl small{font-weight:600;color:var(--bs-ink-3)}
+.s3-rec{font-size:10.5px;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--bs-blue);color:#fff}
+/* brand */
+.s3-bp{width:390px;background:#fff;container-type:inline-size;font-size:14px;line-height:1.5;color:var(--bs-ink);padding-bottom:6px}
+.s3-blogo{display:block;line-height:0}.s3-blogo img{display:block;object-fit:contain}
+.s3-bmenu{font-size:20px;font-weight:800;letter-spacing:-.01em;color:var(--bs-ink)}
+.s3-bink{display:inline-flex;align-items:center;gap:6px;font-size:18px;font-weight:800;letter-spacing:-.035em;text-transform:uppercase;color:var(--bs-ink)}
+/* grid */
+.s3-gc{margin:0 auto;padding-top:12px;padding-bottom:24px}
+.s3-gv-c .ub-h{padding-left:0;padding-right:0}
+.s3-gv-c .ub-h-in{max-width:var(--cw);margin:0 auto;padding:0 12px}
+.s3-chips2{display:grid!important;grid-template-columns:1fr 1fr}
+.s3-act{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px;margin:12px 0}
+.s3-act .ub-btn{flex-wrap:nowrap;white-space:nowrap}
+.stage>div{width:fit-content}
+.s3-g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.s3-short{aspect-ratio:4/3}
+.s3-edge{position:absolute;top:61px;bottom:0;border-left:1.5px dashed var(--bs-blue);opacity:.6;pointer-events:none}
+@container (min-width:769px){.s3-edge{top:69px}}
+/* filter */
+.s3-flay{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:start}
+.s3-ch{padding:20px 22px!important}
+.s3-chrow{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.s3-chrow .ub-chips{background:var(--bs-line-2);padding:4px;border-radius:10px}
+.s3-chrow .ub-chip{border:0;background:transparent;min-height:40px}
+.s3-sort{margin-left:auto;width:220px}
+.s3-fgrid{display:grid;gap:24px;margin-top:16px}
+.s3-fa-cur{border:1px solid #dee2e6;border-radius:6px;background:#fff;font-family:system-ui,sans-serif;font-size:13px;color:#212529}
+.s3-fc-h{padding:10px 16px;background:#f8f9fa;border-bottom:1px solid #dee2e6;font-size:16px}
+.s3-fa-ic{font-size:11px}
+.s3-fc-g{padding:10px 16px;border-bottom:1px solid #dee2e6;font-size:16px;color:#1a6fd6}
+.s3-fc-b{padding:10px 16px;border-bottom:1px solid #dee2e6;display:grid;gap:8px}
+.s3-fc-b label{display:flex;align-items:center;gap:8px}
+.s3-fc-box{width:14px;height:14px;border:1px solid #adb5bd;border-radius:3px}
+.s3-fc-box.is-on{background:#0d6efd;border-color:#0d6efd}
+.s3-fc-f{padding:12px 16px;background:#f8f9fa}
+.s3-fc-btn{display:inline-block;background:#2a9fd6;color:#fff;padding:8px 14px;border-radius:4px;font-weight:600}
+.s3-fa{background:#fff;border:1px solid var(--bs-line);border-radius:var(--bs-r-lg);overflow:hidden}
+.s3-fa-h{display:flex;align-items:center;gap:8px;padding:14px 16px;font-size:15px;font-weight:800;border-bottom:1px solid var(--bs-line)}
+.s3-fa-g{padding:12px 16px 14px;border-bottom:1px solid var(--bs-line-2)}
+.s3-fa-g:last-child{border-bottom:0}
+.s3-fa-t{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--bs-ink-3);margin-bottom:6px}
+.s3-checks{display:grid}
+.s3-ck{display:flex;align-items:center;gap:10px;min-height:36px;font-size:14px;color:var(--bs-ink-2);cursor:pointer}
+.s3-box{width:18px;height:18px;border:1.5px solid var(--bs-ink-4);border-radius:4px;background:#fff;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;color:#fff}
+.s3-box.is-on{background:var(--bs-blue);border-color:var(--bs-blue)}
+.s3-reset{margin-left:auto;font-size:13px;font-weight:600;color:var(--bs-ink-3);text-decoration:underline;text-underline-offset:3px}
+.s3-fb-g{border-bottom:1px solid var(--bs-line-2)}
+.s3-fb-g:last-child{border-bottom:0}
+.s3-fb-t{display:flex;align-items:center;gap:8px;min-height:48px;padding:0 16px;font-weight:700}
+.s3-fb-t .ub-ic{margin-left:auto;color:var(--bs-ink-3)}
+.s3-fb-t .is-up{transform:rotate(180deg)}
+.s3-fb-g .s3-checks{padding:0 16px 12px}
+.s3-cnt{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--bs-blue);color:#fff;font-size:11.5px;font-weight:800}
+.s3-fbar{display:flex;gap:8px;margin-top:14px;position:relative}
+.s3-fbtn{position:relative;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 14px;border:1px solid var(--bs-line);border-radius:8px;background:#fff;font-weight:700}
+.s3-fbtn.is-on{border-color:var(--bs-blue);background:var(--bs-blue-soft);color:var(--bs-blue)}
+.s3-fbtn .is-up{transform:rotate(180deg)}
+.s3-pop{position:absolute;top:calc(100% + 6px);left:0;z-index:50;width:260px;padding:8px 16px;background:#fff;border:1px solid var(--bs-line);border-radius:var(--bs-r-lg);box-shadow:var(--bs-sh-pop);color:var(--bs-ink);font-weight:500}
+.s3-chips-act{display:flex;align-items:center;gap:8px;margin-top:12px}
+.s3-fl{font-size:12.5px;color:var(--bs-ink-3)}
+.s3-fchip{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:999px;background:var(--bs-blue-soft);color:var(--bs-blue);font-size:12.5px;font-weight:700}
+.s3-chips-act .s3-reset{margin-left:4px}
+.ff-vp .ub-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+@container (min-width:1024px){.ff-vp .ub-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.ff-ch{padding:12px!important}
+.ff-row{display:flex;align-items:center;gap:8px;min-width:0}
+.ff-chips{display:flex;gap:6px;flex:1 1 auto;min-width:0;overflow-x:auto;scrollbar-width:none;padding:2px 0}
+.ff-chips::-webkit-scrollbar{display:none}
+.ff-chip{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;min-height:44px;padding:0 12px;border:1px solid var(--bs-line);border-radius:10px;background:#fff;font-weight:700;color:var(--bs-blue);text-decoration:none;white-space:nowrap}
+.ff-chip i{font-style:normal;font-size:11.5px;padding:1px 7px;border-radius:999px;background:var(--bs-gold-soft);color:var(--bs-warning-fg)}
+.ff-tools{display:flex;gap:8px;flex:0 0 auto}
+.ff-fbtn{display:inline-flex;align-items:center;gap:8px;height:44px;min-width:44px;padding:0 12px;border:1px solid var(--bs-line);border-radius:8px;background:#fff;font:inherit;font-weight:700;font-size:14.5px;color:var(--bs-ink);cursor:pointer;position:relative;justify-content:center}
+.ff-fbtn.is-on{border-color:var(--bs-blue);background:var(--bs-blue-soft);color:var(--bs-blue)}
+.ff-fbtn .is-up,.ff-gt .is-up,.ff-close .is-up{transform:rotate(180deg)}
+.ff-sortic{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border:1px solid var(--bs-line);border-radius:8px;background:#fff;color:var(--bs-ink)}
+.ff-sort{width:200px}
+.ff-panel{margin-top:12px;border-top:1px solid var(--bs-line);padding-top:4px}
+.ff-groups{display:grid;grid-template-columns:minmax(0,1fr)}
+.ff-g{border-bottom:1px solid var(--bs-line-2)}
+.ff-gt{display:flex;align-items:center;gap:8px;width:100%;min-height:48px;padding:0 4px;border:0;background:none;font:inherit;font-weight:700;font-size:14.5px;color:var(--bs-ink);cursor:pointer;text-align:left}
+.ff-gt .ub-ic{margin-left:auto;color:var(--bs-ink-3)}
+.ff-g .s3-checks{padding:0 4px 10px}
+.ff-foot{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding-top:12px}
+.ff-close{margin-left:auto;display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 12px;border:1px solid var(--bs-line);border-radius:8px;background:#fff;font:inherit;font-weight:700;font-size:13.5px;color:var(--bs-ink-2);cursor:pointer}
+@container (min-width:576px){.ff-ch{padding:16px 18px!important}.ff-fbtn{padding:0 14px}}
+@container (min-width:768px){.ff-groups{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 24px}}
+@container (min-width:1024px){.ff-ch{padding:20px 22px!important}.ff-ch h1{font-size:26px}.ff-chips{overflow:visible;flex-wrap:wrap;background:var(--bs-line-2);padding:4px;border-radius:10px;flex:0 1 auto}.ff-chip{border:0;background:transparent;min-height:40px}.ff-tools{margin-left:auto}.ff-sort{width:220px}.ff-groups{grid-template-columns:repeat(4,minmax(0,1fr))}.ff-g{border-bottom:0}.ff-gt{padding:0}.ff-g .s3-checks{padding:0 0 8px}.ff-foot{border-top:1px solid var(--bs-line-2);margin-top:4px}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="ux-b-shell.jsx"></script>
+<script type="text/babel" src="ux-b-stage3.jsx"></script>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+const K3 = 'ux-b-stage3';
+const SEC = [['brand', 'Бренд у бургері'], ['grid', 'Сітка 576–767'], ['filter', 'Фільтр категорії']];
+const VAR = {
+  brand: [['cur', 'Зараз'], ['a', 'A · логотип'], ['b', 'B · «Меню»'], ['c', 'C · текст ink']],
+  grid: [['cur', 'Зараз'], ['a', 'A · fluid 576–767'], ['b', 'B · fluid до 991'], ['c', 'C · шапка по контейнеру']],
+  filter: [['final', 'C · фінал'], ['cur', 'Зараз'], ['a', 'A · рескін на місці'], ['b', 'B · групи, що згортаються'], ['c', 'C · перший ескіз']]
+};
+const REC = { brand: 'a', grid: 'b', filter: 'final' };
+const NOTES = {
+  brand: [
+    '<b>Зараз:</b> синій текст «BOOSTER SHOP» і синя блискавка, а в шапці золотий логотип-зображення.',
+    '<b>A · логотип — вибрано.</b> Те саме зображення, що в шапці (<code>{{ logo }}</code>), 110 px, з посиланням на головну. Без нових кольорів.',
+    '<b>B · «Меню»:</b> бренду немає, заголовок «Меню» <span class="ub-ann">копія</span>. Найчистіше, але логотип не повторюється.',
+    '<b>C · текст ink:</b> текст лишається, колір --bs-ink, блискавка --bs-pokemon (золото). Мінімальна правка CSS, але це все одно текстова імітація логотипа.'
+  ],
+  grid: [
+    '<b>Зараз:</b> на 576–767 Bootstrap-контейнер 540 px, а шапка на всю ширину; на 768–991 так само (контейнер 720). Синій пунктир — межі контенту.',
+    '<b>A · fluid 576–767:</b> на 576–767 контейнер на всю ширину з полями 10 px, як у шапки. На 768+ без змін. Найменший обсяг.',
+    '<b>B · fluid до 991:</b> те саме для всіх ширин до 991; на 769–991 поля 32 px, як у шапки desktop. Закриває і розрив на планшетах. <b>Вибрано.</b>',
+    '<b>C · шапка по контейнеру:</b> контент не чіпаємо, ряд шапки обмежено шириною контейнера. На 576–767 пошук стає вужчим, а на 769–991 поле пошуку стискається до іконки (поруч Акаунт, Telegram і повна кнопка кошика). Не рекомендую.',
+    'Перемкніть ширину 700 / 900, щоб побачити різницю між A і B.'
+  ],
+  filter: [
+    '<b>C · фінал (вибрано).</b> Одна кнопка «Фільтр» в одному ряду з підкатегоріями й сортуванням. Вона розгортає панель з усіма групами всередині шапки категорії. Кожну групу можна згорнути окремо. Лічильник на кнопці й на групі — кількість вибраних значень. Кнопки «Пошук» немає: фільтр застосовується одразу після кожної галочки (так модуль працює вже зараз).',
+    '<b>1440:</b> підкатегорії, «Фільтр» і сортування в один ряд. Групи в панелі — колонками, по 4 в ряд.',
+    '<b>768:</b> ряд той самий, але підкатегорії гортаються вбік, щоб «Фільтр» і сортування не переносились. Групи — 2 колонки.',
+    '<b>390:</b> «Фільтр» і сортування — квадратні кнопки 44 px з іконками, підкатегорії гортаються вбік. Групи — одна колонка; «Країна» спочатку згорнута. Сортування — нативний select поверх іконки (<code>#input-sort</code> без змін).',
+    'Вибрані фільтри — чипи UX-004 («Фільтр: Бустер ×», «Скинути») під рядом, коли панель згорнута, і внизу панелі, коли розгорнута.',
+    '<b>Для реалізації:</b> колонку <code>column_right</code> більше не показуємо збоку — її вміст переїжджає в панель у шапці категорії (правка category.twig). Мобільна кнопка «Фільтр» з category-action-toolbar стає цією кнопкою на всіх ширинах. Згортання груп потребує шаблону модуля фільтра (extension/…/filter.twig) — надішліть його, щоб я звірив хуки.',
+    '<b>Попередні варіанти</b> — у перемикачі «Варіант»:',
+    '<b>Зараз:</b> стоковий Bootstrap: іконки Font Awesome, блакитна кнопка «Пошук». Скрипт модуля вже застосовує фільтр при кожній зміні галочки (250 мс), тож кнопка зайва.',
+    '<b>A · рескін на місці:</b> та сама колонка праворуч у картці DS, SVG-іконка, підзаголовки груп, сині чекбокси. Кнопку «Пошук» сховано (<code>#button-filter</code> лишається в DOM). Тільки CSS. Рекомендую.',
+    '<b>B · групи, що згортаються:</b> як A, плюс згортання груп з лічильником вибраних і «Скинути» <span class="ub-ann">копія</span>. Потрібна правка шаблону модуля фільтра.',
+    '<b>C · панель над сіткою:</b> колонки праворуч немає, групи стають кнопками з випадним списком у шапці категорії, сітка — 4 колонки. Найбільша зміна: новий JS і шаблон.',
+    'Вибрані фільтри у всіх варіантах — існуючі чипи UX-004 («Фільтр: Бустер ×»).',
+    'Окремо: колонка фільтра <code>d-md-block</code> показується вже з 768, а мобільна кнопка «Фільтр» — до 991. На 768–991 видно обидві. Пропоную показувати колонку з 992 (<code>d-lg-block</code>).',
+    'Для B і C потрібен шаблон модуля фільтра (extension/…/filter.twig) — у мене його немає.'
+  ]
+};
+function Frame({ w, avail, label, rec, children }) {
+  const z = avail > 100 ? Math.min(1, avail / w) : 1;
+  return <div><p className="s3-vl">{label}{rec && <span className="s3-rec">вибрано</span>}<small>{w} px{z < 1 ? ` · ${Math.round(z * 100)}%` : ''}</small></p><div className="fr-wrap" style={{ zoom: z }}>{children}</div></div>;
+}
+function App() {
+  const sv = (() => { try { return JSON.parse(localStorage.getItem(K3)) || {}; } catch (e) { return {}; } })();
+  const [sec, setSec] = useState(sv.sec || 'brand');
+  const [vs, setVs] = useState(sv.vs || {});
+  const [gw, setGw] = useState(sv.gw || 700);
+  const [avail, setAvail] = useState(1200);
+  const ref = useRef();
+  useEffect(() => { localStorage.setItem(K3, JSON.stringify({ sec, vs, gw })); }, [sec, vs, gw]);
+  useEffect(() => {
+    const el = ref.current; if (!el) return;
+    const m = () => { let w = el.clientWidth - 40; if (w < 100) w = document.documentElement.clientWidth - 40; if (w > 100) setAvail(w); };
+    m(); const iv = setInterval(m, 250); window.addEventListener('resize', m);
+    return () => { clearInterval(iv); window.removeEventListener('resize', m); };
+  }, []);
+  const Seg = ({ items, v, set }) => <div className="seg">{items.map(([k, l]) => <button key={k} aria-pressed={v === k} onClick={() => set(k)}>{l}</button>)}</div>;
+  const v = vs[sec] || (sec === 'brand' ? 'all' : sec === 'filter' ? 'final' : 'cur');
+  const [fo, setFo] = useState(localStorage.getItem(K3 + '-fo') || 'open');
+  useEffect(() => { localStorage.setItem(K3 + '-fo', fo); }, [fo]);
+  const lab = k => VAR[sec].find(x => x[0] === k)[1];
+  let body;
+  if (sec === 'brand') body = VAR.brand.map(([k, l]) => <Frame key={k} w={390} avail={(avail - 84) / 4} label={l} rec={REC.brand === k}><BrandPanel v={k} /></Frame>);
+  if (sec === 'grid') body = <Frame w={gw} avail={avail} label={lab(v)} rec={REC.grid === v}><GridDemo w={gw} v={v} /></Frame>;
+  if (sec === 'filter' && v !== 'final') body = <Frame w={1440} avail={avail} label={lab(v)} rec={REC.filter === v}><FilterDemo v={v} /></Frame>;
+  if (sec === 'filter' && v === 'final') body = [1440, 768, 390].map(w => <Frame key={w + '-' + fo} w={w} avail={avail} label={'C · фінал · ' + (w === 1440 ? 'десктоп' : w === 768 ? 'планшет' : 'мобайл')} rec={w === 1440}><FilterFinal w={w} initOpen={fo === 'open'} /></Frame>);
+  return (
+    <>
+      <div className="tb">
+        <h1>UX-003 / UX-005 / UX-009 — етап 3 · погоджено 04.10.2026: бренд A, сітка B, фільтр C-фінал</h1>
+        <div className="tb-g"><span className="tb-l">Тема</span><Seg items={SEC} v={sec} set={setSec} /></div>
+        {sec !== 'brand' && <div className="tb-g"><span className="tb-l">Варіант</span><Seg items={VAR[sec]} v={v} set={x => setVs({ ...vs, [sec]: x })} /></div>}
+        {sec === 'filter' && v === 'final' && <div className="tb-g"><span className="tb-l">Панель</span><Seg items={[['open', 'розгорнута'], ['closed', 'згорнута']]} v={fo} set={setFo} /></div>}
+        {sec === 'grid' && <div className="tb-g"><span className="tb-l">Ширина</span><Seg items={[[700, '700'], [900, '900']]} v={gw} set={setGw} /></div>}
+      </div>
+      <div className="stage" ref={ref} data-screen-label={sec + ' · ' + v}>{body}</div>
+      <div className="notes"><div className="note"><h2>{SEC.find(x => x[0] === sec)[1]}</h2><ul>{NOTES[sec].map((x, i) => <li key={i} dangerouslySetInnerHTML={{ __html: x }} />)}</ul></div></div>
+    </>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
