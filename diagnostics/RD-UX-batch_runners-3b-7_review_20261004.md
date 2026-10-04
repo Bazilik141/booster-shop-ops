@@ -43,10 +43,21 @@ Executor reports omit `cd ~/public_html` before rollback commands; the owner run
 ## Owner decisions
 
 - R4 header overflow 769–905: **fix** (owner, 2026-10-04) — in the polish runner; icons-only or short cart label at the affected widths so the header fits.
-- R3 filter chips: owner (2026-10-04) rejects full-page reload on every tick as unacceptable UX and wants a modern flow. Options a/b/c only change who renders the chips; none removes the reload. Claude recommends a separate package: AJAX filtering without reload (fetch the same filtered category URL, swap #product-list + pagination + results, chips from the checked state, history.pushState + popstate, re-init load-more, mobile panel stays open with a "show products" action, fallback to normal navigation on any error). No PHP, no DB, URLs/canonical unchanged. Known gap: GA4 view_item_list is not re-sent for AJAX-updated lists. Awaiting owner confirmation.
+- R3 filter chips: owner (2026-10-04) rejects full-page reload on every tick as unacceptable UX and wants a modern flow. Options a/b/c only change who renders the chips; none removes the reload. Claude recommends a separate package: AJAX filtering without reload (fetch the same filtered category URL, swap #product-list + pagination + results, chips from the checked state, history.pushState + popstate, re-init load-more, mobile panel stays open with a "show products" action, fallback to normal navigation on any error). No PHP, no DB, URLs/canonical unchanged. Known gap: GA4 view_item_list is not re-sent for AJAX-updated lists. **Owner confirmed this option (4) for runner 9, 2026-10-04.**
 
 ## Follow-up runners (after runner 7 QA)
 
 Runner 8 (polish): R2, R4 (header fits at 769–905), R6 and any live-QA findings, built on the post-runner-7 state.
-Runner 9 (filters without reload + chips): separate work package after owner confirmation, built on runner 8 output.
+Runner 9 (filters without reload + chips): separate work package (owner-confirmed option 4), built on runner 8 output; Claude Design states brief first.
 BUG-004 builds on the final state.
+
+## Deploy and owner QA (2026-10-04)
+
+Runners 3b, 4, 5, 6, 7 deployed by the owner. Owner QA passed except:
+
+- Console: Chrome issue "CSP blocks the use of `eval`" (`script-src`). Not introduced by this batch: no runner adds `eval`, `new Function` or string timers; the only `new Function` in pulled files is in `nunjucks-slim.js` (unchanged, not referenced by pulled templates). Source unattributed — separate diagnostic if the owner wants it.
+- List/grid toggle: hidden by an earlier owner decision; the QA item is not applicable. Remove it from future QA lists.
+- Category header card <992: owner rejects the single swipe row → two rows (runner 8, INDEX section "Deploy log runners 3b–7 and runner 8").
+- Mobile gap (~35 px) between the category header card and the grid at 400 px → runner 8.
+
+Runner 8 handoff: INDEX section above. Runner 9 design brief: `handoffs/handoff_UX-003_filters-no-reload_visual-design-brief_20261004.md`.

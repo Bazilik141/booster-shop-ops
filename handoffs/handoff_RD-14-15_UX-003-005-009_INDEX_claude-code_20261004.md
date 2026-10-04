@@ -66,6 +66,24 @@ Runner 3b rules:
 
 **Out of this batch:** `BUG-004` (mobile mini-cart: missing quantity badge; swipe-down on the open drawer reloads the page), `CHECKOUT-012`, remaining `TECH-045` work.
 
+**Deploy log runners 3b–7 and runner 8 (owner QA, 2026-10-04).** Runners 3b, 4, 5, 6 and 7 are deployed on production and passed owner QA except the items below. Claude's review: `diagnostics/RD-UX-batch_runners-3b-7_review_20261004.md` (R1–R10).
+
+Build one follow-up runner, `UX-003-005-009_polish_20261004.php` (chain position **8**), on the deployed post-runner-7 state. Reconstruct it outside the repo: live2 pull + runners 1, 2, 3, 3b, 4, 5, 6, 7 from `patches/`; derive every `EXPECTED_SHA` from that state. One work package: layout polish, CSS/Twig only.
+
+1. **Header fits at every width (owner decision: fix).** `.bs-header__actions` overflows the viewport at roughly 769–905 px (measured in the runner-6 report; the upper bound depends on the real fonts — the owner's 900 px screenshot shows the cart button cut off). Fix at the source rules: in the affected range show «Акаунт/Увійти» and «Telegram» as icons only, keeping accessible names (`aria-label` or visually-hidden text), and shorten the cart label (for example icon + total). Determine the range by measurement. Widths where everything already fits, and 390 px, stay unchanged.
+2. **Category header card below 992 px: two rows, no swipe (owner decision).** The owner rejects the single swipe row. Row 1: subcategory pills wrap onto as many lines as needed, counts kept, no horizontal scroll. Row 2: the «Фільтр» button and the sort control side by side, equal width, filling the row, with text labels (no icon-only squares). The filter panel opens below row 2 as now. ≥992 px unchanged.
+3. **Extra gap on mobile.** At 400 px the owner sees about 35 px of empty space between the category header card and the first product row; at ≥992 the gap is about 15 px. Find the cause (empty `.bs-ff-chips`, the panel container, the 14 px margin added by runner 7, or the dead UX-004 chips block), make the gap equal to the ≥992 gap, and name the cause in the report.
+4. **Review R2.** The empty `.bs-ff-chips` placeholder renders an 8×8 grey dot at ≥992 on categories without sub-/sibling categories. Fix at the source rule (`:empty`) or stop rendering the empty placeholder.
+5. **Review R6.** The live-search error button `.bs-ls-state__btn` overflows at 320 px. Let it wrap (`white-space: normal; height: auto; max-width: 100%`) at the source rule.
+
+**Runner 8 rules.** Same runner library and gates as runners 1–7: SHA guard on every target, Twig parse gate on every changed template, hazard scan on added text, CSS balance gate, ds.css `?v=` token bumped once, backup + restore-all-on-fail, idempotent marker, self-delete. No PHP logic, no DB, no `!important` unless the report justifies it. Measure before/after at 320, 360, 390, 576, 768, 769, 800, 900, 991, 992, 1024, 1280 and 1440 px on home, category (with subcategories, without subcategories, with a filter applied), product, search and checkout (no submit); horizontal scroll must be zero at every listed width. Write `diagnostics/UX-003-005-009_polish_report_20261004.md` with files, before/after SHA-256, gates, the rollback command (prefixed with `cd ~/public_html &&`) and an owner QA list. Stop and report if any gate fails or the work crosses this scope.
+
+**Not in runner 8.**
+- Filter chips and filtering without a page reload: runner 9, owner-confirmed (fetch the same filtered category URL, swap the product list, chips from the checked state, `history.pushState`, fallback to a normal reload on error). It waits for the Claude Design states brief `handoffs/handoff_UX-003_filters-no-reload_visual-design-brief_20261004.md`.
+- List/grid toggle: hidden by an earlier owner decision. Do not restore it; drop it from QA lists.
+- `BUG-004`.
+- Console issue: Chrome reports "Content Security Policy of your site blocks the use of `eval`" (`script-src`). None of runners 1–7 adds `eval`, `new Function` or string timers (grep of every changed file). The only `new Function` in the pulled files is in `catalog/view/javascript/nunjucks-slim.js`, unchanged since the pull and not referenced by any pulled template. Source unattributed; separate diagnostic task if the owner wants one.
+
 ---
 
 
