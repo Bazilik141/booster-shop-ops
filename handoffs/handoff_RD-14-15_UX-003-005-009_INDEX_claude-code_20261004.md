@@ -35,6 +35,33 @@ Verified by Claude in `backup-9.24.2026_16-35-03_boosters.tar.gz`:
 - No database writes in any package. RD-15 is the only package that edits a language file.
 - Before delivery, render every listed state locally with fixture data at 390 / 768 / 1440. Put the screenshots and gate output in `diagnostics/<TASK-ID>_<slug>_report_20261004.md`.
 
+**Owner decision after the RD-14 deploy (2026-10-04) — support links.**
+- Every "questions / напишіть у Telegram" support link goes to `https://telegram.me/BoosterShop_Support_bot`. That covers the RD-14 footer link and fallback button, the RD-15 button and `text_message` link, and the package 5 empty-state button.
+- Links that present the channel stay on `https://telegram.me/boostershop_tcg` (burger «Наш Telegram-канал», footer).
+- RD-14 is live with the channel URL, and runner 2 is already built with it. Do not rebuild runner 2.
+- The URL swap is part of runner 3b below; there is no separate micro-runner.
+- Runner 5 uses the bot URL directly.
+
+**Deploy log and runner 3b (owner QA, 2026-10-04).**
+
+Runners 1–3 are deployed on production. Owner QA passed except for the items below. Runner 1 backup: `_patch_backups/RD-14_success-steps_20261004-20261004-111827/`.
+
+Build one follow-up runner, `RD-UX-qa-followups_20261004.php` (chain position **3b**), on top of the deployed post-runner-3 state. Runners 4–7 are then built on 3b's output. Its changes:
+1. **Support links → bot.** Swap `https://telegram.me/boostershop_tcg` for `https://telegram.me/BoosterShop_Support_bot` in the RD-14 footer link and fallback button (`checkout/success.twig`), and in the RD-15 button (`checkout/failure.twig`) and `text_message` link (`extension/ukrainian/catalog/language/uk-ua/checkout/failure.php`; `php -l` and the sprintf check as in runner 2).
+2. **Burger link.** Under One Piece Card Game in `common/header.twig`, add «Набори та бокси One Piece» → `/catalog/One-Piece/one-piece-nabory-ta-boksy`, between «Бустери One Piece» and «Фігурки та декор». The SEO path `60_68` was verified in the 2026-09-24 backup. Root-relative, class `bs-menu__sub`.
+3. **Mini-cart «До каталогу».** In `common/cart.twig`, the empty-state button is `<button … data-bs-mini-cart-close>До каталогу</button>` and only closes the drawer. Owner decision: it closes the mini-cart and then opens the burger catalogue menu (the same action as `#bs-menu-open`).
+   - Keep the close behaviour.
+   - Open the menu only after the mini-cart's scroll lock is released.
+   - QA on phone and desktop that the page scroll and the burger's own lock end in a clean state.
+4. **Review N2** (`diagnostics/RD-UX-batch_runners-1-3_review_20261004.md`): set `#checkout-success .bs-success-f15-k` to `var(--bs-buy-hover)`. This is the only ds.css change in 3b, so 3b bumps the ds.css token in `header.twig`. Runner 4 no longer carries N2.
+
+Runner 3b rules:
+- SHA-guard every target on the deployed state.
+- Run the Twig gate on every changed template (`success.twig`, `failure.twig`, `header.twig`, `cart.twig`).
+- Note that `cart.twig` is not touched by runners 4–7; BUG-004 builds on 3b's output.
+
+**Live search (runner 4).** The owner confirmed the mobile suggestions are too tall. Hiding the description, as runner 4 already specifies, is the owner's requested fix: name up to 2 lines, small thumbnail, price.
+
 **Status.** Notion stays `In progress`. Claude (chat) sets `Done` after owner QA. The executor writes neither Notion nor `ROADMAP_TASKS`.
 
 **Out of this batch:** `BUG-004` (mobile mini-cart: missing quantity badge; swipe-down on the open drawer reloads the page), `CHECKOUT-012`, remaining `TECH-045` work.
