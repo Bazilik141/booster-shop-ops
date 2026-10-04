@@ -1,0 +1,31 @@
+/* === UX-003-GRID: page container fluid from 576 to 991px (2026-10-04) ====== */
+/* Bootstrap caps .container at 540px (576–767) and 720px (768–991) while the header runs full width, so the
+   content was narrower than the header. Below 992 the page wrapper (every template's top-level
+   <div id="…" class="container"> directly inside <main>) now runs full width with the header's own side
+   gutters: 10px up to 768 (body.bs .bs-header, RD-01-02-03 hotfix, max-width 768px) and 32px from 769
+   (body.bs .bs-header 12px 32px). Below 576 nothing changes (Bootstrap is already full width there, 12px).
+   Scoped to `main > .container`, so the cookie bar, the stock #menu and any .container inside a component
+   are not touched. ≥992 is unchanged. Page-specific wrapper rules still win where they exist
+   (#checkout-checkout.bs-co 12px ≤640, #information-information.bs-cp-page padding 0, #common-home ≤768). */
+@media (min-width: 576px) and (max-width: 991.98px) {
+  main > .container {
+    max-width: none;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+/* Up to 768 the page row's gutter follows the 10px padding: with Bootstrap's -12px row margins the row would be
+   4px wider than the viewport, and R07MOB5's `#content { max-width: 100vw !important }` (≤768) then clamps the
+   column on one side only — content 10px from the left edge but 14px from the right. */
+@media (min-width: 576px) and (max-width: 768px) {
+  main > .container > .row {
+    --bs-gutter-x: 20px;
+  }
+}
+@media (min-width: 769px) and (max-width: 991.98px) {
+  main > .container {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+}
+/* === /UX-003-GRID === */

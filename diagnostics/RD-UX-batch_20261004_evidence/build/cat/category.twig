@@ -1,0 +1,1108 @@
+{{ header }}
+<div id="product-category" class="container">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+      <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+
+  <div class="row">
+    {{ column_left }}
+
+    <div id="content" class="col">
+      {{ content_top }}
+
+      {# CAT-002-5c · category accent class #}
+      <div class="bs-cat-header{% if category_code %} bs-cat-header--{{ category_code }}{% endif %}{% if category_is_subcategory %} bs-cat-header--subcategory{% endif %}">
+        <div class="bs-cat-header__strip"></div>
+
+        <div class="bs-cat-header__hero">
+          <div>
+            <div class="bs-cat-header__title">
+              <h1>
+                <span class="bs-heading-full">{{ heading_title }}</span>
+                <span class="bs-heading-mobile">{% if category_heading_short %}{{ category_heading_short }}{% else %}{{ heading_title }}{% endif %}</span>
+              </h1>
+              <span class="bs-count">{{ product_total }} {{ products_total_label }}</span>
+            </div>
+          </div>
+
+        </div>
+
+        {# UX-003-FILTER (2026-10-04): one row — subcategories | «Фільтр» | sort — and the filter panel under it
+           (design «етап 3», «Фільтр категорії», variant C). Replaces the desktop toolbar, the mobile subcategory grid
+           and the mobile action row. The filter module (column_right) renders inside the panel instead of the side
+           column; its aside wrapper is swapped because stylesheet.css hides #column-right below 992px. #}
+        <div class="bs-ff-row">
+          {% if sub_categories|length %}
+            <nav class="bs-ff-chips" aria-label="Підкатегорії">
+              {% for sub in sub_categories %}
+                <a href="{{ sub.href }}" class="bs-ff-chip{% if sub.active %} is-active{% endif %}"{% if sub.active %} aria-current="page"{% endif %}>{{ sub.name }}{% if sub.product_count %}<span class="bs-ff-chip__count">{{ sub.product_count }}</span>{% endif %}</a>
+              {% endfor %}
+            </nav>
+          {% else %}
+            <div class="bs-ff-chips"></div>
+          {% endif %}
+          <div class="bs-ff-tools">
+            {% if column_right %}
+              <button type="button" class="bs-ff-btn" id="bs-ff-toggle" aria-expanded="false" aria-controls="bs-ff-panel">
+                <svg width="17" height="17" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><path d="M2 4h7M12 4h2M2 12h2M7 12h7M9 2.5v3M5 10.5v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                <span class="bs-ff-btn__label">Фільтр</span>
+                <span class="bs-ff-count" hidden>0</span>
+                <svg class="bs-ff-btn__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            {% endif %}
+            <div class="bs-ff-sort">
+              <span class="bs-ff-sort__ic" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 4v16m0 0-3-3m3 3 3-3M17 20V4m0 0-3 3m3-3 3 3"/></svg></span>
+              <select class="bs-select" aria-label="{{ text_sort }}" onchange="location = this.value;">
+                {% for sort_item in sorts %}
+                  <option value="{{ sort_item.href }}"{% if sort_item.value == current_sort %} selected{% endif %}>{{ sort_item.text }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>
+        {% if column_right %}
+          <div class="bs-ff-panel" id="bs-ff-panel" hidden>
+            {{ column_right|replace({'<aside id="column-right" class="col-3 d-none d-md-block">': '<div class="bs-ff-modules">', '</aside>': '</div>'}) }}
+            <div class="bs-ff-foot">
+              <button type="button" class="bs-ff-reset" data-bs-ff-reset hidden>Скинути</button>
+              <button type="button" class="bs-ff-close" data-bs-ff-close>Згорнути <svg class="bs-ff-close__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </div>
+          </div>
+        {% endif %}
+
+        {% if active_filters|length %}
+          <div class="bs-cat-header__filters">
+            <span class="bs-cat-header__filters-label">Фільтр:</span>
+            {% for f in active_filters %}
+              <span class="bs-filter-chip">
+                {{ f.label }}
+                <button class="bs-filter-chip__remove" type="button" aria-label="Прибрати {{ f.label }}" onclick="location='{{ f.remove_url }}'">x</button>
+              </span>
+            {% endfor %}
+            <button class="bs-filter-reset" type="button" onclick="location='{{ reset_url }}'">Скинути все</button>
+          </div>
+        {% endif %}
+      </div>
+
+      {% if products %}
+        <div id="product-list" class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4">
+          {% for product in products %}
+            {# TECH-013 WP2: the first card is the LCP element on mobile (measured
+               340x240 = 81,600 px^2 above the fold at 390x844, the largest element on
+               the page) and thumb.twig marks every card loading="lazy", which defers
+               exactly the image LCP waits for. Promote the first card only — the grid is
+               row-cols-1 on mobile, so one card is above the fold, and eager-loading a
+               full desktop row would compete for bandwidth on throttled 4G. The replace
+               filter is used because product/thumb pre-renders each card to an HTML
+               string, so thumb.twig has no loop index; header.twig uses the same
+               `|replace` idiom for the cart block. #}
+            <div class="col mb-3">{{ loop.first ? product|replace({'loading="lazy"': 'loading="eager" fetchpriority="high"'}) : product }}</div>
+          {% endfor %}
+        </div>
+
+        {# SEO / no-JS fallback: keeps rel=prev/next pager available to crawlers #}
+        <noscript>
+          <div class="row">
+            <div class="col-sm-6 text-start">{{ pagination }}</div>
+            <div class="col-sm-6 text-end">{{ results }}</div>
+          </div>
+        </noscript>
+
+        {# Results count - always visible #}
+        <div class="text-end bs-results-count mb-2">{{ results }}</div>
+
+        {# Load-More block - JS reveals it based on rel=next in <head> #}
+        <div id="bs-load-more-wrap" aria-live="polite" style="display:none">
+          <div class="bs-load-more-progress"
+               id="bs-load-more-progress"
+               data-shown="0"
+               data-total="{{ product_total|default(0) }}">
+            <div class="bs-load-more-progress__label">
+              Ви переглянули <b class="bs-lm-shown">0</b>
+              із <b class="bs-lm-total">{{ product_total|default(0) }}</b> товарів
+            </div>
+            <div class="bs-load-more-progress__track">
+              <div class="bs-load-more-progress__fill" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <button id="bs-load-more-btn" type="button" class="bs-btn-load-more">
+            <span class="bs-load-more-label">Показати ще</span>
+            <span class="bs-load-more-count" id="bs-load-more-count"></span>
+            <svg class="bs-load-more-chev" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="bs-load-more-spinner" aria-hidden="true"></span>
+          </button>
+        </div>
+      {% endif %}
+
+      {% if not categories and not products %}
+        <div class="bs-empty" role="status">
+          <div class="bs-empty__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M6 7h12l-1 12H7L6 7Z" stroke-width="1.7" stroke-linejoin="round"/>
+              <path d="M9 7a3 3 0 0 1 6 0" stroke-width="1.7" stroke-linecap="round"/>
+              <path d="M9.5 13h5" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <p class="bs-empty__title">{{ heading_title }}</p>
+          <p class="bs-empty__text">{{ text_no_results }}</p>
+          <a href="{{ continue }}" class="bs-btn bs-btn-primary bs-empty__cta">{{ button_continue }}</a>
+        </div>
+      {% endif %}
+
+      <div class="category-intro category-seo-panel{% if heading_title == 'Pokémon' or heading_title == 'Pokemon' %} category-seo-pokemon{% elseif heading_title == 'One Piece' %} category-seo-onepiece{% endif %}">
+                        {#
+        {% if image %}
+          <div class="category-thumb-wrap">
+            <div class="category-thumb">
+              <img src="{{ image }}" alt="{{ heading_title }}" title="{{ heading_title }}" class="category-thumb-img"/>
+            </div>
+          </div>
+        {% endif %}
+        #}
+
+
+
+        {% if description %}
+          <div class="category-description">
+            {{ description }}
+          </div>
+        {% endif %}
+      </div>
+
+      {{ content_bottom }}
+    </div>
+  </div>
+</div>
+<style>
+  .bs-subcategory-nav {
+    --bs-subcategory-accent: #1E3A8A;
+    --bs-subcategory-accent-soft: #EFF6FF;
+    --bs-subcategory-card-bg: #FAFBFC;
+    --bs-subcategory-border: #D8DEE8;
+    --bs-subcategory-hover: #F8FAFC;
+    margin: 8px 0 18px;
+  }
+
+  .bs-subcategory-nav--pokemon {
+    --bs-subcategory-accent: #C68A00;
+    --bs-subcategory-accent-soft: #FFF3D2;
+    --bs-subcategory-card-bg: #FFFDF7;
+    --bs-subcategory-border: #DCD6C8;
+    --bs-subcategory-hover: #FFF8E8;
+  }
+
+  .bs-subcategory-nav--onepiece {
+    --bs-subcategory-accent: #1E40AF;
+    --bs-subcategory-accent-soft: #EFF6FF;
+    --bs-subcategory-card-bg: #FAFCFF;
+    --bs-subcategory-border: #D8DEE8;
+    --bs-subcategory-hover: #F8FAFC;
+  }
+
+  .bs-subcategory-nav--yugioh {
+    --bs-subcategory-accent: #1E3A8A;
+    --bs-subcategory-accent-soft: #EFF6FF;
+    --bs-subcategory-card-bg: #FAFBFC;
+    --bs-subcategory-border: #D8DEE8;
+    --bs-subcategory-hover: #F8FAFC;
+  }
+
+  .bs-subcategory-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    max-width: 760px;
+  }
+
+  .bs-subcategory-card {
+    min-height: 68px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border: 1px solid var(--bs-subcategory-border);
+    border-radius: 8px;
+    background: var(--bs-subcategory-card-bg);
+    color: #111827;
+    text-decoration: none;
+    box-shadow: 0 1px 2px rgba(31, 41, 55, 0.04);
+    transition: background-color 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease;
+  }
+
+  .bs-subcategory-card:hover,
+  .bs-subcategory-card:focus {
+    color: #111827;
+    text-decoration: none;
+    background: var(--bs-subcategory-hover);
+    border-color: var(--bs-subcategory-accent);
+    box-shadow: 0 10px 22px rgba(31, 41, 55, 0.08);
+    transform: translateY(-1px);
+  }
+
+  .bs-subcategory-card:focus {
+    outline: 2px solid rgba(30, 58, 138, 0.18);
+    outline-offset: 2px;
+  }
+
+  .bs-subcategory-icon {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: var(--bs-subcategory-accent-soft);
+    color: var(--bs-subcategory-accent);
+    border: 1px solid rgba(31, 41, 55, 0.06);
+  }
+
+  .bs-subcategory-icon i {
+    font-size: 19px;
+    line-height: 1;
+  }
+
+  .bs-subcategory-name {
+    min-width: 0;
+    color: #111827;
+    font-size: 17px;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+
+  .category-sort-group .input-group-text,
+  .category-limit-group .input-group-text {
+    min-width: 44px;
+    justify-content: center;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .category-sort-group .input-group-text i,
+  .category-limit-group .input-group-text i {
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 991.98px) {
+    .bs-subcategory-nav {
+      margin: 4px 0 12px;
+    }
+
+    .bs-subcategory-list {
+      grid-template-columns: 1fr;
+      gap: 8px;
+      max-width: none;
+    }
+
+    .bs-subcategory-card {
+      min-height: 56px;
+      padding: 9px 12px;
+      gap: 10px;
+    }
+
+    .bs-subcategory-icon {
+      width: 36px;
+      height: 36px;
+      flex-basis: 36px;
+    }
+
+    .bs-subcategory-icon i {
+      font-size: 17px;
+    }
+
+    .bs-subcategory-name {
+      font-size: 15.5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+       .category-controls-row {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 0px;
+    }
+
+
+    .category-controls-row > div:first-child {
+      width: 62%;
+      flex: 0 0 62%;
+    }
+
+    .category-controls-row > div:last-child {
+      width: 38%;
+      flex: 0 0 38%;
+    }
+
+    .category-sort-group .input-group-text,
+    .category-limit-group .input-group-text {
+      min-width: 40px;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+
+    .category-sort-group .form-select,
+    .category-limit-group .form-select {
+      font-size: 0.875rem;
+      padding-left: 0.45rem;
+      padding-right: 1.8rem;
+    }
+  }
+    .category-intro {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-top: 16px;
+    margin-bottom: 8px;
+  }
+
+  .category-thumb-wrap {
+    flex: 0 0 220px;
+    max-width: 220px;
+  }
+
+  .category-thumb {
+    width: 220px;
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .category-thumb-bg {
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+  }
+
+  .category-description {
+    flex: 1 1 auto;
+  }
+
+  @media (max-width: 991.98px) {
+    .category-intro {
+      align-items: flex-start;
+      gap: 14px;
+      margin-top: 12px;
+      margin-bottom: 4px;
+    }
+
+    .category-thumb-wrap {
+      flex: 0 0 120px;
+      max-width: 120px;
+    }
+
+    .category-thumb {
+      width: 120px;
+      height: 60px;
+    }
+  }
+
+
+  /* R-03 final · segmented chips (desktop) + subcat-tabs (mobile) + action-row */
+
+  .bs-cat-header { margin-bottom: 0; }
+
+  /* UI-CAT-GAP · desktop toolbar-to-grid spacing */
+  @media (min-width: 992px) {
+    #product-category .bs-cat-header { margin-bottom: 16px; }
+  }
+  .bs-cat-header__hero { align-items: flex-start; }
+  .bs-cat-header__title { flex-wrap: wrap; }
+
+  /* Active filter chips — separate row inside the header card. */
+  .bs-cat-header__filters {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    padding: 10px 22px;
+    border-top: 1px solid var(--bs-line-2);
+    background: #fff;
+  }
+  .bs-cat-header__filters-label {
+    font-size: 12.5px; color: var(--bs-ink-3);
+  }
+
+  @media (max-width: 991.98px) {
+    .bs-cat-header__filters { padding: 10px 14px; }
+  }
+
+  /* R-03 visual fix - owner mobile reference */
+  @media (max-width: 991.98px) {
+    .bs-cat-header__hero {
+      padding: 18px 16px 14px;
+    }
+
+    .bs-cat-header__title h1 {
+      font-size: 24px;
+      line-height: 1.12;
+    }
+
+  }
+
+  /* R-03 mobile subcategory heading cleanup */
+  .bs-heading-mobile {
+    display: none;
+  }
+
+  @media (max-width: 991.98px) {
+    .bs-heading-full {
+      display: none;
+    }
+
+    .bs-heading-mobile {
+      display: inline;
+    }
+
+    .bs-cat-header--subcategory .bs-cat-header__title {
+      align-items: flex-start;
+    }
+
+    .bs-cat-header--subcategory .bs-cat-header__title .bs-count {
+      display: none;
+    }
+  }
+
+  /* UI-FIX-20260903 T9 · C3 inversion. At phone widths the category name drops
+     to a caption line above the subcategory grid, which becomes the page's
+     primary navigation. The element stays a real <h1> — this is visual only,
+     and the name is still in the breadcrumbs. Placed after the 991.98px block
+     on purpose: it has to win at 640px and below. */
+  @media (max-width: 640px) {
+    .bs-cat-header__hero {
+      padding: 14px 14px 4px;
+    }
+
+    .bs-cat-header__title {
+      align-items: baseline;
+      gap: 5px;
+      margin: 0 2px 2px;
+    }
+
+    .bs-cat-header__title h1 {
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--bs-ink);
+    }
+
+    .bs-cat-header__title .bs-count {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--bs-ink-4);
+    }
+
+    .bs-cat-header__title .bs-count::before {
+      content: "· ";
+    }
+
+  }
+
+  /* Load More button - visual handoff */
+  :root {
+    --bs-blue: #1E3A8A;
+    --bs-blue-soft: #E8EEFB;
+    --bs-line: #E5E7EB;
+    --bs-ink: #111827;
+    --bs-ink-3: #6B7280;
+    --bs-paper: #FFFFFF;
+    --bs-r-pill: 999px;
+  }
+
+  #bs-load-more-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 26px 0 16px;
+  }
+
+  .bs-results-count {
+    font-size: 13px;
+    color: var(--bs-ink-3);
+    text-align: right;
+    margin: 22px 2px 0;
+  }
+  .bs-results-count b { color: var(--bs-ink); font-weight: 700; }
+
+  .bs-load-more-progress {
+    width: 300px;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .bs-load-more-progress__label {
+    font-size: 12.5px;
+    color: var(--bs-ink-3);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .bs-load-more-progress__label b { color: var(--bs-ink); font-weight: 700; }
+  .bs-load-more-progress__track {
+    width: 100%;
+    height: 5px;
+    border-radius: 999px;
+    background: var(--bs-line);
+    overflow: hidden;
+  }
+  .bs-load-more-progress__fill {
+    height: 100%;
+    border-radius: 999px;
+    background: var(--bs-blue);
+    transition: width .4s ease;
+  }
+
+  .bs-btn-load-more {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 300px;
+    max-width: 100%;
+    min-height: 50px;
+    padding: 0 28px;
+    font-family: inherit;
+    font-size: 14.5px;
+    font-weight: 700;
+    letter-spacing: .01em;
+    white-space: nowrap;
+    border-radius: var(--bs-r-pill);
+    cursor: pointer;
+    background: var(--bs-paper);
+    border: 1.5px solid var(--bs-blue);
+    color: var(--bs-blue);
+    box-shadow: 0 1px 0 rgba(17,24,39,0.03); /* UX-003-FILTER (review N3): was var(--bs-sh-sm), which the :root above redefined page-wide */
+    transition: background .18s ease, border-color .18s ease, color .18s ease, transform .1s ease;
+  }
+  .bs-btn-load-more:hover:not(:disabled) { background: var(--bs-blue-soft); }
+  .bs-btn-load-more:active { transform: translateY(1px); }
+  .bs-btn-load-more:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(30,58,138,0.18);
+  }
+  .bs-btn-load-more:disabled { cursor: wait; }
+
+  .bs-load-more-count {
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 1;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: var(--bs-blue-soft);
+    color: var(--bs-blue);
+  }
+
+  .bs-load-more-chev {
+    width: 16px;
+    height: 16px;
+    flex: 0 0 auto;
+    transition: transform .18s ease;
+  }
+  .bs-btn-load-more:hover .bs-load-more-chev { transform: translateY(2px); }
+
+  .bs-load-more-spinner {
+    display: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    animation: bs-spin .6s linear infinite;
+  }
+  .bs-btn-load-more.loading { pointer-events: none; }
+  .bs-btn-load-more.loading .bs-load-more-chev { display: none; }
+  .bs-btn-load-more.loading .bs-load-more-spinner { display: inline-block; }
+  .bs-btn-load-more.loading .bs-load-more-label { opacity: .65; }
+  @keyframes bs-spin { to { transform: rotate(360deg); } }
+
+  @media (max-width: 760px) {
+    .bs-results-count { text-align: center; }
+    .bs-load-more-progress,
+    .bs-btn-load-more { width: 100%; max-width: 360px; }
+    .bs-btn-load-more { min-height: 48px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bs-load-more-progress__fill,
+    .bs-load-more-chev,
+    .bs-btn-load-more { transition: none; }
+    .bs-load-more-spinner { animation-duration: 1.2s; }
+  }
+</style>
+
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var content = document.getElementById('content');
+
+
+  function setMobileView(mode) {
+    if (!content) {
+      return;
+    }
+
+    if (mode === 'list') {
+      content.classList.add('mobile-force-list');
+      content.classList.remove('mobile-force-grid');
+      localStorage.setItem('mobileCatalogView', 'list');
+    } else {
+      content.classList.add('mobile-force-grid');
+      content.classList.remove('mobile-force-list');
+      localStorage.setItem('mobileCatalogView', 'grid');
+    }
+
+    syncMobileButtons();
+  }
+
+  function syncMobileButtons() {
+    if (!mobileListBtn || !mobileGridBtn || !content) {
+      return;
+    }
+
+    var isList = content.classList.contains('mobile-force-list');
+
+    mobileListBtn.classList.toggle('active', isList);
+    mobileGridBtn.classList.toggle('active', !isList);
+  }
+
+ 
+
+    if (content) {
+    content.classList.remove('mobile-force-list');
+    content.classList.remove('mobile-force-grid');
+  }
+
+
+    window.addEventListener('resize', function () {
+    if (!content) {
+      return;
+    }
+
+    content.classList.remove('mobile-force-list');
+    content.classList.remove('mobile-force-grid');
+  });
+
+});
+</script>
+<script>
+/* UX-003-FILTER (2026-10-04): filter panel — open/close, per-group collapse, selection counters, «Скинути».
+   Applying a filter stays with the filter module's own script (a checkbox change applies it after 250 ms). */
+(function () {
+  var toggle = document.getElementById('bs-ff-toggle');
+  var panel = document.getElementById('bs-ff-panel');
+  if (!toggle || !panel) return;
+
+  var closeButton = panel.querySelector('[data-bs-ff-close]');
+  var resetButton = panel.querySelector('[data-bs-ff-reset]');
+  var groups = panel.querySelectorAll('[data-bs-ff-group]');
+  var narrow = window.matchMedia ? window.matchMedia('(max-width: 575.98px)').matches : false;
+
+  function setPanel(open) {
+    panel.hidden = !open;
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+
+  function setGroup(button, body, open) {
+    button.setAttribute('aria-expanded', open ? 'true' : 'false');
+    body.hidden = !open;
+  }
+
+  function checked(scope) {
+    return scope.querySelectorAll('input[name="filter[]"]:checked');
+  }
+
+  function syncCounts() {
+    Array.prototype.forEach.call(groups, function (group) {
+      var badge = group.querySelector('.bs-ff-gt .bs-ff-count');
+      var n = checked(group).length;
+      if (badge) {
+        badge.textContent = String(n);
+        badge.hidden = n === 0;
+      }
+    });
+    var total = checked(panel).length;
+    var mainBadge = toggle.querySelector('.bs-ff-count');
+    if (mainBadge) {
+      mainBadge.textContent = String(total);
+      mainBadge.hidden = total === 0;
+    }
+    if (resetButton) resetButton.hidden = total === 0;
+  }
+
+  Array.prototype.forEach.call(groups, function (group, index) {
+    var button = group.querySelector('.bs-ff-gt');
+    var body = group.querySelector('.bs-ff-checks');
+    if (!button || !body) return;
+    setGroup(button, body, !narrow || index === 0);
+    button.addEventListener('click', function () {
+      setGroup(button, body, body.hidden);
+    });
+  });
+
+  toggle.addEventListener('click', function () {
+    setPanel(panel.hidden);
+  });
+
+  if (closeButton) {
+    closeButton.addEventListener('click', function () {
+      setPanel(false);
+      toggle.focus();
+    });
+  }
+
+  if (resetButton) {
+    resetButton.addEventListener('click', function () {
+      Array.prototype.forEach.call(checked(panel), function (input) {
+        input.checked = false;
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+    });
+  }
+
+  panel.addEventListener('change', syncCounts);
+  syncCounts();
+})();
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {% for breadcrumb in breadcrumbs %}
+    {
+      "@type": "ListItem",
+      "position": {{ loop.index }},
+      {% if loop.first %}
+      "name": "Головна",
+{% else %}
+      "name": {{ breadcrumb.text|striptags|json_encode|raw }},
+{% endif %}
+
+      "item": {{ breadcrumb.href|replace({'&amp;': '&'})|json_encode|raw }}
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+
+<style>
+  .bs-faq-accordion {
+    margin: 24px 0;
+    border: 1px solid #d7dce4;
+    border-radius: 8px;
+    background: #ffffff;
+  }
+
+  .bs-faq-title {
+    margin: 0;
+    padding: 16px 18px 8px;
+    color: #111827;
+    font-size: 1.25rem;
+    line-height: 1.25;
+  }
+
+  .bs-faq-item {
+    border-top: 1px solid #e5e7eb;
+  }
+
+  .bs-faq-question {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.35;
+  }
+
+  .bs-faq-toggle {
+    width: 100%;
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 13px 18px;
+    border: 0;
+    background: #f8fafc;
+    color: #111827;
+    font: inherit;
+    font-weight: 700;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .bs-faq-toggle:hover,
+  .bs-faq-toggle:focus {
+    background: #eef2f7;
+    color: #111827;
+  }
+
+  .bs-faq-toggle:focus {
+    outline: 2px solid #64748b;
+    outline-offset: -2px;
+  }
+
+  .bs-faq-icon {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    position: relative;
+  }
+
+  .bs-faq-icon::before,
+  .bs-faq-icon::after {
+    content: "";
+    position: absolute;
+    background: #334155;
+    border-radius: 2px;
+  }
+
+  .bs-faq-icon::before {
+    left: 2px;
+    right: 2px;
+    top: 8px;
+    height: 2px;
+  }
+
+  .bs-faq-icon::after {
+    left: 8px;
+    top: 2px;
+    bottom: 2px;
+    width: 2px;
+  }
+
+  .bs-faq-toggle[aria-expanded="true"] .bs-faq-icon::after {
+    display: none;
+  }
+
+  .bs-faq-panel {
+    padding: 14px 18px 16px;
+    color: #374151;
+    background: #ffffff;
+  }
+
+  .bs-faq-panel p:last-child {
+    margin-bottom: 0;
+  }
+
+  .bs-special-seo {
+    margin: 0 0 22px;
+  }
+
+  @media (max-width: 767.98px) {
+    .bs-faq-accordion {
+      margin: 18px 0;
+    }
+
+    .bs-faq-title {
+      padding: 14px 14px 7px;
+      font-size: 1.15rem;
+    }
+
+    .bs-faq-toggle {
+      min-height: 50px;
+      padding: 12px 14px;
+    }
+
+    .bs-faq-panel {
+      padding: 12px 14px 14px;
+    }
+  }
+</style>
+
+<script>
+(function () {
+  if (window.bsFaqAccordionReady) {
+    return;
+  }
+
+  window.bsFaqAccordionReady = true;
+
+  function setExpanded(button, expanded) {
+    var panelId = button.getAttribute('aria-controls');
+    var panel = panelId ? document.getElementById(panelId) : null;
+
+    button.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+
+    if (panel) {
+      panel.hidden = !expanded;
+    }
+  }
+
+  document.addEventListener('click', function (event) {
+    var button = event.target.closest('[data-bs-faq-toggle]');
+
+    if (!button) {
+      return;
+    }
+
+    setExpanded(button, button.getAttribute('aria-expanded') !== 'true');
+  });
+
+  document.addEventListener('keydown', function (event) {
+    var button = event.target.closest('[data-bs-faq-toggle]');
+
+    if (!button || (event.key !== 'Enter' && event.key !== ' ')) {
+      return;
+    }
+
+    event.preventDefault();
+    button.click();
+  });
+})();
+</script>
+
+
+<script>
+(function () {
+  'use strict';
+
+  var wrap = document.getElementById('bs-load-more-wrap');
+  var btn = document.getElementById('bs-load-more-btn');
+  var list = document.getElementById('product-list');
+
+  if (!wrap || !btn || !list) {
+    return;
+  }
+
+  var progress = document.getElementById('bs-load-more-progress');
+  var fill = wrap.querySelector('.bs-load-more-progress__fill');
+  var shownEl = wrap.querySelector('.bs-lm-shown');
+  var totalEl = wrap.querySelector('.bs-lm-total');
+  var countEl = document.getElementById('bs-load-more-count');
+
+  function countCards() {
+    return list.querySelectorAll('.col').length;
+  }
+
+  function parseTotalFromResults() {
+    var resultsEl = document.querySelector('.bs-results-count');
+    var text = resultsEl ? resultsEl.textContent.replace(/\u00a0/g, ' ') : '';
+    var match = text.match(/із\s+(\d+)/i) || text.match(/of\s+(\d+)/i) || text.match(/(\d+)\s*$/);
+    return match ? parseInt(match[1], 10) : 0;
+  }
+
+  var total = progress ? parseInt(progress.getAttribute('data-total'), 10) : 0;
+  if (!total) {
+    total = parseTotalFromResults();
+  }
+
+  var perPage = countCards() || 15;
+
+  function getNextUrl(doc) {
+    var el = (doc || document).querySelector('link[rel="next"]');
+    return el ? el.href : null;
+  }
+
+  function setNextUrl(url) {
+    var el = document.querySelector('link[rel="next"]');
+
+    if (url) {
+      if (el) {
+        el.href = url;
+      } else {
+        var link = document.createElement('link');
+        link.rel = 'next';
+        link.href = url;
+        document.head.appendChild(link);
+      }
+    } else if (el) {
+      el.parentNode.removeChild(el);
+    }
+  }
+
+  function refreshUI() {
+    var shown = countCards();
+
+    if (!total) {
+      total = parseTotalFromResults();
+    }
+
+    if (shownEl) {
+      shownEl.textContent = shown;
+    }
+
+    if (totalEl && total) {
+      totalEl.textContent = total;
+    }
+
+    if (fill && total) {
+      fill.style.width = Math.min(100, Math.round((shown / total) * 100)) + '%';
+    }
+
+    if (countEl) {
+      var remaining = total ? Math.max(0, total - shown) : 0;
+      var next = Math.min(perPage, remaining);
+
+      if (next > 0) {
+        countEl.textContent = '+' + next;
+        countEl.style.display = '';
+      } else {
+        countEl.style.display = 'none';
+      }
+    }
+  }
+
+  var nextUrl = getNextUrl(document);
+
+  if (nextUrl) {
+    wrap.style.display = '';
+    refreshUI();
+  }
+
+  btn.addEventListener('click', function () {
+    if (!nextUrl || btn.disabled) {
+      return;
+    }
+
+    btn.disabled = true;
+    btn.classList.add('loading');
+
+    fetch(nextUrl, { credentials: 'same-origin' })
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error('HTTP ' + response.status);
+        }
+
+        return response.text();
+      })
+      .then(function (html) {
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(html, 'text/html');
+        var newCols = doc.querySelectorAll('#product-list > .col');
+
+        if (newCols.length) {
+          perPage = newCols.length;
+        }
+
+        newCols.forEach(function (col) {
+          list.appendChild(col);
+        });
+
+        nextUrl = getNextUrl(doc);
+        setNextUrl(nextUrl);
+
+        btn.disabled = false;
+        btn.classList.remove('loading');
+        refreshUI();
+
+        if (!nextUrl) {
+          wrap.style.display = 'none';
+        }
+      })
+      .catch(function (error) {
+        console.error('[bs-load-more] fetch error:', error);
+        btn.disabled = false;
+        btn.classList.remove('loading');
+      });
+  });
+})();
+</script>
+{{ footer }}

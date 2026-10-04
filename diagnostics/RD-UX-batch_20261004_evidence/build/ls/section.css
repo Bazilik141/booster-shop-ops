@@ -1,0 +1,242 @@
+/* === UX-009-LS: live search suggestions (2026-10-04) ====================== */
+/* The module's own stylesheet (extension/ps_live_search/…/ps_live_search.css) loads after this file and styles
+   the list on Bootstrap variables. These rules are scoped to #ps-live-search so they win on specificity — no
+   !important. bs-ls-* classes and the state rows are added by the init in common/header.twig after the module
+   has rendered; ps_live_search.js itself is not changed. Mobile (≤768) placement stays in the «A — MOBILE:
+   ps-live-search dropdown position override» block above. */
+#ps-live-search.ps-live-search-list {
+  padding: 6px 0;
+  color: var(--bs-ink);
+  background: #fff;
+  font-size: 14px;
+  line-height: 1.4;
+}
+@media (min-width: 769px) {
+  #ps-live-search.ps-live-search-list {
+    top: calc(100% + 6px);
+    border: 1px solid var(--bs-line);
+    border-radius: var(--bs-r-lg);
+    box-shadow: 0 12px 32px rgba(17, 24, 39, 0.16);
+    max-height: calc(100vh - var(--bs-header-sticky-h, 69px) - 24px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
+#ps-live-search .ps-live-search-subheader {
+  padding: 10px 16px;
+  font-size: 13px;
+  color: var(--bs-ink-3);
+  background: none;
+  border-bottom: 1px solid var(--bs-line-2);
+}
+#ps-live-search .ps-live-search-subheader > output {
+  color: var(--bs-ink);
+  font-weight: 700;
+}
+#ps-live-search .ps-live-search-header {
+  margin: 0;
+  padding: 12px 16px 4px;
+  border: 0;
+  font-size: 11.5px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--bs-ink-3);
+}
+
+/* Category / manufacturer / information rows: 44px, chevron appended by the init. */
+#ps-live-search .ps-live-search-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 16px;
+  color: var(--bs-ink-2);
+  font-weight: 600;
+  text-decoration: none;
+}
+#ps-live-search .ps-live-search-item:is(:hover, :focus) {
+  background: var(--bs-line-2);
+}
+#ps-live-search .ps-live-search-item:focus-visible {
+  outline: 2px solid var(--bs-blue);
+  outline-offset: -2px;
+}
+#ps-live-search .bs-ls-link .thumb {
+  display: none;
+}
+#ps-live-search .bs-ls-chev {
+  flex: 0 0 auto;
+  color: var(--bs-ink-4);
+}
+
+/* Product rows: 56px thumbnail | name (2 lines) over price. The description is not shown (owner, 2026-10-04). */
+#ps-live-search .description {
+  display: none;
+}
+#ps-live-search .bs-ls-product {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  grid-template-areas: "thumb info" "thumb prices";
+  align-content: center;
+  align-items: center;
+  gap: 3px 12px;
+  min-height: 68px;
+  padding: 6px 16px;
+  font-weight: 400;
+}
+#ps-live-search .bs-ls-product .thumb {
+  grid-area: thumb;
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  border: 1px solid var(--bs-line);
+  border-radius: 8px;
+  background: #fff;
+}
+#ps-live-search .bs-ls-product .info {
+  grid-area: info;
+  display: block;
+  min-width: 0;
+}
+#ps-live-search .bs-ls-product .name {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--bs-ink);
+}
+#ps-live-search .bs-ls-product .prices {
+  grid-area: prices;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: baseline;
+  gap: 0 8px;
+}
+#ps-live-search .bs-ls-product .price-new {
+  order: 1;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--bs-ink);
+}
+#ps-live-search .bs-ls-product .price-old + .price-new {
+  color: var(--bs-danger);
+}
+#ps-live-search .bs-ls-product .price-old {
+  order: 2;
+  font-size: 13px;
+  color: var(--bs-ink-4);
+  text-decoration: line-through;
+}
+#ps-live-search .bs-ls-product .price-tax {
+  order: 3;
+  font-size: 12px;
+  color: var(--bs-ink-3);
+}
+
+/* A section with nothing in it while another has results (the all-empty case becomes one state row). */
+#ps-live-search .ps-live-search-item-text {
+  display: block;
+  padding: 4px 16px 10px;
+  font-size: 13.5px;
+  color: var(--bs-ink-3);
+}
+#ps-live-search span.ps-live-search-more {
+  display: none;
+}
+#ps-live-search a.ps-live-search-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  margin: 8px 12px 4px;
+  padding: 0 16px;
+  border: 1px solid var(--bs-line);
+  border-radius: 8px;
+  color: var(--bs-blue);
+  font-weight: 700;
+  text-decoration: none;
+}
+#ps-live-search a.ps-live-search-more:is(:hover, :focus-visible) {
+  background: var(--bs-blue-soft);
+}
+#ps-live-search a.ps-live-search-more > i {
+  display: none; /* the module's Font Awesome caret; the init appends an arrow */
+}
+
+/* Loading: the module renders a Font Awesome icon; the spinner is drawn on its container instead. */
+#ps-live-search .ps-live-search-item-loading {
+  display: flex;
+  justify-content: center;
+  padding: 28px 16px;
+}
+#ps-live-search .ps-live-search-item-loading > i {
+  display: none;
+}
+#ps-live-search .ps-live-search-item-loading::before {
+  content: "";
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+  border: 2.5px solid var(--bs-line);
+  border-top-color: var(--bs-blue);
+  border-radius: 50%;
+  animation: bs-ls-spin 0.8s linear infinite;
+}
+@keyframes bs-ls-spin {
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  #ps-live-search .ps-live-search-item-loading::before {
+    animation-duration: 2.4s;
+  }
+}
+
+/* No results / error: one centred row. */
+#ps-live-search .bs-ls-state {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 28px 20px;
+  text-align: center;
+}
+#ps-live-search .bs-ls-state strong {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--bs-ink);
+}
+#ps-live-search .bs-ls-state p {
+  max-width: 34ch;
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--bs-ink-3);
+}
+#ps-live-search .bs-ls-state__ic {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bs-line-2);
+  color: var(--bs-ink-3);
+}
+#ps-live-search .bs-ls-state--error .bs-ls-state__ic {
+  background: var(--bs-warning-bg);
+  border: 1px solid var(--bs-warning-line);
+  color: var(--bs-warning-fg);
+}
+#ps-live-search .bs-ls-state__btn {
+  gap: 6px;
+  min-height: 44px;
+  margin-top: 4px;
+}
+/* === /UX-009-LS === */

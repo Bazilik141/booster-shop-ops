@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="uk">
+   
+
+<head>
+    <meta name="google-site-verification" content="2Sfu39n_UtBLjmm6xl-esdCBiJiJ2jwYdCGvGmOOjdc" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Pokémon</title>
+  <base href="http://HOST/"/>
+        
+  <meta property="og:title" content="Pokémon"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="http://HOST/"/>
+    
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:title" content="Pokémon"/>
+    
+    <script src="catalog/view/javascript/jquery/jquery-3.7.1.min.js" type="text/javascript"></script>
+      
+  <link href="catalog/view/stylesheet/bootstrap.css" type="text/css" rel="stylesheet" media="screen"/>
+      <link href="catalog/view/stylesheet/fonts/fontawesome/css/all.min.css" rel="stylesheet" type="text/css" media="print" onload="this.media='all'"/>
+  <noscript><link href="catalog/view/stylesheet/fonts/fontawesome/css/all.min.css" rel="stylesheet" type="text/css"/></noscript>
+      <link rel="preload" href="catalog/view/stylesheet/fonts/manrope/manrope-cyrillic.woff2?v=manrope-v20" as="font" type="font/woff2" crossorigin>
+  <style>
+    @font-face{font-family:'Manrope';font-style:normal;font-weight:200 800;font-display:swap;src:url(catalog/view/stylesheet/fonts/manrope/manrope-cyrillic.woff2?v=manrope-v20) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+    @font-face{font-family:'Manrope';font-style:normal;font-weight:200 800;font-display:swap;src:url(catalog/view/stylesheet/fonts/manrope/manrope-latin-ext.woff2?v=manrope-v20) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+    @font-face{font-family:'Manrope';font-style:normal;font-weight:200 800;font-display:swap;src:url(catalog/view/stylesheet/fonts/manrope/manrope-latin.woff2?v=manrope-v20) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+  </style>
+  <link href="catalog/view/stylesheet/boostershop-ds.css?v=TOKEN" type="text/css" rel="stylesheet"/>
+  <link href="catalog/view/stylesheet/bs-faq.css?v=rd05b-faq-20260604" type="text/css" rel="stylesheet"/>
+    <link href="catalog/view/stylesheet/content-pages.css?v=tech045-wpa-20260928" type="text/css" rel="stylesheet"/>
+<link href="catalog/view/stylesheet/stylesheet.css?v=rd10-breadcrumb-mockup-20260611e" type="text/css" rel="stylesheet"/>
+<link href="catalog/view/stylesheet/booster-typography.css?v=tech045-wpe-20260929" rel="stylesheet">
+
+  <script src="catalog/view/javascript/common.js?v=cartjslogs-20260526" type="text/javascript" defer></script>
+  <script src="catalog/view/javascript/booster-product-polish.js?v=tech045-wpc0-20260928" type="text/javascript" defer></script>
+  <script src="catalog/view/javascript/bs-faq.js?v=rd05b-faq-20260604" type="text/javascript" defer></script>
+
+        <link href="extension/ps_live_search/catalog/view/stylesheet/ps_live_search.css" type="text/css" rel="stylesheet" media="screen"/>
+        <script src="extension/ps_live_search/catalog/view/javascript/ps_live_search.js" type="text/javascript" defer></script>
+      <link href="http://HOST/index.php?route=product/category&path=59&filter=12%2C21" rel="canonical"/>
+  
+        <script>
+    (function () {
+      if (window.ps_dataLayer && typeof window.ps_dataLayer === 'object' && Object.prototype.hasOwnProperty.call(window.ps_dataLayer, 'tracking_delay')) {
+        window.ps_dataLayer.tracking_delay = 0;
+      }
+    })();
+  </script>
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="data:text/javascript,//"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "wufz7dj4ug");
+  </script>
+  <style>
+    /* Максимально жорстке приховування полів через атрибути модуля */
+    [field_id="company"], 
+    [field_id="postcode"],
+    [field_id="shipping_address.company"],
+    [field_id="shipping_address.postcode"],
+    #payment_address_company,
+    #payment_address_postcode,
+    .field-sortable:has(#payment_address_company),
+    .field-sortable:has(#payment_address_postcode) { 
+        display: none !important; 
+        visibility: hidden !important;
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        opacity: 0 !important;
+    }
+        #top {
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+
+    #top .list-inline {
+        margin-bottom: 0;
+    }
+
+       header {
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-top: 0;
+    }
+
+
+             header .row {
+        display: flex;
+        align-items: flex-start;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+    header .container {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    #logo {
+        margin: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        line-height: 0;
+    }
+
+    #cart {
+        margin-top: 18px !important;
+        margin-bottom: 0 !important;
+    }
+
+
+
+
+             #logo {
+        margin: 0 0 -10px 0;
+        line-height: 0;
+    }
+
+
+    #logo img {
+        width: 100%;
+        max-width: 320px;
+        height: auto;
+        display: block;
+    }
+
+
+    header .container {
+        padding-bottom: 0;
+    }
+
+    main {
+        padding-top: 0;
+    }
+
+    #menu,
+    main > .container:first-child,
+    #common-home {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+
+    @media (max-width: 991.98px) {
+        #top .list-inline-item {
+            margin-right: 10px !important;
+        }
+
+        #top a {
+            font-size: 0.95rem;
+        }
+
+        #top .list-inline-item:last-child {
+            margin-right: 0 !important;
+        }
+
+        #top .list-inline-item a[title="Оформлення замовлення"] {
+            display: none;
+        }
+
+                header {
+            padding-top: 6px;
+            padding-bottom: 4px;
+        }
+
+        #logo {
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+            #cart {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        padding-top: 0;
+        align-self: flex-end;
+    }
+
+
+    }
+    @media (min-width: 992px) {
+    header .row > div:first-child {
+        position: relative;
+        top: -12px;
+    }
+    header .row > div:nth-child(2) {
+        position: relative;
+        top: 18px;
+    }
+    header .row > div:nth-child(3) {
+        position: relative;
+        top: -1px;
+    }
+    }
+
+  </style>
+    <script src="catalog/view/javascript/patch-mobile-search-menu-redesign.js?v=ux003hdr-20261004" type="text/javascript" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"><style>/* fixture-only */ .fx-pick{position:fixed;right:4px;bottom:4px;z-index:9999;font:11px monospace;background:#ff0;padding:2px 4px;opacity:.7;pointer-events:none}</style></head>

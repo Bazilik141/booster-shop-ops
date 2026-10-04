@@ -1,0 +1,387 @@
+/* === UX-003-FILTER: category row + filter panel, variant C (2026-10-04) ===== */
+/* product/category.twig (row, panel, panel script) + extension/opencart/…/module/filter.twig (groups). One row in
+   the category header card: subcategory chips | «Фільтр» | sort; the panel opens under it with every filter group,
+   each collapsible. Replaces the desktop toolbar (.bs-cat-header__toolbar / .bs-segmented), the mobile
+   subcategory grid (.bs-subcat-tabs), the mobile action row and the side filter column on category pages.
+   Side padding follows .bs-cat-header__hero: 14px ≤640, 16px to 991, 22px from 992. */
+.bs-ff-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 0 14px 14px;
+}
+.bs-ff-chips {
+  display: flex;
+  flex: 1 1 auto;
+  gap: 6px;
+  min-width: 0;
+  padding: 2px 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.bs-ff-chips::-webkit-scrollbar {
+  display: none;
+}
+#product-category .bs-ff-chip {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--bs-line);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--bs-blue);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+#product-category .bs-ff-chip:hover {
+  text-decoration: none;
+}
+#product-category .bs-ff-chip.is-active {
+  border-color: var(--bs-blue);
+  box-shadow: inset 0 0 0 1px var(--bs-blue);
+  color: var(--bs-ink);
+}
+.bs-ff-chip__count {
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--bs-gold-soft);
+  color: var(--bs-warning-fg);
+  font-size: 11.5px;
+  font-weight: 700;
+}
+.bs-cat-header--onepiece .bs-ff-chip__count {
+  background: var(--bs-blue-soft);
+  color: var(--bs-onepiece);
+}
+.bs-ff-tools {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 8px;
+  margin-left: auto;
+}
+
+/* «Фільтр» */
+.bs-ff-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  min-width: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--bs-line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--bs-ink);
+  font: inherit;
+  font-size: 14.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.bs-ff-btn:hover {
+  background: var(--bs-line-2);
+}
+.bs-ff-btn[aria-expanded="true"] {
+  border-color: var(--bs-blue);
+  background: var(--bs-blue-soft);
+  color: var(--bs-blue);
+}
+.bs-ff-btn:focus-visible,
+.bs-ff-gt:focus-visible,
+.bs-ff-close:focus-visible,
+.bs-ff-reset:focus-visible {
+  outline: 2px solid var(--bs-blue);
+  outline-offset: 2px;
+}
+.bs-ff-btn__chev,
+.bs-ff-gt__chev,
+.bs-ff-close__chev {
+  flex: 0 0 auto;
+  transition: transform 0.15s;
+}
+.bs-ff-btn[aria-expanded="true"] .bs-ff-btn__chev,
+.bs-ff-gt[aria-expanded="true"] .bs-ff-gt__chev,
+.bs-ff-close__chev {
+  transform: rotate(180deg);
+}
+.bs-ff-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--bs-blue);
+  color: #fff;
+  font-size: 11.5px;
+  font-weight: 800;
+  line-height: 1;
+}
+.bs-ff-count[hidden] {
+  display: none;
+}
+
+/* Sort: the native select, unchanged behaviour (onchange → location). */
+.bs-ff-sort {
+  position: relative;
+  flex: 0 0 auto;
+  width: 200px;
+}
+.bs-ff-sort .bs-select {
+  height: 44px;
+  padding-block: 0;
+  color: var(--bs-ink-2);
+  font-size: 14px;
+  font-weight: 600;
+}
+.bs-ff-sort__ic {
+  display: none;
+}
+
+/* Panel */
+.bs-ff-panel {
+  margin: 0 14px;
+  padding: 4px 0 14px;
+  border-top: 1px solid var(--bs-line);
+}
+.bs-ff-panel[hidden] {
+  display: none;
+}
+.bs-ff-groups {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+.bs-ff-g {
+  border-bottom: 1px solid var(--bs-line-2);
+}
+.bs-ff-gt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 48px;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: var(--bs-ink);
+  font: inherit;
+  font-size: 14.5px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+.bs-ff-gt__chev {
+  margin-left: auto;
+  color: var(--bs-ink-3);
+}
+.bs-ff-checks {
+  padding: 0 4px 10px;
+}
+.bs-ff-checks[hidden] {
+  display: none;
+}
+.bs-ff-ck {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 36px;
+  color: var(--bs-ink-2);
+  font-size: 14px;
+  cursor: pointer;
+}
+.bs-ff-ck input {
+  appearance: none;
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  border: 1.5px solid var(--bs-ink-4);
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+}
+.bs-ff-ck input:checked {
+  border-color: var(--bs-blue);
+  background: var(--bs-blue) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path d='M2.5 6.2 5 8.5l4.5-5' stroke='white' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>") center / 12px 12px no-repeat;
+}
+.bs-ff-ck input:focus-visible {
+  outline: 2px solid var(--bs-blue);
+  outline-offset: 2px;
+}
+.bs-ff-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding-top: 12px;
+}
+.bs-ff-reset {
+  min-height: 44px;
+  padding: 0 4px;
+  border: 0;
+  background: transparent;
+  color: var(--bs-ink-3);
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.bs-ff-close {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  margin-left: auto;
+  padding: 0 12px;
+  border: 1px solid var(--bs-line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--bs-ink-2);
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ≤575: «Фільтр» and sort become 44×44 icon buttons. The sort icon sits under a transparent native select, so the
+   select keeps its own picker and its onchange; position:absolute is that overlay. */
+@media (max-width: 575.98px) {
+  .bs-ff-btn {
+    width: 44px;
+    padding: 0;
+  }
+  .bs-ff-btn__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .bs-ff-btn__chev {
+    display: none;
+  }
+  .bs-ff-btn .bs-ff-count {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+  }
+  .bs-ff-sort {
+    width: 44px;
+    height: 44px;
+  }
+  .bs-ff-sort__ic {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--bs-line);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--bs-ink);
+    pointer-events: none;
+  }
+  .bs-ff-sort .bs-select {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .bs-ff-sort:focus-within .bs-ff-sort__ic {
+    outline: 2px solid var(--bs-blue);
+    outline-offset: 2px;
+  }
+}
+@media (min-width: 641px) {
+  .bs-ff-row {
+    padding: 0 16px 16px;
+  }
+  .bs-ff-panel {
+    margin: 0 16px;
+  }
+}
+@media (min-width: 768px) {
+  .bs-ff-groups {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 24px;
+  }
+}
+/* Below 992 the removed mobile action row used to hold the grid 14px off the header card (≥992 has UI-CAT-GAP). */
+@media (max-width: 991.98px) {
+  #product-category .bs-cat-header {
+    margin-bottom: 14px;
+  }
+}
+/* ≥992: four product columns now that the side column is gone. Stock common.js rewrites #product-list's classes
+   to row-cols-lg-3 on every load (its list/grid localStorage switch, which has no buttons on this page), so the
+   template's row-cols-lg-4 never survives; the column width is set for that grid class instead. List mode
+   (.product-list) is untouched; the card rules keyed on .row-cols-lg-3 in stylesheet.css keep applying. */
+@media (min-width: 992px) {
+  #product-category #product-list.row-cols-lg-3 > * {
+    flex: 0 0 auto;
+    width: 25%;
+  }
+  .bs-ff-row {
+    padding: 0 22px 18px;
+  }
+  .bs-ff-panel {
+    margin: 0 22px;
+    padding-bottom: 18px;
+  }
+  .bs-ff-chips {
+    flex: 0 1 auto;
+    flex-wrap: wrap;
+    padding: 4px;
+    overflow: visible;
+    border-radius: 10px;
+    background: var(--bs-line-2);
+  }
+  #product-category .bs-ff-chip {
+    min-height: 40px;
+    border: 0;
+    background: transparent;
+  }
+  #product-category .bs-ff-chip:hover {
+    background: #fff;
+  }
+  #product-category .bs-ff-chip.is-active {
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(17, 24, 39, 0.08), 0 0 0 1px var(--bs-line);
+    color: var(--bs-ink);
+  }
+  .bs-ff-sort {
+    width: 220px;
+  }
+  .bs-ff-groups {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .bs-ff-g {
+    border-bottom: 0;
+  }
+  .bs-ff-gt {
+    padding: 0;
+  }
+  .bs-ff-checks {
+    padding: 0 0 8px;
+  }
+  .bs-ff-foot {
+    margin-top: 4px;
+    border-top: 1px solid var(--bs-line-2);
+  }
+}
+/* === /UX-003-FILTER === */

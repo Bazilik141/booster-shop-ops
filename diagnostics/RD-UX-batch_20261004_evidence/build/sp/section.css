@@ -1,0 +1,264 @@
+/* === UX-009-SP: search results page (2026-10-04) ========================== */
+/* product/search.twig. The stock fields keep their ids and the template's inline script; they sit in
+   <details class="bs-sp-refine">, open when nothing was found. Scoped to #product-search where a rule has to
+   beat Bootstrap's form classes or `.bs a` (0,1,1), which otherwise paints links navy and underlines them. */
+#product-search h1 {
+  margin: 0 0 12px;
+  font-size: 24px;
+  line-height: 1.2;
+}
+@media (min-width: 769px) {
+  #product-search h1 {
+    font-size: 30px;
+  }
+}
+
+/* «Змінити пошук» */
+.bs-sp-refine > summary {
+  list-style: none;
+}
+.bs-sp-refine > summary::-webkit-details-marker {
+  display: none;
+}
+.bs-sp-refine__btn {
+  width: 100%;
+  user-select: none;
+}
+.bs-sp-refine__btn:focus-visible {
+  outline: 2px solid var(--bs-blue);
+  outline-offset: 2px;
+}
+.bs-sp-refine__chev {
+  transition: transform 0.15s;
+}
+.bs-sp-refine[open] .bs-sp-refine__chev {
+  transform: rotate(180deg);
+}
+.bs-sp-form {
+  display: grid;
+  gap: 14px;
+  margin-top: 10px;
+  padding: 16px;
+  background: #fff;
+  border: 1px solid var(--bs-line);
+  border-radius: var(--bs-r-lg);
+}
+.bs-sp-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bs-ink-2);
+}
+#product-search :is(.bs-sp-form, .bs-sp-sel) :is(.form-control, .form-select) {
+  height: 44px;
+  border: 1px solid var(--bs-line);
+  border-radius: 8px;
+  color: var(--bs-ink);
+  font-size: 15px;
+}
+#product-search :is(.bs-sp-form, .bs-sp-sel) :is(.form-control, .form-select):focus {
+  border-color: var(--bs-blue);
+  box-shadow: 0 0 0 3px var(--bs-blue-soft);
+}
+#product-search .bs-sp-form .form-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  margin: 6px 0 0;
+  padding-left: 0;
+  font-size: 13.5px;
+  color: var(--bs-ink-2);
+}
+#product-search .bs-sp-form .form-check-input {
+  float: none;
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  border: 1.5px solid var(--bs-ink-4);
+  border-radius: 4px;
+}
+#product-search .bs-sp-form .form-check-input:checked {
+  background-color: var(--bs-blue);
+  border-color: var(--bs-blue);
+}
+.bs-sp-form__act {
+  display: flex;
+}
+.bs-sp-submit {
+  flex: 1 1 auto;
+  background: var(--bs-blue);
+  color: #fff;
+}
+.bs-sp-submit:hover,
+.bs-sp-submit:focus-visible {
+  background: #16245C;
+  color: #fff;
+}
+@media (min-width: 769px) {
+  .bs-sp-refine__btn {
+    width: auto;
+  }
+  .bs-sp-form {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 16px 20px;
+    padding: 20px 22px;
+  }
+  .bs-sp-form__act {
+    grid-column: 1 / -1;
+    justify-content: flex-end;
+  }
+  .bs-sp-submit {
+    flex: 0 0 auto;
+    min-width: 160px;
+  }
+}
+
+/* List / grid, sort, limit */
+.bs-sp-dc {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 10px;
+  margin: 16px 0;
+}
+.bs-sp-view {
+  display: none;
+}
+.bs-sp-sel {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+.bs-sp-sel > label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--bs-ink-3);
+}
+.bs-sp-vbtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--bs-line);
+  background: #fff;
+  color: var(--bs-ink-3);
+  cursor: pointer;
+}
+.bs-sp-vbtn:first-child {
+  border-radius: 8px 0 0 8px;
+}
+.bs-sp-vbtn:last-child {
+  border-left: 0;
+  border-radius: 0 8px 8px 0;
+}
+.bs-sp-vbtn:hover {
+  color: var(--bs-ink);
+}
+.bs-sp-vbtn.active {
+  background: var(--bs-blue-soft);
+  color: var(--bs-blue);
+}
+.bs-sp-vbtn:focus-visible {
+  outline: 2px solid var(--bs-blue);
+  outline-offset: 2px;
+}
+@media (min-width: 769px) {
+  .bs-sp-dc {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+  }
+  .bs-sp-view {
+    display: flex;
+    margin-right: auto;
+  }
+  .bs-sp-sel {
+    width: 260px;
+  }
+  .bs-sp-sel--limit {
+    width: 130px;
+  }
+}
+
+/* Nothing found: next steps under the RD-06 empty state */
+.bs-sp-next {
+  margin-top: 4px;
+}
+.bs-sp-next__title {
+  margin: 0 0 10px;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--bs-ink);
+}
+.bs-sp-next__list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+}
+#product-search .bs-sp-next__link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 14px;
+  background: #fff;
+  border: 1px solid var(--bs-line);
+  border-radius: 10px;
+  color: var(--bs-ink);
+  font-weight: 700;
+  text-decoration: none;
+}
+#product-search .bs-sp-next__link:hover {
+  border-color: var(--bs-blue);
+  color: var(--bs-blue);
+}
+.bs-sp-next__dot {
+  flex: 0 0 auto;
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+}
+.bs-sp-next__chev {
+  flex: 0 0 auto;
+  margin-left: auto;
+  color: var(--bs-ink-4);
+}
+.bs-sp-next__tg {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 16px;
+  background: var(--bs-blue-soft);
+  border-radius: var(--bs-r-lg);
+}
+.bs-sp-next__tg p {
+  margin: 0;
+  font-weight: 600;
+  color: var(--bs-ink);
+}
+#product-search .bs-sp-next__tg .bs-btn-secondary {
+  color: var(--bs-ink);
+  text-decoration: none;
+}
+@media (min-width: 576px) {
+  .bs-sp-next__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 769px) {
+  .bs-sp-next__tg {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    padding: 18px 22px;
+  }
+}
+@media (min-width: 1024px) {
+  .bs-sp-next__list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+/* === /UX-009-SP === */

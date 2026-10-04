@@ -26,6 +26,7 @@ ws.addEventListener('message', ev => {
 });
 const send = (method, params = {}) => new Promise(r => { const i = ++id; pending.set(i, r); ws.send(JSON.stringify({ id: i, method, params })); });
 await send('Page.enable'); await send('Runtime.enable'); await send('Log.enable');
+await send('Emulation.setFocusEmulationEnabled', { enabled: true }); // page counts as focused, so focus events fire
 const evalJs = async (expr) => { const r = await send('Runtime.evaluate', { expression: expr, awaitPromise: true, returnByValue: true }); return r.result?.result?.value ?? r.result?.exceptionDetails?.exception?.description; };
 const results = [];
 for (const j of jobs) {

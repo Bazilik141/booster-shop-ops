@@ -1,0 +1,30 @@
+{# UX-003-FILTER (2026-10-04): groups as collapsible blocks for the category filter panel (variant C). Field names,
+   values and ids are unchanged, and so is the script below: a checkbox change applies the filter after 250 ms.
+   #button-filter stays in the DOM, hidden — the apply-on-change already covers it. #}
+<div class="bs-ff-module">
+  <h2 class="visually-hidden">{{ heading_title }}</h2>
+  <div class="bs-ff-groups">
+    {% for filter_group in filter_groups %}
+      {% set bs_ff_selected = 0 %}
+      {% for filter in filter_group.filter %}
+        {% if filter.filter_id in filter_category %}{% set bs_ff_selected = bs_ff_selected + 1 %}{% endif %}
+      {% endfor %}
+      <div class="bs-ff-g" data-bs-ff-group>
+        <button type="button" class="bs-ff-gt" aria-expanded="true" aria-controls="filter-group-{{ filter_group.filter_group_id }}">
+          <span>{{ filter_group.name }}</span>
+          <span class="bs-ff-count"{% if not bs_ff_selected %} hidden{% endif %}>{{ bs_ff_selected }}</span>
+          <svg class="bs-ff-gt__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div id="filter-group-{{ filter_group.filter_group_id }}" class="bs-ff-checks">
+          {% for filter in filter_group.filter %}
+            <label class="bs-ff-ck" for="input-filter-{{ filter.filter_id }}">
+              <input type="checkbox" name="filter[]" value="{{ filter.filter_id }}" id="input-filter-{{ filter.filter_id }}"{% if filter.filter_id in filter_category %} checked{% endif %}/>
+              <span>{{ filter.name }}</span>
+            </label>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  <button type="button" id="button-filter" class="btn btn-primary" hidden>{{ button_filter }}</button>
+</div>

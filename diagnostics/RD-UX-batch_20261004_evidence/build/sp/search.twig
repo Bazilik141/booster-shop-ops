@@ -1,0 +1,161 @@
+{{ header }}
+{# UX-009-SP (2026-10-04): search results page. The form sits in «Змінити пошук» (open when nothing was found),
+   «Порівняння товарів» is gone, list/grid/sort/limit are DS controls, and an empty result offers next steps.
+   Every stock id and the inline script at the bottom are unchanged; styles live in boostershop-ds.css
+   (section UX-009-SP). #}
+<div id="product-search" class="container">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+      <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+  <div class="row">
+    {{ column_left }}
+    <div id="content" class="col">
+      {{ content_top }}
+      <h1>{{ heading_title }}</h1>
+      <details class="bs-sp-refine"{% if not products %} open{% endif %}>
+        <summary class="bs-btn bs-btn-secondary bs-sp-refine__btn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><path d="M2 4h7M12 4h2M2 12h2M7 12h7M9 2.5v3M5 10.5v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          <span>Змінити пошук</span>
+          <svg class="bs-sp-refine__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="bs-sp-form">
+          <div class="bs-sp-form__group">
+            <label for="input-search" class="bs-sp-label">{{ entry_search|trim(':') }}</label>
+            <input type="text" name="search" value="{{ search }}" placeholder="{{ text_keyword }}" id="input-search" class="form-control"/>
+            <div class="form-check">
+              <input type="checkbox" name="description" value="1" id="input-description" class="form-check-input"{% if description %} checked{% endif %}/>
+              <label for="input-description" class="form-check-label">{{ entry_description }}</label>
+            </div>
+          </div>
+          <div class="bs-sp-form__group">
+            <label for="input-category" class="bs-sp-label">Категорія</label>
+            <select name="category_id" id="input-category" class="form-select">
+              <option value="0">{{ text_category }}</option>
+              {% for category_1 in categories %}
+                <option value="{{ category_1.category_id }}"{% if category_1.category_id == category_id %} selected{% endif %}>{{ category_1.name }}</option>
+                {% for category_2 in category_1.children %}
+                  <option value="{{ category_2.category_id }}"{% if category_2.category_id == category_id %} selected{% endif %}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ category_2.name }}</option>
+                  {% for category_3 in category_2.children %}
+                    <option value="{{ category_3.category_id }}"{% if category_3.category_id == category_id %} selected{% endif %}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ category_3.name }}</option>
+                  {% endfor %}
+                {% endfor %}
+              {% endfor %}
+            </select>
+            <div class="form-check">
+              <input type="checkbox" name="sub_category" value="1" id="input-sub-category" class="form-check-input"{% if sub_category %} checked{% endif %}/>
+              <label for="input-sub-category" class="form-check-label">{{ text_sub_category }}</label>
+            </div>
+          </div>
+          <div class="bs-sp-form__act">
+            <button type="button" id="button-search" class="bs-btn bs-sp-submit">{{ button_search }}</button>
+          </div>
+        </div>
+      </details>
+      <h2 class="visually-hidden">{{ text_search }}</h2>
+      {% if products %}
+        <div id="display-control" class="bs-sp-dc">
+          <div class="bs-sp-view" role="group" aria-label="Вигляд списку">
+            <button type="button" id="button-list" class="bs-sp-vbtn" data-bs-toggle="tooltip" title="{{ button_list }}" aria-label="{{ button_list }}"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" focusable="false"><path d="M6.5 4.5h9M6.5 9h9M6.5 13.5h9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M2.5 4.5h1M2.5 9h1M2.5 13.5h1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+            <button type="button" id="button-grid" class="bs-sp-vbtn" data-bs-toggle="tooltip" title="{{ button_grid }}" aria-label="{{ button_grid }}"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" focusable="false"><rect x="2.5" y="2.5" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.6"/><rect x="10.5" y="2.5" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.6"/><rect x="2.5" y="10.5" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.6"/><rect x="10.5" y="10.5" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.6"/></svg></button>
+          </div>
+          <div class="bs-sp-sel">
+            <label for="input-sort">{{ text_sort|trim(':') }}</label>
+            <select id="input-sort" class="form-select" onchange="location = this.value;">
+              {% for sorts in sorts %}
+                <option value="{{ sorts.href }}"{% if sorts.value == '%s-%s'|format(sort, order) %} selected{% endif %}>{{ sorts.text }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="bs-sp-sel bs-sp-sel--limit">
+            <label for="input-limit">{{ text_limit|trim(':') }}</label>
+            <select id="input-limit" class="form-select" onchange="location = this.value;">
+              {% for limits in limits %}
+                <option value="{{ limits.href }}"{% if limits.value == limit %} selected{% endif %}>{{ limits.text }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div id="product-list" class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4">
+          {% for product in products %}
+            <div class="col mb-3">{{ product }}</div>
+          {% endfor %}
+        </div>
+        <div class="row">
+          <div class="col-sm-6 text-start">{{ pagination }}</div>
+          <div class="col-sm-6 text-end">{{ results }}</div>
+        </div>
+      {% else %}
+        <div class="bs-empty" role="status">
+          <div class="bs-empty__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M10.8 17.4a6.4 6.4 0 1 1 0-12.8 6.4 6.4 0 0 1 0 12.8Z" stroke-width="1.7"/>
+              <path d="M15.5 15.5 20 20" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <p class="bs-empty__title">{{ text_no_results }}</p>
+        </div>
+        <section class="bs-sp-next" aria-labelledby="bs-sp-next-title">
+          <h3 id="bs-sp-next-title" class="bs-sp-next__title">Подивіться розділи</h3>
+          <div class="bs-sp-next__list">
+            <a href="/catalog/pokemon" class="bs-sp-next__link"><span class="bs-sp-next__dot" style="background:#C68A00" aria-hidden="true"></span>Pokémon TCG<svg class="bs-sp-next__chev" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" focusable="false"><path d="M5 2.5 9.5 7 5 11.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            <a href="/catalog/one-piece" class="bs-sp-next__link"><span class="bs-sp-next__dot" style="background:#1E40AF" aria-hidden="true"></span>One Piece Card Game<svg class="bs-sp-next__chev" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" focusable="false"><path d="M5 2.5 9.5 7 5 11.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            <a href="/catalog/more-tcg" class="bs-sp-next__link"><span class="bs-sp-next__dot" style="background:var(--bs-other-tcg)" aria-hidden="true"></span>Інші TCG<svg class="bs-sp-next__chev" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" focusable="false"><path d="M5 2.5 9.5 7 5 11.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            <a href="/catalog/acsesuary" class="bs-sp-next__link"><span class="bs-sp-next__dot" style="background:var(--bs-accessories)" aria-hidden="true"></span>Аксесуари<svg class="bs-sp-next__chev" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" focusable="false"><path d="M5 2.5 9.5 7 5 11.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </div>
+          <div class="bs-sp-next__tg">
+            <p>Не знайшли? Напишіть у Telegram — привеземо під замовлення</p>
+            <a href="https://telegram.me/BoosterShop_Support_bot" target="_blank" rel="noopener" class="bs-btn bs-btn-secondary"><svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#229ED9" d="M21.2 4.3 2.9 11.4c-1 0.4-1 1.7 0 2l4.5 1.5 1.7 5.3c0.2 0.7 1.1 0.9 1.6 0.4l2.6-2.4 4.7 3.4c0.6 0.4 1.4 0.1 1.6-0.6l3-14.6c0.2-1-0.6-1.5-1.4-1.1Zm-3.4 3.5-7.9 7.1-0.3 3-1.2-3.9 9-6.4c0.3-0.2 0.6 0.1 0.4 0.2Z"/></svg> Написати в Telegram</a>
+          </div>
+        </section>
+      {% endif %}
+      {{ content_bottom }}
+    </div>
+    {{ column_right }}
+  </div>
+</div>
+<script type="text/javascript"><!--
+$('#button-search').bind('click', function() {
+    url = 'index.php?route=product/search&language={{ language }}';
+
+    var search = $('#input-search').val();
+
+    if (search) {
+        url += '&search=' + encodeURIComponent(search);
+    }
+
+    var category_id = $('#input-category').prop('value');
+
+    if (category_id > 0) {
+        url += '&category_id=' + encodeURIComponent(category_id);
+    }
+
+    var sub_category = $('#input-sub-category:checked').prop('value');
+
+    if (sub_category) {
+        url += '&sub_category=1';
+    }
+
+    var description = $('#input-description:checked').prop('value');
+
+    if (description) {
+        url += '&description=1';
+    }
+
+    location = url;
+});
+
+$('#input-search').bind('keydown', function(e) {
+    if (e.keyCode == 13) {
+        $('#button-search').trigger('click');
+    }
+});
+
+$('#input-category').on('change', function() {
+    $('#input-sub-category').prop('disabled', (this.value == '0' ? true : false));
+});
+
+$('#input-category').trigger('change');
+//--></script>
+{{ footer }}
