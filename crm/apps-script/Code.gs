@@ -3119,6 +3119,97 @@ function crm3dpSaleMatches_(rows, order, crmRow) {
   });
 }
 
+function crm3dpStrictSaleNumber_(value) {
+  if (typeof value === 'number') return Number.isFinite(value) ? value : null;
+  const raw = String(value == null ? '' : value).trim();
+  if (!raw) return 0;
+  const normalized = raw.replace(',', '.');
+  if (!/^-?(?:\d+\.?\d*|\.\d+)$/.test(normalized)) return null;
+  const number = Number(normalized);
+  return Number.isFinite(number) ? number : null;
+}
+
+function crm3dpSalePayloadMatchesExceptPackaging_(config, sale, payload) {
+  const schema = crm3dpGet_(config, { action: '3dp_get_range', sheet: CRM_3DP_SALES_SHEET_, range: 'A1:AA1' });
+  const headers = schema && schema.values && schema.values[0] ? schema.values[0] : [];
+  const expectedHeaders = {
+    A: 'Дата', B: 'SKU', D: 'Кількість', E: 'Фактична ціна за од., грн (після знижки)',
+    F: 'Собівартість Сергія за од., грн', G: CRM_3DP_EXPENSE_HEADER_, H: CRM_3DP_PROFIT_SHARE_HEADER_,
+    M: 'Канал', N: CRM_3DP_ORDER_HEADER_, T: CRM_3DP_CRM_ROW_HEADER_,
+    U: 'РРЦ на момент продажу, грн', V: CRM_3DP_FIXTURE_COST_HEADER_, W: CRM_3DP_FIXTURE_PAYER_HEADER_,
+    X: 'Режим CRM', Y: 'Фурнітура власника за од., грн (заморожена)',
+    Z: 'Фурнітура Сергія за од., грн (заморожена)', AA: 'Ціна викупу за од., грн (заморожена)',
+  };
+  Object.keys(expectedHeaders).forEach(function (column) {
+    const index = column.split('').reduce(function (value, letter) { return value * 26 + letter.charCodeAt(0) - 64; }, 0) - 1;
+    if (String(headers[index] || '').trim() !== expectedHeaders[column]) {
+      throw new Error('3D-P packaging-only recovery blocked: Продажі header ' + column + ' does not match the expected schema.');
+    }
+  });
+  const textMatches = function (header, expected) {
+    return Object.prototype.hasOwnProperty.call(sale, header) && String(sale[header] == null ? '' : sale[header]).trim() === String(expected == null ? '' : expected).trim();
+  };
+  const numberMatches = function (header, expected) {
+    if (!Object.prototype.hasOwnProperty.call(sale, header)) return false;
+    const actual = crm3dpStrictSaleNumber_(sale[header]);
+    return actual !== null && Number.isFinite(expected) && Math.abs(actual - expected) < 0.000001;
+  };
+  const saleDate = String(sale['Дата'] || '').trim().slice(0, 10);
+  const checks = [
+    textMatches('SKU', payload.sku),
+    textMatches('№ замовлення', payload.order),
+    textMatches('Канал', payload.channel),
+    textMatches('Режим CRM', payload.mode),
+    textMatches('Платник фурнітури', payload.fixture_payer),
+    saleDate === payload.sale_date,
+    numberMatches('Кількість', payload.quantity),
+    numberMatches('Фактична ціна за од., грн (після знижки)', payload.sale_unit_price),
+    numberMatches('% прибутку Сергію', payload.profit_share),
+    numberMatches('РРЦ на момент продажу, грн', payload.actual_rrp),
+    numberMatches(CRM_3DP_FIXTURE_COST_HEADER_, payload.fixture_cost),
+    numberMatches('Фурнітура власника за од., грн (заморожена)', payload.owner_fixture_per_unit),
+    numberMatches('Фурнітура Сергія за од., грн (заморожена)', payload.serhiy_fixture_per_unit),
+    numberMatches('Ціна викупу за од., грн (заморожена)', payload.buyout),
+    numberMatches(CRM_3DP_CRM_ROW_HEADER_, payload.crm_row),
+  ];
+  if (checks.indexOf(false) !== -1) {
+    throw new Error('3D-P packaging-only recovery blocked: at least one saved sale field differs from the requested payload.');
+  }
+  const productionCost = crm3dpStrictSaleNumber_(sale['Собівартість Сергія за од., грн']);
+  if (productionCost === null || productionCost < 0) {
+    throw new Error('3D-P packaging-only recovery blocked: frozen FIFO unit cost is missing or invalid.');
+  }
+  return productionCost;
+}
+
+function crm3dpReconcilePackagingAfterConflict_(config, commitPayload, order, crmRow) {
+  const matches = crm3dpSaleMatches_(crm3dpSaleRows_(config, true), order, crmRow);
+  if (matches.length !== 1) {
+    throw new Error('3D-P FIFO packaging reconciliation blocked: expected exactly one linked sale row; found ' + matches.length + '.');
+  }
+  const linkedSale = matches[0];
+  const frozenUnitCost = crm3dpSalePayloadMatchesExceptPackaging_(config, linkedSale, commitPayload);
+  const expectedPackaging = Object.prototype.hasOwnProperty.call(linkedSale, CRM_3DP_EXPENSE_HEADER_)
+    ? linkedSale[CRM_3DP_EXPENSE_HEADER_] : null;
+  const packagingChanged = !Object.prototype.hasOwnProperty.call(linkedSale, CRM_3DP_EXPENSE_HEADER_) ||
+    crm3dpStrictSaleNumber_(expectedPackaging) === null ||
+    Math.abs(crm3dpStrictSaleNumber_(expectedPackaging) - commitPayload.packaging_unit) >= 0.000001;
+  if (packagingChanged) {
+    crm3dpPost_(config, {
+      action: '3dp_write', sheet: CRM_3DP_SALES_SHEET_, sku_or_row: linkedSale.row_number,
+      column: 'G', value: commitPayload.packaging_unit, expected_current: expectedPackaging,
+    });
+  }
+  return {
+    already_applied: true, packaging_reconciled: true, packaging_changed: packagingChanged,
+    unit_cost_uah: frozenUnitCost,
+  };
+}
+
+function crm3dpIsIdempotencyConflict_(error) {
+  return /^3D-P request failed \(\d+\): IDEMPOTENCY_CONFLICT$/.test(String(error && error.message ? error.message : error));
+}
+
 function crm3dpFiniteNonNegative_(value) {
   const raw = String(value == null ? '' : value).trim();
   if (!raw) return null;
@@ -3585,25 +3676,36 @@ function sync3dpSalesV2_(sales, orderId, rowNumbers, source, options) {
       const linePrice = crm3dpNumber_(entry.values[8]);
       const lineDiscount = crm3dpNumber_(entry.values[9]);
       const operationId = 'crm_sale:' + order + ':' + entry.row;
-      const committed = crm3dpFetchJson_(config.url, { method: 'post', contentType: 'text/plain;charset=utf-8', payload: JSON.stringify({
-        action: '3dp_crm_sale_commit', token: config.token, operation_id: operationId,
+      const commitPayload = {
+        action: '3dp_crm_sale_commit', operation_id: operationId,
         order: order, crm_row: entry.row, sku: String(entry.values[5] || '').trim(), quantity: entryQuantity,
         sale_date: crm3dpDate_(entry.values[2]), sale_unit_price: crm3dpRound2_(entryQuantity ? linePrice - lineDiscount / entryQuantity : linePrice),
         packaging_unit: desiredPackaging, profit_share: frozen.profit_share, actual_rrp: frozen.actual_rrp,
         fixture_cost: frozen.fixture_cost, fixture_payer: frozen.fixture_payer,
         owner_fixture_per_unit: frozen.owner_fixture_per_unit, serhiy_fixture_per_unit: frozen.serhiy_fixture_per_unit,
-        buyout: frozen.buyout, mode: mode, channel: String(entry.values[1] || '').trim(),
-      }) });
+        buyout: frozen.buyout, mode: mode, channel: String(entry.values[1] || '').trim(), note: '',
+      };
+      let committed;
+      try {
+        committed = crm3dpPost_(config, commitPayload);
+      } catch (error) {
+        if (!crm3dpIsIdempotencyConflict_(error)) throw error;
+        committed = crm3dpReconcilePackagingAfterConflict_(config, commitPayload, order, entry.row);
+      }
       frozen.production_cost = crm3dpNumber_(committed.unit_cost_uah);
-      if (!(frozen.production_cost >= 0) || !committed.allocation_id) throw new Error('3D-P FIFO commit did not return a frozen cost/allocation.');
+      const packagingReconciled = committed.packaging_reconciled === true;
+      if (!(frozen.production_cost >= 0) || (!committed.allocation_id && !packagingReconciled)) throw new Error('3D-P FIFO commit did not return a frozen cost/allocation.');
       const wasCreated = !committed.already_applied;
       if (wasCreated) result.created++; else result.matched++;
-      const detail = (wasCreated ? '3D-P FIFO sale committed.' : '3D-P FIFO sale replayed.') + ' allocation=' + committed.allocation_id + '.';
+      const allocationRef = committed.allocation_id ? 'allocation=' + committed.allocation_id : 'operation=' + operationId;
+      const detail = packagingReconciled
+        ? '3D-P packaging-only FIFO correction ' + (committed.packaging_changed ? 'applied' : 'already matches') + '; original FIFO operation preserved; ' + allocationRef + '.'
+        : (wasCreated ? '3D-P FIFO sale committed.' : '3D-P FIFO sale replayed.') + ' ' + allocationRef + '.';
       const snapshot = crm3dpAccountingSnapshot_(entry, order, frozen, fixture, mode, options && options.request_id);
       const saved = append3dpAccountingSnapshot_(ss, snapshot, 'source=' + journalSource);
       project3dpAccountingToCrm_(ss, saved);
       result.accounting_rows++;
-      const outcome = wasCreated ? 'created' : 'noop';
+      const outcome = packagingReconciled && committed.packaging_changed ? 'updated' : (wasCreated ? 'created' : 'noop');
       crm3dpAppendJournal_(sales, journalSource, order, entry, outcome, detail);
     } catch (error) {
       result.ok = false;

@@ -1,3 +1,14 @@
+# OC-FOP-0414 CRM V195 export and local recovery candidate (2026-10-04)
+
+The owner-supplied `Версія 195, 27 вер. 2026 р., 2243.csv` normalizes to the
+repository `Code.gs` source that was present before this task. The local
+candidate now catches only `IDEMPOTENCY_CONFLICT`, verifies the unique linked
+3D-P sale row against every stored sale field except packaging, then uses the
+existing owner-only, audited `3dp_write` CAS path on column G. The 3D-P V41
+`Code.gs` export confirms that write path is available. This candidate is not
+copied to Apps Script or published; deploy CRM before retrying `OC-FOP-0414`
+through the dashboard.
+
 # Owner-reported CRM Web App V195 and bounded live verification (2026-09-27 22:43)
 
 The owner reports publishing V195 and completing a name-only edit of
