@@ -71,3 +71,7 @@ Notes: `cart.twig` was changed again — BUG-004 must build on runner 8 output. 
 ## Runner 8 owner QA (2026-10-05)
 
 Deployed; QA passed. One finding: the category H1 flashes large before shrinking after a subcategory tap (FOUC). Cause: the H1 size and the full/mobile span toggle are in the first inline `<style>` of `category.twig`, placed after the header markup; pre-existing since R-03 / UI-FIX-20260903 T9. Fix scoped as runner 8b in the INDEX handoff.
+
+## Runner 8b review (2026-10-05) — `UX-003_category-heading-fouc_20261005.php`
+
+Verdict: **Deploy OK.** Independent run on the reconstructed post-runner-8 state: SHA guard ok, Twig gate passed, `done=ok`, self-deleted; repeat run → `already_applied=yes`. Shared library byte-identical to runner 3b. Independent byte check: the moved block is identical and appears once; the template minus the block differs only by the one-line Twig marker comment (and the blank line that followed the block). `{% if products %}`, JSON-LD, load-more and `{{ footer }}` unchanged. Cascade order unchanged (block stays after `<head>` stylesheets and before the second inline block). Side observation from the executor (not fixed): on phones the search placeholder shows «Пошук бустерів…» until the header script shortens it to «Пошук».

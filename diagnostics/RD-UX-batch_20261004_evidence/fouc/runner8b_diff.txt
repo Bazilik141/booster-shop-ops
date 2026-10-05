@@ -1,0 +1,371 @@
+--- /c/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/7c94fbc8-7944-4f82-8410-7294bd7e0beb/scratchpad/post8/catalog/view/template/product/category.twig	2026-10-05 23:15:27.006773600 +0300
++++ /c/Users/14bez/AppData/Local/Temp/claude/C--Users-14bez-Downloads-Booster-Shop-booster-shop-ops/7c94fbc8-7944-4f82-8410-7294bd7e0beb/scratchpad/w8b/catalog/view/template/product/category.twig	2026-10-05 23:16:33.243046900 +0300
+@@ -1,182 +1,5 @@
+ {{ header }}
+-<div id="product-category" class="container">
+-  <ul class="breadcrumb">
+-    {% for breadcrumb in breadcrumbs %}
+-      <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+-    {% endfor %}
+-  </ul>
+-
+-  <div class="row">
+-    {{ column_left }}
+-
+-    <div id="content" class="col">
+-      {{ content_top }}
+-
+-      {# CAT-002-5c · category accent class #}
+-      <div class="bs-cat-header{% if category_code %} bs-cat-header--{{ category_code }}{% endif %}{% if category_is_subcategory %} bs-cat-header--subcategory{% endif %}">
+-        <div class="bs-cat-header__strip"></div>
+-
+-        <div class="bs-cat-header__hero">
+-          <div>
+-            <div class="bs-cat-header__title">
+-              <h1>
+-                <span class="bs-heading-full">{{ heading_title }}</span>
+-                <span class="bs-heading-mobile">{% if category_heading_short %}{{ category_heading_short }}{% else %}{{ heading_title }}{% endif %}</span>
+-              </h1>
+-              <span class="bs-count">{{ product_total }} {{ products_total_label }}</span>
+-            </div>
+-          </div>
+-
+-        </div>
+-
+-        {# UX-003-FILTER (2026-10-04): one row — subcategories | «Фільтр» | sort — and the filter panel under it
+-           (design «етап 3», «Фільтр категорії», variant C). Replaces the desktop toolbar, the mobile subcategory grid
+-           and the mobile action row. The filter module (column_right) renders inside the panel instead of the side
+-           column; its aside wrapper is swapped because stylesheet.css hides #column-right below 992px. #}
+-        {# UX-003-POLISH (2026-10-04): below 992 the row wraps — chips on row 1, «Фільтр» + sort on row 2 (ds.css). No
+-           empty chips placeholder any more (review R2); the tools keep margin-left:auto at ≥992. #}
+-        <div class="bs-ff-row">
+-          {% if sub_categories|length %}
+-            <nav class="bs-ff-chips" aria-label="Підкатегорії">
+-              {% for sub in sub_categories %}
+-                <a href="{{ sub.href }}" class="bs-ff-chip{% if sub.active %} is-active{% endif %}"{% if sub.active %} aria-current="page"{% endif %}>{{ sub.name }}{% if sub.product_count %}<span class="bs-ff-chip__count">{{ sub.product_count }}</span>{% endif %}</a>
+-              {% endfor %}
+-            </nav>
+-          {% endif %}
+-          <div class="bs-ff-tools">
+-            {% if column_right %}
+-              <button type="button" class="bs-ff-btn" id="bs-ff-toggle" aria-expanded="false" aria-controls="bs-ff-panel">
+-                <svg width="17" height="17" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><path d="M2 4h7M12 4h2M2 12h2M7 12h7M9 2.5v3M5 10.5v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+-                <span class="bs-ff-btn__label">Фільтр</span>
+-                <span class="bs-ff-count" hidden>0</span>
+-                <svg class="bs-ff-btn__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+-              </button>
+-            {% endif %}
+-            <div class="bs-ff-sort">
+-              <select class="bs-select" aria-label="{{ text_sort }}" onchange="location = this.value;">
+-                {% for sort_item in sorts %}
+-                  <option value="{{ sort_item.href }}"{% if sort_item.value == current_sort %} selected{% endif %}>{{ sort_item.text }}</option>
+-                {% endfor %}
+-              </select>
+-            </div>
+-          </div>
+-        </div>
+-        {% if column_right %}
+-          <div class="bs-ff-panel" id="bs-ff-panel" hidden>
+-            {{ column_right|replace({'<aside id="column-right" class="col-3 d-none d-md-block">': '<div class="bs-ff-modules">', '</aside>': '</div>'}) }}
+-            <div class="bs-ff-foot">
+-              <button type="button" class="bs-ff-reset" data-bs-ff-reset hidden>Скинути</button>
+-              <button type="button" class="bs-ff-close" data-bs-ff-close>Згорнути <svg class="bs-ff-close__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+-            </div>
+-          </div>
+-        {% endif %}
+-
+-        {% if active_filters|length %}
+-          <div class="bs-cat-header__filters">
+-            <span class="bs-cat-header__filters-label">Фільтр:</span>
+-            {% for f in active_filters %}
+-              <span class="bs-filter-chip">
+-                {{ f.label }}
+-                <button class="bs-filter-chip__remove" type="button" aria-label="Прибрати {{ f.label }}" onclick="location='{{ f.remove_url }}'">x</button>
+-              </span>
+-            {% endfor %}
+-            <button class="bs-filter-reset" type="button" onclick="location='{{ reset_url }}'">Скинути все</button>
+-          </div>
+-        {% endif %}
+-      </div>
+-
+-      {% if products %}
+-        <div id="product-list" class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4">
+-          {% for product in products %}
+-            {# TECH-013 WP2: the first card is the LCP element on mobile (measured
+-               340x240 = 81,600 px^2 above the fold at 390x844, the largest element on
+-               the page) and thumb.twig marks every card loading="lazy", which defers
+-               exactly the image LCP waits for. Promote the first card only — the grid is
+-               row-cols-1 on mobile, so one card is above the fold, and eager-loading a
+-               full desktop row would compete for bandwidth on throttled 4G. The replace
+-               filter is used because product/thumb pre-renders each card to an HTML
+-               string, so thumb.twig has no loop index; header.twig uses the same
+-               `|replace` idiom for the cart block. #}
+-            <div class="col mb-3">{{ loop.first ? product|replace({'loading="lazy"': 'loading="eager" fetchpriority="high"'}) : product }}</div>
+-          {% endfor %}
+-        </div>
+-
+-        {# SEO / no-JS fallback: keeps rel=prev/next pager available to crawlers #}
+-        <noscript>
+-          <div class="row">
+-            <div class="col-sm-6 text-start">{{ pagination }}</div>
+-            <div class="col-sm-6 text-end">{{ results }}</div>
+-          </div>
+-        </noscript>
+-
+-        {# Results count - always visible #}
+-        <div class="text-end bs-results-count mb-2">{{ results }}</div>
+-
+-        {# Load-More block - JS reveals it based on rel=next in <head> #}
+-        <div id="bs-load-more-wrap" aria-live="polite" style="display:none">
+-          <div class="bs-load-more-progress"
+-               id="bs-load-more-progress"
+-               data-shown="0"
+-               data-total="{{ product_total|default(0) }}">
+-            <div class="bs-load-more-progress__label">
+-              Ви переглянули <b class="bs-lm-shown">0</b>
+-              із <b class="bs-lm-total">{{ product_total|default(0) }}</b> товарів
+-            </div>
+-            <div class="bs-load-more-progress__track">
+-              <div class="bs-load-more-progress__fill" style="width: 0%"></div>
+-            </div>
+-          </div>
+-
+-          <button id="bs-load-more-btn" type="button" class="bs-btn-load-more">
+-            <span class="bs-load-more-label">Показати ще</span>
+-            <span class="bs-load-more-count" id="bs-load-more-count"></span>
+-            <svg class="bs-load-more-chev" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+-              <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+-            </svg>
+-            <span class="bs-load-more-spinner" aria-hidden="true"></span>
+-          </button>
+-        </div>
+-      {% endif %}
+-
+-      {% if not categories and not products %}
+-        <div class="bs-empty" role="status">
+-          <div class="bs-empty__icon" aria-hidden="true">
+-            <svg viewBox="0 0 24 24" fill="none">
+-              <path d="M6 7h12l-1 12H7L6 7Z" stroke-width="1.7" stroke-linejoin="round"/>
+-              <path d="M9 7a3 3 0 0 1 6 0" stroke-width="1.7" stroke-linecap="round"/>
+-              <path d="M9.5 13h5" stroke-width="1.7" stroke-linecap="round"/>
+-            </svg>
+-          </div>
+-          <p class="bs-empty__title">{{ heading_title }}</p>
+-          <p class="bs-empty__text">{{ text_no_results }}</p>
+-          <a href="{{ continue }}" class="bs-btn bs-btn-primary bs-empty__cta">{{ button_continue }}</a>
+-        </div>
+-      {% endif %}
+-
+-      <div class="category-intro category-seo-panel{% if heading_title == 'Pokémon' or heading_title == 'Pokemon' %} category-seo-pokemon{% elseif heading_title == 'One Piece' %} category-seo-onepiece{% endif %}">
+-                        {#
+-        {% if image %}
+-          <div class="category-thumb-wrap">
+-            <div class="category-thumb">
+-              <img src="{{ image }}" alt="{{ heading_title }}" title="{{ heading_title }}" class="category-thumb-img"/>
+-            </div>
+-          </div>
+-        {% endif %}
+-        #}
+-
+-
+-
+-        {% if description %}
+-          <div class="category-description">
+-            {{ description }}
+-          </div>
+-        {% endif %}
+-      </div>
+-
+-      {{ content_bottom }}
+-    </div>
+-  </div>
+-</div>
++{# UX-003-FOUC (2026-10-05): this block moved here unchanged from after the page markup, so the heading rules apply before the first paint. #}
+ <style>
+   .bs-subcategory-nav {
+     --bs-subcategory-accent: #1E3A8A;
+@@ -634,6 +457,184 @@
+     .bs-load-more-spinner { animation-duration: 1.2s; }
+   }
+ </style>
++<div id="product-category" class="container">
++  <ul class="breadcrumb">
++    {% for breadcrumb in breadcrumbs %}
++      <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
++    {% endfor %}
++  </ul>
++
++  <div class="row">
++    {{ column_left }}
++
++    <div id="content" class="col">
++      {{ content_top }}
++
++      {# CAT-002-5c · category accent class #}
++      <div class="bs-cat-header{% if category_code %} bs-cat-header--{{ category_code }}{% endif %}{% if category_is_subcategory %} bs-cat-header--subcategory{% endif %}">
++        <div class="bs-cat-header__strip"></div>
++
++        <div class="bs-cat-header__hero">
++          <div>
++            <div class="bs-cat-header__title">
++              <h1>
++                <span class="bs-heading-full">{{ heading_title }}</span>
++                <span class="bs-heading-mobile">{% if category_heading_short %}{{ category_heading_short }}{% else %}{{ heading_title }}{% endif %}</span>
++              </h1>
++              <span class="bs-count">{{ product_total }} {{ products_total_label }}</span>
++            </div>
++          </div>
++
++        </div>
++
++        {# UX-003-FILTER (2026-10-04): one row — subcategories | «Фільтр» | sort — and the filter panel under it
++           (design «етап 3», «Фільтр категорії», variant C). Replaces the desktop toolbar, the mobile subcategory grid
++           and the mobile action row. The filter module (column_right) renders inside the panel instead of the side
++           column; its aside wrapper is swapped because stylesheet.css hides #column-right below 992px. #}
++        {# UX-003-POLISH (2026-10-04): below 992 the row wraps — chips on row 1, «Фільтр» + sort on row 2 (ds.css). No
++           empty chips placeholder any more (review R2); the tools keep margin-left:auto at ≥992. #}
++        <div class="bs-ff-row">
++          {% if sub_categories|length %}
++            <nav class="bs-ff-chips" aria-label="Підкатегорії">
++              {% for sub in sub_categories %}
++                <a href="{{ sub.href }}" class="bs-ff-chip{% if sub.active %} is-active{% endif %}"{% if sub.active %} aria-current="page"{% endif %}>{{ sub.name }}{% if sub.product_count %}<span class="bs-ff-chip__count">{{ sub.product_count }}</span>{% endif %}</a>
++              {% endfor %}
++            </nav>
++          {% endif %}
++          <div class="bs-ff-tools">
++            {% if column_right %}
++              <button type="button" class="bs-ff-btn" id="bs-ff-toggle" aria-expanded="false" aria-controls="bs-ff-panel">
++                <svg width="17" height="17" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><path d="M2 4h7M12 4h2M2 12h2M7 12h7M9 2.5v3M5 10.5v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
++                <span class="bs-ff-btn__label">Фільтр</span>
++                <span class="bs-ff-count" hidden>0</span>
++                <svg class="bs-ff-btn__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
++              </button>
++            {% endif %}
++            <div class="bs-ff-sort">
++              <select class="bs-select" aria-label="{{ text_sort }}" onchange="location = this.value;">
++                {% for sort_item in sorts %}
++                  <option value="{{ sort_item.href }}"{% if sort_item.value == current_sort %} selected{% endif %}>{{ sort_item.text }}</option>
++                {% endfor %}
++              </select>
++            </div>
++          </div>
++        </div>
++        {% if column_right %}
++          <div class="bs-ff-panel" id="bs-ff-panel" hidden>
++            {{ column_right|replace({'<aside id="column-right" class="col-3 d-none d-md-block">': '<div class="bs-ff-modules">', '</aside>': '</div>'}) }}
++            <div class="bs-ff-foot">
++              <button type="button" class="bs-ff-reset" data-bs-ff-reset hidden>Скинути</button>
++              <button type="button" class="bs-ff-close" data-bs-ff-close>Згорнути <svg class="bs-ff-close__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
++            </div>
++          </div>
++        {% endif %}
++
++        {% if active_filters|length %}
++          <div class="bs-cat-header__filters">
++            <span class="bs-cat-header__filters-label">Фільтр:</span>
++            {% for f in active_filters %}
++              <span class="bs-filter-chip">
++                {{ f.label }}
++                <button class="bs-filter-chip__remove" type="button" aria-label="Прибрати {{ f.label }}" onclick="location='{{ f.remove_url }}'">x</button>
++              </span>
++            {% endfor %}
++            <button class="bs-filter-reset" type="button" onclick="location='{{ reset_url }}'">Скинути все</button>
++          </div>
++        {% endif %}
++      </div>
++
++      {% if products %}
++        <div id="product-list" class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4">
++          {% for product in products %}
++            {# TECH-013 WP2: the first card is the LCP element on mobile (measured
++               340x240 = 81,600 px^2 above the fold at 390x844, the largest element on
++               the page) and thumb.twig marks every card loading="lazy", which defers
++               exactly the image LCP waits for. Promote the first card only — the grid is
++               row-cols-1 on mobile, so one card is above the fold, and eager-loading a
++               full desktop row would compete for bandwidth on throttled 4G. The replace
++               filter is used because product/thumb pre-renders each card to an HTML
++               string, so thumb.twig has no loop index; header.twig uses the same
++               `|replace` idiom for the cart block. #}
++            <div class="col mb-3">{{ loop.first ? product|replace({'loading="lazy"': 'loading="eager" fetchpriority="high"'}) : product }}</div>
++          {% endfor %}
++        </div>
++
++        {# SEO / no-JS fallback: keeps rel=prev/next pager available to crawlers #}
++        <noscript>
++          <div class="row">
++            <div class="col-sm-6 text-start">{{ pagination }}</div>
++            <div class="col-sm-6 text-end">{{ results }}</div>
++          </div>
++        </noscript>
++
++        {# Results count - always visible #}
++        <div class="text-end bs-results-count mb-2">{{ results }}</div>
++
++        {# Load-More block - JS reveals it based on rel=next in <head> #}
++        <div id="bs-load-more-wrap" aria-live="polite" style="display:none">
++          <div class="bs-load-more-progress"
++               id="bs-load-more-progress"
++               data-shown="0"
++               data-total="{{ product_total|default(0) }}">
++            <div class="bs-load-more-progress__label">
++              Ви переглянули <b class="bs-lm-shown">0</b>
++              із <b class="bs-lm-total">{{ product_total|default(0) }}</b> товарів
++            </div>
++            <div class="bs-load-more-progress__track">
++              <div class="bs-load-more-progress__fill" style="width: 0%"></div>
++            </div>
++          </div>
++
++          <button id="bs-load-more-btn" type="button" class="bs-btn-load-more">
++            <span class="bs-load-more-label">Показати ще</span>
++            <span class="bs-load-more-count" id="bs-load-more-count"></span>
++            <svg class="bs-load-more-chev" viewBox="0 0 16 16" fill="none" aria-hidden="true">
++              <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
++            </svg>
++            <span class="bs-load-more-spinner" aria-hidden="true"></span>
++          </button>
++        </div>
++      {% endif %}
++
++      {% if not categories and not products %}
++        <div class="bs-empty" role="status">
++          <div class="bs-empty__icon" aria-hidden="true">
++            <svg viewBox="0 0 24 24" fill="none">
++              <path d="M6 7h12l-1 12H7L6 7Z" stroke-width="1.7" stroke-linejoin="round"/>
++              <path d="M9 7a3 3 0 0 1 6 0" stroke-width="1.7" stroke-linecap="round"/>
++              <path d="M9.5 13h5" stroke-width="1.7" stroke-linecap="round"/>
++            </svg>
++          </div>
++          <p class="bs-empty__title">{{ heading_title }}</p>
++          <p class="bs-empty__text">{{ text_no_results }}</p>
++          <a href="{{ continue }}" class="bs-btn bs-btn-primary bs-empty__cta">{{ button_continue }}</a>
++        </div>
++      {% endif %}
++
++      <div class="category-intro category-seo-panel{% if heading_title == 'Pokémon' or heading_title == 'Pokemon' %} category-seo-pokemon{% elseif heading_title == 'One Piece' %} category-seo-onepiece{% endif %}">
++                        {#
++        {% if image %}
++          <div class="category-thumb-wrap">
++            <div class="category-thumb">
++              <img src="{{ image }}" alt="{{ heading_title }}" title="{{ heading_title }}" class="category-thumb-img"/>
++            </div>
++          </div>
++        {% endif %}
++        #}
++
++
++
++        {% if description %}
++          <div class="category-description">
++            {{ description }}
++          </div>
++        {% endif %}
++      </div>
++
++      {{ content_bottom }}
++    </div>
++  </div>
++</div>
+ 
+ 
+ 
