@@ -67,3 +67,7 @@ Runner 8 handoff: INDEX section above. Runner 9 design brief: `handoffs/handoff_
 Verdict: **Deploy OK.** Independent run on the reconstructed post-runner-7 state (PHP 8.4 CLI, site Twig 3.28): all SHA guards ok, Twig gates passed, `done=ok`, self-deleted; after-SHAs equal the report. Shared runner library byte-identical to runner 3b. Diff limited to the five handoff items plus the ds.css token; no JS, PHP, DB, URL or canonical change. Cart label split (`text_items|split(' - ', 2)`) survives AJAX refreshes because every refresh reloads `common/cart.info`. The owner's "35 px" gap is product-photo whitespace; the box gap is now 16 px at every width.
 
 Notes: `cart.twig` was changed again — BUG-004 must build on runner 8 output. Runner 9 design (Claude Design) should use the post-runner-8 two-row card.
+
+## Runner 8 owner QA (2026-10-05)
+
+Deployed; QA passed. One finding: the category H1 flashes large before shrinking after a subcategory tap (FOUC). Cause: the H1 size and the full/mobile span toggle are in the first inline `<style>` of `category.twig`, placed after the header markup; pre-existing since R-03 / UI-FIX-20260903 T9. Fix scoped as runner 8b in the INDEX handoff.

@@ -84,6 +84,21 @@ Build one follow-up runner, `UX-003-005-009_polish_20261004.php` (chain position
 - `BUG-004`.
 - Console issue: Chrome reports "Content Security Policy of your site blocks the use of `eval`" (`script-src`). None of runners 1–7 adds `eval`, `new Function` or string timers (grep of every changed file). The only `new Function` in the pulled files is in `catalog/view/javascript/nunjucks-slim.js`, unchanged since the pull and not referenced by any pulled template. Claude checked production on 2026-10-05 (built-in browser, clean profile): no `Content-Security-Policy` header or meta tag on `/`, a category, search, cart, checkout, success or failure; no iframes or service workers on the category page; `eval` runs normally in the page. The site has no CSP that could block `eval`, so the issue most likely comes from a browser extension in the owner's Chrome (extensions run under their own CSP). Owner confirmed 2026-10-05: the issue came from a built-in VPN browser extension; without it the console is clean. Closed — nothing for runners 8–9.
 
+**Runner 8 deployed; runner 8b — category heading flash (owner QA, 2026-10-05).** Runner 8 is deployed and passed owner QA. One finding: after tapping a subcategory chip, the category H1 shows for a fraction of a second as large, dark text before it shrinks to the caption style; barely visible at 1440 px, increasingly visible at narrower widths.
+
+Cause (Claude, static evidence from the post-runner-8 state; present since before this batch — same structure in the live2 pull):
+- `product/category.twig` renders the H1 at line ~22 with two spans, `.bs-heading-full` and `.bs-heading-mobile`.
+- The rules that hide one of them and size the H1 below 992 px (R-03 «mobile subcategory heading cleanup», R-03 «visual fix», UI-FIX-20260903 T9 «C3 inversion»: 26 px → 24 px → 12 px caption) live in the first inline `<style>` block, which starts at line ~180, after the header card markup.
+- Until the parser reaches that block, the browser can paint the H1 with only `boostershop-ds.css` (`.bs-cat-header__title h1 { font-size: 26px }`) and with both spans visible. The jump is largest on phones (26 px → 12 px), which matches the owner's description.
+
+Build one runner, `UX-003_category-heading-fouc_20261005.php` (chain position **8b**), on the deployed post-runner-8 state (reconstruct outside the repo: live2 pull + runners 1, 2, 3, 3b, 4, 5, 6, 7, 8; derive every `EXPECTED_SHA` from it).
+1. Move the first inline `<style>…</style>` block of `product/category.twig` unchanged (byte-identical content) to directly after `{{ header }}`, before any page markup. The cascade does not change: it stays after the `<head>` stylesheets and before the second inline block.
+2. Nothing else. `{% if products %}` (GA4 anchor), the JSON-LD block, FAQ and load-more scripts and every other byte of the template stay as they are; prove it (template minus the moved block is identical before/after).
+3. Reproduce before and after at 390 and 768 px with a slowed, chunked HTML response (CDP throttling or a delayed second chunk) and capture the first painted frames; after the fix the H1 must never paint at the large size or with both spans visible.
+4. Report only, do not fix: whether the second inline `<style>` block (FAQ) or inline styles in `product/product.twig`, `product/search.twig` or `common/home.twig` style markup that appears above them in the first screen.
+
+Rules: same runner library and gates as runners 1–8 (SHA guard, marker, Twig gate on `category.twig`, backup + restore-all, self-delete). Only `category.twig` changes; no ds.css change, so no token bump. Report `diagnostics/UX-003_category-heading-fouc_report_20261005.md` with before/after SHA, gates, frame captures, rollback command prefixed with `cd ~/public_html &&`, and owner QA. Runner 9 and BUG-004 build on runner 8b's output.
+
 ---
 
 
