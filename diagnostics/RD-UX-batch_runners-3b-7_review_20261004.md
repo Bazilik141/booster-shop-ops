@@ -55,7 +55,7 @@ BUG-004 builds on the final state.
 
 Runners 3b, 4, 5, 6, 7 deployed by the owner. Owner QA passed except:
 
-- Console: Chrome issue "CSP blocks the use of `eval`" (`script-src`). Not introduced by this batch: no runner adds `eval`, `new Function` or string timers; the only `new Function` in pulled files is in `nunjucks-slim.js` (unchanged, not referenced by pulled templates). Source unattributed — separate diagnostic if the owner wants it.
+- Console: Chrome issue "CSP blocks the use of `eval`" (`script-src`). Not introduced by this batch: no runner adds `eval`, `new Function` or string timers; the only `new Function` in pulled files is in `nunjucks-slim.js` (unchanged, not referenced by pulled templates). Follow-up 2026-10-05: production sends no CSP header or meta tag on 7 checked routes (home, category, search, cart, checkout, success, failure); the category page has no iframes or service workers; `eval` runs in the page. The issue cannot come from a site CSP; most likely a browser extension in the owner's Chrome. Owner confirmed 2026-10-05: caused by a built-in VPN browser extension; console clean without it. Closed.
 - List/grid toggle: hidden by an earlier owner decision; the QA item is not applicable. Remove it from future QA lists.
 - Category header card <992: owner rejects the single swipe row → two rows (runner 8, INDEX section "Deploy log runners 3b–7 and runner 8").
 - Mobile gap (~35 px) between the category header card and the grid at 400 px → runner 8.
