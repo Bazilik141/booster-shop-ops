@@ -1,0 +1,117 @@
+[
+ {
+  "url": "http://fixture/?page=category",
+  "w": 320,
+  "eval": {
+   "iw": 320,
+   "sw": 320,
+   "btn": [
+    20,
+    302,
+    282,
+    44
+   ],
+   "list": [
+    0,
+    320
+   ],
+   "listScroll": 0,
+   "ws": "nowrap"
+  },
+  "errors": [
+   "LOG-ERROR: Failed to load resource: the server responded with a status of 500 (Internal Server Error) http://127.0.0.1:8810/index.php?route=extension/ps_live_search/module/ps_live_search.autocomplete&search=err"
+  ]
+ },
+ {
+  "url": "http://fixture/?page=category",
+  "w": 360,
+  "eval": {
+   "iw": 360,
+   "sw": 360,
+   "btn": [
+    39,
+    321,
+    282,
+    44
+   ],
+   "list": [
+    0,
+    360
+   ],
+   "listScroll": 0,
+   "ws": "nowrap"
+  },
+  "errors": [
+   "LOG-ERROR: Failed to load resource: the server responded with a status of 500 (Internal Server Error) http://127.0.0.1:8810/index.php?route=extension/ps_live_search/module/ps_live_search.autocomplete&search=err"
+  ]
+ },
+ {
+  "url": "http://fixture/?page=category",
+  "w": 390,
+  "eval": {
+   "iw": 390,
+   "sw": 390,
+   "btn": [
+    54,
+    336,
+    282,
+    44
+   ],
+   "list": [
+    0,
+    390
+   ],
+   "listScroll": 0,
+   "ws": "nowrap"
+  },
+  "errors": [
+   "LOG-ERROR: Failed to load resource: the server responded with a status of 500 (Internal Server Error) http://127.0.0.1:8810/index.php?route=extension/ps_live_search/module/ps_live_search.autocomplete&search=err"
+  ]
+ },
+ {
+  "url": "http://fixture/?page=category",
+  "w": 768,
+  "eval": {
+   "iw": 768,
+   "sw": 768,
+   "btn": [
+    243,
+    525,
+    282,
+    44
+   ],
+   "list": [
+    0,
+    768
+   ],
+   "listScroll": 0,
+   "ws": "nowrap"
+  },
+  "errors": [
+   "LOG-ERROR: Failed to load resource: the server responded with a status of 500 (Internal Server Error) http://127.0.0.1:8810/index.php?route=extension/ps_live_search/module/ps_live_search.autocomplete&search=err"
+  ]
+ },
+ {
+  "url": "http://fixture/?page=category",
+  "w": 1440,
+  "eval": {
+   "iw": 1440,
+   "sw": 1440,
+   "btn": [
+    506,
+    788,
+    282,
+    44
+   ],
+   "list": [
+    386,
+    908
+   ],
+   "listScroll": 0,
+   "ws": "nowrap"
+  },
+  "errors": [
+   "LOG-ERROR: Failed to load resource: the server responded with a status of 500 (Internal Server Error) http://127.0.0.1:8810/index.php?route=extension/ps_live_search/module/ps_live_search.autocomplete&search=err"
+  ]
+ }
+]

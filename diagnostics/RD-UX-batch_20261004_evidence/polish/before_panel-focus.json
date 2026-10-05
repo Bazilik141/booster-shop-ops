@@ -1,0 +1,152 @@
+[
+ {
+  "url": "http://fixture/?page=category&filter=12",
+  "w": 320,
+  "eval": {
+   "w": 320,
+   "sw": 320,
+   "expanded": "true",
+   "panelTop": 225,
+   "toolsBottom": 209,
+   "panelBelowRow2": true,
+   "focusOutline": "none rgb(31, 41, 55)",
+   "active": "bs"
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=category",
+  "w": 320,
+  "eval": {
+   "w": 320,
+   "sw": 320,
+   "expanded": "false",
+   "panelTop": 0,
+   "toolsBottom": 209,
+   "panelBelowRow2": false,
+   "focusOutline": "none rgb(17, 24, 39)",
+   "active": "bs-ff-toggle"
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=category&filter=12",
+  "w": 390,
+  "eval": {
+   "w": 390,
+   "sw": 390,
+   "expanded": "true",
+   "panelTop": 225,
+   "toolsBottom": 209,
+   "panelBelowRow2": true,
+   "focusOutline": "none rgb(31, 41, 55)",
+   "active": "bs"
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=category",
+  "w": 390,
+  "eval": {
+   "w": 390,
+   "sw": 390,
+   "expanded": "false",
+   "panelTop": 0,
+   "toolsBottom": 209,
+   "panelBelowRow2": false,
+   "focusOutline": "none rgb(17, 24, 39)",
+   "active": "bs-ff-toggle"
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=category&filter=12",
+  "w": 768,
+  "eval": {
+   "w": 768,
+   "sw": 768,
+   "expanded": "true",
+   "panelTop": 249,
+   "toolsBottom": 231,
+   "panelBelowRow2": true,
+   "focusOutline": "none rgb(31, 41, 55)",
+   "active": "bs"
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=category",
+  "w": 768,
+  "eval": {
+   "w": 768,
+   "sw": 768,
+   "expanded": "false",
+   "panelTop": 0,
+   "toolsBottom": 231,
+   "panelBelowRow2": false,
+   "focusOutline": "none rgb(17, 24, 39)",
+   "active": "bs-ff-toggle"
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=category&filter=12",
+  "w": 991,
+  "eval": {
+   "w": 991,
+   "sw": 991,
+   "expanded": "true",
+   "panelTop": 257,
+   "toolsBottom": 239,
+   "panelBelowRow2": true,
+   "focusOutline": "none rgb(31, 41, 55)",
+   "active": "bs"
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=category",
+  "w": 991,
+  "eval": {
+   "w": 991,
+   "sw": 991,
+   "expanded": "false",
+   "panelTop": 0,
+   "toolsBottom": 239,
+   "panelBelowRow2": false,
+   "focusOutline": "none rgb(17, 24, 39)",
+   "active": "bs-ff-toggle"
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=category&filter=12",
+  "w": 1440,
+  "eval": {
+   "w": 1440,
+   "sw": 1440,
+   "expanded": "true",
+   "panelTop": 267,
+   "toolsBottom": 247,
+   "panelBelowRow2": true,
+   "focusOutline": "none rgb(31, 41, 55)",
+   "active": "bs"
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=category",
+  "w": 1440,
+  "eval": {
+   "w": 1440,
+   "sw": 1440,
+   "expanded": "false",
+   "panelTop": 0,
+   "toolsBottom": 247,
+   "panelBelowRow2": false,
+   "focusOutline": "none rgb(17, 24, 39)",
+   "active": "bs-ff-toggle"
+  },
+  "errors": []
+ }
+]

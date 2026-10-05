@@ -1,0 +1,90 @@
+[
+ {
+  "url": "https://boostershop.website/catalog/Pokemon/Pokemon-booster-box",
+  "w": 400,
+  "eval": {
+   "iw": 400,
+   "cardBottom": 222,
+   "boxGap": 14,
+   "img": [
+    376,
+    273
+   ],
+   "fit": "contain",
+   "firstRow": 16,
+   "visualGap": 23,
+   "src": "%D0%B8%D0%B4%D0%B0%D0%BD%D0%BD%D1%8F)-Photoroom-500x500.webp"
+  },
+  "logs": []
+ },
+ {
+  "url": "https://boostershop.website/catalog/Pokemon/Pokemon-booster-box",
+  "w": 1440,
+  "eval": {
+   "iw": 1440,
+   "cardBottom": 268,
+   "boxGap": 16,
+   "img": [
+    306,
+    222
+   ],
+   "fit": "contain",
+   "firstRow": 16,
+   "visualGap": 23,
+   "src": "%D0%B8%D0%B4%D0%B0%D0%BD%D0%BD%D1%8F)-Photoroom-500x500.webp"
+  },
+  "logs": []
+ },
+ {
+  "url": "https://boostershop.website/catalog/One-Piece/one-piece-nabory-ta-boksy",
+  "w": 400,
+  "eval": {
+   "iw": 400,
+   "cardBottom": 222,
+   "boxGap": 14,
+   "img": [
+    376,
+    273
+   ],
+   "fit": "contain",
+   "firstRow": 0,
+   "visualGap": 14,
+   "src": "%20Kuzan-%20[ST-33]%20ONE%20PIECE%20CARD%20GAME-500x500.webp"
+  },
+  "logs": []
+ },
+ {
+  "url": "https://boostershop.website/catalog/One-Piece/one-piece-nabory-ta-boksy",
+  "w": 1440,
+  "eval": {
+   "iw": 1440,
+   "cardBottom": 268,
+   "boxGap": 16,
+   "img": [
+    306,
+    222
+   ],
+   "fit": "contain",
+   "firstRow": 0,
+   "visualGap": 16,
+   "src": "%20Kuzan-%20[ST-33]%20ONE%20PIECE%20CARD%20GAME-500x500.webp"
+  },
+  "logs": []
+ },
+ {
+  "url": "https://boostershop.website/catalog/MTG",
+  "w": 400,
+  "eval": {},
+  "logs": [
+   "LOG-ERROR: Failed to load resource: the server responded with a status of 404 () https://boostershop.website/catalog/MTG"
+  ]
+ },
+ {
+  "url": "https://boostershop.website/catalog/MTG",
+  "w": 1440,
+  "eval": {},
+  "logs": [
+   "LOG-ERROR: Failed to load resource: the server responded with a status of 404 () https://boostershop.website/catalog/MTG"
+  ]
+ }
+]

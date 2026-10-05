@@ -1,0 +1,306 @@
+--- post7/catalog/view/stylesheet/boostershop-ds.css	2026-10-05 17:55:52.914779800 +0300
++++ work/catalog/view/stylesheet/boostershop-ds.css	2026-10-05 18:23:45.743783300 +0300
+@@ -3247,6 +3247,17 @@
+   .bs-ghost { display: none; }
+ }
+ 
++/* UX-003-POLISH (2026-10-04, owner decision, review R4): from 769px the full labels no longer fit next to the
++   search's 220px minimum. Measured: «Увійти» + «Telegram» + «Мій кошик - 0.00₴» need 896px; a six-digit total
++   while logged in needs 945px. Up to 959px both links are 44×44 icons (aria-label keeps the name) and the cart
++   shows icon + total — cart.twig wraps the «Мій кошик - » part in .bs-btn-label__lead. */
++@media (min-width: 769px) and (max-width: 959.98px) {
++  .bs-ghost { justify-content: center; width: 44px; height: 44px; padding: 0; }
++  .bs-ghost svg { width: 20px; height: 20px; }
++  .bs-ghost > span { display: none; }
++  #cart .bs-btn-label__lead { display: none; }
++}
++
+ 
+ /* ============================================================
+    A — MOBILE SEARCH: tap-to-expand, live results in place
+@@ -3640,8 +3651,12 @@
+ }
+ #ps-live-search .bs-ls-state__btn {
+   gap: 6px;
++  height: auto;
+   min-height: 44px;
++  max-width: 100%;
+   margin-top: 4px;
++  padding-block: 8px;
++  white-space: normal; /* UX-003-POLISH (review R6): .bs-btn is nowrap; the label overflowed at 320px */
+ }
+ /* === /UX-009-LS === */
+ 
+@@ -3947,9 +3962,12 @@
+    the category header card: subcategory chips | «Фільтр» | sort; the panel opens under it with every filter group,
+    each collapsible. Replaces the desktop toolbar (.bs-cat-header__toolbar / .bs-segmented), the mobile
+    subcategory grid (.bs-subcat-tabs), the mobile action row and the side filter column on category pages.
+-   Side padding follows .bs-cat-header__hero: 14px ≤640, 16px to 991, 22px from 992. */
++   Side padding follows .bs-cat-header__hero: 14px ≤640, 16px to 991, 22px from 992.
++   UX-003-POLISH (2026-10-04, owner decision): below 992 the row wraps into two — the chips wrap on row 1 (no
++   horizontal scroll), «Фільтр» and the sort share row 2 at equal width with text labels. ≥992 is one row. */
+ .bs-ff-row {
+   display: flex;
++  flex-wrap: wrap;
+   align-items: center;
+   gap: 8px;
+   min-width: 0;
+@@ -3957,15 +3975,10 @@
+ }
+ .bs-ff-chips {
+   display: flex;
+-  flex: 1 1 auto;
++  flex: 1 1 100%;
++  flex-wrap: wrap;
+   gap: 6px;
+   min-width: 0;
+-  padding: 2px 0;
+-  overflow-x: auto;
+-  scrollbar-width: none;
+-}
+-.bs-ff-chips::-webkit-scrollbar {
+-  display: none;
+ }
+ #product-category .bs-ff-chip {
+   display: inline-flex;
+@@ -3981,7 +3994,7 @@
+   font-size: 14px;
+   font-weight: 700;
+   text-decoration: none;
+-  white-space: nowrap;
++  max-width: 100%;
+ }
+ #product-category .bs-ff-chip:hover {
+   text-decoration: none;
+@@ -4005,9 +4018,8 @@
+ }
+ .bs-ff-tools {
+   display: flex;
+-  flex: 0 0 auto;
++  flex: 1 1 100%;
+   gap: 8px;
+-  margin-left: auto;
+ }
+ 
+ /* «Фільтр» */
+@@ -4016,9 +4028,10 @@
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
++  flex: 1 1 50%; /* 50%, not 0: border-box floors a 0 basis at padding + border, 30px wider than the sort */
+   gap: 8px;
+   height: 44px;
+-  min-width: 44px;
++  min-width: 0;
+   padding: 0 14px;
+   border: 1px solid var(--bs-line);
+   border-radius: 8px;
+@@ -4075,9 +4088,8 @@
+ 
+ /* Sort: the native select, unchanged behaviour (onchange → location). */
+ .bs-ff-sort {
+-  position: relative;
+-  flex: 0 0 auto;
+-  width: 200px;
++  flex: 1 1 50%;
++  min-width: 0;
+ }
+ .bs-ff-sort .bs-select {
+   height: 44px;
+@@ -4085,9 +4097,7 @@
+   color: var(--bs-ink-2);
+   font-size: 14px;
+   font-weight: 600;
+-}
+-.bs-ff-sort__ic {
+-  display: none;
++  text-overflow: ellipsis;
+ }
+ 
+ /* Panel */
+@@ -4197,58 +4207,13 @@
+   cursor: pointer;
+ }
+ 
+-/* ≤575: «Фільтр» and sort become 44×44 icon buttons. The sort icon sits under a transparent native select, so the
+-   select keeps its own picker and its onchange; position:absolute is that overlay. */
++/* ≤575: the half-row sort keeps «За замовчуванням» whole down to 390px (tighter inline padding, 13.5px); narrower,
++   it ends in an ellipsis instead of being cut mid-letter. */
+ @media (max-width: 575.98px) {
+-  .bs-ff-btn {
+-    width: 44px;
+-    padding: 0;
+-  }
+-  .bs-ff-btn__label {
+-    position: absolute;
+-    width: 1px;
+-    height: 1px;
+-    margin: -1px;
+-    overflow: hidden;
+-    clip: rect(0 0 0 0);
+-    clip-path: inset(50%);
+-    white-space: nowrap;
+-  }
+-  .bs-ff-btn__chev {
+-    display: none;
+-  }
+-  .bs-ff-btn .bs-ff-count {
+-    position: absolute;
+-    top: -6px;
+-    right: -6px;
+-  }
+-  .bs-ff-sort {
+-    width: 44px;
+-    height: 44px;
+-  }
+-  .bs-ff-sort__ic {
+-    position: absolute;
+-    inset: 0;
+-    display: flex;
+-    align-items: center;
+-    justify-content: center;
+-    border: 1px solid var(--bs-line);
+-    border-radius: 8px;
+-    background: #fff;
+-    color: var(--bs-ink);
+-    pointer-events: none;
+-  }
+   .bs-ff-sort .bs-select {
+-    position: absolute;
+-    inset: 0;
+-    width: 100%;
+-    height: 100%;
+-    opacity: 0;
+-    cursor: pointer;
+-  }
+-  .bs-ff-sort:focus-within .bs-ff-sort__ic {
+-    outline: 2px solid var(--bs-blue);
+-    outline-offset: 2px;
++    padding-inline: 10px 26px;
++    font-size: 13.5px;
++    background-position: right 8px center;
+   }
+ }
+ @media (min-width: 641px) {
+@@ -4265,12 +4230,6 @@
+     column-gap: 24px;
+   }
+ }
+-/* Below 992 the removed mobile action row used to hold the grid 14px off the header card (≥992 has UI-CAT-GAP). */
+-@media (max-width: 991.98px) {
+-  #product-category .bs-cat-header {
+-    margin-bottom: 14px;
+-  }
+-}
+ /* ≥992: four product columns now that the side column is gone. Stock common.js rewrites #product-list's classes
+    to row-cols-lg-3 on every load (its list/grid localStorage switch, which has no buttons on this page), so the
+    template's row-cols-lg-4 never survives; the column width is set for that grid class instead. List mode
+@@ -4281,6 +4240,7 @@
+     width: 25%;
+   }
+   .bs-ff-row {
++    flex-wrap: nowrap;
+     padding: 0 22px 18px;
+   }
+   .bs-ff-panel {
+@@ -4289,9 +4249,7 @@
+   }
+   .bs-ff-chips {
+     flex: 0 1 auto;
+-    flex-wrap: wrap;
+     padding: 4px;
+-    overflow: visible;
+     border-radius: 10px;
+     background: var(--bs-line-2);
+   }
+@@ -4299,6 +4257,7 @@
+     min-height: 40px;
+     border: 0;
+     background: transparent;
++    white-space: nowrap;
+   }
+   #product-category .bs-ff-chip:hover {
+     background: #fff;
+@@ -4308,7 +4267,15 @@
+     box-shadow: 0 1px 2px rgba(17, 24, 39, 0.08), 0 0 0 1px var(--bs-line);
+     color: var(--bs-ink);
+   }
++  .bs-ff-tools {
++    flex: 0 0 auto;
++    margin-left: auto;
++  }
++  .bs-ff-btn {
++    flex: 0 0 auto;
++  }
+   .bs-ff-sort {
++    flex: 0 0 auto;
+     width: 220px;
+   }
+   .bs-ff-groups {
+--- post7/catalog/view/template/common/cart.twig	2026-10-05 17:55:53.087757300 +0300
++++ work/catalog/view/template/common/cart.twig	2026-10-05 18:23:45.780303000 +0300
+@@ -9,8 +9,11 @@
+ {# TECH-045-WPD (2026-09-28): the panel element is div, not aside — role=dialog is not allowed on aside; «До каталогу» is
+    navigation, so it uses bs-btn-secondary (green is for purchase actions). #}
+ {# RD-UX-QA-3B (2026-10-04): «До каталогу» closes the drawer, then opens the burger catalogue (owner decision). #}
++{# UX-003-POLISH (2026-10-04): the trigger label «Мій кошик - <total>» is split at its first « - » so ds.css can show
++   icon + total at 769–959px; any other text_items shape renders unchanged. aria-label keeps the full text. #}
++{% set bs_cart_label = text_items|split(' - ', 2) %}
+ <div class="bs-mini-cart" data-bs-mini-cart>
+-  <button type="button" class="bs-btn bs-btn-primary bs-btn-sm mini-cart-trigger" data-bs-mini-cart-open aria-label="{{ text_items }}" aria-expanded="false"><svg class="bs-cart-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4H6Z" stroke="currentColor" stroke-width="1.6"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0" stroke="currentColor" stroke-width="1.6"/></svg><span class="bs-btn-label">{{ text_items }}</span></button>
++  <button type="button" class="bs-btn bs-btn-primary bs-btn-sm mini-cart-trigger" data-bs-mini-cart-open aria-label="{{ text_items }}" aria-expanded="false"><svg class="bs-cart-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4H6Z" stroke="currentColor" stroke-width="1.6"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0" stroke="currentColor" stroke-width="1.6"/></svg><span class="bs-btn-label">{% if bs_cart_label|length == 2 %}<span class="bs-btn-label__lead">{{ bs_cart_label[0] }} - </span>{{ bs_cart_label[1] }}{% else %}{{ text_items }}{% endif %}</span></button>
+   <div class="bs-mini-cart__overlay" data-bs-mini-cart-close></div><div class="bs-mini-cart__panel" role="dialog" aria-modal="true" aria-label="Кошик"><div class="bs-mini-cart__handle" aria-hidden="true"></div><header class="bs-mini-cart__head"><h2>Кошик{% if bs_cart_qty > 0 %}<span> · {{ bs_cart_qty }} товарів</span>{% endif %}</h2><button type="button" data-bs-mini-cart-close aria-label="Закрити">×</button></header>
+   {% if products %}<div class="bs-mini-cart__body">{% for product in products %}<article class="bs-mini-cart__row"><a href="{{ product.href }}">{% if product.thumb %}<img src="{{ product.thumb }}" alt="{{ product.name }}"/>{% endif %}</a><div><div class="bs-mini-cart__rowhead"><a href="{{ product.href }}">{{ product.name }}</a><button type="button" class="mini-cart-remove-btn" data-remove-url="{{ remove }}" data-key="{{ product.cart_id }}" aria-label="Видалити">×</button></div><form class="mini-cart-quantity-form" data-edit-url="index.php?route=checkout/cart.edit&language={{ language }}"><div class="bs-mini-cart__line"><div class="bs-mini-cart__stepper"><button type="button" class="bs-mini-cart-qty" data-delta="-1">−</button><input type="number" name="quantity" value="{{ product.quantity }}" min="1" class="mini-cart-quantity-input" data-key="{{ product.cart_id }}" aria-label="Кількість"/><button type="button" class="bs-mini-cart-qty" data-delta="1">+</button></div><strong>{{ product.total }}</strong></div></form></div></article>{% endfor %}</div>{% set bs_free = sub_total >= shipping_pinta_nova_poshta_free_from %}{% set bs_remaining = shipping_pinta_nova_poshta_free_from - sub_total %}<div class="bs-mini-cart__foot"><div class="bs-mini-cart__shipping{% if bs_free %} is-free{% endif %}">{% if bs_free %}<strong>Доставка Новою поштою — безкоштовно</strong>{% else %}<span>Безкоштовна доставка Новою поштою від {{ shipping_pinta_nova_poshta_free_from }}</span>{% endif %}{% if not bs_free and bs_remaining <= shipping_pinta_nova_poshta_free_from * 0.3 %}<div><i style="width:{{ (sub_total / shipping_pinta_nova_poshta_free_from * 100)|round }}%"></i></div><small>Ще {{ bs_remaining }} — і доставка безкоштовна</small>{% endif %}</div><div class="bs-mini-cart__sum"><span>Сума</span><strong>{% for total in totals %}{% if total.code == 'sub_total' %}{{ total.text }}{% endif %}{% endfor %}</strong></div><a href="{{ checkout }}" class="bs-btn bs-btn-primary">Оформити замовлення</a><div class="bs-mini-cart__links"><button type="button" data-bs-mini-cart-close>← Продовжити покупки</button><a href="{{ cart }}">Відкрити кошик</a></div></div>{% else %}<div class="bs-empty"><div class="bs-empty__icon" aria-hidden="true">⌑</div><p class="bs-empty__title">Кошик порожній</p><p class="bs-empty__text">Тут з’являться товари, які ви додасте.</p><button type="button" class="bs-btn bs-btn-secondary" data-bs-mini-cart-close data-bs-mini-cart-catalog>До каталогу</button></div>{% endif %}</div></div><script type="text/javascript"><!--
+ var miniCartUpdateTimers = window.miniCartUpdateTimers || {};
+--- post7/catalog/view/template/product/category.twig	2026-10-05 17:55:53.071331300 +0300
++++ work/catalog/view/template/product/category.twig	2026-10-05 18:23:45.807971300 +0300
+@@ -33,6 +33,8 @@
+            (design «етап 3», «Фільтр категорії», variant C). Replaces the desktop toolbar, the mobile subcategory grid
+            and the mobile action row. The filter module (column_right) renders inside the panel instead of the side
+            column; its aside wrapper is swapped because stylesheet.css hides #column-right below 992px. #}
++        {# UX-003-POLISH (2026-10-04): below 992 the row wraps — chips on row 1, «Фільтр» + sort on row 2 (ds.css). No
++           empty chips placeholder any more (review R2); the tools keep margin-left:auto at ≥992. #}
+         <div class="bs-ff-row">
+           {% if sub_categories|length %}
+             <nav class="bs-ff-chips" aria-label="Підкатегорії">
+@@ -40,8 +42,6 @@
+                 <a href="{{ sub.href }}" class="bs-ff-chip{% if sub.active %} is-active{% endif %}"{% if sub.active %} aria-current="page"{% endif %}>{{ sub.name }}{% if sub.product_count %}<span class="bs-ff-chip__count">{{ sub.product_count }}</span>{% endif %}</a>
+               {% endfor %}
+             </nav>
+-          {% else %}
+-            <div class="bs-ff-chips"></div>
+           {% endif %}
+           <div class="bs-ff-tools">
+             {% if column_right %}
+@@ -53,7 +53,6 @@
+               </button>
+             {% endif %}
+             <div class="bs-ff-sort">
+-              <span class="bs-ff-sort__ic" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 4v16m0 0-3-3m3 3 3-3M17 20V4m0 0-3 3m3-3 3 3"/></svg></span>
+               <select class="bs-select" aria-label="{{ text_sort }}" onchange="location = this.value;">
+                 {% for sort_item in sorts %}
+                   <option value="{{ sort_item.href }}"{% if sort_item.value == current_sort %} selected{% endif %}>{{ sort_item.text }}</option>
+@@ -411,10 +410,8 @@
+ 
+   .bs-cat-header { margin-bottom: 0; }
+ 
+-  /* UI-CAT-GAP · desktop toolbar-to-grid spacing */
+-  @media (min-width: 992px) {
+-    #product-category .bs-cat-header { margin-bottom: 16px; }
+-  }
++  /* UI-CAT-GAP · header-card-to-grid spacing, every width (UX-003-POLISH: was ≥992 only; runner 7 gave 14px below) */
++  #product-category .bs-cat-header { margin-bottom: 16px; }
+   .bs-cat-header__hero { align-items: flex-start; }
+   .bs-cat-header__title { flex-wrap: wrap; }
+ 
+--- post7/catalog/view/template/common/header.twig	2026-10-05 17:55:53.081188200 +0300
++++ work/catalog/view/template/common/header.twig	2026-10-05 18:23:45.751296500 +0300
+@@ -72,7 +72,7 @@
+     @font-face{font-family:'Manrope';font-style:normal;font-weight:200 800;font-display:swap;src:url(catalog/view/stylesheet/fonts/manrope/manrope-latin-ext.woff2?v=manrope-v20) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+     @font-face{font-family:'Manrope';font-style:normal;font-weight:200 800;font-display:swap;src:url(catalog/view/stylesheet/fonts/manrope/manrope-latin.woff2?v=manrope-v20) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+   </style>
+-  <link href="catalog/view/stylesheet/boostershop-ds.css?v=ux003filter-20261004" type="text/css" rel="stylesheet"/>
++  <link href="catalog/view/stylesheet/boostershop-ds.css?v=ux003polish-20261004" type="text/css" rel="stylesheet"/>
+   <link href="catalog/view/stylesheet/bs-faq.css?v=rd05b-faq-20260604" type="text/css" rel="stylesheet"/>
+     <link href="catalog/view/stylesheet/content-pages.css?v=tech045-wpa-20260928" type="text/css" rel="stylesheet"/>
+ <link href="{{ stylesheet }}?v=rd10-breadcrumb-mockup-20260611e" type="text/css" rel="stylesheet"/>

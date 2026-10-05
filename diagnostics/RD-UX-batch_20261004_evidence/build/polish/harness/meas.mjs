@@ -1,0 +1,14 @@
+// node meas.mjs <port> <widths csv> <pages csv> [outdir prefix] -> jobs JSON
+const [port, ws, ps, outdir, prefix] = process.argv.slice(2);
+const PAGES = { home: 'page=home', cat: 'page=category', catnosubs: 'page=category&nosubs=1', catfilter: 'page=category&filter=12,21', product: 'page=product',
+  search: 'page=search&search=pokemon', checkout: 'page=checkoutreal', stack: 'page=stack', catnofilter: 'page=category&nofilter=1&nosubs=1', catlong: 'page=category&longsub=1' };
+const ev = `(() => { const de = document.documentElement; const r = s => { const e = document.querySelector(s); if (!e) return null; const b = e.getBoundingClientRect(); return [Math.round(b.left), Math.round(b.right), Math.round(b.width), Math.round(b.height), Math.round(b.top)]; };
+ const over = []; document.querySelectorAll('body *').forEach(e => { const b = e.getBoundingClientRect(); if (b.width && b.right > innerWidth + 0.5) { let p = e, clipped = false; for (let a = e; a && a !== document.body; a = a.parentElement) { if (getComputedStyle(a).position === 'fixed') { clipped = true; break; } } p = e.parentElement; while (!clipped && p && p !== document.body) { const cs = getComputedStyle(p); if (/(hidden|auto|scroll|clip)/.test(cs.overflowX)) { const pb = p.getBoundingClientRect(); if (pb.right <= innerWidth + 0.5) { clipped = true; break; } } p = p.parentElement; } if (!clipped) over.push((e.id ? '#' + e.id : e.tagName.toLowerCase() + '.' + [...e.classList].join('.')) + '@' + Math.round(b.right)); } });
+ return { iw: innerWidth, sw: de.scrollWidth, bsw: document.body.scrollWidth, actions: r('.bs-header__actions'), cart: r('#cart .mini-cart-trigger'), logo: r('.bs-header__logo'), search: r('.bs-msearch'), burger: r('#bs-menu-open'), hdrH: r('.bs-header') && r('.bs-header')[3], over: over.slice(0, 8), ff: (() => { const t = document.querySelector('.bs-ff-tools'); if (!t) return null; const c = document.querySelector('.bs-ff-chips'); const b = document.querySelector('#bs-ff-toggle'); const so = document.querySelector('.bs-ff-sort'); const g = e => e ? [Math.round(e.getBoundingClientRect().left), Math.round(e.getBoundingClientRect().top), Math.round(e.getBoundingClientRect().width), Math.round(e.getBoundingClientRect().height)] : null; return { chips: g(c), btn: g(b), sort: g(so), chipsScroll: c ? c.scrollWidth - c.clientWidth : null, gap: Math.round(document.querySelector('#product-list').getBoundingClientRect().top - document.querySelector('.bs-cat-header').getBoundingClientRect().bottom) }; })() }; })()`;
+const jobs = [];
+for (const p of ps.split(',')) for (const w of ws.split(',').map(Number)) {
+  const j = { url: `http://127.0.0.1:${port}/?${PAGES[p]}`, w, h: 900, evalOut: ev, loadWait: 900, tag: p };
+  if (outdir) { j.out = `${outdir}/${prefix}_${p}_${w}.png`; }
+  jobs.push(j);
+}
+process.stdout.write(JSON.stringify(jobs));

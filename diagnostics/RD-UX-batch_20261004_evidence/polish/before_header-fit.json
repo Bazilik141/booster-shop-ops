@@ -1,0 +1,970 @@
+[
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%200.00%E2%82%B4",
+  "w": 768,
+  "eval": {
+   "iw": 768,
+   "sw": 768,
+   "act": 44,
+   "cart": 44
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%200.00%E2%82%B4",
+  "w": 769,
+  "eval": {
+   "iw": 769,
+   "sw": 896,
+   "act": 413,
+   "cart": 201
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%200.00%E2%82%B4",
+  "w": 800,
+  "eval": {
+   "iw": 800,
+   "sw": 896,
+   "act": 413,
+   "cart": 201
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%200.00%E2%82%B4",
+  "w": 900,
+  "eval": {
+   "iw": 900,
+   "sw": 900,
+   "act": 413,
+   "cart": 201
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%200.00%E2%82%B4",
+  "w": 940,
+  "eval": {
+   "iw": 940,
+   "sw": 940,
+   "act": 413,
+   "cart": 201
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%200.00%E2%82%B4",
+  "w": 958,
+  "eval": {
+   "iw": 958,
+   "sw": 958,
+   "act": 413,
+   "cart": 201
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%200.00%E2%82%B4",
+  "w": 959,
+  "eval": {
+   "iw": 959,
+   "sw": 959,
+   "act": 413,
+   "cart": 201
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%200.00%E2%82%B4",
+  "w": 960,
+  "eval": {
+   "iw": 960,
+   "sw": 960,
+   "act": 413,
+   "cart": 201
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%200.00%E2%82%B4",
+  "w": 991,
+  "eval": {
+   "iw": 991,
+   "sw": 991,
+   "act": 413,
+   "cart": 201
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%200.00%E2%82%B4",
+  "w": 992,
+  "eval": {
+   "iw": 992,
+   "sw": 992,
+   "act": 413,
+   "cart": 201
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%200.00%E2%82%B4",
+  "w": 1024,
+  "eval": {
+   "iw": 1024,
+   "sw": 1024,
+   "act": 413,
+   "cart": 201
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%200.00%E2%82%B4",
+  "w": 768,
+  "eval": {
+   "iw": 768,
+   "sw": 768,
+   "act": 44,
+   "cart": 44
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%200.00%E2%82%B4",
+  "w": 769,
+  "eval": {
+   "iw": 769,
+   "sw": 900,
+   "act": 417,
+   "cart": 201
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%200.00%E2%82%B4",
+  "w": 800,
+  "eval": {
+   "iw": 800,
+   "sw": 900,
+   "act": 417,
+   "cart": 201
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%200.00%E2%82%B4",
+  "w": 900,
+  "eval": {
+   "iw": 900,
+   "sw": 900,
+   "act": 417,
+   "cart": 201
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%200.00%E2%82%B4",
+  "w": 940,
+  "eval": {
+   "iw": 940,
+   "sw": 940,
+   "act": 417,
+   "cart": 201
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%200.00%E2%82%B4",
+  "w": 958,
+  "eval": {
+   "iw": 958,
+   "sw": 958,
+   "act": 417,
+   "cart": 201
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%200.00%E2%82%B4",
+  "w": 959,
+  "eval": {
+   "iw": 959,
+   "sw": 959,
+   "act": 417,
+   "cart": 201
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%200.00%E2%82%B4",
+  "w": 960,
+  "eval": {
+   "iw": 960,
+   "sw": 960,
+   "act": 417,
+   "cart": 201
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%200.00%E2%82%B4",
+  "w": 991,
+  "eval": {
+   "iw": 991,
+   "sw": 991,
+   "act": 417,
+   "cart": 201
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%200.00%E2%82%B4",
+  "w": 992,
+  "eval": {
+   "iw": 992,
+   "sw": 992,
+   "act": 417,
+   "cart": 201
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%200.00%E2%82%B4",
+  "w": 1024,
+  "eval": {
+   "iw": 1024,
+   "sw": 1024,
+   "act": 417,
+   "cart": 201
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%204990.00%E2%82%B4",
+  "w": 768,
+  "eval": {
+   "iw": 768,
+   "sw": 768,
+   "act": 44,
+   "cart": 44
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%204990.00%E2%82%B4",
+  "w": 769,
+  "eval": {
+   "iw": 769,
+   "sw": 925,
+   "act": 442,
+   "cart": 230
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%204990.00%E2%82%B4",
+  "w": 800,
+  "eval": {
+   "iw": 800,
+   "sw": 925,
+   "act": 442,
+   "cart": 230
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%204990.00%E2%82%B4",
+  "w": 900,
+  "eval": {
+   "iw": 900,
+   "sw": 925,
+   "act": 442,
+   "cart": 230
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%204990.00%E2%82%B4",
+  "w": 940,
+  "eval": {
+   "iw": 940,
+   "sw": 940,
+   "act": 442,
+   "cart": 230
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%204990.00%E2%82%B4",
+  "w": 958,
+  "eval": {
+   "iw": 958,
+   "sw": 958,
+   "act": 442,
+   "cart": 230
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%204990.00%E2%82%B4",
+  "w": 959,
+  "eval": {
+   "iw": 959,
+   "sw": 959,
+   "act": 442,
+   "cart": 230
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%204990.00%E2%82%B4",
+  "w": 960,
+  "eval": {
+   "iw": 960,
+   "sw": 960,
+   "act": 442,
+   "cart": 230
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%204990.00%E2%82%B4",
+  "w": 991,
+  "eval": {
+   "iw": 991,
+   "sw": 991,
+   "act": 442,
+   "cart": 230
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%204990.00%E2%82%B4",
+  "w": 992,
+  "eval": {
+   "iw": 992,
+   "sw": 992,
+   "act": 442,
+   "cart": 230
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%204990.00%E2%82%B4",
+  "w": 1024,
+  "eval": {
+   "iw": 1024,
+   "sw": 1024,
+   "act": 442,
+   "cart": 230
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%204990.00%E2%82%B4",
+  "w": 768,
+  "eval": {
+   "iw": 768,
+   "sw": 768,
+   "act": 44,
+   "cart": 44
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%204990.00%E2%82%B4",
+  "w": 769,
+  "eval": {
+   "iw": 769,
+   "sw": 929,
+   "act": 446,
+   "cart": 230
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%204990.00%E2%82%B4",
+  "w": 800,
+  "eval": {
+   "iw": 800,
+   "sw": 929,
+   "act": 446,
+   "cart": 230
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%204990.00%E2%82%B4",
+  "w": 900,
+  "eval": {
+   "iw": 900,
+   "sw": 929,
+   "act": 446,
+   "cart": 230
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%204990.00%E2%82%B4",
+  "w": 940,
+  "eval": {
+   "iw": 940,
+   "sw": 940,
+   "act": 446,
+   "cart": 230
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%204990.00%E2%82%B4",
+  "w": 958,
+  "eval": {
+   "iw": 958,
+   "sw": 958,
+   "act": 446,
+   "cart": 230
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%204990.00%E2%82%B4",
+  "w": 959,
+  "eval": {
+   "iw": 959,
+   "sw": 959,
+   "act": 446,
+   "cart": 230
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%204990.00%E2%82%B4",
+  "w": 960,
+  "eval": {
+   "iw": 960,
+   "sw": 960,
+   "act": 446,
+   "cart": 230
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%204990.00%E2%82%B4",
+  "w": 991,
+  "eval": {
+   "iw": 991,
+   "sw": 991,
+   "act": 446,
+   "cart": 230
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%204990.00%E2%82%B4",
+  "w": 992,
+  "eval": {
+   "iw": 992,
+   "sw": 992,
+   "act": 446,
+   "cart": 230
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%204990.00%E2%82%B4",
+  "w": 1024,
+  "eval": {
+   "iw": 1024,
+   "sw": 1024,
+   "act": 446,
+   "cart": 230
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%2023460.00%E2%82%B4",
+  "w": 768,
+  "eval": {
+   "iw": 768,
+   "sw": 768,
+   "act": 44,
+   "cart": 44
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%2023460.00%E2%82%B4",
+  "w": 769,
+  "eval": {
+   "iw": 769,
+   "sw": 934,
+   "act": 451,
+   "cart": 239
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%2023460.00%E2%82%B4",
+  "w": 800,
+  "eval": {
+   "iw": 800,
+   "sw": 934,
+   "act": 451,
+   "cart": 239
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%2023460.00%E2%82%B4",
+  "w": 900,
+  "eval": {
+   "iw": 900,
+   "sw": 934,
+   "act": 451,
+   "cart": 239
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%2023460.00%E2%82%B4",
+  "w": 940,
+  "eval": {
+   "iw": 940,
+   "sw": 940,
+   "act": 451,
+   "cart": 239
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%2023460.00%E2%82%B4",
+  "w": 958,
+  "eval": {
+   "iw": 958,
+   "sw": 958,
+   "act": 451,
+   "cart": 239
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%2023460.00%E2%82%B4",
+  "w": 959,
+  "eval": {
+   "iw": 959,
+   "sw": 959,
+   "act": 451,
+   "cart": 239
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%2023460.00%E2%82%B4",
+  "w": 960,
+  "eval": {
+   "iw": 960,
+   "sw": 960,
+   "act": 451,
+   "cart": 239
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%2023460.00%E2%82%B4",
+  "w": 991,
+  "eval": {
+   "iw": 991,
+   "sw": 991,
+   "act": 451,
+   "cart": 239
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%2023460.00%E2%82%B4",
+  "w": 992,
+  "eval": {
+   "iw": 992,
+   "sw": 992,
+   "act": 451,
+   "cart": 239
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%2023460.00%E2%82%B4",
+  "w": 1024,
+  "eval": {
+   "iw": 1024,
+   "sw": 1024,
+   "act": 451,
+   "cart": 239
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%2023460.00%E2%82%B4",
+  "w": 768,
+  "eval": {
+   "iw": 768,
+   "sw": 768,
+   "act": 44,
+   "cart": 44
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%2023460.00%E2%82%B4",
+  "w": 769,
+  "eval": {
+   "iw": 769,
+   "sw": 938,
+   "act": 455,
+   "cart": 239
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%2023460.00%E2%82%B4",
+  "w": 800,
+  "eval": {
+   "iw": 800,
+   "sw": 938,
+   "act": 455,
+   "cart": 239
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%2023460.00%E2%82%B4",
+  "w": 900,
+  "eval": {
+   "iw": 900,
+   "sw": 938,
+   "act": 455,
+   "cart": 239
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%2023460.00%E2%82%B4",
+  "w": 940,
+  "eval": {
+   "iw": 940,
+   "sw": 940,
+   "act": 455,
+   "cart": 239
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%2023460.00%E2%82%B4",
+  "w": 958,
+  "eval": {
+   "iw": 958,
+   "sw": 958,
+   "act": 455,
+   "cart": 239
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%2023460.00%E2%82%B4",
+  "w": 959,
+  "eval": {
+   "iw": 959,
+   "sw": 959,
+   "act": 455,
+   "cart": 239
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%2023460.00%E2%82%B4",
+  "w": 960,
+  "eval": {
+   "iw": 960,
+   "sw": 960,
+   "act": 455,
+   "cart": 239
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%2023460.00%E2%82%B4",
+  "w": 991,
+  "eval": {
+   "iw": 991,
+   "sw": 991,
+   "act": 455,
+   "cart": 239
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%2023460.00%E2%82%B4",
+  "w": 992,
+  "eval": {
+   "iw": 992,
+   "sw": 992,
+   "act": 455,
+   "cart": 239
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%2023460.00%E2%82%B4",
+  "w": 1024,
+  "eval": {
+   "iw": 1024,
+   "sw": 1024,
+   "act": 455,
+   "cart": 239
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%20123460.00%E2%82%B4",
+  "w": 768,
+  "eval": {
+   "iw": 768,
+   "sw": 768,
+   "act": 44,
+   "cart": 44
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%20123460.00%E2%82%B4",
+  "w": 769,
+  "eval": {
+   "iw": 769,
+   "sw": 941,
+   "act": 458,
+   "cart": 246
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%20123460.00%E2%82%B4",
+  "w": 800,
+  "eval": {
+   "iw": 800,
+   "sw": 941,
+   "act": 458,
+   "cart": 246
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%20123460.00%E2%82%B4",
+  "w": 900,
+  "eval": {
+   "iw": 900,
+   "sw": 941,
+   "act": 458,
+   "cart": 246
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%20123460.00%E2%82%B4",
+  "w": 940,
+  "eval": {
+   "iw": 940,
+   "sw": 941,
+   "act": 458,
+   "cart": 246
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%20123460.00%E2%82%B4",
+  "w": 958,
+  "eval": {
+   "iw": 958,
+   "sw": 958,
+   "act": 458,
+   "cart": 246
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%20123460.00%E2%82%B4",
+  "w": 959,
+  "eval": {
+   "iw": 959,
+   "sw": 959,
+   "act": 458,
+   "cart": 246
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%20123460.00%E2%82%B4",
+  "w": 960,
+  "eval": {
+   "iw": 960,
+   "sw": 960,
+   "act": 458,
+   "cart": 246
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%20123460.00%E2%82%B4",
+  "w": 991,
+  "eval": {
+   "iw": 991,
+   "sw": 991,
+   "act": 458,
+   "cart": 246
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%20123460.00%E2%82%B4",
+  "w": 992,
+  "eval": {
+   "iw": 992,
+   "sw": 992,
+   "act": 458,
+   "cart": 246
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=0&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%20123460.00%E2%82%B4",
+  "w": 1024,
+  "eval": {
+   "iw": 1024,
+   "sw": 1024,
+   "act": 458,
+   "cart": 246
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%20123460.00%E2%82%B4",
+  "w": 768,
+  "eval": {
+   "iw": 768,
+   "sw": 768,
+   "act": 44,
+   "cart": 44
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%20123460.00%E2%82%B4",
+  "w": 769,
+  "eval": {
+   "iw": 769,
+   "sw": 945,
+   "act": 462,
+   "cart": 246
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%20123460.00%E2%82%B4",
+  "w": 800,
+  "eval": {
+   "iw": 800,
+   "sw": 945,
+   "act": 462,
+   "cart": 246
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%20123460.00%E2%82%B4",
+  "w": 900,
+  "eval": {
+   "iw": 900,
+   "sw": 945,
+   "act": 462,
+   "cart": 246
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%20123460.00%E2%82%B4",
+  "w": 940,
+  "eval": {
+   "iw": 940,
+   "sw": 945,
+   "act": 462,
+   "cart": 246
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%20123460.00%E2%82%B4",
+  "w": 958,
+  "eval": {
+   "iw": 958,
+   "sw": 958,
+   "act": 462,
+   "cart": 246
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%20123460.00%E2%82%B4",
+  "w": 959,
+  "eval": {
+   "iw": 959,
+   "sw": 959,
+   "act": 462,
+   "cart": 246
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%20123460.00%E2%82%B4",
+  "w": 960,
+  "eval": {
+   "iw": 960,
+   "sw": 960,
+   "act": 462,
+   "cart": 246
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%20123460.00%E2%82%B4",
+  "w": 991,
+  "eval": {
+   "iw": 991,
+   "sw": 991,
+   "act": 462,
+   "cart": 246
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%20123460.00%E2%82%B4",
+  "w": 992,
+  "eval": {
+   "iw": 992,
+   "sw": 992,
+   "act": 462,
+   "cart": 246
+  },
+  "errors": []
+ },
+ {
+  "url": "http://fixture/?page=home&logged=1&ct=%D0%9C%D1%96%D0%B9%20%D0%BA%D0%BE%D1%88%D0%B8%D0%BA%20-%20123460.00%E2%82%B4",
+  "w": 1024,
+  "eval": {
+   "iw": 1024,
+   "sw": 1024,
+   "act": 462,
+   "cart": 246
+  },
+  "errors": []
+ }
+]
