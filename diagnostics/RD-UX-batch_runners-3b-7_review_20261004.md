@@ -75,3 +75,7 @@ Deployed; QA passed. One finding: the category H1 flashes large before shrinking
 ## Runner 8b review (2026-10-05) — `UX-003_category-heading-fouc_20261005.php`
 
 Verdict: **Deploy OK.** Independent run on the reconstructed post-runner-8 state: SHA guard ok, Twig gate passed, `done=ok`, self-deleted; repeat run → `already_applied=yes`. Shared library byte-identical to runner 3b. Independent byte check: the moved block is identical and appears once; the template minus the block differs only by the one-line Twig marker comment (and the blank line that followed the block). `{% if products %}`, JSON-LD, load-more and `{{ footer }}` unchanged. Cascade order unchanged (block stays after `<head>` stylesheets and before the second inline block). Side observation from the executor (not fixed): on phones the search placeholder shows «Пошук бустерів…» until the header script shortens it to «Пошук».
+
+## Runner 8b owner QA and roadmap (2026-10-05)
+
+Runner 8b deployed; owner QA passed. Roadmap on owner authorization (Notion + dashboard): RD-14, RD-15, UX-005, UX-009 → Done; UX-003 stays In progress (runner 9 waits for the Claude Design states mockup); TECH-045 pause extended until runner 9 is deployed; notes added to CHECKOUT-012 (Back from Hutko → empty cart) and BUG-004 (build on post-runner-8 `cart.twig`).
