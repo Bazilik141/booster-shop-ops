@@ -1,0 +1,41 @@
+{
+  "source_archive": "ux003-r9-bug004a-live-20261006-223210.tar.gz",
+  "local_php": "8.3.30",
+  "local_twig": "3.28.0",
+  "browser_cases": 25,
+  "source_sha256": {
+    "catalog/controller/common/cart.php": "0f42ca6f73bb776c1fd1ea6f904d06e875a613ccc29c58a09bae2f9f048f78c8",
+    "catalog/controller/product/category.php": "e82522a5a1103c4ba559ee587735396b51717e4625b8836536a35e1b623bf145",
+    "catalog/view/javascript/booster-product-polish.js": "98aff5be3c0b091cd3ce367afc3a1ec5186649b7711cf9e60f87af8a789ba41b",
+    "catalog/view/javascript/common.js": "58605f6df5f8ded195f994d44446920b478e331243c983d75df56e49c48d7c02",
+    "catalog/view/javascript/patch-mobile-search-menu-redesign.js": "ab1ff4677332f77b96e51d06ff6d9444aa36e7f901fe19d3a31ba554bed270c3",
+    "catalog/view/stylesheet/boostershop-ds.css": "70b897ed64083632d830fb54cea24c2162468796f2318e36e83812ec0d265805",
+    "catalog/view/stylesheet/stylesheet.css": "02135431f716403cfb4a9bafb37bf367c242d15a267b2de8268cb3b90546eacd",
+    "catalog/view/template/common/cart.twig": "eeb1213cbc7b5890594a7b33cb8ee3463d16a7fdd3fa9a745f50bb12259dbf23",
+    "catalog/view/template/common/footer.twig": "df5a5ca70bdfdd63a2f709a188593d88c3f1f7d087d9d09ae008ee0fd05f91db",
+    "catalog/view/template/common/header.twig": "28453cf86747e88bfdf48446ba26e354b345e6f4544b8a1fda4939bb82b40859",
+    "catalog/view/template/product/category.twig": "c7c658d677a120ab3895e37547de7f782b96b8ff42986db2309b177f1f50d54f",
+    "extension/opencart/catalog/controller/module/filter.php": "0a7739ea6be728732fcd27aa97b1eaca44c4df7ddacfbbc69f9400d4f278e4e5",
+    "extension/opencart/catalog/view/template/module/filter.twig": "96ea7f7458683e175b33684a97faf6942f1b1b5b8e5ef3a75e023fd86475fa34"
+  },
+  "patch_sha256": {
+    "BUG-004A_mobile-cart-badge_20261006.php": "7f9f09cc52b80e1ea14bdf227d778312420ebb7ee6a6823b8835ed2dd325d009",
+    "UX-003_runner9_filters-no-reload_20261006.php": "2c45f74037bfbe504bea02a097d11c9c40fa86bf43b32e3996402a7c85360173"
+  },
+  "final_target_sha256": {
+    "catalog/controller/common/cart.php": "0f42ca6f73bb776c1fd1ea6f904d06e875a613ccc29c58a09bae2f9f048f78c8",
+    "catalog/controller/product/category.php": "e82522a5a1103c4ba559ee587735396b51717e4625b8836536a35e1b623bf145",
+    "catalog/view/javascript/booster-product-polish.js": "98aff5be3c0b091cd3ce367afc3a1ec5186649b7711cf9e60f87af8a789ba41b",
+    "catalog/view/javascript/common.js": "58605f6df5f8ded195f994d44446920b478e331243c983d75df56e49c48d7c02",
+    "catalog/view/javascript/patch-mobile-search-menu-redesign.js": "ab1ff4677332f77b96e51d06ff6d9444aa36e7f901fe19d3a31ba554bed270c3",
+    "catalog/view/stylesheet/boostershop-ds.css": "2523731cf09d1030535acd66f01765173f10d65ea810fd49bb5749f9f9ae778a",
+    "catalog/view/stylesheet/stylesheet.css": "02135431f716403cfb4a9bafb37bf367c242d15a267b2de8268cb3b90546eacd",
+    "catalog/view/template/common/cart.twig": "511214cad1d69a218ae47b4d1c0226620f97336ff0d7a6af4e258b1019dcf0dc",
+    "catalog/view/template/common/footer.twig": "df5a5ca70bdfdd63a2f709a188593d88c3f1f7d087d9d09ae008ee0fd05f91db",
+    "catalog/view/template/common/header.twig": "bce83880a8c26a0b60908e95fb171bfe4486d9304b97b6b8dafba9fc32dfca44",
+    "catalog/view/template/product/category.twig": "2ede52f642757083241e1634ed77babc3786be5ccdfce963be3651f30da1dded",
+    "extension/opencart/catalog/controller/module/filter.php": "0a7739ea6be728732fcd27aa97b1eaca44c4df7ddacfbbc69f9400d4f278e4e5",
+    "extension/opencart/catalog/view/template/module/filter.twig": "84a9a01fca297ed5a9b4fe3a53bf873d0edf7cf8142632e0e844e52de41eff25",
+    "catalog/view/javascript/bs-category-results.js": "3b31c563aca5f20764c6b041655480494c711cc6230cd41d79fd5e5589e9c735"
+  }
+}

@@ -1,0 +1,6 @@
+source/
+expected/
+fixture/
+chrome-fixture-profile/
+screenshots/
+__pycache__/

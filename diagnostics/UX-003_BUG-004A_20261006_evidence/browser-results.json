@@ -1,0 +1,317 @@
+[
+  {
+    "name": "responsive-390",
+    "pass": true,
+    "detail": {
+      "aria": "Кошик: 3 товари",
+      "badge": "flex",
+      "label": "none",
+      "height": 44,
+      "width": 44,
+      "overflow": false,
+      "green": "rgb(18, 136, 62)"
+    }
+  },
+  {
+    "name": "responsive-575",
+    "pass": true,
+    "detail": {
+      "aria": "Кошик: 3 товари",
+      "badge": "flex",
+      "label": "none",
+      "height": 44,
+      "width": 44,
+      "overflow": false,
+      "green": "rgb(18, 136, 62)"
+    }
+  },
+  {
+    "name": "responsive-576",
+    "pass": true,
+    "detail": {
+      "aria": "Кошик: 3 товари, 999999.00₴",
+      "badge": "flex",
+      "label": "block",
+      "height": 44,
+      "width": 140.09375,
+      "overflow": false,
+      "green": "rgb(18, 136, 62)"
+    }
+  },
+  {
+    "name": "responsive-768",
+    "pass": true,
+    "detail": {
+      "aria": "Кошик: 3 товари, 999999.00₴",
+      "badge": "flex",
+      "label": "block",
+      "height": 44,
+      "width": 140.09375,
+      "overflow": false,
+      "green": "rgb(18, 136, 62)"
+    }
+  },
+  {
+    "name": "responsive-991",
+    "pass": true,
+    "detail": {
+      "aria": "Кошик: 3 товари, 999999.00₴",
+      "badge": "flex",
+      "label": "block",
+      "height": 44,
+      "width": 140.09375,
+      "overflow": false,
+      "green": "rgb(18, 136, 62)"
+    }
+  },
+  {
+    "name": "responsive-992",
+    "pass": true,
+    "detail": {
+      "aria": "Мій кошик - 999999.00₴",
+      "badge": "none",
+      "label": "block",
+      "height": 44,
+      "width": 245.265625,
+      "overflow": false,
+      "green": "rgb(18, 136, 62)"
+    }
+  },
+  {
+    "name": "responsive-1000",
+    "pass": true,
+    "detail": {
+      "aria": "Мій кошик - 999999.00₴",
+      "badge": "none",
+      "label": "block",
+      "height": 44,
+      "width": 245.265625,
+      "overflow": false,
+      "green": "rgb(18, 136, 62)"
+    }
+  },
+  {
+    "name": "responsive-1440",
+    "pass": true,
+    "detail": {
+      "aria": "Мій кошик - 999999.00₴",
+      "badge": "none",
+      "label": "block",
+      "height": 44,
+      "width": 245.265625,
+      "overflow": false,
+      "green": "rgb(18, 136, 62)"
+    }
+  },
+  {
+    "name": "quantity-0",
+    "pass": true,
+    "detail": {
+      "aria": "Кошик порожній",
+      "hidden": true,
+      "text": "0"
+    }
+  },
+  {
+    "name": "quantity-1",
+    "pass": true,
+    "detail": {
+      "aria": "Кошик: 1 товар",
+      "hidden": false,
+      "text": "1"
+    }
+  },
+  {
+    "name": "quantity-12",
+    "pass": true,
+    "detail": {
+      "aria": "Кошик: 12 товарів",
+      "hidden": false,
+      "text": "9+"
+    }
+  },
+  {
+    "name": "quantity-21",
+    "pass": true,
+    "detail": {
+      "aria": "Кошик: 21 товар",
+      "hidden": false,
+      "text": "9+"
+    }
+  },
+  {
+    "name": "filters-sort-history-metadata-and-focus",
+    "pass": true,
+    "detail": {
+      "count": "48 товарів",
+      "robots": "index,follow",
+      "identity": "survives"
+    }
+  },
+  {
+    "name": "load-more-filter-rebind-and-empty-state",
+    "pass": true,
+    "detail": "append/reset/zero-result passed"
+  },
+  {
+    "name": "latest-request-wins-with-an-uncancellable-old-response",
+    "pass": true,
+    "detail": "Latest result remains 6"
+  },
+  {
+    "name": "fallback-on-request-failure",
+    "pass": true,
+    "detail": "Normal navigation confirmed"
+  },
+  {
+    "name": "no-filter-and-no-subcategories",
+    "pass": true,
+    "detail": "No module safe"
+  },
+  {
+    "name": "cart-fragment-refresh-and-drawer-preservation",
+    "pass": true,
+    "detail": "Quantity and remove refresh passed"
+  },
+  {
+    "name": "desktop-trigger-exact-source-style-parity",
+    "pass": true,
+    "detail": {
+      "w": 245.265625,
+      "h": 44,
+      "bg": "rgb(18, 136, 62)",
+      "border": "rgb(18, 136, 62)",
+      "radius": "8px",
+      "padding": "0px 16px",
+      "gap": "8px",
+      "font": "16px",
+      "weight": "600",
+      "icon": "22px",
+      "text": "Мій кошик - 999999.00₴"
+    }
+  },
+  {
+    "name": "long-content-keyboard-sticky-and-single-fetch",
+    "pass": true,
+    "detail": {
+      "geometry": {
+        "r": 348,
+        "s": 344,
+        "left": 61
+      },
+      "sticky": {
+        "top": 784,
+        "bottom": 832,
+        "height": 48,
+        "scroll": 0,
+        "ancestors": [
+          {
+            "node": "bs-r9-sticky",
+            "x": "visible",
+            "y": "visible",
+            "position": "sticky"
+          },
+          {
+            "node": "bs-ff-panel",
+            "x": "visible",
+            "y": "visible",
+            "position": "static"
+          },
+          {
+            "node": "bs-cat-header bs-cat-header--pokemon",
+            "x": "clip",
+            "y": "clip",
+            "position": "static"
+          },
+          {
+            "node": "content",
+            "x": "clip",
+            "y": "visible",
+            "position": "static"
+          },
+          {
+            "node": "row",
+            "x": "visible",
+            "y": "visible",
+            "position": "static"
+          },
+          {
+            "node": "product-category",
+            "x": "visible",
+            "y": "visible",
+            "position": "static"
+          },
+          {
+            "node": "MAIN",
+            "x": "clip",
+            "y": "visible",
+            "position": "static"
+          },
+          {
+            "node": "container",
+            "x": "clip",
+            "y": "visible",
+            "position": "relative"
+          },
+          {
+            "node": "bs",
+            "x": "hidden",
+            "y": "auto",
+            "position": "static"
+          },
+          {
+            "node": "HTML",
+            "x": "visible",
+            "y": "visible",
+            "position": "static"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "category-card-add-after-grid-swap",
+    "pass": true,
+    "detail": {
+      "old": 0,
+      "now": 1
+    }
+  },
+  {
+    "name": "fallback-500",
+    "pass": true,
+    "detail": "Normal server navigation"
+  },
+  {
+    "name": "fallback-missing-wrapper",
+    "pass": true,
+    "detail": "Normal server navigation"
+  },
+  {
+    "name": "fallback-wrong-canonical",
+    "pass": true,
+    "detail": "Normal server navigation"
+  },
+  {
+    "name": "interaction-styles-and-loading-state",
+    "pass": true,
+    "detail": {
+      "state": {
+        "outline": "2px",
+        "style": "solid",
+        "color": "rgb(30, 58, 138)",
+        "cursor": "pointer"
+      },
+      "loading": {
+        "busy": "true",
+        "grid": "true",
+        "min": "1878.2px",
+        "opacity": "0.45",
+        "pointer": "none",
+        "disabled": true,
+        "aria": "true",
+        "top": true
+      }
+    }
+  }
+]
