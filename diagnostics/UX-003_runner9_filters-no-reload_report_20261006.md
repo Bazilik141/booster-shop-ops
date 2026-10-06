@@ -2,8 +2,9 @@
 
 Date: 2026-10-06
 Executor: Codex; owner instructed the executor to choose the proper site solution.
-Status of evidence: implementation and local fixture validation complete; review,
-production deployment and owner QA remain separate gates. No status was changed.
+Status of evidence: local fixture validation complete. On 2026-10-06 the owner
+confirmed the patches work on the site and authorized Git publication and closure.
+Production acceptance is owner-reported, not independent remote verification.
 
 ## Scope and resulting behavior
 
