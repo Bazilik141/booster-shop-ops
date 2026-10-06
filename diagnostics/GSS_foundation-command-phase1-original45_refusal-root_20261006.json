@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-06",
+  "scope": "Root capture of actual single source45 Phase1 refusal;no rerun/native query",
+  "passed": false,
+  "sourceManifestSha256": "060AEB8B0F252534999257ED69849C73E0C25AF0FB93A66E4B663E78A2EADAB3",
+  "actualCommand": "node work/run-gss-command-phase1-original45_20261006.mjs",
+  "actualExitCode": 1,
+  "reportedRefusal": {
+    "phase": "after",
+    "family": "untagged_no_sqlstate",
+    "stage": "unknown",
+    "category": "unknown",
+    "sqlState": null,
+    "closure": {
+      "rollback": "acknowledged",
+      "connection": "closed"
+    },
+    "valuesWithheld": true
+  },
+  "counts": {
+    "tests": 144,
+    "pass": 143,
+    "fail": 1,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "duration_ms": 40216.2954
+  },
+  "failingCriterion": "all exact source migrations/fixture pass lexical transaction guard",
+  "failingCanonicalTest": "work/GSS_command-ledger36_20261006/phase1-tests/sql-file-guard.test.mjs",
+  "failingTestSha256": "23E8C4296E47706CC857666A114CE580C52335A09493552F06737B765526B7A8",
+  "oldExpectedArchiveSha256": "7C524DBBBEFA2DAFEB5AA4227CEC5EE8BD55782C4767ED55044065C8C939D8E3",
+  "actualPublishedArchiveSha256": "DAEEA79A3AB5F53DDE28621905F66BB26FFF089C76ED2DC9B71B9EBB8C00AB8D",
+  "cause": "Frozen canonical36 test retained prepublication 7C52 archive pin;COMPLETE44/45 correctly require published DAEE",
+  "transcript": {
+    "path": "diagnostics/GSS_foundation-command-phase1-original45_20261006.txt",
+    "sha256": "7632BFFBD037EEA7C3BD1420F15FA5BFDF689DE385C03ABBB3191FD60B4424E0",
+    "screenedBeforeOriginalWrite": true
+  },
+  "reservationSha256": "DE5FCAC1F976B8B1C2D7BBB4C3A409CCEBF62C5F1624662B59AB35CBB622ECED",
+  "actual144AllPassed": false,
+  "originalBeforeAfterReceiptProduced": false,
+  "currentSourceGatePassed": true,
+  "currentJournalAttempts": 2,
+  "applicationAuthorized": false,
+  "newAttempt": false,
+  "newNativeConnections": 0,
+  "automaticRetry": false,
+  "frozenSourcesEdited": false
+}

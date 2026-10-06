@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-06",
+  "scope": "Actual byte hashing/current2 source gate + read-only NTFS ACL process timings and ordinary synthetic fsync;not native DB or private write approval",
+  "passed": true,
+  "sourceManifestSha256": "B3D515661490976365CA75CBF191EEE273AE07DC66495D387FA8D4B41470A50D",
+  "repeatCount": 5,
+  "milliseconds": {
+    "current2": [
+      1212.964,
+      1236.362,
+      1370.2,
+      1255.959,
+      1203.468
+    ],
+    "privacyOperationIncludingCurrent2Gate": [
+      2784.996,
+      1939.393,
+      1947.287,
+      1946.274,
+      1941.682
+    ],
+    "fourIgnoredPathChecks": [
+      209.642,
+      202.866,
+      206.148,
+      207.42,
+      201.042
+    ],
+    "syntheticOrdinaryFileFsync": [
+      3.645,
+      3.352,
+      2.87,
+      2.086,
+      3.534
+    ]
+  },
+  "maximumMilliseconds": {
+    "current2": 1370.2,
+    "privacyOperationIncludingCurrent2Gate": 2784.996,
+    "fourIgnoredPathChecks": 209.642,
+    "syntheticOrdinaryFileFsync": 3.645
+  },
+  "limitations": [
+    "These measured filesystem maxima are samples,not worst-case OS/antivirus guarantees",
+    "Privacy path is actual read-only;ordinary synthetic fsync does not prove private path write behavior",
+    "No native apply/whole-candidate/history/final inspection was executed"
+  ],
+  "sampleFiles": 5,
+  "samplePayloadSha256": "ED45D5B857ACAF0CB8D241412C942A05A504025F3B4A446AFEE77988A4F82F03",
+  "actualPrivateFileWritten": false,
+  "nativeConnections": 0,
+  "secretReads": 0,
+  "journalWritten": false,
+  "invocationReserved": false,
+  "newAttempt": false,
+  "runnerSha256": "22F33C887E52163C504482BDAE1E83D135F07586C37F67DDF925A768D5F5315B"
+}

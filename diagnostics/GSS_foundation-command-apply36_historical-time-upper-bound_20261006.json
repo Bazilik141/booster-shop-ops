@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-06",
+  "source": "Codex app read_thread: historical commandExecution metadata from this GSS chat",
+  "threadId": "01a10589-443c-7e82-842b-de3e082afff6",
+  "commandExecutionId": "exec-9c0904ea-0b01-446f-87d2-d52c80ce6a58",
+  "command": "node work/capture-gss-command-application36_20261006.mjs",
+  "status": "failed",
+  "exitCode": 1,
+  "reportedCommandDurationMs": 16937,
+  "scope": "Includes complete apply2, independent reconcile, source guards and shell; upper bound only, not exact apply transaction elapsed",
+  "recordedApplyElapsedMs": null,
+  "collectorOmittedPerOperationTiming": true,
+  "actualApplyArtifact": "diagnostics/GSS_foundation-command-apply36-attempt2_20261006.json",
+  "actualApplyResult": "refused at whole-candidate-before-history; topXid1973; journal2",
+  "recordsRewritten": false,
+  "newNativeExecution": false,
+  "valuesWithheld": true
+}

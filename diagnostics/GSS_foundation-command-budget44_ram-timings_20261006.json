@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-06",
+  "scope": "SOURCE-ONLY actual36/43 full gate functions with synthetic RAM3-row journal/reviews/proof;not actual approval",
+  "passed": true,
+  "cases": [
+    "actual_complete44_historical36_and_attempt3_chain_at_append3",
+    "missing_actual_attempt_authorization",
+    "wrong_attempt_reference",
+    "wrong_complete_manifest_binding",
+    "wrong_fresh_proof_binding",
+    "wrong_application_scope",
+    "wrong_model",
+    "failed_fresh_proof",
+    "wrong_attempt_seal",
+    "fourth_row_refused_before_attempt_authority",
+    "complete_chain_restored_after_negative_cases"
+  ],
+  "repeatCount": 5,
+  "timingMilliseconds": [
+    1003.428,
+    934.469,
+    893.82,
+    901.421,
+    894.331
+  ],
+  "maximumMilliseconds": 1003.428,
+  "actualCompleteInputCount": 1458,
+  "actualManifestInputSetUsed": true,
+  "sourceHashes": {
+    "work/GSS_command-ledger36_20261006/source-contract.mjs": "F373658B203DB6537D520849B0381BB01620DD6F45CB505BAEF21FA6D14B8EBA",
+    "work/GSS_command-ledger44_20261006/historical-parent-gate.mjs": "C1DA54BE923D28EC3C7F4FC92C4D5AEFEEE1CC4B1169077F7C21ABDB04FF9143",
+    "work/GSS_command-ledger44_20261006/source-contract.mjs": "007FBF0C7F2345E6F6039E3141B1436A2F8DFFF467B75B5971893632DA1CCB05"
+  },
+  "old36FullGateCalls": 16,
+  "unchangedPremise40CallsAfter3": 0,
+  "realJournalSha256": "9A695871717E690DD4922FCB4624A407C3EF0C8D6A1EA533D466017B6F4EBE74",
+  "realJournalWritten": false,
+  "syntheticApprovalFilesWritten": false,
+  "nativeConnections": 0,
+  "secretReads": 0,
+  "newAttempt": false
+}

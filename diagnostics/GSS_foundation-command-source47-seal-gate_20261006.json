@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-06",
+  "scope": "Actual independent COMPLETE47 source acceptance and real input gate;not application/product acceptance",
+  "passed": true,
+  "gate": {
+    "completeSourcePeerAccepted": true,
+    "sourceManifestSha256": "FB022E5EA7089378F95D7B0FAC93B063BAA182A72D6BD9DA9886CEA218FADBB5",
+    "historicalParents": {
+      "parentSource36": "BB6A7D07E6D0BCEBC779C0770CA43D27A0047865D72A00112CC41293918EEAAB",
+      "actualDiagnosis38Accepted": true,
+      "actualPremise40Accepted": true,
+      "native40Exact": true,
+      "attempts": 2,
+      "attempt3Ref": null,
+      "applicationAuthorized": false,
+      "valuesWithheld": true
+    },
+    "applicationAuthorized": false,
+    "valuesWithheld": true
+  },
+  "inputs": {
+    "sourceInputsByteVerified": 1819,
+    "driverFiles": 68,
+    "analysisResourceFiles": 3,
+    "ledgerFoldersWalked": 9,
+    "approvalManufactured": false,
+    "valuesWithheld": true
+  },
+  "packetSha256": "C87652F157A7E35F408165E96848EF9EF4F4AFC471D32A99A9CED481CAF9D87E",
+  "manifestSha256": "FB022E5EA7089378F95D7B0FAC93B063BAA182A72D6BD9DA9886CEA218FADBB5",
+  "sealSha256": "73F372C54D07C466AB942124646DE7161C5B272F17B9CFF9E8260108C08F34AA",
+  "reviewRunSha256": "87ACD575982037CC2552913F6D42C8A78F8E31DAFD76280CD9E1CACEB75A55EA",
+  "preDispatchWitnessSha256": "2FE1D90FFB8B234C7500A0220D63821AE7BA0FC51EDBC994D05E010E94CD1735",
+  "sourceCoverageBound": true,
+  "unissued46ImmutableInputsPreserved": 1704,
+  "journalReviewedPrefixPreserved": true,
+  "nativePhase1Authorized": true,
+  "applicationAuthorized": false,
+  "productApproval": false,
+  "nativeConnections": 0,
+  "newAttempt": false
+}
