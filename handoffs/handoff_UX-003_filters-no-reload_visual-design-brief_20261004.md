@@ -27,6 +27,13 @@ Owner decision (2026-10-04): the reload-per-tick flow is unacceptable. Runner 9 
 
 Error/fallback (network error → normal page reload) needs no visual unless you propose one.
 
+## 3a. Same round: mobile cart badge (BUG-004 subtask A)
+
+Owner decision 2026-10-06: delivered in the same round as runner 9, as a separate runner file.
+- Live state: on phones the header cart button is an icon only and shows no item count, even with items in the cart (owner check 2026-10-06). Your header audit (item 10) flagged the same.
+- Design the badge on the mobile cart button (390 and 768 px): position, size, colours (the button itself is the green purchase button), 1–2 digits and «9+» or similar, and the empty-cart state (no badge). Keep the 44 px touch target. The count must also be announced (accessible name «Кошик: N товарів» with correct plurals).
+- The swipe-to-close on the open mini-cart already works; do not redesign the drawer.
+
 ## 4. Constraints
 
 - Tokens and components from `boostershop-ds.css` (`:root`): surfaces, `--bs-line*`, `--bs-ink*`, `--bs-blue` / `--bs-blue-soft`, radii `--bs-r-sm/--bs-r/--bs-r-lg`. Selected/secondary states are blue.

@@ -99,6 +99,8 @@ Build one runner, `UX-003_category-heading-fouc_20261005.php` (chain position **
 
 Rules: same runner library and gates as runners 1–8 (SHA guard, marker, Twig gate on `category.twig`, backup + restore-all, self-delete). Only `category.twig` changes; no ds.css change, so no token bump. Report `diagnostics/UX-003_category-heading-fouc_report_20261005.md` with before/after SHA, gates, frame captures, rollback command prefixed with `cd ~/public_html &&`, and owner QA. Runner 9 and BUG-004 build on runner 8b's output.
 
+**Runner 8b deployed; BUG-004 status (owner, 2026-10-06).** Runner 8b is deployed and passed owner QA. BUG-004 subtask B (swipe-down on the open mini-cart reloads the page) no longer reproduces on the owner's phone — fixed as a side effect of the batch; which change fixed it is not established. Subtask A (no item-count badge on the mobile cart button) is still open. Owner decision: deliver A in the same round as runner 9 but as its own runner file (independent rollback), built on the post-runner-8b state, before runner 9 in the chain. The badge design is part of the runner 9 Claude Design brief (§3a). The Claude Code task for both runners is written after the owner approves the design.
+
 ---
 
 
