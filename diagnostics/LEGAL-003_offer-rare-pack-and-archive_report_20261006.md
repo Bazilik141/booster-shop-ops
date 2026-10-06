@@ -16,7 +16,7 @@ The runner changes only id=3/language=4 `description` and creates one new archiv
 - `diagnostics/LEGAL-003_offer-rare-pack-and-archive_report_20261006.md` — this report.
 - `dashboard/booster-dashboard.html` — only the LEGAL-003 mirror entry, closed after owner QA.
 - `context-index.md` — only LEGAL-003 evidence links, without status.
-- Existing owner/Claude inputs included in the authorized task commit: `handoffs/handoff_LEGAL-003_offer-rare-pack-and-archive_20261006.md`, `handoffs/offer_html_20261006.html`; their contents were not edited. The source DOCX is retained locally and excluded from Git publication.
+- Existing owner/Claude inputs included in the authorized task commits: `handoffs/handoff_LEGAL-003_offer-rare-pack-and-archive_20261006.md`, `handoffs/offer_html_20261006.html`, `Booster_Shop_Public_Offer_2026-10-06_FINAL.docx`; their contents were not edited. The owner explicitly authorized GitHub publication of the source DOCX in a follow-up on 2026-10-06.
 - Local-only test tools and fixtures under `work/legal003/`: build script, integration matrix, selected-table SQL seed, disposable runtime/DB files and execution outputs. These are not deployment or commit inputs.
 
 ## Source evidence
@@ -131,4 +131,4 @@ No WP2 QA is required. The owner confirmed the QA above and authorized LEGAL-003
 
 ## Review and Git boundary
 
-The owner authorized a scoped commit/push on 2026-10-06 after deployment and QA. It includes the runner/report, exact LEGAL-003 dashboard entry and evidence-index row, and unchanged handoff/HTML: six files total. The source DOCX (SHA-256 `1e2fa1ae75e646a3ffb46604abd3828bb03349b8f5e8f3bd2e24991c8aef4197`) remains local: automatic approval review rejected its inclusion because explicit authorization for that document's GitHub egress was not established. The rejected command did not execute. Unrelated working-tree changes and local test runtimes/seeds are excluded. The existing branch is `codex/3dp-payout-approval-status`, with its same-name upstream; no master merge was requested.
+The owner authorized a scoped commit/push on 2026-10-06 after deployment and QA. Commit `2602053` published the runner/report, exact LEGAL-003 dashboard entry and evidence-index row, and unchanged handoff/HTML: six files total. The owner subsequently gave explicit permission to publish `Booster_Shop_Public_Offer_2026-10-06_FINAL.docx` to the same GitHub repository after automatic approval review had required document-specific authorization. Its SHA-256 was rechecked as `1e2fa1ae75e646a3ffb46604abd3828bb03349b8f5e8f3bd2e24991c8aef4197`; the follow-up commit adds that unchanged source and this authorization record. Unrelated working-tree changes and local test runtimes/seeds are excluded. The existing branch is `codex/3dp-payout-approval-status`, with its same-name upstream; no master merge was requested.
