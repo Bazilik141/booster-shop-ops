@@ -1,0 +1,987 @@
+# COMPLETE ADMISSION ADAPTER48 source-only review
+
+Review the actual new5-source admission overlay under D075, preserving COMPLETE47 and historical38/40. Assess exact source equivalence, two truthful peer records, minted approval/in-process reservation binding, no replay, all parent/proof gates, and full apply import closure. The existing native47 passed144/all122; this packet grants no application. No attempt3, new keys, journal append, Phase2 or Foundation acceptance.
+
+Return first line exactly ## Verdict: Review OK or ## Verdict: Changes requested. If accepted include exactly ## Review scope: COMPLETE ADMISSION ADAPTER48. This is source acceptance ONLY; applicationAuthorized=false. Report scope-bound hashes and concrete findings.
+
+===== plans/GSS_owner-decision-D075_temporary-review_20261007.md SHA256 324341C1BB02C854BF782470FDE024F75A9BEADA42CEAFFFF666C2097EF1C9B0 =====
+# GSS-D075 — temporary peer-review substitution
+
+Date: 2026-10-07; owner timezone Europe/Kyiv.
+Status: approved by direct owner instruction in the active continuation chat.
+Executor: Codex; one implementation, database, Git and status writer.
+
+## Authority and duration
+
+The owner explicitly approved the proposed temporary format:
+"Так, погоджу. такий тимчасовий формат. Він діятиме до моєї команди про відновлення стандартного формату роботи."
+
+Within the assigned local GSS Foundation continuation, two separately tasked
+read-only Codex subagents may provide the required peer review in place of
+Claude. One reviews architecture/security; the other reviews correctness and
+test sufficiency. The format remains active until the owner explicitly restores
+the standard Codex executor / Claude reviewer format. After that restoration,
+Claude will review accumulated changes; no Claude quota-consuming requests
+are required during the temporary period.
+
+This temporarily supersedes the reviewer requirement in D069, governance
+section 5 and autonomy-policy extension 1 for this local scope only. It does not
+change Q1 revision 2 ordering, the approved functionality, D070-D074, attempt
+budgets, existing source-bound grants, owner QA, deployment, paid activation,
+production or live business-data authority. Subagents remain read-only and
+cannot provide owner acceptance or write implementation/Git/status/database.
+
+## Attestation and preservation
+
+Record actual subagent identity, reviewed source hashes, findings and verdicts
+truthfully. A Codex review must never be labeled as a Claude model/CLI verdict.
+New grants must bind the concrete reviewed target and retain existing refusal,
+one-shot, evidence and rollback conditions.
+
+The canonical AGENTS.md, GSS_GOVERNANCE.md and original owner-decision register
+are pinned COMPLETE47 inputs. Preserve their exact bytes. This additive decision
+is the active owner amendment; consolidation into the register must wait until
+it can occur without invalidating frozen evidence. Historical Claude verdicts,
+seals, manifests, runners and failed-attempt artifacts remain unchanged.
+
+## Continuous segment
+
+1. Validate the actual COMPLETE47 seal, all 1819 inputs, accepted pre-dispatch
+   witness, four absent native47 outputs and unchanged two-attempt journal.
+2. Implement an additive outer capture to close I168; obtain both actual
+   read-only reviews; run the existing unused Phase1 grant once. Record actual
+   timestamps, duration, exit, reservation/failure presence and hashes.
+3. On success, verify the original prepared root receipt (144 tests/all 122
+   criteria, exact original0006/S0 before/after). On failure, preserve evidence,
+   investigate read-only and never retry the consumed grant automatically.
+4. A future application attempt3 requires a distinct concrete reviewed packet
+   and a truthful additive admission mechanism under this decision. Frozen47
+   currently requires Claude metadata; do not bypass or counterfeit it.
+
+Model recommendation: current gpt-6.1-sol / xhigh for security-sensitive
+orchestration and evidence boundaries. Subagents inherit the active session's
+model/effort; no paid model escalation is authorized. Natural first boundary:
+the single native Phase1 result and dual review of its captured evidence.
+
+
+===== plans/GSS_foundation-temporary-attempt3-admission-design48_20261007.md SHA256 4608E365FC30279268ECBE156B57263D21F2665E4F635DE74041200C856C74A2 =====
+# Foundation — temporary attempt3 admission overlay48
+
+Date: 2026-10-07; owner timezone Europe/Kyiv.
+Authority: D064/D065 assigned local Foundation continuation; D075 reviewer replacement.
+Executor: Codex. Reviewers: independent security/test OpenAI subagents, read-only.
+Status: DESIGN DRAFT, not application authority.
+
+## Result and scope
+
+The existing source47 Phase1 has genuinely passed144/all122 with original0006/S0
+before/after, no new roles/keys and journal2. Its grant is consumed. Frozen47
+application admission still requires actual Claude metadata. Replacing a model
+name in that metadata would counterfeit evidence and is prohibited.
+
+Create a minimal separate lane `work/GSS_command-admission48_20261007/` that
+truthfully validates two actual OpenAI subagent attestations and then invokes
+the existing reviewed SQL behavior through affected source copies. The lane
+has no new product behavior and no new migration/archive/candidate. Preserve
+all1819 COMPLETE47 inputs and all historical38/40/45/46/47 evidence.
+
+## Minimal affected import closure
+
+Copy only maintenance.mjs, command-private-files.mjs and apply-invocation.mjs
+from frozen47. New source-contract.mjs owns the changed admission. Imports of
+unchanged support stay directed to frozen47/28 or existing gss tools. Private
+PowerShell operations keep the exact frozen47 script URL and its reviewed bytes.
+Maintenance's archive path remains the original47 fixed path, the published
+DAEE archive, all14 SQL phases and the same source-owned candidates.
+
+For each copied file, an executable equivalence matrix must compare exact
+original bytes after a closed list of declared import/admission/output/CLI
+translations. Reject every extra change. Preserve every SQL statement, timeout,
+target/logging/DDL fence, role phase, transaction order, privilege/candidate
+assertion, secret screen, recovery branch and private-file protocol.
+
+Limit the new CLI to `maintenance.mjs apply` only. No initialize, reconcile,
+contain, rotate, seed, Phase2, authentication/factor/effect or owner UI operation
+is granted by this scope. Existing protected command directory is present;
+current/next files are absent. Any required recovery operation gets a separately
+reviewed exact scope; an uncertain outcome blocks dependent work, never retry.
+
+## New admission contract
+
+1. Retain process/driver and public path/nlink checks. Require the exact new
+   maintenance entrypoint, three argv entries and `apply`, with no Node flags.
+2. Validate original47 manifest/packet/genuine Claude metadata/seal/witness and
+   all1819 input bytes through unchanged input/historical-parent helpers. Reuse
+   fixedCommandSource47 only for immutable public source/candidates. Do not call
+   assertCompleteCommandReview47 after journal3: its application classifier
+   intentionally still requires Claude and must remain frozen.
+3. Require a separately reviewed COMPLETE ADMISSION ADAPTER48 source packet
+   and actual attestations from exactly the two designated read-only subagents.
+   Record provider=OpenAI and collaboration provenance; never claim Claude CLI,
+   resolved Anthropic models or a product authentication boundary. This is
+   local trusted-operator review evidence, captured by the accountable executor.
+4. After that source gate, prepare a DISTINCT SINGLE APPLICATION ATTEMPT3
+   ADAPTER48 packet. Bind complete47, exact adapter code/import closure, D075,
+   native47 proof/transcript/reservation/root/outer evidence, actual dual runtime
+   reviews, one new UUIDv4, journal's exact two-attempt prefix, fixed DAEE archive,
+   budget evidence and actual rendered I167/watchdog configuration.
+5. Both actual application reviewers must explicitly accept that exact scope,
+   packet+source hashes, source47 native proof and UUID. A generic Review OK,
+   architecture recommendation or source-only review cannot authorize apply.
+6. Exclusively reserve the new invocation before target, private reads or keys;
+   fsync all bytes. Set consumedOnRefusal=true and automaticRetry=false. Never
+   delete/reset/reuse the consumed reservation. Initial reservation requires
+   journal2 and rejects old/new application reservations or journal3.
+7. During the one native operation, permit journal2 -> exact journal3 transition
+   under that same grant. No journal reset, rehearsal or failed-catalog learning.
+
+## Initial and continuing operation identity
+
+The new gate mints a frozen approval object kept in a module-private WeakSet.
+Before first reservation, the gate requires journal2 and absent old/new invocation
+records. The reservation writer accepts only that minted object, the exact source
+and application hashes/UUID, and current journal2. It writes an exclusive/fsynced
+record that includes the actual executor PID. Only after successful persistence,
+a guarded source-contract binder marks the same approval/record as active in
+module-private memory, with its actual bytes hash, PID and UUID.
+
+Continuing calls from copied private-file operations validate the same live code,
+both reviews, historical source, proof and reservation bytes. They permit only
+that in-memory operation at the same PID, with journal2 or the exact authorized
+journal3 UUID. They do not perform another reservation. A newly launched process
+has no active in-memory object and must reject an existing reservation/journal3
+before target/private/key access. A bind failure after the exclusive write leaves
+the invocation consumed and stops, with no retry. No serialized record alone
+grants a fresh process permission to continue or recover.
+
+Before application review, enumerate exact outer/native reservation, success,
+failure and transcript output paths, exclusive-write/initial-absence rules and
+nonfinal refusal states. The outer capture records every known end fact even
+when per-file hashes fail; unresolved closure or write failure blocks acceptance.
+
+## Verification and I167
+
+Use one syntax pass and focused executable source/fake acceptance/rejection
+matrix: missing/duplicate/wrong-provider/reused/mismatched peer metadata, changed
+code/proof/UUID/parent/decision, non-apply/foreign process, stale archive, foreign
+journal suffix, reused reservation and incomplete wrapper end evidence.
+Trace all application imports to prove no transitive post-append call reaches
+the frozen47 application classifier. No fake case is native proof.
+
+The DISTINCT application packet must render real outer and child command config.
+Outer process budget600000ms, at least300000ms and no hidden shorter whole-run
+watchdog; maintenance transaction180000ms/idle60000ms, statement8000ms/lock5000ms,
+fixture10000ms unchanged. Source47 Phase1's120000ms child is historical test
+configuration, not the future application watchdog. Capture actual UTC/Kyiv
+start/end/elapsed/exit and reservation/failure/journal hashes. Bound termination
+recovery and record uncertain closure without claiming success.
+
+## Gates and natural boundary
+
+Design -> dual independent design review -> source/fake implementation/equivalence
+-> dual COMPLETE adapter review -> DISTINCT application packet and dual actual
+application grant -> one apply -> independently reviewed bounded result.
+No application occurs before the concrete source and application reviews exist.
+No source substitution, gate dilution, product acceptance or production authority
+is implied. Native successful budget fit and new installed-state proof remain
+unknown until the one authorized operation genuinely succeeds.
+
+
+===== work/GSS_command-admission48_20261007/source-contract.mjs SHA256 150E29DF8A8C79700CA0F2BCC73E816BD59627FA07EA21CE6DF8DF0FA9CBE70F =====
+// Additive D075 gate; immutable COMPLETE47 remains genuinely Claude-reviewed.
+// No import-time IO, client, private-file read or caller-selected path.
+import fs from 'node:fs';import path from 'node:path';import {createHash} from 'node:crypto';
+import {assertFixedCommandProcess} from '../GSS_command-ledger47_20261006/command-process-fences.mjs';
+import {assertCompleteCommandInputs,fixedCommandSource,archiveName,archiveSha256} from '../GSS_command-ledger47_20261006/source-contract.mjs';
+import {assertHistoricalCommandParents,currentJournalLineage,classifyJournalLineage,readPublicBytes} from '../GSS_command-ledger47_20261006/historical-parent-gate.mjs';
+import {actualReviewMetadataAccepted} from '../GSS_command-premises40_20261006/review-metadata.mjs';
+import {acceptedPeer} from './peer-metadata.mjs';
+export {fixedCommandSource,archiveName,archiveSha256};
+const ROOT='C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops';
+const ENTRY='work/GSS_command-admission48_20261007/maintenance.mjs';
+export const reservationPath='diagnostics/GSS_foundation-command-apply48_invocation-reserved_20261007.json';
+const OLD_RESERVATION='diagnostics/GSS_foundation-command-apply47_invocation-reserved_20261006.json';
+const COMPLETE47='FB022E5EA7089378F95D7B0FAC93B063BAA182A72D6BD9DA9886CEA218FADBB5';
+const PACKET47='C87652F157A7E35F408165E96848EF9EF4F4AFC471D32A99A9CED481CAF9D87E';
+const PREFIX='9A695871717E690DD4922FCB4624A407C3EF0C8D6A1EA533D466017B6F4EBE74';
+const PHASE1='A790444A610AF26C9E3A5B3DEB7863DC5CDBBD633A4107DE3D4FE02A31212906';
+const D075='324341C1BB02C854BF782470FDE024F75A9BEADA42CEAFFFF666C2097EF1C9B0';
+const design='4608E365FC30279268ECBE156B57263D21F2665E4F635DE74041200C856C74A2';
+const h=b=>createHash('sha256').update(b).digest('hex').toUpperCase();
+const read=readPublicBytes,json=p=>JSON.parse(read(p));
+const refuse=()=>{throw Error('GSS temporary admission48 refused;values withheld');};
+const issued=new WeakSet();let active=null;
+function assertEntry() {
+  assertFixedCommandProcess();
+  if(process.argv.length!==3||process.argv[2]!=='apply'||path.resolve(process.argv[1])!==path.join(ROOT,...ENTRY.split('/')))refuse();
+}
+function originalAcceptance() {
+  const parents=assertHistoricalCommandParents(),base='diagnostics/GSS_foundation-command-complete-source47';
+  const mb=read(base+'_revision-source-manifest_20261006.json'),m=JSON.parse(mb),r=json(base+'_claude-review-run_20261006.json');
+  if(h(mb)!==COMPLETE47||m.inputSha256!==PACKET47||m.secretPatternHits!==0||
+    h(read(base+'_claude-review-run_20261006.json'))!=='87ACD575982037CC2552913F6D42C8A78F8E31DAFD76280CD9E1CACEB75A55EA'||
+    h(read(base+'_reviewed_20261006.txt'))!=='73F372C54D07C466AB942124646DE7161C5B272F17B9CFF9E8260108C08F34AA'||
+    !actualReviewMetadataAccepted(r,{scope:'COMPLETE PREAPPLICATION source47',bundleSha256:PACKET47,sourceManifestSha256:COMPLETE47,nativeWitnessAuthorized:false})||
+    h(read(base+'_review-ready_20261006.txt'))!==PACKET47||read(base+'_reviewed_20261006.txt').toString().trim()!==PACKET47)refuse();
+  const inputGate=assertCompleteCommandInputs(m);if(inputGate.sourceInputsByteVerified!==1819)refuse();
+  const wpath='diagnostics/GSS_foundation-command-gate47-pre-dispatch_20261006.json',w=json(wpath);
+  if(w.passed!==true||w.cases.length!==15||w.manifestSha256!==COMPLETE47||w.bundleSha256!==PACKET47||r.preDispatchGate.actualWitnessSha256!==h(read(wpath)))refuse();
+  if(h(read('plans/GSS_owner-decision-D075_temporary-review_20261007.md'))!==D075||h(read('plans/GSS_foundation-temporary-attempt3-admission-design48_20261007.md'))!==design)refuse();
+  return parents;
+}
+function packet(base,scope,applicationAuthorized,adapterManifestSha256) {
+  const mb=read(base+'_manifest_20261007.json'),m=JSON.parse(mb),mh=h(mb);
+  if(m.scope!==scope||m.secretPatternHits!==0||m.complete47ManifestSha256!==COMPLETE47||m.applicationAuthorized!==applicationAuthorized||
+    !Array.isArray(m.inputs)||m.inputs.length<8||h(read(base+'_packet_20261007.txt'))!==m.inputSha256)refuse();
+  const seen=new Set();for(const row of m.inputs){
+    if(seen.has(row.path))refuse();seen.add(row.path);
+    if(row.path==='diagnostics/GSS_foundation-command-deparse-attempts29_20261005.jsonl'){if(row.sha256!==PREFIX)refuse();currentJournalLineage();}
+    else if(h(read(row.path))!==row.sha256)refuse();
+  }
+  for(const p of [ENTRY,'work/GSS_command-admission48_20261007/source-contract.mjs','work/GSS_command-admission48_20261007/peer-metadata.mjs','work/GSS_command-admission48_20261007/apply-invocation.mjs','work/GSS_command-admission48_20261007/command-private-files.mjs',
+    'plans/GSS_owner-decision-D075_temporary-review_20261007.md','plans/GSS_foundation-temporary-attempt3-admission-design48_20261007.md',
+    'diagnostics/GSS_foundation-command-complete-source47_revision-source-manifest_20261006.json'])if(!seen.has(p))refuse();
+  const lane=path.join(ROOT,'work','GSS_command-admission48_20261007');
+  if(fs.realpathSync.native(lane)!==lane||!fs.lstatSync(lane).isDirectory())refuse();
+  for(const name of fs.readdirSync(lane))if(!['maintenance.mjs','command-private-files.mjs','apply-invocation.mjs','source-contract.mjs','peer-metadata.mjs'].includes(name))refuse();
+  const scopeHeading=applicationAuthorized?'## Application scope: SINGLE APPLICATION ATTEMPT3 ADAPTER48':'## Review scope: COMPLETE ADMISSION ADAPTER48';
+  for(const role of ['security','test']){
+    const r=json(base+'_'+role+'-review_20261007.json');
+    if(!acceptedPeer(r,{agentName:'/root/foundation_'+role+'_review',scope,bundleSha256:m.inputSha256,sourceManifestSha256:mh,complete47ManifestSha256:COMPLETE47,
+      adapterManifestSha256:applicationAuthorized?adapterManifestSha256:null,freshPhase1Sha256:applicationAuthorized?PHASE1:null,attemptRef:applicationAuthorized?m.attemptRef:null,applicationAuthorized,scopeHeading}))refuse();
+  }
+  return {m,manifestSha256:mh,seen};
+}
+function freshEvidence() {
+  const p='diagnostics/GSS_foundation-command-phase1-original47_20261006.json',pb=read(p),r=JSON.parse(pb);
+  if(h(pb)!==PHASE1||r.passed!==true||r.sourceManifestSha256!==COMPLETE47||r.originalStateExactBeforeAndAfter!==true||r.sourceHashesUnchanged!==true||r.applyAttempts!==2||r.newKeys!==false||r.newRoles!==0||r.counts.tests!==144||r.counts.pass!==144||['fail','cancelled','skipped','todo'].some(k=>r.counts[k]!==0)||r.criteria.length!==122||r.criteria.some(c=>c.passed!==true))refuse();
+  for(const s of [r.before,r.after])if(s.state!=='original_0006'||s.fixtureMode!=='S0'||s.closure.rollback!=='acknowledged'||s.closure.connection!=='closed')refuse();
+  if(h(read(r.transcript.path))!==r.transcript.sha256)refuse();
+  const root=json('diagnostics/GSS_foundation-command-phase1-original47_root-receipt_20261006.json');
+  if(root.passed!==true||root.nativePhase1Sha256!==PHASE1||root.applicationAuthorized!==false||root.tests!==144||root.originalCriteria!==122||root.applyAttempts!==2)refuse();
+  const outer=json('diagnostics/GSS_foundation-source47-phase1_outer-summary_20261007.json');
+  if(outer.exitCode!==0||outer.closeObserved!==true||outer.spawnError!==false||outer.timedOut!==false||outer.outputOverflow!==false||outer.artifactInspectionRefused!==false)refuse();
+  for(const role of ['security','test']){const v=json('diagnostics/GSS_foundation-source47-phase1_'+role+'-review_20261007.json');if(v.provider!=='OpenAI'||v.agentName!=='/root/foundation_'+role+'_review'||v.scope!=='ACTUAL SOURCE47 PHASE1 EVIDENCE48'||v.verdict!=='Review OK'||v.readOnly!==true||v.I168Closed!==true||v.applicationAuthorized!==false||v.reviewedEvidenceHashes[p]!==PHASE1)refuse();}
+}
+function authority() {
+  const complete=packet('diagnostics/GSS_foundation-command-adapter48-complete','COMPLETE ADMISSION ADAPTER48',false,null);
+  const application=packet('diagnostics/GSS_foundation-command-adapter48-attempt3','SINGLE APPLICATION ATTEMPT3 ADAPTER48',true,complete.manifestSha256),m=application.m;
+  if(m.adapterManifestSha256!==complete.manifestSha256||m.freshPhase1Sha256!==PHASE1||typeof m.attemptRef!=='string'||!/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(m.attemptRef)||m.maximumAttempts!==3||m.beforeAttempts!==2||m.archiveSha256!==archiveSha256.toUpperCase()||m.outerBudgetMs!==600000||m.shorterWholeRunWatchdog!==false)refuse();
+  // Pure candidate validation BEFORE consumption or target/private access.
+  // The frozen classifier also rejects UUIDs used in either reviewed attempt.
+  const prefix=read('work/GSS_command-ledger47_20261006/two-attempt-prefix.jsonl');
+  const candidate=classifyJournalLineage(Buffer.concat([prefix,Buffer.from(JSON.stringify({attempt:3,attemptRef:m.attemptRef})+'\n')]),prefix);
+  if(candidate.attempts!==3||candidate.attempt3Ref!==m.attemptRef)refuse();
+  for(const p of ['diagnostics/GSS_foundation-command-phase1-original47_20261006.json','diagnostics/GSS_foundation-command-phase1-original47_20261006.txt','diagnostics/GSS_foundation-command-phase1-original47_invocation-reserved_20261006.json','diagnostics/GSS_foundation-command-phase1-original47_root-receipt_20261006.json','diagnostics/GSS_foundation-source47-phase1_outer-summary_20261007.json','diagnostics/GSS_foundation-source47-phase1_outer-capture_20261007.jsonl','diagnostics/GSS_foundation-source47-phase1_security-review_20261007.json','diagnostics/GSS_foundation-source47-phase1_test-review_20261007.json','diagnostics/GSS_foundation-command-deparse-attempts29_20261005.jsonl',
+    'diagnostics/GSS_foundation-command-adapter48-complete_manifest_20261007.json','diagnostics/GSS_foundation-command-adapter48-complete_packet_20261007.txt','diagnostics/GSS_foundation-command-adapter48-complete_security-review_20261007.json','diagnostics/GSS_foundation-command-adapter48-complete_test-review_20261007.json'])if(!application.seen.has(p))refuse();
+  freshEvidence();
+  return {attemptRef:m.attemptRef,adapterManifestSha256:complete.manifestSha256,applicationManifestSha256:application.manifestSha256};
+}
+export function assertCompleteCommandReview() {
+  if(arguments.length)refuse();assertEntry();const parents=originalAcceptance(),a=authority();
+  if(fs.existsSync(OLD_RESERVATION))refuse();
+  if(active===null){if(parents.attempts!==2||fs.existsSync(reservationPath))refuse();}
+  else if(active.pid!==process.pid||active.attemptRef!==a.attemptRef||active.applicationManifestSha256!==a.applicationManifestSha256||h(read(reservationPath))!==active.reservationSha256||parents.attempts===3&&parents.attempt3Ref!==a.attemptRef)refuse();
+  const approval=Object.freeze({completeSourcePeerAccepted:true,sourceManifestSha256:COMPLETE47,...a,applicationAuthorized:true,valuesWithheld:true});issued.add(approval);return approval;
+}
+export function assertFreshApplyAuthority(approval) {
+  if(arguments.length!==1||!issued.has(approval)||active!==null)refuse();assertEntry();
+  const a=authority();if(currentJournalLineage().attempts!==2||fs.existsSync(OLD_RESERVATION)||fs.existsSync(reservationPath)||a.attemptRef!==approval.attemptRef||a.applicationManifestSha256!==approval.applicationManifestSha256)refuse();
+  return Object.freeze(a);
+}
+export function bindConsumedInvocation(approval,reservationBytes) {
+  if(arguments.length!==2||!issued.has(approval)||active!==null||!Buffer.isBuffer(reservationBytes))refuse();assertEntry();
+  const actual=read(reservationPath),r=JSON.parse(actual);
+  if(!actual.equals(reservationBytes)||r.scope!=='SINGLE APPLICATION ATTEMPT3 ADAPTER48'||r.operation!=='apply'||r.executorPid!==process.pid||r.attemptRef!==approval.attemptRef||r.sourceManifestSha256!==COMPLETE47||r.adapterManifestSha256!==approval.adapterManifestSha256||r.applicationManifestSha256!==approval.applicationManifestSha256||r.consumedBeforeTarget!==true||r.consumedOnRefusal!==true||r.automaticRetry!==false||currentJournalLineage().attempts!==2)refuse();
+  active=Object.freeze({pid:process.pid,attemptRef:r.attemptRef,applicationManifestSha256:r.applicationManifestSha256,reservationSha256:h(actual)});
+}
+
+
+===== work/GSS_command-admission48_20261007/peer-metadata.mjs SHA256 795ADD0984110F183A65037CCEB885C64DAB919FB028C5DF280E5DBED58FB665 =====
+// Pure temporary-review attestation classifier. Local operator evidence only.
+// Provider/model identity is never disguised as a historical Claude CLI run.
+const own=(o,k)=>{const d=o&&typeof o==='object'?Object.getOwnPropertyDescriptor(o,k):null;return d&&Object.hasOwn(d,'value')?d.value:undefined;};
+export function acceptedPeer(run,expected) {
+  try {
+    const result=own(run,'result');if(typeof result!=='string')return false;
+    const lines=result.split(/\r?\n/).filter(s=>s.trim());
+    return own(run,'provider')==='OpenAI'&&own(run,'transport')==='collaboration'&&own(run,'agentName')===expected.agentName&&
+      own(run,'readOnly')===true&&own(run,'completed')===true&&own(run,'provenance')==='actual subagent final response'&&
+      own(run,'scope')===expected.scope&&own(run,'bundleSha256')===expected.bundleSha256&&own(run,'sourceManifestSha256')===expected.sourceManifestSha256&&
+      own(run,'complete47ManifestSha256')===expected.complete47ManifestSha256&&own(run,'adapterManifestSha256')===expected.adapterManifestSha256&&
+      own(run,'freshPhase1Sha256')===expected.freshPhase1Sha256&&own(run,'attemptRef')===expected.attemptRef&&
+      own(run,'applicationAuthorized')===expected.applicationAuthorized&&own(run,'productApproval')===false&&
+      lines[0]==='## Verdict: Review OK'&&lines.filter(s=>/^## Verdict:/i.test(s)).length===1&&
+      lines.filter(s=>s===expected.scopeHeading).length===1;
+  }catch{return false;}
+}
+
+
+===== work/GSS_command-admission48_20261007/apply-invocation.mjs SHA256 82D005D341F2BBF3AAB6ADEA95C96BC0E6DA4A180874A1A2B6A8D9D3B2854CAA =====
+// One-use D075 application reservation; consumed even if subsequent bind fails.
+import fs from 'node:fs';
+import {assertFreshApplyAuthority,bindConsumedInvocation,reservationPath} from './source-contract.mjs';
+export function reserveApplyInvocation(approval) {
+  if(arguments.length!==1)throw Error('GSS application48 invocation refused;values withheld');
+  const authority=assertFreshApplyAuthority(approval);
+  const record={scope:'SINGLE APPLICATION ATTEMPT3 ADAPTER48',sourceManifestSha256:approval.sourceManifestSha256,adapterManifestSha256:authority.adapterManifestSha256,applicationManifestSha256:authority.applicationManifestSha256,attemptRef:authority.attemptRef,executorPid:process.pid,operation:'apply',consumedBeforeTarget:true,consumedOnRefusal:true,automaticRetry:false,valuesWithheld:true};
+  const b=Buffer.from(JSON.stringify(record,null,2)+'\n');let fd;
+  try{fd=fs.openSync(reservationPath,'wx');let n=0;while(n<b.length){const q=fs.writeSync(fd,b,n,b.length-n);if(!Number.isSafeInteger(q)||q<1||q>b.length-n)throw Error('GSS reservation48 write refused');n+=q;}fs.fsyncSync(fd);fs.closeSync(fd);fd=undefined;}
+  finally{if(fd!==undefined)fs.closeSync(fd);}
+  bindConsumedInvocation(approval,b);return authority;
+}
+
+
+===== work/GSS_command-admission48_20261007/maintenance.mjs SHA256 E329464606F57E529A65EB8A0E5C037DC9E8556BE84BCBEB81E5641A667413E2 =====
+// UNREVIEWED fixed sole maintenance CLI. NOT executable until COMPLETE actual
+// Opus source47 gate exists and pins ALL actual source. No client/config/query export.
+import fs from 'node:fs';import path from 'node:path';import {fileURLToPath} from 'node:url';import {randomUUID,randomBytes,createHash} from 'node:crypto';
+import pg from '../../gss/node_modules/pg/lib/index.js';import {ROOT,verifiedRunningStack} from '../../gss/tools/local-target.mjs';
+import {assertCompleteCommandReview,fixedCommandSource,archiveName,archiveSha256} from './source-contract.mjs';
+import {assertFixedCommandProcess} from '../GSS_command-ledger47_20261006/command-process-fences.mjs';
+import {commandSessionFenceSQL,commandFenceReadSQL,assertCommandSessionFences} from '../GSS_command-ledger47_20261006/command-session-fences.mjs';
+import {commandMaintenanceDDLFenceSQL,commandDDLReadSQL,commandAmbientReadSQL,assertCommandDDLFences,assertCommandAmbientSettings} from '../GSS_command-ledger47_20261006/command-ddl-fences.mjs';
+import {commandLeaseSQL,inspectCommandLeases,classifyPostcommitLeases,commandMaintenanceLockSQL,commandMaintenanceUnlockSQL} from '../GSS_command-ledger28_20261005/command-leases.mjs';
+import {assertCommandFile,freshCommandClients} from '../GSS_command-ledger28_20261005/command-private-file-format.mjs';
+import {inspectCommandPrivatePrivacy,initializeCommandPrivateFolder,readCurrentCommandFile,readNextCommandFile,writeCurrentCommandFile,writeNextCommandFile,
+ removeOnlyOwnAbortedCommandFile,quarantineMatchingCurrentCommandFile,quarantineConfirmedAbortedNextCommandFile,promoteMatchingNextCommandFile} from './command-private-files.mjs';
+import {classifyInstallationRecovery,classifyCredentialLifecycle} from '../GSS_command-ledger28_20261005/maintenance-recovery-model.mjs';
+import {inspectCommandState,commandTransactionStamp,assertSameCommandTransaction,commandXidOutcome,commandPrivateProvenance} from '../GSS_command-ledger47_20261006/command-state-inspection.mjs';
+import {releaseCaptureAfterConfirmedRollback,comparisonTokenForRefusal} from '../GSS_command-ledger47_20261006/source-comparison.mjs';
+import {withInspectionTrace,setInspectionStage,makeInspectionRefusal,inspectionSnapshot,recordConnectionCloseFailure,connectionCloseFailureRecorded} from '../GSS_command-ledger47_20261006/inspection-trace.mjs';
+import {recognizedSqlState,snapshotRefusal,classifyRefusal} from '../GSS_command-ledger47_20261006/value-free-refusal.mjs';
+import {writeAttemptRefusal} from '../GSS_command-ledger47_20261006/refusal-diagnostic-writer.mjs';
+import {reserveApplyInvocation} from './apply-invocation.mjs';
+const refuse=()=>{throw makeInspectionRefusal('maintenance','precondition');},roles=['gss_command_runtime','gss_command_fixture_admitter'];
+// Append-only NONSECRET attempt journal. It is operational state,not source or
+// an owner task/GitHub ledger. Created zero-state is reviewed before first apply.
+const journal='diagnostics/GSS_foundation-command-deparse-attempts29_20261005.jsonl';
+function attempts(){
+ const absolute=path.resolve(journal);if(fs.realpathSync.native(absolute)!==absolute||fs.lstatSync(absolute).isSymbolicLink()||!fs.statSync(absolute).isFile()||fs.statSync(absolute,{bigint:true}).nlink!==1n)refuse();
+ const b=fs.readFileSync(absolute);if(b.length>32768||b.at(-1)!==10)refuse();
+ const rows=b.toString('utf8').trimEnd().split('\n').map(s=>JSON.parse(s));
+ if(JSON.stringify(rows[0])!==JSON.stringify({format:'gss.command.deparse.attempts.v1',maximum:3,initialAttempts:0,cluster:'7693110423095439394'}))refuse();
+ const runs=new Set();for(let i=1;i<rows.length;i++){
+  const r=rows[i];if(Object.keys(r).sort().join(',')!=='attempt,attemptRef'||r.attempt!==i||i>3||!/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(r.attemptRef)||runs.has(r.attemptRef))refuse();runs.add(r.attemptRef);
+ }
+ return rows.length-1;
+}
+function reserveAttempt(attemptRef){
+ const previous=attempts();if(previous>=3)refuse();const fd=fs.openSync(journal,'a');
+ try{fs.writeSync(fd,Buffer.from(JSON.stringify({attempt:previous+1,attemptRef})+'\n'));fs.fsyncSync(fd);}finally{fs.closeSync(fd);}
+ if(attempts()!==previous+1)refuse();return previous+1;
+}
+function bootSecret(){
+ const p=path.join(ROOT,'.local','secrets.json');if(fs.realpathSync.native(p)!==p||!fs.lstatSync(p).isFile()||fs.statSync(p,{bigint:true}).nlink!==1n)refuse();
+ const s=JSON.parse(fs.readFileSync(p,'utf8'));if(Object.keys(s).sort().join(',')!=='jwt,password'||!/^[a-f0-9]{64}$/.test(s.password)||!/^[a-f0-9]{96}$/.test(s.jwt))refuse();return s.password;
+}
+async function publishFixedSourceArchive(c){
+ const folder=path.join(ROOT,'db','migrations'),file=path.join(folder,archiveName);
+ if(fs.realpathSync.native(folder)!==folder||!fs.lstatSync(folder).isDirectory())refuse();
+ const source=fs.readFileSync(path.resolve('work/GSS_command-ledger47_20261006/'+archiveName));
+ if(createHash('sha256').update(source).digest('hex')!==archiveSha256)refuse();
+ if(fs.existsSync(file)){
+  if(fs.realpathSync.native(file)!==file||!fs.lstatSync(file).isFile()||fs.statSync(file,{bigint:true}).nlink!==1n)refuse();
+  const actual=createHash('sha256').update(fs.readFileSync(file)).digest('hex');if(actual===archiveSha256)return;
+  if(attempts()===3)throw makeInspectionRefusal('maintenance','source_archive');
+  if(actual!=='7c524dbbbefa2dafeb5aa4227cec5ee8bd55782c4767ed55044065c8c939d8e3'||attempts()!==2)refuse();
+  const outcome=(await c.query("SELECT pg_xact_status('1893'::xid8) AS outcome,(SELECT count(*)::int FROM pg_prepared_xacts) AS prepared")).rows[0];
+  if(outcome.outcome!=='aborted'||outcome.prepared!==0)refuse();
+  const privateFolder=path.join(ROOT,'.local','command-ledger');
+  if(JSON.stringify(fs.readdirSync(privateFolder))!=='["quarantine"]'||fs.readdirSync(path.join(privateFolder,'quarantine')).length)refuse();
+  const next=file+'.source33-next';if(fs.existsSync(next))refuse();const fd=fs.openSync(next,'wx');
+  try{fs.writeFileSync(fd,source);fs.fsyncSync(fd);}finally{fs.closeSync(fd);}
+  if(fs.realpathSync.native(next)!==next||!fs.lstatSync(next).isFile()||fs.statSync(next,{bigint:true}).nlink!==1n||createHash('sha256').update(fs.readFileSync(next)).digest('hex')!==archiveSha256)refuse();
+  fs.renameSync(next,file);
+  if(createHash('sha256').update(fs.readFileSync(file)).digest('hex')!==archiveSha256)refuse();return;
+ }
+ if(attempts()>=2)throw makeInspectionRefusal('maintenance','source_archive');
+ const fd=fs.openSync(file,'wx');try{fs.writeFileSync(fd,source);fs.fsyncSync(fd);}finally{fs.closeSync(fd);}
+ // Reviewed immutable source only;NEVER execute this whole archive. All legacy
+ // migrators refuse its 0007 name before external operations. Retain on abort.
+}
+function config(user,password){
+ // Literal WRITABLE config;PG* / defaults / NODE startup were refused first.
+ return {host:'127.0.0.1',port:55322,database:'postgres',user,password,ssl:false,
+ options:'-c default_transaction_read_only=on',application_name:'gss-command-maintenance',connectionTimeoutMillis:2000,
+ query_timeout:12000,statement_timeout:8000,lock_timeout:5000,idle_in_transaction_session_timeout:10000,keepAlive:true,keepAliveInitialDelayMillis:0};
+}
+async function fences(c,phase='boot_initial',transactionMode='outside'){
+ setInspectionStage('session','logging');const logging=(await c.query(commandFenceReadSQL)).rows;assertCommandSessionFences(logging);
+ setInspectionStage('session','ddl');assertCommandDDLFences((await c.query(commandDDLReadSQL)).rows,'maintenance');setInspectionStage('session','ambient');assertCommandAmbientSettings((await c.query(commandAmbientReadSQL)).rows,logging,phase,transactionMode,'maintenance');
+}
+async function connectBoot(verification=false){
+ if(typeof verification!=='boolean')refuse();
+ assertFixedCommandProcess();const c=new pg.Client(config('supabase_admin',bootSecret()));c.on('error',()=>{});
+ try{setInspectionStage('maintenance','credentials');await c.connect();setInspectionStage('session','logging');await c.query(commandSessionFenceSQL);setInspectionStage('session','ddl');await c.query(commandMaintenanceDDLFenceSQL);await fences(c);return c;}catch(e){const snapshot=snapshotRefusal(e,inspectionSnapshot());try{await c.end();}catch{if(!verification)recordConnectionCloseFailure();}throw snapshot;}
+}
+async function lock(c){const r=(await c.query(commandMaintenanceLockSQL)).rows;if(r.length!==1||r[0].acquired!==true)refuse();}
+async function unlock(c){const r=(await c.query(commandMaintenanceUnlockSQL)).rows;if(r.length!==1||r[0].released!==true)refuse();}
+async function twoLeases(c){
+ setInspectionStage('maintenance','lease');
+ const first=inspectCommandLeases((await c.query(commandLeaseSQL)).rows),second=inspectCommandLeases((await c.query(commandLeaseSQL)).rows);
+ return classifyPostcommitLeases(first,second).state;
+}
+async function noLeases(c){setInspectionStage('maintenance','lease');if(!inspectCommandLeases((await c.query(commandLeaseSQL)).rows).zero)refuse();}
+async function readonlyIndependent(source){
+ const c=await connectBoot(true);let firstFailure=null;try{
+  setInspectionStage('maintenance','transaction');
+  await c.query('BEGIN ISOLATION LEVEL READ COMMITTED READ ONLY');const n=(await c.query("SELECT count(*)::int AS n FROM pg_roles WHERE left(rolname,12)='gss_command_'")).rows[0].n;
+  if(n!==0&&n!==3)refuse();const state=await inspectCommandState(c,source,{original:n===0});
+  setInspectionStage('maintenance','transaction');if((await c.query('COMMIT')).command!=='COMMIT')refuse();return state;
+ }catch(e){firstFailure=snapshotRefusal(e,inspectionSnapshot());throw firstFailure;}
+ finally{setInspectionStage('maintenance','transaction');try{await c.end();}catch(e){if(!firstFailure)throw snapshotRefusal(e,inspectionSnapshot());}}
+}
+async function inspectBound(c,source,file,state,transactionMode='read_only'){
+ // These are independent/read-only state facts;never a failed-write client.
+ const provenance=await commandPrivateProvenance(c,file,state,transactionMode,'maintenance'),xid=await commandXidOutcome(c,file);
+ return {provenance,xid};
+}
+async function positiveAndWrongPassword(file,staleFile=null){
+ for(const role of roles){
+  let positive,negative;try{
+   positive=new pg.Client(config(role,file.roles[role].password));positive.on('error',()=>{});await positive.connect();
+   const r=(await positive.query(`SELECT session_user AS original_role,current_user AS current_role,current_database() AS database,
+    inet_server_port() AS port,inet_client_addr()::text AS client_address,current_setting('server_version_num') AS version,
+    rolsuper,rolbypassrls,rolcreatedb,rolcreaterole,rolinherit,rolreplication FROM pg_roles WHERE rolname=session_user`)).rows[0];
+   if(r.original_role!==role||r.current_role!==role||r.database!=='postgres'||r.port!==5432||r.client_address!=='172.20.0.1/32'||r.version!=='170011'||
+    ['rolsuper','rolbypassrls','rolcreatedb','rolcreaterole','rolinherit','rolreplication'].some(k=>r[k]!==false))refuse();
+   await positive.end();positive=null;let wrong=randomBytes(32).toString('hex');while(wrong===file.roles[role].password)wrong=randomBytes(32).toString('hex');
+   negative=new pg.Client(config(role,wrong));negative.on('error',()=>{});let code=null,connected=false;
+   try{await negative.connect();connected=true;}catch(e){code=recognizedSqlState(e);}
+   if(connected||code!=='28P01')refuse();await negative.end().catch(()=>{});negative=null;
+   if(staleFile){
+    if(staleFile.roles[role].password===file.roles[role].password)refuse();
+    negative=new pg.Client(config(role,staleFile.roles[role].password));negative.on('error',()=>{});code=null;connected=false;
+    try{await negative.connect();connected=true;}catch(e){code=recognizedSqlState(e);}
+    if(connected||code!=='28P01')refuse();
+   }
+  }finally{await positive?.end().catch(()=>{});await negative?.end().catch(()=>{});}
+ }
+ return 'positive_and_wrongpassword';
+}
+async function requireCredentialMessage(c){
+ // Must be BOOT ORIGINAL and CURRENT. Readbacks immediately BEFORE combined
+ // secret message. Its closing backstop+verifiers+gate share one transport.
+ const r=(await c.query("SELECT session_user AS s,current_user AS c,current_setting('role') AS r")).rows[0];
+ if(r.s!=='supabase_admin'||r.c!=='supabase_admin'||r.r!=='supabase_admin')refuse();await fences(c,'boot','read_write');
+}
+function credentialSQL(file){
+ const f=assertCommandFile(file);return roles.map(role=>`ALTER ROLE ${role} LOGIN PASSWORD '${f.roles[role].verifier}';`).join('\n');
+}
+async function appendMarker(c,verb,generation){
+ const rows=(await c.query(`INSERT INTO gss_meta.command_maintenance_runs(generation,verb,source_archive_sha256,cluster_id)
+ VALUES($1::uuid,$2,$3,'7693110423095439394') RETURNING run_ref::text,generation::text,top_xid::text,verb,source_archive_sha256,cluster_id,credential_generation::text,original_role::text`,
+ [generation,verb,archiveSha256])).rows;
+ if(rows.length!==1||rows[0].generation!==generation||rows[0].verb!==verb||rows[0].source_archive_sha256!==archiveSha256||rows[0].cluster_id!=='7693110423095439394'||rows[0].original_role!=='supabase_admin')refuse();return rows[0];
+}
+function privateFor(marker,clients){return assertCommandFile({format:'gss.command.private.credentials.v1',cluster:marker.cluster_id,sourceArchiveSha256:marker.source_archive_sha256,
+ runRef:marker.run_ref,ledgerGeneration:marker.generation,topXid:marker.top_xid,credentialGeneration:marker.credential_generation,verb:marker.verb,roles:clients});}
+async function committedFacts(c,source,current,next){
+ await c.query('BEGIN ISOLATION LEVEL READ COMMITTED READ ONLY');const state=await inspectCommandState(c,source);
+ const currentFacts=current?await inspectBound(c,source,current,state):null,nextFacts=next?await inspectBound(c,source,next,state):null;
+ if((await c.query('COMMIT')).command!=='COMMIT')refuse();
+ const leases=await twoLeases(c);return {state,currentFacts,nextFacts,leases};
+}
+async function reconcileLocked(c,source){
+ const current=await readCurrentCommandFile(),next=await readNextCommandFile();
+ await c.query('BEGIN ISOLATION LEVEL READ COMMITTED READ ONLY');const n=(await c.query("SELECT count(*)::int AS n FROM pg_roles WHERE left(rolname,12)='gss_command_'")).rows[0].n;
+ if(n!==0&&n!==3)refuse();const state=await inspectCommandState(c,source,{original:n===0});
+ const cf=current?await inspectBound(c,source,current,state):null,nf=next?await inspectBound(c,source,next,state):null;
+ if((await c.query('COMMIT')).command!=='COMMIT')refuse();
+ if(state.state==='original_0006'){
+  if(next)refuse();if(!current)return Object.freeze({state:'fresh_preconditions_required',admissionEligible:false});
+  const r=classifyInstallationRecovery({catalog:'original_0006',file:'matching',xid:cf.xid,marker:cf.provenance.marker,createdByThisRun:false});
+  if(r.fileAction==='quarantine_matching_old_file'){await quarantineMatchingCurrentCommandFile(current);return Object.freeze({state:'fresh_preconditions_required',quarantined:true,admissionEligible:false});}
+  return r;
+ }
+ if(cf&&(cf.provenance.marker!=='matching'||cf.xid==='aborted')||nf&&(nf.provenance.marker==='contradictory'||nf.provenance.marker==='matching'&&nf.xid==='aborted'))refuse();
+ // A resumed pre-COMMIT rotation is not an unrecoverable secret-file dead end.
+ // Full installed source/generation + marker absence + non-progress XID prove
+ // the new key was never committed. Quarantine only; no overwrite/deletion or
+ // automatic rotate/admission. The next explicit verb reruns fresh preflight.
+ if(next&&['aborted','expired'].includes(nf.xid)&&nf.provenance.marker==='absent'){
+  if(next.verb!=='rotate'||next.ledgerGeneration!==state.generation)refuse();
+  await quarantineConfirmedAbortedNextCommandFile(next);
+  return Object.freeze({state:'fresh_preconditions_required',quarantined:true,admissionEligible:false,automaticRetry:false});
+ }
+ const eligibleFile=nf?.provenance.credential==='current_generation'?next:cf?.provenance.credential==='current_generation'?current:null;
+ const durable=(facts)=>facts&&['committed','expired'].includes(facts.xid)&&facts.provenance.marker==='matching';
+ if(cf&&cf.xid==='in_progress'||nf&&nf.xid==='in_progress')return Object.freeze({state:'reconcile_required',admissionEligible:false});
+ if(eligibleFile&&(eligibleFile===current&&!durable(cf)||eligibleFile===next&&!durable(nf)))refuse();
+ const leases=await twoLeases(c);let auth='unobserved';
+ if(state.state==='active_exact'&&eligibleFile&&leases==='zero_twice')auth=await positiveAndWrongPassword(eligibleFile,eligibleFile===next?current:null);
+ const currentFile=current?cf.provenance.credential==='current_generation'?'current_generation':'stale_generation':'absent';
+ const nextFile=next?nf.provenance.credential==='current_generation'?'current_generation':nf.xid==='in_progress'?'pending_generation':'foreign_or_invalid':'absent';
+ const classified=classifyCredentialLifecycle({catalog:state.state,currentFile,nextFile,leases:leases==='zero_twice'?'zero_twice':'nonzero',auth,promotion:'unattempted'});
+ if(classified.fileAction==='promote_matching_next_file'){
+  if(current){if(!durable(cf))refuse();await quarantineMatchingCurrentCommandFile(current);}
+  const promoted=await promoteMatchingNextCommandFile(next);if(promoted.state!=='promotion_completed')return promoted;
+  const after=await committedFacts(c,source,await readCurrentCommandFile(),await readNextCommandFile());
+  if(after.state.state!=='active_exact'||after.currentFacts?.provenance.credential!=='current_generation'||!durable(after.currentFacts)||after.nextFacts||after.leases!=='zero_twice')refuse();
+  return Object.freeze({state:'active_exact',admissionEligible:true,promotionCompleted:true,hostAuthenticationProved:true,directoryEntryFsyncClaim:false});
+ }
+ // Authentication creates its own leases,allended before a fresh TWO checks.
+ if(classified.admissionEligible&&await twoLeases(c)!=='zero_twice')return Object.freeze({state:'committed_incomplete',admissionEligible:false});
+ return classified;
+}
+const containSQL=`ALTER ROLE gss_command_runtime NOLOGIN;ALTER ROLE gss_command_fixture_admitter NOLOGIN;
+ REVOKE EXECUTE ON FUNCTION gss.fixture_open_command(uuid,uuid,uuid,text,integer,text,text,uuid,uuid,text),
+ gss.fixture_issue_action_proof(uuid,uuid,uuid,text,integer,text,text,uuid,uuid,text,integer) FROM gss_command_fixture_admitter;
+ REVOKE EXECUTE ON FUNCTION gss.claim_command_receipt(),gss.consume_action_proof(uuid),gss.append_command_audit(),gss.finalize_command_receipt(uuid) FROM gss_command_runtime;
+ REVOKE INSERT(organization_id,principal_id,replay_key,command,version,definition_digest,public_digest,epoch) ON gss.command_receipts FROM gss_command_runtime;`;
+const reactivateFunctionGrantsSQL=`GRANT EXECUTE ON FUNCTION gss.fixture_open_command(uuid,uuid,uuid,text,integer,text,text,uuid,uuid,text),
+ gss.fixture_issue_action_proof(uuid,uuid,uuid,text,integer,text,text,uuid,uuid,text,integer) TO gss_command_fixture_admitter;
+ GRANT EXECUTE ON FUNCTION gss.claim_command_receipt(),gss.consume_action_proof(uuid),gss.append_command_audit(),gss.finalize_command_receipt(uuid) TO gss_command_runtime;`;
+async function maintain(verb){
+ assertFixedCommandProcess();const approval=assertCompleteCommandReview(),authority=verb==='apply'?reserveApplyInvocation(approval):null;const source=fixedCommandSource();await verifiedRunningStack();
+ let c,held=false,transaction=false,commitIssued=false,committed=false,ownFile=null,ownFileWritten=null,ownStamp=null,attempt=null,phase='connect',ownFileWriteAttempted=false;
+ let failureSnapshot=null,failureStage=null,elapsedMs=0;const started=performance.now();
+ const recovery={rollback:'not_attempted',independentRead:'not_checked',xid:'not_checked',capture:'not_checked',cleanup:'not_needed',unlock:'not_held',connection:'not_open'};
+ const query=async(...args)=>{setInspectionStage('maintenance',phase==='credential-message'?'credentials':'transaction');return c.query(...args);};
+ async function operation(){try{
+  c=await connectBoot();await lock(c);held=true;
+  if(verb==='initialize'){
+   phase='initialize-original-preflight';await query('BEGIN ISOLATION LEVEL READ COMMITTED READ ONLY');
+   const rolesPresent=(await query("SELECT count(*)::int AS n FROM pg_roles WHERE left(rolname,12)='gss_command_'")).rows[0].n;
+   if(rolesPresent!==0&&rolesPresent!==3)refuse();await inspectCommandState(c,source,{original:rolesPresent===0});await noLeases(c);
+   if((await query('COMMIT')).command!=='COMMIT')refuse();
+   // Empty protected folder initialization is explicit and OUTSIDE a DB
+   // transaction,attempt reservation and any key generation.
+   const privacy=await initializeCommandPrivateFolder();
+   return Object.freeze({state:'private_folder_ready',...privacy,newCredentialsCreated:false,sqlApplied:false});
+  }
+  if(verb==='reconcile')return await reconcileLocked(c,source);
+  phase='files';const current=await readCurrentCommandFile(),next=await readNextCommandFile();
+  if(verb==='apply'){
+   const rolesPresent=(await query("SELECT count(*)::int AS count FROM pg_roles WHERE left(rolname,12)='gss_command_'")).rows[0].count;
+   if(rolesPresent!==0&&rolesPresent!==3)refuse();
+   if(current||next||rolesPresent===3){
+    const reconciled=await reconcileLocked(c,source);
+    return Object.freeze({...reconciled,alreadyExact:reconciled.state==='active_exact'&&reconciled.admissionEligible===true,applied:[]});
+   }
+  }else if(next)refuse();
+  if(['apply','rotate'].includes(verb)){
+   phase='private-privacy-preflight';const privacy=await inspectCommandPrivatePrivacy();if(!privacy.privateFolderPresent)refuse();
+  }
+  phase='begin';setInspectionStage('maintenance','transaction');await query('BEGIN ISOLATION LEVEL READ COMMITTED READ WRITE');transaction=true;ownStamp=await commandTransactionStamp(c,'supabase_admin');
+  phase='original-or-installed-preflight';const before=await inspectCommandState(c,source,{original:verb==='apply'});if(verb!=='contain')await noLeases(c);
+  if(verb==='apply'){
+   phase='reserve-bounded-attempt';attempt=reserveAttempt(authority.attemptRef);
+   phase='publish-reviewed-source-archive';await publishFixedSourceArchive(c);
+   const clients=freshCommandClients();
+   // All role phases fixed and source-hashed. FinalBOOT phases below use ONE
+   // simple-query transport. No arbitrary SQL/archive execution accepted.
+   for(let i=0;i<11;i++){
+    const stage=source.phases[i];phase='apply-phase-'+String(i+1);await query('SET LOCAL ROLE '+stage.currentRole);await assertSameCommandTransaction(c,ownStamp,stage.currentRole);
+    await query(stage.sql);await assertSameCommandTransaction(c,ownStamp,stage.currentRole);
+   }
+   await query('SET LOCAL ROLE supabase_admin');
+   const generation=(await query('SELECT generation::text FROM gss_meta.command_ledger_generation WHERE id')).rows[0]?.generation;
+   const marker=await appendMarker(c,'apply',generation);if(marker.top_xid!==ownStamp.top_xid)refuse();ownFile=privateFor(marker,clients);
+   phase='credential-message-preflight';await requireCredentialMessage(c);phase='credential-message';
+   await query(source.phases[11].sql+'\n'+credentialSQL(ownFile)+'\n'+source.phases[12].sql);
+   await assertSameCommandTransaction(c,ownStamp,'supabase_admin');await query('SET LOCAL ROLE postgres');phase='final-assertion-fragment';await query(source.phases[13].sql);
+   await assertSameCommandTransaction(c,ownStamp,'postgres');phase='whole-candidate-before-history';await inspectCommandState(c,source,{historyInserted:false});
+   phase='private-file-fsync';setInspectionStage('maintenance','private_file');ownFileWriteAttempted=true;ownFileWritten=await writeCurrentCommandFile(ownFile);ownFile=ownFileWritten;
+   phase='history';await query('SET LOCAL ROLE postgres');await query('INSERT INTO gss_meta.migrations(version,sha256) VALUES($1,$2)',[archiveName,archiveSha256]);
+  }else{
+   const cf=current?await inspectBound(c,source,current,before,'read_write'):null;
+   if(current&&(!['committed','expired'].includes(cf.xid)||cf.provenance.marker!=='matching'))refuse();
+   if(verb==='contain'){
+    phase='contain';await query('SET LOCAL ROLE supabase_admin');await query(containSQL);await appendMarker(c,'contain',before.generation);
+   }else{
+    // Explicit rotate may recover missing/stale current credentials only after
+    // exact installed source/provenance/zero leases. It never overwrites either
+    // pathname and never treats reconcile as permission to generate a secret.
+    phase='rotate-marker';await query('SET LOCAL ROLE supabase_admin');const marker=await appendMarker(c,'rotate',before.generation);
+    if(marker.top_xid!==ownStamp.top_xid)refuse();ownFile=privateFor(marker,freshCommandClients());
+    // Regrant with the original declared GRANTOR owner,not BOOT. Contains the
+    // same entry/column capabilities;full active candidate catches grantor drift.
+    await query('SET LOCAL ROLE gss_command_guard');await query(reactivateFunctionGrantsSQL);
+    await query('SET LOCAL ROLE gss_migration_owner');await query('GRANT INSERT(organization_id,principal_id,replay_key,command,version,definition_digest,public_digest,epoch) ON gss.command_receipts TO gss_command_runtime;');
+    await query('SET LOCAL ROLE supabase_admin');phase='credential-message-preflight';await requireCredentialMessage(c);phase='credential-message';
+    // ClosingREVOKE transientedge is idempotent but can emit harmless NOTICE;
+    // source gate must explicitly review the rotate transport. No notice body.
+    await query(source.phases[11].sql+'\n'+credentialSQL(ownFile)+'\n'+source.phases[12].sql);
+    phase='next-file-fsync';setInspectionStage('maintenance','private_file');ownFileWriteAttempted=true;ownFileWritten=await writeNextCommandFile(ownFile);ownFile=ownFileWritten;
+   }
+  }
+  phase='final-whole-candidate';const final=await inspectCommandState(c,source);await assertSameCommandTransaction(c,ownStamp,'supabase_admin');
+  if(verb==='contain'&&final.state!=='contained_exact'||verb!=='contain'&&final.state!=='active_exact')refuse();if(verb!=='contain')await noLeases(c);
+  phase='commit';setInspectionStage('maintenance','transaction');commitIssued=true;const tag=await query('COMMIT');transaction=false;if(tag.command!=='COMMIT')refuse();committed=true;
+  phase='independent-outcome';const independent=await readonlyIndependent(source);if(independent.state!==final.state)refuse();
+  phase='postcommit-leases';if(await twoLeases(c)!=='zero_twice')return Object.freeze({state:'committed_incomplete',admissionEligible:false});
+  phase='credential-reconcile';return await reconcileLocked(c,source);
+ }catch(e){
+  failureStage=inspectionSnapshot();failureSnapshot=snapshotRefusal(e,failureStage);elapsedMs=performance.now()-started;
+  recovery.cleanup=ownFileWritten?'own_file_retained':ownFileWriteAttempted?'refused':'not_needed';
+  if(commitIssued)recovery.rollback='commit_already_issued';
+  else if(transaction){try{const r=await query('ROLLBACK');recovery.rollback=r.command==='ROLLBACK'?'acknowledged':'failed';if(recovery.rollback==='acknowledged')transaction=false;}catch{recovery.rollback='failed';}}
+  if(recovery.rollback==='acknowledged'&&ownStamp){
+   let independent=null;try{independent=await readonlyIndependent(source);recovery.independentRead=independent.state==='original_0006'?'original':'other';}catch{recovery.independentRead='failed';}
+   if(independent){
+    let v;try{v=await connectBoot(true);await v.query('BEGIN ISOLATION LEVEL READ COMMITTED READ ONLY');recovery.xid=await commandXidOutcome(v,{topXid:ownStamp.top_xid});if((await v.query('COMMIT')).command!=='COMMIT')recovery.xid='failed';}
+    catch{recovery.xid='failed';}finally{if(v)try{await v.end();}catch{recovery.xid='failed';}}
+    const abortedOriginal=recovery.xid==='aborted'&&independent.state==='original_0006'&&verb==='apply';
+    const abortedRotation=recovery.xid==='aborted'&&['active_exact','contained_exact'].includes(independent.state)&&verb==='rotate';
+    if((abortedOriginal||abortedRotation)&&ownFileWritten){try{await removeOnlyOwnAbortedCommandFile(ownFileWritten);recovery.cleanup='own_aborted_file_removed';}catch{recovery.cleanup='refused';}}
+    else if(ownFileWritten)recovery.cleanup='own_file_retained';
+    const token=comparisonTokenForRefusal(e);
+    if(abortedOriginal&&token){try{
+      const capture=releaseCaptureAfterConfirmedRollback(token,{rollbackTag:'ROLLBACK',independentOriginalExact:true,xidOutcome:'aborted'});
+      const p='diagnostics/GSS_foundation-command-deparse-refusal29-'+attempt+'_20261005.json';
+      const fd=fs.openSync(p,'wx');try{fs.writeFileSync(fd,JSON.stringify({attempt,maximum:3,sourceArchiveSha256:archiveSha256,capture,rollbackAcknowledged:true,originalStateExact:true,retryApproved:false},null,2));fs.fsyncSync(fd);}finally{fs.closeSync(fd);}
+      recovery.capture='written';
+    }catch{recovery.capture='failed';}}
+    else recovery.capture='not_eligible';
+   }
+  }
+  const classified=classifyRefusal(failureSnapshot,failureStage),safe={state:commitIssued&&!committed?'reconcile_required':committed?'committed_incomplete':'refused',phase,
+   sqlState:classified.sqlState,admissionEligible:false,valuesWithheld:true,automaticRetry:false};
+  if(ownStamp)safe.topXid=ownStamp.top_xid;return Object.freeze(safe);
+ }finally{
+  if(c){
+   if(transaction&&!commitIssued){try{const r=await query('ROLLBACK');if(recovery.rollback!=='acknowledged')recovery.rollback=r.command==='ROLLBACK'?'acknowledged':'failed';}catch{recovery.rollback='failed';}}
+   if(held)try{await unlock(c);recovery.unlock='released';}catch{recovery.unlock='failed';}
+   try{await c.end();recovery.connection='closed';}catch{recovery.connection='failed';recordConnectionCloseFailure();}
+  }
+  if(connectionCloseFailureRecorded())recovery.connection='failed';
+ }}
+ const result=await operation();
+ // Snapshot was taken before recovery; the record is written only after the
+ // terminal primary-handle cleanup. No attempt is invented for preflight or
+ // contain/rotate failures. Writer failure never modifies this result.
+ if(failureSnapshot&&attempt!==null)writeAttemptRefusal(failureSnapshot,{attempt,operation:verb,maintenancePhase:phase,stage:failureStage,elapsedMs,recovery});
+ if((recovery.unlock==='failed'||recovery.connection==='failed')&&!['refused','reconcile_required','committed_incomplete','rotation_promotion_failed'].includes(result.state))return Object.freeze({...result,state:commitIssued?'committed_incomplete':'refused',admissionEligible:false,closureUnproved:true,valuesWithheld:true,automaticRetry:false});
+ return result;
+}
+
+if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
+ if(process.argv.length!==3||process.argv[2]!=='apply'){console.error('GSS command maintenance arguments refused;values withheld');process.exitCode=1;}
+ else withInspectionTrace(()=>maintain(process.argv[2])).then(r=>{console.log(JSON.stringify(r));if(['refused','reconcile_required','committed_incomplete','rotation_promotion_failed'].includes(r.state))process.exitCode=1;})
+ .catch(()=>{console.error('GSS command maintenance source/target gate refused;values withheld');process.exitCode=1;});
+}
+
+
+===== work/GSS_command-admission48_20261007/command-private-files.mjs SHA256 AA936F83E86B0D53EEE64C34CF68270FC774E68323E6BC8813FA19709DEEA43C =====
+// UNREVIEWED fixed private filesystem lifecycle. No CLI/import-time IO.
+// Sole maintenance tool must independently establish DB outcomes before moves.
+import fs from 'node:fs';import path from 'node:path';import {execFile,execFileSync} from 'node:child_process';import {fileURLToPath} from 'node:url';
+import {assertFixedCommandProcess} from '../GSS_command-ledger47_20261006/command-process-fences.mjs';import {assertCommandFile} from '../GSS_command-ledger28_20261005/command-private-file-format.mjs';
+import {assertCompleteCommandReview} from './source-contract.mjs';
+const root='C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\gss\\.local\\command-ledger';
+const ps='C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe';
+const script=fileURLToPath(new URL('../GSS_command-ledger47_20261006/private-command-files.ps1',import.meta.url));
+const refuse=()=>{throw Error('GSS private command file operation refused;values withheld');};
+const uuid=/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/;
+const created=new WeakMap();
+function privateChildEnvironment(){return Object.fromEntries(['SystemRoot','SYSTEMROOT','WINDIR','PATH','Path','PATHEXT','TEMP','TMP','USERPROFILE','APPDATA','LOCALAPPDATA'].filter(k=>process.env[k]).map(k=>[k,process.env[k]]));}
+export function assertCommandPathsIgnored(){
+ if(arguments.length)refuse();assertFixedCommandProcess();
+ for(const relative of ['gss/.local/command-ledger/','gss/.local/command-ledger/current.json','gss/.local/command-ledger/next.json','gss/.local/command-ledger/quarantine/probe.json']){
+  try{execFileSync('C:\\Program Files\\Git\\cmd\\git.exe',['check-ignore','-q','--',relative],{cwd:'C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops',env:privateChildEnvironment(),windowsHide:true,stdio:'ignore'});}catch{refuse();}
+ }
+ return Object.freeze({ignoredPaths:4,valuesWithheld:true});
+}
+function location(name){
+ const p=path.join(root,name);
+ if(!p.startsWith(root+path.sep)||!['current.json','next.json'].includes(name))refuse();return p;
+}
+function exactPath(p,directory=false){
+ if(fs.realpathSync.native(p)!==p||fs.lstatSync(p).isSymbolicLink()||fs.statSync(p).isDirectory()!==directory)refuse();
+}
+async function operation(action,run=''){
+ assertFixedCommandProcess();assertCompleteCommandReview();exactPath(script);
+ if(action!=='inspect')assertCommandPathsIgnored();
+ return new Promise((resolve,reject)=>execFile(ps,['-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',script,'-Action',action,'-RunRef',run],
+  {env:privateChildEnvironment(),windowsHide:true,timeout:5000,maxBuffer:1024,encoding:'utf8'},(error,stdout,stderr)=>{
+   if(error||stderr){reject(Error('GSS private command file operation refused;values withheld'));return;}
+   try{
+    const v=JSON.parse(stdout);
+    if(Object.keys(v).sort().join(',')!=='directoryEntryFsyncClaim,identityValuesWithheld,ntfsPrivacyVerified,privateFolderPresent,privateFolderProtected,trustedAllowSidCount,trustedOwnerVerified'||
+     typeof v.ntfsPrivacyVerified!=='boolean'||v.ntfsPrivacyVerified!==v.privateFolderPresent||v.identityValuesWithheld!==true||v.directoryEntryFsyncClaim!==false||
+     v.privateFolderProtected!==v.privateFolderPresent||v.trustedOwnerVerified!==true||v.trustedAllowSidCount!==(v.privateFolderPresent?3:0)||action!=='inspect'&&v.ntfsPrivacyVerified!==true)refuse();
+    resolve(Object.freeze(v));
+   }catch{reject(Error('GSS private command file operation refused;values withheld'));}
+  }));
+}
+export async function inspectCommandPrivatePrivacy(){if(arguments.length)refuse();return operation('inspect');}
+export async function initializeCommandPrivateFolder(){
+ if(arguments.length)refuse();await operation('initialize');exactPath(root,true);
+ exactPath(path.join(root,'quarantine'),true);
+ return Object.freeze({privateFolderReady:true,ntfsPrivacyVerified:true,privateFolderProtected:true,trustedOwnerVerified:true,trustedAllowSidCount:3,directoryEntryFsyncClaim:false});
+}
+function readFixed(name){
+ assertFixedCommandProcess();const p=location(name);
+ if(!fs.existsSync(p))return null;exactPath(root,true);exactPath(p);
+ const stat=fs.statSync(p,{bigint:true});if(!stat.isFile()||stat.nlink!==1n||stat.size>4096n||stat.size===0n)refuse();
+ try{return assertCommandFile(JSON.parse(fs.readFileSync(p,'utf8')));}catch{refuse();}
+}
+export async function readCurrentCommandFile(){if(arguments.length)refuse();await operation('inspect');return readFixed('current.json');}
+export async function readNextCommandFile(){if(arguments.length)refuse();await operation('inspect');return readFixed('next.json');}
+async function writeFixed(name,input){
+ assertCommandPathsIgnored();
+ assertFixedCommandProcess();const privacy=await operation('inspect');if(!privacy.ntfsPrivacyVerified)refuse();exactPath(root,true);
+ const value=assertCommandFile(input),p=location(name),bytes=Buffer.from(JSON.stringify(value)+'\n');
+ if(bytes.length>4096||name==='current.json'&&value.verb!=='apply'||name==='next.json'&&value.verb!=='rotate')refuse();
+ // Sole fixed rotate tool permits an exclusive next slot after an exact
+ // installed-state/zero-lease preflight,including missing current directory entry.
+ // Existing current,if present,is retained until outcome reconciliation.
+ let fd;
+ try{fd=fs.openSync(p,'wx');fs.writeFileSync(fd,bytes);fs.fsyncSync(fd);}finally{if(fd!==undefined)fs.closeSync(fd);bytes.fill(0);}
+ // Failure retains file;no blind deletion of a possibly durable pending file.
+ await operation('inspect');const reread=readFixed(name);
+ if(JSON.stringify(reread)!==JSON.stringify(value))refuse();created.set(value,name);return value;
+}
+export function writeCurrentCommandFile(value){if(arguments.length!==1)refuse();return writeFixed('current.json',value);}
+export function writeNextCommandFile(value){if(arguments.length!==1)refuse();return writeFixed('next.json',value);}
+export async function removeOnlyOwnAbortedCommandFile(value){
+ if(arguments.length!==1)refuse();await operation('inspect');const name=created.get(value);
+ if(!name||JSON.stringify(readFixed(name))!==JSON.stringify(value))refuse();
+ // The fixed maintenance caller additionally verifies actual abort/original
+ // catalog before this call. Resumed objects cannot acquire the WeakMap token.
+ fs.unlinkSync(location(name));created.delete(value);await operation('inspect');return Object.freeze({removedOnlyThisRunFile:true});
+}
+export async function quarantineMatchingCurrentCommandFile(value){
+ if(arguments.length!==1)refuse();await operation('inspect');const exact=assertCommandFile(value);
+ if(JSON.stringify(readFixed('current.json'))!==JSON.stringify(exact))refuse();
+ await operation('quarantine_current',exact.runRef);
+ const q=path.join(root,'quarantine',exact.runRef+'.json');exactPath(q);
+ let persisted;try{persisted=assertCommandFile(JSON.parse(fs.readFileSync(q,'utf8')));}catch{refuse();}
+ if(JSON.stringify(persisted)!==JSON.stringify(exact)||fs.existsSync(location('current.json')))refuse();
+ return Object.freeze({quarantined:true,overwritten:false,reusable:false,deleted:false});
+}
+export async function quarantineConfirmedAbortedNextCommandFile(value){
+ if(arguments.length!==1)refuse();await operation('inspect');const exact=assertCommandFile(value);
+ if(exact.verb!=='rotate'||JSON.stringify(readFixed('next.json'))!==JSON.stringify(exact))refuse();
+ // Only the fixed caller may establish exact installed generation, marker
+ // absence and known-aborted/expired XID. Never load or delete this file again.
+ await operation('quarantine_next',exact.runRef);
+ const q=path.join(root,'quarantine',exact.runRef+'.json');exactPath(q);
+ let persisted;try{persisted=assertCommandFile(JSON.parse(fs.readFileSync(q,'utf8')));}catch{refuse();}
+ if(JSON.stringify(persisted)!==JSON.stringify(exact)||fs.existsSync(location('next.json')))refuse();
+ return Object.freeze({quarantined:true,overwritten:false,reusable:false,deleted:false});
+}
+export async function promoteMatchingNextCommandFile(value){
+ if(arguments.length!==1)refuse();await operation('inspect');const exact=assertCommandFile(value);
+ if(!uuid.test(exact.runRef)||fs.existsSync(location('current.json'))||JSON.stringify(readFixed('next.json'))!==JSON.stringify(exact))refuse();
+ try{
+  await operation('promote_next',exact.runRef);
+  if(JSON.stringify(readFixed('current.json'))!==JSON.stringify(exact)||fs.existsSync(location('next.json')))refuse();
+  return Object.freeze({state:'promotion_completed',directoryEntryFsyncClaim:false});
+ }catch{
+  // No automatic cleanup/overwrite:independent reconciliation observes both.
+  return Object.freeze({state:'rotation_promotion_failed',directoryEntryFsyncClaim:false,admissionEligible:false});
+ }
+}
+
+
+===== work/check-gss-admission48_20261007.mjs SHA256 43D51F1B6D190001D2BE62E9F36443BF422060BE5142DC00D7B7D8F801A44431 =====
+// Focused actual-source metadata/one-shot matrix; all admission filesystem effects fake.
+import fs from 'node:fs';import path from 'node:path';import vm from 'node:vm';
+import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+import {acceptedPeer} from './GSS_command-admission48_20261007/peer-metadata.mjs';
+import {classifyJournalLineage} from './GSS_command-ledger47_20261006/historical-parent-gate.mjs';
+const root=process.cwd(),lane='work/GSS_command-admission48_20261007/',old='work/GSS_command-ledger47_20261006/';
+const h=b=>createHash('sha256').update(b).digest('hex').toUpperCase(),rows=[];
+// Exact equivalence uses a closed list of allowed translations, not generated expectations.
+for(const name of ['maintenance.mjs','command-private-files.mjs']){
+  let expected=fs.readFileSync(old+name,'utf8');
+  const names=name==='maintenance.mjs'?['command-process-fences.mjs','command-session-fences.mjs','command-ddl-fences.mjs','command-state-inspection.mjs','source-comparison.mjs','inspection-trace.mjs','value-free-refusal.mjs','refusal-diagnostic-writer.mjs']:['command-process-fences.mjs'];
+  for(const n of names)expected=expected.split("from './"+n+"'").join("from '../GSS_command-ledger47_20261006/"+n+"'");
+  if(name==='maintenance.mjs')expected=expected.replace("!['initialize','apply','reconcile','contain','rotate'].includes(process.argv[2])","process.argv[2]!=='apply'");
+  else expected=expected.replace("new URL('./private-command-files.ps1',import.meta.url)","new URL('../GSS_command-ledger47_20261006/private-command-files.ps1',import.meta.url)");
+  assert.equal(fs.readFileSync(lane+name,'utf8'),expected);rows.push({case:'exact_copy_'+name,passed:true});
+}
+const pureExpected={agentName:'/root/foundation_security_review',scope:'SINGLE APPLICATION ATTEMPT3 ADAPTER48',bundleSha256:'A',sourceManifestSha256:'B',complete47ManifestSha256:'C',adapterManifestSha256:'D',freshPhase1Sha256:'E',attemptRef:'F',applicationAuthorized:true,scopeHeading:'## Application scope: SINGLE APPLICATION ATTEMPT3 ADAPTER48'};
+const peerBase={...pureExpected,provider:'OpenAI',transport:'collaboration',readOnly:true,completed:true,provenance:'actual subagent final response',productApproval:false,result:'## Verdict: Review OK\n'+pureExpected.scopeHeading+'\n'};
+assert(acceptedPeer(peerBase,pureExpected));rows.push({case:'peer_positive',passed:true});
+for(const key of ['provider','transport','agentName','scope','bundleSha256','sourceManifestSha256','complete47ManifestSha256','adapterManifestSha256','freshPhase1Sha256','attemptRef','applicationAuthorized','readOnly','completed','provenance','productApproval']){
+  const altered={...peerBase,[key]:typeof peerBase[key]==='boolean'?!peerBase[key]:'wrong'};assert(!acceptedPeer(altered,pureExpected));rows.push({case:'peer_wrong_'+key,passed:true});
+}
+for(const [name,text]of [['generic','## Verdict: Review OK'],['duplicate_verdict',peerBase.result+'## Verdict: Review OK'],['duplicate_scope',peerBase.result+pureExpected.scopeHeading],['changes_requested','## Verdict: Changes requested\n'+pureExpected.scopeHeading],['preface','Preface\n'+peerBase.result]]){assert(!acceptedPeer({...peerBase,result:text},pureExpected));rows.push({case:'peer_'+name,passed:true});}
+let touched=false;const getter={...peerBase};Object.defineProperty(getter,'provider',{get(){touched=true;throw Error('sentinel');}});assert(!acceptedPeer(getter,pureExpected));assert(!touched);rows.push({case:'peer_getter_refused',passed:true});
+
+const originalFiles=[
+ 'work/GSS_command-ledger47_20261006/two-attempt-prefix.jsonl',
+ 'diagnostics/GSS_foundation-command-complete-source47_revision-source-manifest_20261006.json','diagnostics/GSS_foundation-command-complete-source47_claude-review-run_20261006.json','diagnostics/GSS_foundation-command-complete-source47_review-ready_20261006.txt','diagnostics/GSS_foundation-command-complete-source47_reviewed_20261006.txt','diagnostics/GSS_foundation-command-gate47-pre-dispatch_20261006.json',
+ 'plans/GSS_owner-decision-D075_temporary-review_20261007.md','plans/GSS_foundation-temporary-attempt3-admission-design48_20261007.md',
+ 'diagnostics/GSS_foundation-command-phase1-original47_20261006.json','diagnostics/GSS_foundation-command-phase1-original47_20261006.txt','diagnostics/GSS_foundation-command-phase1-original47_invocation-reserved_20261006.json','diagnostics/GSS_foundation-command-phase1-original47_root-receipt_20261006.json','diagnostics/GSS_foundation-source47-phase1_outer-summary_20261007.json','diagnostics/GSS_foundation-source47-phase1_outer-capture_20261007.jsonl','diagnostics/GSS_foundation-source47-phase1_security-review_20261007.json','diagnostics/GSS_foundation-source47-phase1_test-review_20261007.json','diagnostics/GSS_foundation-command-deparse-attempts29_20261005.jsonl',
+ ...['maintenance.mjs','command-private-files.mjs','source-contract.mjs','apply-invocation.mjs','peer-metadata.mjs'].map(n=>lane+n)
+];
+const publicBase=new Map(originalFiles.map(p=>[p,fs.readFileSync(p)]));
+const complete='diagnostics/GSS_foundation-command-adapter48-complete',app='diagnostics/GSS_foundation-command-adapter48-attempt3';
+const manifestPath='diagnostics/GSS_foundation-command-complete-source47_revision-source-manifest_20261006.json';
+const originalManifestHash=h(publicBase.get(manifestPath)),phaseHash=h(publicBase.get('diagnostics/GSS_foundation-command-phase1-original47_20261006.json'));
+const fixtureAttemptRef='7fd79236-8c14-4634-809d-2d6fd7ec7a17'; // Fictional matrix UUID; never native authority.
+const strip=s=>s.replace(/^import .*;\r?\n/gm,'').replace(/^export \{[^\n]+\};\r?\n/gm,'').replace(/^export /gm,'');
+const gateSource=strip(fs.readFileSync(lane+'source-contract.mjs','utf8'));
+const reservationSource=strip(fs.readFileSync(lane+'apply-invocation.mjs','utf8'));
+const code=gateSource+'\n'+reservationSource+'\nglobalThis.api={assertCompleteCommandReview,assertFreshApplyAuthority,bindConsumedInvocation,reserveApplyInvocation};';
+const outcomes=['normal_2_to_3','cloned_approval','second_reservation','bind_failure_consumed','wrong_pid','altered_reservation','foreign_journal_uuid','new_process_replay','wrong_entry','changed_input','extra_lane_file','short_writes','reused_attempt_uuid'];
+for(const scenario of outcomes){
+  const attemptRef=scenario==='reused_attempt_uuid'?JSON.parse(publicBase.get(originalFiles[0]).toString().trimEnd().split('\n')[1]).attemptRef:fixtureAttemptRef;
+  const map=new Map(publicBase),state={attempts:2,attempt3Ref:null};let fdName=null,activePid=54321,extra=false,bindRefused=false;
+  const asBytes=x=>Buffer.from(JSON.stringify(x,null,2)+'\n');
+  function installPacket(base,scope,isApp,adapterHash){
+    const paths=isApp?[...originalFiles,complete+'_manifest_20261007.json',complete+'_packet_20261007.txt',complete+'_security-review_20261007.json',complete+'_test-review_20261007.json']:originalFiles.filter(p=>p.startsWith(lane)||p.startsWith('plans/')||p===manifestPath);
+    const packetBytes=Buffer.from('FAKE source-only packet '+scope),bundleSha256=h(packetBytes);map.set(base+'_packet_20261007.txt',packetBytes);
+    const m={scope,secretPatternHits:0,complete47ManifestSha256:originalManifestHash,applicationAuthorized:isApp,inputSha256:bundleSha256,inputs:paths.map(p=>({path:p,sha256:h(map.get(p))})),adapterManifestSha256:adapterHash,freshPhase1Sha256:phaseHash,attemptRef,maximumAttempts:3,beforeAttempts:2,archiveSha256:'DAEEA79A3AB5F53DDE28621905F66BB26FFF089C76ED2DC9B71B9EBB8C00AB8D',outerBudgetMs:600000,shorterWholeRunWatchdog:false};
+    const mb=asBytes(m),mh=h(mb);map.set(base+'_manifest_20261007.json',mb);
+    for(const role of ['security','test'])map.set(base+'_'+role+'-review_20261007.json',asBytes({provider:'OpenAI',transport:'collaboration',agentName:'/root/foundation_'+role+'_review',readOnly:true,completed:true,provenance:'actual subagent final response',scope,bundleSha256,sourceManifestSha256:mh,complete47ManifestSha256:originalManifestHash,adapterManifestSha256:isApp?adapterHash:null,freshPhase1Sha256:isApp?phaseHash:null,attemptRef:isApp?attemptRef:null,applicationAuthorized:isApp,productApproval:false,result:'## Verdict: Review OK\n'+(isApp?'## Application scope: SINGLE APPLICATION ATTEMPT3 ADAPTER48':'## Review scope: COMPLETE ADMISSION ADAPTER48')+'\n'}));
+    return mh;
+  }
+  const ch=installPacket(complete,'COMPLETE ADMISSION ADAPTER48',false,null);installPacket(app,'SINGLE APPLICATION ATTEMPT3 ADAPTER48',true,ch);
+  const relative=p=>path.isAbsolute(p)?path.relative(root,p).replaceAll('\\','/'):p;
+  const fakeFs={existsSync:p=>map.has(relative(p)),realpathSync:{native:p=>p},lstatSync:()=>({isDirectory:()=>true}),readdirSync:()=>['maintenance.mjs','command-private-files.mjs','apply-invocation.mjs','source-contract.mjs','peer-metadata.mjs',...(extra?['unexpected.mjs']:[])],
+    openSync:(p,flags)=>{assert.equal(flags,'wx');p=relative(p);assert(!map.has(p));fdName=p;map.set(p,Buffer.alloc(0));return 1;},
+    writeSync:(fd,b,o,l)=>{const n=scenario==='short_writes'?Math.min(5,l):l;map.set(fdName,Buffer.concat([map.get(fdName),b.subarray(o,o+n)]));return n;},fsyncSync:()=>{},closeSync:()=>{if(scenario==='bind_failure_consumed')bindRefused=true;}
+  };
+  const fakeProcess={argv:['node',path.join(root,...(lane+'maintenance.mjs').split('/')),'apply'],get pid(){return activePid;}};
+  if(scenario==='wrong_entry')fakeProcess.argv[2]='rotate';
+  if(scenario==='changed_input')map.set(lane+'maintenance.mjs',Buffer.from('changed'));
+  if(scenario==='extra_lane_file')extra=true;
+  const context=vm.createContext({fs:fakeFs,path,createHash,process:fakeProcess,Buffer,classifyJournalLineage,assertFixedCommandProcess:()=>{},assertHistoricalCommandParents:()=>({...state}),currentJournalLineage:()=>({...state}),readPublicBytes:p=>{if(bindRefused&&p.includes('apply48_invocation'))throw Error('fixed refusal');assert(map.has(p),p);return map.get(p);},actualReviewMetadataAccepted:()=>true,assertCompleteCommandInputs:()=>({sourceInputsByteVerified:1819}),acceptedPeer,fixedCommandSource:()=>{},archiveName:'0007_private_fixture_command_ledger.sql',archiveSha256:'daeea79a3ab5f53dde28621905f66bb26fff089c76ed2dc9b71b9ebb8c00ab8d'});
+  new vm.Script(code).runInContext(context);
+  if(['wrong_entry','changed_input','extra_lane_file','reused_attempt_uuid'].includes(scenario)){
+    assert.throws(()=>context.api.assertCompleteCommandReview());
+    assert(!map.has('diagnostics/GSS_foundation-command-apply48_invocation-reserved_20261007.json'));assert.equal(state.attempts,2);
+  }
+  else {
+    const approval=context.api.assertCompleteCommandReview();
+    if(scenario==='cloned_approval')assert.throws(()=>context.api.reserveApplyInvocation({...approval}));
+    else if(scenario==='bind_failure_consumed'){assert.throws(()=>context.api.reserveApplyInvocation(approval));assert(map.has('diagnostics/GSS_foundation-command-apply48_invocation-reserved_20261007.json'));assert.throws(()=>context.api.assertCompleteCommandReview());}
+    else {
+      context.api.reserveApplyInvocation(approval);assert.equal(context.api.assertCompleteCommandReview().attemptRef,attemptRef);
+      state.attempts=3;state.attempt3Ref=attemptRef;assert.equal(context.api.assertCompleteCommandReview().attemptRef,attemptRef);
+      if(scenario==='second_reservation')assert.throws(()=>context.api.reserveApplyInvocation(approval));
+      if(scenario==='wrong_pid'){activePid++;assert.throws(()=>context.api.assertCompleteCommandReview());}
+      if(scenario==='altered_reservation'){map.set('diagnostics/GSS_foundation-command-apply48_invocation-reserved_20261007.json',Buffer.from('{}'));assert.throws(()=>context.api.assertCompleteCommandReview());}
+      if(scenario==='foreign_journal_uuid'){state.attempt3Ref='00000000-0000-4000-8000-000000000000';assert.throws(()=>context.api.assertCompleteCommandReview());}
+      if(scenario==='new_process_replay'){const fresh=vm.createContext({...context});new vm.Script(code).runInContext(fresh);assert.throws(()=>fresh.api.assertCompleteCommandReview());}
+    }
+  }
+  rows.push({case:scenario,passed:true});
+}
+console.log(JSON.stringify({scope:'Exact copy, pure actual peer classifier and actual gate/reservation source against fake IO only',passed:true,cases:rows,nativeInvocations:0,privateReads:0,connections:0}));
+
+
+===== EXACT REFERENCED COVERAGE =====
+[
+  {
+    "path": "plans/GSS_owner-decision-D075_temporary-review_20261007.md",
+    "sha256": "324341C1BB02C854BF782470FDE024F75A9BEADA42CEAFFFF666C2097EF1C9B0",
+    "coverage": "complete source"
+  },
+  {
+    "path": "plans/GSS_foundation-temporary-attempt3-admission-design48_20261007.md",
+    "sha256": "4608E365FC30279268ECBE156B57263D21F2665E4F635DE74041200C856C74A2",
+    "coverage": "complete source"
+  },
+  {
+    "path": "work/GSS_command-admission48_20261007/source-contract.mjs",
+    "sha256": "150E29DF8A8C79700CA0F2BCC73E816BD59627FA07EA21CE6DF8DF0FA9CBE70F",
+    "coverage": "complete source"
+  },
+  {
+    "path": "work/GSS_command-admission48_20261007/peer-metadata.mjs",
+    "sha256": "795ADD0984110F183A65037CCEB885C64DAB919FB028C5DF280E5DBED58FB665",
+    "coverage": "complete source"
+  },
+  {
+    "path": "work/GSS_command-admission48_20261007/apply-invocation.mjs",
+    "sha256": "82D005D341F2BBF3AAB6ADEA95C96BC0E6DA4A180874A1A2B6A8D9D3B2854CAA",
+    "coverage": "complete source"
+  },
+  {
+    "path": "work/GSS_command-admission48_20261007/maintenance.mjs",
+    "sha256": "E329464606F57E529A65EB8A0E5C037DC9E8556BE84BCBEB81E5641A667413E2",
+    "coverage": "complete source"
+  },
+  {
+    "path": "work/GSS_command-admission48_20261007/command-private-files.mjs",
+    "sha256": "AA936F83E86B0D53EEE64C34CF68270FC774E68323E6BC8813FA19709DEEA43C",
+    "coverage": "complete source"
+  },
+  {
+    "path": "work/check-gss-admission48_20261007.mjs",
+    "sha256": "43D51F1B6D190001D2BE62E9F36443BF422060BE5142DC00D7B7D8F801A44431",
+    "coverage": "complete source"
+  },
+  {
+    "path": "work/GSS_command-ledger47_20261006/source-contract.mjs",
+    "sha256": "6B85E2EE2BC8ADB02BCB87AE8C8DA68450CED139829266B99D4B00828C21B3F8",
+    "coverage": "immutable evidence/support reference; available for bounded read"
+  },
+  {
+    "path": "work/GSS_command-ledger47_20261006/historical-parent-gate.mjs",
+    "sha256": "73679A08C32B397AAAD52E9E6D164E69EF19D85492B692DCA20B2A52A2EA0EEF",
+    "coverage": "immutable evidence/support reference; available for bounded read"
+  },
+  {
+    "path": "work/GSS_command-ledger47_20261006/command-process-fences.mjs",
+    "sha256": "1F9D3189E21E6C6B9E0E38174205C289003566B871450317076CE2532073F51B",
+    "coverage": "immutable evidence/support reference; available for bounded read"
+  },
+  {
+    "path": "work/GSS_command-ledger47_20261006/maintenance.mjs",
+    "sha256": "E130833418D6F6D267A9CA716B767A9D094FC74C61D8ABCBED3FB856A9777ECA",
+    "coverage": "immutable evidence/support reference; available for bounded read"
+  },
+  {
+    "path": "work/GSS_command-ledger47_20261006/command-private-files.mjs",
+    "sha256": "6C9F6070363D601CB52EB04A873438C96F1D9F9CE1CD5D07F2CFB5A417F90778",
+    "coverage": "immutable evidence/support reference; available for bounded read"
+  },
+  {
+    "path": "work/GSS_command-ledger47_20261006/refusal-diagnostic-writer.mjs",
+    "sha256": "244483A2D4CF0FFBC061780DB5DC2474B128E6D030F1ABF9474A6713873290C5",
+    "coverage": "immutable evidence/support reference; available for bounded read"
+  },
+  {
+    "path": "diagnostics/GSS_foundation-command-complete-source47_revision-source-manifest_20261006.json",
+    "sha256": "FB022E5EA7089378F95D7B0FAC93B063BAA182A72D6BD9DA9886CEA218FADBB5",
+    "coverage": "immutable evidence/support reference; available for bounded read"
+  },
+  {
+    "path": "diagnostics/GSS_foundation-command-complete-source47_claude-review-run_20261006.json",
+    "sha256": "87ACD575982037CC2552913F6D42C8A78F8E31DAFD76280CD9E1CACEB75A55EA",
+    "coverage": "immutable evidence/support reference; available for bounded read"
+  },
+  {
+    "path": "diagnostics/GSS_foundation-command-complete-source47_reviewed_20261006.txt",
+    "sha256": "73F372C54D07C466AB942124646DE7161C5B272F17B9CFF9E8260108C08F34AA",
+    "coverage": "immutable evidence/support reference; available for bounded read"
+  },
+  {
+    "path": "diagnostics/GSS_foundation-command-gate47-pre-dispatch_20261006.json",
+    "sha256": "2FE1D90FFB8B234C7500A0220D63821AE7BA0FC51EDBC994D05E010E94CD1735",
+    "coverage": "immutable evidence/support reference; available for bounded read"
+  },
+  {
+    "path": "diagnostics/GSS_foundation-command-phase1-original47_20261006.json",
+    "sha256": "A790444A610AF26C9E3A5B3DEB7863DC5CDBBD633A4107DE3D4FE02A31212906",
+    "coverage": "immutable evidence/support reference; available for bounded read"
+  },
+  {
+    "path": "diagnostics/GSS_foundation-command-phase1-original47_root-receipt_20261006.json",
+    "sha256": "5B3C1A251CBA946542F2FA71A7C5DE920A1C17FCE816236EDD9BD6CCBD6E87A0",
+    "coverage": "immutable evidence/support reference; available for bounded read"
+  },
+  {
+    "path": "diagnostics/GSS_foundation-source47-phase1_outer-summary_20261007.json",
+    "sha256": "E2469C2CF13D1FFC4CD58F47A7119F4C7C611E4C913A12B5BA55D8F06582A334",
+    "coverage": "immutable evidence/support reference; available for bounded read"
+  },
+  {
+    "path": "diagnostics/GSS_foundation-source47-phase1_security-review_20261007.json",
+    "sha256": "53098DEFF17FE1E9BE0543A9DD61E1699847E0EDF016B4191D18C34E1C56BBFB",
+    "coverage": "immutable evidence/support reference; available for bounded read"
+  },
+  {
+    "path": "diagnostics/GSS_foundation-source47-phase1_test-review_20261007.json",
+    "sha256": "1141098E6725ED72C0F08EB67397971F744EEC8242D7F9107590DA581B69BCD2",
+    "coverage": "immutable evidence/support reference; available for bounded read"
+  }
+]

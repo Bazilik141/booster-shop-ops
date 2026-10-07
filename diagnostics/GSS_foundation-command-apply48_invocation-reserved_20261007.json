@@ -1,0 +1,13 @@
+{
+  "scope": "SINGLE APPLICATION ATTEMPT3 ADAPTER48",
+  "sourceManifestSha256": "FB022E5EA7089378F95D7B0FAC93B063BAA182A72D6BD9DA9886CEA218FADBB5",
+  "adapterManifestSha256": "8929DEA2D5B72494FBD8E6FD0B9C2DF241F5C267B6EF7AC8B9A46BE08C732A46",
+  "applicationManifestSha256": "6F1CFD129769031CAE6FB06D221909B3CBAD033B550C6D8789DFD5DDFC7A5C8F",
+  "attemptRef": "c0e65978-f8da-470d-9527-fdd14dfc7fd9",
+  "executorPid": 23108,
+  "operation": "apply",
+  "consumedBeforeTarget": true,
+  "consumedOnRefusal": true,
+  "automaticRetry": false,
+  "valuesWithheld": true
+}

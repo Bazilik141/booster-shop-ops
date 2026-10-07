@@ -1,0 +1,18 @@
+// Additive source packet only; no reviewer output, seal, DB or private-file IO.
+import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+const h=b=>createHash('sha256').update(b).digest('hex').toUpperCase(),base='diagnostics/GSS_foundation-command-adapter48-complete';
+const paths=[
+ 'plans/GSS_owner-decision-D075_temporary-review_20261007.md','plans/GSS_foundation-temporary-attempt3-admission-design48_20261007.md',
+ ...['source-contract.mjs','peer-metadata.mjs','apply-invocation.mjs','maintenance.mjs','command-private-files.mjs'].map(n=>'work/GSS_command-admission48_20261007/'+n),
+ 'work/check-gss-admission48_20261007.mjs',
+ 'work/GSS_command-ledger47_20261006/source-contract.mjs','work/GSS_command-ledger47_20261006/historical-parent-gate.mjs','work/GSS_command-ledger47_20261006/command-process-fences.mjs','work/GSS_command-ledger47_20261006/maintenance.mjs','work/GSS_command-ledger47_20261006/command-private-files.mjs','work/GSS_command-ledger47_20261006/refusal-diagnostic-writer.mjs',
+ 'diagnostics/GSS_foundation-command-complete-source47_revision-source-manifest_20261006.json','diagnostics/GSS_foundation-command-complete-source47_claude-review-run_20261006.json','diagnostics/GSS_foundation-command-complete-source47_reviewed_20261006.txt','diagnostics/GSS_foundation-command-gate47-pre-dispatch_20261006.json',
+ 'diagnostics/GSS_foundation-command-phase1-original47_20261006.json','diagnostics/GSS_foundation-command-phase1-original47_root-receipt_20261006.json','diagnostics/GSS_foundation-source47-phase1_outer-summary_20261007.json','diagnostics/GSS_foundation-source47-phase1_security-review_20261007.json','diagnostics/GSS_foundation-source47-phase1_test-review_20261007.json'
+];
+const full=new Set(paths.filter(p=>p.startsWith('plans/')||p.startsWith('work/GSS_command-admission48')||p==='work/check-gss-admission48_20261007.mjs'));
+let packet='# COMPLETE ADMISSION ADAPTER48 source-only review\n\nReview the actual new5-source admission overlay under D075, preserving COMPLETE47 and historical38/40. Assess exact source equivalence, two truthful peer records, minted approval/in-process reservation binding, no replay, all parent/proof gates, and full apply import closure. The existing native47 passed144/all122; this packet grants no application. No attempt3, new keys, journal append, Phase2 or Foundation acceptance.\n\nReturn first line exactly ## Verdict: Review OK or ## Verdict: Changes requested. If accepted include exactly ## Review scope: COMPLETE ADMISSION ADAPTER48. This is source acceptance ONLY; applicationAuthorized=false. Report scope-bound hashes and concrete findings.\n';
+const inputs=paths.map(p=>{assert(!p.includes('/.local/'));const b=fs.readFileSync(p),sha=h(b);if(full.has(p))packet+='\n===== '+p+' SHA256 '+sha+' =====\n'+b.toString('utf8')+'\n';return {path:p,sha256:sha,coverage:full.has(p)?'complete source':'immutable evidence/support reference; available for bounded read'};});
+packet+='\n===== EXACT REFERENCED COVERAGE =====\n'+JSON.stringify(inputs,null,2)+'\n';
+const b=Buffer.from(packet),manifest={date:'2026-10-07',scope:'COMPLETE ADMISSION ADAPTER48',complete47ManifestSha256:'FB022E5EA7089378F95D7B0FAC93B063BAA182A72D6BD9DA9886CEA218FADBB5',inputSha256:h(b),packetUtf8Bytes:b.length,secretPatternHits:0,applicationAuthorized:false,productApproval:false,inputs};
+fs.writeFileSync(base+'_packet_20261007.txt',b,{flag:'wx'});fs.writeFileSync(base+'_manifest_20261007.json',JSON.stringify(manifest,null,2)+'\n',{flag:'wx'});
+console.log(JSON.stringify({prepared:true,scope:manifest.scope,packetBytes:b.length,packetSha256:h(b),manifestSha256:h(fs.readFileSync(base+'_manifest_20261007.json')),inputs:inputs.length,applicationAuthorized:false}));

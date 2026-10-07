@@ -1,0 +1,704 @@
+# DISTINCT SINGLE APPLICATION ATTEMPT3 ADAPTER48
+
+Date2026-10-07, Europe/Kyiv. Executor Codex; D075 truthful two OpenAI peer-review substitution. COMPLETE47 is genuinely Claude accepted and immutable; fresh native47 passed144/all122 original0006/S0 before/after with closed rollback/handles. COMPLETE ADMISSION ADAPTER48 is actually dual source accepted (source-only).
+
+This DISTINCT review seeks one native LOCAL installation apply of unchanged DAEE archive through adapter48, UUID c0e65978-f8da-470d-9527-fdd14dfc7fd9. It is the last bounded attempt (2used/max3). No automatic retry, journal reset, rehearsal or failing-catalog learning. Invocation is consumed even on preflight refusal, before target/private access; journal append occurs only after existing original0006 whole preflight. New fictional local roles/credentials are expected only inside the approved fixed child; root/subagents never read/copy credentials. Existing production, legacy business data, Auth/factor/effect, Phase2, restoration, UI QA and whole Foundation acceptance remain outside scope.
+
+Review the COMPLETE source closure plus new outer/config/fake matrix and actual output paths. Rendered outer budget600000ms; no hidden shorter whole-run watchdog. Frozen maintenance180000ms/idle60000ms, statement8000/lock5000ms, fixture10000ms, connection2000/query12000 unchanged. Earlier actual measured budget45 evidence is pinned below; native successful transaction fit remains unknown. Bounded15s termination+15s closure recovery records unresolved closure as refusal. Wrapper retains only raw stdout/stderr hashes/counts; it releases exclusively the exact known active_exact success schema. Exclusive durable begin, same configured command, actual UTC/Kyiv end/time/exit, reservation/refusal/journal hashes and private-file existence only. Prior outer output/old47 or new48 reservation/refusal/private current or next must be absent immediately before dispatch. Real accepted seal contains this packet SHA after both actual verdicts; no seal/review is fabricated by packet preparation.
+
+Accept ONLY if native single apply is explicitly justified by the exact packet+manifest, COMPLETE47, actual adapter source acceptance, fresh proof, new UUID, original prefix, I165/I167 rendered configuration and immediate preconditions. First line exactly ## Verdict: Review OK or ## Verdict: Changes requested. If accepted include EXACT heading ## Application scope: SINGLE APPLICATION ATTEMPT3 ADAPTER48. State applicationAuthorized=true for this one local fixed invocation, productApproval=false. This is not a generic source review. On refusal/unknown outcome preserve artifacts and do not retry.
+
+## Rendered actual outer configuration
+{
+  "scope": "SINGLE APPLICATION ATTEMPT3 ADAPTER48",
+  "actualNativeCommand": {
+    "executable": "C:\\Program Files\\nodejs\\node.exe",
+    "argv": [
+      "work/GSS_command-admission48_20261007/maintenance.mjs",
+      "apply"
+    ],
+    "cwd": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops",
+    "shell": false,
+    "windowsHide": true,
+    "nodeFlags": [],
+    "environmentAllowlist": [
+      "SystemRoot",
+      "SYSTEMROOT",
+      "WINDIR",
+      "PATH",
+      "Path",
+      "PATHEXT",
+      "TEMP",
+      "TMP",
+      "USERPROFILE",
+      "APPDATA",
+      "LOCALAPPDATA",
+      "USERNAME",
+      "USER"
+    ]
+  },
+  "outerBudgetMs": 600000,
+  "shorterWholeRunWatchdog": false,
+  "terminationMs": 15000,
+  "closureRecoveryMs": 15000,
+  "maximumOutputBytes": 1048576,
+  "maintenanceTransactionMs": 180000,
+  "maintenanceIdleMs": 60000,
+  "statementMs": 8000,
+  "lockMs": 5000,
+  "fixtureMs": 10000,
+  "connectionMs": 2000,
+  "queryMs": 12000,
+  "maximumAttempts": 3,
+  "beforeAttempts": 2,
+  "automaticRetry": false,
+  "consumedOnRefusal": true,
+  "capturePath": "diagnostics/GSS_foundation-command-adapter48-attempt3_outer-capture_20261007.jsonl",
+  "summaryPath": "diagnostics/GSS_foundation-command-adapter48-attempt3_outer-summary_20261007.json",
+  "outputsMustBeAbsent": [
+    "diagnostics/GSS_foundation-command-apply48_invocation-reserved_20261007.json",
+    "diagnostics/GSS_foundation-command-apply47_invocation-reserved_20261006.json",
+    "diagnostics/GSS_foundation-command-refusal47-attempt3_20261006.json",
+    "diagnostics/GSS_foundation-command-deparse-refusal29-3_20261005.json"
+  ],
+  "privateExistenceOnly": [
+    "gss/.local/command-ledger/current.json",
+    "gss/.local/command-ledger/next.json"
+  ],
+  "journalPath": "diagnostics/GSS_foundation-command-deparse-attempts29_20261005.jsonl",
+  "requiredState": "original_0006/S0",
+  "archiveSha256": "DAEEA79A3AB5F53DDE28621905F66BB26FFF089C76ED2DC9B71B9EBB8C00AB8D"
+}
+
+===== plans/GSS_owner-decision-D075_temporary-review_20261007.md SHA256 324341C1BB02C854BF782470FDE024F75A9BEADA42CEAFFFF666C2097EF1C9B0 =====
+# GSS-D075 — temporary peer-review substitution
+
+Date: 2026-10-07; owner timezone Europe/Kyiv.
+Status: approved by direct owner instruction in the active continuation chat.
+Executor: Codex; one implementation, database, Git and status writer.
+
+## Authority and duration
+
+The owner explicitly approved the proposed temporary format:
+"Так, погоджу. такий тимчасовий формат. Він діятиме до моєї команди про відновлення стандартного формату роботи."
+
+Within the assigned local GSS Foundation continuation, two separately tasked
+read-only Codex subagents may provide the required peer review in place of
+Claude. One reviews architecture/security; the other reviews correctness and
+test sufficiency. The format remains active until the owner explicitly restores
+the standard Codex executor / Claude reviewer format. After that restoration,
+Claude will review accumulated changes; no Claude quota-consuming requests
+are required during the temporary period.
+
+This temporarily supersedes the reviewer requirement in D069, governance
+section 5 and autonomy-policy extension 1 for this local scope only. It does not
+change Q1 revision 2 ordering, the approved functionality, D070-D074, attempt
+budgets, existing source-bound grants, owner QA, deployment, paid activation,
+production or live business-data authority. Subagents remain read-only and
+cannot provide owner acceptance or write implementation/Git/status/database.
+
+## Attestation and preservation
+
+Record actual subagent identity, reviewed source hashes, findings and verdicts
+truthfully. A Codex review must never be labeled as a Claude model/CLI verdict.
+New grants must bind the concrete reviewed target and retain existing refusal,
+one-shot, evidence and rollback conditions.
+
+The canonical AGENTS.md, GSS_GOVERNANCE.md and original owner-decision register
+are pinned COMPLETE47 inputs. Preserve their exact bytes. This additive decision
+is the active owner amendment; consolidation into the register must wait until
+it can occur without invalidating frozen evidence. Historical Claude verdicts,
+seals, manifests, runners and failed-attempt artifacts remain unchanged.
+
+## Continuous segment
+
+1. Validate the actual COMPLETE47 seal, all 1819 inputs, accepted pre-dispatch
+   witness, four absent native47 outputs and unchanged two-attempt journal.
+2. Implement an additive outer capture to close I168; obtain both actual
+   read-only reviews; run the existing unused Phase1 grant once. Record actual
+   timestamps, duration, exit, reservation/failure presence and hashes.
+3. On success, verify the original prepared root receipt (144 tests/all 122
+   criteria, exact original0006/S0 before/after). On failure, preserve evidence,
+   investigate read-only and never retry the consumed grant automatically.
+4. A future application attempt3 requires a distinct concrete reviewed packet
+   and a truthful additive admission mechanism under this decision. Frozen47
+   currently requires Claude metadata; do not bypass or counterfeit it.
+
+Model recommendation: current gpt-6.1-sol / xhigh for security-sensitive
+orchestration and evidence boundaries. Subagents inherit the active session's
+model/effort; no paid model escalation is authorized. Natural first boundary:
+the single native Phase1 result and dual review of its captured evidence.
+
+
+===== work/GSS_command-admission48_20261007/source-contract.mjs SHA256 150E29DF8A8C79700CA0F2BCC73E816BD59627FA07EA21CE6DF8DF0FA9CBE70F =====
+// Additive D075 gate; immutable COMPLETE47 remains genuinely Claude-reviewed.
+// No import-time IO, client, private-file read or caller-selected path.
+import fs from 'node:fs';import path from 'node:path';import {createHash} from 'node:crypto';
+import {assertFixedCommandProcess} from '../GSS_command-ledger47_20261006/command-process-fences.mjs';
+import {assertCompleteCommandInputs,fixedCommandSource,archiveName,archiveSha256} from '../GSS_command-ledger47_20261006/source-contract.mjs';
+import {assertHistoricalCommandParents,currentJournalLineage,classifyJournalLineage,readPublicBytes} from '../GSS_command-ledger47_20261006/historical-parent-gate.mjs';
+import {actualReviewMetadataAccepted} from '../GSS_command-premises40_20261006/review-metadata.mjs';
+import {acceptedPeer} from './peer-metadata.mjs';
+export {fixedCommandSource,archiveName,archiveSha256};
+const ROOT='C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops';
+const ENTRY='work/GSS_command-admission48_20261007/maintenance.mjs';
+export const reservationPath='diagnostics/GSS_foundation-command-apply48_invocation-reserved_20261007.json';
+const OLD_RESERVATION='diagnostics/GSS_foundation-command-apply47_invocation-reserved_20261006.json';
+const COMPLETE47='FB022E5EA7089378F95D7B0FAC93B063BAA182A72D6BD9DA9886CEA218FADBB5';
+const PACKET47='C87652F157A7E35F408165E96848EF9EF4F4AFC471D32A99A9CED481CAF9D87E';
+const PREFIX='9A695871717E690DD4922FCB4624A407C3EF0C8D6A1EA533D466017B6F4EBE74';
+const PHASE1='A790444A610AF26C9E3A5B3DEB7863DC5CDBBD633A4107DE3D4FE02A31212906';
+const D075='324341C1BB02C854BF782470FDE024F75A9BEADA42CEAFFFF666C2097EF1C9B0';
+const design='4608E365FC30279268ECBE156B57263D21F2665E4F635DE74041200C856C74A2';
+const h=b=>createHash('sha256').update(b).digest('hex').toUpperCase();
+const read=readPublicBytes,json=p=>JSON.parse(read(p));
+const refuse=()=>{throw Error('GSS temporary admission48 refused;values withheld');};
+const issued=new WeakSet();let active=null;
+function assertEntry() {
+  assertFixedCommandProcess();
+  if(process.argv.length!==3||process.argv[2]!=='apply'||path.resolve(process.argv[1])!==path.join(ROOT,...ENTRY.split('/')))refuse();
+}
+function originalAcceptance() {
+  const parents=assertHistoricalCommandParents(),base='diagnostics/GSS_foundation-command-complete-source47';
+  const mb=read(base+'_revision-source-manifest_20261006.json'),m=JSON.parse(mb),r=json(base+'_claude-review-run_20261006.json');
+  if(h(mb)!==COMPLETE47||m.inputSha256!==PACKET47||m.secretPatternHits!==0||
+    h(read(base+'_claude-review-run_20261006.json'))!=='87ACD575982037CC2552913F6D42C8A78F8E31DAFD76280CD9E1CACEB75A55EA'||
+    h(read(base+'_reviewed_20261006.txt'))!=='73F372C54D07C466AB942124646DE7161C5B272F17B9CFF9E8260108C08F34AA'||
+    !actualReviewMetadataAccepted(r,{scope:'COMPLETE PREAPPLICATION source47',bundleSha256:PACKET47,sourceManifestSha256:COMPLETE47,nativeWitnessAuthorized:false})||
+    h(read(base+'_review-ready_20261006.txt'))!==PACKET47||read(base+'_reviewed_20261006.txt').toString().trim()!==PACKET47)refuse();
+  const inputGate=assertCompleteCommandInputs(m);if(inputGate.sourceInputsByteVerified!==1819)refuse();
+  const wpath='diagnostics/GSS_foundation-command-gate47-pre-dispatch_20261006.json',w=json(wpath);
+  if(w.passed!==true||w.cases.length!==15||w.manifestSha256!==COMPLETE47||w.bundleSha256!==PACKET47||r.preDispatchGate.actualWitnessSha256!==h(read(wpath)))refuse();
+  if(h(read('plans/GSS_owner-decision-D075_temporary-review_20261007.md'))!==D075||h(read('plans/GSS_foundation-temporary-attempt3-admission-design48_20261007.md'))!==design)refuse();
+  return parents;
+}
+function packet(base,scope,applicationAuthorized,adapterManifestSha256) {
+  const mb=read(base+'_manifest_20261007.json'),m=JSON.parse(mb),mh=h(mb);
+  if(m.scope!==scope||m.secretPatternHits!==0||m.complete47ManifestSha256!==COMPLETE47||m.applicationAuthorized!==applicationAuthorized||
+    !Array.isArray(m.inputs)||m.inputs.length<8||h(read(base+'_packet_20261007.txt'))!==m.inputSha256)refuse();
+  const seen=new Set();for(const row of m.inputs){
+    if(seen.has(row.path))refuse();seen.add(row.path);
+    if(row.path==='diagnostics/GSS_foundation-command-deparse-attempts29_20261005.jsonl'){if(row.sha256!==PREFIX)refuse();currentJournalLineage();}
+    else if(h(read(row.path))!==row.sha256)refuse();
+  }
+  for(const p of [ENTRY,'work/GSS_command-admission48_20261007/source-contract.mjs','work/GSS_command-admission48_20261007/peer-metadata.mjs','work/GSS_command-admission48_20261007/apply-invocation.mjs','work/GSS_command-admission48_20261007/command-private-files.mjs',
+    'plans/GSS_owner-decision-D075_temporary-review_20261007.md','plans/GSS_foundation-temporary-attempt3-admission-design48_20261007.md',
+    'diagnostics/GSS_foundation-command-complete-source47_revision-source-manifest_20261006.json'])if(!seen.has(p))refuse();
+  const lane=path.join(ROOT,'work','GSS_command-admission48_20261007');
+  if(fs.realpathSync.native(lane)!==lane||!fs.lstatSync(lane).isDirectory())refuse();
+  for(const name of fs.readdirSync(lane))if(!['maintenance.mjs','command-private-files.mjs','apply-invocation.mjs','source-contract.mjs','peer-metadata.mjs'].includes(name))refuse();
+  const scopeHeading=applicationAuthorized?'## Application scope: SINGLE APPLICATION ATTEMPT3 ADAPTER48':'## Review scope: COMPLETE ADMISSION ADAPTER48';
+  for(const role of ['security','test']){
+    const r=json(base+'_'+role+'-review_20261007.json');
+    if(!acceptedPeer(r,{agentName:'/root/foundation_'+role+'_review',scope,bundleSha256:m.inputSha256,sourceManifestSha256:mh,complete47ManifestSha256:COMPLETE47,
+      adapterManifestSha256:applicationAuthorized?adapterManifestSha256:null,freshPhase1Sha256:applicationAuthorized?PHASE1:null,attemptRef:applicationAuthorized?m.attemptRef:null,applicationAuthorized,scopeHeading}))refuse();
+  }
+  return {m,manifestSha256:mh,seen};
+}
+function freshEvidence() {
+  const p='diagnostics/GSS_foundation-command-phase1-original47_20261006.json',pb=read(p),r=JSON.parse(pb);
+  if(h(pb)!==PHASE1||r.passed!==true||r.sourceManifestSha256!==COMPLETE47||r.originalStateExactBeforeAndAfter!==true||r.sourceHashesUnchanged!==true||r.applyAttempts!==2||r.newKeys!==false||r.newRoles!==0||r.counts.tests!==144||r.counts.pass!==144||['fail','cancelled','skipped','todo'].some(k=>r.counts[k]!==0)||r.criteria.length!==122||r.criteria.some(c=>c.passed!==true))refuse();
+  for(const s of [r.before,r.after])if(s.state!=='original_0006'||s.fixtureMode!=='S0'||s.closure.rollback!=='acknowledged'||s.closure.connection!=='closed')refuse();
+  if(h(read(r.transcript.path))!==r.transcript.sha256)refuse();
+  const root=json('diagnostics/GSS_foundation-command-phase1-original47_root-receipt_20261006.json');
+  if(root.passed!==true||root.nativePhase1Sha256!==PHASE1||root.applicationAuthorized!==false||root.tests!==144||root.originalCriteria!==122||root.applyAttempts!==2)refuse();
+  const outer=json('diagnostics/GSS_foundation-source47-phase1_outer-summary_20261007.json');
+  if(outer.exitCode!==0||outer.closeObserved!==true||outer.spawnError!==false||outer.timedOut!==false||outer.outputOverflow!==false||outer.artifactInspectionRefused!==false)refuse();
+  for(const role of ['security','test']){const v=json('diagnostics/GSS_foundation-source47-phase1_'+role+'-review_20261007.json');if(v.provider!=='OpenAI'||v.agentName!=='/root/foundation_'+role+'_review'||v.scope!=='ACTUAL SOURCE47 PHASE1 EVIDENCE48'||v.verdict!=='Review OK'||v.readOnly!==true||v.I168Closed!==true||v.applicationAuthorized!==false||v.reviewedEvidenceHashes[p]!==PHASE1)refuse();}
+}
+function authority() {
+  const complete=packet('diagnostics/GSS_foundation-command-adapter48-complete','COMPLETE ADMISSION ADAPTER48',false,null);
+  const application=packet('diagnostics/GSS_foundation-command-adapter48-attempt3','SINGLE APPLICATION ATTEMPT3 ADAPTER48',true,complete.manifestSha256),m=application.m;
+  if(m.adapterManifestSha256!==complete.manifestSha256||m.freshPhase1Sha256!==PHASE1||typeof m.attemptRef!=='string'||!/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(m.attemptRef)||m.maximumAttempts!==3||m.beforeAttempts!==2||m.archiveSha256!==archiveSha256.toUpperCase()||m.outerBudgetMs!==600000||m.shorterWholeRunWatchdog!==false)refuse();
+  // Pure candidate validation BEFORE consumption or target/private access.
+  // The frozen classifier also rejects UUIDs used in either reviewed attempt.
+  const prefix=read('work/GSS_command-ledger47_20261006/two-attempt-prefix.jsonl');
+  const candidate=classifyJournalLineage(Buffer.concat([prefix,Buffer.from(JSON.stringify({attempt:3,attemptRef:m.attemptRef})+'\n')]),prefix);
+  if(candidate.attempts!==3||candidate.attempt3Ref!==m.attemptRef)refuse();
+  for(const p of ['diagnostics/GSS_foundation-command-phase1-original47_20261006.json','diagnostics/GSS_foundation-command-phase1-original47_20261006.txt','diagnostics/GSS_foundation-command-phase1-original47_invocation-reserved_20261006.json','diagnostics/GSS_foundation-command-phase1-original47_root-receipt_20261006.json','diagnostics/GSS_foundation-source47-phase1_outer-summary_20261007.json','diagnostics/GSS_foundation-source47-phase1_outer-capture_20261007.jsonl','diagnostics/GSS_foundation-source47-phase1_security-review_20261007.json','diagnostics/GSS_foundation-source47-phase1_test-review_20261007.json','diagnostics/GSS_foundation-command-deparse-attempts29_20261005.jsonl',
+    'diagnostics/GSS_foundation-command-adapter48-complete_manifest_20261007.json','diagnostics/GSS_foundation-command-adapter48-complete_packet_20261007.txt','diagnostics/GSS_foundation-command-adapter48-complete_security-review_20261007.json','diagnostics/GSS_foundation-command-adapter48-complete_test-review_20261007.json'])if(!application.seen.has(p))refuse();
+  freshEvidence();
+  return {attemptRef:m.attemptRef,adapterManifestSha256:complete.manifestSha256,applicationManifestSha256:application.manifestSha256};
+}
+export function assertCompleteCommandReview() {
+  if(arguments.length)refuse();assertEntry();const parents=originalAcceptance(),a=authority();
+  if(fs.existsSync(OLD_RESERVATION))refuse();
+  if(active===null){if(parents.attempts!==2||fs.existsSync(reservationPath))refuse();}
+  else if(active.pid!==process.pid||active.attemptRef!==a.attemptRef||active.applicationManifestSha256!==a.applicationManifestSha256||h(read(reservationPath))!==active.reservationSha256||parents.attempts===3&&parents.attempt3Ref!==a.attemptRef)refuse();
+  const approval=Object.freeze({completeSourcePeerAccepted:true,sourceManifestSha256:COMPLETE47,...a,applicationAuthorized:true,valuesWithheld:true});issued.add(approval);return approval;
+}
+export function assertFreshApplyAuthority(approval) {
+  if(arguments.length!==1||!issued.has(approval)||active!==null)refuse();assertEntry();
+  const a=authority();if(currentJournalLineage().attempts!==2||fs.existsSync(OLD_RESERVATION)||fs.existsSync(reservationPath)||a.attemptRef!==approval.attemptRef||a.applicationManifestSha256!==approval.applicationManifestSha256)refuse();
+  return Object.freeze(a);
+}
+export function bindConsumedInvocation(approval,reservationBytes) {
+  if(arguments.length!==2||!issued.has(approval)||active!==null||!Buffer.isBuffer(reservationBytes))refuse();assertEntry();
+  const actual=read(reservationPath),r=JSON.parse(actual);
+  if(!actual.equals(reservationBytes)||r.scope!=='SINGLE APPLICATION ATTEMPT3 ADAPTER48'||r.operation!=='apply'||r.executorPid!==process.pid||r.attemptRef!==approval.attemptRef||r.sourceManifestSha256!==COMPLETE47||r.adapterManifestSha256!==approval.adapterManifestSha256||r.applicationManifestSha256!==approval.applicationManifestSha256||r.consumedBeforeTarget!==true||r.consumedOnRefusal!==true||r.automaticRetry!==false||currentJournalLineage().attempts!==2)refuse();
+  active=Object.freeze({pid:process.pid,attemptRef:r.attemptRef,applicationManifestSha256:r.applicationManifestSha256,reservationSha256:h(actual)});
+}
+
+
+===== work/GSS_command-admission48_20261007/peer-metadata.mjs SHA256 795ADD0984110F183A65037CCEB885C64DAB919FB028C5DF280E5DBED58FB665 =====
+// Pure temporary-review attestation classifier. Local operator evidence only.
+// Provider/model identity is never disguised as a historical Claude CLI run.
+const own=(o,k)=>{const d=o&&typeof o==='object'?Object.getOwnPropertyDescriptor(o,k):null;return d&&Object.hasOwn(d,'value')?d.value:undefined;};
+export function acceptedPeer(run,expected) {
+  try {
+    const result=own(run,'result');if(typeof result!=='string')return false;
+    const lines=result.split(/\r?\n/).filter(s=>s.trim());
+    return own(run,'provider')==='OpenAI'&&own(run,'transport')==='collaboration'&&own(run,'agentName')===expected.agentName&&
+      own(run,'readOnly')===true&&own(run,'completed')===true&&own(run,'provenance')==='actual subagent final response'&&
+      own(run,'scope')===expected.scope&&own(run,'bundleSha256')===expected.bundleSha256&&own(run,'sourceManifestSha256')===expected.sourceManifestSha256&&
+      own(run,'complete47ManifestSha256')===expected.complete47ManifestSha256&&own(run,'adapterManifestSha256')===expected.adapterManifestSha256&&
+      own(run,'freshPhase1Sha256')===expected.freshPhase1Sha256&&own(run,'attemptRef')===expected.attemptRef&&
+      own(run,'applicationAuthorized')===expected.applicationAuthorized&&own(run,'productApproval')===false&&
+      lines[0]==='## Verdict: Review OK'&&lines.filter(s=>/^## Verdict:/i.test(s)).length===1&&
+      lines.filter(s=>s===expected.scopeHeading).length===1;
+  }catch{return false;}
+}
+
+
+===== work/GSS_command-admission48_20261007/apply-invocation.mjs SHA256 82D005D341F2BBF3AAB6ADEA95C96BC0E6DA4A180874A1A2B6A8D9D3B2854CAA =====
+// One-use D075 application reservation; consumed even if subsequent bind fails.
+import fs from 'node:fs';
+import {assertFreshApplyAuthority,bindConsumedInvocation,reservationPath} from './source-contract.mjs';
+export function reserveApplyInvocation(approval) {
+  if(arguments.length!==1)throw Error('GSS application48 invocation refused;values withheld');
+  const authority=assertFreshApplyAuthority(approval);
+  const record={scope:'SINGLE APPLICATION ATTEMPT3 ADAPTER48',sourceManifestSha256:approval.sourceManifestSha256,adapterManifestSha256:authority.adapterManifestSha256,applicationManifestSha256:authority.applicationManifestSha256,attemptRef:authority.attemptRef,executorPid:process.pid,operation:'apply',consumedBeforeTarget:true,consumedOnRefusal:true,automaticRetry:false,valuesWithheld:true};
+  const b=Buffer.from(JSON.stringify(record,null,2)+'\n');let fd;
+  try{fd=fs.openSync(reservationPath,'wx');let n=0;while(n<b.length){const q=fs.writeSync(fd,b,n,b.length-n);if(!Number.isSafeInteger(q)||q<1||q>b.length-n)throw Error('GSS reservation48 write refused');n+=q;}fs.fsyncSync(fd);fs.closeSync(fd);fd=undefined;}
+  finally{if(fd!==undefined)fs.closeSync(fd);}
+  bindConsumedInvocation(approval,b);return authority;
+}
+
+
+===== work/GSS_command-attempt3-outer48_20261007.json SHA256 FDCD943B3330A9311C88ACF2E6AC2CEA4BBDCA75E94655A0E14AE7BD1DF22C83 =====
+{
+  "scope": "SINGLE APPLICATION ATTEMPT3 ADAPTER48",
+  "actualNativeCommand": {
+    "executable": "C:\\Program Files\\nodejs\\node.exe",
+    "argv": [
+      "work/GSS_command-admission48_20261007/maintenance.mjs",
+      "apply"
+    ],
+    "cwd": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops",
+    "shell": false,
+    "windowsHide": true,
+    "nodeFlags": [],
+    "environmentAllowlist": [
+      "SystemRoot",
+      "SYSTEMROOT",
+      "WINDIR",
+      "PATH",
+      "Path",
+      "PATHEXT",
+      "TEMP",
+      "TMP",
+      "USERPROFILE",
+      "APPDATA",
+      "LOCALAPPDATA",
+      "USERNAME",
+      "USER"
+    ]
+  },
+  "outerBudgetMs": 600000,
+  "shorterWholeRunWatchdog": false,
+  "terminationMs": 15000,
+  "closureRecoveryMs": 15000,
+  "maximumOutputBytes": 1048576,
+  "maintenanceTransactionMs": 180000,
+  "maintenanceIdleMs": 60000,
+  "statementMs": 8000,
+  "lockMs": 5000,
+  "fixtureMs": 10000,
+  "connectionMs": 2000,
+  "queryMs": 12000,
+  "maximumAttempts": 3,
+  "beforeAttempts": 2,
+  "automaticRetry": false,
+  "consumedOnRefusal": true,
+  "capturePath": "diagnostics/GSS_foundation-command-adapter48-attempt3_outer-capture_20261007.jsonl",
+  "summaryPath": "diagnostics/GSS_foundation-command-adapter48-attempt3_outer-summary_20261007.json",
+  "outputsMustBeAbsent": [
+    "diagnostics/GSS_foundation-command-apply48_invocation-reserved_20261007.json",
+    "diagnostics/GSS_foundation-command-apply47_invocation-reserved_20261006.json",
+    "diagnostics/GSS_foundation-command-refusal47-attempt3_20261006.json",
+    "diagnostics/GSS_foundation-command-deparse-refusal29-3_20261005.json"
+  ],
+  "privateExistenceOnly": [
+    "gss/.local/command-ledger/current.json",
+    "gss/.local/command-ledger/next.json"
+  ],
+  "journalPath": "diagnostics/GSS_foundation-command-deparse-attempts29_20261005.jsonl",
+  "requiredState": "original_0006/S0",
+  "archiveSha256": "DAEEA79A3AB5F53DDE28621905F66BB26FFF089C76ED2DC9B71B9EBB8C00AB8D"
+}
+
+
+===== work/capture-gss-attempt3-adapter48_20261007.mjs SHA256 E6D36CD604048DFB8D0F623DEED0B40DCE9C93252B4124E9A5B3B409369A5C12 =====
+// D075 one-use outer. Public evidence only; secrets/DB are confined to fixed child.
+import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';import {spawn,spawnSync} from 'node:child_process';
+import {assertCompleteCommandReview,assertCompleteCommandInputs} from './GSS_command-ledger47_20261006/source-contract.mjs';
+import {readPublicBytes,currentJournalLineage,classifyJournalLineage} from './GSS_command-ledger47_20261006/historical-parent-gate.mjs';
+import {acceptedPeer} from './GSS_command-admission48_20261007/peer-metadata.mjs';
+const ROOT='C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops';
+const SELF='work/capture-gss-attempt3-adapter48_20261007.mjs',CONFIG='work/GSS_command-attempt3-outer48_20261007.json';
+const BASE='diagnostics/GSS_foundation-command-adapter48-attempt3',COMPLETE='diagnostics/GSS_foundation-command-adapter48-complete';
+const OLD='diagnostics/GSS_foundation-command-complete-source47_revision-source-manifest_20261006.json';
+const COMPLETE47='FB022E5EA7089378F95D7B0FAC93B063BAA182A72D6BD9DA9886CEA218FADBB5';
+const PHASE1='A790444A610AF26C9E3A5B3DEB7863DC5CDBBD633A4107DE3D4FE02A31212906';
+const read=readPublicBytes,h=b=>createHash('sha256').update(b).digest('hex').toUpperCase(),json=p=>JSON.parse(read(p));
+const absolute=p=>path.join(ROOT,...p.split('/'));
+const ownerDate=utc=>new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Kyiv',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(utc));
+function state(p){if(!fs.existsSync(absolute(p)))return {present:false,sha256:null};return {present:true,sha256:h(read(p))};}
+function post(p){try{return state(p);}catch{return {present:null,sha256:null,captureRefused:true,valuesWithheld:true};}}
+function line(fd,row){const b=Buffer.from(JSON.stringify(row)+'\n');let n=0;while(n<b.length){const q=fs.writeSync(fd,b,n,b.length-n);assert(Number.isSafeInteger(q)&&q>0&&q<=b.length-n);n+=q;}fs.fsyncSync(fd);}
+function pins(base,isApp,adapterHash){
+  const b=read(base+'_manifest_20261007.json'),m=JSON.parse(b),mh=h(b),seen=new Set();
+  assert.equal(m.scope,isApp?'SINGLE APPLICATION ATTEMPT3 ADAPTER48':'COMPLETE ADMISSION ADAPTER48');assert.equal(m.applicationAuthorized,isApp);
+  assert.equal(m.complete47ManifestSha256,COMPLETE47);assert.equal(m.secretPatternHits,0);assert.equal(h(read(base+'_packet_20261007.txt')),m.inputSha256);
+  if(isApp)assert.equal(read(base+'_reviewed_20261007.txt').toString().trim(),m.inputSha256);
+  for(const r of m.inputs){assert(!seen.has(r.path));seen.add(r.path);assert.equal(h(read(r.path)),r.sha256);}
+  for(const role of ['security','test'])assert(acceptedPeer(json(base+'_'+role+'-review_20261007.json'),{
+    agentName:'/root/foundation_'+role+'_review',scope:m.scope,bundleSha256:m.inputSha256,sourceManifestSha256:mh,complete47ManifestSha256:COMPLETE47,
+    adapterManifestSha256:isApp?adapterHash:null,freshPhase1Sha256:isApp?PHASE1:null,attemptRef:isApp?m.attemptRef:null,applicationAuthorized:isApp,
+    scopeHeading:isApp?'## Application scope: SINGLE APPLICATION ATTEMPT3 ADAPTER48':'## Review scope: COMPLETE ADMISSION ADAPTER48'}));
+  return {m,mh,seen};
+}
+function safeResult(out){
+  // Only the exact known active-success object is released, never arbitrary stdout.
+  const expected={state:'active_exact',fileAction:'retain',admissionEligible:true,automaticRetry:false,ledgerAction:'retain_all',existingSecretsAction:'unchanged'};
+  try{assert.deepEqual(JSON.parse(out.toString('utf8')),expected);return expected;}catch{return null;}
+}
+async function main(){
+  assert.equal(process.argv.length,2);assert.equal(process.execArgv.length,0);assert.equal(process.cwd(),ROOT);
+  assert.equal(h(read(OLD)),COMPLETE47);const old=assertCompleteCommandReview();assert.equal(old.historicalParents.attempts,2);
+  assert.equal(assertCompleteCommandInputs(json(OLD)).sourceInputsByteVerified,1819);
+  const c=pins(COMPLETE,false,null),a=pins(BASE,true,c.mh),m=a.m;
+  for(const p of [SELF,CONFIG])assert(a.seen.has(p));
+  assert.equal(m.adapterManifestSha256,c.mh);assert.equal(m.freshPhase1Sha256,PHASE1);assert.equal(m.beforeAttempts,2);assert.equal(m.maximumAttempts,3);
+  const prefix=read('work/GSS_command-ledger47_20261006/two-attempt-prefix.jsonl');
+  assert.equal(classifyJournalLineage(Buffer.concat([prefix,Buffer.from(JSON.stringify({attempt:3,attemptRef:m.attemptRef})+'\n')]),prefix).attempt3Ref,m.attemptRef);
+  const config=json(CONFIG);assert.deepEqual(config,m.actualOuterConfig);
+  assert.equal(config.outerBudgetMs,600000);assert.equal(config.shorterWholeRunWatchdog,false);
+  assert.equal(config.terminationMs,15000);assert.equal(config.closureRecoveryMs,15000);assert.equal(config.maximumOutputBytes,1048576);
+  const command=config.actualNativeCommand;
+  assert.equal(command.executable,process.execPath);assert.deepEqual(command.argv,['work/GSS_command-admission48_20261007/maintenance.mjs','apply']);
+  assert.equal(command.cwd,ROOT);assert.equal(command.shell,false);assert.equal(command.windowsHide,true);assert.deepEqual(command.nodeFlags,[]);
+  assert.equal(config.capturePath,BASE+'_outer-capture_20261007.jsonl');assert.equal(config.summaryPath,BASE+'_outer-summary_20261007.json');
+  assert.deepEqual(config.outputsMustBeAbsent,['diagnostics/GSS_foundation-command-apply48_invocation-reserved_20261007.json','diagnostics/GSS_foundation-command-apply47_invocation-reserved_20261006.json','diagnostics/GSS_foundation-command-refusal47-attempt3_20261006.json','diagnostics/GSS_foundation-command-deparse-refusal29-3_20261005.json']);
+  assert.deepEqual(config.privateExistenceOnly,['gss/.local/command-ledger/current.json','gss/.local/command-ledger/next.json']);
+  assert.equal(config.journalPath,'diagnostics/GSS_foundation-command-deparse-attempts29_20261005.jsonl');
+  const absent=[config.capturePath,config.summaryPath,...config.outputsMustBeAbsent,...config.privateExistenceOnly];
+  for(const p of absent)assert(!fs.existsSync(absolute(p)));assert.equal(currentJournalLineage().attempts,2);
+  const envKeys=['SystemRoot','SYSTEMROOT','WINDIR','PATH','Path','PATHEXT','TEMP','TMP','USERPROFILE','APPDATA','LOCALAPPDATA','USERNAME','USER'];
+  assert.deepEqual(command.environmentAllowlist,envKeys);
+  const env=Object.fromEntries(envKeys.filter(k=>typeof process.env[k]==='string').map(k=>[k,process.env[k]]));
+  const before=Object.fromEntries(config.outputsMustBeAbsent.map(p=>[p,state(p)])),journalBefore=state(config.journalPath);
+  const fd=fs.openSync(absolute(config.capturePath),'wx'),startUtc=new Date().toISOString(),startNs=process.hrtime.bigint();
+  const begin={event:'begin',scope:m.scope,actualStartUtc:startUtc,ownerDate:ownerDate(startUtc),ownerTimezone:'Europe/Kyiv',actualOuterConfig:config,applicationManifestSha256:a.mh,adapterManifestSha256:c.mh,complete47ManifestSha256:COMPLETE47,freshPhase1Sha256:PHASE1,attemptRef:m.attemptRef,before,journalBefore,automaticRetry:false,productApproval:false,valuesWithheld:true};
+  try{
+    line(fd,begin);
+    for(const p of [...config.outputsMustBeAbsent,...config.privateExistenceOnly])assert(!fs.existsSync(absolute(p)));
+    assert.equal(currentJournalLineage().attempts,2);
+    let result;
+    try{result=await new Promise(resolve=>{
+      const child=spawn(command.executable,command.argv,{cwd:ROOT,env,shell:false,windowsHide:true});
+      let out=Buffer.alloc(0),err=Buffer.alloc(0),spawnError=false,timedOut=false,outputOverflow=false,treeTermination=null,settled=false,closureTimer;
+      const finish=(exitCode,signal,closeObserved)=>{
+        if(settled)return;settled=true;clearTimeout(timer);clearTimeout(closureTimer);
+        if(!closeObserved){child.stdout.destroy();child.stderr.destroy();child.unref();}
+        resolve({exitCode,signal,spawnError,timedOut,outputOverflow,treeTermination,closeObserved,runnerPid:Number.isSafeInteger(child.pid)?child.pid:null,
+          stdout:{bytes:out.length,sha256:h(out)},stderr:{bytes:err.length,sha256:h(err)},safeActiveResult:safeResult(out)});
+      };
+      const stop=()=>{
+        if(treeTermination!==null)return;treeTermination={attempted:false,exitCode:null,signal:null,errorPresent:false,fallbackKill:false};
+        try{if(Number.isSafeInteger(child.pid)&&child.pid>0){treeTermination.attempted=true;const k=spawnSync('C:\\Windows\\System32\\taskkill.exe',['/PID',String(child.pid),'/T','/F'],{windowsHide:true,shell:false,encoding:'utf8',timeout:config.terminationMs});treeTermination={...treeTermination,exitCode:k.status,signal:k.signal,errorPresent:!!k.error};if(k.status!==0||k.error)treeTermination.fallbackKill=child.kill();}}
+        catch{treeTermination.errorPresent=true;try{treeTermination.fallbackKill=child.kill();}catch{}}
+        closureTimer=setTimeout(()=>finish(null,null,false),config.closureRecoveryMs);
+      };
+      const timer=setTimeout(()=>{timedOut=true;stop();},config.outerBudgetMs);
+      const collect=(kind,b)=>{if(outputOverflow)return;if(out.length+err.length+b.length>config.maximumOutputBytes){outputOverflow=true;stop();return;}if(kind==='stdout')out=Buffer.concat([out,b]);else err=Buffer.concat([err,b]);};
+      child.stdout.on('data',b=>collect('stdout',b));child.stderr.on('data',b=>collect('stderr',b));child.on('error',()=>{spawnError=true;});child.on('close',(code,signal)=>finish(code,signal,true));
+    });}catch{result={exitCode:null,signal:null,spawnError:true,timedOut:false,outputOverflow:false,treeTermination:null,closeObserved:false,safeActiveResult:null,valuesWithheld:true};}
+    const endUtc=new Date().toISOString(),after=Object.fromEntries(config.outputsMustBeAbsent.map(p=>[p,post(p)])),journalAfter=post(config.journalPath);
+    let lineage=null;try{lineage=currentJournalLineage();}catch{}
+    const privatePresence=Object.fromEntries(config.privateExistenceOnly.map(p=>[p,fs.existsSync(absolute(p))]));
+    const artifactInspectionRefused=[...Object.values(after),journalAfter].some(r=>r.captureRefused===true)||lineage===null;
+    const passed=result.exitCode===0&&result.closeObserved&&!result.spawnError&&!result.timedOut&&!result.outputOverflow&&!artifactInspectionRefused&&result.safeActiveResult!==null&&
+      lineage?.attempts===3&&lineage.attempt3Ref===m.attemptRef&&after[config.outputsMustBeAbsent[0]].present===true&&after[config.outputsMustBeAbsent[1]].present===false&&after[config.outputsMustBeAbsent[2]].present===false&&after[config.outputsMustBeAbsent[3]].present===false&&privatePresence[config.privateExistenceOnly[0]]===true&&privatePresence[config.privateExistenceOnly[1]]===false;
+    const end={event:'end',actualEndUtc:endUtc,ownerDate:ownerDate(endUtc),elapsedMs:Number(process.hrtime.bigint()-startNs)/1e6,...result,after,journalAfter,lineage,privatePresence,artifactInspectionRefused,passed,automaticRetry:false,productApproval:false,valuesWithheld:true};
+    line(fd,end);fs.writeFileSync(absolute(config.summaryPath),JSON.stringify({...begin,...end,capturePath:config.capturePath},null,2)+'\n',{flag:'wx'});
+    console.log(JSON.stringify({captureComplete:true,passed,exitCode:result.exitCode,elapsedMs:end.elapsedMs,journalAttempts:lineage?.attempts??null,automaticRetry:false,productApproval:false,valuesWithheld:true}));if(!passed)process.exitCode=1;
+  }finally{fs.closeSync(fd);}
+}
+main().catch(()=>{console.error(JSON.stringify({captureRefused:true,automaticRetry:false,productApproval:false,valuesWithheld:true}));process.exitCode=1;});
+
+
+===== work/check-gss-attempt3-outer48-fakes_20261007.mjs SHA256 DB8F88FF549F922B10435E9B4B413AFF2F8FA81D96F602F684A1624FE95CB545 =====
+// Actual application outer source with fake process/filesystem only. No native IO.
+import fs from 'node:fs';import path from 'node:path';import vm from 'node:vm';import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';import {EventEmitter} from 'node:events';
+import {acceptedPeer} from './GSS_command-admission48_20261007/peer-metadata.mjs';
+import {classifyJournalLineage} from './GSS_command-ledger47_20261006/historical-parent-gate.mjs';
+const ROOT=process.cwd(),SELF='work/capture-gss-attempt3-adapter48_20261007.mjs',CONFIG='work/GSS_command-attempt3-outer48_20261007.json';
+const COMPLETE='diagnostics/GSS_foundation-command-adapter48-complete',BASE='diagnostics/GSS_foundation-command-adapter48-attempt3';
+const old='diagnostics/GSS_foundation-command-complete-source47_revision-source-manifest_20261006.json';
+const raw=fs.readFileSync(SELF,'utf8'),h=b=>createHash('sha256').update(b).digest('hex').toUpperCase();
+const bytes=x=>Buffer.from(JSON.stringify(x,null,2)+'\n'),original=JSON.parse(fs.readFileSync(COMPLETE+'_manifest_20261007.json'));
+const files=[SELF,CONFIG,old,'work/GSS_command-ledger47_20261006/two-attempt-prefix.jsonl',...original.inputs.map(r=>r.path),...['manifest_20261007.json','packet_20261007.txt','security-review_20261007.json','test-review_20261007.json'].map(s=>COMPLETE+'_'+s)];
+const publicBase=new Map([...new Set(files)].map(p=>[p,fs.readFileSync(p)]));
+const body=raw.slice(0,raw.lastIndexOf('main().catch(')).replace(/^import .*;\r?\n/gm,'')+'\nglobalThis.entry=main;';assert(!/^import /m.test(body));
+const rows=[];
+for(const scenario of ['success','native_failure','old_reservation','review_mismatch','wrong_scope','wrong_budget','wrong_command','private_exists','post_inspection_failure','unknown_closure','output_overflow','secret_output','short_writes','begin_fsync_failure']){
+  const map=new Map(publicBase),fds=new Map(),messages=[],timers=new Map();let nextFd=1,timerId=0,spawns=0,ended=false,unref=false;
+  const config=JSON.parse(map.get(CONFIG)),attemptRef='e1f82d8d-7d09-442d-8f76-6368dff21212'; // Fake only.
+  if(scenario==='wrong_budget')config.outerBudgetMs=299999;if(scenario==='wrong_command')config.actualNativeCommand.argv[1]='rotate';map.set(CONFIG,bytes(config));
+  const adapterHash=h(map.get(COMPLETE+'_manifest_20261007.json')),packet=Buffer.from('FAKE distinct application scope only'),bundle=h(packet);
+  const m={scope:'SINGLE APPLICATION ATTEMPT3 ADAPTER48',applicationAuthorized:true,secretPatternHits:0,complete47ManifestSha256:'FB022E5EA7089378F95D7B0FAC93B063BAA182A72D6BD9DA9886CEA218FADBB5',freshPhase1Sha256:'A790444A610AF26C9E3A5B3DEB7863DC5CDBBD633A4107DE3D4FE02A31212906',adapterManifestSha256:adapterHash,inputSha256:bundle,beforeAttempts:2,maximumAttempts:3,attemptRef,actualOuterConfig:config,inputs:files.filter((p,i,a)=>a.indexOf(p)===i).map(p=>({path:p,sha256:h(map.get(p))}))};
+  map.set(BASE+'_packet_20261007.txt',packet);map.set(BASE+'_manifest_20261007.json',bytes(m));map.set(BASE+'_reviewed_20261007.txt',Buffer.from(bundle+'\n'));const mh=h(map.get(BASE+'_manifest_20261007.json'));
+  for(const role of ['security','test']){const r={provider:'OpenAI',transport:'collaboration',agentName:'/root/foundation_'+role+'_review',readOnly:true,completed:true,provenance:'actual subagent final response',scope:m.scope,bundleSha256:bundle,sourceManifestSha256:mh,complete47ManifestSha256:m.complete47ManifestSha256,adapterManifestSha256:adapterHash,freshPhase1Sha256:m.freshPhase1Sha256,attemptRef,applicationAuthorized:true,productApproval:false,result:'## Verdict: Review OK\n## Application scope: SINGLE APPLICATION ATTEMPT3 ADAPTER48\n'};if(scenario==='review_mismatch')r.bundleSha256='0'.repeat(64);if(scenario==='wrong_scope')r.result='## Verdict: Review OK\n## Review scope: COMPLETE ADMISSION ADAPTER48\n';map.set(BASE+'_'+role+'-review_20261007.json',bytes(r));}
+  const journal=config.journalPath;map.set(journal,Buffer.from(map.get('work/GSS_command-ledger47_20261006/two-attempt-prefix.jsonl')));
+  if(scenario==='old_reservation')map.set(config.outputsMustBeAbsent[1],Buffer.from('{}'));if(scenario==='private_exists')map.set(config.privateExistenceOnly[0],Buffer.from('PRIVATE-SENTINEL'));
+  const relative=p=>path.isAbsolute(p)?path.relative(ROOT,p).replaceAll('\\','/'):p;
+  const read=p=>{if(ended&&scenario==='post_inspection_failure'&&p===config.outputsMustBeAbsent[0])throw Error('private sentinel');assert(map.has(p),p);return map.get(p);};
+  const fakeFs={existsSync:p=>map.has(relative(p)),openSync:(p,flags)=>{p=relative(p);assert.equal(flags,'wx');assert(!map.has(p));map.set(p,Buffer.alloc(0));fds.set(nextFd,p);return nextFd++;},
+    writeSync:(fd,b,o,l)=>{const n=scenario==='short_writes'?Math.min(7,l):l,p=fds.get(fd);map.set(p,Buffer.concat([map.get(p),b.subarray(o,o+n)]));return n;},
+    fsyncSync:()=>{if(!ended&&scenario==='begin_fsync_failure')throw Error('private sentinel');},closeSync:fd=>fds.delete(fd),writeFileSync:(p,b,opts)=>{p=relative(p);assert.equal(opts.flag,'wx');assert(!map.has(p));map.set(p,Buffer.from(b));}};
+  const fakeTimers=(fn,ms)=>{const id=++timerId;timers.set(id,true);if(['unknown_closure','output_overflow'].includes(scenario))setImmediate(()=>{if(timers.get(id))fn();});return id;};
+  const spawnFake=(exe,args,opts)=>{assert.equal(exe,process.execPath);assert.equal(JSON.stringify(args),JSON.stringify(config.actualNativeCommand.argv));assert.equal(opts.shell,false);spawns++;
+    const child=new EventEmitter();child.pid=45678;child.stdout=new EventEmitter();child.stderr=new EventEmitter();child.stdout.destroy=child.stderr.destroy=()=>{};child.unref=()=>{unref=true;};child.kill=()=>false;
+    if(scenario!=='unknown_closure')queueMicrotask(()=>{ended=true;map.set(config.outputsMustBeAbsent[0],Buffer.from('{}'));map.set(journal,Buffer.concat([map.get(journal),Buffer.from(JSON.stringify({attempt:3,attemptRef})+'\n')]));map.set(config.privateExistenceOnly[0],Buffer.from('PRIVATE-SENTINEL'));
+      const success={state:'active_exact',fileAction:'retain',admissionEligible:true,automaticRetry:false,ledgerAction:'retain_all',existingSecretsAction:'unchanged'};
+      const out=scenario==='secret_output'?'api_key: PRIVATE-SENTINEL':scenario==='native_failure'?'{"state":"refused"}':JSON.stringify(success)+'\n';
+      if(scenario==='output_overflow')child.stdout.emit('data',Buffer.alloc(config.maximumOutputBytes+1));else child.stdout.emit('data',Buffer.from(out));
+      if(scenario!=='output_overflow')child.emit('close',scenario==='native_failure'?1:0,null);
+    });return child;
+  };
+  const fakeProcess={argv:['node',SELF],execArgv:[],execPath:process.execPath,cwd:()=>ROOT,env:{SystemRoot:'C:\\Windows'},hrtime:process.hrtime,exitCode:0};
+  const context=vm.createContext({fs:fakeFs,path,assert,createHash,spawn:spawnFake,spawnSync:()=>{throw Error('private sentinel');},process:fakeProcess,Buffer,Date,Intl,setTimeout:fakeTimers,clearTimeout:id=>timers.delete(id),console:{log:s=>messages.push(s)},readPublicBytes:read,currentJournalLineage:()=>classifyJournalLineage(map.get(journal),map.get('work/GSS_command-ledger47_20261006/two-attempt-prefix.jsonl')),classifyJournalLineage,acceptedPeer,assertCompleteCommandReview:()=>({historicalParents:{attempts:2}}),assertCompleteCommandInputs:()=>({sourceInputsByteVerified:1819})});
+  new vm.Script(body).runInContext(context);let refused=false;try{await context.entry();}catch(e){if(scenario==='success')throw e;refused=true;}
+  const events=map.has(config.capturePath)?map.get(config.capturePath).toString().trim().split('\n').filter(Boolean).map(s=>JSON.parse(s)):[];
+  if(['old_reservation','review_mismatch','wrong_scope','wrong_budget','wrong_command','private_exists','begin_fsync_failure'].includes(scenario)){assert.equal(spawns,0);assert(refused);}
+  else{assert.equal(spawns,1,scenario);assert(!refused,scenario);assert.equal(events.length,2,scenario);const end=events[1];assert.equal(end.passed,scenario==='success'||scenario==='short_writes',scenario);assert.equal(end.automaticRetry,false);assert.equal(end.productApproval,false);if(['unknown_closure','output_overflow'].includes(scenario)){assert.equal(end.closeObserved,false);assert(unref);}if(scenario==='post_inspection_failure')assert(end.artifactInspectionRefused);if(scenario==='secret_output')assert.equal(end.safeActiveResult,null);}
+  assert(!JSON.stringify(events).includes('PRIVATE-SENTINEL'));assert(!messages.join('').includes('PRIVATE-SENTINEL'));rows.push({scenario,passed:true,mockDispatches:spawns});
+}
+console.log(JSON.stringify({scope:'Actual adapter48 application outer against fake IO/process only',passed:true,cases:rows,nativeInvocations:0,privateReads:0,connections:0}));
+
+
+## Exact application bindings
+{
+  "attemptRef": "c0e65978-f8da-470d-9527-fdd14dfc7fd9",
+  "adapterManifestSha256": "8929DEA2D5B72494FBD8E6FD0B9C2DF241F5C267B6EF7AC8B9A46BE08C732A46",
+  "inputs": [
+    {
+      "path": "plans/GSS_owner-decision-D075_temporary-review_20261007.md",
+      "sha256": "324341C1BB02C854BF782470FDE024F75A9BEADA42CEAFFFF666C2097EF1C9B0",
+      "coverage": "complete source/config"
+    },
+    {
+      "path": "plans/GSS_foundation-temporary-attempt3-admission-design48_20261007.md",
+      "sha256": "4608E365FC30279268ECBE156B57263D21F2665E4F635DE74041200C856C74A2",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "work/GSS_command-admission48_20261007/source-contract.mjs",
+      "sha256": "150E29DF8A8C79700CA0F2BCC73E816BD59627FA07EA21CE6DF8DF0FA9CBE70F",
+      "coverage": "complete source/config"
+    },
+    {
+      "path": "work/GSS_command-admission48_20261007/peer-metadata.mjs",
+      "sha256": "795ADD0984110F183A65037CCEB885C64DAB919FB028C5DF280E5DBED58FB665",
+      "coverage": "complete source/config"
+    },
+    {
+      "path": "work/GSS_command-admission48_20261007/apply-invocation.mjs",
+      "sha256": "82D005D341F2BBF3AAB6ADEA95C96BC0E6DA4A180874A1A2B6A8D9D3B2854CAA",
+      "coverage": "complete source/config"
+    },
+    {
+      "path": "work/GSS_command-admission48_20261007/maintenance.mjs",
+      "sha256": "E329464606F57E529A65EB8A0E5C037DC9E8556BE84BCBEB81E5641A667413E2",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "work/GSS_command-admission48_20261007/command-private-files.mjs",
+      "sha256": "AA936F83E86B0D53EEE64C34CF68270FC774E68323E6BC8813FA19709DEEA43C",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "work/check-gss-admission48_20261007.mjs",
+      "sha256": "43D51F1B6D190001D2BE62E9F36443BF422060BE5142DC00D7B7D8F801A44431",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "work/GSS_command-ledger47_20261006/source-contract.mjs",
+      "sha256": "6B85E2EE2BC8ADB02BCB87AE8C8DA68450CED139829266B99D4B00828C21B3F8",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "work/GSS_command-ledger47_20261006/historical-parent-gate.mjs",
+      "sha256": "73679A08C32B397AAAD52E9E6D164E69EF19D85492B692DCA20B2A52A2EA0EEF",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "work/GSS_command-ledger47_20261006/command-process-fences.mjs",
+      "sha256": "1F9D3189E21E6C6B9E0E38174205C289003566B871450317076CE2532073F51B",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "work/GSS_command-ledger47_20261006/maintenance.mjs",
+      "sha256": "E130833418D6F6D267A9CA716B767A9D094FC74C61D8ABCBED3FB856A9777ECA",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "work/GSS_command-ledger47_20261006/command-private-files.mjs",
+      "sha256": "6C9F6070363D601CB52EB04A873438C96F1D9F9CE1CD5D07F2CFB5A417F90778",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "work/GSS_command-ledger47_20261006/refusal-diagnostic-writer.mjs",
+      "sha256": "244483A2D4CF0FFBC061780DB5DC2474B128E6D030F1ABF9474A6713873290C5",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-complete-source47_revision-source-manifest_20261006.json",
+      "sha256": "FB022E5EA7089378F95D7B0FAC93B063BAA182A72D6BD9DA9886CEA218FADBB5",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-complete-source47_claude-review-run_20261006.json",
+      "sha256": "87ACD575982037CC2552913F6D42C8A78F8E31DAFD76280CD9E1CACEB75A55EA",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-complete-source47_reviewed_20261006.txt",
+      "sha256": "73F372C54D07C466AB942124646DE7161C5B272F17B9CFF9E8260108C08F34AA",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-gate47-pre-dispatch_20261006.json",
+      "sha256": "2FE1D90FFB8B234C7500A0220D63821AE7BA0FC51EDBC994D05E010E94CD1735",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-phase1-original47_20261006.json",
+      "sha256": "A790444A610AF26C9E3A5B3DEB7863DC5CDBBD633A4107DE3D4FE02A31212906",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-phase1-original47_root-receipt_20261006.json",
+      "sha256": "5B3C1A251CBA946542F2FA71A7C5DE920A1C17FCE816236EDD9BD6CCBD6E87A0",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-source47-phase1_outer-summary_20261007.json",
+      "sha256": "E2469C2CF13D1FFC4CD58F47A7119F4C7C611E4C913A12B5BA55D8F06582A334",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-source47-phase1_security-review_20261007.json",
+      "sha256": "53098DEFF17FE1E9BE0543A9DD61E1699847E0EDF016B4191D18C34E1C56BBFB",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-source47-phase1_test-review_20261007.json",
+      "sha256": "1141098E6725ED72C0F08EB67397971F744EEC8242D7F9107590DA581B69BCD2",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-adapter48-complete_manifest_20261007.json",
+      "sha256": "8929DEA2D5B72494FBD8E6FD0B9C2DF241F5C267B6EF7AC8B9A46BE08C732A46",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-adapter48-complete_packet_20261007.txt",
+      "sha256": "520B4EC9B3B5F1570A8A12ABD7D7A58F2D77BB04B9F9914EAC66C3521D4F181C",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-adapter48-complete_security-review_20261007.json",
+      "sha256": "3B4322C3C5F4C0CF5288050F1F7F1E21602ADC85F809EEF4276F4D5C1F3F979F",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-adapter48-complete_test-review_20261007.json",
+      "sha256": "73CF520D4B91CF9825432E8222C4304C0B7D6E9D2C88BB8FAA481EE3B08AF4CA",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "work/GSS_command-attempt3-outer48_20261007.json",
+      "sha256": "FDCD943B3330A9311C88ACF2E6AC2CEA4BBDCA75E94655A0E14AE7BD1DF22C83",
+      "coverage": "complete source/config"
+    },
+    {
+      "path": "work/capture-gss-attempt3-adapter48_20261007.mjs",
+      "sha256": "E6D36CD604048DFB8D0F623DEED0B40DCE9C93252B4124E9A5B3B409369A5C12",
+      "coverage": "complete source/config"
+    },
+    {
+      "path": "work/check-gss-attempt3-outer48-fakes_20261007.mjs",
+      "sha256": "DB8F88FF549F922B10435E9B4B413AFF2F8FA81D96F602F684A1624FE95CB545",
+      "coverage": "complete source/config"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-complete-source47_review-ready_20261006.txt",
+      "sha256": "C87652F157A7E35F408165E96848EF9EF4F4AFC471D32A99A9CED481CAF9D87E",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-phase1-original47_20261006.txt",
+      "sha256": "3B2DB7E2B7F3583199C095B4C11D9ABD690A9B9CA536014475142AF45FC41D20",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-phase1-original47_invocation-reserved_20261006.json",
+      "sha256": "8B0D694EB309D92F5C41C287371F9DE46D9710C2E589016B7E03A3C58E7A070C",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-source47-phase1_outer-capture_20261007.jsonl",
+      "sha256": "551BB37C3BFDF5756C264F15180CCDE43953DA7087F4619D84DDFC72C85FD1C4",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-deparse-attempts29_20261005.jsonl",
+      "sha256": "9A695871717E690DD4922FCB4624A407C3EF0C8D6A1EA533D466017B6F4EBE74",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "work/GSS_command-ledger47_20261006/two-attempt-prefix.jsonl",
+      "sha256": "9A695871717E690DD4922FCB4624A407C3EF0C8D6A1EA533D466017B6F4EBE74",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "work/GSS_command-ledger47_20261006/command-ddl-fences.mjs",
+      "sha256": "02C8A6D52B9C9CA5F95E3E2E4573C3D85C4C3C39B931169F820415D93E31F627",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-budget44_ram-timings_20261006.json",
+      "sha256": "F27798805498ECC50D85F521E6CB909F45DCFBEDD5C8E923AE520BB401E569AF",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-budget44_public-timings_20261006.json",
+      "sha256": "338A94A36132F60B434E1066C015911B6B0AC46E64625F892760C04011FBA6DD",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-budget45_progress_20261006.md",
+      "sha256": "2290F026B4B2D56346322A1CD689CA8B7E391F9BE5BC84F65E11FD342A45C91F",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-day-end_checkpoint_20261006.md",
+      "sha256": "044F0D37C7AF7CC7E074A052D6D4104AA37362D89AEA7CF1A30D28D43926BEE7",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    }
+  ]
+}

@@ -1,0 +1,287 @@
+{
+  "date": "2026-10-07",
+  "scope": "SINGLE APPLICATION ATTEMPT3 ADAPTER48",
+  "complete47ManifestSha256": "FB022E5EA7089378F95D7B0FAC93B063BAA182A72D6BD9DA9886CEA218FADBB5",
+  "adapterManifestSha256": "8929DEA2D5B72494FBD8E6FD0B9C2DF241F5C267B6EF7AC8B9A46BE08C732A46",
+  "freshPhase1Sha256": "A790444A610AF26C9E3A5B3DEB7863DC5CDBBD633A4107DE3D4FE02A31212906",
+  "attemptRef": "c0e65978-f8da-470d-9527-fdd14dfc7fd9",
+  "inputSha256": "DA373F9384CF08E108AD273B5B9DBABFFCAA0A84F17AED2A65AF6E406EA37CE5",
+  "packetUtf8Bytes": 56300,
+  "secretPatternHits": 0,
+  "beforeAttempts": 2,
+  "maximumAttempts": 3,
+  "archiveSha256": "DAEEA79A3AB5F53DDE28621905F66BB26FFF089C76ED2DC9B71B9EBB8C00AB8D",
+  "outerBudgetMs": 600000,
+  "shorterWholeRunWatchdog": false,
+  "actualOuterConfig": {
+    "scope": "SINGLE APPLICATION ATTEMPT3 ADAPTER48",
+    "actualNativeCommand": {
+      "executable": "C:\\Program Files\\nodejs\\node.exe",
+      "argv": [
+        "work/GSS_command-admission48_20261007/maintenance.mjs",
+        "apply"
+      ],
+      "cwd": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops",
+      "shell": false,
+      "windowsHide": true,
+      "nodeFlags": [],
+      "environmentAllowlist": [
+        "SystemRoot",
+        "SYSTEMROOT",
+        "WINDIR",
+        "PATH",
+        "Path",
+        "PATHEXT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "APPDATA",
+        "LOCALAPPDATA",
+        "USERNAME",
+        "USER"
+      ]
+    },
+    "outerBudgetMs": 600000,
+    "shorterWholeRunWatchdog": false,
+    "terminationMs": 15000,
+    "closureRecoveryMs": 15000,
+    "maximumOutputBytes": 1048576,
+    "maintenanceTransactionMs": 180000,
+    "maintenanceIdleMs": 60000,
+    "statementMs": 8000,
+    "lockMs": 5000,
+    "fixtureMs": 10000,
+    "connectionMs": 2000,
+    "queryMs": 12000,
+    "maximumAttempts": 3,
+    "beforeAttempts": 2,
+    "automaticRetry": false,
+    "consumedOnRefusal": true,
+    "capturePath": "diagnostics/GSS_foundation-command-adapter48-attempt3_outer-capture_20261007.jsonl",
+    "summaryPath": "diagnostics/GSS_foundation-command-adapter48-attempt3_outer-summary_20261007.json",
+    "outputsMustBeAbsent": [
+      "diagnostics/GSS_foundation-command-apply48_invocation-reserved_20261007.json",
+      "diagnostics/GSS_foundation-command-apply47_invocation-reserved_20261006.json",
+      "diagnostics/GSS_foundation-command-refusal47-attempt3_20261006.json",
+      "diagnostics/GSS_foundation-command-deparse-refusal29-3_20261005.json"
+    ],
+    "privateExistenceOnly": [
+      "gss/.local/command-ledger/current.json",
+      "gss/.local/command-ledger/next.json"
+    ],
+    "journalPath": "diagnostics/GSS_foundation-command-deparse-attempts29_20261005.jsonl",
+    "requiredState": "original_0006/S0",
+    "archiveSha256": "DAEEA79A3AB5F53DDE28621905F66BB26FFF089C76ED2DC9B71B9EBB8C00AB8D"
+  },
+  "applicationAuthorized": true,
+  "productApproval": false,
+  "reviewRequiredBeforeInvocation": true,
+  "automaticRetry": false,
+  "inputs": [
+    {
+      "path": "plans/GSS_owner-decision-D075_temporary-review_20261007.md",
+      "sha256": "324341C1BB02C854BF782470FDE024F75A9BEADA42CEAFFFF666C2097EF1C9B0",
+      "coverage": "complete source/config"
+    },
+    {
+      "path": "plans/GSS_foundation-temporary-attempt3-admission-design48_20261007.md",
+      "sha256": "4608E365FC30279268ECBE156B57263D21F2665E4F635DE74041200C856C74A2",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "work/GSS_command-admission48_20261007/source-contract.mjs",
+      "sha256": "150E29DF8A8C79700CA0F2BCC73E816BD59627FA07EA21CE6DF8DF0FA9CBE70F",
+      "coverage": "complete source/config"
+    },
+    {
+      "path": "work/GSS_command-admission48_20261007/peer-metadata.mjs",
+      "sha256": "795ADD0984110F183A65037CCEB885C64DAB919FB028C5DF280E5DBED58FB665",
+      "coverage": "complete source/config"
+    },
+    {
+      "path": "work/GSS_command-admission48_20261007/apply-invocation.mjs",
+      "sha256": "82D005D341F2BBF3AAB6ADEA95C96BC0E6DA4A180874A1A2B6A8D9D3B2854CAA",
+      "coverage": "complete source/config"
+    },
+    {
+      "path": "work/GSS_command-admission48_20261007/maintenance.mjs",
+      "sha256": "E329464606F57E529A65EB8A0E5C037DC9E8556BE84BCBEB81E5641A667413E2",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "work/GSS_command-admission48_20261007/command-private-files.mjs",
+      "sha256": "AA936F83E86B0D53EEE64C34CF68270FC774E68323E6BC8813FA19709DEEA43C",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "work/check-gss-admission48_20261007.mjs",
+      "sha256": "43D51F1B6D190001D2BE62E9F36443BF422060BE5142DC00D7B7D8F801A44431",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "work/GSS_command-ledger47_20261006/source-contract.mjs",
+      "sha256": "6B85E2EE2BC8ADB02BCB87AE8C8DA68450CED139829266B99D4B00828C21B3F8",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "work/GSS_command-ledger47_20261006/historical-parent-gate.mjs",
+      "sha256": "73679A08C32B397AAAD52E9E6D164E69EF19D85492B692DCA20B2A52A2EA0EEF",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "work/GSS_command-ledger47_20261006/command-process-fences.mjs",
+      "sha256": "1F9D3189E21E6C6B9E0E38174205C289003566B871450317076CE2532073F51B",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "work/GSS_command-ledger47_20261006/maintenance.mjs",
+      "sha256": "E130833418D6F6D267A9CA716B767A9D094FC74C61D8ABCBED3FB856A9777ECA",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "work/GSS_command-ledger47_20261006/command-private-files.mjs",
+      "sha256": "6C9F6070363D601CB52EB04A873438C96F1D9F9CE1CD5D07F2CFB5A417F90778",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "work/GSS_command-ledger47_20261006/refusal-diagnostic-writer.mjs",
+      "sha256": "244483A2D4CF0FFBC061780DB5DC2474B128E6D030F1ABF9474A6713873290C5",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-complete-source47_revision-source-manifest_20261006.json",
+      "sha256": "FB022E5EA7089378F95D7B0FAC93B063BAA182A72D6BD9DA9886CEA218FADBB5",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-complete-source47_claude-review-run_20261006.json",
+      "sha256": "87ACD575982037CC2552913F6D42C8A78F8E31DAFD76280CD9E1CACEB75A55EA",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-complete-source47_reviewed_20261006.txt",
+      "sha256": "73F372C54D07C466AB942124646DE7161C5B272F17B9CFF9E8260108C08F34AA",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-gate47-pre-dispatch_20261006.json",
+      "sha256": "2FE1D90FFB8B234C7500A0220D63821AE7BA0FC51EDBC994D05E010E94CD1735",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-phase1-original47_20261006.json",
+      "sha256": "A790444A610AF26C9E3A5B3DEB7863DC5CDBBD633A4107DE3D4FE02A31212906",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-phase1-original47_root-receipt_20261006.json",
+      "sha256": "5B3C1A251CBA946542F2FA71A7C5DE920A1C17FCE816236EDD9BD6CCBD6E87A0",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-source47-phase1_outer-summary_20261007.json",
+      "sha256": "E2469C2CF13D1FFC4CD58F47A7119F4C7C611E4C913A12B5BA55D8F06582A334",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-source47-phase1_security-review_20261007.json",
+      "sha256": "53098DEFF17FE1E9BE0543A9DD61E1699847E0EDF016B4191D18C34E1C56BBFB",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-source47-phase1_test-review_20261007.json",
+      "sha256": "1141098E6725ED72C0F08EB67397971F744EEC8242D7F9107590DA581B69BCD2",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-adapter48-complete_manifest_20261007.json",
+      "sha256": "8929DEA2D5B72494FBD8E6FD0B9C2DF241F5C267B6EF7AC8B9A46BE08C732A46",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-adapter48-complete_packet_20261007.txt",
+      "sha256": "520B4EC9B3B5F1570A8A12ABD7D7A58F2D77BB04B9F9914EAC66C3521D4F181C",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-adapter48-complete_security-review_20261007.json",
+      "sha256": "3B4322C3C5F4C0CF5288050F1F7F1E21602ADC85F809EEF4276F4D5C1F3F979F",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-adapter48-complete_test-review_20261007.json",
+      "sha256": "73CF520D4B91CF9825432E8222C4304C0B7D6E9D2C88BB8FAA481EE3B08AF4CA",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "work/GSS_command-attempt3-outer48_20261007.json",
+      "sha256": "FDCD943B3330A9311C88ACF2E6AC2CEA4BBDCA75E94655A0E14AE7BD1DF22C83",
+      "coverage": "complete source/config"
+    },
+    {
+      "path": "work/capture-gss-attempt3-adapter48_20261007.mjs",
+      "sha256": "E6D36CD604048DFB8D0F623DEED0B40DCE9C93252B4124E9A5B3B409369A5C12",
+      "coverage": "complete source/config"
+    },
+    {
+      "path": "work/check-gss-attempt3-outer48-fakes_20261007.mjs",
+      "sha256": "DB8F88FF549F922B10435E9B4B413AFF2F8FA81D96F602F684A1624FE95CB545",
+      "coverage": "complete source/config"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-complete-source47_review-ready_20261006.txt",
+      "sha256": "C87652F157A7E35F408165E96848EF9EF4F4AFC471D32A99A9CED481CAF9D87E",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-phase1-original47_20261006.txt",
+      "sha256": "3B2DB7E2B7F3583199C095B4C11D9ABD690A9B9CA536014475142AF45FC41D20",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-phase1-original47_invocation-reserved_20261006.json",
+      "sha256": "8B0D694EB309D92F5C41C287371F9DE46D9710C2E589016B7E03A3C58E7A070C",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-source47-phase1_outer-capture_20261007.jsonl",
+      "sha256": "551BB37C3BFDF5756C264F15180CCDE43953DA7087F4619D84DDFC72C85FD1C4",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-deparse-attempts29_20261005.jsonl",
+      "sha256": "9A695871717E690DD4922FCB4624A407C3EF0C8D6A1EA533D466017B6F4EBE74",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "work/GSS_command-ledger47_20261006/two-attempt-prefix.jsonl",
+      "sha256": "9A695871717E690DD4922FCB4624A407C3EF0C8D6A1EA533D466017B6F4EBE74",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "work/GSS_command-ledger47_20261006/command-ddl-fences.mjs",
+      "sha256": "02C8A6D52B9C9CA5F95E3E2E4573C3D85C4C3C39B931169F820415D93E31F627",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-budget44_ram-timings_20261006.json",
+      "sha256": "F27798805498ECC50D85F521E6CB909F45DCFBEDD5C8E923AE520BB401E569AF",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-budget44_public-timings_20261006.json",
+      "sha256": "338A94A36132F60B434E1066C015911B6B0AC46E64625F892760C04011FBA6DD",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-budget45_progress_20261006.md",
+      "sha256": "2290F026B4B2D56346322A1CD689CA8B7E391F9BE5BC84F65E11FD342A45C91F",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-day-end_checkpoint_20261006.md",
+      "sha256": "044F0D37C7AF7CC7E074A052D6D4104AA37362D89AEA7CF1A30D28D43926BEE7",
+      "coverage": "immutable support/evidence; bounded direct read available"
+    }
+  ]
+}

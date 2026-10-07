@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-06",
+  "scope": "Root verification of actual source-bound native original47 Phase1;not attempt3 authorization",
+  "passed": true,
+  "nativePhase1Sha256": "A790444A610AF26C9E3A5B3DEB7863DC5CDBBD633A4107DE3D4FE02A31212906",
+  "transcriptSha256": "3B2DB7E2B7F3583199C095B4C11D9ABD690A9B9CA536014475142AF45FC41D20",
+  "sourceManifestSha256": "FB022E5EA7089378F95D7B0FAC93B063BAA182A72D6BD9DA9886CEA218FADBB5",
+  "reservationSha256": "8B0D694EB309D92F5C41C287371F9DE46D9710C2E589016B7E03A3C58E7A070C",
+  "actualPhase1Grant": true,
+  "originalS0ExactBeforeAfter": true,
+  "rollbackAndConnectionAcknowledged": true,
+  "tests": 144,
+  "originalCriteria": 122,
+  "applyAttempts": 2,
+  "newKeys": false,
+  "applicationAuthorized": false,
+  "connections": 0
+}

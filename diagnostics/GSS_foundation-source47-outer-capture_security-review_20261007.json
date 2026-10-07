@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-07",
+  "rootCapturedAtUtc": "2026-10-07T10:11:16.172Z",
+  "scope": "SOURCE47 OUTER CAPTURE48",
+  "provider": "OpenAI",
+  "agentName": "/root/foundation_security_review",
+  "provenance": "Actual final response from the named collaboration subagent, recorded by sole executor under D075",
+  "verdict": "Review OK",
+  "readOnly": true,
+  "reviewedHashes": {
+    "work/capture-gss-source47-phase1_20261007.mjs": "5CDDF85CFB1B29B17E24608BC9755C879DF197EFD97F323EC9B9D9CE4DC8A36D",
+    "plans/GSS_foundation-source47-outer-capture_20261007.md": "40858EDE44A4BC0DF99EC4E90A8D41BCF2749929F88CB15D4A141613D918C4C0",
+    "plans/GSS_owner-decision-D075_temporary-review_20261007.md": "324341C1BB02C854BF782470FDE024F75A9BEADA42CEAFFFF666C2097EF1C9B0"
+  },
+  "findingsClosed": [
+    "Exception-safe bounded termination; unobserved closure fails closed",
+    "Post-run inspection refuses without losing known process end facts"
+  ],
+  "applicationAuthorized": false,
+  "nativeExecutionPerformed": false,
+  "claudeMetadataClaimed": false
+}

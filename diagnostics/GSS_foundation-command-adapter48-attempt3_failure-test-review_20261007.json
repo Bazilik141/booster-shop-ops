@@ -1,0 +1,27 @@
+{
+  "provider": "OpenAI",
+  "transport": "collaboration",
+  "agentName": "/root/foundation_test_review",
+  "readOnly": true,
+  "completed": true,
+  "provenance": "actual subagent final response",
+  "scope": "ACTUAL ATTEMPT3 ADAPTER48 FAILURE EVIDENCE",
+  "verdict": "Review OK",
+  "applicationSucceeded": false,
+  "applicationAuthorized": false,
+  "retryAuthorized": false,
+  "productApproval": false,
+  "phase2Accepted": false,
+  "wholeFoundationAccepted": false,
+  "attemptRef": "c0e65978-f8da-470d-9527-fdd14dfc7fd9",
+  "reviewedEvidenceHashes": {
+    "diagnostics/GSS_foundation-command-adapter48-attempt3_outer-summary_20261007.json": "F073CD71AD04AA8EF1D897B759F1340FF57B47E39C890EAF7BB936CEDEF5DD0A",
+    "diagnostics/GSS_foundation-command-adapter48-attempt3_outer-capture_20261007.jsonl": "3BD738C1C07FF0A6F146DC62876C78673654F01807E3449107FA122827CBBE90",
+    "diagnostics/GSS_foundation-command-apply48_invocation-reserved_20261007.json": "A2EDD3DA1D7AF86E96EB8262C8BAF840124F6C73488E03903F7206537BB08E78",
+    "diagnostics/GSS_foundation-command-refusal47-attempt3_20261006.json": "F4F5CFBDFF560793794098CCACEA6EFAA1663D8450EF484547910B20829215D6",
+    "diagnostics/GSS_foundation-command-deparse-attempts29_20261005.jsonl": "476C75DF1CD9426AAED4FF1D9625CE7D3925AB3EB3BE45C4BF6BF252DBE33AFC",
+    "diagnostics/GSS_foundation-command-adapter48-attempt3_failure-root-receipt_20261007.json": "13802B3B8EFD7FE7C4EF3207A6F95B2A468F6001944085600A548FB05D70FFEE",
+    "work/verify-gss-attempt3-adapter48-failure_20261007.mjs": "63DCF59F1364DE8E321624853A6DDE86AD3C73AE42601AE13DD5748E8E2120ED"
+  },
+  "result": "## Verdict: Review OK\n\n## Review scope: ACTUAL ATTEMPT3 ADAPTER48 FAILURE EVIDENCE\n\nThe failure evidence is coherent. **Application failed; the single-use grant is consumed and the maximum three attempts are exhausted.**\n\n`applicationAuthorized=false`, `retryAuthorized=false`, `productApproval=false`, `phase2Accepted=false`, `wholeFoundationAccepted=false`.\n\nVerified:\n\n- UTC `10:50:29.125→10:50:41.197` (Kyiv `13:50:29.125→13:50:41.197`), monotonic elapsed `12077.0441 ms`, exit `1`, closure observed, no timeout, empty stderr.\n- Exactly two outer events match the summary. Reservation PID, UUID and application hash agree.\n- Journal retains the exact 241-byte prefix and adds only authorized attempt3 UUID `c0e65978-f8da-470d-9527-fdd14dfc7fd9`.\n- All 1819 source47 pins checked: only the authorized mutable journal changed. All 23 COMPLETE pins match; the same journal is the sole delta among 41 application pins. All 17 failure-receipt evidence hashes match.\n- Refusal records `external_read/externalFunctions`, SQLSTATE `42703`, before history/private-file publication. Recovery reports acknowledged rollback, independent original state, aborted XID, released lock and closed connection. Comparison capture and old47 reservation remain absent.\n\nA newly evidenced static defect exists at [command-external-inventory.mjs:46](<C:/Users/14bez/Downloads/Booster Shop/booster-shop-ops/work/GSS_command-ledger47_20261006/command-external-inventory.mjs:46>): computed output alias `signature` is referenced inside `ORDER BY signature COLLATE \"C\"`. Output-alias resolution does not extend inside that expression. This is consistent with the recorded category and `42703`; the withheld full error body does not establish its exact wording.\n\nCoverage limitation: [command-state-inspection.mjs:89](<C:/Users/14bez/Downloads/Booster Shop/booster-shop-ops/work/GSS_command-ledger47_20261006/command-state-inspection.mjs:89>) returns for original0006 before the external inventory call at line93. The accepted144/all122 result remains valid within its original scope; it did not prove installed-reader SQL validity.\n\n| Public evidence | SHA256 |\n|---|---|\n| Outer summary | `F073CD71AD04AA8EF1D897B759F1340FF57B47E39C890EAF7BB936CEDEF5DD0A` |\n| Outer capture | `3BD738C1C07FF0A6F146DC62876C78673654F01807E3449107FA122827CBBE90` |\n| Apply48 reservation | `A2EDD3DA1D7AF86E96EB8262C8BAF840124F6C73488E03903F7206537BB08E78` |\n| Refusal | `F4F5CFBDFF560793794098CCACEA6EFAA1663D8450EF484547910B20829215D6` |\n| Journal | `476C75DF1CD9426AAED4FF1D9625CE7D3925AB3EB3BE45C4BF6BF252DBE33AFC` |\n| Failure root receipt | `13802B3B8EFD7FE7C4EF3207A6F95B2A468F6001944085600A548FB05D70FFEE` |\n| Public failure verifier source | `63DCF59F1364DE8E321624853A6DDE86AD3C73AE42601AE13DD5748E8E2120ED` |\n\nThe root receipt correctly separates evidence consistency from application success. DB recovery and private-file absence are reported by the reviewed child/outer evidence; this reviewer performed no new DB queries, private checks, execution, imports or writes. Any correction and new attempt require a separately authorized scope."
+}

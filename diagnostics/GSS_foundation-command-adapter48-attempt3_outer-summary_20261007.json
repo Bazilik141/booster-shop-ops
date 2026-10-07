@@ -1,0 +1,149 @@
+{
+  "event": "end",
+  "scope": "SINGLE APPLICATION ATTEMPT3 ADAPTER48",
+  "actualStartUtc": "2026-10-07T10:50:29.125Z",
+  "ownerDate": "2026-10-07",
+  "ownerTimezone": "Europe/Kyiv",
+  "actualOuterConfig": {
+    "scope": "SINGLE APPLICATION ATTEMPT3 ADAPTER48",
+    "actualNativeCommand": {
+      "executable": "C:\\Program Files\\nodejs\\node.exe",
+      "argv": [
+        "work/GSS_command-admission48_20261007/maintenance.mjs",
+        "apply"
+      ],
+      "cwd": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops",
+      "shell": false,
+      "windowsHide": true,
+      "nodeFlags": [],
+      "environmentAllowlist": [
+        "SystemRoot",
+        "SYSTEMROOT",
+        "WINDIR",
+        "PATH",
+        "Path",
+        "PATHEXT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "APPDATA",
+        "LOCALAPPDATA",
+        "USERNAME",
+        "USER"
+      ]
+    },
+    "outerBudgetMs": 600000,
+    "shorterWholeRunWatchdog": false,
+    "terminationMs": 15000,
+    "closureRecoveryMs": 15000,
+    "maximumOutputBytes": 1048576,
+    "maintenanceTransactionMs": 180000,
+    "maintenanceIdleMs": 60000,
+    "statementMs": 8000,
+    "lockMs": 5000,
+    "fixtureMs": 10000,
+    "connectionMs": 2000,
+    "queryMs": 12000,
+    "maximumAttempts": 3,
+    "beforeAttempts": 2,
+    "automaticRetry": false,
+    "consumedOnRefusal": true,
+    "capturePath": "diagnostics/GSS_foundation-command-adapter48-attempt3_outer-capture_20261007.jsonl",
+    "summaryPath": "diagnostics/GSS_foundation-command-adapter48-attempt3_outer-summary_20261007.json",
+    "outputsMustBeAbsent": [
+      "diagnostics/GSS_foundation-command-apply48_invocation-reserved_20261007.json",
+      "diagnostics/GSS_foundation-command-apply47_invocation-reserved_20261006.json",
+      "diagnostics/GSS_foundation-command-refusal47-attempt3_20261006.json",
+      "diagnostics/GSS_foundation-command-deparse-refusal29-3_20261005.json"
+    ],
+    "privateExistenceOnly": [
+      "gss/.local/command-ledger/current.json",
+      "gss/.local/command-ledger/next.json"
+    ],
+    "journalPath": "diagnostics/GSS_foundation-command-deparse-attempts29_20261005.jsonl",
+    "requiredState": "original_0006/S0",
+    "archiveSha256": "DAEEA79A3AB5F53DDE28621905F66BB26FFF089C76ED2DC9B71B9EBB8C00AB8D"
+  },
+  "applicationManifestSha256": "6F1CFD129769031CAE6FB06D221909B3CBAD033B550C6D8789DFD5DDFC7A5C8F",
+  "adapterManifestSha256": "8929DEA2D5B72494FBD8E6FD0B9C2DF241F5C267B6EF7AC8B9A46BE08C732A46",
+  "complete47ManifestSha256": "FB022E5EA7089378F95D7B0FAC93B063BAA182A72D6BD9DA9886CEA218FADBB5",
+  "freshPhase1Sha256": "A790444A610AF26C9E3A5B3DEB7863DC5CDBBD633A4107DE3D4FE02A31212906",
+  "attemptRef": "c0e65978-f8da-470d-9527-fdd14dfc7fd9",
+  "before": {
+    "diagnostics/GSS_foundation-command-apply48_invocation-reserved_20261007.json": {
+      "present": false,
+      "sha256": null
+    },
+    "diagnostics/GSS_foundation-command-apply47_invocation-reserved_20261006.json": {
+      "present": false,
+      "sha256": null
+    },
+    "diagnostics/GSS_foundation-command-refusal47-attempt3_20261006.json": {
+      "present": false,
+      "sha256": null
+    },
+    "diagnostics/GSS_foundation-command-deparse-refusal29-3_20261005.json": {
+      "present": false,
+      "sha256": null
+    }
+  },
+  "journalBefore": {
+    "present": true,
+    "sha256": "9A695871717E690DD4922FCB4624A407C3EF0C8D6A1EA533D466017B6F4EBE74"
+  },
+  "automaticRetry": false,
+  "productApproval": false,
+  "valuesWithheld": true,
+  "actualEndUtc": "2026-10-07T10:50:41.197Z",
+  "elapsedMs": 12077.0441,
+  "exitCode": 1,
+  "signal": null,
+  "spawnError": false,
+  "timedOut": false,
+  "outputOverflow": false,
+  "treeTermination": null,
+  "closeObserved": true,
+  "runnerPid": 23108,
+  "stdout": {
+    "bytes": 167,
+    "sha256": "9BF2B9959B4301D1110DEBAFE7FE07BAD5907F168D9168A5E47F9022D439E7B5"
+  },
+  "stderr": {
+    "bytes": 0,
+    "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  "safeActiveResult": null,
+  "after": {
+    "diagnostics/GSS_foundation-command-apply48_invocation-reserved_20261007.json": {
+      "present": true,
+      "sha256": "A2EDD3DA1D7AF86E96EB8262C8BAF840124F6C73488E03903F7206537BB08E78"
+    },
+    "diagnostics/GSS_foundation-command-apply47_invocation-reserved_20261006.json": {
+      "present": false,
+      "sha256": null
+    },
+    "diagnostics/GSS_foundation-command-refusal47-attempt3_20261006.json": {
+      "present": true,
+      "sha256": "F4F5CFBDFF560793794098CCACEA6EFAA1663D8450EF484547910B20829215D6"
+    },
+    "diagnostics/GSS_foundation-command-deparse-refusal29-3_20261005.json": {
+      "present": false,
+      "sha256": null
+    }
+  },
+  "journalAfter": {
+    "present": true,
+    "sha256": "476C75DF1CD9426AAED4FF1D9625CE7D3925AB3EB3BE45C4BF6BF252DBE33AFC"
+  },
+  "lineage": {
+    "attempts": 3,
+    "attempt3Ref": "c0e65978-f8da-470d-9527-fdd14dfc7fd9"
+  },
+  "privatePresence": {
+    "gss/.local/command-ledger/current.json": false,
+    "gss/.local/command-ledger/next.json": false
+  },
+  "artifactInspectionRefused": false,
+  "passed": false,
+  "capturePath": "diagnostics/GSS_foundation-command-adapter48-attempt3_outer-capture_20261007.jsonl"
+}

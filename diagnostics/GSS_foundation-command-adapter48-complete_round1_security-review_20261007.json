@@ -1,0 +1,16 @@
+{
+  "provider": "OpenAI",
+  "transport": "collaboration",
+  "readOnly": true,
+  "completed": true,
+  "provenance": "actual subagent final response",
+  "scope": "COMPLETE ADMISSION ADAPTER48",
+  "bundleSha256": "0448291095E41FDEADAF475E27CA6E817B3A2CC18447FEBA06A9F1F2CA8B701E",
+  "sourceManifestSha256": "35736E02112B7FA2F163F4088BCCB510E74302D0A7D18D3865C96C87C8F30151",
+  "applicationAuthorized": false,
+  "productApproval": false,
+  "superseded": true,
+  "agentName": "/root/foundation_security_review",
+  "verdict": "Changes requested",
+  "result": "## Verdict: Changes requested\n\nScope: **COMPLETE ADMISSION ADAPTER48**, source review only. Reviewer: `/root/foundation_security_review`, OpenAI subagent. `applicationAuthorized=false`.\n\nReviewed packet SHA256:\n\n`0448291095E41FDEADAF475E27CA6E817B3A2CC18447FEBA06A9F1F2CA8B701E`\n\nReviewed manifest SHA256:\n\n`35736E02112B7FA2F163F4088BCCB510E74302D0A7D18D3865C96C87C8F30151`\n\n**[P1] Reject an already-used attempt UUID before consumption.**\n\n`work/GSS_command-admission48_20261007/source-contract.mjs:79` validates UUIDv4 shape but does not reject either UUID already present in the reviewed two-attempt prefix. A future packet and both attestations can consistently bind such a reused UUID and pass admission.\n\nCopied `maintenance.mjs:29-37` detects duplicate UUIDs only when rereading the journal **after** appending attempt3. That leaves an invalid consumed journal during the last permitted attempt.\n\nRequired correction:\n\n- Purely validate candidate UUID uniqueness against the pinned two-attempt prefix before reservation or private/target access.\n- Prefer reusing frozen47’s pure `classifyJournalLineage` on an in-memory prefix plus candidate suffix.\n- Add a focused negative case where the application packet and both reviewers consistently bind an existing attempt UUID. It must refuse before reservation or append.\n- Rebuild the packet and manifest and obtain fresh source reviews.\n\nOther inspected controls are consistent: all23 manifest inputs matched; all1819 frozen47 inputs remained unchanged; the two copied files equal their originals under the declared translations. Static apply import traversal found43 module paths/109 edges and no live transitive call to the frozen47 application classifier. Minted approvals, active PID/reservation binding, truthful peer metadata, continuing checks and no-retry behavior are otherwise sound.\n\nThis verdict grants no application, attempt3, private reads, keys or native proof."
+}

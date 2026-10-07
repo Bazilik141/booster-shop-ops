@@ -1,0 +1,16 @@
+{
+  "provider": "OpenAI",
+  "transport": "collaboration",
+  "readOnly": true,
+  "completed": true,
+  "provenance": "actual subagent final response",
+  "scope": "COMPLETE ADMISSION ADAPTER48",
+  "bundleSha256": "0448291095E41FDEADAF475E27CA6E817B3A2CC18447FEBA06A9F1F2CA8B701E",
+  "sourceManifestSha256": "35736E02112B7FA2F163F4088BCCB510E74302D0A7D18D3865C96C87C8F30151",
+  "applicationAuthorized": false,
+  "productApproval": false,
+  "superseded": true,
+  "agentName": "/root/foundation_test_review",
+  "verdict": "Review OK",
+  "result": "## Verdict: Review OK\n\n## Review scope: COMPLETE ADMISSION ADAPTER48\n\n`applicationAuthorized=false`; `productApproval=false`.\n\nVerified packet/manifest and all23 referenced input hashes. Maintenance and private-file code are exact frozen47 copies after declared import, CLI and script-URL translations; SQL, fences, timeouts and recovery behavior remain unchanged.\n\nThe gate distinguishes COMPLETE source acceptance from a distinct application grant, binds genuine47/fresh proof/dual reviews/UUID/journal, and requires minted approval plus exclusive/fsynced reservation and same-PID active state. The36-case matrix covers the principal metadata, binding, continuation, refusal and replay paths; these remain source/fake evidence.\n\nNo new blocking finding. The actual application packet must still provide reviewed outer configuration/output paths and its separate explicit grant. This verdict grants neither invocation nor attempt3 execution.\n\n- Packet SHA256: `0448291095E41FDEADAF475E27CA6E817B3A2CC18447FEBA06A9F1F2CA8B701E`\n- Manifest SHA256: `35736E02112B7FA2F163F4088BCCB510E74302D0A7D18D3865C96C87C8F30151`\n\nRead-only inspection; no imports/execution, database/private-file access or edits."
+}

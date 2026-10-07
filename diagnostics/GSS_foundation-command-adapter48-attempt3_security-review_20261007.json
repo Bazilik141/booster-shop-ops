@@ -1,0 +1,19 @@
+{
+  "provider": "OpenAI",
+  "transport": "collaboration",
+  "readOnly": true,
+  "completed": true,
+  "provenance": "actual subagent final response",
+  "scope": "SINGLE APPLICATION ATTEMPT3 ADAPTER48",
+  "bundleSha256": "DA373F9384CF08E108AD273B5B9DBABFFCAA0A84F17AED2A65AF6E406EA37CE5",
+  "sourceManifestSha256": "6F1CFD129769031CAE6FB06D221909B3CBAD033B550C6D8789DFD5DDFC7A5C8F",
+  "complete47ManifestSha256": "FB022E5EA7089378F95D7B0FAC93B063BAA182A72D6BD9DA9886CEA218FADBB5",
+  "adapterManifestSha256": "8929DEA2D5B72494FBD8E6FD0B9C2DF241F5C267B6EF7AC8B9A46BE08C732A46",
+  "freshPhase1Sha256": "A790444A610AF26C9E3A5B3DEB7863DC5CDBBD633A4107DE3D4FE02A31212906",
+  "attemptRef": "c0e65978-f8da-470d-9527-fdd14dfc7fd9",
+  "applicationAuthorized": true,
+  "productApproval": false,
+  "verdict": "Review OK",
+  "agentName": "/root/foundation_security_review",
+  "result": "## Verdict: Review OK\n## Application scope: SINGLE APPLICATION ATTEMPT3 ADAPTER48\n\nReviewer: `/root/foundation_security_review`, OpenAI subagent. Read-only review; no execution, imports, DB access, private contents or writes.\n\n**applicationAuthorized=true** for exactly one local invocation of the reviewed outer wrapper, launching fixed `maintenance.mjs apply`. **productApproval=false**.\n\nBound packet SHA256:\n\n`DA373F9384CF08E108AD273B5B9DBABFFCAA0A84F17AED2A65AF6E406EA37CE5`\n\nBound application manifest SHA256:\n\n`6F1CFD129769031CAE6FB06D221909B3CBAD033B550C6D8789DFD5DDFC7A5C8F`\n\nBound attempt UUID:\n\n`c0e65978-f8da-470d-9527-fdd14dfc7fd9`\n\nThe application premise is justified: genuine immutable COMPLETE47, actual dual COMPLETE adapter acceptance at `8929DEA2…732A46`, fresh native144/all122 original0006/S0 proof and I168 closure, unchanged DAEE archive/SQL, unique UUID, and journal2. I independently verified all41 application pins and all1819 frozen47 pins; zero mismatches.\n\n**I167 is closed for this invocation:** rendered fixed command, 600000ms outer watchdog, unchanged effective maintenance180000/idle60000ms, and no shorter whole-run watchdog. The shorter query/statement/PowerShell limits apply individually. Successful native transaction fit remains unproved until execution.\n\nAdmission conditions remain mandatory:\n\n- Both exact actual application verdicts and the real packet-bound seal must exist.\n- Current pins, journal2 and configured output/reservation/private-file absence checks must pass immediately before dispatch.\n- Use the reviewed wrapper/config with no additional shorter executor watchdog.\n- The exclusive invocation remains consumed on refusal; no retry, reset, rehearsal or UUID substitution.\n- Timeout, unresolved closure, capture/hash failure, unexpected output or inconsistent journal/artifacts blocks acceptance and dependent work.\n\nThe success whitelist matches the frozen `active_exact` result schema; arbitrary stdout/stderr remains withheld. Fixed child preflight, transaction/source/role fences, private-file protocol and recovery remain unchanged.\n\n**No Phase2, additional credential operation, production/business-data write, owner QA or Foundation acceptance is granted.**"
+}

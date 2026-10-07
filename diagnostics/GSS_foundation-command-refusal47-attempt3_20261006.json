@@ -1,0 +1,25 @@
+{
+  "format": "gss.command.refusal.v1",
+  "attempt": 3,
+  "operation": "apply",
+  "maintenancePhase": "whole-candidate-before-history",
+  "family": "untagged_sqlstate",
+  "stage": "external_read",
+  "category": "externalFunctions",
+  "comparisonState": "none",
+  "literalKind": "unknown",
+  "identityCount": "unknown",
+  "sqlState": "42703",
+  "elapsedBucket": "5_to_14s",
+  "recovery": {
+    "rollback": "acknowledged",
+    "independentRead": "original",
+    "xid": "aborted",
+    "capture": "not_eligible",
+    "cleanup": "not_needed",
+    "unlock": "released",
+    "connection": "closed"
+  },
+  "valuesWithheld": true,
+  "automaticRetry": false
+}

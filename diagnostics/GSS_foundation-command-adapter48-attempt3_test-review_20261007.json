@@ -1,0 +1,19 @@
+{
+  "provider": "OpenAI",
+  "transport": "collaboration",
+  "readOnly": true,
+  "completed": true,
+  "provenance": "actual subagent final response",
+  "scope": "SINGLE APPLICATION ATTEMPT3 ADAPTER48",
+  "bundleSha256": "DA373F9384CF08E108AD273B5B9DBABFFCAA0A84F17AED2A65AF6E406EA37CE5",
+  "sourceManifestSha256": "6F1CFD129769031CAE6FB06D221909B3CBAD033B550C6D8789DFD5DDFC7A5C8F",
+  "complete47ManifestSha256": "FB022E5EA7089378F95D7B0FAC93B063BAA182A72D6BD9DA9886CEA218FADBB5",
+  "adapterManifestSha256": "8929DEA2D5B72494FBD8E6FD0B9C2DF241F5C267B6EF7AC8B9A46BE08C732A46",
+  "freshPhase1Sha256": "A790444A610AF26C9E3A5B3DEB7863DC5CDBBD633A4107DE3D4FE02A31212906",
+  "attemptRef": "c0e65978-f8da-470d-9527-fdd14dfc7fd9",
+  "applicationAuthorized": true,
+  "productApproval": false,
+  "verdict": "Review OK",
+  "agentName": "/root/foundation_test_review",
+  "result": "## Verdict: Review OK\n\n## Application scope: SINGLE APPLICATION ATTEMPT3 ADAPTER48\n\n`applicationAuthorized=true` for **one invocation through the reviewed outer wrapper**, with UUID `c0e65978-f8da-470d-9527-fdd14dfc7fd9`, after both exact application approvals, the real seal, and immediate preflight checks.\n\n`productApproval=false`.\n\nNo blocking findings. Reviewed bindings preserve genuine source47/native evidence, unique UUID admission, journal `2→3`, reservation before target access, and consumed-on-refusal semantics. The outer wrapper enforces 600000 ms, unchanged 180000 ms maintenance budget, one child launch, bounded termination, value-free fault evidence, and the exact native success schema.\n\nAll 41 public pins matched. Final recheck confirmed unchanged hashes, six public output artifacts absent, and the original journal prefix intact with two attempts.\n\n| Reviewed artifact | SHA256 |\n|---|---|\n| Application packet | `DA373F9384CF08E108AD273B5B9DBABFFCAA0A84F17AED2A65AF6E406EA37CE5` |\n| Application manifest | `6F1CFD129769031CAE6FB06D221909B3CBAD033B550C6D8789DFD5DDFC7A5C8F` |\n| Outer wrapper | `E6D36CD604048DFB8D0F623DEED0B40DCE9C93252B4124E9A5B3B409369A5C12` |\n| Outer configuration | `FDCD943B3330A9311C88ACF2E6AC2CEA4BBDCA75E94655A0E14AE7BD1DF22C83` |\n\nThis grant excludes retries, source47 reruns, reservation deletion/reuse, journal reset, and broader Foundation acceptance. Actual execution evidence requires subsequent independent review.\n\nReview was read-only; no project execution, DB access, private-content reads, or mutations occurred."
+}

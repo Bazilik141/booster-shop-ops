@@ -1,0 +1,84 @@
+{
+  "event": "end",
+  "scope": "One-use source47 Phase1 outer capture;not application authority",
+  "actualStartUtc": "2026-10-07T10:11:38.631Z",
+  "ownerDate": "2026-10-07",
+  "ownerTimezone": "Europe/Kyiv",
+  "outerBudgetMs": 600000,
+  "runnerSha256": "9AD2F2DB6AE51BAB954833E49930EEED8EE71E58F9340F3A0A471BB02401AF94",
+  "sourceManifestSha256": "FB022E5EA7089378F95D7B0FAC93B063BAA182A72D6BD9DA9886CEA218FADBB5",
+  "sourceInputsVerified": 1819,
+  "reviewedHashes": {
+    "work/capture-gss-source47-phase1_20261007.mjs": "5CDDF85CFB1B29B17E24608BC9755C879DF197EFD97F323EC9B9D9CE4DC8A36D",
+    "plans/GSS_owner-decision-D075_temporary-review_20261007.md": "324341C1BB02C854BF782470FDE024F75A9BEADA42CEAFFFF666C2097EF1C9B0",
+    "plans/GSS_foundation-source47-outer-capture_20261007.md": "40858EDE44A4BC0DF99EC4E90A8D41BCF2749929F88CB15D4A141613D918C4C0"
+  },
+  "reviewers": [
+    "/root/foundation_security_review",
+    "/root/foundation_test_review"
+  ],
+  "before": {
+    "diagnostics/GSS_foundation-command-phase1-original47_20261006.json": {
+      "present": false,
+      "sha256": null
+    },
+    "diagnostics/GSS_foundation-command-phase1-original47_20261006.txt": {
+      "present": false,
+      "sha256": null
+    },
+    "diagnostics/GSS_foundation-command-phase1-original47_failure_20261006.json": {
+      "present": false,
+      "sha256": null
+    },
+    "diagnostics/GSS_foundation-command-phase1-original47_invocation-reserved_20261006.json": {
+      "present": false,
+      "sha256": null
+    }
+  },
+  "automaticRetry": false,
+  "applicationAuthorized": false,
+  "valuesWithheld": true,
+  "actualEndUtc": "2026-10-07T10:12:23.382Z",
+  "elapsedMs": 44753.3792,
+  "exitCode": 0,
+  "signal": null,
+  "spawnError": false,
+  "timedOut": false,
+  "outputOverflow": false,
+  "treeTermination": null,
+  "closeObserved": true,
+  "runnerPid": 38544,
+  "stdout": {
+    "bytes": 216,
+    "sha256": "5DE64D8DAC235F459F9AA222DA258522830BC97B6BA06BE3065C5C4C944C9ADD"
+  },
+  "stderr": {
+    "bytes": 0,
+    "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  "after": {
+    "diagnostics/GSS_foundation-command-phase1-original47_20261006.json": {
+      "present": true,
+      "sha256": "A790444A610AF26C9E3A5B3DEB7863DC5CDBBD633A4107DE3D4FE02A31212906"
+    },
+    "diagnostics/GSS_foundation-command-phase1-original47_20261006.txt": {
+      "present": true,
+      "sha256": "3B2DB7E2B7F3583199C095B4C11D9ABD690A9B9CA536014475142AF45FC41D20"
+    },
+    "diagnostics/GSS_foundation-command-phase1-original47_failure_20261006.json": {
+      "present": false,
+      "sha256": null
+    },
+    "diagnostics/GSS_foundation-command-phase1-original47_invocation-reserved_20261006.json": {
+      "present": true,
+      "sha256": "8B0D694EB309D92F5C41C287371F9DE46D9710C2E589016B7E03A3C58E7A070C"
+    }
+  },
+  "applicationReservation": {
+    "present": false,
+    "sha256": null
+  },
+  "artifactInspectionRefused": false,
+  "capturePath": "diagnostics/GSS_foundation-source47-phase1_outer-capture_20261007.jsonl",
+  "nativeReceiptVerified": false
+}

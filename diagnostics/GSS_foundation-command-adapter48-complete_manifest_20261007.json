@@ -1,0 +1,127 @@
+{
+  "date": "2026-10-07",
+  "scope": "COMPLETE ADMISSION ADAPTER48",
+  "complete47ManifestSha256": "FB022E5EA7089378F95D7B0FAC93B063BAA182A72D6BD9DA9886CEA218FADBB5",
+  "inputSha256": "520B4EC9B3B5F1570A8A12ABD7D7A58F2D77BB04B9F9914EAC66C3521D4F181C",
+  "packetUtf8Bytes": 84968,
+  "secretPatternHits": 0,
+  "applicationAuthorized": false,
+  "productApproval": false,
+  "inputs": [
+    {
+      "path": "plans/GSS_owner-decision-D075_temporary-review_20261007.md",
+      "sha256": "324341C1BB02C854BF782470FDE024F75A9BEADA42CEAFFFF666C2097EF1C9B0",
+      "coverage": "complete source"
+    },
+    {
+      "path": "plans/GSS_foundation-temporary-attempt3-admission-design48_20261007.md",
+      "sha256": "4608E365FC30279268ECBE156B57263D21F2665E4F635DE74041200C856C74A2",
+      "coverage": "complete source"
+    },
+    {
+      "path": "work/GSS_command-admission48_20261007/source-contract.mjs",
+      "sha256": "150E29DF8A8C79700CA0F2BCC73E816BD59627FA07EA21CE6DF8DF0FA9CBE70F",
+      "coverage": "complete source"
+    },
+    {
+      "path": "work/GSS_command-admission48_20261007/peer-metadata.mjs",
+      "sha256": "795ADD0984110F183A65037CCEB885C64DAB919FB028C5DF280E5DBED58FB665",
+      "coverage": "complete source"
+    },
+    {
+      "path": "work/GSS_command-admission48_20261007/apply-invocation.mjs",
+      "sha256": "82D005D341F2BBF3AAB6ADEA95C96BC0E6DA4A180874A1A2B6A8D9D3B2854CAA",
+      "coverage": "complete source"
+    },
+    {
+      "path": "work/GSS_command-admission48_20261007/maintenance.mjs",
+      "sha256": "E329464606F57E529A65EB8A0E5C037DC9E8556BE84BCBEB81E5641A667413E2",
+      "coverage": "complete source"
+    },
+    {
+      "path": "work/GSS_command-admission48_20261007/command-private-files.mjs",
+      "sha256": "AA936F83E86B0D53EEE64C34CF68270FC774E68323E6BC8813FA19709DEEA43C",
+      "coverage": "complete source"
+    },
+    {
+      "path": "work/check-gss-admission48_20261007.mjs",
+      "sha256": "43D51F1B6D190001D2BE62E9F36443BF422060BE5142DC00D7B7D8F801A44431",
+      "coverage": "complete source"
+    },
+    {
+      "path": "work/GSS_command-ledger47_20261006/source-contract.mjs",
+      "sha256": "6B85E2EE2BC8ADB02BCB87AE8C8DA68450CED139829266B99D4B00828C21B3F8",
+      "coverage": "immutable evidence/support reference; available for bounded read"
+    },
+    {
+      "path": "work/GSS_command-ledger47_20261006/historical-parent-gate.mjs",
+      "sha256": "73679A08C32B397AAAD52E9E6D164E69EF19D85492B692DCA20B2A52A2EA0EEF",
+      "coverage": "immutable evidence/support reference; available for bounded read"
+    },
+    {
+      "path": "work/GSS_command-ledger47_20261006/command-process-fences.mjs",
+      "sha256": "1F9D3189E21E6C6B9E0E38174205C289003566B871450317076CE2532073F51B",
+      "coverage": "immutable evidence/support reference; available for bounded read"
+    },
+    {
+      "path": "work/GSS_command-ledger47_20261006/maintenance.mjs",
+      "sha256": "E130833418D6F6D267A9CA716B767A9D094FC74C61D8ABCBED3FB856A9777ECA",
+      "coverage": "immutable evidence/support reference; available for bounded read"
+    },
+    {
+      "path": "work/GSS_command-ledger47_20261006/command-private-files.mjs",
+      "sha256": "6C9F6070363D601CB52EB04A873438C96F1D9F9CE1CD5D07F2CFB5A417F90778",
+      "coverage": "immutable evidence/support reference; available for bounded read"
+    },
+    {
+      "path": "work/GSS_command-ledger47_20261006/refusal-diagnostic-writer.mjs",
+      "sha256": "244483A2D4CF0FFBC061780DB5DC2474B128E6D030F1ABF9474A6713873290C5",
+      "coverage": "immutable evidence/support reference; available for bounded read"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-complete-source47_revision-source-manifest_20261006.json",
+      "sha256": "FB022E5EA7089378F95D7B0FAC93B063BAA182A72D6BD9DA9886CEA218FADBB5",
+      "coverage": "immutable evidence/support reference; available for bounded read"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-complete-source47_claude-review-run_20261006.json",
+      "sha256": "87ACD575982037CC2552913F6D42C8A78F8E31DAFD76280CD9E1CACEB75A55EA",
+      "coverage": "immutable evidence/support reference; available for bounded read"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-complete-source47_reviewed_20261006.txt",
+      "sha256": "73F372C54D07C466AB942124646DE7161C5B272F17B9CFF9E8260108C08F34AA",
+      "coverage": "immutable evidence/support reference; available for bounded read"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-gate47-pre-dispatch_20261006.json",
+      "sha256": "2FE1D90FFB8B234C7500A0220D63821AE7BA0FC51EDBC994D05E010E94CD1735",
+      "coverage": "immutable evidence/support reference; available for bounded read"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-phase1-original47_20261006.json",
+      "sha256": "A790444A610AF26C9E3A5B3DEB7863DC5CDBBD633A4107DE3D4FE02A31212906",
+      "coverage": "immutable evidence/support reference; available for bounded read"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-command-phase1-original47_root-receipt_20261006.json",
+      "sha256": "5B3C1A251CBA946542F2FA71A7C5DE920A1C17FCE816236EDD9BD6CCBD6E87A0",
+      "coverage": "immutable evidence/support reference; available for bounded read"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-source47-phase1_outer-summary_20261007.json",
+      "sha256": "E2469C2CF13D1FFC4CD58F47A7119F4C7C611E4C913A12B5BA55D8F06582A334",
+      "coverage": "immutable evidence/support reference; available for bounded read"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-source47-phase1_security-review_20261007.json",
+      "sha256": "53098DEFF17FE1E9BE0543A9DD61E1699847E0EDF016B4191D18C34E1C56BBFB",
+      "coverage": "immutable evidence/support reference; available for bounded read"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-source47-phase1_test-review_20261007.json",
+      "sha256": "1141098E6725ED72C0F08EB67397971F744EEC8242D7F9107590DA581B69BCD2",
+      "coverage": "immutable evidence/support reference; available for bounded read"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-07",
+  "scope": "ACTUAL SOURCE47 PHASE1 EVIDENCE48",
+  "provider": "OpenAI",
+  "agentName": "/root/foundation_security_review",
+  "verdict": "Review OK",
+  "readOnly": true,
+  "provenance": "Actual named collaboration subagent final response recorded by sole executor under D075",
+  "reviewedEvidenceHashes": {
+    "diagnostics/GSS_foundation-source47-phase1_outer-summary_20261007.json": "E2469C2CF13D1FFC4CD58F47A7119F4C7C611E4C913A12B5BA55D8F06582A334",
+    "diagnostics/GSS_foundation-source47-phase1_outer-capture_20261007.jsonl": "551BB37C3BFDF5756C264F15180CCDE43953DA7087F4619D84DDFC72C85FD1C4",
+    "diagnostics/GSS_foundation-command-phase1-original47_20261006.json": "A790444A610AF26C9E3A5B3DEB7863DC5CDBBD633A4107DE3D4FE02A31212906",
+    "diagnostics/GSS_foundation-command-phase1-original47_20261006.txt": "3B2DB7E2B7F3583199C095B4C11D9ABD690A9B9CA536014475142AF45FC41D20",
+    "diagnostics/GSS_foundation-command-phase1-original47_invocation-reserved_20261006.json": "8B0D694EB309D92F5C41C287371F9DE46D9710C2E589016B7E03A3C58E7A070C",
+    "diagnostics/GSS_foundation-command-phase1-original47_root-receipt_20261006.json": "5B3C1A251CBA946542F2FA71A7C5DE920A1C17FCE816236EDD9BD6CCBD6E87A0"
+  },
+  "I168Closed": true,
+  "nativeTests": 144,
+  "originalCriteria": 122,
+  "sourceInputsIndependentlyVerified": 1819,
+  "originalBeforeAfter": "original_0006/S0",
+  "applyAttempts": 2,
+  "applicationAuthorized": false,
+  "native47GrantConsumed": true
+}

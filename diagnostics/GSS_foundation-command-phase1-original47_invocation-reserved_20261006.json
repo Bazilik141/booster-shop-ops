@@ -1,0 +1,9 @@
+{
+  "scope": "ORIGINAL0006 FRESH PHASE1 source47",
+  "sourceManifestSha256": "FB022E5EA7089378F95D7B0FAC93B063BAA182A72D6BD9DA9886CEA218FADBB5",
+  "consumedBeforeTarget": true,
+  "consumedOnRefusal": true,
+  "automaticRetry": false,
+  "applicationAttempt": false,
+  "valuesWithheld": true
+}

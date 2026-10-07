@@ -1,0 +1,60 @@
+{
+  "scope": "SINGLE APPLICATION ATTEMPT3 ADAPTER48",
+  "actualNativeCommand": {
+    "executable": "C:\\Program Files\\nodejs\\node.exe",
+    "argv": [
+      "work/GSS_command-admission48_20261007/maintenance.mjs",
+      "apply"
+    ],
+    "cwd": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops",
+    "shell": false,
+    "windowsHide": true,
+    "nodeFlags": [],
+    "environmentAllowlist": [
+      "SystemRoot",
+      "SYSTEMROOT",
+      "WINDIR",
+      "PATH",
+      "Path",
+      "PATHEXT",
+      "TEMP",
+      "TMP",
+      "USERPROFILE",
+      "APPDATA",
+      "LOCALAPPDATA",
+      "USERNAME",
+      "USER"
+    ]
+  },
+  "outerBudgetMs": 600000,
+  "shorterWholeRunWatchdog": false,
+  "terminationMs": 15000,
+  "closureRecoveryMs": 15000,
+  "maximumOutputBytes": 1048576,
+  "maintenanceTransactionMs": 180000,
+  "maintenanceIdleMs": 60000,
+  "statementMs": 8000,
+  "lockMs": 5000,
+  "fixtureMs": 10000,
+  "connectionMs": 2000,
+  "queryMs": 12000,
+  "maximumAttempts": 3,
+  "beforeAttempts": 2,
+  "automaticRetry": false,
+  "consumedOnRefusal": true,
+  "capturePath": "diagnostics/GSS_foundation-command-adapter48-attempt3_outer-capture_20261007.jsonl",
+  "summaryPath": "diagnostics/GSS_foundation-command-adapter48-attempt3_outer-summary_20261007.json",
+  "outputsMustBeAbsent": [
+    "diagnostics/GSS_foundation-command-apply48_invocation-reserved_20261007.json",
+    "diagnostics/GSS_foundation-command-apply47_invocation-reserved_20261006.json",
+    "diagnostics/GSS_foundation-command-refusal47-attempt3_20261006.json",
+    "diagnostics/GSS_foundation-command-deparse-refusal29-3_20261005.json"
+  ],
+  "privateExistenceOnly": [
+    "gss/.local/command-ledger/current.json",
+    "gss/.local/command-ledger/next.json"
+  ],
+  "journalPath": "diagnostics/GSS_foundation-command-deparse-attempts29_20261005.jsonl",
+  "requiredState": "original_0006/S0",
+  "archiveSha256": "DAEEA79A3AB5F53DDE28621905F66BB26FFF089C76ED2DC9B71B9EBB8C00AB8D"
+}
