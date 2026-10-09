@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Component C · підкатегорії mobile у живій сторінці категорії</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:#EAE7E1;font-family:'Manrope',system-ui,sans-serif;color:#1F2937}
+.wrap{padding:32px 28px 80px}
+h1{font-size:22px;font-weight:800;color:#111827;margin:0 0 6px;letter-spacing:-0.01em}
+.lede{font-size:13px;color:#6B7280;margin:0 0 10px;max-width:980px;line-height:1.55}
+.controls{display:flex;gap:8px;align-items:center;margin:0 0 24px}
+.controls span{font-size:12px;color:#6B7280;margin-right:4px}
+.controls button{font:inherit;font-size:12.5px;font-weight:600;padding:7px 13px;border-radius:999px;border:1px solid #D8D4CC;background:#fff;color:#1F2937;cursor:pointer}
+.controls button.on{background:#111827;color:#fff;border-color:#111827}
+.strip{display:flex;gap:22px;align-items:flex-start;overflow-x:auto;padding-bottom:20px}
+.col{flex:0 0 auto;width:390px}
+.col h2{font-size:14px;font-weight:700;color:#111827;margin:0 0 4px}
+.col .desc{font-size:12px;color:#6B7280;line-height:1.5;margin:0 0 10px;min-height:80px}
+.metric{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10.5px;color:#111827;background:#fff;border:1px solid #E5E7EB;border-radius:8px;padding:6px 9px;margin-bottom:10px;display:inline-block}
+.phone{width:390px;height:760px;border-radius:14px;overflow:hidden;background:#fff;box-shadow:0 10px 28px rgba(17,24,39,.12),0 0 0 1px rgba(17,24,39,.06)}
+.phone iframe{width:390px;height:760px;border:0;display:block}
+.tag{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#9CA3AF;margin-bottom:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Component C · підкатегорії на мобільному — у живій сторінці категорії</h1>
+<p class="lede">Кожен фрейм — справжня сторінка <code>/catalog/Pokemon</code> (реальний CSS, хлібні крихти, H1, товари), ширина 390px, без скролу — саме те, що бачить клієнт при відкритті. Підмінено тільки блок H1+підкатегорії. Метрика під описом показує, на якій висоті починається перша картка товару: чим менше — тим швидше клієнт бачить асортимент. Жодних обрізаних назв і жодного горизонтального скролу.</p>
+<div class="controls" id="controls"><span>Кількість підкатегорій:</span></div>
+<div class="strip" id="strip"></div>
+</div>
+
+<script>
+const PAGE = 'uploads/Pokémon TCG бустери JP _ KR _ EN - sealed _ Booster Shop.html';
+const LOCAL_CSS = 'uploads/One Piece TCG та Pokémon карти _ Японські бустери в наявності_files/';
+const SUBS = [
+  {name:'Бустери', count:16},
+  {name:'Бустер бокси', count:13},
+  {name:'Набори', count:11},
+  {name:'Фігурки та декор', count:19},
+  {name:'Декбілдінг', count:5},
+];
+let COUNT = 4;
+
+const BASE = `
+  .bs-cookie-bar,#cookie-bar,.cookie-bar{display:none!important}
+  /* компактний H1: один рядок, лічильник поруч, тонка смуга */
+  .bs-cat-header{margin-bottom:8px!important}
+  .bs-cat-header__strip{height:3px!important}
+  .bs-cat-header__hero{padding:8px 16px 7px!important;flex-direction:row!important;align-items:baseline!important;gap:8px!important}
+  .bs-cat-header__title{display:flex!important;align-items:baseline!important;gap:8px!important}
+  .bs-cat-header__title h1{font-size:17px!important;line-height:1.15!important;margin:0!important}
+  .bs-cat-header__title .bs-count{font-size:12px!important}
+  .bs-subcat-tabs{display:none!important}
+`;
+
+/* ---------- C1 · 2-колонковий текстовий список у шапці ---------- */
+function c1(doc, subs){
+  const host = doc.querySelector('.bs-cat-header'); if(!host) return;
+  const el = doc.createElement('nav');
+  el.className='x-c1'; el.setAttribute('aria-label','Підкатегорії');
+  el.innerHTML = subs.map(s=>`<a class="x-c1__item" href="#"><span>${s.name}</span><b>${s.count}</b></a>`).join('');
+  host.appendChild(el);
+  addCSS(doc,`
+  .x-c1{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--bs-line-2,#EEF0F2)}
+  .x-c1__item{display:flex;align-items:center;justify-content:space-between;gap:8px;
+    padding:7px 14px;text-decoration:none;font-size:12.5px;font-weight:600;color:var(--bs-ink-2,#1F2937);
+    border-bottom:1px solid var(--bs-line-2,#EEF0F2);border-right:1px solid var(--bs-line-2,#EEF0F2);min-height:32px;box-sizing:border-box}
+  .x-c1__item:nth-child(2n){border-right:0}
+  .x-c1__item:nth-child(odd):last-child{grid-column:1/-1;border-right:0}
+  .x-c1__item b{font-size:11px;font-weight:700;color:var(--bs-ink-4,#9CA3AF)}
+  .x-c1__item span{overflow-wrap:anywhere}
+  .x-c1__item:active{background:var(--bs-gold-soft,#FBF4DC)}
+  `);
+}
+
+/* ---------- C2 · Згорнутий експандер в один рядок з фільтром ---------- */
+function c2(doc, subs){
+  const row = doc.querySelector('.bs-action-row'); if(!row) return;
+  // тогл живе ВСЕРЕДИНІ наявного рядка «Фільтр / Сортування» — нуль додаткової висоти
+  const btn = doc.createElement('button');
+  btn.type='button'; btn.className='x-c2__toggle'; btn.setAttribute('aria-expanded','false');
+  btn.innerHTML = `Підкатегорії <b>${subs.length}</b><span class="x-c2__chev">▾</span>`;
+  row.insertBefore(btn, row.firstChild);
+  const panel = doc.createElement('div');
+  panel.className='x-c2__panel'; panel.hidden = true;
+  panel.innerHTML = subs.map(s=>`<a class="x-c2__item" href="#"><span>${s.name}</span><b>${s.count}</b></a>`).join('');
+  row.parentNode.insertBefore(panel, row.nextSibling);
+  btn.addEventListener('click', ()=>{
+    const open = btn.getAttribute('aria-expanded')==='true';
+    btn.setAttribute('aria-expanded', String(!open));
+    panel.hidden = open;
+  });
+  addCSS(doc,`
+  .bs-action-row{grid-template-columns:auto auto 1fr!important;gap:8px!important;margin:0 0 12px!important}
+  .bs-action-row__filter{padding:0 12px!important;font-size:12.5px!important}
+  .bs-action-row__sort{font-size:12.5px!important;padding:0 30px 0 10px!important;min-width:0!important}
+  .x-c2__toggle{display:inline-flex;align-items:center;gap:6px;height:44px;padding:0 12px;
+    border-radius:var(--bs-r-sm,6px);border:1px solid var(--bs-line,#E5E7EB);background:#fff;font:inherit;font-size:12.5px;font-weight:600;color:var(--bs-ink-2,#1F2937);white-space:nowrap}
+  .x-c2__toggle b{font-size:11px;font-weight:700;color:var(--bs-pokemon,#C68A00);background:var(--bs-gold-soft,#FBF4DC);border-radius:var(--bs-r-pill,999px);padding:2px 6px}
+  .x-c2__chev{color:var(--bs-ink-4,#9CA3AF);font-size:10px}
+  .x-c2__panel{margin:-4px 0 12px;background:#fff;border:1px solid var(--bs-line,#E5E7EB);border-radius:var(--bs-r,10px);overflow:hidden;
+    display:grid;grid-template-columns:1fr 1fr}
+  .x-c2__item{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 13px;
+    font-size:12.5px;font-weight:600;color:var(--bs-ink-2,#1F2937);text-decoration:none;border-bottom:1px solid var(--bs-line-2,#EEF0F2);border-right:1px solid var(--bs-line-2,#EEF0F2)}
+  .x-c2__item:nth-child(2n){border-right:0}
+  .x-c2__item:nth-child(odd):last-child{grid-column:1/-1;border-right:0}
+  .x-c2__item b{font-size:11px;color:var(--bs-ink-4,#9CA3AF)}
+  `);
+}
+
+/* ---------- C3 · Перевернута ієрархія: підкатегорії = головна навігація ---------- */
+function c3(doc, subs){
+  const header = doc.querySelector('.bs-cat-header'); if(!header) return;
+  const title = header.querySelector('.bs-cat-header__title h1')?.textContent.trim() || 'Категорія';
+  const count = header.querySelector('.bs-count')?.textContent.trim() || '';
+  const block = doc.createElement('div');
+  block.className='x-c3';
+  block.innerHTML = `
+    <div class="x-c3__label">${title} <span>· ${count}</span></div>
+    <nav class="x-c3__grid" aria-label="Підкатегорії">
+
+      ${subs.map(s=>`<a class="x-c3__card" href="#"><span>${s.name}</span><b>${s.count}</b></a>`).join('')}
+    </nav>`;
+  header.parentNode.insertBefore(block, header);
+  header.style.display='none';
+  addCSS(doc,`
+  .x-c3{margin:0 0 10px}
+  .x-c3__label{font-size:12px;font-weight:700;color:var(--bs-ink,#111827);letter-spacing:.01em;margin:0 2px 6px}
+  .x-c3__label span{font-weight:500;color:var(--bs-ink-4,#9CA3AF)}
+  .x-c3__grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .x-c3__card{display:flex;align-items:center;justify-content:space-between;gap:8px;
+    background:#fff;border:1px solid var(--bs-line,#E5E7EB);border-radius:var(--bs-r,10px);padding:9px 12px;
+    font-size:12.5px;font-weight:700;color:var(--bs-ink,#111827);text-decoration:none;line-height:1.2;min-height:40px;box-sizing:border-box}
+  .x-c3__card b{font-size:11px;font-weight:700;color:var(--bs-pokemon,#C68A00);background:var(--bs-gold-soft,#FBF4DC);border-radius:var(--bs-r-pill,999px);padding:2px 7px;flex:0 0 auto}
+  .x-c3__card:nth-child(odd):last-child{grid-column:1/-1}
+  .x-c3__card span{overflow-wrap:anywhere}
+  `);
+}
+
+function addCSS(doc, css){ const s=doc.createElement('style'); s.textContent=css; doc.head.appendChild(s); }
+
+const VARIANTS = [
+  {tag:'зараз на сайті', name:'Поточний стан', desc:'H1 у власній картці + рядок табів під ним. На 4 підкатегоріях таби ламаються в 2×2 сітку, шапка з’їдає верх екрана.', fn:null, base:false},
+  {tag:'C1', name:'C1 · 2-колонковий список у самій шапці', desc:'Підкатегорії стають частиною картки-шапки: щільний список 2×N, назва ліворуч, кількість праворуч, хайрлайни замість пілюль. H1 стиснуто в один рядок. Повні назви, без обрізань.', fn:c1, base:true},
+  {tag:'C2', name:'C2 · Згорнутий блок «Підкатегорії · N» у рядку фільтра', desc:'Підкатегорії згорнуті в кнопку, яка живе в наявному рядку «Фільтр/Сортування» — нуль додаткової висоти, товари починаються помітно вище (див. метрику нижче). Тап розгортає повний список 2×N. Компроміс: селект сортування стає вужчим (текст може обрізатись) — тоді кнопку виносимо в окремий рядок 34px.', fn:c2, base:true},
+  {tag:'C3', name:'C3 · Перевернута ієрархія: підкатегорії = навігація', desc:'Картку H1 прибрано зовсім: назва категорії — маленький підпис (вона є і в хлібних крихтах), а головний елемент — сітка підкатегорій 2×N з кількостями. Непарний останній займає весь рядок. Навігація найпомітніша з трьох.', fn:c3, base:true},
+];
+
+const strip = document.getElementById('strip');
+function build(){
+  strip.innerHTML='';
+  const subs = SUBS.slice(0, COUNT);
+  VARIANTS.forEach((v,i)=>{
+    const col = document.createElement('div'); col.className='col';
+    col.innerHTML = `<div class="tag">${v.tag}</div><h2>${v.name}</h2><p class="desc">${v.desc}</p>
+      <div class="metric" id="m${i}">міряю…</div>
+      <div class="phone"><iframe src="${encodeURI(PAGE)}" title="${v.name}"></iframe></div>`;
+    strip.appendChild(col);
+    const f = col.querySelector('iframe');
+    f.addEventListener('load', ()=>{
+      try{
+        const doc = f.contentDocument;
+        ['bootstrap.css','boostershop-ds.css','stylesheet.css','booster-typography.css','content-pages.css','bs-faq.css'].forEach(n=>{
+          const l = doc.createElement('link'); l.rel='stylesheet'; l.href='../' + encodeURI(LOCAL_CSS + n); doc.head.appendChild(l);
+        });
+        if(v.base) addCSS(doc, BASE); else addCSS(doc, '.bs-cookie-bar,#cookie-bar,.cookie-bar{display:none!important}');
+        // привести живий блок табів до вибраної кількості підкатегорій
+        const row = doc.querySelector('.bs-subcat-tabs__row');
+        if(row){
+          row.className = 'bs-subcat-tabs__row bs-subcat-tabs__row--count-' + subs.length;
+          row.innerHTML = subs.map(s=>`<a href="#" class="bs-subcat-tab">${s.name}<span class="bs-subcat-tab__count">${s.count}</span></a>`).join('');
+        }
+        if(v.fn) v.fn(doc, subs);
+        const m = document.getElementById('m'+i);
+        let last = -1, stable = 0, tries = 0;
+        const measure = ()=>{
+          const card = doc.querySelector('.bs-pcard');
+          if(!card){ if(m) m.textContent = 'товарів не знайдено у фреймі'; return; }
+          const top = Math.round(card.getBoundingClientRect().top + f.contentWindow.scrollY);
+          if(top > 0 && top === last) stable++; else stable = 0;
+          last = top; tries++;
+          if(top > 0 && stable >= 2){
+            if(m) m.textContent = 'перша картка товару: ' + top + 'px від верху';
+            return;
+          }
+          if(tries < 240) setTimeout(measure, 100);
+          else if(m) m.textContent = top > 0 ? ('перша картка товару: ' + top + 'px від верху') : 'не вдалося зміряти';
+        };
+        const fontsReady = f.contentDocument.fonts ? f.contentDocument.fonts.ready : Promise.resolve();
+        Promise.race([fontsReady, new Promise(r=>setTimeout(r, 1500))]).then(()=>setTimeout(measure, 60));
+        f.contentWindow.addEventListener('resize', ()=>{ last=-1; stable=0; tries=0; setTimeout(measure, 60); });
+        f.contentWindow.addEventListener('resizeX', ()=>{ last=-1; stable=0; tries=0; setTimeout(measure, 60); });
+      }catch(e){ console.error('inject failed', e); }
+    });
+  });
+}
+
+const controls = document.getElementById('controls');
+[3,4,5].forEach(n=>{
+  const b = document.createElement('button'); b.textContent = n + ' підкат.';
+  if(n===COUNT) b.classList.add('on');
+  b.addEventListener('click', ()=>{ COUNT=n; [...controls.querySelectorAll('button')].forEach(x=>x.classList.toggle('on', x===b)); build(); });
+  controls.appendChild(b);
+});
+build();
+</script>
+</body>
+</html>

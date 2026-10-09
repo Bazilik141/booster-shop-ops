@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Component B · ФІНАЛ — плитки категорій з ілюстраціями</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:#EAE7E1;font-family:'Manrope',system-ui,sans-serif;color:#1F2937}
+.wrap{padding:32px 28px 80px}
+h1{font-size:22px;font-weight:800;color:#111827;margin:0 0 6px;letter-spacing:-0.01em}
+.lede{font-size:13px;color:#6B7280;margin:0 0 8px;max-width:1020px;line-height:1.55}
+.lede b{color:#111827}
+.strip{display:flex;gap:22px;align-items:flex-start;overflow-x:auto;padding:18px 0 20px}
+.col{flex:0 0 auto}
+.col h2{font-size:14px;font-weight:700;color:#111827;margin:0 0 4px}
+.col .desc{font-size:12px;color:#6B7280;line-height:1.5;margin:0 0 12px;min-height:56px}
+.phone{border-radius:14px;overflow:hidden;background:#fff;box-shadow:0 10px 28px rgba(17,24,39,.12),0 0 0 1px rgba(17,24,39,.06)}
+.phone iframe{border:0;display:block}
+.tag{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#9CA3AF;margin-bottom:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Component B · фінал</h1>
+<p class="lede">Мобайл — <b>N1-A</b>: два цілих квадрати поруч, «Дивитись усе» білим у верхньому лівому куті поверх легкого градієнта. Десктоп — <b>E2</b>: ті самі квадрати на дві колонки, CTA у тому ж куті. Назва категорії текстом не дублюється — лого-напис уже в ілюстрації. Другорядні плитки (Інші TCG, Аксесуари) не змінені. Спека: <code>handoffs/CODEX - UI-CD_B-tiles_20260903.md</code>.</p>
+<div class="strip" id="strip"></div>
+</div>
+<script>
+const PAGE='uploads/One Piece TCG та Pokémon карти _ Японські бустери в наявності-63b2f407.html';
+const ART={op:'One Piece Card Game logo tiles catygory.png',pk:'Pokemon trading Card Game logo tiles catygory 2.png'};
+const CLEAN=`.bs-cookie-bar,#cookie-bar,.cookie-bar{display:none!important}`;
+const DROP_LEGACY=`.category-tiles{display:none!important}`;
+function addCSS(doc,css){const s=doc.createElement('style');s.textContent=css;doc.head.appendChild(s);}
+/* ФІНАЛЬНИЙ CSS — саме він іде в спеку */
+const FINAL_CSS=`
+.bs-cattiles{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:4px 0 12px}
+.bs-cattile{position:relative;display:block;aspect-ratio:1/1;overflow:hidden;
+  border-radius:var(--bs-r-lg,14px);text-decoration:none;background:var(--bs-ink,#111827)}
+.bs-cattile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
+  transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.bs-cattile__scrim{position:absolute;inset:0 0 auto 0;height:36%;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(10,12,16,.66),rgba(10,12,16,0))}
+.bs-cattile__cta{position:absolute;left:11px;top:10px;font-size:11.5px;font-weight:700;color:#fff;letter-spacing:.01em}
+.bs-cattile:hover img{transform:scale(1.04)}
+.bs-cattile:focus-visible{outline:2px solid var(--bs-ink,#111827);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){.bs-cattile img{transition:none}.bs-cattile:hover img{transform:none}}
+@media (min-width:900px){
+  .bs-cattiles{gap:24px;margin:8px 0 16px}
+  .bs-cattile__scrim{height:34%}
+  .bs-cattile__cta{left:20px;top:18px;font-size:13.5px}
+}`;
+function build(doc){
+  const main=doc.querySelector('.bs-catcards'); if(!main) return;
+  const cats=[...main.querySelectorAll('.bs-catcard')].map(a=>{
+    const title=a.querySelector('.bs-catcard__title')?.textContent.trim()||'';
+    const full=title.includes('Pok')?'Pokémon Trading Card Game':'One Piece Card Game';
+    return{href:a.getAttribute('href'),title,full,art:encodeURI(title.includes('Pok')?ART.pk:ART.op)};
+  });
+  /* у прототипі loading="eager": у прев'ю-айфреймі lazy ніколи не спрацьовує. У проді — lazy, див. §3 спеки. */
+  main.className='bs-cattiles';
+  main.innerHTML=cats.map(c=>`<a class="bs-cattile" href="${c.href}" aria-label="${c.title}">
+    <img src="${c.art}" alt="${c.full}" width="1256" height="1256" loading="eager" decoding="async">
+    <span class="bs-cattile__scrim"></span>
+    <span class="bs-cattile__cta">Дивитись усе</span></a>`).join('');
+  addCSS(doc,FINAL_CSS);
+}
+function frame(w,h,v){
+  const col=document.createElement('div');col.className='col';col.style.width=w+'px';
+  col.innerHTML=`<div class="tag">${v.tag}</div><h2>${v.name}</h2><p class="desc">${v.desc}</p>
+    <div class="phone" style="width:${w}px;height:${h}px"><iframe src="${encodeURI(PAGE)}" style="width:${w}px;height:${h}px" title="${v.name}"></iframe></div>`;
+  document.getElementById('strip').appendChild(col);
+  const f=col.querySelector('iframe');
+  f.addEventListener('load',()=>{try{
+    const doc=f.contentDocument;addCSS(doc,CLEAN);addCSS(doc,DROP_LEGACY);build(doc);
+    const el=doc.querySelector('.bs-cattiles');
+    if(el) f.contentWindow.scrollTo(0,Math.max(0,el.getBoundingClientRect().top+f.contentWindow.scrollY-110));
+  }catch(e){console.error('inject failed',e);}});
+}
+frame(390,820,{tag:'мобайл 390px',name:'N1-A · пара обкладинок',desc:'Два квадрати ~168px, gap 14px, CTA 11.5px у куті 11/10.'});
+frame(1100,860,{tag:'десктоп 1100px',name:'E2 · дві колонки',desc:'Ті самі плитки, gap 24px, CTA 13.5px у куті 20/18, ховер — приближення арту на 4%.'});
+</script>
+</body>
+</html>

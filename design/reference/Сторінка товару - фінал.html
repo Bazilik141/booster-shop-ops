@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Сторінка товару — фінал</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script type="text/babel" src="design-canvas.jsx"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+
+/* ─── Tokens ─────────────────────────────────────────────────── */
+const G='#C68A00', GS='#FBF4DC', GD='#D4A017';
+const BL='#1E3A8A', BLS='#E8EEFB';
+const BG='#F7F7F5', PP='#FFFFFF';
+const INK='#111827', INK2='#1F2937', INK3='#6B7280', INK4='#9CA3AF';
+const LINE='#E5E7EB', LN2='#EEF0F2';
+const GRN='#16A34A';
+const BLU='#3B82F6';
+const FF ="'Manrope', system-ui, sans-serif";
+const FFM="'JetBrains Mono', ui-monospace, monospace";
+
+/* ─── Category colors & labels ───────────────────────────────── */
+// Active breadcrumb chip gets category-specific colour; backlog of brands ready to use
+const CATS = {
+  pokemon:  { bg:'#FBF4DC', bd:'#D4A017', tx:'#6B3A00', label:'Pokémon' },
+  onepiece: { bg:'#EEF2FF', bd:'#C7D2FE', tx:'#1E3A8A', label:'One Piece' },
+  mtg:      { bg:'#FEF2F2', bd:'#FECACA', tx:'#991B1B', label:'Magic: The Gathering' },
+  yugioh:   { bg:'#F5F3FF', bd:'#DDD6FE', tx:'#5B21B6', label:'Yu-Gi-Oh!' },
+  acc:      { bg:'#F3F4F6', bd:'#D1D5DB', tx:'#374151', label:'Аксесуари' },
+};
+
+/* ─── Icons ───────────────────────────────────────────────────── */
+const IcHome  = ({c=INK4,s=11}) => <svg width={s} height={s} viewBox="0 0 16 16" fill={c}><path d="M8 2l6 5v7h-4v-4H6v4H2V7l6-5z"/></svg>;
+const IcCart  = ({c=PP,s=14})   => <svg width={s} height={s} viewBox="0 0 20 20" fill="none"><path d="M3 4h2l2 10h9l2-7H6" stroke={c} strokeWidth="1.6" strokeLinejoin="round" strokeLinecap="round"/><circle cx="8" cy="17" r="1.2" fill={c}/><circle cx="15" cy="17" r="1.2" fill={c}/></svg>;
+const IcSearch= ({c=INK4,s=13}) => <svg width={s} height={s} viewBox="0 0 20 20" fill="none"><circle cx="9" cy="9" r="6" stroke={c} strokeWidth="1.6"/><path d="M14 14l4 4" stroke={c} strokeWidth="1.6" strokeLinecap="round"/></svg>;
+const IcUser  = ({c=INK3,s=13}) => <svg width={s} height={s} viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="3.2" stroke={c} strokeWidth="1.5"/><path d="M3.5 17c.7-3.3 3.4-5 6.5-5s5.8 1.7 6.5 5" stroke={c} strokeWidth="1.5" strokeLinecap="round"/></svg>;
+const IcTg    = ({c=INK3,s=13}) => <svg width={s} height={s} viewBox="0 0 20 20" fill="none"><path d="M3 9.5L17 4l-2 13-4-2-2 3-1-4 8-7-9 5-4-1.5z" stroke={c} strokeWidth="1.4" strokeLinejoin="round"/></svg>;
+const IcChevR = ({c=INK4,s=7})  => <svg width={s} height={s} viewBox="0 0 8 8" fill="none"><path d="M2 1.5l4 2.5-4 2.5" stroke={c} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+const IcTag   = ({c=GD,s=12})   => <svg width={s} height={s} viewBox="0 0 16 16" fill="none" stroke={c} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9.5 1.5H5L1.5 5v4.5l9 9L17 12z"/><circle cx="5.5" cy="5.5" r="1" fill={c} stroke="none"/></svg>;
+// Trust icons — match homepage reference: stroke, round caps, gold colour
+const IcShield= ({c=G,s=16}) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9,12 11,14 15,10"/></svg>;
+const IcZap   = ({c=G,s=16}) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2"/></svg>;
+const IcSend  = ({c=G,s=16}) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9 22,2"/></svg>;
+const IcTruck = ({c=G,s=16}) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>;
+
+/* ─── Headers ────────────────────────────────────────────────── */
+const HdrD = () => (
+  <header style={{ background:PP, borderBottom:`1px solid ${LINE}`, height:56, padding:'0 32px', display:'flex', alignItems:'center', gap:16, fontFamily:FF }}>
+    <button style={{ border:'none', background:'none', cursor:'pointer', padding:'4px 6px', display:'flex', flexDirection:'column', gap:3.5 }}>
+      {[0,1,2].map(i=><div key={i} style={{ width:18, height:1.5, background:INK, borderRadius:1 }}/>)}
+    </button>
+    <div style={{ fontWeight:800, fontSize:12, letterSpacing:'-0.01em', lineHeight:1.15 }}>
+      <div style={{ color:G }}>BOOSTER</div><div style={{ color:BL }}>SHOP</div>
+    </div>
+    <div style={{ flex:1, height:36, background:BG, border:`1px solid ${LINE}`, borderRadius:8, padding:'0 12px', display:'flex', alignItems:'center', gap:8, color:INK4, fontSize:13 }}>
+      <IcSearch/> Пошук бустерів, сетів, виробників...
+    </div>
+    <div style={{ display:'flex', gap:18, fontSize:13, color:INK3, alignItems:'center' }}>
+      <span style={{ display:'flex', alignItems:'center', gap:4 }}><IcUser/> Акаунт</span>
+      <span style={{ display:'flex', alignItems:'center', gap:4 }}><IcTg/> Telegram</span>
+    </div>
+    <button style={{ background:GRN, color:PP, border:'none', borderRadius:8, height:38, padding:'0 16px', fontSize:13, fontWeight:700, cursor:'pointer', fontFamily:FF, display:'flex', alignItems:'center', gap:6, flexShrink:0 }}>
+      <IcCart c={PP} s={14}/> Мій кошик — ₴0.00
+    </button>
+  </header>
+);
+
+const HdrM = () => (
+  <header style={{ background:PP, borderBottom:`1px solid ${LINE}`, height:52, padding:'0 16px', display:'flex', alignItems:'center', gap:12, fontFamily:FF }}>
+    <button style={{ border:'none', background:'none', cursor:'pointer', padding:'4px 6px', display:'flex', flexDirection:'column', gap:3.5 }}>
+      {[0,1,2].map(i=><div key={i} style={{ width:18, height:1.5, background:INK, borderRadius:1 }}/>)}
+    </button>
+    <div style={{ fontWeight:800, fontSize:11, letterSpacing:'-0.01em', lineHeight:1.15 }}>
+      <div style={{ color:G }}>BOOSTER</div><div style={{ color:BL }}>SHOP</div>
+    </div>
+    <div style={{ flex:1 }}/>
+    <button style={{ border:'none', background:BG, border:`1px solid ${LINE}`, borderRadius:8, width:36, height:36, display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer' }}>
+      <IcSearch/>
+    </button>
+    <button style={{ background:GRN, color:PP, border:'none', borderRadius:8, height:36, padding:'0 12px', fontSize:12, fontWeight:700, cursor:'pointer', fontFamily:FF, display:'flex', alignItems:'center', gap:5, flexShrink:0 }}>
+      <IcCart s={13}/> ₴0.00
+    </button>
+  </header>
+);
+
+/* ─── Breadcrumb — B-style pills, category-aware colour ─────── */
+const Crumb = ({ cat='pokemon', name, mob=false }) => {
+  const c = CATS[cat];
+  const base = { borderRadius:99, display:'inline-flex', alignItems:'center', fontFamily:FF };
+  const size = mob ? 11 : 12;
+  const gap  = mob ? 4  : 5;
+  return (
+    <nav style={{ padding: mob ? '8px 16px' : '10px 32px' }}>
+      <div style={{ display:'flex', alignItems:'center', gap }}>
+        {/* Home */}
+        <a href="#" style={{ ...base,
+          width: mob?24:26, height: mob?24:26, justifyContent:'center', flexShrink:0,
+          background:BG, border:`1px solid ${LINE}`, textDecoration:'none',
+        }}>
+          <IcHome c={INK3} s={mob?9:10}/>
+        </a>
+        <IcChevR/>
+        {/* Category */}
+        <a href="#" style={{ ...base,
+          padding: mob ? '3px 9px' : '4px 10px',
+          background:BG, border:`1px solid ${LINE}`,
+          fontSize:size, color:INK3, textDecoration:'none', fontWeight:500, whiteSpace:'nowrap',
+        }}>{c.label}</a>
+        <IcChevR/>
+        {/* Current page — category colour */}
+        <span style={{ ...base,
+          padding: mob ? '3px 10px' : '4px 12px',
+          background:c.bg, border:`1px solid ${c.bd}`,
+          fontSize:size, color:c.tx, fontWeight:600,
+          overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap',
+          maxWidth: mob ? 148 : 390,
+        }}>{name}</span>
+      </div>
+    </nav>
+  );
+};
+
+/* ─── Gallery ─────────────────────────────────────────────────── */
+const BoosterPh = ({ h }) => (
+  <div style={{
+    width:'100%', height:h,
+    background:`repeating-linear-gradient(-45deg,#EDEDEA 0,#EDEDEA 10px,#E3E2DE 10px,#E3E2DE 11px)`,
+    borderRadius:6, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:10,
+  }}>
+    <svg width="56" height="74" viewBox="0 0 56 74" fill="none" opacity="0.28">
+      <rect x="2" y="2" width="52" height="70" rx="5" stroke={INK3} strokeWidth="1.5"/>
+      <rect x="7" y="7" width="42" height="42" rx="3" stroke={INK3} strokeWidth="1"/>
+      <path d="M11 58h34M11 64h22" stroke={INK3} strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+    <span style={{ fontFamily:FFM, fontSize:10, letterSpacing:'0.1em', color:INK4 }}>ФОТО ТОВАРУ</span>
+  </div>
+);
+
+const Gallery = ({ mob=false }) => {
+  const [sel, setSel] = useState(0);
+  const imgH = mob ? 310 : 396;
+  const thumbSz = mob ? 52 : 64;
+  return (
+    <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+      <div style={{ background:PP, border:`1px solid ${LINE}`, borderRadius:10, padding: mob?10:12 }}>
+        <BoosterPh h={imgH}/>
+      </div>
+      <div style={{ display:'flex', gap:8 }}>
+        {[0,1].map(i => (
+          <div key={i} onClick={() => setSel(i)} style={{
+            width:thumbSz, height:thumbSz, flexShrink:0, borderRadius:6, cursor:'pointer',
+            border:`1.5px solid ${i===sel ? BL : LINE}`,
+            background:`repeating-linear-gradient(-45deg,#EDEDEA 0,#EDEDEA 6px,#E3E2DE 6px,#E3E2DE 7px)`,
+            transition:'border-color .15s',
+          }}/>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+/* ─── Review row ─────────────────────────────────────────────── */
+// 0 відгуків → "Відгуки про нас →" з посиланням на OLX
+const ReviewRow = ({ count=0 }) => {
+  if (count === 0) {
+    return (
+      <a href="#olx" style={{ display:'inline-flex', alignItems:'center', gap:6, fontSize:13, color:BL, textDecoration:'none', fontWeight:500 }}>
+        <svg width="12" height="12" viewBox="0 0 14 14" fill="#F59E0B"><path d="M7 1.5l1.7 3.6L12.5 6 9.7 8.5l.8 4L7 10.5 3.5 12.5l.8-4L1.5 6l3.8-.9L7 1.5z"/></svg>
+        Відгуки про нас →
+      </a>
+    );
+  }
+  return (
+    <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+      <div style={{ display:'flex', gap:2 }}>
+        {[0,1,2,3,4].map(i => (
+          <svg key={i} width="13" height="13" viewBox="0 0 14 14"
+            fill={i < count ? '#F59E0B' : 'none'} stroke="#F59E0B" strokeWidth="1.1">
+            <path d="M7 1.5l1.7 3.6L12.5 6 9.7 8.5l.8 4L7 10.5 3.5 12.5l.8-4L1.5 6l3.8-.9L7 1.5z"/>
+          </svg>
+        ))}
+      </div>
+      <a href="#" style={{ fontSize:13, color:BL, textDecoration:'none', fontWeight:500 }}>
+        {count} відгуків
+      </a>
+      <span style={{ color:INK4 }}>/</span>
+      <a href="#" style={{ fontSize:13, color:BL, textDecoration:'none', fontWeight:500 }}>
+        Написати відгук
+      </a>
+    </div>
+  );
+};
+
+/* ─── Meta panel (C-style table) ─────────────────────────────── */
+const MetaPanel = ({ isPreorder=false, manufacturer, stock=0 }) => {
+  const rows = [
+    ['Виробник', (
+      <a href="#" style={{ color:BL, textDecoration:'none', fontWeight:600 }}>
+        {manufacturer}
+      </a>
+    )],
+    isPreorder
+      ? ['Статус', (
+          <span style={{ display:'inline-flex', alignItems:'center', gap:5,
+            background:`${BLU}18`, color:BLU, fontWeight:700,
+            fontSize:12, padding:'2px 9px', borderRadius:99,
+            border:`1px solid ${BLU}40`,
+          }}>● Передзамовлення</span>
+        )]
+      : ['В наявності', (
+          <span style={{ color:GRN, fontWeight:700 }}>{stock} шт</span>
+        )],
+  ];
+  return (
+    <div style={{ border:`1px solid ${LN2}`, borderRadius:8, overflow:'hidden' }}>
+      {rows.map(([label, val], i) => (
+        <div key={i} style={{
+          display:'flex', alignItems:'center', padding:'9px 14px', fontSize:13,
+          background: i===0 ? PP : BG,
+          borderBottom: i===0 ? `1px solid ${LN2}` : 'none',
+        }}>
+          <span style={{ width:96, flexShrink:0, color:INK4 }}>{label}</span>
+          <span>{val}</span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+/* ─── Price block ────────────────────────────────────────────── */
+const PriceBlock = ({ price, bulkPrice, isPreorder=false }) => (
+  <div style={{ display:'flex', flexDirection:'column', gap:7 }}>
+    <div style={{ display:'flex', alignItems:'baseline', gap:10 }}>
+      <span style={{ fontSize:32, fontWeight:800, color:INK, letterSpacing:'-0.025em' }}>
+        ₴{price}.00
+      </span>
+      <span style={{ fontSize:12.5, color:INK4 }}>/ 1 шт</span>
+    </div>
+    {!isPreorder && bulkPrice && (
+      <div style={{ display:'flex', alignItems:'center', gap:7, fontSize:13.5 }}>
+        <IcTag/>
+        <span style={{ color:INK3 }}>від 5 шт —</span>
+        <span style={{
+          fontWeight:700, color:'#5A3200', background:GS,
+          padding:'2px 9px', borderRadius:4, border:`1px solid ${GD}55`,
+        }}>₴{bulkPrice}.00 за штуку</span>
+      </div>
+    )}
+    {isPreorder && (
+      <p style={{ margin:0, fontSize:12.5, color:INK3, lineHeight:1.4 }}>
+        Ціна фіксується на момент замовлення
+      </p>
+    )}
+  </div>
+);
+
+/* ─── Cart row ───────────────────────────────────────────────── */
+const CartRow = ({ isPreorder=false, mob=false }) => {
+  const [qty, setQty] = useState(2);
+  const inputSz = mob ? 34 : 38;
+  const spanW   = mob ? 34 : 42;
+  return (
+    <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+      <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+        <span style={{ fontSize: mob?13:13.5, color:INK3, fontWeight:500 }}>
+          {mob ? 'К-сть' : 'Кількість'}
+        </span>
+        <div style={{ display:'inline-flex', alignItems:'center', height:44, border:`1px solid ${LINE}`, borderRadius:6, background:PP }}>
+          <button onClick={() => setQty(n => Math.max(1,n-1))} style={{ width:inputSz, height:'100%', border:'none', background:'transparent', color:INK3, cursor:'pointer', fontSize:20, fontFamily:FF, display:'flex', alignItems:'center', justifyContent:'center' }}>−</button>
+          <span style={{ width:spanW, textAlign:'center', fontSize:15, fontWeight:600, color:INK, fontFamily:FF }}>{qty}</span>
+          <button onClick={() => setQty(n => n+1)} style={{ width:inputSz, height:'100%', border:'none', background:'transparent', color:INK3, cursor:'pointer', fontSize:20, fontFamily:FF, display:'flex', alignItems:'center', justifyContent:'center' }}>+</button>
+        </div>
+      </div>
+      <button style={{
+        flex:1, height:44, border:'none', borderRadius:6,
+        background: isPreorder ? BLU : GRN,
+        color:PP, fontFamily:FF, fontSize: mob?14:15, fontWeight:700,
+        cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:8,
+      }}>
+        <IcCart c={PP} s={14}/>
+        {isPreorder ? 'Передзамовити' : 'У кошик'}
+      </button>
+    </div>
+  );
+};
+
+/* ─── Trust strip — match homepage reference ─────────────────── */
+// Regular: Гарантія оригінальності · Швидка відправка · Telegram підтримка
+// Preorder: Гарантія оригінальності · Привеземо під замовлення · Telegram підтримка
+const TrustStrip = ({ isPreorder=false, mob=false }) => {
+  const items = isPreorder
+    ? [
+        { Ic: IcShield, label: 'Гарантія оригінальності' },
+        { Ic: IcTruck,  label: 'Привеземо під замовлення' },
+        { Ic: IcSend,   label: 'Telegram підтримка' },
+      ]
+    : [
+        { Ic: IcShield, label: 'Гарантія оригінальності' },
+        { Ic: IcZap,    label: 'Швидка відправка' },
+        { Ic: IcSend,   label: 'Telegram підтримка' },
+      ];
+  const s = mob ? 15 : 17;
+  return (
+    <div style={{
+      background:PP, border:`1px solid ${LINE}`, borderRadius:8,
+      display:'flex', alignItems:'center',
+      padding: mob ? '9px 8px' : '11px 14px',
+    }}>
+      {items.map(({ Ic, label }, i) => (
+        <React.Fragment key={i}>
+          {i > 0 && (
+            <div style={{ width:1, background:LINE, alignSelf:'stretch', margin:`0 ${mob?7:12}px`, flexShrink:0 }}/>
+          )}
+          <div style={{
+            flex:1, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center',
+            gap: mob ? 4 : 5, textAlign:'center',
+          }}>
+            <Ic c={G} s={s}/>
+            <span style={{ fontSize: mob?10.5:12.5, fontWeight:600, color:INK2, lineHeight:1.3, textWrap:'balance' }}>
+              {label}
+            </span>
+          </div>
+        </React.Fragment>
+      ))}
+    </div>
+  );
+};
+
+/* ─── Product summary (assembles all right-column components) ── */
+const Summary = ({ name, manufacturer, stock, price, bulkPrice, isPreorder=false, mob=false }) => (
+  <div style={{ display:'flex', flexDirection:'column', gap: mob?13:15, fontFamily:FF }}>
+    <h1 style={{
+      fontSize: mob?21:26, fontWeight:800, lineHeight:1.25,
+      color:INK, margin:0, letterSpacing:'-0.025em', textWrap:'pretty',
+    }}>{name}</h1>
+
+    <ReviewRow count={0}/>
+
+    <MetaPanel isPreorder={isPreorder} manufacturer={manufacturer} stock={stock}/>
+
+    <PriceBlock price={price} bulkPrice={bulkPrice} isPreorder={isPreorder}/>
+
+    <hr style={{ border:'none', borderTop:`1px solid ${LINE}`, margin:0 }}/>
+
+    <CartRow isPreorder={isPreorder} mob={mob}/>
+
+    <TrustStrip isPreorder={isPreorder} mob={mob}/>
+  </div>
+);
+
+/* ─── Full product page mock ─────────────────────────────────── */
+const ProductPage = ({ cat='pokemon', isPreorder=false, mob=false, name, manufacturer, stock, price, bulkPrice }) => {
+  const Hdr = mob ? HdrM : HdrD;
+  return (
+    <div style={{ background:BG, fontFamily:FF }}>
+      <Hdr/>
+      <Crumb cat={cat} name={name} mob={mob}/>
+      {mob ? (
+        <div style={{ padding:'12px 16px 32px', display:'flex', flexDirection:'column', gap:20 }}>
+          <Gallery mob/>
+          <Summary name={name} manufacturer={manufacturer} stock={stock}
+            price={price} bulkPrice={bulkPrice} isPreorder={isPreorder} mob/>
+        </div>
+      ) : (
+        <main style={{ maxWidth:1160, margin:'0 auto', padding:'14px 32px 40px' }}>
+          <div style={{ display:'grid', gridTemplateColumns:'408px 1fr', gap:44, alignItems:'start' }}>
+            <Gallery/>
+            <Summary name={name} manufacturer={manufacturer} stock={stock}
+              price={price} bulkPrice={bulkPrice} isPreorder={isPreorder}/>
+          </div>
+        </main>
+      )}
+    </div>
+  );
+};
+
+/* ─── Product data ───────────────────────────────────────────── */
+const NINJA_SPINNER = {
+  cat: 'pokemon',
+  name: 'Бустер Pokémon TCG: Ninja Spinner (Японське видання)',
+  manufacturer: 'The Pokémon Company',
+  stock: 18, price: 200, bulkPrice: 190,
+  isPreorder: false,
+};
+const EB04_PREORDER = {
+  cat: 'onepiece',
+  name: 'Бустер One Piece Card Game EB-04: Three Realms (Японське видання)',
+  manufacturer: 'Bandai',
+  price: 185,
+  isPreorder: true,
+};
+
+/* ─── App ─────────────────────────────────────────────────────── */
+function App() {
+  return (
+    <DesignCanvas>
+
+      <DCSection id="desktop" title="Десктоп">
+
+        <DCArtboard id="d-stock" label="Pokémon — В наявності" width={1280} height={672}>
+          <ProductPage {...NINJA_SPINNER}/>
+        </DCArtboard>
+
+        <DCArtboard id="d-pre" label="One Piece — Передзамовлення" width={1280} height={672}>
+          <ProductPage {...EB04_PREORDER}/>
+        </DCArtboard>
+
+      </DCSection>
+
+      <DCSection id="mobile" title="Мобайл">
+
+        <DCArtboard id="m-stock" label="Pokémon — В наявності (390px)" width={390} height={1020}>
+          <ProductPage {...NINJA_SPINNER} mob/>
+        </DCArtboard>
+
+        <DCArtboard id="m-pre" label="One Piece — Передзамовлення (390px)" width={390} height={990}>
+          <ProductPage {...EB04_PREORDER} mob/>
+        </DCArtboard>
+
+      </DCSection>
+
+    </DesignCanvas>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

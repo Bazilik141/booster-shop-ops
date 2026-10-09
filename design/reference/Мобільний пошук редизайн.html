@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Мобільний пошук — редизайн</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<style>
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Manrope', system-ui, sans-serif;
+    background: #ECECE8;
+    color: var(--bs-ink-2);
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 40px 28px 72px; }
+  .eyebrow {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--bs-ink-3); margin: 0 0 10px;
+  }
+  h1.title { font-size: 30px; font-weight: 800; color: var(--bs-ink); letter-spacing: -0.02em; margin: 0 0 12px; }
+  .lede { font-size: 15px; line-height: 1.6; color: var(--bs-ink-2); max-width: 660px; margin: 0; text-wrap: pretty; }
+  .lede b { color: var(--bs-ink); font-weight: 700; }
+
+  .problem {
+    margin: 24px 0 8px; padding: 14px 16px;
+    background: var(--bs-warning-bg); border: 1px solid var(--bs-warning-line);
+    border-radius: var(--bs-r); display: flex; gap: 12px; align-items: flex-start;
+    max-width: 660px;
+  }
+  .problem .dot { flex: 0 0 auto; width: 8px; height: 8px; border-radius: 50%; background: var(--bs-warning-fg); margin-top: 6px; }
+  .problem p { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--bs-warning-fg); }
+  .problem b { font-weight: 800; }
+
+  .stage {
+    margin-top: 44px;
+    display: flex; gap: 56px; justify-content: center; flex-wrap: wrap;
+  }
+  .hint {
+    text-align: center; font-size: 12.5px; color: var(--bs-ink-3);
+    margin: 36px 0 0; font-style: normal;
+  }
+  .hint kbd {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    background: #fff; border: 1px solid var(--bs-line); border-radius: 5px;
+    padding: 2px 6px; color: var(--bs-ink-2);
+  }
+  .why {
+    margin-top: 56px; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; max-width: 760px;
+  }
+  .why .col { background: #fff; border: 1px solid var(--bs-line); border-radius: var(--bs-r); padding: 18px 20px; }
+  .why h3 { font-size: 14.5px; font-weight: 800; color: var(--bs-ink); margin: 0 0 4px; letter-spacing: -0.01em; }
+  .why .tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--bs-blue); margin-bottom: 10px; }
+  .why ul { margin: 0; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .why li { font-size: 13px; line-height: 1.5; color: var(--bs-ink-2); padding-left: 18px; position: relative; }
+  .why li::before { content: ''; position: absolute; left: 2px; top: 7px; width: 7px; height: 7px; border-radius: 2px; background: var(--bs-blue-soft); border: 1px solid var(--bs-blue); }
+  @media (max-width: 720px) { .why { grid-template-columns: 1fr; } }
+
+  /* web header interactive bits */
+  .web-burger { width: 42px; height: 42px; border-radius: var(--bs-r-sm); background: #fff; border: 1px solid var(--bs-line); color: #374151; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; flex: 0 0 auto; transition: background .15s; }
+  .web-burger:hover { background: var(--bs-bg); }
+  .web-ghost { display: inline-flex; align-items: center; gap: 7px; padding: 8px 10px; background: transparent; border: 0; border-radius: var(--bs-r-sm); color: var(--bs-blue); font-size: 13.5px; font-weight: 600; cursor: pointer; font-family: inherit; text-decoration: none; white-space: nowrap; transition: background .15s, color .15s; }
+  .web-ghost:hover { background: var(--bs-bg); color: #16245C; }
+  .seg { display: inline-flex; background: var(--bs-bg); border: 1px solid var(--bs-line); border-radius: 999px; padding: 3px; gap: 2px; }
+  .seg button { border: 0; background: transparent; padding: 6px 14px; border-radius: 999px; font-size: 12.5px; font-weight: 700; color: var(--bs-ink-3); cursor: pointer; font-family: inherit; }
+  .seg button.on { background: #fff; color: var(--bs-ink); box-shadow: var(--bs-sh-sm); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <p class="eyebrow">Booster Shop · Mobile UX</p>
+    <h1 class="title">Пошук без переходу на окрему сторінку</h1>
+    <p class="lede">Два варіанти, як зробити мобільний пошук <b>зручним для дотику</b> та залишити живі результати <b>прямо на місці</b> — без редіректу на <code>/search</code>. Обидва побудовані на чинному дизайн-системі магазину.</p>
+
+    <div class="problem">
+      <span class="dot"></span>
+      <p><b>Проблема зараз:</b> на мобільному поле живого пошуку стиснуте до ~85&nbsp;px і його важко поцілити пальцем. До того ж дотик одразу кидає на сторінку <code>/search</code>, тож ввести запит у самій шапці неможливо.</p>
+    </div>
+
+    <div class="stage" id="stage"></div>
+
+    <p class="hint">↑ Натисніть на поле / іконку пошуку в кожному телефоні — це інтерактивні прототипи. Спробуйте ввести <kbd>mega</kbd>, <kbd>one piece</kbd> або <kbd>бустер</kbd>.</p>
+
+    <div class="why">
+      <div class="col">
+        <div class="tag">Варіант A · рекомендований</div>
+        <h3>Поле розкривається на місці</h3>
+        <ul>
+          <li>Поле займає весь рядок шапки — ціль ~42&nbsp;px заввишки, легко поцілити.</li>
+          <li>Дотик не веде нікуди: фокус лишається, знизу випадає панель з живими результатами.</li>
+          <li>Мінімальна зміна верстки — найближче до поточної шапки.</li>
+          <li>Затемнення фону фокусує увагу; «Назад» згортає назад.</li>
+        </ul>
+      </div>
+      <div class="col">
+        <div class="tag">Варіант B · якщо шапка щільна</div>
+        <h3>Пошук на весь екран</h3>
+        <ul>
+          <li>Шапка лишається компактною: лого + іконка пошуку + кошик.</li>
+          <li>Дотик по іконці піднімає повноекранний лист з великим полем.</li>
+          <li>Більше місця під результати, нещодавні та популярні запити.</li>
+          <li>«Скасувати» миттєво повертає до сторінки — теж без редіректу.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===== WEB VERSION ===== -->
+    <div style="margin-top:72px;padding-top:40px;border-top:1px solid #D9D9D4;">
+      <p class="eyebrow">Те саме меню · десктоп</p>
+      <h1 class="title" style="font-size:26px;">Бургер-меню у веб-хедері</h1>
+      <p class="lede">Зліва від лого — бургер, який відкриває <b>ту саму панель</b>, що й у мобі (каталог + інфо + акаунт). Горизонтальна навігація лишається. Панель виїжджає зліва із затемненням; закривається по <b>Esc</b>, кліку поза нею або ✕.</p>
+      <div id="web-stage" style="margin-top:32px;"></div>
+    </div>
+
+    <!-- ===== CATEGORY PROMO CARDS ===== -->
+    <div style="margin-top:72px;padding-top:40px;border-top:1px solid #D9D9D4;">
+      <p class="eyebrow">Категорії · промо-картки</p>
+      <h1 class="title" style="font-size:26px;">Більший логотип у категорійних картках</h1>
+      <p class="lede">Той самий вигляд, що й зараз, але картинка логотипа — <b>на всю висоту плитки</b> (full-bleed). Обрізається по вертикалі, тож висота картки не зростає. Desktop і mobile.</p>
+      <div id="cat-stage" style="margin-top:32px;display:flex;justify-content:center;"></div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="image-slot.js"></script>
+  <script type="text/babel" src="search-mobile-app.jsx"></script>
+  <script type="text/babel" src="search-mobile-variants.jsx"></script>
+  <script type="text/babel" src="web-menu.jsx"></script>
+  <script type="text/babel" src="category-cards.jsx"></script>
+  <script type="text/babel">
+    function Stage() {
+      return (<React.Fragment><VariantA /><VariantB /></React.Fragment>);
+    }
+    ReactDOM.createRoot(document.getElementById('stage')).render(<Stage />);
+    ReactDOM.createRoot(document.getElementById('web-stage')).render(<WebHeaderDemo />);
+    ReactDOM.createRoot(document.getElementById('cat-stage')).render(<CategoryCardsDemo />);
+  </script>
+</body>
+</html>

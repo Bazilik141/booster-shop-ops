@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RD-14 / RD-15 — фінал</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="rd14-shared.css">
+<style>
+.f15{display:flex;gap:14px;align-items:flex-start;border-radius:var(--bs-r-lg);padding:16px;margin:0 0 12px}
+.f15-ic{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;flex:0 0 auto}
+.f15-ic .rp-ic{width:20px;height:20px}
+.f15-k{display:block;font-size:13px;font-weight:700;margin-bottom:2px}
+.f15-main{margin:0;font-size:17px;font-weight:800;line-height:1.4;text-wrap:pretty}
+.f15-pct{background:none;color:inherit;font-weight:800}
+.f15-a{background:var(--bs-green-soft);border:2px solid var(--bs-buy)}
+.f15-a .f15-ic{background:var(--bs-buy);color:#fff}
+.f15-a .f15-k{color:var(--bs-buy)}
+.f15-a .f15-pct{color:var(--bs-buy);font-size:1.25em}
+.f15-b{background:var(--bs-buy);color:#fff;box-shadow:var(--bs-sh-md)}
+.f15-b .f15-ic{background:#fff;color:var(--bs-buy)}
+.f15-b .f15-pct{display:inline-block;background:#fff;color:var(--bs-buy);padding:0 8px;border-radius:999px;line-height:1.35}
+.f15-c{position:relative;background:var(--bs-warning-bg);border:2px dashed var(--bs-warning-line);color:var(--bs-ink)}
+.f15-c::before,.f15-c::after{content:"";position:absolute;top:50%;width:18px;height:18px;margin-top:-9px;border-radius:50%;background:var(--bs-bg);border:2px dashed var(--bs-warning-line)}
+.f15-c::before{left:-11px;clip-path:inset(0 0 0 50%)}.f15-c::after{right:-11px;clip-path:inset(0 50% 0 0)}
+.f15-c .f15-ic{background:#fff;color:var(--bs-warning-fg);border:1px solid var(--bs-warning-line)}
+.f15-c .f15-k{color:var(--bs-warning-fg)}
+.f15-c .f15-pct{background:var(--bs-warning-line);padding:0 6px;border-radius:4px}
+.rp-meta-sum span:last-child{font-size:16px;font-weight:800}
+.rp-items.is-coll .rp-meta{border-bottom:0;padding-bottom:4px}
+.rp-items.is-coll .rp-table{border-top:1px solid var(--bs-line);margin-top:8px}
+.rp-toggle{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;width:100%;min-height:44px;margin-top:10px;border:1px solid var(--bs-line);border-radius:8px;background:#fff;font:inherit;font-size:14px;font-weight:700;color:var(--bs-blue);cursor:pointer}
+.rp-toggle:hover{background:var(--bs-line-2)}
+.rp-toggle .rp-ic{width:16px;height:16px;transition:transform .2s}
+.rp-toggle .rp-ic.is-up{transform:rotate(180deg)}
+.rp-fb-act{margin:16px 0 0}
+.rp-nowrap{white-space:nowrap}
+@container vp (min-width:768px){.f15{padding:18px 22px;margin-bottom:16px}.rp-fb-act{justify-content:flex-start}.rp-fb-act .rp-btn{min-width:0}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="rd14-final.jsx"></script>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+const FK = 'rd14-15-final';
+const STATES = [['a', 'a · гість, COD'], ['b', 'b · Hutko + First15'], ['c', 'c · IBAN'], ['d', 'd · 6 товарів'], ['e', 'e · fallback'], ['f', 'RD-15 failure']];
+const WIDTHS = [390, 768, 1440];
+const F15 = [['a', 'A · рамка'], ['b', 'B · заливка'], ['c', 'C · купон']];
+function Frame({ w, avail, children }) {
+  const z = avail > 100 ? Math.min(1, avail / w) : 1;
+  return <div><p className="fr-l">{w} px{z < 1 ? ` · масштаб ${Math.round(z * 100)}%` : ''}</p><div className="fr-wrap" style={{ zoom: z }}>{children}</div></div>;
+}
+function App() {
+  const sv = (() => { try { return JSON.parse(localStorage.getItem(FK)) || {}; } catch (e) { return {}; } })();
+  const [st, setSt] = useState(sv.st || 'd');
+  const [wf, setWf] = useState(sv.wf || 'all');
+  const [f15, setF15] = useState(sv.f15 || 'a');
+  const [copy, setCopy] = useState('');
+  const [avail, setAvail] = useState(1200);
+  const ref = useRef();
+  useEffect(() => { localStorage.setItem(FK, JSON.stringify({ st, wf, f15 })); }, [st, wf, f15]);
+  useEffect(() => { setCopy(''); }, [st]);
+  useEffect(() => {
+    const el = ref.current; if (!el) return;
+    const m = () => { let w = el.clientWidth - 40; if (w < 100) w = document.documentElement.clientWidth - 40; if (w > 100) setAvail(w); };
+    m(); const iv = setInterval(m, 250); window.addEventListener('resize', m);
+    return () => { clearInterval(iv); window.removeEventListener('resize', m); };
+  }, []);
+  const fail = st === 'f';
+  const ws = wf === 'all' ? WIDTHS : [wf];
+  const Seg = ({ items, v, set }) => <div className="seg">{items.map(([k, l]) => <button key={k} aria-pressed={v === k} onClick={() => set(k)}>{l}</button>)}</div>;
+  return (
+    <>
+      <div className="tb">
+        <h1>RD-14 «Замовлення прийнято» · RD-15 «Оплата не пройшла» — фінал</h1>
+        <div className="tb-g"><span className="tb-l">Стан</span><Seg items={STATES} v={st} set={setSt} /></div>
+        <div className="tb-g"><span className="tb-l">Ширина</span><Seg items={[['all', 'всі'], ...WIDTHS.map(w => [w, String(w)])]} v={wf} set={setWf} /></div>
+        {st === 'b' && <div className="tb-g"><span className="tb-l">First15</span><Seg items={F15} v={f15} set={setF15} /></div>}
+      </div>
+      <div className="stage" ref={ref} data-screen-label={fail ? 'RD-15' : 'RD-14 ' + st}>
+        {ws.map(w => <Frame key={w} w={w} avail={avail}><FViewport w={w} fail={fail}>{fail ? <FinalFailure /> : <FinalSuccess st={st} w={w} f15={f15} copyStatus={copy} onCopy={() => setCopy('Реквізити скопійовано.')} />}</FViewport></Frame>)}
+      </div>
+      <div className="notes">
+        <div className="note"><h2>RD-14 — що змінилось</h2><ul>
+          <li>Усі стани — напрямок «Кроки». Для IBAN реквізити йдуть окремою карткою одразу під hero (або під First15), а не кроком.</li>
+          <li>«Ваше замовлення» на 390/768 згорнуте завжди: доставка, оплата, сума. Кнопка «Показати товари (N)» розгортає таблицю <span className="tag">копія — пропозиція</span>. На 1440 таблиця відкрита.</li>
+          <li>Іконка «Без зайвих дзвінків» — смартфон.</li>
+          <li>Fallback (e): текст без змін, під ним «На головну» + «напишіть у Telegram».</li>
+          <li>First15 — три варіанти акценту (перемикач у стані b). Текст дослівний, «15%» лише виділено стилем.</li>
+        </ul></div>
+        <div className="note"><h2>RD-15 — що змінилось</h2><ul>
+          <li>Напрямок «Дві колонки»: іконка ліворуч від тексту з 768 px, жовта смуга вгорі картки.</li>
+          <li>Ваш текст дослівно. Посилання в тексті: «Telegram», «електронну пошту» (mailto:helpbs@boostershop.website), номер (tel:). Адреса пошти в тексті не показана — тільки посилання.</li>
+          <li>Кнопки: «На головну» + «напишіть у Telegram».</li>
+          <li>Зміна heading_title і text_message — правка мовного файлу uk-ua.</li>
+        </ul></div>
+        <div className="note"><h2>Для реалізації</h2><ul>
+          <li>Згортання: розмітка таблиці залишається; на &lt;1024 — кнопка з aria-expanded, на ≥1024 таблиця завжди видима. Без JS таблиця має бути відкритою.</li>
+          <li>Хуки data-checkout008-*, GA4-скрипт і гілки за способом оплати — без змін.</li>
+          <li>Шапка, хлібні крихти, футер на макеті — заглушки.</li>
+        </ul></div>
+      </div>
+    </>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

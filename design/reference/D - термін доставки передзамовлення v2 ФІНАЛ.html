@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<title>Component D v2 — термін доставки для передзамовлень (фінал)</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bs-ink:#0F172A;--bs-ink-2:#1F2937;--bs-ink-3:#6B7280;--bs-ink-4:#9CA3AF;--bs-bg:#F7F7F5;--bs-paper:#fff;--bs-line:#E5E7EB;--bs-line-2:#EEF0F2;--bs-blue:#1E3A8A;--bs-green:#16A34A;--bs-r-sm:8px;--bs-r:10px;--bs-r-pill:999px;--bs-sh-sm:0 1px 2px rgba(16,24,40,.05)}
+*{box-sizing:border-box}
+body{margin:0;background:#EDEDEA;font-family:'Manrope',system-ui,sans-serif;color:var(--bs-ink-2);-webkit-font-smoothing:antialiased}
+a{color:var(--bs-blue)}a:hover{color:#16307a}
+.doc{max-width:1240px;margin:0 auto;padding:48px 32px 96px;display:flex;flex-direction:column;gap:52px}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--bs-ink-4)}
+h1{font-size:30px;font-weight:800;letter-spacing:-.02em;color:var(--bs-ink);margin:8px 0 12px}
+.lede{max-width:70ch;font-size:14.5px;line-height:1.65;text-wrap:pretty;margin:0}
+.rules{margin:22px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;max-width:76ch}
+.rules li{position:relative;padding-left:20px;font-size:13.5px;line-height:1.55;color:var(--bs-ink-2)}
+.rules li::before{content:"";position:absolute;left:4px;top:8px;width:5px;height:5px;border-radius:50%;background:var(--bs-ink-4)}
+.vhead{display:flex;flex-direction:column;gap:10px;padding-bottom:18px;border-bottom:1px solid #DCDCD8}
+.vhead h2{margin:0;font-size:22px;font-weight:800;color:var(--bs-ink);letter-spacing:-.01em}
+.vhead .tag{align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:var(--bs-ink);color:#fff;padding:4px 8px;border-radius:6px}
+.vhead .tag--off{background:#fff;color:var(--bs-ink-3);border:1px solid var(--bs-line)}
+.frames{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start;margin-top:26px}
+.frame{background:var(--bs-paper);border:1px solid #D8D8D4;border-radius:12px;box-shadow:0 6px 24px rgba(16,24,40,.06);overflow:hidden}
+.frame__bar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 12px;border-bottom:1px solid var(--bs-line-2);background:#FBFBFA;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bs-ink-4)}
+.frame__body{background:var(--bs-bg);padding:18px}
+.w390{width:390px}.w760{width:760px}.w560{width:560px}
+.note{font-size:13px;line-height:1.6;color:var(--bs-ink-3);max-width:66ch;margin:0}
+pre{margin:22px 0 0;background:#0F172A;color:#E2E8F0;border-radius:var(--bs-r);padding:16px 18px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.7}
+pre b{color:#93C5FD;font-weight:500}
+.callout{margin-top:22px;background:#fff;border:1px solid var(--bs-line);border-left:none;border-radius:var(--bs-r);padding:16px 18px;font-size:13.5px;line-height:1.6;max-width:76ch}
+.callout h3{margin:0 0 8px;font-size:13px;font-weight:800;color:var(--bs-ink)}
+
+/* ===== live-site fragments (DS-faithful, current production colors) ===== */
+.pp__title{font-size:26px;font-weight:800;letter-spacing:-.02em;color:var(--bs-ink);line-height:1.25;margin:0 0 10px}
+.w390 .pp__title{font-size:19px}
+.pp__olx{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--bs-ink-3);text-decoration:none;margin-bottom:14px}
+.bs-pp-meta{border:1px solid var(--bs-line-2);border-radius:8px;overflow:hidden;background:#fff}
+.bs-pp-meta__row{display:flex;align-items:center;gap:10px;padding:9px 12px;font-size:13px}
+.bs-pp-meta__row+.bs-pp-meta__row{border-top:1px solid var(--bs-line-2);background:var(--bs-bg)}
+.bs-pp-meta__label{width:96px;flex-shrink:0;color:var(--bs-ink-4)}
+.bs-pp-meta__link{color:var(--bs-blue);font-weight:600;text-decoration:none}
+.bs-badge{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.04em;padding:3px 7px;border-radius:var(--bs-r-sm);text-transform:uppercase}
+.bs-badge--preorder{background:#fef3c7;color:#92400e;border:1px solid #f59e0b}
+.bs-pp-meta .bs-badge--preorder{font-size:12px;text-transform:none;letter-spacing:0}
+.pp__price{display:flex;align-items:baseline;gap:8px;margin:16px 0 14px}
+.pp__price b{font-size:28px;font-weight:800;color:var(--bs-ink);letter-spacing:-.02em}
+.pp__price span{font-size:12.5px;color:var(--bs-ink-4);font-weight:600}
+.pp__buy{display:flex;align-items:center;gap:10px}
+.pp__qty{display:flex;align-items:center;border:1px solid var(--bs-line);border-radius:var(--bs-r-sm);background:#fff;height:46px}
+.pp__qty b,.pp__qty i{width:34px;text-align:center;font-style:normal;font-size:15px;color:var(--bs-ink-3);font-weight:500}
+.pp__qty em{width:38px;text-align:center;font-style:normal;font-size:14px;font-weight:700;color:var(--bs-ink);border-left:1px solid var(--bs-line-2);border-right:1px solid var(--bs-line-2);line-height:44px}
+.pp__cta{flex:1;min-height:46px;border:1px solid #16a34a;border-radius:var(--bs-r-sm);background:#16a34a;color:#fff;font-family:inherit;font-size:17px;font-weight:700}
+
+/* product card — production, unchanged */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.bs-pcard{background:#fff;border:1px solid var(--bs-line);border-radius:var(--bs-r);box-shadow:var(--bs-sh-sm);overflow:hidden;display:flex;flex-direction:column}
+.bs-pcard__media{position:relative;display:block;padding:18px;background:#fff}
+.bs-pcard__ph{aspect-ratio:1/1;border-radius:6px;background:repeating-linear-gradient(45deg,#F3F4F6 0 6px,#EAECEF 6px 12px);display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px}
+.bs-pcard__ph span{font-family:'JetBrains Mono',monospace;font-size:9px;color:#9CA3AF;letter-spacing:.06em}
+.bs-pcard__badge-tl{position:absolute;top:14px;left:14px}
+.bs-pcard__body{padding:4px 14px 14px;display:flex;flex-direction:column;gap:8px}
+.bs-pcard__title{margin:0;font-size:13px;font-weight:700;line-height:1.35;color:var(--bs-ink)}
+.bs-pcard__price-new{font-size:16px;font-weight:800;color:var(--bs-ink);letter-spacing:-.01em}
+.bs-pcard__buy-btn{height:38px;border:0;border-radius:var(--bs-r-sm);background:#3B82F6;color:#fff;font-family:inherit;font-size:12.5px;font-weight:700;width:100%}
+
+/* ---- Component D (final): product-page meta row only ---- */
+.bs-pp-eta__val{color:var(--bs-ink-2);font-weight:700;font-size:12.5px;line-height:1.35}
+.bs-pp-eta__val em{font-style:normal;font-weight:500;color:var(--bs-ink-3)}
+</style>
+</head>
+<body>
+<div class="doc">
+
+<header>
+<div class="eyebrow">UI-CD · Component D · Task 11 · v2 фінал</div>
+<h1>Термін доставки для передзамовлень — фінальне рішення</h1>
+<p class="lede">Спрощена версія за рішенням власника 2026-09-03: жодних конкретних дат і місяців, лише один орієнтир, і тільки на сторінці товару.</p>
+<ul class="rules">
+<li>Текст завжди один і той самий: <b>орієнтовно 3–4 тижні</b>. Ні діапазонів дат, ні назв місяців, ні числових форматів.</li>
+<li>Рендериться лише при статусі передзамовлення (<code>stock_status_id = 8</code>) і лише на сторінці товару.</li>
+<li>На картці товару (категорії, головна, промо, схожі товари) термін доставки <b>не показується взагалі</b>.</li>
+<li>Кольори продакшену не змінюються: бейдж «Передзамовлення» лишається бурштиновим (<code>#fef3c7 / #92400e / #f59e0b</code>), кнопка «У кошик» — зеленою (<code>#16a34a</code>). Нового кольору компонент D не вводить.</li>
+</ul>
+</header>
+
+<section>
+<div class="vhead">
+<span class="tag">Варіант A · погоджено</span>
+<h2>Сторінка товару — окремий рядок «Доставка» в таблиці характеристик</h2>
+<p class="note">Третій рядок у <code>.bs-pp-meta</code> під «Статус», у тій самій сітці label/value. Рядок статусу не чіпається, бейдж і його колір лишаються як є. Значення — 12.5px: «орієнтовно» приглушене (500, ink-3), «3–4 тижні» акцентне (700, ink-2), щоб око бачило термін, а не службове слово. На мобайлі рядок вміщується в один рядок навіть на 360px.</p>
+</div>
+
+<div class="frames">
+<div class="frame w760"><div class="frame__bar"><span>Сторінка товару · десктоп</span><span>760px колонка</span></div><div class="frame__body">
+<h3 class="pp__title">Бустер One Piece OP-17: The World's Strongest Warriors (Японське видання)</h3>
+<a class="pp__olx" href="#">★ Відгуки про нас →</a>
+<div class="bs-pp-meta">
+<div class="bs-pp-meta__row"><span class="bs-pp-meta__label">Виробник</span><a class="bs-pp-meta__link" href="#">Bandai</a></div>
+<div class="bs-pp-meta__row"><span class="bs-pp-meta__label">Статус</span><span class="bs-badge bs-badge--preorder">● Передзамовлення</span></div>
+<div class="bs-pp-meta__row"><span class="bs-pp-meta__label">Доставка</span><span class="bs-pp-eta__val"><em>орієнтовно</em> 3–4 тижні</span></div>
+</div>
+<div class="pp__price"><b>₴300.00</b><span>/ 1 шт</span></div>
+<div class="pp__buy"><span style="font-size:12.5px;color:var(--bs-ink-3);font-weight:600">Кількість</span><div class="pp__qty"><i>−</i><em>1</em><b>+</b></div><button class="pp__cta">У кошик</button></div>
+</div></div>
+
+<div class="frame w390"><div class="frame__bar"><span>Сторінка товару · мобайл</span><span>390px</span></div><div class="frame__body">
+<h3 class="pp__title">Бустер One Piece OP-17: The World's Strongest Warriors (Японське видання)</h3>
+<a class="pp__olx" href="#">★ Відгуки про нас →</a>
+<div class="bs-pp-meta">
+<div class="bs-pp-meta__row"><span class="bs-pp-meta__label">Виробник</span><a class="bs-pp-meta__link" href="#">Bandai</a></div>
+<div class="bs-pp-meta__row"><span class="bs-pp-meta__label">Статус</span><span class="bs-badge bs-badge--preorder">● Передзамовлення</span></div>
+<div class="bs-pp-meta__row"><span class="bs-pp-meta__label">Доставка</span><span class="bs-pp-eta__val"><em>орієнтовно</em> 3–4 тижні</span></div>
+</div>
+<div class="pp__price"><b>₴300.00</b><span>/ 1 шт</span></div>
+<div class="pp__buy"><div class="pp__qty"><i>−</i><em>1</em><b>+</b></div><button class="pp__cta">У кошик</button></div>
+</div></div>
+</div>
+
+<pre>/* Component D — final. Product page only. */
+.bs-pp-eta__val{color:var(--bs-ink-2);font-weight:700;font-size:12.5px;line-height:1.35}
+.bs-pp-eta__val em{font-style:normal;font-weight:500;color:var(--bs-ink-3)}
+
+<b>{# render only when the product is in preorder status #}
+&lt;div class="bs-pp-meta__row"&gt;
+  &lt;span class="bs-pp-meta__label"&gt;Доставка&lt;/span&gt;
+  &lt;span class="bs-pp-eta__val"&gt;&lt;em&gt;орієнтовно&lt;/em&gt; 3–4 тижні&lt;/span&gt;
+&lt;/div&gt;</b>
+
+/* Not touched by this component:
+   .bs-badge--preorder  → stays #fef3c7 / #92400e / 1px #f59e0b
+   #button-cart         → stays #16a34a
+   .bs-pcard, .bs-pcard__badge-tl → no ETA anywhere on cards */</pre>
+</section>
+
+<section>
+<div class="vhead">
+<span class="tag tag--off">Картка товару · без змін</span>
+<h2>Картка товару — терміну доставки немає</h2>
+<p class="note">Рішення власника: строки доставки живуть лише на сторінці товару. Картка лишається точно такою, як на продакшені — бейдж «Передзамовлення» поверх зображення, заголовок, ціна, CTA. Нижче — контрольний рендер того, що не повинно змінитися після патча.</p>
+</div>
+
+<div class="frames">
+<div class="frame w560"><div class="frame__bar"><span>Картка товару · десктоп</span><span>2 колонки</span></div><div class="frame__body">
+<div class="grid2">
+<article class="bs-pcard"><div class="bs-pcard__media"><div class="bs-pcard__ph"><span>product shot</span></div><span class="bs-pcard__badge-tl"><span class="bs-badge bs-badge--preorder">Передзамовлення</span></span></div><div class="bs-pcard__body"><h4 class="bs-pcard__title">Бустер One Piece Card Game OP-07 (Японське видання)</h4><div><span class="bs-pcard__price-new">₴170.00</span></div><button class="bs-pcard__buy-btn">Передзамовити</button></div></article>
+<article class="bs-pcard"><div class="bs-pcard__media"><div class="bs-pcard__ph"><span>product shot</span></div><span class="bs-pcard__badge-tl"><span class="bs-badge bs-badge--preorder">Передзамовлення</span></span></div><div class="bs-pcard__body"><h4 class="bs-pcard__title">Бустер One Piece OP-17: The World's Strongest Warriors (Японське видання)</h4><div><span class="bs-pcard__price-new">₴300.00</span></div><button class="bs-pcard__buy-btn">Передзамовити</button></div></article>
+</div>
+</div></div>
+
+<div class="frame w390"><div class="frame__bar"><span>Картка товару · мобайл</span><span>390px · 2 колонки</span></div><div class="frame__body">
+<div class="grid2" style="gap:10px">
+<article class="bs-pcard"><div class="bs-pcard__media" style="padding:12px"><div class="bs-pcard__ph"><span>product shot</span></div><span class="bs-pcard__badge-tl" style="top:9px;left:9px"><span class="bs-badge bs-badge--preorder" style="font-size:10px">Передзамовлення</span></span></div><div class="bs-pcard__body" style="padding:2px 10px 10px"><h4 class="bs-pcard__title" style="font-size:12px">Бустер One Piece Card Game OP-07 (Японське видання)</h4><div><span class="bs-pcard__price-new" style="font-size:15px">₴170.00</span></div><button class="bs-pcard__buy-btn">Передзамовити</button></div></article>
+<article class="bs-pcard"><div class="bs-pcard__media" style="padding:12px"><div class="bs-pcard__ph"><span>product shot</span></div><span class="bs-pcard__badge-tl" style="top:9px;left:9px"><span class="bs-badge bs-badge--preorder" style="font-size:10px">Передзамовлення</span></span></div><div class="bs-pcard__body" style="padding:2px 10px 10px"><h4 class="bs-pcard__title" style="font-size:12px">Бустер One Piece OP-14 (Японське видання)</h4><div><span class="bs-pcard__price-new" style="font-size:15px">₴180.00</span></div><button class="bs-pcard__buy-btn">Передзамовити</button></div></article>
+</div>
+</div></div>
+</div>
+
+<div class="callout">
+<h3>Що це змінює в Task 10 (бекенд)</h3>
+Текст тепер константа, тому дві дати в адмінці й нова таблиця <code>oc_product_bs_delivery_window</code> для цього більше не потрібні: немає що вводити й нічого форматувати. Ні DDL, ні DB-write, ні гейту §0 — Component D зводиться до одного рядка в шаблоні сторінки товару під умовою статусу передзамовлення. Логіка форматування місяців у родовому відмінку та компактний формат для листингів зі скоупу знімаються.
+</div>
+</section>
+
+</div>
+</body>
+</html>

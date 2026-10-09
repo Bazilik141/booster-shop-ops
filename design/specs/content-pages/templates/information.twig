@@ -1,0 +1,56 @@
+{#
+  Information page wrapper — used for all 5 static content pages:
+    • Гарантія оригінальності
+    • Про нас
+    • Оплата і доставка
+    • Обмін і повернення
+    • Публічна оферта
+
+  Strategy:
+  ─ Хедер (header.twig) рендериться окремо — лишається стандартний DS-хедер.
+  ─ Тіло сторінки = ця Twig-обгортка з breadcrumb + raw {{ description }}.
+  ─ Адмінка пише ввесь HTML контентної сторінки (hero, секції, callout-и,
+    Telegram CTA) в полі «Опис» у режимі HTML — це дає власнику повний
+    контроль над текстом без правок коду.
+
+  Класи .bs-cp-* визначені в boostershop-ds.css (Phase 0 з основного handoff)
+  + content-pages.css (з цього пакета).
+
+  OpenCart 4 контролер — `catalog/controller/information/information.php` —
+  вже передає `$heading_title`, `$description`, `$breadcrumbs`. Зміни в
+  контролері НЕ потрібні.
+#}
+
+{{ header }}
+
+<main class="bs-cp-shell">
+
+  {# Breadcrumb. OpenCart returns array of { text, href } — last item is current. #}
+  <nav class="bs-cp-crumbs" aria-label="{{ text_breadcrumb|default('Хлібні крихти') }}">
+    {% for crumb in breadcrumbs %}
+      {% if loop.first %}
+        <a href="{{ crumb.href }}" aria-label="Головна">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 2l6 5v7h-4v-4H6v4H2V7l6-5z"/></svg>
+        </a>
+      {% elseif loop.last %}
+        <span class="bs-cp-crumbs__sep">›</span>
+        <span class="bs-cp-crumbs__current">{{ crumb.text }}</span>
+      {% else %}
+        <span class="bs-cp-crumbs__sep">›</span>
+        <a href="{{ crumb.href }}">{{ crumb.text }}</a>
+      {% endif %}
+    {% endfor %}
+  </nav>
+
+  {#
+    Все тіло сторінки приходить з поля «Опис» в адмінці. Кожна сторінка
+    починається з блоку <section class="bs-cp-hero ..."> ... </section>.
+    Див. content/02-*.html ... content/06-*.html для готових шматків.
+  #}
+  <div class="bs-cp-content">
+    {{ description }}
+  </div>
+
+</main>
+
+{{ footer }}

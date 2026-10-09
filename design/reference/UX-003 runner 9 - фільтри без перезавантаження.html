@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UX-003 runner 9 — фільтри без перезавантаження, чипи, бейдж кошика</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bs-bg:#F7F7F5;--bs-paper:#fff;--bs-line:#E5E7EB;--bs-line-2:#EEF0F2;--bs-ink:#111827;--bs-ink-2:#1F2937;--bs-ink-3:#6B7280;--bs-ink-4:#9CA3AF;--bs-blue:#1E3A8A;--bs-blue-soft:#E8EEFB;--bs-gold:#D4A017;--bs-gold-soft:#FBF4DC;--bs-pokemon:#C68A00;--bs-green:#16A34A;--bs-green-hover:#15803D;--bs-danger:#DC2626;--bs-warning-fg:#92400E;--bs-r-sm:6px;--bs-r:10px;--bs-r-lg:14px;--bs-sh:0 1px 2px rgba(17,24,39,.04),0 0 0 1px rgba(17,24,39,.02);--bs-sh-pop:0 12px 32px rgba(17,24,39,.10),0 2px 6px rgba(17,24,39,.06);--mono:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:#E9E9E6;font-family:Manrope,system-ui,sans-serif;color:var(--bs-ink-2);font-size:14.5px;line-height:1.5}
+a{color:var(--bs-blue)}a:hover{color:var(--bs-blue)}
+.doc{max-width:1500px;margin:0 auto;padding:32px 32px 80px}
+.top h1{font-size:26px;font-weight:800;letter-spacing:-.015em;color:var(--bs-ink);margin:0 0 6px}
+.top p{margin:0;color:var(--bs-ink-3);max-width:900px;text-wrap:pretty}
+.keys{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:20px 0 0;padding:0;list-style:none}
+.keys li{background:#fff;border:1px solid var(--bs-line);border-radius:var(--bs-r);padding:12px 14px;font-size:13.5px;text-wrap:pretty}
+.keys b{display:block;color:var(--bs-ink);font-size:13.5px}
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 0}
+.toc a{font-size:13px;font-weight:700;text-decoration:none;padding:6px 12px;border-radius:999px;background:#fff;border:1px solid var(--bs-line)}
+.sec{margin-top:56px}
+.sec>h2{font-size:20px;font-weight:800;letter-spacing:-.015em;color:var(--bs-ink);margin:0 0 4px;display:flex;gap:10px;align-items:baseline}
+.sec>h2 span{font-family:var(--mono);font-size:12px;color:var(--bs-ink-3);font-weight:600}
+.notes{margin:8px 0 20px;padding:0 0 0 18px;max-width:980px;font-size:13.5px;color:var(--bs-ink-2)}
+.notes li{margin:3px 0;text-wrap:pretty}
+.notes code,.spec code{font-family:var(--mono);font-size:12px;background:#fff;border:1px solid var(--bs-line);border-radius:4px;padding:0 4px}
+.row{display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start}
+.fr{margin:0;min-width:0}
+.fr figcaption{font-family:var(--mono);font-size:12px;color:var(--bs-ink-3);margin:0 0 6px}
+.fr figcaption b{color:var(--bs-ink)}
+.fr figcaption[data-z]:not([data-z=""])::after{content:" · " attr(data-z)}
+.zw{border-radius:12px;overflow:hidden;box-shadow:0 0 0 1px rgba(17,24,39,.12),0 8px 24px rgba(17,24,39,.08);width:fit-content}
+.live{font-family:var(--mono);font-size:11.5px;color:var(--bs-ink-3);margin-top:6px;display:flex;gap:8px}
+.live span{background:var(--bs-ink);color:#fff;border-radius:4px;padding:0 6px}
+.live em{font-style:normal;color:var(--bs-ink-2)}
+/* viewport */
+.vp{background:var(--bs-bg);overflow-y:auto;scrollbar-width:none;position:relative;font-size:14.5px;color:var(--bs-ink-2)}
+.vp::-webkit-scrollbar{display:none}
+.vp button{font:inherit;cursor:pointer}
+.vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.ic{flex:0 0 auto;display:block}.ic.up{transform:rotate(180deg)}.ic.rt{transform:rotate(-90deg)}
+.vp :focus-visible,.vp .kf{outline:2px solid var(--bs-blue);outline-offset:2px}
+.vp .ck.kf{outline:0}.vp .ck.kf .box,.vp .ck:has(input:focus-visible) .box{outline:2px solid var(--bs-blue);outline-offset:2px}
+/* header */
+.hd{background:#fff;border-bottom:1px solid var(--bs-line)}
+.hd-in{display:flex;align-items:center;gap:10px;height:64px;padding:0 10px;max-width:1196px;margin:0 auto}
+.hbtn{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 14px;border:1px solid var(--bs-line);border-radius:8px;background:#fff;font-weight:700;color:var(--bs-ink)}
+.hbtn.sq{width:44px;padding:0;justify-content:center}
+.logo{height:34px;width:auto;flex:0 0 auto}
+.hsearch{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:10px;height:44px;padding:0 14px;border-radius:8px;background:var(--bs-line-2);color:var(--bs-ink-4);white-space:nowrap;overflow:hidden}
+.hlink{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:13.5px;color:var(--bs-blue);padding:0 6px;height:44px}
+.hcart{position:relative;display:inline-flex;align-items:center;gap:10px;height:44px;padding:0 16px;border:0;border-radius:8px;background:var(--bs-green-hover);color:#fff;font-weight:800;font-size:15px;white-space:nowrap}
+.hcart.sq{width:44px;padding:0;justify-content:center}
+.hci{position:relative;display:inline-flex}
+.cb{position:absolute;display:inline-flex;align-items:center;justify-content:center;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.cb-a{top:3px;right:3px;min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:#fff;color:var(--bs-green-hover);font-size:10.5px}
+.hci .cb-a{top:-7px;right:-9px}
+.cb-b{top:-6px;right:-6px;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:var(--bs-ink);color:#fff;font-size:11px;box-shadow:0 0 0 2px #fff}
+.cb-c{top:-6px;right:-6px;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:var(--bs-danger);color:#fff;font-size:11px;box-shadow:0 0 0 2px #fff}
+.hci .cb-b,.hci .cb-c{top:-12px;right:-14px}
+/* content */
+.ct{max-width:1196px;margin:0 auto;padding:12px 10px 32px}
+.crumbs{display:flex;align-items:center;gap:6px;margin:2px 0 14px;color:var(--bs-ink-4)}
+.home{display:inline-flex;width:24px;height:24px;border-radius:999px;background:var(--bs-line-2);align-items:center;justify-content:center;color:var(--bs-ink-3)}
+.crumb{font-size:12px;font-weight:600;color:var(--bs-warning-fg);background:var(--bs-gold-soft);border:1px solid var(--bs-gold);border-radius:999px;padding:1px 10px}
+.ch{background:#fff;border:1px solid var(--bs-line);border-top:4px solid var(--bs-pokemon);border-radius:var(--bs-r);box-shadow:var(--bs-sh);padding:14px}
+.ch-sm{margin:0 0 10px;font-size:13px;color:var(--bs-ink-4)}.ch-sm b{color:var(--bs-ink);font-weight:700}
+.ch-h1{margin:0 0 14px;font-size:24px;font-weight:800;letter-spacing:-.015em;color:var(--bs-ink)}
+.ch-h1 small{font-size:13px;font-weight:600;color:var(--bs-ink-3);margin-left:6px;letter-spacing:0}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 12px;border:1px solid var(--bs-line);border-radius:var(--bs-r);background:#fff;font-weight:700;color:var(--bs-blue);text-decoration:none}
+.pill i{font-style:normal;font-size:11.5px;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--bs-gold-soft);color:var(--bs-warning-fg)}
+.tools2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.ch-row{display:flex;align-items:center;gap:16px}
+.seg{display:flex;flex-wrap:wrap;gap:2px;background:var(--bs-line-2);padding:4px;border-radius:var(--bs-r)}
+.seg .pill{border:0;background:transparent;min-height:40px;font-weight:600}
+.tools{display:flex;gap:8px;margin-left:auto}
+.fbtn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 14px;border:1px solid var(--bs-line);border-radius:8px;background:#fff;font-weight:700;color:var(--bs-ink)}
+.fbtn.is-on{border-color:var(--bs-blue);background:var(--bs-blue-soft);color:var(--bs-blue)}
+.cnt{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--bs-blue);color:#fff;font-size:11.5px;font-weight:800}
+.sort{position:relative;display:block}
+.sort select{appearance:none;width:100%;height:44px;padding:0 36px 0 12px;border:1px solid var(--bs-line);border-radius:8px;background:#fff;font:inherit;font-weight:600;font-size:14px;color:var(--bs-ink-2);cursor:pointer;text-overflow:ellipsis}
+.tools .sort{width:240px}
+.sort .ic{position:absolute;right:12px;top:14px;pointer-events:none;color:var(--bs-ink-3)}
+/* panel */
+.panel{margin-top:12px;border-top:1px solid var(--bs-line);padding-top:4px}
+.groups{display:grid;grid-template-columns:minmax(0,1fr)}
+.grp{border-bottom:1px solid var(--bs-line-2)}
+.gt{display:flex;align-items:center;gap:8px;width:100%;min-height:48px;padding:0 4px;border:0;background:none;font-weight:700;color:var(--bs-ink);text-align:left}
+.gt .ic:last-child{margin-left:auto;color:var(--bs-ink-3)}
+.cks{display:grid;padding:0 4px 8px}
+.ck{display:flex;align-items:center;gap:12px;min-height:44px;font-size:14.5px;color:var(--bs-ink-2);cursor:pointer;position:relative}
+.ck input{position:absolute;opacity:0;width:18px;height:18px;margin:0;left:0}
+.box{width:20px;height:20px;border:1.5px solid var(--bs-ink-4);border-radius:5px;background:#fff;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;color:transparent}
+.ck input:checked+.box{background:var(--bs-blue);border-color:var(--bs-blue);color:#fff}
+.pfoot{display:flex;align-items:center;gap:12px;padding-top:10px;margin-top:6px;border-top:1px solid var(--bs-line-2)}
+.pres{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:var(--bs-ink-3);font-variant-numeric:tabular-nums}
+.btn-s{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 14px;border:1px solid var(--bs-line);border-radius:8px;background:#fff;font-weight:700;font-size:14px;color:var(--bs-ink-2)}
+.pfoot .btn-s{margin-left:auto;min-height:36px}
+.btn-s.blue{border-color:var(--bs-blue);color:var(--bs-blue)}
+.btn-p{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;height:48px;border:0;border-radius:8px;background:var(--bs-blue);color:#fff;font-weight:800;font-size:15px;font-variant-numeric:tabular-nums}
+.btn-p[aria-disabled=true]{opacity:.85;cursor:progress}
+/* chips */
+.fchips{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:12px}
+.fl{font-size:13px;color:var(--bs-ink-3);font-weight:600}
+.fchip{position:relative;display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 10px 0 14px;border:0;border-radius:999px;background:var(--bs-blue-soft);color:var(--bs-blue);font-weight:700;font-size:13.5px}
+.fchip::before{content:"";position:absolute;inset:-4px 0}
+.fchip:hover{background:#DCE5F8}
+.reset{position:relative;height:36px;padding:0 6px;border:0;background:none;font-weight:600;font-size:13.5px;color:var(--bs-ink-3);text-decoration:underline;text-underline-offset:3px}
+.reset::before{content:"";position:absolute;inset:-4px 0}
+/* results */
+.res{position:relative;margin-top:16px;transition:opacity .15s;outline-offset:6px;border-radius:6px}
+.bar{position:absolute;left:0;right:0;top:-9px;height:3px;border-radius:3px;overflow:hidden;opacity:0}
+.res.is-loading .bar{opacity:1;background:var(--bs-blue-soft)}
+.res.is-loading .bar::after{content:"";position:absolute;top:0;bottom:0;width:35%;background:var(--bs-blue);border-radius:3px;animation:ind 1.1s ease-in-out infinite}
+@keyframes ind{0%{left:-35%}100%{left:100%}}
+.res.is-loading .grid,.res.is-loading .pag{opacity:.45;pointer-events:none}
+.grid{display:grid;grid-template-columns:minmax(0,1fr);gap:20px 16px;transition:opacity .15s}
+.pc{display:flex;flex-direction:column;gap:6px}
+.pc-img{height:220px;border-bottom:1px solid var(--bs-line);display:flex;align-items:center;justify-content:center;background:repeating-linear-gradient(135deg,#EFEFEC 0 8px,#F5F5F2 8px 16px);border-radius:8px 8px 0 0;font-family:var(--mono);font-size:11px;color:var(--bs-ink-4)}
+.pc-n{font-size:14px;color:var(--bs-blue);text-decoration:none;line-height:1.4;text-wrap:pretty}
+.pc-p{font-size:16px;font-weight:800;color:var(--bs-ink)}
+.buy{height:44px;border:0;border-radius:8px;background:var(--bs-green-hover);color:#fff;font-weight:700;font-size:15px;margin-top:auto}
+.empty{background:#fff;border:1px solid var(--bs-line);border-radius:var(--bs-r);padding:40px 20px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px}
+.empty h2{margin:0;font-size:18px;font-weight:700;letter-spacing:-.015em;color:var(--bs-ink)}
+.empty p{margin:0 0 8px;color:var(--bs-ink-3)}
+.pag{display:flex;justify-content:center;gap:6px;margin-top:28px}
+.pg{display:inline-flex;align-items:center;justify-content:center;min-width:44px;height:44px;border:1px solid var(--bs-line);border-radius:8px;background:#fff;font-weight:700;color:var(--bs-ink-2);text-decoration:none}
+.pg.is-on{background:var(--bs-blue);border-color:var(--bs-blue);color:#fff}
+.sticky{position:sticky;bottom:0;z-index:5;padding:10px 10px 14px;background:#fff;border-top:1px solid var(--bs-line);box-shadow:0 -6px 16px rgba(17,24,39,.06)}
+.sticky.two{display:flex;align-items:center;gap:12px;font-weight:600;color:var(--bs-ink-3);font-size:14px}
+.sticky.two .btn-s{margin-left:auto}
+.spin{width:14px;height:14px;border-radius:999px;border:2px solid var(--bs-line);border-top-color:var(--bs-blue);animation:sp .7s linear infinite;flex:0 0 auto}
+.spin.w{border-color:rgba(255,255,255,.35);border-top-color:#fff}
+@keyframes sp{to{transform:rotate(360deg)}}
+/* breakpoints by frame width */
+.vp[style*="width:768px"] .ct{padding:12px 32px 32px}
+.vp[style*="width:768px"] .hd-in{padding:0 32px}
+.vp[style*="width:768px"] .ch{padding:16px 18px}
+.vp[style*="width:768px"] .groups{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 24px}
+.vp[style*="width:768px"] .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.vp[style*="width:768px"] .pc-img{height:260px}
+.vp[style*="width:1440px"] .hd-in{gap:16px}
+.vp[style*="width:1440px"] .ch{padding:20px 22px}
+.vp[style*="width:1440px"] .groups{grid-template-columns:repeat(4,minmax(0,1fr));gap:0 24px}
+.vp[style*="width:1440px"] .grp{border-bottom:0}
+.vp[style*="width:1440px"] .ck{min-height:36px}
+.vp[style*="width:1440px"] .box{width:18px;height:18px}
+.vp[style*="width:1440px"] .fchip{height:32px}
+.vp[style*="width:1440px"] .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.vp[style*="width:1440px"] .pc-img{height:240px}
+.vp[style*="width:1440px"] .ct{padding-top:16px}
+/* spec blocks */
+.spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-top:20px}
+.spec>div{background:#fff;border:1px solid var(--bs-line);border-radius:var(--bs-r);padding:16px 18px;font-size:13.5px}
+.spec h3{margin:0 0 8px;font-size:14.5px;font-weight:800;color:var(--bs-ink)}
+.spec ol,.spec ul{margin:0;padding-left:18px}.spec li{margin:3px 0;text-wrap:pretty}
+.spec q{font-weight:700;color:var(--bs-ink)}
+.ctab{width:100%;border-collapse:collapse;font-size:13px}
+.ctab th,.ctab td{border-bottom:1px solid var(--bs-line-2);padding:6px 8px;text-align:left;vertical-align:top}
+.ctab th{font-weight:700;color:var(--bs-ink-3);font-size:12px}
+/* badges */
+.bgrid{display:grid;grid-template-columns:minmax(120px,180px) repeat(3,minmax(0,390px));gap:14px 20px;align-items:start}.bgrid [data-hdr]{min-width:0}
+.bgrid>.vl{font-weight:800;color:var(--bs-ink);font-size:13.5px;padding-top:18px;max-width:180px}
+.bgrid>.vl small{display:block;font-weight:500;color:var(--bs-ink-3)}
+.bgrid>.ch-h{font-family:var(--mono);font-size:12px;color:var(--bs-ink-3)}
+.vp.hdr{overflow:visible;border-radius:10px;box-shadow:0 0 0 1px rgba(17,24,39,.12)}
+.vp.hdr .hd{border-radius:10px}
+.cap{font-family:var(--mono);font-size:12px;color:var(--bs-ink-3);margin:0 0 6px}.cap b{color:var(--bs-ink)}.bh768>div{flex:1 1 360px;min-width:0;max-width:780px}.hcap{font-family:var(--mono);font-size:11px;color:var(--bs-ink-3);margin:6px 0 0}
+.rec{font-size:10.5px;font-weight:700;padding:1px 8px;border-radius:999px;background:var(--bs-blue);color:#fff;margin-left:6px;vertical-align:2px}
+</style>
+</head>
+<body>
+<div class="doc">
+<div class="top">
+<h1>UX-003 runner 9 · фільтри без перезавантаження + чипи · BUG-004 A бейдж кошика</h1>
+<p>Основа: живий стан після runner 7 і 8 (скріни власника від 06.10). Усі кадри робочі: галочки, «×», «Скинути все», сортування, «Показати N товарів» і згортання груп клікаються. Затримку відповіді імітовано (0,9 с). Під кожним кадром видно, що оголошує скрінрідер.</p>
+<ul class="keys">
+<li><b>Без перезавантаження</b>Кожна галочка одразу оновлює сітку. Панель не закривається. Кнопки «Застосувати» немає.</li>
+<li><b>Чипи завжди в одному місці</b>Останній рядок картки шапки, під панеллю (коли вона відкрита) або під рядом «Фільтр / сортування» (коли закрита). Галочка додає чип нижче панелі, тому панель не зсувається.</li>
+<li><b>До 992 px</b>Унизу екрана липка синя кнопка «Показати N товарів». Вона закриває панель і прокручує до сітки.</li>
+<li><b>Від 992 px</b>Сітка під панеллю оновлюється наживо. Про це повідомляють синя смужка над сіткою, лічильник у шапці й рядок «Знайдено N товарів» унизу панелі.</li>
+</ul>
+<nav class="toc"><a href="#s1">1 · Чипи</a><a href="#s2">2 · Кілька значень</a><a href="#s3">3 · Завантаження</a><a href="#s4">4 · Порожньо</a><a href="#s5">5 · Лічильники</a><a href="#s6">6 · Сортування і сторінки</a><a href="#s7">7 · Клавіатура і скрінрідер</a><a href="#s8">3a · Бейдж кошика</a></nav>
+</div>
+
+<section class="sec" id="s1" data-screen-label="1 Чипи">
+<h2>1 · Активні чипи <span>панель закрита · вибрано «Бустер» і «Японія»</span></h2>
+<ul class="notes">
+<li>Рядок: підпис «Фільтр:», чипи у порядку вибору, «Скинути все» з’являється від 2 значень. Чипи переносяться на новий рядок, гортання вбік немає.</li>
+<li>Чип: <code>--bs-blue-soft</code> / <code>--bs-blue</code>, радіус 999, 13.5/700. Висота 36 на мобайлі (зона тапу 44 через <code>::before</code>), 32 на десктопі. «×» прибирає значення: чип зникає одразу, сітка оновлюється.</li>
+<li>У чипі тільки значення, без назви групи. Назви значень у групах не повторюються.</li>
+</ul>
+<div class="row">
+<figure class="fr" data-w="390" data-label="мобайл" data-st='{"sel":["Бустер","Японія"]}'></figure>
+<figure class="fr" data-w="768" data-label="планшет" data-st='{"sel":["Бустер","Японія"]}'></figure>
+<figure class="fr" data-w="1440" data-label="десктоп" data-st='{"sel":["Бустер","Японія"]}'></figure>
+</div>
+</section>
+
+<section class="sec" id="s2" data-screen-label="2 Кілька значень">
+<h2>2 · Вибір кількох значень <span>панель відкрита, клієнт ставить галочки</span></h2>
+<ul class="notes">
+<li><b>390 / 768:</b> панель лишається в картці шапки. Липка панель знизу: <code>--bs-blue</code>, 48 px, «Показати N товарів». Тап закриває панель, прокручує до сітки й ставить фокус на неї. Поки йде запит, кнопка показує «Оновлюємо…» і не реагує.</li>
+<li><b>1440:</b> липкої кнопки немає, сітка під панеллю оновлюється після кожної галочки. Унизу панелі стоїть «Знайдено N товарів» і кнопка «Згорнути».</li>
+<li>На 390 спочатку відкрита тільки перша група (як у runner 7). Колонки груп: 1 / 2 / 4. Рядок чекбокса на мобайлі 44 px, на десктопі 36.</li>
+</ul>
+<div class="row">
+<figure class="fr" data-w="390" data-label="мобайл" data-st='{"sel":["Бустер","Японія"],"open":true,"g":{"country":true}}'></figure>
+<figure class="fr" data-w="768" data-label="планшет" data-st='{"sel":["Бустер","Японія"],"open":true}'></figure>
+<figure class="fr" data-w="1440" data-label="десктоп" data-st='{"sel":["Бустер","Японія"],"open":true}'></figure>
+</div>
+</section>
+
+<section class="sec" id="s3" data-screen-label="3 Завантаження">
+<h2>3 · Завантаження <span>кадр зупинено посередині запиту</span></h2>
+<ul class="notes">
+<li>Сітка й пагінація тьмяніють (opacity .45) і не клікаються. Над сіткою рухається синя смужка 3 px. Скелетонів немає, тому висота сітки не стрибає.</li>
+<li>Поки йде запит, чип, лічильник на «Фільтр» і галочка вже нові, а кількість товарів у шапці ще стара. Нове число з’являється разом із новою сіткою.</li>
+<li>Шапку й панель під час запиту ніщо не зсуває. Висоту сітки фіксувати на час заміни (<code>min-height</code> = попередня висота), а після вставки зняти.</li>
+<li>Якщо запит не вдався, звичайне перезавантаження сторінки за тим самим URL. Окремого екрана помилки немає.</li>
+</ul>
+<div class="row">
+<figure class="fr" data-w="390" data-label="мобайл · після «×» на чипі" data-st='{"sel":["Японія"],"applied":["Бустер","Японія"],"loading":true,"scroll":"res"}'></figure>
+<figure class="fr" data-w="768" data-label="планшет · панель відкрита" data-st='{"sel":["Бустер","Японія"],"applied":["Бустер"],"loading":true,"open":true}'></figure>
+<figure class="fr" data-w="1440" data-label="десктоп · панель відкрита" data-st='{"sel":["Бустер","Японія"],"applied":["Бустер"],"loading":true,"open":true}'></figure>
+</div>
+</section>
+
+<section class="sec" id="s4" data-screen-label="4 Порожньо">
+<h2>4 · Нічого не знайдено <span>вибрано «Україна»</span></h2>
+<ul class="notes">
+<li>Сітку замінює біла картка: «Нічого не знайдено з цими фільтрами», нижче «Приберіть один із фільтрів або скиньте всі.» і кнопка «Скинути фільтри» (синя рамка).</li>
+<li>На мобайлі з відкритою панеллю липка кнопка стає рядком «0 товарів з цими фільтрами» з кнопкою «Скинути». Кнопки «Показати 0 товарів» немає.</li>
+<li>Лічильник у шапці показує «0 товарів», чипи лишаються.</li>
+</ul>
+<div class="row">
+<figure class="fr" data-w="390" data-label="мобайл · панель відкрита" data-st='{"sel":["Україна"],"open":true,"g":{"country":true,"type":false}}'></figure>
+<figure class="fr" data-w="768" data-label="планшет · панель закрита" data-st='{"sel":["Україна"]}'></figure>
+<figure class="fr" data-w="1440" data-label="десктоп · панель закрита" data-st='{"sel":["Україна"]}'></figure>
+</div>
+</section>
+
+<section class="sec" id="s5" data-screen-label="5 Лічильники">
+<h2>5 · Лічильники <span>0 → 1 → 2 галочки, 390</span></h2>
+<ul class="notes">
+<li><b>Логіка (перевірено власником 06.10):</b> значення з різних груп звужують вибір. «Бустер» + «Японія» дають менше товарів, ніж один «Бустер». Макет рахує так само. Додаткова галочка в тій самій групі в макеті розширює вибір. Ця логіка на сервері, runner 9 її не змінює.</li>
+<li>Числа після фільтра в макеті порахував по 7 реальних товарах зі скрінів, тож вони ілюстративні. На сайті кількість береться зі сторінки, що прийшла з сервера.</li>
+</ul>
+<div class="row">
+<figure class="fr" data-w="390" data-h="560" data-label="0 галочок" data-st='{"open":true}'></figure>
+<figure class="fr" data-w="390" data-h="560" data-label="1 · Бустер" data-st='{"sel":["Бустер"],"open":true}'></figure>
+<figure class="fr" data-w="390" data-h="560" data-label="2 · + Японія" data-st='{"sel":["Бустер","Японія"],"open":true,"g":{"country":true}}'></figure>
+</div>
+<div class="spec"><div><h3>Що змінюється і коли</h3>
+<table class="ctab"><tr><th>Елемент</th><th>Значення</th><th>Коли оновлюється</th></tr>
+<tr><td>Кількість у шапці («48 товарів»)</td><td>усього товарів з поточним фільтром, правильна форма множини</td><td>коли прийшла відповідь</td></tr>
+<tr><td>Бейдж на «Фільтр»</td><td>скільки значень вибрано у всіх групах; 0 — бейджа немає</td><td>одразу після галочки</td></tr>
+<tr><td>Лічильник групи</td><td>скільки значень вибрано в групі; 0 — немає</td><td>одразу</td></tr>
+<tr><td>Липка кнопка / «Знайдено N»</td><td>те саме число, що в шапці</td><td>коли прийшла відповідь, до того «Оновлюємо…»</td></tr>
+<tr><td>Лічильники підкатегорій (15, 13…)</td><td>не змінюються, бо це посилання на інші категорії без фільтра</td><td>—</td></tr>
+</table></div></div>
+</section>
+
+<section class="sec" id="s6" data-screen-label="6 Сортування і сторінки">
+<h2>6 · Фільтр + сортування + пагінація <span>«Японія», «Ціна (низька &gt; висока)»</span></h2>
+<ul class="notes">
+<li>Сортування працює так само, як галочка: запит у фоні, заміна сітки, оголошення «Відсортовано: …». Фільтр зберігається. Тексти опцій беріть із живого <code>#input-sort</code>. У макеті ці тексти приблизні.</li>
+<li>Номери сторінок у кадрах показують лише вигляд: квадрати 44 px, активна сторінка синя. Посилання вже несуть параметри фільтра й сортування (так видає сервер). Клік так само міняє сітку без перезавантаження, прокручує до верху сітки й ставить на неї фокус.</li>
+<li>Ви не знали, що зараз під сіткою, тому намальовано стокову пагінацію. Якщо там «Показати ще», логіка та сама: запит у фоні, товари <b>додаються</b> в кінець, фокус переходить на перший доданий товар, оголошення «Додано N товарів».</li>
+</ul>
+<div class="row">
+<figure class="fr" data-w="390" data-label="мобайл · низ сітки" data-st='{"sel":["Японія"],"sort":2,"pag":true,"scroll":"bottom"}'></figure>
+<figure class="fr" data-w="768" data-label="планшет · низ сітки" data-st='{"sel":["Японія"],"sort":2,"pag":true,"scroll":"bottom"}'></figure>
+<figure class="fr" data-w="1440" data-label="десктоп · верх" data-st='{"sel":["Японія"],"sort":2,"pag":true}'></figure>
+</div>
+</section>
+
+<section class="sec" id="s7" data-screen-label="7 Клавіатура">
+<h2>7 · Клавіатура і скрінрідер</h2>
+<ul class="notes"><li>Лівий кадр: щойно поставлено галочку «Бустер», фокус лишився на ній. Правий кадр: натиснуто «×» на «Бустер», фокус перейшов на наступний чип «Японія».</li></ul>
+<div class="row">
+<figure class="fr" data-w="390" data-label="фокус після галочки" data-st='{"sel":["Бустер"],"open":true,"kf":"cb:Бустер","say":"Знайдено 4 товари."}'></figure>
+<figure class="fr" data-w="1440" data-label="фокус після «×»" data-st='{"sel":["Японія"],"kf":"chip:Японія","say":"Фільтр «Бустер» прибрано. Знайдено 6 товарів."}'></figure>
+</div>
+<div class="spec">
+<div><h3>Порядок Tab</h3><ol><li>Підкатегорії</li><li>«Фільтр» (<code>aria-expanded</code>, <code>aria-controls</code>)</li><li>Сортування</li><li>Панель: заголовок групи → її чекбокси → наступна група → «Згорнути» (десктоп)</li><li>Чипи → «Скинути все»</li><li>Сітка товарів</li><li>Липка кнопка «Показати N товарів» (стоїть у DOM після сітки, але відкрита панель на екрані поруч)</li></ol></div>
+<div><h3>Куди йде фокус</h3><ul><li><b>Галочка:</b> лишається на чекбоксі, нікуди не стрибає.</li><li><b>«×» на чипі:</b> наступний чип → попередній → кнопка «Фільтр», якщо чипів більше немає.</li><li><b>«Скинути все» / «Скинути фільтри»:</b> кнопка «Фільтр».</li><li><b>«Показати N товарів»:</b> панель закривається, фокус на контейнері сітки (<code>tabindex="-1"</code>, <code>aria-label="Товари"</code>).</li><li><b>Сторінка 2:</b> контейнер сітки.</li><li>Під час запиту на сітці <code>aria-busy="true"</code>.</li></ul></div>
+<div><h3>Що оголошується (один <code>role="status"</code>, polite)</h3><ul><li><q>Знайдено 4 товари.</q></li><li><q>Нічого не знайдено з цими фільтрами.</q></li><li><q>Фільтр «Бустер» прибрано. Знайдено 6 товарів.</q></li><li><q>Фільтри скинуто. Знайдено 48 товарів.</q></li><li><q>Відсортовано: Ціна (низька &gt; висока).</q></li><li>«Оновлюємо…» не оголошується, звучить тільки результат. Якщо швидко поставити кілька галочок, оголошується лише останній результат.</li></ul></div>
+</div>
+</section>
+
+<section class="sec" id="s8" data-screen-label="3a Бейдж кошика">
+<h2>3a · Бейдж кошика на мобайлі <span>BUG-004 A · 390 і 768</span></h2>
+<ul class="notes">
+<li><b>Погоджено 06.10: варіант A</b> на 390 і 768. На десктопі (від 992) бейджа немає, лишається сума «Мій кошик - ₴…».</li>
+<li>Кнопка лишається 44×44 зеленою (<code>--bs-green-hover</code>, як на живому сайті). Порожній кошик — бейджа немає. Від 10 товарів пишемо «9+».</li>
+<li>Число — сума кількостей (як у тексті кошика OpenCart). <code>aria-label</code> кнопки: «Кошик: 1 товар / 3 товари / 12 товарів», для порожнього «Кошик порожній». Сам бейдж <code>aria-hidden</code>. Після додавання в кошик оновлюються і число, і <code>aria-label</code>. Окремого оголошення немає, бо тост RD-12 уже повідомляє.</li>
+<li><b>A</b> — білий бейдж усередині кнопки, цифра <code>--bs-green-hover</code> (контраст 5:1), за межі кнопки не виходить. <b>B</b> — темний <code>--bs-ink</code> з білим обідком, на куті. <b>C</b> — червоний <code>--bs-danger</code>: найпомітніший, але червоний у нас означає знижку/помилку, тому не раджу.</li>
+</ul>
+<div class="bgrid">
+<span></span><span class="ch-h">порожній</span><span class="ch-h">3 товари</span><span class="ch-h">12 товарів</span>
+<span class="vl">A · білий усередині<span class="rec">погоджено</span><small>без нових кольорів</small></span><div data-hdr='{"badge":"a","cart":0}' data-w="390"></div><div data-hdr='{"badge":"a","cart":3}' data-w="390"></div><div data-hdr='{"badge":"a","cart":12}' data-w="390"></div>
+<span class="vl">B · темний на куті<small>найкраще читається</small></span><div data-hdr='{"badge":"b","cart":0}' data-w="390"></div><div data-hdr='{"badge":"b","cart":3}' data-w="390"></div><div data-hdr='{"badge":"b","cart":12}' data-w="390"></div>
+<span class="vl">C · червоний на куті<small>не раджу</small></span><div data-hdr='{"badge":"c","cart":0}' data-w="390"></div><div data-hdr='{"badge":"c","cart":3}' data-w="390"></div><div data-hdr='{"badge":"c","cart":12}' data-w="390"></div>
+</div>
+<div class="row bh768" style="margin-top:28px">
+<div><div class="cap"><b>768</b> · A</div><div data-hdr='{"badge":"a","cart":3}' data-w="768"></div></div>
+<div><div class="cap"><b>768</b> · B</div><div data-hdr='{"badge":"b","cart":3}' data-w="768"></div></div>
+<div><div class="cap"><b>768</b> · C</div><div data-hdr='{"badge":"c","cart":3}' data-w="768"></div></div>
+</div>
+</section>
+<p class="notes" style="list-style:none;padding:0;margin-top:48px">Нотатка для Claude Code: <a href="UX-003_runner9_implementation-note.md">UX-003_runner9_implementation-note.md</a></p>
+</div>
+<script src="ux003-r9.js"></script>
+</body>
+</html>

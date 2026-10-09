@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Booster Shop — редизайн контентних сторінок</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="boostershop-ds.css">
+  <style>
+    html, body { margin: 0; background: var(--bs-bg); font-family: 'Manrope', system-ui, sans-serif; color: var(--bs-ink-2); }
+    #root { min-height: 100vh; }
+
+    /* Placeholder image — used inside mockup product thumbs. */
+    .bs-img-ph {
+      background:
+        repeating-linear-gradient(45deg, #f0eee9 0 8px, #e8e5dc 8px 16px);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 10px; color: rgba(0,0,0,.35);
+      text-transform: uppercase; letter-spacing: .08em; text-align: center;
+    }
+    .bs-img-ph::before { content: attr(data-label); padding: 0 8px; }
+    .bs-mock a:hover { text-decoration: none; }
+
+    /* Pretty-wrap headings + body */
+    .bs h1, .bs h2, .bs h3, .bs p { text-wrap: pretty; }
+  </style>
+</head>
+<body class="bs">
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="shared-ui.jsx"></script>
+  <script type="text/babel" src="header-variants.jsx"></script>
+  <script type="text/babel" src="content-shared.jsx"></script>
+  <script type="text/babel" src="content-pages-1.jsx"></script>
+  <script type="text/babel" src="content-pages-2.jsx"></script>
+  <script type="text/babel" src="content-app.jsx"></script>
+</body>
+</html>

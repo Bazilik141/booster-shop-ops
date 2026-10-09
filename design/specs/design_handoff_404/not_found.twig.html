@@ -1,0 +1,136 @@
+{# =============================================================================
+   Booster Shop — 404 / not_found.twig
+   Replaces: catalog/view/template/error/not_found.twig
+
+   Twig variables (standard OpenCart error controller):
+     {{ heading_title }}  — "Сторінка не знайдена!"
+     {{ text_error }}     — the long error description (we override with our copy below,
+                            but keep it in a hidden element for SEO/a11y if needed)
+     {{ button_continue }} — "Продовжити" label
+     {{ continue }}        — URL for the "Continue" button (usually route=common/home)
+
+   The search form action uses the standard OpenCart search route.
+   Category pill hrefs — update to your real category URLs.
+============================================================================= #}
+
+<div class="bs-404-wrap">
+
+  {# ── Illustration (inline SVG, zero HTTP requests) ───────────────────── #}
+  <div class="bs-404-illustration" aria-hidden="true">
+    <svg viewBox="0 0 440 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Ghost 404 -->
+      <text x="220" y="197" text-anchor="middle"
+        font-family="Manrope,system-ui,sans-serif"
+        font-size="178" font-weight="800"
+        fill="#E8EEFB" opacity="0.95">404</text>
+
+      <!-- Ground shadow -->
+      <ellipse cx="220" cy="237" rx="126" ry="9" fill="rgba(17,24,39,0.06)"/>
+
+      <!-- Card LEFT – face-down, −22° -->
+      <g transform="translate(110,44) rotate(-22,50,70)">
+        <rect x="3" y="5" width="100" height="140" rx="8" fill="rgba(17,24,39,0.13)"/>
+        <rect width="100" height="140" rx="8" fill="#1E3A8A"/>
+        <rect x="7" y="7" width="86" height="126" rx="5" fill="none"
+          stroke="rgba(255,255,255,0.14)" stroke-width="1.5"/>
+        <line x1="7" y1="30" x2="93" y2="133" stroke="rgba(255,255,255,0.05)" stroke-width="6"/>
+        <text x="50" y="84" text-anchor="middle"
+          font-family="Manrope,sans-serif" font-size="18" font-weight="800"
+          fill="rgba(255,255,255,0.18)">BS</text>
+      </g>
+
+      <!-- Card RIGHT – face-down, +22° -->
+      <g transform="translate(230,44) rotate(22,50,70)">
+        <rect x="3" y="5" width="100" height="140" rx="8" fill="rgba(17,24,39,0.13)"/>
+        <rect width="100" height="140" rx="8" fill="#1E3A8A"/>
+        <rect x="7" y="7" width="86" height="126" rx="5" fill="none"
+          stroke="rgba(255,255,255,0.14)" stroke-width="1.5"/>
+        <line x1="7" y1="7" x2="93" y2="133" stroke="rgba(255,255,255,0.05)" stroke-width="6"/>
+        <text x="50" y="84" text-anchor="middle"
+          font-family="Manrope,sans-serif" font-size="18" font-weight="800"
+          fill="rgba(255,255,255,0.18)">BS</text>
+      </g>
+
+      <!-- Card CENTER – face-up, "?" -->
+      <g transform="translate(170,26)">
+        <rect x="4" y="7" width="100" height="140" rx="8" fill="rgba(17,24,39,0.17)"/>
+        <rect width="100" height="140" rx="8" fill="#FFFFFF"/>
+        <rect x="7" y="7" width="86" height="126" rx="5" fill="none"
+          stroke="#E5E7EB" stroke-width="1.5"/>
+        <text x="50" y="90" text-anchor="middle"
+          font-family="Manrope,sans-serif" font-size="50" font-weight="800"
+          fill="#1E3A8A">?</text>
+        <rect x="7" y="113" width="86" height="20" rx="3" fill="#E8EEFB"/>
+        <text x="50" y="127" text-anchor="middle"
+          font-family="Manrope,sans-serif" font-size="8" font-weight="700"
+          fill="#1E3A8A" letter-spacing="0.1em">НЕ ЗНАЙДЕНО</text>
+      </g>
+
+      <!-- Gold sparkles -->
+      <circle cx="68"  cy="34"  r="3.5" fill="#D4A017"/>
+      <circle cx="372" cy="46"  r="2.5" fill="#D4A017"/>
+      <circle cx="46"  cy="148" r="2"   fill="#D4A017"/>
+      <circle cx="398" cy="162" r="3"   fill="#D4A017"/>
+      <rect x="378" y="94.5" width="8" height="2" rx="1" fill="#D4A017" opacity="0.7"/>
+      <rect x="381" y="91.5" width="2" height="8" rx="1" fill="#D4A017" opacity="0.7"/>
+      <rect x="55"  y="208"  width="6" height="2" rx="1" fill="#D4A017" opacity="0.5"/>
+      <rect x="57"  y="206"  width="2" height="6" rx="1" fill="#D4A017" opacity="0.5"/>
+
+      <!-- Blue sparkles -->
+      <circle cx="98"  cy="198" r="2"   fill="#3B82F6" opacity="0.4"/>
+      <circle cx="344" cy="207" r="2.5" fill="#3B82F6" opacity="0.4"/>
+      <circle cx="420" cy="100" r="2"   fill="#3B82F6" opacity="0.35"/>
+      <circle cx="22"  cy="90"  r="1.5" fill="#3B82F6" opacity="0.35"/>
+    </svg>
+  </div>
+
+  {# ── Heading + body ───────────────────────────────────────────────────── #}
+  <h1 class="bs-404-heading">Цю сторінку видалено з колоди</h1>
+
+  <p class="bs-404-body">
+    Схоже, ця картка вже не в нашій колоді — її видалили, переклали або вона
+    ніколи й не існувала. Спробуйте пошук або оберіть категорію нижче.
+  </p>
+
+  {# Hidden original error text for screen-readers / SEO if needed #}
+  <span class="visually-hidden">{{ text_error }}</span>
+
+  {# ── Search bar ───────────────────────────────────────────────────────── #}
+  <form class="bs-404-search" action="{{ search }}" method="get" role="search">
+    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+      <circle cx="6.5" cy="6.5" r="4" stroke="#6B7280" stroke-width="1.5"/>
+      <path d="M10 10l2.5 2.5" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    <input type="text" name="search"
+      placeholder="Пошук бустерів, сетів, виробників..."
+      aria-label="Пошук"/>
+  </form>
+
+  {# ── CTAs ─────────────────────────────────────────────────────────────── #}
+  <div class="bs-404-actions">
+    <a href="{{ continue }}" class="bs-404-btn-primary">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <path d="M5.5 11.5l-4-4.5 4-4.5M1.5 7h11"
+          stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      На головну
+    </a>
+    {# "Продовжити покупки" = go back in history or to catalogue root #}
+    <a href="javascript:history.back()" class="bs-404-btn-secondary">
+      Продовжити покупки
+    </a>
+  </div>
+
+  {# ── Category shortcuts ────────────────────────────────────────────────── #}
+  <div class="bs-404-cats">
+    <span class="bs-404-cats__label">Або перейдіть до:</span>
+    <div class="bs-404-cats__row">
+      {# Update hrefs to your real category URLs #}
+      <a href="/pokemon-tcg"   class="bs-404-cats__pill">Pokémon TCG</a>
+      <a href="/one-piece-tcg" class="bs-404-cats__pill">One Piece TCG</a>
+      <a href="/yugioh"        class="bs-404-cats__pill">Yu-Gi-Oh!</a>
+      <a href="/accessories"   class="bs-404-cats__pill">Аксесуари</a>
+    </div>
+  </div>
+
+</div>
