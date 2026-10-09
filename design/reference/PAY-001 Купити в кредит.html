@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PAY-001-UI · Купити в кредит — прототип</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<style>
+html,body{margin:0;padding:0;background:var(--bs-bg);font-family:'Manrope',system-ui,sans-serif}
+@keyframes pay001pulse{0%{transform:scale(.85);opacity:.65}100%{transform:scale(1.55);opacity:0}}
+.pay001-pulse{position:absolute;inset:-8px;border-radius:50%;border:2px solid #111;animation:pay001pulse 1.7s ease-out infinite;pointer-events:none}
+.bs-btn-sm{height:32px;padding:0 12px;font-size:12.5px}
+@keyframes pay001spin{to{transform:rotate(360deg)}}
+.pay001-spin{width:13px;height:13px;border-radius:50%;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;animation:pay001spin .7s linear infinite;flex:0 0 auto}
+.pay001-spin-dark{border-color:rgba(17,17,17,.22);border-top-color:#111}
+/* beats the chip's inline border/background on hover — inline always wins otherwise */
+.pay001-chip:hover{border-color:var(--bs-ink-3) !important;background:var(--bs-bg) !important}
+</style>
+</head>
+<body>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="shared-ui.jsx"></script>
+<script type="text/babel" src="header-variants.jsx"></script>
+<script type="text/babel" src="rd13-checkout.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="pay001-credit.jsx"></script>
+<script type="text/babel" src="pay001-checkout.jsx"></script>
+<script type="text/babel" src="pay001-screens.jsx"></script>
+
+<div id="root"></div>
+
+<script type="text/babel">
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "price": 1070,
+  "device": "desktop",
+  "stock": "in_stock",
+  "discountPct": 0,
+  "declineReason": "not_found"
+}/*EDITMODE-END*/;
+
+const STOCK_OPTIONS = [
+  { value: 'in_stock', label: 'В наявності' },
+  { value: 'preorder', label: 'Передзамовлення' },
+];
+
+const DECLINE_OPTIONS = [
+  { value: 'not_found', label: 'Клієнта не знайдено' },
+  { value: 'insufficient_funds', label: 'Недостатньо коштів' },
+  { value: 'rejected', label: 'Клієнт відхилив' },
+  { value: 'timeout', label: 'Час очікування вичерпано' },
+];
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [screen, setScreen] = React.useState('product');
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const [payment, setPayment] = React.useState('card');
+  const [paymentsCount, setPaymentsCount] = React.useState(CREDIT_MAX_PAYMENTS);
+  const [checkoutState, setCheckoutState] = React.useState('form');
+  const [outcome, setOutcome] = React.useState(null);
+  const [qty, setQty] = React.useState(1);
+  const [selectedBank, setSelectedBank] = React.useState('monobank');
+  const [toast, setToast] = React.useState(null);
+  React.useEffect(() => { if (!toast) return; const id = setTimeout(() => setToast(null), 1800); return () => clearTimeout(id); }, [toast]);
+
+  const mobile = t.device === 'mobile';
+  const preorder = t.stock === 'preorder';
+  const financeAmount = t.price * qty;
+
+  const chooseInstallments = (bank) => {
+    setModalOpen(false);
+    setSelectedBank(bank);
+    setPayment('installments');
+    setScreen('checkout');
+    setCheckoutState('form');
+    setOutcome(null);
+  };
+  // QA round 2: modal's secondary action — commits the same cart-add as
+  // primary, but no redirect. Real impl: same add-to-cart AJAX + the site's
+  // existing "додано в кошик" notification; `toast` below is a prototype-only
+  // stand-in for that existing notification, not a new component to build.
+  const continueShopping = (bank) => {
+    setModalOpen(false);
+    setSelectedBank(bank);
+    setToast('Товар додано в кошик');
+  };
+  const goCheckoutDirect = () => {
+    setScreen('checkout');
+    setCheckoutState('form');
+    setPayment('card');
+    setOutcome(null);
+  };
+  const goBack = () => {
+    setScreen('product');
+    setCheckoutState('form');
+    setOutcome(null);
+  };
+  const submitOrder = (pay) => {
+    if (pay === 'installments') setCheckoutState('waiting');
+  };
+  const demoSuccess = () => { setOutcome('success'); setCheckoutState('result'); };
+  const demoDecline = () => { setOutcome('decline'); setCheckoutState('result'); };
+  const retryWaiting = () => setCheckoutState('waiting');
+  const switchMethod = () => { setPayment('card'); setCheckoutState('form'); };
+
+  let content;
+  if (screen === 'product') {
+    content = <ProductScreen price={t.price} device={t.device} qty={qty} onQtyChange={setQty} preorder={preorder} onOpenModal={() => setModalOpen(true)} onGoCheckout={goCheckoutDirect} />;
+  } else if (checkoutState === 'form') {
+    content = <CheckoutScreen device={t.device} price={t.price} qty={qty} discountPct={t.discountPct} payment={payment} setPayment={setPayment} paymentsCount={paymentsCount} setPaymentsCount={setPaymentsCount} selectedBank={selectedBank} setSelectedBank={setSelectedBank} onSubmit={submitOrder} onBack={goBack} preorder={preorder} />;
+  } else if (checkoutState === 'waiting') {
+    content = <CheckoutShell device={t.device}><WaitingScreen bank={selectedBank} onDemoSuccess={demoSuccess} onDemoDecline={demoDecline} /></CheckoutShell>;
+  } else {
+    content = <CheckoutShell device={t.device}><ResultScreen outcome={outcome} reason={t.declineReason} bank={selectedBank} orderId="BS-2026-04812" onRetry={retryWaiting} onSwitchMethod={switchMethod} /></CheckoutShell>;
+  }
+
+  return (
+    <div style={{ minHeight: '100vh', background: 'var(--bs-bg)', display: 'flex', justifyContent: 'center', padding: mobile ? '28px 0 60px' : 0 }}>
+      <div style={{
+        width: mobile ? 390 : '100%', maxWidth: '100%',
+        boxShadow: mobile ? 'var(--bs-sh-pop)' : 'none',
+        borderRadius: mobile ? 16 : 0, overflow: mobile ? 'hidden' : 'visible',
+      }}>{content}</div>
+
+      <CreditModal open={modalOpen} device={t.device} price={financeAmount} paymentsCount={paymentsCount} setPaymentsCount={setPaymentsCount} selectedBank={selectedBank} setSelectedBank={setSelectedBank} onClose={() => setModalOpen(false)} onChoose={chooseInstallments} onContinueShopping={continueShopping} />
+
+      {toast && (
+        <div style={{ position: 'fixed', bottom: 24, left: '50%', transform: 'translateX(-50%)', background: '#111', color: '#fff', padding: '10px 18px', borderRadius: 'var(--bs-r-pill)', fontSize: 13.5, fontWeight: 600, boxShadow: 'var(--bs-sh-pop)', zIndex: 300 }}>{toast}</div>
+      )}
+
+      <TweaksPanel title="PAY-001 · Купити в кредит">
+        <TweakSection label="Товар" />
+        <TweakSlider label="Ціна товару" value={t.price} min={200} max={2000} step={10} unit=" ₴" onChange={(v) => setTweak('price', v)} />
+        <TweakRadio label="Наявність" value={t.stock} options={STOCK_OPTIONS} onChange={(v) => setTweak('stock', v)} />
+        <TweakSection label="Чекаут — купон" />
+        <TweakSlider label="Знижка/купон" value={t.discountPct} min={0} max={50} step={5} unit="%" onChange={(v) => setTweak('discountPct', v)} />
+        <TweakSection label="Viewport" />
+        <TweakRadio label="Пристрій" value={t.device} options={['desktop', 'mobile']} onChange={(v) => setTweak('device', v)} />
+        <TweakSection label="Демо відмови" />
+        <TweakSelect label="Причина" value={t.declineReason} options={DECLINE_OPTIONS} onChange={(v) => setTweak('declineReason', v)} />
+      </TweaksPanel>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+
+</body>
+</html>

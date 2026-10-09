@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="design_doc_mode" content="canvas">
+<title>Оплата і доставка — пропозиції редизайну</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="content-pages.css">
+<style>
+html,body{margin:0;font-family:'Manrope',system-ui,sans-serif}
+.note{position:absolute;left:40px;top:64px;width:1000px;background:#fff;border-radius:14px;box-shadow:var(--bs-sh-pop);padding:20px 24px}
+.note h1{font-size:17px;margin:0 0 10px;color:var(--bs-ink)}
+.note ul{margin:0;padding:0 0 0 18px;color:var(--bs-ink-2);font-size:13.5px;line-height:1.65}
+.note li+li{margin-top:5px}
+.frame{position:absolute}
+.frame-label{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.frame-tag{font:800 11px Manrope;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px}
+.frame-tag--before{background:#FDECEE;color:#B91C2C}
+.frame-tag--after{background:var(--bs-blue-soft);color:var(--bs-blue)}
+.frame-title{font:800 14px Manrope;color:var(--bs-ink)}
+.frame-card{background:#fff;border-radius:16px;box-shadow:var(--bs-sh-pop);overflow:hidden}
+</style>
+</head>
+<body>
+
+<div class="note">
+<h1>Що змінили і чому</h1>
+<ul>
+<li>«Способи оплати» розбили на дві групи: швидкі варіанти (картка/накладена/IBAN) одним компактним блоком, і окремо — «Оплата частинами», де monobank і ПУМБ подані як дві рівнозначні картки.</li>
+<li>У кожного H2 — іконка-якір, у кожного способу оплати — своя картка з чіткою межею. Заголовки більше не зливаються з текстом під ними.</li>
+<li>Переліки характеристик банків стали сіткою «мітка → значення» замість стовпця з крапками. Копірайт-правки другого раунду (тексти, порядок пунктів, реальне лого ПУМБ) внесено безпосередньо в сторінку.</li>
+<li>Лапку (сертифікаційний бейдж monobank) замінили на компактну лапу з гайдлайну. Лого ПУМБ — офіційне, надане замовником.</li>
+<li>IBAN отримав копі-кнопку — легко скопіювати без помилок при ручному переказі.</li>
+</ul>
+</div>
+
+<div class="frame" style="left:40px;top:460px">
+<div class="frame-label"><span class="frame-tag frame-tag--before">Зараз</span><span class="frame-title">Фрагмент «Способи оплати» — оригінал, без змін</span></div>
+<div class="frame-card" style="width:860px">
+<div class="bs-cp-content" style="border:0;border-radius:0">
+<div class="bs-cp-main">
+
+<h2 id="b-cp-2">Способи оплати</h2>
+
+<h3>Картка онлайн</h3>
+<p>Безпечна оплата через <strong>Hutko</strong>: Visa, Mastercard, Apple Pay та Google Pay.</p>
+
+<h3>Післяплата</h3>
+<p>Оплата після огляду у відділенні або поштоматі Нової Пошти. Комісія NovaPay сплачується окремо.</p>
+
+<h3>Оплата на IBAN</h3>
+<p>Переказ на рахунок ФОП. Реквізити також доступні під час оформлення замовлення.</p>
+<ul>
+<li><strong>Отримувач:</strong> ФОП Леусенко Євгеній Андрійович</li>
+<li><strong>ЄДРПОУ:</strong> 3485903435</li>
+<li><strong>IBAN:</strong> UA063348510000000026003285008</li>
+<li><strong>МФО:</strong> 334851</li>
+<li><strong>Банк:</strong> АТ «ПУМБ»</li>
+<li><strong>Призначення платежу:</strong> оплата за товар</li>
+</ul>
+
+<h3>Покупка частинами (monobank) <img src="mono-badge-before.png" alt="monobank" width="32" height="32" style="vertical-align:middle;margin-left:8px"></h3>
+<p>Оформити покупку частинами можна за допомогою сервісу monobank. Умови — нижче.</p>
+<p><strong>Надавач послуг:</strong><br>АТ «УНІВЕРСАЛ БАНК» ліцензія НБУ №92 від 20.01.1994, номер у держреєстрі банків №226.</p>
+<p><strong>Характеристики продукту:</strong></p>
+<ul>
+<li>Мінімальна сума розстрочки: 1 грн</li>
+<li>Максимальна сума розстрочки: 400 000 грн</li>
+<li>Реальна річна процентна ставка: 0,000001%</li>
+<li>Доступний строк, платежів: 3 - 25</li>
+<li>Порядок погашення: щомісячні платежі рівними частинами</li>
+<li>Перший платіж у момент оформлення покупки</li>
+<li>Інформація про істотні характеристики продукту та попередження розміщені на сайті продукту chast.monobank.ua</li>
+</ul>
+
+<h3>Сплачуйте частинами (ПУМБ)</h3>
+<p>Оформити покупку частинами можна за допомогою сервісу «Сплачуйте частинами NEW» від ПУМБ. Умови — нижче.</p>
+<p><strong>Надавач послуг:</strong><br>АКЦІОНЕРНЕ ТОВАРИСТВО «ПЕРШИЙ УКРАЇНСЬКИЙ МІЖНАРОДНИЙ БАНК», банківська ліцензія НБУ №8 від 06.10.2011.</p>
+<p><strong>Характеристики продукту:</strong></p>
+<ul>
+<li>Мінімальна сума кредиту: 500 грн</li>
+<li>Максимальна сума кредиту: 500 000 грн</li>
+<li>Строк кредитування: від 2 до 24 місяців</li>
+<li>Процентна ставка: 0,00001% річних</li>
+<li>Щомісячна комісія за обслуговування кредитної заборгованості: від 0% до 1,9%</li>
+<li>Разова комісія: 0%</li>
+<li>Реальна річна процентна ставка: від 0,00001% до 48,31%</li>
+<li>Погашення: щомісяця, ануїтетна схема (рівними платежами)</li>
+</ul>
+<p><small>Ця інформація містить загальні умови надання банком послуг споживчого кредитування та не є пропозицією з надання цих послуг. Запропоновані індивідуальні умови залежатимуть від результатів оцінки банком кредитоспроможності, проведеної на підставі отриманої від клієнта інформації та з інших джерел за наявності законних на це підстав, і надаються клієнту до укладення договору про споживчий кредит у формі паспорта споживчого кредиту.</small></p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="frame" style="left:960px;top:460px">
+<div class="frame-label"><span class="frame-tag frame-tag--after">Пропозиція</span><span class="frame-title">Десктоп</span></div>
+<div class="frame-card" style="width:1240px">
+<iframe src="PAY-001 Оплата і доставка - сторінка.html" style="width:1240px;height:2100px;border:0;display:block" onload="this.style.height=this.contentDocument.documentElement.scrollHeight+'px'"></iframe>
+</div>
+</div>
+
+<div class="frame" style="left:2260px;top:460px">
+<div class="frame-label"><span class="frame-tag frame-tag--after">Пропозиція</span><span class="frame-title">Мобайл</span></div>
+<div class="frame-card" style="width:390px">
+<iframe src="PAY-001 Оплата і доставка - сторінка.html" style="width:390px;height:3300px;border:0;display:block" onload="this.style.height=this.contentDocument.documentElement.scrollHeight+'px'"></iframe>
+</div>
+</div>
+
+</body>
+</html>

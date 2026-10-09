@@ -1,0 +1,155 @@
+/* =============================================================
+ * Booster Shop · FAQ accordion · Variant A "Quiet hairlines"
+ * Затверджено: 2026-06-03
+ *
+ * Базовий контракт DOM (після нормалізації bs-faq.js):
+ *
+ * <section class="bs-faq" itemscope itemtype="https://schema.org/FAQPage">
+ *   <h3 class="bs-faq__title">Часті питання</h3>
+ *   <div class="bs-faq__list">
+ *     <article class="bs-faq__item" itemprop="mainEntity"
+ *              itemscope itemtype="https://schema.org/Question">
+ *       <button class="bs-faq__q" type="button"
+ *               aria-expanded="false" aria-controls="faq-a-1">
+ *         <span class="bs-faq__q-text" itemprop="name">…?</span>
+ *         <svg class="bs-faq__chev">…</svg>
+ *       </button>
+ *       <div id="faq-a-1" class="bs-faq__a"
+ *            itemprop="acceptedAnswer" itemscope
+ *            itemtype="https://schema.org/Answer">
+ *         <div class="bs-faq__a-inner" itemprop="text">…</div>
+ *       </div>
+ *     </article>
+ *   </div>
+ * </section>
+ *
+ * Не потрібно змінювати токени з boostershop-ds.css — посилаємось
+ * на існуючі CSS-змінні (--bs-ink, --bs-line, --bs-gold і т.д.).
+ * ============================================================= */
+
+.bs-faq {
+  /* Розташування на сторінці — БЕЗ beige-блока і великого margin згори.
+     Це головне виправлення проти попередньої версії. */
+  background: transparent;
+  margin: 24px 0 0;
+  padding: 0;
+}
+
+.bs-faq__title {
+  /* Простий текстовий заголовок. Жодного фону, жодного бордера. */
+  margin: 0 0 8px;
+  padding: 0;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--bs-ink, #111827);
+}
+
+.bs-faq__list {
+  border-top: 1px solid var(--bs-line, #E5E7EB);
+}
+
+.bs-faq__item {
+  border-bottom: 1px solid var(--bs-line, #E5E7EB);
+  margin: 0;
+}
+
+/* ---- Кнопка-питання ------------------------------------------------ */
+.bs-faq__q {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  padding: 18px 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-align: left;
+  font: inherit;
+  color: var(--bs-ink, #111827);
+  min-height: 44px; /* tap target */
+}
+.bs-faq__q:focus-visible {
+  outline: 2px solid var(--bs-blue, #1E3A8A);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.bs-faq__q-text {
+  flex: 1;
+  font-size: 15.5px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.005em;
+}
+.bs-faq__chev {
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  color: var(--bs-ink-3, #6B7280);
+  transition: transform .28s cubic-bezier(.2,.7,.2,1), color .2s;
+}
+.bs-faq__chev svg { display: block; margin: auto; }
+.bs-faq__item[data-open="true"] .bs-faq__chev {
+  transform: rotate(180deg);
+  color: var(--bs-gold, #D4A017);
+}
+
+/* ---- Панель відповіді: плавне розгортання через grid-rows ---------- */
+.bs-faq__a {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows .28s cubic-bezier(.2,.7,.2,1);
+}
+.bs-faq__item[data-open="true"] .bs-faq__a {
+  grid-template-rows: 1fr;
+}
+.bs-faq__a-inner {
+  overflow: hidden;
+  padding: 0 56px 0 4px;
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--bs-ink-2, #1F2937);
+}
+.bs-faq__item[data-open="true"] .bs-faq__a-inner {
+  padding-bottom: 20px;
+}
+.bs-faq__a-inner > :first-child { margin-top: 0; }
+.bs-faq__a-inner > :last-child  { margin-bottom: 0; }
+.bs-faq__a-inner p { margin: 0 0 10px; }
+.bs-faq__a-inner p:last-child { margin-bottom: 0; }
+.bs-faq__a-inner ul,
+.bs-faq__a-inner ol { margin: 0 0 10px; padding-left: 20px; }
+
+/* ---- Стан "відповідь у підготовці" (для broken-input на кшталт
+       Mega Dream EX, де ШІ не дописав відповіді) -------------------- */
+.bs-faq__a-pending {
+  color: var(--bs-ink-3, #6B7280);
+  font-style: italic;
+}
+
+/* ---- Мобільний tune-up -------------------------------------------- */
+@media (max-width: 640px) {
+  .bs-faq        { margin-top: 18px; }
+  .bs-faq__title { font-size: 19px; }
+  .bs-faq__q     { padding: 16px 2px; gap: 12px; }
+  .bs-faq__q-text { font-size: 15px; }
+  .bs-faq__a-inner { padding-right: 32px; }
+  .bs-faq__item[data-open="true"] .bs-faq__a-inner { padding-bottom: 18px; }
+}
+
+/* ---- prefers-reduced-motion --------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .bs-faq__chev,
+  .bs-faq__a { transition: none; }
+}
+
+/* ---- Очищення СТАРИХ стилів (.bs-faq-accordion / .bs-faq-title /
+        .bs-faq-item) — якщо вони лишаються в темі, перебиваємо їх,
+        щоб не було подвійних рамок і beige-заголовка ----------------- */
+.bs-faq-accordion,
+.bs-faq-accordion .bs-faq-title,
+.bs-faq-accordion .bs-faq-item {
+  all: revert; /* скидаємо успадковані стилі — оригінал лишається в DOM */
+}
+.bs-faq-accordion { display: none !important; } /* нормалізатор замінив його */

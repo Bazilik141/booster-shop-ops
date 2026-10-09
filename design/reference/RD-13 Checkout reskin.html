@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RD-13 · Checkout reskin (HIGH-RISK)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<style>
+  html, body { margin: 0; padding: 0; background: #f0eee9; font-family: 'Manrope', system-ui, sans-serif; }
+</style>
+</head>
+<body>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="shared-ui.jsx"></script>
+<script type="text/babel" src="header-variants.jsx"></script>
+<script type="text/babel" src="rd13-checkout.jsx"></script>
+
+<script type="text/babel">
+function App() {
+  return (
+    <DesignCanvas>
+      <DCPostIt top={-92} left={60} width={540} rotate={-1}>
+        RD-13 · HIGH-RISK. Scope: markup/CSS у checkout/checkout.twig ЛИШЕ.
+        Payment/fiscalization (Hutko/Checkbox) логіку не чіпати. Обов'язковий
+        smoke-test повного циклу оформлення перед деплоєм.
+        Блокери: RD-11 (кошик), RD-12 (міні-кошик) — обидва todo. Мокапи ОК
+        зараз, але фінальний handoff у роботу — тільки після їх стабілізації.
+      </DCPostIt>
+
+      <DCSection
+        id="desktop"
+        title="1 · Desktop — 4 картки замість 7 секцій"
+        subtitle="Отримувач · Доставка (адреса збережена АБО «+ Інша адреса» — ручний ввід Область→Місто→Тип доставки→Відділення) · Оплата · Замовлення (прогрес-бар безкоштовної доставки від ₴2000, товари скролляться після 3 рядків, реальна ціна доставки з API, без дисклеймера про рандом). ОДНА зелена CTA внизу «Замовлення»."
+      >
+        <DCArtboard id="d-default" label="Default · 5 товарів (scroll)" width={1240} height={1340}>
+          <CheckoutDesktop items={CO_ITEMS_MANY} />
+        </DCArtboard>
+        <DCArtboard id="d-errors" label="Помилки валідації + безкоштовна доставка" width={1240} height={1360}>
+          <CheckoutDesktop errors items={CO_ITEMS_FREESHIP} />
+        </DCArtboard>
+        <DCArtboard id="d-guest" label="Гість · нова адреса" width={1240} height={1610}>
+          <CheckoutDesktop guest items={CO_ITEMS_DEFAULT} />
+        </DCArtboard>
+        <DCArtboard id="d-promo" label="Промокод FIRST15 застосовано" width={1240} height={1360}>
+          <CheckoutDesktop items={CO_ITEMS_DEFAULT} promo={PROMO_FIRST15} />
+        </DCArtboard>
+      </DCSection>
+
+      <DCPostIt top={600} left={1970} width={220} rotate={2}>
+        Inline-помилки під полем. Без модалів. Згода з офертою — чекбокс,
+        OFF за замовчуванням (як на бойовому сайті) — CTA тьмяніє, поки не
+        позначено; червоний текст з'являється тільки після спроби відправити.
+      </DCPostIt>
+      <DCPostIt top={600} left={3260} width={230} rotate={-2}>
+        Гість: Доставка одразу в режимі ручного вводу (нема збереженої
+        адреси) + Captcha (плейсхолдер, не малюємо чужий бренд) + новини.
+        «Зберегти дані та зареєструватись» — окремий тумблер у Замовленні,
+        створює акаунт + magic-link на пошту. Автопозначений, як і в поточній
+        реалізації.
+      </DCPostIt>
+      <DCPostIt top={600} left={4550} width={220} rotate={1}>
+        Доставка + прогрес-бар безкоштовної доставки — один блок. «До сплати»
+        завжди лише сума товарів (за вирахуванням знижки) — доставку рахуємо й
+        показуємо окремо, не додаємо в цю суму.
+      </DCPostIt>
+
+      <DCSection
+        id="mobile"
+        title="2 · Mobile 390px — Отримувач/Доставка згортаються як Замовлення"
+        subtitle="Повернений клієнт зі збереженими даними → Отримувач і Доставка згорнуті за замовчуванням (рядок-підсумок: ім'я+телефон / спосіб+відділення). Немає збережених даних, або гість → розгорнуто одразу. «Маєш акаунт?» тепер ВИЩЕ блоку «Замовлення»."
+      >
+        <DCArtboard id="m-collapsed" label="Авторизований · усе згорнуто" width={390} height={1050}>
+          <CheckoutMobile filled />
+        </DCArtboard>
+        <DCArtboard id="m-edit" label="Авторизований · редагує Доставку" width={390} height={1410}>
+          <CheckoutMobile filled forceOpen="delivery" />
+        </DCArtboard>
+        <DCArtboard id="m-guest" label="Гість · усе розгорнуто" width={390} height={2380}>
+          <CheckoutMobile guest />
+        </DCArtboard>
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root') || document.body.appendChild(document.createElement('div'))).render(<App />);
+</script>
+
+</body>
+</html>

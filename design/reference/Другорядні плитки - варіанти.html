@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<title>Другорядні плитки — варіанти</title>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="boostershop-ds.css">
+<style>
+  /* Live styles copied from D-phase handoff so the primary tiles render
+     exactly like prod, plus secondary-tile styles for each variant. */
+  body { font-family: 'Manrope', system-ui, -apple-system, sans-serif; color: var(--bs-ink); }
+
+  .frame {
+    position: absolute; background: var(--bs-bg);
+    border: 1px solid var(--bs-line); border-radius: 18px;
+    padding: 28px 30px 32px; box-shadow: 0 24px 60px rgba(17,24,39,0.10);
+    overflow: hidden;
+  }
+  .frame__label {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--bs-ink-3); margin: 0 0 4px;
+  }
+  .frame__title {
+    font-size: 18px; font-weight: 800; letter-spacing: -0.015em;
+    color: var(--bs-ink); margin: 0 0 4px;
+  }
+  .frame__hint {
+    font-size: 13px; color: var(--bs-ink-3); margin: 0 0 20px;
+    max-width: 640px; line-height: 1.5;
+  }
+
+  /* -- Primary catcards (live) -------------------------------------------- */
+  .bs-home-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .bs-catcard {
+    position: relative; display: flex; height: 168px; overflow: hidden;
+    background: #fff; border: 1px solid var(--bs-line);
+    border-radius: var(--bs-r); box-shadow: var(--bs-sh-sm); text-decoration: none;
+  }
+  .bs-catcard::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: var(--accent); z-index: 2;
+  }
+  .bs-catcard__media {
+    flex: 0 0 168px; width: 168px; height: 168px;
+    background: var(--bs-bg); border-right: 1px solid var(--bs-line);
+    display: grid; place-items: center; color: var(--accent);
+    font-weight: 800; font-size: 13px; letter-spacing: .02em;
+    background-image: repeating-linear-gradient(45deg, rgba(0,0,0,0.04) 0 10px, transparent 10px 20px);
+  }
+  .bs-catcard__body { flex: 1; min-width: 0; padding: 18px 20px; display: flex; flex-direction: column; }
+  .bs-catcard__title { font-size: 18px; font-weight: 800; color: var(--bs-ink); letter-spacing: -0.01em; }
+  .bs-catcard__desc {
+    font-size: 13.5px; line-height: 1.5; color: var(--bs-ink-3); margin-top: 6px;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .bs-catcard__more { margin-top: auto; padding-top: 10px; font-size: 13.5px; font-weight: 700; color: var(--bs-blue); }
+
+  /* Section separator between primary and secondary rows */
+  .row-gap-sm { margin-top: 12px; }
+  .row-gap-md { margin-top: 18px; }
+  .row-gap-lg { margin-top: 24px; }
+
+  /* =========================================================
+     Variant A — Slim mirror, half-height of primaries
+     Same grid, same border style, same chrome — but ~52% height,
+     no media panel, accent reduced to left rule, single line of helper.
+     ========================================================= */
+  .bs-subtiles--A { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .bs-subtile-A {
+    position: relative; display: flex; align-items: center; gap: 14px;
+    height: 84px; padding: 0 18px 0 20px;
+    background: #fff; border: 1px solid var(--bs-line);
+    border-radius: var(--bs-r); text-decoration: none;
+    color: var(--bs-ink); overflow: hidden;
+  }
+  .bs-subtile-A::before {
+    content: ""; position: absolute; left: 0; top: 14px; bottom: 14px;
+    width: 3px; background: var(--accent); border-radius: 0 3px 3px 0;
+  }
+  .bs-subtile-A__glyph {
+    width: 38px; height: 38px; flex: 0 0 38px; border-radius: 8px;
+    display: grid; place-items: center;
+    background: color-mix(in oklab, var(--accent) 12%, white);
+    color: var(--accent);
+  }
+  .bs-subtile-A__glyph svg { width: 18px; height: 18px; }
+  .bs-subtile-A__body { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  .bs-subtile-A__title { font-size: 15px; font-weight: 700; letter-spacing: -0.005em; }
+  .bs-subtile-A__hint {
+    font-size: 12.5px; color: var(--bs-ink-3); margin-top: 2px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .bs-subtile-A__chev { color: var(--bs-ink-4); flex: 0 0 auto; }
+
+  /* =========================================================
+     Variant B — Quiet with sublinks (shows accordion contents)
+     2-col, ~110px tall, accent on title only as a tiny dot,
+     "Інші TCG" exposes YGO / MTG as inline chips.
+     ========================================================= */
+  .bs-subtiles--B { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .bs-subtile-B {
+    position: relative; background: #fff; border: 1px solid var(--bs-line);
+    border-radius: var(--bs-r); padding: 16px 18px 14px;
+    text-decoration: none; color: var(--bs-ink);
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .bs-subtile-B__head {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .bs-subtile-B__dot {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+    flex: 0 0 8px;
+  }
+  .bs-subtile-B__title {
+    font-size: 16px; font-weight: 700; letter-spacing: -0.005em; flex: 1;
+  }
+  .bs-subtile-B__more {
+    font-size: 12.5px; font-weight: 600; color: var(--bs-ink-3);
+  }
+  .bs-subtile-B__sublinks {
+    display: flex; gap: 6px; flex-wrap: wrap;
+  }
+  .bs-sublink {
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 28px; padding: 0 11px;
+    background: var(--bs-bg); border: 1px solid var(--bs-line-2);
+    border-radius: 999px; font-size: 12.5px; font-weight: 600;
+    color: var(--bs-ink-2); text-decoration: none;
+    transition: background .15s, border-color .15s;
+  }
+  .bs-sublink:hover { background: #fff; border-color: var(--bs-line); }
+  .bs-subtile-B__hint {
+    font-size: 12.5px; color: var(--bs-ink-3); line-height: 1.45;
+  }
+
+  /* =========================================================
+     Variant C — Inline link row (lightest possible)
+     Not a card at all — just a row of pills under the primaries.
+     Used when we want to be sure they don't compete.
+     ========================================================= */
+  .bs-subrow {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    padding: 14px 16px; background: #fff; border: 1px solid var(--bs-line);
+    border-radius: var(--bs-r);
+  }
+  .bs-subrow__label {
+    font-size: 12px; font-weight: 700; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--bs-ink-3);
+    padding-right: 6px; border-right: 1px solid var(--bs-line-2);
+    margin-right: 4px;
+  }
+  .bs-suplink {
+    display: inline-flex; align-items: center; gap: 8px;
+    height: 34px; padding: 0 14px;
+    background: var(--bs-bg); border: 1px solid var(--bs-line);
+    border-radius: 999px; font-size: 13.5px; font-weight: 600;
+    color: var(--bs-ink); text-decoration: none;
+    transition: background .15s, border-color .15s;
+  }
+  .bs-suplink::before {
+    content: ""; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent);
+  }
+  .bs-suplink:hover { background: #fff; border-color: color-mix(in oklab, var(--accent) 40%, var(--bs-line)); }
+  .bs-suplink__caret {
+    margin-left: 2px; color: var(--bs-ink-3); font-size: 12px;
+  }
+
+  /* Notes column */
+  .notes {
+    position: absolute; font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 12px; color: var(--bs-ink-3); line-height: 1.55;
+    width: 280px;
+  }
+  .notes h4 {
+    font-family: 'Manrope', system-ui, sans-serif;
+    font-size: 13px; font-weight: 800; color: var(--bs-ink);
+    text-transform: uppercase; letter-spacing: .08em;
+    margin: 0 0 10px;
+  }
+  .notes ul { margin: 0; padding: 0 0 0 16px; }
+  .notes li { margin-bottom: 6px; }
+  .notes .pill {
+    display: inline-block; padding: 1px 7px; border-radius: 999px;
+    background: var(--bs-bg); border: 1px solid var(--bs-line);
+    font-size: 11px; color: var(--bs-ink-2);
+  }
+
+  /* Mobile frame */
+  .phone {
+    width: 360px; background: #fff; border: 9px solid #15181d;
+    border-radius: 36px; padding: 14px; box-shadow: 0 28px 64px rgba(17,24,39,0.22);
+  }
+  .phone .bs-home-tiles { grid-template-columns: 1fr; gap: 12px; }
+  .phone .bs-catcard { height: 132px; }
+  .phone .bs-catcard__media { flex: 0 0 124px; width: 124px; height: 132px; }
+  .phone .bs-catcard__desc { -webkit-line-clamp: 2; }
+  .phone .bs-subtiles--A { grid-template-columns: 1fr; gap: 10px; }
+  .phone .bs-subtile-A { height: 72px; }
+
+  /* Recommendation badge */
+  .reco {
+    position: absolute; top: 22px; right: 24px;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px; background: var(--bs-blue-soft);
+    color: var(--bs-blue); border-radius: 999px;
+    font-size: 11.5px; font-weight: 700; letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body class="bs">
+
+  <!-- =========================================================
+       VARIANT A — Slim mirror tiles (recommended)
+       ========================================================= -->
+  <div class="frame" style="left: 60px; top: 60px; width: 1180px;" data-screen-label="Variant A">
+    <p class="frame__label">Варіант A</p>
+    <h2 class="frame__title">Тонкі плитки-«віддзеркалення» · 84px заввишки</h2>
+    <p class="frame__hint">
+      Та сама сітка 2 колонки й та сама геометрія, що в основних, але вдвічі нижчі, без панелі лого
+      й з акцентом тільки у вигляді тонкої лівої смужки. Іконка-гліф у м'якій тонованій плашці —
+      достатньо, щоб око зачепилось, недостатньо, щоб переключитись з основних плиток.
+    </p>
+    <span class="reco">Рекомендую</span>
+
+    <!-- Primary -->
+    <section class="bs-home-tiles">
+      <a class="bs-catcard" style="--accent:#C68A00;" href="#">
+        <span class="bs-catcard__media">Pokémon logo</span>
+        <span class="bs-catcard__body">
+          <span class="bs-catcard__title">Pokémon TCG</span>
+          <span class="bs-catcard__desc">Оригінальні бустери, бокси та набори Pokémon TCG. Японські, корейські й англійські видання — sealed, без зважування.</span>
+          <span class="bs-catcard__more">Переглянути →</span>
+        </span>
+      </a>
+      <a class="bs-catcard" style="--accent:#1E40AF;" href="#">
+        <span class="bs-catcard__media">One Piece logo</span>
+        <span class="bs-catcard__body">
+          <span class="bs-catcard__title">One Piece Card Game</span>
+          <span class="bs-catcard__desc">Оригінальні бустери та бокси One Piece Card Game від Bandai. Sealed із боксів, без сортування.</span>
+          <span class="bs-catcard__more">Переглянути →</span>
+        </span>
+      </a>
+    </section>
+
+    <!-- Secondary -->
+    <section class="bs-subtiles--A row-gap-md" aria-label="Інші категорії">
+      <a class="bs-subtile-A" style="--accent:#065F46;" href="/catalog/more-tcg">
+        <span class="bs-subtile-A__glyph" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="13" height="16" rx="2"/><rect x="8" y="3" width="13" height="16" rx="2"/></svg>
+        </span>
+        <span class="bs-subtile-A__body">
+          <span class="bs-subtile-A__title">Інші TCG</span>
+          <span class="bs-subtile-A__hint">Yu-Gi-Oh! · Magic: The Gathering</span>
+        </span>
+        <svg class="bs-subtile-A__chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+      </a>
+      <a class="bs-subtile-A" style="--accent:#0D9488;" href="/catalog/accessories">
+        <span class="bs-subtile-A__glyph" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18"/><path d="M8 14h3"/></svg>
+        </span>
+        <span class="bs-subtile-A__body">
+          <span class="bs-subtile-A__title">Аксесуари</span>
+          <span class="bs-subtile-A__hint">Sleeves, deck boxes, playmats, binders</span>
+        </span>
+        <svg class="bs-subtile-A__chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+      </a>
+    </section>
+  </div>
+
+  <aside class="notes" style="left: 1270px; top: 110px;">
+    <h4>Чому A</h4>
+    <ul>
+      <li>Висота 84 vs 168 px — лінійно «легші», око одразу читає основні як головне.</li>
+      <li>Жодного бренд-кольору як великої площі. <span class="pill">#065F46</span> та <span class="pill">#0D9488</span> працюють лише як 3 px смужка зліва і 12% tint у плашці іконки.</li>
+      <li>Один спільний шрифт-розмір (15 px) для обох вторинних — щоб не наростав акцент на одній з них.</li>
+      <li>Hint-рядок коротко натякає на вміст: підкатегорії «Інші TCG» та типи аксесуарів.</li>
+      <li>Та сама ширина та gap, що в основних — сітка не «ламається».</li>
+    </ul>
+  </aside>
+
+
+  <!-- =========================================================
+       VARIANT B — Quiet card with sublinks visible
+       ========================================================= -->
+  <div class="frame" style="left: 60px; top: 700px; width: 1180px;" data-screen-label="Variant B">
+    <p class="frame__label">Варіант B</p>
+    <h2 class="frame__title">Тиха картка з підкатегоріями всередині</h2>
+    <p class="frame__hint">
+      Та сама сітка, ~110 px висота. Замість акордеону в бургері — підкатегорії YGO / MTG показані одразу
+      як міні-чіпи в плитці «Інші TCG». Кращий discoverability, але виглядає трохи «густіше» за A.
+    </p>
+
+    <section class="bs-home-tiles">
+      <a class="bs-catcard" style="--accent:#C68A00;" href="#">
+        <span class="bs-catcard__media">Pokémon logo</span>
+        <span class="bs-catcard__body">
+          <span class="bs-catcard__title">Pokémon TCG</span>
+          <span class="bs-catcard__desc">Оригінальні бустери, бокси та набори Pokémon TCG. Японські, корейські й англійські видання — sealed, без зважування.</span>
+          <span class="bs-catcard__more">Переглянути →</span>
+        </span>
+      </a>
+      <a class="bs-catcard" style="--accent:#1E40AF;" href="#">
+        <span class="bs-catcard__media">One Piece logo</span>
+        <span class="bs-catcard__body">
+          <span class="bs-catcard__title">One Piece Card Game</span>
+          <span class="bs-catcard__desc">Оригінальні бустери та бокси One Piece Card Game від Bandai. Sealed із боксів, без сортування.</span>
+          <span class="bs-catcard__more">Переглянути →</span>
+        </span>
+      </a>
+    </section>
+
+    <section class="bs-subtiles--B row-gap-md" aria-label="Інші категорії">
+      <a class="bs-subtile-B" style="--accent:#065F46;" href="/catalog/more-tcg">
+        <div class="bs-subtile-B__head">
+          <span class="bs-subtile-B__dot" aria-hidden="true"></span>
+          <span class="bs-subtile-B__title">Інші TCG</span>
+          <span class="bs-subtile-B__more">2 категорії →</span>
+        </div>
+        <div class="bs-subtile-B__sublinks">
+          <span class="bs-sublink">Yu-Gi-Oh!</span>
+          <span class="bs-sublink">Magic: The Gathering</span>
+        </div>
+      </a>
+      <a class="bs-subtile-B" style="--accent:#0D9488;" href="/catalog/accessories">
+        <div class="bs-subtile-B__head">
+          <span class="bs-subtile-B__dot" aria-hidden="true"></span>
+          <span class="bs-subtile-B__title">Аксесуари</span>
+          <span class="bs-subtile-B__more">Переглянути →</span>
+        </div>
+        <p class="bs-subtile-B__hint">Sleeves, deck boxes, playmats, binders — для зберігання та гри.</p>
+      </a>
+    </section>
+  </div>
+
+  <aside class="notes" style="left: 1270px; top: 760px;">
+    <h4>Trade-offs B</h4>
+    <ul>
+      <li>Більше SEO-сигналів і одразу клікабельні YGO / MTG.</li>
+      <li>Дві плитки виглядають асиметрично за щільністю (чіпи vs прозовий хінт). Можна вирівняти.</li>
+      <li>Картка трохи помітніша за A — конкурує сильніше з основними.</li>
+      <li>Якщо обрати B — приберемо chevron у meta «2 категорії →», бо самі чіпи вже є CTA.</li>
+    </ul>
+  </aside>
+
+
+  <!-- =========================================================
+       VARIANT C — Inline pill row
+       ========================================================= -->
+  <div class="frame" style="left: 60px; top: 1340px; width: 1180px;" data-screen-label="Variant C">
+    <p class="frame__label">Варіант C</p>
+    <h2 class="frame__title">Інлайновий рядок-«линка» — найтихіший</h2>
+    <p class="frame__hint">
+      Не картки взагалі. Один контейнер під основними плитками, підпис «Також у магазині» зліва,
+      далі пігулки. Гарантовано не конкурує з основними, але втрачає «промо-вагу»: легко не помітити.
+    </p>
+
+    <section class="bs-home-tiles">
+      <a class="bs-catcard" style="--accent:#C68A00;" href="#">
+        <span class="bs-catcard__media">Pokémon logo</span>
+        <span class="bs-catcard__body">
+          <span class="bs-catcard__title">Pokémon TCG</span>
+          <span class="bs-catcard__desc">Оригінальні бустери, бокси та набори Pokémon TCG. Японські, корейські й англійські видання — sealed, без зважування.</span>
+          <span class="bs-catcard__more">Переглянути →</span>
+        </span>
+      </a>
+      <a class="bs-catcard" style="--accent:#1E40AF;" href="#">
+        <span class="bs-catcard__media">One Piece logo</span>
+        <span class="bs-catcard__body">
+          <span class="bs-catcard__title">One Piece Card Game</span>
+          <span class="bs-catcard__desc">Оригінальні бустери та бокси One Piece Card Game від Bandai. Sealed із боксів, без сортування.</span>
+          <span class="bs-catcard__more">Переглянути →</span>
+        </span>
+      </a>
+    </section>
+
+    <div class="bs-subrow row-gap-md" aria-label="Інші категорії">
+      <span class="bs-subrow__label">Також у магазині</span>
+      <a class="bs-suplink" style="--accent:#065F46;" href="/catalog/more-tcg">Інші TCG <span class="bs-suplink__caret">→</span></a>
+      <a class="bs-suplink" style="--accent:#0D9488;" href="/catalog/accessories">Аксесуари <span class="bs-suplink__caret">→</span></a>
+      <a class="bs-suplink" style="--accent:#7C3AED;" href="/catalog/yu-gi-oh">Yu-Gi-Oh!</a>
+      <a class="bs-suplink" style="--accent:#B45309;" href="/catalog/mtg">Magic: The Gathering</a>
+    </div>
+  </div>
+
+  <aside class="notes" style="left: 1270px; top: 1400px;">
+    <h4>Коли C</h4>
+    <ul>
+      <li>Якщо «Інші TCG» і «Аксесуари» — це чисто catch-all для довгого хвоста.</li>
+      <li>Економить ~80–110 px вертикалі — корисно, якщо нижче йде «Популярні товари» одразу.</li>
+      <li>Можна показати одразу YGO / MTG як окремі лінки — спрощує бургер-акордеон.</li>
+      <li>Мінус: «Аксесуари» втрачають видимість на десктопі.</li>
+    </ul>
+  </aside>
+
+
+  <!-- =========================================================
+       MOBILE — варіант A на телефоні
+       ========================================================= -->
+  <div class="frame" style="left: 60px; top: 1900px; width: 460px; padding: 28px 30px;" data-screen-label="Mobile A">
+    <p class="frame__label">Mobile · варіант A</p>
+    <h2 class="frame__title">Стек на телефоні</h2>
+
+    <div class="phone" style="margin-top: 14px;">
+      <section class="bs-home-tiles">
+        <a class="bs-catcard" style="--accent:#C68A00;" href="#">
+          <span class="bs-catcard__media">Pokémon</span>
+          <span class="bs-catcard__body">
+            <span class="bs-catcard__title">Pokémon TCG</span>
+            <span class="bs-catcard__desc">Оригінальні бустери та бокси Pokémon, JP/KR/EN видання.</span>
+            <span class="bs-catcard__more">Переглянути →</span>
+          </span>
+        </a>
+        <a class="bs-catcard" style="--accent:#1E40AF;" href="#">
+          <span class="bs-catcard__media">One Piece</span>
+          <span class="bs-catcard__body">
+            <span class="bs-catcard__title">One Piece Card Game</span>
+            <span class="bs-catcard__desc">Sealed бустери та бокси One Piece від Bandai.</span>
+            <span class="bs-catcard__more">Переглянути →</span>
+          </span>
+        </a>
+      </section>
+
+      <section class="bs-subtiles--A row-gap-sm" style="margin-top: 10px;" aria-label="Інші категорії">
+        <a class="bs-subtile-A" style="--accent:#065F46;" href="/catalog/more-tcg">
+          <span class="bs-subtile-A__glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="13" height="16" rx="2"/><rect x="8" y="3" width="13" height="16" rx="2"/></svg></span>
+          <span class="bs-subtile-A__body">
+            <span class="bs-subtile-A__title">Інші TCG</span>
+            <span class="bs-subtile-A__hint">YGO · MTG</span>
+          </span>
+          <svg class="bs-subtile-A__chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+        </a>
+        <a class="bs-subtile-A" style="--accent:#0D9488;" href="/catalog/accessories">
+          <span class="bs-subtile-A__glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18"/><path d="M8 14h3"/></svg></span>
+          <span class="bs-subtile-A__body">
+            <span class="bs-subtile-A__title">Аксесуари</span>
+            <span class="bs-subtile-A__hint">Sleeves, boxes, mats</span>
+          </span>
+          <svg class="bs-subtile-A__chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+        </a>
+      </section>
+    </div>
+  </div>
+
+  <!-- Side-by-side hierarchy reference -->
+  <div class="frame" style="left: 560px; top: 1900px; width: 680px;" data-screen-label="Hierarchy check">
+    <p class="frame__label">Перевірка ієрархії</p>
+    <h2 class="frame__title">Скільки уваги забирає кожна плитка</h2>
+    <p class="frame__hint">
+      Лівий стовпчик — поточні основні, правий — варіанти A / B / C на одній шкалі. Висота смужки
+      приблизно пропорційна «візуальній вазі» у скрол-патерні.
+    </p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: end;">
+      <div>
+        <div style="font-size: 11px; color: var(--bs-ink-3); margin-bottom: 8px; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: .08em;">Primary (Pokémon / One Piece)</div>
+        <div style="display: flex; gap: 8px; align-items: end;">
+          <div style="flex: 1; height: 168px; background: #C68A00; border-radius: 6px; display: grid; place-items: end center; color: #fff; padding-bottom: 8px; font-size: 11px; font-weight: 700;">168px</div>
+          <div style="flex: 1; height: 168px; background: #1E40AF; border-radius: 6px; display: grid; place-items: end center; color: #fff; padding-bottom: 8px; font-size: 11px; font-weight: 700;">168px</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size: 11px; color: var(--bs-ink-3); margin-bottom: 8px; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: .08em;">Secondary A / B / C</div>
+        <div style="display: grid; gap: 10px;">
+          <div style="display: flex; gap: 8px; align-items: end;">
+            <div style="flex: 1; height: 84px; background: #065F46; opacity: .85; border-radius: 6px; display: grid; place-items: end center; color: #fff; padding-bottom: 6px; font-size: 11px; font-weight: 700;">A · 84</div>
+            <div style="flex: 1; height: 84px; background: #0D9488; opacity: .85; border-radius: 6px; display: grid; place-items: end center; color: #fff; padding-bottom: 6px; font-size: 11px; font-weight: 700;">A · 84</div>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: end;">
+            <div style="flex: 1; height: 110px; background: #065F46; opacity: .7; border-radius: 6px; display: grid; place-items: end center; color: #fff; padding-bottom: 6px; font-size: 11px; font-weight: 700;">B · 110</div>
+            <div style="flex: 1; height: 110px; background: #0D9488; opacity: .7; border-radius: 6px; display: grid; place-items: end center; color: #fff; padding-bottom: 6px; font-size: 11px; font-weight: 700;">B · 110</div>
+          </div>
+          <div style="height: 64px; background: var(--bs-bg); border: 1px solid var(--bs-line); border-radius: 6px; display: grid; place-items: center; font-size: 11px; font-weight: 700; color: var(--bs-ink-3);">C · ~64 (one row, both)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

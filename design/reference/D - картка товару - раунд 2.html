@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="uk"><head><meta charset="utf-8"><title>Картка товару — раунд 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Manrope,system-ui,sans-serif;background:#F1F2F4;color:#1F2937;padding:48px 32px 96px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:60px}
+h1{font-size:27px;font-weight:700;letter-spacing:-.02em}
+.lede{font-size:15px;line-height:1.6;color:#4B5563;max-width:72ch;margin-top:10px}
+a{color:#15803D;text-decoration:none}a:hover{color:#166534}
+.sec{display:flex;flex-direction:column;gap:20px}
+.shead{display:flex;flex-direction:column;gap:6px;border-top:1px solid #D7DADF;padding-top:16px}
+.stag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#4B5563}
+.sname{font-size:20px;font-weight:700;letter-spacing:-.01em}
+.sdesc{font-size:14px;line-height:1.6;color:#4B5563;max-width:78ch}
+.row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.tt{font-size:14px;font-weight:600;line-height:1.35;color:#1D4ED8}
+.pr{font-size:17px;font-weight:700}
+.note{font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.7;color:#414B58;background:#E4E6EA;border-radius:8px;padding:12px 14px;white-space:pre-wrap}
+.buy{margin-top:4px;display:block;width:100%;padding:9px;border:0;border-radius:8px;background:#16A34A;color:#fff;font:600 14px Manrope,sans-serif;cursor:pointer}
+.buy:hover{background:#15803D}
+
+/* ── A · резерв ─────────────────────────── */
+.vA .card{background:#fff;border:1px solid #E5E7EB;border-radius:12px;overflow:hidden}
+.vA .media{position:relative;aspect-ratio:331/240;overflow:hidden;background:#E7E9ED}
+.vA .media img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transform:scale(2.6);filter:blur(26px) saturate(1.45) brightness(.95);z-index:0}
+.vA .media::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(0,0,0,.12))}
+.vA .media img.fg{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:12px 0;z-index:2}
+.vA .body{padding:14px 16px 18px;display:flex;flex-direction:column;gap:8px}
+
+/* ── D · без коробки ────────────────────── */
+.vD .card{display:flex;flex-direction:column;gap:10px;height:100%;transition:transform .18s ease}
+.vD .card:hover{transform:translateY(-3px)}
+.vD .media{position:relative;aspect-ratio:331/240}
+.vD .media img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.vD .body{display:flex;flex-direction:column;gap:6px;padding:0 2px 2px;flex:1}
+.vD .tt{flex:1}
+.vD .rule{height:1px;background:#D7DADF}
+
+/* ── E · полиця ─────────────────────────── */
+.vE .card{display:flex;flex-direction:column;gap:14px;height:100%}
+.vE .media{position:relative;aspect-ratio:331/240}
+.vE .media img{position:absolute;left:0;right:0;bottom:0;width:100%;height:100%;object-fit:contain;object-position:bottom;z-index:2}
+.vE .media::before{content:"";position:absolute;left:50%;bottom:-3px;width:52%;height:16px;transform:translateX(-50%);background:radial-gradient(50% 50% at 50% 50%,rgba(31,41,55,.34),rgba(31,41,55,0) 72%);filter:blur(4px);z-index:1}
+.vE .media::after{content:"";position:absolute;left:0;right:-20px;bottom:0;height:64px;background:linear-gradient(180deg,rgba(31,41,55,0),rgba(31,41,55,.05));border-bottom:1px solid #CFD3D9;z-index:0}
+.vE .card:last-child .media::after{right:0}
+.vE .body{display:flex;flex-direction:column;gap:6px;flex:1}
+.vE .tt{flex:1}
+
+/* ── F · горизонтальна плитка ───────────── */
+.vF .row{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.vF .card{background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:14px;display:grid;grid-template-columns:96px 1fr;gap:16px;align-items:center}
+.vF .media{position:relative;aspect-ratio:3/4;background:#F4F5F7;border-radius:8px}
+.vF .media img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:8px}
+.vF .body{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.vF .buy{width:auto;padding:8px 20px}
+</style></head>
+<body><div class="wrap">
+<header><h1>Картка товару — раунд 2</h1>
+<p class="lede">Три нові підходи. Замість того щоб чимось заповнювати порожнє поле, кожен з них знімає саму причину: коробку, яку товар не заповнює. Файли зображень ті самі.</p></header>
+
+<section class="sec vD"><div class="shead"><div class="stag">Варіант D</div><div class="sname">Без коробки</div>
+<p class="sdesc">Прибираємо білу плитку, рамку й тінь. Товар лежить прямо на полотні сторінки, підпис під ним, тонка лінія відділяє текстовий блок. Порожнього поля не існує, бо немає контейнера, межі якого його показують. Найлегший варіант із можливих — ми прибираємо елементи, а не додаємо.</p></div>
+<div class="row">
+<div class="card"><div class="media"><img src="samples/pack2.png" alt=""></div><div class="rule"></div><div class="body"><div class="tt">Бустер One Piece Card Game OP-16: The Time of Battle (Японське видання)</div><div class="pr">₴200.00</div><button class="buy">Купити</button></div></div>
+<div class="card"><div class="media"><img src="samples/box.png" alt=""></div><div class="rule"></div><div class="body"><div class="tt">Бустер бокс One Piece Card Game OP-16: The Time of Battle (Японське видання)</div><div class="pr">₴4700.00</div><button class="buy">Купити</button></div></div>
+<div class="card"><div class="media"><img src="samples/deck.png" alt=""></div><div class="rule"></div><div class="body"><div class="tt">Стартова колода One Piece ST-33 Kuzan (Японське видання)</div><div class="pr">₴600.00</div><button class="buy">Купити</button></div></div>
+</div>
+<div class="note">Плюс: нуль додаткової ваги, сторінка стає повітрянішою, товар — єдиний носій кольору.
+Мінус: без рамок межі клікабельної області читаються гірше; потрібен виразний hover.</div></section>
+
+<section class="sec vE"><div class="shead"><div class="stag">Варіант E</div><div class="sname">Полиця</div>
+<p class="sdesc">Теж без плиток, але весь ряд отримує спільну основу: наскрізна лінія з дуже слабким градієнтом над нею, товари стоять на ній із короткою тінню. Різна висота й ширина товарів перестає бути проблемою — навпаки, ряд читається як вітрина. Порожнє поле лишається зверху, де око його не шукає.</p></div>
+<div class="row">
+<div class="card"><div class="media"><img src="samples/pack2.png" alt=""></div><div class="body"><div class="tt">Бустер One Piece Card Game OP-16: The Time of Battle (Японське видання)</div><div class="pr">₴200.00</div><button class="buy">Купити</button></div></div>
+<div class="card"><div class="media"><img src="samples/box.png" alt=""></div><div class="body"><div class="tt">Бустер бокс One Piece Card Game OP-16: The Time of Battle (Японське видання)</div><div class="pr">₴4700.00</div><button class="buy">Купити</button></div></div>
+<div class="card"><div class="media"><img src="samples/deck.png" alt=""></div><div class="body"><div class="tt">Стартова колода One Piece ST-33 Kuzan (Японське видання)</div><div class="pr">₴600.00</div><button class="buy">Купити</button></div></div>
+</div>
+<div class="note">Плюс: ряд виглядає цілісно, товари різного розміру вирівняні по одній базі.
+Мінус: ламається, якщо в ряду залишився один товар.</div></section>
+
+<section class="sec vF"><div class="shead"><div class="stag">Варіант F</div><div class="sname">Горизонтальна плитка</div>
+<p class="sdesc">Єдиний варіант, що усуває причину, а не маскує наслідок: слот під зображення стає вертикальним (3:4), як сам товар, а текст і ціна йдуть праворуч. Порожнього поля майже немає. У ряд стає дві картки замість трьох, зате назви товарів — а вони у вас довгі — нарешті поміщаються в один-два рядки.</p></div>
+<div class="row">
+<div class="card"><div class="media"><img src="samples/pack2.png" alt=""></div><div class="body"><div class="tt">Бустер One Piece Card Game OP-16: The Time of Battle (Японське видання)</div><div class="pr">₴200.00</div><button class="buy">Купити</button></div></div>
+<div class="card"><div class="media"><img src="samples/box.png" alt=""></div><div class="body"><div class="tt">Бустер бокс One Piece Card Game OP-16: The Time of Battle (Японське видання)</div><div class="pr">₴4700.00</div><button class="buy">Купити</button></div></div>
+<div class="card"><div class="media"><img src="samples/deck.png" alt=""></div><div class="body"><div class="tt">Стартова колода One Piece ST-33 Kuzan (Японське видання)</div><div class="pr">₴600.00</div><button class="buy">Купити</button></div></div>
+<div class="card"><div class="media"><img src="samples/box.png" alt=""></div><div class="body"><div class="tt">Бустер бокс One Piece Card Game OP-16 (Японське видання)</div><div class="pr">₴4700.00</div><button class="buy">Купити</button></div></div>
+</div>
+<div class="note">Плюс: порожнеча зникає структурно, довгі назви читаються, картка компактніша по висоті.
+Мінус: товар видно дрібніше; це перебудова сітки каталогу, а не косметика.</div></section>
+
+<section class="sec vA"><div class="shead"><div class="stag">Резерв</div><div class="sname">A · розмитий дубль</div>
+<p class="sdesc">Лишаю для порівняння.</p></div>
+<div class="row">
+<div class="card"><div class="media"><img class="bg" src="samples/pack2.png" alt=""><img class="fg" src="samples/pack2.png" alt=""></div><div class="body"><div class="tt">Бустер One Piece Card Game OP-16: The Time of Battle (Японське видання)</div><div class="pr">₴200.00</div></div></div>
+<div class="card"><div class="media"><img class="bg" src="samples/box.png" alt=""><img class="fg" src="samples/box.png" alt=""></div><div class="body"><div class="tt">Бустер бокс One Piece Card Game OP-16: The Time of Battle (Японське видання)</div><div class="pr">₴4700.00</div></div></div>
+<div class="card"><div class="media"><img class="bg" src="samples/deck.png" alt=""><img class="fg" src="samples/deck.png" alt=""></div><div class="body"><div class="tt">Стартова колода One Piece ST-33 Kuzan (Японське видання)</div><div class="pr">₴600.00</div></div></div>
+</div></section>
+
+</div></body></html>

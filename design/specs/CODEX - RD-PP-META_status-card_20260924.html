@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<title>CODEX · RD-PP-META · Картка статусу (варіант B) · 2026-09-24</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F7F7F5;font-family:Manrope,system-ui,sans-serif;color:#1F2937;font-size:14.5px;line-height:1.55}
+a{color:#1E3A8A}a:hover{color:#1E40AF}
+.doc{max-width:1120px;margin:0 auto;padding:32px 20px 64px}
+.doc h1{font-size:26px;font-weight:800;color:#111827;margin:0 0 6px;letter-spacing:-.015em}
+.doc h2{font-size:19px;font-weight:800;color:#111827;margin:40px 0 10px;padding-top:20px;border-top:1px solid #E5E7EB}
+.doc h3{font-size:15px;font-weight:700;color:#111827;margin:20px 0 6px}
+.doc p,.doc li{max-width:820px;text-wrap:pretty}
+.doc ul,.doc ol{padding-left:20px;margin:6px 0}
+.doc li{margin:3px 0}
+.doc code{font-family:"JetBrains Mono",monospace;font-size:12.5px;background:#EEF0F2;padding:1px 5px;border-radius:4px}
+.doc pre{font-family:"JetBrains Mono",monospace;font-size:12px;line-height:1.55;background:#111827;color:#E5E7EB;padding:14px 16px;border-radius:10px;overflow:auto;white-space:pre;margin:8px 0}
+.meta{color:#6B7280;font-size:13px}
+.doc table{border-collapse:collapse;font-size:13px;margin:8px 0;width:100%;max-width:900px}
+.doc th,.doc td{border:1px solid #E5E7EB;padding:7px 10px;text-align:left;vertical-align:top;background:#fff}
+.doc th{background:#EEF0F2;font-weight:700}
+.sw{display:inline-block;width:12px;height:12px;border-radius:3px;border:1px solid rgba(0,0,0,.1);vertical-align:-2px;margin-right:4px}
+.ex-grid{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start;margin-top:10px}
+.ex{display:grid;gap:6px}
+.ex__cap{font-size:11.5px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:.05em}
+.ex__dk{width:600px;max-width:100%;background:#fff;border:1px solid #E5E7EB;border-radius:14px;padding:28px;box-sizing:border-box}
+.ex__mb{width:375px;background:#fff;border:1px solid #E5E7EB;border-radius:14px;padding:20px 16px;box-sizing:border-box}
+.ex h1.t{margin:0;font-size:32px;line-height:1.2;font-weight:800;color:#111827;letter-spacing:-.015em}
+.ex__mb h1.t{font-size:22px}
+.ex .price{display:flex;align-items:baseline;gap:10px;margin-top:18px}
+.ex .price b{font-size:34px;font-weight:800;color:#111827}
+.ex .price span{font-size:13px;color:#6B7280}
+.ex .bulk{display:flex;gap:8px;align-items:center;margin-top:10px;font-size:13px;color:#6B7280}
+.ex .bulk em{font-style:normal;background:#FBF4DC;border:1px solid #F1DFA2;color:#92400E;font-weight:700;padding:3px 8px;border-radius:6px}
+.ex .ctx{opacity:.55}
+</style>
+<!-- ======== ЄДИНЕ ДЖЕРЕЛО CSS: цей блок переноситься в boostershop-ds.css 1:1 ======== -->
+<style id="bs-pp-css">
+/* RD-PP-META · product info block: reviews button + manufacturer + status card */
+.bs-pp-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:12px}
+.bs-pp-reviews{display:inline-flex;align-items:center;gap:8px;padding:4px 10px 4px 4px;border:1px solid transparent;border-radius:999px;background:var(--bs-bg,#F7F7F5);color:var(--bs-ink-2,#1F2937);font-size:13px;font-weight:600;line-height:1.2;text-decoration:none;transition:background .15s,border-color .15s,color .15s}
+.bs-pp-reviews:hover,.bs-pp-reviews:focus-visible{background:var(--bs-paper,#fff);border-color:var(--bs-line,#E5E7EB);color:var(--bs-ink,#111827);text-decoration:none}
+.bs-pp-reviews:focus-visible{outline:2px solid var(--bs-blue,#1E3A8A);outline-offset:2px}
+.bs-pp-reviews__ic{width:26px;height:26px;border-radius:999px;background:var(--bs-gold-soft,#FBF4DC);color:var(--bs-gold,#D4A017);display:grid;place-items:center;flex:0 0 auto}
+.bs-pp-reviews__arr{color:var(--bs-ink-4,#9CA3AF);transition:transform .15s,color .15s;flex:0 0 auto}
+.bs-pp-reviews:hover .bs-pp-reviews__arr{transform:translateX(2px);color:var(--bs-ink-2,#1F2937)}
+.bs-pp-mf{display:inline-flex;align-items:center;gap:8px;font-size:13px}
+.bs-pp-mf__label{color:var(--bs-ink-3,#6B7280)}
+.bs-pp-mf__link{color:var(--bs-blue,#1E3A8A);font-size:13.5px;font-weight:600;text-decoration:none}
+.bs-pp-mf__link:hover{color:var(--bs-onepiece,#1E40AF);text-decoration:underline;text-underline-offset:3px}
+.bs-pp-status{display:flex;align-items:center;gap:12px;margin-top:14px;padding:12px 14px;border:1px solid var(--bs-line,#E5E7EB);border-radius:var(--bs-r,10px);background:var(--bs-bg,#F7F7F5)}
+.bs-pp-status__ic{width:36px;height:36px;border-radius:999px;background:#fff;display:grid;place-items:center;flex:0 0 auto}
+.bs-pp-status__body{min-width:0}
+.bs-pp-status__title{font-size:14.5px;font-weight:700;line-height:1.3}
+.bs-pp-status__sub{margin-top:2px;font-size:13px;line-height:1.4;color:var(--bs-ink-3,#6B7280)}
+.bs-pp-status__sub strong{color:var(--bs-ink-2,#1F2937);font-weight:700}
+.bs-pp-status--in{background:var(--bs-green-soft,#F3FBF6);border-color:#CDEBD8}
+.bs-pp-status--in .bs-pp-status__ic{color:var(--bs-green,#16A34A)}
+.bs-pp-status--in .bs-pp-status__title{color:var(--bs-green-d,#15803D)}
+.bs-pp-status--pre{background:var(--bs-warning-bg,#FFFBEA);border-color:var(--bs-warning-line,#FCD34D)}
+.bs-pp-status--pre .bs-pp-status__ic,.bs-pp-status--pre .bs-pp-status__title{color:var(--bs-warning-fg,#92400E)}
+.bs-pp-status--out .bs-pp-status__ic{background:var(--bs-line-2,#EEF0F2);color:var(--bs-ink-3,#6B7280)}
+.bs-pp-status--out .bs-pp-status__title{color:var(--bs-ink-3,#6B7280)}
+.bs-pp-status + .bs-price-block{margin-top:18px}
+@media (max-width:767.98px){
+.bs-pp-reviews{padding:7px 12px 7px 7px}
+}
+</style>
+</head>
+<body>
+<div class="doc">
+<h1>Хендоф: RD-PP-META, блок інфо під назвою товару (варіант B «Картка статусу»)</h1>
+<div class="meta">Дата: 2026-09-24 · Executor: Codex · Зона: сторінка товару (<code>product/product.twig</code>), лише розмітка й CSS · Файл-джерело дизайну: <code>RD-PP-meta - статус, виробник, відгуки.html</code>, варіант B</div>
+
+<h2>1. Мета</h2>
+<p>Замінити поточний блок під <code>h1.bs-product__title</code> (посилання «★ Відгуки про нас →» + сітка <code>.bs-pp-meta</code> з рядками «Виробник / Статус / Доставка») на:</p>
+<ol>
+<li>рядок <code>.bs-pp-head</code>: зліва кнопка «Відгуки про нас», справа «Виробник Bandai»;</li>
+<li>картку статусу <code>.bs-pp-status</code> з іконкою, заголовком і підрядком. Вона має <strong>рівно 3 стани</strong>: в наявності, передзамовлення, закінчився.</li>
+</ol>
+<p><strong>Стану «мало на складі» немає.</strong> Будь-яка кількість &gt; 0 рендериться як «В наявності» з точним числом. Порогів, окремих кольорів і текстів типу «Залишилось N» не додавати.</p>
+
+<h2>2. Живий приклад (еталон)</h2>
+<p>Нижче наведено справжню розмітку з розділу 4, стилізовану CSS із розділу 5. Ціна й «від 5 шт» (напівпрозорі) показані тільки для контексту, їх не змінювати.</p>
+<div id="examples"></div>
+
+<h2>3. Стани та тексти (дослівно)</h2>
+<table>
+<tr><th>Стан</th><th>Коли (логіка без змін)</th><th>Модифікатор</th><th>Іконка</th><th>Заголовок</th><th>Підрядок</th></tr>
+<tr><td>В наявності</td><td>та сама умова, що зараз рендерить рядок «В наявності · N шт»</td><td><code>--in</code></td><td>галочка</td><td>В наявності</td><td><code>&lt;strong&gt;{N} шт&lt;/strong&gt; на складі</code></td></tr>
+<tr><td>Передзамовлення</td><td>та сама умова, що зараз рендерить <code>.bs-badge--preorder</code> + рядок «Доставка»</td><td><code>--pre</code></td><td>годинник</td><td>Передзамовлення</td><td><code>Доставка орієнтовно &lt;strong&gt;3–4 тижні&lt;/strong&gt;</code> (значення брати з того ж джерела, що зараз <code>.bs-pp-eta__val</code>)</td></tr>
+<tr><td>Закінчився</td><td>та сама умова, що зараз рендерить бейдж «Закінчився»</td><td><code>--out</code></td><td>хрестик</td><td>Закінчився</td><td>Товару немає в наявності</td></tr>
+</table>
+<ul>
+<li>Якщо в стані «в наявності» кількість недоступна в шаблоні (порожня), не виводити <code>.bs-pp-status__sub</code> узагалі. Не підставляти «0 шт» чи вигадані тексти.</li>
+<li>Тире в «3–4» довге (U+2013), як зараз на сайті.</li>
+</ul>
+
+<h2>4. Розмітка (Twig)</h2>
+<p>Назви змінних-умов нижче умовні (<code>is_preorder</code>, <code>is_out</code>, <code>stock_qty</code>, <code>eta_text</code>). Codex підставляє ті, що <strong>вже</strong> використовуються в поточному шаблоні для цих самих рядків. Нових змінних у контролері не додавати.</p>
+<pre id="twig-src"></pre>
+<h3>Кнопка «Відгуки про нас»: що зберегти</h3>
+<ul>
+<li>Той самий елемент <code>&lt;a&gt;</code>: <code>href="#tab-review"</code>, <strong>весь</strong> наявний <code>onclick</code> (перемикання таба + прокрутка) і клас <code>bs-pp-reviews__olx</code> лишаються дослівно. Додається лише клас <code>bs-pp-reviews</code> і внутрішня розмітка.</li>
+<li>Умову, за якою кнопка зараз показується, не змінювати. Якщо кнопки немає, <code>.bs-pp-mf</code> лишається сам у рядку (завдяки <code>space-between</code> він стане зліва, і це очікувано).</li>
+<li>Якщо у товару немає виробника, <code>.bs-pp-mf</code> не рендерити (як зараз).</li>
+</ul>
+
+<h2>5. CSS (додати в <code>boostershop-ds.css</code> 1:1)</h2>
+<p>Блок самодостатній: у кожного <code>var()</code> є fallback-значення, тож CSS працює навіть там, де токена на сайті немає. Точні значення, зокрема <code>#CDEBD8</code> для рамки стану «в наявності», звіряти з цим блоком, а не з «оком».</p>
+<pre id="css-src"></pre>
+
+<h2>6. Специфікація в цифрах</h2>
+<table>
+<tr><th>Елемент</th><th>Десктоп</th><th>Мобайл (&lt;768px)</th></tr>
+<tr><td><code>.bs-pp-head</code></td><td>flex, space-between, gap 12, margin-top 12 від h1</td><td>те саме; переноситься, якщо не вміщується</td></tr>
+<tr><td>Кнопка відгуків</td><td>пігулка, фон <span class="sw" style="background:#F7F7F5"></span>#F7F7F5, padding 4/10/4/4 → висота ≈34px; кружечок 26px <span class="sw" style="background:#FBF4DC"></span>#FBF4DC із зіркою 13px <span class="sw" style="background:#D4A017"></span>#D4A017; текст 13/600 #1F2937; стрілка 13px #9CA3AF. Hover: фон #fff, рамка #E5E7EB, стрілка зсувається на 2px вправо</td><td>padding 7/12/7/7 → висота ≈40px</td></tr>
+<tr><td>Виробник</td><td>лейбл 13 #6B7280, gap 8, посилання 13.5/600 #1E3A8A, hover з підкресленням</td><td>те саме</td></tr>
+<tr><td><code>.bs-pp-status</code></td><td>margin-top 14, padding 12/14, radius 10, border 1px; іконка-кружечок 36px, SVG 18px; gap 12; заголовок 14.5/700; підрядок 13 #6B7280, strong #1F2937/700</td><td>те саме, на всю ширину</td></tr>
+<tr><td>Відступ до ціни</td><td colspan="2">18px (<code>.bs-pp-status + .bs-price-block</code>)</td></tr>
+</table>
+<table>
+<tr><th>Стан</th><th>Фон</th><th>Рамка</th><th>Кружечок</th><th>Іконка</th><th>Заголовок</th></tr>
+<tr><td>--in</td><td><span class="sw" style="background:#F3FBF6"></span>#F3FBF6</td><td><span class="sw" style="background:#CDEBD8"></span>#CDEBD8</td><td>#fff</td><td><span class="sw" style="background:#16A34A"></span>#16A34A</td><td><span class="sw" style="background:#15803D"></span>#15803D</td></tr>
+<tr><td>--pre</td><td><span class="sw" style="background:#FFFBEA"></span>#FFFBEA</td><td><span class="sw" style="background:#FCD34D"></span>#FCD34D</td><td>#fff</td><td><span class="sw" style="background:#92400E"></span>#92400E</td><td>#92400E</td></tr>
+<tr><td>--out</td><td><span class="sw" style="background:#F7F7F5"></span>#F7F7F5</td><td><span class="sw" style="background:#E5E7EB"></span>#E5E7EB</td><td><span class="sw" style="background:#EEF0F2"></span>#EEF0F2</td><td><span class="sw" style="background:#6B7280"></span>#6B7280</td><td>#6B7280</td></tr>
+</table>
+
+<h2>7. Що прибрати</h2>
+<ul>
+<li>Стару розмітку <code>.bs-pp-meta</code> з рядками <code>--manufacturer</code>, <code>--stock</code>, <code>--eta</code> і бейдж <code>.bs-badge--preorder</code> з інлайновим <code>style="font-size:12px;"</code> <strong>лише в цьому блоці</strong>.</li>
+<li>CSS-правила <code>.bs-pp-meta*</code> і <code>.bs-pp-eta__val</code> видаляти тільки тоді, коли grep по темі підтверджує, що вони ніде більше не використовуються. Інакше залишити.</li>
+<li>Глобальні <code>.bs-badge--preorder</code> і <code>.bs-badge--out</code> <strong>не чіпати</strong>, бо вони використовуються в картках товарів у каталозі.</li>
+</ul>
+
+<h2>8. Не чіпати</h2>
+<ul>
+<li>Логіку статусів, кількості, передзамовлення й ETA в контролері/моделі: тільки читати.</li>
+<li><code>Product</code> schema / JSON-LD (<code>availability</code>), Merchant-фід, canonical, sitemap.</li>
+<li>Ціну, «від 5 шт», кнопку купівлі, степер, галерею.</li>
+<li>Скрипт таба відгуків (<code>bs-tab-review-link</code>).</li>
+</ul>
+
+<h2>9. Критерії приймання</h2>
+<ol>
+<li>OP-16 (в наявності, 18 шт) відповідає прикладу «В наявності» з розділу 2 на 1280px і 390px.</li>
+<li>OP-14 (передзамовлення) показує картку <code>--pre</code> з «Доставка орієнтовно 3–4 тижні», окремого рядка «Доставка» немає.</li>
+<li>OP-10 (закінчився) показує сіру картку <code>--out</code>.</li>
+<li>Товар з кількістю 1–5 виглядає так само, як з 18: зелена картка з точним числом.</li>
+<li>Клік на «Відгуки про нас» відкриває таб відгуків і прокручує до нього (як до патча).</li>
+<li>Посилання «Bandai» веде на ту саму сторінку виробника.</li>
+<li>У computed styles немає успадкованих темних фонів зі старого <code>.bs-pp-meta</code> (урок RD-12-UI-FIX).</li>
+<li>Консоль без нових помилок. Rich Results Test для товару показує той самий <code>availability</code>, що й до патча.</li>
+</ol>
+
+<h2>10. Доставка й відкат</h2>
+<ul>
+<li>Один файл <code>patches/RD-PP-META_status-card_YYYYMMDD.php</code>, конвенції AGENTS.md. Власник заливає в <code>~/public_html</code> і запускає <code>php &lt;patch&gt;.php</code>. Codex нічого не деплоїть.</li>
+<li>Бекап <code>product.twig</code> і <code>boostershop-ds.css</code> у <code>backups/&lt;дата&gt;-rd-pp-meta/</code>. Cache-bust <code>?v=</code> у підключенні <code>boostershop-ds.css</code>.</li>
+<li>Тригер відкату: блок під назвою порожній або з сирим текстом, статус не відповідає фактичному, таб відгуків не відкривається.</li>
+<li>Статус після виконання: <code>In review</code>.</li>
+</ul>
+</div>
+
+<script>
+const ICONS={
+ in:'<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 10.5l3.5 3.5 7.5-8"/></svg>',
+ pre:'<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M10 6v4.2l2.8 1.8"/></svg>',
+ out:'<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l8 8M14 6l-8 8"/></svg>'
+};
+const STAR='<svg width="13" height="13" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><path d="M7 1.5l1.7 3.6L12.5 6 9.7 8.5l.8 4L7 10.5 3.5 12.5l.8-4L1.5 6l3.8-.9L7 1.5z"/></svg>';
+const ARR='<svg class="bs-pp-reviews__arr" width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>';
+const head=`<div class="bs-pp-head">
+  <a href="#tab-review" class="bs-pp-reviews__olx bs-pp-reviews" onclick="return false;">
+    <span class="bs-pp-reviews__ic">${STAR}</span>
+    <span>Відгуки про нас</span>
+    ${ARR}
+  </a>
+  <div class="bs-pp-mf">
+    <span class="bs-pp-mf__label">Виробник</span>
+    <a href="#" class="bs-pp-mf__link" onclick="return false;">Bandai</a>
+  </div>
+</div>`;
+const card=(k,t,s)=>`<div class="bs-pp-status bs-pp-status--${k}">
+  <span class="bs-pp-status__ic">${ICONS[k]}</span>
+  <div class="bs-pp-status__body">
+    <div class="bs-pp-status__title">${t}</div>
+    <div class="bs-pp-status__sub">${s}</div>
+  </div>
+</div>`;
+const S=[
+ {k:'in',cap:'В наявності',title:'Бустер One Piece Card Game OP-16: The Time of Battle (Японське видання)',price:'₴200.00',bulk:'₴180.00',c:card('in','В наявності','<strong>18 шт</strong> на складі')},
+ {k:'pre',cap:'Передзамовлення',title:'Бустер One Piece Card Game OP-14 (Японське видання)',price:'₴180.00',bulk:'₴170.00',c:card('pre','Передзамовлення','Доставка орієнтовно <strong>3–4 тижні</strong>')},
+ {k:'out',cap:'Закінчився',title:'Бустер One Piece Card Game OP-10 (Японське видання)',price:'₴190.00',bulk:'₴170.00',c:card('out','Закінчився','Товару немає в наявності')},
+];
+const box=(s,cls)=>`<div class="${cls}"><h1 class="t">${s.title}</h1>${head}${s.c}<div class="ctx"><div class="price"><b>${s.price}</b><span>/ 1 шт</span></div><div class="bulk"><span>від 5 шт —</span><em>${s.bulk} за штуку</em></div></div></div>`;
+document.getElementById('examples').innerHTML=S.map(s=>`<h3>${s.cap}</h3><div class="ex-grid"><div class="ex"><span class="ex__cap">Десктоп · колонка інфо</span>${box(s,'ex__dk')}</div><div class="ex"><span class="ex__cap">Мобайл · 375</span>${box(s,'ex__mb')}</div></div>`).join('');
+document.getElementById('css-src').textContent=document.getElementById('bs-pp-css').textContent.trim();
+document.getElementById('twig-src').textContent=`{# одразу після <h1 class="bs-product__title"> #}
+<div class="bs-pp-head">
+  {% if <умова показу відгуків як зараз> %}
+  <a href="#tab-review" class="bs-pp-reviews__olx bs-pp-reviews" onclick="<НАЯВНИЙ onclick БЕЗ ЗМІН>">
+    <span class="bs-pp-reviews__ic">${STAR}</span>
+    <span>Відгуки про нас</span>
+    ${ARR}
+  </a>
+  {% endif %}
+  {% if manufacturer %}
+  <div class="bs-pp-mf">
+    <span class="bs-pp-mf__label">Виробник</span>
+    <a href="{{ manufacturers }}" class="bs-pp-mf__link">{{ manufacturer }}</a>
+  </div>
+  {% endif %}
+</div>
+
+{% if is_out %}
+  {% set st = 'out' %}
+{% elseif is_preorder %}
+  {% set st = 'pre' %}
+{% else %}
+  {% set st = 'in' %}
+{% endif %}
+<div class="bs-pp-status bs-pp-status--{{ st }}">
+  <span class="bs-pp-status__ic">
+    {% if st == 'in' %}${ICONS.in}{% elseif st == 'pre' %}${ICONS.pre}{% else %}${ICONS.out}{% endif %}
+  </span>
+  <div class="bs-pp-status__body">
+    {% if st == 'in' %}
+      <div class="bs-pp-status__title">В наявності</div>
+      {% if stock_qty %}<div class="bs-pp-status__sub"><strong>{{ stock_qty }} шт</strong> на складі</div>{% endif %}
+    {% elseif st == 'pre' %}
+      <div class="bs-pp-status__title">Передзамовлення</div>
+      <div class="bs-pp-status__sub">Доставка орієнтовно <strong>{{ eta_text }}</strong></div>
+    {% else %}
+      <div class="bs-pp-status__title">Закінчився</div>
+      <div class="bs-pp-status__sub">Товару немає в наявності</div>
+    {% endif %}
+  </div>
+</div>
+{# далі без змін: <div class="bs-price-block"> … #}`;
+</script>
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UX-003 / UX-005 / UX-009 — макети шапки, меню, пошуку</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="rd14-shared.css">
+<style>
+:root{--bs-gold-soft:#FBF4DC;--bs-pokemon:#C68A00;--bs-onepiece:#1E40AF;--bs-other-tcg:#065F46;--bs-accessories:#0D9488;--bs-yugioh:#7C3AED;--bs-mtg:#B45309;--bs-sh-pop:0 12px 32px rgba(17,24,39,.16),0 2px 6px rgba(17,24,39,.08)}
+.ub-vp{position:relative;container-type:inline-size;background:var(--bs-bg);font-size:14px;line-height:1.5;color:var(--bs-ink)}
+.ub-vp.is-fixed{overflow:hidden}
+.ub-ic{flex:0 0 auto;display:block}
+.ub-ann{display:inline-block;font-size:10.5px;font-weight:700;line-height:1.5;padding:0 6px;border-radius:999px;background:var(--bs-warning-bg);color:var(--bs-warning-fg);border:1px solid var(--bs-warning-line);margin-left:6px;vertical-align:2px;white-space:nowrap;letter-spacing:0;text-transform:none}
+.ub-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.ub-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:8px;border:1px solid transparent;font:inherit;font-size:14.5px;font-weight:700;text-decoration:none;cursor:pointer;flex-wrap:wrap}
+.ub-btn-sec{background:#fff;color:var(--bs-ink);border-color:var(--bs-line)}
+.ub-btn-pri{background:var(--bs-blue);color:#fff}
+/* header */
+.ub-h{position:relative;z-index:200;background:#fff;border-bottom:1px solid var(--bs-line);padding:8px 10px}
+.ub-h.is-scrolled{box-shadow:var(--bs-sh-sm)}
+.ub-h-in{display:flex;align-items:center;gap:8px}
+.ub-burger{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:40px;height:40px;flex:0 0 auto;border:1px solid var(--bs-line);border-radius:8px;background:#fff;color:var(--bs-ink)}
+.ub-logo{flex:0 0 auto;display:block;line-height:0}
+.ub-logo img{display:block;object-fit:contain}
+.ub-h-search{position:relative;flex:1 1 auto;min-width:0}
+.ub-sf{display:flex;align-items:center;gap:8px;height:40px;padding:0 12px;border:1px solid var(--bs-line);border-radius:8px;background:var(--bs-line-2);color:var(--bs-ink-3);min-width:0}
+.ub-sf.is-focus{background:#fff;border-color:var(--bs-blue);box-shadow:0 0 0 3px var(--bs-blue-soft)}
+.ub-sf-ph,.ub-sf-val{flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:15px}
+.ub-sf-val{color:var(--bs-ink)}
+.ub-caret{display:inline-block;width:1.5px;height:1.1em;background:var(--bs-ink);vertical-align:-3px;margin-left:1px;animation:ubblink 1s steps(1) infinite}
+@keyframes ubblink{50%{opacity:0}}
+.ub-ghost{display:inline-flex;align-items:center;gap:7px;height:44px;padding:0 10px;color:var(--bs-blue);font-weight:600;font-size:14.5px;white-space:nowrap}
+.ub-cart{position:relative;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 16px;border-radius:8px;background:var(--bs-buy);color:#fff;font-weight:700;font-size:15px;white-space:nowrap;flex:0 0 auto}
+.ub-cart-m{width:44px;padding:0;justify-content:center}
+.ub-qty{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:#fff;color:var(--bs-buy);border:1.5px solid var(--bs-buy);font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.ub-sticky-tag{position:absolute;right:10px;top:100%;margin-top:6px;font-size:10.5px;font-weight:700;padding:0 6px;border-radius:999px;background:var(--bs-warning-bg);color:var(--bs-warning-fg);border:1px solid var(--bs-warning-line)}
+.ub-catrow{background:#fff;border-bottom:1px solid var(--bs-line)}
+.ub-catrow-in{max-width:1240px;margin:0 auto;padding:0 32px;display:flex;gap:4px}
+.ub-catrow a{display:inline-flex;align-items:center;height:44px;padding:0 12px;font-weight:700;font-size:14.5px;color:var(--bs-ink-2);text-decoration:none;border-radius:8px}
+.ub-catrow a:hover{background:var(--bs-blue-soft);color:var(--bs-blue)}
+.ub-catrow a.is-sale{color:var(--bs-danger)}
+@container (min-width:769px){
+.ub-h{padding:12px 32px}
+.ub-h-in{max-width:1240px;margin:0 auto;gap:16px}
+.ub-burger{width:44px;height:44px}
+.ub-burger.has-label{width:auto;padding:0 14px 0 12px;font-weight:700;font-size:14.5px}
+.ub-h-search{max-width:580px}
+.ub-sf{height:44px}
+}
+/* page stub */
+.ub-c{padding:12px 12px 8px}
+@container (min-width:769px){.ub-c{max-width:1320px;margin:0 auto;padding:16px 24px 8px}}
+.ub-crumbs{display:flex;flex-wrap:nowrap;align-items:center;gap:6px;list-style:none;margin:0 0 12px;padding:0;font-size:12px;overflow:hidden}
+.ub-crumbs li{display:flex;align-items:center;gap:6px}
+.ub-crumbs li+li::before{content:"›";color:var(--bs-ink-4)}
+.ub-cr-home,.ub-cr{display:inline-flex;align-items:center;justify-content:center;height:26px;border-radius:999px;border:1px solid var(--bs-line);background:var(--bs-line-2);color:var(--bs-ink-3)}
+.ub-cr-home{width:26px}
+.ub-cr{padding:0 10px;color:var(--bs-ink-2)}
+.ub-cr.is-cur{background:var(--bs-warning-bg);border-color:var(--bs-warning-line);color:var(--bs-ink)}
+.ub-cathead{background:#fff;border:1px solid var(--bs-line);border-top:4px solid var(--bs-pokemon);border-radius:var(--bs-r-lg);padding:12px}
+.ub-cathead h1{margin:0 0 10px;font-size:15px;font-weight:800}
+.ub-cathead small{font-size:13px;font-weight:500;color:var(--bs-ink-3)}
+.ub-chips{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ub-chip{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:44px;padding:0 12px;border:1px solid var(--bs-line);border-radius:10px;background:#fff;font-weight:700;color:var(--bs-blue)}
+.ub-chip i{font-style:normal;font-size:11.5px;padding:1px 7px;border-radius:999px;background:var(--bs-gold-soft);color:var(--bs-warning-fg)}
+@container (min-width:769px){.ub-cathead{padding:20px 22px}.ub-cathead h1{font-size:26px}.ub-chips{display:flex;flex-wrap:wrap}}
+.ub-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;margin-top:16px}
+@container (min-width:576px){.ub-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@container (min-width:1024px){.ub-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}}
+.ub-pc{display:grid;gap:8px}
+.ub-pc-img{aspect-ratio:1/1;border-radius:var(--bs-r);background:repeating-linear-gradient(135deg,#fff 0 10px,var(--bs-line-2) 10px 20px);border:1px solid var(--bs-line);display:flex;align-items:center;justify-content:center}
+.ub-pc-img span{font-size:11px;color:var(--bs-ink-4);background:#fff;padding:2px 8px;border-radius:4px}
+.ub-pc-n{color:var(--bs-blue);text-decoration:none;font-size:14.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ub-pc-p{font-size:16px;font-weight:800}
+.ub-buy{display:flex;align-items:center;justify-content:center;height:44px;border-radius:8px;background:var(--bs-buy);color:#fff;font-weight:700;font-size:15px}
+.ub-stub{text-align:center;font-size:11px;color:var(--bs-ink-4);margin:16px 0 0}
+.ub-foot{height:120px;display:flex;align-items:center;justify-content:center;background:var(--bs-ink-2);color:var(--bs-ink-4);font-size:12px;margin-top:24px}
+.ub-fold{position:absolute;left:0;right:0;border-top:2px dashed var(--bs-danger);z-index:400;pointer-events:none}
+.ub-fold span{position:absolute;right:0;top:0;background:var(--bs-danger);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:0 0 0 6px}
+/* burger */
+.ub-menu{position:absolute;inset:0;z-index:300}
+.ub-scrim{position:absolute;inset:0;background:rgba(17,24,39,.45)}
+.ub-panel{position:absolute;left:0;top:0;bottom:0;width:380px;max-width:86%;background:#fff;display:flex;flex-direction:column;box-shadow:var(--bs-sh-pop)}
+.ub-mh{background:var(--bs-bg);padding:14px 14px 10px;display:grid;gap:8px;border-bottom:1px solid var(--bs-line)}
+.ub-brandrow{display:flex;align-items:center;justify-content:space-between;height:38px}
+.ub-brand{display:inline-flex;align-items:center;gap:6px;font-size:18px;font-weight:800;letter-spacing:-.035em;text-transform:uppercase;color:var(--bs-blue)}
+.ub-mclose{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border:1px solid var(--bs-line);border-radius:8px;background:#fff}
+.ub-acct{display:flex;align-items:center;gap:10px;min-height:44px;padding:6px 12px;background:#fff;border:1px solid var(--bs-line);border-radius:10px;color:var(--bs-ink-3)}
+.ub-acct-ic{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--bs-blue-soft);color:var(--bs-blue)}
+.ub-acct-l{flex:1;font-weight:700;color:var(--bs-ink)}
+.ub-orders{display:flex;align-items:center;gap:12px;min-height:40px;padding:0 18px;color:var(--bs-ink-2);font-weight:600}
+.ub-mb{flex:1;overflow:hidden;padding:4px 0 8px}
+.ub-mlabel{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--bs-ink-4);padding:14px 16px 6px}
+.ub-mlabel-sep{border-top:1px solid var(--bs-line);margin-top:8px}
+.ub-mrow{display:flex;align-items:center;gap:12px;min-height:48px;padding:0 16px;color:var(--bs-ink-4)}
+.ub-mname{flex:1;font-weight:600;font-size:15px;color:var(--bs-ink)}
+.ub-mrow.is-sale .ub-mname{color:var(--bs-danger);font-weight:700}
+.ub-mcat.is-open .ub-mrow{background:var(--bs-bg)}
+.ub-dot{display:inline-block;width:9px;height:9px;border-radius:2px;flex:0 0 auto}
+.ub-subs{padding:2px 0 6px}
+.ub-sub{display:flex;align-items:center;gap:8px;min-height:40px;padding:0 16px 0 40px;color:var(--bs-blue);font-size:14px;text-decoration:none}
+.ub-sub.is-new{background:linear-gradient(90deg,var(--bs-warning-bg),transparent)}
+.ub-minfo{display:flex;align-items:center;gap:12px;min-height:44px;padding:0 16px;color:var(--bs-ink-2);font-weight:500}
+.ub-mf{border-top:1px solid var(--bs-line);padding:12px 14px}
+.ub-mtg{display:flex;align-items:center;justify-content:center;gap:8px;height:44px;border-radius:10px;background:var(--bs-blue-soft);color:var(--bs-blue);font-weight:700}
+/* live search */
+.ub-ls{position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:100;list-style:none;margin:0;padding:6px 0;background:#fff;border:1px solid var(--bs-line);border-radius:var(--bs-r-lg);box-shadow:var(--bs-sh-pop);max-height:680px;overflow:hidden}
+.ub-ls.is-mob{position:static;border:0;border-radius:0;box-shadow:none;max-height:none;padding:0 0 12px}
+.ub-ls-sub{padding:10px 16px;font-size:13px;color:var(--bs-ink-3);border-bottom:1px solid var(--bs-line-2)}
+.ub-ls-sub output{font-weight:700;color:var(--bs-ink)}
+.ub-ls-h{display:block;padding:12px 16px 4px;font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--bs-ink-3)}
+.ub-ls-item{display:grid;grid-template-columns:56px minmax(0,1fr);gap:12px;align-items:center;min-height:68px;padding:6px 16px;text-decoration:none;color:inherit}
+.ub-ls-item:hover{background:var(--bs-line-2)}
+.ub-ls-th{width:56px;height:56px;border-radius:8px;border:1px solid var(--bs-line);background:repeating-linear-gradient(135deg,#fff 0 6px,var(--bs-line-2) 6px 12px)}
+.ub-ls-name{font-size:14px;font-weight:600;line-height:1.35;color:var(--bs-ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ub-ls-prices{display:flex;align-items:baseline;gap:8px;margin-top:3px}
+.ub-ls-new{font-size:15px;font-weight:800;color:var(--bs-ink)}
+.ub-ls-new.is-sale{color:var(--bs-danger)}
+.ub-ls-old{font-size:13px;color:var(--bs-ink-4)}
+.ub-ls-cat{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:44px;padding:0 16px;color:var(--bs-ink-2);font-weight:600;text-decoration:none}
+.ub-ls-cat .ub-ic{color:var(--bs-ink-4)}
+.ub-ls-more{display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;margin:8px 12px 4px;border:1px solid var(--bs-line);border-radius:8px;color:var(--bs-blue);font-weight:700;text-decoration:none}
+.ub-ls-load{display:flex;justify-content:center;padding:28px 16px}
+.ub-spin{width:24px;height:24px;border-radius:50%;border:2.5px solid var(--bs-line);border-top-color:var(--bs-blue);animation:ubspin .8s linear infinite}
+@keyframes ubspin{to{transform:rotate(360deg)}}
+.ub-ls-none,.ub-ls-err{display:grid;justify-items:center;gap:8px;padding:28px 20px;text-align:center}
+.ub-ls-none strong,.ub-ls-err strong{font-size:15px}
+.ub-ls-none p{margin:0;color:var(--bs-ink-3);font-size:13.5px;max-width:34ch;text-wrap:pretty}
+.ub-ls-none-ic{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:var(--bs-line-2);color:var(--bs-ink-3)}
+.ub-ls-none-ic.is-err{background:var(--bs-warning-bg);color:var(--bs-warning-fg);border:1px solid var(--bs-warning-line)}
+.ub-ls-err .ub-btn{margin-top:4px}
+/* mobile overlay */
+.ub-mo-bar{position:absolute;top:0;left:0;right:0;z-index:310;display:flex;align-items:center;gap:4px;height:61px;padding:0 10px 0 4px;background:#fff;border-bottom:1px solid var(--bs-line)}
+.ub-mo-back{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;flex:0 0 auto;color:var(--bs-ink)}
+.ub-mo-field{position:relative;flex:1;height:44px;padding-right:44px}
+.ub-mo-clear{position:absolute;right:0;top:0;width:44px;height:42px;display:flex;align-items:center;justify-content:center}
+.ub-mo-clear span{display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--bs-line-2);color:var(--bs-ink-2)}
+.ub-mo-scrim{position:absolute;top:61px;left:0;right:0;bottom:0;z-index:305;background:rgba(17,24,39,.45)}
+.ub-mo-drop{position:absolute;top:61px;left:0;right:0;bottom:0;z-index:306;background:#fff;overflow:hidden}
+/* search page */
+.ub-sp-head h1{margin:0 0 12px;font-size:24px;font-weight:800;line-height:1.2}
+@container (min-width:769px){.ub-sp-head h1{font-size:30px}}
+.ub-refine summary{list-style:none}
+.ub-refine summary::-webkit-details-marker{display:none}
+.ub-refine-btn{width:100%}
+.ub-refine-btn .is-up{transform:rotate(180deg)}
+@container (min-width:769px){.ub-refine-btn{width:auto}}
+.ub-sform{margin-top:10px;background:#fff;border:1px solid var(--bs-line);border-radius:var(--bs-r-lg);padding:16px;display:grid;gap:14px}
+@container (min-width:769px){.ub-sform{grid-template-columns:1fr 1fr;gap:16px 20px;padding:20px 22px}}
+.ub-flabel{display:block;font-size:13px;font-weight:600;color:var(--bs-ink-2);margin-bottom:6px}
+.ub-input{display:flex;align-items:center;justify-content:space-between;gap:8px;height:44px;padding:0 12px;border:1px solid var(--bs-line);border-radius:8px;background:#fff;color:var(--bs-ink);font-size:15px;min-width:0;white-space:nowrap;overflow:hidden}
+.ub-select .ub-ic{color:var(--bs-ink-3)}
+.ub-check{display:flex;align-items:center;gap:8px;min-height:36px;margin-top:6px;font-size:13.5px;color:var(--bs-ink-2)}
+.ub-check.is-dis{opacity:.55}
+.ub-box{width:18px;height:18px;border:1.5px solid var(--bs-ink-4);border-radius:4px;background:#fff;flex:0 0 auto}
+.ub-sform-act{display:flex;justify-content:stretch}
+.ub-sform-act .ub-btn{flex:1}
+@container (min-width:769px){.ub-sform-act{grid-column:1/-1;justify-content:flex-end}.ub-sform-act .ub-btn{flex:0 0 auto;min-width:160px}}
+.ub-dc{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0 0}
+@container (min-width:769px){.ub-dc{display:flex;align-items:flex-end;gap:12px}.ub-view{margin-right:auto}.ub-sel{width:260px}.ub-sel-lim{width:130px}}
+.ub-sel{display:grid;gap:4px;min-width:0}
+.ub-sel>span:first-child{font-size:12.5px;font-weight:600;color:var(--bs-ink-3)}
+.ub-view{display:flex}
+.ub-vbtn{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border:1px solid var(--bs-line);background:#fff;color:var(--bs-ink-3)}
+.ub-vbtn:first-child{border-radius:8px 0 0 8px}.ub-vbtn:last-child{border-radius:0 8px 8px 0;border-left:0}
+.ub-vbtn.is-on{background:var(--bs-blue-soft);color:var(--bs-blue)}
+.ub-empty{margin-top:16px;background:#fff;border:1px solid var(--bs-line);border-radius:var(--bs-r-lg);padding:28px 16px;text-align:center}
+.ub-empty-ic{display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;background:var(--bs-line-2);color:var(--bs-ink-3)}
+.ub-empty-t{margin:12px 0 0;font-size:15.5px;font-weight:700;text-wrap:pretty}
+.ub-next{margin-top:20px}
+.ub-next h3{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin:0 0 10px;font-size:15px;font-weight:800}
+.ub-next-l{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+@container (min-width:576px){.ub-next-l{grid-template-columns:1fr 1fr}}
+@container (min-width:1024px){.ub-next-l{grid-template-columns:repeat(4,1fr)}}
+.ub-next-a{display:flex;align-items:center;gap:10px;min-height:48px;padding:0 14px;background:#fff;border:1px solid var(--bs-line);border-radius:10px;font-weight:700;color:var(--bs-ink);text-decoration:none}
+.ub-next-a .ub-ic{margin-left:auto;color:var(--bs-ink-4)}
+.ub-next-tg{margin-top:16px;background:var(--bs-blue-soft);border-radius:var(--bs-r-lg);padding:16px;display:grid;gap:12px}
+.ub-next-tg p{margin:0;font-weight:600;color:var(--bs-ink);text-wrap:pretty}
+@container (min-width:769px){.ub-next-tg{grid-template-columns:minmax(0,1fr) auto;align-items:center;padding:18px 22px}}
+.note .ub-ann{margin-left:2px}
+.ub-vp .ub-ann{display:none}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="ux-b-shell.jsx"></script>
+<script type="text/babel" src="ux-b-search.jsx"></script>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+const BK = 'ux-b-mockups';
+const SCENES = [['header', 'Шапка'], ['burger', 'Бургер'], ['live', 'Живий пошук'], ['page', 'Сторінка пошуку']];
+const SST = {
+  header: [['top', 'вгорі'], ['scrolled', 'після прокрутки']],
+  burger: [['pokemon', 'Pokémon відкрито'], ['onepiece', 'One Piece відкрито']],
+  live: [['empty', 'фокус, порожньо'], ['loading', 'завантаження'], ['results', 'результати'], ['none', 'нічого'], ['error', 'помилка']],
+  page: [['results', 'є результати'], ['open', '«Змінити пошук» розгорнуто'], ['none', 'нічого не знайдено']]
+};
+const LQ = { empty: '', loading: 'pok', results: 'pokemon', none: 'zzz', error: 'pokemon' };
+const WIDTHS = [390, 768, 1440];
+const NOTES = {
+  header: { t: 'Шапка — пункти 4, 5, 7', li: [
+    '<b>4 · Sticky.</b> Основний рядок шапки фіксується на всіх сторінках, checkout теж. Після прокрутки з’являється тінь --bs-sh-sm. На мобільному висота ~61 px. Рядок категорій (варіант b) і смуга переваг на головній прокручуються разом зі сторінкою.',
+    '<b>5 · Вхід у каталог на ≥1024</b> — варіант a, затверджено: підпис «Каталог» на кнопці бургера (#bs-menu-open). На 390/768 без змін.',
+    '<b>7 · Placeholder.</b> На ≤768 — «Пошук». На desktop — без змін.',
+    'Бейдж кількості на кошику показано так, як він задуманий (2). На live його немає — це окремий баг у даних (пункт 10).'
+  ] },
+  burger: { t: 'Бургер — оновлення посилань', li: [
+    'Pokémon TCG: додано «Фігурки та декор» → /catalog/Pokemon/figurky-ta-dekor-pokemon.',
+    'One Piece Card Game: додано «Фігурки та декор» → /catalog/One-Piece/figurky-ta-dekor-one-piece.',
+    'Нові посилання додаються останніми в списку підкатегорій, стиль <code>.bs-menu__sub</code> без змін. Жовта підсвітка і позначка — лише для огляду, на сайт не йдуть.',
+    'Брендовий рядок («Booster Shop ⚡») поки без змін — варіанти буде на етапі 3.'
+  ] },
+  live: { t: 'Живий пошук — пункти 2, 3, 7, 9', li: [
+    '<b>2 · Рядок товару.</b> Опис сховано, назва — до 2 рядків, ціна під назвою, мініатюра 56 px. Ціна зі знижкою — червона, стара закреслена. Тільки CSS поверх розмітки модуля.',
+    '<b>3 · Нічого не знайдено.</b> Одне повідомлення замість трьох, «Усі результати» сховано. Booster-код (CSS <code>:has()</code> або JS в init).',
+    '<b>7 · Поле на мобільному.</b> Нативний × сховано (<code>::-webkit-search-cancel-button</code>), наш × з зоною дотику 44 px.',
+    '<b>9 · Помилка і завантаження.</b> Спінер — CSS замість Font Awesome. Помилка або тайм-аут ~8 с → повідомлення і кнопка, що відправляє форму пошуку.',
+    '«Усі результати» — кнопка зі стрілкою вправо замість ▾. Дані товарів умовні (ціни зі знижкою — для прикладу).',
+    '768 — мобільний оверлей, бо скрипт вмикає його на ≤768.'
+  ] },
+  page: { t: 'Сторінка пошуку — пункти 1, 6, 8', li: [
+    '<b>1 · Перший екран.</b> Форма згорнута в «Змінити пошук» (<code>&lt;details&gt;</code>), поля лишаються в DOM. Кнопку «Порівняння товарів» прибрано. Червона лінія — межа першого екрана: на 390 тепер видно перший товар.',
+    'H2 «Результати пошуку» дублює H1 — візуально прихований, у розмітці лишається <span class="ub-ann">відхилення від пункту 6</span>.',
+    '<b>6 · Під дизайн-систему.</b> «Пошук» — синя DS-кнопка. Список/сітка — SVG. Сортування й ліміт з підписами над полем, на 390 — по 50% ширини.',
+    '<b>8 · Нічого не знайдено.</b> Форма одразу розгорнута, під bs-empty — 4 розділи з бургера і рядок про Telegram.',
+    'Картки товарів (RD-04), пагінація і текст «Показано з…» без змін.'
+  ] }
+};
+function Frame({ w, avail, children }) {
+  const z = avail > 100 ? Math.min(1, avail / w) : 1;
+  return <div><p className="fr-l">{w} px{z < 1 ? ` · масштаб ${Math.round(z * 100)}%` : ''}</p><div className="fr-wrap" style={{ zoom: z }}>{children}</div></div>;
+}
+function Scene({ sc, st, w, cat }) {
+  const mob = w <= 768;
+  if (sc === 'header') return <Viewport w={w} fold={st === 'top'}><Header w={w} cat={cat} scrolled={st === 'scrolled'} /><CategoryStub scrolled={st === 'scrolled'} /></Viewport>;
+  if (sc === 'burger') return <Viewport w={w} fixed><Header w={w} cat={cat} /><CategoryStub /><Burger open={st} /></Viewport>;
+  if (sc === 'live') {
+    const q = LQ[st];
+    if (mob) return <Viewport w={w} fixed><Header w={w} cat={cat} /><CategoryStub /><MobileOverlay st={st} q={q} /></Viewport>;
+    return <Viewport w={w} fixed><Header w={w} cat={cat} search={q} focus><LiveList st={st} q={q} /></Header><CategoryStub /></Viewport>;
+  }
+  return <Viewport w={w} fold><Header w={w} cat={cat} /><SearchPage w={w} st={st} /></Viewport>;
+}
+function App() {
+  const sv = (() => { try { return JSON.parse(localStorage.getItem(BK)) || {}; } catch (e) { return {}; } })();
+  const [sc, setSc] = useState(sv.sc || 'header');
+  const [sts, setSts] = useState(sv.sts || {});
+  const [wf, setWf] = useState(sv.wf || 'all');
+  const cat = 'a';
+  const [avail, setAvail] = useState(1200);
+  const ref = useRef();
+  const st = sts[sc] || SST[sc][0][0];
+  useEffect(() => { localStorage.setItem(BK, JSON.stringify({ sc, sts, wf })); }, [sc, sts, wf]);
+  useEffect(() => {
+    const el = ref.current; if (!el) return;
+    const m = () => { let w = el.clientWidth - 40; if (w < 100) w = document.documentElement.clientWidth - 40; if (w > 100) setAvail(w); };
+    m(); const iv = setInterval(m, 250); window.addEventListener('resize', m);
+    return () => { clearInterval(iv); window.removeEventListener('resize', m); };
+  }, []);
+  const ws = wf === 'all' ? WIDTHS : [wf];
+  const Seg = ({ items, v, set }) => <div className="seg">{items.map(([k, l]) => <button key={k} aria-pressed={v === k} onClick={() => set(k)}>{l}</button>)}</div>;
+  const n = NOTES[sc];
+  return (
+    <>
+      <div className="tb">
+        <h1>UX-003 / UX-005 / UX-009 — макети, етап 2 · тексти погоджено 03.10.2026</h1>
+        <div className="tb-g"><span className="tb-l">Екран</span><Seg items={SCENES} v={sc} set={setSc} /></div>
+        <div className="tb-g"><span className="tb-l">Стан</span><Seg items={SST[sc]} v={st} set={v => setSts({ ...sts, [sc]: v })} /></div>
+        <div className="tb-g"><span className="tb-l">Ширина</span><Seg items={[['all', 'всі'], ...WIDTHS.map(w => [w, String(w)])]} v={wf} set={setWf} /></div>
+        <div className="tb-g"><span className="tb-l">Каталог ≥1024</span><span className="tb-l">a · підпис — затверджено</span></div>
+      </div>
+      <div className="stage" ref={ref} data-screen-label={sc + ' · ' + st}>
+        {ws.map(w => <Frame key={w} w={w} avail={avail}><Scene sc={sc} st={st} w={w} cat={cat} /></Frame>)}
+      </div>
+      <div className="notes">
+        <div className="note"><h2>{n.t}</h2><ul>{n.li.map((x, i) => <li key={i} dangerouslySetInnerHTML={{ __html: x }} />)}</ul></div>
+        <div className="note"><h2>Хуки — без змін</h2><ul>
+          <li><code>#ps-live-search-input</code>, <code>#ps-live-search</code>, <code>.ps-live-search-container</code>, <code>data-live-search-target</code>, form action + hidden route/language.</li>
+          <li><code>#bs-menu-open</code>, <code>#bs-menu</code>, <code>[data-bs-menu-close]</code>, <code>[data-bs-accordion]</code>, <code>.bs-menu__subs</code>, <code>#bs-msearch</code>, <code>[data-bs-search-close]</code>, <code>[data-bs-search-clear]</code>, <code>#cart</code>, <code>#alert</code>.</li>
+          <li>Сторінка пошуку: <code>#input-search</code>, <code>#input-description</code>, <code>#input-category</code>, <code>#input-sub-category</code>, <code>#button-search</code>, <code>#button-list</code>, <code>#button-grid</code>, <code>#input-sort</code>, <code>#input-limit</code>.</li>
+          <li>Логотип на макеті — кроп зі скріну, тому низької якості.</li>
+        </ul></div>
+      </div>
+    </>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

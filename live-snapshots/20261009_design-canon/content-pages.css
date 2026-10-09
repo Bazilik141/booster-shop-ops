@@ -1,0 +1,482 @@
+/* =============================================================================
+   R-09 content pages
+   Dedicated styles for OpenCart information pages. Uses existing --bs-* tokens
+   from boostershop-ds.css and keeps every project class under .bs-cp-*.
+============================================================================= */
+
+.bs-cp-page {
+  background: var(--bs-bg);
+}
+
+.bs-cp-wrap {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+.bs-cp-row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.bs-cp-content {
+  min-width: 0;
+  background: var(--bs-paper);
+  border: 1px solid var(--bs-line);
+  border-radius: var(--bs-r-sm);
+  padding: 0 32px 36px;
+}
+
+.bs-cp-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0;
+  padding: 0 0 14px;
+  font-size: 13px;
+  color: var(--bs-ink-3);
+}
+
+.bs-cp-breadcrumb a {
+  color: var(--bs-ink-3);
+  text-decoration: none;
+}
+
+.bs-cp-breadcrumb a:hover {
+  color: var(--bs-blue);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.bs-cp-breadcrumb span[aria-current="page"] {
+  color: var(--bs-ink);
+  font-weight: 600;
+}
+
+.bs-cp-breadcrumb__sep {
+  margin: 0 7px;
+  color: var(--bs-ink-4);
+}
+
+.bs-cp-article {
+  min-width: 0;
+}
+
+.bs-cp-hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 28px 0 24px;
+  margin-bottom: 28px;
+  background: var(--bs-paper);
+  border-bottom: 1px solid var(--bs-line);
+}
+
+.bs-cp-kicker {
+  margin-bottom: 8px;
+  font-size: 12px;
+  line-height: 1.3;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--bs-ink-3);
+  letter-spacing: 0;
+}
+
+.bs-cp-hero h1 {
+  margin: 0;
+  color: var(--bs-ink);
+  font-size: 32px;
+  line-height: 1.18;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.bs-cp-intro {
+  max-width: 780px;
+  margin: 12px 0 0;
+  color: var(--bs-ink-2);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.bs-cp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  padding: 8px 12px;
+  border: 1px solid var(--bs-line);
+  border-radius: var(--bs-r-sm);
+  background: var(--bs-blue-soft);
+  color: var(--bs-blue);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.bs-cp-badge__mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--bs-r-sm);
+  background: var(--bs-paper);
+  color: var(--bs-blue);
+  font-size: 12px;
+}
+
+.bs-cp-layout {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 40px;
+  align-items: start;
+}
+
+.bs-cp-layout--no-toc {
+  display: block;
+}
+
+.bs-cp-toc {
+  position: sticky;
+  top: 24px;
+  align-self: flex-start;
+padding-left: 16px;
+  border-left: 2px solid var(--bs-line);
+}
+
+.bs-cp-toc__title {
+  margin-bottom: 10px;
+  color: var(--bs-ink);
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: 800;
+}
+
+.bs-cp-toc__list {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bs-cp-toc__link {
+  display: block;
+  padding: 7px 10px;
+  border-radius: var(--bs-r-sm);
+  color: var(--bs-ink-3);
+  font-size: 13px;
+  line-height: 1.35;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.bs-cp-toc__link:hover,
+.bs-cp-toc__link.is-active {
+  background: var(--bs-blue-soft);
+  color: var(--bs-blue);
+  text-decoration: none;
+}
+
+.bs-cp-main {
+  min-width: 0;
+  color: var(--bs-ink-2);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.bs-cp-main > :first-child {
+  margin-top: 0;
+}
+
+.bs-cp-main > :last-child {
+  margin-bottom: 0;
+}
+
+.bs-cp-main h2 {
+  /* UI-FIX-20260903 T1: the desktop rhythm lives here now. It used to be
+     re-declared by the PAY-001-INFO-1 block at the end of this file, which
+     sits after the mobile media query and silently killed it. */
+  margin: 44px 0 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--bs-line);
+  color: var(--bs-ink);
+  font-size: 22px;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: 0;
+  scroll-margin-top: 110px;
+}
+
+.bs-cp-main h2:first-child {
+  margin-top: 0;
+}
+
+.bs-cp-main h3 {
+  margin: 24px 0 10px;
+  color: var(--bs-ink);
+  font-size: 17px;
+  line-height: 1.35;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.bs-cp-main p,
+.bs-cp-main li {
+  color: var(--bs-ink-2);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.bs-cp-main p {
+  margin: 0 0 14px;
+}
+
+.bs-cp-main ul,
+.bs-cp-main ol {
+  margin: 0 0 18px 22px;
+  padding: 0;
+}
+
+.bs-cp-main li + li {
+  margin-top: 6px;
+}
+
+.bs-cp-main strong,
+.bs-cp-main b {
+  color: var(--bs-ink);
+  font-weight: 700;
+}
+
+.bs-cp-main a {
+  color: var(--bs-blue);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.bs-cp-main a:hover {
+  color: var(--bs-blue);
+}
+
+.bs-cp-main hr,
+.bs-cp-divider {
+  margin: 32px 0;
+  border: 0;
+  border-top: 1px solid var(--bs-line);
+}
+
+.bs-cp-main img {
+  max-width: 100%;
+  height: auto;
+}
+
+.bs-cp-main table {
+  width: 100%;
+  margin: 20px 0;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.bs-cp-main th,
+.bs-cp-main td {
+  padding: 10px 12px;
+  border: 1px solid var(--bs-line);
+  vertical-align: top;
+}
+
+.bs-cp-main th {
+  background: var(--bs-line-2);
+  color: var(--bs-ink);
+  font-weight: 700;
+}
+
+.bs-cp-cta,
+.bs-cp-main .btn,
+.bs-cp-main .btn-primary,
+.bs-cp-main .button,
+.bs-cp-main a.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: 1.5px solid var(--bs-blue);
+  border-radius: var(--bs-r-sm);
+  color: var(--bs-blue);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.2;
+  text-decoration: none;
+  background: transparent;
+  transition: background .15s, color .15s, border-color .15s;
+}
+
+.bs-cp-cta:hover,
+.bs-cp-main .btn:hover,
+.bs-cp-main .btn-primary:hover,
+.bs-cp-main .button:hover,
+.bs-cp-main a.button:hover {
+  background: var(--bs-blue-soft);
+  color: var(--bs-blue);
+  border-color: var(--bs-blue);
+  text-decoration: none;
+}
+
+@media (max-width: 991.98px) {
+  .bs-cp-layout {
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 28px;
+  }
+}
+
+@media (max-width: 768px) {
+  .bs-cp-wrap {
+    padding: 16px;
+  }
+
+  .bs-cp-content {
+    padding: 0 16px 24px;
+  }
+
+  .bs-cp-layout {
+    display: block;
+  }
+
+  .bs-cp-toc {
+    display: none;
+  }
+
+  .bs-cp-hero {
+    display: block;
+    padding: 22px 0 18px;
+    margin-bottom: 22px;
+  }
+
+  .bs-cp-hero h1 {
+    font-size: 26px;
+    line-height: 1.22;
+  }
+
+  .bs-cp-intro {
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .bs-cp-badge {
+    margin-top: 14px;
+  }
+
+  .bs-cp-main h2 {
+    margin-top: 28px;
+    font-size: 20px;
+  }
+
+  .bs-cp-main h3 {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .bs-cp-wrap {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .bs-cp-content {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}
+
+/* == R09INFOCTA: Telegram CTA for information pages ===================== */
+.bs-info-cta-wrap {
+  margin-top: 12px;
+}
+
+.bs-info-cta {
+  background: #1E3A8A;
+  color: #fff;
+  padding: 12px 22px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.bs-info-cta:hover,
+.bs-info-cta:focus {
+  color: #fff;
+  text-decoration: none;
+}
+
+/* == R09COPY: About slogan callouts ===================================== */
+.bs-cp-slogan {
+  display: block;
+  border: 1px solid #D7DEE8;
+  border-left: 4px solid #1E3A8A;
+  border-radius: 8px;
+  background: #F8FAFC;
+  color: #111827;
+  font-weight: 800;
+  line-height: 1.35;
+  padding: 14px 18px;
+  box-shadow: 0 1px 2px rgba(17,24,39,0.04);
+}
+
+.bs-cp-slogan--hero {
+  margin-top: 14px;
+  max-width: 760px;
+  font-size: 18px;
+}
+
+.bs-cp-main .bs-cp-slogan--bottom {
+  margin-top: 28px;
+  font-size: 17px;
+}
+
+/* PAY-001-INFO-1-20260726 */
+/* UI-FIX-20260903 T1: margin and font-size removed — they belong to the base rule and to the mobile media query above. */
+.bs-cp-main h2{display:flex;align-items:center;gap:12px}
+.bs-cp-main h2:first-child{margin-top:0}
+.bs-cp-toc__link{display:flex;align-items:center;gap:8px}
+.bs-cp-toc__link svg{flex:0 0 auto;opacity:.6}
+.bs-cp-toc__link.is-active svg,.bs-cp-toc__link:hover svg{opacity:1}
+.bs-cp-h2-icon{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:9px;background:var(--bs-blue-soft);color:var(--bs-blue);flex:0 0 auto}
+.bs-pm-quickcard{border:1px solid var(--bs-line);border-radius:var(--bs-r);background:#fff;box-shadow:var(--bs-sh-sm);margin-bottom:8px}
+.bs-pm-row{display:flex;gap:14px;padding:18px 20px;align-items:flex-start}
+.bs-pm-row+.bs-pm-row{border-top:1px solid var(--bs-line-2)}
+.bs-pm-row__icon{width:34px;height:34px;border-radius:9px;background:var(--bs-line-2);color:var(--bs-ink-2);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.bs-pm-row__body{min-width:0;flex:1}
+.bs-pm-row__body h3{margin:0 0 4px !important;font-size:15.5px !important}
+.bs-pm-row__body p{margin:0 !important;font-size:14px}
+.bs-pm-eyebrow{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--bs-ink-3);margin:32px 0 12px}
+.bs-pm-card{border:1.5px solid var(--bs-line);border-radius:var(--bs-r);background:#fff;box-shadow:var(--bs-sh-sm);padding:22px 24px;margin-bottom:16px}
+.bs-pm-card__head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.bs-pm-card__head h3{margin:0 !important;font-size:18px !important;flex:1;min-width:0}
+.bs-pm-logo{width:28px;height:28px;flex:0 0 auto;display:block}
+.bs-pm-pill{font-size:11.5px;font-weight:800;padding:5px 11px;border-radius:999px;letter-spacing:-.01em;flex:0 0 auto;white-space:nowrap}
+.bs-pm-pill--mono{background:#111;color:#fff}
+.bs-pm-pill--pumb{background:var(--bs-pumb-red,#e30613);color:#fff}
+.bs-cp-finePrint{font-size:13px !important;color:var(--bs-ink-3) !important;line-height:1.6}
+.bs-pm-kv-title{font-size:13.5px;font-weight:700;color:var(--bs-ink);margin:14px 0 -2px}
+.bs-pm-note{font-size:13px;color:var(--bs-ink-3);margin:6px 0 0}
+.bs-kv-grid{display:grid;grid-template-columns:1fr 1fr;column-gap:28px;row-gap:14px;margin:16px 0;padding:16px 0;border-top:1px solid var(--bs-line-2);border-bottom:1px solid var(--bs-line-2)}
+.bs-kv__label{display:block;font-size:11.5px;color:var(--bs-ink-3);margin-bottom:3px}
+.bs-kv__value{display:block;font-size:14px;color:var(--bs-ink);font-weight:700;line-height:1.4}
+/* TECH-045-WPA: requisites were 'JetBrains Mono'; system monospace per owner decision 2026-09-28 (1a). */
+.bs-kv--copy .bs-kv__value{display:flex;align-items:center;gap:8px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.5px;font-weight:600;word-break:break-all}
+.bs-copy-btn{position:relative;border:1px solid var(--bs-line);background:#fff;border-radius:6px;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;color:var(--bs-ink-3);cursor:pointer;flex:0 0 auto}
+.bs-copy-btn:hover{color:var(--bs-blue);border-color:var(--bs-blue)}
+.bs-copy-btn__tip{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#111;color:#fff;font-size:10.5px;font-weight:600;padding:3px 7px;border-radius:5px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s}
+.bs-copy-btn.is-copied{color:#fff;background:var(--bs-green);border-color:var(--bs-green)}
+.bs-copy-btn.is-copied .bs-copy-btn__tip{opacity:1}
+@media (max-width:640px){.bs-kv-grid{grid-template-columns:1fr}}
+
+/* PAY-001-INFO-2-20260726 */
+.bs-cp-main a.bs-info-cta,
+.bs-cp-main a.bs-info-cta:visited,
+.bs-cp-main a.bs-info-cta:hover,
+.bs-cp-main a.bs-info-cta:focus {
+  color: #fff !important;
+  text-decoration: none !important;
+}

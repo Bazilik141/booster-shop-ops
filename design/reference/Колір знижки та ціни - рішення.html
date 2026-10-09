@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Booster Shop — Колір знижки та ціни</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="boostershop-ds.css">
+  <style>
+    :root { --canvas: #ece9e3; --canvas-line: rgba(60,50,40,.10); }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body {
+      background: var(--canvas);
+      background-image:
+        linear-gradient(var(--canvas-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--canvas-line) 1px, transparent 1px);
+      background-size: 32px 32px;
+      font-family: 'Manrope', system-ui, sans-serif; color: var(--bs-ink-2);
+      -webkit-font-smoothing: antialiased;
+    }
+    .board { max-width: 1080px; margin: 0 auto; padding: 56px 28px 110px; }
+    .board-head { margin-bottom: 12px; }
+    .board-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--bs-ink-3); margin: 0 0 10px; }
+    .board-head h1 { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; color: var(--bs-ink); margin: 0; }
+    .board-head p { margin: 12px 0 0; font-size: 15px; line-height: 1.6; color: var(--bs-ink-3); max-width: 720px; text-wrap: pretty; }
+
+    .caption { display: flex; align-items: baseline; gap: 12px; margin: 44px 0 16px; }
+    .caption .num { flex: 0 0 auto; width: 26px; height: 26px; border-radius: 7px; background: var(--bs-ink); color: #fff; font-size: 13px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; }
+    .caption h2 { font-size: 17px; font-weight: 800; letter-spacing: -0.01em; color: var(--bs-ink); margin: 0; }
+    .caption p { font-size: 13.5px; color: var(--bs-ink-3); margin: 2px 0 0; line-height: 1.45; }
+    .caption .meta { display: flex; flex-direction: column; gap: 2px; }
+    .tagm { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--bs-ink-4); margin-left: auto; align-self: center; }
+
+    .frame { background: #fff; border: 1px solid var(--bs-line); border-radius: var(--bs-r-lg); padding: 28px; box-shadow: 0 18px 44px rgba(17,24,39,.07); }
+
+    .opt { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--bs-ink-4); margin: 0 0 12px; display: flex; align-items: center; gap: 8px; }
+    .opt .pin { padding: 2px 7px; border-radius: 999px; font-weight: 600; }
+    .pin-now { background: var(--bs-line-2); color: var(--bs-ink-3); }
+    .pin-pick { background: #e9f6ee; color: #197a3b; }
+    .pin-no { background: #fdecec; color: #b42318; }
+
+    /* mini card */
+    .row { display: grid; gap: 18px; }
+    .row-3 { grid-template-columns: repeat(3, 1fr); }
+    .pc { background: #fff; border: 1px solid var(--bs-line); border-radius: var(--bs-r); box-shadow: var(--bs-sh-sm); overflow: hidden; display: flex; flex-direction: column; }
+    .pc__media { position: relative; padding: 12px; }
+    .pc__ph { aspect-ratio: 16/11; border-radius: var(--bs-r-sm); background: repeating-linear-gradient(45deg, #f0eee9 0 10px, #e8e5dc 10px 20px); display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace; font-size:9.5px; color:rgba(17,24,39,.34); text-transform:uppercase; letter-spacing:.08em; }
+    .pc__badge-tr { position: absolute; top: 18px; right: 18px; }
+    .pc__body { padding: 6px 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+    .pc__title { font-size: 13.5px; font-weight: 600; line-height: 1.4; color: var(--bs-ink); margin: 0; }
+    .pc__price { display: flex; align-items: baseline; gap: 9px; }
+    .pc__price .new { font-size: 17px; font-weight: 800; letter-spacing: -.01em; }
+    .pc__price .old { font-size: 12.5px; color: var(--bs-ink-4); text-decoration: line-through; font-weight: 500; }
+    .pc__cta { width: 100%; height: 42px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: var(--bs-r-sm); font: inherit; font-size: 14px; font-weight: 700; border: none; color: #fff; background: var(--bs-green); cursor: pointer; }
+
+    .b { display: inline-flex; align-items: center; font-size: 11.5px; font-weight: 700; letter-spacing: .04em; padding: 5px 9px; border-radius: var(--bs-r-sm); line-height: 1; }
+
+    .note { font-size: 13px; line-height: 1.55; color: var(--bs-ink-3); margin: 16px 0 0; padding: 12px 14px; border-radius: var(--bs-r-sm); background: var(--bs-bg); border: 1px solid var(--bs-line); }
+    .note b { color: var(--bs-ink); }
+    .note.good { background: #f3faf5; border-color: #cdeada; }
+    .note.bad { background: #fdf4f4; border-color: #f3d4d4; }
+
+    /* swatch chips for price */
+    .swrow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .sw { border: 1px solid var(--bs-line); border-radius: var(--bs-r); padding: 22px 20px; background: #fff; display: flex; flex-direction: column; gap: 14px; }
+    .sw .big { display: flex; align-items: baseline; gap: 10px; }
+    .sw .big .new { font-size: 26px; font-weight: 800; letter-spacing: -.02em; }
+    .sw .big .old { font-size: 15px; color: var(--bs-ink-4); text-decoration: line-through; font-weight: 500; }
+    .sw .hex { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--bs-ink-3); letter-spacing: .04em; }
+    .sw .small { font-size: 13.5px; font-weight: 800; }
+
+    @media (max-width: 860px) {
+      .row-3, .swrow { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="board">
+
+    <header class="board-head">
+      <p class="board-eyebrow">Booster Shop · колір знижки та акційної ціни</p>
+      <h1>Два питання про червоний</h1>
+      <p>Дивимось на справжніх пікселях, а не на словах. Коротко моя думка: бейдж знижки — лишити одним кольором (я за чорний); тири за розміром знижки — не варто. Акційну ціну — так, трохи почистити.</p>
+    </header>
+
+    <!-- 1 · BADGE: single colors -->
+    <div class="caption">
+      <span class="num">1</span>
+      <div class="meta">
+        <h2>Бейдж знижки — один колір</h2>
+        <p>Чорний vs червоний. Дивіться, де «живе» червоний на картці.</p>
+      </div>
+      <span class="tagm">A vs B</span>
+    </div>
+
+    <div class="frame">
+      <div class="row row-3">
+        <div>
+          <p class="opt"><span class="pin pin-now">зараз</span> A · чорний бейдж + червона ціна</p>
+          <div class="pc">
+            <div class="pc__media">
+              <span class="pc__badge-tr"><span class="b" style="background:#111827;color:#fff">−16%</span></span>
+              <div class="pc__ph">фото товару</div>
+            </div>
+            <div class="pc__body">
+              <p class="pc__title">Super Electric Breaker</p>
+              <div class="pc__price"><span class="new" style="color:#DC2626">₴2700</span><span class="old">₴3200</span></div>
+              <button class="pc__cta">Купити</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="opt"><span class="pin pin-no">обережно</span> B · червоний бейдж + червона ціна</p>
+          <div class="pc">
+            <div class="pc__media">
+              <span class="pc__badge-tr"><span class="b" style="background:#DC2626;color:#fff">−16%</span></span>
+              <div class="pc__ph">фото товару</div>
+            </div>
+            <div class="pc__body">
+              <p class="pc__title">Super Electric Breaker</p>
+              <div class="pc__price"><span class="new" style="color:#DC2626">₴2700</span><span class="old">₴3200</span></div>
+              <button class="pc__cta">Купити</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="opt"><span class="pin pin-pick">варіант</span> C · червоний бейдж + ink ціна</p>
+          <div class="pc">
+            <div class="pc__media">
+              <span class="pc__badge-tr"><span class="b" style="background:#DC2626;color:#fff">−16%</span></span>
+              <div class="pc__ph">фото товару</div>
+            </div>
+            <div class="pc__body">
+              <p class="pc__title">Super Electric Breaker</p>
+              <div class="pc__price"><span class="new" style="color:#111827">₴2700</span><span class="old">₴3200</span></div>
+              <button class="pc__cta">Купити</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="note bad"><b>B — два червоних б'ються.</b> Бейдж зверху і ціна знизу тягнуть увагу одночасно, картка стає «крикливою». Якщо хочете червоний бейдж — тоді ціну робимо темною (варіант C), щоб червоний був один.</div>
+      <div class="note good"><b>Моя рекомендація — A.</b> Червоний живе на ціні (там, де гроші), бейдж чорний і преміальний. До того ж чорний бейдж вирізняє вас — у більшості TCG-магазинів він червоний.</div>
+    </div>
+
+    <!-- 2 · BADGE: tiers -->
+    <div class="caption">
+      <span class="num">2</span>
+      <div class="meta">
+        <h2>Тири за розміром знижки</h2>
+        <p>Як це виглядає в реальному ряду: −8% / −22% / −45% трьома різними червоними.</p>
+      </div>
+      <span class="tagm">проти</span>
+    </div>
+
+    <div class="frame">
+      <div class="row row-3">
+        <div>
+          <div class="pc">
+            <div class="pc__media">
+              <span class="pc__badge-tr"><span class="b" style="background:#111827;color:#fff">−8%</span></span>
+              <div class="pc__ph">фото товару</div>
+            </div>
+            <div class="pc__body"><p class="pc__title">0–10% — чорний</p><div class="pc__price"><span class="new" style="color:#111827">₴1840</span><span class="old">₴2000</span></div></div>
+          </div>
+        </div>
+        <div>
+          <div class="pc">
+            <div class="pc__media">
+              <span class="pc__badge-tr"><span class="b" style="background:#E2574C;color:#fff">−22%</span></span>
+              <div class="pc__ph">фото товару</div>
+            </div>
+            <div class="pc__body"><p class="pc__title">11–30% — приглушений</p><div class="pc__price"><span class="new" style="color:#111827">₴2500</span><span class="old">₴3200</span></div></div>
+          </div>
+        </div>
+        <div>
+          <div class="pc">
+            <div class="pc__media">
+              <span class="pc__badge-tr"><span class="b" style="background:#DC2626;color:#fff">−45%</span></span>
+              <div class="pc__ph">фото товару</div>
+            </div>
+            <div class="pc__body"><p class="pc__title">30%+ — яскравий</p><div class="pc__price"><span class="new" style="color:#111827">₴1100</span><span class="old">₴2000</span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="note bad"><b>Чесно — я проти.</b> У ряду три різних червоних виглядають як неузгодженість, а не як система. Покупець не «розшифровує» відтінок — він просто бачить «червоне = знижка». Розмір і так читається з числа: <b>−45%</b> очевидно більше за <b>−8%</b>.</div>
+      <div class="note"><b>Якщо все ж хочеться відзначати великі знижки</b> — краще не шкала кольорів, а один виняток: для справжніх «зливів» (напр. від 35%) — суцільний червоний бейдж зі словом <b>ХІТ</b>, а решта лишається однаковою. Один акцент, не градієнт.</div>
+    </div>
+
+    <!-- 3 · PRICE red -->
+    <div class="caption">
+      <span class="num">3</span>
+      <div class="meta">
+        <h2>Колір акційної ціни</h2>
+        <p>Поточний трохи «цегляний». Чистіший і насиченіший — праворуч.</p>
+      </div>
+      <span class="tagm">на білому</span>
+    </div>
+
+    <div class="frame">
+      <div class="swrow">
+        <div class="sw">
+          <p class="opt" style="margin:0"><span class="pin pin-now">зараз</span> цегляний</p>
+          <div class="big"><span class="new" style="color:#B91C1C">₴2700</span><span class="old">₴3200</span></div>
+          <div class="big" style="align-items:center"><span class="b small" style="color:#B91C1C">−16%</span><span class="hex">#B91C1C</span></div>
+        </div>
+        <div class="sw" style="outline:2px solid #197a3b; outline-offset:-2px">
+          <p class="opt" style="margin:0"><span class="pin pin-pick">моя рекомендація</span> чистий</p>
+          <div class="big"><span class="new" style="color:#DC2626">₴2700</span><span class="old">₴3200</span></div>
+          <div class="big" style="align-items:center"><span class="b small" style="color:#DC2626">−16%</span><span class="hex">#DC2626</span></div>
+        </div>
+        <div class="sw">
+          <p class="opt" style="margin:0"><span class="pin" style="background:var(--bs-blue-soft);color:var(--bs-blue)">пунчіше</span> насичений</p>
+          <div class="big"><span class="new" style="color:#E11D48">₴2700</span><span class="old">₴3200</span></div>
+          <div class="big" style="align-items:center"><span class="b small" style="color:#E11D48">−16%</span><span class="hex">#E11D48</span></div>
+        </div>
+      </div>
+      <div class="note good"><b>Я за #DC2626.</b> Чистіший і трохи яскравіший за поточний, але не «кричить» і добре контрастує з чорним заголовком на білому. <b>#E11D48</b> — якщо хочете більше «акційної» енергії (відтінок у рожевий). Від чистого <b>#FF0000</b> тримаємось подалі — він вібрує і виглядає дешево.</div>
+    </div>
+
+    <!-- summary -->
+    <div class="caption">
+      <span class="num">≡</span>
+      <div class="meta">
+        <h2>Мій підсумок для патча</h2>
+      </div>
+    </div>
+    <div class="frame">
+      <div class="note good" style="margin-top:0"><b>1.</b> Бейдж знижки — лишаємо <b>чорний</b> (варіант A). Один колір, без тирів.</div>
+      <div class="note good"><b>2.</b> Замість тирів — за бажання один виняток «ХІТ» для дуже великих знижок (опційно, окремо).</div>
+      <div class="note good"><b>3.</b> Колір акційної ціни: <b>#B91C1C → #DC2626</b> (оновлюємо токен <code>--bs-danger</code>).</div>
+      <p style="font-size:13px;color:var(--bs-ink-3);margin:16px 0 0;line-height:1.55">Скажіть, з чим погоджуєтесь — і я зафіксую це у токенах та підготую хендоф на патч для Codex.</p>
+    </div>
+
+  </div>
+</body>
+</html>

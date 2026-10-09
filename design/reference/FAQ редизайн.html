@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>FAQ редизайн — Booster Shop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: #f0eee9; font-family: 'Manrope', system-ui, sans-serif; }
+
+  /* Tokens — mirrored from the Booster Shop design system doc. Muted, trust-focused,
+     Japanese minimalist. Gold and blue used sparingly, green only for CTAs. */
+  :root {
+    --bs-gold: #D4A017;          /* accent gold (sparingly) */
+    --bs-gold-soft: #fbf4dc;     /* very subtle gold wash — only when explicitly needed */
+    --bs-gold-line: #E8C766;     /* gold border on active */
+    --bs-blue: #1E3A8A;          /* brand blue */
+    --bs-ink: #111827;           /* headings */
+    --bs-ink-2: #1F2937;         /* body */
+    --bs-ink-3: #6B7280;         /* secondary / muted */
+    --bs-line: #E5E7EB;          /* hairline border */
+    --bs-line-2: #EEF0F2;        /* even lighter hairline */
+    --bs-paper: #FFFFFF;
+    --bs-bg: #F7F7F5;            /* page background */
+    --bs-green: #16A34A;         /* CTA only */
+  }
+
+  /* Page mock chrome (shared by every artboard) */
+  .page {
+    background: #fff;
+    color: var(--bs-ink);
+    font-family: 'Manrope', system-ui, sans-serif;
+    box-sizing: border-box;
+    padding: 28px 40px 40px;
+  }
+  .page * { box-sizing: border-box; }
+  .crumbs {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--bs-ink-3);
+    margin-bottom: 18px;
+  }
+  .crumbs a { color: #3a78c0; text-decoration: none; }
+  .crumbs svg { width: 13px; height: 13px; opacity: .5; }
+  .h-page {
+    font-size: 36px; font-weight: 800; letter-spacing: -0.02em;
+    margin: 0 0 18px; color: var(--bs-ink);
+  }
+  .lede {
+    font-size: 15px; line-height: 1.65; color: var(--bs-ink-2);
+    max-width: 680px; margin: 0 0 24px;
+  }
+  .lede + .lede { margin-top: -10px; }
+  .lede strong { color: var(--bs-ink); font-weight: 700; }
+
+  /* Product card placeholders for "Акції" comparison */
+  .product-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+    margin: 18px 0 24px;
+  }
+  .product-card {
+    border: 1px solid var(--bs-line); border-radius: 10px;
+    padding: 12px; background: #fff;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .product-img {
+    aspect-ratio: 1/1;
+    background:
+      repeating-linear-gradient(45deg, #f0eee9 0 8px, #e8e5dc 8px 16px);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 10px; color: rgba(0,0,0,.35);
+    text-transform: uppercase; letter-spacing: .08em;
+  }
+  .product-title {
+    font-size: 12px; font-weight: 600; color: var(--bs-ink);
+    line-height: 1.35; min-height: 32px;
+  }
+  .product-price { font-size: 13px; font-weight: 700; color: var(--bs-ink); }
+  .product-price s { color: var(--bs-ink-3); font-weight: 500; margin-left: 6px; font-size: 11px;}
+  .product-cta {
+    background: var(--bs-green); color: #fff;
+    font-size: 11px; font-weight: 700; letter-spacing: .04em;
+    text-transform: uppercase;
+    padding: 8px; border-radius: 6px; text-align: center;
+  }
+  .promo-badge {
+    position: absolute; top: 8px; left: 8px;
+    background: #e11d2d; color: #fff;
+    font-size: 10px; font-weight: 700;
+    padding: 3px 7px; border-radius: 4px;
+    letter-spacing: .04em;
+  }
+  .product-card { position: relative; }
+
+  /* Tag chips for variant headers */
+  .variant-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px; font-weight: 500;
+    color: var(--bs-ink-3); text-transform: uppercase; letter-spacing: .1em;
+    margin-bottom: 8px;
+  }
+  .variant-tag::before {
+    content: ''; width: 14px; height: 1px; background: var(--bs-gold);
+  }
+
+  /* Section divider for "Акції" reorder card */
+  .section-marker {
+    display: inline-block;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 10px; font-weight: 500; letter-spacing: .12em;
+    color: var(--bs-ink-3); text-transform: uppercase;
+    background: var(--bs-bg); padding: 4px 8px; border-radius: 4px;
+    margin: 10px 0;
+  }
+  .ghost {
+    border: 1px dashed var(--bs-line);
+    border-radius: 10px;
+    padding: 14px 18px;
+    color: var(--bs-ink-3);
+    font-size: 13px;
+    text-align: center;
+    background: repeating-linear-gradient(45deg, transparent 0 12px, rgba(0,0,0,.015) 12px 13px);
+  }
+</style>
+</head>
+<body>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="faq-data.jsx"></script>
+<script type="text/babel" src="faq-variants.jsx"></script>
+<script type="text/babel" src="promo-reorder.jsx"></script>
+<script type="text/babel" src="app.jsx"></script>
+
+</body>
+</html>

@@ -1,0 +1,205 @@
+{#
+  Сторінка «Замовлення прийнято» — заміна для catalog/view/template/<theme>/checkout/success.twig.
+
+  Контролерні зміни ОБОВ'ЯЗКОВІ. Стандартний OpenCart 4 контролер
+  catalog/controller/checkout/success.php передає тільки text_message і
+  breadcrumbs. Цей шаблон вимагає додатково:
+
+    $data['order_id']         — string ID-у замовлення (напр. "BS-2026-04812")
+    $data['items']            — масив [{ title, qty, sum }, ...]
+    $data['total']            — int сума «до сплати» в гривнях
+    $data['shipping_method']  — string («Нова пошта — у відділення №31, Дніпро»)
+    $data['payment_method']   — string («Оплата карткою»)
+    $data['history_url']      — string URL історії замовлень в кабінеті
+    $data['catalog_url']      — string URL головної / каталогу
+    $data['account_url']      — string URL особистого кабінету
+
+  Приклад розширення контролера дивись наприкінці файлу в коментарі.
+
+  Класи .bs-cp-* визначені в content-pages.css.
+#}
+
+{{ header }}
+
+<main class="bs-cp-shell">
+
+  <nav class="bs-cp-crumbs" aria-label="Хлібні крихти">
+    {% for crumb in breadcrumbs %}
+      {% if loop.first %}
+        <a href="{{ crumb.href }}" aria-label="Головна">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 2l6 5v7h-4v-4H6v4H2V7l6-5z"/></svg>
+        </a>
+      {% elseif loop.last %}
+        <span class="bs-cp-crumbs__sep">›</span>
+        <span class="bs-cp-crumbs__current">{{ crumb.text }}</span>
+      {% else %}
+        <span class="bs-cp-crumbs__sep">›</span>
+        <a href="{{ crumb.href }}">{{ crumb.text }}</a>
+      {% endif %}
+    {% endfor %}
+  </nav>
+
+  {# Success hero — зелена стрічка зліва + великий check-icon + заголовок #}
+  <section class="bs-cp-success">
+    <div class="bs-cp-success__stripe"></div>
+    <div class="bs-cp-success__body">
+      <div class="bs-cp-success__icon" aria-hidden="true">
+        <svg viewBox="0 0 14 14" fill="none">
+          <path d="M3 7l3 3 5-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="bs-cp-success__main">
+        <div class="bs-cp-eyebrow bs-cp-eyebrow--gold">Замовлення №{{ order_id }}</div>
+        <h1>Дякуємо, замовлення в грі.</h1>
+        <p>
+          Уже збираємо ваш лут. Статус замовлення можна перевірити в
+          <a href="{{ history_url }}">історії замовлень</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {# 2-col layout: timeline + summary aside #}
+  <div class="bs-cp-success-grid">
+
+    {# Лівий бік — timeline + дрібні nudges + кнопки #}
+    <div>
+      <div class="bs-cp-eyebrow">Що далі</div>
+      <h2 style="font-size:22px; font-weight:700; margin:8px 0 22px; color:var(--bs-ink);">
+        Кроки, які ми робимо для вас
+      </h2>
+
+      <ol class="bs-cp-timeline">
+        <li class="bs-cp-timeline__item bs-cp-timeline__item--current">
+          <div class="bs-cp-timeline__bullet">1</div>
+          <div class="bs-cp-timeline__title">Збираємо ваш лут</div>
+        </li>
+        <li class="bs-cp-timeline__item">
+          <div class="bs-cp-timeline__bullet">2</div>
+          <div class="bs-cp-timeline__title">Пакуємо та відправляємо</div>
+        </li>
+        <li class="bs-cp-timeline__item">
+          <div class="bs-cp-timeline__bullet">3</div>
+          <div class="bs-cp-timeline__title">Надсилаємо фіскальний чек</div>
+        </li>
+      </ol>
+
+      <aside class="bs-cp-callout bs-cp-callout--grey">
+        <span class="bs-cp-callout__icon" aria-hidden="true">
+          <svg viewBox="0 0 18 18" fill="none"><path d="M5 2.5h3l1 3-2 1c.7 2 2 3.3 4 4l1-2 3 1v3a1 1 0 01-1 1A12 12 0 014 4a1 1 0 011-1.5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </span>
+        <div>
+          <div class="bs-cp-callout__title">Без зайвих дзвінків</div>
+          <div class="bs-cp-callout__body">
+            Ми не телефонуємо й не пишемо без потреби. Якщо в замовленні все
+            заповнено коректно — просто тихо й швидко відправляємо.
+          </div>
+        </div>
+      </aside>
+
+      <div class="bs-cp-actions">
+        <a class="bs-btn bs-btn-primary" href="{{ catalog_url }}" style="min-width:200px;">
+          Продовжити покупки →
+        </a>
+        <a class="bs-btn bs-btn-secondary" href="{{ account_url }}">
+          Перейти в кабінет
+        </a>
+      </div>
+    </div>
+
+    {# Правий бік — order summary aside #}
+    <aside class="bs-cp-summary">
+      <div class="bs-cp-eyebrow">Замовлення</div>
+      <h3>№{{ order_id }}</h3>
+
+      <div class="bs-cp-summary__items">
+        {% for item in items %}
+          <div class="bs-cp-summary__item">
+            <div>
+              <div class="bs-cp-summary__title">{{ item.title }}</div>
+              <div class="bs-cp-summary__qty">× {{ item.qty }}</div>
+            </div>
+            <div class="bs-cp-summary__sum">₴{{ item.sum }}</div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="bs-cp-summary__total">
+        <span>Сплачено</span>
+        <span>₴{{ total }}</span>
+      </div>
+
+      <div class="bs-cp-summary__meta">
+        <div class="bs-cp-summary__meta-row">
+          <span class="bs-cp-summary__meta-label">Доставка</span>
+          <span>{{ shipping_method }}</span>
+        </div>
+        <div class="bs-cp-summary__meta-row">
+          <span class="bs-cp-summary__meta-label">Оплата</span>
+          <span>{{ payment_method }}</span>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  {# Telegram CTA — підвал кожної контентної сторінки #}
+  <section class="bs-cp-tg">
+    <div class="bs-cp-tg__icon" aria-hidden="true">
+      <svg viewBox="0 0 20 20" fill="none"><path d="M3 9.5L17 4l-2 13-4-2-2 3-1-4 8-7-9 5-4-1.5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+    </div>
+    <div>
+      <div class="bs-cp-tg__title">Залишилось питання?</div>
+      <div class="bs-cp-tg__desc">
+        Найшвидше відповідаємо в Telegram: <strong>@boostershop_tcg</strong>
+      </div>
+    </div>
+    <a class="bs-btn bs-btn-blue-outline" href="https://t.me/boostershop_tcg" style="font-size:13.5px;">
+      Відкрити Telegram →
+    </a>
+  </section>
+
+</main>
+
+{{ footer }}
+
+{# ────────────────────────────────────────────────────────────────────────────
+   Приклад розширення контролера catalog/controller/checkout/success.php
+   (фрагмент — додати після стандартного блоку, перед $this->load->view):
+
+      if (isset($this->session->data['order_id'])) {
+          $order_id = (int)$this->session->data['order_id'];
+          $this->load->model('checkout/order');
+          $order_info = $this->model_checkout_order->getOrder($order_id);
+
+          if ($order_info) {
+              $this->load->model('account/order');
+              $products = $this->model_account_order->getProducts($order_id);
+
+              $items = [];
+              foreach ($products as $p) {
+                  $items[] = [
+                      'title' => $p['name'],
+                      'qty'   => (int)$p['quantity'],
+                      'sum'   => $this->currency->format(
+                                    $this->tax->calculate($p['price'], $p['tax_class_id']) * $p['quantity'],
+                                    $order_info['currency_code']
+                                ),
+                  ];
+              }
+
+              $data['order_id']        = 'BS-' . date('Y') . '-' . str_pad((string)$order_id, 5, '0', STR_PAD_LEFT);
+              $data['items']           = $items;
+              $data['total']           = $this->currency->format($order_info['total'], $order_info['currency_code']);
+              $data['shipping_method'] = $order_info['shipping_method'];
+              $data['payment_method']  = $order_info['payment_method'];
+              $data['history_url']     = $this->url->link('account/order', 'language=' . $this->config->get('config_language'), true);
+              $data['catalog_url']     = $this->url->link('common/home', 'language=' . $this->config->get('config_language'), true);
+              $data['account_url']     = $this->url->link('account/account', 'language=' . $this->config->get('config_language'), true);
+          }
+      }
+
+   Якщо session не має order_id (наприклад, після очистки кошика) — fallback
+   на старий simple text-message. Можна додати окремий if-блок у самому
+   шаблоні: {% if order_id is defined %} … {% else %} {{ text_message }} {% endif %}.
+   ────────────────────────────────────────────────────────────────────────── #}
