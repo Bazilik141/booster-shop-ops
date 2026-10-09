@@ -1,15 +1,13 @@
-> **Superseded 2026-10-09 by `handoffs/handoff_RD-26_preorder-badge-rules_20261009.md` (Notion RD-26). Do not execute this file.**
-
-# Handoff — UI-BADGE-DEDUP: remove dead `.bs-badge--preorder` rules
+# Handoff — RD-26: remove dead `.bs-badge--preorder` rules
 
 Date: 2026-10-09 | Parent: design canon actualisation 2026-10-09 (`design/`)
-Executor: Codex or Claude Code (owner decides) · model=Terra / Sonnet · effort=medium
+Executor: Codex (owner decision 2026-10-09) · model=Terra · effort=medium
 Justification: three known lines in one shared stylesheet plus the standard cache-bust; no discovery needed, but `boostershop-ds.css` is a soft risky zone (AGENTS.md, UI/CSS discipline 6), so not a small model.
 
-Task ID status: proposed. Not in Notion or `ROADMAP_FLOW` yet; the owner creates it or renames it before execution.
+Task ID: Notion RD-26 (`3f46bf20-bdb4-8175-bcbc-dfcd7ecfe35e`), In progress. Supersedes `handoffs/handoff_UI-BADGE-DEDUP_preorder-badge-rules_20261009.md` (same scope; its working ID `UI-BADGE-DEDUP` is not a roadmap series and was never executed).
 
 ## 1. Task ID
-`UI-BADGE-DEDUP`
+`RD-26`
 
 ## 2. Context
 Owner decision 2026-10-09 (`design/DECISIONS.md`, Foundation → "Preorder colours"): the preorder badge is amber, as live; the «Передзамовити» button stays `--bs-blue-light`. The live `boostershop-ds.css` (copy: `live-snapshots/20261009_design-canon/boostershop-ds.css`, cache token `ui-pcard-badge-20261006`) defines `.bs-badge--preorder` three times:
@@ -30,7 +28,7 @@ Exactly one `.bs-badge--preorder` rule remains, at the base badge set, with the 
   - Line 142: replace the blue declaration values with the amber values (`#fef3c7` / `#92400e` / `1px solid #f59e0b`). Keep the selector, its alignment and the neighbouring lines.
   - Line 384: delete the `.bs-badge--preorder` line only. Keep `.bs-badge--instock` and the comment above it.
   - Line 5079: delete the `.bs-badge--preorder` line only. Keep the two `.bs-btn-preorder` lines after it.
-  - Add a one-line marker comment at the edited base rule (patch convention 5), e.g. `/* UI-BADGE-DEDUP 20261009: single amber preorder badge (owner 2026-10-09). */`.
+  - Add a one-line marker comment at the edited base rule (patch convention 5), e.g. `/* RD-26 20261009: single amber preorder badge (owner 2026-10-09). */`.
 - `catalog/view/template/common/header.twig` — CSS cache token for `boostershop-ds.css`, read and replaced wholesale per patch convention 8.
 - Line numbers are from the 2026-10-09 copy. The executor anchors on exact rule text and asserts each anchor count before writing (convention 2): the blue rule = 1, the amber rule = 2.
 - Before editing, grep `patches/` for `bs-badge--preorder` (known hit: `CAT-004-SD-7_rare-pack-listing-badge_20260918.php`) and state in the report whether any applied patch's rollback or marker logic anchors on the lines being removed.
@@ -53,7 +51,7 @@ Exactly one `.bs-badge--preorder` rule remains, at the base badge set, with the 
 
 Owner command, run in `~/public_html` on the server:
 ```
-tar -czf UI-BADGE-DEDUP-live-20261009.tar.gz catalog/view/stylesheet/boostershop-ds.css catalog/view/template/common/header.twig
+tar -czf RD-26-live-20261009.tar.gz catalog/view/stylesheet/boostershop-ds.css catalog/view/template/common/header.twig
 ```
 
 ## 7. Acceptance criteria
@@ -71,7 +69,7 @@ tar -czf UI-BADGE-DEDUP-live-20261009.tar.gz catalog/view/stylesheet/boostershop
 No checkout or payment smoke test needed: no risky zone is touched.
 
 ## 9. Rollback note
-Restore `catalog/view/stylesheet/boostershop-ds.css` and `catalog/view/template/common/header.twig` from `_patch_backups/UI-BADGE-DEDUP_preorder-badge-rules_20261009-<timestamp>/`, then clear the OpenCart theme cache. Rollback trigger: any badge or button colour on catalog or product pages differs from before the patch.
+Restore `catalog/view/stylesheet/boostershop-ds.css` and `catalog/view/template/common/header.twig` from `_patch_backups/RD-26_preorder-badge-rules_20261009-<timestamp>/`, then clear the OpenCart theme cache. Rollback trigger: any badge or button colour on catalog or product pages differs from before the patch.
 
 ## 10. Recommended status after execution
-Executor: patch ready → owner deploys → owner QA OK → Done (Claude writes the Notion status on the owner's word). Delivery: patch file `patches/UI-BADGE-DEDUP_preorder-badge-rules_20261009.php`; the owner uploads it to `~/public_html` and runs `php UI-BADGE-DEDUP_preorder-badge-rules_20261009.php`. The executor never commits, pushes or deploys.
+Executor: patch ready → owner deploys → owner QA OK → Done (Claude writes the Notion status on the owner's word). Delivery: patch file `patches/RD-26_preorder-badge-rules_20261009.php`; the owner uploads it to `~/public_html` and runs `php RD-26_preorder-badge-rules_20261009.php`. The executor never commits, pushes or deploys.
