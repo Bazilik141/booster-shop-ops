@@ -6,6 +6,9 @@ Each entry: the decision, then the spec (`specs/`) and mockup (`reference/`) tha
 ## Foundation
 - **Logo** (owner, 2026-10-09): the designer package is canonical; files in `assets/logo/`, rules in `BRAND.md`. Supersedes `bs-logo-crop.png`. Site header and favicon not yet migrated.
 - **Gold** (owner, 2026-10-09): site gold `#C68A00`; `#D4A017` retired. Live since RD-10F (2026-06-11).
+- **Page background** (owner, 2026-10-09): white (`--bs-paper`), as live. Supersedes "white cards on warm light grey". `--bs-bg` stays for fields, hovers and media panels.
+- **Preorder colours** (owner, 2026-10-09): badge amber, as live; «Передзамовити» button stays `--bs-blue-light`. Supersedes the blue preorder badge of 2026-06-01. Obsolete blue badge rule: cleanup backlog in `TOKENS.md`.
+- **«В наявності» badge** (owner, 2026-10-09): light green `.bs-badge--instock` stays as a deliberate, narrow exception to "green only for purchase".
 - **TECH-045 fonts and contrast** (owner 2026-09-25…29, live): Manrope self-hosted (WP-B); JetBrains Mono and IBM Plex Sans Condensed removed, payment requisites in system monospace (WP-A); contrast and ARIA fixes, "До каталогу" in the empty mini-cart is a secondary button (WP-D); purchase controls `--bs-buy #12883E` / hover `#15803D`, card "Купити" 16/700 one line on mobile, checkout confirm 17px, "Переглянути замовлення" white text (WP-E). Patches: `TECH-045_wpa…wpe_2026092*.php`; handoff `handoffs/handoff_TECH-045_render-blocking-fonts-icons_20260925.md`.
 - **Design system base** (2026-05-21): single `boostershop-ds.css`, `bs-*` classes, Manrope, tokens. Phases: category header, empty states, /special order, sticky mobile ATC, transactional emails, Twig templates (header, footer, product card, product page, cart, checkout, account, FAQ, home tiles).
   Spec: `HANDOFF.md`. Mockup: `Booster Shop UX Audit.html`. Several sections are superseded below (FAQ, home tiles, cart, mini-cart, checkout, header, product page, PUMB).
@@ -70,4 +73,4 @@ Each entry: the decision, then the spec (`specs/`) and mockup (`reference/`) tha
 ## Not canon yet
 - **Variant families on 3D-print products** (3D-P-011 trigger: Onix 21/15 cm): the selector itself is live (see Product page); no 3D product has a family configured yet (no selector on the live Onix page, 2026-10-09). The 2026-09-12 master/variant model and the Claude artifact "Селектор варіантів — картка товару" (2026-09-15) are superseded.
 - **Logo migration on the site** (header SVG, favicon from the mark): not started.
-- **Pending owner decisions** listed under "Known drift" in `TOKENS.md`: page background, preorder badge colour, "in stock" green badge.
+- **Cleanup backlog** (no visual change): remove the dead blue and duplicate amber `.bs-badge--preorder` rules (`TOKENS.md`, Known drift).

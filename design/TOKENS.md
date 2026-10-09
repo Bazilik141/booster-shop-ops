@@ -43,8 +43,8 @@ Rules carry a fallback, so nothing breaks. Do not add new uses; prefer the defin
 |---|---|
 | `.bs-btn` | height 44, 14.5/700, padding 0 16, radius 8px |
 | `.bs-badge--rare` | bg `#4C0519`, text `#FDE68A` |
-| `.bs-badge--preorder` | bg `#FEF3C7`, text `#92400E`, border `#F59E0B` (later rule overrides the blue one, see drift) |
-| `.bs-badge--instock` | bg `#D1FAE5`, text `#065F46`, border `#6EE7B7` |
+| `.bs-badge--preorder` | bg `#FEF3C7`, text `#92400E`, border `#F59E0B`. Canonical (owner 2026-10-09). The earlier blue rule in the same file is dead code (see drift). |
+| `.bs-badge--instock` | bg `#D1FAE5`, text `#065F46`, border `#6EE7B7`. Deliberate exception to "green only for purchase" (owner 2026-10-09). |
 | PUMB red `#E60C2A` / soft `#FDECEE` | from bank materials (PAY-001); not found in the five live stylesheets |
 
 ## Mockup-only file
@@ -52,9 +52,8 @@ Rules carry a fallback, so nothing breaks. Do not add new uses; prefer the defin
 
 ## Known drift
 Resolve to the canonical value when a task touches the element.
-- **Page background — owner decision pending.** Old canon: page `--bs-bg #F7F7F5` with white cards. Live: body is white (`#FFFFFF`); `--bs-bg` only fills fields, hovers and media panels.
-- **Preorder badge colour — owner decision pending.** Canon (product-card states, 2026-06-01): blue badge. Live: a later `.bs-badge--preorder` rule makes it amber.
-- **"In stock" badge uses green — owner decision pending.** It conflicts with "green only for purchase" and "sealed is the default, no badge". Where it renders: not verified.
+- **Dead CSS — preorder badge (cleanup backlog).** `boostershop-ds.css` defines `.bs-badge--preorder` three times: the original blue rule (bg `--bs-blue-soft`, border `#c7d2fe`) and two identical amber rules later in the file. Amber is canonical; a cleanup patch may delete the blue rule and the duplicate amber one. Visual result must not change.
+- **Contrast below WCAG AA 4.5:1 (measured 2026-10-09):** white on `--bs-blue-light` (preorder button "Передзамовити", 14.5–16px bold) 3.68:1; `--bs-green #16A34A` as text on white (checkout free-shipping text) 3.30:1; out-of-stock badge `--bs-ink-3` on `--bs-line-2` 4.23:1; `--bs-gold #C68A00` on white 2.98:1 (never use as text); `--bs-ink-4` on white 2.54:1 (placeholders only). Passing reference: white on `--bs-buy` 4.55:1, on `--bs-buy-hover` 5.02:1, on `#2563EB` 5.17:1.
 - `--bs-danger`: old docs (HANDOFF-header-menu-search) list `#B91C1C`; one `#B91C1C` remains in the live CSS. Canonical `#DC2626`.
 - Raw `#16A34A` appears 3 times and `#D4A017` 4 times in the live CSS outside `:root`; replace with tokens when touched.
 - `booster-typography.css` declares `Inter` on `body` (overridden by Manrope). `stylesheet.css` declares `"Open Sans"` on `footer h5`. Both are legacy.
