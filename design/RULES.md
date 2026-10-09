@@ -18,8 +18,8 @@ Apply to every UI task unless a spec for that area says otherwise.
 - Header is sticky on all pages including checkout. Overlays (burger, search, mini-cart, toast, modals) must sit above it.
 - Mini-cart opens only on click of the header cart button. Add-to-cart shows a toast, never auto-opens the drawer.
 - Horizontal scroll and truncated names for subcategory navigation on mobile category pages are rejected (C3 grid instead). Exception: the filter row (UX-003 C) scrolls subcategory chips at 768/390.
-- Sealed is the default state: no badge. Badges only for exceptions (discount, low pull, preorder, out of stock, Rare Pack).
-- Out of stock: dimmed photo, single status, button "Повідомити про наявність". Preorder: badge + ETA line + blue "Передзамовити" (badge colour: see `TOKENS.md` drift, owner decision pending).
+- Sealed is the default state: no badge on catalog tiles. Badges only for exceptions (discount, low pull, preorder, out of stock, Rare Pack). The light green «В наявності» badge is a deliberate exception (owner 2026-10-09).
+- Out of stock: dimmed photo, single status, button "Повідомити про наявність". Preorder: amber badge + ETA line + blue "Передзамовити".
 - Purchase controls use `--bs-buy` / `--bs-buy-hover`, never `--bs-green`.
 - Logo: place a file from `assets/logo/`; never rebuild it in a font or CSS.
 - Disabled purchase CTA: grey (`--bs-line-2` fill, `--bs-ink-2` text, `--bs-line` border), never semi-transparent green.

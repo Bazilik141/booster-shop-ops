@@ -38,7 +38,7 @@ Live state (2026-10-09), not yet migrated: the header shows the old raster `imag
 - Badges 10.5/700, uppercase, +0.04em.
 
 ## Palette (live `:root`, full list in `TOKENS.md`)
-Surfaces: `--bs-paper #FFFFFF` · `--bs-bg #F7F7F5` (fields, hover, media panels) · `--bs-line #E5E7EB` · `--bs-line-2 #EEF0F2`.
+Surfaces: `--bs-paper #FFFFFF` (page background and cards; owner 2026-10-09) · `--bs-bg #F7F7F5` (fields, hover, media panels) · `--bs-line #E5E7EB` · `--bs-line-2 #EEF0F2`.
 Text: `--bs-ink #111827` headings · `--bs-ink-2 #1F2937` body · `--bs-ink-3 #6B7280` secondary · `--bs-ink-4 #9CA3AF` placeholder.
 Brand: `--bs-blue #1E3A8A` (links, active, focus) · `--bs-blue-soft #E8EEFB` · `--bs-gold #C68A00` (site accent) · `--bs-gold-soft #FBF4DC`.
 Secondary action / preorder: `--bs-blue-light #3B82F6`, hover `#2563EB`.
@@ -53,7 +53,8 @@ Gold decision (owner, 2026-10-09): on the site gold is `#C68A00` (set globally b
 
 ## Color rules
 - Purchase green (`--bs-buy`) = only "Купити / Оформити / Додати в кошик / Підтвердити замовлення" and the header cart trigger. Never for status, headings, secondary links.
-- Light blue = only preorder and secondary purchase actions.
+- Light blue = only preorder and secondary purchase actions (the «Передзамовити» button). The preorder badge is amber (`#FEF3C7` / `#92400E` / `#F59E0B`), not blue (owner 2026-10-09).
+- Deliberate exception (owner 2026-10-09): the light green «В наявності» badge (`.bs-badge--instock`, `#D1FAE5` / `#065F46`). It is quiet enough not to compete with purchase green. Do not extend the exception to other elements.
 - Gold = accent. Not a button colour; not body text on white.
 - Category colours never enter header chrome, buttons or forms.
 - Error states never use green.
