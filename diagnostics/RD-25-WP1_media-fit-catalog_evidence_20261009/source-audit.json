@@ -1,0 +1,9 @@
+{
+  "new_important": 0,
+  "new_setTimeout": 0,
+  "new_absolute_positions": "Only the prescribed cut/photo media geometry, documented at the source rule",
+  "magic_values": "1:1,4:5,8%,6%,84%,94%,24px,14px,13px,35px,15px,44px from handoff; 8px CTA sides documented for longest label; 16px replaces mb-3",
+  "rd26_marker_preserved": true,
+  "form_and_script_preservation": "protected-media.json",
+  "image_and_db_writes": "Generated fit/metadata cache only; no image/catalog or DB writes"
+}

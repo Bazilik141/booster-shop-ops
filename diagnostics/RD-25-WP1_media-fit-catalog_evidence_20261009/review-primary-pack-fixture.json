@@ -1,0 +1,69 @@
+{
+    "scope": "4 source assets; synthetic prices, no production writes",
+    "rows": [
+        {
+            "product_id": 300,
+            "name": "OP-15 Booster.webp",
+            "thumb": "/image/catalog/One Piece/OP-15 Booster.webp",
+            "image": "catalog/One Piece/OP-15 Booster.webp",
+            "href": "#white-pack-0",
+            "minimum": 1,
+            "price": "100 ₴",
+            "button_cart": "До кошика",
+            "cart": "/cart",
+            "cart_add": "/cart.add",
+            "bs_fit_thumb": "http://127.0.0.1:18725/image/cache/rd25-fit/06bb4bed0443e3f5118bec30fc2b6ca131e02eda894425249460d6d18e07f6ad-700x875-fit.webp",
+            "bs_media_kind": "cut",
+            "bs_media_width": 209,
+            "bs_media_height": 418
+        },
+        {
+            "product_id": 301,
+            "name": "Duel Masters — DM24-RP3 — JP — Booster.png",
+            "thumb": "/image/catalog/Other/Duel Masters — DM24-RP3 — JP — Booster.png",
+            "image": "catalog/Other/Duel Masters — DM24-RP3 — JP — Booster.png",
+            "href": "#white-pack-1",
+            "minimum": 1,
+            "price": "100 ₴",
+            "button_cart": "До кошика",
+            "cart": "/cart",
+            "cart_add": "/cart.add",
+            "bs_fit_thumb": "http://127.0.0.1:18725/image/cache/rd25-fit/d586b06e9bd8f556435368a4d0a047f45afb0b9eb4252d3fd8e8f8493e5cc3c6-700x875-fit.webp",
+            "bs_media_kind": "cut",
+            "bs_media_width": 700,
+            "bs_media_height": 700
+        },
+        {
+            "product_id": 302,
+            "name": "Yu-Gi-Oh! OCG Duel Monsters BEYOND THE BRAVE Booster.webp",
+            "thumb": "/image/catalog/Other/Yu-Gi-Oh! OCG Duel Monsters BEYOND THE BRAVE Booster.webp",
+            "image": "catalog/Other/Yu-Gi-Oh! OCG Duel Monsters BEYOND THE BRAVE Booster.webp",
+            "href": "#white-pack-2",
+            "minimum": 1,
+            "price": "100 ₴",
+            "button_cart": "До кошика",
+            "cart": "/cart",
+            "cart_add": "/cart.add",
+            "bs_fit_thumb": "http://127.0.0.1:18725/image/cache/rd25-fit/8351e741820dce82e15046bfe84067cbc831512b6c56897c0a8375a7348e29d9-700x875-fit.webp",
+            "bs_media_kind": "cut",
+            "bs_media_width": 422,
+            "bs_media_height": 875
+        },
+        {
+            "product_id": 303,
+            "name": "QCAC-BoosterJP.png",
+            "thumb": "/image/catalog/Other/QCAC-BoosterJP.png",
+            "image": "catalog/Other/QCAC-BoosterJP.png",
+            "href": "#white-pack-3",
+            "minimum": 1,
+            "price": "100 ₴",
+            "button_cart": "До кошика",
+            "cart": "/cart",
+            "cart_add": "/cart.add",
+            "bs_fit_thumb": "http://127.0.0.1:18725/image/cache/rd25-fit/ff3da321eaf6a91535a14aa0b403ee4340597440130281ec5123dd6ed14d183d-700x875-fit.webp",
+            "bs_media_kind": "cut",
+            "bs_media_width": 420,
+            "bs_media_height": 875
+        }
+    ]
+}

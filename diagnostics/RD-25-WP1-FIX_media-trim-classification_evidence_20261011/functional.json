@@ -1,0 +1,74 @@
+{
+    "php": "8.3.30",
+    "assets": 286,
+    "printing_handler_warnings": [],
+    "cold_warm_dimensions_checked": 286,
+    "extra": {
+        "alpha_png": {
+            "source_edge": {
+                "red": 230,
+                "green": 40,
+                "blue": 50,
+                "alpha": 63
+            },
+            "crop_edge": {
+                "red": 230,
+                "green": 40,
+                "blue": 50,
+                "alpha": 63
+            },
+            "transparent_pixel": {
+                "red": 255,
+                "green": 255,
+                "blue": 255,
+                "alpha": 127
+            },
+            "saved_edge": {
+                "red": 230,
+                "green": 40,
+                "blue": 50,
+                "alpha": 63
+            },
+            "dimensions": [
+                5,
+                5
+            ]
+        },
+        "alpha_webp": {
+            "source_edge": {
+                "red": 230,
+                "green": 40,
+                "blue": 50,
+                "alpha": 63
+            },
+            "crop_edge": {
+                "red": 230,
+                "green": 40,
+                "blue": 50,
+                "alpha": 63
+            },
+            "transparent_pixel": {
+                "red": 0,
+                "green": 0,
+                "blue": 0,
+                "alpha": 127
+            },
+            "saved_edge": {
+                "red": 168,
+                "green": 73,
+                "blue": 71,
+                "alpha": 63
+            },
+            "dimensions": [
+                5,
+                5
+            ]
+        },
+        "invalid_json": "regenerated",
+        "v3": "regenerated",
+        "outside_crop": "regenerated",
+        "float_crop": "regenerated",
+        "inconsistent_dimensions": "regenerated"
+    },
+    "elapsed_seconds": 2.18
+}

@@ -1,0 +1,32 @@
+{
+  "archive": "C:\\Users\\14bez\\Downloads\\RD-25-WP1-FIX-check-20261011.tar.gz",
+  "bytes": 10410,
+  "sha256": "d90a2ce776b282fd68d5063acce5d24832860fe5b86fe4c16733641ba5c131a1",
+  "files": [
+    {
+      "path": "catalog/model/tool/image.php",
+      "expected": "9d6aaec56eaa44be072e67957e43b7365ca8f115283988d0ab7a3227db885285",
+      "actual": "9d6aaec56eaa44be072e67957e43b7365ca8f115283988d0ab7a3227db885285",
+      "match": true
+    },
+    {
+      "path": "system/library/image.php",
+      "expected": "b032345fa128dc867a55dbe4bf49f4070a34a2efa952525a69006fdb706875d9",
+      "actual": "b032345fa128dc867a55dbe4bf49f4070a34a2efa952525a69006fdb706875d9",
+      "match": true
+    },
+    {
+      "path": "catalog/controller/product/thumb.php",
+      "expected": "47e56e45e134359074aecdd3a1a50a068e8b19766b40589cb8688e077df5d2eb",
+      "actual": "47e56e45e134359074aecdd3a1a50a068e8b19766b40589cb8688e077df5d2eb",
+      "match": true
+    },
+    {
+      "path": "catalog/view/template/product/thumb.twig",
+      "expected": "d9237b2c9c0cc21cda73a86ba6cf1ff66b7ad956f0da3c24a8e1add6518037d6",
+      "actual": "d9237b2c9c0cc21cda73a86ba6cf1ff66b7ad956f0da3c24a8e1add6518037d6",
+      "match": true
+    }
+  ],
+  "passed": true
+}

@@ -1,0 +1,1535 @@
+{
+  "checks": [
+    {
+      "name": "all 286 assets measured with actual PHP/GD",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #0",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #1",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #2",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #3",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #4",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #5",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #6",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #7",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #8",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #9",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #10",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #11",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #12",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #13",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #14",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #15",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #16",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #17",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #18",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #19",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #20",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #21",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #22",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #23",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #24",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #25",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #26",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #27",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #28",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #29",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #30",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #31",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #32",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #33",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #34",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #35",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #36",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #37",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #38",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #39",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #40",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #41",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #42",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #43",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #44",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #45",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #46",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #47",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #48",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #49",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #50",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #51",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #52",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #53",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #54",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #55",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #56",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #57",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #58",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #59",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #60",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #61",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #62",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #63",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #64",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #65",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #66",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #67",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #68",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #69",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #70",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #71",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #72",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #73",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #74",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #75",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #76",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #77",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #78",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #79",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #80",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #81",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #82",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #83",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #84",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #85",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #86",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #87",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #88",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #89",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #90",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #91",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #92",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #93",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #94",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #95",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #96",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #97",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #98",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #99",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #100",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #101",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #102",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #103",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #104",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #105",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #106",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #107",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #108",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #109",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #110",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #111",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #112",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #113",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #114",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #115",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #116",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #117",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #118",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #119",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #120",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #121",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #122",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #123",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #124",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #125",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #126",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #127",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #128",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #129",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #130",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #131",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #132",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #133",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #134",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #135",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #136",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #137",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #138",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #139",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #140",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #141",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #142",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #143",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #144",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #145",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #146",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #147",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #148",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #149",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #150",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #151",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #152",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #153",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #154",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #155",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #156",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #157",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #158",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #159",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #160",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #161",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #162",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #163",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #164",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #165",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #166",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #167",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #168",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #169",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #170",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #171",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #172",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #173",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #174",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #175",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #176",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #177",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #178",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #179",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #180",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #181",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #182",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #183",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #184",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #185",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #186",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #187",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #188",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #189",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #190",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #191",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #192",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #193",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #194",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #195",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #196",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #197",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #198",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #199",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #200",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #201",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #202",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #203",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #204",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #205",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #206",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #207",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #208",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #209",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #210",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #211",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #212",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #213",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #214",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #215",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #216",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #217",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #218",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #219",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #220",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #221",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #222",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #223",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #224",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #225",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #226",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #227",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #228",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #229",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #230",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #231",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #232",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #233",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #234",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #235",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #236",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #237",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #238",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #239",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #240",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #241",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #242",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #243",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #244",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #245",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #246",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #247",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #248",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #249",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #250",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #251",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #252",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #253",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #254",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #255",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #256",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #257",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #258",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #259",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #260",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #261",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #262",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #263",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #264",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #265",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #266",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #267",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #268",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #269",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #270",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #271",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #272",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #273",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #274",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #275",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #276",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #277",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #278",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #279",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #280",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #281",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #282",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #283",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #284",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "exact Phase 0 decision/bounds/dimensions #285",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "165 cut / 121 photo",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Phase 0 report unchanged",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Phase 0 evidence seal unchanged",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "prior deployed patch files unchanged",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "all 286 original image bytes unchanged",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "exactly three PHP targets, no CSS or Twig",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "fresh source pins unchanged",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "fresh archive pin unchanged",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "patch hash unchanged",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "legacy resize and WebP APIs byte-identical",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "cache-miss warning guard byte-identical",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "existing library resize / crop / resizeFit untouched",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "commerce/controller remainder unchanged",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "v4 metadata and v2 fit namespace",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "zero printing-handler warnings for all 286",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "runner regression suite passes",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "browser UI suite passes",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "actual unchanged Twig emits served dimensions for all assets",
+      "pass": true,
+      "detail": null
+    }
+  ],
+  "passed": 305,
+  "total": 305,
+  "class_counts": {
+    "photo": 121,
+    "cut": 165
+  }
+}

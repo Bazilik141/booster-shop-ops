@@ -1,0 +1,19 @@
+{
+  "alpha_content_gt": 16,
+  "minimum_content_pixels_per_row_or_column": 2,
+  "bbox_safety_pad_px": 2,
+  "above_threshold_excluded_pixels_policy": "expand to strict bbox if any; source pixels are never rewritten",
+  "page_white_each_channel_min": 250,
+  "uniform_max_corner_channel_span": 8,
+  "background_distance_metric": "max channel absolute distance to channel-wise median of four corners",
+  "background_content_distance_gt": 12,
+  "cover_safety_fraction_per_axis": 0.02,
+  "aspect_cover_band": [
+    0.7,
+    1.45
+  ],
+  "fit_dimensions": [
+    700,
+    875
+  ]
+}

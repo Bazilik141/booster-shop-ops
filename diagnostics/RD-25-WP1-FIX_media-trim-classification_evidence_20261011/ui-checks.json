@@ -1,0 +1,303 @@
+{
+  "checks": [
+    {
+      "name": "category@1440 actual generated images and exact intrinsic attributes",
+      "pass": true,
+      "detail": 33
+    },
+    {
+      "name": "category@1440 approved slot ratio and contain/cover framing",
+      "pass": true
+    },
+    {
+      "name": "category@1440 no horizontal overflow",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "name": "search@1440 actual generated images and exact intrinsic attributes",
+      "pass": true,
+      "detail": 33
+    },
+    {
+      "name": "search@1440 approved slot ratio and contain/cover framing",
+      "pass": true
+    },
+    {
+      "name": "search@1440 no horizontal overflow",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "name": "special@1440 actual generated images and exact intrinsic attributes",
+      "pass": true,
+      "detail": 33
+    },
+    {
+      "name": "special@1440 approved slot ratio and contain/cover framing",
+      "pass": true
+    },
+    {
+      "name": "special@1440 no horizontal overflow",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "name": "manufacturer_info@1440 actual generated images and exact intrinsic attributes",
+      "pass": true,
+      "detail": 33
+    },
+    {
+      "name": "manufacturer_info@1440 approved slot ratio and contain/cover framing",
+      "pass": true
+    },
+    {
+      "name": "manufacturer_info@1440 no horizontal overflow",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "name": "featured-horizontal@1440 actual generated images and exact intrinsic attributes",
+      "pass": true,
+      "detail": 33
+    },
+    {
+      "name": "featured-horizontal@1440 approved slot ratio and contain/cover framing",
+      "pass": true
+    },
+    {
+      "name": "featured-horizontal@1440 no horizontal overflow",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "name": "category@1024 actual generated images and exact intrinsic attributes",
+      "pass": true,
+      "detail": 33
+    },
+    {
+      "name": "category@1024 approved slot ratio and contain/cover framing",
+      "pass": true
+    },
+    {
+      "name": "category@1024 no horizontal overflow",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "name": "search@1024 actual generated images and exact intrinsic attributes",
+      "pass": true,
+      "detail": 33
+    },
+    {
+      "name": "search@1024 approved slot ratio and contain/cover framing",
+      "pass": true
+    },
+    {
+      "name": "search@1024 no horizontal overflow",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "name": "special@1024 actual generated images and exact intrinsic attributes",
+      "pass": true,
+      "detail": 33
+    },
+    {
+      "name": "special@1024 approved slot ratio and contain/cover framing",
+      "pass": true
+    },
+    {
+      "name": "special@1024 no horizontal overflow",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "name": "manufacturer_info@1024 actual generated images and exact intrinsic attributes",
+      "pass": true,
+      "detail": 33
+    },
+    {
+      "name": "manufacturer_info@1024 approved slot ratio and contain/cover framing",
+      "pass": true
+    },
+    {
+      "name": "manufacturer_info@1024 no horizontal overflow",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "name": "featured-horizontal@1024 actual generated images and exact intrinsic attributes",
+      "pass": true,
+      "detail": 33
+    },
+    {
+      "name": "featured-horizontal@1024 approved slot ratio and contain/cover framing",
+      "pass": true
+    },
+    {
+      "name": "featured-horizontal@1024 no horizontal overflow",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "name": "category@390 actual generated images and exact intrinsic attributes",
+      "pass": true,
+      "detail": 33
+    },
+    {
+      "name": "category@390 approved slot ratio and contain/cover framing",
+      "pass": true
+    },
+    {
+      "name": "category@390 no horizontal overflow",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "name": "search@390 actual generated images and exact intrinsic attributes",
+      "pass": true,
+      "detail": 33
+    },
+    {
+      "name": "search@390 approved slot ratio and contain/cover framing",
+      "pass": true
+    },
+    {
+      "name": "search@390 no horizontal overflow",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "name": "special@390 actual generated images and exact intrinsic attributes",
+      "pass": true,
+      "detail": 33
+    },
+    {
+      "name": "special@390 approved slot ratio and contain/cover framing",
+      "pass": true
+    },
+    {
+      "name": "special@390 no horizontal overflow",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "name": "manufacturer_info@390 actual generated images and exact intrinsic attributes",
+      "pass": true,
+      "detail": 33
+    },
+    {
+      "name": "manufacturer_info@390 approved slot ratio and contain/cover framing",
+      "pass": true
+    },
+    {
+      "name": "manufacturer_info@390 no horizontal overflow",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "name": "featured-horizontal@390 actual generated images and exact intrinsic attributes",
+      "pass": true,
+      "detail": 33
+    },
+    {
+      "name": "featured-horizontal@390 approved slot ratio and contain/cover framing",
+      "pass": true
+    },
+    {
+      "name": "featured-horizontal@390 no horizontal overflow",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "name": "category@360 actual generated images and exact intrinsic attributes",
+      "pass": true,
+      "detail": 33
+    },
+    {
+      "name": "category@360 approved slot ratio and contain/cover framing",
+      "pass": true
+    },
+    {
+      "name": "category@360 no horizontal overflow",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "name": "search@360 actual generated images and exact intrinsic attributes",
+      "pass": true,
+      "detail": 33
+    },
+    {
+      "name": "search@360 approved slot ratio and contain/cover framing",
+      "pass": true
+    },
+    {
+      "name": "search@360 no horizontal overflow",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "name": "special@360 actual generated images and exact intrinsic attributes",
+      "pass": true,
+      "detail": 33
+    },
+    {
+      "name": "special@360 approved slot ratio and contain/cover framing",
+      "pass": true
+    },
+    {
+      "name": "special@360 no horizontal overflow",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "name": "manufacturer_info@360 actual generated images and exact intrinsic attributes",
+      "pass": true,
+      "detail": 33
+    },
+    {
+      "name": "manufacturer_info@360 approved slot ratio and contain/cover framing",
+      "pass": true
+    },
+    {
+      "name": "manufacturer_info@360 no horizontal overflow",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "name": "featured-horizontal@360 actual generated images and exact intrinsic attributes",
+      "pass": true,
+      "detail": 33
+    },
+    {
+      "name": "featured-horizontal@360 approved slot ratio and contain/cover framing",
+      "pass": true
+    },
+    {
+      "name": "featured-horizontal@360 no horizontal overflow",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "name": "hover state preserved",
+      "pass": true
+    },
+    {
+      "name": "keyboard focus preserved",
+      "pass": true
+    },
+    {
+      "name": "active state preserved",
+      "pass": true
+    },
+    {
+      "name": "no JavaScript errors",
+      "pass": true,
+      "detail": []
+    }
+  ],
+  "passed": 64,
+  "total": 64
+}

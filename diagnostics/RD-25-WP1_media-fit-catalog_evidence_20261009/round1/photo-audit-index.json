@@ -1,0 +1,6558 @@
+[
+  {
+    "version": 1,
+    "source": "catalog/3D print/kit card/Gengar kit card 1.webp",
+    "mtime": 1791575566,
+    "size": 58769,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 0,
+    "corner_rgba": [
+      [
+        21,
+        21,
+        21,
+        255
+      ],
+      [
+        50,
+        50,
+        50,
+        255
+      ],
+      [
+        41,
+        41,
+        41,
+        255
+      ],
+      [
+        77,
+        77,
+        77,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/kit card/Gengar kit card 2.webp",
+    "mtime": 1791575566,
+    "size": 66265,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 1,
+    "corner_rgba": [
+      [
+        26,
+        26,
+        26,
+        255
+      ],
+      [
+        55,
+        53,
+        54,
+        255
+      ],
+      [
+        42,
+        42,
+        42,
+        255
+      ],
+      [
+        76,
+        74,
+        77,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/kit card/Gengar kit card 3d print.webp",
+    "mtime": 1791575566,
+    "size": 73993,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 2,
+    "corner_rgba": [
+      [
+        23,
+        31,
+        34,
+        255
+      ],
+      [
+        117,
+        131,
+        144,
+        255
+      ],
+      [
+        26,
+        35,
+        42,
+        255
+      ],
+      [
+        53,
+        63,
+        72,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/kit card/Gengar kit card.webp",
+    "mtime": 1791575566,
+    "size": 65822,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 3,
+    "corner_rgba": [
+      [
+        20,
+        20,
+        20,
+        255
+      ],
+      [
+        39,
+        37,
+        38,
+        255
+      ],
+      [
+        39,
+        40,
+        35,
+        255
+      ],
+      [
+        83,
+        82,
+        78,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/kit card/Jugglypuff kit card 1.webp",
+    "mtime": 1791575566,
+    "size": 88856,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 4,
+    "corner_rgba": [
+      [
+        5,
+        18,
+        26,
+        255
+      ],
+      [
+        21,
+        30,
+        37,
+        255
+      ],
+      [
+        61,
+        71,
+        80,
+        255
+      ],
+      [
+        104,
+        113,
+        122,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/kit card/Jugglypuff kit card 2.webp",
+    "mtime": 1791575566,
+    "size": 82426,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 5,
+    "corner_rgba": [
+      [
+        2,
+        15,
+        23,
+        255
+      ],
+      [
+        11,
+        24,
+        32,
+        255
+      ],
+      [
+        45,
+        56,
+        62,
+        255
+      ],
+      [
+        81,
+        91,
+        100,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/kit card/Jugglypuff kit card 4.webp",
+    "mtime": 1791575566,
+    "size": 90608,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 6,
+    "corner_rgba": [
+      [
+        0,
+        14,
+        23,
+        255
+      ],
+      [
+        14,
+        25,
+        31,
+        255
+      ],
+      [
+        36,
+        53,
+        61,
+        255
+      ],
+      [
+        73,
+        86,
+        92,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/kit card/Jugglypuff kit card.webp",
+    "mtime": 1791575566,
+    "size": 98150,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 7,
+    "corner_rgba": [
+      [
+        13,
+        24,
+        26,
+        255
+      ],
+      [
+        12,
+        22,
+        24,
+        255
+      ],
+      [
+        40,
+        51,
+        57,
+        255
+      ],
+      [
+        61,
+        70,
+        75,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/kit card/Magicarp kit card 1.webp",
+    "mtime": 1791575566,
+    "size": 59735,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 8,
+    "corner_rgba": [
+      [
+        2,
+        7,
+        10,
+        255
+      ],
+      [
+        1,
+        7,
+        7,
+        255
+      ],
+      [
+        23,
+        33,
+        35,
+        255
+      ],
+      [
+        27,
+        37,
+        39,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/kit card/Magicarp kit card 2.webp",
+    "mtime": 1791575566,
+    "size": 69319,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 9,
+    "corner_rgba": [
+      [
+        17,
+        17,
+        15,
+        255
+      ],
+      [
+        21,
+        21,
+        19,
+        255
+      ],
+      [
+        40,
+        40,
+        38,
+        255
+      ],
+      [
+        45,
+        45,
+        43,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/kit card/Magicarp kit card.webp",
+    "mtime": 1791575566,
+    "size": 103121,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 10,
+    "corner_rgba": [
+      [
+        10,
+        33,
+        41,
+        255
+      ],
+      [
+        10,
+        30,
+        39,
+        255
+      ],
+      [
+        41,
+        59,
+        71,
+        255
+      ],
+      [
+        60,
+        74,
+        87,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/kit card/MEW kit card 1.webp",
+    "mtime": 1791575566,
+    "size": 63049,
+    "width": 1024,
+    "height": 764,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 11,
+    "corner_rgba": [
+      [
+        16,
+        16,
+        18,
+        255
+      ],
+      [
+        48,
+        46,
+        49,
+        255
+      ],
+      [
+        40,
+        41,
+        36,
+        255
+      ],
+      [
+        72,
+        68,
+        67,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/kit card/MEW kit card 2.webp",
+    "mtime": 1791575566,
+    "size": 67245,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 12,
+    "corner_rgba": [
+      [
+        13,
+        13,
+        13,
+        255
+      ],
+      [
+        41,
+        41,
+        43,
+        255
+      ],
+      [
+        34,
+        34,
+        34,
+        255
+      ],
+      [
+        60,
+        59,
+        55,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/kit card/MEW kit card 3.webp",
+    "mtime": 1791575566,
+    "size": 51338,
+    "width": 1024,
+    "height": 764,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 13,
+    "corner_rgba": [
+      [
+        15,
+        15,
+        17,
+        255
+      ],
+      [
+        38,
+        38,
+        40,
+        255
+      ],
+      [
+        39,
+        39,
+        39,
+        255
+      ],
+      [
+        68,
+        68,
+        68,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/kit card/MEW kit card.webp",
+    "mtime": 1791575566,
+    "size": 63005,
+    "width": 1024,
+    "height": 764,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 14,
+    "corner_rgba": [
+      [
+        16,
+        16,
+        16,
+        255
+      ],
+      [
+        43,
+        43,
+        43,
+        255
+      ],
+      [
+        30,
+        29,
+        25,
+        255
+      ],
+      [
+        66,
+        64,
+        67,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/kit card/Pikachu kit card 1.webp",
+    "mtime": 1791575566,
+    "size": 59316,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 15,
+    "corner_rgba": [
+      [
+        23,
+        27,
+        26,
+        255
+      ],
+      [
+        57,
+        61,
+        64,
+        255
+      ],
+      [
+        37,
+        39,
+        38,
+        255
+      ],
+      [
+        75,
+        79,
+        82,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/kit card/Pikachu kit card 3.webp",
+    "mtime": 1791575566,
+    "size": 84980,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 16,
+    "corner_rgba": [
+      [
+        4,
+        29,
+        33,
+        255
+      ],
+      [
+        7,
+        28,
+        33,
+        255
+      ],
+      [
+        32,
+        51,
+        57,
+        255
+      ],
+      [
+        80,
+        91,
+        97,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/kit card/Pikachu kit card 4.webp",
+    "mtime": 1791575566,
+    "size": 107192,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 17,
+    "corner_rgba": [
+      [
+        0,
+        24,
+        28,
+        255
+      ],
+      [
+        6,
+        27,
+        32,
+        255
+      ],
+      [
+        36,
+        53,
+        61,
+        255
+      ],
+      [
+        89,
+        103,
+        103,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/kit card/Pikachu kit card.webp",
+    "mtime": 1791575566,
+    "size": 64975,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 18,
+    "corner_rgba": [
+      [
+        21,
+        21,
+        19,
+        255
+      ],
+      [
+        53,
+        53,
+        51,
+        255
+      ],
+      [
+        41,
+        41,
+        39,
+        255
+      ],
+      [
+        79,
+        79,
+        77,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/kit card/Sqirtle kit card 1.webp",
+    "mtime": 1791575566,
+    "size": 82583,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 19,
+    "corner_rgba": [
+      [
+        2,
+        17,
+        24,
+        255
+      ],
+      [
+        6,
+        25,
+        31,
+        255
+      ],
+      [
+        23,
+        43,
+        50,
+        255
+      ],
+      [
+        70,
+        83,
+        89,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/kit card/Sqirtle kit card 2.webp",
+    "mtime": 1791575566,
+    "size": 87854,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 20,
+    "corner_rgba": [
+      [
+        1,
+        16,
+        23,
+        255
+      ],
+      [
+        9,
+        24,
+        31,
+        255
+      ],
+      [
+        19,
+        42,
+        48,
+        255
+      ],
+      [
+        66,
+        81,
+        88,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/kit card/Sqirtle kit card 3.webp",
+    "mtime": 1791575566,
+    "size": 82701,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 21,
+    "corner_rgba": [
+      [
+        0,
+        13,
+        21,
+        255
+      ],
+      [
+        2,
+        19,
+        26,
+        255
+      ],
+      [
+        24,
+        43,
+        50,
+        255
+      ],
+      [
+        78,
+        88,
+        97,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/kit card/Sqirtle kit card 4.webp",
+    "mtime": 1791575566,
+    "size": 78281,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 22,
+    "corner_rgba": [
+      [
+        2,
+        12,
+        22,
+        255
+      ],
+      [
+        4,
+        19,
+        26,
+        255
+      ],
+      [
+        28,
+        46,
+        56,
+        255
+      ],
+      [
+        69,
+        82,
+        90,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/kit card/Sqirtle kit card.webp",
+    "mtime": 1791575566,
+    "size": 105187,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 23,
+    "corner_rgba": [
+      [
+        2,
+        22,
+        29,
+        255
+      ],
+      [
+        8,
+        25,
+        33,
+        255
+      ],
+      [
+        39,
+        51,
+        63,
+        255
+      ],
+      [
+        72,
+        83,
+        85,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/kit card/Umbreon kit card 1.webp",
+    "mtime": 1791575566,
+    "size": 73764,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 24,
+    "corner_rgba": [
+      [
+        13,
+        13,
+        11,
+        255
+      ],
+      [
+        15,
+        15,
+        13,
+        255
+      ],
+      [
+        56,
+        57,
+        51,
+        255
+      ],
+      [
+        69,
+        70,
+        64,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/kit card/Umbreon kit card 2.webp",
+    "mtime": 1791575566,
+    "size": 71574,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 25,
+    "corner_rgba": [
+      [
+        15,
+        15,
+        15,
+        255
+      ],
+      [
+        49,
+        49,
+        51,
+        255
+      ],
+      [
+        33,
+        33,
+        33,
+        255
+      ],
+      [
+        36,
+        36,
+        36,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/kit card/Umbreon kit card.webp",
+    "mtime": 1791575566,
+    "size": 87251,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 26,
+    "corner_rgba": [
+      [
+        14,
+        14,
+        12,
+        255
+      ],
+      [
+        17,
+        17,
+        15,
+        255
+      ],
+      [
+        49,
+        50,
+        45,
+        255
+      ],
+      [
+        64,
+        65,
+        59,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Брелоки/brelok-going-merry-one-piece-3d-druk.jpg",
+    "mtime": 1791575566,
+    "size": 1361635,
+    "width": 1900,
+    "height": 2534,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 27,
+    "corner_rgba": [
+      [
+        54,
+        56,
+        55,
+        255
+      ],
+      [
+        22,
+        22,
+        22,
+        255
+      ],
+      [
+        28,
+        29,
+        31,
+        255
+      ],
+      [
+        17,
+        19,
+        18,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Брелоки/One Piece brelock.jpg",
+    "mtime": 1791575566,
+    "size": 156700,
+    "width": 767,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 28,
+    "corner_rgba": [
+      [
+        103,
+        105,
+        100,
+        255
+      ],
+      [
+        103,
+        108,
+        104,
+        255
+      ],
+      [
+        52,
+        53,
+        47,
+        255
+      ],
+      [
+        36,
+        36,
+        34,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Брелоки/Брелов MEW.jpg",
+    "mtime": 1791575566,
+    "size": 432124,
+    "width": 1024,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 29,
+    "corner_rgba": [
+      [
+        25,
+        26,
+        31,
+        255
+      ],
+      [
+        78,
+        79,
+        83,
+        255
+      ],
+      [
+        28,
+        28,
+        30,
+        255
+      ],
+      [
+        44,
+        44,
+        46,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Брелоки/Брелок 3х поке.jpg",
+    "mtime": 1791575566,
+    "size": 166156,
+    "width": 1024,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 30,
+    "corner_rgba": [
+      [
+        65,
+        69,
+        68,
+        255
+      ],
+      [
+        73,
+        78,
+        81,
+        255
+      ],
+      [
+        38,
+        42,
+        41,
+        255
+      ],
+      [
+        35,
+        37,
+        36,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Брелоки/Брелок One Piece.jpg",
+    "mtime": 1791575566,
+    "size": 156700,
+    "width": 767,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 31,
+    "corner_rgba": [
+      [
+        103,
+        105,
+        100,
+        255
+      ],
+      [
+        103,
+        108,
+        104,
+        255
+      ],
+      [
+        52,
+        53,
+        47,
+        255
+      ],
+      [
+        36,
+        36,
+        34,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Брелоки/Брелок бульбазавр.jpg",
+    "mtime": 1791575566,
+    "size": 181587,
+    "width": 1024,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 32,
+    "corner_rgba": [
+      [
+        55,
+        58,
+        65,
+        255
+      ],
+      [
+        54,
+        57,
+        66,
+        255
+      ],
+      [
+        43,
+        46,
+        51,
+        255
+      ],
+      [
+        40,
+        41,
+        46,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Брелоки/Брелок ван піс.jpg",
+    "mtime": 1791575566,
+    "size": 1352734,
+    "width": 1024,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 33,
+    "corner_rgba": [
+      [
+        42,
+        41,
+        39,
+        255
+      ],
+      [
+        46,
+        40,
+        42,
+        255
+      ],
+      [
+        61,
+        55,
+        57,
+        255
+      ],
+      [
+        62,
+        56,
+        60,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Брелоки/Брелок капелюх з крилами.jpg",
+    "mtime": 1791575566,
+    "size": 5965726,
+    "width": 1024,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 34,
+    "corner_rgba": [
+      [
+        88,
+        89,
+        84,
+        255
+      ],
+      [
+        46,
+        46,
+        46,
+        255
+      ],
+      [
+        50,
+        49,
+        45,
+        255
+      ],
+      [
+        35,
+        36,
+        31,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Брелоки/Брелок пікачу.jpg",
+    "mtime": 1791575566,
+    "size": 773889,
+    "width": 1024,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 35,
+    "corner_rgba": [
+      [
+        31,
+        35,
+        38,
+        255
+      ],
+      [
+        39,
+        43,
+        46,
+        255
+      ],
+      [
+        29,
+        29,
+        29,
+        255
+      ],
+      [
+        28,
+        28,
+        28,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Брелоки/Брелок покебол.JPG",
+    "mtime": 1791575566,
+    "size": 1076012,
+    "width": 1672,
+    "height": 2230,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 36,
+    "corner_rgba": [
+      [
+        86,
+        87,
+        81,
+        255
+      ],
+      [
+        102,
+        103,
+        98,
+        255
+      ],
+      [
+        40,
+        40,
+        32,
+        255
+      ],
+      [
+        53,
+        54,
+        48,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Брелоки/Брелок сквіртл.jpg",
+    "mtime": 1791575566,
+    "size": 205929,
+    "width": 1024,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 37,
+    "corner_rgba": [
+      [
+        50,
+        49,
+        55,
+        255
+      ],
+      [
+        44,
+        43,
+        49,
+        255
+      ],
+      [
+        34,
+        32,
+        37,
+        255
+      ],
+      [
+        35,
+        34,
+        39,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Брелоки/Брелок солом'яний капелюх.JPG",
+    "mtime": 1791575566,
+    "size": 1740318,
+    "width": 2023,
+    "height": 2697,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 38,
+    "corner_rgba": [
+      [
+        117,
+        119,
+        114,
+        255
+      ],
+      [
+        115,
+        120,
+        116,
+        255
+      ],
+      [
+        69,
+        70,
+        65,
+        255
+      ],
+      [
+        72,
+        74,
+        71,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Брелоки/Брелок спінер Дітто.jpg",
+    "mtime": 1791575566,
+    "size": 658464,
+    "width": 1024,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 39,
+    "corner_rgba": [
+      [
+        55,
+        55,
+        55,
+        255
+      ],
+      [
+        51,
+        49,
+        52,
+        255
+      ],
+      [
+        41,
+        39,
+        40,
+        255
+      ],
+      [
+        34,
+        34,
+        34,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Брелоки/Брелок спінер Дітто1.jpg",
+    "mtime": 1791575566,
+    "size": 1638597,
+    "width": 1024,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 40,
+    "corner_rgba": [
+      [
+        54,
+        54,
+        54,
+        255
+      ],
+      [
+        49,
+        49,
+        49,
+        255
+      ],
+      [
+        37,
+        37,
+        37,
+        255
+      ],
+      [
+        38,
+        38,
+        38,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Брелоки/Брелок фрукт.JPG",
+    "mtime": 1791575566,
+    "size": 1825191,
+    "width": 2056,
+    "height": 2742,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 41,
+    "corner_rgba": [
+      [
+        108,
+        110,
+        105,
+        255
+      ],
+      [
+        97,
+        102,
+        98,
+        255
+      ],
+      [
+        67,
+        68,
+        63,
+        255
+      ],
+      [
+        56,
+        58,
+        55,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Брелоки/Брелок чармандер.jpg",
+    "mtime": 1791575566,
+    "size": 262388,
+    "width": 1024,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 42,
+    "corner_rgba": [
+      [
+        37,
+        35,
+        36,
+        255
+      ],
+      [
+        62,
+        60,
+        61,
+        255
+      ],
+      [
+        29,
+        29,
+        29,
+        255
+      ],
+      [
+        46,
+        44,
+        47,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Брелоки/Брелок чармандер1.JPG",
+    "mtime": 1791575566,
+    "size": 1156167,
+    "width": 1622,
+    "height": 2163,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 43,
+    "corner_rgba": [
+      [
+        75,
+        76,
+        70,
+        255
+      ],
+      [
+        115,
+        120,
+        114,
+        255
+      ],
+      [
+        55,
+        56,
+        50,
+        255
+      ],
+      [
+        60,
+        62,
+        59,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Брелоки/Ван Піс череп брелок.JPG",
+    "mtime": 1791575566,
+    "size": 1152886,
+    "width": 1622,
+    "height": 2162,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 44,
+    "corner_rgba": [
+      [
+        94,
+        96,
+        91,
+        255
+      ],
+      [
+        88,
+        93,
+        89,
+        255
+      ],
+      [
+        61,
+        62,
+        57,
+        255
+      ],
+      [
+        57,
+        59,
+        56,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Брелоки/Дітто брелок спінер.JPG",
+    "mtime": 1791575566,
+    "size": 1317361,
+    "width": 1760,
+    "height": 2347,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 45,
+    "corner_rgba": [
+      [
+        106,
+        108,
+        103,
+        255
+      ],
+      [
+        105,
+        110,
+        106,
+        255
+      ],
+      [
+        65,
+        66,
+        61,
+        255
+      ],
+      [
+        65,
+        67,
+        64,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Брелоки/Клікер чармандер.jpg",
+    "mtime": 1791575566,
+    "size": 1809045,
+    "width": 1024,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 46,
+    "corner_rgba": [
+      [
+        38,
+        37,
+        33,
+        255
+      ],
+      [
+        37,
+        36,
+        32,
+        255
+      ],
+      [
+        61,
+        57,
+        54,
+        255
+      ],
+      [
+        65,
+        60,
+        54,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Брелоки/Крилатий капелюх.JPG",
+    "mtime": 1791575566,
+    "size": 1704415,
+    "width": 2115,
+    "height": 2820,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 47,
+    "corner_rgba": [
+      [
+        94,
+        96,
+        91,
+        255
+      ],
+      [
+        84,
+        89,
+        85,
+        255
+      ],
+      [
+        52,
+        53,
+        48,
+        255
+      ],
+      [
+        39,
+        41,
+        38,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Брелоки/Чармандер брелок клікер.JPG",
+    "mtime": 1791575566,
+    "size": 1814178,
+    "width": 2131,
+    "height": 2841,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 48,
+    "corner_rgba": [
+      [
+        115,
+        117,
+        112,
+        255
+      ],
+      [
+        100,
+        105,
+        101,
+        255
+      ],
+      [
+        60,
+        61,
+        56,
+        255
+      ],
+      [
+        67,
+        69,
+        66,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Фігурки/Figurka Charizard Pokemon 1.webp",
+    "mtime": 1791575566,
+    "size": 59596,
+    "width": 768,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 49,
+    "corner_rgba": [
+      [
+        10,
+        12,
+        11,
+        255
+      ],
+      [
+        16,
+        16,
+        16,
+        255
+      ],
+      [
+        32,
+        32,
+        32,
+        255
+      ],
+      [
+        74,
+        74,
+        72,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Фігурки/Figurka Charizard Pokemon.webp",
+    "mtime": 1791575566,
+    "size": 62139,
+    "width": 768,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 50,
+    "corner_rgba": [
+      [
+        14,
+        15,
+        17,
+        255
+      ],
+      [
+        17,
+        17,
+        17,
+        255
+      ],
+      [
+        30,
+        30,
+        30,
+        255
+      ],
+      [
+        68,
+        68,
+        68,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Фігурки/Figurka Nami One Piece 1.webp",
+    "mtime": 1791575566,
+    "size": 75187,
+    "width": 768,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 51,
+    "corner_rgba": [
+      [
+        33,
+        33,
+        33,
+        255
+      ],
+      [
+        82,
+        82,
+        82,
+        255
+      ],
+      [
+        52,
+        52,
+        52,
+        255
+      ],
+      [
+        74,
+        74,
+        74,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Фігурки/Figurka Nami One Piece.webp",
+    "mtime": 1791575566,
+    "size": 90274,
+    "width": 768,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 52,
+    "corner_rgba": [
+      [
+        18,
+        18,
+        18,
+        255
+      ],
+      [
+        36,
+        34,
+        37,
+        255
+      ],
+      [
+        49,
+        49,
+        49,
+        255
+      ],
+      [
+        65,
+        65,
+        65,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Фігурки/kartyna-luffy-kruhla-one-piece-3d-druk 1.jpg",
+    "mtime": 1791575566,
+    "size": 75165,
+    "width": 768,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 53,
+    "corner_rgba": [
+      [
+        53,
+        53,
+        53,
+        255
+      ],
+      [
+        97,
+        97,
+        97,
+        255
+      ],
+      [
+        41,
+        41,
+        41,
+        255
+      ],
+      [
+        51,
+        51,
+        51,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Фігурки/kartyna-luffy-kruhla-one-piece-3d-druk.jpg",
+    "mtime": 1791575566,
+    "size": 53999,
+    "width": 768,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 54,
+    "corner_rgba": [
+      [
+        54,
+        54,
+        54,
+        255
+      ],
+      [
+        98,
+        98,
+        98,
+        255
+      ],
+      [
+        38,
+        38,
+        38,
+        255
+      ],
+      [
+        50,
+        50,
+        50,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Фігурки/kartyna-zoro-one-piece-3d-druk.jpg",
+    "mtime": 1791575566,
+    "size": 93925,
+    "width": 767,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 55,
+    "corner_rgba": [
+      [
+        7,
+        7,
+        7,
+        255
+      ],
+      [
+        8,
+        8,
+        8,
+        255
+      ],
+      [
+        11,
+        11,
+        11,
+        255
+      ],
+      [
+        15,
+        15,
+        15,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Фігурки/kartyna-zoro-one-piece-3d-druk1.webp",
+    "mtime": 1791575566,
+    "size": 47326,
+    "width": 963,
+    "height": 722,
+    "type": 18,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      126,
+      255,
+      126
+    ],
+    "audit_id": 56,
+    "corner_rgba": [
+      [
+        208,
+        211,
+        208,
+        255
+      ],
+      [
+        211,
+        211,
+        209,
+        127
+      ],
+      [
+        201,
+        202,
+        199,
+        255
+      ],
+      [
+        201,
+        201,
+        201,
+        127
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Фігурки/Mew покебол1.JPG",
+    "mtime": 1791575566,
+    "size": 1973012,
+    "width": 2645,
+    "height": 3527,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 57,
+    "corner_rgba": [
+      [
+        64,
+        66,
+        61,
+        255
+      ],
+      [
+        73,
+        74,
+        68,
+        255
+      ],
+      [
+        71,
+        72,
+        67,
+        255
+      ],
+      [
+        58,
+        59,
+        54,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Фігурки/Mew-pockeball.JPG",
+    "mtime": 1791575566,
+    "size": 1695498,
+    "width": 3024,
+    "height": 4002,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 58,
+    "corner_rgba": [
+      [
+        52,
+        54,
+        51,
+        255
+      ],
+      [
+        53,
+        55,
+        50,
+        255
+      ],
+      [
+        62,
+        64,
+        59,
+        255
+      ],
+      [
+        40,
+        41,
+        36,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Фігурки/ONYX static1.JPG",
+    "mtime": 1791575566,
+    "size": 1793457,
+    "width": 3024,
+    "height": 3736,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 59,
+    "corner_rgba": [
+      [
+        69,
+        69,
+        67,
+        255
+      ],
+      [
+        77,
+        76,
+        72,
+        255
+      ],
+      [
+        84,
+        84,
+        82,
+        255
+      ],
+      [
+        72,
+        66,
+        66,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Фігурки/ONYX-static-02.JPG",
+    "mtime": 1791575566,
+    "size": 1910943,
+    "width": 3024,
+    "height": 3933,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 60,
+    "corner_rgba": [
+      [
+        62,
+        62,
+        60,
+        255
+      ],
+      [
+        57,
+        56,
+        51,
+        255
+      ],
+      [
+        53,
+        53,
+        55,
+        255
+      ],
+      [
+        54,
+        53,
+        51,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Фігурки/Геодуд однокольоровий L та M.webp",
+    "mtime": 1791575566,
+    "size": 100596,
+    "width": 1024,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 61,
+    "corner_rgba": [
+      [
+        33,
+        33,
+        33,
+        255
+      ],
+      [
+        72,
+        70,
+        71,
+        255
+      ],
+      [
+        45,
+        43,
+        44,
+        255
+      ],
+      [
+        81,
+        80,
+        76,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Фігурки/Геодуд фігурка 3д.jpg",
+    "mtime": 1791575566,
+    "size": 63282,
+    "width": 682,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 62,
+    "corner_rgba": [
+      [
+        16,
+        16,
+        16,
+        255
+      ],
+      [
+        35,
+        35,
+        35,
+        255
+      ],
+      [
+        48,
+        48,
+        48,
+        255
+      ],
+      [
+        55,
+        55,
+        55,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Фігурки/Геодуд фігурка.JPG",
+    "mtime": 1791575566,
+    "size": 1742462,
+    "width": 2147,
+    "height": 2863,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 63,
+    "corner_rgba": [
+      [
+        96,
+        98,
+        93,
+        255
+      ],
+      [
+        101,
+        106,
+        102,
+        255
+      ],
+      [
+        47,
+        48,
+        43,
+        255
+      ],
+      [
+        28,
+        30,
+        29,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Фігурки/Луффі рухомий.webp",
+    "mtime": 1791575566,
+    "size": 1645161,
+    "width": 1024,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 64,
+    "corner_rgba": [
+      [
+        22,
+        22,
+        24,
+        255
+      ],
+      [
+        49,
+        49,
+        51,
+        255
+      ],
+      [
+        29,
+        29,
+        29,
+        255
+      ],
+      [
+        102,
+        102,
+        102,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Фігурки/Онікс рухомий L та М.webp",
+    "mtime": 1791575566,
+    "size": 98330,
+    "width": 767,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 65,
+    "corner_rgba": [
+      [
+        83,
+        83,
+        81,
+        255
+      ],
+      [
+        100,
+        100,
+        98,
+        255
+      ],
+      [
+        93,
+        93,
+        91,
+        255
+      ],
+      [
+        103,
+        103,
+        103,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Фігурки/Онікс рухомий.JPG",
+    "mtime": 1791575566,
+    "size": 1791075,
+    "width": 2691,
+    "height": 3588,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 66,
+    "corner_rgba": [
+      [
+        56,
+        56,
+        56,
+        255
+      ],
+      [
+        56,
+        56,
+        58,
+        255
+      ],
+      [
+        31,
+        27,
+        26,
+        255
+      ],
+      [
+        32,
+        30,
+        33,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Фігурки/Онікс рухомий1.JPG",
+    "mtime": 1791575566,
+    "size": 2374357,
+    "width": 2807,
+    "height": 3743,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 67,
+    "corner_rgba": [
+      [
+        63,
+        63,
+        61,
+        255
+      ],
+      [
+        65,
+        65,
+        65,
+        255
+      ],
+      [
+        33,
+        32,
+        30,
+        255
+      ],
+      [
+        33,
+        33,
+        33,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Фігурки/Пласка картина Луффі 2.png",
+    "mtime": 1791575566,
+    "size": 1990678,
+    "width": 1085,
+    "height": 1450,
+    "type": 3,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 68,
+    "corner_rgba": [
+      [
+        34,
+        33,
+        33,
+        255
+      ],
+      [
+        42,
+        42,
+        39,
+        255
+      ],
+      [
+        39,
+        36,
+        36,
+        255
+      ],
+      [
+        42,
+        40,
+        39,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Фігурки/Плаский Луффі силует.webp",
+    "mtime": 1791575566,
+    "size": 57373,
+    "width": 785,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 69,
+    "corner_rgba": [
+      [
+        50,
+        50,
+        48,
+        255
+      ],
+      [
+        71,
+        70,
+        66,
+        255
+      ],
+      [
+        45,
+        46,
+        41,
+        255
+      ],
+      [
+        55,
+        56,
+        51,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Фігурки/Стоячий клікер покебол.webp",
+    "mtime": 1791575566,
+    "size": 65885,
+    "width": 768,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 70,
+    "corner_rgba": [
+      [
+        64,
+        64,
+        62,
+        255
+      ],
+      [
+        132,
+        132,
+        130,
+        255
+      ],
+      [
+        74,
+        75,
+        70,
+        255
+      ],
+      [
+        107,
+        107,
+        105,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Фігурки/Фігурка похитун Snorlax Pokémon — 3D-друк Booster Shop 2.jpg",
+    "mtime": 1791575566,
+    "size": 383888,
+    "width": 2048,
+    "height": 1528,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 71,
+    "corner_rgba": [
+      [
+        232,
+        232,
+        232,
+        255
+      ],
+      [
+        235,
+        235,
+        235,
+        255
+      ],
+      [
+        215,
+        211,
+        212,
+        255
+      ],
+      [
+        224,
+        222,
+        225,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Фігурки/Фігурка похитун Snorlax Pokémon — 3D-друк Booster Shop face.jpg",
+    "mtime": 1791575566,
+    "size": 170797,
+    "width": 1528,
+    "height": 1528,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 72,
+    "corner_rgba": [
+      [
+        233,
+        233,
+        235,
+        255
+      ],
+      [
+        240,
+        240,
+        242,
+        255
+      ],
+      [
+        210,
+        210,
+        212,
+        255
+      ],
+      [
+        215,
+        215,
+        217,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Фігурки/Фігурка похитун Snorlax Pokémon — 3D-друк Booster Shop.jpg",
+    "mtime": 1791575566,
+    "size": 349071,
+    "width": 2048,
+    "height": 1536,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 73,
+    "corner_rgba": [
+      [
+        238,
+        237,
+        243,
+        255
+      ],
+      [
+        239,
+        238,
+        244,
+        255
+      ],
+      [
+        247,
+        246,
+        254,
+        255
+      ],
+      [
+        247,
+        246,
+        252,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Функціональні/chasha-pokeball-pokemon-3d-druk.webp",
+    "mtime": 1791575566,
+    "size": 50897,
+    "width": 767,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 74,
+    "corner_rgba": [
+      [
+        7,
+        7,
+        7,
+        255
+      ],
+      [
+        7,
+        7,
+        7,
+        255
+      ],
+      [
+        12,
+        12,
+        12,
+        255
+      ],
+      [
+        16,
+        16,
+        16,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Функціональні/chasha-pokeball-pokemon-3d-druk1.webp",
+    "mtime": 1791575566,
+    "size": 89967,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 75,
+    "corner_rgba": [
+      [
+        3,
+        3,
+        3,
+        255
+      ],
+      [
+        4,
+        6,
+        5,
+        255
+      ],
+      [
+        15,
+        15,
+        15,
+        255
+      ],
+      [
+        17,
+        17,
+        17,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Функціональні/Ditto cukernutsya 1.webp",
+    "mtime": 1791575566,
+    "size": 120003,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 76,
+    "corner_rgba": [
+      [
+        18,
+        19,
+        21,
+        255
+      ],
+      [
+        61,
+        61,
+        63,
+        255
+      ],
+      [
+        49,
+        50,
+        44,
+        255
+      ],
+      [
+        71,
+        71,
+        69,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Функціональні/Ditto cukernutsya.webp",
+    "mtime": 1791575566,
+    "size": 64719,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 77,
+    "corner_rgba": [
+      [
+        21,
+        22,
+        24,
+        255
+      ],
+      [
+        56,
+        55,
+        60,
+        255
+      ],
+      [
+        15,
+        15,
+        15,
+        255
+      ],
+      [
+        31,
+        31,
+        33,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Функціональні/Ditto-pidstavka-dlia- telefony-01.JPG",
+    "mtime": 1791575566,
+    "size": 2121308,
+    "width": 4284,
+    "height": 4579,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 78,
+    "corner_rgba": [
+      [
+        65,
+        65,
+        65,
+        255
+      ],
+      [
+        52,
+        51,
+        49,
+        255
+      ],
+      [
+        52,
+        52,
+        52,
+        255
+      ],
+      [
+        56,
+        55,
+        53,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Функціональні/Ditto-pidstavka-dlia- telefony.JPG",
+    "mtime": 1791575566,
+    "size": 2204101,
+    "width": 4284,
+    "height": 5138,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 79,
+    "corner_rgba": [
+      [
+        73,
+        73,
+        73,
+        255
+      ],
+      [
+        37,
+        33,
+        32,
+        255
+      ],
+      [
+        54,
+        54,
+        54,
+        255
+      ],
+      [
+        56,
+        56,
+        56,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Функціональні/One Piece zakladka dlia knugy.JPG",
+    "mtime": 1791575566,
+    "size": 1975383,
+    "width": 3024,
+    "height": 3785,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 80,
+    "corner_rgba": [
+      [
+        60,
+        77,
+        93,
+        255
+      ],
+      [
+        64,
+        80,
+        95,
+        255
+      ],
+      [
+        35,
+        44,
+        53,
+        255
+      ],
+      [
+        36,
+        45,
+        54,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Функціональні/Pidstavka dlia slabiv TCG.JPG",
+    "mtime": 1791575566,
+    "size": 1884504,
+    "width": 3024,
+    "height": 3943,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 81,
+    "corner_rgba": [
+      [
+        65,
+        65,
+        63,
+        255
+      ],
+      [
+        46,
+        45,
+        40,
+        255
+      ],
+      [
+        56,
+        56,
+        54,
+        255
+      ],
+      [
+        52,
+        51,
+        46,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Функціональні/pidstavka-dlia-slab-na-nizhtsi-3d-druk.webp",
+    "mtime": 1791575566,
+    "size": 1896290,
+    "width": 1086,
+    "height": 1448,
+    "type": 3,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 82,
+    "corner_rgba": [
+      [
+        3,
+        3,
+        5,
+        255
+      ],
+      [
+        2,
+        2,
+        2,
+        255
+      ],
+      [
+        12,
+        13,
+        14,
+        255
+      ],
+      [
+        3,
+        5,
+        6,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Функціональні/pidstavka-dlia-slaba PSA.webp",
+    "mtime": 1791575566,
+    "size": 1630621,
+    "width": 1086,
+    "height": 1448,
+    "type": 3,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 83,
+    "corner_rgba": [
+      [
+        1,
+        0,
+        1,
+        255
+      ],
+      [
+        1,
+        0,
+        0,
+        255
+      ],
+      [
+        6,
+        7,
+        9,
+        255
+      ],
+      [
+        0,
+        2,
+        2,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Функціональні/pidstavka-slab-tcg-01.jpg.JPG",
+    "mtime": 1791575566,
+    "size": 1737773,
+    "width": 3024,
+    "height": 3716,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 84,
+    "corner_rgba": [
+      [
+        51,
+        53,
+        52,
+        255
+      ],
+      [
+        52,
+        53,
+        48,
+        255
+      ],
+      [
+        51,
+        55,
+        56,
+        255
+      ],
+      [
+        39,
+        41,
+        38,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Функціональні/pokeball deckbox02.jpg.JPG",
+    "mtime": 1791575566,
+    "size": 1524335,
+    "width": 2880,
+    "height": 3749,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 85,
+    "corner_rgba": [
+      [
+        47,
+        45,
+        46,
+        255
+      ],
+      [
+        66,
+        61,
+        57,
+        255
+      ],
+      [
+        76,
+        75,
+        71,
+        255
+      ],
+      [
+        51,
+        47,
+        46,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Функціональні/pokeballdeckbox01.jpg.JPG",
+    "mtime": 1791575566,
+    "size": 1351941,
+    "width": 2704,
+    "height": 3426,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 86,
+    "corner_rgba": [
+      [
+        70,
+        69,
+        67,
+        255
+      ],
+      [
+        73,
+        72,
+        67,
+        255
+      ],
+      [
+        91,
+        91,
+        91,
+        255
+      ],
+      [
+        64,
+        62,
+        63,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Функціональні/stakan-dlia-ruchok-ditto-pokemon-3d-druk.webp",
+    "mtime": 1791575566,
+    "size": 1618144,
+    "width": 1024,
+    "height": 1535,
+    "type": 3,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 87,
+    "corner_rgba": [
+      [
+        1,
+        0,
+        0,
+        255
+      ],
+      [
+        1,
+        0,
+        0,
+        255
+      ],
+      [
+        93,
+        88,
+        92,
+        255
+      ],
+      [
+        2,
+        4,
+        3,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Функціональні/Підставка для телефону Дітто3.JPG",
+    "mtime": 1791575566,
+    "size": 1600084,
+    "width": 2788,
+    "height": 3408,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 88,
+    "corner_rgba": [
+      [
+        93,
+        94,
+        89,
+        255
+      ],
+      [
+        93,
+        95,
+        92,
+        255
+      ],
+      [
+        28,
+        27,
+        23,
+        255
+      ],
+      [
+        24,
+        24,
+        24,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Функціональні/Підставка мала.webp",
+    "mtime": 1791575566,
+    "size": 7403295,
+    "width": 1024,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 89,
+    "corner_rgba": [
+      [
+        67,
+        65,
+        68,
+        255
+      ],
+      [
+        71,
+        69,
+        72,
+        255
+      ],
+      [
+        102,
+        96,
+        100,
+        255
+      ],
+      [
+        108,
+        102,
+        106,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Функціональні/Підставка мала1.webp",
+    "mtime": 1791575566,
+    "size": 1875015,
+    "width": 1254,
+    "height": 1254,
+    "type": 3,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 90,
+    "corner_rgba": [
+      [
+        39,
+        41,
+        40,
+        255
+      ],
+      [
+        64,
+        64,
+        62,
+        255
+      ],
+      [
+        40,
+        38,
+        40,
+        255
+      ],
+      [
+        47,
+        45,
+        46,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Функціональні/Підставка під слаби PSA, CGC, BGS (без покеболу).webp",
+    "mtime": 1791575566,
+    "size": 190816,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 91,
+    "corner_rgba": [
+      [
+        21,
+        25,
+        28,
+        255
+      ],
+      [
+        29,
+        32,
+        37,
+        255
+      ],
+      [
+        64,
+        65,
+        70,
+        255
+      ],
+      [
+        79,
+        80,
+        85,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Функціональні/Підставка середня1.webp",
+    "mtime": 1791575566,
+    "size": 82561,
+    "width": 767,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 92,
+    "corner_rgba": [
+      [
+        51,
+        51,
+        49,
+        255
+      ],
+      [
+        84,
+        85,
+        79,
+        255
+      ],
+      [
+        50,
+        50,
+        48,
+        255
+      ],
+      [
+        66,
+        67,
+        62,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Функціональні/Підставка середня2.webp",
+    "mtime": 1791575566,
+    "size": 2562275,
+    "width": 1024,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 93,
+    "corner_rgba": [
+      [
+        41,
+        41,
+        39,
+        255
+      ],
+      [
+        80,
+        81,
+        76,
+        255
+      ],
+      [
+        45,
+        45,
+        43,
+        255
+      ],
+      [
+        71,
+        72,
+        67,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Функціональні/Шестигранна крутяща підставка під грейджені PSA, CGC, BGS.webp",
+    "mtime": 1791575566,
+    "size": 129519,
+    "width": 1024,
+    "height": 768,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 94,
+    "corner_rgba": [
+      [
+        46,
+        46,
+        46,
+        255
+      ],
+      [
+        74,
+        74,
+        72,
+        255
+      ],
+      [
+        48,
+        48,
+        46,
+        255
+      ],
+      [
+        57,
+        57,
+        55,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Функціональні/Шестигранна крутяща підставка під топлоадери.webp",
+    "mtime": 1791575566,
+    "size": 1728191,
+    "width": 1024,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 95,
+    "corner_rgba": [
+      [
+        43,
+        43,
+        41,
+        255
+      ],
+      [
+        83,
+        82,
+        78,
+        255
+      ],
+      [
+        48,
+        48,
+        46,
+        255
+      ],
+      [
+        71,
+        72,
+        67,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/3D print/Функціональні/Шестигранна крутяща підставка під топлоадери1.webp",
+    "mtime": 1791575566,
+    "size": 110435,
+    "width": 767,
+    "height": 1024,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 96,
+    "corner_rgba": [
+      [
+        89,
+        92,
+        97,
+        255
+      ],
+      [
+        67,
+        70,
+        75,
+        255
+      ],
+      [
+        55,
+        60,
+        64,
+        255
+      ],
+      [
+        83,
+        88,
+        92,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/Accsesuary/albom-dlia-kartok-OnePiece-na-400-slotiv.png",
+    "mtime": 1791575566,
+    "size": 1854944,
+    "width": 1536,
+    "height": 1024,
+    "type": 3,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 97,
+    "corner_rgba": [
+      [
+        240,
+        242,
+        241,
+        255
+      ],
+      [
+        243,
+        243,
+        243,
+        255
+      ],
+      [
+        242,
+        241,
+        242,
+        255
+      ],
+      [
+        240,
+        239,
+        241,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/Accsesuary/albom-dlia-kartok-pokemon-na-400-slotiv.png",
+    "mtime": 1791575566,
+    "size": 1406944,
+    "width": 1448,
+    "height": 1086,
+    "type": 3,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 98,
+    "corner_rgba": [
+      [
+        254,
+        255,
+        255,
+        255
+      ],
+      [
+        254,
+        255,
+        254,
+        255
+      ],
+      [
+        254,
+        254,
+        254,
+        255
+      ],
+      [
+        254,
+        253,
+        254,
+        255
+      ]
+    ],
+    "all_near_white_corners": true
+  },
+  {
+    "version": 1,
+    "source": "catalog/Accsesuary/Акриловий жорсткий протектор для картки 1 шт.png",
+    "mtime": 1791575566,
+    "size": 1655338,
+    "width": 1254,
+    "height": 1254,
+    "type": 3,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 99,
+    "corner_rgba": [
+      [
+        222,
+        224,
+        229,
+        255
+      ],
+      [
+        217,
+        218,
+        222,
+        255
+      ],
+      [
+        215,
+        215,
+        221,
+        255
+      ],
+      [
+        208,
+        207,
+        213,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/Accsesuary/Акриловий кейс для картки без магніта, 1 шт.png",
+    "mtime": 1791575566,
+    "size": 1434942,
+    "width": 1254,
+    "height": 1254,
+    "type": 3,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 100,
+    "corner_rgba": [
+      [
+        189,
+        191,
+        199,
+        255
+      ],
+      [
+        190,
+        192,
+        198,
+        255
+      ],
+      [
+        198,
+        197,
+        206,
+        255
+      ],
+      [
+        197,
+        196,
+        205,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/Accsesuary/Акриловий протектор для картки без магніта, 1 шт.jpg",
+    "mtime": 1791575566,
+    "size": 1508135,
+    "width": 2194,
+    "height": 2194,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 101,
+    "corner_rgba": [
+      [
+        208,
+        208,
+        218,
+        255
+      ],
+      [
+        199,
+        199,
+        211,
+        255
+      ],
+      [
+        210,
+        210,
+        218,
+        255
+      ],
+      [
+        209,
+        207,
+        218,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/Accsesuary/Акриловий протектор-кейс для картки без магніта, 1 шт.png",
+    "mtime": 1791575566,
+    "size": 1255438,
+    "width": 1254,
+    "height": 1254,
+    "type": 3,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 102,
+    "corner_rgba": [
+      [
+        204,
+        206,
+        213,
+        255
+      ],
+      [
+        197,
+        199,
+        204,
+        255
+      ],
+      [
+        204,
+        204,
+        212,
+        255
+      ],
+      [
+        206,
+        206,
+        213,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/Accsesuary/Альбом для колекційних карток на 360 карток, білий.png",
+    "mtime": 1791575566,
+    "size": 1882815,
+    "width": 1254,
+    "height": 1254,
+    "type": 3,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 103,
+    "corner_rgba": [
+      [
+        191,
+        193,
+        196,
+        255
+      ],
+      [
+        181,
+        185,
+        187,
+        255
+      ],
+      [
+        215,
+        215,
+        220,
+        255
+      ],
+      [
+        218,
+        220,
+        224,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/Accsesuary/Альбом для колекційних карток на 360 карток, жовтий.png",
+    "mtime": 1791575566,
+    "size": 1554775,
+    "width": 1254,
+    "height": 1254,
+    "type": 3,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 104,
+    "corner_rgba": [
+      [
+        196,
+        196,
+        198,
+        255
+      ],
+      [
+        189,
+        189,
+        187,
+        255
+      ],
+      [
+        203,
+        200,
+        204,
+        255
+      ],
+      [
+        214,
+        212,
+        215,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/Accsesuary/Альбом для колекційних карток на 360 карток, чорний.png",
+    "mtime": 1791575566,
+    "size": 1949240,
+    "width": 1254,
+    "height": 1254,
+    "type": 3,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 105,
+    "corner_rgba": [
+      [
+        192,
+        193,
+        194,
+        255
+      ],
+      [
+        182,
+        183,
+        183,
+        255
+      ],
+      [
+        205,
+        204,
+        208,
+        255
+      ],
+      [
+        212,
+        212,
+        214,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/Accsesuary/Альбом для колекційних карток на 360 карток.png",
+    "mtime": 1791575566,
+    "size": 2072167,
+    "width": 1254,
+    "height": 1254,
+    "type": 3,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 106,
+    "corner_rgba": [
+      [
+        181,
+        184,
+        185,
+        255
+      ],
+      [
+        174,
+        174,
+        174,
+        255
+      ],
+      [
+        206,
+        204,
+        207,
+        255
+      ],
+      [
+        203,
+        202,
+        204,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/Accsesuary/Альбоми для колекційних карток на 360 карток.png",
+    "mtime": 1791575566,
+    "size": 1808714,
+    "width": 1254,
+    "height": 1254,
+    "type": 3,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 107,
+    "corner_rgba": [
+      [
+        210,
+        210,
+        211,
+        255
+      ],
+      [
+        210,
+        210,
+        208,
+        255
+      ],
+      [
+        209,
+        207,
+        208,
+        255
+      ],
+      [
+        206,
+        205,
+        206,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/Accsesuary/Білий альбом для колекційних карток на 360 карток.png",
+    "mtime": 1791575566,
+    "size": 1670966,
+    "width": 1254,
+    "height": 1254,
+    "type": 3,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 108,
+    "corner_rgba": [
+      [
+        218,
+        218,
+        221,
+        255
+      ],
+      [
+        215,
+        216,
+        217,
+        255
+      ],
+      [
+        235,
+        235,
+        238,
+        255
+      ],
+      [
+        238,
+        239,
+        241,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/Accsesuary/Магнітний кейс для карт 35PT.png",
+    "mtime": 1791575566,
+    "size": 1676034,
+    "width": 1254,
+    "height": 1254,
+    "type": 3,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 109,
+    "corner_rgba": [
+      [
+        156,
+        160,
+        170,
+        255
+      ],
+      [
+        152,
+        158,
+        165,
+        255
+      ],
+      [
+        188,
+        189,
+        198,
+        255
+      ],
+      [
+        189,
+        191,
+        200,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/Accsesuary/Магнітний кейс для карток 35PT.jpg",
+    "mtime": 1791575566,
+    "size": 1343239,
+    "width": 2194,
+    "height": 2194,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 110,
+    "corner_rgba": [
+      [
+        163,
+        167,
+        178,
+        255
+      ],
+      [
+        164,
+        166,
+        178,
+        255
+      ],
+      [
+        191,
+        194,
+        203,
+        255
+      ],
+      [
+        194,
+        196,
+        208,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/One Piece/Bandai.jpg",
+    "mtime": 1791575566,
+    "size": 47320,
+    "width": 900,
+    "height": 900,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 114,
+    "corner_rgba": [
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ]
+    ],
+    "all_near_white_corners": true
+  },
+  {
+    "version": 1,
+    "source": "catalog/One Piece/BS Big logo.png",
+    "mtime": 1791575565,
+    "size": 21182,
+    "width": 270,
+    "height": 84,
+    "type": 3,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 115,
+    "corner_rgba": [
+      [
+        254,
+        254,
+        254,
+        255
+      ],
+      [
+        254,
+        254,
+        254,
+        255
+      ],
+      [
+        254,
+        254,
+        254,
+        255
+      ],
+      [
+        254,
+        254,
+        254,
+        255
+      ]
+    ],
+    "all_near_white_corners": true
+  },
+  {
+    "version": 1,
+    "source": "catalog/One Piece/BS Big logo1.jpg",
+    "mtime": 1791575565,
+    "size": 85965,
+    "width": 545,
+    "height": 465,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 116,
+    "corner_rgba": [
+      [
+        254,
+        254,
+        254,
+        255
+      ],
+      [
+        254,
+        254,
+        254,
+        255
+      ],
+      [
+        254,
+        254,
+        254,
+        255
+      ],
+      [
+        254,
+        254,
+        254,
+        255
+      ]
+    ],
+    "all_near_white_corners": true
+  },
+  {
+    "version": 1,
+    "source": "catalog/One Piece/IMG_20260605_125627_236.jpg",
+    "mtime": 1791575565,
+    "size": 3004867,
+    "width": 4284,
+    "height": 4287,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 117,
+    "corner_rgba": [
+      [
+        182,
+        188,
+        222,
+        255
+      ],
+      [
+        170,
+        173,
+        208,
+        255
+      ],
+      [
+        185,
+        195,
+        246,
+        255
+      ],
+      [
+        166,
+        176,
+        227,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/One Piece/Mistery BOX One Piece Standard.jpg",
+    "mtime": 1791575565,
+    "size": 2103360,
+    "width": 2194,
+    "height": 2194,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 118,
+    "corner_rgba": [
+      [
+        3,
+        32,
+        88,
+        255
+      ],
+      [
+        85,
+        0,
+        0,
+        255
+      ],
+      [
+        15,
+        60,
+        115,
+        255
+      ],
+      [
+        91,
+        0,
+        0,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/One Piece/MYSTERY BOX XL ONE PIECE No blur.jpg",
+    "mtime": 1791575565,
+    "size": 3084089,
+    "width": 2048,
+    "height": 2048,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 119,
+    "corner_rgba": [
+      [
+        94,
+        109,
+        142,
+        255
+      ],
+      [
+        150,
+        91,
+        95,
+        255
+      ],
+      [
+        108,
+        122,
+        148,
+        255
+      ],
+      [
+        145,
+        85,
+        84,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/One Piece/One Piece OP-05 Awakening of the New Era Booster (Японське видання).jpg",
+    "mtime": 1791575565,
+    "size": 112835,
+    "width": 510,
+    "height": 1000,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 124,
+    "corner_rgba": [
+      [
+        254,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ]
+    ],
+    "all_near_white_corners": true
+  },
+  {
+    "version": 1,
+    "source": "catalog/One Piece/One Piece OP-05 Awakening of the New Era display (Японське видання).jpg",
+    "mtime": 1791575565,
+    "size": 134900,
+    "width": 515,
+    "height": 868,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 125,
+    "corner_rgba": [
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ]
+    ],
+    "all_near_white_corners": true
+  },
+  {
+    "version": 1,
+    "source": "catalog/One Piece/One-Piece-Boosters-EB-02 card.jpg",
+    "mtime": 1791575566,
+    "size": 401885,
+    "width": 844,
+    "height": 1200,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 133,
+    "corner_rgba": [
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        254,
+        255,
+        255,
+        255
+      ]
+    ],
+    "all_near_white_corners": true
+  },
+  {
+    "version": 1,
+    "source": "catalog/One Piece/OP JP V7-PROMO.png",
+    "mtime": 1791575566,
+    "size": 233907,
+    "width": 307,
+    "height": 400,
+    "type": 3,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 139,
+    "corner_rgba": [
+      [
+        255,
+        255,
+        254,
+        255
+      ],
+      [
+        255,
+        255,
+        254,
+        255
+      ],
+      [
+        255,
+        255,
+        254,
+        255
+      ],
+      [
+        255,
+        255,
+        254,
+        255
+      ]
+    ],
+    "all_near_white_corners": true
+  },
+  {
+    "version": 1,
+    "source": "catalog/One Piece/OP-15 B1.jpg",
+    "mtime": 1791575565,
+    "size": 1665883,
+    "width": 3024,
+    "height": 3026,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 141,
+    "corner_rgba": [
+      [
+        170,
+        177,
+        187,
+        255
+      ],
+      [
+        209,
+        209,
+        217,
+        255
+      ],
+      [
+        208,
+        211,
+        220,
+        255
+      ],
+      [
+        206,
+        207,
+        211,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/One Piece/OP-15 B2.jpg",
+    "mtime": 1791575566,
+    "size": 1411013,
+    "width": 2980,
+    "height": 2982,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 142,
+    "corner_rgba": [
+      [
+        152,
+        152,
+        160,
+        255
+      ],
+      [
+        201,
+        202,
+        206,
+        255
+      ],
+      [
+        177,
+        182,
+        188,
+        255
+      ],
+      [
+        209,
+        210,
+        214,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/One Piece/OP-15 Booster.webp",
+    "mtime": 1791575565,
+    "size": 23106,
+    "width": 209,
+    "height": 418,
+    "type": 18,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 143,
+    "corner_rgba": [
+      [
+        246,
+        243,
+        247,
+        255
+      ],
+      [
+        238,
+        235,
+        240,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        170,
+        166,
+        158,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/One Piece/Бустер One Piece Card Game OP-07 (Японське видання).png",
+    "mtime": 1791575566,
+    "size": 2039219,
+    "width": 745,
+    "height": 1500,
+    "type": 3,
+    "kind": "photo",
+    "corner_alpha": [
+      149,
+      38,
+      2,
+      0
+    ],
+    "audit_id": 161,
+    "corner_rgba": [
+      [
+        253,
+        255,
+        221,
+        148
+      ],
+      [
+        248,
+        248,
+        150,
+        39
+      ],
+      [
+        255,
+        255,
+        128,
+        2
+      ],
+      [
+        255,
+        255,
+        0,
+        1
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/Other/35pt-180pt-magnitni-ramki-dlya-kartok_6l74fhlsgq9cbn63n.jpg",
+    "mtime": 1791575565,
+    "size": 29902,
+    "width": 1000,
+    "height": 1000,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 176,
+    "corner_rgba": [
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ]
+    ],
+    "all_near_white_corners": true
+  },
+  {
+    "version": 1,
+    "source": "catalog/Other/Duel Masters — DM24-RP3 — JP card.jpg",
+    "mtime": 1791575565,
+    "size": 129006,
+    "width": 500,
+    "height": 700,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 181,
+    "corner_rgba": [
+      [
+        223,
+        222,
+        227,
+        255
+      ],
+      [
+        224,
+        224,
+        226,
+        255
+      ],
+      [
+        233,
+        236,
+        219,
+        255
+      ],
+      [
+        229,
+        231,
+        226,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/Other/Duel Masters — DM24-RP3 — JP.jpg",
+    "mtime": 1791575565,
+    "size": 146781,
+    "width": 508,
+    "height": 730,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 185,
+    "corner_rgba": [
+      [
+        116,
+        92,
+        82,
+        255
+      ],
+      [
+        236,
+        217,
+        210,
+        255
+      ],
+      [
+        207,
+        220,
+        190,
+        255
+      ],
+      [
+        252,
+        255,
+        255,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/Other/G7D sleeves premium plus (MTG).webp",
+    "mtime": 1791575565,
+    "size": 20976,
+    "width": 362,
+    "height": 500,
+    "type": 18,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 186,
+    "corner_rgba": [
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        36,
+        184,
+        111,
+        255
+      ],
+      [
+        232,
+        235,
+        232,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/Other/G7D.jpg",
+    "mtime": 1791575565,
+    "size": 7908,
+    "width": 225,
+    "height": 225,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 187,
+    "corner_rgba": [
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ]
+    ],
+    "all_near_white_corners": true
+  },
+  {
+    "version": 1,
+    "source": "catalog/Other/One Piece Card Game logo tiles catygory.png",
+    "mtime": 1791575565,
+    "size": 2617751,
+    "width": 1254,
+    "height": 1254,
+    "type": 3,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 190,
+    "corner_rgba": [
+      [
+        2,
+        17,
+        63,
+        255
+      ],
+      [
+        55,
+        6,
+        5,
+        255
+      ],
+      [
+        19,
+        46,
+        89,
+        255
+      ],
+      [
+        51,
+        8,
+        3,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/Other/Pokemon trading Card Game logo tiles catygory 2.png",
+    "mtime": 1791575565,
+    "size": 2772813,
+    "width": 1254,
+    "height": 1254,
+    "type": 3,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 191,
+    "corner_rgba": [
+      [
+        7,
+        46,
+        55,
+        255
+      ],
+      [
+        5,
+        42,
+        50,
+        255
+      ],
+      [
+        6,
+        34,
+        43,
+        255
+      ],
+      [
+        1,
+        18,
+        26,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/Other/Protectory-100sht-generic.jpg",
+    "mtime": 1791575565,
+    "size": 447714,
+    "width": 2204,
+    "height": 1600,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 192,
+    "corner_rgba": [
+      [
+        17,
+        17,
+        17,
+        255
+      ],
+      [
+        20,
+        22,
+        21,
+        255
+      ],
+      [
+        25,
+        27,
+        26,
+        255
+      ],
+      [
+        21,
+        23,
+        22,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/Other/QCAC-BoosterJP.png",
+    "mtime": 1791575565,
+    "size": 3247701,
+    "width": 928,
+    "height": 1930,
+    "type": 3,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 193,
+    "corner_rgba": [
+      [
+        24,
+        22,
+        23,
+        255
+      ],
+      [
+        71,
+        65,
+        65,
+        255
+      ],
+      [
+        199,
+        197,
+        198,
+        255
+      ],
+      [
+        17,
+        15,
+        16,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/Other/Yu-Gi-Oh OCG Duel Monsters QUARTER CENTURY ART COLLECTION 25th cards.webp",
+    "mtime": 1791575565,
+    "size": 187596,
+    "width": 1583,
+    "height": 449,
+    "type": 18,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 198,
+    "corner_rgba": [
+      [
+        1,
+        1,
+        1,
+        255
+      ],
+      [
+        3,
+        3,
+        3,
+        255
+      ],
+      [
+        1,
+        1,
+        1,
+        255
+      ],
+      [
+        1,
+        1,
+        1,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/Other/Yu-Gi-Oh! OCG Blazing Dominion Booster.webp",
+    "mtime": 1791575565,
+    "size": 245384,
+    "width": 726,
+    "height": 1500,
+    "type": 18,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 199,
+    "corner_rgba": [
+      [
+        253,
+        253,
+        253,
+        255
+      ],
+      [
+        254,
+        254,
+        254,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        253,
+        253,
+        253,
+        255
+      ]
+    ],
+    "all_near_white_corners": true
+  },
+  {
+    "version": 1,
+    "source": "catalog/Other/Yu-Gi-Oh! OCG Duel Monsters BEYOND THE BRAVE Booster.webp",
+    "mtime": 1791575565,
+    "size": 210000,
+    "width": 580,
+    "height": 1200,
+    "type": 18,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 202,
+    "corner_rgba": [
+      [
+        82,
+        73,
+        72,
+        255
+      ],
+      [
+        14,
+        14,
+        14,
+        255
+      ],
+      [
+        73,
+        69,
+        66,
+        255
+      ],
+      [
+        14,
+        14,
+        14,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/Pokemon/Gemini_Generated_Image_c8wi9fc8wi9fc8wi.png",
+    "mtime": 1791575566,
+    "size": 6158336,
+    "width": 2268,
+    "height": 1856,
+    "type": 3,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 222,
+    "corner_rgba": [
+      [
+        240,
+        242,
+        239,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        248,
+        248,
+        248,
+        255
+      ],
+      [
+        255,
+        255,
+        253,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/Pokemon/IMG_7255.jpg",
+    "mtime": 1791575566,
+    "size": 3202516,
+    "width": 4284,
+    "height": 4086,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 225,
+    "corner_rgba": [
+      [
+        197,
+        197,
+        205,
+        255
+      ],
+      [
+        188,
+        187,
+        193,
+        255
+      ],
+      [
+        218,
+        217,
+        223,
+        255
+      ],
+      [
+        205,
+        204,
+        210,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/Pokemon/MS1.webp",
+    "mtime": 1791575566,
+    "size": 118370,
+    "width": 665,
+    "height": 1301,
+    "type": 18,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 232,
+    "corner_rgba": [
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        254,
+        254,
+        254,
+        255
+      ],
+      [
+        252,
+        254,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ]
+    ],
+    "all_near_white_corners": true
+  },
+  {
+    "version": 1,
+    "source": "catalog/Pokemon/MS2.jpg",
+    "mtime": 1791575566,
+    "size": 103216,
+    "width": 679,
+    "height": 838,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 233,
+    "corner_rgba": [
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ]
+    ],
+    "all_near_white_corners": true
+  },
+  {
+    "version": 1,
+    "source": "catalog/Pokemon/MSB1.jpg",
+    "mtime": 1791575566,
+    "size": 426890,
+    "width": 1280,
+    "height": 1232,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 234,
+    "corner_rgba": [
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ]
+    ],
+    "all_near_white_corners": true
+  },
+  {
+    "version": 1,
+    "source": "catalog/Pokemon/Pokemon company1.png",
+    "mtime": 1791575566,
+    "size": 42346,
+    "width": 208,
+    "height": 162,
+    "type": 3,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 238,
+    "corner_rgba": [
+      [
+        202,
+        205,
+        210,
+        255
+      ],
+      [
+        202,
+        205,
+        210,
+        255
+      ],
+      [
+        202,
+        205,
+        210,
+        255
+      ],
+      [
+        202,
+        205,
+        210,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/Pokemon/Pokemon Mega Dream Ex.webp",
+    "mtime": 1791575567,
+    "size": 16828,
+    "width": 300,
+    "height": 300,
+    "type": 18,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 239,
+    "corner_rgba": [
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ]
+    ],
+    "all_near_white_corners": true
+  },
+  {
+    "version": 1,
+    "source": "catalog/Pokemon/Pokemon TCG Mega Evolution 05 - Pitch Black - Checklane Blister.webp",
+    "mtime": 1791575566,
+    "size": 306302,
+    "width": 343,
+    "height": 630,
+    "type": 18,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 242,
+    "corner_rgba": [
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ]
+    ],
+    "all_near_white_corners": true
+  },
+  {
+    "version": 1,
+    "source": "catalog/Pokemon/Pokémon — Special Card Set Grass Leafeon VSTAR — JP — Collection Set inside.png",
+    "mtime": 1791575566,
+    "size": 1139508,
+    "width": 1200,
+    "height": 540,
+    "type": 3,
+    "kind": "photo",
+    "corner_alpha": [
+      0,
+      0,
+      253,
+      0
+    ],
+    "audit_id": 266,
+    "corner_rgba": [
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        148,
+        157,
+        174,
+        253
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/Pokemon/Scarlet_Violet_Expansion_Pack_White_Flare.png",
+    "mtime": 1791575566,
+    "size": 1017009,
+    "width": 573,
+    "height": 1183,
+    "type": 3,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 269,
+    "corner_rgba": [
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255,
+        255
+      ]
+    ],
+    "all_near_white_corners": true
+  },
+  {
+    "version": 1,
+    "source": "catalog/Pokemon/Містері бокс Pokémon TCG Mystery Mix Standard (Японське видання).jpg",
+    "mtime": 1791575566,
+    "size": 850602,
+    "width": 2194,
+    "height": 2194,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 282,
+    "corner_rgba": [
+      [
+        6,
+        64,
+        138,
+        255
+      ],
+      [
+        157,
+        17,
+        16,
+        255
+      ],
+      [
+        4,
+        61,
+        130,
+        255
+      ],
+      [
+        163,
+        14,
+        18,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  },
+  {
+    "version": 1,
+    "source": "catalog/Pokemon/Містері бокс Pokémon TCG Mystery Mix XL (Японське видання).jpg",
+    "mtime": 1791575566,
+    "size": 1119794,
+    "width": 2194,
+    "height": 2194,
+    "type": 2,
+    "kind": "photo",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "audit_id": 283,
+    "corner_rgba": [
+      [
+        6,
+        61,
+        128,
+        255
+      ],
+      [
+        157,
+        5,
+        4,
+        255
+      ],
+      [
+        4,
+        60,
+        121,
+        255
+      ],
+      [
+        147,
+        2,
+        5,
+        255
+      ]
+    ],
+    "all_near_white_corners": false
+  }
+]

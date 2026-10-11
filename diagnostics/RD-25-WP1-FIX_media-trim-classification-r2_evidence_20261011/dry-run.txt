@@ -1,0 +1,9 @@
+php_version=8.3.30
+cwd=C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-wp1-fix-r2-20261011\verify4\runner-main
+time=2026-10-11T15:44:07+00:00
+preflight_file=catalog/model/tool/image.php
+preflight_file=system/library/image.php
+preflight_file=catalog/controller/product/thumb.php
+dry_run=yes
+target_writes=0
+done=ok

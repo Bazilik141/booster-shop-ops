@@ -72,6 +72,7 @@ status and priority from the verified Notion card. Use dashboard
 
 | Roadmap ID | Назва | Handoff |
 |---|---|---|
+| RD-25 | Product media: catalog fit/classification, product gallery and small thumbnail routing | handoffs/handoff_RD-25_product-media-slot_20261009.md · handoffs/handoff_RD-25-WP1-FIX_media-trim-classification_20261011.md · diagnostics/RD-25-WP1_closure_report_20261011.md |
 | RD-04 | Картка товару — дизайн-система | handoffs/handoff_RD-04_product-card_thumb-twig_2026-06-01.md |
 | RD-06/07 | Empty state / category / breadcrumb | handoffs/handoff_RD-06-07_empty-state_category_breadcrumb_2026-06-04.md |
 | RD-10 | Сторінка товару — редизайн | handoffs/handoff_RD-10_product-page-parity_2026-06-09.md |

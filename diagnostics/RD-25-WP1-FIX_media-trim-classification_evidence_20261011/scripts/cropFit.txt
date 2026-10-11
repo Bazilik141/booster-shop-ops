@@ -1,0 +1,21 @@
+	/** RD-25-WP1-FIX 20261011: crop exclusive bounds without flattening source alpha. */
+	public function cropFit(int $left, int $top, int $right, int $bottom): void {
+		if ($left < 0 || $top < 0 || $right > $this->width || $bottom > $this->height || $right <= $left || $bottom <= $top) {
+			throw new \InvalidArgumentException('Invalid fit crop bounds');
+		}
+		if ($left === 0 && $top === 0 && $right === $this->width && $bottom === $this->height) { return; }
+		$width = $right - $left; $height = $bottom - $top;
+		$next = imagecreatetruecolor($width, $height);
+		if (!$next) { throw new \RuntimeException('Fit crop allocation failed'); }
+		if ($this->mime === 'image/png' || $this->mime === 'image/webp') {
+			imagealphablending($next, false); imagesavealpha($next, true);
+			$background = imagecolorallocatealpha($next, 255, 255, 255, 127);
+		} else { $background = imagecolorallocate($next, 255, 255, 255); }
+		imagefilledrectangle($next, 0, 0, $width - 1, $height - 1, $background);
+		if (!imagecopy($next, $this->image, 0, 0, $left, $top, $width, $height)) {
+			imagedestroy($next); throw new \RuntimeException('Fit crop copy failed');
+		}
+		imagedestroy($this->image); $this->image = $next;
+		$this->width = $width; $this->height = $height;
+	}
+

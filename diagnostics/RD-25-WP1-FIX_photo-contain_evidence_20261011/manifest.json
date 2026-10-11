@@ -1,0 +1,26 @@
+{
+  "patch": "RD-25-WP1-FIX_photo-contain_20261011.php",
+  "patch_sha256": "1a01abb7ccd98903a962ede7918410ec1920e696f92067ca22038a60fe52fcd1",
+  "patch_bytes": 12964,
+  "marker": "RD-25-WP1-FIX-PHOTO 20261011",
+  "token": "rd25-wp1-photo-contain-20261011",
+  "targets": {
+    "catalog/view/stylesheet/boostershop-ds.css": {
+      "before_sha256": "edc5913817da258374c26aa03cb172eca07c2ee11e76a25402e46e7472440a53",
+      "after_sha256": "c140e25de36e40b89830972cbc270b35cdda017cac0cd64118df935312eaf0f9"
+    },
+    "catalog/view/template/common/header.twig": {
+      "before_sha256": "eec16fbe81c72332d44ab2ecc7ee9f8a613a39206a21ab40ee04d7e2b7007cee",
+      "after_sha256": "eec16fbe81c72332d44ab2ecc7ee9f8a613a39206a21ab40ee04d7e2b7007cee"
+    }
+  },
+  "context": {
+    "catalog/model/tool/image.php": "85cf9489244c48fe915bc25f370cdfdb2b39c9c6d6a42219cec7f84a9e375e71",
+    "system/library/image.php": "7f81dcbb8b5d2d032005ae28ce01cea5ba7542f7334fd9909e538f6952adeff9",
+    "catalog/controller/product/thumb.php": "cf4f8e354b18a4318af159c34bf3c083d0991007b42d03e2c57aa4963c1ed3b1",
+    "catalog/view/template/product/thumb.twig": "d9237b2c9c0cc21cda73a86ba6cf1ff66b7ad956f0da3c24a8e1add6518037d6"
+  },
+  "header_before_actual_sha256": "05a195529958ad22f2cdf29229f36d2e47d65394328f6cbe0bba38c9378bb752",
+  "header_after_actual_sha256": "bf0328cd9da4095282069584150ca7a396fc4a09426b0e90b00ab852ffaa70d2",
+  "header_token_read": "rd25-wp1-media-fit-r3-20261010"
+}

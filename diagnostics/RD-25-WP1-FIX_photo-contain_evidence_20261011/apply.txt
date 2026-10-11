@@ -1,0 +1,16 @@
+php_version=8.3.30
+php_lint=ok:C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-wp1-photo-contain-20261011\lifecycle\RD-25-WP1-FIX_photo-contain_20261011.php
+cwd=C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-wp1-photo-contain-20261011\lifecycle
+time=2026-10-11T16:55:59+00:00
+context_file=catalog/model/tool/image.php
+context_file=system/library/image.php
+context_file=catalog/controller/product/thumb.php
+context_file=catalog/view/template/product/thumb.twig
+preflight_file=catalog/view/stylesheet/boostershop-ds.css
+preflight_file=catalog/view/template/common/header.twig
+backup=C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-wp1-photo-contain-20261011\lifecycle/_patch_backups/RD-25-WP1-FIX_photo-contain_20261011-20261011_165559-1cd05b
+changed_file=catalog/view/stylesheet/boostershop-ds.css
+changed_file=catalog/view/template/common/header.twig
+changed_files=2
+done=ok
+self_delete=ok

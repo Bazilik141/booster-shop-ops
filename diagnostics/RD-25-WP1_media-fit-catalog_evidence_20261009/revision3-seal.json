@@ -1,0 +1,32 @@
+{
+  "scope": "R3 local evidence consistency; no production proof",
+  "patch_sha256": "49ff6c088caf05eecbba47d660af98ce18b85bd50739e1540a3bde637ce01e83",
+  "report_sha256": "b68f9f11c22e2974dc68ff1df31db57c04c8e2fcdb32c6d9bbd45d26acfcbe41",
+  "target_count": 11,
+  "all_original_before_hashes_unchanged_from_r2": true,
+  "normalized_after_hash_changes_from_r2": [
+    "catalog/model/tool/image.php"
+  ],
+  "all_fixture_targets_match_pins_after_checks": true,
+  "all_286_metadata_classes_and_reasons_match_independent_rule_oracle": true,
+  "class_changes": 10,
+  "cut": 164,
+  "photo": 122,
+  "runner_checks": 26,
+  "functional_checks": 79,
+  "ui_checks": 253,
+  "protected_media_diff_bytes": 0,
+  "evidence_sha256": {
+    "targets.json": "2d242477c2fb151d52f544d31b690f3edfe1e923023b21f685defc3dfc4ccb00",
+    "delivery-manifest.json": "6791d50c14e601387c36a39b437f995facf67178eece89b9463a403dc731b72f",
+    "classification.json": "8159b7b6632f4dd9b7ec985e3a698abe99442b87fee9c4395cbceb56c5cb8e70",
+    "reclassified-assets.json": "9fe39ea9261130c15bc161a6b2d6636dc2518a5173bf874476c7b50260e943cb",
+    "runner-checks.json": "aa7fba349bce95719da35196b2ae10a61e4cabad33c5449f36c822f416133d34",
+    "functional-checks.json": "7e768eeffda4f58219c142c03bbd8ff016025c02d2ab2a182e8ddff194b95e7b",
+    "ui-checks.json": "ec9b384a50feb92fc8c90360029f3bc5e4039842ce1e5b277d647a748befd42e",
+    "white-pack-ui-checks.json": "ec7062d8335f707d819222b90ba41b984c8886b6589c6fc9a5b0d3522834dd13",
+    "aspect-pack-ui-checks.json": "1a02262dea3e8ffc01d71bff7fb188a5ddafd99d499b17f790ad03a1389b7f7f",
+    "review-primary-pack-ui-checks.json": "827b00ca1ec593bdf1a52ee5c7e3130ef0fb3fcfdc54f45574d8a20110d56df1",
+    "revision3.diff": "ee1da3dcadbaa7d310a97587d4940aa463cef5b3b8f16ca5b577cae38d3f33d1"
+  }
+}

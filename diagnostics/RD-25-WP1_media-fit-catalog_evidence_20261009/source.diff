@@ -1,0 +1,533 @@
+--- a/system/library/image.php
++++ b/system/library/image.php
+@@ -222,6 +222,51 @@
+ 
+ 		$this->width = $width;
+ 		$this->height = $height;
++	}
++
++	/**
++	 * RD-25-WP1 20261009: fit inside a box without adding a padded canvas.
++	 * Keep resize() unchanged: popup/schema/feed callers retain their old URLs.
++	 * Smaller originals are not enlarged; alpha and the source aspect are preserved.
++	 */
++	public function resizeFit(int $width, int $height): void {
++		if ($width < 1 || $height < 1 || !$this->width || !$this->height) {
++			throw new \InvalidArgumentException('RD-25: invalid fit dimensions');
++		}
++
++		$scale = min(1.0, $width / $this->width, $height / $this->height);
++		$new_width = max(1, (int)floor($this->width * $scale));
++		$new_height = max(1, (int)floor($this->height * $scale));
++
++		if ($new_width === $this->width && $new_height === $this->height) {
++			return;
++		}
++
++		$image_new = imagecreatetruecolor($new_width, $new_height);
++
++		if (!$image_new) {
++			throw new \RuntimeException('RD-25: cannot allocate fit image');
++		}
++
++		if ($this->mime === 'image/png' || $this->mime === 'image/webp') {
++			imagealphablending($image_new, false);
++			imagesavealpha($image_new, true);
++			$background = imagecolorallocatealpha($image_new, 255, 255, 255, 127);
++		} else {
++			$background = imagecolorallocate($image_new, 255, 255, 255);
++		}
++
++		imagefill($image_new, 0, 0, $background);
++
++		if (!imagecopyresampled($image_new, $this->image, 0, 0, 0, 0, $new_width, $new_height, $this->width, $this->height)) {
++			imagedestroy($image_new);
++			throw new \RuntimeException('RD-25: fit resampling failed');
++		}
++
++		imagedestroy($this->image);
++		$this->image = $image_new;
++		$this->width = $new_width;
++		$this->height = $new_height;
+ 	}
+ 
+ 	/**
+--- a/catalog/model/tool/image.php
++++ b/catalog/model/tool/image.php
+@@ -78,6 +78,246 @@
+ 		return $this->config->get('config_url') . 'image/' . $image_new;
+ 	}
+ 
++	// RD-25-WP1 20261009: isolated fit cache and source classification.
++	private const RD25_MEDIA_VERSION = 3;
++
++	/** Source metadata is cached per canonical path + mtime + size, not per view. */
++	public function mediaInfo(string $filename): array {
++		$source = $this->rd25Source($filename);
++
++		if (!$source) {
++			return [];
++		}
++
++		$cache_file = DIR_CACHE . 'rd25-media-v' . self::RD25_MEDIA_VERSION . '-' . hash('sha256', $source['relative']) . '.json';
++		$cached = $this->rd25ReadMedia($cache_file, $source);
++
++		if ($cached) {
++			return $cached;
++		}
++
++		// On unavailable persistent storage use the original thumb; do not decode on each view.
++		if (!is_dir(DIR_CACHE) || !is_writable(DIR_CACHE)) {
++			return [];
++		}
++
++		$lock = @fopen($cache_file . '.lock', 'c');
++
++		if (!$lock) {
++			return [];
++		}
++
++		try {
++			if (!flock($lock, LOCK_EX)) {
++				return [];
++			}
++
++			$cached = $this->rd25ReadMedia($cache_file, $source);
++
++			if ($cached) {
++				return $cached;
++			}
++
++			$dimensions = @getimagesize($source['path']);
++
++			if (!$dimensions || !in_array($dimensions[2], [IMAGETYPE_PNG, IMAGETYPE_JPEG, IMAGETYPE_WEBP], true)) {
++				return [];
++			}
++
++			$image = new \Opencart\System\Library\Image($source['path']);
++			$gd = $image->getImage();
++
++			if (!$gd) {
++				return [];
++			}
++
++			$corner_alpha = [];
++			$corner_rgb = [];
++			$transparent_cut = $dimensions[2] !== IMAGETYPE_JPEG;
++			$white_cut = true;
++
++			foreach ([[0, 0], [$dimensions[0] - 1, 0], [0, $dimensions[1] - 1], [$dimensions[0] - 1, $dimensions[1] - 1]] as $corner) {
++				$color = imagecolorsforindex($gd, imagecolorat($gd, $corner[0], $corner[1]));
++				// GD: 127 = transparent. Normalize to 0..255, where 0 = transparent.
++				$alpha = (int)round(255 * (127 - (int)$color['alpha']) / 127);
++				$corner_alpha[] = $alpha;
++				$corner_rgb[] = [(int)$color['red'], (int)$color['green'], (int)$color['blue']];
++				// Near-transparent (1..2) edge pixels exist in the supplied PNGs.
++				$transparent_cut = $transparent_cut && $alpha <= 16;
++				// F1 / owner 2026-10-10: opaque white-background pack art is a cutout.
++				// Use the original audit's exact near-white test: every RGB channel >= 240.
++				$white_cut = $white_cut && $alpha === 255
++					&& $color['red'] >= 240 && $color['green'] >= 240 && $color['blue'] >= 240;
++			}
++
++			imagedestroy($gd);
++			// F5 / owner 2026-10-10: inclusive 0.70..1.45 cover band.
++			// Integer cross-products preserve exact boundary decisions; source pixels stay intact.
++			$aspect_cut = $dimensions[0] * 100 < $dimensions[1] * 70
++				|| $dimensions[0] * 100 > $dimensions[1] * 145;
++			$metadata = [
++				'version' => self::RD25_MEDIA_VERSION,
++				'source' => $source['relative'],
++				'mtime' => $source['mtime'],
++				'size' => $source['size'],
++				'width' => (int)$dimensions[0],
++				'height' => (int)$dimensions[1],
++				'type' => (int)$dimensions[2],
++				'kind' => ($aspect_cut || $transparent_cut || $white_cut) ? 'cut' : 'photo',
++				'corner_alpha' => $corner_alpha,
++				'corner_rgb' => $corner_rgb,
++				'all_near_white_corners' => $white_cut,
++				'class_reason' => $aspect_cut ? 'aspect_outside_cover_band' : ($transparent_cut ? 'transparent_corners' : ($white_cut ? 'opaque_near_white_corners' : 'non_white_or_mixed_corners'))
++			];
++			$json = json_encode($metadata, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
++			$temp = @tempnam(DIR_CACHE, 'rd25-meta-');
++
++			if ($json === false || !$temp) {
++				return [];
++			}
++
++			if (@file_put_contents($temp, $json, LOCK_EX) !== strlen($json) || !@rename($temp, $cache_file)) {
++				@unlink($temp);
++				return [];
++			}
++
++			return $metadata;
++		} catch (\Throwable $error) {
++			return [];
++		} finally {
++			flock($lock, LOCK_UN);
++			fclose($lock);
++		}
++	}
++
++	/** New API only: no existing resize() call or cache file is changed. */
++	public function resizeFit(string $filename, int $width, int $height): string {
++		if ($width < 1 || $height < 1 || $width > 4096 || $height > 4096) {
++			return '';
++		}
++
++		$metadata = $this->mediaInfo($filename);
++
++		if (!$metadata) {
++			return '';
++		}
++
++		$source = $this->rd25Source($filename);
++
++		if (!$source || $source['mtime'] !== $metadata['mtime'] || $source['size'] !== $metadata['size']) {
++			return '';
++		}
++
++		$extensions = [IMAGETYPE_PNG => 'png', IMAGETYPE_JPEG => 'jpg', IMAGETYPE_WEBP => 'webp'];
++		$extension = $this->webpSupported() ? 'webp' : $extensions[$metadata['type']];
++		// Source format/path/stat are part of the key: same-stem PNG/JPEG never collide.
++		$key = hash('sha256', 'rd25-fit-v1:' . $source['relative'] . ':' . $source['mtime'] . ':' . $source['size']);
++		$image_new = 'cache/rd25-fit/' . $key . '-' . $width . 'x' . $height . '-fit.' . $extension;
++		$destination = DIR_IMAGE . $image_new;
++
++		if (is_file($destination) && filesize($destination) > 0) {
++			return $this->config->get('config_url') . 'image/' . $image_new;
++		}
++
++		$lock = @fopen(DIR_CACHE . 'rd25-fit-' . hash('sha256', $image_new) . '.lock', 'c');
++
++		if (!$lock) {
++			return '';
++		}
++
++		$temp = '';
++
++		try {
++			if (!flock($lock, LOCK_EX)) {
++				return '';
++			}
++
++			clearstatcache(true, $destination);
++
++			if (is_file($destination) && filesize($destination) > 0) {
++				return $this->config->get('config_url') . 'image/' . $image_new;
++			}
++
++			$directory = dirname($destination);
++
++			if (!is_dir($directory) && !@mkdir($directory, 0777, true) && !is_dir($directory)) {
++				return '';
++			}
++
++			$temp_base = @tempnam($directory, 'rd25-fit-');
++
++			if (!$temp_base) {
++				return '';
++			}
++
++			$temp = $temp_base . '.' . $extension;
++
++			if (!@rename($temp_base, $temp)) {
++				@unlink($temp_base);
++				return '';
++			}
++
++			$image = new \Opencart\System\Library\Image($source['path']);
++			$image->resizeFit($width, $height);
++			$expected_width = $image->getWidth();
++			$expected_height = $image->getHeight();
++			$image->save($temp, self::WEBP_QUALITY);
++			$output = @getimagesize($temp);
++			$expected_type = $extension === 'webp' ? IMAGETYPE_WEBP : $metadata['type'];
++
++			if (!$output || $output[0] !== $expected_width || $output[1] !== $expected_height || $output[2] !== $expected_type || !@chmod($temp, 0644) || !@rename($temp, $destination)) {
++				return '';
++			}
++
++			$temp = '';
++			return $this->config->get('config_url') . 'image/' . $image_new;
++		} catch (\Throwable $error) {
++			return '';
++		} finally {
++			if ($temp !== '' && is_file($temp)) {
++				@unlink($temp);
++			}
++			flock($lock, LOCK_UN);
++			fclose($lock);
++		}
++	}
++
++	private function rd25Source(string $filename): array {
++		$filename = html_entity_decode($filename, ENT_QUOTES, 'UTF-8');
++		$root = realpath(DIR_IMAGE);
++		$path = realpath(DIR_IMAGE . $filename);
++
++		if (!$root || !$path || !is_file($path)) {
++			return [];
++		}
++
++		$root = rtrim(str_replace('\\', '/', $root), '/') . '/';
++		$path = str_replace('\\', '/', $path);
++
++		if (strpos($path, $root) !== 0) {
++			return [];
++		}
++
++		clearstatcache(true, $path);
++		$stat = @stat($path);
++
++		return $stat ? ['path' => $path, 'relative' => substr($path, strlen($root)), 'mtime' => (int)$stat['mtime'], 'size' => (int)$stat['size']] : [];
++	}
++
++	private function rd25ReadMedia(string $cache_file, array $source): array {
++		$json = @file_get_contents($cache_file);
++		$metadata = $json !== false ? json_decode($json, true) : null;
++
++		if (!is_array($metadata) || ($metadata['version'] ?? null) !== self::RD25_MEDIA_VERSION
++			|| ($metadata['source'] ?? null) !== $source['relative'] || ($metadata['mtime'] ?? null) !== $source['mtime']
++			|| ($metadata['size'] ?? null) !== $source['size'] || !in_array($metadata['kind'] ?? '', ['cut', 'photo'], true)
++			|| !is_int($metadata['width'] ?? null) || $metadata['width'] < 1 || !is_int($metadata['height'] ?? null) || $metadata['height'] < 1
++			|| !in_array($metadata['type'] ?? null, [IMAGETYPE_PNG, IMAGETYPE_JPEG, IMAGETYPE_WEBP], true)) {
++			return [];
++		}
++
++		return $metadata;
++	}
+ 	/**
+ 	 * TECH-044-WEBP: WebP quality, chosen from measurement in
+ 	 * diagnostics/TECH-044_wp0-baseline_report_20260929.md. Image::save() does not pass $quality
+--- a/catalog/controller/product/thumb.php
++++ b/catalog/controller/product/thumb.php
+@@ -38,6 +38,39 @@
+ 	 * @return string
+ 	 */
+ 	public function index(array $data): string {
++		// RD-25-WP1 20261009: original image comes from the caller's product row.
++		// All existing caller resize() expressions remain byte-identical.
++		$data['bs_media_kind'] = '';
++		$data['bs_fit_thumb'] = '';
++		$bs_source = isset($data['image']) && is_string($data['image']) ? $data['image'] : '';
++
++		// Third-party callers may provide only product_id/thumb. Read the original once
++		// per product within this request rather than reverse-parsing a cache URL.
++		if ($bs_source === '' && !empty($data['product_id'])) {
++			static $bs_source_cache = [];
++			$bs_product_id = (int)$data['product_id'];
++
++			if (!array_key_exists($bs_product_id, $bs_source_cache)) {
++				$this->load->model('catalog/product');
++				$bs_product = $this->model_catalog_product->getProduct($bs_product_id);
++				$bs_source_cache[$bs_product_id] = $bs_product['image'] ?? '';
++			}
++
++			$bs_source = (string)$bs_source_cache[$bs_product_id];
++		}
++
++		if ($bs_source !== '' && strpos(strtolower($bs_source), 'placeholder') === false && strpos(strtolower($bs_source), 'no_image') === false) {
++			$this->load->model('tool/image');
++			$bs_fit_url = $this->model_tool_image->resizeFit($bs_source, 700, 875);
++
++			if ($bs_fit_url !== '' && ($bs_media = $this->model_tool_image->mediaInfo($bs_source))) {
++				$bs_scale = min(1.0, 700 / $bs_media['width'], 875 / $bs_media['height']);
++				$data['bs_fit_thumb'] = $bs_fit_url;
++				$data['bs_media_kind'] = $bs_media['kind'];
++				$data['bs_media_width'] = max(1, (int)floor($bs_media['width'] * $bs_scale));
++				$data['bs_media_height'] = max(1, (int)floor($bs_media['height'] * $bs_scale));
++			}
++		}
+ 		$this->load->language('product/thumb');
+ 
+ 		$data['cart'] = $this->url->link('common/cart.info', 'language=' . $this->config->get('config_language'));
+--- a/catalog/view/template/product/thumb.twig
++++ b/catalog/view/template/product/thumb.twig
+@@ -1,3 +1,4 @@
++{# RD-25-WP1 20261009: fitted listing image and source kind. #}
+ {# RD-04 Product card system: all product states.
+    RD-04f: product/thumb.php normalizes bs_state and bs_eta.
+ #}
+@@ -6,7 +7,7 @@
+ {% set bs_is_pre = bs_state_value == 'preorder' %}
+ {% set bs_is_out = bs_state_value == 'out' %}
+ {% set bs_is_rare = bs_is_rare|default(false) %}
+-{% set bs_thumb = thumb|default('') %}
++{% set bs_thumb = bs_fit_thumb|default(thumb|default('')) %}
+ {% set bs_thumb_lc = bs_thumb|lower %}
+ {% set bs_is_sale = special is not empty and not bs_is_out %}
+ {% set bs_no_img = bs_thumb is empty or 'no_image' in bs_thumb_lc or 'placeholder' in bs_thumb_lc %}
+@@ -17,11 +18,11 @@
+ {% endif %}
+ 
+ <article class="bs-pcard{% if bs_is_out %} bs-pcard--out{% endif %}{% if bs_no_img %} bs-pcard--nophoto{% endif %}">
+-  <a class="bs-pcard__media" href="{{ href }}" tabindex="-1" aria-hidden="true">
++  <a class="bs-pcard__media{% if bs_media_kind|default('') in ['cut', 'photo'] %} bs-pcard__media--{{ bs_media_kind }}{% endif %}" href="{{ href }}" tabindex="-1" aria-hidden="true">
+     {% if bs_no_img %}
+       <span class="bs-pcard__img-placeholder" aria-hidden="true"></span>
+     {% else %}
+-      <img src="{{ thumb }}" alt="{{ name }}" loading="lazy" width="240" height="240">
++      <img src="{{ bs_thumb }}" alt="{{ name }}" loading="lazy" width="{{ bs_media_width|default(240) }}" height="{{ bs_media_height|default(240) }}">
+     {% endif %}
+ 
+     {% if discount > 0 %}
+--- a/catalog/view/stylesheet/boostershop-ds.css
++++ b/catalog/view/stylesheet/boostershop-ds.css
+@@ -260,12 +260,25 @@
+   transition: transform .18s ease;
+ }
+ .bs-pcard:hover, .bs-pcard:focus-within { transform: translateY(-3px); }
++/* RD-25-WP1 20261009: edit UI-PCARD-D source rules; no backdrop or override layer.
++   Geometry below is the approved catalog framing: cut 8%/6%/84%/94%, photo full bleed. */
+ .bs-pcard__media {
+-  position: relative; aspect-ratio: 331/240;
++  position: relative; aspect-ratio: 1 / 1; background: transparent;
+ }
+ .bs-pcard__media img {
+   position: absolute; inset: 0;
+   width: 100%; height: 100%; object-fit: contain;
++}
++.bs-pcard__media--cut img {
++  inset: auto; left: 8%; top: 6%; width: 84%; height: 94%;
++  object-fit: contain; object-position: center bottom;
++}
++.bs-pcard__media--photo img {
++  inset: 0; width: 100%; height: 100%; object-fit: cover;
++  border-radius: var(--bs-r);
++}
++@media (max-width: 767.98px) {
++  .bs-pcard__media { aspect-ratio: 4 / 5; }
+ }
+ .bs-pcard--out .bs-pcard__media img { opacity: 0.45; }
+ /* UI-PCARD-BADGE 20261006: 4px top inset on the DS spacing grid. */
+@@ -495,8 +508,7 @@
+ .bs-pcard__body { flex: 1 1 auto; }
+ .bs-pcard__cta { margin-top: auto; }
+ .bs-pcard__form { width: 100%; }
+-/* TECH-045-WPE: 16px/700 at every breakpoint — narrowest live card button is 291px, the longest label
+-   («Передзамовити») needs 159px incl. padding, so one size stays on one line everywhere. */
++/* TECH-045-WPE desktop size; RD-25 mobile typography is defined with the component below. */
+ .bs-pcard__buy-btn { width: 100%; font-size: 16px; font-weight: 700; text-transform: none; }
+ .bs-pcard__unavail {
+   font-size: 13px;
+@@ -510,6 +522,26 @@
+   width: 100%; height: 100%;
+   background: transparent;
+ }
++/* RD-25 grids: data attribute survives stock common.js rewriting row classes.
++   Related products remain their existing mobile swipe rail; vertical modules are excluded. */
++.bs-media-grid__item { margin-bottom: 16px; } /* replaces Bootstrap mb-3 on desktop */
++@media (max-width: 575.98px) {
++  [data-bs-media-grid] {
++    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
++    gap: 24px 14px; /* approved row/column gaps */
++    margin-left: 0; margin-right: 0;
++  }
++  [data-bs-media-grid] > .bs-media-grid__item {
++    width: auto; max-width: none; min-width: 0; padding: 0; margin-bottom: 0;
++  }
++  .bs-pcard__title { font-size: 13px; line-height: 1.35; min-height: 35px; overflow-wrap: anywhere; }
++  .bs-pcard__price-new,
++  .bs-pcard__price-row--sale .bs-pcard__price-new { font-size: 15px; font-weight: 800; }
++  .bs-pcard__price-row { flex-wrap: wrap; row-gap: 4px; }
++  /* 8px side padding keeps the longest preorder label inside a 360px two-column layout. */
++  .bs-pcard__buy-btn { height: 44px; font-size: 15px; font-weight: 700; padding: 0 8px; }
++}
++
+ 
+ /* -- Mini-cart, cart, account, FAQ, etc. — see individual partials.
+    See HANDOFF.md for templates that consume the classes above. */
+--- a/catalog/view/template/product/category.twig
++++ b/catalog/view/template/product/category.twig
+@@ -539,18 +539,19 @@
+ 
+       <div id="bs-category-results" data-total="{{ product_total }}" data-page-size="{{ products|length }}" data-category="{{ reset_url }}" tabindex="-1" aria-label="Товари" aria-busy="false">
+       {% if products %}
+-        <div id="product-list" class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4">
++        {# RD-25-WP1 20261009: two-column mobile product grid. #}
++        <div id="product-list" class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-4" data-bs-media-grid="RD-25-WP1">
+           {% for product in products %}
+             {# TECH-013 WP2: the first card is the LCP element on mobile (measured
+                340x240 = 81,600 px^2 above the fold at 390x844, the largest element on
+                the page) and thumb.twig marks every card loading="lazy", which defers
+                exactly the image LCP waits for. Promote the first card only — the grid is
+-               row-cols-1 on mobile, so one card is above the fold, and eager-loading a
++               two columns on mobile; only the primary card is high priority, and eager-loading a
+                full desktop row would compete for bandwidth on throttled 4G. The replace
+                filter is used because product/thumb pre-renders each card to an HTML
+                string, so thumb.twig has no loop index; header.twig uses the same
+                `|replace` idiom for the cart block. #}
+-            <div class="col mb-3">{{ loop.first ? product|replace({'loading="lazy"': 'loading="eager" fetchpriority="high"'}) : product }}</div>
++            <div class="col bs-media-grid__item">{{ loop.first ? product|replace({'loading="lazy"': 'loading="eager" fetchpriority="high"'}) : product }}</div>
+           {% endfor %}
+         </div>
+ 
+--- a/catalog/view/template/product/search.twig
++++ b/catalog/view/template/product/search.twig
+@@ -77,9 +77,10 @@
+             </select>
+           </div>
+         </div>
+-        <div id="product-list" class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4">
++        {# RD-25-WP1 20261009: two-column mobile product grid. #}
++        <div id="product-list" class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-4" data-bs-media-grid="RD-25-WP1">
+           {% for product in products %}
+-            <div class="col mb-3">{{ product }}</div>
++            <div class="col bs-media-grid__item">{{ product }}</div>
+           {% endfor %}
+         </div>
+         <div class="row">
+--- a/catalog/view/template/product/special.twig
++++ b/catalog/view/template/product/special.twig
+@@ -39,9 +39,10 @@
+           </div>
+         </div>
+ 
+-        <div id="product-list" class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 row-cols-xl-4">
++        {# RD-25-WP1 20261009: two-column mobile product grid. #}
++        <div id="product-list" class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 row-cols-xl-4" data-bs-media-grid="RD-25-WP1">
+           {% for product in products %}
+-            <div class="col mb-3">{{ product }}</div>
++            <div class="col bs-media-grid__item">{{ product }}</div>
+           {% endfor %}
+         </div>
+         <div class="row">
+--- a/catalog/view/template/product/manufacturer_info.twig
++++ b/catalog/view/template/product/manufacturer_info.twig
+@@ -42,9 +42,10 @@
+             </div>
+           </div>
+         </div>
+-        <div id="product-list" class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4">
++        {# RD-25-WP1 20261009: two-column mobile product grid. #}
++        <div id="product-list" class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-4" data-bs-media-grid="RD-25-WP1">
+           {% for product in products %}
+-            <div class="col mb-3">{{ product }}</div>
++            <div class="col bs-media-grid__item">{{ product }}</div>
+           {% endfor %}
+         </div>
+         <div class="row">
+--- a/extension/opencart/catalog/view/template/module/featured.twig
++++ b/extension/opencart/catalog/view/template/module/featured.twig
+@@ -1,6 +1,7 @@
++{# RD-25-WP1 20261009: horizontal module grid only; vertical widgets keep their layout. #}
+ <h3>{{ heading_title }}</h3>
+-<div class="row{% if axis == 'horizontal' %} row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4{% endif %}">
++<div class="row{% if axis == 'horizontal' %} row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-xl-4{% endif %}"{% if axis == 'horizontal' %} data-bs-media-grid="RD-25-WP1"{% endif %}>
+   {% for product in products %}
+-    <div class="col mb-3">{{ product }}</div>
++    <div class="col {% if axis == 'horizontal' %}bs-media-grid__item{% else %}mb-3{% endif %}">{{ product }}</div>
+   {% endfor %}
+ </div>
+--- a/catalog/view/template/common/header.twig
++++ b/catalog/view/template/common/header.twig
+@@ -72,6 +72,7 @@
+     @font-face{font-family:'Manrope';font-style:normal;font-weight:200 800;font-display:swap;src:url(catalog/view/stylesheet/fonts/manrope/manrope-latin-ext.woff2?v=manrope-v20) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+     @font-face{font-family:'Manrope';font-style:normal;font-weight:200 800;font-display:swap;src:url(catalog/view/stylesheet/fonts/manrope/manrope-latin.woff2?v=manrope-v20) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+   </style>
++  {# RD-25-WP1 20261009: fit-media stylesheet version. #}
+   <link href="catalog/view/stylesheet/boostershop-ds.css?v=__RD25_TOKEN__" type="text/css" rel="stylesheet"/>
+   <link href="catalog/view/stylesheet/bs-faq.css?v=rd05b-faq-20260604" type="text/css" rel="stylesheet"/>
+     <link href="catalog/view/stylesheet/content-pages.css?v=tech045-wpa-20260928" type="text/css" rel="stylesheet"/>

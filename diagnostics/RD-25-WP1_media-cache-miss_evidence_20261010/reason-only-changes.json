@@ -1,0 +1,653 @@
+{
+    "total": 81,
+    "assets": [
+        {
+            "source": "catalog/Accsesuary/Топлоадери для карток 35PT, 25 шт toploaders 3 var.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 478,
+            "height": 934
+        },
+        {
+            "source": "catalog/One Piece/BS Big logo.png",
+            "kind": "cut",
+            "before_reason": "opaque_near_white_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 270,
+            "height": 84
+        },
+        {
+            "source": "catalog/One Piece/One Piece Card Game OP-16 The Time of Battle display-Photoroom.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 381,
+            "height": 615
+        },
+        {
+            "source": "catalog/One Piece/One Piece Card Game OP-16 The Time of Battle-Photoroom.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 534,
+            "height": 1000
+        },
+        {
+            "source": "catalog/One Piece/One Piece OP-05 Awakening of the New Era Booster (Японське видання).jpg",
+            "kind": "cut",
+            "before_reason": "opaque_near_white_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 510,
+            "height": 1000
+        },
+        {
+            "source": "catalog/One Piece/One Piece OP-05 Awakening of the New Era display (Японське видання).jpg",
+            "kind": "cut",
+            "before_reason": "opaque_near_white_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 515,
+            "height": 868
+        },
+        {
+            "source": "catalog/One Piece/One Piece — OP-09 — JP — Booster box.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 330,
+            "height": 500
+        },
+        {
+            "source": "catalog/One Piece/One Piece — OP-13 — JP — Booster box.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 647,
+            "height": 1000
+        },
+        {
+            "source": "catalog/One Piece/One Piece — OP-13 — JP — Booster dispay.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 434,
+            "height": 800
+        },
+        {
+            "source": "catalog/One Piece/One Piece — OP-13 — JP — Booster.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 551,
+            "height": 1000
+        },
+        {
+            "source": "catalog/One Piece/One Piece-Photoroom.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 463,
+            "height": 111
+        },
+        {
+            "source": "catalog/One Piece/one-piece-card-game-start-deck-yellow-eustass-kid-st-36-1.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 545,
+            "height": 900
+        },
+        {
+            "source": "catalog/One Piece/one-piece-eb01-memorial-collection-rare-pack-back.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 1024,
+            "height": 1536
+        },
+        {
+            "source": "catalog/One Piece/one-piece-eb01-memorial-collection-rare-pack-front.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 518,
+            "height": 951
+        },
+        {
+            "source": "catalog/One Piece/OP-08 Booster.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 509,
+            "height": 878
+        },
+        {
+            "source": "catalog/One Piece/OP-15 Box.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 642,
+            "height": 436
+        },
+        {
+            "source": "catalog/One Piece/Rare Pack One Piece OP-01 Romance Dawn — зворотна сторона японського бустера.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 406,
+            "height": 772
+        },
+        {
+            "source": "catalog/One Piece/Rare Pack One Piece OP-01 Romance Dawn — лицьова сторона японського бустера.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 924,
+            "height": 1815
+        },
+        {
+            "source": "catalog/One Piece/Rare Pack One Piece OP-04 Kingdoms of Intrigue — зворотна сторона японського бустера.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 559,
+            "height": 1095
+        },
+        {
+            "source": "catalog/One Piece/Rare Pack One Piece OP-04 Kingdoms of Intrigue — лицьова сторона японського бустера.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 677,
+            "height": 1250
+        },
+        {
+            "source": "catalog/One Piece/Rare Pack One Piece OP-05 Awakening of the New Era — зворотна сторона японського бустера.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 1247,
+            "height": 2217
+        },
+        {
+            "source": "catalog/One Piece/Rare Pack One Piece OP-06 Wings of the Captain — зворотна сторона японського бустера.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 1350,
+            "height": 2400
+        },
+        {
+            "source": "catalog/One Piece/Rare Pack One Piece OP-06 Wings of the Captain — лицьова сторона японського бустера.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 1002,
+            "height": 1986
+        },
+        {
+            "source": "catalog/One Piece/Rare Pack One Piece OP-09 Emperors in the New World — зворотна сторона японського бустера.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 1002,
+            "height": 1908
+        },
+        {
+            "source": "catalog/One Piece/Rare Pack One Piece OP-09 Emperors in the New World — лицьова сторона японського бустера.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 382,
+            "height": 748
+        },
+        {
+            "source": "catalog/One Piece/STARTER DECK -Red Black Sabo- [ST-35] ONE PIECE CARD GAME.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 343,
+            "height": 604
+        },
+        {
+            "source": "catalog/One Piece/STARTER DECK BLUE Kuzan- [ST-33] ONE PIECE CARD GAME.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 552,
+            "height": 900
+        },
+        {
+            "source": "catalog/One Piece/STARTER DECK PURPLE Charlotte Katakuri- [ST-34] ONE PIECE CARD.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 341,
+            "height": 592
+        },
+        {
+            "source": "catalog/One Piece/STARTER DECK ST-32 ONE PIECE CARD GAME.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 320,
+            "height": 544
+        },
+        {
+            "source": "catalog/One Piece/Бустер One Piece Card Game EB-03 (Японське видання).png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 634,
+            "height": 1280
+        },
+        {
+            "source": "catalog/One Piece/Бустер One Piece Card Game OP-10 (Японське видання).png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 494,
+            "height": 986
+        },
+        {
+            "source": "catalog/One Piece/Бустер One Piece Card Game OP-12 (Японське видання).png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 357,
+            "height": 700
+        },
+        {
+            "source": "catalog/One Piece/Бустер One Piece Card Game OP-14 (Японське видання).png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 485,
+            "height": 958
+        },
+        {
+            "source": "catalog/One Piece/Бустер бокс One Piece Card Game EB-03 (Японське видання).png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 515,
+            "height": 837
+        },
+        {
+            "source": "catalog/One Piece/Бустер бокс One Piece Card Game OP-07 (Японське видання).png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 606,
+            "height": 1000
+        },
+        {
+            "source": "catalog/One Piece/Бустер бокс One Piece Card Game OP-10 (Японське видання).png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 610,
+            "height": 1000
+        },
+        {
+            "source": "catalog/One Piece/Бустер бокс One Piece Card Game OP-11 (Японське видання).png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 517,
+            "height": 846
+        },
+        {
+            "source": "catalog/One Piece/Бустер бокс One Piece Card Game OP-12 (Японське видання).png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 603,
+            "height": 992
+        },
+        {
+            "source": "catalog/One Piece/Бустер бокс One Piece Card Game OP-14 (Японське видання).png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 598,
+            "height": 985
+        },
+        {
+            "source": "catalog/One Piece/Дисплей бокс One Piece Card Game EB-03 (Японське видання).png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 520,
+            "height": 1088
+        },
+        {
+            "source": "catalog/One Piece/Дисплей бокс One Piece Card Game OP-11 (Японське видання).png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 600,
+            "height": 1200
+        },
+        {
+            "source": "catalog/One Piece/Дисплей бокс One Piece Card Game OP-12 (Японське видання).png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 250,
+            "height": 500
+        },
+        {
+            "source": "catalog/One Piece/Дисплей бокс One Piece Card Game OP-14 (Японське видання).png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 477,
+            "height": 1000
+        },
+        {
+            "source": "catalog/Other/booster Yu-Gi-Oh! OCG World Premiere Pack 2024.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 274,
+            "height": 555
+        },
+        {
+            "source": "catalog/Other/Konami-Logo.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 2400,
+            "height": 436
+        },
+        {
+            "source": "catalog/Other/Magic_The_Gathering_logo.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 2000,
+            "height": 1300
+        },
+        {
+            "source": "catalog/Other/Yu-Gi-Oh! OCG Blazing Dominion Booster.webp",
+            "kind": "cut",
+            "before_reason": "opaque_near_white_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 726,
+            "height": 1500
+        },
+        {
+            "source": "catalog/Other/Yugioh_logo.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 900,
+            "height": 330
+        },
+        {
+            "source": "catalog/Other/Бустер Yu-Gi-Oh! OCG BURST PROTOCOL (Японське видання).png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 503,
+            "height": 958
+        },
+        {
+            "source": "catalog/Pokemon/Abyss Eye Booster.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 425,
+            "height": 863
+        },
+        {
+            "source": "catalog/Pokemon/chaos-rising-pawmot-premium-checklane-blister-chaos-rising-Photoroom.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 960,
+            "height": 1766
+        },
+        {
+            "source": "catalog/Pokemon/chaos-rising-pawmot-premium-checklane-blister-chaos-rising1.webp",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 434,
+            "height": 800
+        },
+        {
+            "source": "catalog/Pokemon/Inferno X Booster.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 482,
+            "height": 959
+        },
+        {
+            "source": "catalog/Pokemon/Mega Dream EX display.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 618,
+            "height": 1200
+        },
+        {
+            "source": "catalog/Pokemon/Mega Dream EX JP Booster BOX.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 810,
+            "height": 1280
+        },
+        {
+            "source": "catalog/Pokemon/Mega Dream.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 514,
+            "height": 926
+        },
+        {
+            "source": "catalog/Pokemon/Mega Evolution — Perfect Order Boosters.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 756,
+            "height": 1119
+        },
+        {
+            "source": "catalog/Pokemon/MS1.webp",
+            "kind": "cut",
+            "before_reason": "opaque_near_white_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 665,
+            "height": 1301
+        },
+        {
+            "source": "catalog/Pokemon/Pokemon S&V blister EX.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 502,
+            "height": 728
+        },
+        {
+            "source": "catalog/Pokemon/Pokemon TCG Mega Evolution 05 - Pitch Black - Checklane Blister back.webp",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 343,
+            "height": 630
+        },
+        {
+            "source": "catalog/Pokemon/Pokemon TCG Mega Evolution 05 - Pitch Black - Checklane Blister.webp",
+            "kind": "cut",
+            "before_reason": "opaque_near_white_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 343,
+            "height": 630
+        },
+        {
+            "source": "catalog/Pokemon/Pokemon TCG Q2 Mini Tin - A - Lumiose City Min Tin - Salamence.webp",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 404,
+            "height": 630
+        },
+        {
+            "source": "catalog/Pokemon/Pokemon TCG Q2 Mini Tin - D - Lumiose City Min Tin – Feraligatr.webp",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 404,
+            "height": 630
+        },
+        {
+            "source": "catalog/Pokemon/Pokemon TCG Q2 Mini Tin - E - Lumiose City Min Tin – Gallade.webp",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 404,
+            "height": 630
+        },
+        {
+            "source": "catalog/Pokemon/Pokemon TCG Q2 Mini Tin - Lumiose City Min Tin - Salamence.webp",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 396,
+            "height": 630
+        },
+        {
+            "source": "catalog/Pokemon/Pokemon-Ice-Glaceon-VSTAR-Special Card Set.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 1253,
+            "height": 2400
+        },
+        {
+            "source": "catalog/Pokemon/pokemon-storm-emeralda-M6-booster-pack.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 302,
+            "height": 600
+        },
+        {
+            "source": "catalog/Pokemon/PokemonC.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 452,
+            "height": 176
+        },
+        {
+            "source": "catalog/Pokemon/PokemonC2-200x200.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 200,
+            "height": 81
+        },
+        {
+            "source": "catalog/Pokemon/Pokémon TCG Mega Evolution — Chaos Rising Booster Bundle-Photoroom.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 1225,
+            "height": 1800
+        },
+        {
+            "source": "catalog/Pokemon/Pokémon — Special Card Set Grass Leafeon VSTAR — JP — Collection Set back.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 654,
+            "height": 1280
+        },
+        {
+            "source": "catalog/Pokemon/Pokémon — Special Card Set Grass Leafeon VSTAR — JP — Collection Set face.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 1253,
+            "height": 2400
+        },
+        {
+            "source": "catalog/Pokemon/scarlet-and-violet-black-bolt-japanese-booster-pack.webp",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 1080,
+            "height": 1920
+        },
+        {
+            "source": "catalog/Pokemon/Scarlet_Violet_Expansion_Pack_White_Flare.png",
+            "kind": "cut",
+            "before_reason": "opaque_near_white_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 573,
+            "height": 1183
+        },
+        {
+            "source": "catalog/Pokemon/Бустер Pokemon TCG Mega Brave (Японське видання).png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 575,
+            "height": 995
+        },
+        {
+            "source": "catalog/Pokemon/Бустер Pokemon TCG Munikis Zero (Японське видання).png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 399,
+            "height": 793
+        },
+        {
+            "source": "catalog/Pokemon/Бустер Pokemon TCG Ninja Spinner (Японське видання).png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 207,
+            "height": 400
+        },
+        {
+            "source": "catalog/Pokemon/Бустер Pokemon TCG Super Electric Breaker (Корейське видання).png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 252,
+            "height": 500
+        },
+        {
+            "source": "catalog/Pokemon/Бустер Pokémon TCG The Glory of Team Rocket (Японське видання).png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 356,
+            "height": 692
+        },
+        {
+            "source": "catalog/Pokemon/Бустер бокс Pokemon TCG Super Electric Breaker (Корейське видання).png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 525,
+            "height": 792
+        },
+        {
+            "source": "catalog/Pokemon/Набір Pokemon TCG Premium Trainer Box ex (Японське видання) inside.png",
+            "kind": "cut",
+            "before_reason": "transparent_corners",
+            "after_reason": "aspect_outside_cover_band",
+            "width": 983,
+            "height": 665
+        }
+    ]
+}

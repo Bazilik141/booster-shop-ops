@@ -1,0 +1,40 @@
+{
+  "assets": 286,
+  "before": {
+    "photo": 122,
+    "cut": 164
+  },
+  "proposed": {
+    "photo": 121,
+    "cut": 165
+  },
+  "class_changes": 3,
+  "trim_changes": 140,
+  "render_change_above_5pct": 69,
+  "reasons": {
+    "photo/non_white_or_mixed_non_white_corners": 120,
+    "cut/aspect_outside_cover_band_unsafe_cover": 5,
+    "photo/uniform_non_white_safe_cover_both_slots": 1,
+    "cut/opaque_page_white_uniform_corners": 17,
+    "cut/transparent_corners": 137,
+    "cut/mixed_page_white_or_transparent_corners": 6
+  },
+  "categories": {
+    "One-Piece": {
+      "cut": 57,
+      "photo": 5
+    },
+    "Pokemon": {
+      "cut": 68,
+      "photo": 4
+    },
+    "more-tcg": {
+      "cut": 22,
+      "photo": 3
+    },
+    "acsesuary": {
+      "photo": 109,
+      "cut": 18
+    }
+  }
+}

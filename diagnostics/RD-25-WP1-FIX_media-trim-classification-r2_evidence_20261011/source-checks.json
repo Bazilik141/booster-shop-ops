@@ -1,0 +1,118 @@
+{
+  "checks": [
+    {
+      "name": "r1 patch hash unchanged",
+      "pass": true
+    },
+    {
+      "name": "r1 report and evidence unchanged",
+      "pass": true
+    },
+    {
+      "name": "Phase0 before pin catalog/model/tool/image.php",
+      "pass": true
+    },
+    {
+      "name": "r2 candidate pin catalog/model/tool/image.php",
+      "pass": true
+    },
+    {
+      "name": "Phase0 before pin system/library/image.php",
+      "pass": true
+    },
+    {
+      "name": "r2 candidate pin system/library/image.php",
+      "pass": true
+    },
+    {
+      "name": "Phase0 before pin catalog/controller/product/thumb.php",
+      "pass": true
+    },
+    {
+      "name": "r2 candidate pin catalog/controller/product/thumb.php",
+      "pass": true
+    },
+    {
+      "name": "accepted candidate byte-identical system/library/image.php",
+      "pass": true
+    },
+    {
+      "name": "accepted candidate byte-identical catalog/controller/product/thumb.php",
+      "pass": true
+    },
+    {
+      "name": "286 original source bytes unchanged",
+      "pass": true
+    },
+    {
+      "name": "rd25ReadMedia validation and miss guard byte-identical",
+      "pass": true
+    },
+    {
+      "name": "diagnostic metadata never read as decision input",
+      "pass": true
+    },
+    {
+      "name": "metadata v4 and fit v2 unchanged",
+      "pass": true
+    },
+    {
+      "name": "one r2 patch bound to current hash",
+      "pass": true
+    },
+    {
+      "name": "runner control flow unchanged",
+      "pass": true
+    },
+    {
+      "name": "owner read-only export complete",
+      "pass": true
+    },
+    {
+      "name": "owner category has 20 distinct primary product rows",
+      "pass": true
+    },
+    {
+      "name": "measured dataset exactly owner primary references",
+      "pass": true
+    },
+    {
+      "name": "real category complete and warning-free cold",
+      "pass": true
+    },
+    {
+      "name": "real category complete and warning-free second-request",
+      "pass": true
+    },
+    {
+      "name": "real category complete and warning-free third-request",
+      "pass": true
+    },
+    {
+      "name": "timing bound to final model archive-superset cold",
+      "pass": true
+    },
+    {
+      "name": "timing bound to final model archive-superset second-request",
+      "pass": true
+    },
+    {
+      "name": "timing bound to final model archive-superset third-request",
+      "pass": true
+    },
+    {
+      "name": "timing bound to final model real-category cold",
+      "pass": true
+    },
+    {
+      "name": "timing bound to final model real-category second-request",
+      "pass": true
+    },
+    {
+      "name": "timing bound to final model real-category third-request",
+      "pass": true
+    }
+  ],
+  "passed": 28,
+  "total": 28
+}

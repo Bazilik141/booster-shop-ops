@@ -1,0 +1,644 @@
+{
+  "php": "8.3.30",
+  "mode": "printing",
+  "cold": {
+    "value": [
+      {
+        "metadata": {
+          "version": 3,
+          "source": "fixture/cold-png.png",
+          "mtime": 1700000000,
+          "size": 1670,
+          "width": 256,
+          "height": 512,
+          "type": 3,
+          "kind": "cut",
+          "corner_alpha": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "corner_rgb": [
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ]
+          ],
+          "all_near_white_corners": false,
+          "class_reason": "aspect_outside_cover_band"
+        },
+        "fit_sha256": "b1c6a227dde615977c57342fa8ae455450da65df79f186682b4bdd0658b27cf5",
+        "fit_dimensions": [
+          256,
+          512,
+          18
+        ],
+        "fit_cache_relative": "cache/rd25-fit/c6153eac44e8435555c902b8bdb4390fc83676ef2d8517846894bc02c47bdbc8-700x875-fit.webp"
+      },
+      {
+        "metadata": {
+          "version": 3,
+          "source": "fixture/cold-jpg.jpg",
+          "mtime": 1700000000,
+          "size": 18886,
+          "width": 800,
+          "height": 1000,
+          "type": 2,
+          "kind": "photo",
+          "corner_alpha": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "corner_rgb": [
+            [
+              30,
+              30,
+              30
+            ],
+            [
+              30,
+              30,
+              30
+            ],
+            [
+              30,
+              30,
+              30
+            ],
+            [
+              30,
+              30,
+              30
+            ]
+          ],
+          "all_near_white_corners": false,
+          "class_reason": "non_white_or_mixed_corners"
+        },
+        "fit_sha256": "3d9bc0e5d2080f99f37be217e4283fcf6e9b06d54ce3154cbb3bc135d8f4e76c",
+        "fit_dimensions": [
+          700,
+          875,
+          18
+        ],
+        "fit_cache_relative": "cache/rd25-fit/913eec7ec484b6c6eff6b0620ca7e969bbefcb0fc40a6ea9d03b1ae355ae985c-700x875-fit.webp"
+      },
+      {
+        "metadata": {
+          "version": 3,
+          "source": "fixture/cold-webp.webp",
+          "mtime": 1700000000,
+          "size": 1820,
+          "width": 700,
+          "height": 1000,
+          "type": 18,
+          "kind": "cut",
+          "corner_alpha": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "corner_rgb": [
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ]
+          ],
+          "all_near_white_corners": true,
+          "class_reason": "opaque_near_white_corners"
+        },
+        "fit_sha256": "ff416024d1310f10c8b9d9e9239fc0754597e64a41a9843e967b68ab368e8134",
+        "fit_dimensions": [
+          612,
+          875,
+          18
+        ],
+        "fit_cache_relative": "cache/rd25-fit/8c82be6c242b5b8ffac2aca3f27f74d073d31d7dbbb7548d47309605426f9df4-700x875-fit.webp"
+      }
+    ],
+    "output": "",
+    "warnings": [],
+    "exception": ""
+  },
+  "warm": {
+    "value": [
+      {
+        "metadata": {
+          "version": 3,
+          "source": "fixture/cold-png.png",
+          "mtime": 1700000000,
+          "size": 1670,
+          "width": 256,
+          "height": 512,
+          "type": 3,
+          "kind": "cut",
+          "corner_alpha": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "corner_rgb": [
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ]
+          ],
+          "all_near_white_corners": false,
+          "class_reason": "aspect_outside_cover_band"
+        },
+        "fit_sha256": "b1c6a227dde615977c57342fa8ae455450da65df79f186682b4bdd0658b27cf5",
+        "fit_dimensions": [
+          256,
+          512,
+          18
+        ],
+        "fit_cache_relative": "cache/rd25-fit/c6153eac44e8435555c902b8bdb4390fc83676ef2d8517846894bc02c47bdbc8-700x875-fit.webp"
+      },
+      {
+        "metadata": {
+          "version": 3,
+          "source": "fixture/cold-jpg.jpg",
+          "mtime": 1700000000,
+          "size": 18886,
+          "width": 800,
+          "height": 1000,
+          "type": 2,
+          "kind": "photo",
+          "corner_alpha": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "corner_rgb": [
+            [
+              30,
+              30,
+              30
+            ],
+            [
+              30,
+              30,
+              30
+            ],
+            [
+              30,
+              30,
+              30
+            ],
+            [
+              30,
+              30,
+              30
+            ]
+          ],
+          "all_near_white_corners": false,
+          "class_reason": "non_white_or_mixed_corners"
+        },
+        "fit_sha256": "3d9bc0e5d2080f99f37be217e4283fcf6e9b06d54ce3154cbb3bc135d8f4e76c",
+        "fit_dimensions": [
+          700,
+          875,
+          18
+        ],
+        "fit_cache_relative": "cache/rd25-fit/913eec7ec484b6c6eff6b0620ca7e969bbefcb0fc40a6ea9d03b1ae355ae985c-700x875-fit.webp"
+      },
+      {
+        "metadata": {
+          "version": 3,
+          "source": "fixture/cold-webp.webp",
+          "mtime": 1700000000,
+          "size": 1820,
+          "width": 700,
+          "height": 1000,
+          "type": 18,
+          "kind": "cut",
+          "corner_alpha": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "corner_rgb": [
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ]
+          ],
+          "all_near_white_corners": true,
+          "class_reason": "opaque_near_white_corners"
+        },
+        "fit_sha256": "ff416024d1310f10c8b9d9e9239fc0754597e64a41a9843e967b68ab368e8134",
+        "fit_dimensions": [
+          612,
+          875,
+          18
+        ],
+        "fit_cache_relative": "cache/rd25-fit/8c82be6c242b5b8ffac2aca3f27f74d073d31d7dbbb7548d47309605426f9df4-700x875-fit.webp"
+      }
+    ],
+    "output": "",
+    "warnings": [],
+    "exception": ""
+  },
+  "warm_GD_decodes": 0,
+  "extra": {
+    "disappears_after_guard": {
+      "value": [],
+      "output": "",
+      "warnings": [],
+      "exception": ""
+    },
+    "unreadable_guard": {
+      "value": [],
+      "output": "",
+      "warnings": [],
+      "exception": ""
+    },
+    "exception_restores_handler": {
+      "value": null,
+      "output": "",
+      "warnings": [],
+      "exception": "RuntimeException:fixture-read-exception"
+    },
+    "corrupt_metadata": {
+      "value": {
+        "version": 3,
+        "source": "fixture/cold-png.png",
+        "mtime": 1700000000,
+        "size": 1670,
+        "width": 256,
+        "height": 512,
+        "type": 3,
+        "kind": "cut",
+        "corner_alpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner_rgb": [
+          [
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            255
+          ]
+        ],
+        "all_near_white_corners": false,
+        "class_reason": "aspect_outside_cover_band"
+      },
+      "output": "",
+      "warnings": [],
+      "exception": ""
+    },
+    "stale_v2_metadata": {
+      "value": {
+        "version": 3,
+        "source": "fixture/cold-png.png",
+        "mtime": 1700000000,
+        "size": 1670,
+        "width": 256,
+        "height": 512,
+        "type": 3,
+        "kind": "cut",
+        "corner_alpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner_rgb": [
+          [
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            255
+          ]
+        ],
+        "all_near_white_corners": false,
+        "class_reason": "aspect_outside_cover_band"
+      },
+      "output": "",
+      "warnings": [],
+      "exception": ""
+    },
+    "directory_not_metadata": {
+      "value": [],
+      "output": "",
+      "warnings": [],
+      "exception": ""
+    },
+    "deleted_metadata_regenerates": {
+      "value": [
+        {
+          "metadata": {
+            "version": 3,
+            "source": "fixture/cold-png.png",
+            "mtime": 1700000000,
+            "size": 1670,
+            "width": 256,
+            "height": 512,
+            "type": 3,
+            "kind": "cut",
+            "corner_alpha": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "corner_rgb": [
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ]
+            ],
+            "all_near_white_corners": false,
+            "class_reason": "aspect_outside_cover_band"
+          },
+          "fit_sha256": "b1c6a227dde615977c57342fa8ae455450da65df79f186682b4bdd0658b27cf5",
+          "fit_dimensions": [
+            256,
+            512,
+            18
+          ],
+          "fit_cache_relative": "cache/rd25-fit/c6153eac44e8435555c902b8bdb4390fc83676ef2d8517846894bc02c47bdbc8-700x875-fit.webp"
+        },
+        {
+          "metadata": {
+            "version": 3,
+            "source": "fixture/cold-jpg.jpg",
+            "mtime": 1700000000,
+            "size": 18886,
+            "width": 800,
+            "height": 1000,
+            "type": 2,
+            "kind": "photo",
+            "corner_alpha": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "corner_rgb": [
+              [
+                30,
+                30,
+                30
+              ],
+              [
+                30,
+                30,
+                30
+              ],
+              [
+                30,
+                30,
+                30
+              ],
+              [
+                30,
+                30,
+                30
+              ]
+            ],
+            "all_near_white_corners": false,
+            "class_reason": "non_white_or_mixed_corners"
+          },
+          "fit_sha256": "3d9bc0e5d2080f99f37be217e4283fcf6e9b06d54ce3154cbb3bc135d8f4e76c",
+          "fit_dimensions": [
+            700,
+            875,
+            18
+          ],
+          "fit_cache_relative": "cache/rd25-fit/913eec7ec484b6c6eff6b0620ca7e969bbefcb0fc40a6ea9d03b1ae355ae985c-700x875-fit.webp"
+        },
+        {
+          "metadata": {
+            "version": 3,
+            "source": "fixture/cold-webp.webp",
+            "mtime": 1700000000,
+            "size": 1820,
+            "width": 700,
+            "height": 1000,
+            "type": 18,
+            "kind": "cut",
+            "corner_alpha": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "corner_rgb": [
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ]
+            ],
+            "all_near_white_corners": true,
+            "class_reason": "opaque_near_white_corners"
+          },
+          "fit_sha256": "ff416024d1310f10c8b9d9e9239fc0754597e64a41a9843e967b68ab368e8134",
+          "fit_dimensions": [
+            612,
+            875,
+            18
+          ],
+          "fit_cache_relative": "cache/rd25-fit/8c82be6c242b5b8ffac2aca3f27f74d073d31d7dbbb7548d47309605426f9df4-700x875-fit.webp"
+        }
+      ],
+      "output": "",
+      "warnings": [],
+      "exception": ""
+    },
+    "source_stat_invalidates": {
+      "value": {
+        "version": 3,
+        "source": "fixture/cold-jpg.jpg",
+        "mtime": 1700000005,
+        "size": 18886,
+        "width": 800,
+        "height": 1000,
+        "type": 2,
+        "kind": "photo",
+        "corner_alpha": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "corner_rgb": [
+          [
+            30,
+            30,
+            30
+          ],
+          [
+            30,
+            30,
+            30
+          ],
+          [
+            30,
+            30,
+            30
+          ],
+          [
+            30,
+            30,
+            30
+          ]
+        ],
+        "all_near_white_corners": false,
+        "class_reason": "non_white_or_mixed_corners"
+      },
+      "output": "",
+      "warnings": [],
+      "exception": ""
+    }
+  },
+  "site_handler_restored": true,
+  "error_reporting_mask_unchanged": true,
+  "unrelated_warning": {
+    "value": "continued",
+    "output": "<b>Warning</b>: fixture-unrelated-warning in C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-cache-miss-20261010\\cold-probe.php on line 83",
+    "warnings": [
+      {
+        "level": 512,
+        "message": "fixture-unrelated-warning",
+        "file": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-cache-miss-20261010\\cold-probe.php",
+        "line": 83,
+        "reported_mask_contains_level": true
+      }
+    ],
+    "exception": ""
+  }
+}

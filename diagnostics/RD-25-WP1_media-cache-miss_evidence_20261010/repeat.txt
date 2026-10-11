@@ -1,0 +1,5 @@
+cwd=C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-cache-miss-20261010\fixture
+time=2026-10-11T05:22:40+00:00
+already_applied=yes
+done=ok
+self_delete=ok

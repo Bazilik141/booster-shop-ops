@@ -1,0 +1,329 @@
+{
+  "product_controller_sha256": "4d9ee4e7fcb9042a46817801a6dfb973c471823751c87010cf70e0b07d7e345d",
+  "product_template_sha256": "0f4f38030e4bf1e9d42260f2b26c6793907277f3fae5a70a18003a25ce63069e",
+  "popup_anchor_expressions": [
+    "<a href=\"{{ popup }}\" title=\"{{ heading_title }}\">",
+    "<a href=\"{{ image.popup }}\" title=\"{{ heading_title }}\">"
+  ],
+  "schema_image_uses": "popup and images[].popup",
+  "schema_block_sha256": "451c7949698a1e181397c6bc854fb26c5dc696f48212743fe3088b1098f77d40",
+  "product_files_outside_target_set": true,
+  "legacy_resize_code": [
+    {
+      "file": "system/library/image.php",
+      "existing_code_byte_identical_after_removing_only_new_block": true,
+      "before_sha256": "84e064697d81b06397d39fce6e35037d1c5f8d8b3d17195daa462c5189062e54"
+    },
+    {
+      "file": "catalog/model/tool/image.php",
+      "existing_code_byte_identical_after_removing_only_new_block": true,
+      "before_sha256": "8ccf26a263a854004e488d9810a133b85ea8f180fe06c453ae4b285857c65bc5"
+    },
+    {
+      "file": "catalog/controller/product/thumb.php",
+      "existing_code_byte_identical_after_removing_only_new_block": true,
+      "before_sha256": "1f003f688fdd199ea3cf84b8a1703a0ae319734fb7a32e8849c8c1f053708a83"
+    }
+  ],
+  "unchanged_resize_callers": [
+    {
+      "file": "catalog/model/tool/image.php",
+      "unchanged_resize_call_count": 2,
+      "calls": [
+        "\t\t\t\t$image->resize($width, $height, $default);",
+        "\t\t\t\t$image->resize($width, $height, $default);"
+      ]
+    },
+    {
+      "file": "catalog/controller/product/related.php",
+      "unchanged_resize_call_count": 1,
+      "calls": [
+        "\t\t\t\t'thumb'       => $this->model_tool_image->resize($image, $this->config->get('config_image_related_width'), $this->config->get('config_image_related_height')),"
+      ]
+    },
+    {
+      "file": "catalog/controller/product/product.php",
+      "unchanged_resize_call_count": 5,
+      "calls": [
+        "\t\t\t\t$data['popup'] = $this->model_tool_image->resize($product_info['image'], $this->config->get('config_image_popup_width'), $this->config->get('config_image_popup_height'));",
+        "\t\t\t\t$data['thumb'] = $this->model_tool_image->resize($product_info['image'], $this->config->get('config_image_thumb_width'), $this->config->get('config_image_thumb_height'));",
+        "\t\t\t\t\t\t'popup' => $this->model_tool_image->resize($result['image'], $this->config->get('config_image_popup_width'), $this->config->get('config_image_popup_height')),",
+        "\t\t\t\t\t\t'thumb' => $this->model_tool_image->resize($result['image'], $this->config->get('config_image_additional_width'), $this->config->get('config_image_additional_height'))",
+        "\t\t\t\t\t\t\t\t'image' => $this->model_tool_image->resize($image, 50, 50),"
+      ]
+    },
+    {
+      "file": "catalog/controller/product/category.php",
+      "unchanged_resize_call_count": 2,
+      "calls": [
+        "\t\t\t\t$data['image'] = $this->model_tool_image->resize($category_info['image'], $this->config->get('config_image_category_width'), $this->config->get('config_image_category_height'));",
+        "\t\t\t\t\t'thumb'       => $this->model_tool_image->resize($image, $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height')),"
+      ]
+    },
+    {
+      "file": "catalog/controller/product/special.php",
+      "unchanged_resize_call_count": 1,
+      "calls": [
+        "\t\t\t\t'thumb'       => $this->model_tool_image->resize($image, $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height')),"
+      ]
+    },
+    {
+      "file": "catalog/controller/product/search.php",
+      "unchanged_resize_call_count": 1,
+      "calls": [
+        "\t\t\t\t\t'thumb'       => $this->model_tool_image->resize($image, $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height')),"
+      ]
+    },
+    {
+      "file": "catalog/controller/product/manufacturer.php",
+      "unchanged_resize_call_count": 1,
+      "calls": [
+        "\t\t\t\t\t'thumb'       => $this->model_tool_image->resize($image, $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height')),"
+      ]
+    },
+    {
+      "file": "catalog/controller/product/compare.php",
+      "unchanged_resize_call_count": 1,
+      "calls": [
+        "\t\t\t\t\t$image = $this->model_tool_image->resize($product_info['image'], $this->config->get('config_image_compare_width'), $this->config->get('config_image_compare_height'));"
+      ]
+    },
+    {
+      "file": "catalog/controller/common/cart.php",
+      "unchanged_resize_call_count": 1,
+      "calls": [
+        "\t\t\t\t'thumb'        => $this->model_tool_image->resize($product['image'], $this->config->get('config_image_cart_width'), $this->config->get('config_image_cart_height')),"
+      ]
+    }
+  ],
+  "inline_scripts": [
+    {
+      "file": "catalog/view/template/product/thumb.twig",
+      "inline_script_blocks": 1,
+      "byte_identical": true
+    },
+    {
+      "file": "catalog/view/template/product/category.twig",
+      "inline_script_blocks": 4,
+      "byte_identical": true
+    },
+    {
+      "file": "catalog/view/template/product/search.twig",
+      "inline_script_blocks": 1,
+      "byte_identical": true
+    },
+    {
+      "file": "catalog/view/template/product/special.twig",
+      "inline_script_blocks": 2,
+      "byte_identical": true
+    },
+    {
+      "file": "catalog/view/template/product/manufacturer_info.twig",
+      "inline_script_blocks": 0,
+      "byte_identical": true
+    },
+    {
+      "file": "extension/opencart/catalog/view/template/module/featured.twig",
+      "inline_script_blocks": 0,
+      "byte_identical": true
+    },
+    {
+      "file": "catalog/view/template/common/header.twig",
+      "inline_script_blocks": 9,
+      "byte_identical": true
+    }
+  ],
+  "thumb_cart_forms_byte_identical": true,
+  "unmodified_archive_files": [
+    {
+      "file": "catalog/controller/product/related.php",
+      "sha256": "dac19f9e43d59106fb4bca68932ae79ef086c1700a4c2f2cb087d4be804019ac",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/controller/product/product.php",
+      "sha256": "4d9ee4e7fcb9042a46817801a6dfb973c471823751c87010cf70e0b07d7e345d",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/controller/product/category.php",
+      "sha256": "e82522a5a1103c4ba559ee587735396b51717e4625b8836536a35e1b623bf145",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/controller/product/special.php",
+      "sha256": "85e867d0d38a1d41d138493d74995734f6879b6319f90c8a576f14f751dc861c",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/controller/product/search.php",
+      "sha256": "f6c31e9c61844bccc93fc3063b13d70ca47f1538f7beb54cd3be3aa7167f006c",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/controller/product/review.php",
+      "sha256": "11ffe6c88320dcba5defca15da2c8f042774ac50d39c22da2f7692d7acec2b54",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/controller/product/manufacturer.php",
+      "sha256": "f32906431b6ed2fa018b75ee62822b986ff9ee021f43fd1301ed4334dccd76f3",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/controller/product/compare.php",
+      "sha256": "37cb46fb72245f9d2c71f9e60e741f024272921dc84a3f2db34570ddc63ef399",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/controller/product/error_log",
+      "sha256": "6a7822a5df1464c53b4f39f246f34f0a768c26b6ac5dd803aee1f96219e0a956",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/controller/common/cart.php",
+      "sha256": "0f42ca6f73bb776c1fd1ea6f904d06e875a613ccc29c58a09bae2f9f048f78c8",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/view/template/product/related.twig",
+      "sha256": "5105c5671c9c9b29f7f060ba546ed1f6d2e608d219e7fac3835beccccc78f183",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/view/template/product/compare.twig",
+      "sha256": "af01da62305fbbe0685d96f93465fd9d4e14327dde6e58177290731eedb790bd",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/view/template/product/manufacturer_list.twig",
+      "sha256": "761032a6ba56598ca4f08d8d84ba57ca496f9ccbcf486e22c9cb7398b4fcf271",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/view/template/product/review_list.twig",
+      "sha256": "2055d6db51dbbbc6f34a1f10fd03e43b42148cb189b8a23cd03ad708390b6ad2",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/view/template/product/product.twig",
+      "sha256": "0f4f38030e4bf1e9d42260f2b26c6793907277f3fae5a70a18003a25ce63069e",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/view/template/product/review.twig",
+      "sha256": "ac98235d3e84a1ecdf1114610833038dbc98c05a4150455c8aff832ca287468f",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/view/template/common/cart.twig",
+      "sha256": "511214cad1d69a218ae47b4d1c0226620f97336ff0d7a6af4e258b1019dcf0dc",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/view/template/checkout/shipping_address.twig.st2b4p0-20260614-143724.bak",
+      "sha256": "457092ad70e050fe2ac242fdebab51c661e2b9d00367ae6c25dbb8111b1e188b",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/view/template/checkout/confirm.twig",
+      "sha256": "68878dc74de8b55f42f87f41b3e95f5fa0935b30912a095f8a00b90f41e857b6",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/view/template/checkout/checkout.twig",
+      "sha256": "e334d78880c00022095a8767f5788edeb450044f3fcbad0e3f674faee2acd34a",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/view/template/checkout/payment_address.twig",
+      "sha256": "8565e5070f33d71700d052c54c8edff2a29342a8e8d5f0ee033b09a7b97c05c9",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/view/template/checkout/success.twig",
+      "sha256": "ba39d7b605aa99c34512efccdaa05a83d568ab1e494decc963ce72909b1fec03",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/view/template/checkout/cart_list.twig",
+      "sha256": "cfe6d57209ca0938e1044679b8e66379bd1e46a47528d2a120618a49e4d950b7",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/view/template/checkout/payment_address.twig.st2b4p0-20260614-143724.bak",
+      "sha256": "46627b84d2168df5d78a781e3c1b1fda7a5b553f3586587691b4d992463d1a4d",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/view/template/checkout/payment_method.twig",
+      "sha256": "974d73f62b98b4a562db1478abcea040cd47b7270675e368173a83b3e43bf7c6",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/view/template/checkout/failure.twig",
+      "sha256": "45c1cdeebfe1528405d01599922e64c96d167803d3b51888c9612ec1c0064379",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/view/template/checkout/checkout.twig.st2b4p0-20260614-143724.bak",
+      "sha256": "b47330d9b0d0b72697fa29432c054c7a0c601d82df34a76decb4890e48cf0737",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/view/template/checkout/register.twig.st2b4p0-20260614-143724.bak",
+      "sha256": "6dc1664b5702af6da355914c76e64a2afb1d4007287b0c4e2c46e0e7ac70c0a6",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/view/template/checkout/shipping_method.twig",
+      "sha256": "21c4f1982f357e428f3a6c843c6cd42ebedce0dd2a1307ec1128c6833268f1db",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/view/template/checkout/success.twig.st2b3-20260614-140103.bak",
+      "sha256": "57e5d2a1092aea444e4f00dd5919155cae6d2a1af154c12bbacffdca25e56395",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/view/template/checkout/credit.twig",
+      "sha256": "94d7a778d181574f2e165c6b916aea85652b375971918455359b9813c0ee1c1a",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/view/template/checkout/success.twig.st2b2-20260614-112646.bak",
+      "sha256": "22aa8d8fece01344473a33c9b82479378c7e8cce2d23c2208a495d0d15a3cd3d",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/view/template/checkout/payment_method.twig.st2b4p0-20260614-143724.bak",
+      "sha256": "4537cf71bd3f25c4c22b95a5e226d4d4458152e1251120cab08b0f2c4601c545",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/view/template/checkout/checkout.twig.st2b3-20260614-140103.bak",
+      "sha256": "3b9e843726d48406702e16f2fcd625a38f5f69dbf228494688f423acf8ca23cc",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/view/template/checkout/cart.twig",
+      "sha256": "847d9356bb49c3c2b471bd1119f7621d5c9c2a641264570f2b5890945886eb48",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/view/template/checkout/shipping_address.twig",
+      "sha256": "b16eddbc3916f4331d1452e9a82a182f8c606aa137554c107fc3c2092f9528a6",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/view/template/checkout/credit_confirm.twig",
+      "sha256": "6c095eaee5bc8bd5b5d074d4e990c208e03b936be3d63e639b0b055e597624ad",
+      "outside_runner_target_set": true
+    },
+    {
+      "file": "catalog/view/template/checkout/register.twig",
+      "sha256": "5624640133e4ab0050958e2b3768fed406efbbcc70c554acdcde4a986cf4541b",
+      "outside_runner_target_set": true
+    }
+  ]
+}

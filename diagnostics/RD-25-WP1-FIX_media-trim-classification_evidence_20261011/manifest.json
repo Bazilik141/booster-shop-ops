@@ -1,0 +1,21 @@
+{
+  "patch": "RD-25-WP1-FIX_media-trim-classification_20261011.php",
+  "patch_sha256": "894c0e75e7a1bcea13f8ff5d59fe849d1de47576996931d2daf848fd0ae4297a",
+  "patch_bytes": 22024,
+  "targets": {
+    "catalog/model/tool/image.php": {
+      "before_sha256": "9d6aaec56eaa44be072e67957e43b7365ca8f115283988d0ab7a3227db885285",
+      "after_sha256": "ea17a200ecd251954ccf907586fad234ee10e796a8b642abd394339b3bb8ace3"
+    },
+    "system/library/image.php": {
+      "before_sha256": "b032345fa128dc867a55dbe4bf49f4070a34a2efa952525a69006fdb706875d9",
+      "after_sha256": "7f81dcbb8b5d2d032005ae28ce01cea5ba7542f7334fd9909e538f6952adeff9"
+    },
+    "catalog/controller/product/thumb.php": {
+      "before_sha256": "47e56e45e134359074aecdd3a1a50a068e8b19766b40589cb8688e077df5d2eb",
+      "after_sha256": "cf4f8e354b18a4318af159c34bf3c083d0991007b42d03e2c57aa4963c1ed3b1"
+    }
+  },
+  "metadata_version": 4,
+  "fit_key_version": 2
+}

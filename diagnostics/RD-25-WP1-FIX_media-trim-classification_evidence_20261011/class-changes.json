@@ -1,0 +1,23 @@
+[
+  {
+    "id": 97,
+    "source": "catalog/Accsesuary/albom-dlia-kartok-OnePiece-na-400-slotiv.png",
+    "before": "cut",
+    "after": "photo",
+    "reason": "uniform_non_white_safe_cover_both_slots"
+  },
+  {
+    "id": 186,
+    "source": "catalog/Other/G7D sleeves premium plus (MTG).webp",
+    "before": "photo",
+    "after": "cut",
+    "reason": "mixed_page_white_or_transparent_corners"
+  },
+  {
+    "id": 222,
+    "source": "catalog/Pokemon/Gemini_Generated_Image_c8wi9fc8wi9fc8wi.png",
+    "before": "photo",
+    "after": "cut",
+    "reason": "mixed_page_white_or_transparent_corners"
+  }
+]

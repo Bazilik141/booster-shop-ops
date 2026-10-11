@@ -1,0 +1,98 @@
+{
+  "provenance": "Owner pasted current hosting read-only lookup output in this chat",
+  "task": "RD-25-WP1-FIX",
+  "utc": "2026-10-11T06:39:54+00:00",
+  "asset": "Gemini_Generated_Image_c8wi9fc8wi9fc8wi.png",
+  "db_writes": 0,
+  "file_writes": 0,
+  "required_product_tables_checked": true,
+  "product_reference_found_stop": false,
+  "references": [
+    {
+      "table": "product",
+      "field": "image",
+      "status": "checked",
+      "matches": 0,
+      "public_reference_ids_first_20": []
+    },
+    {
+      "table": "product_image",
+      "field": "image",
+      "status": "checked",
+      "matches": 0,
+      "public_reference_ids_first_20": []
+    },
+    {
+      "table": "category",
+      "field": "image",
+      "status": "checked",
+      "matches": 0,
+      "public_reference_ids_first_20": []
+    },
+    {
+      "table": "manufacturer",
+      "field": "image",
+      "status": "checked",
+      "matches": 0,
+      "public_reference_ids_first_20": []
+    },
+    {
+      "table": "banner_image",
+      "field": "image",
+      "status": "checked",
+      "matches": 0,
+      "public_reference_ids_first_20": []
+    },
+    {
+      "table": "option_value",
+      "field": "image",
+      "status": "checked",
+      "matches": 0,
+      "public_reference_ids_first_20": []
+    },
+    {
+      "table": "setting",
+      "field": "value",
+      "status": "checked",
+      "matches": 0,
+      "public_reference_ids_first_20": []
+    },
+    {
+      "table": "module",
+      "field": "setting",
+      "status": "checked",
+      "matches": 0,
+      "public_reference_ids_first_20": []
+    },
+    {
+      "table": "theme",
+      "field": "code",
+      "status": "checked",
+      "matches": 0,
+      "public_reference_ids_first_20": []
+    },
+    {
+      "table": "product_description",
+      "field": "description",
+      "status": "checked",
+      "matches": 0,
+      "public_reference_ids_first_20": []
+    },
+    {
+      "table": "category_description",
+      "field": "description",
+      "status": "checked",
+      "matches": 0,
+      "public_reference_ids_first_20": []
+    },
+    {
+      "table": "information_description",
+      "field": "description",
+      "status": "checked",
+      "matches": 0,
+      "public_reference_ids_first_20": []
+    }
+  ],
+  "done": "ok",
+  "driver_warning_before_json": "WARNING: MYSQL_OPT_RECONNECT is deprecated and will be removed in a future version."
+}

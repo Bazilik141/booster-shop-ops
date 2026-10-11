@@ -1,0 +1,989 @@
+{
+    "php": "8.3.30",
+    "gd": {
+        "GD Version": "bundled (2.1.0 compatible)",
+        "FreeType Support": true,
+        "FreeType Linkage": "with freetype",
+        "GIF Read Support": true,
+        "GIF Create Support": true,
+        "JPEG Support": true,
+        "PNG Support": true,
+        "WBMP Support": true,
+        "XPM Support": true,
+        "XBM Support": true,
+        "WebP Support": true,
+        "BMP Support": true,
+        "AVIF Support": true,
+        "TGA Read Support": true,
+        "JIS-mapped Japanese Font Support": false
+    },
+    "checks": [
+        {
+            "name": "PNG transparent cut",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "JPEG opaque photo",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "WebP transparent cut",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "near-transparent threshold normalized <=16",
+            "pass": true,
+            "detail": {
+                "version": 2,
+                "source": "fixture/near.png",
+                "mtime": 1791652222,
+                "size": 2239,
+                "width": 400,
+                "height": 600,
+                "type": 3,
+                "kind": "cut",
+                "corner_alpha": [
+                    2,
+                    2,
+                    2,
+                    2
+                ],
+                "corner_rgb": [
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ]
+                ],
+                "all_near_white_corners": false,
+                "class_reason": "transparent_corners"
+            }
+        },
+        {
+            "name": "opaque PNG photo",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F1 opaque near-white jpg is cut",
+            "pass": true,
+            "detail": {
+                "version": 2,
+                "source": "fixture/white-jpg.jpg",
+                "mtime": 1791652222,
+                "size": 14599,
+                "width": 510,
+                "height": 1000,
+                "type": 2,
+                "kind": "cut",
+                "corner_alpha": [
+                    255,
+                    255,
+                    255,
+                    255
+                ],
+                "corner_rgb": [
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ]
+                ],
+                "all_near_white_corners": true,
+                "class_reason": "opaque_near_white_corners"
+            }
+        },
+        {
+            "name": "F1 opaque near-white png is cut",
+            "pass": true,
+            "detail": {
+                "version": 2,
+                "source": "fixture/white-png.png",
+                "mtime": 1791652222,
+                "size": 4139,
+                "width": 510,
+                "height": 1000,
+                "type": 3,
+                "kind": "cut",
+                "corner_alpha": [
+                    255,
+                    255,
+                    255,
+                    255
+                ],
+                "corner_rgb": [
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ]
+                ],
+                "all_near_white_corners": true,
+                "class_reason": "opaque_near_white_corners"
+            }
+        },
+        {
+            "name": "F1 opaque near-white webp is cut",
+            "pass": true,
+            "detail": {
+                "version": 2,
+                "source": "fixture/white-webp.webp",
+                "mtime": 1791652222,
+                "size": 1582,
+                "width": 510,
+                "height": 1000,
+                "type": 18,
+                "kind": "cut",
+                "corner_alpha": [
+                    255,
+                    255,
+                    255,
+                    255
+                ],
+                "corner_rgb": [
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ]
+                ],
+                "all_near_white_corners": true,
+                "class_reason": "opaque_near_white_corners"
+            }
+        },
+        {
+            "name": "F1 exact audit threshold RGB=240 passes",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F1 any RGB channel=239 stays photo",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F1 one non-white corner stays photo",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "media v2 rejects stale v1 metadata and recomputes kind once",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "GIF/missing/outside source and invalid dimensions fallback",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "non-padding no-upsample dimensions fixture/portrait.png",
+            "pass": true,
+            "detail": {
+                "0": 583,
+                "1": 875,
+                "2": 18,
+                "3": "width=\"583\" height=\"875\"",
+                "bits": 8,
+                "mime": "image/webp"
+            }
+        },
+        {
+            "name": "separate suffix and decodable WebP fixture/portrait.png",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "non-padding no-upsample dimensions fixture/landscape.jpg",
+            "pass": true,
+            "detail": {
+                "0": 700,
+                "1": 350,
+                "2": 18,
+                "3": "width=\"700\" height=\"350\"",
+                "bits": 8,
+                "mime": "image/webp"
+            }
+        },
+        {
+            "name": "separate suffix and decodable WebP fixture/landscape.jpg",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "non-padding no-upsample dimensions fixture/tiny.webp",
+            "pass": true,
+            "detail": {
+                "0": 90,
+                "1": 150,
+                "2": 18,
+                "3": "width=\"90\" height=\"150\"",
+                "bits": 8,
+                "mime": "image/webp"
+            }
+        },
+        {
+            "name": "separate suffix and decodable WebP fixture/tiny.webp",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "alpha preserved in fitted PNG->WebP",
+            "pass": true,
+            "detail": {
+                "red": 0,
+                "green": 0,
+                "blue": 0,
+                "alpha": 127
+            }
+        },
+        {
+            "name": "20 warm views: zero GD decodes and identical file/time",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "same-stem PNG/JPEG isolated keys",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "source mtime invalidates metadata AND fitted URL without old-cache deletion",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "corrupt metadata regenerates",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "legacy image cache unchanged",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "WebP capability method anchor",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "GD without WebP output: PNG/JPEG fallback",
+            "pass": true,
+            "detail": [
+                "http://fixture/image/cache/rd25-fit/eb2daee29cfbe668aae8543a2e8243e81045466662956dfb4aee728447cecc60-700x875-fit.png",
+                "http://fixture/image/cache/rd25-fit/c3dacf7d9de5e6ff761bd355bad354359479db02bace3bb0a91c35f33f549529-700x875-fit.jpg"
+            ]
+        },
+        {
+            "name": "complete 286 product-direction archive image assets",
+            "pass": true,
+            "detail": {
+                "3D print": {
+                    "photo": 97
+                },
+                "Accsesuary": {
+                    "photo": 13,
+                    "cut": 4
+                },
+                "One Piece": {
+                    "cut": 55,
+                    "photo": 7
+                },
+                "Other": {
+                    "cut": 29,
+                    "photo": 9
+                },
+                "Pokemon": {
+                    "cut": 66,
+                    "photo": 6
+                }
+            }
+        },
+        {
+            "name": "F1 all 17 original near-white photo assets reclassified, dark 3D photos retained",
+            "pass": true,
+            "detail": [
+                {
+                    "source": "catalog/Accsesuary/albom-dlia-kartok-pokemon-na-400-slotiv.png",
+                    "before": "photo",
+                    "after": "cut",
+                    "corner_alpha": [
+                        255,
+                        255,
+                        255,
+                        255
+                    ],
+                    "corner_rgb": [
+                        [
+                            254,
+                            255,
+                            255
+                        ],
+                        [
+                            254,
+                            255,
+                            254
+                        ],
+                        [
+                            254,
+                            254,
+                            254
+                        ],
+                        [
+                            254,
+                            253,
+                            254
+                        ]
+                    ],
+                    "reason": "opaque_near_white_corners"
+                },
+                {
+                    "source": "catalog/One Piece/Bandai.jpg",
+                    "before": "photo",
+                    "after": "cut",
+                    "corner_alpha": [
+                        255,
+                        255,
+                        255,
+                        255
+                    ],
+                    "corner_rgb": [
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ]
+                    ],
+                    "reason": "opaque_near_white_corners"
+                },
+                {
+                    "source": "catalog/One Piece/BS Big logo.png",
+                    "before": "photo",
+                    "after": "cut",
+                    "corner_alpha": [
+                        255,
+                        255,
+                        255,
+                        255
+                    ],
+                    "corner_rgb": [
+                        [
+                            254,
+                            254,
+                            254
+                        ],
+                        [
+                            254,
+                            254,
+                            254
+                        ],
+                        [
+                            254,
+                            254,
+                            254
+                        ],
+                        [
+                            254,
+                            254,
+                            254
+                        ]
+                    ],
+                    "reason": "opaque_near_white_corners"
+                },
+                {
+                    "source": "catalog/One Piece/BS Big logo1.jpg",
+                    "before": "photo",
+                    "after": "cut",
+                    "corner_alpha": [
+                        255,
+                        255,
+                        255,
+                        255
+                    ],
+                    "corner_rgb": [
+                        [
+                            254,
+                            254,
+                            254
+                        ],
+                        [
+                            254,
+                            254,
+                            254
+                        ],
+                        [
+                            254,
+                            254,
+                            254
+                        ],
+                        [
+                            254,
+                            254,
+                            254
+                        ]
+                    ],
+                    "reason": "opaque_near_white_corners"
+                },
+                {
+                    "source": "catalog/One Piece/One Piece OP-05 Awakening of the New Era Booster (Японське видання).jpg",
+                    "before": "photo",
+                    "after": "cut",
+                    "corner_alpha": [
+                        255,
+                        255,
+                        255,
+                        255
+                    ],
+                    "corner_rgb": [
+                        [
+                            254,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ]
+                    ],
+                    "reason": "opaque_near_white_corners"
+                },
+                {
+                    "source": "catalog/One Piece/One Piece OP-05 Awakening of the New Era display (Японське видання).jpg",
+                    "before": "photo",
+                    "after": "cut",
+                    "corner_alpha": [
+                        255,
+                        255,
+                        255,
+                        255
+                    ],
+                    "corner_rgb": [
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ]
+                    ],
+                    "reason": "opaque_near_white_corners"
+                },
+                {
+                    "source": "catalog/One Piece/One-Piece-Boosters-EB-02 card.jpg",
+                    "before": "photo",
+                    "after": "cut",
+                    "corner_alpha": [
+                        255,
+                        255,
+                        255,
+                        255
+                    ],
+                    "corner_rgb": [
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            254,
+                            255,
+                            255
+                        ]
+                    ],
+                    "reason": "opaque_near_white_corners"
+                },
+                {
+                    "source": "catalog/One Piece/OP JP V7-PROMO.png",
+                    "before": "photo",
+                    "after": "cut",
+                    "corner_alpha": [
+                        255,
+                        255,
+                        255,
+                        255
+                    ],
+                    "corner_rgb": [
+                        [
+                            255,
+                            255,
+                            254
+                        ],
+                        [
+                            255,
+                            255,
+                            254
+                        ],
+                        [
+                            255,
+                            255,
+                            254
+                        ],
+                        [
+                            255,
+                            255,
+                            254
+                        ]
+                    ],
+                    "reason": "opaque_near_white_corners"
+                },
+                {
+                    "source": "catalog/Other/35pt-180pt-magnitni-ramki-dlya-kartok_6l74fhlsgq9cbn63n.jpg",
+                    "before": "photo",
+                    "after": "cut",
+                    "corner_alpha": [
+                        255,
+                        255,
+                        255,
+                        255
+                    ],
+                    "corner_rgb": [
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ]
+                    ],
+                    "reason": "opaque_near_white_corners"
+                },
+                {
+                    "source": "catalog/Other/G7D.jpg",
+                    "before": "photo",
+                    "after": "cut",
+                    "corner_alpha": [
+                        255,
+                        255,
+                        255,
+                        255
+                    ],
+                    "corner_rgb": [
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ]
+                    ],
+                    "reason": "opaque_near_white_corners"
+                },
+                {
+                    "source": "catalog/Other/Yu-Gi-Oh! OCG Blazing Dominion Booster.webp",
+                    "before": "photo",
+                    "after": "cut",
+                    "corner_alpha": [
+                        255,
+                        255,
+                        255,
+                        255
+                    ],
+                    "corner_rgb": [
+                        [
+                            253,
+                            253,
+                            253
+                        ],
+                        [
+                            254,
+                            254,
+                            254
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            253,
+                            253,
+                            253
+                        ]
+                    ],
+                    "reason": "opaque_near_white_corners"
+                },
+                {
+                    "source": "catalog/Pokemon/MS1.webp",
+                    "before": "photo",
+                    "after": "cut",
+                    "corner_alpha": [
+                        255,
+                        255,
+                        255,
+                        255
+                    ],
+                    "corner_rgb": [
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            254,
+                            254,
+                            254
+                        ],
+                        [
+                            252,
+                            254,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ]
+                    ],
+                    "reason": "opaque_near_white_corners"
+                },
+                {
+                    "source": "catalog/Pokemon/MS2.jpg",
+                    "before": "photo",
+                    "after": "cut",
+                    "corner_alpha": [
+                        255,
+                        255,
+                        255,
+                        255
+                    ],
+                    "corner_rgb": [
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ]
+                    ],
+                    "reason": "opaque_near_white_corners"
+                },
+                {
+                    "source": "catalog/Pokemon/MSB1.jpg",
+                    "before": "photo",
+                    "after": "cut",
+                    "corner_alpha": [
+                        255,
+                        255,
+                        255,
+                        255
+                    ],
+                    "corner_rgb": [
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ]
+                    ],
+                    "reason": "opaque_near_white_corners"
+                },
+                {
+                    "source": "catalog/Pokemon/Pokemon Mega Dream Ex.webp",
+                    "before": "photo",
+                    "after": "cut",
+                    "corner_alpha": [
+                        255,
+                        255,
+                        255,
+                        255
+                    ],
+                    "corner_rgb": [
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ]
+                    ],
+                    "reason": "opaque_near_white_corners"
+                },
+                {
+                    "source": "catalog/Pokemon/Pokemon TCG Mega Evolution 05 - Pitch Black - Checklane Blister.webp",
+                    "before": "photo",
+                    "after": "cut",
+                    "corner_alpha": [
+                        255,
+                        255,
+                        255,
+                        255
+                    ],
+                    "corner_rgb": [
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ]
+                    ],
+                    "reason": "opaque_near_white_corners"
+                },
+                {
+                    "source": "catalog/Pokemon/Scarlet_Violet_Expansion_Pack_White_Flare.png",
+                    "before": "photo",
+                    "after": "cut",
+                    "corner_alpha": [
+                        255,
+                        255,
+                        255,
+                        255
+                    ],
+                    "corner_rgb": [
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ]
+                    ],
+                    "reason": "opaque_near_white_corners"
+                }
+            ]
+        },
+        {
+            "name": "thumb uses original source without extra product lookup; commerce data intact",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "third-party product-only caller lookup once/request",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "placeholder original URL remains fallback",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "controller database calls read-only",
+            "pass": true,
+            "detail": [
+                "SELECT `text` FROM `fixture_product_attribute` WHERE `product_id` = '501' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1",
+                "SELECT `text` FROM `fixture_product_attribute` WHERE `product_id` = '502' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1"
+            ]
+        },
+        {
+            "name": "F2 24 cards passing nonempty image add zero getProduct calls",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F2 24 distinct source-less cards add exactly 24 getProduct calls",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F2 repeated source-less cards reuse request cache",
+            "pass": true,
+            "detail": null
+        }
+    ]
+}

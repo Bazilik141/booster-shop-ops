@@ -1,0 +1,733 @@
+{
+  "grain": "asset paths, not asserted live primary product IDs",
+  "white_background_product_artwork": [],
+  "additional_opaque_pack_artwork": [
+    {
+      "version": 2,
+      "source": "catalog/One Piece/OP-15 Booster.webp",
+      "mtime": 1791651958,
+      "size": 23106,
+      "width": 209,
+      "height": 418,
+      "type": 18,
+      "kind": "photo",
+      "corner_alpha": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "corner_rgb": [
+        [
+          246,
+          243,
+          247
+        ],
+        [
+          238,
+          235,
+          240
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          170,
+          166,
+          158
+        ]
+      ],
+      "all_near_white_corners": false,
+      "class_reason": "non_white_or_mixed_corners",
+      "audit_id": 143,
+      "corner_rgba": [
+        [
+          246,
+          243,
+          247,
+          255
+        ],
+        [
+          238,
+          235,
+          240,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          170,
+          166,
+          158,
+          255
+        ]
+      ]
+    },
+    {
+      "version": 2,
+      "source": "catalog/Other/Duel Masters — DM24-RP3 — JP card.jpg",
+      "mtime": 1791651957,
+      "size": 129006,
+      "width": 500,
+      "height": 700,
+      "type": 2,
+      "kind": "photo",
+      "corner_alpha": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "corner_rgb": [
+        [
+          223,
+          222,
+          227
+        ],
+        [
+          224,
+          224,
+          226
+        ],
+        [
+          233,
+          236,
+          219
+        ],
+        [
+          229,
+          231,
+          226
+        ]
+      ],
+      "all_near_white_corners": false,
+      "class_reason": "non_white_or_mixed_corners",
+      "audit_id": 181,
+      "corner_rgba": [
+        [
+          223,
+          222,
+          227,
+          255
+        ],
+        [
+          224,
+          224,
+          226,
+          255
+        ],
+        [
+          233,
+          236,
+          219,
+          255
+        ],
+        [
+          229,
+          231,
+          226,
+          255
+        ]
+      ]
+    },
+    {
+      "version": 2,
+      "source": "catalog/Other/Duel Masters — DM24-RP3 — JP.jpg",
+      "mtime": 1791651958,
+      "size": 146781,
+      "width": 508,
+      "height": 730,
+      "type": 2,
+      "kind": "photo",
+      "corner_alpha": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "corner_rgb": [
+        [
+          116,
+          92,
+          82
+        ],
+        [
+          236,
+          217,
+          210
+        ],
+        [
+          207,
+          220,
+          190
+        ],
+        [
+          252,
+          255,
+          255
+        ]
+      ],
+      "all_near_white_corners": false,
+      "class_reason": "non_white_or_mixed_corners",
+      "audit_id": 185,
+      "corner_rgba": [
+        [
+          116,
+          92,
+          82,
+          255
+        ],
+        [
+          236,
+          217,
+          210,
+          255
+        ],
+        [
+          207,
+          220,
+          190,
+          255
+        ],
+        [
+          252,
+          255,
+          255,
+          255
+        ]
+      ]
+    },
+    {
+      "version": 2,
+      "source": "catalog/Other/G7D sleeves premium plus (MTG).webp",
+      "mtime": 1791651958,
+      "size": 20976,
+      "width": 362,
+      "height": 500,
+      "type": 18,
+      "kind": "photo",
+      "corner_alpha": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "corner_rgb": [
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          36,
+          184,
+          111
+        ],
+        [
+          232,
+          235,
+          232
+        ]
+      ],
+      "all_near_white_corners": false,
+      "class_reason": "non_white_or_mixed_corners",
+      "audit_id": 186,
+      "corner_rgba": [
+        [
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          36,
+          184,
+          111,
+          255
+        ],
+        [
+          232,
+          235,
+          232,
+          255
+        ]
+      ]
+    },
+    {
+      "version": 2,
+      "source": "catalog/Other/QCAC-BoosterJP.png",
+      "mtime": 1791651958,
+      "size": 3247701,
+      "width": 928,
+      "height": 1930,
+      "type": 3,
+      "kind": "photo",
+      "corner_alpha": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "corner_rgb": [
+        [
+          24,
+          22,
+          23
+        ],
+        [
+          71,
+          65,
+          65
+        ],
+        [
+          199,
+          197,
+          198
+        ],
+        [
+          17,
+          15,
+          16
+        ]
+      ],
+      "all_near_white_corners": false,
+      "class_reason": "non_white_or_mixed_corners",
+      "audit_id": 193,
+      "corner_rgba": [
+        [
+          24,
+          22,
+          23,
+          255
+        ],
+        [
+          71,
+          65,
+          65,
+          255
+        ],
+        [
+          199,
+          197,
+          198,
+          255
+        ],
+        [
+          17,
+          15,
+          16,
+          255
+        ]
+      ]
+    },
+    {
+      "version": 2,
+      "source": "catalog/Other/Yu-Gi-Oh! OCG Duel Monsters BEYOND THE BRAVE Booster.webp",
+      "mtime": 1791651958,
+      "size": 210000,
+      "width": 580,
+      "height": 1200,
+      "type": 18,
+      "kind": "photo",
+      "corner_alpha": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "corner_rgb": [
+        [
+          82,
+          73,
+          72
+        ],
+        [
+          14,
+          14,
+          14
+        ],
+        [
+          73,
+          69,
+          66
+        ],
+        [
+          14,
+          14,
+          14
+        ]
+      ],
+      "all_near_white_corners": false,
+      "class_reason": "non_white_or_mixed_corners",
+      "audit_id": 202,
+      "corner_rgba": [
+        [
+          82,
+          73,
+          72,
+          255
+        ],
+        [
+          14,
+          14,
+          14,
+          255
+        ],
+        [
+          73,
+          69,
+          66,
+          255
+        ],
+        [
+          14,
+          14,
+          14,
+          255
+        ]
+      ]
+    }
+  ],
+  "mixed_alpha_photos": [
+    {
+      "version": 2,
+      "source": "catalog/3D print/Фігурки/kartyna-zoro-one-piece-3d-druk1.webp",
+      "mtime": 1791652221,
+      "size": 47326,
+      "width": 963,
+      "height": 722,
+      "type": 18,
+      "kind": "photo",
+      "corner_alpha": [
+        255,
+        126,
+        255,
+        126
+      ],
+      "corner_rgb": [
+        [
+          208,
+          211,
+          208
+        ],
+        [
+          211,
+          211,
+          209
+        ],
+        [
+          201,
+          202,
+          199
+        ],
+        [
+          201,
+          201,
+          201
+        ]
+      ],
+      "all_near_white_corners": false,
+      "class_reason": "non_white_or_mixed_corners"
+    },
+    {
+      "version": 2,
+      "source": "catalog/One Piece/Бустер One Piece Card Game OP-07 (Японське видання).png",
+      "mtime": 1791652221,
+      "size": 2039219,
+      "width": 745,
+      "height": 1500,
+      "type": 3,
+      "kind": "photo",
+      "corner_alpha": [
+        149,
+        38,
+        2,
+        0
+      ],
+      "corner_rgb": [
+        [
+          253,
+          255,
+          221
+        ],
+        [
+          248,
+          248,
+          150
+        ],
+        [
+          255,
+          255,
+          128
+        ],
+        [
+          255,
+          255,
+          0
+        ]
+      ],
+      "all_near_white_corners": false,
+      "class_reason": "non_white_or_mixed_corners"
+    },
+    {
+      "version": 2,
+      "source": "catalog/Pokemon/Pokémon — Special Card Set Grass Leafeon VSTAR — JP — Collection Set inside.png",
+      "mtime": 1791652222,
+      "size": 1139508,
+      "width": 1200,
+      "height": 540,
+      "type": 3,
+      "kind": "photo",
+      "corner_alpha": [
+        0,
+        0,
+        253,
+        0
+      ],
+      "corner_rgb": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          148,
+          157,
+          174
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "all_near_white_corners": false,
+      "class_reason": "non_white_or_mixed_corners"
+    }
+  ],
+  "mystery_box_assets": [
+    {
+      "version": 2,
+      "source": "catalog/One Piece/Mistery BOX One Piece Standard.jpg",
+      "mtime": 1791652221,
+      "size": 2103360,
+      "width": 2194,
+      "height": 2194,
+      "type": 2,
+      "kind": "photo",
+      "corner_alpha": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "corner_rgb": [
+        [
+          3,
+          32,
+          88
+        ],
+        [
+          85,
+          0,
+          0
+        ],
+        [
+          15,
+          60,
+          115
+        ],
+        [
+          91,
+          0,
+          0
+        ]
+      ],
+      "all_near_white_corners": false,
+      "class_reason": "non_white_or_mixed_corners"
+    },
+    {
+      "version": 2,
+      "source": "catalog/One Piece/MYSTERY BOX XL ONE PIECE No blur.jpg",
+      "mtime": 1791652221,
+      "size": 3084089,
+      "width": 2048,
+      "height": 2048,
+      "type": 2,
+      "kind": "photo",
+      "corner_alpha": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "corner_rgb": [
+        [
+          94,
+          109,
+          142
+        ],
+        [
+          150,
+          91,
+          95
+        ],
+        [
+          108,
+          122,
+          148
+        ],
+        [
+          145,
+          85,
+          84
+        ]
+      ],
+      "all_near_white_corners": false,
+      "class_reason": "non_white_or_mixed_corners"
+    },
+    {
+      "version": 2,
+      "source": "catalog/Pokemon/Outlet MIX.png",
+      "mtime": 1791652222,
+      "size": 5390370,
+      "width": 2398,
+      "height": 2400,
+      "type": 3,
+      "kind": "cut",
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "corner_rgb": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "all_near_white_corners": false,
+      "class_reason": "transparent_corners"
+    },
+    {
+      "version": 2,
+      "source": "catalog/Pokemon/Містері бокс Pokémon TCG Mystery Mix Standard (Японське видання).jpg",
+      "mtime": 1791652222,
+      "size": 850602,
+      "width": 2194,
+      "height": 2194,
+      "type": 2,
+      "kind": "photo",
+      "corner_alpha": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "corner_rgb": [
+        [
+          6,
+          64,
+          138
+        ],
+        [
+          157,
+          17,
+          16
+        ],
+        [
+          4,
+          61,
+          130
+        ],
+        [
+          163,
+          14,
+          18
+        ]
+      ],
+      "all_near_white_corners": false,
+      "class_reason": "non_white_or_mixed_corners"
+    },
+    {
+      "version": 2,
+      "source": "catalog/Pokemon/Містері бокс Pokémon TCG Mystery Mix XL (Японське видання).jpg",
+      "mtime": 1791652222,
+      "size": 1119794,
+      "width": 2194,
+      "height": 2194,
+      "type": 2,
+      "kind": "photo",
+      "corner_alpha": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "corner_rgb": [
+        [
+          6,
+          61,
+          128
+        ],
+        [
+          157,
+          5,
+          4
+        ],
+        [
+          4,
+          60,
+          121
+        ],
+        [
+          147,
+          2,
+          5
+        ]
+      ],
+      "all_near_white_corners": false,
+      "class_reason": "non_white_or_mixed_corners"
+    }
+  ],
+  "automatic_overrides_added": false
+}

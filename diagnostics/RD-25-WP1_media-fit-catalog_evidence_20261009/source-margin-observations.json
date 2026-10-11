@@ -1,0 +1,81 @@
+{
+  "note": "F3 accepted as is: source alpha margins remain. No source-alpha cropping is implemented.",
+  "samples": [
+    {
+      "source": "catalog/Pokemon/Abyss Eye Display.png",
+      "size": [
+        707,
+        821
+      ],
+      "visible_alpha_gt16_bbox": [
+        9,
+        3,
+        703,
+        815
+      ],
+      "portrait_sample_visible_height_if_height_constrained": 0.9297,
+      "source_bottom_transparent_fraction": 0.0073
+    },
+    {
+      "source": "catalog/One Piece/Bandai.jpg",
+      "size": [
+        900,
+        900
+      ],
+      "visible_alpha_gt16_bbox": [
+        0,
+        0,
+        900,
+        900
+      ],
+      "portrait_sample_visible_height_if_height_constrained": 0.94,
+      "source_bottom_transparent_fraction": 0.0
+    },
+    {
+      "source": "catalog/Other/35pt-180pt-magnitni-ramki-dlya-kartok_6l74fhlsgq9cbn63n.jpg",
+      "size": [
+        1000,
+        1000
+      ],
+      "visible_alpha_gt16_bbox": [
+        0,
+        0,
+        1000,
+        1000
+      ],
+      "portrait_sample_visible_height_if_height_constrained": 0.94,
+      "source_bottom_transparent_fraction": 0.0
+    },
+    {
+      "source": "catalog/One Piece/Bandai.jpg",
+      "size": [
+        900,
+        900
+      ],
+      "visible_alpha_gt16_bbox": [
+        0,
+        0,
+        900,
+        900
+      ],
+      "portrait_sample_visible_height_if_height_constrained": 0.94,
+      "source_bottom_transparent_fraction": 0.0
+    },
+    {
+      "source": "catalog/One Piece/One Piece Card Game OP-16 The Time of Battle-Photoroom.png",
+      "size": [
+        534,
+        1000
+      ],
+      "visible_alpha_gt16_bbox": [
+        36,
+        24,
+        508,
+        975
+      ],
+      "portrait_sample_visible_height_if_height_constrained": 0.8939,
+      "source_bottom_transparent_fraction": 0.025,
+      "review_F3": "accepted, source-alpha trimming excluded"
+    }
+  ]
+}

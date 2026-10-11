@@ -1,0 +1,111 @@
+--- r1/catalog/model/tool/image.php
++++ r2/catalog/model/tool/image.php
+@@ -80,6 +80,9 @@
+ 
+ 	// RD-25-WP1 20261009: isolated fit cache and source classification.
+ 	private const RD25_MEDIA_VERSION = 4;
++	// RD-25 G1: request-local decode/measurement admission budget; finish the
++	// admitted source so an expensive cut can warm rather than starve forever.
++	private const RD25_MEASURE_BUDGET_NS = 1250000000;
+ 
+ 	/** Source metadata is cached per canonical path + mtime + size, not per view. */
+ 	public function mediaInfo(string $filename): array {
+@@ -96,6 +99,9 @@
+ 			return $cached;
+ 		}
+ 
++		static $measuring_ns = 0;
++		if ($measuring_ns >= self::RD25_MEASURE_BUDGET_NS) { return []; }
++
+ 		// On unavailable persistent storage use the original thumb; do not decode on each view.
+ 		if (!is_dir(DIR_CACHE) || !is_writable(DIR_CACHE)) {
+ 			return [];
+@@ -107,8 +113,9 @@
+ 			return [];
+ 		}
+ 
++		$measure_started = null;
+ 		try {
+-			if (!flock($lock, LOCK_EX)) {
++			if (!flock($lock, LOCK_EX | LOCK_NB)) {
+ 				return [];
+ 			}
+ 
+@@ -118,6 +125,7 @@
+ 				return $cached;
+ 			}
+ 
++			$measure_started = hrtime(true);
+ 			$dimensions = @getimagesize($source['path']);
+ 
+ 			if (!$dimensions || !in_array($dimensions[2], [IMAGETYPE_PNG, IMAGETYPE_JPEG, IMAGETYPE_WEBP], true)) {
+@@ -154,6 +162,7 @@
+ 		} catch (\Throwable $error) {
+ 			return [];
+ 		} finally {
++			if ($measure_started !== null) { $measuring_ns += hrtime(true) - $measure_started; }
+ 			flock($lock, LOCK_UN);
+ 			fclose($lock);
+ 		}
+@@ -197,7 +206,7 @@
+ 		$temp = '';
+ 
+ 		try {
+-			if (!flock($lock, LOCK_EX)) {
++			if (!flock($lock, LOCK_EX | LOCK_NB)) {
+ 				return '';
+ 			}
+ 
+@@ -255,7 +264,7 @@
+ 	}
+ 
+ 	// RD-25-WP1-FIX 20261011: measured Phase 0 thresholds; exclusive source bounds.
+-	private function rd25Measure($gd, int $width, int $height): array {
++	private function rd25Measure($gd, int $width, int $height, bool $full_diagnostics = false): array {
+ 		$corners = []; $white = []; $transparent = []; $span = 0; $background = [];
+ 		foreach ([[0, 0], [$width - 1, 0], [0, $height - 1], [$width - 1, $height - 1]] as $point) {
+ 			$c = imagecolorsforindex($gd, imagecolorat($gd, $point[0], $point[1]));
+@@ -269,18 +278,38 @@
+ 			$span = max($span, $values[3] - $values[0]);
+ 			$background[] = ($values[1] + $values[2]) / 2;
+ 		}
++		$background_corners = 0;
++		for ($i = 0; $i < 4; $i++) { $background_corners += $white[$i] || $transparent[$i] ? 1 : 0; }
++		$outside = $width * 100 < $height * 70 || $width * 100 > $height * 145;
++		// G1: inside-band photo classification and full crop need only four corners.
++		// The owner permits null for unused diagnostic bboxes; never infer them.
++		if (!$full_diagnostics && !$outside && $background_corners === 0) {
++			return ['kind' => 'photo', 'class_reason' => 'non_white_or_mixed_non_white_corners',
++				'corner_alpha' => array_column($corners, 3),
++				'corner_rgb' => array_map(static function(array $c): array { return array_slice($c, 0, 3); }, $corners),
++				'all_near_white_corners' => false, 'corner_span' => $span, 'background_rgb' => $background,
++				'alpha_bbox_16' => null, 'background_bbox_12' => null, 'cover_check' => null,
++				'trim_method' => 'none', 'crop_box_exclusive' => [0, 0, $width, $height],
++				'crop_width' => $width, 'crop_height' => $height];
++		}
++		// Read source corners first: palette conversion may zero hidden RGB at
++		// fully transparent pixels. Preserve the r1 background median for parity.
++		if (!imageistruecolor($gd) && !imagepalettetotruecolor($gd)) {
++			throw new \RuntimeException('Fit source truecolor conversion failed');
++		}
+ 		$rows = [array_fill(0, $height, 0), array_fill(0, $height, 0)];
+ 		$cols = [array_fill(0, $width, 0), array_fill(0, $width, 0)];
+ 		$opaque = true; $has_transparent = false;
+ 		for ($y = 0; $y < $height; $y++) {
+ 			for ($x = 0; $x < $width; $x++) {
+-				$c = imagecolorsforindex($gd, imagecolorat($gd, $x, $y));
++				$v = imagecolorat($gd, $x, $y);
++				$alpha = ($v >> 24) & 0x7F;
+ 				// GD alpha is integral; opacity > 16 is exactly GD alpha < 119.
+-				$opaque = $opaque && $c['alpha'] === 0;
+-				$has_transparent = $has_transparent || $c['alpha'] >= 119;
+-				if ($c['alpha'] < 119) {
++				$opaque = $opaque && $alpha === 0;
++				$has_transparent = $has_transparent || $alpha >= 119;
++				if ($alpha < 119) {
+ 					$rows[0][$y]++; $cols[0][$x]++;
+-					if (max(abs($c['red'] - $background[0]), abs($c['green'] - $background[1]), abs($c['blue'] - $background[2])) > 12) {
++					if (max(abs((($v >> 16) & 0xFF) - $background[0]), abs((($v >> 8) & 0xFF) - $background[1]), abs(($v & 0xFF) - $background[2])) > 12) {
+ 						$rows[1][$y]++; $cols[1][$x]++;
+ 					}
+ 				}

@@ -1,0 +1,78 @@
+{
+  "checks": [
+    {
+      "name": "dry-run no source writes or backup",
+      "pass": true
+    },
+    {
+      "name": "apply two exact targets and self-delete",
+      "pass": true
+    },
+    {
+      "name": "four context files untouched",
+      "pass": true
+    },
+    {
+      "name": "both original backup files exact",
+      "pass": true
+    },
+    {
+      "name": "repeat is idempotent and self-deletes",
+      "pass": true
+    },
+    {
+      "name": "rollback restores both originals and self-deletes",
+      "pass": true
+    },
+    {
+      "name": "different valid header token accepted and replaced wholesale",
+      "pass": true
+    },
+    {
+      "name": "repeat preserves later CSS and later header token",
+      "pass": true
+    },
+    {
+      "name": "css-drift refused/restored with no source loss",
+      "pass": true
+    },
+    {
+      "name": "header-drift refused/restored with no source loss",
+      "pass": true
+    },
+    {
+      "name": "context-drift refused/restored with no source loss",
+      "pass": true
+    },
+    {
+      "name": "missing refused/restored with no source loss",
+      "pass": true
+    },
+    {
+      "name": "invalid-token refused/restored with no source loss",
+      "pass": true
+    },
+    {
+      "name": "duplicate-token refused/restored with no source loss",
+      "pass": true
+    },
+    {
+      "name": "write-failure refused/restored with no source loss",
+      "pass": true
+    },
+    {
+      "name": "post-write failure restored the changed CSS",
+      "pass": true
+    },
+    {
+      "name": "prior evidence seal unchanged diagnostics/RD-25-WP1-FIX_media-trim-classification-r2_evidence_20261011",
+      "pass": true
+    },
+    {
+      "name": "prior evidence seal unchanged diagnostics/RD-25-WP1-FIX_media-trim-classification_evidence_20261011",
+      "pass": true
+    }
+  ],
+  "passed": 18,
+  "total": 18
+}

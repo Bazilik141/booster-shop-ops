@@ -1,0 +1,10 @@
+cwd=C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-featured-20261010\fixture
+time=2026-10-10T19:21:07+00:00
+preflight_file=extension/opencart/catalog/controller/module/featured.php
+php_lint=ok:C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-featured-20261010\fixture/_patch_backups/RD-25-WP1_featured-image-payload_20261010-20261010_192107-de36e7/candidate/extension/opencart/catalog/controller/module/featured.php
+backup=C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-featured-20261010\fixture/_patch_backups/RD-25-WP1_featured-image-payload_20261010-20261010_192107-de36e7
+php_lint=ok:C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-featured-20261010\fixture/extension/opencart/catalog/controller/module/featured.php
+changed_file=extension/opencart/catalog/controller/module/featured.php
+changed_files=1
+done=ok
+self_delete=ok

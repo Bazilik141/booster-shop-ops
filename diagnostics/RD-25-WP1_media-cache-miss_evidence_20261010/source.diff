@@ -1,0 +1,26 @@
+--- a/catalog/model/tool/image.php
++++ b/catalog/model/tool/image.php
+@@ -305,7 +305,22 @@
+ 	}
+ 
+ 	private function rd25ReadMedia(string $cache_file, array $source): array {
+-		$json = @file_get_contents($cache_file);
++		// RD-25-WP1-CACHE-MISS 20261010: absent metadata is a normal cold-cache miss.
++		if (!is_file($cache_file) || !is_readable($cache_file)) {
++			return [];
++		}
++
++		// A custom handler can report warnings even under @. Contain only this read's
++		// E_WARNING (e.g. deletion after the check); always restore the site's handler.
++		set_error_handler(static function(int $severity, string $message): bool {
++			return true;
++		}, E_WARNING);
++
++		try {
++			$json = file_get_contents($cache_file);
++		} finally {
++			restore_error_handler();
++		}
+ 		$metadata = $json !== false ? json_decode($json, true) : null;
+ 
+ 		if (!is_array($metadata) || ($metadata['version'] ?? null) !== self::RD25_MEDIA_VERSION

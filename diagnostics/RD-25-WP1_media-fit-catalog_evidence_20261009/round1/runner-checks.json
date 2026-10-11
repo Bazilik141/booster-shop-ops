@@ -1,0 +1,112 @@
+[
+  {
+    "name": "dry-run all 11 sources validated; zero writes",
+    "pass_": true,
+    "detail": ""
+  },
+  {
+    "name": "apply 11 targets and self-delete",
+    "pass_": true,
+    "detail": "ownloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-20261009\\fixture/system/library/image.php\nchanged_file=system/library/image.php\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-20261009\\fixture/catalog/model/tool/image.php\nchanged_file=catalog/model/tool/image.php\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-20261009\\fixture/catalog/controller/product/thumb.php\nchanged_file=catalog/controller/product/thumb.php\nchanged_file=catalog/view/template/product/thumb.twig\nchanged_file=catalog/view/stylesheet/boostershop-ds.css\nchanged_file=catalog/view/template/product/category.twig\nchanged_file=catalog/view/template/product/search.twig\nchanged_file=catalog/view/template/product/special.twig\nchanged_file=catalog/view/template/product/manufacturer_info.twig\nchanged_file=extension/opencart/catalog/view/template/module/featured.twig\nchanged_file=catalog/view/template/common/header.twig\nchanged_files=11\ndone=ok\nself_delete=ok\n"
+  },
+  {
+    "name": "candidate exact system/library/image.php",
+    "pass_": true,
+    "detail": ""
+  },
+  {
+    "name": "candidate exact catalog/model/tool/image.php",
+    "pass_": true,
+    "detail": ""
+  },
+  {
+    "name": "candidate exact catalog/controller/product/thumb.php",
+    "pass_": true,
+    "detail": ""
+  },
+  {
+    "name": "candidate exact catalog/view/template/product/thumb.twig",
+    "pass_": true,
+    "detail": ""
+  },
+  {
+    "name": "candidate exact catalog/view/stylesheet/boostershop-ds.css",
+    "pass_": true,
+    "detail": ""
+  },
+  {
+    "name": "candidate exact catalog/view/template/product/category.twig",
+    "pass_": true,
+    "detail": ""
+  },
+  {
+    "name": "candidate exact catalog/view/template/product/search.twig",
+    "pass_": true,
+    "detail": ""
+  },
+  {
+    "name": "candidate exact catalog/view/template/product/special.twig",
+    "pass_": true,
+    "detail": ""
+  },
+  {
+    "name": "candidate exact catalog/view/template/product/manufacturer_info.twig",
+    "pass_": true,
+    "detail": ""
+  },
+  {
+    "name": "candidate exact extension/opencart/catalog/view/template/module/featured.twig",
+    "pass_": true,
+    "detail": ""
+  },
+  {
+    "name": "candidate exact catalog/view/template/common/header.twig",
+    "pass_": true,
+    "detail": ""
+  },
+  {
+    "name": "backups all byte-identical and APPLIED",
+    "pass_": true,
+    "detail": ""
+  },
+  {
+    "name": "repeat idempotent and no cache-token rewrite",
+    "pass_": true,
+    "detail": ""
+  },
+  {
+    "name": "rollback rejects newer source without writes",
+    "pass_": true,
+    "detail": ""
+  },
+  {
+    "name": "rollback all original hashes + original RD26 token + self-delete",
+    "pass_": true,
+    "detail": ""
+  },
+  {
+    "name": "reapply after rollback",
+    "pass_": true,
+    "detail": ""
+  },
+  {
+    "name": "source drift refuses preflight, no backup/write",
+    "pass_": true,
+    "detail": ""
+  },
+  {
+    "name": "partial markers refuse without writes",
+    "pass_": true,
+    "detail": ""
+  },
+  {
+    "name": "dynamic token composition preserves RD26 CSS",
+    "pass_": true,
+    "detail": ""
+  },
+  {
+    "name": "forced second write failure restores first target",
+    "pass_": true,
+    "detail": "k\\rd25-wp1-20261009\\fixture-write-failure/_patch_backups/RD-25-WP1_media-fit-catalog_20261009-20261009_195244-cef420/candidate/system/library/image.php\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-20261009\\fixture-write-failure/_patch_backups/RD-25-WP1_media-fit-catalog_20261009-20261009_195244-cef420/candidate/catalog/model/tool/image.php\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-20261009\\fixture-write-failure/_patch_backups/RD-25-WP1_media-fit-catalog_20261009-20261009_195244-cef420/candidate/catalog/controller/product/thumb.php\nbackup=C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-20261009\\fixture-write-failure/_patch_backups/RD-25-WP1_media-fit-catalog_20261009-20261009_195244-cef420\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-20261009\\fixture-write-failure/system/library/image.php\nchanged_file=system/library/image.php\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-20261009\\fixture-write-failure/system/library/image.php\nrestored_after_failure=system/library/image.php\nerror=file_write_failed:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-20261009\\fixture-write-failure/catalog/model/tool/image.php\nbackup=C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-20261009\\fixture-write-failure/_patch_backups/RD-25-WP1_media-fit-catalog_20261009-20261009_195244-cef420\nrestore=ok\n"
+  }
+]

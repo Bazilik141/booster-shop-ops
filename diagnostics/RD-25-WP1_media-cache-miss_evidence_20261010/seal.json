@@ -1,0 +1,12 @@
+{
+  "validated_date": "2026-10-11",
+  "patch_sha256": "085cbb193b7c877f03768278acef97dd700d66aea042bee2b584e0997bbc32c3",
+  "report_sha256": "4950af266f4b9c7550dcf2381f3fcf61909eed146dba25ff527e439b88528d7c",
+  "repair_checks_passed": 39,
+  "WP1_checks_passed": 79,
+  "archive_classifications_unchanged": 286,
+  "r3_sealed_evidence_unchanged": true,
+  "cold_warnings_before": 6,
+  "cold_warnings_after": 0,
+  "deployment": false
+}

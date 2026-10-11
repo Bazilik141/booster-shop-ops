@@ -1,0 +1,7 @@
+{
+  "patch_sha256": "0f7b394c634a05f5b8abb4fa684647015b98442b7dbd604f477c432d9bce2aa3",
+  "report_sha256": "50eb47afe2903453587e1ec602a878b2dac8b59986bcbd8f90d4881689a6211b",
+  "approved_r3_report_and_evidence_unchanged": true,
+  "checks_passed": 64,
+  "production_deploy": false
+}

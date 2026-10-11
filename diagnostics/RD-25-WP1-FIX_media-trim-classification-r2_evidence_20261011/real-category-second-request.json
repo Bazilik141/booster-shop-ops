@@ -1,0 +1,135 @@
+{
+    "php": "8.3.30",
+    "model_sha256": "85cf9489244c48fe915bc25f370cdfdb2b39c9c6d6a42219cec7f84a9e375e71",
+    "dataset_scope": "Owner current public enabled store-0 acsesuary and descendants primary product images, 2026-10-11T15:58:18+00:00",
+    "mode": "second-request",
+    "products": 20,
+    "fit_cards": 20,
+    "legacy_fallback_cards": 0,
+    "wall_seconds": 2.898142,
+    "warning_count": 0,
+    "warnings": [],
+    "peak_memory_bytes": 25165824,
+    "trace": [
+        {
+            "product_id": 139,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/pidstavka-slab-tcg-01.jpg.JPG",
+            "fit": true,
+            "seconds": 0.042491
+        },
+        {
+            "product_id": 163,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/pokeballdeckbox01.jpg.JPG",
+            "fit": true,
+            "seconds": 0.001707
+        },
+        {
+            "product_id": 99,
+            "image": "catalog/Other/\u041f\u0456\u0434\u0441\u0442\u0430\u0432\u043a\u0430 \u0434\u043b\u044f \u043a\u0430\u0440\u0442 PSA.png",
+            "fit": true,
+            "seconds": 0.001653
+        },
+        {
+            "product_id": 95,
+            "image": "catalog/Other/Protectory-100sht-generic.jpg",
+            "fit": true,
+            "seconds": 0.001596
+        },
+        {
+            "product_id": 144,
+            "image": "catalog/Accsesuary/albom-dlia-kartok-OnePiece-na-400-slotiv.png",
+            "fit": true,
+            "seconds": 0.00155
+        },
+        {
+            "product_id": 141,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/pidstavka-dlia-slab-na-nizhtsi-3d-druk.webp",
+            "fit": true,
+            "seconds": 0.225314
+        },
+        {
+            "product_id": 98,
+            "image": "catalog/Accsesuary/\u041c\u0430\u0433\u043d\u0456\u0442\u043d\u0438\u0439 \u043a\u0435\u0439\u0441 \u0434\u043b\u044f \u043a\u0430\u0440\u0442 35PT.png",
+            "fit": true,
+            "seconds": 0.194486
+        },
+        {
+            "product_id": 112,
+            "image": "catalog/Accsesuary/\u0410\u043b\u044c\u0431\u043e\u043c \u0434\u043b\u044f \u043a\u043e\u043b\u0435\u043a\u0446\u0456\u0439\u043d\u0438\u0445 \u043a\u0430\u0440\u0442\u043e\u043a \u043d\u0430 360 \u043a\u0430\u0440\u0442\u043e\u043a, \u0436\u043e\u0432\u0442\u0438\u0439.png",
+            "fit": true,
+            "seconds": 0.190927
+        },
+        {
+            "product_id": 113,
+            "image": "catalog/Accsesuary/\u0410\u043a\u0440\u0438\u043b\u043e\u0432\u0438\u0439 \u043f\u0440\u043e\u0442\u0435\u043a\u0442\u043e\u0440-\u043a\u0435\u0439\u0441 \u0434\u043b\u044f \u043a\u0430\u0440\u0442\u043a\u0438 \u0431\u0435\u0437 \u043c\u0430\u0433\u043d\u0456\u0442\u0430, 1 \u0448\u0442.png",
+            "fit": true,
+            "seconds": 0.188528
+        },
+        {
+            "product_id": 190,
+            "image": "catalog/Accsesuary/\u0410\u043b\u044c\u0431\u043e\u043c \u0434\u043b\u044f \u043a\u043e\u043b\u0435\u043a\u0446\u0456\u0439\u043d\u0438\u0445 \u043a\u0430\u0440\u0442\u043e\u043a \u043d\u0430 360 \u043a\u0430\u0440\u0442\u043e\u043a, \u0447\u043e\u0440\u043d\u0438\u0439.png",
+            "fit": true,
+            "seconds": 0.200755
+        },
+        {
+            "product_id": 193,
+            "image": "catalog/Accsesuary/\u0410\u043b\u044c\u0431\u043e\u043c \u0434\u043b\u044f \u043a\u043e\u043b\u0435\u043a\u0446\u0456\u0439\u043d\u0438\u0445 \u043a\u0430\u0440\u0442\u043e\u043a \u043d\u0430 360 \u043a\u0430\u0440\u0442\u043e\u043a, \u0431\u0456\u043b\u0438\u0439.png",
+            "fit": true,
+            "seconds": 0.191239
+        },
+        {
+            "product_id": 97,
+            "image": "catalog/Accsesuary/\u0422\u043e\u043f\u043b\u043e\u0430\u0434\u0435\u0440\u0438 \u0434\u043b\u044f \u043a\u0430\u0440\u0442\u043e\u043a 35PT, 25 \u0448\u0442 toploaders.png",
+            "fit": true,
+            "seconds": 0.515983
+        },
+        {
+            "product_id": 137,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/\u041f\u0456\u0434\u0441\u0442\u0430\u0432\u043a\u0430 \u043c\u0430\u043b\u0430.webp",
+            "fit": true,
+            "seconds": 0.158358
+        },
+        {
+            "product_id": 140,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/\u041f\u0456\u0434\u0441\u0442\u0430\u0432\u043a\u0430 \u043f\u0456\u0434 \u0441\u043b\u0430\u0431\u0438 PSA, CGC, BGS (\u0431\u0435\u0437 \u043f\u043e\u043a\u0435\u0431\u043e\u043b\u0443).webp",
+            "fit": true,
+            "seconds": 0.11622
+        },
+        {
+            "product_id": 164,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/Ditto cukernutsya.webp",
+            "fit": true,
+            "seconds": 0.105415
+        },
+        {
+            "product_id": 138,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/\u041f\u0456\u0434\u0441\u0442\u0430\u0432\u043a\u0430 \u0441\u0435\u0440\u0435\u0434\u043d\u044f1.webp",
+            "fit": true,
+            "seconds": 0.144676
+        },
+        {
+            "product_id": 173,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/chasha-pokeball-pokemon-3d-druk.webp",
+            "fit": true,
+            "seconds": 0.140211
+        },
+        {
+            "product_id": 114,
+            "image": "catalog/Other/Toploader1p (1).webp",
+            "fit": true,
+            "seconds": 0.262799
+        },
+        {
+            "product_id": 100,
+            "image": "catalog/Other/arkush-na-9-kyshenok-game-7-days-9-pocket-page.png",
+            "fit": true,
+            "seconds": 0.110088
+        },
+        {
+            "product_id": 96,
+            "image": "catalog/Other/G7D sleeves premium plus (MTG).webp",
+            "fit": true,
+            "seconds": 0.100758
+        }
+    ]
+}

@@ -1,0 +1,18 @@
+{
+  "row_cols_1_product_loop_templates": [
+    "catalog/view/template/product/related.twig",
+    "catalog/view/template/product/manufacturer_info.twig",
+    "catalog/view/template/product/special.twig",
+    "catalog/view/template/product/category.twig",
+    "catalog/view/template/product/search.twig",
+    "extension/opencart/catalog/view/template/module/featured.twig"
+  ],
+  "actual_grid_targets": [
+    "catalog/view/template/product/category.twig",
+    "catalog/view/template/product/search.twig",
+    "catalog/view/template/product/special.twig",
+    "catalog/view/template/product/manufacturer_info.twig",
+    "extension/opencart/catalog/view/template/module/featured.twig"
+  ],
+  "related_retained_swipe_rail": true
+}

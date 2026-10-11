@@ -1,0 +1,16 @@
+cwd=C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-wp1-20261009\fixture
+time=2026-10-10T17:10:14+00:00
+preflight_file=system/library/image.php
+preflight_file=catalog/model/tool/image.php
+preflight_file=catalog/controller/product/thumb.php
+preflight_file=catalog/view/template/product/thumb.twig
+preflight_file=catalog/view/stylesheet/boostershop-ds.css
+preflight_file=catalog/view/template/product/category.twig
+preflight_file=catalog/view/template/product/search.twig
+preflight_file=catalog/view/template/product/special.twig
+preflight_file=catalog/view/template/product/manufacturer_info.twig
+preflight_file=extension/opencart/catalog/view/template/module/featured.twig
+preflight_file=catalog/view/template/common/header.twig
+dry_run=yes
+target_writes=0
+done=ok

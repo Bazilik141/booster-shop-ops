@@ -1,0 +1,103 @@
+{
+    "checks": [
+        {
+            "name": "palette all measurement fields equal r1",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "palette converted truecolor",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "palette raw semi-alpha preserved",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "truecolor all measurement fields equal r1",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "truecolor converted truecolor",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "truecolor raw semi-alpha preserved",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "inside-band photo exactly four corner reads",
+            "pass": true,
+            "detail": 4
+        },
+        {
+            "name": "fast nullable diagnostic alpha_bbox_16",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "fast nullable diagnostic background_bbox_12",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "fast nullable diagnostic cover_check",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "fast all operational fields exact with interior alpha",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "metadata LOCK_NB no wait or metadata write",
+            "pass": true,
+            "detail": {
+                "seconds": 0.0013020038604736328
+            }
+        },
+        {
+            "name": "one admitted source completes and warms",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "request cumulative budget returns misses without scan or writes",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "resizeFit returns empty for budget fallback",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "warm metadata remains available after budget exhausted",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "rd25ReadMedia accepts null diagnostics for cut",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "fit LOCK_NB returns empty without waiting",
+            "pass": true,
+            "detail": 0.0015330314636230469
+        },
+        {
+            "name": "printing site handler emitted zero warnings",
+            "pass": true,
+            "detail": []
+        }
+    ],
+    "passed": 19,
+    "total": 19
+}

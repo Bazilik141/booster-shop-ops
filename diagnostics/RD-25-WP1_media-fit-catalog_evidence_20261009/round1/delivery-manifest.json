@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-09",
+  "scope": "RD-25 WP1 only",
+  "patch": "RD-25-WP1_media-fit-catalog_20261009.php",
+  "patch_bytes": 31133,
+  "patch_sha256": "a675ab5b1eca2f7b038a004f27e3c0783d474f49995dbb4523523c37319351b3",
+  "live_inputs": [
+    {
+      "archive": "RD-25-live-20261009.tar.gz",
+      "bytes": 175122,
+      "sha256": "e294050d93ebf0f1f835d1c2def9775eea9f66df87b37cfd11a5f7465a5f397f"
+    },
+    {
+      "archive": "RD-25-WP1-followup-20261009.tar.gz",
+      "bytes": 297795606,
+      "sha256": "075d3e77f1a30092633662b74b80585f3d0b963228075639f4b224070e36251a"
+    }
+  ],
+  "master_handoff": "handoffs/handoff_RD-25_product-media-slot_20261009.md read via git show master; checkout not switched",
+  "production_deploy": false,
+  "commit_push": false,
+  "source_backup_20260924_used": false
+}

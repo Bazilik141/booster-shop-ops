@@ -1,0 +1,6 @@
+php_version=8.3.30
+cwd=C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-wp1-fix-phase1-20261011\verify3\runner-main
+time=2026-10-11T06:49:01+00:00
+already_applied=yes
+done=ok
+self_delete=ok

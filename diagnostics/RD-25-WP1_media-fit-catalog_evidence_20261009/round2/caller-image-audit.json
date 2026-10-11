@@ -1,0 +1,69 @@
+{
+  "date": "2026-10-10",
+  "scope": "F2; actual current supplied controller source",
+  "callers": [
+    {
+      "caller": "category",
+      "file": "catalog/controller/product/category.php",
+      "sha256": "e82522a5a1103c4ba559ee587735396b51717e4625b8836536a35e1b623bf145",
+      "line": 287,
+      "image_passed": true,
+      "mechanism": "product_data array union + $result; no image override on left",
+      "extra_getProduct_calls_for_nonempty_image": 0,
+      "empty_image_case": "M distinct positive product_ids with absent/empty source cause M extra getProduct calls; request cache prevents repeated IDs",
+      "excerpt": "$product_data = [\n\t\t\t\t\t'description' => $description,\n\t\t\t\t\t'thumb'       => $this->model_tool_image->resize($image, $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height')),\n\t\t\t\t\t'price'       => $price,\n\t\t\t\t\t'special'     => $special,\n\t\t\t\t\t'price_value'   => (float)$result['price'],\n\t\t\t\t\t'special_value' => (float)($result['special'] ?? 0),\n\t\t\t\t\t'quantity'      => isset($result['quantity']) ? (int)$result['quantity'] : 1,\n\t\t\t\t\t'stock'         => $result['stock_status'] ?? '',\n\t\t\t\t\t'stock_status_id' => isset($result['stock_status_id']) ? (int)$result['stock_status_id'] : 0,\n\t\t\t\t\t'date_available'  => $result['date_available'] ?? '',\n\t\t\t\t\t'tax'         => $tax,\n\t\t\t\t\t'minimum'     => $result['minimum'] > 0 ? $result['minimum'] : 1,\n\t\t\t\t\t'href'        => $this->url->link('product/product', 'language=' . $this->config->get('config_language') . '&product_id=' . $result['product_id'])\n\n\t\t\t\t] + $result;\n\n\t\t\t\t$data['products'][] = $this->load->controller('product/thumb', $product_data)"
+    },
+    {
+      "caller": "search",
+      "file": "catalog/controller/product/search.php",
+      "sha256": "f6c31e9c61844bccc93fc3063b13d70ca47f1538f7beb54cd3be3aa7167f006c",
+      "line": 219,
+      "image_passed": true,
+      "mechanism": "product_data array union + $result; no image override on left",
+      "extra_getProduct_calls_for_nonempty_image": 0,
+      "empty_image_case": "M distinct positive product_ids with absent/empty source cause M extra getProduct calls; request cache prevents repeated IDs",
+      "excerpt": "$product_data = [\n\t\t\t\t\t'thumb'       => $this->model_tool_image->resize($image, $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height')),\n\t\t\t\t\t'description' => $description,\n\t\t\t\t\t'price'       => $price,\n\t\t\t\t\t'special'     => $special,\n\t\t\t\t\t'price_value'   => (float)$result['price'],\n\t\t\t\t\t'special_value' => (float)($result['special'] ?? 0),\n\t\t\t\t\t'quantity'      => isset($result['quantity']) ? (int)$result['quantity'] : 1,\n\t\t\t\t\t'stock'         => $result['stock_status'] ?? '',\n\t\t\t\t\t'stock_status_id' => isset($result['stock_status_id']) ? (int)$result['stock_status_id'] : 0,\n\t\t\t\t\t'date_available'  => $result['date_available'] ?? '',\n\t\t\t\t\t'tax'         => $tax,\n\t\t\t\t\t'minimum'     => $result['minimum'] > 0 ? $result['minimum'] : 1,\n\t\t\t\t\t'href'        => $this->url->link('product/product', 'language=' . $this->config->get('config_language') . '&product_id=' . $result['product_id'])\n\n\t\t\t\t] + $result;\n\n\t\t\t\t$data['products'][] = $this->load->controller('product/thumb', $product_data)"
+    },
+    {
+      "caller": "special",
+      "file": "catalog/controller/product/special.php",
+      "sha256": "85e867d0d38a1d41d138493d74995734f6879b6319f90c8a576f14f751dc861c",
+      "line": 127,
+      "image_passed": true,
+      "mechanism": "product_data array union + $result; no image override on left",
+      "extra_getProduct_calls_for_nonempty_image": 0,
+      "empty_image_case": "M distinct positive product_ids with absent/empty source cause M extra getProduct calls; request cache prevents repeated IDs",
+      "excerpt": "$product_data = [\n\t\t\t\t'thumb'       => $this->model_tool_image->resize($image, $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height')),\n\t\t\t\t'description' => $description,\n\t\t\t\t'price'       => $price,\n\t\t\t\t'special'     => $special,\n\t\t\t\t'price_value'   => (float)$result['price'],\n\t\t\t\t'special_value' => (float)($result['special'] ?? 0),\n\t\t\t\t'quantity'      => isset($result['quantity']) ? (int)$result['quantity'] : 1,\n\t\t\t\t'stock'         => $result['stock_status'] ?? '',\n\t\t\t\t'stock_status_id' => isset($result['stock_status_id']) ? (int)$result['stock_status_id'] : 0,\n\t\t\t\t'date_available'  => $result['date_available'] ?? '',\n\t\t\t\t'tax'         => $tax,\n\t\t\t\t'minimum'     => $result['minimum'] > 0 ? $result['minimum'] : 1,\n\t\t\t\t'href'        => $this->url->link('product/product', 'language=' . $this->config->get('config_language') . '&product_id=' . $result['product_id'] . $url)\n\t\t\t] + $result;\n\n\t\t\t$data['products'][] = $this->load->controller('product/thumb', $product_data)"
+    },
+    {
+      "caller": "manufacturer_info",
+      "file": "catalog/controller/product/manufacturer.php",
+      "sha256": "f32906431b6ed2fa018b75ee62822b986ff9ee021f43fd1301ed4334dccd76f3",
+      "line": 200,
+      "image_passed": true,
+      "mechanism": "product_data array union + $result; no image override on left",
+      "extra_getProduct_calls_for_nonempty_image": 0,
+      "empty_image_case": "M distinct positive product_ids with absent/empty source cause M extra getProduct calls; request cache prevents repeated IDs",
+      "excerpt": "$product_data = [\n\t\t\t\t\t'thumb'       => $this->model_tool_image->resize($image, $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height')),\n\t\t\t\t\t'description' => $description,\n\t\t\t\t\t'price'       => $price,\n\t\t\t\t\t'special'     => $special,\n\t\t\t\t\t'tax'         => $tax,\n\t\t\t\t\t'minimum'     => $result['minimum'] > 0 ? $result['minimum'] : 1,\n\t\t\t\t\t'href'        => $this->url->link('product/product', 'language=' . $this->config->get('config_language') . '&manufacturer_id=' . $result['manufacturer_id'] . '&product_id=' . $result['product_id'] . $url)\n\t\t\t\t] + $result;\n\n\t\t\t\t$data['products'][] = $this->load->controller('product/thumb', $product_data)"
+    },
+    {
+      "caller": "featured",
+      "file": "extension/opencart/catalog/controller/module/featured.php",
+      "image_passed": null,
+      "evidence": "controller absent from both owner archives; not inferred from Twig or a stock/old version",
+      "extra_getProduct_calls": "unknown for current caller; 0 if nonempty image is supplied, otherwise one per distinct positive product_id lacking image. N distinct source-less cards = N calls, e.g. 24 cards = 24 calls"
+    },
+    {
+      "caller": "related",
+      "file": "catalog/controller/product/related.php",
+      "sha256": "dac19f9e43d59106fb4bca68932ae79ef086c1700a4c2f2cb087d4be804019ac",
+      "line": 60,
+      "image_passed": true,
+      "mechanism": "product_data array union + $result; no image override on left",
+      "extra_getProduct_calls_for_nonempty_image": 0,
+      "empty_image_case": "M distinct positive product_ids with absent/empty source cause M extra getProduct calls; request cache prevents repeated IDs",
+      "excerpt": "$product_data = [\n\t\t\t\t'thumb'       => $this->model_tool_image->resize($image, $this->config->get('config_image_related_width'), $this->config->get('config_image_related_height')),\n\t\t\t\t'description' => $description,\n\t\t\t\t'price'       => $price,\n\t\t\t\t'special'     => $special,\n\t\t\t\t'tax'         => $tax,\n\t\t\t\t'minimum'     => $result['minimum'] > 0 ? $result['minimum'] : 1,\n\t\t\t\t'href'        => $this->url->link('product/product', 'language=' . $this->config->get('config_language') . '&product_id=' . $result['product_id'])\n\t\t\t] + $result;\n\n\t\t\t$data['products'][] = $this->load->controller('product/thumb', $product_data)"
+    }
+  ],
+  "getProduct_counts_are_api_call_counts_not_individual_SQL_query_counts": true
+}

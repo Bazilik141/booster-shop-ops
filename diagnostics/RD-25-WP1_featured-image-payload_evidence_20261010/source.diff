@@ -1,0 +1,13 @@
+--- a/extension/opencart/catalog/controller/module/featured.php
++++ b/extension/opencart/catalog/controller/module/featured.php
+@@ -62,8 +62,10 @@
+ 					$tax = false;
+ 				}
+ 
++				// RD-25-WP1-F6 20261010: reuse the loaded original image in product/thumb.
+ 				$product_data = [
+ 					'product_id'  => $product['product_id'],
++					'image'       => $product['image'],
+ 					'thumb'       => $image,
+ 					'name'        => $product['name'],
+ 					'description' => oc_substr(trim(strip_tags(html_entity_decode($product['description'], ENT_QUOTES, 'UTF-8'))), 0, $this->config->get('config_product_description_length')) . '..',

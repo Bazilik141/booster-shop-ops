@@ -1,0 +1,13 @@
+{
+  "provenance": "Owner reply to clarification in this task, 2026-10-11",
+  "decision": "Fast photos may store null for unused diagnostic bboxes; all operational metadata unchanged",
+  "conditions": [
+    "Every still-scanned source must match all r1 fields exactly",
+    "rd25ReadMedia must accept null diagnostics; no decision path may read them"
+  ],
+  "implementation_null_fields": [
+    "alpha_bbox_16",
+    "background_bbox_12",
+    "cover_check"
+  ]
+}

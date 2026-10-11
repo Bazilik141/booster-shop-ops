@@ -1,0 +1,49 @@
+cd ~/public_html && php <<'RD25_ASSET222_READONLY'
+<?php
+// RD-25 WP1-FIX condition 1. Owner-run read-only reference lookup; no file/DB writes.
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+try {
+    require 'config.php';
+    if (!preg_match('/\A[A-Za-z0-9_]+\z/', DB_PREFIX)) { throw new RuntimeException('Invalid prefix'); }
+    $db = new mysqli(DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE, (int) DB_PORT);
+    $db->set_charset('utf8mb4');
+    $basename = 'Gemini_Generated_Image_c8wi9fc8wi9fc8wi.png';
+    $needle = '%' . strtr($basename, ['=' => '==', '%' => '=%', '_' => '=_']) . '%';
+    $spec = [
+        'product' => ['product_id', 'image'], 'product_image' => ['product_id', 'image'],
+        'category' => ['category_id', 'image'], 'manufacturer' => ['manufacturer_id', 'image'],
+        'banner_image' => ['banner_id', 'image'], 'option_value' => ['option_value_id', 'image'],
+        'setting' => ['setting_id', 'value'], 'module' => ['module_id', 'setting'],
+        'theme' => ['theme_id', 'code'], 'product_description' => ['product_id', 'description'],
+        'category_description' => ['category_id', 'description'], 'information_description' => ['information_id', 'description']
+    ];
+    $rows = []; $complete = true; $product_reference = false;
+    foreach ($spec as $suffix => $fields) {
+        [$id, $field] = $fields; $table = DB_PREFIX . $suffix;
+        $columns = [];
+        $stmt = $db->prepare('SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?');
+        $schema = DB_DATABASE; $stmt->bind_param('ss', $schema, $table); $stmt->execute(); $stmt->bind_result($column);
+        while ($stmt->fetch()) { $columns[] = $column; } $stmt->close();
+        if (!in_array($id, $columns, true) || !in_array($field, $columns, true)) {
+            $rows[] = ['table' => $suffix, 'field' => $field, 'status' => 'not_available'];
+            if ($suffix === 'product' || $suffix === 'product_image') { $complete = false; }
+            continue;
+        }
+        $stmt = $db->prepare("SELECT COUNT(*) FROM `" . $table . "` WHERE `" . $field . "` LIKE ? ESCAPE '='");
+        $stmt->bind_param('s', $needle); $stmt->execute(); $stmt->bind_result($count); $stmt->fetch(); $count = (int) $count; $stmt->close();
+        $ids = [];
+        if ($count > 0) {
+            $stmt = $db->prepare("SELECT DISTINCT `" . $id . "` FROM `" . $table . "` WHERE `" . $field . "` LIKE ? ESCAPE '=' ORDER BY `" . $id . "` LIMIT 20");
+            $stmt->bind_param('s', $needle); $stmt->execute(); $stmt->bind_result($row_id);
+            while ($stmt->fetch()) { $ids[] = (int) $row_id; } $stmt->close();
+            if (in_array($suffix, ['product', 'product_image', 'product_description'], true)) { $product_reference = true; }
+        }
+        $rows[] = ['table' => $suffix, 'field' => $field, 'status' => 'checked', 'matches' => $count, 'public_reference_ids_first_20' => $ids];
+    }
+    $db->close();
+    echo json_encode(['task' => 'RD-25-WP1-FIX', 'utc' => gmdate('c'), 'asset' => $basename, 'db_writes' => 0, 'file_writes' => 0, 'required_product_tables_checked' => $complete, 'product_reference_found_stop' => $product_reference, 'references' => $rows, 'done' => $complete ? 'ok' : 'incomplete'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n";
+} catch (Throwable $error) {
+    // Do not expose credentials, schema details or statement/connection exception text.
+    echo json_encode(['task' => 'RD-25-WP1-FIX', 'done' => 'error', 'error_code' => (int) $error->getCode(), 'db_writes' => 0, 'file_writes' => 0]) . "\n";
+}
+RD25_ASSET222_READONLY

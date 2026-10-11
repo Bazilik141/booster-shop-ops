@@ -1,0 +1,278 @@
+{
+  "raw_8bit_near_transparent_cuts": [
+    {
+      "source": "catalog/One Piece/OP-15 Box 2.png",
+      "pillow_alpha": [
+        1,
+        1,
+        1,
+        0
+      ],
+      "gd_alpha": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "source": "catalog/One Piece/Rare Pack One Piece OP-01 Romance Dawn — лицьова сторона японського бустера.png",
+      "pillow_alpha": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "gd_alpha": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "source": "catalog/One Piece/Rare Pack One Piece OP-05 Awakening of the New Era — зворотна сторона японського бустера.png",
+      "pillow_alpha": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "gd_alpha": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "source": "catalog/One Piece/Rare Pack One Piece OP-06 Wings of the Captain — лицьова сторона японського бустера.png",
+      "pillow_alpha": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "gd_alpha": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "source": "catalog/One Piece/Бустер One Piece Card Game EB-03 (Японське видання).png",
+      "pillow_alpha": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "gd_alpha": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "source": "catalog/Other/Konami-Logo.png",
+      "pillow_alpha": [
+        2,
+        1,
+        1,
+        0
+      ],
+      "gd_alpha": [
+        2,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "source": "catalog/Other/Акрилова підставка+кейс.png",
+      "pillow_alpha": [
+        1,
+        1,
+        1,
+        0
+      ],
+      "gd_alpha": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "source": "catalog/Other/Магнітний кейс для картки.png",
+      "pillow_alpha": [
+        1,
+        1,
+        2,
+        1
+      ],
+      "gd_alpha": [
+        0,
+        0,
+        2,
+        0
+      ]
+    },
+    {
+      "source": "catalog/Other/Магнітний кейс для карток.png",
+      "pillow_alpha": [
+        1,
+        1,
+        1,
+        0
+      ],
+      "gd_alpha": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "source": "catalog/Other/Підставка для карт PSA.png",
+      "pillow_alpha": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "gd_alpha": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "source": "catalog/Other/Підставка для оцінених карт PSA.png",
+      "pillow_alpha": [
+        1,
+        1,
+        1,
+        0
+      ],
+      "gd_alpha": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "source": "catalog/Pokemon/chaos-rising-pawmot-premium-checklane-blister-chaos-rising-Photoroom.png",
+      "pillow_alpha": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "gd_alpha": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "source": "catalog/Pokemon/Hot Wind Arena Korea BB.png",
+      "pillow_alpha": [
+        1,
+        1,
+        1,
+        0
+      ],
+      "gd_alpha": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "source": "catalog/Pokemon/Outlet MIX.png",
+      "pillow_alpha": [
+        1,
+        1,
+        1,
+        0
+      ],
+      "gd_alpha": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "source": "catalog/Pokemon/Pokemon_Storm_Emeralda_m6_Japanese_Booster_Box_shrink.png",
+      "pillow_alpha": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "gd_alpha": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "source": "catalog/Pokemon/Pokémon TCG Mega Evolution — Chaos Rising Booster Bundle-Photoroom.png",
+      "pillow_alpha": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "gd_alpha": [
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "mixed_corner_candidates": [
+    {
+      "source": "catalog/One Piece/Бустер One Piece Card Game OP-07 (Японське видання).png",
+      "pillow_alpha": [
+        148,
+        39,
+        2,
+        1
+      ],
+      "gd_alpha": [
+        149,
+        38,
+        2,
+        0
+      ],
+      "kind": "photo"
+    },
+    {
+      "source": "catalog/Pokemon/Pokémon — Special Card Set Grass Leafeon VSTAR — JP — Collection Set inside.png",
+      "pillow_alpha": [
+        0,
+        0,
+        253,
+        0
+      ],
+      "gd_alpha": [
+        0,
+        0,
+        253,
+        0
+      ],
+      "kind": "photo"
+    }
+  ]
+}

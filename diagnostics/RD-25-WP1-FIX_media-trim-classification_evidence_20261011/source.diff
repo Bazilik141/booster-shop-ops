@@ -1,0 +1,242 @@
+--- a/catalog/model/tool/image.php
++++ b/catalog/model/tool/image.php
+@@ -79,7 +79,7 @@
+ 	}
+ 
+ 	// RD-25-WP1 20261009: isolated fit cache and source classification.
+-	private const RD25_MEDIA_VERSION = 3;
++	private const RD25_MEDIA_VERSION = 4;
+ 
+ 	/** Source metadata is cached per canonical path + mtime + size, not per view. */
+ 	public function mediaInfo(string $filename): array {
+@@ -131,44 +131,13 @@
+ 				return [];
+ 			}
+ 
+-			$corner_alpha = [];
+-			$corner_rgb = [];
+-			$transparent_cut = $dimensions[2] !== IMAGETYPE_JPEG;
+-			$white_cut = true;
+-
+-			foreach ([[0, 0], [$dimensions[0] - 1, 0], [0, $dimensions[1] - 1], [$dimensions[0] - 1, $dimensions[1] - 1]] as $corner) {
+-				$color = imagecolorsforindex($gd, imagecolorat($gd, $corner[0], $corner[1]));
+-				// GD: 127 = transparent. Normalize to 0..255, where 0 = transparent.
+-				$alpha = (int)round(255 * (127 - (int)$color['alpha']) / 127);
+-				$corner_alpha[] = $alpha;
+-				$corner_rgb[] = [(int)$color['red'], (int)$color['green'], (int)$color['blue']];
+-				// Near-transparent (1..2) edge pixels exist in the supplied PNGs.
+-				$transparent_cut = $transparent_cut && $alpha <= 16;
+-				// F1 / owner 2026-10-10: opaque white-background pack art is a cutout.
+-				// Use the original audit's exact near-white test: every RGB channel >= 240.
+-				$white_cut = $white_cut && $alpha === 255
+-					&& $color['red'] >= 240 && $color['green'] >= 240 && $color['blue'] >= 240;
+-			}
+-
++			$measurement = $this->rd25Measure($gd, (int)$dimensions[0], (int)$dimensions[1]);
+ 			imagedestroy($gd);
+-			// F5 / owner 2026-10-10: inclusive 0.70..1.45 cover band.
+-			// Integer cross-products preserve exact boundary decisions; source pixels stay intact.
+-			$aspect_cut = $dimensions[0] * 100 < $dimensions[1] * 70
+-				|| $dimensions[0] * 100 > $dimensions[1] * 145;
+-			$metadata = [
+-				'version' => self::RD25_MEDIA_VERSION,
+-				'source' => $source['relative'],
+-				'mtime' => $source['mtime'],
+-				'size' => $source['size'],
+-				'width' => (int)$dimensions[0],
+-				'height' => (int)$dimensions[1],
+-				'type' => (int)$dimensions[2],
+-				'kind' => ($aspect_cut || $transparent_cut || $white_cut) ? 'cut' : 'photo',
+-				'corner_alpha' => $corner_alpha,
+-				'corner_rgb' => $corner_rgb,
+-				'all_near_white_corners' => $white_cut,
+-				'class_reason' => $aspect_cut ? 'aspect_outside_cover_band' : ($transparent_cut ? 'transparent_corners' : ($white_cut ? 'opaque_near_white_corners' : 'non_white_or_mixed_corners'))
+-			];
++			$metadata = array_merge([
++				'version' => self::RD25_MEDIA_VERSION, 'source' => $source['relative'],
++				'mtime' => $source['mtime'], 'size' => $source['size'],
++				'width' => (int)$dimensions[0], 'height' => (int)$dimensions[1], 'type' => (int)$dimensions[2]
++			], $measurement);
+ 			$json = json_encode($metadata, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+ 			$temp = @tempnam(DIR_CACHE, 'rd25-meta-');
+ 
+@@ -211,7 +180,7 @@
+ 		$extensions = [IMAGETYPE_PNG => 'png', IMAGETYPE_JPEG => 'jpg', IMAGETYPE_WEBP => 'webp'];
+ 		$extension = $this->webpSupported() ? 'webp' : $extensions[$metadata['type']];
+ 		// Source format/path/stat are part of the key: same-stem PNG/JPEG never collide.
+-		$key = hash('sha256', 'rd25-fit-v1:' . $source['relative'] . ':' . $source['mtime'] . ':' . $source['size']);
++		$key = hash('sha256', 'rd25-fit-v2:' . $source['relative'] . ':' . $source['mtime'] . ':' . $source['size']);
+ 		$image_new = 'cache/rd25-fit/' . $key . '-' . $width . 'x' . $height . '-fit.' . $extension;
+ 		$destination = DIR_IMAGE . $image_new;
+ 
+@@ -258,6 +227,9 @@
+ 			}
+ 
+ 			$image = new \Opencart\System\Library\Image($source['path']);
++			if ($metadata['kind'] === 'cut') {
++				$image->cropFit(...$metadata['crop_box_exclusive']);
++			}
+ 			$image->resizeFit($width, $height);
+ 			$expected_width = $image->getWidth();
+ 			$expected_height = $image->getHeight();
+@@ -282,6 +254,97 @@
+ 		}
+ 	}
+ 
++	// RD-25-WP1-FIX 20261011: measured Phase 0 thresholds; exclusive source bounds.
++	private function rd25Measure($gd, int $width, int $height): array {
++		$corners = []; $white = []; $transparent = []; $span = 0; $background = [];
++		foreach ([[0, 0], [$width - 1, 0], [0, $height - 1], [$width - 1, $height - 1]] as $point) {
++			$c = imagecolorsforindex($gd, imagecolorat($gd, $point[0], $point[1]));
++			$a = (int)round(255 * (127 - $c['alpha']) / 127);
++			$corners[] = [$c['red'], $c['green'], $c['blue'], $a];
++			$white[] = $a === 255 && min($c['red'], $c['green'], $c['blue']) >= 250;
++			$transparent[] = $a <= 16;
++		}
++		for ($channel = 0; $channel < 3; $channel++) {
++			$values = array_column($corners, $channel); sort($values);
++			$span = max($span, $values[3] - $values[0]);
++			$background[] = ($values[1] + $values[2]) / 2;
++		}
++		$rows = [array_fill(0, $height, 0), array_fill(0, $height, 0)];
++		$cols = [array_fill(0, $width, 0), array_fill(0, $width, 0)];
++		$opaque = true; $has_transparent = false;
++		for ($y = 0; $y < $height; $y++) {
++			for ($x = 0; $x < $width; $x++) {
++				$c = imagecolorsforindex($gd, imagecolorat($gd, $x, $y));
++				// GD alpha is integral; opacity > 16 is exactly GD alpha < 119.
++				$opaque = $opaque && $c['alpha'] === 0;
++				$has_transparent = $has_transparent || $c['alpha'] >= 119;
++				if ($c['alpha'] < 119) {
++					$rows[0][$y]++; $cols[0][$x]++;
++					if (max(abs($c['red'] - $background[0]), abs($c['green'] - $background[1]), abs($c['blue'] - $background[2])) > 12) {
++						$rows[1][$y]++; $cols[1][$x]++;
++					}
++				}
++			}
++		}
++		$alpha_box = $this->rd25Bounds($rows[0], $cols[0], 1);
++		$background_box = $this->rd25Bounds($rows[1], $cols[1], 1);
++		$cover_box = $this->rd25Expand($background_box, $width, $height);
++		$cover = [];
++		foreach (['desktop' => 1.0, 'mobile' => 0.8] as $slot => $ratio) {
++			$cw = $width / $height >= $ratio ? $ratio * $height : $width;
++			$ch = $width / $height >= $ratio ? $height : $width / $ratio;
++			$window = [($width - $cw) / 2, ($height - $ch) / 2, ($width + $cw) / 2, ($height + $ch) / 2];
++			$inner = [$window[0] + $cw * .02, $window[1] + $ch * .02, $window[2] - $cw * .02, $window[3] - $ch * .02];
++			$cover[$slot] = ['window' => $window, 'safe_window' => $inner, 'content_box' => $cover_box,
++				'passes' => $cover_box[0] >= $inner[0] && $cover_box[1] >= $inner[1] && $cover_box[2] <= $inner[2] && $cover_box[3] <= $inner[3]];
++		}
++		$background_corners = 0;
++		for ($i = 0; $i < 4; $i++) { $background_corners += $white[$i] || $transparent[$i] ? 1 : 0; }
++		$uniform = $span <= 8;
++		$outside = $width * 100 < $height * 70 || $width * 100 > $height * 145;
++		$kind = 'cut';
++		if ($background_corners > 0 && $background_corners < 4) { $reason = 'mixed_page_white_or_transparent_corners'; }
++		elseif (!in_array(false, $transparent, true)) { $reason = 'transparent_corners'; }
++		elseif (!in_array(false, $white, true) && $uniform) { $reason = 'opaque_page_white_uniform_corners'; }
++		elseif ($outside) {
++			if ($opaque && $background_corners === 0 && $uniform && $background_box && $cover['desktop']['passes'] && $cover['mobile']['passes']) {
++				$kind = 'photo'; $reason = 'uniform_non_white_safe_cover_both_slots';
++			} else { $reason = 'aspect_outside_cover_band_unsafe_cover'; }
++		} else { $kind = 'photo'; $reason = 'non_white_or_mixed_non_white_corners'; }
++		$crop = [0, 0, $width, $height]; $method = 'none';
++		if ($kind === 'cut') {
++			$mask = null;
++			if ($has_transparent) { $mask = 0; $method = 'alpha'; }
++			elseif ($uniform && (!in_array(false, $white, true) || ($opaque && $outside))) { $mask = 1; $method = 'background_distance'; }
++			if ($mask !== null) {
++				$strict = $mask === 0 ? $alpha_box : $background_box;
++				$crop = $this->rd25Expand($this->rd25Bounds($rows[$mask], $cols[$mask], 2), $width, $height);
++				// Containment of strict extents proves no above-threshold pixel is discarded.
++				if ($strict && ($crop[0] > $strict[0] || $crop[1] > $strict[1] || $crop[2] < $strict[2] || $crop[3] < $strict[3])) {
++					$crop = $this->rd25Expand($strict, $width, $height); $method .= ':strict_bbox_fallback';
++				}
++			}
++		}
++		return ['kind' => $kind, 'class_reason' => $reason, 'corner_alpha' => array_column($corners, 3),
++			'corner_rgb' => array_map(static function(array $c): array { return array_slice($c, 0, 3); }, $corners),
++			'all_near_white_corners' => !in_array(false, $white, true), 'corner_span' => $span,
++			'background_rgb' => $background, 'alpha_bbox_16' => $alpha_box, 'background_bbox_12' => $background_box,
++			'cover_check' => $cover, 'trim_method' => $method, 'crop_box_exclusive' => $crop,
++			'crop_width' => $crop[2] - $crop[0], 'crop_height' => $crop[3] - $crop[1]];
++	}
++
++	private function rd25Bounds(array $rows, array $cols, int $minimum): ?array {
++		$ys = []; $xs = [];
++		foreach ($rows as $i => $count) { if ($count >= $minimum) { $ys[] = $i; } }
++		foreach ($cols as $i => $count) { if ($count >= $minimum) { $xs[] = $i; } }
++		return $ys && $xs ? [$xs[0], $ys[0], $xs[count($xs) - 1] + 1, $ys[count($ys) - 1] + 1] : null;
++	}
++
++	private function rd25Expand(?array $box, int $width, int $height): array {
++		return $box ? [max(0, $box[0] - 2), max(0, $box[1] - 2), min($width, $box[2] + 2), min($height, $box[3] + 2)] : [0, 0, $width, $height];
++	}
++
++
+ 	private function rd25Source(string $filename): array {
+ 		$filename = html_entity_decode($filename, ENT_QUOTES, 'UTF-8');
+ 		$root = realpath(DIR_IMAGE);
+@@ -331,6 +394,13 @@
+ 			return [];
+ 		}
+ 
++		$box = $metadata['crop_box_exclusive'] ?? null;
++		if (!is_array($box) || array_keys($box) !== [0, 1, 2, 3]) { return []; }
++		foreach ($box as $value) { if (!is_int($value)) { return []; } }
++		if ($box[0] < 0 || $box[1] < 0 || $box[2] > $metadata['width'] || $box[3] > $metadata['height']
++			|| $box[2] <= $box[0] || $box[3] <= $box[1]
++			|| ($metadata['crop_width'] ?? null) !== $box[2] - $box[0] || ($metadata['crop_height'] ?? null) !== $box[3] - $box[1]
++			|| ($metadata['kind'] === 'photo' && $box !== [0, 0, $metadata['width'], $metadata['height']])) { return []; }
+ 		return $metadata;
+ 	}
+ 	/**
+--- a/system/library/image.php
++++ b/system/library/image.php
+@@ -338,6 +338,28 @@
+ 	 *
+ 	 * @return void
+ 	 */
++	/** RD-25-WP1-FIX 20261011: crop exclusive bounds without flattening source alpha. */
++	public function cropFit(int $left, int $top, int $right, int $bottom): void {
++		if ($left < 0 || $top < 0 || $right > $this->width || $bottom > $this->height || $right <= $left || $bottom <= $top) {
++			throw new \InvalidArgumentException('Invalid fit crop bounds');
++		}
++		if ($left === 0 && $top === 0 && $right === $this->width && $bottom === $this->height) { return; }
++		$width = $right - $left; $height = $bottom - $top;
++		$next = imagecreatetruecolor($width, $height);
++		if (!$next) { throw new \RuntimeException('Fit crop allocation failed'); }
++		if ($this->mime === 'image/png' || $this->mime === 'image/webp') {
++			imagealphablending($next, false); imagesavealpha($next, true);
++			$background = imagecolorallocatealpha($next, 255, 255, 255, 127);
++		} else { $background = imagecolorallocate($next, 255, 255, 255); }
++		imagefilledrectangle($next, 0, 0, $width - 1, $height - 1, $background);
++		if (!imagecopy($next, $this->image, 0, 0, $left, $top, $width, $height)) {
++			imagedestroy($next); throw new \RuntimeException('Fit crop copy failed');
++		}
++		imagedestroy($this->image); $this->image = $next;
++		$this->width = $width; $this->height = $height;
++	}
++
++
+ 	public function crop(int $top_x, int $top_y, int $bottom_x, int $bottom_y): void {
+ 		$image_old = $this->image;
+ 		$this->image = imagecreatetruecolor($bottom_x - $top_x, $bottom_y - $top_y);
+--- a/catalog/controller/product/thumb.php
++++ b/catalog/controller/product/thumb.php
+@@ -64,11 +64,12 @@
+ 			$bs_fit_url = $this->model_tool_image->resizeFit($bs_source, 700, 875);
+ 
+ 			if ($bs_fit_url !== '' && ($bs_media = $this->model_tool_image->mediaInfo($bs_source))) {
+-				$bs_scale = min(1.0, 700 / $bs_media['width'], 875 / $bs_media['height']);
++				// RD-25-WP1-FIX 20261011: match the generated crop + fit dimensions.
++				$bs_scale = min(1.0, 700 / $bs_media['crop_width'], 875 / $bs_media['crop_height']);
+ 				$data['bs_fit_thumb'] = $bs_fit_url;
+ 				$data['bs_media_kind'] = $bs_media['kind'];
+-				$data['bs_media_width'] = max(1, (int)floor($bs_media['width'] * $bs_scale));
+-				$data['bs_media_height'] = max(1, (int)floor($bs_media['height'] * $bs_scale));
++				$data['bs_media_width'] = max(1, (int)floor($bs_media['crop_width'] * $bs_scale));
++				$data['bs_media_height'] = max(1, (int)floor($bs_media['crop_height'] * $bs_scale));
+ 			}
+ 		}
+ 		$this->load->language('product/thumb');

@@ -1,0 +1,777 @@
+{
+    "php": "8.3.30",
+    "model_sha256": "85cf9489244c48fe915bc25f370cdfdb2b39c9c6d6a42219cec7f84a9e375e71",
+    "dataset_scope": "Conservative entire archive acsesuary/3D asset superset, includes secondary images; NOT claimed actual primary category membership",
+    "mode": "cold",
+    "products": 127,
+    "fit_cards": 18,
+    "legacy_fallback_cards": 109,
+    "wall_seconds": 9.527313,
+    "warning_count": 0,
+    "warnings": [],
+    "peak_memory_bytes": 115343360,
+    "trace": [
+        {
+            "product_id": 900079,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/Ditto-pidstavka-dlia- telefony.JPG",
+            "fit": true,
+            "seconds": 0.779323
+        },
+        {
+            "product_id": 900078,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/Ditto-pidstavka-dlia- telefony-01.JPG",
+            "fit": true,
+            "seconds": 0.675391
+        },
+        {
+            "product_id": 900058,
+            "image": "catalog/3D print/\u0424\u0456\u0433\u0443\u0440\u043a\u0438/Mew-pockeball.JPG",
+            "fit": true,
+            "seconds": 0.471775
+        },
+        {
+            "product_id": 900081,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/Pidstavka dlia slabiv TCG.JPG",
+            "fit": true,
+            "seconds": 0.490052
+        },
+        {
+            "product_id": 900060,
+            "image": "catalog/3D print/\u0424\u0456\u0433\u0443\u0440\u043a\u0438/ONYX-static-02.JPG",
+            "fit": true,
+            "seconds": 0.452365
+        },
+        {
+            "product_id": 900080,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/One Piece zakladka dlia knugy.JPG",
+            "fit": true,
+            "seconds": 0.485607
+        },
+        {
+            "product_id": 900059,
+            "image": "catalog/3D print/\u0424\u0456\u0433\u0443\u0440\u043a\u0438/ONYX static1.JPG",
+            "fit": true,
+            "seconds": 0.475312
+        },
+        {
+            "product_id": 900084,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/pidstavka-slab-tcg-01.jpg.JPG",
+            "fit": true,
+            "seconds": 0.463839
+        },
+        {
+            "product_id": 900085,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/pokeball deckbox02.jpg.JPG",
+            "fit": true,
+            "seconds": 0.437546
+        },
+        {
+            "product_id": 900067,
+            "image": "catalog/3D print/\u0424\u0456\u0433\u0443\u0440\u043a\u0438/\u041e\u043d\u0456\u043a\u0441 \u0440\u0443\u0445\u043e\u043c\u0438\u04391.JPG",
+            "fit": true,
+            "seconds": 0.44267
+        },
+        {
+            "product_id": 900066,
+            "image": "catalog/3D print/\u0424\u0456\u0433\u0443\u0440\u043a\u0438/\u041e\u043d\u0456\u043a\u0441 \u0440\u0443\u0445\u043e\u043c\u0438\u0439.JPG",
+            "fit": true,
+            "seconds": 0.441576
+        },
+        {
+            "product_id": 900088,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/\u041f\u0456\u0434\u0441\u0442\u0430\u0432\u043a\u0430 \u0434\u043b\u044f \u0442\u0435\u043b\u0435\u0444\u043e\u043d\u0443 \u0414\u0456\u0442\u0442\u043e3.JPG",
+            "fit": true,
+            "seconds": 0.411644
+        },
+        {
+            "product_id": 900057,
+            "image": "catalog/3D print/\u0424\u0456\u0433\u0443\u0440\u043a\u0438/Mew \u043f\u043e\u043a\u0435\u0431\u043e\u043b1.JPG",
+            "fit": true,
+            "seconds": 0.395427
+        },
+        {
+            "product_id": 900086,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/pokeballdeckbox01.jpg.JPG",
+            "fit": true,
+            "seconds": 0.401006
+        },
+        {
+            "product_id": 900063,
+            "image": "catalog/3D print/\u0424\u0456\u0433\u0443\u0440\u043a\u0438/\u0413\u0435\u043e\u0434\u0443\u0434 \u0444\u0456\u0433\u0443\u0440\u043a\u0430.JPG",
+            "fit": true,
+            "seconds": 0.338338
+        },
+        {
+            "product_id": 900048,
+            "image": "catalog/3D print/\u0411\u0440\u0435\u043b\u043e\u043a\u0438/\u0427\u0430\u0440\u043c\u0430\u043d\u0434\u0435\u0440 \u0431\u0440\u0435\u043b\u043e\u043a \u043a\u043b\u0456\u043a\u0435\u0440.JPG",
+            "fit": true,
+            "seconds": 0.334943
+        },
+        {
+            "product_id": 900047,
+            "image": "catalog/3D print/\u0411\u0440\u0435\u043b\u043e\u043a\u0438/\u041a\u0440\u0438\u043b\u0430\u0442\u0438\u0439 \u043a\u0430\u043f\u0435\u043b\u044e\u0445.JPG",
+            "fit": true,
+            "seconds": 0.333175
+        },
+        {
+            "product_id": 900210,
+            "image": "catalog/Other/\u041c\u0430\u0433\u043d\u0456\u0442\u043d\u0438\u0439 \u043a\u0435\u0439\u0441 \u0434\u043b\u044f \u043a\u0430\u0440\u0442\u043a\u0438.png",
+            "fit": true,
+            "seconds": 1.60676
+        },
+        {
+            "product_id": 900207,
+            "image": "catalog/Other/\u0410\u043a\u0440\u0438\u043b\u043e\u0432\u0430 \u043f\u0456\u0434\u0441\u0442\u0430\u0432\u043a\u0430+\u043a\u0435\u0439\u0441.png",
+            "fit": false,
+            "seconds": 0.000807
+        },
+        {
+            "product_id": 900212,
+            "image": "catalog/Other/\u041f\u0456\u0434\u0441\u0442\u0430\u0432\u043a\u0430 \u0434\u043b\u044f \u043a\u0430\u0440\u0442 PSA.png",
+            "fit": false,
+            "seconds": 0.00068
+        },
+        {
+            "product_id": 900213,
+            "image": "catalog/Other/\u041f\u0456\u0434\u0441\u0442\u0430\u0432\u043a\u0430 \u0434\u043b\u044f \u043e\u0446\u0456\u043d\u0435\u043d\u0438\u0445 \u043a\u0430\u0440\u0442 PSA.png",
+            "fit": false,
+            "seconds": 0.000728
+        },
+        {
+            "product_id": 900041,
+            "image": "catalog/3D print/\u0411\u0440\u0435\u043b\u043e\u043a\u0438/\u0411\u0440\u0435\u043b\u043e\u043a \u0444\u0440\u0443\u043a\u0442.JPG",
+            "fit": false,
+            "seconds": 0.000914
+        },
+        {
+            "product_id": 900038,
+            "image": "catalog/3D print/\u0411\u0440\u0435\u043b\u043e\u043a\u0438/\u0411\u0440\u0435\u043b\u043e\u043a \u0441\u043e\u043b\u043e\u043c'\u044f\u043d\u0438\u0439 \u043a\u0430\u043f\u0435\u043b\u044e\u0445.JPG",
+            "fit": false,
+            "seconds": 0.000724
+        },
+        {
+            "product_id": 900027,
+            "image": "catalog/3D print/\u0411\u0440\u0435\u043b\u043e\u043a\u0438/brelok-going-merry-one-piece-3d-druk.jpg",
+            "fit": false,
+            "seconds": 0.000819
+        },
+        {
+            "product_id": 900101,
+            "image": "catalog/Accsesuary/\u0410\u043a\u0440\u0438\u043b\u043e\u0432\u0438\u0439 \u043f\u0440\u043e\u0442\u0435\u043a\u0442\u043e\u0440 \u0434\u043b\u044f \u043a\u0430\u0440\u0442\u043a\u0438 \u0431\u0435\u0437 \u043c\u0430\u0433\u043d\u0456\u0442\u0430, 1 \u0448\u0442.jpg",
+            "fit": false,
+            "seconds": 0.000911
+        },
+        {
+            "product_id": 900110,
+            "image": "catalog/Accsesuary/\u041c\u0430\u0433\u043d\u0456\u0442\u043d\u0438\u0439 \u043a\u0435\u0439\u0441 \u0434\u043b\u044f \u043a\u0430\u0440\u0442\u043e\u043a 35PT.jpg",
+            "fit": false,
+            "seconds": 0.000843
+        },
+        {
+            "product_id": 900211,
+            "image": "catalog/Other/\u041c\u0430\u0433\u043d\u0456\u0442\u043d\u0438\u0439 \u043a\u0435\u0439\u0441 \u0434\u043b\u044f \u043a\u0430\u0440\u0442\u043e\u043a.png",
+            "fit": false,
+            "seconds": 0.000766
+        },
+        {
+            "product_id": 900045,
+            "image": "catalog/3D print/\u0411\u0440\u0435\u043b\u043e\u043a\u0438/\u0414\u0456\u0442\u0442\u043e \u0431\u0440\u0435\u043b\u043e\u043a \u0441\u043f\u0456\u043d\u0435\u0440.JPG",
+            "fit": false,
+            "seconds": 0.00074
+        },
+        {
+            "product_id": 900036,
+            "image": "catalog/3D print/\u0411\u0440\u0435\u043b\u043e\u043a\u0438/\u0411\u0440\u0435\u043b\u043e\u043a \u043f\u043e\u043a\u0435\u0431\u043e\u043b.JPG",
+            "fit": false,
+            "seconds": 0.000791
+        },
+        {
+            "product_id": 900192,
+            "image": "catalog/Other/Protectory-100sht-generic.jpg",
+            "fit": false,
+            "seconds": 0.000736
+        },
+        {
+            "product_id": 900043,
+            "image": "catalog/3D print/\u0411\u0440\u0435\u043b\u043e\u043a\u0438/\u0411\u0440\u0435\u043b\u043e\u043a \u0447\u0430\u0440\u043c\u0430\u043d\u0434\u0435\u04401.JPG",
+            "fit": false,
+            "seconds": 0.000941
+        },
+        {
+            "product_id": 900044,
+            "image": "catalog/3D print/\u0411\u0440\u0435\u043b\u043e\u043a\u0438/\u0412\u0430\u043d \u041f\u0456\u0441 \u0447\u0435\u0440\u0435\u043f \u0431\u0440\u0435\u043b\u043e\u043a.JPG",
+            "fit": false,
+            "seconds": 0.000759
+        },
+        {
+            "product_id": 900073,
+            "image": "catalog/3D print/\u0424\u0456\u0433\u0443\u0440\u043a\u0438/\u0424\u0456\u0433\u0443\u0440\u043a\u0430 \u043f\u043e\u0445\u0438\u0442\u0443\u043d Snorlax Pok\u00e9mon \u2014 3D-\u0434\u0440\u0443\u043a Booster Shop.jpg",
+            "fit": false,
+            "seconds": 0.00093
+        },
+        {
+            "product_id": 900071,
+            "image": "catalog/3D print/\u0424\u0456\u0433\u0443\u0440\u043a\u0438/\u0424\u0456\u0433\u0443\u0440\u043a\u0430 \u043f\u043e\u0445\u0438\u0442\u0443\u043d Snorlax Pok\u00e9mon \u2014 3D-\u0434\u0440\u0443\u043a Booster Shop 2.jpg",
+            "fit": false,
+            "seconds": 0.000869
+        },
+        {
+            "product_id": 900072,
+            "image": "catalog/3D print/\u0424\u0456\u0433\u0443\u0440\u043a\u0438/\u0424\u0456\u0433\u0443\u0440\u043a\u0430 \u043f\u043e\u0445\u0438\u0442\u0443\u043d Snorlax Pok\u00e9mon \u2014 3D-\u0434\u0440\u0443\u043a Booster Shop face.jpg",
+            "fit": false,
+            "seconds": 0.000821
+        },
+        {
+            "product_id": 900068,
+            "image": "catalog/3D print/\u0424\u0456\u0433\u0443\u0440\u043a\u0438/\u041f\u043b\u0430\u0441\u043a\u0430 \u043a\u0430\u0440\u0442\u0438\u043d\u0430 \u041b\u0443\u0444\u0444\u0456 2.png",
+            "fit": false,
+            "seconds": 0.00076
+        },
+        {
+            "product_id": 900097,
+            "image": "catalog/Accsesuary/albom-dlia-kartok-OnePiece-na-400-slotiv.png",
+            "fit": false,
+            "seconds": 0.000826
+        },
+        {
+            "product_id": 900082,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/pidstavka-dlia-slab-na-nizhtsi-3d-druk.webp",
+            "fit": false,
+            "seconds": 0.000894
+        },
+        {
+            "product_id": 900083,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/pidstavka-dlia-slaba PSA.webp",
+            "fit": false,
+            "seconds": 0.000756
+        },
+        {
+            "product_id": 900098,
+            "image": "catalog/Accsesuary/albom-dlia-kartok-pokemon-na-400-slotiv.png",
+            "fit": false,
+            "seconds": 0.000767
+        },
+        {
+            "product_id": 900090,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/\u041f\u0456\u0434\u0441\u0442\u0430\u0432\u043a\u0430 \u043c\u0430\u043b\u04301.webp",
+            "fit": false,
+            "seconds": 0.000774
+        },
+        {
+            "product_id": 900099,
+            "image": "catalog/Accsesuary/\u0410\u043a\u0440\u0438\u043b\u043e\u0432\u0438\u0439 \u0436\u043e\u0440\u0441\u0442\u043a\u0438\u0439 \u043f\u0440\u043e\u0442\u0435\u043a\u0442\u043e\u0440 \u0434\u043b\u044f \u043a\u0430\u0440\u0442\u043a\u0438 1 \u0448\u0442.png",
+            "fit": false,
+            "seconds": 0.000778
+        },
+        {
+            "product_id": 900100,
+            "image": "catalog/Accsesuary/\u0410\u043a\u0440\u0438\u043b\u043e\u0432\u0438\u0439 \u043a\u0435\u0439\u0441 \u0434\u043b\u044f \u043a\u0430\u0440\u0442\u043a\u0438 \u0431\u0435\u0437 \u043c\u0430\u0433\u043d\u0456\u0442\u0430, 1 \u0448\u0442.png",
+            "fit": false,
+            "seconds": 0.000868
+        },
+        {
+            "product_id": 900102,
+            "image": "catalog/Accsesuary/\u0410\u043a\u0440\u0438\u043b\u043e\u0432\u0438\u0439 \u043f\u0440\u043e\u0442\u0435\u043a\u0442\u043e\u0440-\u043a\u0435\u0439\u0441 \u0434\u043b\u044f \u043a\u0430\u0440\u0442\u043a\u0438 \u0431\u0435\u0437 \u043c\u0430\u0433\u043d\u0456\u0442\u0430, 1 \u0448\u0442.png",
+            "fit": false,
+            "seconds": 0.000774
+        },
+        {
+            "product_id": 900103,
+            "image": "catalog/Accsesuary/\u0410\u043b\u044c\u0431\u043e\u043c \u0434\u043b\u044f \u043a\u043e\u043b\u0435\u043a\u0446\u0456\u0439\u043d\u0438\u0445 \u043a\u0430\u0440\u0442\u043e\u043a \u043d\u0430 360 \u043a\u0430\u0440\u0442\u043e\u043a, \u0431\u0456\u043b\u0438\u0439.png",
+            "fit": false,
+            "seconds": 0.000751
+        },
+        {
+            "product_id": 900104,
+            "image": "catalog/Accsesuary/\u0410\u043b\u044c\u0431\u043e\u043c \u0434\u043b\u044f \u043a\u043e\u043b\u0435\u043a\u0446\u0456\u0439\u043d\u0438\u0445 \u043a\u0430\u0440\u0442\u043e\u043a \u043d\u0430 360 \u043a\u0430\u0440\u0442\u043e\u043a, \u0436\u043e\u0432\u0442\u0438\u0439.png",
+            "fit": false,
+            "seconds": 0.00077
+        },
+        {
+            "product_id": 900105,
+            "image": "catalog/Accsesuary/\u0410\u043b\u044c\u0431\u043e\u043c \u0434\u043b\u044f \u043a\u043e\u043b\u0435\u043a\u0446\u0456\u0439\u043d\u0438\u0445 \u043a\u0430\u0440\u0442\u043e\u043a \u043d\u0430 360 \u043a\u0430\u0440\u0442\u043e\u043a, \u0447\u043e\u0440\u043d\u0438\u0439.png",
+            "fit": false,
+            "seconds": 0.000738
+        },
+        {
+            "product_id": 900106,
+            "image": "catalog/Accsesuary/\u0410\u043b\u044c\u0431\u043e\u043c \u0434\u043b\u044f \u043a\u043e\u043b\u0435\u043a\u0446\u0456\u0439\u043d\u0438\u0445 \u043a\u0430\u0440\u0442\u043e\u043a \u043d\u0430 360 \u043a\u0430\u0440\u0442\u043e\u043a.png",
+            "fit": false,
+            "seconds": 0.000756
+        },
+        {
+            "product_id": 900107,
+            "image": "catalog/Accsesuary/\u0410\u043b\u044c\u0431\u043e\u043c\u0438 \u0434\u043b\u044f \u043a\u043e\u043b\u0435\u043a\u0446\u0456\u0439\u043d\u0438\u0445 \u043a\u0430\u0440\u0442\u043e\u043a \u043d\u0430 360 \u043a\u0430\u0440\u0442\u043e\u043a.png",
+            "fit": false,
+            "seconds": 0.000767
+        },
+        {
+            "product_id": 900108,
+            "image": "catalog/Accsesuary/\u0411\u0456\u043b\u0438\u0439 \u0430\u043b\u044c\u0431\u043e\u043c \u0434\u043b\u044f \u043a\u043e\u043b\u0435\u043a\u0446\u0456\u0439\u043d\u0438\u0445 \u043a\u0430\u0440\u0442\u043e\u043a \u043d\u0430 360 \u043a\u0430\u0440\u0442\u043e\u043a.png",
+            "fit": false,
+            "seconds": 0.0009
+        },
+        {
+            "product_id": 900109,
+            "image": "catalog/Accsesuary/\u041c\u0430\u0433\u043d\u0456\u0442\u043d\u0438\u0439 \u043a\u0435\u0439\u0441 \u0434\u043b\u044f \u043a\u0430\u0440\u0442 35PT.png",
+            "fit": false,
+            "seconds": 0.000818
+        },
+        {
+            "product_id": 900087,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/stakan-dlia-ruchok-ditto-pokemon-3d-druk.webp",
+            "fit": false,
+            "seconds": 0.000862
+        },
+        {
+            "product_id": 900113,
+            "image": "catalog/Accsesuary/\u0422\u043e\u043f\u043b\u043e\u0430\u0434\u0435\u0440\u0438 \u0434\u043b\u044f \u043a\u0430\u0440\u0442\u043e\u043a 35PT, 25 \u0448\u0442 toploaders.png",
+            "fit": false,
+            "seconds": 0.000785
+        },
+        {
+            "product_id": 900029,
+            "image": "catalog/3D print/\u0411\u0440\u0435\u043b\u043e\u043a\u0438/\u0411\u0440\u0435\u043b\u043e\u0432 MEW.jpg",
+            "fit": false,
+            "seconds": 0.000695
+        },
+        {
+            "product_id": 900030,
+            "image": "catalog/3D print/\u0411\u0440\u0435\u043b\u043e\u043a\u0438/\u0411\u0440\u0435\u043b\u043e\u043a 3\u0445 \u043f\u043e\u043a\u0435.jpg",
+            "fit": false,
+            "seconds": 0.000707
+        },
+        {
+            "product_id": 900032,
+            "image": "catalog/3D print/\u0411\u0440\u0435\u043b\u043e\u043a\u0438/\u0411\u0440\u0435\u043b\u043e\u043a \u0431\u0443\u043b\u044c\u0431\u0430\u0437\u0430\u0432\u0440.jpg",
+            "fit": false,
+            "seconds": 0.000754
+        },
+        {
+            "product_id": 900033,
+            "image": "catalog/3D print/\u0411\u0440\u0435\u043b\u043e\u043a\u0438/\u0411\u0440\u0435\u043b\u043e\u043a \u0432\u0430\u043d \u043f\u0456\u0441.jpg",
+            "fit": false,
+            "seconds": 0.00076
+        },
+        {
+            "product_id": 900034,
+            "image": "catalog/3D print/\u0411\u0440\u0435\u043b\u043e\u043a\u0438/\u0411\u0440\u0435\u043b\u043e\u043a \u043a\u0430\u043f\u0435\u043b\u044e\u0445 \u0437 \u043a\u0440\u0438\u043b\u0430\u043c\u0438.jpg",
+            "fit": false,
+            "seconds": 0.000753
+        },
+        {
+            "product_id": 900035,
+            "image": "catalog/3D print/\u0411\u0440\u0435\u043b\u043e\u043a\u0438/\u0411\u0440\u0435\u043b\u043e\u043a \u043f\u0456\u043a\u0430\u0447\u0443.jpg",
+            "fit": false,
+            "seconds": 0.000767
+        },
+        {
+            "product_id": 900037,
+            "image": "catalog/3D print/\u0411\u0440\u0435\u043b\u043e\u043a\u0438/\u0411\u0440\u0435\u043b\u043e\u043a \u0441\u043a\u0432\u0456\u0440\u0442\u043b.jpg",
+            "fit": false,
+            "seconds": 0.000772
+        },
+        {
+            "product_id": 900039,
+            "image": "catalog/3D print/\u0411\u0440\u0435\u043b\u043e\u043a\u0438/\u0411\u0440\u0435\u043b\u043e\u043a \u0441\u043f\u0456\u043d\u0435\u0440 \u0414\u0456\u0442\u0442\u043e.jpg",
+            "fit": false,
+            "seconds": 0.00083
+        },
+        {
+            "product_id": 900040,
+            "image": "catalog/3D print/\u0411\u0440\u0435\u043b\u043e\u043a\u0438/\u0411\u0440\u0435\u043b\u043e\u043a \u0441\u043f\u0456\u043d\u0435\u0440 \u0414\u0456\u0442\u0442\u043e1.jpg",
+            "fit": false,
+            "seconds": 0.000768
+        },
+        {
+            "product_id": 900042,
+            "image": "catalog/3D print/\u0411\u0440\u0435\u043b\u043e\u043a\u0438/\u0411\u0440\u0435\u043b\u043e\u043a \u0447\u0430\u0440\u043c\u0430\u043d\u0434\u0435\u0440.jpg",
+            "fit": false,
+            "seconds": 0.000744
+        },
+        {
+            "product_id": 900046,
+            "image": "catalog/3D print/\u0411\u0440\u0435\u043b\u043e\u043a\u0438/\u041a\u043b\u0456\u043a\u0435\u0440 \u0447\u0430\u0440\u043c\u0430\u043d\u0434\u0435\u0440.jpg",
+            "fit": false,
+            "seconds": 0.000764
+        },
+        {
+            "product_id": 900061,
+            "image": "catalog/3D print/\u0424\u0456\u0433\u0443\u0440\u043a\u0438/\u0413\u0435\u043e\u0434\u0443\u0434 \u043e\u0434\u043d\u043e\u043a\u043e\u043b\u044c\u043e\u0440\u043e\u0432\u0438\u0439 L \u0442\u0430 M.webp",
+            "fit": false,
+            "seconds": 0.000777
+        },
+        {
+            "product_id": 900064,
+            "image": "catalog/3D print/\u0424\u0456\u0433\u0443\u0440\u043a\u0438/\u041b\u0443\u0444\u0444\u0456 \u0440\u0443\u0445\u043e\u043c\u0438\u0439.webp",
+            "fit": false,
+            "seconds": 0.000763
+        },
+        {
+            "product_id": 900089,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/\u041f\u0456\u0434\u0441\u0442\u0430\u0432\u043a\u0430 \u043c\u0430\u043b\u0430.webp",
+            "fit": false,
+            "seconds": 0.000774
+        },
+        {
+            "product_id": 900093,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/\u041f\u0456\u0434\u0441\u0442\u0430\u0432\u043a\u0430 \u0441\u0435\u0440\u0435\u0434\u043d\u044f2.webp",
+            "fit": false,
+            "seconds": 0.000801
+        },
+        {
+            "product_id": 900095,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/\u0428\u0435\u0441\u0442\u0438\u0433\u0440\u0430\u043d\u043d\u0430 \u043a\u0440\u0443\u0442\u044f\u0449\u0430 \u043f\u0456\u0434\u0441\u0442\u0430\u0432\u043a\u0430 \u043f\u0456\u0434 \u0442\u043e\u043f\u043b\u043e\u0430\u0434\u0435\u0440\u0438.webp",
+            "fit": false,
+            "seconds": 0.000878
+        },
+        {
+            "product_id": 900176,
+            "image": "catalog/Other/35pt-180pt-magnitni-ramki-dlya-kartok_6l74fhlsgq9cbn63n.jpg",
+            "fit": false,
+            "seconds": 0.000897
+        },
+        {
+            "product_id": 900069,
+            "image": "catalog/3D print/\u0424\u0456\u0433\u0443\u0440\u043a\u0438/\u041f\u043b\u0430\u0441\u043a\u0438\u0439 \u041b\u0443\u0444\u0444\u0456 \u0441\u0438\u043b\u0443\u0435\u0442.webp",
+            "fit": false,
+            "seconds": 0.000779
+        },
+        {
+            "product_id": 900000,
+            "image": "catalog/3D print/kit card/Gengar kit card 1.webp",
+            "fit": false,
+            "seconds": 0.000902
+        },
+        {
+            "product_id": 900001,
+            "image": "catalog/3D print/kit card/Gengar kit card 2.webp",
+            "fit": false,
+            "seconds": 0.000957
+        },
+        {
+            "product_id": 900002,
+            "image": "catalog/3D print/kit card/Gengar kit card 3d print.webp",
+            "fit": false,
+            "seconds": 0.000893
+        },
+        {
+            "product_id": 900003,
+            "image": "catalog/3D print/kit card/Gengar kit card.webp",
+            "fit": false,
+            "seconds": 0.00086
+        },
+        {
+            "product_id": 900004,
+            "image": "catalog/3D print/kit card/Jugglypuff kit card 1.webp",
+            "fit": false,
+            "seconds": 0.00073
+        },
+        {
+            "product_id": 900005,
+            "image": "catalog/3D print/kit card/Jugglypuff kit card 2.webp",
+            "fit": false,
+            "seconds": 0.000751
+        },
+        {
+            "product_id": 900006,
+            "image": "catalog/3D print/kit card/Jugglypuff kit card 4.webp",
+            "fit": false,
+            "seconds": 0.000751
+        },
+        {
+            "product_id": 900007,
+            "image": "catalog/3D print/kit card/Jugglypuff kit card.webp",
+            "fit": false,
+            "seconds": 0.0007
+        },
+        {
+            "product_id": 900008,
+            "image": "catalog/3D print/kit card/Magicarp kit card 1.webp",
+            "fit": false,
+            "seconds": 0.000728
+        },
+        {
+            "product_id": 900009,
+            "image": "catalog/3D print/kit card/Magicarp kit card 2.webp",
+            "fit": false,
+            "seconds": 0.000738
+        },
+        {
+            "product_id": 900010,
+            "image": "catalog/3D print/kit card/Magicarp kit card.webp",
+            "fit": false,
+            "seconds": 0.000742
+        },
+        {
+            "product_id": 900012,
+            "image": "catalog/3D print/kit card/MEW kit card 2.webp",
+            "fit": false,
+            "seconds": 0.000748
+        },
+        {
+            "product_id": 900015,
+            "image": "catalog/3D print/kit card/Pikachu kit card 1.webp",
+            "fit": false,
+            "seconds": 0.000771
+        },
+        {
+            "product_id": 900016,
+            "image": "catalog/3D print/kit card/Pikachu kit card 3.webp",
+            "fit": false,
+            "seconds": 0.000727
+        },
+        {
+            "product_id": 900017,
+            "image": "catalog/3D print/kit card/Pikachu kit card 4.webp",
+            "fit": false,
+            "seconds": 0.000712
+        },
+        {
+            "product_id": 900018,
+            "image": "catalog/3D print/kit card/Pikachu kit card.webp",
+            "fit": false,
+            "seconds": 0.000765
+        },
+        {
+            "product_id": 900019,
+            "image": "catalog/3D print/kit card/Sqirtle kit card 1.webp",
+            "fit": false,
+            "seconds": 0.000752
+        },
+        {
+            "product_id": 900020,
+            "image": "catalog/3D print/kit card/Sqirtle kit card 2.webp",
+            "fit": false,
+            "seconds": 0.00081
+        },
+        {
+            "product_id": 900021,
+            "image": "catalog/3D print/kit card/Sqirtle kit card 3.webp",
+            "fit": false,
+            "seconds": 0.000725
+        },
+        {
+            "product_id": 900022,
+            "image": "catalog/3D print/kit card/Sqirtle kit card 4.webp",
+            "fit": false,
+            "seconds": 0.000717
+        },
+        {
+            "product_id": 900023,
+            "image": "catalog/3D print/kit card/Sqirtle kit card.webp",
+            "fit": false,
+            "seconds": 0.00066
+        },
+        {
+            "product_id": 900024,
+            "image": "catalog/3D print/kit card/Umbreon kit card 1.webp",
+            "fit": false,
+            "seconds": 0.000684
+        },
+        {
+            "product_id": 900025,
+            "image": "catalog/3D print/kit card/Umbreon kit card 2.webp",
+            "fit": false,
+            "seconds": 0.000723
+        },
+        {
+            "product_id": 900026,
+            "image": "catalog/3D print/kit card/Umbreon kit card.webp",
+            "fit": false,
+            "seconds": 0.000709
+        },
+        {
+            "product_id": 900049,
+            "image": "catalog/3D print/\u0424\u0456\u0433\u0443\u0440\u043a\u0438/Figurka Charizard Pokemon 1.webp",
+            "fit": false,
+            "seconds": 0.000729
+        },
+        {
+            "product_id": 900050,
+            "image": "catalog/3D print/\u0424\u0456\u0433\u0443\u0440\u043a\u0438/Figurka Charizard Pokemon.webp",
+            "fit": false,
+            "seconds": 0.000803
+        },
+        {
+            "product_id": 900051,
+            "image": "catalog/3D print/\u0424\u0456\u0433\u0443\u0440\u043a\u0438/Figurka Nami One Piece 1.webp",
+            "fit": false,
+            "seconds": 0.000707
+        },
+        {
+            "product_id": 900052,
+            "image": "catalog/3D print/\u0424\u0456\u0433\u0443\u0440\u043a\u0438/Figurka Nami One Piece.webp",
+            "fit": false,
+            "seconds": 0.000708
+        },
+        {
+            "product_id": 900053,
+            "image": "catalog/3D print/\u0424\u0456\u0433\u0443\u0440\u043a\u0438/kartyna-luffy-kruhla-one-piece-3d-druk 1.jpg",
+            "fit": false,
+            "seconds": 0.00073
+        },
+        {
+            "product_id": 900054,
+            "image": "catalog/3D print/\u0424\u0456\u0433\u0443\u0440\u043a\u0438/kartyna-luffy-kruhla-one-piece-3d-druk.jpg",
+            "fit": false,
+            "seconds": 0.00072
+        },
+        {
+            "product_id": 900070,
+            "image": "catalog/3D print/\u0424\u0456\u0433\u0443\u0440\u043a\u0438/\u0421\u0442\u043e\u044f\u0447\u0438\u0439 \u043a\u043b\u0456\u043a\u0435\u0440 \u043f\u043e\u043a\u0435\u0431\u043e\u043b.webp",
+            "fit": false,
+            "seconds": 0.000702
+        },
+        {
+            "product_id": 900075,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/chasha-pokeball-pokemon-3d-druk1.webp",
+            "fit": false,
+            "seconds": 0.00071
+        },
+        {
+            "product_id": 900076,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/Ditto cukernutsya 1.webp",
+            "fit": false,
+            "seconds": 0.000732
+        },
+        {
+            "product_id": 900077,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/Ditto cukernutsya.webp",
+            "fit": false,
+            "seconds": 0.00078
+        },
+        {
+            "product_id": 900091,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/\u041f\u0456\u0434\u0441\u0442\u0430\u0432\u043a\u0430 \u043f\u0456\u0434 \u0441\u043b\u0430\u0431\u0438 PSA, CGC, BGS (\u0431\u0435\u0437 \u043f\u043e\u043a\u0435\u0431\u043e\u043b\u0443).webp",
+            "fit": false,
+            "seconds": 0.000794
+        },
+        {
+            "product_id": 900094,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/\u0428\u0435\u0441\u0442\u0438\u0433\u0440\u0430\u043d\u043d\u0430 \u043a\u0440\u0443\u0442\u044f\u0449\u0430 \u043f\u0456\u0434\u0441\u0442\u0430\u0432\u043a\u0430 \u043f\u0456\u0434 \u0433\u0440\u0435\u0439\u0434\u0436\u0435\u043d\u0456 PSA, CGC, BGS.webp",
+            "fit": false,
+            "seconds": 0.000788
+        },
+        {
+            "product_id": 900028,
+            "image": "catalog/3D print/\u0411\u0440\u0435\u043b\u043e\u043a\u0438/One Piece brelock.jpg",
+            "fit": false,
+            "seconds": 0.000754
+        },
+        {
+            "product_id": 900031,
+            "image": "catalog/3D print/\u0411\u0440\u0435\u043b\u043e\u043a\u0438/\u0411\u0440\u0435\u043b\u043e\u043a One Piece.jpg",
+            "fit": false,
+            "seconds": 0.00074
+        },
+        {
+            "product_id": 900055,
+            "image": "catalog/3D print/\u0424\u0456\u0433\u0443\u0440\u043a\u0438/kartyna-zoro-one-piece-3d-druk.jpg",
+            "fit": false,
+            "seconds": 0.000972
+        },
+        {
+            "product_id": 900065,
+            "image": "catalog/3D print/\u0424\u0456\u0433\u0443\u0440\u043a\u0438/\u041e\u043d\u0456\u043a\u0441 \u0440\u0443\u0445\u043e\u043c\u0438\u0439 L \u0442\u0430 \u041c.webp",
+            "fit": false,
+            "seconds": 0.000788
+        },
+        {
+            "product_id": 900074,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/chasha-pokeball-pokemon-3d-druk.webp",
+            "fit": false,
+            "seconds": 0.000717
+        },
+        {
+            "product_id": 900092,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/\u041f\u0456\u0434\u0441\u0442\u0430\u0432\u043a\u0430 \u0441\u0435\u0440\u0435\u0434\u043d\u044f1.webp",
+            "fit": false,
+            "seconds": 0.000722
+        },
+        {
+            "product_id": 900096,
+            "image": "catalog/3D print/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456/\u0428\u0435\u0441\u0442\u0438\u0433\u0440\u0430\u043d\u043d\u0430 \u043a\u0440\u0443\u0442\u044f\u0449\u0430 \u043f\u0456\u0434\u0441\u0442\u0430\u0432\u043a\u0430 \u043f\u0456\u0434 \u0442\u043e\u043f\u043b\u043e\u0430\u0434\u0435\u0440\u04381.webp",
+            "fit": false,
+            "seconds": 0.001061
+        },
+        {
+            "product_id": 900011,
+            "image": "catalog/3D print/kit card/MEW kit card 1.webp",
+            "fit": false,
+            "seconds": 0.001081
+        },
+        {
+            "product_id": 900013,
+            "image": "catalog/3D print/kit card/MEW kit card 3.webp",
+            "fit": false,
+            "seconds": 0.000789
+        },
+        {
+            "product_id": 900014,
+            "image": "catalog/3D print/kit card/MEW kit card.webp",
+            "fit": false,
+            "seconds": 0.000679
+        },
+        {
+            "product_id": 900062,
+            "image": "catalog/3D print/\u0424\u0456\u0433\u0443\u0440\u043a\u0438/\u0413\u0435\u043e\u0434\u0443\u0434 \u0444\u0456\u0433\u0443\u0440\u043a\u0430 3\u0434.jpg",
+            "fit": false,
+            "seconds": 0.000713
+        },
+        {
+            "product_id": 900056,
+            "image": "catalog/3D print/\u0424\u0456\u0433\u0443\u0440\u043a\u0438/kartyna-zoro-one-piece-3d-druk1.webp",
+            "fit": false,
+            "seconds": 0.000734
+        },
+        {
+            "product_id": 900194,
+            "image": "catalog/Other/Toploader1p (1).webp",
+            "fit": false,
+            "seconds": 0.00071
+        },
+        {
+            "product_id": 900111,
+            "image": "catalog/Accsesuary/\u0422\u043e\u043f\u043b\u043e\u0430\u0434\u0435\u0440\u0438 \u0434\u043b\u044f \u043a\u0430\u0440\u0442\u043e\u043a 35PT, 25 \u0448\u0442 toploaders 2 var.png",
+            "fit": false,
+            "seconds": 0.000713
+        },
+        {
+            "product_id": 900112,
+            "image": "catalog/Accsesuary/\u0422\u043e\u043f\u043b\u043e\u0430\u0434\u0435\u0440\u0438 \u0434\u043b\u044f \u043a\u0430\u0440\u0442\u043e\u043a 35PT, 25 \u0448\u0442 toploaders 3 var.png",
+            "fit": false,
+            "seconds": 0.000748
+        },
+        {
+            "product_id": 900178,
+            "image": "catalog/Other/arkush-na-9-kyshenok-game-7-days-9-pocket-page..png",
+            "fit": false,
+            "seconds": 0.000765
+        },
+        {
+            "product_id": 900179,
+            "image": "catalog/Other/arkush-na-9-kyshenok-game-7-days-9-pocket-page.png",
+            "fit": false,
+            "seconds": 0.000954
+        },
+        {
+            "product_id": 900186,
+            "image": "catalog/Other/G7D sleeves premium plus (MTG).webp",
+            "fit": false,
+            "seconds": 0.000944
+        },
+        {
+            "product_id": 900195,
+            "image": "catalog/Other/toploadery-3-x-4.png",
+            "fit": false,
+            "seconds": 0.00093
+        },
+        {
+            "product_id": 900187,
+            "image": "catalog/Other/G7D.jpg",
+            "fit": false,
+            "seconds": 0.000962
+        }
+    ]
+}

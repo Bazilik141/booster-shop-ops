@@ -1,0 +1,27 @@
+{
+  "scope": "owner screenshot metadata-path hashes matched to supplied archive source paths; not a live product-ID mapping",
+  "owner_warning_hashes": [
+    "7e7db86470b059c8ecc839d89f829847b9006bc0342283c928c7abc0d673ec12",
+    "c25120109ee212b3771bef1c7309403970fe2a1fdc28ef96081ba3572a183daa",
+    "fc02ea6c56cd7818fbffed42f0a69feaf4e02ecab035c40ffa2e74a34650d72c",
+    "cc0585cca0630e12829c8a10bd05b3b91abb6cc148e152529d1b2b29a4003cf6"
+  ],
+  "archive_matches": [
+    {
+      "source": "catalog/3D print/Фігурки/Figurka Charizard Pokemon.webp",
+      "metadata_path_hash": "fc02ea6c56cd7818fbffed42f0a69feaf4e02ecab035c40ffa2e74a34650d72c"
+    },
+    {
+      "source": "catalog/3D print/Функціональні/pidstavka-slab-tcg-01.jpg.JPG",
+      "metadata_path_hash": "cc0585cca0630e12829c8a10bd05b3b91abb6cc148e152529d1b2b29a4003cf6"
+    },
+    {
+      "source": "catalog/One Piece/One Piece Card Game OP-16 The Time of Battle-Photoroom.png",
+      "metadata_path_hash": "7e7db86470b059c8ecc839d89f829847b9006bc0342283c928c7abc0d673ec12"
+    },
+    {
+      "source": "catalog/Pokemon/pokemon-storm-emeralda-M6-booster-pack.png",
+      "metadata_path_hash": "c25120109ee212b3771bef1c7309403970fe2a1fdc28ef96081ba3572a183daa"
+    }
+  ]
+}

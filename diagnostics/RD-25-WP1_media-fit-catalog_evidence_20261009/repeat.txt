@@ -1,0 +1,5 @@
+cwd=C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-wp1-20261009\fixture
+time=2026-10-10T18:18:56+00:00
+already_applied=yes
+done=ok
+self_delete=ok

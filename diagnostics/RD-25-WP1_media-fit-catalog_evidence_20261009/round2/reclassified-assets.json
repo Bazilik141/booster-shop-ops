@@ -1,0 +1,629 @@
+{
+    "revision_date": "2026-10-10",
+    "metadata_version": 2,
+    "near_white_rgb_minimum": 240,
+    "opaque_alpha": 255,
+    "before_counts": {
+        "3D print": {
+            "photo": 97
+        },
+        "Accsesuary": {
+            "photo": 14,
+            "cut": 3
+        },
+        "One Piece": {
+            "photo": 14,
+            "cut": 48
+        },
+        "Other": {
+            "photo": 12,
+            "cut": 26
+        },
+        "Pokemon": {
+            "cut": 60,
+            "photo": 12
+        }
+    },
+    "after_counts": {
+        "3D print": {
+            "photo": 97
+        },
+        "Accsesuary": {
+            "photo": 13,
+            "cut": 4
+        },
+        "One Piece": {
+            "cut": 55,
+            "photo": 7
+        },
+        "Other": {
+            "cut": 29,
+            "photo": 9
+        },
+        "Pokemon": {
+            "cut": 66,
+            "photo": 6
+        }
+    },
+    "changed_assets": [
+        {
+            "source": "catalog/Accsesuary/albom-dlia-kartok-pokemon-na-400-slotiv.png",
+            "before": "photo",
+            "after": "cut",
+            "corner_alpha": [
+                255,
+                255,
+                255,
+                255
+            ],
+            "corner_rgb": [
+                [
+                    254,
+                    255,
+                    255
+                ],
+                [
+                    254,
+                    255,
+                    254
+                ],
+                [
+                    254,
+                    254,
+                    254
+                ],
+                [
+                    254,
+                    253,
+                    254
+                ]
+            ],
+            "reason": "opaque_near_white_corners"
+        },
+        {
+            "source": "catalog/One Piece/Bandai.jpg",
+            "before": "photo",
+            "after": "cut",
+            "corner_alpha": [
+                255,
+                255,
+                255,
+                255
+            ],
+            "corner_rgb": [
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ]
+            ],
+            "reason": "opaque_near_white_corners"
+        },
+        {
+            "source": "catalog/One Piece/BS Big logo.png",
+            "before": "photo",
+            "after": "cut",
+            "corner_alpha": [
+                255,
+                255,
+                255,
+                255
+            ],
+            "corner_rgb": [
+                [
+                    254,
+                    254,
+                    254
+                ],
+                [
+                    254,
+                    254,
+                    254
+                ],
+                [
+                    254,
+                    254,
+                    254
+                ],
+                [
+                    254,
+                    254,
+                    254
+                ]
+            ],
+            "reason": "opaque_near_white_corners"
+        },
+        {
+            "source": "catalog/One Piece/BS Big logo1.jpg",
+            "before": "photo",
+            "after": "cut",
+            "corner_alpha": [
+                255,
+                255,
+                255,
+                255
+            ],
+            "corner_rgb": [
+                [
+                    254,
+                    254,
+                    254
+                ],
+                [
+                    254,
+                    254,
+                    254
+                ],
+                [
+                    254,
+                    254,
+                    254
+                ],
+                [
+                    254,
+                    254,
+                    254
+                ]
+            ],
+            "reason": "opaque_near_white_corners"
+        },
+        {
+            "source": "catalog/One Piece/One Piece OP-05 Awakening of the New Era Booster (Японське видання).jpg",
+            "before": "photo",
+            "after": "cut",
+            "corner_alpha": [
+                255,
+                255,
+                255,
+                255
+            ],
+            "corner_rgb": [
+                [
+                    254,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ]
+            ],
+            "reason": "opaque_near_white_corners"
+        },
+        {
+            "source": "catalog/One Piece/One Piece OP-05 Awakening of the New Era display (Японське видання).jpg",
+            "before": "photo",
+            "after": "cut",
+            "corner_alpha": [
+                255,
+                255,
+                255,
+                255
+            ],
+            "corner_rgb": [
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ]
+            ],
+            "reason": "opaque_near_white_corners"
+        },
+        {
+            "source": "catalog/One Piece/One-Piece-Boosters-EB-02 card.jpg",
+            "before": "photo",
+            "after": "cut",
+            "corner_alpha": [
+                255,
+                255,
+                255,
+                255
+            ],
+            "corner_rgb": [
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    254,
+                    255,
+                    255
+                ]
+            ],
+            "reason": "opaque_near_white_corners"
+        },
+        {
+            "source": "catalog/One Piece/OP JP V7-PROMO.png",
+            "before": "photo",
+            "after": "cut",
+            "corner_alpha": [
+                255,
+                255,
+                255,
+                255
+            ],
+            "corner_rgb": [
+                [
+                    255,
+                    255,
+                    254
+                ],
+                [
+                    255,
+                    255,
+                    254
+                ],
+                [
+                    255,
+                    255,
+                    254
+                ],
+                [
+                    255,
+                    255,
+                    254
+                ]
+            ],
+            "reason": "opaque_near_white_corners"
+        },
+        {
+            "source": "catalog/Other/35pt-180pt-magnitni-ramki-dlya-kartok_6l74fhlsgq9cbn63n.jpg",
+            "before": "photo",
+            "after": "cut",
+            "corner_alpha": [
+                255,
+                255,
+                255,
+                255
+            ],
+            "corner_rgb": [
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ]
+            ],
+            "reason": "opaque_near_white_corners"
+        },
+        {
+            "source": "catalog/Other/G7D.jpg",
+            "before": "photo",
+            "after": "cut",
+            "corner_alpha": [
+                255,
+                255,
+                255,
+                255
+            ],
+            "corner_rgb": [
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ]
+            ],
+            "reason": "opaque_near_white_corners"
+        },
+        {
+            "source": "catalog/Other/Yu-Gi-Oh! OCG Blazing Dominion Booster.webp",
+            "before": "photo",
+            "after": "cut",
+            "corner_alpha": [
+                255,
+                255,
+                255,
+                255
+            ],
+            "corner_rgb": [
+                [
+                    253,
+                    253,
+                    253
+                ],
+                [
+                    254,
+                    254,
+                    254
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    253,
+                    253,
+                    253
+                ]
+            ],
+            "reason": "opaque_near_white_corners"
+        },
+        {
+            "source": "catalog/Pokemon/MS1.webp",
+            "before": "photo",
+            "after": "cut",
+            "corner_alpha": [
+                255,
+                255,
+                255,
+                255
+            ],
+            "corner_rgb": [
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    254,
+                    254,
+                    254
+                ],
+                [
+                    252,
+                    254,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ]
+            ],
+            "reason": "opaque_near_white_corners"
+        },
+        {
+            "source": "catalog/Pokemon/MS2.jpg",
+            "before": "photo",
+            "after": "cut",
+            "corner_alpha": [
+                255,
+                255,
+                255,
+                255
+            ],
+            "corner_rgb": [
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ]
+            ],
+            "reason": "opaque_near_white_corners"
+        },
+        {
+            "source": "catalog/Pokemon/MSB1.jpg",
+            "before": "photo",
+            "after": "cut",
+            "corner_alpha": [
+                255,
+                255,
+                255,
+                255
+            ],
+            "corner_rgb": [
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ]
+            ],
+            "reason": "opaque_near_white_corners"
+        },
+        {
+            "source": "catalog/Pokemon/Pokemon Mega Dream Ex.webp",
+            "before": "photo",
+            "after": "cut",
+            "corner_alpha": [
+                255,
+                255,
+                255,
+                255
+            ],
+            "corner_rgb": [
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ]
+            ],
+            "reason": "opaque_near_white_corners"
+        },
+        {
+            "source": "catalog/Pokemon/Pokemon TCG Mega Evolution 05 - Pitch Black - Checklane Blister.webp",
+            "before": "photo",
+            "after": "cut",
+            "corner_alpha": [
+                255,
+                255,
+                255,
+                255
+            ],
+            "corner_rgb": [
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ]
+            ],
+            "reason": "opaque_near_white_corners"
+        },
+        {
+            "source": "catalog/Pokemon/Scarlet_Violet_Expansion_Pack_White_Flare.png",
+            "before": "photo",
+            "after": "cut",
+            "corner_alpha": [
+                255,
+                255,
+                255,
+                255
+            ],
+            "corner_rgb": [
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ]
+            ],
+            "reason": "opaque_near_white_corners"
+        }
+    ],
+    "total_changed": 17
+}

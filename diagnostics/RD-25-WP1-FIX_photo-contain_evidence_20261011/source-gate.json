@@ -1,0 +1,36 @@
+{
+  "archive": "C:\\Users\\14bez\\Downloads\\RD-25-WP1-FIX-photo-check-20261011.tar.gz",
+  "archive_sha256": "3039792077f051aec0ba0be08b86831d434788acf603f3019959418466a8843c",
+  "files": [
+    {
+      "path": "catalog/view/stylesheet/boostershop-ds.css",
+      "bytes": 223090,
+      "sha256": "edc5913817da258374c26aa03cb172eca07c2ee11e76a25402e46e7472440a53"
+    },
+    {
+      "path": "catalog/view/template/common/header.twig",
+      "bytes": 30036,
+      "sha256": "05a195529958ad22f2cdf29229f36d2e47d65394328f6cbe0bba38c9378bb752"
+    },
+    {
+      "path": "catalog/view/template/product/thumb.twig",
+      "bytes": 5202,
+      "sha256": "d9237b2c9c0cc21cda73a86ba6cf1ff66b7ad956f0da3c24a8e1add6518037d6"
+    },
+    {
+      "path": "catalog/controller/product/thumb.php",
+      "bytes": 7107,
+      "sha256": "cf4f8e354b18a4318af159c34bf3c083d0991007b42d03e2c57aa4963c1ed3b1"
+    },
+    {
+      "path": "catalog/model/tool/image.php",
+      "bytes": 20056,
+      "sha256": "85cf9489244c48fe915bc25f370cdfdb2b39c9c6d6a42219cec7f84a9e375e71"
+    },
+    {
+      "path": "system/library/image.php",
+      "bytes": 11766,
+      "sha256": "7f81dcbb8b5d2d032005ae28ce01cea5ba7542f7334fd9909e538f6952adeff9"
+    }
+  ]
+}

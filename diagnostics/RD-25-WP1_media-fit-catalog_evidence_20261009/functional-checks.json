@@ -1,0 +1,1258 @@
+{
+    "php": "8.3.30",
+    "gd": {
+        "GD Version": "bundled (2.1.0 compatible)",
+        "FreeType Support": true,
+        "FreeType Linkage": "with freetype",
+        "GIF Read Support": true,
+        "GIF Create Support": true,
+        "JPEG Support": true,
+        "PNG Support": true,
+        "WBMP Support": true,
+        "XPM Support": true,
+        "XBM Support": true,
+        "WebP Support": true,
+        "BMP Support": true,
+        "AVIF Support": true,
+        "TGA Read Support": true,
+        "JIS-mapped Japanese Font Support": false
+    },
+    "checks": [
+        {
+            "name": "PNG transparent cut",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "JPEG opaque photo",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "WebP transparent cut",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "near-transparent threshold normalized <=16",
+            "pass": true,
+            "detail": {
+                "version": 3,
+                "source": "fixture/near.png",
+                "mtime": 1791656345,
+                "size": 1889,
+                "width": 400,
+                "height": 500,
+                "type": 3,
+                "kind": "cut",
+                "corner_alpha": [
+                    2,
+                    2,
+                    2,
+                    2
+                ],
+                "corner_rgb": [
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ]
+                ],
+                "all_near_white_corners": false,
+                "class_reason": "transparent_corners"
+            }
+        },
+        {
+            "name": "opaque PNG photo",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F1 opaque near-white jpg is cut",
+            "pass": true,
+            "detail": {
+                "version": 3,
+                "source": "fixture/white-jpg.jpg",
+                "mtime": 1791656345,
+                "size": 18629,
+                "width": 700,
+                "height": 1000,
+                "type": 2,
+                "kind": "cut",
+                "corner_alpha": [
+                    255,
+                    255,
+                    255,
+                    255
+                ],
+                "corner_rgb": [
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ]
+                ],
+                "all_near_white_corners": true,
+                "class_reason": "opaque_near_white_corners"
+            }
+        },
+        {
+            "name": "F1 opaque near-white png is cut",
+            "pass": true,
+            "detail": {
+                "version": 3,
+                "source": "fixture/white-png.png",
+                "mtime": 1791656345,
+                "size": 5014,
+                "width": 700,
+                "height": 1000,
+                "type": 3,
+                "kind": "cut",
+                "corner_alpha": [
+                    255,
+                    255,
+                    255,
+                    255
+                ],
+                "corner_rgb": [
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ]
+                ],
+                "all_near_white_corners": true,
+                "class_reason": "opaque_near_white_corners"
+            }
+        },
+        {
+            "name": "F1 opaque near-white webp is cut",
+            "pass": true,
+            "detail": {
+                "version": 3,
+                "source": "fixture/white-webp.webp",
+                "mtime": 1791656345,
+                "size": 1986,
+                "width": 700,
+                "height": 1000,
+                "type": 18,
+                "kind": "cut",
+                "corner_alpha": [
+                    255,
+                    255,
+                    255,
+                    255
+                ],
+                "corner_rgb": [
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ]
+                ],
+                "all_near_white_corners": true,
+                "class_reason": "opaque_near_white_corners"
+            }
+        },
+        {
+            "name": "F1 exact audit threshold RGB=240 passes",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F1 any RGB channel=239 stays photo",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F1 one non-white corner stays photo",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "media v3 rejects stale v2 metadata and recomputes kind once",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F5 inclusive boundary 700/1000",
+            "pass": true,
+            "detail": {
+                "version": 3,
+                "source": "fixture/band-700.png",
+                "mtime": 1791656346,
+                "size": 5016,
+                "width": 700,
+                "height": 1000,
+                "type": 3,
+                "kind": "photo",
+                "corner_alpha": [
+                    255,
+                    255,
+                    255,
+                    255
+                ],
+                "corner_rgb": [
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ]
+                ],
+                "all_near_white_corners": false,
+                "class_reason": "non_white_or_mixed_corners"
+            }
+        },
+        {
+            "name": "F5 inclusive boundary 1450/1000",
+            "pass": true,
+            "detail": {
+                "version": 3,
+                "source": "fixture/band-1450.png",
+                "mtime": 1791656346,
+                "size": 8029,
+                "width": 1450,
+                "height": 1000,
+                "type": 3,
+                "kind": "photo",
+                "corner_alpha": [
+                    255,
+                    255,
+                    255,
+                    255
+                ],
+                "corner_rgb": [
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ]
+                ],
+                "all_near_white_corners": false,
+                "class_reason": "non_white_or_mixed_corners"
+            }
+        },
+        {
+            "name": "F5 inclusive boundary 699/1000",
+            "pass": true,
+            "detail": {
+                "version": 3,
+                "source": "fixture/band-699.png",
+                "mtime": 1791656346,
+                "size": 5016,
+                "width": 699,
+                "height": 1000,
+                "type": 3,
+                "kind": "cut",
+                "corner_alpha": [
+                    255,
+                    255,
+                    255,
+                    255
+                ],
+                "corner_rgb": [
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ]
+                ],
+                "all_near_white_corners": false,
+                "class_reason": "aspect_outside_cover_band"
+            }
+        },
+        {
+            "name": "F5 inclusive boundary 1451/1000",
+            "pass": true,
+            "detail": {
+                "version": 3,
+                "source": "fixture/band-1451.png",
+                "mtime": 1791656346,
+                "size": 8028,
+                "width": 1451,
+                "height": 1000,
+                "type": 3,
+                "kind": "cut",
+                "corner_alpha": [
+                    255,
+                    255,
+                    255,
+                    255
+                ],
+                "corner_rgb": [
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ]
+                ],
+                "all_near_white_corners": false,
+                "class_reason": "aspect_outside_cover_band"
+            }
+        },
+        {
+            "name": "F5 non-white png outside band 500",
+            "pass": true,
+            "detail": {
+                "version": 3,
+                "source": "fixture/aspect-500-png.png",
+                "mtime": 1791656346,
+                "size": 4141,
+                "width": 500,
+                "height": 1000,
+                "type": 3,
+                "kind": "cut",
+                "corner_alpha": [
+                    255,
+                    255,
+                    255,
+                    255
+                ],
+                "corner_rgb": [
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ]
+                ],
+                "all_near_white_corners": false,
+                "class_reason": "aspect_outside_cover_band"
+            }
+        },
+        {
+            "name": "F5 non-white png outside band 2000",
+            "pass": true,
+            "detail": {
+                "version": 3,
+                "source": "fixture/aspect-2000-png.png",
+                "mtime": 1791656346,
+                "size": 10182,
+                "width": 2000,
+                "height": 1000,
+                "type": 3,
+                "kind": "cut",
+                "corner_alpha": [
+                    255,
+                    255,
+                    255,
+                    255
+                ],
+                "corner_rgb": [
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ]
+                ],
+                "all_near_white_corners": false,
+                "class_reason": "aspect_outside_cover_band"
+            }
+        },
+        {
+            "name": "F5 non-white jpg outside band 500",
+            "pass": true,
+            "detail": {
+                "version": 3,
+                "source": "fixture/aspect-500-jpg.jpg",
+                "mtime": 1791656346,
+                "size": 13613,
+                "width": 500,
+                "height": 1000,
+                "type": 2,
+                "kind": "cut",
+                "corner_alpha": [
+                    255,
+                    255,
+                    255,
+                    255
+                ],
+                "corner_rgb": [
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ]
+                ],
+                "all_near_white_corners": false,
+                "class_reason": "aspect_outside_cover_band"
+            }
+        },
+        {
+            "name": "F5 non-white jpg outside band 2000",
+            "pass": true,
+            "detail": {
+                "version": 3,
+                "source": "fixture/aspect-2000-jpg.jpg",
+                "mtime": 1791656346,
+                "size": 40713,
+                "width": 2000,
+                "height": 1000,
+                "type": 2,
+                "kind": "cut",
+                "corner_alpha": [
+                    255,
+                    255,
+                    255,
+                    255
+                ],
+                "corner_rgb": [
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ]
+                ],
+                "all_near_white_corners": false,
+                "class_reason": "aspect_outside_cover_band"
+            }
+        },
+        {
+            "name": "F5 non-white webp outside band 500",
+            "pass": true,
+            "detail": {
+                "version": 3,
+                "source": "fixture/aspect-500-webp.webp",
+                "mtime": 1791656346,
+                "size": 1482,
+                "width": 500,
+                "height": 1000,
+                "type": 18,
+                "kind": "cut",
+                "corner_alpha": [
+                    255,
+                    255,
+                    255,
+                    255
+                ],
+                "corner_rgb": [
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ]
+                ],
+                "all_near_white_corners": false,
+                "class_reason": "aspect_outside_cover_band"
+            }
+        },
+        {
+            "name": "F5 non-white webp outside band 2000",
+            "pass": true,
+            "detail": {
+                "version": 3,
+                "source": "fixture/aspect-2000-webp.webp",
+                "mtime": 1791656346,
+                "size": 4608,
+                "width": 2000,
+                "height": 1000,
+                "type": 18,
+                "kind": "cut",
+                "corner_alpha": [
+                    255,
+                    255,
+                    255,
+                    255
+                ],
+                "corner_rgb": [
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ],
+                    [
+                        30,
+                        30,
+                        30
+                    ]
+                ],
+                "all_near_white_corners": false,
+                "class_reason": "aspect_outside_cover_band"
+            }
+        },
+        {
+            "name": "F5 reason takes precedence over white corners",
+            "pass": true,
+            "detail": {
+                "version": 3,
+                "source": "fixture/aspect-white.png",
+                "mtime": 1791656346,
+                "size": 4139,
+                "width": 500,
+                "height": 1000,
+                "type": 3,
+                "kind": "cut",
+                "corner_alpha": [
+                    255,
+                    255,
+                    255,
+                    255
+                ],
+                "corner_rgb": [
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ]
+                ],
+                "all_near_white_corners": true,
+                "class_reason": "aspect_outside_cover_band"
+            }
+        },
+        {
+            "name": "F5 reason takes precedence over transparent corners",
+            "pass": true,
+            "detail": {
+                "version": 3,
+                "source": "fixture/aspect-transparent.png",
+                "mtime": 1791656346,
+                "size": 4139,
+                "width": 500,
+                "height": 1000,
+                "type": 3,
+                "kind": "cut",
+                "corner_alpha": [
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "corner_rgb": [
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ]
+                ],
+                "all_near_white_corners": false,
+                "class_reason": "aspect_outside_cover_band"
+            }
+        },
+        {
+            "name": "GIF/missing/outside source and invalid dimensions fallback",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "non-padding no-upsample dimensions fixture/portrait.png",
+            "pass": true,
+            "detail": {
+                "0": 583,
+                "1": 875,
+                "2": 18,
+                "3": "width=\"583\" height=\"875\"",
+                "bits": 8,
+                "mime": "image/webp"
+            }
+        },
+        {
+            "name": "separate suffix and decodable WebP fixture/portrait.png",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "non-padding no-upsample dimensions fixture/landscape.jpg",
+            "pass": true,
+            "detail": {
+                "0": 700,
+                "1": 525,
+                "2": 18,
+                "3": "width=\"700\" height=\"525\"",
+                "bits": 8,
+                "mime": "image/webp"
+            }
+        },
+        {
+            "name": "separate suffix and decodable WebP fixture/landscape.jpg",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "non-padding no-upsample dimensions fixture/tiny.webp",
+            "pass": true,
+            "detail": {
+                "0": 90,
+                "1": 150,
+                "2": 18,
+                "3": "width=\"90\" height=\"150\"",
+                "bits": 8,
+                "mime": "image/webp"
+            }
+        },
+        {
+            "name": "separate suffix and decodable WebP fixture/tiny.webp",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "alpha preserved in fitted PNG->WebP",
+            "pass": true,
+            "detail": {
+                "red": 0,
+                "green": 0,
+                "blue": 0,
+                "alpha": 127
+            }
+        },
+        {
+            "name": "20 warm views: zero GD decodes and identical file/time",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "same-stem PNG/JPEG isolated keys",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "source mtime invalidates metadata AND fitted URL without old-cache deletion",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "corrupt metadata regenerates",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "legacy image cache unchanged",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "WebP capability method anchor",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "GD without WebP output: PNG/JPEG fallback",
+            "pass": true,
+            "detail": [
+                "http://fixture/image/cache/rd25-fit/46fb4c62207b08f1cd601835c5b40c20552ae3f1ec66cf6681bf857691b826a8-700x875-fit.png",
+                "http://fixture/image/cache/rd25-fit/b0b7f62e0656ed6eee46ae277f1a164f3ad70c8946e3d8e9db2bb12c77f18676-700x875-fit.jpg"
+            ]
+        },
+        {
+            "name": "complete 286 product-direction archive image assets",
+            "pass": true,
+            "detail": {
+                "3D print": {
+                    "photo": 95,
+                    "cut": 2
+                },
+                "Accsesuary": {
+                    "cut": 5,
+                    "photo": 12
+                },
+                "One Piece": {
+                    "cut": 57,
+                    "photo": 5
+                },
+                "Other": {
+                    "cut": 33,
+                    "photo": 5
+                },
+                "Pokemon": {
+                    "cut": 67,
+                    "photo": 5
+                }
+            }
+        },
+        {
+            "name": "F1 accepted cut retained catalog/Accsesuary/albom-dlia-kartok-pokemon-na-400-slotiv.png",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F1 accepted cut retained catalog/One Piece/Bandai.jpg",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F1 accepted cut retained catalog/One Piece/BS Big logo.png",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F1 accepted cut retained catalog/One Piece/BS Big logo1.jpg",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F1 accepted cut retained catalog/One Piece/One Piece OP-05 Awakening of the New Era Booster (Японське видання).jpg",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F1 accepted cut retained catalog/One Piece/One Piece OP-05 Awakening of the New Era display (Японське видання).jpg",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F1 accepted cut retained catalog/One Piece/One-Piece-Boosters-EB-02 card.jpg",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F1 accepted cut retained catalog/One Piece/OP JP V7-PROMO.png",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F1 accepted cut retained catalog/Other/35pt-180pt-magnitni-ramki-dlya-kartok_6l74fhlsgq9cbn63n.jpg",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F1 accepted cut retained catalog/Other/G7D.jpg",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F1 accepted cut retained catalog/Other/Yu-Gi-Oh! OCG Blazing Dominion Booster.webp",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F1 accepted cut retained catalog/Pokemon/MS1.webp",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F1 accepted cut retained catalog/Pokemon/MS2.jpg",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F1 accepted cut retained catalog/Pokemon/MSB1.jpg",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F1 accepted cut retained catalog/Pokemon/Pokemon Mega Dream Ex.webp",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F1 accepted cut retained catalog/Pokemon/Pokemon TCG Mega Evolution 05 - Pitch Black - Checklane Blister.webp",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F1 accepted cut retained catalog/Pokemon/Scarlet_Violet_Expansion_Pack_White_Flare.png",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F5 changed asset only photo to aspect cut catalog/3D print/Фігурки/Геодуд фігурка 3д.jpg",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F5 changed asset only photo to aspect cut catalog/3D print/Функціональні/stakan-dlia-ruchok-ditto-pokemon-3d-druk.webp",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F5 changed asset only photo to aspect cut catalog/Accsesuary/albom-dlia-kartok-OnePiece-na-400-slotiv.png",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F5 changed asset only photo to aspect cut catalog/One Piece/OP-15 Booster.webp",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F5 changed asset only photo to aspect cut catalog/One Piece/Бустер One Piece Card Game OP-07 (Японське видання).png",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F5 changed asset only photo to aspect cut catalog/Other/Duel Masters — DM24-RP3 — JP.jpg",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F5 changed asset only photo to aspect cut catalog/Other/QCAC-BoosterJP.png",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F5 changed asset only photo to aspect cut catalog/Other/Yu-Gi-Oh OCG Duel Monsters QUARTER CENTURY ART COLLECTION 25th cards.webp",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F5 changed asset only photo to aspect cut catalog/Other/Yu-Gi-Oh! OCG Duel Monsters BEYOND THE BRAVE Booster.webp",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F5 changed asset only photo to aspect cut catalog/Pokemon/Pokémon — Special Card Set Grass Leafeon VSTAR — JP — Collection Set inside.png",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F5 supplied source OP-15 Booster.webp is aspect cut",
+            "pass": true,
+            "detail": [
+                {
+                    "version": 3,
+                    "source": "catalog/One Piece/OP-15 Booster.webp",
+                    "mtime": 1791656344,
+                    "size": 23106,
+                    "width": 209,
+                    "height": 418,
+                    "type": 18,
+                    "kind": "cut",
+                    "corner_alpha": [
+                        255,
+                        255,
+                        255,
+                        255
+                    ],
+                    "corner_rgb": [
+                        [
+                            246,
+                            243,
+                            247
+                        ],
+                        [
+                            238,
+                            235,
+                            240
+                        ],
+                        [
+                            255,
+                            255,
+                            255
+                        ],
+                        [
+                            170,
+                            166,
+                            158
+                        ]
+                    ],
+                    "all_near_white_corners": false,
+                    "class_reason": "aspect_outside_cover_band"
+                }
+            ]
+        },
+        {
+            "name": "F5 supplied source DM24-RP3 — JP.jpg is aspect cut",
+            "pass": true,
+            "detail": [
+                {
+                    "version": 3,
+                    "source": "catalog/Other/Duel Masters — DM24-RP3 — JP.jpg",
+                    "mtime": 1791656344,
+                    "size": 146781,
+                    "width": 508,
+                    "height": 730,
+                    "type": 2,
+                    "kind": "cut",
+                    "corner_alpha": [
+                        255,
+                        255,
+                        255,
+                        255
+                    ],
+                    "corner_rgb": [
+                        [
+                            116,
+                            92,
+                            82
+                        ],
+                        [
+                            236,
+                            217,
+                            210
+                        ],
+                        [
+                            207,
+                            220,
+                            190
+                        ],
+                        [
+                            252,
+                            255,
+                            255
+                        ]
+                    ],
+                    "all_near_white_corners": false,
+                    "class_reason": "aspect_outside_cover_band"
+                }
+            ]
+        },
+        {
+            "name": "F5 supplied source BEYOND THE BRAVE Booster.webp is aspect cut",
+            "pass": true,
+            "detail": [
+                {
+                    "version": 3,
+                    "source": "catalog/Other/Yu-Gi-Oh! OCG Duel Monsters BEYOND THE BRAVE Booster.webp",
+                    "mtime": 1791656344,
+                    "size": 210000,
+                    "width": 580,
+                    "height": 1200,
+                    "type": 18,
+                    "kind": "cut",
+                    "corner_alpha": [
+                        255,
+                        255,
+                        255,
+                        255
+                    ],
+                    "corner_rgb": [
+                        [
+                            82,
+                            73,
+                            72
+                        ],
+                        [
+                            14,
+                            14,
+                            14
+                        ],
+                        [
+                            73,
+                            69,
+                            66
+                        ],
+                        [
+                            14,
+                            14,
+                            14
+                        ]
+                    ],
+                    "all_near_white_corners": false,
+                    "class_reason": "aspect_outside_cover_band"
+                }
+            ]
+        },
+        {
+            "name": "F5 supplied source QCAC-BoosterJP.png is aspect cut",
+            "pass": true,
+            "detail": [
+                {
+                    "version": 3,
+                    "source": "catalog/Other/QCAC-BoosterJP.png",
+                    "mtime": 1791656344,
+                    "size": 3247701,
+                    "width": 928,
+                    "height": 1930,
+                    "type": 3,
+                    "kind": "cut",
+                    "corner_alpha": [
+                        255,
+                        255,
+                        255,
+                        255
+                    ],
+                    "corner_rgb": [
+                        [
+                            24,
+                            22,
+                            23
+                        ],
+                        [
+                            71,
+                            65,
+                            65
+                        ],
+                        [
+                            199,
+                            197,
+                            198
+                        ],
+                        [
+                            17,
+                            15,
+                            16
+                        ]
+                    ],
+                    "all_near_white_corners": false,
+                    "class_reason": "aspect_outside_cover_band"
+                }
+            ]
+        },
+        {
+            "name": "F5 supplied square DM24-RP3 Booster keeps accepted transparent cut",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "thumb uses original source without extra product lookup; commerce data intact",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "third-party product-only caller lookup once/request",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "placeholder original URL remains fallback",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "controller database calls read-only",
+            "pass": true,
+            "detail": [
+                "SELECT `text` FROM `fixture_product_attribute` WHERE `product_id` = '501' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1",
+                "SELECT `text` FROM `fixture_product_attribute` WHERE `product_id` = '502' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1"
+            ]
+        },
+        {
+            "name": "F2 24 cards passing nonempty image add zero getProduct calls",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F2 24 distinct source-less cards add exactly 24 getProduct calls",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "F2 repeated source-less cards reuse request cache",
+            "pass": true,
+            "detail": null
+        }
+    ]
+}

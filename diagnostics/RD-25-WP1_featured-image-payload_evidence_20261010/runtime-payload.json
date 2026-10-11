@@ -1,0 +1,104 @@
+{
+  "proof": "actual uploaded Featured and approved WP1 r3 Thumb controllers; local mock OpenCart services, no production DB or rendering proof",
+  "cases": [
+    {
+      "case": "normal",
+      "php": "8.3.30",
+      "rendered_cards": 24,
+      "original_featured_getProduct_calls": 24,
+      "before_wp1_extra_getProduct_calls": 24,
+      "after_f6_extra_getProduct_calls": 0,
+      "before_total_getProduct_calls": 48,
+      "after_total_getProduct_calls": 24,
+      "other_payload_fields_fit_and_read_only_attribute_queries_identical": true
+    },
+    {
+      "case": "vertical",
+      "php": "8.3.30",
+      "rendered_cards": 24,
+      "original_featured_getProduct_calls": 24,
+      "before_wp1_extra_getProduct_calls": 24,
+      "after_f6_extra_getProduct_calls": 0,
+      "before_total_getProduct_calls": 48,
+      "after_total_getProduct_calls": 24,
+      "other_payload_fields_fit_and_read_only_attribute_queries_identical": true
+    },
+    {
+      "case": "hidden",
+      "php": "8.3.30",
+      "rendered_cards": 24,
+      "original_featured_getProduct_calls": 24,
+      "before_wp1_extra_getProduct_calls": 24,
+      "after_f6_extra_getProduct_calls": 0,
+      "before_total_getProduct_calls": 48,
+      "after_total_getProduct_calls": 24,
+      "other_payload_fields_fit_and_read_only_attribute_queries_identical": true
+    },
+    {
+      "case": "mixed",
+      "php": "8.3.30",
+      "rendered_cards": 24,
+      "original_featured_getProduct_calls": 24,
+      "before_wp1_extra_getProduct_calls": 24,
+      "after_f6_extra_getProduct_calls": 1,
+      "before_total_getProduct_calls": 48,
+      "after_total_getProduct_calls": 25,
+      "other_payload_fields_fit_and_read_only_attribute_queries_identical": true
+    },
+    {
+      "case": "empty",
+      "php": "8.3.30",
+      "rendered_cards": 24,
+      "original_featured_getProduct_calls": 24,
+      "before_wp1_extra_getProduct_calls": 24,
+      "after_f6_extra_getProduct_calls": 24,
+      "before_total_getProduct_calls": 48,
+      "after_total_getProduct_calls": 48,
+      "other_payload_fields_fit_and_read_only_attribute_queries_identical": true
+    },
+    {
+      "case": "missing",
+      "php": "8.3.30",
+      "rendered_cards": 24,
+      "original_featured_getProduct_calls": 24,
+      "before_wp1_extra_getProduct_calls": 24,
+      "after_f6_extra_getProduct_calls": 0,
+      "before_total_getProduct_calls": 48,
+      "after_total_getProduct_calls": 24,
+      "other_payload_fields_fit_and_read_only_attribute_queries_identical": true
+    },
+    {
+      "case": "duplicates",
+      "php": "8.3.30",
+      "rendered_cards": 3,
+      "original_featured_getProduct_calls": 3,
+      "before_wp1_extra_getProduct_calls": 2,
+      "after_f6_extra_getProduct_calls": 0,
+      "before_total_getProduct_calls": 5,
+      "after_total_getProduct_calls": 3,
+      "other_payload_fields_fit_and_read_only_attribute_queries_identical": true
+    },
+    {
+      "case": "invalid",
+      "php": "8.3.30",
+      "rendered_cards": 2,
+      "original_featured_getProduct_calls": 3,
+      "before_wp1_extra_getProduct_calls": 2,
+      "after_f6_extra_getProduct_calls": 0,
+      "before_total_getProduct_calls": 5,
+      "after_total_getProduct_calls": 3,
+      "other_payload_fields_fit_and_read_only_attribute_queries_identical": true
+    },
+    {
+      "case": "no-products",
+      "php": "8.3.30",
+      "rendered_cards": 0,
+      "original_featured_getProduct_calls": 0,
+      "before_wp1_extra_getProduct_calls": 0,
+      "after_f6_extra_getProduct_calls": 0,
+      "before_total_getProduct_calls": 0,
+      "after_total_getProduct_calls": 0,
+      "other_payload_fields_fit_and_read_only_attribute_queries_identical": true
+    }
+  ]
+}

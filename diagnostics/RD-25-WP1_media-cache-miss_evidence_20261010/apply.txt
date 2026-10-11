@@ -1,0 +1,10 @@
+cwd=C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-cache-miss-20261010\fixture
+time=2026-10-11T05:22:40+00:00
+preflight_file=catalog/model/tool/image.php
+php_lint=ok:C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-cache-miss-20261010\fixture/_patch_backups/RD-25-WP1_media-cache-miss_20261010-20261011_052240-0f6a3d/candidate/catalog/model/tool/image.php
+backup=C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-cache-miss-20261010\fixture/_patch_backups/RD-25-WP1_media-cache-miss_20261010-20261011_052240-0f6a3d
+php_lint=ok:C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-cache-miss-20261010\fixture/catalog/model/tool/image.php
+changed_file=catalog/model/tool/image.php
+changed_files=1
+done=ok
+self_delete=ok

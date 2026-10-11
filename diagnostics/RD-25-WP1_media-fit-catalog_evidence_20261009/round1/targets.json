@@ -1,0 +1,46 @@
+{
+  "system/library/image.php": {
+    "before_sha256": "84e064697d81b06397d39fce6e35037d1c5f8d8b3d17195daa462c5189062e54",
+    "after_sha256": "b032345fa128dc867a55dbe4bf49f4070a34a2efa952525a69006fdb706875d9"
+  },
+  "catalog/model/tool/image.php": {
+    "before_sha256": "8ccf26a263a854004e488d9810a133b85ea8f180fe06c453ae4b285857c65bc5",
+    "after_sha256": "1ecd0105ce5aa6c8151efbec3559ab8662cf5814b945dd7eeb2c37928b39ce19"
+  },
+  "catalog/controller/product/thumb.php": {
+    "before_sha256": "1f003f688fdd199ea3cf84b8a1703a0ae319734fb7a32e8849c8c1f053708a83",
+    "after_sha256": "47e56e45e134359074aecdd3a1a50a068e8b19766b40589cb8688e077df5d2eb"
+  },
+  "catalog/view/template/product/thumb.twig": {
+    "before_sha256": "1e7658cddb25720a06e44f9f4c8ea989d3a410d61a22e3425498611a7a9c3a5c",
+    "after_sha256": "d9237b2c9c0cc21cda73a86ba6cf1ff66b7ad956f0da3c24a8e1add6518037d6"
+  },
+  "catalog/view/stylesheet/boostershop-ds.css": {
+    "before_sha256": "91bf663f5555b498f865b96288551bdb99dfd8606558330c5bab40972bc45188",
+    "after_sha256": "edc5913817da258374c26aa03cb172eca07c2ee11e76a25402e46e7472440a53"
+  },
+  "catalog/view/template/product/category.twig": {
+    "before_sha256": "1241f8163bc16f5ebec936fd39444ca6daa78420f753d805cfb3be37dde230d2",
+    "after_sha256": "f93313c689cd7ddc3e4d2750d34a0c365f3cd3de2304456f512817c7147da187"
+  },
+  "catalog/view/template/product/search.twig": {
+    "before_sha256": "107869d094103b8f3fbe140dc621e4d4a2e1182c4f9eb529c4439b2946a4b0b5",
+    "after_sha256": "dce45b48efaf87d6b2e554d2dab710a8e4cb446d09d11a91b8174ac5ff3589d0"
+  },
+  "catalog/view/template/product/special.twig": {
+    "before_sha256": "eb7d1aa4860d2df2e4b27907d0db7f9997f0cbaf8e5b37ad3865ac1a0b841e53",
+    "after_sha256": "7e63d7648ec6f73dc206244b1d7c02b7c0d1b64f79157eae20e53773d389b565"
+  },
+  "catalog/view/template/product/manufacturer_info.twig": {
+    "before_sha256": "c3a1e512514cd5ed23453ce3b8936642b2822a6f945ccbb04968740f872266aa",
+    "after_sha256": "56acc02f18d20d8189028ac31d10002d87d4deb6c7c57c5b8fe8dadc4c66cbf1"
+  },
+  "extension/opencart/catalog/view/template/module/featured.twig": {
+    "before_sha256": "a8dcc48823c41a75693f3740a35c222a8da937d7bcc0482bcb5968459945502f",
+    "after_sha256": "b669587152de72aa038f690e218cd0ce8cc1e8877d0445cbd67a32cfab500d86"
+  },
+  "catalog/view/template/common/header.twig": {
+    "before_sha256": "fcc16bc7c02b7524d241f0f124da794c0ecc56c3f706898a16fb7618573ac111",
+    "after_sha256": "eec16fbe81c72332d44ab2ecc7ee9f8a613a39206a21ab40ee04d7e2b7007cee"
+  }
+}

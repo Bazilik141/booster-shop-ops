@@ -1,0 +1,574 @@
+{
+  "checks": [
+    {
+      "name": "F5 OP-15 Booster.webp @1440: full source remains contained",
+      "pass": true,
+      "detail": {
+        "name": "OP-15 Booster.webp",
+        "kind": "cut",
+        "fit": "contain",
+        "position": "50% 100%",
+        "naturalWidth": 209,
+        "naturalHeight": 418,
+        "elementWidth": 257.03125,
+        "elementHeight": 287.625,
+        "paintedWidth": 143.8125,
+        "paintedHeight": 287.625,
+        "slotHeight": 306,
+        "top": 18.359375,
+        "uncroppedSourceHeightFraction": 1
+      }
+    },
+    {
+      "name": "F5 Duel Masters — DM24-RP3 — JP — Booster.png @1440: full source remains contained",
+      "pass": true,
+      "detail": {
+        "name": "Duel Masters — DM24-RP3 — JP — Booster.png",
+        "kind": "cut",
+        "fit": "contain",
+        "position": "50% 100%",
+        "naturalWidth": 700,
+        "naturalHeight": 700,
+        "elementWidth": 257.03125,
+        "elementHeight": 287.625,
+        "paintedWidth": 257.03125,
+        "paintedHeight": 257.03125,
+        "slotHeight": 306,
+        "top": 18.359375,
+        "uncroppedSourceHeightFraction": 1
+      }
+    },
+    {
+      "name": "F5 Yu-Gi-Oh! OCG Duel Monsters BEYOND THE BRAVE Booster.webp @1440: full source remains contained",
+      "pass": true,
+      "detail": {
+        "name": "Yu-Gi-Oh! OCG Duel Monsters BEYOND THE BRAVE Booster.webp",
+        "kind": "cut",
+        "fit": "contain",
+        "position": "50% 100%",
+        "naturalWidth": 422,
+        "naturalHeight": 875,
+        "elementWidth": 257.03125,
+        "elementHeight": 287.625,
+        "paintedWidth": 138.71742857142857,
+        "paintedHeight": 287.625,
+        "slotHeight": 306,
+        "top": 18.359375,
+        "uncroppedSourceHeightFraction": 1
+      }
+    },
+    {
+      "name": "F5 QCAC-BoosterJP.png @1440: full source remains contained",
+      "pass": true,
+      "detail": {
+        "name": "QCAC-BoosterJP.png",
+        "kind": "cut",
+        "fit": "contain",
+        "position": "50% 100%",
+        "naturalWidth": 420,
+        "naturalHeight": 875,
+        "elementWidth": 257.03125,
+        "elementHeight": 287.625,
+        "paintedWidth": 138.06,
+        "paintedHeight": 287.625,
+        "slotHeight": 306,
+        "top": 18.359375,
+        "uncroppedSourceHeightFraction": 1
+      }
+    },
+    {
+      "name": "F5 OP-15 Booster.webp @1024: full source remains contained",
+      "pass": true,
+      "detail": {
+        "name": "OP-15 Booster.webp",
+        "kind": "cut",
+        "fit": "contain",
+        "position": "50% 100%",
+        "naturalWidth": 209,
+        "naturalHeight": 418,
+        "elementWidth": 181.4375,
+        "elementHeight": 203.03125,
+        "paintedWidth": 101.515625,
+        "paintedHeight": 203.03125,
+        "slotHeight": 216,
+        "top": 12.953125,
+        "uncroppedSourceHeightFraction": 1
+      }
+    },
+    {
+      "name": "F5 Duel Masters — DM24-RP3 — JP — Booster.png @1024: full source remains contained",
+      "pass": true,
+      "detail": {
+        "name": "Duel Masters — DM24-RP3 — JP — Booster.png",
+        "kind": "cut",
+        "fit": "contain",
+        "position": "50% 100%",
+        "naturalWidth": 700,
+        "naturalHeight": 700,
+        "elementWidth": 181.4375,
+        "elementHeight": 203.03125,
+        "paintedWidth": 181.43749999999997,
+        "paintedHeight": 181.43749999999997,
+        "slotHeight": 216,
+        "top": 12.953125,
+        "uncroppedSourceHeightFraction": 1
+      }
+    },
+    {
+      "name": "F5 Yu-Gi-Oh! OCG Duel Monsters BEYOND THE BRAVE Booster.webp @1024: full source remains contained",
+      "pass": true,
+      "detail": {
+        "name": "Yu-Gi-Oh! OCG Duel Monsters BEYOND THE BRAVE Booster.webp",
+        "kind": "cut",
+        "fit": "contain",
+        "position": "50% 100%",
+        "naturalWidth": 422,
+        "naturalHeight": 875,
+        "elementWidth": 181.4375,
+        "elementHeight": 203.03125,
+        "paintedWidth": 97.91907142857143,
+        "paintedHeight": 203.03125,
+        "slotHeight": 216,
+        "top": 12.953125,
+        "uncroppedSourceHeightFraction": 1
+      }
+    },
+    {
+      "name": "F5 QCAC-BoosterJP.png @1024: full source remains contained",
+      "pass": true,
+      "detail": {
+        "name": "QCAC-BoosterJP.png",
+        "kind": "cut",
+        "fit": "contain",
+        "position": "50% 100%",
+        "naturalWidth": 420,
+        "naturalHeight": 875,
+        "elementWidth": 181.4375,
+        "elementHeight": 203.03125,
+        "paintedWidth": 97.455,
+        "paintedHeight": 203.03125,
+        "slotHeight": 216,
+        "top": 12.953125,
+        "uncroppedSourceHeightFraction": 1
+      }
+    },
+    {
+      "name": "F5 OP-15 Booster.webp @390: full source remains contained",
+      "pass": true,
+      "detail": {
+        "name": "OP-15 Booster.webp",
+        "kind": "cut",
+        "fit": "contain",
+        "position": "50% 100%",
+        "naturalWidth": 209,
+        "naturalHeight": 418,
+        "elementWidth": 147.828125,
+        "elementHeight": 206.796875,
+        "paintedWidth": 103.3984375,
+        "paintedHeight": 206.796875,
+        "slotHeight": 220,
+        "top": 13.1875,
+        "uncroppedSourceHeightFraction": 1
+      }
+    },
+    {
+      "name": "F5 Duel Masters — DM24-RP3 — JP — Booster.png @390: full source remains contained",
+      "pass": true,
+      "detail": {
+        "name": "Duel Masters — DM24-RP3 — JP — Booster.png",
+        "kind": "cut",
+        "fit": "contain",
+        "position": "50% 100%",
+        "naturalWidth": 700,
+        "naturalHeight": 700,
+        "elementWidth": 147.828125,
+        "elementHeight": 206.796875,
+        "paintedWidth": 147.828125,
+        "paintedHeight": 147.828125,
+        "slotHeight": 220,
+        "top": 13.1875,
+        "uncroppedSourceHeightFraction": 1
+      }
+    },
+    {
+      "name": "F5 Yu-Gi-Oh! OCG Duel Monsters BEYOND THE BRAVE Booster.webp @390: full source remains contained",
+      "pass": true,
+      "detail": {
+        "name": "Yu-Gi-Oh! OCG Duel Monsters BEYOND THE BRAVE Booster.webp",
+        "kind": "cut",
+        "fit": "contain",
+        "position": "50% 100%",
+        "naturalWidth": 422,
+        "naturalHeight": 875,
+        "elementWidth": 147.828125,
+        "elementHeight": 206.796875,
+        "paintedWidth": 99.73517857142858,
+        "paintedHeight": 206.796875,
+        "slotHeight": 220,
+        "top": 13.1875,
+        "uncroppedSourceHeightFraction": 1
+      }
+    },
+    {
+      "name": "F5 QCAC-BoosterJP.png @390: full source remains contained",
+      "pass": true,
+      "detail": {
+        "name": "QCAC-BoosterJP.png",
+        "kind": "cut",
+        "fit": "contain",
+        "position": "50% 100%",
+        "naturalWidth": 420,
+        "naturalHeight": 875,
+        "elementWidth": 147.828125,
+        "elementHeight": 206.796875,
+        "paintedWidth": 99.2625,
+        "paintedHeight": 206.796875,
+        "slotHeight": 220,
+        "top": 13.1875,
+        "uncroppedSourceHeightFraction": 1
+      }
+    },
+    {
+      "name": "F5 OP-15 Booster.webp @360: full source remains contained",
+      "pass": true,
+      "detail": {
+        "name": "OP-15 Booster.webp",
+        "kind": "cut",
+        "fit": "contain",
+        "position": "50% 100%",
+        "naturalWidth": 209,
+        "naturalHeight": 418,
+        "elementWidth": 135.234375,
+        "elementHeight": 189.171875,
+        "paintedWidth": 94.5859375,
+        "paintedHeight": 189.171875,
+        "slotHeight": 201.25,
+        "top": 12.0625,
+        "uncroppedSourceHeightFraction": 1
+      }
+    },
+    {
+      "name": "F5 Duel Masters — DM24-RP3 — JP — Booster.png @360: full source remains contained",
+      "pass": true,
+      "detail": {
+        "name": "Duel Masters — DM24-RP3 — JP — Booster.png",
+        "kind": "cut",
+        "fit": "contain",
+        "position": "50% 100%",
+        "naturalWidth": 700,
+        "naturalHeight": 700,
+        "elementWidth": 135.234375,
+        "elementHeight": 189.171875,
+        "paintedWidth": 135.234375,
+        "paintedHeight": 135.234375,
+        "slotHeight": 201.25,
+        "top": 12.0625,
+        "uncroppedSourceHeightFraction": 1
+      }
+    },
+    {
+      "name": "F5 Yu-Gi-Oh! OCG Duel Monsters BEYOND THE BRAVE Booster.webp @360: full source remains contained",
+      "pass": true,
+      "detail": {
+        "name": "Yu-Gi-Oh! OCG Duel Monsters BEYOND THE BRAVE Booster.webp",
+        "kind": "cut",
+        "fit": "contain",
+        "position": "50% 100%",
+        "naturalWidth": 422,
+        "naturalHeight": 875,
+        "elementWidth": 135.234375,
+        "elementHeight": 189.171875,
+        "paintedWidth": 91.23489285714285,
+        "paintedHeight": 189.171875,
+        "slotHeight": 201.25,
+        "top": 12.0625,
+        "uncroppedSourceHeightFraction": 1
+      }
+    },
+    {
+      "name": "F5 QCAC-BoosterJP.png @360: full source remains contained",
+      "pass": true,
+      "detail": {
+        "name": "QCAC-BoosterJP.png",
+        "kind": "cut",
+        "fit": "contain",
+        "position": "50% 100%",
+        "naturalWidth": 420,
+        "naturalHeight": 875,
+        "elementWidth": 135.234375,
+        "elementHeight": 189.171875,
+        "paintedWidth": 90.8025,
+        "paintedHeight": 189.171875,
+        "slotHeight": 201.25,
+        "top": 12.0625,
+        "uncroppedSourceHeightFraction": 1
+      }
+    }
+  ],
+  "observations": [
+    {
+      "width": 1440,
+      "assets": [
+        {
+          "name": "OP-15 Booster.webp",
+          "kind": "cut",
+          "fit": "contain",
+          "position": "50% 100%",
+          "naturalWidth": 209,
+          "naturalHeight": 418,
+          "elementWidth": 257.03125,
+          "elementHeight": 287.625,
+          "paintedWidth": 143.8125,
+          "paintedHeight": 287.625,
+          "slotHeight": 306,
+          "top": 18.359375,
+          "uncroppedSourceHeightFraction": 1
+        },
+        {
+          "name": "Duel Masters — DM24-RP3 — JP — Booster.png",
+          "kind": "cut",
+          "fit": "contain",
+          "position": "50% 100%",
+          "naturalWidth": 700,
+          "naturalHeight": 700,
+          "elementWidth": 257.03125,
+          "elementHeight": 287.625,
+          "paintedWidth": 257.03125,
+          "paintedHeight": 257.03125,
+          "slotHeight": 306,
+          "top": 18.359375,
+          "uncroppedSourceHeightFraction": 1
+        },
+        {
+          "name": "Yu-Gi-Oh! OCG Duel Monsters BEYOND THE BRAVE Booster.webp",
+          "kind": "cut",
+          "fit": "contain",
+          "position": "50% 100%",
+          "naturalWidth": 422,
+          "naturalHeight": 875,
+          "elementWidth": 257.03125,
+          "elementHeight": 287.625,
+          "paintedWidth": 138.71742857142857,
+          "paintedHeight": 287.625,
+          "slotHeight": 306,
+          "top": 18.359375,
+          "uncroppedSourceHeightFraction": 1
+        },
+        {
+          "name": "QCAC-BoosterJP.png",
+          "kind": "cut",
+          "fit": "contain",
+          "position": "50% 100%",
+          "naturalWidth": 420,
+          "naturalHeight": 875,
+          "elementWidth": 257.03125,
+          "elementHeight": 287.625,
+          "paintedWidth": 138.06,
+          "paintedHeight": 287.625,
+          "slotHeight": 306,
+          "top": 18.359375,
+          "uncroppedSourceHeightFraction": 1
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "assets": [
+        {
+          "name": "OP-15 Booster.webp",
+          "kind": "cut",
+          "fit": "contain",
+          "position": "50% 100%",
+          "naturalWidth": 209,
+          "naturalHeight": 418,
+          "elementWidth": 181.4375,
+          "elementHeight": 203.03125,
+          "paintedWidth": 101.515625,
+          "paintedHeight": 203.03125,
+          "slotHeight": 216,
+          "top": 12.953125,
+          "uncroppedSourceHeightFraction": 1
+        },
+        {
+          "name": "Duel Masters — DM24-RP3 — JP — Booster.png",
+          "kind": "cut",
+          "fit": "contain",
+          "position": "50% 100%",
+          "naturalWidth": 700,
+          "naturalHeight": 700,
+          "elementWidth": 181.4375,
+          "elementHeight": 203.03125,
+          "paintedWidth": 181.43749999999997,
+          "paintedHeight": 181.43749999999997,
+          "slotHeight": 216,
+          "top": 12.953125,
+          "uncroppedSourceHeightFraction": 1
+        },
+        {
+          "name": "Yu-Gi-Oh! OCG Duel Monsters BEYOND THE BRAVE Booster.webp",
+          "kind": "cut",
+          "fit": "contain",
+          "position": "50% 100%",
+          "naturalWidth": 422,
+          "naturalHeight": 875,
+          "elementWidth": 181.4375,
+          "elementHeight": 203.03125,
+          "paintedWidth": 97.91907142857143,
+          "paintedHeight": 203.03125,
+          "slotHeight": 216,
+          "top": 12.953125,
+          "uncroppedSourceHeightFraction": 1
+        },
+        {
+          "name": "QCAC-BoosterJP.png",
+          "kind": "cut",
+          "fit": "contain",
+          "position": "50% 100%",
+          "naturalWidth": 420,
+          "naturalHeight": 875,
+          "elementWidth": 181.4375,
+          "elementHeight": 203.03125,
+          "paintedWidth": 97.455,
+          "paintedHeight": 203.03125,
+          "slotHeight": 216,
+          "top": 12.953125,
+          "uncroppedSourceHeightFraction": 1
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "assets": [
+        {
+          "name": "OP-15 Booster.webp",
+          "kind": "cut",
+          "fit": "contain",
+          "position": "50% 100%",
+          "naturalWidth": 209,
+          "naturalHeight": 418,
+          "elementWidth": 147.828125,
+          "elementHeight": 206.796875,
+          "paintedWidth": 103.3984375,
+          "paintedHeight": 206.796875,
+          "slotHeight": 220,
+          "top": 13.1875,
+          "uncroppedSourceHeightFraction": 1
+        },
+        {
+          "name": "Duel Masters — DM24-RP3 — JP — Booster.png",
+          "kind": "cut",
+          "fit": "contain",
+          "position": "50% 100%",
+          "naturalWidth": 700,
+          "naturalHeight": 700,
+          "elementWidth": 147.828125,
+          "elementHeight": 206.796875,
+          "paintedWidth": 147.828125,
+          "paintedHeight": 147.828125,
+          "slotHeight": 220,
+          "top": 13.1875,
+          "uncroppedSourceHeightFraction": 1
+        },
+        {
+          "name": "Yu-Gi-Oh! OCG Duel Monsters BEYOND THE BRAVE Booster.webp",
+          "kind": "cut",
+          "fit": "contain",
+          "position": "50% 100%",
+          "naturalWidth": 422,
+          "naturalHeight": 875,
+          "elementWidth": 147.828125,
+          "elementHeight": 206.796875,
+          "paintedWidth": 99.73517857142858,
+          "paintedHeight": 206.796875,
+          "slotHeight": 220,
+          "top": 13.1875,
+          "uncroppedSourceHeightFraction": 1
+        },
+        {
+          "name": "QCAC-BoosterJP.png",
+          "kind": "cut",
+          "fit": "contain",
+          "position": "50% 100%",
+          "naturalWidth": 420,
+          "naturalHeight": 875,
+          "elementWidth": 147.828125,
+          "elementHeight": 206.796875,
+          "paintedWidth": 99.2625,
+          "paintedHeight": 206.796875,
+          "slotHeight": 220,
+          "top": 13.1875,
+          "uncroppedSourceHeightFraction": 1
+        }
+      ]
+    },
+    {
+      "width": 360,
+      "assets": [
+        {
+          "name": "OP-15 Booster.webp",
+          "kind": "cut",
+          "fit": "contain",
+          "position": "50% 100%",
+          "naturalWidth": 209,
+          "naturalHeight": 418,
+          "elementWidth": 135.234375,
+          "elementHeight": 189.171875,
+          "paintedWidth": 94.5859375,
+          "paintedHeight": 189.171875,
+          "slotHeight": 201.25,
+          "top": 12.0625,
+          "uncroppedSourceHeightFraction": 1
+        },
+        {
+          "name": "Duel Masters — DM24-RP3 — JP — Booster.png",
+          "kind": "cut",
+          "fit": "contain",
+          "position": "50% 100%",
+          "naturalWidth": 700,
+          "naturalHeight": 700,
+          "elementWidth": 135.234375,
+          "elementHeight": 189.171875,
+          "paintedWidth": 135.234375,
+          "paintedHeight": 135.234375,
+          "slotHeight": 201.25,
+          "top": 12.0625,
+          "uncroppedSourceHeightFraction": 1
+        },
+        {
+          "name": "Yu-Gi-Oh! OCG Duel Monsters BEYOND THE BRAVE Booster.webp",
+          "kind": "cut",
+          "fit": "contain",
+          "position": "50% 100%",
+          "naturalWidth": 422,
+          "naturalHeight": 875,
+          "elementWidth": 135.234375,
+          "elementHeight": 189.171875,
+          "paintedWidth": 91.23489285714285,
+          "paintedHeight": 189.171875,
+          "slotHeight": 201.25,
+          "top": 12.0625,
+          "uncroppedSourceHeightFraction": 1
+        },
+        {
+          "name": "QCAC-BoosterJP.png",
+          "kind": "cut",
+          "fit": "contain",
+          "position": "50% 100%",
+          "naturalWidth": 420,
+          "naturalHeight": 875,
+          "elementWidth": 135.234375,
+          "elementHeight": 189.171875,
+          "paintedWidth": 90.8025,
+          "paintedHeight": 189.171875,
+          "slotHeight": 201.25,
+          "top": 12.0625,
+          "uncroppedSourceHeightFraction": 1
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total": 16,
+    "passed": 16
+  }
+}

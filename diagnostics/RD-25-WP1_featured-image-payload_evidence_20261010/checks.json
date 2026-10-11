@@ -1,0 +1,371 @@
+{
+  "checks": [
+    {
+      "name": "runner syntax",
+      "pass": true,
+      "detail": "No syntax errors detected in C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\patches\\RD-25-WP1_featured-image-payload_20261010.php\n"
+    },
+    {
+      "name": "candidate syntax",
+      "pass": true,
+      "detail": "No syntax errors detected in C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-featured-20261010\\expected\\extension\\opencart\\catalog\\controller\\module\\featured.php\n"
+    },
+    {
+      "name": "dry run no target writes or backup",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "one exact write and self delete",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "verified byte-identical backup and APPLIED receipt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "repeat exact idempotency and self delete",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "rollback refuses later changes",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "rollback restores exact source and self deletes",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "reapply after rollback",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source drift refuses without writes or backup",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "missing target fails clearly without backup",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "invalid candidate rejected by lint before target write",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "composition f6 executes RD-25-WP1_featured-image-payload_20261010.php",
+      "pass": true,
+      "detail": "oads\\Booster Shop\\booster-shop-ops\\work\\rd25-featured-20261010\\fixture-compose-f6/extension/opencart/catalog/controller/module/featured.php\nchanged_file=extension/opencart/catalog/controller/module/featured.php\nchanged_files=1\ndone=ok\nself_delete=ok\n"
+    },
+    {
+      "name": "composition f6 executes RD-25-WP1_media-fit-catalog_20261009.php",
+      "pass": true,
+      "detail": "t/special.twig\nchanged_file=catalog/view/template/product/manufacturer_info.twig\nchanged_file=extension/opencart/catalog/view/template/module/featured.twig\nchanged_file=catalog/view/template/common/header.twig\nchanged_files=11\ndone=ok\nself_delete=ok\n"
+    },
+    {
+      "name": "composition f6 all original r3 targets unchanged from approved candidate",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "composition r3 executes RD-25-WP1_media-fit-catalog_20261009.php",
+      "pass": true,
+      "detail": "t/special.twig\nchanged_file=catalog/view/template/product/manufacturer_info.twig\nchanged_file=extension/opencart/catalog/view/template/module/featured.twig\nchanged_file=catalog/view/template/common/header.twig\nchanged_files=11\ndone=ok\nself_delete=ok\n"
+    },
+    {
+      "name": "composition r3 executes RD-25-WP1_featured-image-payload_20261010.php",
+      "pass": true,
+      "detail": "oads\\Booster Shop\\booster-shop-ops\\work\\rd25-featured-20261010\\fixture-compose-r3/extension/opencart/catalog/controller/module/featured.php\nchanged_file=extension/opencart/catalog/controller/module/featured.php\nchanged_files=1\ndone=ok\nself_delete=ok\n"
+    },
+    {
+      "name": "composition r3 all original r3 targets unchanged from approved candidate",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "normal original-source payload forwarded for every card",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "normal fallback call counts",
+      "pass": true,
+      "detail": {
+        "before": 48,
+        "after": 24,
+        "first_thumb_reads_before": 24,
+        "first_thumb_reads_after": 0
+      }
+    },
+    {
+      "name": "normal existing featured reads retained",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "normal all other payload/commerce/state/fit data identical",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "normal repeated modules have zero further thumb lookups",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "vertical original-source payload forwarded for every card",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "vertical fallback call counts",
+      "pass": true,
+      "detail": {
+        "before": 48,
+        "after": 24,
+        "first_thumb_reads_before": 24,
+        "first_thumb_reads_after": 0
+      }
+    },
+    {
+      "name": "vertical existing featured reads retained",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "vertical all other payload/commerce/state/fit data identical",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "vertical repeated modules have zero further thumb lookups",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden original-source payload forwarded for every card",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden fallback call counts",
+      "pass": true,
+      "detail": {
+        "before": 48,
+        "after": 24,
+        "first_thumb_reads_before": 24,
+        "first_thumb_reads_after": 0
+      }
+    },
+    {
+      "name": "hidden existing featured reads retained",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden all other payload/commerce/state/fit data identical",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden repeated modules have zero further thumb lookups",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "mixed original-source payload forwarded for every card",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "mixed fallback call counts",
+      "pass": true,
+      "detail": {
+        "before": 48,
+        "after": 25,
+        "first_thumb_reads_before": 24,
+        "first_thumb_reads_after": 1
+      }
+    },
+    {
+      "name": "mixed existing featured reads retained",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "mixed all other payload/commerce/state/fit data identical",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "mixed repeated modules have zero further thumb lookups",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "empty original-source payload forwarded for every card",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "empty fallback call counts",
+      "pass": true,
+      "detail": {
+        "before": 48,
+        "after": 48,
+        "first_thumb_reads_before": 24,
+        "first_thumb_reads_after": 24
+      }
+    },
+    {
+      "name": "empty existing featured reads retained",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "empty all other payload/commerce/state/fit data identical",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "empty repeated modules have zero further thumb lookups",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "missing original-source payload forwarded for every card",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "missing fallback call counts",
+      "pass": true,
+      "detail": {
+        "before": 48,
+        "after": 24,
+        "first_thumb_reads_before": 24,
+        "first_thumb_reads_after": 0
+      }
+    },
+    {
+      "name": "missing existing featured reads retained",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "missing all other payload/commerce/state/fit data identical",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "missing repeated modules have zero further thumb lookups",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "duplicates original-source payload forwarded for every card",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "duplicates fallback call counts",
+      "pass": true,
+      "detail": {
+        "before": 5,
+        "after": 3,
+        "first_thumb_reads_before": 2,
+        "first_thumb_reads_after": 0
+      }
+    },
+    {
+      "name": "duplicates existing featured reads retained",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "duplicates all other payload/commerce/state/fit data identical",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "duplicates repeated modules have zero further thumb lookups",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "invalid original-source payload forwarded for every card",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "invalid fallback call counts",
+      "pass": true,
+      "detail": {
+        "before": 5,
+        "after": 3,
+        "first_thumb_reads_before": 2,
+        "first_thumb_reads_after": 0
+      }
+    },
+    {
+      "name": "invalid existing featured reads retained",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "invalid all other payload/commerce/state/fit data identical",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "invalid repeated modules have zero further thumb lookups",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "no-products original-source payload forwarded for every card",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "no-products fallback call counts",
+      "pass": true,
+      "detail": {
+        "before": 0,
+        "after": 0,
+        "first_thumb_reads_before": 0,
+        "first_thumb_reads_after": 0
+      }
+    },
+    {
+      "name": "no-products existing featured reads retained",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "no-products all other payload/commerce/state/fit data identical",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "no-products repeated modules have zero further thumb lookups",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "approved WP1 r3 patch checksum unchanged",
+      "pass": true,
+      "detail": null
+    }
+  ],
+  "total": 64,
+  "passed": 64
+}

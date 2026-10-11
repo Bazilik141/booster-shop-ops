@@ -1,0 +1,6 @@
+cwd=C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-featured-20261010\fixture
+time=2026-10-10T19:21:07+00:00
+preflight_file=extension/opencart/catalog/controller/module/featured.php
+dry_run=yes
+target_writes=0
+done=ok

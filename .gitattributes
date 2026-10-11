@@ -28,3 +28,9 @@
 *.woff2 binary
 *.ttf  binary
 *.eot  binary
+
+# RD-25 WP1 reviewed artifact bytes: retain SHA256 seals and runner payload hashes.
+patches/RD-25-WP1* -text
+diagnostics/RD-25-WP1* -text
+diagnostics/RD-25-WP1*/** -text
+handoffs/handoff_RD-25-WP1-FIX* -text

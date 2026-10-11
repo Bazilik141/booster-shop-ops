@@ -1,0 +1,63 @@
+--- reviewed-r2
++++ candidate-r3
+@@ -1,7 +1,7 @@
+ <?php
+ /**
+  * RD-25 WP1 — non-padding listing media, cut/photo framing and mobile grids.
+- * Revision 2 (2026-10-10): F1 opaque near-white corners are cut; media metadata v2.
++ * Revision 3 (2026-10-10): F5 outside 0.70..1.45 is cut; F1 retained; metadata v3.
+  * PHP 8.0 compatible. CLI only. No DB writes. No source-image or existing-cache edits.
+  * Inputs: RD-25-live-20261009.tar.gz (post RD-26) and RD-25-WP1-followup-20261009.tar.gz.
+  * Root cause: Image::resize() pads to WxH; UI-PCARD-D uses 331/240 and centered contain;
+@@ -19,7 +19,7 @@
+ declare(strict_types=1);
+ 
+ const RD25_MARKER = 'RD-25-WP1 20261009';
+-const RD25_TOKEN = 'rd25-wp1-media-fit-r2-20261010';
++const RD25_TOKEN = 'rd25-wp1-media-fit-r3-20261010';
+ const RD25_PREFIX = 'catalog/view/stylesheet/boostershop-ds.css?v=';
+ 
+ function rd25Out(string $key, string $value): void { echo $key . '=' . $value . PHP_EOL; }
+@@ -126,7 +126,7 @@
+ 	],
+ 	'catalog/model/tool/image.php' => [
+ 		'before_sha256' => '8ccf26a263a854004e488d9810a133b85ea8f180fe06c453ae4b285857c65bc5',
+-		'after_sha256' => '82fd96ea58542e1e57ec1cddfa38b62e9a2b3794dc7139390f3a352c3e78deda',
++		'after_sha256' => 'a42869efe054311be56f1c37e56969e8e1318331de55b6ca3e8aa4b83b0a4ddd',
+ 		'replacements' => [
+ 			['before' => <<<'RD25_1_0_BEFORE'
+ 	/**
+@@ -134,7 +134,7 @@
+ RD25_1_0_BEFORE,
+ 'after' => <<<'RD25_1_0_AFTER'
+ 	// RD-25-WP1 20261009: isolated fit cache and source classification.
+-	private const RD25_MEDIA_VERSION = 2;
++	private const RD25_MEDIA_VERSION = 3;
+ 
+ 	/** Source metadata is cached per canonical path + mtime + size, not per view. */
+ 	public function mediaInfo(string $filename): array {
+@@ -206,6 +206,10 @@
+ 			}
+ 
+ 			imagedestroy($gd);
++			// F5 / owner 2026-10-10: inclusive 0.70..1.45 cover band.
++			// Integer cross-products preserve exact boundary decisions; source pixels stay intact.
++			$aspect_cut = $dimensions[0] * 100 < $dimensions[1] * 70
++				|| $dimensions[0] * 100 > $dimensions[1] * 145;
+ 			$metadata = [
+ 				'version' => self::RD25_MEDIA_VERSION,
+ 				'source' => $source['relative'],
+@@ -214,11 +218,11 @@
+ 				'width' => (int)$dimensions[0],
+ 				'height' => (int)$dimensions[1],
+ 				'type' => (int)$dimensions[2],
+-				'kind' => ($transparent_cut || $white_cut) ? 'cut' : 'photo',
++				'kind' => ($aspect_cut || $transparent_cut || $white_cut) ? 'cut' : 'photo',
+ 				'corner_alpha' => $corner_alpha,
+ 				'corner_rgb' => $corner_rgb,
+ 				'all_near_white_corners' => $white_cut,
+-				'class_reason' => $transparent_cut ? 'transparent_corners' : ($white_cut ? 'opaque_near_white_corners' : 'non_white_or_mixed_corners')
++				'class_reason' => $aspect_cut ? 'aspect_outside_cover_band' : ($transparent_cut ? 'transparent_corners' : ($white_cut ? 'opaque_near_white_corners' : 'non_white_or_mixed_corners'))
+ 			];
+ 			$json = json_encode($metadata, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+ 			$temp = @tempnam(DIR_CACHE, 'rd25-meta-');

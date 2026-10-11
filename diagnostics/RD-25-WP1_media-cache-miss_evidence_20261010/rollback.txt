@@ -1,0 +1,7 @@
+cwd=C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-cache-miss-20261010\fixture
+time=2026-10-11T05:22:40+00:00
+php_lint=ok:C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-cache-miss-20261010\fixture/catalog/model/tool/image.php
+restored_file=catalog/model/tool/image.php
+rollback=ok
+done=ok
+self_delete=ok

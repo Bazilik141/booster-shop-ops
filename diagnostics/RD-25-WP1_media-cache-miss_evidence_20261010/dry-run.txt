@@ -1,0 +1,6 @@
+cwd=C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-cache-miss-20261010\fixture
+time=2026-10-11T05:22:39+00:00
+preflight_file=catalog/model/tool/image.php
+dry_run=yes
+target_writes=0
+done=ok

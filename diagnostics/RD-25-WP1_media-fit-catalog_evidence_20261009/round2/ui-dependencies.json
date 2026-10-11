@@ -1,0 +1,59 @@
+[
+  {
+    "file": "bootstrap.css",
+    "source": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\live-snapshots\\20261004_rd-ux-batch-live2\\catalog\\view\\stylesheet\\bootstrap.css",
+    "sha256": "3e6b85215061cd33fc02676958ee706c0e96b877893c244bff473ce4fb9ecc57"
+  },
+  {
+    "file": "stylesheet.css",
+    "source": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\live-snapshots\\20261004_rd-ux-batch-live2\\catalog\\view\\stylesheet\\stylesheet.css",
+    "sha256": "02135431f716403cfb4a9bafb37bf367c242d15a267b2de8268cb3b90546eacd"
+  },
+  {
+    "file": "booster-typography.css",
+    "source": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\live-snapshots\\20261004_rd-ux-batch-live2\\catalog\\view\\stylesheet\\booster-typography.css",
+    "sha256": "9a8ddc85fb6adc85db81df387c3b0c06df46db1ee4f14856fda5728b926d34b5"
+  },
+  {
+    "file": "xn7_YHE41ni1AdIRqAuZuw1Bx9mbZk59FO_F.ttf",
+    "source": "https://fonts.gstatic.com/s/manrope/v20/xn7_YHE41ni1AdIRqAuZuw1Bx9mbZk59FO_F.ttf",
+    "sha256": "30c051f0b547252670ef3a41213ec8134db1373edf621187d97ed546f9959605",
+    "note": "Manrope v20 Google TTF substitute; deployed WOFF2 fetch was reset"
+  },
+  {
+    "file": "xn7_YHE41ni1AdIRqAuZuw1Bx9mbZk6jFO_F.ttf",
+    "source": "https://fonts.gstatic.com/s/manrope/v20/xn7_YHE41ni1AdIRqAuZuw1Bx9mbZk6jFO_F.ttf",
+    "sha256": "8acf416c55ae37360161a6e84fd91489b3211ffe550ba17df750e28d0685bb93",
+    "note": "Manrope v20 Google TTF substitute; deployed WOFF2 fetch was reset"
+  },
+  {
+    "file": "xn7_YHE41ni1AdIRqAuZuw1Bx9mbZk79FO_F.ttf",
+    "source": "https://fonts.gstatic.com/s/manrope/v20/xn7_YHE41ni1AdIRqAuZuw1Bx9mbZk79FO_F.ttf",
+    "sha256": "a13d9b41b0a471ce58f0e46d377fa3cc76615e4632c3b15eb397caadf7a13f0a",
+    "note": "Manrope v20 Google TTF substitute; deployed WOFF2 fetch was reset"
+  },
+  {
+    "file": "xn7_YHE41ni1AdIRqAuZuw1Bx9mbZk7PFO_F.ttf",
+    "source": "https://fonts.gstatic.com/s/manrope/v20/xn7_YHE41ni1AdIRqAuZuw1Bx9mbZk7PFO_F.ttf",
+    "sha256": "f433e5d333be1128d8ec8a28b8aadd0314d10e14e4105406076666bc830fc15d",
+    "note": "Manrope v20 Google TTF substitute; deployed WOFF2 fetch was reset"
+  },
+  {
+    "file": "xn7_YHE41ni1AdIRqAuZuw1Bx9mbZk4jE-_F.ttf",
+    "source": "https://fonts.gstatic.com/s/manrope/v20/xn7_YHE41ni1AdIRqAuZuw1Bx9mbZk4jE-_F.ttf",
+    "sha256": "6bad1a774228464cc88b8b0271555b266f7a3c64a7bedf15e165fdab4f6ac0ce",
+    "note": "Manrope v20 Google TTF substitute; deployed WOFF2 fetch was reset"
+  },
+  {
+    "file": "xn7_YHE41ni1AdIRqAuZuw1Bx9mbZk4aE-_F.ttf",
+    "source": "https://fonts.gstatic.com/s/manrope/v20/xn7_YHE41ni1AdIRqAuZuw1Bx9mbZk4aE-_F.ttf",
+    "sha256": "b9584e099e0e7f1e1e914c3037aabb9010c50346a3ce8df5eeeeecc0563044d8",
+    "note": "Manrope v20 Google TTF substitute; deployed WOFF2 fetch was reset"
+  },
+  {
+    "file": "xn7_YHE41ni1AdIRqAuZuw1Bx9mbZk59E-_F.ttf",
+    "source": "https://fonts.gstatic.com/s/manrope/v20/xn7_YHE41ni1AdIRqAuZuw1Bx9mbZk59E-_F.ttf",
+    "sha256": "b8f802f05b322a7345805f5b89f8bb976604cc719a91530918d5ce3c47160950",
+    "note": "Manrope v20 Google TTF substitute; deployed WOFF2 fetch was reset"
+  }
+]

@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-10",
+  "scope": "RD-25 WP1 post-deploy cold-cache warning repair, review-ready source",
+  "target": "catalog/model/tool/image.php",
+  "source_provenance": "exact approved r3 candidate reconstructed from October 9 archives; owner screenshot matches line 308; server bytes are gated at execution, not claimed downloaded",
+  "before_sha256": "a42869efe054311be56f1c37e56969e8e1318331de55b6ca3e8aa4b83b0a4ddd",
+  "after_sha256": "9d6aaec56eaa44be072e67957e43b7365ca8f115283988d0ab7a3227db885285",
+  "patch": "RD-25-WP1_media-cache-miss_20261010.php",
+  "patch_bytes": 10790,
+  "patch_sha256": "085cbb193b7c877f03768278acef97dd700d66aea042bee2b584e0997bbc32c3",
+  "metadata_version": 3,
+  "classification_and_fit_algorithms_unchanged": true,
+  "cache_cleanup_required": false,
+  "commit_push_deploy": false
+}

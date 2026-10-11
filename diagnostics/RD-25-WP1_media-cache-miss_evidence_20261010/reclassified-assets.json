@@ -1,0 +1,427 @@
+{
+    "revision_date": "2026-10-10",
+    "metadata_version": 3,
+    "previous_metadata_version": 2,
+    "cover_band_inclusive": [
+        0.7,
+        1.45
+    ],
+    "near_white_rgb_minimum": 240,
+    "opaque_alpha": 255,
+    "before_counts": {
+        "3D print": {
+            "photo": 97
+        },
+        "Accsesuary": {
+            "photo": 13,
+            "cut": 4
+        },
+        "One Piece": {
+            "cut": 55,
+            "photo": 7
+        },
+        "Other": {
+            "cut": 29,
+            "photo": 9
+        },
+        "Pokemon": {
+            "cut": 66,
+            "photo": 6
+        }
+    },
+    "after_counts": {
+        "3D print": {
+            "photo": 95,
+            "cut": 2
+        },
+        "Accsesuary": {
+            "cut": 5,
+            "photo": 12
+        },
+        "One Piece": {
+            "cut": 57,
+            "photo": 5
+        },
+        "Other": {
+            "cut": 33,
+            "photo": 5
+        },
+        "Pokemon": {
+            "cut": 67,
+            "photo": 5
+        }
+    },
+    "changed_assets": [
+        {
+            "source": "catalog/3D print/Фігурки/Геодуд фігурка 3д.jpg",
+            "before": "photo",
+            "after": "cut",
+            "width": 682,
+            "height": 1024,
+            "aspect_ratio": 0.666015625,
+            "corner_alpha": [
+                255,
+                255,
+                255,
+                255
+            ],
+            "corner_rgb": [
+                [
+                    16,
+                    16,
+                    16
+                ],
+                [
+                    35,
+                    35,
+                    35
+                ],
+                [
+                    48,
+                    48,
+                    48
+                ],
+                [
+                    55,
+                    55,
+                    55
+                ]
+            ],
+            "reason": "aspect_outside_cover_band"
+        },
+        {
+            "source": "catalog/3D print/Функціональні/stakan-dlia-ruchok-ditto-pokemon-3d-druk.webp",
+            "before": "photo",
+            "after": "cut",
+            "width": 1024,
+            "height": 1535,
+            "aspect_ratio": 0.6671009771986971,
+            "corner_alpha": [
+                255,
+                255,
+                255,
+                255
+            ],
+            "corner_rgb": [
+                [
+                    1,
+                    0,
+                    0
+                ],
+                [
+                    1,
+                    0,
+                    0
+                ],
+                [
+                    93,
+                    88,
+                    92
+                ],
+                [
+                    2,
+                    4,
+                    3
+                ]
+            ],
+            "reason": "aspect_outside_cover_band"
+        },
+        {
+            "source": "catalog/Accsesuary/albom-dlia-kartok-OnePiece-na-400-slotiv.png",
+            "before": "photo",
+            "after": "cut",
+            "width": 1536,
+            "height": 1024,
+            "aspect_ratio": 1.5,
+            "corner_alpha": [
+                255,
+                255,
+                255,
+                255
+            ],
+            "corner_rgb": [
+                [
+                    240,
+                    242,
+                    241
+                ],
+                [
+                    243,
+                    243,
+                    243
+                ],
+                [
+                    242,
+                    241,
+                    242
+                ],
+                [
+                    240,
+                    239,
+                    241
+                ]
+            ],
+            "reason": "aspect_outside_cover_band"
+        },
+        {
+            "source": "catalog/One Piece/OP-15 Booster.webp",
+            "before": "photo",
+            "after": "cut",
+            "width": 209,
+            "height": 418,
+            "aspect_ratio": 0.5,
+            "corner_alpha": [
+                255,
+                255,
+                255,
+                255
+            ],
+            "corner_rgb": [
+                [
+                    246,
+                    243,
+                    247
+                ],
+                [
+                    238,
+                    235,
+                    240
+                ],
+                [
+                    255,
+                    255,
+                    255
+                ],
+                [
+                    170,
+                    166,
+                    158
+                ]
+            ],
+            "reason": "aspect_outside_cover_band"
+        },
+        {
+            "source": "catalog/One Piece/Бустер One Piece Card Game OP-07 (Японське видання).png",
+            "before": "photo",
+            "after": "cut",
+            "width": 745,
+            "height": 1500,
+            "aspect_ratio": 0.49666666666666665,
+            "corner_alpha": [
+                149,
+                38,
+                2,
+                0
+            ],
+            "corner_rgb": [
+                [
+                    253,
+                    255,
+                    221
+                ],
+                [
+                    248,
+                    248,
+                    150
+                ],
+                [
+                    255,
+                    255,
+                    128
+                ],
+                [
+                    255,
+                    255,
+                    0
+                ]
+            ],
+            "reason": "aspect_outside_cover_band"
+        },
+        {
+            "source": "catalog/Other/Duel Masters — DM24-RP3 — JP.jpg",
+            "before": "photo",
+            "after": "cut",
+            "width": 508,
+            "height": 730,
+            "aspect_ratio": 0.6958904109589041,
+            "corner_alpha": [
+                255,
+                255,
+                255,
+                255
+            ],
+            "corner_rgb": [
+                [
+                    116,
+                    92,
+                    82
+                ],
+                [
+                    236,
+                    217,
+                    210
+                ],
+                [
+                    207,
+                    220,
+                    190
+                ],
+                [
+                    252,
+                    255,
+                    255
+                ]
+            ],
+            "reason": "aspect_outside_cover_band"
+        },
+        {
+            "source": "catalog/Other/QCAC-BoosterJP.png",
+            "before": "photo",
+            "after": "cut",
+            "width": 928,
+            "height": 1930,
+            "aspect_ratio": 0.48082901554404145,
+            "corner_alpha": [
+                255,
+                255,
+                255,
+                255
+            ],
+            "corner_rgb": [
+                [
+                    24,
+                    22,
+                    23
+                ],
+                [
+                    71,
+                    65,
+                    65
+                ],
+                [
+                    199,
+                    197,
+                    198
+                ],
+                [
+                    17,
+                    15,
+                    16
+                ]
+            ],
+            "reason": "aspect_outside_cover_band"
+        },
+        {
+            "source": "catalog/Other/Yu-Gi-Oh OCG Duel Monsters QUARTER CENTURY ART COLLECTION 25th cards.webp",
+            "before": "photo",
+            "after": "cut",
+            "width": 1583,
+            "height": 449,
+            "aspect_ratio": 3.5256124721603563,
+            "corner_alpha": [
+                255,
+                255,
+                255,
+                255
+            ],
+            "corner_rgb": [
+                [
+                    1,
+                    1,
+                    1
+                ],
+                [
+                    3,
+                    3,
+                    3
+                ],
+                [
+                    1,
+                    1,
+                    1
+                ],
+                [
+                    1,
+                    1,
+                    1
+                ]
+            ],
+            "reason": "aspect_outside_cover_band"
+        },
+        {
+            "source": "catalog/Other/Yu-Gi-Oh! OCG Duel Monsters BEYOND THE BRAVE Booster.webp",
+            "before": "photo",
+            "after": "cut",
+            "width": 580,
+            "height": 1200,
+            "aspect_ratio": 0.48333333333333334,
+            "corner_alpha": [
+                255,
+                255,
+                255,
+                255
+            ],
+            "corner_rgb": [
+                [
+                    82,
+                    73,
+                    72
+                ],
+                [
+                    14,
+                    14,
+                    14
+                ],
+                [
+                    73,
+                    69,
+                    66
+                ],
+                [
+                    14,
+                    14,
+                    14
+                ]
+            ],
+            "reason": "aspect_outside_cover_band"
+        },
+        {
+            "source": "catalog/Pokemon/Pokémon — Special Card Set Grass Leafeon VSTAR — JP — Collection Set inside.png",
+            "before": "photo",
+            "after": "cut",
+            "width": 1200,
+            "height": 540,
+            "aspect_ratio": 2.2222222222222223,
+            "corner_alpha": [
+                0,
+                0,
+                253,
+                0
+            ],
+            "corner_rgb": [
+                [
+                    0,
+                    0,
+                    0
+                ],
+                [
+                    0,
+                    0,
+                    0
+                ],
+                [
+                    148,
+                    157,
+                    174
+                ],
+                [
+                    0,
+                    0,
+                    0
+                ]
+            ],
+            "reason": "aspect_outside_cover_band"
+        }
+    ],
+    "total_changed": 10
+}

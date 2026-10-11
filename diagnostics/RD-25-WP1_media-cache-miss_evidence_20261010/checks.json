@@ -1,0 +1,201 @@
+{
+  "checks": [
+    {
+      "name": "runner syntax",
+      "pass": true,
+      "detail": "No syntax errors detected in C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\patches\\RD-25-WP1_media-cache-miss_20261010.php\n"
+    },
+    {
+      "name": "candidate syntax",
+      "pass": true,
+      "detail": "No syntax errors detected in C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-cache-miss-20261010\\expected\\catalog\\model\\tool\\image.php\n"
+    },
+    {
+      "name": "dry run no target write or backup",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "one exact write and self delete",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "verified backup and APPLIED receipt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "repeat idempotent and self delete",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "rollback refuses newer source",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "rollback exact source and self delete",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "reapply after rollback",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source drift refuses with no target writes",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "missing target fails without backup",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "invalid candidate lint fails before target write",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "actual r3 reproduces two warnings per cold asset despite @",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "fixed first visits generate PNG/JPEG/WebP with zero warnings or HTML output",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "classification, source dimensions, fit cache keys and output pixels identical",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "warm reads: zero warnings, zero GD loads and identical cache outputs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "disappears_after_guard returns silent cache miss",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "unreadable_guard returns silent cache miss",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "directory_not_metadata returns silent cache miss",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "corrupt_metadata regenerates without warning or HTML output",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "stale_v2_metadata regenerates without warning or HTML output",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "deleted_metadata_regenerates regenerates without warning or HTML output",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source_stat_invalidates regenerates without warning or HTML output",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "metadata recreation does not change fit pixels or keys",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "read exception propagates after handler restoration",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "site handler and error_reporting preserved",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "unrelated warnings still reach site handler",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "throwing site handler survives fixed cold/warm path",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original cold miss can abort under throwing custom handler",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "full existing WP1 functional suite",
+      "pass": true,
+      "detail": "{\"functional_checks\":79,\"classification_counts\":{\"3D print\":{\"photo\":95,\"cut\":2},\"Accsesuary\":{\"cut\":5,\"photo\":12},\"One Piece\":{\"cut\":57,\"photo\":5},\"Other\":{\"cut\":33,\"photo\":5},\"Pokemon\":{\"cut\":67,\"photo\":5}},\"near_transparent\":1}\n"
+    },
+    {
+      "name": "all 79 WP1 checks pass",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "all 286 archived source classifications unchanged",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "composition cache executes RD-25-WP1_media-cache-miss_20261010.php",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "composition cache executes RD-25-WP1_featured-image-payload_20261010.php",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "composition cache both exact candidates",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "composition f6 executes RD-25-WP1_featured-image-payload_20261010.php",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "composition f6 executes RD-25-WP1_media-cache-miss_20261010.php",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "composition f6 both exact candidates",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "approved r3 and F6 delivered patch hashes unchanged",
+      "pass": true,
+      "detail": null
+    }
+  ],
+  "total": 39,
+  "passed": 39
+}

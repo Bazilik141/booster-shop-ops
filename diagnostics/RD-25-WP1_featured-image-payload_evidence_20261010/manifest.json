@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-10",
+  "scope": "RD-25 WP1 F6, separate companion, prepared for review",
+  "archive": "RD-25-featured-check-20261010.tar.gz",
+  "archive_bytes": 1199,
+  "archive_sha256": "3a2c2e98469fb8da33d3450e8daf20aa60ed3caa5b8dea63ebab67d56a288846",
+  "target": "extension/opencart/catalog/controller/module/featured.php",
+  "before_sha256": "aa9bd528b74256883224d5406366edc5d171000d7fdd8ae61006068398b9f839",
+  "after_sha256": "b981a76485faf267c9362240dc50f972adb15379dffaf3a0ce52a93d3e1deaae",
+  "payload_line_before": 65,
+  "original_image_passed_before": false,
+  "original_image_passed_after": true,
+  "patch": "RD-25-WP1_featured-image-payload_20261010.php",
+  "patch_bytes": 10257,
+  "patch_sha256": "0f7b394c634a05f5b8abb4fa684647015b98442b7dbd604f477c432d9bce2aa3",
+  "approved_r3_sha256": "49ff6c088caf05eecbba47d660af98ce18b85bd50739e1540a3bde637ce01e83",
+  "existing_source_byte_identical_after_removing_two_added_lines": true,
+  "deployment": false,
+  "commit_push": false
+}

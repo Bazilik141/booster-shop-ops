@@ -1,0 +1,121 @@
+{
+  "id": 186,
+  "source": "catalog/Other/G7D sleeves premium plus (MTG).webp",
+  "metadata": {
+    "version": 4,
+    "source": "catalog/Other/G7D sleeves premium plus (MTG).webp",
+    "mtime": 1791698657,
+    "size": 20976,
+    "width": 362,
+    "height": 500,
+    "type": 18,
+    "kind": "cut",
+    "class_reason": "mixed_page_white_or_transparent_corners",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "corner_rgb": [
+      [
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255
+      ],
+      [
+        36,
+        184,
+        111
+      ],
+      [
+        232,
+        235,
+        232
+      ]
+    ],
+    "all_near_white_corners": false,
+    "corner_span": 219,
+    "background_rgb": [
+      243.5,
+      245,
+      243.5
+    ],
+    "alpha_bbox_16": [
+      0,
+      0,
+      362,
+      500
+    ],
+    "background_bbox_12": [
+      0,
+      0,
+      362,
+      500
+    ],
+    "cover_check": {
+      "desktop": {
+        "window": [
+          0,
+          69,
+          362,
+          431
+        ],
+        "safe_window": [
+          7.24,
+          76.24,
+          354.76,
+          423.76
+        ],
+        "content_box": [
+          0,
+          0,
+          362,
+          500
+        ],
+        "passes": false
+      },
+      "mobile": {
+        "window": [
+          0,
+          23.75,
+          362,
+          476.25
+        ],
+        "safe_window": [
+          7.24,
+          32.8,
+          354.76,
+          467.2
+        ],
+        "content_box": [
+          0,
+          0,
+          362,
+          500
+        ],
+        "passes": false
+      }
+    },
+    "trim_method": "none",
+    "crop_box_exclusive": [
+      0,
+      0,
+      362,
+      500
+    ],
+    "crop_width": 362,
+    "crop_height": 500
+  },
+  "served_dimensions": [
+    362,
+    500
+  ],
+  "emitted_img": "<img width=\"362\" height=\"500\">",
+  "fit_relative": "cache/rd25-fit/f14d9b60b8fd60a69b0cecf60261933204cd65463e48e0c7baa74bc61f45f6f5-700x875-fit.webp"
+}

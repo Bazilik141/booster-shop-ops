@@ -1,0 +1,28 @@
+{
+    "runtime": "8.3.30",
+    "signature": "crop(int $top_x, int $top_y, int $bottom_x, int $bottom_y): void",
+    "bottom_endpoints": "exclusive",
+    "output_dimensions": [
+        4,
+        4
+    ],
+    "source_semtransparent_pixel": {
+        "red": 255,
+        "green": 0,
+        "blue": 0,
+        "alpha": 63
+    },
+    "cropped_pixel": {
+        "red": 128,
+        "green": 0,
+        "blue": 0,
+        "alpha": 0
+    },
+    "cropped_transparent_background": {
+        "red": 0,
+        "green": 0,
+        "blue": 0,
+        "alpha": 0
+    },
+    "preserves_alpha": false
+}

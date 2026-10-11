@@ -1,0 +1,1284 @@
+{
+  "php": "8.3.30",
+  "mode": "throwing",
+  "cold": {
+    "value": [
+      {
+        "metadata": {
+          "version": 4,
+          "source": "fixture/cold-png.png",
+          "mtime": 1700000000,
+          "size": 383,
+          "width": 64,
+          "height": 128,
+          "type": 3,
+          "kind": "cut",
+          "class_reason": "transparent_corners",
+          "corner_alpha": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "corner_rgb": [
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ]
+          ],
+          "all_near_white_corners": false,
+          "corner_span": 0,
+          "background_rgb": [
+            255,
+            255,
+            255
+          ],
+          "alpha_bbox_16": [
+            30,
+            40,
+            35,
+            89
+          ],
+          "background_bbox_12": [
+            30,
+            40,
+            35,
+            89
+          ],
+          "cover_check": {
+            "desktop": {
+              "window": [
+                0,
+                32,
+                64,
+                96
+              ],
+              "safe_window": [
+                1.28,
+                33.28,
+                62.72,
+                94.72
+              ],
+              "content_box": [
+                28,
+                38,
+                37,
+                91
+              ],
+              "passes": true
+            },
+            "mobile": {
+              "window": [
+                0,
+                24,
+                64,
+                104
+              ],
+              "safe_window": [
+                1.28,
+                25.6,
+                62.72,
+                102.4
+              ],
+              "content_box": [
+                28,
+                38,
+                37,
+                91
+              ],
+              "passes": true
+            }
+          },
+          "trim_method": "alpha",
+          "crop_box_exclusive": [
+            28,
+            38,
+            37,
+            91
+          ],
+          "crop_width": 9,
+          "crop_height": 53
+        },
+        "fit_sha256": "65226e1f1b256251c49616f689f2872207a75b0ee8998f7db84795e5ae39e836",
+        "fit_dimensions": [
+          9,
+          53,
+          18
+        ],
+        "fit_cache_relative": "cache/rd25-fit/af46d0cc634bb54af42e54b8f7459aec326e2247774821e0cecedf72a4a4a505-700x875-fit.webp"
+      },
+      {
+        "metadata": {
+          "version": 4,
+          "source": "fixture/cold-jpg.jpg",
+          "mtime": 1700000000,
+          "size": 4704,
+          "width": 320,
+          "height": 400,
+          "type": 2,
+          "kind": "photo",
+          "class_reason": "non_white_or_mixed_non_white_corners",
+          "corner_alpha": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "corner_rgb": [
+            [
+              30,
+              30,
+              30
+            ],
+            [
+              30,
+              30,
+              30
+            ],
+            [
+              30,
+              30,
+              30
+            ],
+            [
+              30,
+              30,
+              30
+            ]
+          ],
+          "all_near_white_corners": false,
+          "corner_span": 0,
+          "background_rgb": [
+            30,
+            30,
+            30
+          ],
+          "alpha_bbox_16": null,
+          "background_bbox_12": null,
+          "cover_check": null,
+          "trim_method": "none",
+          "crop_box_exclusive": [
+            0,
+            0,
+            320,
+            400
+          ],
+          "crop_width": 320,
+          "crop_height": 400
+        },
+        "fit_sha256": "9814cdb9f88e5468f9256a2e343d8cf95f03a7b8b570b5df3fac3431b29dbb1b",
+        "fit_dimensions": [
+          320,
+          400,
+          18
+        ],
+        "fit_cache_relative": "cache/rd25-fit/2424e019b0bf2c342c93f7595e4c254573fd06a76ffa86b858ad2fd78a2737df-700x875-fit.webp"
+      },
+      {
+        "metadata": {
+          "version": 4,
+          "source": "fixture/cold-webp.webp",
+          "mtime": 1700000000,
+          "size": 460,
+          "width": 256,
+          "height": 384,
+          "type": 18,
+          "kind": "cut",
+          "class_reason": "opaque_page_white_uniform_corners",
+          "corner_alpha": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "corner_rgb": [
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ]
+          ],
+          "all_near_white_corners": true,
+          "corner_span": 0,
+          "background_rgb": [
+            255,
+            255,
+            255
+          ],
+          "alpha_bbox_16": [
+            0,
+            0,
+            256,
+            384
+          ],
+          "background_bbox_12": [
+            30,
+            40,
+            228,
+            346
+          ],
+          "cover_check": {
+            "desktop": {
+              "window": [
+                0,
+                64,
+                256,
+                320
+              ],
+              "safe_window": [
+                5.12,
+                69.12,
+                250.88,
+                314.88
+              ],
+              "content_box": [
+                28,
+                38,
+                230,
+                348
+              ],
+              "passes": false
+            },
+            "mobile": {
+              "window": [
+                0,
+                32,
+                256,
+                352
+              ],
+              "safe_window": [
+                5.12,
+                38.4,
+                250.88,
+                345.6
+              ],
+              "content_box": [
+                28,
+                38,
+                230,
+                348
+              ],
+              "passes": false
+            }
+          },
+          "trim_method": "background_distance",
+          "crop_box_exclusive": [
+            28,
+            38,
+            230,
+            348
+          ],
+          "crop_width": 202,
+          "crop_height": 310
+        },
+        "fit_sha256": "27b246435acdbb9cb174a1b74c52f5e8c83077aa27be3464f81bbef777f6e9ca",
+        "fit_dimensions": [
+          202,
+          310,
+          18
+        ],
+        "fit_cache_relative": "cache/rd25-fit/719a0fb7f022ed9c0a218acdbf7f77bf3d87a2de83205adedbbdeb9ca8159cb5-700x875-fit.webp"
+      }
+    ],
+    "output": "",
+    "warnings": [],
+    "exception": ""
+  },
+  "warm": {
+    "value": [
+      {
+        "metadata": {
+          "version": 4,
+          "source": "fixture/cold-png.png",
+          "mtime": 1700000000,
+          "size": 383,
+          "width": 64,
+          "height": 128,
+          "type": 3,
+          "kind": "cut",
+          "class_reason": "transparent_corners",
+          "corner_alpha": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "corner_rgb": [
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ]
+          ],
+          "all_near_white_corners": false,
+          "corner_span": 0,
+          "background_rgb": [
+            255,
+            255,
+            255
+          ],
+          "alpha_bbox_16": [
+            30,
+            40,
+            35,
+            89
+          ],
+          "background_bbox_12": [
+            30,
+            40,
+            35,
+            89
+          ],
+          "cover_check": {
+            "desktop": {
+              "window": [
+                0,
+                32,
+                64,
+                96
+              ],
+              "safe_window": [
+                1.28,
+                33.28,
+                62.72,
+                94.72
+              ],
+              "content_box": [
+                28,
+                38,
+                37,
+                91
+              ],
+              "passes": true
+            },
+            "mobile": {
+              "window": [
+                0,
+                24,
+                64,
+                104
+              ],
+              "safe_window": [
+                1.28,
+                25.6,
+                62.72,
+                102.4
+              ],
+              "content_box": [
+                28,
+                38,
+                37,
+                91
+              ],
+              "passes": true
+            }
+          },
+          "trim_method": "alpha",
+          "crop_box_exclusive": [
+            28,
+            38,
+            37,
+            91
+          ],
+          "crop_width": 9,
+          "crop_height": 53
+        },
+        "fit_sha256": "65226e1f1b256251c49616f689f2872207a75b0ee8998f7db84795e5ae39e836",
+        "fit_dimensions": [
+          9,
+          53,
+          18
+        ],
+        "fit_cache_relative": "cache/rd25-fit/af46d0cc634bb54af42e54b8f7459aec326e2247774821e0cecedf72a4a4a505-700x875-fit.webp"
+      },
+      {
+        "metadata": {
+          "version": 4,
+          "source": "fixture/cold-jpg.jpg",
+          "mtime": 1700000000,
+          "size": 4704,
+          "width": 320,
+          "height": 400,
+          "type": 2,
+          "kind": "photo",
+          "class_reason": "non_white_or_mixed_non_white_corners",
+          "corner_alpha": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "corner_rgb": [
+            [
+              30,
+              30,
+              30
+            ],
+            [
+              30,
+              30,
+              30
+            ],
+            [
+              30,
+              30,
+              30
+            ],
+            [
+              30,
+              30,
+              30
+            ]
+          ],
+          "all_near_white_corners": false,
+          "corner_span": 0,
+          "background_rgb": [
+            30,
+            30,
+            30
+          ],
+          "alpha_bbox_16": null,
+          "background_bbox_12": null,
+          "cover_check": null,
+          "trim_method": "none",
+          "crop_box_exclusive": [
+            0,
+            0,
+            320,
+            400
+          ],
+          "crop_width": 320,
+          "crop_height": 400
+        },
+        "fit_sha256": "9814cdb9f88e5468f9256a2e343d8cf95f03a7b8b570b5df3fac3431b29dbb1b",
+        "fit_dimensions": [
+          320,
+          400,
+          18
+        ],
+        "fit_cache_relative": "cache/rd25-fit/2424e019b0bf2c342c93f7595e4c254573fd06a76ffa86b858ad2fd78a2737df-700x875-fit.webp"
+      },
+      {
+        "metadata": {
+          "version": 4,
+          "source": "fixture/cold-webp.webp",
+          "mtime": 1700000000,
+          "size": 460,
+          "width": 256,
+          "height": 384,
+          "type": 18,
+          "kind": "cut",
+          "class_reason": "opaque_page_white_uniform_corners",
+          "corner_alpha": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "corner_rgb": [
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ]
+          ],
+          "all_near_white_corners": true,
+          "corner_span": 0,
+          "background_rgb": [
+            255,
+            255,
+            255
+          ],
+          "alpha_bbox_16": [
+            0,
+            0,
+            256,
+            384
+          ],
+          "background_bbox_12": [
+            30,
+            40,
+            228,
+            346
+          ],
+          "cover_check": {
+            "desktop": {
+              "window": [
+                0,
+                64,
+                256,
+                320
+              ],
+              "safe_window": [
+                5.12,
+                69.12,
+                250.88,
+                314.88
+              ],
+              "content_box": [
+                28,
+                38,
+                230,
+                348
+              ],
+              "passes": false
+            },
+            "mobile": {
+              "window": [
+                0,
+                32,
+                256,
+                352
+              ],
+              "safe_window": [
+                5.12,
+                38.4,
+                250.88,
+                345.6
+              ],
+              "content_box": [
+                28,
+                38,
+                230,
+                348
+              ],
+              "passes": false
+            }
+          },
+          "trim_method": "background_distance",
+          "crop_box_exclusive": [
+            28,
+            38,
+            230,
+            348
+          ],
+          "crop_width": 202,
+          "crop_height": 310
+        },
+        "fit_sha256": "27b246435acdbb9cb174a1b74c52f5e8c83077aa27be3464f81bbef777f6e9ca",
+        "fit_dimensions": [
+          202,
+          310,
+          18
+        ],
+        "fit_cache_relative": "cache/rd25-fit/719a0fb7f022ed9c0a218acdbf7f77bf3d87a2de83205adedbbdeb9ca8159cb5-700x875-fit.webp"
+      }
+    ],
+    "output": "",
+    "warnings": [],
+    "exception": ""
+  },
+  "warm_GD_decodes": 0,
+  "extra": {
+    "disappears_after_guard": {
+      "value": [],
+      "output": "",
+      "warnings": [],
+      "exception": ""
+    },
+    "unreadable_guard": {
+      "value": [],
+      "output": "",
+      "warnings": [],
+      "exception": ""
+    },
+    "exception_restores_handler": {
+      "value": null,
+      "output": "",
+      "warnings": [],
+      "exception": "RuntimeException:fixture-read-exception"
+    },
+    "corrupt_metadata": {
+      "value": {
+        "version": 4,
+        "source": "fixture/cold-png.png",
+        "mtime": 1700000000,
+        "size": 383,
+        "width": 64,
+        "height": 128,
+        "type": 3,
+        "kind": "cut",
+        "class_reason": "transparent_corners",
+        "corner_alpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner_rgb": [
+          [
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            255
+          ]
+        ],
+        "all_near_white_corners": false,
+        "corner_span": 0,
+        "background_rgb": [
+          255,
+          255,
+          255
+        ],
+        "alpha_bbox_16": [
+          30,
+          40,
+          35,
+          89
+        ],
+        "background_bbox_12": [
+          30,
+          40,
+          35,
+          89
+        ],
+        "cover_check": {
+          "desktop": {
+            "window": [
+              0,
+              32,
+              64,
+              96
+            ],
+            "safe_window": [
+              1.28,
+              33.28,
+              62.72,
+              94.72
+            ],
+            "content_box": [
+              28,
+              38,
+              37,
+              91
+            ],
+            "passes": true
+          },
+          "mobile": {
+            "window": [
+              0,
+              24,
+              64,
+              104
+            ],
+            "safe_window": [
+              1.28,
+              25.6,
+              62.72,
+              102.4
+            ],
+            "content_box": [
+              28,
+              38,
+              37,
+              91
+            ],
+            "passes": true
+          }
+        },
+        "trim_method": "alpha",
+        "crop_box_exclusive": [
+          28,
+          38,
+          37,
+          91
+        ],
+        "crop_width": 9,
+        "crop_height": 53
+      },
+      "output": "",
+      "warnings": [],
+      "exception": ""
+    },
+    "stale_v2_metadata": {
+      "value": {
+        "version": 4,
+        "source": "fixture/cold-png.png",
+        "mtime": 1700000000,
+        "size": 383,
+        "width": 64,
+        "height": 128,
+        "type": 3,
+        "kind": "cut",
+        "class_reason": "transparent_corners",
+        "corner_alpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner_rgb": [
+          [
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            255
+          ]
+        ],
+        "all_near_white_corners": false,
+        "corner_span": 0,
+        "background_rgb": [
+          255,
+          255,
+          255
+        ],
+        "alpha_bbox_16": [
+          30,
+          40,
+          35,
+          89
+        ],
+        "background_bbox_12": [
+          30,
+          40,
+          35,
+          89
+        ],
+        "cover_check": {
+          "desktop": {
+            "window": [
+              0,
+              32,
+              64,
+              96
+            ],
+            "safe_window": [
+              1.28,
+              33.28,
+              62.72,
+              94.72
+            ],
+            "content_box": [
+              28,
+              38,
+              37,
+              91
+            ],
+            "passes": true
+          },
+          "mobile": {
+            "window": [
+              0,
+              24,
+              64,
+              104
+            ],
+            "safe_window": [
+              1.28,
+              25.6,
+              62.72,
+              102.4
+            ],
+            "content_box": [
+              28,
+              38,
+              37,
+              91
+            ],
+            "passes": true
+          }
+        },
+        "trim_method": "alpha",
+        "crop_box_exclusive": [
+          28,
+          38,
+          37,
+          91
+        ],
+        "crop_width": 9,
+        "crop_height": 53
+      },
+      "output": "",
+      "warnings": [],
+      "exception": ""
+    },
+    "directory_not_metadata": {
+      "value": [],
+      "output": "",
+      "warnings": [],
+      "exception": ""
+    },
+    "deleted_metadata_regenerates": {
+      "value": [
+        {
+          "metadata": {
+            "version": 4,
+            "source": "fixture/cold-png.png",
+            "mtime": 1700000000,
+            "size": 383,
+            "width": 64,
+            "height": 128,
+            "type": 3,
+            "kind": "cut",
+            "class_reason": "transparent_corners",
+            "corner_alpha": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "corner_rgb": [
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ]
+            ],
+            "all_near_white_corners": false,
+            "corner_span": 0,
+            "background_rgb": [
+              255,
+              255,
+              255
+            ],
+            "alpha_bbox_16": [
+              30,
+              40,
+              35,
+              89
+            ],
+            "background_bbox_12": [
+              30,
+              40,
+              35,
+              89
+            ],
+            "cover_check": {
+              "desktop": {
+                "window": [
+                  0,
+                  32,
+                  64,
+                  96
+                ],
+                "safe_window": [
+                  1.28,
+                  33.28,
+                  62.72,
+                  94.72
+                ],
+                "content_box": [
+                  28,
+                  38,
+                  37,
+                  91
+                ],
+                "passes": true
+              },
+              "mobile": {
+                "window": [
+                  0,
+                  24,
+                  64,
+                  104
+                ],
+                "safe_window": [
+                  1.28,
+                  25.6,
+                  62.72,
+                  102.4
+                ],
+                "content_box": [
+                  28,
+                  38,
+                  37,
+                  91
+                ],
+                "passes": true
+              }
+            },
+            "trim_method": "alpha",
+            "crop_box_exclusive": [
+              28,
+              38,
+              37,
+              91
+            ],
+            "crop_width": 9,
+            "crop_height": 53
+          },
+          "fit_sha256": "65226e1f1b256251c49616f689f2872207a75b0ee8998f7db84795e5ae39e836",
+          "fit_dimensions": [
+            9,
+            53,
+            18
+          ],
+          "fit_cache_relative": "cache/rd25-fit/af46d0cc634bb54af42e54b8f7459aec326e2247774821e0cecedf72a4a4a505-700x875-fit.webp"
+        },
+        {
+          "metadata": {
+            "version": 4,
+            "source": "fixture/cold-jpg.jpg",
+            "mtime": 1700000000,
+            "size": 4704,
+            "width": 320,
+            "height": 400,
+            "type": 2,
+            "kind": "photo",
+            "class_reason": "non_white_or_mixed_non_white_corners",
+            "corner_alpha": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "corner_rgb": [
+              [
+                30,
+                30,
+                30
+              ],
+              [
+                30,
+                30,
+                30
+              ],
+              [
+                30,
+                30,
+                30
+              ],
+              [
+                30,
+                30,
+                30
+              ]
+            ],
+            "all_near_white_corners": false,
+            "corner_span": 0,
+            "background_rgb": [
+              30,
+              30,
+              30
+            ],
+            "alpha_bbox_16": null,
+            "background_bbox_12": null,
+            "cover_check": null,
+            "trim_method": "none",
+            "crop_box_exclusive": [
+              0,
+              0,
+              320,
+              400
+            ],
+            "crop_width": 320,
+            "crop_height": 400
+          },
+          "fit_sha256": "9814cdb9f88e5468f9256a2e343d8cf95f03a7b8b570b5df3fac3431b29dbb1b",
+          "fit_dimensions": [
+            320,
+            400,
+            18
+          ],
+          "fit_cache_relative": "cache/rd25-fit/2424e019b0bf2c342c93f7595e4c254573fd06a76ffa86b858ad2fd78a2737df-700x875-fit.webp"
+        },
+        {
+          "metadata": {
+            "version": 4,
+            "source": "fixture/cold-webp.webp",
+            "mtime": 1700000000,
+            "size": 460,
+            "width": 256,
+            "height": 384,
+            "type": 18,
+            "kind": "cut",
+            "class_reason": "opaque_page_white_uniform_corners",
+            "corner_alpha": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "corner_rgb": [
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ]
+            ],
+            "all_near_white_corners": true,
+            "corner_span": 0,
+            "background_rgb": [
+              255,
+              255,
+              255
+            ],
+            "alpha_bbox_16": [
+              0,
+              0,
+              256,
+              384
+            ],
+            "background_bbox_12": [
+              30,
+              40,
+              228,
+              346
+            ],
+            "cover_check": {
+              "desktop": {
+                "window": [
+                  0,
+                  64,
+                  256,
+                  320
+                ],
+                "safe_window": [
+                  5.12,
+                  69.12,
+                  250.88,
+                  314.88
+                ],
+                "content_box": [
+                  28,
+                  38,
+                  230,
+                  348
+                ],
+                "passes": false
+              },
+              "mobile": {
+                "window": [
+                  0,
+                  32,
+                  256,
+                  352
+                ],
+                "safe_window": [
+                  5.12,
+                  38.4,
+                  250.88,
+                  345.6
+                ],
+                "content_box": [
+                  28,
+                  38,
+                  230,
+                  348
+                ],
+                "passes": false
+              }
+            },
+            "trim_method": "background_distance",
+            "crop_box_exclusive": [
+              28,
+              38,
+              230,
+              348
+            ],
+            "crop_width": 202,
+            "crop_height": 310
+          },
+          "fit_sha256": "27b246435acdbb9cb174a1b74c52f5e8c83077aa27be3464f81bbef777f6e9ca",
+          "fit_dimensions": [
+            202,
+            310,
+            18
+          ],
+          "fit_cache_relative": "cache/rd25-fit/719a0fb7f022ed9c0a218acdbf7f77bf3d87a2de83205adedbbdeb9ca8159cb5-700x875-fit.webp"
+        }
+      ],
+      "output": "",
+      "warnings": [],
+      "exception": ""
+    },
+    "source_stat_invalidates": {
+      "value": {
+        "version": 4,
+        "source": "fixture/cold-jpg.jpg",
+        "mtime": 1700000005,
+        "size": 4704,
+        "width": 320,
+        "height": 400,
+        "type": 2,
+        "kind": "photo",
+        "class_reason": "non_white_or_mixed_non_white_corners",
+        "corner_alpha": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "corner_rgb": [
+          [
+            30,
+            30,
+            30
+          ],
+          [
+            30,
+            30,
+            30
+          ],
+          [
+            30,
+            30,
+            30
+          ],
+          [
+            30,
+            30,
+            30
+          ]
+        ],
+        "all_near_white_corners": false,
+        "corner_span": 0,
+        "background_rgb": [
+          30,
+          30,
+          30
+        ],
+        "alpha_bbox_16": null,
+        "background_bbox_12": null,
+        "cover_check": null,
+        "trim_method": "none",
+        "crop_box_exclusive": [
+          0,
+          0,
+          320,
+          400
+        ],
+        "crop_width": 320,
+        "crop_height": 400
+      },
+      "output": "",
+      "warnings": [],
+      "exception": ""
+    }
+  },
+  "site_handler_restored": true,
+  "error_reporting_mask_unchanged": true,
+  "unrelated_warning": {
+    "value": null,
+    "output": "",
+    "warnings": [
+      {
+        "level": 512,
+        "message": "fixture-unrelated-warning",
+        "file": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\cold-probe.php",
+        "line": 83,
+        "reported_mask_contains_level": true
+      }
+    ],
+    "exception": "ErrorException:fixture-unrelated-warning"
+  }
+}

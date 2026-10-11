@@ -1,0 +1,17 @@
+{
+    "scope": "review-named source fixtures; archive DM Booster PNG, not verified live product mapping",
+    "changed_assets": [
+        {
+            "source": "catalog/One Piece/OP-15 Booster.webp"
+        },
+        {
+            "source": "catalog/Other/Duel Masters — DM24-RP3 — JP — Booster.png"
+        },
+        {
+            "source": "catalog/Other/Yu-Gi-Oh! OCG Duel Monsters BEYOND THE BRAVE Booster.webp"
+        },
+        {
+            "source": "catalog/Other/QCAC-BoosterJP.png"
+        }
+    ]
+}

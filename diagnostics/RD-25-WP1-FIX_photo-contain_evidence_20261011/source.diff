@@ -1,0 +1,34 @@
+--- before/catalog/view/stylesheet/boostershop-ds.css
++++ after/catalog/view/stylesheet/boostershop-ds.css
+@@ -261,7 +261,7 @@
+ }
+ .bs-pcard:hover, .bs-pcard:focus-within { transform: translateY(-3px); }
+ /* RD-25-WP1 20261009: edit UI-PCARD-D source rules; no backdrop or override layer.
+-   Geometry below is the approved catalog framing: cut 8%/6%/84%/94%, photo full bleed. */
++   Geometry below keeps cut 8%/6%/84%/94%; photos preserve their full source. */
+ .bs-pcard__media {
+   position: relative; aspect-ratio: 1 / 1; background: transparent;
+ }
+@@ -273,8 +273,10 @@
+   inset: auto; left: 8%; top: 6%; width: 84%; height: 94%;
+   object-fit: contain; object-position: center bottom;
+ }
++/* RD-25-WP1-FIX-PHOTO 20261011: whole photo, bottom aligned; empty space allowed. */
+ .bs-pcard__media--photo img {
+-  inset: 0; width: 100%; height: 100%; object-fit: cover;
++  inset: 0; width: 100%; height: 100%; object-fit: contain;
++  object-position: center bottom;
+   border-radius: var(--bs-r);
+ }
+ @media (max-width: 767.98px) {
+--- before/catalog/view/template/common/header.twig
++++ after/catalog/view/template/common/header.twig
+@@ -73,7 +73,7 @@
+     @font-face{font-family:'Manrope';font-style:normal;font-weight:200 800;font-display:swap;src:url(catalog/view/stylesheet/fonts/manrope/manrope-latin.woff2?v=manrope-v20) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+   </style>
+   {# RD-25-WP1 20261009: fit-media stylesheet version. #}
+-  <link href="catalog/view/stylesheet/boostershop-ds.css?v=rd25-wp1-media-fit-r3-20261010" type="text/css" rel="stylesheet"/>
++  <link href="catalog/view/stylesheet/boostershop-ds.css?v=rd25-wp1-photo-contain-20261011" type="text/css" rel="stylesheet"/>
+   <link href="catalog/view/stylesheet/bs-faq.css?v=rd05b-faq-20260604" type="text/css" rel="stylesheet"/>
+     <link href="catalog/view/stylesheet/content-pages.css?v=tech045-wpa-20260928" type="text/css" rel="stylesheet"/>
+ <link href="{{ stylesheet }}?v=rd10-breadcrumb-mockup-20260611e" type="text/css" rel="stylesheet"/>

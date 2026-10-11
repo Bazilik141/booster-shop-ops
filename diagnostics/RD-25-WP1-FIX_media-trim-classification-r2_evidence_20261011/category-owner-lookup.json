@@ -1,0 +1,33 @@
+{
+  "task": "RD-25-WP1-FIX-G1",
+  "utc": "2026-10-11T15:58:18+00:00",
+  "category_keyword": "acsesuary",
+  "root_category_id": 70,
+  "scope": "enabled store-0 products in acsesuary and descendants; primary images only",
+  "product_count": 20,
+  "products": [
+    {"product_id": 95, "image": "catalog/Other/Protectory-100sht-generic.jpg", "category_ids": [70, 71]},
+    {"product_id": 96, "image": "catalog/Other/G7D sleeves premium plus (MTG).webp", "category_ids": [70, 71]},
+    {"product_id": 97, "image": "catalog/Accsesuary/Топлоадери для карток 35PT, 25 шт toploaders.png", "category_ids": [70, 71]},
+    {"product_id": 98, "image": "catalog/Accsesuary/Магнітний кейс для карт 35PT.png", "category_ids": [70, 71]},
+    {"product_id": 99, "image": "catalog/Other/Підставка для карт PSA.png", "category_ids": [70, 72]},
+    {"product_id": 100, "image": "catalog/Other/arkush-na-9-kyshenok-game-7-days-9-pocket-page.png", "category_ids": [70, 71]},
+    {"product_id": 112, "image": "catalog/Accsesuary/Альбом для колекційних карток на 360 карток, жовтий.png", "category_ids": [70, 71]},
+    {"product_id": 113, "image": "catalog/Accsesuary/Акриловий протектор-кейс для картки без магніта, 1 шт.png", "category_ids": [70, 71]},
+    {"product_id": 114, "image": "catalog/Other/Toploader1p (1).webp", "category_ids": [70, 71]},
+    {"product_id": 137, "image": "catalog/3D print/Функціональні/Підставка мала.webp", "category_ids": [70, 72]},
+    {"product_id": 138, "image": "catalog/3D print/Функціональні/Підставка середня1.webp", "category_ids": [70, 72]},
+    {"product_id": 139, "image": "catalog/3D print/Функціональні/pidstavka-slab-tcg-01.jpg.JPG", "category_ids": [70, 72]},
+    {"product_id": 140, "image": "catalog/3D print/Функціональні/Підставка під слаби PSA, CGC, BGS (без покеболу).webp", "category_ids": [70, 72]},
+    {"product_id": 141, "image": "catalog/3D print/Функціональні/pidstavka-dlia-slab-na-nizhtsi-3d-druk.webp", "category_ids": [70, 72]},
+    {"product_id": 144, "image": "catalog/Accsesuary/albom-dlia-kartok-OnePiece-na-400-slotiv.png", "category_ids": [70, 71]},
+    {"product_id": 163, "image": "catalog/3D print/Функціональні/pokeballdeckbox01.jpg.JPG", "category_ids": [70, 71]},
+    {"product_id": 164, "image": "catalog/3D print/Функціональні/Ditto cukernutsya.webp", "category_ids": [72]},
+    {"product_id": 173, "image": "catalog/3D print/Функціональні/chasha-pokeball-pokemon-3d-druk.webp", "category_ids": [72]},
+    {"product_id": 190, "image": "catalog/Accsesuary/Альбом для колекційних карток на 360 карток, чорний.png", "category_ids": [70, 71]},
+    {"product_id": 193, "image": "catalog/Accsesuary/Альбом для колекційних карток на 360 карток, білий.png", "category_ids": [70, 71]}
+  ],
+  "db_writes": 0,
+  "file_writes": 0,
+  "done": "ok"
+}

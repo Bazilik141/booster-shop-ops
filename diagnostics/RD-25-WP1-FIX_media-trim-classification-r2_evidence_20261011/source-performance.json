@@ -1,0 +1,96 @@
+{
+    "php": "8.3.30",
+    "scope": "Five largest originals by area plus four prior timing references; native GD, no instrumentation or cache",
+    "assets": [
+        {
+            "id": 79,
+            "source": "catalog\/3D print\/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456\/Ditto-pidstavka-dlia- telefony.JPG",
+            "pixels": 22011192,
+            "decode_seconds": 0.08583,
+            "measurement_seconds": 6.0e-5,
+            "total_seconds": 0.0859,
+            "path": "four_corners_no_scan",
+            "kind": "photo"
+        },
+        {
+            "id": 78,
+            "source": "catalog\/3D print\/\u0424\u0443\u043d\u043a\u0446\u0456\u043e\u043d\u0430\u043b\u044c\u043d\u0456\/Ditto-pidstavka-dlia- telefony-01.JPG",
+            "pixels": 19616436,
+            "decode_seconds": 0.08171,
+            "measurement_seconds": 6.0e-5,
+            "total_seconds": 0.08177,
+            "path": "four_corners_no_scan",
+            "kind": "photo"
+        },
+        {
+            "id": 117,
+            "source": "catalog\/One Piece\/IMG_20260605_125627_236.jpg",
+            "pixels": 18365508,
+            "decode_seconds": 0.08157,
+            "measurement_seconds": 4.0e-5,
+            "total_seconds": 0.08161,
+            "path": "four_corners_no_scan",
+            "kind": "photo"
+        },
+        {
+            "id": 225,
+            "source": "catalog\/Pokemon\/IMG_7255.jpg",
+            "pixels": 17504424,
+            "decode_seconds": 0.08245,
+            "measurement_seconds": 4.0e-5,
+            "total_seconds": 0.08248,
+            "path": "four_corners_no_scan",
+            "kind": "photo"
+        },
+        {
+            "id": 58,
+            "source": "catalog\/3D print\/\u0424\u0456\u0433\u0443\u0440\u043a\u0438\/Mew-pockeball.JPG",
+            "pixels": 12102048,
+            "decode_seconds": 0.05742,
+            "measurement_seconds": 7.0e-5,
+            "total_seconds": 0.05748,
+            "path": "four_corners_no_scan",
+            "kind": "photo"
+        },
+        {
+            "id": 97,
+            "source": "catalog\/Accsesuary\/albom-dlia-kartok-OnePiece-na-400-slotiv.png",
+            "pixels": 1572864,
+            "decode_seconds": 0.03206,
+            "measurement_seconds": 0.4766,
+            "total_seconds": 0.50866,
+            "path": "bit_scan",
+            "kind": "photo"
+        },
+        {
+            "id": 131,
+            "source": "catalog\/One Piece\/One Piece \u2014 OP-13 \u2014 JP \u2014 Booster.png",
+            "pixels": 551000,
+            "decode_seconds": 0.01472,
+            "measurement_seconds": 0.14977,
+            "total_seconds": 0.16449,
+            "path": "bit_scan",
+            "kind": "cut"
+        },
+        {
+            "id": 186,
+            "source": "catalog\/Other\/G7D sleeves premium plus (MTG).webp",
+            "pixels": 181000,
+            "decode_seconds": 0.00335,
+            "measurement_seconds": 0.06022,
+            "total_seconds": 0.06357,
+            "path": "bit_scan",
+            "kind": "cut"
+        },
+        {
+            "id": 143,
+            "source": "catalog\/One Piece\/OP-15 Booster.webp",
+            "pixels": 87362,
+            "decode_seconds": 0.00257,
+            "measurement_seconds": 0.02898,
+            "total_seconds": 0.03155,
+            "path": "bit_scan",
+            "kind": "cut"
+        }
+    ]
+}

@@ -1,0 +1,121 @@
+{
+  "id": 97,
+  "source": "catalog/Accsesuary/albom-dlia-kartok-OnePiece-na-400-slotiv.png",
+  "metadata": {
+    "version": 4,
+    "source": "catalog/Accsesuary/albom-dlia-kartok-OnePiece-na-400-slotiv.png",
+    "mtime": 1791698658,
+    "size": 1854944,
+    "width": 1536,
+    "height": 1024,
+    "type": 3,
+    "kind": "photo",
+    "class_reason": "uniform_non_white_safe_cover_both_slots",
+    "corner_alpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "corner_rgb": [
+      [
+        240,
+        242,
+        241
+      ],
+      [
+        243,
+        243,
+        243
+      ],
+      [
+        242,
+        241,
+        242
+      ],
+      [
+        240,
+        239,
+        241
+      ]
+    ],
+    "all_near_white_corners": false,
+    "corner_span": 4,
+    "background_rgb": [
+      241,
+      241.5,
+      241.5
+    ],
+    "alpha_bbox_16": [
+      0,
+      0,
+      1536,
+      1024
+    ],
+    "background_bbox_12": [
+      378,
+      90,
+      1140,
+      952
+    ],
+    "cover_check": {
+      "desktop": {
+        "window": [
+          256,
+          0,
+          1280,
+          1024
+        ],
+        "safe_window": [
+          276.48,
+          20.48,
+          1259.52,
+          1003.52
+        ],
+        "content_box": [
+          376,
+          88,
+          1142,
+          954
+        ],
+        "passes": true
+      },
+      "mobile": {
+        "window": [
+          358.4,
+          0,
+          1177.6,
+          1024
+        ],
+        "safe_window": [
+          374.784,
+          20.48,
+          1161.216,
+          1003.52
+        ],
+        "content_box": [
+          376,
+          88,
+          1142,
+          954
+        ],
+        "passes": true
+      }
+    },
+    "trim_method": "none",
+    "crop_box_exclusive": [
+      0,
+      0,
+      1536,
+      1024
+    ],
+    "crop_width": 1536,
+    "crop_height": 1024
+  },
+  "served_dimensions": [
+    700,
+    466
+  ],
+  "emitted_img": "<img width=\"700\" height=\"466\">",
+  "fit_relative": "cache/rd25-fit/63977f5a8f45eba37fb0e157d2facda7f72566646ced2765ee8bd23cd0f8a652-700x875-fit.webp"
+}

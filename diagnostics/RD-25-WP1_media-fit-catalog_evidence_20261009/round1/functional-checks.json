@@ -1,0 +1,214 @@
+{
+    "php": "8.3.30",
+    "gd": {
+        "GD Version": "bundled (2.1.0 compatible)",
+        "FreeType Support": true,
+        "FreeType Linkage": "with freetype",
+        "GIF Read Support": true,
+        "GIF Create Support": true,
+        "JPEG Support": true,
+        "PNG Support": true,
+        "WBMP Support": true,
+        "XPM Support": true,
+        "XBM Support": true,
+        "WebP Support": true,
+        "BMP Support": true,
+        "AVIF Support": true,
+        "TGA Read Support": true,
+        "JIS-mapped Japanese Font Support": false
+    },
+    "checks": [
+        {
+            "name": "PNG transparent cut",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "JPEG opaque photo",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "WebP transparent cut",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "near-transparent threshold normalized <=16",
+            "pass": true,
+            "detail": {
+                "version": 1,
+                "source": "fixture/near.png",
+                "mtime": 1791575567,
+                "size": 2239,
+                "width": 400,
+                "height": 600,
+                "type": 3,
+                "kind": "cut",
+                "corner_alpha": [
+                    2,
+                    2,
+                    2,
+                    2
+                ]
+            }
+        },
+        {
+            "name": "opaque PNG photo",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "GIF/missing/outside source and invalid dimensions fallback",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "non-padding no-upsample dimensions fixture/portrait.png",
+            "pass": true,
+            "detail": {
+                "0": 583,
+                "1": 875,
+                "2": 18,
+                "3": "width=\"583\" height=\"875\"",
+                "bits": 8,
+                "mime": "image/webp"
+            }
+        },
+        {
+            "name": "separate suffix and decodable WebP fixture/portrait.png",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "non-padding no-upsample dimensions fixture/landscape.jpg",
+            "pass": true,
+            "detail": {
+                "0": 700,
+                "1": 350,
+                "2": 18,
+                "3": "width=\"700\" height=\"350\"",
+                "bits": 8,
+                "mime": "image/webp"
+            }
+        },
+        {
+            "name": "separate suffix and decodable WebP fixture/landscape.jpg",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "non-padding no-upsample dimensions fixture/tiny.webp",
+            "pass": true,
+            "detail": {
+                "0": 90,
+                "1": 150,
+                "2": 18,
+                "3": "width=\"90\" height=\"150\"",
+                "bits": 8,
+                "mime": "image/webp"
+            }
+        },
+        {
+            "name": "separate suffix and decodable WebP fixture/tiny.webp",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "alpha preserved in fitted PNG->WebP",
+            "pass": true,
+            "detail": {
+                "red": 0,
+                "green": 0,
+                "blue": 0,
+                "alpha": 127
+            }
+        },
+        {
+            "name": "20 warm views: zero GD decodes and identical file/time",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "same-stem PNG/JPEG isolated keys",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "source mtime invalidates metadata AND fitted URL without old-cache deletion",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "corrupt metadata regenerates",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "legacy image cache unchanged",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "WebP capability method anchor",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "GD without WebP output: PNG/JPEG fallback",
+            "pass": true,
+            "detail": [
+                "http://fixture/image/cache/rd25-fit/0ed8c77908d7190b45df7f902bd8eff8ece3ad775af98e18b1fd11e13b99e04c-700x875-fit.png",
+                "http://fixture/image/cache/rd25-fit/17f8a098a1d243466a799615904631cc51584861d88c8e756baa4d85e29c5c82-700x875-fit.jpg"
+            ]
+        },
+        {
+            "name": "complete 286 product-direction archive image assets",
+            "pass": true,
+            "detail": {
+                "3D print": {
+                    "photo": 97
+                },
+                "Accsesuary": {
+                    "photo": 14,
+                    "cut": 3
+                },
+                "One Piece": {
+                    "photo": 14,
+                    "cut": 48
+                },
+                "Other": {
+                    "photo": 12,
+                    "cut": 26
+                },
+                "Pokemon": {
+                    "cut": 60,
+                    "photo": 12
+                }
+            }
+        },
+        {
+            "name": "thumb uses original source without extra product lookup; commerce data intact",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "third-party product-only caller lookup once/request",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "placeholder original URL remains fallback",
+            "pass": true,
+            "detail": null
+        },
+        {
+            "name": "controller database calls read-only",
+            "pass": true,
+            "detail": [
+                "SELECT `text` FROM `fixture_product_attribute` WHERE `product_id` = '501' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1",
+                "SELECT `text` FROM `fixture_product_attribute` WHERE `product_id` = '502' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1"
+            ]
+        }
+    ]
+}

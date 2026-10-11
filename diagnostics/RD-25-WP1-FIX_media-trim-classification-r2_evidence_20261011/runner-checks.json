@@ -1,0 +1,266 @@
+{
+  "checks": [
+    {
+      "name": "runner syntax",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "candidate syntax catalog/model/tool/image.php",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "candidate syntax system/library/image.php",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "candidate syntax catalog/controller/product/thumb.php",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "dry run no backup or target writes",
+      "pass": true,
+      "detail": "php_version=8.3.30\ncwd=C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-main\ntime=2026-10-11T15:44:07+00:00\npreflight_file=catalog/model/tool/image.php\npreflight_file=system/library/image.php\npreflight_file=catalog/controller/product/thumb.php\ndry_run=yes\ntarget_writes=0\ndone=ok\n"
+    },
+    {
+      "name": "apply all three exact candidates, lint and self-delete",
+      "pass": true,
+      "detail": "php_version=8.3.30\ncwd=C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-main\ntime=2026-10-11T15:44:07+00:00\npreflight_file=catalog/model/tool/image.php\npreflight_file=system/library/image.php\npreflight_file=catalog/controller/product/thumb.php\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-main/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154407-3e7f43/candidate/catalog/model/tool/image.php\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-main/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154407-3e7f43/candidate/system/library/image.php\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-main/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154407-3e7f43/candidate/catalog/controller/product/thumb.php\nbackup=C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-main/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154407-3e7f43\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-main/catalog/model/tool/image.php\nchanged_file=catalog/model/tool/image.php\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-main/system/library/image.php\nchanged_file=system/library/image.php\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-main/catalog/controller/product/thumb.php\nchanged_file=catalog/controller/product/thumb.php\nchanged_files=3\ndone=ok\nself_delete=ok\n"
+    },
+    {
+      "name": "verified backups",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "idempotent repeat",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "idempotency refuses modified source",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "rollback refuses newer source",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "rollback restores all three exact sources",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "reapply after rollback",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "drift rejects/restores without source loss",
+      "pass": true,
+      "detail": "php_version=8.3.30\ncwd=C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-drift\ntime=2026-10-11T15:44:09+00:00\nerror=source_sha256_mismatch:catalog/model/tool/image.php\nrestore=not_needed\n"
+    },
+    {
+      "name": "missing rejects/restores without source loss",
+      "pass": true,
+      "detail": "php_version=8.3.30\ncwd=C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-missing\ntime=2026-10-11T15:44:09+00:00\nerror=target_missing_unwritable_or_symlink:catalog/model/tool/image.php\nrestore=not_needed\n"
+    },
+    {
+      "name": "partial rejects/restores without source loss",
+      "pass": true,
+      "detail": "php_version=8.3.30\ncwd=C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-partial\ntime=2026-10-11T15:44:09+00:00\nerror=partial_marker_state\nrestore=not_needed\n"
+    },
+    {
+      "name": "anchor rejects/restores without source loss",
+      "pass": true,
+      "detail": "php_version=8.3.30\ncwd=C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-anchor\ntime=2026-10-11T15:44:09+00:00\nerror=anchor_count_invalid:catalog/model/tool/image.php\nrestore=not_needed\n"
+    },
+    {
+      "name": "bad-lint rejects/restores without source loss",
+      "pass": true,
+      "detail": "php_version=8.3.30\ncwd=C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-bad-lint\ntime=2026-10-11T15:44:10+00:00\npreflight_file=catalog/model/tool/image.php\npreflight_file=system/library/image.php\npreflight_file=catalog/controller/product/thumb.php\nerror=php_lint_failed:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-bad-lint/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154410-0bd0e1/candidate/catalog/model/tool/image.php: Parse error: syntax error, unexpected token \";\" in C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-bad-lint/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154410-0bd0e1/candidate/catalog/model/tool/image.php on line 142 Errors parsing C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-bad-lint/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154410-0bd0e1/candidate/catalog/model/tool/image.php\nbackup=C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-bad-lint/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154410-0bd0e1\nrestore=not_needed\n"
+    },
+    {
+      "name": "invalid candidate rejected by lint before write",
+      "pass": true,
+      "detail": "php_version=8.3.30\ncwd=C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-bad-lint\ntime=2026-10-11T15:44:10+00:00\npreflight_file=catalog/model/tool/image.php\npreflight_file=system/library/image.php\npreflight_file=catalog/controller/product/thumb.php\nerror=php_lint_failed:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-bad-lint/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154410-0bd0e1/candidate/catalog/model/tool/image.php: Parse error: syntax error, unexpected token \";\" in C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-bad-lint/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154410-0bd0e1/candidate/catalog/model/tool/image.php on line 142 Errors parsing C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-bad-lint/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154410-0bd0e1/candidate/catalog/model/tool/image.php\nbackup=C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-bad-lint/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154410-0bd0e1\nrestore=not_needed\n"
+    },
+    {
+      "name": "write-failure rejects/restores without source loss",
+      "pass": true,
+      "detail": "php_version=8.3.30\ncwd=C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-write-failure\ntime=2026-10-11T15:44:10+00:00\npreflight_file=catalog/model/tool/image.php\npreflight_file=system/library/image.php\npreflight_file=catalog/controller/product/thumb.php\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-write-failure/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154410-caeee6/candidate/catalog/model/tool/image.php\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-write-failure/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154410-caeee6/candidate/system/library/image.php\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-write-failure/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154410-caeee6/candidate/catalog/controller/product/thumb.php\nbackup=C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-write-failure/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154410-caeee6\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-write-failure/catalog/model/tool/image.php\nrestored_after_failure=catalog/model/tool/image.php\nerror=fixture_post_write_failure\nbackup=C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-write-failure/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154410-caeee6\nrestore=ok\n"
+    },
+    {
+      "name": "failure restores written target",
+      "pass": true,
+      "detail": "php_version=8.3.30\ncwd=C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-write-failure\ntime=2026-10-11T15:44:10+00:00\npreflight_file=catalog/model/tool/image.php\npreflight_file=system/library/image.php\npreflight_file=catalog/controller/product/thumb.php\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-write-failure/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154410-caeee6/candidate/catalog/model/tool/image.php\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-write-failure/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154410-caeee6/candidate/system/library/image.php\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-write-failure/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154410-caeee6/candidate/catalog/controller/product/thumb.php\nbackup=C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-write-failure/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154410-caeee6\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-write-failure/catalog/model/tool/image.php\nrestored_after_failure=catalog/model/tool/image.php\nerror=fixture_post_write_failure\nbackup=C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\runner-write-failure/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154410-caeee6\nrestore=ok\n"
+    },
+    {
+      "name": "composition fix RD-25-WP1-FIX_media-trim-classification-r2_20261011.php",
+      "pass": true,
+      "detail": "php_version=8.3.30\ncwd=C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\compose-fix\ntime=2026-10-11T15:44:11+00:00\npreflight_file=catalog/model/tool/image.php\npreflight_file=system/library/image.php\npreflight_file=catalog/controller/product/thumb.php\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\compose-fix/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154411-c4def1/candidate/catalog/model/tool/image.php\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\compose-fix/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154411-c4def1/candidate/system/library/image.php\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\compose-fix/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154411-c4def1/candidate/catalog/controller/product/thumb.php\nbackup=C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\compose-fix/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154411-c4def1\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\compose-fix/catalog/model/tool/image.php\nchanged_file=catalog/model/tool/image.php\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\compose-fix/system/library/image.php\nchanged_file=system/library/image.php\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\compose-fix/catalog/controller/product/thumb.php\nchanged_file=catalog/controller/product/thumb.php\nchanged_files=3\ndone=ok\nself_delete=ok\n"
+    },
+    {
+      "name": "composition fix RD-25-WP1_featured-image-payload_20261010.php",
+      "pass": true,
+      "detail": "cwd=C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\compose-fix\ntime=2026-10-11T15:44:11+00:00\npreflight_file=extension/opencart/catalog/controller/module/featured.php\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\compose-fix/_patch_backups/RD-25-WP1_featured-image-payload_20261010-20261011_154411-e3c3e0/candidate/extension/opencart/catalog/controller/module/featured.php\nbackup=C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\compose-fix/_patch_backups/RD-25-WP1_featured-image-payload_20261010-20261011_154411-e3c3e0\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\compose-fix/extension/opencart/catalog/controller/module/featured.php\nchanged_file=extension/opencart/catalog/controller/module/featured.php\nchanged_files=1\ndone=ok\nself_delete=ok\n"
+    },
+    {
+      "name": "composition fix exact four files",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "composition f6 RD-25-WP1_featured-image-payload_20261010.php",
+      "pass": true,
+      "detail": "cwd=C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\compose-f6\ntime=2026-10-11T15:44:12+00:00\npreflight_file=extension/opencart/catalog/controller/module/featured.php\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\compose-f6/_patch_backups/RD-25-WP1_featured-image-payload_20261010-20261011_154412-d99441/candidate/extension/opencart/catalog/controller/module/featured.php\nbackup=C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\compose-f6/_patch_backups/RD-25-WP1_featured-image-payload_20261010-20261011_154412-d99441\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\compose-f6/extension/opencart/catalog/controller/module/featured.php\nchanged_file=extension/opencart/catalog/controller/module/featured.php\nchanged_files=1\ndone=ok\nself_delete=ok\n"
+    },
+    {
+      "name": "composition f6 RD-25-WP1-FIX_media-trim-classification-r2_20261011.php",
+      "pass": true,
+      "detail": "php_version=8.3.30\ncwd=C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\compose-f6\ntime=2026-10-11T15:44:12+00:00\npreflight_file=catalog/model/tool/image.php\npreflight_file=system/library/image.php\npreflight_file=catalog/controller/product/thumb.php\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\compose-f6/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154412-d5eafe/candidate/catalog/model/tool/image.php\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\compose-f6/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154412-d5eafe/candidate/system/library/image.php\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\compose-f6/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154412-d5eafe/candidate/catalog/controller/product/thumb.php\nbackup=C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\compose-f6/_patch_backups/RD-25-WP1-FIX_media-trim-classification-r2_20261011-20261011_154412-d5eafe\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\compose-f6/catalog/model/tool/image.php\nchanged_file=catalog/model/tool/image.php\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\compose-f6/system/library/image.php\nchanged_file=system/library/image.php\nphp_lint=ok:C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-wp1-fix-r2-20261011\\verify4\\compose-f6/catalog/controller/product/thumb.php\nchanged_file=catalog/controller/product/thumb.php\nchanged_files=3\ndone=ok\nself_delete=ok\n"
+    },
+    {
+      "name": "composition f6 exact four files",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "cold probe completes printing",
+      "pass": true,
+      "detail": "\\\\Downloads\\\\Booster Shop\\\\booster-shop-ops\\\\work\\\\rd25-wp1-fix-r2-20261011\\\\cold-probe.php on line 83\",\n        \"warnings\": [\n            {\n                \"level\": 512,\n                \"message\": \"fixture-unrelated-warning\",\n                \"file\": \"C:\\\\Users\\\\14bez\\\\Downloads\\\\Booster Shop\\\\booster-shop-ops\\\\work\\\\rd25-wp1-fix-r2-20261011\\\\cold-probe.php\",\n                \"line\": 83,\n                \"reported_mask_contains_level\": true\n            }\n        ],\n        \"exception\": \"\"\n    }\n}\n"
+    },
+    {
+      "name": "cold and warm warning-free printing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "warm decodes zero printing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "handler restored printing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "disappears_after_guard printing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "unreadable_guard printing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "directory_not_metadata printing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "unrelated warning remains visible printing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "cold probe completes throwing",
+      "pass": true,
+      "detail": "related_warning\": {\n        \"value\": null,\n        \"output\": \"\",\n        \"warnings\": [\n            {\n                \"level\": 512,\n                \"message\": \"fixture-unrelated-warning\",\n                \"file\": \"C:\\\\Users\\\\14bez\\\\Downloads\\\\Booster Shop\\\\booster-shop-ops\\\\work\\\\rd25-wp1-fix-r2-20261011\\\\cold-probe.php\",\n                \"line\": 83,\n                \"reported_mask_contains_level\": true\n            }\n        ],\n        \"exception\": \"ErrorException:fixture-unrelated-warning\"\n    }\n}\n"
+    },
+    {
+      "name": "cold and warm warning-free throwing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "warm decodes zero throwing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "handler restored throwing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "disappears_after_guard throwing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "unreadable_guard throwing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "directory_not_metadata throwing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "unrelated warning remains visible throwing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "F6 payload normal",
+      "pass": true,
+      "detail": "d` = '21' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1\",\"SELECT `text` FROM `f6_fixture_product_attribute` WHERE `product_id` = '22' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1\",\"SELECT `text` FROM `f6_fixture_product_attribute` WHERE `product_id` = '23' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1\",\"SELECT `text` FROM `f6_fixture_product_attribute` WHERE `product_id` = '24' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1\"],\"empty_result\":false}\n"
+    },
+    {
+      "name": "Featured passes image without additional getProduct calls",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "F6 payload duplicates",
+      "pass": true,
+      "detail": "],[\"catalog/F6/O&amp;P-1.webp\",700,875],[\"catalog/F6/O&amp;P-2.webp\",700,875],[\"catalog/F6/O&amp;P-1.webp\",700,875],[\"catalog/F6/O&amp;P-1.webp\",700,875],[\"catalog/F6/O&amp;P-2.webp\",700,875]],\"db_queries\":[\"SELECT `text` FROM `f6_fixture_product_attribute` WHERE `product_id` = '1' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1\",\"SELECT `text` FROM `f6_fixture_product_attribute` WHERE `product_id` = '2' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1\"],\"empty_result\":false}\n"
+    },
+    {
+      "name": "F6 payload empty",
+      "pass": true,
+      "detail": "d` = '21' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1\",\"SELECT `text` FROM `f6_fixture_product_attribute` WHERE `product_id` = '22' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1\",\"SELECT `text` FROM `f6_fixture_product_attribute` WHERE `product_id` = '23' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1\",\"SELECT `text` FROM `f6_fixture_product_attribute` WHERE `product_id` = '24' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1\"],\"empty_result\":false}\n"
+    },
+    {
+      "name": "F6 payload mixed",
+      "pass": true,
+      "detail": "d` = '21' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1\",\"SELECT `text` FROM `f6_fixture_product_attribute` WHERE `product_id` = '22' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1\",\"SELECT `text` FROM `f6_fixture_product_attribute` WHERE `product_id` = '23' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1\",\"SELECT `text` FROM `f6_fixture_product_attribute` WHERE `product_id` = '24' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1\"],\"empty_result\":false}\n"
+    },
+    {
+      "name": "F6 payload missing",
+      "pass": true,
+      "detail": "d` = '21' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1\",\"SELECT `text` FROM `f6_fixture_product_attribute` WHERE `product_id` = '22' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1\",\"SELECT `text` FROM `f6_fixture_product_attribute` WHERE `product_id` = '23' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1\",\"SELECT `text` FROM `f6_fixture_product_attribute` WHERE `product_id` = '24' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1\"],\"empty_result\":false}\n"
+    },
+    {
+      "name": "F6 payload hidden",
+      "pass": true,
+      "detail": "d` = '21' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1\",\"SELECT `text` FROM `f6_fixture_product_attribute` WHERE `product_id` = '22' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1\",\"SELECT `text` FROM `f6_fixture_product_attribute` WHERE `product_id` = '23' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1\",\"SELECT `text` FROM `f6_fixture_product_attribute` WHERE `product_id` = '24' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1\"],\"empty_result\":false}\n"
+    },
+    {
+      "name": "F6 payload invalid",
+      "pass": true,
+      "detail": "g/F6/O&P-2.webp\",500,500]],\"fit_calls\":[[\"catalog/F6/O&amp;P-1.webp\",700,875],[\"catalog/F6/O&amp;P-2.webp\",700,875],[\"catalog/F6/O&amp;P-1.webp\",700,875],[\"catalog/F6/O&amp;P-2.webp\",700,875]],\"db_queries\":[\"SELECT `text` FROM `f6_fixture_product_attribute` WHERE `product_id` = '1' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1\",\"SELECT `text` FROM `f6_fixture_product_attribute` WHERE `product_id` = '2' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1\"],\"empty_result\":false}\n"
+    },
+    {
+      "name": "F6 payload vertical",
+      "pass": true,
+      "detail": "d` = '21' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1\",\"SELECT `text` FROM `f6_fixture_product_attribute` WHERE `product_id` = '22' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1\",\"SELECT `text` FROM `f6_fixture_product_attribute` WHERE `product_id` = '23' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1\",\"SELECT `text` FROM `f6_fixture_product_attribute` WHERE `product_id` = '24' AND `attribute_id` = '27' AND `language_id` = '1' LIMIT 1\"],\"empty_result\":false}\n"
+    },
+    {
+      "name": "F6 payload no-products",
+      "pass": true,
+      "detail": "{\"php\":\"8.3.30\",\"case\":\"no-products\",\"first_reads\":[],\"all_reads\":[],\"first_count\":0,\"first_featured_reads\":0,\"first_thumb_reads\":0,\"payloads\":[],\"thumb_views\":[],\"featured_views\":[],\"legacy_resize_calls\":[],\"fit_calls\":[],\"db_queries\":[],\"empty_result\":true}\n"
+    }
+  ],
+  "passed": 52,
+  "total": 52
+}

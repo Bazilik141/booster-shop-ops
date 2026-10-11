@@ -1,0 +1,50 @@
+{
+  "php": "8.3.30",
+  "mode": "throwing",
+  "cold": {
+    "value": null,
+    "output": "",
+    "warnings": [
+      {
+        "level": 2,
+        "message": "file_get_contents(C:/Users/14bez/Downloads/Booster Shop/booster-shop-ops/work/rd25-cache-miss-20261010/probe-source-throwing/storage/cache/rd25-media-v3-5586db8ca14c9483d60da43d49e139ca448bc167714bdb22c7c84567e1f4d0ab.json): Failed to open stream: No such file or directory",
+        "file": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-cache-miss-20261010\\cold-probe.php",
+        "line": 10,
+        "reported_mask_contains_level": false
+      }
+    ],
+    "exception": "ErrorException:file_get_contents(C:/Users/14bez/Downloads/Booster Shop/booster-shop-ops/work/rd25-cache-miss-20261010/probe-source-throwing/storage/cache/rd25-media-v3-5586db8ca14c9483d60da43d49e139ca448bc167714bdb22c7c84567e1f4d0ab.json): Failed to open stream: No such file or directory"
+  },
+  "warm": {
+    "value": null,
+    "output": "",
+    "warnings": [
+      {
+        "level": 2,
+        "message": "file_get_contents(C:/Users/14bez/Downloads/Booster Shop/booster-shop-ops/work/rd25-cache-miss-20261010/probe-source-throwing/storage/cache/rd25-media-v3-5586db8ca14c9483d60da43d49e139ca448bc167714bdb22c7c84567e1f4d0ab.json): Failed to open stream: No such file or directory",
+        "file": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-cache-miss-20261010\\cold-probe.php",
+        "line": 10,
+        "reported_mask_contains_level": false
+      }
+    ],
+    "exception": "ErrorException:file_get_contents(C:/Users/14bez/Downloads/Booster Shop/booster-shop-ops/work/rd25-cache-miss-20261010/probe-source-throwing/storage/cache/rd25-media-v3-5586db8ca14c9483d60da43d49e139ca448bc167714bdb22c7c84567e1f4d0ab.json): Failed to open stream: No such file or directory"
+  },
+  "warm_GD_decodes": 0,
+  "extra": [],
+  "site_handler_restored": true,
+  "error_reporting_mask_unchanged": true,
+  "unrelated_warning": {
+    "value": null,
+    "output": "",
+    "warnings": [
+      {
+        "level": 512,
+        "message": "fixture-unrelated-warning",
+        "file": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd25-cache-miss-20261010\\cold-probe.php",
+        "line": 83,
+        "reported_mask_contains_level": true
+      }
+    ],
+    "exception": "ErrorException:fixture-unrelated-warning"
+  }
+}

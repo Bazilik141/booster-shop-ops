@@ -1,0 +1,91 @@
+{
+  "checks": [
+    {
+      "check": "Fresh export: all four expected hashes match",
+      "passed": true
+    },
+    {
+      "check": "Exactly the original 286 unique asset sources measured",
+      "passed": true
+    },
+    {
+      "check": "Source dimensions, file sizes, decoded JPEG/PNG/WebP types and corner RGBA match approved v3 evidence (MPO uses JPEG first frame)",
+      "passed": true
+    },
+    {
+      "check": "Recomputed v3 classes match for every measured source",
+      "passed": true
+    },
+    {
+      "check": "Proposed crop boxes are integer, positive and inside source bounds",
+      "passed": true
+    },
+    {
+      "check": "Every above-threshold foreground pixel retained by proposed crop bounds",
+      "passed": true
+    },
+    {
+      "check": "137 transparent-corner assets retain alpha/content classification",
+      "passed": true
+    },
+    {
+      "check": "Album 400 yellow passes safe cover at both slots",
+      "passed": true
+    },
+    {
+      "check": "Games 7 Days sleeves retain full source and become cut",
+      "passed": true
+    },
+    {
+      "check": "Four supplied Mystery Box banner assets remain photo and untrimmed",
+      "passed": true
+    },
+    {
+      "check": "All 95 currently photo-classified 3D asset sources stay photo with unchanged geometry",
+      "passed": true
+    },
+    {
+      "check": "Geodude and Ditto remain cut with unchanged source/canvas framing",
+      "passed": true
+    },
+    {
+      "check": "OP-13/15/17 content heights differ by less than 5% at desktop",
+      "passed": true
+    },
+    {
+      "check": "OP-13/15/17 content heights differ by less than 5% at mobile",
+      "passed": true
+    },
+    {
+      "check": "Every current cut remains un-cropped within its content bbox after proposal",
+      "passed": true
+    },
+    {
+      "check": "Contact sheet includes every changed asset and every named required asset",
+      "passed": true
+    },
+    {
+      "check": "Contact sheet: all 15 PNG category pages and 628 tile images exist",
+      "passed": true
+    },
+    {
+      "check": "All four exported code copies remain byte-identical",
+      "passed": true
+    },
+    {
+      "check": "All extracted original image bytes remain unchanged",
+      "passed": true
+    },
+    {
+      "check": "Prior r3/F6/cache-miss runners remain unchanged",
+      "passed": true
+    },
+    {
+      "check": "No WP1-FIX PHP patch runner exists",
+      "passed": true
+    }
+  ],
+  "passed": 21,
+  "total": 21,
+  "scope": "Measurement artifact consistency and existing crop API probe, not tests of a new implementation."
+}

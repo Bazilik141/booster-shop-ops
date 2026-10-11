@@ -1,0 +1,34 @@
+{
+    "php": "8.3.30",
+    "scope": "Local source decode + uncached pixel scan, excludes encoding\/network\/host load",
+    "assets": [
+        {
+            "id": 97,
+            "source": "catalog\/Accsesuary\/albom-dlia-kartok-OnePiece-na-400-slotiv.png",
+            "pixels": 1572864,
+            "decode_and_measure_seconds": 0.8389,
+            "kind": "photo"
+        },
+        {
+            "id": 131,
+            "source": "catalog\/One Piece\/One Piece \u2014 OP-13 \u2014 JP \u2014 Booster.png",
+            "pixels": 551000,
+            "decode_and_measure_seconds": 0.2541,
+            "kind": "cut"
+        },
+        {
+            "id": 143,
+            "source": "catalog\/One Piece\/OP-15 Booster.webp",
+            "pixels": 87362,
+            "decode_and_measure_seconds": 0.0488,
+            "kind": "cut"
+        },
+        {
+            "id": 186,
+            "source": "catalog\/Other\/G7D sleeves premium plus (MTG).webp",
+            "pixels": 181000,
+            "decode_and_measure_seconds": 0.0991,
+            "kind": "cut"
+        }
+    ]
+}

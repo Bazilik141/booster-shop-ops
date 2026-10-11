@@ -1,0 +1,90 @@
+	// RD-25-WP1-FIX 20261011: measured Phase 0 thresholds; exclusive source bounds.
+	private function rd25Measure($gd, int $width, int $height): array {
+		$corners = []; $white = []; $transparent = []; $span = 0; $background = [];
+		foreach ([[0, 0], [$width - 1, 0], [0, $height - 1], [$width - 1, $height - 1]] as $point) {
+			$c = imagecolorsforindex($gd, imagecolorat($gd, $point[0], $point[1]));
+			$a = (int)round(255 * (127 - $c['alpha']) / 127);
+			$corners[] = [$c['red'], $c['green'], $c['blue'], $a];
+			$white[] = $a === 255 && min($c['red'], $c['green'], $c['blue']) >= 250;
+			$transparent[] = $a <= 16;
+		}
+		for ($channel = 0; $channel < 3; $channel++) {
+			$values = array_column($corners, $channel); sort($values);
+			$span = max($span, $values[3] - $values[0]);
+			$background[] = ($values[1] + $values[2]) / 2;
+		}
+		$rows = [array_fill(0, $height, 0), array_fill(0, $height, 0)];
+		$cols = [array_fill(0, $width, 0), array_fill(0, $width, 0)];
+		$opaque = true; $has_transparent = false;
+		for ($y = 0; $y < $height; $y++) {
+			for ($x = 0; $x < $width; $x++) {
+				$c = imagecolorsforindex($gd, imagecolorat($gd, $x, $y));
+				// GD alpha is integral; opacity > 16 is exactly GD alpha < 119.
+				$opaque = $opaque && $c['alpha'] === 0;
+				$has_transparent = $has_transparent || $c['alpha'] >= 119;
+				if ($c['alpha'] < 119) {
+					$rows[0][$y]++; $cols[0][$x]++;
+					if (max(abs($c['red'] - $background[0]), abs($c['green'] - $background[1]), abs($c['blue'] - $background[2])) > 12) {
+						$rows[1][$y]++; $cols[1][$x]++;
+					}
+				}
+			}
+		}
+		$alpha_box = $this->rd25Bounds($rows[0], $cols[0], 1);
+		$background_box = $this->rd25Bounds($rows[1], $cols[1], 1);
+		$cover_box = $this->rd25Expand($background_box, $width, $height);
+		$cover = [];
+		foreach (['desktop' => 1.0, 'mobile' => 0.8] as $slot => $ratio) {
+			$cw = $width / $height >= $ratio ? $ratio * $height : $width;
+			$ch = $width / $height >= $ratio ? $height : $width / $ratio;
+			$window = [($width - $cw) / 2, ($height - $ch) / 2, ($width + $cw) / 2, ($height + $ch) / 2];
+			$inner = [$window[0] + $cw * .02, $window[1] + $ch * .02, $window[2] - $cw * .02, $window[3] - $ch * .02];
+			$cover[$slot] = ['window' => $window, 'safe_window' => $inner, 'content_box' => $cover_box,
+				'passes' => $cover_box[0] >= $inner[0] && $cover_box[1] >= $inner[1] && $cover_box[2] <= $inner[2] && $cover_box[3] <= $inner[3]];
+		}
+		$background_corners = 0;
+		for ($i = 0; $i < 4; $i++) { $background_corners += $white[$i] || $transparent[$i] ? 1 : 0; }
+		$uniform = $span <= 8;
+		$outside = $width * 100 < $height * 70 || $width * 100 > $height * 145;
+		$kind = 'cut';
+		if ($background_corners > 0 && $background_corners < 4) { $reason = 'mixed_page_white_or_transparent_corners'; }
+		elseif (!in_array(false, $transparent, true)) { $reason = 'transparent_corners'; }
+		elseif (!in_array(false, $white, true) && $uniform) { $reason = 'opaque_page_white_uniform_corners'; }
+		elseif ($outside) {
+			if ($opaque && $background_corners === 0 && $uniform && $background_box && $cover['desktop']['passes'] && $cover['mobile']['passes']) {
+				$kind = 'photo'; $reason = 'uniform_non_white_safe_cover_both_slots';
+			} else { $reason = 'aspect_outside_cover_band_unsafe_cover'; }
+		} else { $kind = 'photo'; $reason = 'non_white_or_mixed_non_white_corners'; }
+		$crop = [0, 0, $width, $height]; $method = 'none';
+		if ($kind === 'cut') {
+			$mask = null;
+			if ($has_transparent) { $mask = 0; $method = 'alpha'; }
+			elseif ($uniform && (!in_array(false, $white, true) || ($opaque && $outside))) { $mask = 1; $method = 'background_distance'; }
+			if ($mask !== null) {
+				$strict = $mask === 0 ? $alpha_box : $background_box;
+				$crop = $this->rd25Expand($this->rd25Bounds($rows[$mask], $cols[$mask], 2), $width, $height);
+				// Containment of strict extents proves no above-threshold pixel is discarded.
+				if ($strict && ($crop[0] > $strict[0] || $crop[1] > $strict[1] || $crop[2] < $strict[2] || $crop[3] < $strict[3])) {
+					$crop = $this->rd25Expand($strict, $width, $height); $method .= ':strict_bbox_fallback';
+				}
+			}
+		}
+		return ['kind' => $kind, 'class_reason' => $reason, 'corner_alpha' => array_column($corners, 3),
+			'corner_rgb' => array_map(static function(array $c): array { return array_slice($c, 0, 3); }, $corners),
+			'all_near_white_corners' => !in_array(false, $white, true), 'corner_span' => $span,
+			'background_rgb' => $background, 'alpha_bbox_16' => $alpha_box, 'background_bbox_12' => $background_box,
+			'cover_check' => $cover, 'trim_method' => $method, 'crop_box_exclusive' => $crop,
+			'crop_width' => $crop[2] - $crop[0], 'crop_height' => $crop[3] - $crop[1]];
+	}
+
+	private function rd25Bounds(array $rows, array $cols, int $minimum): ?array {
+		$ys = []; $xs = [];
+		foreach ($rows as $i => $count) { if ($count >= $minimum) { $ys[] = $i; } }
+		foreach ($cols as $i => $count) { if ($count >= $minimum) { $xs[] = $i; } }
+		return $ys && $xs ? [$xs[0], $ys[0], $xs[count($xs) - 1] + 1, $ys[count($ys) - 1] + 1] : null;
+	}
+
+	private function rd25Expand(?array $box, int $width, int $height): array {
+		return $box ? [max(0, $box[0] - 2), max(0, $box[1] - 2), min($width, $box[2] + 2), min($height, $box[3] + 2)] : [0, 0, $width, $height];
+	}
+

@@ -1,0 +1,6 @@
+php_version=8.3.30
+php_lint=ok:C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-wp1-photo-contain-20261011\missing\RD-25-WP1-FIX_photo-contain_20261011.php
+cwd=C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-wp1-photo-contain-20261011\missing
+time=2026-10-11T16:56:01+00:00
+error=target_missing_unwritable_or_symlink:catalog/view/stylesheet/boostershop-ds.css
+restore=not_needed
