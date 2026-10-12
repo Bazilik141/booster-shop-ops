@@ -1,0 +1,27 @@
+--- before/catalog/controller/common/cart.php
++++ after-wp3/catalog/controller/common/cart.php
+@@ -72,13 +72,23 @@
+ 				}
+ 			}
+ 
++			// RD-25-WP3 20261012: use the existing row source; LOCK_NB/budget refusal keeps legacy thumb.
++			$bs_small = ['bs_fit_thumb' => '', 'bs_media_kind' => 'legacy', 'bs_media_width' => 120, 'bs_media_height' => 120];
++			$bs_fit = $this->model_tool_image->resizeFit($product['image'], 104, 130);
++			if ($bs_fit !== '' && ($bs_media = $this->model_tool_image->mediaInfo($product['image']))) {
++				$bs_scale = min(1.0, 104 / $bs_media['crop_width'], 130 / $bs_media['crop_height']);
++				$bs_small = ['bs_fit_thumb' => $bs_fit, 'bs_media_kind' => $bs_media['kind'],
++					'bs_media_width' => max(1, (int)floor($bs_media['crop_width'] * $bs_scale)),
++					'bs_media_height' => max(1, (int)floor($bs_media['crop_height'] * $bs_scale))];
++			}
++
+ 			$data['products'][] = [
+ 				'thumb'        => $this->model_tool_image->resize($product['image'], $this->config->get('config_image_cart_width'), $this->config->get('config_image_cart_height')),
+ 				'subscription' => $subscription,
+ 				'price'        => $price_status ? $product['price_text'] : '',
+ 				'total'        => $price_status ? $product['total_text'] : '',
+ 				'href'         => $this->url->link('product/product', 'language=' . $this->config->get('config_language') . '&product_id=' . $product['product_id'])
+-			] + $product;
++			] + $bs_small + $product;
+ 		}
+ 
+ 		// Totals

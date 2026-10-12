@@ -1,0 +1,182 @@
+{
+    "module_sha256": "eea58d1e247a16c2cc4bc1e61b8a5028e41dc7ed557e9c652d74382f7984b4b4",
+    "version_branch": "4.1.0.3",
+    "anchors": [
+        {
+            "template": "catalog/view/template/common/header.twig",
+            "method": "replaceCatalogViewCommonHeaderBefore",
+            "index": 0,
+            "search": "<body>",
+            "replace": "<body>\n{% if ps_enhanced_measurement_implementation == 'gtm' %}\n<!-- Google Tag Manager (noscript) -->\n<noscript>\n    <iframe src=\"https://www.googletagmanager.com/ns.html?id={{ ps_enhanced_measurement_gtm_id }}\" height=\"0\" width=\"0\" style=\"display:none; visibility:hidden;\"></iframe>\n</noscript>\n<!-- End Google Tag Manager (noscript) -->\n{% endif %}",
+            "before": 0,
+            "after": 0
+        },
+        {
+            "template": "catalog/view/template/common/header.twig",
+            "method": "replaceCatalogViewCommonHeaderBefore",
+            "index": 1,
+            "search": "</head>",
+            "replace": "<script>\n    // ST-2a.10: keep analytics from breaking storefront flows before consent/bootstrap.\n    window.dataLayer = window.dataLayer || [];\n    window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };\n\n    var ps_dataLayer = {\n        filename_ext: {{ ps_enhanced_measurement_track_file_download_ext | default('[]') }},\n        tracking_delay: {{ ps_enhanced_measurement_tracking_delay | default(800) }},\n        adwords_user_data: {{ ps_enhanced_measurement_adwords_user_data | default('{}') }},\n        adwords_tracking: {{ ps_enhanced_measurement_adwords_tracking | default('{}') }},\n        ga4_tracking: {{ ps_enhanced_measurement_ga4_tracking | default('{}') }},\n        ga4_data: {},\n        init: function () {\n            document.querySelectorAll('a[href]').forEach(function(link, index) {\n                var urlObj = new URL(link.getAttribute('href'), window.location.origin);\n                var fileName = urlObj.pathname.split('/').pop();\n                var fileExtension = '.' + fileName.split('.').pop().toLowerCase();\n\n                if (this.filename_ext.includes(fileExtension)) {\n                    link.setAttribute('data-ps-track-event', 'file_download');\n                    link.setAttribute('data-ps-track-id', 'custom_' + index);\n\n                    this.ga4_data['file_download_custom_' + index] = {\n                        event: 'file_download',\n                        file_extension: fileExtension,\n                        file_name: fileName,\n                        link_text: link.textContent.trim() || \"Unknown\",\n                        link_url: urlObj.href,\n                    };\n                }\n            }, this);\n        },\n        getData: function(eventName, productId) {\n            var dataId = eventName + '_' + productId;\n\n            if (this.ga4_data.hasOwnProperty(dataId)) {\n                return this.ga4_data[dataId];\n            } else {\n                console.error('Enhanced Measurement (Error): `' + dataId + '` dataset does not exists!');\n            }\n\n            return null;\n        },\n        setData: function(data) {\n            this.ga4_data = Object.assign({}, this.ga4_data, data);\n        },\n        onClick: function(eventName, productId) {\n            var dataId = eventName + '_' + productId;\n\n            if (this.ga4_data.hasOwnProperty(dataId)) {\n                this.pushEventData(eventName, this.ga4_data[dataId]);\n            } else {\n                console.error('Enhanced Measurement (Error): `' + dataId + '` dataset does not exists!');\n            }\n        },\n        pushEventData: function(eventName, data) {\n            if (this.ga4_tracking[eventName]) {\n                {% if ps_enhanced_measurement_implementation == 'gtag' %}\n                if (typeof window.gtag === 'function') {\n                    if (data.hasOwnProperty('ecommerce')) {\n                        window.gtag('event', eventName, data.ecommerce);\n                    } else {\n                        window.gtag('event', eventName, data);\n                    }\n                }\n                {% elseif ps_enhanced_measurement_implementation == 'gtm' %}\n                dataLayer.push({ ecommerce: null });\n                dataLayer.push( { 'event': eventName, ...data } );\n                {% endif %}\n                {% if ps_enhanced_measurement_console_log_ga4_events %}\n                this.debug('{{ ps_enhanced_measurement_implementation }}', 'event', eventName, data);\n                {% endif %}\n            }\n\n        {% if ps_enhanced_measurement_adwords_status %}\n            if (this.adwords_tracking.hasOwnProperty(eventName) && typeof window.gtag === 'function') {\n            {% if ps_enhanced_measurement_adwords_enhanced_conversion %}\n                window.gtag('set', 'user_data', this.adwords_user_data);\n                {% if ps_enhanced_measurement_console_log_adwords_events %}\n                this.debug('gtag', 'set', 'user_data', this.adwords_user_data);\n                {% endif %}\n            {% endif %}\n\n            var conversion_data = {'send_to': this.adwords_tracking[eventName]};\n\n            if (data.hasOwnProperty('ecommerce')) {\n                conversion_data.currency = data.ecommerce.currency;\n\n                if (eventName === 'purchase') {\n                    conversion_data.value = data.ecommerce.value + data.ecommerce.tax + data.ecommerce.shipping;\n                    conversion_data.transaction_id = data.ecommerce.transaction_id;\n                } else {\n                    conversion_data.value = data.ecommerce.value;\n                }\n            } else {\n                conversion_data.value = data.value;\n                conversion_data.currency = data.currency;\n            }\n\n            window.gtag('event', 'conversion', conversion_data);\n            {% if ps_enhanced_measurement_console_log_adwords_events %}\n            this.debug('gtag', 'event', 'conversion', conversion_data);\n            {% endif %}\n            }\n        {% endif %}\n        },\n        debug: function(method, command, eventName, data) {\n            if (method == 'gtag') {\n                if (data.hasOwnProperty('ecommerce')) {\n                    console.log(\"gtag('\" + command + \"', '\" + eventName + \"', \" + JSON.stringify(data.ecommerce, undefined, 4) +\");\");\n                } else {\n                    console.log(\"gtag('\" + command + \"', '\" + eventName + \"', \" + JSON.stringify(data, undefined, 4) +\");\");\n                }\n            } else if (method == 'gtm') {\n                console.log('dataLayer.push({ ecommerce: null });\\r\\n');\n                console.log(\"dataLayer.push(\" + JSON.stringify(Object.assign({}, {event: eventName}, data), undefined, 4) + \");\");\n            }\n        }\n    };\n\n    window.onload = function() { ps_dataLayer.init(); };\n</script>\n</head>",
+            "before": 1,
+            "after": 1
+        },
+        {
+            "template": "catalog/view/template/common/header.twig",
+            "method": "replaceCatalogViewCommonHeaderBefore",
+            "index": 2,
+            "search": "</head>",
+            "replace": "{% if ps_login %}<script>ps_dataLayer.pushEventData('login', {{ ps_login }});</script>{% endif %}\n</head>",
+            "before": 1,
+            "after": 1
+        },
+        {
+            "template": "catalog/view/template/product/product.twig",
+            "method": "replaceCatalogViewProductProductBefore",
+            "index": 0,
+            "search": "<button type=\"submit\" id=\"button-cart\"",
+            "replace": "<input type=\"hidden\" name=\"category_id\" value=\"{{ ps_category_id }}\">\n            <button type=\"submit\" id=\"button-cart\"",
+            "before": 2,
+            "after": 2
+        },
+        {
+            "template": "catalog/view/template/product/product.twig",
+            "method": "replaceCatalogViewProductProductBefore",
+            "index": 1,
+            "search": "<button type=\"submit\" formaction=\"{{ wishlist_add }}\"",
+            "replace": "<button type=\"submit\" formaction=\"{{ wishlist_add }}\"\n                data-ps-track-id=\"{{ product_id }}\"\n                {% if ps_track_add_to_wishlist %}data-ps-track-event=\"add_to_wishlist\"{% endif %}\n            ",
+            "before": 0,
+            "after": 0
+        },
+        {
+            "template": "catalog/view/template/product/product.twig",
+            "method": "replaceCatalogViewProductProductBefore",
+            "index": 2,
+            "search": "if (json['success']) {",
+            "replace": "{% if ps_track_add_to_cart %}\nif (json['ps_add_to_cart']) {\n    ps_dataLayer.pushEventData('add_to_cart', json['ps_add_to_cart']);\n}\n{% endif %}\nif (json['success']) {",
+            "before": 1,
+            "after": 1
+        },
+        {
+            "template": "catalog/view/template/product/product.twig",
+            "method": "replaceCatalogViewProductProductBefore",
+            "index": 3,
+            "search": "{{ footer }}",
+            "replace": "{% if ps_merge_items %}<script>ps_dataLayer.setData({{ ps_merge_items }});</script>{% endif %}\n{% if ps_track_view_promotion and ps_view_promotion %}<script>ps_dataLayer.pushEventData('view_promotion', {{ ps_view_promotion }});</script>{% endif %}\n{% if ps_track_view_item and ps_view_item %}<script>ps_dataLayer.pushEventData('view_item', {{ ps_view_item }});</script>{% endif %}\n{{ footer }}",
+            "before": 1,
+            "after": 1
+        },
+        {
+            "template": "catalog/view/template/common/cart.twig",
+            "method": "replaceCatalogViewCheckoutCartInfoBefore",
+            "index": 0,
+            "search": "<a href=\"{{ product.href }}\">",
+            "replace": "<a href=\"{{ product.href }}\"\n                data-ps-track-id=\"{{ product.cart_id }}\"\n                {% if ps_track_select_promotion and product.special %}data-ps-track-event=\"select_promotion\"\n                {% elseif ps_track_select_item and not product.special %}data-ps-track-event=\"select_item\"{% endif %}\n            >",
+            "before": 2,
+            "after": 2
+        },
+        {
+            "template": "catalog/view/template/common/cart.twig",
+            "method": "replaceCatalogViewCheckoutCartInfoBefore",
+            "index": 1,
+            "search": "<button type=\"submit\" data-bs-toggle=\"tooltip\" title=\"{{ button_remove }}\"",
+            "replace": "<button type=\"submit\" data-bs-toggle=\"tooltip\" title=\"{{ button_remove }}\"\n                data-ps-track-id=\"{{ product.cart_id }}\"\n                {% if ps_track_remove_from_cart %}data-ps-track-event=\"remove_from_cart\"{% endif %}\n            ",
+            "before": 0,
+            "after": 0
+        },
+        {
+            "template": "catalog/view/template/common/cart.twig",
+            "method": "replaceCatalogViewCheckoutCartInfoBefore",
+            "index": 2,
+            "search": "<button type=\"button\" data-bs-toggle=\"dropdown\"",
+            "replace": "{% if ps_merge_items %}<script>ps_dataLayer.setData({{ ps_merge_items }});</script>{% endif %}\n            <button type=\"button\" data-bs-toggle=\"dropdown\"",
+            "before": 0,
+            "after": 0
+        },
+        {
+            "template": "catalog/view/template/checkout/cart.twig",
+            "method": "replaceCatalogViewCheckoutCartBefore",
+            "index": 0,
+            "search": "<div id=\"shopping-cart\">{{ list }}</div>",
+            "replace": "<div id=\"shopping-cart\">{{ list }}</div>\n            {% if ps_track_view_cart and ps_view_cart %}<script>ps_dataLayer.pushEventData('view_cart', {{ ps_view_cart }});</script>{% endif %}",
+            "before": 1,
+            "after": 1
+        },
+        {
+            "template": "catalog/view/template/checkout/cart_list.twig",
+            "method": "replaceCatalogViewCheckoutCartListBefore",
+            "index": 0,
+            "search": "<a href=\"{{ product.href }}\">",
+            "replace": "<a href=\"{{ product.href }}\"\n                data-ps-track-id=\"{{ product.cart_id }}\"\n                {% if ps_track_select_promotion and product.special %}data-ps-track-event=\"select_promotion\"\n                {% elseif ps_track_select_item and not product.special %}data-ps-track-event=\"select_item\"{% endif %}\n            >",
+            "before": 0,
+            "after": 0
+        },
+        {
+            "template": "catalog/view/template/checkout/cart_list.twig",
+            "method": "replaceCatalogViewCheckoutCartListBefore",
+            "index": 1,
+            "search": "<input type=\"text\" name=\"quantity\"",
+            "replace": "<input type=\"text\" id=\"product-quantity-{{ product.cart_id }}\" name=\"quantity\"",
+            "before": 1,
+            "after": 1
+        },
+        {
+            "template": "catalog/view/template/checkout/cart_list.twig",
+            "method": "replaceCatalogViewCheckoutCartListBefore",
+            "index": 2,
+            "search": "<button type=\"submit\" formaction=\"{{ edit }}\"",
+            "replace": "<button type=\"submit\" formaction=\"{{ edit }}\"\n                data-ps-track-id=\"{{ product.cart_id }}\"\n                {% if ps_track_add_to_cart or ps_track_remove_from_cart %}data-ps-track-event=\"update_cart\"{% endif %}\n            ",
+            "before": 1,
+            "after": 1
+        },
+        {
+            "template": "catalog/view/template/checkout/cart_list.twig",
+            "method": "replaceCatalogViewCheckoutCartListBefore",
+            "index": 3,
+            "search": "<a href=\"{{ product.remove }}\"",
+            "replace": "<a href=\"{{ product.remove }}\"\n                data-ps-track-id=\"{{ product.cart_id }}\"\n                {% if ps_track_remove_from_cart %}data-ps-track-event=\"remove_from_cart\"{% endif %}\n            ",
+            "before": 1,
+            "after": 1
+        },
+        {
+            "template": "catalog/view/template/checkout/cart_list.twig",
+            "method": "replaceCatalogViewCheckoutCartListBefore",
+            "index": 4,
+            "search": "<table class=\"table table-bordered\">",
+            "replace": "{% if ps_merge_items %}<script>ps_dataLayer.setData({{ ps_merge_items }});</script>{% endif %}\n            <table class=\"table table-bordered\">",
+            "before": 0,
+            "after": 0
+        }
+    ],
+    "preservation": [
+        {
+            "template": "catalog/view/template/common/header.twig",
+            "injected_tracking_attributes": 0,
+            "controls": 8,
+            "all_states_byte_identical": true
+        },
+        {
+            "template": "catalog/view/template/product/product.twig",
+            "injected_tracking_attributes": 0,
+            "controls": 20,
+            "all_states_byte_identical": true
+        },
+        {
+            "template": "catalog/view/template/common/cart.twig",
+            "injected_tracking_attributes": 6,
+            "controls": 6,
+            "all_states_byte_identical": true
+        },
+        {
+            "template": "catalog/view/template/checkout/cart.twig",
+            "injected_tracking_attributes": 0,
+            "controls": 1,
+            "all_states_byte_identical": true
+        },
+        {
+            "template": "catalog/view/template/checkout/cart_list.twig",
+            "injected_tracking_attributes": 4,
+            "controls": 5,
+            "all_states_byte_identical": true
+        }
+    ]
+}

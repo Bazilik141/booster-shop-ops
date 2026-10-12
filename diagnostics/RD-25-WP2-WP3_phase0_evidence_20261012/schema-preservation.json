@@ -1,0 +1,87 @@
+{
+    "scope": "Full unmodified product Twig, legacy popup/image fields retained, diagnostic fit thumb substitution only; local fixture proof, not a deployed patch",
+    "checks": [
+        {
+            "product_id": 78,
+            "image_count": 3,
+            "jsonld_bytes_identical": true,
+            "image_array_identical": true,
+            "primary_thumbnail_not_appended_to_legacy_images": true,
+            "image_urls": [
+                "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20Booster-700x700.webp",
+                "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20B1-700x700.webp",
+                "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20B2-700x700.webp"
+            ]
+        },
+        {
+            "product_id": 80,
+            "image_count": 2,
+            "jsonld_bytes_identical": true,
+            "image_array_identical": true,
+            "primary_thumbnail_not_appended_to_legacy_images": true,
+            "image_urls": [
+                "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20Box%202-700x700.webp",
+                "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20Box-700x700.webp"
+            ]
+        },
+        {
+            "product_id": 77,
+            "image_count": 1,
+            "jsonld_bytes_identical": true,
+            "image_array_identical": true,
+            "primary_thumbnail_not_appended_to_legacy_images": true,
+            "image_urls": [
+                "http://rd25.local/image/cache/catalog/Pokemon/Містері%20бокс%20Pokémon%20TCG%20Mystery%20Mix%20Standard%20(Японське%20видання)-700x700.webp"
+            ]
+        },
+        {
+            "product_id": 131,
+            "image_count": 3,
+            "jsonld_bytes_identical": true,
+            "image_array_identical": true,
+            "primary_thumbnail_not_appended_to_legacy_images": true,
+            "image_urls": [
+                "http://rd25.local/image/cache/catalog/3D%20print/Фігурки/Геодуд%20однокольоровий%20L%20та%20M-700x700.webp",
+                "http://rd25.local/image/cache/catalog/3D%20print/Фігурки/Геодуд%20фігурка%203д-700x700.webp",
+                "http://rd25.local/image/cache/catalog/3D%20print/Фігурки/Геодуд%20фігурка-700x700.webp"
+            ]
+        },
+        {
+            "product_id": 144,
+            "image_count": 2,
+            "jsonld_bytes_identical": true,
+            "image_array_identical": true,
+            "primary_thumbnail_not_appended_to_legacy_images": true,
+            "image_urls": [
+                "http://rd25.local/image/cache/catalog/Accsesuary/albom-dlia-kartok-OnePiece-na-400-slotiv-700x700.webp",
+                "http://rd25.local/image/cache/catalog/Accsesuary/albom-dlia-kartok-pokemon-na-400-slotiv-700x700.webp"
+            ]
+        },
+        {
+            "product_id": 96,
+            "image_count": 1,
+            "jsonld_bytes_identical": true,
+            "image_array_identical": true,
+            "primary_thumbnail_not_appended_to_legacy_images": true,
+            "image_urls": [
+                "http://rd25.local/image/cache/catalog/Other/G7D%20sleeves%20premium%20plus%20(MTG)-700x700.webp"
+            ]
+        },
+        {
+            "product_id": 201,
+            "image_count": 6,
+            "jsonld_bytes_identical": true,
+            "image_array_identical": true,
+            "primary_thumbnail_not_appended_to_legacy_images": true,
+            "image_urls": [
+                "http://rd25.local/image/cache/catalog/Other/УЦІНКА/photo_2026-10-10_23-19-10-700x700.webp",
+                "http://rd25.local/image/cache/catalog/Other/УЦІНКА/photo_2026-10-07_09-01-55-700x700.webp",
+                "http://rd25.local/image/cache/catalog/Other/УЦІНКА/photo_2026-10-07_09-01-56%20(3)-700x700.webp",
+                "http://rd25.local/image/cache/catalog/Other/УЦІНКА/photo_2026-10-07_09-01-55%20(2)-700x700.webp",
+                "http://rd25.local/image/cache/catalog/Other/УЦІНКА/photo_2026-10-07_09-01-56%20(2)-700x700.webp",
+                "http://rd25.local/image/cache/catalog/Other/УЦІНКА/photo_2026-10-07_09-01-56-700x700.webp"
+            ]
+        }
+    ],
+    "warnings": []
+}

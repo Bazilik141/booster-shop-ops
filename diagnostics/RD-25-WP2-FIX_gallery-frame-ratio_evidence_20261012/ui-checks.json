@@ -1,0 +1,3654 @@
+{
+  "records": [
+    {
+      "page": "product-190-before.html",
+      "product_id": 190,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 3,
+      "width": 1440,
+      "screenshot": "product-190-before-1440.png",
+      "metrics": {
+        "main": [
+          152,
+          62.390625,
+          480,
+          600
+        ],
+        "rail": [
+          72,
+          62.390625,
+          70,
+          600
+        ],
+        "railScroll": [
+          600,
+          600,
+          70,
+          70
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-190-after.html",
+      "product_id": 190,
+      "state": "after",
+      "ratio": 1,
+      "images": 3,
+      "width": 1440,
+      "screenshot": "product-190-after-1440.png",
+      "metrics": {
+        "main": [
+          152,
+          62.390625,
+          480,
+          480
+        ],
+        "rail": [
+          72,
+          62.390625,
+          70,
+          480
+        ],
+        "railScroll": [
+          480,
+          480,
+          70,
+          70
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "product_id": 190,
+      "width": 1440,
+      "thumbs_checked": 3,
+      "frame_height_fixed": true,
+      "keyboard_focus": true,
+      "selected_popup_exact": true
+    },
+    {
+      "page": "product-193-before.html",
+      "product_id": 193,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 3,
+      "width": 1440,
+      "screenshot": "product-193-before-1440.png",
+      "metrics": {
+        "main": [
+          152,
+          62.390625,
+          480,
+          600
+        ],
+        "rail": [
+          72,
+          62.390625,
+          70,
+          600
+        ],
+        "railScroll": [
+          600,
+          600,
+          70,
+          70
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-193-after.html",
+      "product_id": 193,
+      "state": "after",
+      "ratio": 1,
+      "images": 3,
+      "width": 1440,
+      "screenshot": "product-193-after-1440.png",
+      "metrics": {
+        "main": [
+          152,
+          62.390625,
+          480,
+          480
+        ],
+        "rail": [
+          72,
+          62.390625,
+          70,
+          480
+        ],
+        "railScroll": [
+          480,
+          480,
+          70,
+          70
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "product_id": 193,
+      "width": 1440,
+      "thumbs_checked": 3,
+      "frame_height_fixed": true,
+      "keyboard_focus": true,
+      "selected_popup_exact": true
+    },
+    {
+      "page": "product-163-before.html",
+      "product_id": 163,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 2,
+      "width": 1440,
+      "screenshot": "product-163-before-1440.png",
+      "metrics": {
+        "main": [
+          152,
+          62.390625,
+          480,
+          600
+        ],
+        "rail": [
+          72,
+          62.390625,
+          70,
+          600
+        ],
+        "railScroll": [
+          600,
+          600,
+          70,
+          70
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-163-after.html",
+      "product_id": 163,
+      "state": "after",
+      "ratio": 0.8,
+      "images": 2,
+      "width": 1440,
+      "screenshot": "product-163-after-1440.png",
+      "metrics": {
+        "main": [
+          152,
+          62.390625,
+          480,
+          600
+        ],
+        "rail": [
+          72,
+          62.390625,
+          70,
+          600
+        ],
+        "railScroll": [
+          600,
+          600,
+          70,
+          70
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "product_id": 163,
+      "width": 1440,
+      "thumbs_checked": 2,
+      "frame_height_fixed": true,
+      "keyboard_focus": true,
+      "selected_popup_exact": true
+    },
+    {
+      "page": "product-78-before.html",
+      "product_id": 78,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 3,
+      "width": 1440,
+      "screenshot": "product-78-before-1440.png",
+      "metrics": {
+        "main": [
+          152,
+          62.390625,
+          480,
+          600
+        ],
+        "rail": [
+          72,
+          62.390625,
+          70,
+          600
+        ],
+        "railScroll": [
+          600,
+          600,
+          70,
+          70
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-78-after.html",
+      "product_id": 78,
+      "state": "after",
+      "ratio": 0.8,
+      "images": 3,
+      "width": 1440,
+      "screenshot": "product-78-after-1440.png",
+      "metrics": {
+        "main": [
+          152,
+          62.390625,
+          480,
+          600
+        ],
+        "rail": [
+          72,
+          62.390625,
+          70,
+          600
+        ],
+        "railScroll": [
+          600,
+          600,
+          70,
+          70
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "product_id": 78,
+      "width": 1440,
+      "thumbs_checked": 3,
+      "frame_height_fixed": true,
+      "keyboard_focus": true,
+      "selected_popup_exact": true
+    },
+    {
+      "page": "product-80-before.html",
+      "product_id": 80,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 2,
+      "width": 1440,
+      "screenshot": "product-80-before-1440.png",
+      "metrics": {
+        "main": [
+          152,
+          62.390625,
+          480,
+          600
+        ],
+        "rail": [
+          72,
+          62.390625,
+          70,
+          600
+        ],
+        "railScroll": [
+          600,
+          600,
+          70,
+          70
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-80-after.html",
+      "product_id": 80,
+      "state": "after",
+      "ratio": 0.8,
+      "images": 2,
+      "width": 1440,
+      "screenshot": "product-80-after-1440.png",
+      "metrics": {
+        "main": [
+          152,
+          62.390625,
+          480,
+          600
+        ],
+        "rail": [
+          72,
+          62.390625,
+          70,
+          600
+        ],
+        "railScroll": [
+          600,
+          600,
+          70,
+          70
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "product_id": 80,
+      "width": 1440,
+      "thumbs_checked": 2,
+      "frame_height_fixed": true,
+      "keyboard_focus": true,
+      "selected_popup_exact": true
+    },
+    {
+      "page": "product-77-before.html",
+      "product_id": 77,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 1,
+      "width": 1440,
+      "screenshot": "product-77-before-1440.png",
+      "metrics": {
+        "main": [
+          72,
+          62.390625,
+          480,
+          600
+        ],
+        "rail": null,
+        "railScroll": null,
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-77-after.html",
+      "product_id": 77,
+      "state": "after",
+      "ratio": 1,
+      "images": 1,
+      "width": 1440,
+      "screenshot": "product-77-after-1440.png",
+      "metrics": {
+        "main": [
+          72,
+          62.390625,
+          480,
+          480
+        ],
+        "rail": null,
+        "railScroll": null,
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-144-before.html",
+      "product_id": 144,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 2,
+      "width": 1440,
+      "screenshot": "product-144-before-1440.png",
+      "metrics": {
+        "main": [
+          152,
+          62.390625,
+          480,
+          600
+        ],
+        "rail": [
+          72,
+          62.390625,
+          70,
+          600
+        ],
+        "railScroll": [
+          600,
+          600,
+          70,
+          70
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-144-after.html",
+      "product_id": 144,
+      "state": "after",
+      "ratio": 1,
+      "images": 2,
+      "width": 1440,
+      "screenshot": "product-144-after-1440.png",
+      "metrics": {
+        "main": [
+          152,
+          62.390625,
+          480,
+          480
+        ],
+        "rail": [
+          72,
+          62.390625,
+          70,
+          480
+        ],
+        "railScroll": [
+          480,
+          480,
+          70,
+          70
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "product_id": 144,
+      "width": 1440,
+      "thumbs_checked": 2,
+      "frame_height_fixed": true,
+      "keyboard_focus": true,
+      "selected_popup_exact": true
+    },
+    {
+      "page": "product-201-before.html",
+      "product_id": 201,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 6,
+      "width": 1440,
+      "screenshot": "product-201-before-1440.png",
+      "metrics": {
+        "main": [
+          152,
+          62.390625,
+          480,
+          600
+        ],
+        "rail": [
+          72,
+          62.390625,
+          70,
+          600
+        ],
+        "railScroll": [
+          600,
+          600,
+          70,
+          70
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-201-after.html",
+      "product_id": 201,
+      "state": "after",
+      "ratio": 0.8141112618724559,
+      "images": 6,
+      "width": 1440,
+      "screenshot": "product-201-after-1440.png",
+      "metrics": {
+        "main": [
+          152,
+          62.390625,
+          480,
+          589.59375
+        ],
+        "rail": [
+          72,
+          62.390625,
+          70,
+          589.59375
+        ],
+        "railScroll": [
+          590,
+          590,
+          70,
+          70
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "product_id": 201,
+      "width": 1440,
+      "thumbs_checked": 6,
+      "frame_height_fixed": true,
+      "keyboard_focus": true,
+      "selected_popup_exact": true
+    },
+    {
+      "page": "product-190-before.html",
+      "product_id": 190,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 3,
+      "width": 1024,
+      "screenshot": "product-190-before-1024.png",
+      "metrics": {
+        "main": [
+          124,
+          62.390625,
+          372,
+          465
+        ],
+        "rail": [
+          44,
+          62.390625,
+          70,
+          465
+        ],
+        "railScroll": [
+          465,
+          465,
+          70,
+          70
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-190-after.html",
+      "product_id": 190,
+      "state": "after",
+      "ratio": 1,
+      "images": 3,
+      "width": 1024,
+      "screenshot": "product-190-after-1024.png",
+      "metrics": {
+        "main": [
+          124,
+          62.390625,
+          372,
+          372
+        ],
+        "rail": [
+          44,
+          62.390625,
+          70,
+          372
+        ],
+        "railScroll": [
+          372,
+          372,
+          70,
+          70
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "product_id": 190,
+      "width": 1024,
+      "thumbs_checked": 3,
+      "frame_height_fixed": true,
+      "keyboard_focus": true,
+      "selected_popup_exact": true
+    },
+    {
+      "page": "product-193-before.html",
+      "product_id": 193,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 3,
+      "width": 1024,
+      "screenshot": "product-193-before-1024.png",
+      "metrics": {
+        "main": [
+          124,
+          62.390625,
+          372,
+          465
+        ],
+        "rail": [
+          44,
+          62.390625,
+          70,
+          465
+        ],
+        "railScroll": [
+          465,
+          465,
+          70,
+          70
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-193-after.html",
+      "product_id": 193,
+      "state": "after",
+      "ratio": 1,
+      "images": 3,
+      "width": 1024,
+      "screenshot": "product-193-after-1024.png",
+      "metrics": {
+        "main": [
+          124,
+          62.390625,
+          372,
+          372
+        ],
+        "rail": [
+          44,
+          62.390625,
+          70,
+          372
+        ],
+        "railScroll": [
+          372,
+          372,
+          70,
+          70
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "product_id": 193,
+      "width": 1024,
+      "thumbs_checked": 3,
+      "frame_height_fixed": true,
+      "keyboard_focus": true,
+      "selected_popup_exact": true
+    },
+    {
+      "page": "product-163-before.html",
+      "product_id": 163,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 2,
+      "width": 1024,
+      "screenshot": "product-163-before-1024.png",
+      "metrics": {
+        "main": [
+          124,
+          62.390625,
+          372,
+          465
+        ],
+        "rail": [
+          44,
+          62.390625,
+          70,
+          465
+        ],
+        "railScroll": [
+          465,
+          465,
+          70,
+          70
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-163-after.html",
+      "product_id": 163,
+      "state": "after",
+      "ratio": 0.8,
+      "images": 2,
+      "width": 1024,
+      "screenshot": "product-163-after-1024.png",
+      "metrics": {
+        "main": [
+          124,
+          62.390625,
+          372,
+          465
+        ],
+        "rail": [
+          44,
+          62.390625,
+          70,
+          465
+        ],
+        "railScroll": [
+          465,
+          465,
+          70,
+          70
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "product_id": 163,
+      "width": 1024,
+      "thumbs_checked": 2,
+      "frame_height_fixed": true,
+      "keyboard_focus": true,
+      "selected_popup_exact": true
+    },
+    {
+      "page": "product-78-before.html",
+      "product_id": 78,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 3,
+      "width": 1024,
+      "screenshot": "product-78-before-1024.png",
+      "metrics": {
+        "main": [
+          124,
+          62.390625,
+          372,
+          465
+        ],
+        "rail": [
+          44,
+          62.390625,
+          70,
+          465
+        ],
+        "railScroll": [
+          465,
+          465,
+          70,
+          70
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-78-after.html",
+      "product_id": 78,
+      "state": "after",
+      "ratio": 0.8,
+      "images": 3,
+      "width": 1024,
+      "screenshot": "product-78-after-1024.png",
+      "metrics": {
+        "main": [
+          124,
+          62.390625,
+          372,
+          465
+        ],
+        "rail": [
+          44,
+          62.390625,
+          70,
+          465
+        ],
+        "railScroll": [
+          465,
+          465,
+          70,
+          70
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "product_id": 78,
+      "width": 1024,
+      "thumbs_checked": 3,
+      "frame_height_fixed": true,
+      "keyboard_focus": true,
+      "selected_popup_exact": true
+    },
+    {
+      "page": "product-80-before.html",
+      "product_id": 80,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 2,
+      "width": 1024,
+      "screenshot": "product-80-before-1024.png",
+      "metrics": {
+        "main": [
+          124,
+          62.390625,
+          372,
+          465
+        ],
+        "rail": [
+          44,
+          62.390625,
+          70,
+          465
+        ],
+        "railScroll": [
+          465,
+          465,
+          70,
+          70
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-80-after.html",
+      "product_id": 80,
+      "state": "after",
+      "ratio": 0.8,
+      "images": 2,
+      "width": 1024,
+      "screenshot": "product-80-after-1024.png",
+      "metrics": {
+        "main": [
+          124,
+          62.390625,
+          372,
+          465
+        ],
+        "rail": [
+          44,
+          62.390625,
+          70,
+          465
+        ],
+        "railScroll": [
+          465,
+          465,
+          70,
+          70
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "product_id": 80,
+      "width": 1024,
+      "thumbs_checked": 2,
+      "frame_height_fixed": true,
+      "keyboard_focus": true,
+      "selected_popup_exact": true
+    },
+    {
+      "page": "product-77-before.html",
+      "product_id": 77,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 1,
+      "width": 1024,
+      "screenshot": "product-77-before-1024.png",
+      "metrics": {
+        "main": [
+          44,
+          62.390625,
+          452,
+          565
+        ],
+        "rail": null,
+        "railScroll": null,
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-77-after.html",
+      "product_id": 77,
+      "state": "after",
+      "ratio": 1,
+      "images": 1,
+      "width": 1024,
+      "screenshot": "product-77-after-1024.png",
+      "metrics": {
+        "main": [
+          44,
+          62.390625,
+          452,
+          452
+        ],
+        "rail": null,
+        "railScroll": null,
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-144-before.html",
+      "product_id": 144,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 2,
+      "width": 1024,
+      "screenshot": "product-144-before-1024.png",
+      "metrics": {
+        "main": [
+          124,
+          62.390625,
+          372,
+          465
+        ],
+        "rail": [
+          44,
+          62.390625,
+          70,
+          465
+        ],
+        "railScroll": [
+          465,
+          465,
+          70,
+          70
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-144-after.html",
+      "product_id": 144,
+      "state": "after",
+      "ratio": 1,
+      "images": 2,
+      "width": 1024,
+      "screenshot": "product-144-after-1024.png",
+      "metrics": {
+        "main": [
+          124,
+          62.390625,
+          372,
+          372
+        ],
+        "rail": [
+          44,
+          62.390625,
+          70,
+          372
+        ],
+        "railScroll": [
+          372,
+          372,
+          70,
+          70
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "product_id": 144,
+      "width": 1024,
+      "thumbs_checked": 2,
+      "frame_height_fixed": true,
+      "keyboard_focus": true,
+      "selected_popup_exact": true
+    },
+    {
+      "page": "product-201-before.html",
+      "product_id": 201,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 6,
+      "width": 1024,
+      "screenshot": "product-201-before-1024.png",
+      "metrics": {
+        "main": [
+          124,
+          62.390625,
+          372,
+          465
+        ],
+        "rail": [
+          44,
+          62.390625,
+          70,
+          465
+        ],
+        "railScroll": [
+          465,
+          536,
+          70,
+          70
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-201-after.html",
+      "product_id": 201,
+      "state": "after",
+      "ratio": 0.8141112618724559,
+      "images": 6,
+      "width": 1024,
+      "screenshot": "product-201-after-1024.png",
+      "metrics": {
+        "main": [
+          124,
+          62.390625,
+          372,
+          456.9375
+        ],
+        "rail": [
+          44,
+          62.390625,
+          70,
+          456.9375
+        ],
+        "railScroll": [
+          457,
+          536,
+          70,
+          70
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "product_id": 201,
+      "width": 1024,
+      "thumbs_checked": 6,
+      "frame_height_fixed": true,
+      "keyboard_focus": true,
+      "selected_popup_exact": true
+    },
+    {
+      "page": "product-190-before.html",
+      "product_id": 190,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 3,
+      "width": 390,
+      "screenshot": "product-190-before-390.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          366,
+          457.5
+        ],
+        "rail": [
+          12,
+          529.890625,
+          366,
+          76
+        ],
+        "railScroll": [
+          76,
+          76,
+          366,
+          366
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-190-after.html",
+      "product_id": 190,
+      "state": "after",
+      "ratio": 1,
+      "images": 3,
+      "width": 390,
+      "screenshot": "product-190-after-390.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          366,
+          366
+        ],
+        "rail": [
+          12,
+          438.390625,
+          366,
+          76
+        ],
+        "railScroll": [
+          76,
+          76,
+          366,
+          366
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "product_id": 190,
+      "width": 390,
+      "thumbs_checked": 3,
+      "frame_height_fixed": true,
+      "keyboard_focus": true,
+      "selected_popup_exact": true
+    },
+    {
+      "page": "product-193-before.html",
+      "product_id": 193,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 3,
+      "width": 390,
+      "screenshot": "product-193-before-390.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          366,
+          457.5
+        ],
+        "rail": [
+          12,
+          529.890625,
+          366,
+          76
+        ],
+        "railScroll": [
+          76,
+          76,
+          366,
+          366
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-193-after.html",
+      "product_id": 193,
+      "state": "after",
+      "ratio": 1,
+      "images": 3,
+      "width": 390,
+      "screenshot": "product-193-after-390.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          366,
+          366
+        ],
+        "rail": [
+          12,
+          438.390625,
+          366,
+          76
+        ],
+        "railScroll": [
+          76,
+          76,
+          366,
+          366
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "product_id": 193,
+      "width": 390,
+      "thumbs_checked": 3,
+      "frame_height_fixed": true,
+      "keyboard_focus": true,
+      "selected_popup_exact": true
+    },
+    {
+      "page": "product-163-before.html",
+      "product_id": 163,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 2,
+      "width": 390,
+      "screenshot": "product-163-before-390.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          366,
+          457.5
+        ],
+        "rail": [
+          12,
+          529.890625,
+          366,
+          76
+        ],
+        "railScroll": [
+          76,
+          76,
+          366,
+          366
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-163-after.html",
+      "product_id": 163,
+      "state": "after",
+      "ratio": 0.8,
+      "images": 2,
+      "width": 390,
+      "screenshot": "product-163-after-390.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          366,
+          457.5
+        ],
+        "rail": [
+          12,
+          529.890625,
+          366,
+          76
+        ],
+        "railScroll": [
+          76,
+          76,
+          366,
+          366
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "product_id": 163,
+      "width": 390,
+      "thumbs_checked": 2,
+      "frame_height_fixed": true,
+      "keyboard_focus": true,
+      "selected_popup_exact": true
+    },
+    {
+      "page": "product-78-before.html",
+      "product_id": 78,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 3,
+      "width": 390,
+      "screenshot": "product-78-before-390.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          366,
+          457.5
+        ],
+        "rail": [
+          12,
+          529.890625,
+          366,
+          76
+        ],
+        "railScroll": [
+          76,
+          76,
+          366,
+          366
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-78-after.html",
+      "product_id": 78,
+      "state": "after",
+      "ratio": 0.8,
+      "images": 3,
+      "width": 390,
+      "screenshot": "product-78-after-390.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          366,
+          457.5
+        ],
+        "rail": [
+          12,
+          529.890625,
+          366,
+          76
+        ],
+        "railScroll": [
+          76,
+          76,
+          366,
+          366
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "product_id": 78,
+      "width": 390,
+      "thumbs_checked": 3,
+      "frame_height_fixed": true,
+      "keyboard_focus": true,
+      "selected_popup_exact": true
+    },
+    {
+      "page": "product-80-before.html",
+      "product_id": 80,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 2,
+      "width": 390,
+      "screenshot": "product-80-before-390.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          366,
+          457.5
+        ],
+        "rail": [
+          12,
+          529.890625,
+          366,
+          76
+        ],
+        "railScroll": [
+          76,
+          76,
+          366,
+          366
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-80-after.html",
+      "product_id": 80,
+      "state": "after",
+      "ratio": 0.8,
+      "images": 2,
+      "width": 390,
+      "screenshot": "product-80-after-390.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          366,
+          457.5
+        ],
+        "rail": [
+          12,
+          529.890625,
+          366,
+          76
+        ],
+        "railScroll": [
+          76,
+          76,
+          366,
+          366
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "product_id": 80,
+      "width": 390,
+      "thumbs_checked": 2,
+      "frame_height_fixed": true,
+      "keyboard_focus": true,
+      "selected_popup_exact": true
+    },
+    {
+      "page": "product-77-before.html",
+      "product_id": 77,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 1,
+      "width": 390,
+      "screenshot": "product-77-before-390.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          366,
+          457.5
+        ],
+        "rail": null,
+        "railScroll": null,
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-77-after.html",
+      "product_id": 77,
+      "state": "after",
+      "ratio": 1,
+      "images": 1,
+      "width": 390,
+      "screenshot": "product-77-after-390.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          366,
+          366
+        ],
+        "rail": null,
+        "railScroll": null,
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-144-before.html",
+      "product_id": 144,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 2,
+      "width": 390,
+      "screenshot": "product-144-before-390.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          366,
+          457.5
+        ],
+        "rail": [
+          12,
+          529.890625,
+          366,
+          76
+        ],
+        "railScroll": [
+          76,
+          76,
+          366,
+          366
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-144-after.html",
+      "product_id": 144,
+      "state": "after",
+      "ratio": 1,
+      "images": 2,
+      "width": 390,
+      "screenshot": "product-144-after-390.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          366,
+          366
+        ],
+        "rail": [
+          12,
+          438.390625,
+          366,
+          76
+        ],
+        "railScroll": [
+          76,
+          76,
+          366,
+          366
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "product_id": 144,
+      "width": 390,
+      "thumbs_checked": 2,
+      "frame_height_fixed": true,
+      "keyboard_focus": true,
+      "selected_popup_exact": true
+    },
+    {
+      "page": "product-201-before.html",
+      "product_id": 201,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 6,
+      "width": 390,
+      "screenshot": "product-201-before-390.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          366,
+          457.5
+        ],
+        "rail": [
+          12,
+          529.890625,
+          366,
+          76
+        ],
+        "railScroll": [
+          76,
+          76,
+          366,
+          392
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-201-after.html",
+      "product_id": 201,
+      "state": "after",
+      "ratio": 0.8141112618724559,
+      "images": 6,
+      "width": 390,
+      "screenshot": "product-201-after-390.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          366,
+          449.5625
+        ],
+        "rail": [
+          12,
+          521.953125,
+          366,
+          76
+        ],
+        "railScroll": [
+          76,
+          76,
+          366,
+          392
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "product_id": 201,
+      "width": 390,
+      "thumbs_checked": 6,
+      "frame_height_fixed": true,
+      "keyboard_focus": true,
+      "selected_popup_exact": true
+    },
+    {
+      "page": "product-190-before.html",
+      "product_id": 190,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 3,
+      "width": 360,
+      "screenshot": "product-190-before-360.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          336,
+          420
+        ],
+        "rail": [
+          12,
+          492.390625,
+          336,
+          76
+        ],
+        "railScroll": [
+          76,
+          76,
+          336,
+          336
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-190-after.html",
+      "product_id": 190,
+      "state": "after",
+      "ratio": 1,
+      "images": 3,
+      "width": 360,
+      "screenshot": "product-190-after-360.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          336,
+          336
+        ],
+        "rail": [
+          12,
+          408.390625,
+          336,
+          76
+        ],
+        "railScroll": [
+          76,
+          76,
+          336,
+          336
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "product_id": 190,
+      "width": 360,
+      "thumbs_checked": 3,
+      "frame_height_fixed": true,
+      "keyboard_focus": true,
+      "selected_popup_exact": true
+    },
+    {
+      "page": "product-193-before.html",
+      "product_id": 193,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 3,
+      "width": 360,
+      "screenshot": "product-193-before-360.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          336,
+          420
+        ],
+        "rail": [
+          12,
+          492.390625,
+          336,
+          76
+        ],
+        "railScroll": [
+          76,
+          76,
+          336,
+          336
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-193-after.html",
+      "product_id": 193,
+      "state": "after",
+      "ratio": 1,
+      "images": 3,
+      "width": 360,
+      "screenshot": "product-193-after-360.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          336,
+          336
+        ],
+        "rail": [
+          12,
+          408.390625,
+          336,
+          76
+        ],
+        "railScroll": [
+          76,
+          76,
+          336,
+          336
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "product_id": 193,
+      "width": 360,
+      "thumbs_checked": 3,
+      "frame_height_fixed": true,
+      "keyboard_focus": true,
+      "selected_popup_exact": true
+    },
+    {
+      "page": "product-163-before.html",
+      "product_id": 163,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 2,
+      "width": 360,
+      "screenshot": "product-163-before-360.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          336,
+          420
+        ],
+        "rail": [
+          12,
+          492.390625,
+          336,
+          76
+        ],
+        "railScroll": [
+          76,
+          76,
+          336,
+          336
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-163-after.html",
+      "product_id": 163,
+      "state": "after",
+      "ratio": 0.8,
+      "images": 2,
+      "width": 360,
+      "screenshot": "product-163-after-360.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          336,
+          420
+        ],
+        "rail": [
+          12,
+          492.390625,
+          336,
+          76
+        ],
+        "railScroll": [
+          76,
+          76,
+          336,
+          336
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "product_id": 163,
+      "width": 360,
+      "thumbs_checked": 2,
+      "frame_height_fixed": true,
+      "keyboard_focus": true,
+      "selected_popup_exact": true
+    },
+    {
+      "page": "product-78-before.html",
+      "product_id": 78,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 3,
+      "width": 360,
+      "screenshot": "product-78-before-360.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          336,
+          420
+        ],
+        "rail": [
+          12,
+          492.390625,
+          336,
+          76
+        ],
+        "railScroll": [
+          76,
+          76,
+          336,
+          336
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-78-after.html",
+      "product_id": 78,
+      "state": "after",
+      "ratio": 0.8,
+      "images": 3,
+      "width": 360,
+      "screenshot": "product-78-after-360.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          336,
+          420
+        ],
+        "rail": [
+          12,
+          492.390625,
+          336,
+          76
+        ],
+        "railScroll": [
+          76,
+          76,
+          336,
+          336
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "product_id": 78,
+      "width": 360,
+      "thumbs_checked": 3,
+      "frame_height_fixed": true,
+      "keyboard_focus": true,
+      "selected_popup_exact": true
+    },
+    {
+      "page": "product-80-before.html",
+      "product_id": 80,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 2,
+      "width": 360,
+      "screenshot": "product-80-before-360.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          336,
+          420
+        ],
+        "rail": [
+          12,
+          492.390625,
+          336,
+          76
+        ],
+        "railScroll": [
+          76,
+          76,
+          336,
+          336
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-80-after.html",
+      "product_id": 80,
+      "state": "after",
+      "ratio": 0.8,
+      "images": 2,
+      "width": 360,
+      "screenshot": "product-80-after-360.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          336,
+          420
+        ],
+        "rail": [
+          12,
+          492.390625,
+          336,
+          76
+        ],
+        "railScroll": [
+          76,
+          76,
+          336,
+          336
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "product_id": 80,
+      "width": 360,
+      "thumbs_checked": 2,
+      "frame_height_fixed": true,
+      "keyboard_focus": true,
+      "selected_popup_exact": true
+    },
+    {
+      "page": "product-77-before.html",
+      "product_id": 77,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 1,
+      "width": 360,
+      "screenshot": "product-77-before-360.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          336,
+          420
+        ],
+        "rail": null,
+        "railScroll": null,
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-77-after.html",
+      "product_id": 77,
+      "state": "after",
+      "ratio": 1,
+      "images": 1,
+      "width": 360,
+      "screenshot": "product-77-after-360.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          336,
+          336
+        ],
+        "rail": null,
+        "railScroll": null,
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-144-before.html",
+      "product_id": 144,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 2,
+      "width": 360,
+      "screenshot": "product-144-before-360.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          336,
+          420
+        ],
+        "rail": [
+          12,
+          492.390625,
+          336,
+          76
+        ],
+        "railScroll": [
+          76,
+          76,
+          336,
+          336
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-144-after.html",
+      "product_id": 144,
+      "state": "after",
+      "ratio": 1,
+      "images": 2,
+      "width": 360,
+      "screenshot": "product-144-after-360.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          336,
+          336
+        ],
+        "rail": [
+          12,
+          408.390625,
+          336,
+          76
+        ],
+        "railScroll": [
+          76,
+          76,
+          336,
+          336
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "product_id": 144,
+      "width": 360,
+      "thumbs_checked": 2,
+      "frame_height_fixed": true,
+      "keyboard_focus": true,
+      "selected_popup_exact": true
+    },
+    {
+      "page": "product-201-before.html",
+      "product_id": 201,
+      "state": "before",
+      "ratio": 0.8,
+      "images": 6,
+      "width": 360,
+      "screenshot": "product-201-before-360.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          336,
+          420
+        ],
+        "rail": [
+          12,
+          492.390625,
+          336,
+          76
+        ],
+        "railScroll": [
+          76,
+          76,
+          336,
+          392
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "page": "product-201-after.html",
+      "product_id": 201,
+      "state": "after",
+      "ratio": 0.8141112618724559,
+      "images": 6,
+      "width": 360,
+      "screenshot": "product-201-after-360.png",
+      "metrics": {
+        "main": [
+          12,
+          62.390625,
+          336,
+          412.71875
+        ],
+        "rail": [
+          12,
+          485.109375,
+          336,
+          76
+        ],
+        "railScroll": [
+          76,
+          76,
+          336,
+          392
+        ],
+        "overflow": 0,
+        "images": [
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "photo",
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "loaded": true,
+            "kind": "cut",
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "product_id": 201,
+      "width": 360,
+      "thumbs_checked": 6,
+      "frame_height_fixed": true,
+      "keyboard_focus": true,
+      "selected_popup_exact": true
+    }
+  ],
+  "js_errors": [],
+  "local_mocked_http_only": true
+}

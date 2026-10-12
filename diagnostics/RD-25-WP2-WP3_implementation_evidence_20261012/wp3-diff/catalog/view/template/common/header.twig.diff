@@ -1,0 +1,11 @@
+--- before/catalog/view/template/common/header.twig
++++ after-wp3/catalog/view/template/common/header.twig
+@@ -73,7 +73,7 @@
+     @font-face{font-family:'Manrope';font-style:normal;font-weight:200 800;font-display:swap;src:url(catalog/view/stylesheet/fonts/manrope/manrope-latin.woff2?v=manrope-v20) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+   </style>
+   {# RD-25-WP1 20261009: fit-media stylesheet version. #}
+-  <link href="catalog/view/stylesheet/boostershop-ds.css?v=rd25-wp2-20261012" type="text/css" rel="stylesheet"/>
++  <link href="catalog/view/stylesheet/boostershop-ds.css?v=rd25-wp3-20261012" type="text/css" rel="stylesheet"/>
+   <link href="catalog/view/stylesheet/bs-faq.css?v=rd05b-faq-20260604" type="text/css" rel="stylesheet"/>
+     <link href="catalog/view/stylesheet/content-pages.css?v=tech045-wpa-20260928" type="text/css" rel="stylesheet"/>
+ <link href="{{ stylesheet }}?v=rd10-breadcrumb-mockup-20260611e" type="text/css" rel="stylesheet"/>

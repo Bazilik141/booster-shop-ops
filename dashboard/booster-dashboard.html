@@ -3183,6 +3183,20 @@ function fillRoadmapSeries_(){const select=document.getElementById('roadmapSerie
 
 const ROADMAP_TASKS = [
   {
+    id: 'RD-27', title: 'Стандартизація фото товарів (бібліотека, Pixelcut, масова заміна)', status: 'todo', tool: 'Codex', priority: '—',
+    lastUpdated: '2026-10-12', blockedBy: ['RD-25'],
+    simple: 'Категорія: Redesign (RD). Привести всі фото товарів до одного стилю через Pixelcut і замінити їх на сайті одним патчем, без ручної роботи по кожному фото.',
+    warn: 'Notion: https://app.notion.com/p/3f76bf20bdb48185ab2bed03e51c3072. 2026-10-12: заведено на доручення власника. Деплой лише після WP2+WP3 RD-25 і QA. Запечатані товари: тільки видалення фону, без генерації/апскейлу. Хендоф: handoffs/handoff_RD-27-RD-28_media-standard-and-logo_20261012.md.',
+    subtasks: []
+  },
+  {
+    id: 'RD-28', title: 'Заміна логотипа й favicon на файли з пакета дизайнера', status: 'todo', tool: 'Codex', priority: '—',
+    lastUpdated: '2026-10-12', blockedBy: ['RD-25'],
+    simple: 'Категорія: Redesign (RD). Замінити растровий логотип у шапці та JPG-favicon на файли з design/assets/logo/ і знайти всі інші місця зі старим логотипом.',
+    warn: 'Notion: https://app.notion.com/p/3f76bf20bdb4811b935df6a320eb6360. 2026-10-12: заведено на доручення власника. Після WP2+WP3 RD-25, бо обидві задачі правлять header.twig. Хендоф: handoffs/handoff_RD-27-RD-28_media-standard-and-logo_20261012.md.',
+    subtasks: []
+  },
+  {
     id: 'CRM-016', title: 'Закупки, коригування рядків замовлень, SKU та Telegram', status: 'done', tool: '—', priority: '—',
     lastUpdated: '2026-09-27', blockedBy: [],
     simple: 'Категорія: CRM. Окрема вкладка закупок, безпечне редагування CRM-замовлень, перейменування ACC-001-BPJP, аналіз швидкодії та діагностика Telegram.',
@@ -4630,10 +4644,10 @@ const ROADMAP_TASKS = [
     subtasks: []
   },
   {
-    id: 'RD-25', title: 'Місце під фото товару: пропорція, кадрування, мобільна сітка', status: 'active', tool: 'Codex', priority: '—',
-    lastUpdated: '2026-10-11', blockedBy: [],
-    simple: 'Категорія: Redesign (RD). WP1 закрито після деплою та QA власника; WP2 і WP3 ще не виконані.',
-    warn: 'Notion: https://app.notion.com/p/3f46bf20bdb4814d91a7c9cc06088eea. 2026-10-11: власник підтвердив Deploy done, QA ok і доручив закрити WP1; RD-25 залишається In progress. Каталог: десктоп 1:1, мобайл 2 колонки 4:5. Товар цілий, вільне місце допустиме: cut contain по нижньому краю в 84% x 94%; photo contain по нижньому краю на всю плитку, замість cover. Класифікація/trim r2, payload рекомендованих і захист холодного кешу прийняті. JSON-LD і lightbox 700x700 не змінені. WP2: галерея товару; WP3: малі мініатюри — очікують окремого доручення. Звіт: diagnostics/RD-25-WP1_closure_report_20261011.md.',
+    id: 'RD-25', title: 'Місце під фото товару: пропорція, кадрування, мобільна сітка', status: 'done', tool: 'Codex', priority: '—',
+    lastUpdated: '2026-10-12', blockedBy: [],
+    simple: 'Категорія: Redesign (RD). Закрито 2026-10-12: каталог, галерея товару, мініатюри кошика — задеплоєно, QA власника ок.',
+    warn: 'Notion: https://app.notion.com/p/3f46bf20bdb4814d91a7c9cc06088eea. 2026-10-12 ЗАКРИТО: власник підтвердив QA ("пофікшено") і доручив коміт/пуш/апдейт. WP1 каталог (1:1 десктоп, 2 колонки 4:5 мобайл, cut contain по низу в 84% x 94%, photo contain по низу), WP2 галерея товару (стрічка мініатюр, лайтбокс 700x700 без змін), WP3 мініатюри кошика й міні-кошика 52x65, WP2-FIX: рамка головного фото за пропорцією головного фото в межах 4:5..1:1, фото по центру, пачки по низу. JSON-LD і якорі GA4 без змін. Рев’ю: diagnostics/RD-25-WP2-FIX_gallery-frame-ratio_claude-review_20261012.md. Далі: RD-27 (фото), RD-28 (лого).',
     subtasks: []
   },
   {

@@ -1,0 +1,2342 @@
+{
+  "utc": "2026-10-12T06:47:07+00:00",
+  "scope": "enabled store-0 products, including future date_available; primary + additional images; no customer/order data",
+  "product_count": 134,
+  "products": [
+    {
+      "product_id": 50,
+      "model": "PKM-JP-MSYM-BST",
+      "image": "catalog/Pokemon/MS1.webp",
+      "date_available": "2026-04-01"
+    },
+    {
+      "product_id": 56,
+      "model": "PKM-JP-MSYM-BBX",
+      "image": "catalog/Pokemon/MSB1.jpg",
+      "date_available": "2026-04-01"
+    },
+    {
+      "product_id": 57,
+      "model": "PKM-JP-MBRV-BST",
+      "image": "catalog/Pokemon/Бустер Pokemon TCG Mega Brave (Японське видання).png",
+      "date_available": "2026-04-01"
+    },
+    {
+      "product_id": 58,
+      "model": "PKM-KR-HWAK-BBX",
+      "image": "catalog/Pokemon/Hot Wind Arena Korea BB.png",
+      "date_available": "2026-05-08"
+    },
+    {
+      "product_id": 59,
+      "model": "PKM-JP-MZERO-BST",
+      "image": "catalog/Pokemon/Бустер Pokemon TCG Munikis Zero (Японське видання).png",
+      "date_available": "2026-04-01"
+    },
+    {
+      "product_id": 61,
+      "model": "PKM-JP-MZERO-BBX",
+      "image": "catalog/Pokemon/Бустер бокс Pokemon TCG Munikis Zero (Японське видання).png",
+      "date_available": "2026-04-01"
+    },
+    {
+      "product_id": 63,
+      "model": "PKM-JP-SPIN-BBX",
+      "image": "catalog/Pokemon/PKM-JP-SPIN-BBX.png",
+      "date_available": "2026-04-01"
+    },
+    {
+      "product_id": 65,
+      "model": "PKM-KR-SEBK-BBX",
+      "image": "catalog/Pokemon/Бустер бокс Pokemon TCG Super Electric Breaker (Корейське видання).png",
+      "date_available": "2026-05-08"
+    },
+    {
+      "product_id": 66,
+      "model": "OP-JP-V7PR-BST",
+      "image": "catalog/One Piece/OP JP V7-PROMO.png",
+      "date_available": "2026-04-10"
+    },
+    {
+      "product_id": 67,
+      "model": "OP-JP-EB03-BST",
+      "image": "catalog/One Piece/Бустер One Piece Card Game EB-03 (Японське видання).png",
+      "date_available": "2026-05-08"
+    },
+    {
+      "product_id": 68,
+      "model": "OP-JP-OP10-BST",
+      "image": "catalog/One Piece/Бустер One Piece Card Game OP-10 (Японське видання).png",
+      "date_available": "2026-04-10"
+    },
+    {
+      "product_id": 69,
+      "model": "OP-JP-OP07-BST",
+      "image": "catalog/One Piece/Бустер One Piece Card Game OP-07 (Японське видання).png",
+      "date_available": "2026-04-10"
+    },
+    {
+      "product_id": 70,
+      "model": "OP-JP-OP11-BST",
+      "image": "catalog/One Piece/Бустер One Piece Card Game OP-11 (Японське видання).png",
+      "date_available": "2026-05-08"
+    },
+    {
+      "product_id": 71,
+      "model": "OP-JP-OP12-BST",
+      "image": "catalog/One Piece/Бустер One Piece Card Game OP-12 (Японське видання).png",
+      "date_available": "2026-04-10"
+    },
+    {
+      "product_id": 72,
+      "model": "OP-JP-OP14-BST",
+      "image": "catalog/One Piece/Бустер One Piece Card Game OP-14 (Японське видання).png",
+      "date_available": "2026-05-22"
+    },
+    {
+      "product_id": 73,
+      "model": "PKM-JP-OUTL-BST",
+      "image": "catalog/Pokemon/Outlet MIX.png",
+      "date_available": "0000-00-00"
+    },
+    {
+      "product_id": 74,
+      "model": "PKM-JP-SPIN-BST",
+      "image": "catalog/Pokemon/Бустер Pokemon TCG Ninja Spinner (Японське видання).png",
+      "date_available": "2026-05-08"
+    },
+    {
+      "product_id": 76,
+      "model": "PKM-JP-PRTB-SET",
+      "image": "catalog/Pokemon/Набір Pokemon TCG Premium Trainer Box ex (Японське видання).png",
+      "date_available": "2026-05-09"
+    },
+    {
+      "product_id": 77,
+      "model": "PKM-JP-MBX-ST",
+      "image": "catalog/Pokemon/Містері бокс Pokémon TCG Mystery Mix Standard (Японське видання).jpg",
+      "date_available": "2026-05-13"
+    },
+    {
+      "product_id": 78,
+      "model": "OP-JP-OP15-BST",
+      "image": "catalog/One Piece/OP-15 Booster.webp",
+      "date_available": "2026-05-26"
+    },
+    {
+      "product_id": 79,
+      "model": "PKM-JP-MDEX-BST",
+      "image": "catalog/Pokemon/Mega Dream.png",
+      "date_available": "2026-06-01"
+    },
+    {
+      "product_id": 80,
+      "model": "OP-JP-OP15-BBX",
+      "image": "catalog/One Piece/OP-15 Box 2.png",
+      "date_available": "2026-06-02"
+    },
+    {
+      "product_id": 81,
+      "model": "PKM-JP-BBLT-BST",
+      "image": "catalog/Pokemon/scarlet-and-violet-black-bolt-japanese-booster-pack.webp",
+      "date_available": "2026-06-02"
+    },
+    {
+      "product_id": 82,
+      "model": "PKM-JP-WFLR-BST",
+      "image": "catalog/Pokemon/Scarlet_Violet_Expansion_Pack_White_Flare.png",
+      "date_available": "2026-06-02"
+    },
+    {
+      "product_id": 83,
+      "model": "YGO-JP-QCAC-BST",
+      "image": "catalog/Other/QCAC-BoosterJP.png",
+      "date_available": "2026-06-04"
+    },
+    {
+      "product_id": 84,
+      "model": "OP-JP-OP08-BST",
+      "image": "catalog/One Piece/OP-08 Booster.png",
+      "date_available": "2026-06-04"
+    },
+    {
+      "product_id": 85,
+      "model": "OP-JP-MBX-ST",
+      "image": "catalog/One Piece/Mistery BOX One Piece Standard.jpg",
+      "date_available": "2026-06-05"
+    },
+    {
+      "product_id": 87,
+      "model": "PKM-JP-INFX-BST",
+      "image": "catalog/Pokemon/Inferno X Booster.png",
+      "date_available": "2026-06-05"
+    },
+    {
+      "product_id": 88,
+      "model": "PKM-JP-MZERO-BLR",
+      "image": "catalog/Pokemon/pokemon_tcg_mega_gallade_ex.png",
+      "date_available": "2026-06-05"
+    },
+    {
+      "product_id": 89,
+      "model": "PKM-JP-SVEX-BLR",
+      "image": "catalog/Pokemon/Pokemon S&amp;V blister EX.png",
+      "date_available": "2026-06-05"
+    },
+    {
+      "product_id": 90,
+      "model": "YGO-JP-WPP5-BST",
+      "image": "catalog/Other/booster Yu-Gi-Oh! OCG World Premiere Pack 2024.png",
+      "date_available": "2026-06-05"
+    },
+    {
+      "product_id": 91,
+      "model": "MTG-JP-AFRS-BST",
+      "image": "catalog/Other/Adventures in the Forgotten Realms MTG.png",
+      "date_available": "2026-06-05"
+    },
+    {
+      "product_id": 92,
+      "model": "PKM-KR-HWAK-BST",
+      "image": "catalog/Pokemon/Hot Wind Arena Korea Booster.png",
+      "date_available": "2026-06-05"
+    },
+    {
+      "product_id": 93,
+      "model": "PKM-JP-ABYE-BST",
+      "image": "catalog/Pokemon/Abyss Eye Booster.png",
+      "date_available": "2026-06-14"
+    },
+    {
+      "product_id": 94,
+      "model": "PKM-JP-ABYE-BBX",
+      "image": "catalog/Pokemon/Abyss Eye Box.png",
+      "date_available": "2026-06-14"
+    },
+    {
+      "product_id": 95,
+      "model": "ACC-001",
+      "image": "catalog/Other/Protectory-100sht-generic.jpg",
+      "date_available": "2026-06-29"
+    },
+    {
+      "product_id": 96,
+      "model": "ACC-002",
+      "image": "catalog/Other/G7D sleeves premium plus (MTG).webp",
+      "date_available": "2026-06-29"
+    },
+    {
+      "product_id": 97,
+      "model": "ACC-003",
+      "image": "catalog/Accsesuary/Топлоадери для карток 35PT, 25 шт toploaders.png",
+      "date_available": "2026-06-29"
+    },
+    {
+      "product_id": 98,
+      "model": "ACC-004",
+      "image": "catalog/Accsesuary/Магнітний кейс для карт 35PT.png",
+      "date_available": "2026-06-29"
+    },
+    {
+      "product_id": 99,
+      "model": "ACC-005",
+      "image": "catalog/Other/Підставка для карт PSA.png",
+      "date_available": "2026-06-29"
+    },
+    {
+      "product_id": 100,
+      "model": "ACC-006",
+      "image": "catalog/Other/arkush-na-9-kyshenok-game-7-days-9-pocket-page.png",
+      "date_available": "2026-06-29"
+    },
+    {
+      "product_id": 101,
+      "model": "YGO-JP-BODE-BST",
+      "image": "catalog/Other/Yu-Gi-Oh! OCG Blazing Dominion Booster.webp",
+      "date_available": "2026-06-29"
+    },
+    {
+      "product_id": 102,
+      "model": "YGO-JP-WPP5-BBX",
+      "image": "catalog/Other/Yu-Gi-Oh! OCG World Premiere Pack 2024 BB.png",
+      "date_available": "2026-07-03"
+    },
+    {
+      "product_id": 103,
+      "model": "PKM-EN-PORD-BBN",
+      "image": "catalog/Pokemon/Mega Evolution — Perfect Order Boosters.png",
+      "date_available": "2026-07-08"
+    },
+    {
+      "product_id": 104,
+      "model": "PKM-EN-PORD-BST",
+      "image": "catalog/Pokemon/Mega Evolution — Perfect Order Booster Bundle.png",
+      "date_available": "2026-07-08"
+    },
+    {
+      "product_id": 105,
+      "model": "PKM-EN-CHRS-BBN",
+      "image": "catalog/Pokemon/Pokémon TCG Mega Evolution — Chaos Rising Booster Bundle-Photoroom.png",
+      "date_available": "2026-07-08"
+    },
+    {
+      "product_id": 106,
+      "model": "PKM-EN-CHRS-BST",
+      "image": "catalog/Pokemon/Pokémon TCG Mega Evolution — Chaos Rising Boosters-Photoroom.png",
+      "date_available": "2026-07-08"
+    },
+    {
+      "product_id": 107,
+      "model": "OP-JP-OP16-BBX",
+      "image": "catalog/One Piece/One Piece Card Game OP-16 The Time of Battle display-Photoroom.png",
+      "date_available": "2026-07-08"
+    },
+    {
+      "product_id": 108,
+      "model": "OP-JP-OP16-BST",
+      "image": "catalog/One Piece/One Piece Card Game OP-16 The Time of Battle-Photoroom.png",
+      "date_available": "2026-07-08"
+    },
+    {
+      "product_id": 109,
+      "model": "PKM-JP-MBRV-BBX",
+      "image": "catalog/Pokemon/Бустер бокс Pokemon TCG Mega Brave (Японське видання).png",
+      "date_available": "2026-07-13"
+    },
+    {
+      "product_id": 110,
+      "model": "PKM-JP-MBX-XL",
+      "image": "catalog/Pokemon/Містері бокс Pokémon TCG Mystery Mix XL (Японське видання).jpg",
+      "date_available": "2026-05-13"
+    },
+    {
+      "product_id": 111,
+      "model": "OP-JP-MBX-XL",
+      "image": "catalog/One Piece/MYSTERY BOX XL ONE PIECE No blur.jpg",
+      "date_available": "0000-00-00"
+    },
+    {
+      "product_id": 112,
+      "model": "ACC-007-360",
+      "image": "catalog/Accsesuary/Альбом для колекційних карток на 360 карток, жовтий.png",
+      "date_available": "2026-06-29"
+    },
+    {
+      "product_id": 113,
+      "model": "ACC-008",
+      "image": "catalog/Accsesuary/Акриловий протектор-кейс для картки без магніта, 1 шт.png",
+      "date_available": "2026-06-29"
+    },
+    {
+      "product_id": 114,
+      "model": "ACC-009",
+      "image": "catalog/Other/Toploader1p (1).webp",
+      "date_available": "2026-06-29"
+    },
+    {
+      "product_id": 115,
+      "model": "PKM-JP-MDEX-BBX",
+      "image": "catalog/Pokemon/Mega Dream EX JP Booster BOX.png",
+      "date_available": "2026-06-01"
+    },
+    {
+      "product_id": 116,
+      "model": "PKM-EN-Q2-MTIN-SAL",
+      "image": "catalog/Pokemon/Pokemon TCG Q2 Mini Tin - A - Lumiose City Min Tin - Salamence.webp",
+      "date_available": "2026-07-31"
+    },
+    {
+      "product_id": 117,
+      "model": "PKM-EN-Q2-MTIN-GAL",
+      "image": "catalog/Pokemon/Pokemon TCG Q2 Mini Tin - E - Lumiose City Min Tin – Gallade.webp",
+      "date_available": "2026-07-31"
+    },
+    {
+      "product_id": 120,
+      "model": "OP-JP-ST32-STD",
+      "image": "catalog/One Piece/STARTER DECK ST-32 ONE PIECE CARD GAME.png",
+      "date_available": "2026-07-08"
+    },
+    {
+      "product_id": 121,
+      "model": "OP-JP-ST33-STD",
+      "image": "catalog/One Piece/STARTER DECK BLUE Kuzan- [ST-33] ONE PIECE CARD GAME.png",
+      "date_available": "2026-07-08"
+    },
+    {
+      "product_id": 122,
+      "model": "OP-JP-ST34-STD",
+      "image": "catalog/One Piece/STARTER DECK PURPLE Charlotte Katakuri- [ST-34] ONE PIECE CARD.png",
+      "date_available": "2026-07-08"
+    },
+    {
+      "product_id": 123,
+      "model": "OP-JP-ST35-STD",
+      "image": "catalog/One Piece/STARTER DECK -Red Black Sabo- [ST-35] ONE PIECE CARD GAME.png",
+      "date_available": "2026-07-08"
+    },
+    {
+      "product_id": 124,
+      "model": "OP-JP-ST36-STD",
+      "image": "catalog/One Piece/one-piece-card-game-start-deck-yellow-eustass-kid-st-36-1.png",
+      "date_available": "2026-07-08"
+    },
+    {
+      "product_id": 125,
+      "model": "BR-MEW-100",
+      "image": "catalog/3D print/Брелоки/Брелов MEW.jpg",
+      "date_available": "2026-08-19"
+    },
+    {
+      "product_id": 126,
+      "model": "BR-CHARM-100",
+      "image": "catalog/3D print/Брелоки/Брелок чармандер1.JPG",
+      "date_available": "2026-08-19"
+    },
+    {
+      "product_id": 127,
+      "model": "BR-SQUIR-100",
+      "image": "catalog/3D print/Брелоки/Брелок сквіртл.jpg",
+      "date_available": "2026-08-19"
+    },
+    {
+      "product_id": 128,
+      "model": "BR-BULB-100",
+      "image": "catalog/3D print/Брелоки/Брелок бульбазавр.jpg",
+      "date_available": "2026-08-19"
+    },
+    {
+      "product_id": 129,
+      "model": "BR-PIKA-100",
+      "image": "catalog/3D print/Брелоки/Брелок пікачу.jpg",
+      "date_available": "2026-08-19"
+    },
+    {
+      "product_id": 130,
+      "model": "FIG-ONIX-500",
+      "image": "catalog/3D print/Фігурки/Онікс рухомий.JPG",
+      "date_available": "2026-08-19"
+    },
+    {
+      "product_id": 131,
+      "model": "FIG-GEOD-511",
+      "image": "catalog/3D print/Фігурки/Геодуд однокольоровий L та M.webp",
+      "date_available": "2026-08-19"
+    },
+    {
+      "product_id": 132,
+      "model": "FIG-MEW-100",
+      "image": "catalog/3D print/Фігурки/Mew-pockeball.JPG",
+      "date_available": "2026-08-19"
+    },
+    {
+      "product_id": 133,
+      "model": "FIG-PKBL-600",
+      "image": "catalog/3D print/Фігурки/Стоячий клікер покебол.webp",
+      "date_available": "2026-08-19"
+    },
+    {
+      "product_id": 134,
+      "model": "FIG-LUFFY-500",
+      "image": "catalog/3D print/Фігурки/Луффі рухомий.webp",
+      "date_available": "2026-08-19"
+    },
+    {
+      "product_id": 135,
+      "model": "FIG-LUFFY-400",
+      "image": "catalog/3D print/Фігурки/Плаский Луффі силует.webp",
+      "date_available": "2026-08-19"
+    },
+    {
+      "product_id": 136,
+      "model": "FIG-LUFFY-410",
+      "image": "catalog/3D print/Фігурки/Пласка картина Луффі 2.png",
+      "date_available": "2026-08-19"
+    },
+    {
+      "product_id": 137,
+      "model": "ACC-3D-PKM-110",
+      "image": "catalog/3D print/Функціональні/Підставка мала.webp",
+      "date_available": "2026-08-19"
+    },
+    {
+      "product_id": 138,
+      "model": "ACC-3D-PKM-120",
+      "image": "catalog/3D print/Функціональні/Підставка середня1.webp",
+      "date_available": "2026-08-19"
+    },
+    {
+      "product_id": 139,
+      "model": "ACC-3D-PKM-130",
+      "image": "catalog/3D print/Функціональні/pidstavka-slab-tcg-01.jpg.JPG",
+      "date_available": "2026-08-19"
+    },
+    {
+      "product_id": 140,
+      "model": "ACC-3D-PKM-200",
+      "image": "catalog/3D print/Функціональні/Підставка під слаби PSA, CGC, BGS (без покеболу).webp",
+      "date_available": "2026-08-19"
+    },
+    {
+      "product_id": 141,
+      "model": "ACC-3D-PKM-300",
+      "image": "catalog/3D print/Функціональні/pidstavka-dlia-slab-na-nizhtsi-3d-druk.webp",
+      "date_available": "2026-08-19"
+    },
+    {
+      "product_id": 144,
+      "model": "ACC-007-400",
+      "image": "catalog/Accsesuary/albom-dlia-kartok-OnePiece-na-400-slotiv.png",
+      "date_available": "2026-08-22"
+    },
+    {
+      "product_id": 145,
+      "model": "YGO-JP-QCAC-BBX",
+      "image": "catalog/Other/Yu-Gi-Oh OCG Duel Monsters QUARTER CENTURY ART COLLECTION 25th BOX.png",
+      "date_available": "2026-08-22"
+    },
+    {
+      "product_id": 146,
+      "model": "PKM-JP-STES-BBX",
+      "image": "catalog/Pokemon/Pokemon_Storm_Emeralda_m6_Japanese_Booster_Box_shrink.png",
+      "date_available": "2026-08-22"
+    },
+    {
+      "product_id": 147,
+      "model": "PKM-JP-STES-BST",
+      "image": "catalog/Pokemon/pokemon-storm-emeralda-M6-booster-pack.png",
+      "date_available": "2026-08-22"
+    },
+    {
+      "product_id": 148,
+      "model": "PKM-JP-INFX-BBX",
+      "image": "catalog/Pokemon/Бустер бокс Pokémon TCG Inferno X (Японське видання)-Photoroom.png",
+      "date_available": "2026-08-22"
+    },
+    {
+      "product_id": 149,
+      "model": "PKM-JP-TGTR-BBX",
+      "image": "catalog/Pokemon/Бустер Pokémon TCG The Glory of Team Rocket.png",
+      "date_available": "2026-08-22"
+    },
+    {
+      "product_id": 150,
+      "model": "PKM-JP-TGTR-BST",
+      "image": "catalog/Pokemon/Бустер Pokémon TCG The Glory of Team Rocket (Японське видання).png",
+      "date_available": "2026-08-22"
+    },
+    {
+      "product_id": 151,
+      "model": "YGO-JP-BETB-BBX",
+      "image": "catalog/Other/Yu-Gi-Oh! OCG Duel Monsters BEYOND THE BRAVE Booster Box.png",
+      "date_available": "2026-08-22"
+    },
+    {
+      "product_id": 152,
+      "model": "YGO-JP-BETB-BST",
+      "image": "catalog/Other/Yu-Gi-Oh! OCG Duel Monsters BEYOND THE BRAVE Booster.webp",
+      "date_available": "2026-08-22"
+    },
+    {
+      "product_id": 154,
+      "model": "BR-CHARM-200",
+      "image": "catalog/3D print/Брелоки/Чармандер брелок клікер.JPG",
+      "date_available": "2026-08-28"
+    },
+    {
+      "product_id": 155,
+      "model": "PKM-JP-SVEL-SET",
+      "image": "catalog/Pokemon/Pokemon Card Game Scarlet &amp; Violet Starter Set Terrastar Loudbone EX TCG Japan.png",
+      "date_available": "2026-08-28"
+    },
+    {
+      "product_id": 156,
+      "model": "FIG-JIGGL-300",
+      "image": "catalog/3D print/kit card/Jugglypuff kit card.webp",
+      "date_available": "2026-08-28"
+    },
+    {
+      "product_id": 157,
+      "model": "FIG-MEW-300",
+      "image": "catalog/3D print/kit card/MEW kit card 3.webp",
+      "date_available": "2026-08-28"
+    },
+    {
+      "product_id": 158,
+      "model": "FIG-UMBRE-300",
+      "image": "catalog/3D print/kit card/Umbreon kit card.webp",
+      "date_available": "2026-08-28"
+    },
+    {
+      "product_id": 159,
+      "model": "FIG-GENG-300",
+      "image": "catalog/3D print/kit card/Gengar kit card 3d print.webp",
+      "date_available": "2026-08-28"
+    },
+    {
+      "product_id": 161,
+      "model": "FIG-PIKA-300",
+      "image": "catalog/3D print/kit card/Pikachu kit card 4.webp",
+      "date_available": "2026-08-28"
+    },
+    {
+      "product_id": 162,
+      "model": "FIG-SQUIR-300",
+      "image": "catalog/3D print/kit card/Sqirtle kit card 4.webp",
+      "date_available": "2026-08-28"
+    },
+    {
+      "product_id": 163,
+      "model": "ACC-3D-PKBL-800",
+      "image": "catalog/3D print/Функціональні/pokeballdeckbox01.jpg.JPG",
+      "date_available": "2026-08-30"
+    },
+    {
+      "product_id": 164,
+      "model": "ACC-3D-DITTO-420",
+      "image": "catalog/3D print/Функціональні/Ditto cukernutsya.webp",
+      "date_available": "2026-08-30"
+    },
+    {
+      "product_id": 165,
+      "model": "FIG-NAMI-200",
+      "image": "catalog/3D print/Фігурки/Figurka Nami One Piece 1.webp",
+      "date_available": "2026-08-30"
+    },
+    {
+      "product_id": 166,
+      "model": "ACC-3D-OP-600",
+      "image": "catalog/3D print/Функціональні/One Piece zakladka dlia knugy.JPG",
+      "date_available": "2026-08-30"
+    },
+    {
+      "product_id": 167,
+      "model": "FIG-CHARZ-200",
+      "image": "catalog/3D print/Фігурки/Figurka Charizard Pokemon.webp",
+      "date_available": "2026-08-30"
+    },
+    {
+      "product_id": 168,
+      "model": "FIG-ZORO-410",
+      "image": "catalog/3D print/Фігурки/kartyna-zoro-one-piece-3d-druk.jpg",
+      "date_available": "2026-08-30"
+    },
+    {
+      "product_id": 169,
+      "model": "FIG-LUFFY-411",
+      "image": "catalog/3D print/Фігурки/kartyna-luffy-kruhla-one-piece-3d-druk 1.jpg",
+      "date_available": "2026-08-30"
+    },
+    {
+      "product_id": 170,
+      "model": "BR-DITTO-400",
+      "image": "catalog/3D print/Брелоки/Дітто брелок спінер.JPG",
+      "date_available": "2026-08-30"
+    },
+    {
+      "product_id": 171,
+      "model": "BR-OPSHP-100",
+      "image": "catalog/3D print/Брелоки/brelok-going-merry-one-piece-3d-druk.jpg",
+      "date_available": "2026-08-30"
+    },
+    {
+      "product_id": 173,
+      "model": "ACC-3D-PKBL-400",
+      "image": "catalog/3D print/Функціональні/chasha-pokeball-pokemon-3d-druk.webp",
+      "date_available": "2026-08-30"
+    },
+    {
+      "product_id": 174,
+      "model": "OP-JP-OP17-BST",
+      "image": "catalog/One Piece/One Piece Card Game The World's Strongest Warriors [OP-17] - Japanese Version.webp",
+      "date_available": "2026-09-02"
+    },
+    {
+      "product_id": 175,
+      "model": "OP-JP-OP17-BBX",
+      "image": "catalog/One Piece/One Piece Card Game The World's Strongest Warriors [OP-17] booster box - Japanese Version.webp",
+      "date_available": "2026-09-02"
+    },
+    {
+      "product_id": 176,
+      "model": "PKM-JP-BBLT-BBX",
+      "image": "catalog/Pokemon/Pokemon-booster-box-Black-Bolt-display.png",
+      "date_available": "2026-09-03"
+    },
+    {
+      "product_id": 177,
+      "model": "PKM-JP-WFLR-BBX",
+      "image": "catalog/Pokemon/Pokemon-booster-box-White-Flare.png",
+      "date_available": "2026-09-03"
+    },
+    {
+      "product_id": 178,
+      "model": "OP-JP-OP13-BST",
+      "image": "catalog/One Piece/One Piece — OP-13 — JP — Booster.png",
+      "date_available": "0000-00-00"
+    },
+    {
+      "product_id": 179,
+      "model": "OP-JP-OP13-BBX",
+      "image": "catalog/One Piece/One Piece — OP-13 — JP — Booster box.png",
+      "date_available": "0000-00-00"
+    },
+    {
+      "product_id": 180,
+      "model": "YGO-JP-BPRO-BST",
+      "image": "catalog/Other/Бустер Yu-Gi-Oh! OCG BURST PROTOCOL (Японське видання).png",
+      "date_available": "0000-00-00"
+    },
+    {
+      "product_id": 181,
+      "model": "PKM-JP-GLVS-SET",
+      "image": "catalog/Pokemon/Pokemon-Ice-Glaceon-VSTAR-Special Card Set.png",
+      "date_available": "2026-09-11"
+    },
+    {
+      "product_id": 183,
+      "model": "PKM-JP-LFVS-SET",
+      "image": "catalog/Pokemon/Pokémon — Special Card Set Grass Leafeon VSTAR — JP — Collection Set face.png",
+      "date_available": "2026-09-12"
+    },
+    {
+      "product_id": 184,
+      "model": "DM-JP-DM24RP3-BST",
+      "image": "catalog/Other/Duel Masters — DM24-RP3 — JP — Booster.png",
+      "date_available": "2026-09-13"
+    },
+    {
+      "product_id": 185,
+      "model": "DM-JP-DM24RP3-BBX",
+      "image": "catalog/Other/Duel Masters — DM24-RP3 — JP — Booster box.png",
+      "date_available": "2026-09-13"
+    },
+    {
+      "product_id": 187,
+      "model": "OP-JP-OP09-BBX",
+      "image": "catalog/One Piece/One Piece — OP-09 — JP — Booster box.png",
+      "date_available": "2026-09-13"
+    },
+    {
+      "product_id": 190,
+      "model": "ACC-007-360-BLCK",
+      "image": "catalog/Accsesuary/Альбом для колекційних карток на 360 карток, чорний.png",
+      "date_available": "2026-06-29"
+    },
+    {
+      "product_id": 191,
+      "model": "FIG-SNRLX-500",
+      "image": "catalog/3D print/Фігурки/Фігурка похитун Snorlax Pokémon — 3D-друк Booster Shop face.jpg",
+      "date_available": "2026-09-27"
+    },
+    {
+      "product_id": 192,
+      "model": "PKM-EN-CHRS-BLR-PWM",
+      "image": "catalog/Pokemon/chaos-rising-pawmot-premium-checklane-blister-chaos-rising-Photoroom.png",
+      "date_available": "0000-00-00"
+    },
+    {
+      "product_id": 193,
+      "model": "ACC-007-360",
+      "image": "catalog/Accsesuary/Альбом для колекційних карток на 360 карток, білий.png",
+      "date_available": "2026-06-29"
+    },
+    {
+      "product_id": 194,
+      "model": "OP-JP-OP05-RPK",
+      "image": "catalog/One Piece/One Piece OP-05 Awakening of the New Era Booster (Японське видання).jpg",
+      "date_available": "2026-10-05"
+    },
+    {
+      "product_id": 195,
+      "model": "OP-JP-EB01-RPK",
+      "image": "catalog/One Piece/one-piece-eb01-memorial-collection-rare-pack-front.png",
+      "date_available": "2026-10-08"
+    },
+    {
+      "product_id": 196,
+      "model": "OP-JP-EB02-RPK",
+      "image": "catalog/One Piece/One-Piece-Boosters-EB-02.png",
+      "date_available": "2026-10-08"
+    },
+    {
+      "product_id": 197,
+      "model": "OP-JP-OP01-RPK",
+      "image": "catalog/One Piece/Rare Pack One Piece OP-01 Romance Dawn — лицьова сторона японського бустера.png",
+      "date_available": "2026-10-08"
+    },
+    {
+      "product_id": 198,
+      "model": "OP-JP-OP06-RPK",
+      "image": "catalog/One Piece/Rare Pack One Piece OP-06 Wings of the Captain — лицьова сторона японського бустера.png",
+      "date_available": "0000-00-00"
+    },
+    {
+      "product_id": 199,
+      "model": "OP-JP-OP09-RPK",
+      "image": "catalog/One Piece/Rare Pack One Piece OP-09 Emperors in the New World — лицьова сторона японського бустера.png",
+      "date_available": "0000-00-00"
+    },
+    {
+      "product_id": 200,
+      "model": "OP-JP-OP04-RPK",
+      "image": "catalog/One Piece/Rare Pack One Piece OP-04 Kingdoms of Intrigue — лицьова сторона японського бустера.png",
+      "date_available": "0000-00-00"
+    },
+    {
+      "product_id": 201,
+      "model": "PKM-JP-ABYE-BBX",
+      "image": "catalog/Other/УЦІНКА/photo_2026-10-10_23-19-10.jpg",
+      "date_available": "2026-06-14"
+    },
+    {
+      "product_id": 202,
+      "model": "PKM-JP-EXSD-STD-GRS",
+      "image": "catalog/Pokemon/Starter deck/pokemon-ex-start-deck-grass-decidueye-front.png",
+      "date_available": "2026-10-11"
+    },
+    {
+      "product_id": 203,
+      "model": "PKM-JP-EXSD-STD-FIR",
+      "image": "catalog/Pokemon/Starter deck/pokemon-ex-start-deck-fire-victini-front.png",
+      "date_available": "2026-10-11"
+    },
+    {
+      "product_id": 204,
+      "model": "PKM-JP-EXSD-STD-WTR",
+      "image": "catalog/Pokemon/Starter deck/pokemon-ex-start-deck-water-greninja-front.png",
+      "date_available": "2026-10-11"
+    }
+  ],
+  "additional_images": [
+    {
+      "product_id": 50,
+      "image": "catalog/Pokemon/MS2.jpg",
+      "sort_order": 0
+    },
+    {
+      "product_id": 56,
+      "image": "",
+      "sort_order": 0
+    },
+    {
+      "product_id": 56,
+      "image": "",
+      "sort_order": 0
+    },
+    {
+      "product_id": 56,
+      "image": "catalog/Pokemon/MS1.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 56,
+      "image": "catalog/Pokemon/MS2.jpg",
+      "sort_order": 0
+    },
+    {
+      "product_id": 57,
+      "image": "catalog/Pokemon/Display Pokemon TCG Mega Brave (Японське видання).png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 58,
+      "image": "catalog/Pokemon/Hot Wind Arena Korea Booster.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 59,
+      "image": "catalog/Pokemon/Display Pokemon TCG Munikis Zero (Японське видання).png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 61,
+      "image": "catalog/Pokemon/Display Pokemon TCG Munikis Zero (Японське видання).png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 61,
+      "image": "catalog/Pokemon/Бустер Pokemon TCG Munikis Zero (Японське видання).png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 63,
+      "image": "catalog/Pokemon/Display box Pokemon TCG Ninja Spinner (Японське видання).png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 65,
+      "image": "catalog/Pokemon/Бустер Pokemon TCG Super Electric Breaker (Корейське видання).png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 67,
+      "image": "catalog/One Piece/Дисплей бокс One Piece Card Game EB-03 (Японське видання).png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 68,
+      "image": "catalog/One Piece/Бустер бокс One Piece Card Game OP-10 (Японське видання).png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 69,
+      "image": "catalog/One Piece/Бустер бокс One Piece Card Game OP-07 (Японське видання).png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 70,
+      "image": "catalog/One Piece/Бустер бокс One Piece Card Game OP-11 (Японське видання).png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 70,
+      "image": "catalog/One Piece/Дисплей бокс One Piece Card Game OP-11 (Японське видання).png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 71,
+      "image": "catalog/One Piece/Дисплей бокс One Piece Card Game OP-12 (Японське видання).png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 71,
+      "image": "catalog/One Piece/Дисплей бокс One Piece Card Game OP-12 (Японське видання).png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 72,
+      "image": "catalog/One Piece/Бустер бокс One Piece Card Game OP-14 (Японське видання).png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 72,
+      "image": "catalog/One Piece/Дисплей бокс One Piece Card Game OP-14 (Японське видання).png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 73,
+      "image": "",
+      "sort_order": 0
+    },
+    {
+      "product_id": 73,
+      "image": "",
+      "sort_order": 1
+    },
+    {
+      "product_id": 73,
+      "image": "catalog/Pokemon/MS1.webp",
+      "sort_order": 2
+    },
+    {
+      "product_id": 73,
+      "image": "",
+      "sort_order": 3
+    },
+    {
+      "product_id": 73,
+      "image": "",
+      "sort_order": 4
+    },
+    {
+      "product_id": 74,
+      "image": "catalog/Pokemon/Display box Pokemon TCG Ninja Spinner (Японське видання).png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 76,
+      "image": "catalog/Pokemon/pokemon_tcg_mega_gallade_ex2.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 78,
+      "image": "catalog/One Piece/OP-15 B1.jpg",
+      "sort_order": 1
+    },
+    {
+      "product_id": 78,
+      "image": "catalog/One Piece/OP-15 B2.jpg",
+      "sort_order": 2
+    },
+    {
+      "product_id": 80,
+      "image": "catalog/One Piece/OP-15 Box.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 85,
+      "image": "",
+      "sort_order": 0
+    },
+    {
+      "product_id": 85,
+      "image": "",
+      "sort_order": 0
+    },
+    {
+      "product_id": 85,
+      "image": "",
+      "sort_order": 0
+    },
+    {
+      "product_id": 85,
+      "image": "",
+      "sort_order": 0
+    },
+    {
+      "product_id": 85,
+      "image": "",
+      "sort_order": 0
+    },
+    {
+      "product_id": 85,
+      "image": "",
+      "sort_order": 0
+    },
+    {
+      "product_id": 85,
+      "image": "",
+      "sort_order": 0
+    },
+    {
+      "product_id": 85,
+      "image": "",
+      "sort_order": 0
+    },
+    {
+      "product_id": 85,
+      "image": "",
+      "sort_order": 0
+    },
+    {
+      "product_id": 85,
+      "image": "",
+      "sort_order": 0
+    },
+    {
+      "product_id": 88,
+      "image": "catalog/Pokemon/pokemon_tcg_mega_gallade_ex2.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 92,
+      "image": "catalog/Pokemon/Hot Wind Arena Korea BB.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 93,
+      "image": "catalog/Pokemon/Abyss Eye Display.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 94,
+      "image": "catalog/Pokemon/Abyss Eye Display.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 97,
+      "image": "catalog/Accsesuary/Топлоадери для карток 35PT, 25 шт toploaders 3 var.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 98,
+      "image": "catalog/Accsesuary/Магнітний кейс для карток 35PT.jpg",
+      "sort_order": 0
+    },
+    {
+      "product_id": 99,
+      "image": "catalog/Other/Акрилова підставка+кейс.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 99,
+      "image": "catalog/Other/Підставка для оцінених карт PSA.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 100,
+      "image": "catalog/Other/arkush-na-9-kyshenok-game-7-days-9-pocket-page..png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 101,
+      "image": "catalog/Other/Yu-Gi-Oh! OCG Blazing Dominion.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 102,
+      "image": "",
+      "sort_order": 0
+    },
+    {
+      "product_id": 102,
+      "image": "catalog/Other/Yu-Gi-Oh! OCG World Premiere Pack 2024 (box).png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 103,
+      "image": "catalog/Pokemon/Mega Evolution — Perfect Order Booster Bundle.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 105,
+      "image": "catalog/Pokemon/Pokémon TCG Mega Evolution — Chaos Rising Boosters-Photoroom.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 107,
+      "image": "catalog/One Piece/One Piece Card Game OP-16 The Time of Battle-Photoroom.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 109,
+      "image": "catalog/Pokemon/Бустер Pokemon TCG Mega Brave (Японське видання).png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 112,
+      "image": "catalog/Accsesuary/Альбом для колекційних карток на 360 карток.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 112,
+      "image": "catalog/Accsesuary/Альбоми для колекційних карток на 360 карток.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 113,
+      "image": "catalog/Accsesuary/Акриловий жорсткий протектор для картки 1 шт.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 113,
+      "image": "catalog/Accsesuary/Акриловий кейс для картки без магніта, 1 шт.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 113,
+      "image": "catalog/Accsesuary/Акриловий протектор для картки без магніта, 1 шт.jpg",
+      "sort_order": 0
+    },
+    {
+      "product_id": 114,
+      "image": "catalog/Other/toploadery-3-x-4.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 115,
+      "image": "catalog/Pokemon/Mega Dream EX display.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 115,
+      "image": "catalog/Pokemon/Mega Dream.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 116,
+      "image": "catalog/Pokemon/Pokemon TCG Q2 Mini Tin - Lumiose City Min Tin - Salamence.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 117,
+      "image": "catalog/Pokemon/Pokemon TCG Q2 Mini Tin - Lumiose City Min Tin – Gallade.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 120,
+      "image": "catalog/One Piece/STARTER DECK ST-32, 33, 34, 35, 36 ONE PIECE CARD GAME.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 121,
+      "image": "catalog/One Piece/STARTER DECK ST-32, 33, 34, 35, 36 ONE PIECE CARD GAME.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 122,
+      "image": "catalog/One Piece/STARTER DECK ST-32, 33, 34, 35, 36 ONE PIECE CARD GAME.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 123,
+      "image": "catalog/One Piece/STARTER DECK ST-32, 33, 34, 35, 36 ONE PIECE CARD GAME.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 124,
+      "image": "catalog/One Piece/STARTER DECK ST-32, 33, 34, 35, 36 ONE PIECE CARD GAME.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 126,
+      "image": "catalog/3D print/Брелоки/Брелок чармандер.jpg",
+      "sort_order": 0
+    },
+    {
+      "product_id": 130,
+      "image": "catalog/3D print/Фігурки/Онікс рухомий L та М.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 130,
+      "image": "catalog/3D print/Фігурки/Онікс рухомий1.JPG",
+      "sort_order": 0
+    },
+    {
+      "product_id": 131,
+      "image": "catalog/3D print/Фігурки/Геодуд фігурка 3д.jpg",
+      "sort_order": 0
+    },
+    {
+      "product_id": 131,
+      "image": "catalog/3D print/Фігурки/Геодуд фігурка.JPG",
+      "sort_order": 0
+    },
+    {
+      "product_id": 132,
+      "image": "catalog/3D print/Фігурки/Mew покебол1.JPG",
+      "sort_order": 0
+    },
+    {
+      "product_id": 137,
+      "image": "catalog/3D print/Функціональні/Підставка мала1.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 138,
+      "image": "catalog/3D print/Функціональні/Підставка середня2.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 139,
+      "image": "catalog/3D print/Функціональні/Pidstavka dlia slabiv TCG.JPG",
+      "sort_order": 0
+    },
+    {
+      "product_id": 141,
+      "image": "catalog/3D print/Функціональні/pidstavka-dlia-slaba PSA.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 144,
+      "image": "catalog/Accsesuary/albom-dlia-kartok-pokemon-na-400-slotiv.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 145,
+      "image": "catalog/Other/QCAC-BoosterJP.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 145,
+      "image": "catalog/Other/Yu-Gi-Oh OCG Duel Monsters QUARTER CENTURY ART COLLECTION 25th cards.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 146,
+      "image": "catalog/Pokemon/pokemon-storm-emeralda-M6-booster-pack.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 146,
+      "image": "catalog/Pokemon/pokemon-tcg-mega-storm-emeralda-booster-box-m6-japanese.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 148,
+      "image": "catalog/Pokemon/Inferno X Booster.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 149,
+      "image": "catalog/Pokemon/Бустер Pokémon TCG The Glory of Team Rocket (Японське видання).png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 149,
+      "image": "catalog/Pokemon/Бустер бокс Pokémon TCG The Glory of Team Rocket (Японське видання).png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 150,
+      "image": "catalog/Pokemon/Бустер бокс Pokémon TCG The Glory of Team Rocket (Японське видання).png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 151,
+      "image": "catalog/Other/Yu-Gi-Oh! OCG Duel Monsters BEYOND THE BRAVE Booster.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 151,
+      "image": "catalog/Other/Yu-Gi-Oh! OCG Duel Monsters BEYOND THE BRAVE display.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 154,
+      "image": "catalog/3D print/Брелоки/Клікер чармандер.jpg",
+      "sort_order": 0
+    },
+    {
+      "product_id": 156,
+      "image": "catalog/3D print/kit card/Jugglypuff kit card 1.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 156,
+      "image": "catalog/3D print/kit card/Jugglypuff kit card 2.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 156,
+      "image": "catalog/3D print/kit card/Jugglypuff kit card 4.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 157,
+      "image": "catalog/3D print/kit card/MEW kit card 1.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 157,
+      "image": "catalog/3D print/kit card/MEW kit card 2.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 157,
+      "image": "catalog/3D print/kit card/MEW kit card.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 158,
+      "image": "catalog/3D print/kit card/Umbreon kit card 1.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 158,
+      "image": "catalog/3D print/kit card/Umbreon kit card 2.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 159,
+      "image": "catalog/3D print/kit card/Gengar kit card 1.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 159,
+      "image": "catalog/3D print/kit card/Gengar kit card 2.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 159,
+      "image": "catalog/3D print/kit card/Gengar kit card.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 161,
+      "image": "catalog/3D print/kit card/Pikachu kit card 1.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 161,
+      "image": "catalog/3D print/kit card/Pikachu kit card 3.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 161,
+      "image": "catalog/3D print/kit card/Pikachu kit card.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 162,
+      "image": "catalog/3D print/kit card/Sqirtle kit card 1.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 162,
+      "image": "catalog/3D print/kit card/Sqirtle kit card 2.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 162,
+      "image": "catalog/3D print/kit card/Sqirtle kit card 3.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 162,
+      "image": "catalog/3D print/kit card/Sqirtle kit card.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 163,
+      "image": "catalog/3D print/Функціональні/pokeball deckbox02.jpg.JPG",
+      "sort_order": 0
+    },
+    {
+      "product_id": 164,
+      "image": "catalog/3D print/Функціональні/Ditto cukernutsya 1.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 165,
+      "image": "catalog/3D print/Фігурки/Figurka Nami One Piece.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 167,
+      "image": "catalog/3D print/Фігурки/Figurka Charizard Pokemon 1.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 168,
+      "image": "catalog/3D print/Фігурки/kartyna-zoro-one-piece-3d-druk1.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 169,
+      "image": "catalog/3D print/Фігурки/kartyna-luffy-kruhla-one-piece-3d-druk.jpg",
+      "sort_order": 0
+    },
+    {
+      "product_id": 170,
+      "image": "catalog/3D print/Брелоки/Брелок спінер Дітто.jpg",
+      "sort_order": 0
+    },
+    {
+      "product_id": 173,
+      "image": "catalog/3D print/Функціональні/chasha-pokeball-pokemon-3d-druk1.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 175,
+      "image": "catalog/One Piece/One Piece Card Game The World's Strongest Warriors [OP-17] - Japanese Version.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 176,
+      "image": "catalog/Pokemon/Pokemon-booster-box-Black-Bolt.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 176,
+      "image": "catalog/Pokemon/scarlet-and-violet-black-bolt-japanese-booster-pack.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 177,
+      "image": "catalog/Pokemon/Pokemon-booster-box-White-Flare-display.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 177,
+      "image": "catalog/Pokemon/Scarlet_Violet_Expansion_Pack_White_Flare.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 179,
+      "image": "catalog/One Piece/One Piece — OP-13 — JP — Booster dispay.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 179,
+      "image": "catalog/One Piece/One Piece — OP-13 — JP — Booster.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 180,
+      "image": "catalog/Other/Бустер Yu-Gi-Oh! OCG BURST PROTOCOL (Японське видання) 1.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 181,
+      "image": "catalog/Pokemon/Pokémon — Special Card Set Grass Leafeon VSTAR — JP — Collection Set inside.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 181,
+      "image": "catalog/Pokemon/Pokemon-Ice-Glaceon-VSTAR-Special-Card-Set.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 183,
+      "image": "catalog/Pokemon/Pokémon — Special Card Set Grass Leafeon VSTAR — JP — Collection Set back.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 183,
+      "image": "catalog/Pokemon/Pokémon — Special Card Set Grass Leafeon VSTAR — JP — Collection Set inside.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 183,
+      "image": "catalog/Pokemon/Pokémon — Special Card Set Grass Leafeon VSTAR — JP — Collection Set side.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 184,
+      "image": "catalog/Other/Duel Masters — DM24-RP3 — JP — Booster display.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 184,
+      "image": "catalog/Other/Duel Masters — DM24-RP3 — JP card.jpg",
+      "sort_order": 0
+    },
+    {
+      "product_id": 184,
+      "image": "catalog/Other/Duel Masters — DM24-RP3 — JP.jpg",
+      "sort_order": 0
+    },
+    {
+      "product_id": 185,
+      "image": "catalog/Other/Duel Masters — DM24-RP3 — JP — Booster display.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 185,
+      "image": "catalog/Other/Duel Masters — DM24-RP3 — JP — Booster.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 187,
+      "image": "catalog/One Piece/One Piece — OP-09 — JP — Booster display.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 190,
+      "image": "catalog/Accsesuary/Альбом для колекційних карток на 360 карток.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 190,
+      "image": "catalog/Accsesuary/Альбоми для колекційних карток на 360 карток.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 191,
+      "image": "catalog/3D print/Фігурки/Фігурка похитун Snorlax Pokémon — 3D-друк Booster Shop 2.jpg",
+      "sort_order": 1
+    },
+    {
+      "product_id": 191,
+      "image": "catalog/3D print/Фігурки/Фігурка похитун Snorlax Pokémon — 3D-друк Booster Shop.jpg",
+      "sort_order": 1
+    },
+    {
+      "product_id": 192,
+      "image": "catalog/Pokemon/chaos-rising-pawmot-premium-checklane-blister-chaos-rising1.webp",
+      "sort_order": 0
+    },
+    {
+      "product_id": 193,
+      "image": "catalog/Accsesuary/Альбоми для колекційних карток на 360 карток.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 193,
+      "image": "catalog/Accsesuary/Білий альбом для колекційних карток на 360 карток.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 194,
+      "image": "catalog/One Piece/Rare Pack One Piece OP-05 Awakening of the New Era — зворотна сторона японського бустера.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 195,
+      "image": "catalog/One Piece/one-piece-eb01-memorial-collection-rare-pack-back.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 196,
+      "image": "",
+      "sort_order": 0
+    },
+    {
+      "product_id": 197,
+      "image": "catalog/One Piece/Rare Pack One Piece OP-01 Romance Dawn — зворотна сторона японського бустера.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 198,
+      "image": "catalog/One Piece/Rare Pack One Piece OP-06 Wings of the Captain — зворотна сторона японського бустера.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 199,
+      "image": "catalog/One Piece/Rare Pack One Piece OP-09 Emperors in the New World — зворотна сторона японського бустера.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 200,
+      "image": "catalog/One Piece/Rare Pack One Piece OP-04 Kingdoms of Intrigue — зворотна сторона японського бустера.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 201,
+      "image": "catalog/Other/УЦІНКА/photo_2026-10-07_09-01-55.jpg",
+      "sort_order": 0
+    },
+    {
+      "product_id": 201,
+      "image": "catalog/Other/УЦІНКА/photo_2026-10-07_09-01-56 (3).jpg",
+      "sort_order": 1
+    },
+    {
+      "product_id": 201,
+      "image": "catalog/Other/УЦІНКА/photo_2026-10-07_09-01-55 (2).jpg",
+      "sort_order": 2
+    },
+    {
+      "product_id": 201,
+      "image": "catalog/Other/УЦІНКА/photo_2026-10-07_09-01-56 (2).jpg",
+      "sort_order": 3
+    },
+    {
+      "product_id": 201,
+      "image": "catalog/Other/УЦІНКА/photo_2026-10-07_09-01-56.jpg",
+      "sort_order": 4
+    },
+    {
+      "product_id": 202,
+      "image": "catalog/Pokemon/Starter deck/pokemon-ex-start-deck-grass-decidueye-back.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 202,
+      "image": "catalog/Pokemon/Starter deck/pokemon-ex-start-deck-grass-decidueye-contents-core-card.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 202,
+      "image": "catalog/Pokemon/Starter deck/pokemon-ex-start-deck-grass-decidueye-contents-trainer.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 202,
+      "image": "catalog/Pokemon/Starter deck/pokemon-ex-start-deck-grass-decidueye-contents.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 203,
+      "image": "catalog/Pokemon/Starter deck/pokemon-ex-start-deck-fire-victini-card1.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 203,
+      "image": "catalog/Pokemon/Starter deck/pokemon-ex-start-deck-fire-victini-card2.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 203,
+      "image": "catalog/Pokemon/Starter deck/pokemon-ex-start-deck-fire-victini-card3.png",
+      "sort_order": 0
+    },
+    {
+      "product_id": 204,
+      "image": "",
+      "sort_order": 0
+    },
+    {
+      "product_id": 204,
+      "image": "",
+      "sort_order": 0
+    },
+    {
+      "product_id": 204,
+      "image": "",
+      "sort_order": 0
+    },
+    {
+      "product_id": 204,
+      "image": "",
+      "sort_order": 0
+    }
+  ],
+  "product_names": [
+    {
+      "product_id": 50,
+      "language_id": 4,
+      "name": "Бустер Pokémon TCG: Mega Symphonia (Японське видання)"
+    },
+    {
+      "product_id": 56,
+      "language_id": 4,
+      "name": "Бустер бокс Pokémon TCG: Mega Symphonia (Японське видання)"
+    },
+    {
+      "product_id": 57,
+      "language_id": 4,
+      "name": "Бустер Pokémon TCG: Mega Brave (Японське видання)"
+    },
+    {
+      "product_id": 58,
+      "language_id": 4,
+      "name": "Бустер бокс Pokémon TCG: Hot Wind Arena (Корейське видання)"
+    },
+    {
+      "product_id": 59,
+      "language_id": 4,
+      "name": "Бустер Pokémon TCG: Munikis Zero (Японське видання)"
+    },
+    {
+      "product_id": 61,
+      "language_id": 4,
+      "name": "Бустер бокс Pokémon TCG: Munikis Zero (Японське видання)"
+    },
+    {
+      "product_id": 63,
+      "language_id": 4,
+      "name": "Бустер бокс Pokémon TCG: Ninja Spinner (Японське видання)"
+    },
+    {
+      "product_id": 65,
+      "language_id": 4,
+      "name": "Бустер бокс Pokémon TCG: Super Electric Breaker (Корейське видання)"
+    },
+    {
+      "product_id": 66,
+      "language_id": 4,
+      "name": "Promotion Pack Vol.7 One Piece Card Game (Японське видання)"
+    },
+    {
+      "product_id": 67,
+      "language_id": 4,
+      "name": "Бустер One Piece Card Game EB-03 (Японське видання)"
+    },
+    {
+      "product_id": 68,
+      "language_id": 4,
+      "name": "Бустер One Piece Card Game OP-10 (Японське видання)"
+    },
+    {
+      "product_id": 69,
+      "language_id": 4,
+      "name": "Бустер One Piece Card Game OP-07 (Японське видання)"
+    },
+    {
+      "product_id": 70,
+      "language_id": 4,
+      "name": "Бустер One Piece Card Game OP-11 (Японське видання)"
+    },
+    {
+      "product_id": 71,
+      "language_id": 4,
+      "name": "Бустер One Piece Card Game OP-12 (Японське видання)"
+    },
+    {
+      "product_id": 72,
+      "language_id": 4,
+      "name": "Бустер One Piece Card Game OP-14 (Японське видання)"
+    },
+    {
+      "product_id": 73,
+      "language_id": 4,
+      "name": "Бустер Pokémon TCG: Outlet Mix (Японське видання)"
+    },
+    {
+      "product_id": 74,
+      "language_id": 4,
+      "name": "Бустер Pokémon TCG: Ninja Spinner (Японське видання)"
+    },
+    {
+      "product_id": 76,
+      "language_id": 4,
+      "name": "Набір Pokémon TCG: Premium Trainer Box ex (Японське видання)"
+    },
+    {
+      "product_id": 77,
+      "language_id": 4,
+      "name": "Містері бокс Pokémon TCG: Mystery Mix Standard (Японське видання)"
+    },
+    {
+      "product_id": 78,
+      "language_id": 4,
+      "name": "Бустер One Piece Card Game OP-15 (Японське видання)"
+    },
+    {
+      "product_id": 79,
+      "language_id": 4,
+      "name": "Бустер Pokémon TCG: Mega Dream EX (Японське видання)"
+    },
+    {
+      "product_id": 80,
+      "language_id": 4,
+      "name": "Бустер бокс One Piece TCG: Пригоди на острові богів OP-15 (Японське видання)"
+    },
+    {
+      "product_id": 81,
+      "language_id": 4,
+      "name": "Бустер Pokémon TCG: Black Bolt (Японське видання)"
+    },
+    {
+      "product_id": 82,
+      "language_id": 4,
+      "name": "Бустер Pokémon TCG: White Flare (Японське видання)"
+    },
+    {
+      "product_id": 83,
+      "language_id": 4,
+      "name": "Бустер Yu-Gi-Oh! OCG: Quarter Century Art Collection (Японське видання)"
+    },
+    {
+      "product_id": 84,
+      "language_id": 4,
+      "name": "Бустер One Piece Card Game OP-08 Two Legends (Японське видання)"
+    },
+    {
+      "product_id": 85,
+      "language_id": 4,
+      "name": "Містері бокс One Piece Card Game: Mystery Mix Standard (Японське видання)"
+    },
+    {
+      "product_id": 87,
+      "language_id": 4,
+      "name": "Бустер Pokémon TCG: Inferno X (Японське видання)"
+    },
+    {
+      "product_id": 88,
+      "language_id": 4,
+      "name": "Набір Pokémon TCG: Special Card Set MEGA Gallade EX (Японське видання)"
+    },
+    {
+      "product_id": 89,
+      "language_id": 4,
+      "name": "Набір Pokémon S&amp;V ex Special Set — Snow Hazard &amp; Clay Burst (Японське видання)"
+    },
+    {
+      "product_id": 90,
+      "language_id": 4,
+      "name": "Бустер Yu-Gi-Oh! OCG: World Premiere Pack 2024 (Японське видання)"
+    },
+    {
+      "product_id": 91,
+      "language_id": 4,
+      "name": "Бустер MTG: Adventures in the Forgotten Realms (Японське видання)"
+    },
+    {
+      "product_id": 92,
+      "language_id": 4,
+      "name": "Бустер Pokémon TCG: Hot Wind Arena (Корейське видання)"
+    },
+    {
+      "product_id": 93,
+      "language_id": 4,
+      "name": "Бустер Pokémon TCG: Abyss Eye (Японське видання)"
+    },
+    {
+      "product_id": 94,
+      "language_id": 4,
+      "name": "Бустер бокс Pokémon TCG: Abyss Eye (Японське видання)"
+    },
+    {
+      "product_id": 95,
+      "language_id": 4,
+      "name": "Протектори для карток 63×89 мм, 100 шт Sleeves"
+    },
+    {
+      "product_id": 96,
+      "language_id": 4,
+      "name": "Протектори для карт Games 7 Days 63.5×88 мм Premium+, 50 шт Sleeves"
+    },
+    {
+      "product_id": 97,
+      "language_id": 4,
+      "name": "Топлоадери для карток 35PT, 25 шт toploaders"
+    },
+    {
+      "product_id": 98,
+      "language_id": 4,
+      "name": "Магнітний кейс для карт 35PT"
+    },
+    {
+      "product_id": 99,
+      "language_id": 4,
+      "name": "Акрилова підставка для карток"
+    },
+    {
+      "product_id": 100,
+      "language_id": 4,
+      "name": "Аркуш для карток на 9 кишеньок Games 7 Days Premium Series"
+    },
+    {
+      "product_id": 101,
+      "language_id": 4,
+      "name": "Бустер Yu-Gi-Oh! OCG: Blazing Dominion (Японське видання)"
+    },
+    {
+      "product_id": 102,
+      "language_id": 4,
+      "name": "Бустер бокс Yu-Gi-Oh! OCG: World Premiere Pack 2024 (Японське видання)"
+    },
+    {
+      "product_id": 103,
+      "language_id": 4,
+      "name": "Pokémon TCG: Mega Evolution — Perfect Order Booster Bundle (Англомовне видання)"
+    },
+    {
+      "product_id": 104,
+      "language_id": 4,
+      "name": "Бустер Pokémon TCG: Mega Evolution — Perfect Order (Англійське видання)"
+    },
+    {
+      "product_id": 105,
+      "language_id": 4,
+      "name": "Pokémon TCG: Mega Evolution — Chaos Rising Booster Bundle (Англомовне видання)"
+    },
+    {
+      "product_id": 106,
+      "language_id": 4,
+      "name": "Бустер Pokémon TCG: Mega Evolution — Chaos Rising (Англійське видання)"
+    },
+    {
+      "product_id": 107,
+      "language_id": 4,
+      "name": "Бустер бокс One Piece Card Game OP-16: The Time of Battle (Японське видання)"
+    },
+    {
+      "product_id": 108,
+      "language_id": 4,
+      "name": "Бустер One Piece Card Game OP-16: The Time of Battle (Японське видання)"
+    },
+    {
+      "product_id": 109,
+      "language_id": 4,
+      "name": "Бустер бокс Pokémon TCG: Mega Brave (Японське видання)"
+    },
+    {
+      "product_id": 110,
+      "language_id": 4,
+      "name": "Містері бокс Pokémon TCG: Mystery Mix XL (Японське видання)"
+    },
+    {
+      "product_id": 111,
+      "language_id": 4,
+      "name": "Містері бокс One Piece Card Game: Mystery Mix XL (Японське видання)"
+    },
+    {
+      "product_id": 112,
+      "language_id": 4,
+      "name": "Альбом для колекційних карток на 360 карток, жовтий"
+    },
+    {
+      "product_id": 113,
+      "language_id": 4,
+      "name": "Акриловий протектор-кейс для картки без магніта, 1 шт"
+    },
+    {
+      "product_id": 114,
+      "language_id": 4,
+      "name": "Топлоадер для колекційної картки 35PT, 1 шт"
+    },
+    {
+      "product_id": 115,
+      "language_id": 4,
+      "name": "Бустер бокс Pokémon TCG: Mega Dream EX (Японське видання)"
+    },
+    {
+      "product_id": 116,
+      "language_id": 4,
+      "name": "Pokémon TCG: Lumiose City Mini Tin — Salamence &amp; Litleo (Англомовне видання)"
+    },
+    {
+      "product_id": 117,
+      "language_id": 4,
+      "name": "Pokémon TCG: Lumiose City Mini Tin — Gallade &amp; Goomy (Англомовне видання)"
+    },
+    {
+      "product_id": 120,
+      "language_id": 4,
+      "name": "Стартова колода One Piece ST-32 Zoro (Японське видання)"
+    },
+    {
+      "product_id": 121,
+      "language_id": 4,
+      "name": "Стартова колода One Piece ST-33 Kuzan (Японське видання)"
+    },
+    {
+      "product_id": 122,
+      "language_id": 4,
+      "name": "Стартова колода One Piece ST-34 Charlotte Katakuri (Японське видання)"
+    },
+    {
+      "product_id": 123,
+      "language_id": 4,
+      "name": "Стартова колода One Piece ST-35 Sabo (Японське видання)"
+    },
+    {
+      "product_id": 124,
+      "language_id": 4,
+      "name": "Стартова колода One Piece ST-36 Eustass Kid (Японське видання)"
+    },
+    {
+      "product_id": 125,
+      "language_id": 4,
+      "name": "Брелок Mew (Pokémon) — 3D-друк"
+    },
+    {
+      "product_id": 126,
+      "language_id": 4,
+      "name": "Брелок Charmander (Pokémon) — 3D-друк"
+    },
+    {
+      "product_id": 127,
+      "language_id": 4,
+      "name": "Брелок Squirtle (Pokémon) — 3D-друк"
+    },
+    {
+      "product_id": 128,
+      "language_id": 4,
+      "name": "Брелок Bulbasaur (Pokémon) — 3D-друк"
+    },
+    {
+      "product_id": 129,
+      "language_id": 4,
+      "name": "Брелок Pikachu (Pokémon) — 3D-друк"
+    },
+    {
+      "product_id": 130,
+      "language_id": 4,
+      "name": "Фігурка Onix (Pokémon) — 3D-друк"
+    },
+    {
+      "product_id": 131,
+      "language_id": 4,
+      "name": "Фігурка Geodude (Pokémon) — 3D-друк"
+    },
+    {
+      "product_id": 132,
+      "language_id": 4,
+      "name": "Фігурка Mew у покеболі (Pokémon) — 3D-друк"
+    },
+    {
+      "product_id": 133,
+      "language_id": 4,
+      "name": "Фігурка-клікер Покебол (Pokémon) — 3D-друк"
+    },
+    {
+      "product_id": 134,
+      "language_id": 4,
+      "name": "Фігурка Luffy (One Piece) — 3D-друк"
+    },
+    {
+      "product_id": 135,
+      "language_id": 4,
+      "name": "Настільна картина Luffy (One Piece) — 3D-друк"
+    },
+    {
+      "product_id": 136,
+      "language_id": 4,
+      "name": "Картина Luffy (One Piece) — 3D-друк"
+    },
+    {
+      "product_id": 137,
+      "language_id": 4,
+      "name": "Підставка для картки в протекторі — 3D-друк"
+    },
+    {
+      "product_id": 138,
+      "language_id": 4,
+      "name": "Підставка для картки в топлоадері — 3D-друк"
+    },
+    {
+      "product_id": 139,
+      "language_id": 4,
+      "name": "Підставка для картки в акриловому кейсі — 3D-друк"
+    },
+    {
+      "product_id": 140,
+      "language_id": 4,
+      "name": "Підставка для слаба — 3D-друк"
+    },
+    {
+      "product_id": 141,
+      "language_id": 4,
+      "name": "Підставка для слаба, на ніжці — 3D-друк"
+    },
+    {
+      "product_id": 144,
+      "language_id": 4,
+      "name": "Альбом для колекційних карток на 400 карток, жовтий"
+    },
+    {
+      "product_id": 145,
+      "language_id": 4,
+      "name": "Бустер бокс Yu-Gi-Oh! OCG: Quarter Century Art Collection (Японське видання)"
+    },
+    {
+      "product_id": 146,
+      "language_id": 4,
+      "name": "Бустер бокс Pokémon TCG: Storm Emeralda (Японське видання)"
+    },
+    {
+      "product_id": 147,
+      "language_id": 4,
+      "name": "Бустер Pokémon TCG: Storm Emeralda (Японське видання)"
+    },
+    {
+      "product_id": 148,
+      "language_id": 4,
+      "name": "Бустер бокс Pokémon TCG: Inferno X (Японське видання)"
+    },
+    {
+      "product_id": 149,
+      "language_id": 4,
+      "name": "Бустер бокс Pokémon TCG: The Glory of Team Rocket (Японське видання)"
+    },
+    {
+      "product_id": 150,
+      "language_id": 4,
+      "name": "Бустер Pokémon TCG: The Glory of Team Rocket (Японське видання)"
+    },
+    {
+      "product_id": 151,
+      "language_id": 4,
+      "name": "Бустер бокс Yu-Gi-Oh! OCG: BEYOND THE BRAVE (Японське видання)"
+    },
+    {
+      "product_id": 152,
+      "language_id": 4,
+      "name": "Бустер Yu-Gi-Oh! OCG: BEYOND THE BRAVE (Японське видання)"
+    },
+    {
+      "product_id": 154,
+      "language_id": 4,
+      "name": "Брелок-клікер Charmander (Pokémon) — 3D-друк"
+    },
+    {
+      "product_id": 155,
+      "language_id": 4,
+      "name": "Стартовий набір Pokémon TCG: Terastal Loudbone ex (Японське видання)"
+    },
+    {
+      "product_id": 156,
+      "language_id": 4,
+      "name": "Фігурка-конструктор Jigglypuff (Pokémon) — 3D-друк"
+    },
+    {
+      "product_id": 157,
+      "language_id": 4,
+      "name": "Фігурка-конструктор Mew (Pokémon) — 3D-друк"
+    },
+    {
+      "product_id": 158,
+      "language_id": 4,
+      "name": "Фігурка-конструктор Umbreon (Pokémon) — 3D-друк"
+    },
+    {
+      "product_id": 159,
+      "language_id": 4,
+      "name": "Фігурка-конструктор Gengar (Pokémon) — 3D-друк"
+    },
+    {
+      "product_id": 161,
+      "language_id": 4,
+      "name": "Фігурка-конструктор Pikachu (Pokémon) — 3D-друк"
+    },
+    {
+      "product_id": 162,
+      "language_id": 4,
+      "name": "Фігурка-конструктор Squirtle (Pokémon) — 3D-друк"
+    },
+    {
+      "product_id": 163,
+      "language_id": 4,
+      "name": "Коробка для карток Покебол (Pokémon), квадратна — 3D-друк"
+    },
+    {
+      "product_id": 164,
+      "language_id": 4,
+      "name": "Цукерниця Ditto (Pokémon) — 3D-друк"
+    },
+    {
+      "product_id": 165,
+      "language_id": 4,
+      "name": "Фігурка Nami (One Piece) — 3D-друк"
+    },
+    {
+      "product_id": 166,
+      "language_id": 4,
+      "name": "Закладка для книг One Piece — 3D-друк"
+    },
+    {
+      "product_id": 167,
+      "language_id": 4,
+      "name": "Фігурка Charizard (Pokémon) — 3D-друк"
+    },
+    {
+      "product_id": 168,
+      "language_id": 4,
+      "name": "Картина Zoro (One Piece) — 3D-друк"
+    },
+    {
+      "product_id": 169,
+      "language_id": 4,
+      "name": "Картина Luffy (One Piece), кругла — 3D-друк"
+    },
+    {
+      "product_id": 170,
+      "language_id": 4,
+      "name": "Брелок-спінер Ditto (Pokémon) — 3D-друк"
+    },
+    {
+      "product_id": 171,
+      "language_id": 4,
+      "name": "Брелок Going Merry (One Piece) — 3D-друк"
+    },
+    {
+      "product_id": 173,
+      "language_id": 4,
+      "name": "Чаша-покебол для дрібниць (Pokémon) — 3D-друк"
+    },
+    {
+      "product_id": 174,
+      "language_id": 4,
+      "name": "Бустер One Piece OP-17: The World's Strongest Warriors (Японське видання)"
+    },
+    {
+      "product_id": 175,
+      "language_id": 4,
+      "name": "Бустер бокс One Piece OP-17: The World's Strongest Warriors (Японське видання)"
+    },
+    {
+      "product_id": 176,
+      "language_id": 4,
+      "name": "Бустер бокс Pokémon TCG: Black Bolt (Японське видання)"
+    },
+    {
+      "product_id": 177,
+      "language_id": 4,
+      "name": "Бустер бокс Pokémon TCG: White Flare (Японське видання)"
+    },
+    {
+      "product_id": 178,
+      "language_id": 4,
+      "name": "Бустер One Piece Card Game OP-13 (Японське видання)"
+    },
+    {
+      "product_id": 179,
+      "language_id": 4,
+      "name": "Бустер бокс One Piece Card Game OP-13 (Японське видання)"
+    },
+    {
+      "product_id": 180,
+      "language_id": 4,
+      "name": "Бустер Yu-Gi-Oh! OCG: BURST PROTOCOL (Японське видання)"
+    },
+    {
+      "product_id": 181,
+      "language_id": 4,
+      "name": "Набір Pokémon TCG: Special Card Set Ice Glaceon VSTAR (Японське видання)"
+    },
+    {
+      "product_id": 183,
+      "language_id": 4,
+      "name": "Набір Pokémon TCG: Special Card Set Grass Leafeon VSTAR (Японське видання)"
+    },
+    {
+      "product_id": 184,
+      "language_id": 4,
+      "name": "Бустер Duel Masters TCG DM24-RP3: Gold of Hyper Angel (Японське видання)"
+    },
+    {
+      "product_id": 185,
+      "language_id": 4,
+      "name": "Бустер бокс Duel Masters TCG DM24-RP3: Gold of Hyper Angel (Японське видання)"
+    },
+    {
+      "product_id": 187,
+      "language_id": 4,
+      "name": "Бустер бокс One Piece OP-09: Emperors in the New World (Японське видання)"
+    },
+    {
+      "product_id": 190,
+      "language_id": 4,
+      "name": "Альбом для колекційних карток на 360 карток, чорний"
+    },
+    {
+      "product_id": 191,
+      "language_id": 4,
+      "name": "Фігурка похитун Snorlax (Pokémon) — 3D-друк"
+    },
+    {
+      "product_id": 192,
+      "language_id": 4,
+      "name": "Pokemon TCG: Mega Evolution — Chaos Rising Premium Checklane Blister — Pawmot (Англомовне видання)"
+    },
+    {
+      "product_id": 193,
+      "language_id": 4,
+      "name": "Альбом для колекційних карток на 360 карток, білий"
+    },
+    {
+      "product_id": 194,
+      "language_id": 4,
+      "name": "Rare Pack: One Piece OP-05 Awakening of the New Era Booster (Японське видання)"
+    },
+    {
+      "product_id": 195,
+      "language_id": 4,
+      "name": "Rare Pack: One Piece EB-01 Memorial Collection Booster (Японське видання)"
+    },
+    {
+      "product_id": 196,
+      "language_id": 4,
+      "name": "Rare Pack: One Piece EB-02 Anime 25th collection Booster (Японське видання)"
+    },
+    {
+      "product_id": 197,
+      "language_id": 4,
+      "name": "Rare Pack: One Piece OP-01 Romance Dawn Booster (Японське видання)"
+    },
+    {
+      "product_id": 198,
+      "language_id": 4,
+      "name": "Rare Pack: One Piece OP-06 Wings of the Captain Booster (Японське видання)"
+    },
+    {
+      "product_id": 199,
+      "language_id": 4,
+      "name": "Rare Pack: One Piece OP-09 Emperors in the New World Booster (Японське видання)"
+    },
+    {
+      "product_id": 200,
+      "language_id": 4,
+      "name": "Rare Pack: One Piece OP-04 Kingdoms of Intrigue Booster (Японське видання)"
+    },
+    {
+      "product_id": 201,
+      "language_id": 4,
+      "name": "Бустер бокс Pokémon TCG: Abyss Eye (Японське видання) - уцінка через пошкоджену плівку бокса."
+    },
+    {
+      "product_id": 202,
+      "language_id": 4,
+      "name": "Стартова колода Pokemon ex Decidueye ex, grass (Японське видання)"
+    },
+    {
+      "product_id": 203,
+      "language_id": 4,
+      "name": "Стартова колода Pokemon ex Victini ex, fire (Японське видання)"
+    },
+    {
+      "product_id": 204,
+      "language_id": 4,
+      "name": "Стартова колода Pokemon ex Greninja ex, water (Японське видання)"
+    }
+  ],
+  "image_path_resolution": [
+    {
+      "db_image": "catalog/Pokemon/Pokemon S&amp;V blister EX.png",
+      "source_image": "catalog/Pokemon/Pokemon S&V blister EX.png",
+      "method": "html_entity_decode_ENT_QUOTES_UTF8"
+    },
+    {
+      "db_image": "catalog/Pokemon/Pokemon Card Game Scarlet &amp; Violet Starter Set Terrastar Loudbone EX TCG Japan.png",
+      "source_image": "catalog/Pokemon/Pokemon Card Game Scarlet & Violet Starter Set Terrastar Loudbone EX TCG Japan.png",
+      "method": "html_entity_decode_ENT_QUOTES_UTF8"
+    }
+  ]
+}

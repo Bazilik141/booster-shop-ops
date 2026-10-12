@@ -1,0 +1,40 @@
+{
+  "representative_ids": [
+    78,
+    80,
+    77,
+    131,
+    144,
+    96,
+    201
+  ],
+  "cold_product_ids": [
+    201,
+    99,
+    132
+  ],
+  "cold_cart_ids": [
+    132,
+    166,
+    139,
+    130,
+    163,
+    154,
+    99,
+    73,
+    171,
+    110,
+    85,
+    77,
+    58,
+    111,
+    170,
+    80,
+    95,
+    126,
+    183,
+    181
+  ],
+  "worst_cart_scope": "Synthetic basket containing the 20 largest primary images from enabled store-0 products; no customer basket or live cart read",
+  "ignored_empty_additional_rows": 22
+}

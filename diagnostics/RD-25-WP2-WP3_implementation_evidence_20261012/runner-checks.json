@@ -1,0 +1,298 @@
+{
+  "php": "8.3.30",
+  "checks": [
+    {
+      "check": "composition/WP2/exit",
+      "pass": true
+    },
+    {
+      "check": "WP2 dry run zero target writes",
+      "pass": true
+    },
+    {
+      "check": "composition/WP2/exit",
+      "pass": true
+    },
+    {
+      "check": "WP2 self delete",
+      "pass": true
+    },
+    {
+      "check": "WP2 candidate bytes catalog/controller/product/product.php",
+      "pass": true
+    },
+    {
+      "check": "WP2 candidate bytes catalog/view/template/product/product.twig",
+      "pass": true
+    },
+    {
+      "check": "WP2 candidate bytes catalog/view/stylesheet/boostershop-ds.css",
+      "pass": true
+    },
+    {
+      "check": "WP2 candidate bytes catalog/view/template/common/header.twig",
+      "pass": true
+    },
+    {
+      "check": "composition/WP2/exit",
+      "pass": true
+    },
+    {
+      "check": "WP2 repeat",
+      "pass": true
+    },
+    {
+      "check": "composition/WP3/exit",
+      "pass": true
+    },
+    {
+      "check": "WP3 dry run zero target writes",
+      "pass": true
+    },
+    {
+      "check": "composition/WP3/exit",
+      "pass": true
+    },
+    {
+      "check": "WP3 self delete",
+      "pass": true
+    },
+    {
+      "check": "WP3 candidate bytes catalog/controller/common/cart.php",
+      "pass": true
+    },
+    {
+      "check": "WP3 candidate bytes catalog/controller/checkout/cart.php",
+      "pass": true
+    },
+    {
+      "check": "WP3 candidate bytes catalog/view/template/common/cart.twig",
+      "pass": true
+    },
+    {
+      "check": "WP3 candidate bytes catalog/view/template/checkout/cart_list.twig",
+      "pass": true
+    },
+    {
+      "check": "WP3 candidate bytes catalog/view/stylesheet/boostershop-ds.css",
+      "pass": true
+    },
+    {
+      "check": "WP3 candidate bytes catalog/view/template/checkout/cart.twig",
+      "pass": true
+    },
+    {
+      "check": "WP3 candidate bytes catalog/view/template/common/header.twig",
+      "pass": true
+    },
+    {
+      "check": "composition/WP2/exit",
+      "pass": true
+    },
+    {
+      "check": "WP2 repeat preserves WP3 token and content",
+      "pass": true
+    },
+    {
+      "check": "composition/WP3/exit",
+      "pass": true
+    },
+    {
+      "check": "WP3 repeat",
+      "pass": true
+    },
+    {
+      "check": "composition/WP2/exit",
+      "pass": true
+    },
+    {
+      "check": "WP2 rollback refuses active WP3",
+      "pass": true
+    },
+    {
+      "check": "composition/WP3/exit",
+      "pass": true
+    },
+    {
+      "check": "WP3 rollback byte exact after WP2",
+      "pass": true
+    },
+    {
+      "check": "composition/WP2/exit",
+      "pass": true
+    },
+    {
+      "check": "WP2 rollback byte exact WP1",
+      "pass": true
+    },
+    {
+      "check": "wp3-before-wp2/WP3/exit",
+      "pass": true
+    },
+    {
+      "check": "WP3 refuses WP1 with zero target writes",
+      "pass": true
+    },
+    {
+      "check": "wp2-source/WP2/exit",
+      "pass": true
+    },
+    {
+      "check": "WP2 source fails before target writes",
+      "pass": true
+    },
+    {
+      "check": "wp2-partial/WP2/exit",
+      "pass": true
+    },
+    {
+      "check": "WP2 partial fails before target writes",
+      "pass": true
+    },
+    {
+      "check": "wp2-context/WP2/exit",
+      "pass": true
+    },
+    {
+      "check": "WP2 context fails before target writes",
+      "pass": true
+    },
+    {
+      "check": "wp2-ga4/WP2/exit",
+      "pass": true
+    },
+    {
+      "check": "WP2 ga4 fails before target writes",
+      "pass": true
+    },
+    {
+      "check": "wp2-missing/WP2/exit",
+      "pass": true
+    },
+    {
+      "check": "WP2 missing fails before target writes",
+      "pass": true
+    },
+    {
+      "check": "wp2-header/WP2/exit",
+      "pass": true
+    },
+    {
+      "check": "WP2 header fails before target writes",
+      "pass": true
+    },
+    {
+      "check": "wp2-forced-write/WP2/exit",
+      "pass": true
+    },
+    {
+      "check": "WP2 forced write restores targets byte exact",
+      "pass": true
+    },
+    {
+      "check": "wp2-forced-lint/WP2/exit",
+      "pass": true
+    },
+    {
+      "check": "WP2 forced lint restores targets byte exact",
+      "pass": true
+    },
+    {
+      "check": "wp3-source/WP3/exit",
+      "pass": true
+    },
+    {
+      "check": "WP3 source fails before target writes",
+      "pass": true
+    },
+    {
+      "check": "wp3-partial/WP3/exit",
+      "pass": true
+    },
+    {
+      "check": "WP3 partial fails before target writes",
+      "pass": true
+    },
+    {
+      "check": "wp3-context/WP3/exit",
+      "pass": true
+    },
+    {
+      "check": "WP3 context fails before target writes",
+      "pass": true
+    },
+    {
+      "check": "wp3-ga4/WP3/exit",
+      "pass": true
+    },
+    {
+      "check": "WP3 ga4 fails before target writes",
+      "pass": true
+    },
+    {
+      "check": "wp3-missing/WP3/exit",
+      "pass": true
+    },
+    {
+      "check": "WP3 missing fails before target writes",
+      "pass": true
+    },
+    {
+      "check": "wp3-header/WP3/exit",
+      "pass": true
+    },
+    {
+      "check": "WP3 header fails before target writes",
+      "pass": true
+    },
+    {
+      "check": "wp3-forced-write/WP3/exit",
+      "pass": true
+    },
+    {
+      "check": "WP3 forced write restores targets byte exact",
+      "pass": true
+    },
+    {
+      "check": "wp3-forced-lint/WP3/exit",
+      "pass": true
+    },
+    {
+      "check": "WP3 forced lint restores targets byte exact",
+      "pass": true
+    },
+    {
+      "check": "wp2-repeat-partial-later/WP2/exit",
+      "pass": true
+    },
+    {
+      "check": "WP2 repeat rejects partial WP3",
+      "pass": true
+    },
+    {
+      "check": "rollback-tampered-backup/WP2/exit",
+      "pass": true
+    },
+    {
+      "check": "rollback-tampered-backup/WP2/exit",
+      "pass": true
+    },
+    {
+      "check": "Rollback refuses modified backup",
+      "pass": true
+    },
+    {
+      "check": "later-token/WP2/exit",
+      "pass": true
+    },
+    {
+      "check": "later-token/WP3/exit",
+      "pass": true
+    },
+    {
+      "check": "Both repeats preserve arbitrary valid later token",
+      "pass": true
+    }
+  ],
+  "local_only": true
+}

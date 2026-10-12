@@ -1,0 +1,134 @@
+{
+  "php": "8.3.30",
+  "checks": [
+    {
+      "check": "apply-repeat-rollback/exit",
+      "pass": true
+    },
+    {
+      "check": "Dry run zero writes",
+      "pass": true
+    },
+    {
+      "check": "apply-repeat-rollback/exit",
+      "pass": true
+    },
+    {
+      "check": "Self delete",
+      "pass": true
+    },
+    {
+      "check": "Candidate byte parity catalog/controller/product/product.php",
+      "pass": true
+    },
+    {
+      "check": "Candidate byte parity catalog/view/template/product/product.twig",
+      "pass": true
+    },
+    {
+      "check": "Candidate byte parity catalog/view/stylesheet/boostershop-ds.css",
+      "pass": true
+    },
+    {
+      "check": "Candidate byte parity catalog/view/template/common/header.twig",
+      "pass": true
+    },
+    {
+      "check": "apply-repeat-rollback/exit",
+      "pass": true
+    },
+    {
+      "check": "Repeat",
+      "pass": true
+    },
+    {
+      "check": "apply-repeat-rollback/exit",
+      "pass": true
+    },
+    {
+      "check": "Repeat preserves later token",
+      "pass": true
+    },
+    {
+      "check": "apply-repeat-rollback/exit",
+      "pass": true
+    },
+    {
+      "check": "Rollback refuses changed header",
+      "pass": true
+    },
+    {
+      "check": "apply-repeat-rollback/exit",
+      "pass": true
+    },
+    {
+      "check": "Rollback exact WP2+WP3",
+      "pass": true
+    },
+    {
+      "check": "source/exit",
+      "pass": true
+    },
+    {
+      "check": "source fails before writes",
+      "pass": true
+    },
+    {
+      "check": "partial/exit",
+      "pass": true
+    },
+    {
+      "check": "partial fails before writes",
+      "pass": true
+    },
+    {
+      "check": "missing/exit",
+      "pass": true
+    },
+    {
+      "check": "missing fails before writes",
+      "pass": true
+    },
+    {
+      "check": "ga4/exit",
+      "pass": true
+    },
+    {
+      "check": "ga4 fails before writes",
+      "pass": true
+    },
+    {
+      "check": "context/exit",
+      "pass": true
+    },
+    {
+      "check": "context fails before writes",
+      "pass": true
+    },
+    {
+      "check": "header/exit",
+      "pass": true
+    },
+    {
+      "check": "header fails before writes",
+      "pass": true
+    },
+    {
+      "check": "forced-write/exit",
+      "pass": true
+    },
+    {
+      "check": "Forced write restores byte exact",
+      "pass": true
+    },
+    {
+      "check": "forced-lint/exit",
+      "pass": true
+    },
+    {
+      "check": "Forced lint restores byte exact",
+      "pass": true
+    }
+  ],
+  "local_fixtures_only": true
+}

@@ -1,0 +1,402 @@
+{
+  "theme_override_check": {
+    "status": "checked",
+    "columns": [
+      "theme_id",
+      "store_id",
+      "route",
+      "code",
+      "status",
+      "date_added"
+    ],
+    "rows": []
+  },
+  "store0_image_and_live_search_settings": [
+    {
+      "store_id": 0,
+      "code": "config",
+      "key": "config_image_additional_height",
+      "dimensions": {
+        "config.config_image_additional_height": 100
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "config",
+      "key": "config_image_additional_width",
+      "dimensions": {
+        "config.config_image_additional_width": 100
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "config",
+      "key": "config_image_article_height",
+      "dimensions": {
+        "config.config_image_article_height": 380
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "config",
+      "key": "config_image_article_width",
+      "dimensions": {
+        "config.config_image_article_width": 1140
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "config",
+      "key": "config_image_cart_height",
+      "dimensions": {
+        "config.config_image_cart_height": 120
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "config",
+      "key": "config_image_cart_width",
+      "dimensions": {
+        "config.config_image_cart_width": 120
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "config",
+      "key": "config_image_category_height",
+      "dimensions": {
+        "config.config_image_category_height": 200
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "config",
+      "key": "config_image_category_width",
+      "dimensions": {
+        "config.config_image_category_width": 200
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "config",
+      "key": "config_image_compare_height",
+      "dimensions": {
+        "config.config_image_compare_height": 90
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "config",
+      "key": "config_image_compare_width",
+      "dimensions": {
+        "config.config_image_compare_width": 90
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "config",
+      "key": "config_image_default_height",
+      "dimensions": {
+        "config.config_image_default_height": 300
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "config",
+      "key": "config_image_default_width",
+      "dimensions": {
+        "config.config_image_default_width": 300
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "config",
+      "key": "config_image_location_height",
+      "dimensions": {
+        "config.config_image_location_height": 268
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "config",
+      "key": "config_image_location_width",
+      "dimensions": {
+        "config.config_image_location_width": 268
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "config",
+      "key": "config_image_popup_height",
+      "dimensions": {
+        "config.config_image_popup_height": 700
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "config",
+      "key": "config_image_popup_width",
+      "dimensions": {
+        "config.config_image_popup_width": 700
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "config",
+      "key": "config_image_product_height",
+      "dimensions": {
+        "config.config_image_product_height": 500
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "config",
+      "key": "config_image_product_width",
+      "dimensions": {
+        "config.config_image_product_width": 500
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "config",
+      "key": "config_image_related_height",
+      "dimensions": {
+        "config.config_image_related_height": 350
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "config",
+      "key": "config_image_related_width",
+      "dimensions": {
+        "config.config_image_related_width": 350
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "config",
+      "key": "config_image_thumb_height",
+      "dimensions": {
+        "config.config_image_thumb_height": 500
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "config",
+      "key": "config_image_thumb_width",
+      "dimensions": {
+        "config.config_image_thumb_width": 500
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "config",
+      "key": "config_image_topic_height",
+      "dimensions": {
+        "config.config_image_topic_height": 380
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "config",
+      "key": "config_image_topic_width",
+      "dimensions": {
+        "config.config_image_topic_width": 1140
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "config",
+      "key": "config_image_wishlist_height",
+      "dimensions": {
+        "config.config_image_wishlist_height": 55
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "config",
+      "key": "config_image_wishlist_width",
+      "dimensions": {
+        "config.config_image_wishlist_width": 55
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "config",
+      "key": "config_theme",
+      "value": "basic"
+    },
+    {
+      "store_id": 0,
+      "code": "module_ps_live_search",
+      "key": "module_ps_live_search_category_image",
+      "dimensions": [],
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "module_ps_live_search",
+      "key": "module_ps_live_search_category_image_height",
+      "dimensions": {
+        "module_ps_live_search.module_ps_live_search_category_image_height": 64
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "module_ps_live_search",
+      "key": "module_ps_live_search_category_image_width",
+      "dimensions": {
+        "module_ps_live_search.module_ps_live_search_category_image_width": 64
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "module_ps_live_search",
+      "key": "module_ps_live_search_category_status",
+      "dimensions": [],
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "module_ps_live_search",
+      "key": "module_ps_live_search_information_status",
+      "dimensions": [],
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "module_ps_live_search",
+      "key": "module_ps_live_search_input_delay",
+      "dimensions": [],
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "module_ps_live_search",
+      "key": "module_ps_live_search_input_min_chars",
+      "dimensions": [],
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "module_ps_live_search",
+      "key": "module_ps_live_search_manufacturer_image",
+      "dimensions": [],
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "module_ps_live_search",
+      "key": "module_ps_live_search_manufacturer_image_height",
+      "dimensions": {
+        "module_ps_live_search.module_ps_live_search_manufacturer_image_height": 64
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "module_ps_live_search",
+      "key": "module_ps_live_search_manufacturer_image_width",
+      "dimensions": {
+        "module_ps_live_search.module_ps_live_search_manufacturer_image_width": 64
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "module_ps_live_search",
+      "key": "module_ps_live_search_manufacturer_status",
+      "dimensions": [],
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "module_ps_live_search",
+      "key": "module_ps_live_search_product_description",
+      "dimensions": [],
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "module_ps_live_search",
+      "key": "module_ps_live_search_product_description_length",
+      "dimensions": [],
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "module_ps_live_search",
+      "key": "module_ps_live_search_product_image",
+      "dimensions": [],
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "module_ps_live_search",
+      "key": "module_ps_live_search_product_image_height",
+      "dimensions": {
+        "module_ps_live_search.module_ps_live_search_product_image_height": 64
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "module_ps_live_search",
+      "key": "module_ps_live_search_product_image_width",
+      "dimensions": {
+        "module_ps_live_search.module_ps_live_search_product_image_width": 64
+      },
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "module_ps_live_search",
+      "key": "module_ps_live_search_product_price",
+      "dimensions": [],
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "module_ps_live_search",
+      "key": "module_ps_live_search_product_status",
+      "dimensions": [],
+      "non_dimension_values_omitted": true
+    },
+    {
+      "store_id": 0,
+      "code": "module_ps_live_search",
+      "key": "module_ps_live_search_status",
+      "dimensions": [],
+      "non_dimension_values_omitted": true
+    }
+  ],
+  "live_search_modules": []
+}

@@ -261,6 +261,8 @@ session does not have to spend search calls on the same lookups.
 | RD-24 | `3e36bf20-bdb4-81a4-a25c-e5e06dd2c2a3` |
 | RD-25 | `3f46bf20-bdb4-814d-91a7-c9cc06088eea` |
 | RD-26 | `3f46bf20-bdb4-8175-bcbc-dfcd7ecfe35e` |
+| RD-27 | `3f76bf20-bdb4-8185-ab2b-ed03e51c3072` |
+| RD-28 | `3f76bf20-bdb4-811b-935d-f6a320eb6360` |
 | R-04 | `36a6bf20-bdb4-81a1-afa9-c23904919cd8` |
 | R-11 | `3696bf20-bdb4-81d9-9e9f-c4cf11dca805` |
 | R-11-UI-1 | `36f6bf20-bdb4-8142-b5e2-fadc47bc2172` |

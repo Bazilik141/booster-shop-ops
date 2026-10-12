@@ -1,0 +1,26 @@
+/* Phase 0 drawing only. These rules are never applied to source/live files.
+   Phase 1 must edit the original rules/obsolete constraints at their source. */
+.prototype-gallery { display:grid; grid-template-columns:64px minmax(0,480px); gap:16px; position:relative; align-items:start; }
+.prototype-gallery .bs-product__main-img { grid-column:2; margin:0; width:100%; aspect-ratio:4/5; max-height:none; background:transparent; display:block; border-radius:0; }
+.prototype-gallery .bs-product__main-img > a { display:block; width:100%; height:100%; position:relative; }
+.prototype-gallery .bs-product__main-img img { position:absolute; inset:0; width:100%; height:100%; max-height:none; object-fit:contain; object-position:center bottom; aspect-ratio:auto; margin:0; }
+.prototype-gallery .bs-product__main-img [data-kind="cut"] > img { left:6%; top:4%; width:88%; height:96%; }
+.prototype-gallery .bs-product__main-img [data-kind="photo"] > img { border-radius:var(--bs-r); }
+.prototype-gallery .bs-product__thumbs { position:absolute; left:0; top:0; bottom:0; width:64px; display:flex; flex-direction:column; flex-wrap:nowrap; gap:10px; overflow:auto; }
+.prototype-gallery .bs-product__thumbs > a { width:64px; height:80px; flex:0 0 80px; position:relative; border:1px solid var(--bs-line); border-radius:var(--bs-r-sm); }
+.prototype-gallery .bs-product__thumbs img { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; object-position:center bottom; }
+.prototype-gallery .bs-product__thumbs [data-kind="cut"] > img { left:6%; top:4%; width:88%; height:96%; }
+.prototype-gallery .bs-product__thumbs [aria-current="true"] { border:2px solid var(--bs-blue); }
+.prototype-gallery .bs-product__thumbs a:focus-visible { outline:2px solid var(--bs-blue); outline-offset:2px; }
+.prototype-gallery:not(:has(.bs-product__thumbs)) { grid-template-columns:minmax(0,480px); }
+.prototype-gallery:not(:has(.bs-product__thumbs)) .bs-product__main-img { grid-column:1; }
+.prototype .bs-mini-cart__row,.prototype .bs-cart-row { grid-template-columns:52px minmax(0,1fr); }
+.prototype .rd25-thumb { display:block; position:relative; width:52px; height:65px; }
+.prototype .rd25-thumb > img { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; object-position:center bottom; }
+.prototype .rd25-thumb--cut > img { left:8%; top:6%; width:84%; height:94%; }
+@media(max-width:991.98px) {
+ .prototype-gallery,.prototype-gallery:not(:has(.bs-product__thumbs)) { display:flex; flex-direction:column; gap:10px; }
+ .prototype-gallery .bs-product__main-img { max-width:none; max-height:none; }
+ .prototype-gallery .bs-product__thumbs { position:static; width:100%; bottom:auto; flex-direction:row; max-height:none; }
+ .prototype-gallery .bs-product__thumbs > a { width:56px; height:70px; flex:0 0 56px; }
+}

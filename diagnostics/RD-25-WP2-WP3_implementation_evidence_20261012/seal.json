@@ -1,0 +1,577 @@
+{
+  "report": {
+    "path": "RD-25-WP2-WP3_implementation_report_20261012.md",
+    "sha256": "9d2b25ded80f8a9a963019b38b2b7aaed03475c7623bcc1efb44ab34491a20a2"
+  },
+  "patches": {
+    "RD-25-WP2_product-gallery_20261012.php": "2d0dbf976f6f54d854e6e6b3f327b54ee68c417b0dce3b37e71f20aa9b5cf607",
+    "RD-25-WP3_small-thumbs_20261012.php": "b5ad8231828d1442614aa900c81be97815d19c9d01576d8551774418866af776"
+  },
+  "files": [
+    {
+      "path": "after-wp2/catalog/controller/product/product.php",
+      "bytes": 27804,
+      "sha256": "74b937525c579a56f67fb62d23cf75f0456e0bc5f034479e600de38e843bb84a"
+    },
+    {
+      "path": "after-wp2/catalog/view/stylesheet/boostershop-ds.css",
+      "bytes": 224342,
+      "sha256": "265f69431271fb921d6529c4909d5eee40b8566c4e70374f4132e90bde212a44"
+    },
+    {
+      "path": "after-wp2/catalog/view/template/common/header.twig",
+      "bytes": 30023,
+      "sha256": "1294e99df189ed9b4f650bbe8cbc4931adc1204a2625ebe6644f6907bbfa4ee2"
+    },
+    {
+      "path": "after-wp2/catalog/view/template/product/product.twig",
+      "bytes": 78569,
+      "sha256": "abfa0d62cc7542a34301f9ed8936203ea497a92a6e4deba52e785c1775ee3aec"
+    },
+    {
+      "path": "after-wp3/catalog/controller/checkout/cart.php",
+      "bytes": 14482,
+      "sha256": "d4b240b0987fac525a2e51bb59b0500a5779594afe3bcfde95ae634aeb515753"
+    },
+    {
+      "path": "after-wp3/catalog/controller/common/cart.php",
+      "bytes": 5411,
+      "sha256": "91f8be5d269bc86adcc76a3a58d76b93a9c74698429ad9cbdb2bc24e7000ab8e"
+    },
+    {
+      "path": "after-wp3/catalog/view/stylesheet/boostershop-ds.css",
+      "bytes": 224799,
+      "sha256": "213d4b48394644d04a464f497d68a0478af7d220142aa68fd3ce52eeafb9caef"
+    },
+    {
+      "path": "after-wp3/catalog/view/template/checkout/cart.twig",
+      "bytes": 13804,
+      "sha256": "633bb4f7e0a0a62e82bd6561343d2b819bde41171868284ad3f4bfa0dc4d9252"
+    },
+    {
+      "path": "after-wp3/catalog/view/template/checkout/cart_list.twig",
+      "bytes": 7497,
+      "sha256": "a99e4108d7819640410ddce3522c874da73907d270a72e3bf29c210e49b09eb2"
+    },
+    {
+      "path": "after-wp3/catalog/view/template/common/cart.twig",
+      "bytes": 16038,
+      "sha256": "0f2cd5891b519b9f516335cb957713cd0295ecf06fe17ff2eccbe8be2794a2fc"
+    },
+    {
+      "path": "after-wp3/catalog/view/template/common/header.twig",
+      "bytes": 30023,
+      "sha256": "a518ced10c03a339ec2cc8e49bc261a357306e15db6a2b4c091882d80b0cc216"
+    },
+    {
+      "path": "cart-1024.png",
+      "bytes": 159067,
+      "sha256": "4afbbf960be465bebc63d14c19785f190e12cd7b28abcb69aec2ab26e28cf1c5"
+    },
+    {
+      "path": "cart-1440.png",
+      "bytes": 159862,
+      "sha256": "29c77460486386571aea83a3f5610953db9a8d6d6c7d95df2218b8e598f564f6"
+    },
+    {
+      "path": "cart-360.png",
+      "bytes": 134950,
+      "sha256": "fe93a628e8b7b142aa390ad392e406f65b3dfeb6bb96ec6fbbe230baeebedcd9"
+    },
+    {
+      "path": "cart-390.png",
+      "bytes": 140863,
+      "sha256": "259cae1b5900e51ca1e5c00e09ea3bf2b2a17d6fcbfdf86a7076809c7d6920cb"
+    },
+    {
+      "path": "contact-sheet-preview.png",
+      "bytes": 142390,
+      "sha256": "5a87a4cd107b61725c08514078e441d163d88aabedf368c0ad01904e563db03f"
+    },
+    {
+      "path": "contact-sheet.html",
+      "bytes": 15149911,
+      "sha256": "1a596cd8d68fa2ebdb186f404aea7eb5e1c6b47090d350839a68fabd8e51ec2a"
+    },
+    {
+      "path": "ga4-4.0.2.3.json",
+      "bytes": 15980,
+      "sha256": "1621f1130fb702b85b7d2b45a8150437aac796603ab025aa1c8e49436453da79"
+    },
+    {
+      "path": "ga4-4.1.0.3.json",
+      "bytes": 15904,
+      "sha256": "9047a17606b1ac3df8fdae84c8d9bdb1a26bf2d3a75100c6b1668ad813c16280"
+    },
+    {
+      "path": "ga4-catalog-model.php",
+      "bytes": 43937,
+      "sha256": "eea58d1e247a16c2cc4bc1e61b8a5028e41dc7ed557e9c652d74382f7984b4b4"
+    },
+    {
+      "path": "mini-cart-1024.png",
+      "bytes": 126313,
+      "sha256": "16cb62f9ddefb67000a192bc7488f88f7d883190802458d5d870c19fdd6d879f"
+    },
+    {
+      "path": "mini-cart-1440.png",
+      "bytes": 130476,
+      "sha256": "96ba4cd6b01a690df5bb71ccd15185307367da66731aac615d87e66714f4bc5a"
+    },
+    {
+      "path": "mini-cart-360.png",
+      "bytes": 110606,
+      "sha256": "ec0d86f495c09b63f54a8462014ca56f3762ef0f3aaf40f23ff4352d7394e833"
+    },
+    {
+      "path": "mini-cart-390.png",
+      "bytes": 113062,
+      "sha256": "8a1afaab5165fbd8debb6ca40f251858b041da0618135cc1a646e2ca449455fb"
+    },
+    {
+      "path": "product-131-1024.png",
+      "bytes": 168328,
+      "sha256": "f63311d76f6098c7eca6474f6b2d51c54d2d0d6d11e918d8d0641b155151f91d"
+    },
+    {
+      "path": "product-131-1440.png",
+      "bytes": 231486,
+      "sha256": "057edcb3797812a42d446f8b237f80f5672084e5568481cc2a5f9d9b19f4e0d9"
+    },
+    {
+      "path": "product-131-360.png",
+      "bytes": 136806,
+      "sha256": "7cd53cb3a749ca244c16e6f454b1b7a05c9171499139ac90a6ac65cee8e597f7"
+    },
+    {
+      "path": "product-131-390.png",
+      "bytes": 152013,
+      "sha256": "c2a58431bc4ccaa7807982de35f1c99b2260b14669b04afd816c8e02ff34663f"
+    },
+    {
+      "path": "product-144-1024.png",
+      "bytes": 64750,
+      "sha256": "4598ad1e6cf1477b7906c0d1f10d08b8bae0f664ed0413fad48ba44daac34a51"
+    },
+    {
+      "path": "product-144-1440.png",
+      "bytes": 78394,
+      "sha256": "e65b0dbdfbbe92120de1e7cb44d6ff5428b532f89a570d4408b3992ddff3034e"
+    },
+    {
+      "path": "product-144-360.png",
+      "bytes": 55005,
+      "sha256": "6356db63c4033ca7fd4d9f6e42240b84fd789b562f9c1499023a383521dbd71f"
+    },
+    {
+      "path": "product-144-390.png",
+      "bytes": 58097,
+      "sha256": "401d16d34826a7e9a0b6a2fdacf233bed5b1fa8e0a5b53a94559197d25927236"
+    },
+    {
+      "path": "product-201-1024.png",
+      "bytes": 377359,
+      "sha256": "f3f5bc0f0542d4c3d4993cba5e6fddcb4fed2cf45826cb1af9106ddc61578789"
+    },
+    {
+      "path": "product-201-1440.png",
+      "bytes": 539318,
+      "sha256": "9d54d99a3298b7dd74ac97b5e9666d2514c32b56cc6bf8abf95440e5a333b3d3"
+    },
+    {
+      "path": "product-201-360.png",
+      "bytes": 300653,
+      "sha256": "4cdbce310154e75330e93713e45e85e852f96166a995bf6f65141952e506834c"
+    },
+    {
+      "path": "product-201-390.png",
+      "bytes": 341589,
+      "sha256": "88ed82e8a65f8e2f038ec583d9e20714b93fd4d821bd40020303a3af6409e22d"
+    },
+    {
+      "path": "product-73-1024.png",
+      "bytes": 162185,
+      "sha256": "14341f05514e08d5682cd281553b3ad0647800be9234f4b9bd42f3fa9da8995a"
+    },
+    {
+      "path": "product-73-1440.png",
+      "bytes": 238975,
+      "sha256": "593a9a5fd5e978bb6a967f80f5dc6e9b5b170cf42fa2025dc749ca879512eba7"
+    },
+    {
+      "path": "product-73-360.png",
+      "bytes": 131707,
+      "sha256": "930f94dd98ae2ab3ec3a95239b8f4fd7bc50d95dec0045d554085f8d2b85b65b"
+    },
+    {
+      "path": "product-73-390.png",
+      "bytes": 152256,
+      "sha256": "f1c46f8a7608b1395d4a48245f82278737e593efcbf5ed8bf44fae3c4d67e042"
+    },
+    {
+      "path": "product-77-1024.png",
+      "bytes": 209052,
+      "sha256": "56bdd1e2f23c33f0c0f2f41ba6cf4fdc1b8dc3288f079345b338fb96ba113f13"
+    },
+    {
+      "path": "product-77-1440.png",
+      "bytes": 229614,
+      "sha256": "0d88c36bb2208841aeddd4da99f3b3eb8528a67063313c11c68b373dd37da077"
+    },
+    {
+      "path": "product-77-360.png",
+      "bytes": 137915,
+      "sha256": "40f9c4f2a8f176d291d139f87f4a7efca8c859445eaa306376cb02752b43e1f5"
+    },
+    {
+      "path": "product-77-390.png",
+      "bytes": 154206,
+      "sha256": "759e1bc5a7047a89c3e8cf87ad75f7296e7209f39ab18335750c830cf8383e37"
+    },
+    {
+      "path": "product-78-1024.png",
+      "bytes": 272232,
+      "sha256": "a17dc9ef37130918781caf1a7168360820fef22aac21eef9f84d72a1d3869ffa"
+    },
+    {
+      "path": "product-78-1440.png",
+      "bytes": 390286,
+      "sha256": "5ae8a5d900cf36dab64f7f58cf5cf030f0adfe7d3da6d7fed2c0d34d49ffe912"
+    },
+    {
+      "path": "product-78-360.png",
+      "bytes": 221704,
+      "sha256": "5766a658f1b8597afc74a5b74b218bac6524bdc4aa448a94707c13ef5023cb23"
+    },
+    {
+      "path": "product-78-390.png",
+      "bytes": 251261,
+      "sha256": "aafd4dfe977feee4a83cb1051c35604faa7431df52dba075eb0c7ed2d7e4d38c"
+    },
+    {
+      "path": "product-80-1024.png",
+      "bytes": 258606,
+      "sha256": "3b8d4fccd735771a1cf9e726efe7240fa5112457a01e19a7d374a709baaf1d90"
+    },
+    {
+      "path": "product-80-1440.png",
+      "bytes": 383340,
+      "sha256": "0b47eb39f000b2eab5f6ddfc6ab830eb6605db7796bb4306b06f90669872092d"
+    },
+    {
+      "path": "product-80-360.png",
+      "bytes": 211118,
+      "sha256": "63948a56af37dc2980d79c369d0e6dd8eef826bbe7d697da52c52a300b459dea"
+    },
+    {
+      "path": "product-80-390.png",
+      "bytes": 240251,
+      "sha256": "fd18707d480a8cae454e29d7c50ef7891a6c51fc5dece52ac21ff9ec51b6f7d7"
+    },
+    {
+      "path": "product-96-1024.png",
+      "bytes": 270999,
+      "sha256": "33116608ea80453278c33e062d50c0e28ff082dfd988d4033435c4d434dce023"
+    },
+    {
+      "path": "product-96-1440.png",
+      "bytes": 299742,
+      "sha256": "0898008f8c4a6220f8bda9b7379fa6af0ce35682f461c3028a88ca8b3a40936f"
+    },
+    {
+      "path": "product-96-360.png",
+      "bytes": 174815,
+      "sha256": "6c4cab42eac7c059f6333263a7344f63180e7427ae02f0fd6a77b564f894c10b"
+    },
+    {
+      "path": "product-96-390.png",
+      "bytes": 196797,
+      "sha256": "6d7f18a1b7ca54bf5768d7fd580e4dce3934e7fe5fb96fda30a83c3577062b68"
+    },
+    {
+      "path": "rendered.json",
+      "bytes": 505632,
+      "sha256": "0404c0cfc1310e73975f55a4c58b6fa8c50e263d0a2ecbfc58012f82865d43da"
+    },
+    {
+      "path": "runner-checks.json",
+      "bytes": 6439,
+      "sha256": "a9516ee3b3c0e7f44b2dcc381caff1fa4f46cf05b79447593c3c79fcc047dfb5"
+    },
+    {
+      "path": "runner-output/composition-wp2-0.txt",
+      "bytes": 939,
+      "sha256": "6aa5dfb44c1b31c2ed1f8a69762ada07a021b6c4362e316c9c36577df1f75a3c"
+    },
+    {
+      "path": "runner-output/composition-wp2-2.txt",
+      "bytes": 1810,
+      "sha256": "7114f8fa1c16771aa9df03477076cabff90a455b6e2f8c9c27d74f14eb896869"
+    },
+    {
+      "path": "runner-output/composition-wp2-21.txt",
+      "bytes": 716,
+      "sha256": "c8d47e1e27a38fcc31107474d5fc0ee591b7761bbbb5dd856d4eb00a087de7f7"
+    },
+    {
+      "path": "runner-output/composition-wp2-25.txt",
+      "bytes": 736,
+      "sha256": "25c523d684780bfc4766ed6993e27f7bf9f970628761f843cf1f3f39b4404baa"
+    },
+    {
+      "path": "runner-output/composition-wp2-29.txt",
+      "bytes": 1084,
+      "sha256": "9159297286f32c8b1f4f82f09c3df5ac588c78cc0a05bbd68f5f0465b1503a8a"
+    },
+    {
+      "path": "runner-output/composition-wp2-8.txt",
+      "bytes": 716,
+      "sha256": "32b41113a292c03a7ead638e1302e76527c4be4c550d97cdccc1e63dc96ac529"
+    },
+    {
+      "path": "runner-output/composition-wp3-10.txt",
+      "bytes": 1207,
+      "sha256": "311e3f83bd3a9f4f41f22f0ae5df6e41a9983d715882f694f722c9accdc1ed52"
+    },
+    {
+      "path": "runner-output/composition-wp3-12.txt",
+      "bytes": 2654,
+      "sha256": "be06f183524f55940b7559ea06634ac6521e9fc9f65f4fc4e9cd35da4368170e"
+    },
+    {
+      "path": "runner-output/composition-wp3-23.txt",
+      "bytes": 820,
+      "sha256": "97488f638bfb79aba4aaaedab62c88510a635e7bd50c7df223aeb7556a46f6ff"
+    },
+    {
+      "path": "runner-output/composition-wp3-27.txt",
+      "bytes": 1659,
+      "sha256": "c9fe819b3e6b5ebe3c84677b8e1524ccaf5b536ae13633f79d5082f0fa79feae"
+    },
+    {
+      "path": "runner-output/later-token-wp2-70.txt",
+      "bytes": 716,
+      "sha256": "393b1c050c3184e296bd73d321ab070972249ca8dfbaefd3799168c25139987a"
+    },
+    {
+      "path": "runner-output/later-token-wp3-71.txt",
+      "bytes": 820,
+      "sha256": "b8421f683f1b1f04b58a857e1317e08f92ef591aac4ed3ddde3031d19076c541"
+    },
+    {
+      "path": "runner-output/rollback-tampered-backup-wp2-67.txt",
+      "bytes": 1875,
+      "sha256": "2f47791ad9b7d6907fdc1c5503c16c054c3665893981f0070b58c2cc8d513044"
+    },
+    {
+      "path": "runner-output/rollback-tampered-backup-wp2-68.txt",
+      "bytes": 775,
+      "sha256": "4afc59b213a3fa13365f80a18c570028d9d3b115c0e45da7d2f29bad51a89bf0"
+    },
+    {
+      "path": "runner-output/wp2-context-wp2-37.txt",
+      "bytes": 501,
+      "sha256": "500150badb74a275d704d15317f552f31846fed13fa24a2179d50c432ac519d4"
+    },
+    {
+      "path": "runner-output/wp2-forced-lint-wp2-47.txt",
+      "bytes": 1897,
+      "sha256": "9261923cc2fec7eafe2d8eebe8a53893a4fae5b1baf1261534afbdf2a29a9607"
+    },
+    {
+      "path": "runner-output/wp2-forced-write-wp2-45.txt",
+      "bytes": 2200,
+      "sha256": "b36e9eaa5fa92107c9e4078407caeeea7f2408974f713f3a714d0ae39555873e"
+    },
+    {
+      "path": "runner-output/wp2-ga4-wp2-39.txt",
+      "bytes": 699,
+      "sha256": "2b3d960f76653c5aed74e19c288297166357b9e36f5241be0cf2134a913bb4aa"
+    },
+    {
+      "path": "runner-output/wp2-header-wp2-43.txt",
+      "bytes": 896,
+      "sha256": "9efb8356e1469bafed6a25ce74ee42e0e415ecfc4cfb1fa595bb0f1eca6cc3d9"
+    },
+    {
+      "path": "runner-output/wp2-missing-wp2-41.txt",
+      "bytes": 485,
+      "sha256": "dc76f1308e48591b1f9d53288670fea379127f765e0bf510452b4b359e98f564"
+    },
+    {
+      "path": "runner-output/wp2-partial-wp2-35.txt",
+      "bytes": 722,
+      "sha256": "864d098428fb26979141f55874e9ad7e5d0401fd45050849a3dd01d2f92d9c89"
+    },
+    {
+      "path": "runner-output/wp2-repeat-partial-later-wp2-65.txt",
+      "bytes": 782,
+      "sha256": "54bc47deee911efa33fcc476ef4aed5b52aac4db9affe794f96d1c21236f7f8b"
+    },
+    {
+      "path": "runner-output/wp2-source-wp2-33.txt",
+      "bytes": 757,
+      "sha256": "0b3e8b7b736dd98fff73b9daf7b72c09449368fbea8e533bb6c744969781384d"
+    },
+    {
+      "path": "runner-output/wp3-before-wp2-wp3-31.txt",
+      "bytes": 760,
+      "sha256": "5d29de1afe9c7b8b3ce6bc2433052bd25f5af7640b67aea2c7573466ad1df917"
+    },
+    {
+      "path": "runner-output/wp3-context-wp3-53.txt",
+      "bytes": 495,
+      "sha256": "3a2b5ffdac9929cbd1ab3c9870779caf83a1deac575c9c330c5dcebcfe7f021d"
+    },
+    {
+      "path": "runner-output/wp3-forced-lint-wp3-63.txt",
+      "bytes": 2404,
+      "sha256": "502739dd548fd1351a4e8107635123a5769c1cec3838171e3467de36546ccd89"
+    },
+    {
+      "path": "runner-output/wp3-forced-write-wp3-61.txt",
+      "bytes": 3170,
+      "sha256": "df09fb5cf94c6760d198c541403b7335a307613e6fe69ce4026e00ac0c7c7e08"
+    },
+    {
+      "path": "runner-output/wp3-ga4-wp3-55.txt",
+      "bytes": 693,
+      "sha256": "17385d8cd0554789a52426c30556b1ba4f0053d1dcbefc1b325a3ad3c7e4b2d6"
+    },
+    {
+      "path": "runner-output/wp3-header-wp3-59.txt",
+      "bytes": 1164,
+      "sha256": "d467eb6bf4acb18697795ba33d14146020bfc323b636e7b9943c580b9764611c"
+    },
+    {
+      "path": "runner-output/wp3-missing-wp3-57.txt",
+      "bytes": 475,
+      "sha256": "be7f70d12c9a98e92c4e5e1f285928340975b978dac8c54925ed0b0fb40b4834"
+    },
+    {
+      "path": "runner-output/wp3-partial-wp3-51.txt",
+      "bytes": 826,
+      "sha256": "43558d33079c172db2086f556430ef1ee067b9aefbe55de82b27ebcdcf3c32c3"
+    },
+    {
+      "path": "runner-output/wp3-source-wp3-49.txt",
+      "bytes": 857,
+      "sha256": "117305215b6efc2e322328e958548beebb8d9f2b11d9317037d8047361441345"
+    },
+    {
+      "path": "scripts/build.py",
+      "bytes": 16414,
+      "sha256": "0a73d9261e5c5b0c31232069895ae86e4a175fe715d4335103553f9750595dd5"
+    },
+    {
+      "path": "scripts/capture.mjs",
+      "bytes": 11796,
+      "sha256": "1bcd9c7dbe7db46455c7000e01d8104efb29971ad39558144f8738119d867b93"
+    },
+    {
+      "path": "scripts/check-runners.py",
+      "bytes": 6642,
+      "sha256": "46ff4b86860b1b0442139c2d93890b676987a4e5fdbf3c83121d95c1da2e0867"
+    },
+    {
+      "path": "scripts/deliver.py",
+      "bytes": 22589,
+      "sha256": "ef7021fafe05edb3400ec3dee7f88ff877b48256d44fe2053c59cd87665792ec"
+    },
+    {
+      "path": "scripts/ga4-probe.php",
+      "bytes": 3253,
+      "sha256": "b145d4673039c311bdf2b9465ebeb9bd35e279f392b4cf07d5bc8d9f103ea278"
+    },
+    {
+      "path": "scripts/package.py",
+      "bytes": 2139,
+      "sha256": "d5619980a0d6edf72f2d897d22ac97f5aea3a8cfcea8fe0da620cda1a8e9a59f"
+    },
+    {
+      "path": "scripts/README.md",
+      "bytes": 636,
+      "sha256": "0b9e0e1631fc1b68ff9aa6eb3ae63fcac761bcb45d6143c255faada3bb441e4e"
+    },
+    {
+      "path": "scripts/render.php",
+      "bytes": 7394,
+      "sha256": "ef6f2e1767be4d32c9cf6724d3c57056020eab09f1ddec11020922bfba6a0e84"
+    },
+    {
+      "path": "scripts/runner.php",
+      "bytes": 12119,
+      "sha256": "2a47fcae9467b4c7a1003853dca782cffd694cdc012c6767f5f0d1737d5faa0a"
+    },
+    {
+      "path": "scripts/visuals.py",
+      "bytes": 3954,
+      "sha256": "21e002df630763ab2124b5c2d860258b1dbce17db80c034bed833ffe0ab6f6d5"
+    },
+    {
+      "path": "source-preservation.json",
+      "bytes": 2348,
+      "sha256": "f09cba3aa5f09f797e0711959696e6870e35b91c3954f55beecb7e7bc00846f0"
+    },
+    {
+      "path": "ui-checks.json",
+      "bytes": 84547,
+      "sha256": "026a99b06247cf2b3cc0f00723bdc10570da88b2e9c25a5222b79572a6199544"
+    },
+    {
+      "path": "wp2-diff/catalog/controller/product/product.php.diff",
+      "bytes": 2784,
+      "sha256": "dbb3526987d50b3df30ea01ecf54db7101e3d58ad598923313034b231c19756a"
+    },
+    {
+      "path": "wp2-diff/catalog/view/stylesheet/boostershop-ds.css.diff",
+      "bytes": 5285,
+      "sha256": "3e5378513fbff62063ebbd5b6bc236d8de3c74f686794cdb83409c4042455967"
+    },
+    {
+      "path": "wp2-diff/catalog/view/template/common/header.twig.diff",
+      "bytes": 1123,
+      "sha256": "0332b666031170bff13237eefacb9620c773c101b57fbfc1ec88bf6384fa89aa"
+    },
+    {
+      "path": "wp2-diff/catalog/view/template/product/product.twig.diff",
+      "bytes": 4427,
+      "sha256": "200d8c1fabba7f40448ab021c56144727ed2ea5912547d5e8d31a09cb10f8550"
+    },
+    {
+      "path": "wp3-diff/catalog/controller/checkout/cart.php.diff",
+      "bytes": 1588,
+      "sha256": "fac3bbf878599df60737697bc1030536d94bd7269e0707d231a159f99c8e5b00"
+    },
+    {
+      "path": "wp3-diff/catalog/controller/common/cart.php.diff",
+      "bytes": 1469,
+      "sha256": "ce54ca50ed7ba6e44007bd09f5904b201bd6b7a8c83773f9b120988ce9b5ac46"
+    },
+    {
+      "path": "wp3-diff/catalog/view/stylesheet/boostershop-ds.css.diff",
+      "bytes": 4016,
+      "sha256": "45c8eb5aa40ad6bf182ac8699b90a8e65b49e42e62445e0fff392b2ae7ddb09e"
+    },
+    {
+      "path": "wp3-diff/catalog/view/template/checkout/cart.twig.diff",
+      "bytes": 8949,
+      "sha256": "8ccd4d3a48e084ed741c0d67d7bf4d103e6bda5b84a65e6727ce9bd6ac7d27ba"
+    },
+    {
+      "path": "wp3-diff/catalog/view/template/checkout/cart_list.twig.diff",
+      "bytes": 7802,
+      "sha256": "b5c5057b0f919b312799eeed298611b37243afd1a48a7e171f1fc8d550af554a"
+    },
+    {
+      "path": "wp3-diff/catalog/view/template/common/cart.twig.diff",
+      "bytes": 7913,
+      "sha256": "34670df2c626ace3e0e9ac75304011b7d9c1482a301f2fdf06eb8ba7a650c2f0"
+    },
+    {
+      "path": "wp3-diff/catalog/view/template/common/header.twig.diff",
+      "bytes": 1109,
+      "sha256": "b64acc647d98bbc0ce8d4e0498ae75e3ce1613b173780d8d922612ca00ec775d"
+    }
+  ]
+}

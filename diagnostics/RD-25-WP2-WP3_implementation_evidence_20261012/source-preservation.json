@@ -1,0 +1,65 @@
+{
+  "original_archive_sha256": "6c7723bb5b2ae34af2e605b3a62dee9f68e5b2e9e8beae3a5ff2a6e2af8d36f0",
+  "archive_members_byte_unchanged": 400,
+  "ga4_archive_sha256": "0b79154a6f65ba7101f8f5d7881c4e98066376bbfc03982bdf4c8195c603dc70",
+  "ga4_catalog_model_sha256": "eea58d1e247a16c2cc4bc1e61b8a5028e41dc7ed557e9c652d74382f7984b4b4",
+  "protected": [
+    {
+      "path": "catalog/model/tool/image.php",
+      "sha256": "85cf9489244c48fe915bc25f370cdfdb2b39c9c6d6a42219cec7f84a9e375e71",
+      "not_written_by_either_runner": true
+    },
+    {
+      "path": "system/library/image.php",
+      "sha256": "7f81dcbb8b5d2d032005ae28ce01cea5ba7542f7334fd9909e538f6952adeff9",
+      "not_written_by_either_runner": true
+    },
+    {
+      "path": "catalog/controller/product/thumb.php",
+      "sha256": "cf4f8e354b18a4318af159c34bf3c083d0991007b42d03e2c57aa4963c1ed3b1",
+      "not_written_by_either_runner": true
+    },
+    {
+      "path": "catalog/view/template/product/thumb.twig",
+      "sha256": "d9237b2c9c0cc21cda73a86ba6cf1ff66b7ad956f0da3c24a8e1add6518037d6",
+      "not_written_by_either_runner": true
+    },
+    {
+      "path": "catalog/view/javascript/checkout-reskin.js",
+      "sha256": "ab2403e5aca0de41f83b5d0d88a269302c33534dbec09fcb45daa8212f1fb100",
+      "not_written_by_either_runner": true
+    }
+  ],
+  "legacy_resize": [
+    {
+      "path": "catalog/controller/product/product.php",
+      "count": 5,
+      "calls_byte_identical": true,
+      "getProduct_count_before": 1,
+      "getProduct_count_after": 1,
+      "getImages_count_before": 1,
+      "getImages_count_after": 1
+    },
+    {
+      "path": "catalog/controller/common/cart.php",
+      "count": 1,
+      "calls_byte_identical": true,
+      "getProduct_count_before": 0,
+      "getProduct_count_after": 0,
+      "getImages_count_before": 0,
+      "getImages_count_after": 0
+    },
+    {
+      "path": "catalog/controller/checkout/cart.php",
+      "count": 1,
+      "calls_byte_identical": true,
+      "getProduct_count_before": 1,
+      "getProduct_count_after": 1,
+      "getImages_count_before": 0,
+      "getImages_count_after": 0
+    }
+  ],
+  "protected_css_wp1_media_and_rd26_bytes_identical": true,
+  "cart_inline_javascript_byte_identical": true,
+  "no_new_css_important_absolute_fixed_or_timers": true
+}

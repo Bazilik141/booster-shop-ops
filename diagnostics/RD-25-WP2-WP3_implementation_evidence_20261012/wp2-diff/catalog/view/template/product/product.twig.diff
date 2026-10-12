@@ -1,0 +1,80 @@
+--- before/catalog/view/template/product/product.twig
++++ after-wp2/catalog/view/template/product/product.twig
+@@ -54,24 +54,26 @@
+ 
+         {# === GALLERY === #}
+         {% if thumb or images %}
+-        <div class="bs-product__gallery magnific-popup">
+-          {% if thumb %}
++        {# RD-25-WP2 20261012: gallery-only data; legacy images remains additional-only for JSON-LD. #}
++        {% if bs_gallery %}
++        {% set bs_main = bs_gallery|first %}
++        <div class="bs-product__gallery magnific-popup{% if bs_gallery|length > 1 %} bs-product__gallery--rail{% endif %}" data-bs-gallery>
+           <div class="bs-product__main-img">
+-            <a href="{{ popup }}" title="{{ heading_title }}">
+-              <img src="{{ thumb }}" title="{{ heading_title }}" alt="{{ heading_title }}" width="400" height="400" decoding="async"/>
++            <a href="{{ bs_main.popup }}" title="{{ heading_title }}" data-bs-gallery-main data-bs-media-kind="{{ bs_main.kind }}">
++              <img src="{{ bs_main.main }}" title="{{ heading_title }}" alt="{{ heading_title }}" width="{{ bs_main.main_width }}" height="{{ bs_main.main_height }}" decoding="async"/>
+             </a>
+           </div>
+-          {% endif %}
+-          {% if images %}
+-          <div class="bs-product__thumbs">
+-            {% for image in images %}
+-              <a href="{{ image.popup }}" title="{{ heading_title }}">
+-                <img src="{{ image.thumb }}" title="{{ heading_title }}" alt="{{ heading_title }}" width="72" height="72" loading="lazy" decoding="async"/>
++          {% if bs_gallery|length > 1 %}
++          <div class="bs-product__thumbs" aria-label="Фотографії товару">
++            {% for image in bs_gallery %}
++              <a href="{{ image.popup }}" title="{{ heading_title }}" data-bs-gallery-thumb data-bs-media-kind="{{ image.kind }}" data-bs-gallery-src="{{ image.main|escape('html_attr') }}" data-bs-gallery-width="{{ image.main_width }}" data-bs-gallery-height="{{ image.main_height }}" aria-label="Фото {{ loop.index }}: {{ heading_title|escape('html_attr') }}"{% if loop.first %} aria-current="true"{% endif %}>
++                <img src="{{ image.small }}" title="{{ heading_title }}" alt="{{ heading_title }}" width="{{ image.small_width }}" height="{{ image.small_height }}" loading="lazy" decoding="async"/>
+               </a>
+             {% endfor %}
+           </div>
+           {% endif %}
+         </div>
++        {% endif %}
+         {% endif %}
+ 
+         {# === INFO PANEL === #}
+@@ -968,12 +970,34 @@
+ });
+ 
+ $(document).ready(function() {
+-    $('.magnific-popup').magnificPopup({
+-        type: 'image',
+-        delegate: 'a',
+-        gallery: {
+-            enabled: true
+-        }
++    // RD-25-WP2 gallery switcher; literal attributes preserve the existing 700x700 URLs.
++    $('[data-bs-gallery]').each(function() {
++        var gallery = this;
++        var main = gallery.querySelector('[data-bs-gallery-main]');
++        var thumbs = Array.prototype.slice.call(gallery.querySelectorAll('[data-bs-gallery-thumb]'));
++        var selected = 0;
++        if (!main) { return; }
++        $(gallery).on('click.rd25Gallery', '[data-bs-gallery-thumb]', function(event) {
++            event.preventDefault();
++            selected = thumbs.indexOf(this);
++            main.setAttribute('href', this.getAttribute('href'));
++            main.setAttribute('data-bs-media-kind', this.getAttribute('data-bs-media-kind'));
++            var image = main.querySelector('img');
++            image.setAttribute('src', this.getAttribute('data-bs-gallery-src'));
++            image.setAttribute('width', this.getAttribute('data-bs-gallery-width'));
++            image.setAttribute('height', this.getAttribute('data-bs-gallery-height'));
++            thumbs.forEach(function(thumb) { thumb.removeAttribute('aria-current'); });
++            this.setAttribute('aria-current', 'true');
++        });
++        $(main).on('click.rd25Gallery', function(event) {
++            event.preventDefault();
++            var links = thumbs.length ? thumbs : [main];
++            $.magnificPopup.open({
++                items: links.map(function(link) { return { src: link.getAttribute('href'), title: link.getAttribute('title') }; }),
++                type: 'image',
++                gallery: { enabled: links.length > 1 }
++            }, selected);
++        });
+     });
+ });
+ //--></script>

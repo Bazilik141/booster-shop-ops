@@ -1,0 +1,13 @@
+php_lint=ok:C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-wp2-wp3-phase1-20261012\runner-fixtures-delivery\composition\RD-25-WP2_product-gallery_20261012.php
+task=RD-25-WP2_product-gallery_20261012
+cwd=C:/Users/14bez/Downloads/Booster Shop/booster-shop-ops/work/rd25-wp2-wp3-phase1-20261012/runner-fixtures-delivery/composition
+time=2026-10-12T09:15:25+00:00
+php_lint=ok:C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-wp2-wp3-phase1-20261012\runner-fixtures-delivery\composition\_patch_backups\RD-25-WP2_product-gallery_20261012-20261012_091521-15d64a/original/catalog/controller/product/product.php
+php_lint=ok:C:/Users/14bez/Downloads/Booster Shop/booster-shop-ops/work/rd25-wp2-wp3-phase1-20261012/runner-fixtures-delivery/composition/catalog/controller/product/product.php
+restored_file=catalog/controller/product/product.php
+restored_file=catalog/view/template/product/product.twig
+restored_file=catalog/view/stylesheet/boostershop-ds.css
+restored_file=catalog/view/template/common/header.twig
+rollback=ok
+done=ok
+self_delete=ok

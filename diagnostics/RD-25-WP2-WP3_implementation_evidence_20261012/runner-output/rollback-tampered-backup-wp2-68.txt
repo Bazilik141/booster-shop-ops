@@ -1,0 +1,7 @@
+php_lint=ok:C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-wp2-wp3-phase1-20261012\runner-fixtures-delivery\rollback-tampered-backup\RD-25-WP2_product-gallery_20261012.php
+task=RD-25-WP2_product-gallery_20261012
+cwd=C:/Users/14bez/Downloads/Booster Shop/booster-shop-ops/work/rd25-wp2-wp3-phase1-20261012/runner-fixtures-delivery/rollback-tampered-backup
+time=2026-10-12T09:15:39+00:00
+php_lint=ok:C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-wp2-wp3-phase1-20261012\runner-fixtures-delivery\rollback-tampered-backup\_patch_backups\RD-25-WP2_product-gallery_20261012-20261012_091538-21c784/original/catalog/controller/product/product.php
+error=rollback_source_changed:catalog/view/stylesheet/boostershop-ds.css
+restore=not_needed

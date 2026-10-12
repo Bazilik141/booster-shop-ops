@@ -1,0 +1,178 @@
+{
+  "pages": [
+    {
+      "page": "product-78-before.html",
+      "surface": "product",
+      "product_id": 78,
+      "state": "before"
+    },
+    {
+      "page": "product-78-after.html",
+      "surface": "product",
+      "product_id": 78,
+      "state": "after"
+    },
+    {
+      "page": "product-80-before.html",
+      "surface": "product",
+      "product_id": 80,
+      "state": "before"
+    },
+    {
+      "page": "product-80-after.html",
+      "surface": "product",
+      "product_id": 80,
+      "state": "after"
+    },
+    {
+      "page": "product-77-before.html",
+      "surface": "product",
+      "product_id": 77,
+      "state": "before"
+    },
+    {
+      "page": "product-77-after.html",
+      "surface": "product",
+      "product_id": 77,
+      "state": "after"
+    },
+    {
+      "page": "product-131-before.html",
+      "surface": "product",
+      "product_id": 131,
+      "state": "before"
+    },
+    {
+      "page": "product-131-after.html",
+      "surface": "product",
+      "product_id": 131,
+      "state": "after"
+    },
+    {
+      "page": "product-144-before.html",
+      "surface": "product",
+      "product_id": 144,
+      "state": "before"
+    },
+    {
+      "page": "product-144-after.html",
+      "surface": "product",
+      "product_id": 144,
+      "state": "after"
+    },
+    {
+      "page": "product-96-before.html",
+      "surface": "product",
+      "product_id": 96,
+      "state": "before"
+    },
+    {
+      "page": "product-96-after.html",
+      "surface": "product",
+      "product_id": 96,
+      "state": "after"
+    },
+    {
+      "page": "product-201-before.html",
+      "surface": "product",
+      "product_id": 201,
+      "state": "before"
+    },
+    {
+      "page": "product-201-after.html",
+      "surface": "product",
+      "product_id": 201,
+      "state": "after"
+    },
+    {
+      "page": "mini-cart-before.html",
+      "surface": "mini-cart",
+      "state": "before"
+    },
+    {
+      "page": "cart-before.html",
+      "surface": "cart",
+      "state": "before"
+    },
+    {
+      "page": "mini-cart-after.html",
+      "surface": "mini-cart",
+      "state": "after"
+    },
+    {
+      "page": "cart-after.html",
+      "surface": "cart",
+      "state": "after"
+    }
+  ],
+  "popup_preservation": [
+    {
+      "product_id": 78,
+      "popup_urls": [
+        "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20Booster-700x700.webp",
+        "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20B1-700x700.webp",
+        "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20B2-700x700.webp"
+      ],
+      "byte_identical": true,
+      "after_fit_images": 3
+    },
+    {
+      "product_id": 80,
+      "popup_urls": [
+        "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20Box%202-700x700.webp",
+        "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20Box-700x700.webp"
+      ],
+      "byte_identical": true,
+      "after_fit_images": 2
+    },
+    {
+      "product_id": 77,
+      "popup_urls": [
+        "http://rd25.local/image/cache/catalog/Pokemon/Містері%20бокс%20Pokémon%20TCG%20Mystery%20Mix%20Standard%20(Японське%20видання)-700x700.webp"
+      ],
+      "byte_identical": true,
+      "after_fit_images": 1
+    },
+    {
+      "product_id": 131,
+      "popup_urls": [
+        "http://rd25.local/image/cache/catalog/3D%20print/Фігурки/Геодуд%20однокольоровий%20L%20та%20M-700x700.webp",
+        "http://rd25.local/image/cache/catalog/3D%20print/Фігурки/Геодуд%20фігурка%203д-700x700.webp",
+        "http://rd25.local/image/cache/catalog/3D%20print/Фігурки/Геодуд%20фігурка-700x700.webp"
+      ],
+      "byte_identical": true,
+      "after_fit_images": 3
+    },
+    {
+      "product_id": 144,
+      "popup_urls": [
+        "http://rd25.local/image/cache/catalog/Accsesuary/albom-dlia-kartok-OnePiece-na-400-slotiv-700x700.webp",
+        "http://rd25.local/image/cache/catalog/Accsesuary/albom-dlia-kartok-pokemon-na-400-slotiv-700x700.webp"
+      ],
+      "byte_identical": true,
+      "after_fit_images": 2
+    },
+    {
+      "product_id": 96,
+      "popup_urls": [
+        "http://rd25.local/image/cache/catalog/Other/G7D%20sleeves%20premium%20plus%20(MTG)-700x700.webp"
+      ],
+      "byte_identical": true,
+      "after_fit_images": 1
+    },
+    {
+      "product_id": 201,
+      "popup_urls": [
+        "http://rd25.local/image/cache/catalog/Other/УЦІНКА/photo_2026-10-10_23-19-10-700x700.webp",
+        "http://rd25.local/image/cache/catalog/Other/УЦІНКА/photo_2026-10-07_09-01-55-700x700.webp",
+        "http://rd25.local/image/cache/catalog/Other/УЦІНКА/photo_2026-10-07_09-01-56%20(3)-700x700.webp",
+        "http://rd25.local/image/cache/catalog/Other/УЦІНКА/photo_2026-10-07_09-01-55%20(2)-700x700.webp",
+        "http://rd25.local/image/cache/catalog/Other/УЦІНКА/photo_2026-10-07_09-01-56%20(2)-700x700.webp",
+        "http://rd25.local/image/cache/catalog/Other/УЦІНКА/photo_2026-10-07_09-01-56-700x700.webp"
+      ],
+      "byte_identical": true,
+      "after_fit_images": 6
+    }
+  ],
+  "scope": "Real exported gallery/cart Twig fragments, native original/fit images; after is a diagnostic-only drawing, not a patch; mini-cart displayed as an isolated open panel; product right panel and prices are synthetic"
+}

@@ -1,0 +1,1438 @@
+{
+  "php": "8.3.30",
+  "hosting_php_from_export": "8.0.30",
+  "plan": {
+    "representative_ids": [
+      78,
+      80,
+      77,
+      131,
+      144,
+      96,
+      201
+    ],
+    "cold_product_ids": [
+      201,
+      99,
+      132
+    ],
+    "cold_cart_ids": [
+      132,
+      166,
+      139,
+      130,
+      163,
+      154,
+      99,
+      73,
+      171,
+      110,
+      85,
+      77,
+      58,
+      111,
+      170,
+      80,
+      95,
+      126,
+      183,
+      181
+    ],
+    "worst_cart_scope": "Synthetic basket containing the 20 largest primary images from enabled store-0 products; no customer basket or live cart read",
+    "ignored_empty_additional_rows": 22
+  },
+  "results": [
+    {
+      "scenario": "product",
+      "php": "8.3.30",
+      "wall_seconds": 1.105133,
+      "trace": [
+        {
+          "product_id": 201,
+          "images": 6,
+          "fit_images": 6,
+          "seconds": 1.105126
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 18874368,
+      "rendered_bytes": 31696,
+      "case": "product-201",
+      "initial_cache": "fit-cold",
+      "request": 1,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "product",
+      "php": "8.3.30",
+      "wall_seconds": 0.059407,
+      "trace": [
+        {
+          "product_id": 201,
+          "images": 6,
+          "fit_images": 6,
+          "seconds": 0.059395
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 10485760,
+      "rendered_bytes": 31696,
+      "case": "product-201",
+      "initial_cache": "fit-cold",
+      "request": 2,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "product",
+      "php": "8.3.30",
+      "wall_seconds": 0.053495,
+      "trace": [
+        {
+          "product_id": 201,
+          "images": 6,
+          "fit_images": 6,
+          "seconds": 0.053484
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 10485760,
+      "rendered_bytes": 31696,
+      "case": "product-201",
+      "initial_cache": "fit-cold",
+      "request": 3,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "product",
+      "php": "8.3.30",
+      "wall_seconds": 0.054011,
+      "trace": [
+        {
+          "product_id": 201,
+          "images": 6,
+          "fit_images": 6,
+          "seconds": 0.053998
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 10485760,
+      "rendered_bytes": 31696,
+      "case": "product-201",
+      "initial_cache": "fit-cold",
+      "request": 4,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "product",
+      "php": "8.3.30",
+      "wall_seconds": 2.33294,
+      "trace": [
+        {
+          "product_id": 201,
+          "images": 6,
+          "fit_images": 6,
+          "seconds": 2.332933
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 18874368,
+      "rendered_bytes": 31696,
+      "case": "product-201",
+      "initial_cache": "metadata-and-fit-cold",
+      "request": 1,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "product",
+      "php": "8.3.30",
+      "wall_seconds": 0.054287,
+      "trace": [
+        {
+          "product_id": 201,
+          "images": 6,
+          "fit_images": 6,
+          "seconds": 0.054276
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 10485760,
+      "rendered_bytes": 31696,
+      "case": "product-201",
+      "initial_cache": "metadata-and-fit-cold",
+      "request": 2,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "product",
+      "php": "8.3.30",
+      "wall_seconds": 0.051878,
+      "trace": [
+        {
+          "product_id": 201,
+          "images": 6,
+          "fit_images": 6,
+          "seconds": 0.051867
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 10485760,
+      "rendered_bytes": 31696,
+      "case": "product-201",
+      "initial_cache": "metadata-and-fit-cold",
+      "request": 3,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "product",
+      "php": "8.3.30",
+      "wall_seconds": 0.051165,
+      "trace": [
+        {
+          "product_id": 201,
+          "images": 6,
+          "fit_images": 6,
+          "seconds": 0.051155
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 10485760,
+      "rendered_bytes": 31696,
+      "case": "product-201",
+      "initial_cache": "metadata-and-fit-cold",
+      "request": 4,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "product",
+      "php": "8.3.30",
+      "wall_seconds": 1.576342,
+      "trace": [
+        {
+          "product_id": 99,
+          "images": 3,
+          "fit_images": 3,
+          "seconds": 1.576335
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 60817408,
+      "rendered_bytes": 29020,
+      "case": "product-99",
+      "initial_cache": "fit-cold",
+      "request": 1,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "product",
+      "php": "8.3.30",
+      "wall_seconds": 0.044522,
+      "trace": [
+        {
+          "product_id": 99,
+          "images": 3,
+          "fit_images": 3,
+          "seconds": 0.044512
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 10485760,
+      "rendered_bytes": 29020,
+      "case": "product-99",
+      "initial_cache": "fit-cold",
+      "request": 2,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "product",
+      "php": "8.3.30",
+      "wall_seconds": 0.046647,
+      "trace": [
+        {
+          "product_id": 99,
+          "images": 3,
+          "fit_images": 3,
+          "seconds": 0.046633
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 10485760,
+      "rendered_bytes": 29020,
+      "case": "product-99",
+      "initial_cache": "fit-cold",
+      "request": 3,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "product",
+      "php": "8.3.30",
+      "wall_seconds": 0.045008,
+      "trace": [
+        {
+          "product_id": 99,
+          "images": 3,
+          "fit_images": 3,
+          "seconds": 0.044999
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 10485760,
+      "rendered_bytes": 29020,
+      "case": "product-99",
+      "initial_cache": "fit-cold",
+      "request": 4,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "product",
+      "php": "8.3.30",
+      "wall_seconds": 2.803746,
+      "trace": [
+        {
+          "product_id": 99,
+          "images": 3,
+          "fit_images": 2,
+          "seconds": 2.80374
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 60817408,
+      "rendered_bytes": 29023,
+      "case": "product-99",
+      "initial_cache": "metadata-and-fit-cold",
+      "request": 1,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "product",
+      "php": "8.3.30",
+      "wall_seconds": 1.24373,
+      "trace": [
+        {
+          "product_id": 99,
+          "images": 3,
+          "fit_images": 3,
+          "seconds": 1.243722
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 58720256,
+      "rendered_bytes": 29020,
+      "case": "product-99",
+      "initial_cache": "metadata-and-fit-cold",
+      "request": 2,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "product",
+      "php": "8.3.30",
+      "wall_seconds": 0.044973,
+      "trace": [
+        {
+          "product_id": 99,
+          "images": 3,
+          "fit_images": 3,
+          "seconds": 0.044964
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 10485760,
+      "rendered_bytes": 29020,
+      "case": "product-99",
+      "initial_cache": "metadata-and-fit-cold",
+      "request": 3,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "product",
+      "php": "8.3.30",
+      "wall_seconds": 0.044547,
+      "trace": [
+        {
+          "product_id": 99,
+          "images": 3,
+          "fit_images": 3,
+          "seconds": 0.044538
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 10485760,
+      "rendered_bytes": 29020,
+      "case": "product-99",
+      "initial_cache": "metadata-and-fit-cold",
+      "request": 4,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "product",
+      "php": "8.3.30",
+      "wall_seconds": 1.192221,
+      "trace": [
+        {
+          "product_id": 132,
+          "images": 2,
+          "fit_images": 2,
+          "seconds": 1.19221
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 58720256,
+      "rendered_bytes": 28204,
+      "case": "product-132",
+      "initial_cache": "fit-cold",
+      "request": 1,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "product",
+      "php": "8.3.30",
+      "wall_seconds": 0.044358,
+      "trace": [
+        {
+          "product_id": 132,
+          "images": 2,
+          "fit_images": 2,
+          "seconds": 0.044349
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 10485760,
+      "rendered_bytes": 28204,
+      "case": "product-132",
+      "initial_cache": "fit-cold",
+      "request": 2,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "product",
+      "php": "8.3.30",
+      "wall_seconds": 0.0426,
+      "trace": [
+        {
+          "product_id": 132,
+          "images": 2,
+          "fit_images": 2,
+          "seconds": 0.042591
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 10485760,
+      "rendered_bytes": 28204,
+      "case": "product-132",
+      "initial_cache": "fit-cold",
+      "request": 3,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "product",
+      "php": "8.3.30",
+      "wall_seconds": 0.046514,
+      "trace": [
+        {
+          "product_id": 132,
+          "images": 2,
+          "fit_images": 2,
+          "seconds": 0.046505
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 10485760,
+      "rendered_bytes": 28204,
+      "case": "product-132",
+      "initial_cache": "fit-cold",
+      "request": 4,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "product",
+      "php": "8.3.30",
+      "wall_seconds": 1.287657,
+      "trace": [
+        {
+          "product_id": 132,
+          "images": 2,
+          "fit_images": 2,
+          "seconds": 1.28765
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 58720256,
+      "rendered_bytes": 28204,
+      "case": "product-132",
+      "initial_cache": "metadata-and-fit-cold",
+      "request": 1,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "product",
+      "php": "8.3.30",
+      "wall_seconds": 0.045398,
+      "trace": [
+        {
+          "product_id": 132,
+          "images": 2,
+          "fit_images": 2,
+          "seconds": 0.045389
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 10485760,
+      "rendered_bytes": 28204,
+      "case": "product-132",
+      "initial_cache": "metadata-and-fit-cold",
+      "request": 2,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "product",
+      "php": "8.3.30",
+      "wall_seconds": 0.043067,
+      "trace": [
+        {
+          "product_id": 132,
+          "images": 2,
+          "fit_images": 2,
+          "seconds": 0.043058
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 10485760,
+      "rendered_bytes": 28204,
+      "case": "product-132",
+      "initial_cache": "metadata-and-fit-cold",
+      "request": 3,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "product",
+      "php": "8.3.30",
+      "wall_seconds": 0.045892,
+      "trace": [
+        {
+          "product_id": 132,
+          "images": 2,
+          "fit_images": 2,
+          "seconds": 0.045882
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 10485760,
+      "rendered_bytes": 28204,
+      "case": "product-132",
+      "initial_cache": "metadata-and-fit-cold",
+      "request": 4,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "cart",
+      "php": "8.3.30",
+      "wall_seconds": 3.200607,
+      "trace": [
+        {
+          "product_id": 132,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/aa5816c877c8a21f864af4990fe490efda99101508e2d29accf9eb33b4741998-104x130-fit.webp"
+        },
+        {
+          "product_id": 166,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/a31fa7de4c4f499fb9eff4a9ee977615d2ff1d061a13d947716b419e4c21cc47-104x130-fit.webp"
+        },
+        {
+          "product_id": 139,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/478ad3502a010378ac7bc5d8028d9d2b004ab0b756eafc690ed252cef3d29d67-104x130-fit.webp"
+        },
+        {
+          "product_id": 130,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/439b6fd3e273e6a59630de93a07bc7659c6ba9088ce2ca06d62eeb8dc453b4d3-104x130-fit.webp"
+        },
+        {
+          "product_id": 163,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/4de98744ad7653f2632467b972b4925f645ca30427a2b49b49944e593a0d6919-104x130-fit.webp"
+        },
+        {
+          "product_id": 154,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/3509657dfa006a8b708c8c5747d9d921d14b5ae344c38008633f0938f4bec41c-104x130-fit.webp"
+        },
+        {
+          "product_id": 99,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/1fbfe35559591f7c4e1e42a6c951be9fdea1de3c1f3b114dde8342927d617a56-104x130-fit.webp"
+        },
+        {
+          "product_id": 73,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/903ce447a54f6aa43b17558dd51793387ebd968a5928c4f16566daccdbcebd03-104x130-fit.webp"
+        },
+        {
+          "product_id": 171,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/18b65408eef49ad7e86633dc9f008fc06656cad77cae9668fce67d715d7ef1c0-104x130-fit.webp"
+        },
+        {
+          "product_id": 110,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/6a9d8812da691f83ef887857ddace5e37491b7093f45957d7f43d5d8eb3bed90-104x130-fit.webp"
+        },
+        {
+          "product_id": 85,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/b01e00a18cd24c16b183ee0cb216195c6372a02565cf3c7498444043880f1331-104x130-fit.webp"
+        },
+        {
+          "product_id": 77,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/c5fdaaca7b7f4fcc25e8daaf76e520da37e93c2e2a89af04f392417e6b3d577a-104x130-fit.webp"
+        },
+        {
+          "product_id": 58,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/0a0db91dcac7cc4f2b06091297bda0ee127ea5d1058e4a19d366803695ac08f0-104x130-fit.webp"
+        },
+        {
+          "product_id": 111,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/11982bfaf001efccada76e815898b54a9705cfc554de02b3c9bb4cce482109b2-104x130-fit.webp"
+        },
+        {
+          "product_id": 170,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/a065acba20eddf23101f2365896b6de6605cbc031e0b0a4c54f7a790c9a9ae68-104x130-fit.webp"
+        },
+        {
+          "product_id": 80,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/ae46bc76053f5f06dbbeb466400320316c9ed301d50e55207f3e99189180386d-104x130-fit.webp"
+        },
+        {
+          "product_id": 95,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/3da79be630935477e0b459e4ada37d0ddd1a2faad4704039242a1e602a64201f-104x130-fit.webp"
+        },
+        {
+          "product_id": 126,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/f9bf4b89c32938e13a8eabd147bc46d3cce3b65c1819288f0851ee0a3b7530cb-104x130-fit.webp"
+        },
+        {
+          "product_id": 183,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/093ea50c2e0dc699f738d99e9939dba0a984ae27a8ec5cbca3eaa5c9faafa1b2-104x130-fit.webp"
+        },
+        {
+          "product_id": 181,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/f50bd5c31e34fe478bf914e824e7b57ad7b6f364ee95c16cf67aae1b1722abc2-104x130-fit.webp"
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 58720256,
+      "rendered_bytes": 42417,
+      "case": "cart-20-largest",
+      "initial_cache": "fit-cold",
+      "request": 1,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "cart",
+      "php": "8.3.30",
+      "wall_seconds": 0.041984,
+      "trace": [
+        {
+          "product_id": 132,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/aa5816c877c8a21f864af4990fe490efda99101508e2d29accf9eb33b4741998-104x130-fit.webp"
+        },
+        {
+          "product_id": 166,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/a31fa7de4c4f499fb9eff4a9ee977615d2ff1d061a13d947716b419e4c21cc47-104x130-fit.webp"
+        },
+        {
+          "product_id": 139,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/478ad3502a010378ac7bc5d8028d9d2b004ab0b756eafc690ed252cef3d29d67-104x130-fit.webp"
+        },
+        {
+          "product_id": 130,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/439b6fd3e273e6a59630de93a07bc7659c6ba9088ce2ca06d62eeb8dc453b4d3-104x130-fit.webp"
+        },
+        {
+          "product_id": 163,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/4de98744ad7653f2632467b972b4925f645ca30427a2b49b49944e593a0d6919-104x130-fit.webp"
+        },
+        {
+          "product_id": 154,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/3509657dfa006a8b708c8c5747d9d921d14b5ae344c38008633f0938f4bec41c-104x130-fit.webp"
+        },
+        {
+          "product_id": 99,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/1fbfe35559591f7c4e1e42a6c951be9fdea1de3c1f3b114dde8342927d617a56-104x130-fit.webp"
+        },
+        {
+          "product_id": 73,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/903ce447a54f6aa43b17558dd51793387ebd968a5928c4f16566daccdbcebd03-104x130-fit.webp"
+        },
+        {
+          "product_id": 171,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/18b65408eef49ad7e86633dc9f008fc06656cad77cae9668fce67d715d7ef1c0-104x130-fit.webp"
+        },
+        {
+          "product_id": 110,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/6a9d8812da691f83ef887857ddace5e37491b7093f45957d7f43d5d8eb3bed90-104x130-fit.webp"
+        },
+        {
+          "product_id": 85,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/b01e00a18cd24c16b183ee0cb216195c6372a02565cf3c7498444043880f1331-104x130-fit.webp"
+        },
+        {
+          "product_id": 77,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/c5fdaaca7b7f4fcc25e8daaf76e520da37e93c2e2a89af04f392417e6b3d577a-104x130-fit.webp"
+        },
+        {
+          "product_id": 58,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/0a0db91dcac7cc4f2b06091297bda0ee127ea5d1058e4a19d366803695ac08f0-104x130-fit.webp"
+        },
+        {
+          "product_id": 111,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/11982bfaf001efccada76e815898b54a9705cfc554de02b3c9bb4cce482109b2-104x130-fit.webp"
+        },
+        {
+          "product_id": 170,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/a065acba20eddf23101f2365896b6de6605cbc031e0b0a4c54f7a790c9a9ae68-104x130-fit.webp"
+        },
+        {
+          "product_id": 80,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/ae46bc76053f5f06dbbeb466400320316c9ed301d50e55207f3e99189180386d-104x130-fit.webp"
+        },
+        {
+          "product_id": 95,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/3da79be630935477e0b459e4ada37d0ddd1a2faad4704039242a1e602a64201f-104x130-fit.webp"
+        },
+        {
+          "product_id": 126,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/f9bf4b89c32938e13a8eabd147bc46d3cce3b65c1819288f0851ee0a3b7530cb-104x130-fit.webp"
+        },
+        {
+          "product_id": 183,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/093ea50c2e0dc699f738d99e9939dba0a984ae27a8ec5cbca3eaa5c9faafa1b2-104x130-fit.webp"
+        },
+        {
+          "product_id": 181,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/f50bd5c31e34fe478bf914e824e7b57ad7b6f364ee95c16cf67aae1b1722abc2-104x130-fit.webp"
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 6291456,
+      "rendered_bytes": 42417,
+      "case": "cart-20-largest",
+      "initial_cache": "fit-cold",
+      "request": 2,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "cart",
+      "php": "8.3.30",
+      "wall_seconds": 0.043695,
+      "trace": [
+        {
+          "product_id": 132,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/aa5816c877c8a21f864af4990fe490efda99101508e2d29accf9eb33b4741998-104x130-fit.webp"
+        },
+        {
+          "product_id": 166,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/a31fa7de4c4f499fb9eff4a9ee977615d2ff1d061a13d947716b419e4c21cc47-104x130-fit.webp"
+        },
+        {
+          "product_id": 139,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/478ad3502a010378ac7bc5d8028d9d2b004ab0b756eafc690ed252cef3d29d67-104x130-fit.webp"
+        },
+        {
+          "product_id": 130,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/439b6fd3e273e6a59630de93a07bc7659c6ba9088ce2ca06d62eeb8dc453b4d3-104x130-fit.webp"
+        },
+        {
+          "product_id": 163,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/4de98744ad7653f2632467b972b4925f645ca30427a2b49b49944e593a0d6919-104x130-fit.webp"
+        },
+        {
+          "product_id": 154,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/3509657dfa006a8b708c8c5747d9d921d14b5ae344c38008633f0938f4bec41c-104x130-fit.webp"
+        },
+        {
+          "product_id": 99,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/1fbfe35559591f7c4e1e42a6c951be9fdea1de3c1f3b114dde8342927d617a56-104x130-fit.webp"
+        },
+        {
+          "product_id": 73,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/903ce447a54f6aa43b17558dd51793387ebd968a5928c4f16566daccdbcebd03-104x130-fit.webp"
+        },
+        {
+          "product_id": 171,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/18b65408eef49ad7e86633dc9f008fc06656cad77cae9668fce67d715d7ef1c0-104x130-fit.webp"
+        },
+        {
+          "product_id": 110,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/6a9d8812da691f83ef887857ddace5e37491b7093f45957d7f43d5d8eb3bed90-104x130-fit.webp"
+        },
+        {
+          "product_id": 85,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/b01e00a18cd24c16b183ee0cb216195c6372a02565cf3c7498444043880f1331-104x130-fit.webp"
+        },
+        {
+          "product_id": 77,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/c5fdaaca7b7f4fcc25e8daaf76e520da37e93c2e2a89af04f392417e6b3d577a-104x130-fit.webp"
+        },
+        {
+          "product_id": 58,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/0a0db91dcac7cc4f2b06091297bda0ee127ea5d1058e4a19d366803695ac08f0-104x130-fit.webp"
+        },
+        {
+          "product_id": 111,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/11982bfaf001efccada76e815898b54a9705cfc554de02b3c9bb4cce482109b2-104x130-fit.webp"
+        },
+        {
+          "product_id": 170,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/a065acba20eddf23101f2365896b6de6605cbc031e0b0a4c54f7a790c9a9ae68-104x130-fit.webp"
+        },
+        {
+          "product_id": 80,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/ae46bc76053f5f06dbbeb466400320316c9ed301d50e55207f3e99189180386d-104x130-fit.webp"
+        },
+        {
+          "product_id": 95,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/3da79be630935477e0b459e4ada37d0ddd1a2faad4704039242a1e602a64201f-104x130-fit.webp"
+        },
+        {
+          "product_id": 126,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/f9bf4b89c32938e13a8eabd147bc46d3cce3b65c1819288f0851ee0a3b7530cb-104x130-fit.webp"
+        },
+        {
+          "product_id": 183,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/093ea50c2e0dc699f738d99e9939dba0a984ae27a8ec5cbca3eaa5c9faafa1b2-104x130-fit.webp"
+        },
+        {
+          "product_id": 181,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/f50bd5c31e34fe478bf914e824e7b57ad7b6f364ee95c16cf67aae1b1722abc2-104x130-fit.webp"
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 6291456,
+      "rendered_bytes": 42417,
+      "case": "cart-20-largest",
+      "initial_cache": "fit-cold",
+      "request": 3,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "cart",
+      "php": "8.3.30",
+      "wall_seconds": 0.03984,
+      "trace": [
+        {
+          "product_id": 132,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/aa5816c877c8a21f864af4990fe490efda99101508e2d29accf9eb33b4741998-104x130-fit.webp"
+        },
+        {
+          "product_id": 166,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/a31fa7de4c4f499fb9eff4a9ee977615d2ff1d061a13d947716b419e4c21cc47-104x130-fit.webp"
+        },
+        {
+          "product_id": 139,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/478ad3502a010378ac7bc5d8028d9d2b004ab0b756eafc690ed252cef3d29d67-104x130-fit.webp"
+        },
+        {
+          "product_id": 130,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/439b6fd3e273e6a59630de93a07bc7659c6ba9088ce2ca06d62eeb8dc453b4d3-104x130-fit.webp"
+        },
+        {
+          "product_id": 163,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/4de98744ad7653f2632467b972b4925f645ca30427a2b49b49944e593a0d6919-104x130-fit.webp"
+        },
+        {
+          "product_id": 154,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/3509657dfa006a8b708c8c5747d9d921d14b5ae344c38008633f0938f4bec41c-104x130-fit.webp"
+        },
+        {
+          "product_id": 99,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/1fbfe35559591f7c4e1e42a6c951be9fdea1de3c1f3b114dde8342927d617a56-104x130-fit.webp"
+        },
+        {
+          "product_id": 73,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/903ce447a54f6aa43b17558dd51793387ebd968a5928c4f16566daccdbcebd03-104x130-fit.webp"
+        },
+        {
+          "product_id": 171,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/18b65408eef49ad7e86633dc9f008fc06656cad77cae9668fce67d715d7ef1c0-104x130-fit.webp"
+        },
+        {
+          "product_id": 110,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/6a9d8812da691f83ef887857ddace5e37491b7093f45957d7f43d5d8eb3bed90-104x130-fit.webp"
+        },
+        {
+          "product_id": 85,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/b01e00a18cd24c16b183ee0cb216195c6372a02565cf3c7498444043880f1331-104x130-fit.webp"
+        },
+        {
+          "product_id": 77,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/c5fdaaca7b7f4fcc25e8daaf76e520da37e93c2e2a89af04f392417e6b3d577a-104x130-fit.webp"
+        },
+        {
+          "product_id": 58,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/0a0db91dcac7cc4f2b06091297bda0ee127ea5d1058e4a19d366803695ac08f0-104x130-fit.webp"
+        },
+        {
+          "product_id": 111,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/11982bfaf001efccada76e815898b54a9705cfc554de02b3c9bb4cce482109b2-104x130-fit.webp"
+        },
+        {
+          "product_id": 170,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/a065acba20eddf23101f2365896b6de6605cbc031e0b0a4c54f7a790c9a9ae68-104x130-fit.webp"
+        },
+        {
+          "product_id": 80,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/ae46bc76053f5f06dbbeb466400320316c9ed301d50e55207f3e99189180386d-104x130-fit.webp"
+        },
+        {
+          "product_id": 95,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/3da79be630935477e0b459e4ada37d0ddd1a2faad4704039242a1e602a64201f-104x130-fit.webp"
+        },
+        {
+          "product_id": 126,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/f9bf4b89c32938e13a8eabd147bc46d3cce3b65c1819288f0851ee0a3b7530cb-104x130-fit.webp"
+        },
+        {
+          "product_id": 183,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/093ea50c2e0dc699f738d99e9939dba0a984ae27a8ec5cbca3eaa5c9faafa1b2-104x130-fit.webp"
+        },
+        {
+          "product_id": 181,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/f50bd5c31e34fe478bf914e824e7b57ad7b6f364ee95c16cf67aae1b1722abc2-104x130-fit.webp"
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 6291456,
+      "rendered_bytes": 42417,
+      "case": "cart-20-largest",
+      "initial_cache": "fit-cold",
+      "request": 4,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "cart",
+      "php": "8.3.30",
+      "wall_seconds": 3.737627,
+      "trace": [
+        {
+          "product_id": 132,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/aa5816c877c8a21f864af4990fe490efda99101508e2d29accf9eb33b4741998-104x130-fit.webp"
+        },
+        {
+          "product_id": 166,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/a31fa7de4c4f499fb9eff4a9ee977615d2ff1d061a13d947716b419e4c21cc47-104x130-fit.webp"
+        },
+        {
+          "product_id": 139,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/478ad3502a010378ac7bc5d8028d9d2b004ab0b756eafc690ed252cef3d29d67-104x130-fit.webp"
+        },
+        {
+          "product_id": 130,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/439b6fd3e273e6a59630de93a07bc7659c6ba9088ce2ca06d62eeb8dc453b4d3-104x130-fit.webp"
+        },
+        {
+          "product_id": 163,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/4de98744ad7653f2632467b972b4925f645ca30427a2b49b49944e593a0d6919-104x130-fit.webp"
+        },
+        {
+          "product_id": 154,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/3509657dfa006a8b708c8c5747d9d921d14b5ae344c38008633f0938f4bec41c-104x130-fit.webp"
+        },
+        {
+          "product_id": 99,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/1fbfe35559591f7c4e1e42a6c951be9fdea1de3c1f3b114dde8342927d617a56-104x130-fit.webp"
+        },
+        {
+          "product_id": 73,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/903ce447a54f6aa43b17558dd51793387ebd968a5928c4f16566daccdbcebd03-104x130-fit.webp"
+        },
+        {
+          "product_id": 171,
+          "fit": false,
+          "url": "http://rd25.local/image/cache/catalog/3D%20print/Брелоки/brelok-going-merry-one-piece-3d-druk-120x120.webp"
+        },
+        {
+          "product_id": 110,
+          "fit": false,
+          "url": "http://rd25.local/image/cache/catalog/Pokemon/Містері%20бокс%20Pokémon%20TCG%20Mystery%20Mix%20XL%20(Японське%20видання)-120x120.webp"
+        },
+        {
+          "product_id": 85,
+          "fit": false,
+          "url": "http://rd25.local/image/cache/catalog/One%20Piece/Mistery%20BOX%20One%20Piece%20Standard-120x120.webp"
+        },
+        {
+          "product_id": 77,
+          "fit": false,
+          "url": "http://rd25.local/image/cache/catalog/Pokemon/Містері%20бокс%20Pokémon%20TCG%20Mystery%20Mix%20Standard%20(Японське%20видання)-120x120.webp"
+        },
+        {
+          "product_id": 58,
+          "fit": false,
+          "url": "http://rd25.local/image/cache/catalog/Pokemon/Hot%20Wind%20Arena%20Korea%20BB-120x120.webp"
+        },
+        {
+          "product_id": 111,
+          "fit": false,
+          "url": "http://rd25.local/image/cache/catalog/One%20Piece/MYSTERY%20BOX%20XL%20ONE%20PIECE%20No%20blur-120x120.webp"
+        },
+        {
+          "product_id": 170,
+          "fit": false,
+          "url": "http://rd25.local/image/cache/catalog/3D%20print/Брелоки/Дітто%20брелок%20спінер-120x120.webp"
+        },
+        {
+          "product_id": 80,
+          "fit": false,
+          "url": "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20Box%202-120x120.webp"
+        },
+        {
+          "product_id": 95,
+          "fit": false,
+          "url": "http://rd25.local/image/cache/catalog/Other/Protectory-100sht-generic-120x120.webp"
+        },
+        {
+          "product_id": 126,
+          "fit": false,
+          "url": "http://rd25.local/image/cache/catalog/3D%20print/Брелоки/Брелок%20чармандер1-120x120.webp"
+        },
+        {
+          "product_id": 183,
+          "fit": false,
+          "url": "http://rd25.local/image/cache/catalog/Pokemon/Pokémon%20—%20Special%20Card%20Set%20Grass%20Leafeon%20VSTAR%20—%20JP%20—%20Collection%20Set%20face-120x120.webp"
+        },
+        {
+          "product_id": 181,
+          "fit": false,
+          "url": "http://rd25.local/image/cache/catalog/Pokemon/Pokemon-Ice-Glaceon-VSTAR-Special%20Card%20Set-120x120.webp"
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 58720256,
+      "rendered_bytes": 42372,
+      "case": "cart-20-largest",
+      "initial_cache": "metadata-and-fit-cold",
+      "request": 1,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "cart",
+      "php": "8.3.30",
+      "wall_seconds": 2.919386,
+      "trace": [
+        {
+          "product_id": 132,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/aa5816c877c8a21f864af4990fe490efda99101508e2d29accf9eb33b4741998-104x130-fit.webp"
+        },
+        {
+          "product_id": 166,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/a31fa7de4c4f499fb9eff4a9ee977615d2ff1d061a13d947716b419e4c21cc47-104x130-fit.webp"
+        },
+        {
+          "product_id": 139,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/478ad3502a010378ac7bc5d8028d9d2b004ab0b756eafc690ed252cef3d29d67-104x130-fit.webp"
+        },
+        {
+          "product_id": 130,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/439b6fd3e273e6a59630de93a07bc7659c6ba9088ce2ca06d62eeb8dc453b4d3-104x130-fit.webp"
+        },
+        {
+          "product_id": 163,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/4de98744ad7653f2632467b972b4925f645ca30427a2b49b49944e593a0d6919-104x130-fit.webp"
+        },
+        {
+          "product_id": 154,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/3509657dfa006a8b708c8c5747d9d921d14b5ae344c38008633f0938f4bec41c-104x130-fit.webp"
+        },
+        {
+          "product_id": 99,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/1fbfe35559591f7c4e1e42a6c951be9fdea1de3c1f3b114dde8342927d617a56-104x130-fit.webp"
+        },
+        {
+          "product_id": 73,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/903ce447a54f6aa43b17558dd51793387ebd968a5928c4f16566daccdbcebd03-104x130-fit.webp"
+        },
+        {
+          "product_id": 171,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/18b65408eef49ad7e86633dc9f008fc06656cad77cae9668fce67d715d7ef1c0-104x130-fit.webp"
+        },
+        {
+          "product_id": 110,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/6a9d8812da691f83ef887857ddace5e37491b7093f45957d7f43d5d8eb3bed90-104x130-fit.webp"
+        },
+        {
+          "product_id": 85,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/b01e00a18cd24c16b183ee0cb216195c6372a02565cf3c7498444043880f1331-104x130-fit.webp"
+        },
+        {
+          "product_id": 77,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/c5fdaaca7b7f4fcc25e8daaf76e520da37e93c2e2a89af04f392417e6b3d577a-104x130-fit.webp"
+        },
+        {
+          "product_id": 58,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/0a0db91dcac7cc4f2b06091297bda0ee127ea5d1058e4a19d366803695ac08f0-104x130-fit.webp"
+        },
+        {
+          "product_id": 111,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/11982bfaf001efccada76e815898b54a9705cfc554de02b3c9bb4cce482109b2-104x130-fit.webp"
+        },
+        {
+          "product_id": 170,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/a065acba20eddf23101f2365896b6de6605cbc031e0b0a4c54f7a790c9a9ae68-104x130-fit.webp"
+        },
+        {
+          "product_id": 80,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/ae46bc76053f5f06dbbeb466400320316c9ed301d50e55207f3e99189180386d-104x130-fit.webp"
+        },
+        {
+          "product_id": 95,
+          "fit": false,
+          "url": "http://rd25.local/image/cache/catalog/Other/Protectory-100sht-generic-120x120.webp"
+        },
+        {
+          "product_id": 126,
+          "fit": false,
+          "url": "http://rd25.local/image/cache/catalog/3D%20print/Брелоки/Брелок%20чармандер1-120x120.webp"
+        },
+        {
+          "product_id": 183,
+          "fit": false,
+          "url": "http://rd25.local/image/cache/catalog/Pokemon/Pokémon%20—%20Special%20Card%20Set%20Grass%20Leafeon%20VSTAR%20—%20JP%20—%20Collection%20Set%20face-120x120.webp"
+        },
+        {
+          "product_id": 181,
+          "fit": false,
+          "url": "http://rd25.local/image/cache/catalog/Pokemon/Pokemon-Ice-Glaceon-VSTAR-Special%20Card%20Set-120x120.webp"
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 50331648,
+      "rendered_bytes": 42400,
+      "case": "cart-20-largest",
+      "initial_cache": "metadata-and-fit-cold",
+      "request": 2,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "cart",
+      "php": "8.3.30",
+      "wall_seconds": 2.387475,
+      "trace": [
+        {
+          "product_id": 132,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/aa5816c877c8a21f864af4990fe490efda99101508e2d29accf9eb33b4741998-104x130-fit.webp"
+        },
+        {
+          "product_id": 166,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/a31fa7de4c4f499fb9eff4a9ee977615d2ff1d061a13d947716b419e4c21cc47-104x130-fit.webp"
+        },
+        {
+          "product_id": 139,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/478ad3502a010378ac7bc5d8028d9d2b004ab0b756eafc690ed252cef3d29d67-104x130-fit.webp"
+        },
+        {
+          "product_id": 130,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/439b6fd3e273e6a59630de93a07bc7659c6ba9088ce2ca06d62eeb8dc453b4d3-104x130-fit.webp"
+        },
+        {
+          "product_id": 163,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/4de98744ad7653f2632467b972b4925f645ca30427a2b49b49944e593a0d6919-104x130-fit.webp"
+        },
+        {
+          "product_id": 154,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/3509657dfa006a8b708c8c5747d9d921d14b5ae344c38008633f0938f4bec41c-104x130-fit.webp"
+        },
+        {
+          "product_id": 99,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/1fbfe35559591f7c4e1e42a6c951be9fdea1de3c1f3b114dde8342927d617a56-104x130-fit.webp"
+        },
+        {
+          "product_id": 73,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/903ce447a54f6aa43b17558dd51793387ebd968a5928c4f16566daccdbcebd03-104x130-fit.webp"
+        },
+        {
+          "product_id": 171,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/18b65408eef49ad7e86633dc9f008fc06656cad77cae9668fce67d715d7ef1c0-104x130-fit.webp"
+        },
+        {
+          "product_id": 110,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/6a9d8812da691f83ef887857ddace5e37491b7093f45957d7f43d5d8eb3bed90-104x130-fit.webp"
+        },
+        {
+          "product_id": 85,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/b01e00a18cd24c16b183ee0cb216195c6372a02565cf3c7498444043880f1331-104x130-fit.webp"
+        },
+        {
+          "product_id": 77,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/c5fdaaca7b7f4fcc25e8daaf76e520da37e93c2e2a89af04f392417e6b3d577a-104x130-fit.webp"
+        },
+        {
+          "product_id": 58,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/0a0db91dcac7cc4f2b06091297bda0ee127ea5d1058e4a19d366803695ac08f0-104x130-fit.webp"
+        },
+        {
+          "product_id": 111,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/11982bfaf001efccada76e815898b54a9705cfc554de02b3c9bb4cce482109b2-104x130-fit.webp"
+        },
+        {
+          "product_id": 170,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/a065acba20eddf23101f2365896b6de6605cbc031e0b0a4c54f7a790c9a9ae68-104x130-fit.webp"
+        },
+        {
+          "product_id": 80,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/ae46bc76053f5f06dbbeb466400320316c9ed301d50e55207f3e99189180386d-104x130-fit.webp"
+        },
+        {
+          "product_id": 95,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/3da79be630935477e0b459e4ada37d0ddd1a2faad4704039242a1e602a64201f-104x130-fit.webp"
+        },
+        {
+          "product_id": 126,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/f9bf4b89c32938e13a8eabd147bc46d3cce3b65c1819288f0851ee0a3b7530cb-104x130-fit.webp"
+        },
+        {
+          "product_id": 183,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/093ea50c2e0dc699f738d99e9939dba0a984ae27a8ec5cbca3eaa5c9faafa1b2-104x130-fit.webp"
+        },
+        {
+          "product_id": 181,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/f50bd5c31e34fe478bf914e824e7b57ad7b6f364ee95c16cf67aae1b1722abc2-104x130-fit.webp"
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 44040192,
+      "rendered_bytes": 42417,
+      "case": "cart-20-largest",
+      "initial_cache": "metadata-and-fit-cold",
+      "request": 3,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    },
+    {
+      "scenario": "cart",
+      "php": "8.3.30",
+      "wall_seconds": 0.040758,
+      "trace": [
+        {
+          "product_id": 132,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/aa5816c877c8a21f864af4990fe490efda99101508e2d29accf9eb33b4741998-104x130-fit.webp"
+        },
+        {
+          "product_id": 166,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/a31fa7de4c4f499fb9eff4a9ee977615d2ff1d061a13d947716b419e4c21cc47-104x130-fit.webp"
+        },
+        {
+          "product_id": 139,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/478ad3502a010378ac7bc5d8028d9d2b004ab0b756eafc690ed252cef3d29d67-104x130-fit.webp"
+        },
+        {
+          "product_id": 130,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/439b6fd3e273e6a59630de93a07bc7659c6ba9088ce2ca06d62eeb8dc453b4d3-104x130-fit.webp"
+        },
+        {
+          "product_id": 163,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/4de98744ad7653f2632467b972b4925f645ca30427a2b49b49944e593a0d6919-104x130-fit.webp"
+        },
+        {
+          "product_id": 154,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/3509657dfa006a8b708c8c5747d9d921d14b5ae344c38008633f0938f4bec41c-104x130-fit.webp"
+        },
+        {
+          "product_id": 99,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/1fbfe35559591f7c4e1e42a6c951be9fdea1de3c1f3b114dde8342927d617a56-104x130-fit.webp"
+        },
+        {
+          "product_id": 73,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/903ce447a54f6aa43b17558dd51793387ebd968a5928c4f16566daccdbcebd03-104x130-fit.webp"
+        },
+        {
+          "product_id": 171,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/18b65408eef49ad7e86633dc9f008fc06656cad77cae9668fce67d715d7ef1c0-104x130-fit.webp"
+        },
+        {
+          "product_id": 110,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/6a9d8812da691f83ef887857ddace5e37491b7093f45957d7f43d5d8eb3bed90-104x130-fit.webp"
+        },
+        {
+          "product_id": 85,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/b01e00a18cd24c16b183ee0cb216195c6372a02565cf3c7498444043880f1331-104x130-fit.webp"
+        },
+        {
+          "product_id": 77,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/c5fdaaca7b7f4fcc25e8daaf76e520da37e93c2e2a89af04f392417e6b3d577a-104x130-fit.webp"
+        },
+        {
+          "product_id": 58,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/0a0db91dcac7cc4f2b06091297bda0ee127ea5d1058e4a19d366803695ac08f0-104x130-fit.webp"
+        },
+        {
+          "product_id": 111,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/11982bfaf001efccada76e815898b54a9705cfc554de02b3c9bb4cce482109b2-104x130-fit.webp"
+        },
+        {
+          "product_id": 170,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/a065acba20eddf23101f2365896b6de6605cbc031e0b0a4c54f7a790c9a9ae68-104x130-fit.webp"
+        },
+        {
+          "product_id": 80,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/ae46bc76053f5f06dbbeb466400320316c9ed301d50e55207f3e99189180386d-104x130-fit.webp"
+        },
+        {
+          "product_id": 95,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/3da79be630935477e0b459e4ada37d0ddd1a2faad4704039242a1e602a64201f-104x130-fit.webp"
+        },
+        {
+          "product_id": 126,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/f9bf4b89c32938e13a8eabd147bc46d3cce3b65c1819288f0851ee0a3b7530cb-104x130-fit.webp"
+        },
+        {
+          "product_id": 183,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/093ea50c2e0dc699f738d99e9939dba0a984ae27a8ec5cbca3eaa5c9faafa1b2-104x130-fit.webp"
+        },
+        {
+          "product_id": 181,
+          "fit": true,
+          "url": "http://rd25.local/image/cache/rd25-fit/f50bd5c31e34fe478bf914e824e7b57ad7b6f364ee95c16cf67aae1b1722abc2-104x130-fit.webp"
+        }
+      ],
+      "warnings": [],
+      "peak_memory_bytes": 6291456,
+      "rendered_bytes": 42417,
+      "case": "cart-20-largest",
+      "initial_cache": "metadata-and-fit-cold",
+      "request": 4,
+      "measured_scope": "Real model image operations and full exported product/cart page Twig with diagnostic gallery payload and synthetic non-image data, legacy cache warm; excludes live DB, full controller execution, header mini-cart, HTTP/network and browser rendering; Twig compiled without persistent cache"
+    }
+  ]
+}

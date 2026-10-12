@@ -1,0 +1,7 @@
+php_lint=ok:C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-wp2-fix-20261012\runner-fixtures-final\apply-repeat-rollback\RD-25-WP2-FIX_gallery-frame-ratio_20261012.php
+task=RD-25-WP2-FIX_gallery-frame-ratio_20261012
+cwd=C:/Users/14bez/Downloads/Booster Shop/booster-shop-ops/work/rd25-wp2-fix-20261012/runner-fixtures-final/apply-repeat-rollback
+time=2026-10-12T15:34:05+00:00
+php_lint=ok:C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-wp2-fix-20261012\runner-fixtures-final\apply-repeat-rollback\_patch_backups\RD-25-WP2-FIX_gallery-frame-ratio_20261012-20261012_153404-34b178/original/catalog/controller/product/product.php
+error=rollback_source_changed:catalog/view/template/common/header.twig
+restore=not_needed

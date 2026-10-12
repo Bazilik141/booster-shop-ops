@@ -1,0 +1,6 @@
+php_lint=ok:C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-wp2-wp3-phase1-20261012\runner-fixtures-delivery\wp3-missing\RD-25-WP3_small-thumbs_20261012.php
+task=RD-25-WP3_small-thumbs_20261012
+cwd=C:/Users/14bez/Downloads/Booster Shop/booster-shop-ops/work/rd25-wp2-wp3-phase1-20261012/runner-fixtures-delivery/wp3-missing
+time=2026-10-12T09:15:34+00:00
+error=target_missing_unwritable_or_symlink:catalog/controller/common/cart.php
+restore=not_needed

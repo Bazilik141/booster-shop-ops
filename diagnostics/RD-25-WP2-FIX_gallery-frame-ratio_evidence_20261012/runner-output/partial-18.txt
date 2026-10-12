@@ -1,0 +1,11 @@
+php_lint=ok:C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-wp2-fix-20261012\runner-fixtures-final\partial\RD-25-WP2-FIX_gallery-frame-ratio_20261012.php
+task=RD-25-WP2-FIX_gallery-frame-ratio_20261012
+cwd=C:/Users/14bez/Downloads/Booster Shop/booster-shop-ops/work/rd25-wp2-fix-20261012/runner-fixtures-final/partial
+time=2026-10-12T15:34:07+00:00
+context_file=catalog/model/tool/image.php
+context_file=system/library/image.php
+context_file=catalog/controller/product/thumb.php
+context_file=catalog/view/template/product/thumb.twig
+context_file=extension/ps_enhanced_measurement/catalog/model/analytics/ps_enhanced_measurement.php
+error=partial_or_mixed_markers
+restore=not_needed

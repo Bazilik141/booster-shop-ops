@@ -1,0 +1,28 @@
+{
+  "fresh_source_gate": 5,
+  "source_bytes_unchanged": true,
+  "javascript_byte_identical": true,
+  "jsonld_cases": 8,
+  "legacy_resize_calls": [
+    {
+      "path": "catalog/controller/product/product.php",
+      "original_and_fit_calls_byte_identical": true,
+      "getProduct_calls_unchanged": true,
+      "getImages_calls_unchanged": true
+    }
+  ],
+  "protected_css": [
+    {
+      "region": "listing/RD26",
+      "sha256": "9d3f3f069f90faa0c669cdbf6e38b24a4de890aa35549cdcc7e58c38a47bac4f",
+      "bytes_identical": true
+    },
+    {
+      "region": "WP3 and later CSS",
+      "sha256": "94fb3899b4b83f6a8a10a470d6ba164b2931590c390ac723b9da5a8a80157779",
+      "bytes_identical": true
+    }
+  ],
+  "reused_photo_archive": "RD-25-WP2-WP3-check-20261012-094705-34448.tar.gz",
+  "reused_original_photo_bytes_verified": 21
+}

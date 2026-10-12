@@ -1,0 +1,12 @@
+php_lint=ok:C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-wp2-wp3-phase1-20261012\runner-fixtures-delivery\composition\RD-25-WP2_product-gallery_20261012.php
+task=RD-25-WP2_product-gallery_20261012
+cwd=C:/Users/14bez/Downloads/Booster Shop/booster-shop-ops/work/rd25-wp2-wp3-phase1-20261012/runner-fixtures-delivery/composition
+time=2026-10-12T09:15:24+00:00
+context_file=catalog/model/tool/image.php
+context_file=system/library/image.php
+context_file=catalog/controller/product/thumb.php
+context_file=catalog/view/template/product/thumb.twig
+context_file=extension/ps_enhanced_measurement/catalog/model/analytics/ps_enhanced_measurement.php
+already_applied=yes
+done=ok
+self_delete=ok

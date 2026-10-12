@@ -1,0 +1,28 @@
+--- before/catalog/view/stylesheet/boostershop-ds.css
++++ after/catalog/view/stylesheet/boostershop-ds.css
+@@ -337,20 +337,21 @@
+ }
+ 
+ /* --- Gallery: RD-25-WP2 20261012 --- */
+-/* Approved 4:5 geometry: main max 480px, desktop rail 64x80 / 10px gap;
++/* Primary-based main frame, max 480px; desktop rail 64x80 / 10px gap;
+    mobile rail 56x70. Cut inset is left 6%, top 4%, width 88%, height 96%.
+    Grid tracks express percentages of the slot without absolute positioning. */
+ .bs-product__gallery { min-width: 0; align-self: start; }
+-.bs-product__gallery .bs-product__main-img { width: 100%; max-width: 480px; aspect-ratio: 4 / 5; }
++/* RD-25-WP2-FIX 20261012: primary served ratio clamped to 0.8..1; photo centred, cut bottom. */
++.bs-product__gallery .bs-product__main-img { width: 100%; max-width: 480px; aspect-ratio: var(--bs-gallery-ratio, 4 / 5); }
+ .bs-product__main-img > a,
+ .bs-product__thumbs > a { display: grid; grid-template-columns: 1fr; grid-template-rows: 1fr; }
+ .bs-product__main-img > a { width: 100%; height: 100%; }
+ .bs-product__main-img > a[data-bs-media-kind="cut"],
+ .bs-product__thumbs > a[data-bs-media-kind="cut"] { grid-template-columns: 6% 88% 6%; grid-template-rows: 4% 96%; }
+ .bs-product__main-img > a[data-bs-media-kind="cut"] > img,
+-.bs-product__thumbs > a[data-bs-media-kind="cut"] > img { grid-column: 2; grid-row: 2; }
++.bs-product__thumbs > a[data-bs-media-kind="cut"] > img { grid-column: 2; grid-row: 2; object-position: center bottom; }
+ .bs-product__gallery .bs-product__main-img img,
+-.bs-product__thumbs img { display: block; width: 100%; height: 100%; min-width: 0; min-height: 0; object-fit: contain; object-position: center bottom; }
++.bs-product__thumbs img { display: block; width: 100%; height: 100%; min-width: 0; min-height: 0; object-fit: contain; object-position: center center; }
+ .bs-product__main-img > a[data-bs-media-kind="photo"] > img { border-radius: var(--bs-r); }
+ .bs-product__thumbs { display: flex; gap: 10px; flex-wrap: nowrap; min-width: 0; margin-top: 10px; overflow-x: auto; padding: 3px; }
+ .bs-product__thumbs > a { box-sizing: border-box; flex: 0 0 56px; width: 56px; height: 70px; border: 1px solid var(--bs-line); border-radius: var(--bs-r-sm); overflow: hidden; }

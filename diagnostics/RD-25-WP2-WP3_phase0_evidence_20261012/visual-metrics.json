@@ -1,0 +1,3005 @@
+{
+  "records": [
+    {
+      "page": "product-78-before.html",
+      "surface": "product",
+      "product_id": 78,
+      "state": "before",
+      "width": 1440,
+      "screenshot": "product-78-before-1440.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20Booster-500x500.webp",
+            "loaded": true,
+            "natural": [
+              500,
+              500
+            ],
+            "box": [
+              460,
+              460
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20B1-100x100.webp",
+            "loaded": true,
+            "natural": [
+              100,
+              100
+            ],
+            "box": [
+              70,
+              70
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20B2-100x100.webp",
+            "loaded": true,
+            "natural": [
+              100,
+              100
+            ],
+            "box": [
+              70,
+              70
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "main": [
+          632,
+          460
+        ],
+        "thumbs": [
+          {
+            "box": [
+              72,
+              72
+            ],
+            "label": null
+          },
+          {
+            "box": [
+              72,
+              72
+            ],
+            "label": null
+          }
+        ],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "product-78-after.html",
+      "surface": "product",
+      "product_id": 78,
+      "state": "after",
+      "width": 1440,
+      "screenshot": "product-78-after-1440.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/8d0f968ff7cf1a66d445e03d0576e7514429d31a0328c11924e65a6bb5a29530-600x750-fit.webp",
+            "loaded": true,
+            "natural": [
+              209,
+              418
+            ],
+            "box": [
+              422.390625,
+              576
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/8d0f968ff7cf1a66d445e03d0576e7514429d31a0328c11924e65a6bb5a29530-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              80,
+              160
+            ],
+            "box": [
+              52.796875,
+              72.953125
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/d7bd0ce20107c3fa476403740b1f3ee2a26b6d5449a3c64f79650a7a52bcae43-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              128,
+              128
+            ],
+            "box": [
+              62,
+              78
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/26495c341096ade82afcabce5802782d86907bca4f527600019504f0b1c3b747-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              128,
+              128
+            ],
+            "box": [
+              62,
+              78
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "main": [
+          480,
+          600
+        ],
+        "thumbs": [
+          {
+            "box": [
+              64,
+              80
+            ],
+            "label": "Фото 1"
+          },
+          {
+            "box": [
+              64,
+              80
+            ],
+            "label": "Фото 2"
+          },
+          {
+            "box": [
+              64,
+              80
+            ],
+            "label": "Фото 3"
+          }
+        ],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "product-80-before.html",
+      "surface": "product",
+      "product_id": 80,
+      "state": "before",
+      "width": 1440,
+      "screenshot": "product-80-before-1440.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20Box%202-500x500.webp",
+            "loaded": true,
+            "natural": [
+              500,
+              500
+            ],
+            "box": [
+              460,
+              460
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20Box-100x100.webp",
+            "loaded": true,
+            "natural": [
+              100,
+              100
+            ],
+            "box": [
+              70,
+              70
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "main": [
+          632,
+          460
+        ],
+        "thumbs": [
+          {
+            "box": [
+              72,
+              72
+            ],
+            "label": null
+          }
+        ],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "product-80-after.html",
+      "surface": "product",
+      "product_id": 80,
+      "state": "after",
+      "width": 1440,
+      "screenshot": "product-80-after-1440.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/ae46bc76053f5f06dbbeb466400320316c9ed301d50e55207f3e99189180386d-600x750-fit.webp",
+            "loaded": true,
+            "natural": [
+              453,
+              750
+            ],
+            "box": [
+              422.390625,
+              576
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/ae46bc76053f5f06dbbeb466400320316c9ed301d50e55207f3e99189180386d-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              96,
+              160
+            ],
+            "box": [
+              52.796875,
+              72.953125
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/751fd55b7aa8f2dbb6938c59e9c4dbb73dfac52eafcac5a45b2422d0474ca1ca-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              128,
+              86
+            ],
+            "box": [
+              54.546875,
+              74.875
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "main": [
+          480,
+          600
+        ],
+        "thumbs": [
+          {
+            "box": [
+              64,
+              80
+            ],
+            "label": "Фото 1"
+          },
+          {
+            "box": [
+              64,
+              80
+            ],
+            "label": "Фото 2"
+          }
+        ],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "product-77-before.html",
+      "surface": "product",
+      "product_id": 77,
+      "state": "before",
+      "width": 1440,
+      "screenshot": "product-77-before-1440.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/catalog/Pokemon/%D0%9C%D1%96%D1%81%D1%82%D0%B5%D1%80%D1%96%20%D0%B1%D0%BE%D0%BA%D1%81%20Pok%C3%A9mon%20TCG%20Mystery%20Mix%20Standard%20(%D0%AF%D0%BF%D0%BE%D0%BD%D1%81%D1%8C%D0%BA%D0%B5%20%D0%B2%D0%B8%D0%B4%D0%B0%D0%BD%D0%BD%D1%8F)-500x500.webp",
+            "loaded": true,
+            "natural": [
+              500,
+              500
+            ],
+            "box": [
+              460,
+              460
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "main": [
+          632,
+          460
+        ],
+        "thumbs": [],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "product-77-after.html",
+      "surface": "product",
+      "product_id": 77,
+      "state": "after",
+      "width": 1440,
+      "screenshot": "product-77-after-1440.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/c5fdaaca7b7f4fcc25e8daaf76e520da37e93c2e2a89af04f392417e6b3d577a-600x750-fit.webp",
+            "loaded": true,
+            "natural": [
+              600,
+              600
+            ],
+            "box": [
+              480,
+              600
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "main": [
+          480,
+          600
+        ],
+        "thumbs": [],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "product-131-before.html",
+      "surface": "product",
+      "product_id": 131,
+      "state": "before",
+      "width": 1440,
+      "screenshot": "product-131-before-1440.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/catalog/3D%20print/%D0%A4%D1%96%D0%B3%D1%83%D1%80%D0%BA%D0%B8/%D0%93%D0%B5%D0%BE%D0%B4%D1%83%D0%B4%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%BA%D0%BE%D0%BB%D1%8C%D0%BE%D1%80%D0%BE%D0%B2%D0%B8%D0%B9%20L%20%D1%82%D0%B0%20M-500x500.webp",
+            "loaded": true,
+            "natural": [
+              500,
+              500
+            ],
+            "box": [
+              460,
+              460
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/3D%20print/%D0%A4%D1%96%D0%B3%D1%83%D1%80%D0%BA%D0%B8/%D0%93%D0%B5%D0%BE%D0%B4%D1%83%D0%B4%20%D1%84%D1%96%D0%B3%D1%83%D1%80%D0%BA%D0%B0%203%D0%B4-100x100.webp",
+            "loaded": true,
+            "natural": [
+              100,
+              100
+            ],
+            "box": [
+              70,
+              70
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/3D%20print/%D0%A4%D1%96%D0%B3%D1%83%D1%80%D0%BA%D0%B8/%D0%93%D0%B5%D0%BE%D0%B4%D1%83%D0%B4%20%D1%84%D1%96%D0%B3%D1%83%D1%80%D0%BA%D0%B0-100x100.webp",
+            "loaded": true,
+            "natural": [
+              100,
+              100
+            ],
+            "box": [
+              70,
+              70
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "main": [
+          632,
+          460
+        ],
+        "thumbs": [
+          {
+            "box": [
+              72,
+              72
+            ],
+            "label": null
+          },
+          {
+            "box": [
+              72,
+              72
+            ],
+            "label": null
+          }
+        ],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "product-131-after.html",
+      "surface": "product",
+      "product_id": 131,
+      "state": "after",
+      "width": 1440,
+      "screenshot": "product-131-after-1440.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/f14a23e6555237ec2638613f0d2874b8a0b76b8f039f9a69338ed8cb791e6d53-600x750-fit.webp",
+            "loaded": true,
+            "natural": [
+              600,
+              600
+            ],
+            "box": [
+              480,
+              600
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/f14a23e6555237ec2638613f0d2874b8a0b76b8f039f9a69338ed8cb791e6d53-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              128,
+              128
+            ],
+            "box": [
+              60,
+              76
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/292d3d8cf686c09dccc6b45a95408eb348116438b67cf6ebdbc8ed0b80c265f1-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              106,
+              160
+            ],
+            "box": [
+              54.546875,
+              74.875
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/6ffbdd2c8d5187aacd76a0fc80700c3f5af4fe28a4a845c65ad22617d6aee044-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              119,
+              160
+            ],
+            "box": [
+              62,
+              78
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "main": [
+          480,
+          600
+        ],
+        "thumbs": [
+          {
+            "box": [
+              64,
+              80
+            ],
+            "label": "Фото 1"
+          },
+          {
+            "box": [
+              64,
+              80
+            ],
+            "label": "Фото 2"
+          },
+          {
+            "box": [
+              64,
+              80
+            ],
+            "label": "Фото 3"
+          }
+        ],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "product-144-before.html",
+      "surface": "product",
+      "product_id": 144,
+      "state": "before",
+      "width": 1440,
+      "screenshot": "product-144-before-1440.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/catalog/Accsesuary/albom-dlia-kartok-OnePiece-na-400-slotiv-500x500.webp",
+            "loaded": true,
+            "natural": [
+              500,
+              500
+            ],
+            "box": [
+              460,
+              460
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/Accsesuary/albom-dlia-kartok-pokemon-na-400-slotiv-100x100.webp",
+            "loaded": true,
+            "natural": [
+              100,
+              100
+            ],
+            "box": [
+              70,
+              70
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "main": [
+          632,
+          460
+        ],
+        "thumbs": [
+          {
+            "box": [
+              72,
+              72
+            ],
+            "label": null
+          }
+        ],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "product-144-after.html",
+      "surface": "product",
+      "product_id": 144,
+      "state": "after",
+      "width": 1440,
+      "screenshot": "product-144-after-1440.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/85f5dc4980615ba8da2dabe2adf15e5b5e566998f1c6093ec3efd84dfdfac643-600x750-fit.webp",
+            "loaded": true,
+            "natural": [
+              600,
+              400
+            ],
+            "box": [
+              480,
+              600
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/85f5dc4980615ba8da2dabe2adf15e5b5e566998f1c6093ec3efd84dfdfac643-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              128,
+              85
+            ],
+            "box": [
+              60,
+              76
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/b884c51415608b1a5855ab654d651b0e076d9c228b0e6f946ef6cbad4c6d6307-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              128,
+              85
+            ],
+            "box": [
+              54.546875,
+              74.875
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "main": [
+          480,
+          600
+        ],
+        "thumbs": [
+          {
+            "box": [
+              64,
+              80
+            ],
+            "label": "Фото 1"
+          },
+          {
+            "box": [
+              64,
+              80
+            ],
+            "label": "Фото 2"
+          }
+        ],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "product-96-before.html",
+      "surface": "product",
+      "product_id": 96,
+      "state": "before",
+      "width": 1440,
+      "screenshot": "product-96-before-1440.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/catalog/Other/G7D%20sleeves%20premium%20plus%20(MTG)-500x500.webp",
+            "loaded": true,
+            "natural": [
+              500,
+              500
+            ],
+            "box": [
+              460,
+              460
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "main": [
+          632,
+          460
+        ],
+        "thumbs": [],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "product-96-after.html",
+      "surface": "product",
+      "product_id": 96,
+      "state": "after",
+      "width": 1440,
+      "screenshot": "product-96-after-1440.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/67f5832694740140cac2e072dee612cd22367e839a752d23ba48612655618aee-600x750-fit.webp",
+            "loaded": true,
+            "natural": [
+              362,
+              500
+            ],
+            "box": [
+              422.390625,
+              576
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "main": [
+          480,
+          600
+        ],
+        "thumbs": [],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "product-201-before.html",
+      "surface": "product",
+      "product_id": 201,
+      "state": "before",
+      "width": 1440,
+      "screenshot": "product-201-before-1440.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/catalog/Other/%D0%A3%D0%A6%D0%86%D0%9D%D0%9A%D0%90/photo_2026-10-10_23-19-10-500x500.webp",
+            "loaded": true,
+            "natural": [
+              500,
+              500
+            ],
+            "box": [
+              460,
+              460
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/Other/%D0%A3%D0%A6%D0%86%D0%9D%D0%9A%D0%90/photo_2026-10-07_09-01-55-100x100.webp",
+            "loaded": true,
+            "natural": [
+              100,
+              100
+            ],
+            "box": [
+              70,
+              70
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/Other/%D0%A3%D0%A6%D0%86%D0%9D%D0%9A%D0%90/photo_2026-10-07_09-01-56%20(3)-100x100.webp",
+            "loaded": true,
+            "natural": [
+              100,
+              100
+            ],
+            "box": [
+              70,
+              70
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/Other/%D0%A3%D0%A6%D0%86%D0%9D%D0%9A%D0%90/photo_2026-10-07_09-01-55%20(2)-100x100.webp",
+            "loaded": true,
+            "natural": [
+              100,
+              100
+            ],
+            "box": [
+              70,
+              70
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/Other/%D0%A3%D0%A6%D0%86%D0%9D%D0%9A%D0%90/photo_2026-10-07_09-01-56%20(2)-100x100.webp",
+            "loaded": true,
+            "natural": [
+              100,
+              100
+            ],
+            "box": [
+              70,
+              70
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/Other/%D0%A3%D0%A6%D0%86%D0%9D%D0%9A%D0%90/photo_2026-10-07_09-01-56-100x100.webp",
+            "loaded": true,
+            "natural": [
+              100,
+              100
+            ],
+            "box": [
+              70,
+              70
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "main": [
+          632,
+          460
+        ],
+        "thumbs": [
+          {
+            "box": [
+              72,
+              72
+            ],
+            "label": null
+          },
+          {
+            "box": [
+              72,
+              72
+            ],
+            "label": null
+          },
+          {
+            "box": [
+              72,
+              72
+            ],
+            "label": null
+          },
+          {
+            "box": [
+              72,
+              72
+            ],
+            "label": null
+          },
+          {
+            "box": [
+              72,
+              72
+            ],
+            "label": null
+          }
+        ],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "product-201-after.html",
+      "surface": "product",
+      "product_id": 201,
+      "state": "after",
+      "width": 1440,
+      "screenshot": "product-201-after-1440.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/0616d93994ded1eb0bd622a0f286229a8235bd4b4929e58f387161466a7869a0-600x750-fit.webp",
+            "loaded": true,
+            "natural": [
+              600,
+              737
+            ],
+            "box": [
+              480,
+              600
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/0616d93994ded1eb0bd622a0f286229a8235bd4b4929e58f387161466a7869a0-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              128,
+              157
+            ],
+            "box": [
+              60,
+              76
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/24c10a56499a354779450015904eb987ede0fe092d6c27f17dc1569768a72f87-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              102,
+              160
+            ],
+            "box": [
+              54.546875,
+              74.875
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/14393f4082f268896174361b4e1b79b0edc1eee365eeaed925c55dae4da3725e-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              128,
+              102
+            ],
+            "box": [
+              62,
+              78
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/6783603ef99ee7e516e842d5e12875d34c83be49ba56dfc86d19d9f6ff6bbc90-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              89,
+              160
+            ],
+            "box": [
+              54.546875,
+              74.875
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/0d075c60b350f905851bdeb3a11e29a2ab9a083edbd8f19412048e4236e5423f-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              90,
+              160
+            ],
+            "box": [
+              54.546875,
+              74.875
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/6336468939bef1f6ce698d7249a923c3d98f18f3ffb5e779a14476bf3a8a529d-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              93,
+              160
+            ],
+            "box": [
+              54.546875,
+              74.875
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "main": [
+          480,
+          600
+        ],
+        "thumbs": [
+          {
+            "box": [
+              64,
+              80
+            ],
+            "label": "Фото 1"
+          },
+          {
+            "box": [
+              64,
+              80
+            ],
+            "label": "Фото 2"
+          },
+          {
+            "box": [
+              64,
+              80
+            ],
+            "label": "Фото 3"
+          },
+          {
+            "box": [
+              64,
+              80
+            ],
+            "label": "Фото 4"
+          },
+          {
+            "box": [
+              64,
+              80
+            ],
+            "label": "Фото 5"
+          },
+          {
+            "box": [
+              64,
+              80
+            ],
+            "label": "Фото 6"
+          }
+        ],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "mini-cart-before.html",
+      "surface": "mini-cart",
+      "state": "before",
+      "width": 1440,
+      "screenshot": "mini-cart-before-1440.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20Booster-120x120.webp",
+            "loaded": true,
+            "natural": [
+              120,
+              120
+            ],
+            "box": [
+              56,
+              56
+            ],
+            "fit": "cover",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20Box%202-120x120.webp",
+            "loaded": true,
+            "natural": [
+              120,
+              120
+            ],
+            "box": [
+              56,
+              56
+            ],
+            "fit": "cover",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/Pokemon/%D0%9C%D1%96%D1%81%D1%82%D0%B5%D1%80%D1%96%20%D0%B1%D0%BE%D0%BA%D1%81%20Pok%C3%A9mon%20TCG%20Mystery%20Mix%20Standard%20(%D0%AF%D0%BF%D0%BE%D0%BD%D1%81%D1%8C%D0%BA%D0%B5%20%D0%B2%D0%B8%D0%B4%D0%B0%D0%BD%D0%BD%D1%8F)-120x120.webp",
+            "loaded": true,
+            "natural": [
+              120,
+              120
+            ],
+            "box": [
+              56,
+              56
+            ],
+            "fit": "cover",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/3D%20print/%D0%A4%D1%96%D0%B3%D1%83%D1%80%D0%BA%D0%B8/%D0%93%D0%B5%D0%BE%D0%B4%D1%83%D0%B4%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%BA%D0%BE%D0%BB%D1%8C%D0%BE%D1%80%D0%BE%D0%B2%D0%B8%D0%B9%20L%20%D1%82%D0%B0%20M-120x120.webp",
+            "loaded": true,
+            "natural": [
+              120,
+              120
+            ],
+            "box": [
+              56,
+              56
+            ],
+            "fit": "cover",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/Accsesuary/albom-dlia-kartok-OnePiece-na-400-slotiv-120x120.webp",
+            "loaded": true,
+            "natural": [
+              120,
+              120
+            ],
+            "box": [
+              56,
+              56
+            ],
+            "fit": "cover",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/Other/G7D%20sleeves%20premium%20plus%20(MTG)-120x120.webp",
+            "loaded": true,
+            "natural": [
+              120,
+              120
+            ],
+            "box": [
+              56,
+              56
+            ],
+            "fit": "cover",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/Other/%D0%A3%D0%A6%D0%86%D0%9D%D0%9A%D0%90/photo_2026-10-10_23-19-10-120x120.webp",
+            "loaded": true,
+            "natural": [
+              120,
+              120
+            ],
+            "box": [
+              56,
+              56
+            ],
+            "fit": "cover",
+            "position": "50% 50%"
+          }
+        ],
+        "main": null,
+        "thumbs": [],
+        "directMiniImages": 7
+      }
+    },
+    {
+      "page": "cart-before.html",
+      "surface": "cart",
+      "state": "before",
+      "width": 1440,
+      "screenshot": "cart-before-1440.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20Booster-120x120.webp",
+            "loaded": true,
+            "natural": [
+              120,
+              120
+            ],
+            "box": [
+              96,
+              96
+            ],
+            "fit": "cover",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20Box%202-120x120.webp",
+            "loaded": true,
+            "natural": [
+              120,
+              120
+            ],
+            "box": [
+              96,
+              96
+            ],
+            "fit": "cover",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/Pokemon/%D0%9C%D1%96%D1%81%D1%82%D0%B5%D1%80%D1%96%20%D0%B1%D0%BE%D0%BA%D1%81%20Pok%C3%A9mon%20TCG%20Mystery%20Mix%20Standard%20(%D0%AF%D0%BF%D0%BE%D0%BD%D1%81%D1%8C%D0%BA%D0%B5%20%D0%B2%D0%B8%D0%B4%D0%B0%D0%BD%D0%BD%D1%8F)-120x120.webp",
+            "loaded": true,
+            "natural": [
+              120,
+              120
+            ],
+            "box": [
+              96,
+              96
+            ],
+            "fit": "cover",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/3D%20print/%D0%A4%D1%96%D0%B3%D1%83%D1%80%D0%BA%D0%B8/%D0%93%D0%B5%D0%BE%D0%B4%D1%83%D0%B4%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%BA%D0%BE%D0%BB%D1%8C%D0%BE%D1%80%D0%BE%D0%B2%D0%B8%D0%B9%20L%20%D1%82%D0%B0%20M-120x120.webp",
+            "loaded": true,
+            "natural": [
+              120,
+              120
+            ],
+            "box": [
+              96,
+              96
+            ],
+            "fit": "cover",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/Accsesuary/albom-dlia-kartok-OnePiece-na-400-slotiv-120x120.webp",
+            "loaded": true,
+            "natural": [
+              120,
+              120
+            ],
+            "box": [
+              96,
+              96
+            ],
+            "fit": "cover",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/Other/G7D%20sleeves%20premium%20plus%20(MTG)-120x120.webp",
+            "loaded": true,
+            "natural": [
+              120,
+              120
+            ],
+            "box": [
+              96,
+              96
+            ],
+            "fit": "cover",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/Other/%D0%A3%D0%A6%D0%86%D0%9D%D0%9A%D0%90/photo_2026-10-10_23-19-10-120x120.webp",
+            "loaded": true,
+            "natural": [
+              120,
+              120
+            ],
+            "box": [
+              96,
+              96
+            ],
+            "fit": "cover",
+            "position": "50% 50%"
+          }
+        ],
+        "main": null,
+        "thumbs": [],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "mini-cart-after.html",
+      "surface": "mini-cart",
+      "state": "after",
+      "width": 1440,
+      "screenshot": "mini-cart-after-1440.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/8d0f968ff7cf1a66d445e03d0576e7514429d31a0328c11924e65a6bb5a29530-104x130-fit.webp",
+            "loaded": true,
+            "natural": [
+              65,
+              130
+            ],
+            "box": [
+              43.671875,
+              61.09375
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/ae46bc76053f5f06dbbeb466400320316c9ed301d50e55207f3e99189180386d-104x130-fit.webp",
+            "loaded": true,
+            "natural": [
+              78,
+              130
+            ],
+            "box": [
+              43.671875,
+              61.09375
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/c5fdaaca7b7f4fcc25e8daaf76e520da37e93c2e2a89af04f392417e6b3d577a-104x130-fit.webp",
+            "loaded": true,
+            "natural": [
+              104,
+              104
+            ],
+            "box": [
+              52,
+              65
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/f14a23e6555237ec2638613f0d2874b8a0b76b8f039f9a69338ed8cb791e6d53-104x130-fit.webp",
+            "loaded": true,
+            "natural": [
+              104,
+              104
+            ],
+            "box": [
+              52,
+              65
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/85f5dc4980615ba8da2dabe2adf15e5b5e566998f1c6093ec3efd84dfdfac643-104x130-fit.webp",
+            "loaded": true,
+            "natural": [
+              104,
+              69
+            ],
+            "box": [
+              52,
+              65
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/67f5832694740140cac2e072dee612cd22367e839a752d23ba48612655618aee-104x130-fit.webp",
+            "loaded": true,
+            "natural": [
+              94,
+              130
+            ],
+            "box": [
+              43.671875,
+              61.09375
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/0616d93994ded1eb0bd622a0f286229a8235bd4b4929e58f387161466a7869a0-104x130-fit.webp",
+            "loaded": true,
+            "natural": [
+              104,
+              127
+            ],
+            "box": [
+              52,
+              65
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "main": null,
+        "thumbs": [],
+        "directMiniImages": 7
+      }
+    },
+    {
+      "page": "cart-after.html",
+      "surface": "cart",
+      "state": "after",
+      "width": 1440,
+      "screenshot": "cart-after-1440.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/8d0f968ff7cf1a66d445e03d0576e7514429d31a0328c11924e65a6bb5a29530-104x130-fit.webp",
+            "loaded": true,
+            "natural": [
+              65,
+              130
+            ],
+            "box": [
+              43.671875,
+              61.09375
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/ae46bc76053f5f06dbbeb466400320316c9ed301d50e55207f3e99189180386d-104x130-fit.webp",
+            "loaded": true,
+            "natural": [
+              78,
+              130
+            ],
+            "box": [
+              43.671875,
+              61.09375
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/c5fdaaca7b7f4fcc25e8daaf76e520da37e93c2e2a89af04f392417e6b3d577a-104x130-fit.webp",
+            "loaded": true,
+            "natural": [
+              104,
+              104
+            ],
+            "box": [
+              52,
+              65
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/f14a23e6555237ec2638613f0d2874b8a0b76b8f039f9a69338ed8cb791e6d53-104x130-fit.webp",
+            "loaded": true,
+            "natural": [
+              104,
+              104
+            ],
+            "box": [
+              52,
+              65
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/85f5dc4980615ba8da2dabe2adf15e5b5e566998f1c6093ec3efd84dfdfac643-104x130-fit.webp",
+            "loaded": true,
+            "natural": [
+              104,
+              69
+            ],
+            "box": [
+              52,
+              65
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/67f5832694740140cac2e072dee612cd22367e839a752d23ba48612655618aee-104x130-fit.webp",
+            "loaded": true,
+            "natural": [
+              94,
+              130
+            ],
+            "box": [
+              43.671875,
+              61.09375
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/0616d93994ded1eb0bd622a0f286229a8235bd4b4929e58f387161466a7869a0-104x130-fit.webp",
+            "loaded": true,
+            "natural": [
+              104,
+              127
+            ],
+            "box": [
+              52,
+              65
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "main": null,
+        "thumbs": [],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "product-78-before.html",
+      "surface": "product",
+      "product_id": 78,
+      "state": "before",
+      "width": 390,
+      "screenshot": "product-78-before-390.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20Booster-500x500.webp",
+            "loaded": true,
+            "natural": [
+              500,
+              500
+            ],
+            "box": [
+              340,
+              340
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20B1-100x100.webp",
+            "loaded": true,
+            "natural": [
+              100,
+              100
+            ],
+            "box": [
+              70,
+              70
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20B2-100x100.webp",
+            "loaded": true,
+            "natural": [
+              100,
+              100
+            ],
+            "box": [
+              70,
+              70
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "main": [
+          366,
+          340
+        ],
+        "thumbs": [
+          {
+            "box": [
+              72,
+              72
+            ],
+            "label": null
+          },
+          {
+            "box": [
+              72,
+              72
+            ],
+            "label": null
+          }
+        ],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "product-78-after.html",
+      "surface": "product",
+      "product_id": 78,
+      "state": "after",
+      "width": 390,
+      "screenshot": "product-78-after-390.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/8d0f968ff7cf1a66d445e03d0576e7514429d31a0328c11924e65a6bb5a29530-600x750-fit.webp",
+            "loaded": true,
+            "natural": [
+              209,
+              418
+            ],
+            "box": [
+              322.078125,
+              439.1875
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/8d0f968ff7cf1a66d445e03d0576e7514429d31a0328c11924e65a6bb5a29530-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              80,
+              160
+            ],
+            "box": [
+              45.75,
+              63.359375
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/d7bd0ce20107c3fa476403740b1f3ee2a26b6d5449a3c64f79650a7a52bcae43-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              128,
+              128
+            ],
+            "box": [
+              54,
+              68
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/26495c341096ade82afcabce5802782d86907bca4f527600019504f0b1c3b747-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              128,
+              128
+            ],
+            "box": [
+              54,
+              68
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "main": [
+          366,
+          457.5
+        ],
+        "thumbs": [
+          {
+            "box": [
+              56,
+              70
+            ],
+            "label": "Фото 1"
+          },
+          {
+            "box": [
+              56,
+              70
+            ],
+            "label": "Фото 2"
+          },
+          {
+            "box": [
+              56,
+              70
+            ],
+            "label": "Фото 3"
+          }
+        ],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "product-80-before.html",
+      "surface": "product",
+      "product_id": 80,
+      "state": "before",
+      "width": 390,
+      "screenshot": "product-80-before-390.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20Box%202-500x500.webp",
+            "loaded": true,
+            "natural": [
+              500,
+              500
+            ],
+            "box": [
+              340,
+              340
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20Box-100x100.webp",
+            "loaded": true,
+            "natural": [
+              100,
+              100
+            ],
+            "box": [
+              70,
+              70
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "main": [
+          366,
+          340
+        ],
+        "thumbs": [
+          {
+            "box": [
+              72,
+              72
+            ],
+            "label": null
+          }
+        ],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "product-80-after.html",
+      "surface": "product",
+      "product_id": 80,
+      "state": "after",
+      "width": 390,
+      "screenshot": "product-80-after-390.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/ae46bc76053f5f06dbbeb466400320316c9ed301d50e55207f3e99189180386d-600x750-fit.webp",
+            "loaded": true,
+            "natural": [
+              453,
+              750
+            ],
+            "box": [
+              322.078125,
+              439.1875
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/ae46bc76053f5f06dbbeb466400320316c9ed301d50e55207f3e99189180386d-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              96,
+              160
+            ],
+            "box": [
+              45.75,
+              63.359375
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/751fd55b7aa8f2dbb6938c59e9c4dbb73dfac52eafcac5a45b2422d0474ca1ca-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              128,
+              86
+            ],
+            "box": [
+              47.515625,
+              65.265625
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "main": [
+          366,
+          457.5
+        ],
+        "thumbs": [
+          {
+            "box": [
+              56,
+              70
+            ],
+            "label": "Фото 1"
+          },
+          {
+            "box": [
+              56,
+              70
+            ],
+            "label": "Фото 2"
+          }
+        ],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "product-77-before.html",
+      "surface": "product",
+      "product_id": 77,
+      "state": "before",
+      "width": 390,
+      "screenshot": "product-77-before-390.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/catalog/Pokemon/%D0%9C%D1%96%D1%81%D1%82%D0%B5%D1%80%D1%96%20%D0%B1%D0%BE%D0%BA%D1%81%20Pok%C3%A9mon%20TCG%20Mystery%20Mix%20Standard%20(%D0%AF%D0%BF%D0%BE%D0%BD%D1%81%D1%8C%D0%BA%D0%B5%20%D0%B2%D0%B8%D0%B4%D0%B0%D0%BD%D0%BD%D1%8F)-500x500.webp",
+            "loaded": true,
+            "natural": [
+              500,
+              500
+            ],
+            "box": [
+              340,
+              340
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "main": [
+          366,
+          340
+        ],
+        "thumbs": [],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "product-77-after.html",
+      "surface": "product",
+      "product_id": 77,
+      "state": "after",
+      "width": 390,
+      "screenshot": "product-77-after-390.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/c5fdaaca7b7f4fcc25e8daaf76e520da37e93c2e2a89af04f392417e6b3d577a-600x750-fit.webp",
+            "loaded": true,
+            "natural": [
+              600,
+              600
+            ],
+            "box": [
+              366,
+              457.5
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "main": [
+          366,
+          457.5
+        ],
+        "thumbs": [],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "product-131-before.html",
+      "surface": "product",
+      "product_id": 131,
+      "state": "before",
+      "width": 390,
+      "screenshot": "product-131-before-390.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/catalog/3D%20print/%D0%A4%D1%96%D0%B3%D1%83%D1%80%D0%BA%D0%B8/%D0%93%D0%B5%D0%BE%D0%B4%D1%83%D0%B4%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%BA%D0%BE%D0%BB%D1%8C%D0%BE%D1%80%D0%BE%D0%B2%D0%B8%D0%B9%20L%20%D1%82%D0%B0%20M-500x500.webp",
+            "loaded": true,
+            "natural": [
+              500,
+              500
+            ],
+            "box": [
+              340,
+              340
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/3D%20print/%D0%A4%D1%96%D0%B3%D1%83%D1%80%D0%BA%D0%B8/%D0%93%D0%B5%D0%BE%D0%B4%D1%83%D0%B4%20%D1%84%D1%96%D0%B3%D1%83%D1%80%D0%BA%D0%B0%203%D0%B4-100x100.webp",
+            "loaded": true,
+            "natural": [
+              100,
+              100
+            ],
+            "box": [
+              70,
+              70
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/3D%20print/%D0%A4%D1%96%D0%B3%D1%83%D1%80%D0%BA%D0%B8/%D0%93%D0%B5%D0%BE%D0%B4%D1%83%D0%B4%20%D1%84%D1%96%D0%B3%D1%83%D1%80%D0%BA%D0%B0-100x100.webp",
+            "loaded": true,
+            "natural": [
+              100,
+              100
+            ],
+            "box": [
+              70,
+              70
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "main": [
+          366,
+          340
+        ],
+        "thumbs": [
+          {
+            "box": [
+              72,
+              72
+            ],
+            "label": null
+          },
+          {
+            "box": [
+              72,
+              72
+            ],
+            "label": null
+          }
+        ],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "product-131-after.html",
+      "surface": "product",
+      "product_id": 131,
+      "state": "after",
+      "width": 390,
+      "screenshot": "product-131-after-390.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/f14a23e6555237ec2638613f0d2874b8a0b76b8f039f9a69338ed8cb791e6d53-600x750-fit.webp",
+            "loaded": true,
+            "natural": [
+              600,
+              600
+            ],
+            "box": [
+              366,
+              457.5
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/f14a23e6555237ec2638613f0d2874b8a0b76b8f039f9a69338ed8cb791e6d53-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              128,
+              128
+            ],
+            "box": [
+              52,
+              66
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/292d3d8cf686c09dccc6b45a95408eb348116438b67cf6ebdbc8ed0b80c265f1-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              106,
+              160
+            ],
+            "box": [
+              47.515625,
+              65.265625
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/6ffbdd2c8d5187aacd76a0fc80700c3f5af4fe28a4a845c65ad22617d6aee044-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              119,
+              160
+            ],
+            "box": [
+              54,
+              68
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "main": [
+          366,
+          457.5
+        ],
+        "thumbs": [
+          {
+            "box": [
+              56,
+              70
+            ],
+            "label": "Фото 1"
+          },
+          {
+            "box": [
+              56,
+              70
+            ],
+            "label": "Фото 2"
+          },
+          {
+            "box": [
+              56,
+              70
+            ],
+            "label": "Фото 3"
+          }
+        ],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "product-144-before.html",
+      "surface": "product",
+      "product_id": 144,
+      "state": "before",
+      "width": 390,
+      "screenshot": "product-144-before-390.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/catalog/Accsesuary/albom-dlia-kartok-OnePiece-na-400-slotiv-500x500.webp",
+            "loaded": true,
+            "natural": [
+              500,
+              500
+            ],
+            "box": [
+              340,
+              340
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/Accsesuary/albom-dlia-kartok-pokemon-na-400-slotiv-100x100.webp",
+            "loaded": true,
+            "natural": [
+              100,
+              100
+            ],
+            "box": [
+              70,
+              70
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "main": [
+          366,
+          340
+        ],
+        "thumbs": [
+          {
+            "box": [
+              72,
+              72
+            ],
+            "label": null
+          }
+        ],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "product-144-after.html",
+      "surface": "product",
+      "product_id": 144,
+      "state": "after",
+      "width": 390,
+      "screenshot": "product-144-after-390.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/85f5dc4980615ba8da2dabe2adf15e5b5e566998f1c6093ec3efd84dfdfac643-600x750-fit.webp",
+            "loaded": true,
+            "natural": [
+              600,
+              400
+            ],
+            "box": [
+              366,
+              457.5
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/85f5dc4980615ba8da2dabe2adf15e5b5e566998f1c6093ec3efd84dfdfac643-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              128,
+              85
+            ],
+            "box": [
+              52,
+              66
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/b884c51415608b1a5855ab654d651b0e076d9c228b0e6f946ef6cbad4c6d6307-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              128,
+              85
+            ],
+            "box": [
+              47.515625,
+              65.265625
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "main": [
+          366,
+          457.5
+        ],
+        "thumbs": [
+          {
+            "box": [
+              56,
+              70
+            ],
+            "label": "Фото 1"
+          },
+          {
+            "box": [
+              56,
+              70
+            ],
+            "label": "Фото 2"
+          }
+        ],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "product-96-before.html",
+      "surface": "product",
+      "product_id": 96,
+      "state": "before",
+      "width": 390,
+      "screenshot": "product-96-before-390.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/catalog/Other/G7D%20sleeves%20premium%20plus%20(MTG)-500x500.webp",
+            "loaded": true,
+            "natural": [
+              500,
+              500
+            ],
+            "box": [
+              340,
+              340
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "main": [
+          366,
+          340
+        ],
+        "thumbs": [],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "product-96-after.html",
+      "surface": "product",
+      "product_id": 96,
+      "state": "after",
+      "width": 390,
+      "screenshot": "product-96-after-390.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/67f5832694740140cac2e072dee612cd22367e839a752d23ba48612655618aee-600x750-fit.webp",
+            "loaded": true,
+            "natural": [
+              362,
+              500
+            ],
+            "box": [
+              322.078125,
+              439.1875
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "main": [
+          366,
+          457.5
+        ],
+        "thumbs": [],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "product-201-before.html",
+      "surface": "product",
+      "product_id": 201,
+      "state": "before",
+      "width": 390,
+      "screenshot": "product-201-before-390.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/catalog/Other/%D0%A3%D0%A6%D0%86%D0%9D%D0%9A%D0%90/photo_2026-10-10_23-19-10-500x500.webp",
+            "loaded": true,
+            "natural": [
+              500,
+              500
+            ],
+            "box": [
+              340,
+              340
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/Other/%D0%A3%D0%A6%D0%86%D0%9D%D0%9A%D0%90/photo_2026-10-07_09-01-55-100x100.webp",
+            "loaded": true,
+            "natural": [
+              100,
+              100
+            ],
+            "box": [
+              70,
+              70
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/Other/%D0%A3%D0%A6%D0%86%D0%9D%D0%9A%D0%90/photo_2026-10-07_09-01-56%20(3)-100x100.webp",
+            "loaded": true,
+            "natural": [
+              100,
+              100
+            ],
+            "box": [
+              70,
+              70
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/Other/%D0%A3%D0%A6%D0%86%D0%9D%D0%9A%D0%90/photo_2026-10-07_09-01-55%20(2)-100x100.webp",
+            "loaded": true,
+            "natural": [
+              100,
+              100
+            ],
+            "box": [
+              70,
+              70
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/Other/%D0%A3%D0%A6%D0%86%D0%9D%D0%9A%D0%90/photo_2026-10-07_09-01-56%20(2)-100x100.webp",
+            "loaded": true,
+            "natural": [
+              100,
+              100
+            ],
+            "box": [
+              70,
+              70
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/Other/%D0%A3%D0%A6%D0%86%D0%9D%D0%9A%D0%90/photo_2026-10-07_09-01-56-100x100.webp",
+            "loaded": true,
+            "natural": [
+              100,
+              100
+            ],
+            "box": [
+              70,
+              70
+            ],
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ],
+        "main": [
+          366,
+          340
+        ],
+        "thumbs": [
+          {
+            "box": [
+              72,
+              72
+            ],
+            "label": null
+          },
+          {
+            "box": [
+              72,
+              72
+            ],
+            "label": null
+          },
+          {
+            "box": [
+              72,
+              72
+            ],
+            "label": null
+          },
+          {
+            "box": [
+              72,
+              72
+            ],
+            "label": null
+          },
+          {
+            "box": [
+              72,
+              72
+            ],
+            "label": null
+          }
+        ],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "product-201-after.html",
+      "surface": "product",
+      "product_id": 201,
+      "state": "after",
+      "width": 390,
+      "screenshot": "product-201-after-390.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/0616d93994ded1eb0bd622a0f286229a8235bd4b4929e58f387161466a7869a0-600x750-fit.webp",
+            "loaded": true,
+            "natural": [
+              600,
+              737
+            ],
+            "box": [
+              386,
+              482.5
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/0616d93994ded1eb0bd622a0f286229a8235bd4b4929e58f387161466a7869a0-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              128,
+              157
+            ],
+            "box": [
+              52,
+              66
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/24c10a56499a354779450015904eb987ede0fe092d6c27f17dc1569768a72f87-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              102,
+              160
+            ],
+            "box": [
+              47.515625,
+              65.265625
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/14393f4082f268896174361b4e1b79b0edc1eee365eeaed925c55dae4da3725e-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              128,
+              102
+            ],
+            "box": [
+              54,
+              68
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/6783603ef99ee7e516e842d5e12875d34c83be49ba56dfc86d19d9f6ff6bbc90-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              89,
+              160
+            ],
+            "box": [
+              47.515625,
+              65.265625
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/0d075c60b350f905851bdeb3a11e29a2ab9a083edbd8f19412048e4236e5423f-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              90,
+              160
+            ],
+            "box": [
+              47.515625,
+              65.265625
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/6336468939bef1f6ce698d7249a923c3d98f18f3ffb5e779a14476bf3a8a529d-128x160-fit.webp",
+            "loaded": true,
+            "natural": [
+              93,
+              160
+            ],
+            "box": [
+              47.515625,
+              65.265625
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "main": [
+          386,
+          482.5
+        ],
+        "thumbs": [
+          {
+            "box": [
+              56,
+              70
+            ],
+            "label": "Фото 1"
+          },
+          {
+            "box": [
+              56,
+              70
+            ],
+            "label": "Фото 2"
+          },
+          {
+            "box": [
+              56,
+              70
+            ],
+            "label": "Фото 3"
+          },
+          {
+            "box": [
+              56,
+              70
+            ],
+            "label": "Фото 4"
+          },
+          {
+            "box": [
+              56,
+              70
+            ],
+            "label": "Фото 5"
+          },
+          {
+            "box": [
+              56,
+              70
+            ],
+            "label": "Фото 6"
+          }
+        ],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "mini-cart-before.html",
+      "surface": "mini-cart",
+      "state": "before",
+      "width": 390,
+      "screenshot": "mini-cart-before-390.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20Booster-120x120.webp",
+            "loaded": true,
+            "natural": [
+              120,
+              120
+            ],
+            "box": [
+              56,
+              56
+            ],
+            "fit": "cover",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20Box%202-120x120.webp",
+            "loaded": true,
+            "natural": [
+              120,
+              120
+            ],
+            "box": [
+              56,
+              56
+            ],
+            "fit": "cover",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/Pokemon/%D0%9C%D1%96%D1%81%D1%82%D0%B5%D1%80%D1%96%20%D0%B1%D0%BE%D0%BA%D1%81%20Pok%C3%A9mon%20TCG%20Mystery%20Mix%20Standard%20(%D0%AF%D0%BF%D0%BE%D0%BD%D1%81%D1%8C%D0%BA%D0%B5%20%D0%B2%D0%B8%D0%B4%D0%B0%D0%BD%D0%BD%D1%8F)-120x120.webp",
+            "loaded": true,
+            "natural": [
+              120,
+              120
+            ],
+            "box": [
+              56,
+              56
+            ],
+            "fit": "cover",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/3D%20print/%D0%A4%D1%96%D0%B3%D1%83%D1%80%D0%BA%D0%B8/%D0%93%D0%B5%D0%BE%D0%B4%D1%83%D0%B4%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%BA%D0%BE%D0%BB%D1%8C%D0%BE%D1%80%D0%BE%D0%B2%D0%B8%D0%B9%20L%20%D1%82%D0%B0%20M-120x120.webp",
+            "loaded": true,
+            "natural": [
+              120,
+              120
+            ],
+            "box": [
+              56,
+              56
+            ],
+            "fit": "cover",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/Accsesuary/albom-dlia-kartok-OnePiece-na-400-slotiv-120x120.webp",
+            "loaded": true,
+            "natural": [
+              120,
+              120
+            ],
+            "box": [
+              56,
+              56
+            ],
+            "fit": "cover",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/Other/G7D%20sleeves%20premium%20plus%20(MTG)-120x120.webp",
+            "loaded": true,
+            "natural": [
+              120,
+              120
+            ],
+            "box": [
+              56,
+              56
+            ],
+            "fit": "cover",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/Other/%D0%A3%D0%A6%D0%86%D0%9D%D0%9A%D0%90/photo_2026-10-10_23-19-10-120x120.webp",
+            "loaded": true,
+            "natural": [
+              120,
+              120
+            ],
+            "box": [
+              56,
+              56
+            ],
+            "fit": "cover",
+            "position": "50% 50%"
+          }
+        ],
+        "main": null,
+        "thumbs": [],
+        "directMiniImages": 7
+      }
+    },
+    {
+      "page": "cart-before.html",
+      "surface": "cart",
+      "state": "before",
+      "width": 390,
+      "screenshot": "cart-before-390.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20Booster-120x120.webp",
+            "loaded": true,
+            "natural": [
+              120,
+              120
+            ],
+            "box": [
+              72,
+              72
+            ],
+            "fit": "cover",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/One%20Piece/OP-15%20Box%202-120x120.webp",
+            "loaded": true,
+            "natural": [
+              120,
+              120
+            ],
+            "box": [
+              72,
+              72
+            ],
+            "fit": "cover",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/Pokemon/%D0%9C%D1%96%D1%81%D1%82%D0%B5%D1%80%D1%96%20%D0%B1%D0%BE%D0%BA%D1%81%20Pok%C3%A9mon%20TCG%20Mystery%20Mix%20Standard%20(%D0%AF%D0%BF%D0%BE%D0%BD%D1%81%D1%8C%D0%BA%D0%B5%20%D0%B2%D0%B8%D0%B4%D0%B0%D0%BD%D0%BD%D1%8F)-120x120.webp",
+            "loaded": true,
+            "natural": [
+              120,
+              120
+            ],
+            "box": [
+              72,
+              72
+            ],
+            "fit": "cover",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/3D%20print/%D0%A4%D1%96%D0%B3%D1%83%D1%80%D0%BA%D0%B8/%D0%93%D0%B5%D0%BE%D0%B4%D1%83%D0%B4%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%BA%D0%BE%D0%BB%D1%8C%D0%BE%D1%80%D0%BE%D0%B2%D0%B8%D0%B9%20L%20%D1%82%D0%B0%20M-120x120.webp",
+            "loaded": true,
+            "natural": [
+              120,
+              120
+            ],
+            "box": [
+              72,
+              72
+            ],
+            "fit": "cover",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/Accsesuary/albom-dlia-kartok-OnePiece-na-400-slotiv-120x120.webp",
+            "loaded": true,
+            "natural": [
+              120,
+              120
+            ],
+            "box": [
+              72,
+              72
+            ],
+            "fit": "cover",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/Other/G7D%20sleeves%20premium%20plus%20(MTG)-120x120.webp",
+            "loaded": true,
+            "natural": [
+              120,
+              120
+            ],
+            "box": [
+              72,
+              72
+            ],
+            "fit": "cover",
+            "position": "50% 50%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/catalog/Other/%D0%A3%D0%A6%D0%86%D0%9D%D0%9A%D0%90/photo_2026-10-10_23-19-10-120x120.webp",
+            "loaded": true,
+            "natural": [
+              120,
+              120
+            ],
+            "box": [
+              72,
+              72
+            ],
+            "fit": "cover",
+            "position": "50% 50%"
+          }
+        ],
+        "main": null,
+        "thumbs": [],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "page": "mini-cart-after.html",
+      "surface": "mini-cart",
+      "state": "after",
+      "width": 390,
+      "screenshot": "mini-cart-after-390.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/8d0f968ff7cf1a66d445e03d0576e7514429d31a0328c11924e65a6bb5a29530-104x130-fit.webp",
+            "loaded": true,
+            "natural": [
+              65,
+              130
+            ],
+            "box": [
+              43.671875,
+              61.09375
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/ae46bc76053f5f06dbbeb466400320316c9ed301d50e55207f3e99189180386d-104x130-fit.webp",
+            "loaded": true,
+            "natural": [
+              78,
+              130
+            ],
+            "box": [
+              43.671875,
+              61.09375
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/c5fdaaca7b7f4fcc25e8daaf76e520da37e93c2e2a89af04f392417e6b3d577a-104x130-fit.webp",
+            "loaded": true,
+            "natural": [
+              104,
+              104
+            ],
+            "box": [
+              52,
+              65
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/f14a23e6555237ec2638613f0d2874b8a0b76b8f039f9a69338ed8cb791e6d53-104x130-fit.webp",
+            "loaded": true,
+            "natural": [
+              104,
+              104
+            ],
+            "box": [
+              52,
+              65
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/85f5dc4980615ba8da2dabe2adf15e5b5e566998f1c6093ec3efd84dfdfac643-104x130-fit.webp",
+            "loaded": true,
+            "natural": [
+              104,
+              69
+            ],
+            "box": [
+              52,
+              65
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/67f5832694740140cac2e072dee612cd22367e839a752d23ba48612655618aee-104x130-fit.webp",
+            "loaded": true,
+            "natural": [
+              94,
+              130
+            ],
+            "box": [
+              43.671875,
+              61.09375
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/0616d93994ded1eb0bd622a0f286229a8235bd4b4929e58f387161466a7869a0-104x130-fit.webp",
+            "loaded": true,
+            "natural": [
+              104,
+              127
+            ],
+            "box": [
+              52,
+              65
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "main": null,
+        "thumbs": [],
+        "directMiniImages": 7
+      }
+    },
+    {
+      "page": "cart-after.html",
+      "surface": "cart",
+      "state": "after",
+      "width": 390,
+      "screenshot": "cart-after-390.png",
+      "metrics": {
+        "overflow": 0,
+        "images": [
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/8d0f968ff7cf1a66d445e03d0576e7514429d31a0328c11924e65a6bb5a29530-104x130-fit.webp",
+            "loaded": true,
+            "natural": [
+              65,
+              130
+            ],
+            "box": [
+              43.671875,
+              61.09375
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/ae46bc76053f5f06dbbeb466400320316c9ed301d50e55207f3e99189180386d-104x130-fit.webp",
+            "loaded": true,
+            "natural": [
+              78,
+              130
+            ],
+            "box": [
+              43.671875,
+              61.09375
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/c5fdaaca7b7f4fcc25e8daaf76e520da37e93c2e2a89af04f392417e6b3d577a-104x130-fit.webp",
+            "loaded": true,
+            "natural": [
+              104,
+              104
+            ],
+            "box": [
+              52,
+              65
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/f14a23e6555237ec2638613f0d2874b8a0b76b8f039f9a69338ed8cb791e6d53-104x130-fit.webp",
+            "loaded": true,
+            "natural": [
+              104,
+              104
+            ],
+            "box": [
+              52,
+              65
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/85f5dc4980615ba8da2dabe2adf15e5b5e566998f1c6093ec3efd84dfdfac643-104x130-fit.webp",
+            "loaded": true,
+            "natural": [
+              104,
+              69
+            ],
+            "box": [
+              52,
+              65
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/67f5832694740140cac2e072dee612cd22367e839a752d23ba48612655618aee-104x130-fit.webp",
+            "loaded": true,
+            "natural": [
+              94,
+              130
+            ],
+            "box": [
+              43.671875,
+              61.09375
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          },
+          {
+            "src": "http://rd25.local/image/cache/rd25-fit/0616d93994ded1eb0bd622a0f286229a8235bd4b4929e58f387161466a7869a0-104x130-fit.webp",
+            "loaded": true,
+            "natural": [
+              104,
+              127
+            ],
+            "box": [
+              52,
+              65
+            ],
+            "fit": "contain",
+            "position": "50% 100%"
+          }
+        ],
+        "main": null,
+        "thumbs": [],
+        "directMiniImages": 0
+      }
+    },
+    {
+      "surface": "gallery-interaction",
+      "width": 1440,
+      "keyboard_switch": true,
+      "popup": "http://rd25.local/image/cache/catalog/Other/УЦІНКА/photo_2026-10-07_09-01-56-700x700.webp",
+      "lightbox": true,
+      "previous_next": true,
+      "escape_close": true
+    },
+    {
+      "surface": "gallery-interaction",
+      "width": 390,
+      "keyboard_switch": true,
+      "popup": "http://rd25.local/image/cache/catalog/Other/УЦІНКА/photo_2026-10-07_09-01-56-700x700.webp",
+      "lightbox": true,
+      "previous_next": true,
+      "escape_close": true
+    }
+  ],
+  "js_errors": []
+}

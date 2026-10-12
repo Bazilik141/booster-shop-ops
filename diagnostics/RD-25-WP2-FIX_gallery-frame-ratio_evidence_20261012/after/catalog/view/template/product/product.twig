@@ -1,0 +1,1545 @@
+{{ header }}
+<div id="product-info" class="container">
+  {# RD-10D2: breadcrumb pill chips — mockup-aligned, filled home icon, chevrons kept #}
+  {% set _crumb_blob = breadcrumbs|json_encode|lower %}
+  {% set _cat_key = category_code|default('') %}
+  {% if not _cat_key %}
+    {% if 'one-piece' in _crumb_blob or 'one piece' in _crumb_blob %}
+      {% set _cat_key = 'one-piece' %}
+    {% elseif 'mtg' in _crumb_blob or 'magic' in _crumb_blob %}
+      {% set _cat_key = 'mtg' %}
+    {% elseif 'yugioh' in _crumb_blob or 'yu-gi-oh' in _crumb_blob %}
+      {% set _cat_key = 'yugioh' %}
+    {% elseif 'acc' in _crumb_blob or 'аксес' in _crumb_blob %}
+      {% set _cat_key = 'acc' %}
+    {% else %}
+      {% set _cat_key = 'pokemon' %}
+    {% endif %}
+  {% endif %}
+  {% set _cat_colors = {
+    'pokemon':   { bg: '#FBF4DC', bd: '#D4A017', tx: '#6B3A00' },
+    'one-piece': { bg: '#EEF2FF', bd: '#C7D2FE', tx: '#1E3A8A' },
+    'mtg':       { bg: '#FEF2F2', bd: '#FECACA', tx: '#991B1B' },
+    'yugioh':    { bg: '#F5F3FF', bd: '#DDD6FE', tx: '#5B21B6' },
+    'acc':       { bg: '#F3F4F6', bd: '#D1D5DB', tx: '#374151' }
+  } %}
+  {% set _cc = _cat_colors[_cat_key]|default(_cat_colors['pokemon']) %}
+
+  <nav class="bs-crumb" aria-label="Breadcrumb">
+    <ol class="bs-crumb__list">
+      {% for breadcrumb in breadcrumbs %}
+        {% if not loop.last %}
+          <li class="bs-crumb__item">
+            <a href="{{ breadcrumb.href }}" class="bs-crumb__link{% if loop.first %} bs-crumb__link--home{% endif %}" aria-label="{% if loop.first %}Головна{% else %}{{ breadcrumb.text|striptags }}{% endif %}">
+              {% if loop.first %}
+                <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 2l6 5v7h-4v-4H6v4H2V7l6-5z"/></svg>
+              {% else %}{{ breadcrumb.text }}{% endif %}
+            </a>
+            <span class="bs-crumb__sep" aria-hidden="true">
+              <svg width="7" height="7" viewBox="0 0 8 8" fill="none"><path d="M2 1.5l4 2.5-4 2.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </li>
+        {% else %}
+          <li class="bs-crumb__item">
+            <span class="bs-crumb__current" style="background:{{ _cc.bg }};border-color:{{ _cc.bd }};color:{{ _cc.tx }};">{{ breadcrumb.text }}</span>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ol>
+  </nav>
+  <div class="row">{{ column_left }}
+    <div id="content" class="col">
+      {{ content_top }}
+      <div class="bs-product__layout">
+
+        {# === GALLERY === #}
+        {% if thumb or images %}
+        {# RD-25-WP2-FIX 20261012: primary ratio stays fixed when selecting thumbs. #}
+        {# RD-25-WP2 20261012: gallery-only data; legacy images remains additional-only for JSON-LD. #}
+        {% if bs_gallery %}
+        {% set bs_main = bs_gallery|first %}
+        <div class="bs-product__gallery magnific-popup{% if bs_gallery|length > 1 %} bs-product__gallery--rail{% endif %}" data-bs-gallery style="--bs-gallery-ratio:{{ bs_gallery_ratio }}">
+          <div class="bs-product__main-img">
+            <a href="{{ bs_main.popup }}" title="{{ heading_title }}" data-bs-gallery-main data-bs-media-kind="{{ bs_main.kind }}">
+              <img src="{{ bs_main.main }}" title="{{ heading_title }}" alt="{{ heading_title }}" width="{{ bs_main.main_width }}" height="{{ bs_main.main_height }}" decoding="async"/>
+            </a>
+          </div>
+          {% if bs_gallery|length > 1 %}
+          <div class="bs-product__thumbs" aria-label="Фотографії товару">
+            {% for image in bs_gallery %}
+              <a href="{{ image.popup }}" title="{{ heading_title }}" data-bs-gallery-thumb data-bs-media-kind="{{ image.kind }}" data-bs-gallery-src="{{ image.main|escape('html_attr') }}" data-bs-gallery-width="{{ image.main_width }}" data-bs-gallery-height="{{ image.main_height }}" aria-label="Фото {{ loop.index }}: {{ heading_title|escape('html_attr') }}"{% if loop.first %} aria-current="true"{% endif %}>
+                <img src="{{ image.small }}" title="{{ heading_title }}" alt="{{ heading_title }}" width="{{ image.small_width }}" height="{{ image.small_height }}" loading="lazy" decoding="async"/>
+              </a>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+        {% endif %}
+        {% endif %}
+
+        {# === INFO PANEL === #}
+        <div class="bs-product__info">
+
+          <h1 class="bs-product__title">{{ heading_title }}</h1>
+
+          {% set _stock_text = stock|striptags|trim %}
+          {% set _stock_lc = _stock_text|lower %}
+          {% set _is_preorder = (bs_is_preorder is defined and bs_is_preorder) or _stock_text == 'Передзамовлення' or _stock_text == 'Pre-Order' or _stock_text == 'PreOrder' or 'передзамов' in _stock_lc %}
+          {% set _is_out = _stock_text == 'Закінчився' or _stock_text == 'Немає в наявності' or _stock_text == 'Out Of Stock' %}
+          {% set _review_count = review_count|default(0) %}
+          {% set _has_reviews = review_status and _review_count > 0 %}
+
+          {# RD-PP-META-STATUS-CARD-20260924 #}
+          {% if review_status or manufacturer %}
+          <div class="bs-pp-head">
+          {% if review_status %}
+            {% if _has_reviews %}
+              <div class="bs-pp-reviews">
+                <div class="rating bs-pp-reviews__stars" aria-label="{{ text_reviews }}">
+                  {% for i in 1..5 %}
+                    {% if rating < i %}
+                      <span class="fa-stack"><i class="fa-regular fa-star fa-stack-1x"></i></span>
+                    {% else %}
+                      <span class="fa-stack"><i class="fa-solid fa-star fa-stack-1x"></i><i class="fa-regular fa-star fa-stack-1x"></i></span>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+                <a href="#" onclick="$('a[href=\'#tab-review\']').tab('show'); return false;" class="bs-pp-reviews__count">{{ text_reviews }}</a>
+                <span class="bs-pp-reviews__sep">/</span>
+                <a href="#" onclick="$('a[href=\'#tab-review\']').tab('show'); return false;" class="bs-pp-reviews__write">{{ text_write }}</a>
+              </div>
+            {% else %}
+              {# UI-FIX-20260903 T4: stays on the page — opens the "Відгуки" tab and
+                 scrolls to it, so the customer picks Telegram or OLX there. #}
+              <a href="#tab-review" class="bs-pp-reviews__olx bs-pp-reviews" onclick="var n=document.getElementById('bs-tab-review-link');if(!n)return true;if(window.bootstrap&&window.bootstrap.Tab){window.bootstrap.Tab.getOrCreateInstance(n).show();}else if(window.jQuery){window.jQuery(n).tab('show');}var r=n.closest('.nav-tabs')||n;r.scrollIntoView({behavior:'smooth',block:'start'});return false;">
+                <span class="bs-pp-reviews__ic"><svg width="13" height="13" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><path d="M7 1.5l1.7 3.6L12.5 6 9.7 8.5l.8 4L7 10.5 3.5 12.5l.8-4L1.5 6l3.8-.9L7 1.5z"/></svg></span>
+                <span>Відгуки про нас</span>
+                <svg class="bs-pp-reviews__arr" width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+              </a>
+            {% endif %}
+          {% endif %}
+
+            {% if manufacturer %}
+              <div class="bs-pp-mf">
+                <span class="bs-pp-mf__label">Виробник</span>
+                <a href="{{ manufacturers }}" class="bs-pp-mf__link">{{ manufacturer }}</a>
+              </div>
+            {% endif %}
+          </div>
+          {% endif %}
+
+          {% if _is_preorder %}
+            <div class="bs-pp-status bs-pp-status--pre">
+              <span class="bs-pp-status__ic"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M10 6v4.2l2.8 1.8"/></svg></span>
+              <div class="bs-pp-status__body">
+                <div class="bs-pp-status__title">Передзамовлення</div>
+                <div class="bs-pp-status__sub">Доставка орієнтовно <strong>3–4 тижні</strong></div>
+              </div>
+            </div>
+          {% elseif _is_out %}
+            <div class="bs-pp-status bs-pp-status--out">
+              <span class="bs-pp-status__ic"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l8 8M14 6l-8 8"/></svg></span>
+              <div class="bs-pp-status__body">
+                <div class="bs-pp-status__title">Закінчився</div>
+                <div class="bs-pp-status__sub">Товару немає в наявності</div>
+              </div>
+            </div>
+          {% else %}
+            <div class="bs-pp-status bs-pp-status--in">
+              <span class="bs-pp-status__ic"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 10.5l3.5 3.5 7.5-8"/></svg></span>
+              <div class="bs-pp-status__body">
+                <div class="bs-pp-status__title">В наявності</div>
+                {% if _stock_text matches '/^[0-9]+$/' %}<div class="bs-pp-status__sub"><strong>{{ _stock_text }} шт</strong> на складі</div>{% endif %}
+              </div>
+            </div>
+          {% endif %}
+          {% if price %}
+          <div class="bs-price-block">
+            {% if special %}
+              <span class="bs-price-block__old">{{ price }}</span>
+              <span class="bs-price-block__new">{{ special }}</span>
+            {% else %}
+              <span class="bs-price-block__new">{{ price }}</span>
+            {% endif %}
+            <span class="bs-price-block__unit">/ 1 шт</span>
+          </div>
+
+          {# CAT-004-PREORDER-PRICES-20260924: quantity tiers also apply to preorder products. #}
+          {% if discounts %}
+            {% for discount in discounts %}
+              {% if loop.first %}
+                <div class="bs-bulk-discount">
+                  <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#D4A017" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M9.5 1.5H5L1.5 5v4.5l9 9L17 12z"/>
+                    <circle cx="5.5" cy="5.5" r="1" fill="#D4A017" stroke="none"/>
+                  </svg>
+                  <span class="bs-bulk-discount__prefix">від {{ discount.quantity }} шт —</span>
+                  <span class="bs-bulk-discount__price">{{ discount.price }} за штуку</span>
+                </div>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+
+
+          {% endif %}
+
+          {% if _is_preorder %}
+            {% set _trust = [
+              { icon: 'shield', label: 'Гарантія оригінальності' },
+              { icon: 'truck',  label: 'Привеземо під замовлення' },
+              { icon: 'send',   label: 'Telegram підтримка' }
+            ] %}
+          {% else %}
+            {% set _trust = [
+              { icon: 'shield', label: 'Гарантія оригінальності' },
+              { icon: 'zap',    label: 'Швидка відправка' },
+              { icon: 'send',   label: 'Telegram підтримка' }
+            ] %}
+          {% endif %}
+
+          <div id="product">
+            {# CAT-004 variant selector: normal links; no in-place product swap. #}
+            {% if variant_groups %}
+              {% for group in variant_groups %}
+                <div class="bs-variant">
+                  <div class="bs-variant__label">
+                    {{ group.name }}
+                    {# CAT-004-VC active chip is the current-value indicator #}
+                  </div>
+                  <div class="bs-variant__row">
+                    {% for value in group.values %}
+                      {% if value.state != 'none' and value.href %}
+                        <a href="{{ value.href }}" class="bs-variant__chip{% if value.is_current %} is-active{% endif %}{% if value.state == 'out' %} is-off{% endif %}"{% if value.is_current %} aria-current="page"{% endif %}>
+                          {% if value.thumb %}<img class="bs-variant__thumb" src="{{ value.thumb }}" alt=""/>{% endif %}
+                          <span class="bs-variant__text">
+                            <span class="bs-variant__value">{{ value.label }}</span>
+                            {% if group.show_price and value.price %}<span class="bs-variant__price">{{ value.price }}</span>{% endif %}
+                          </span>
+                          {% if value.state == 'out' %}<span class="visually-hidden">немає в наявності</span>{% endif %}
+                        </a>
+                      {% else %}
+                        <span class="bs-variant__chip is-off{% if value.is_current %} is-active{% endif %}" aria-disabled="true"{% if value.is_current %} aria-current="page"{% endif %}>
+                          {% if value.thumb %}<img class="bs-variant__thumb" src="{{ value.thumb }}" alt=""/>{% endif %}
+                          <span class="bs-variant__text"><span class="bs-variant__value">{{ value.label }}</span></span>
+                          <span class="visually-hidden">недоступно</span>
+                        </span>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                </div>
+              {% endfor %}
+            {% endif %}
+            <form id="form-product">
+              {% if options %}
+                <hr>
+                <h3>{{ text_option }}</h3>
+                <div>
+                  {% for option in options %}
+
+                    {% if option.type == 'select' %}
+                      <div class="mb-3{% if option.required %} required{% endif %}">
+                        <label for="input-option-{{ option.product_option_id }}" class="form-label">{{ option.name }}</label>
+                        <select name="option[{{ option.product_option_id }}]" id="input-option-{{ option.product_option_id }}" class="form-select">
+                          <option value="">{{ text_select }}</option>
+                          {% for option_value in option.product_option_value %}
+                            <option value="{{ option_value.product_option_value_id }}">{{ option_value.name }}
+                              {% if option_value.price %}
+                                ({{ option_value.price_prefix }}{{ option_value.price }})
+                              {% endif %}</option>
+                          {% endfor %}
+                        </select>
+                        <div id="error-option-{{ option.product_option_id }}" class="invalid-feedback"></div>
+                      </div>
+                    {% endif %}
+
+                    {% if option.type == 'radio' %}
+                      <div class="mb-3{% if option.required %} required{% endif %}">
+                        <label class="form-label">{{ option.name }}</label>
+                        <div id="input-option-{{ option.product_option_id }}">
+                          {% for option_value in option.product_option_value %}
+                            <div class="form-check">
+                              <input type="radio" name="option[{{ option.product_option_id }}]" value="{{ option_value.product_option_value_id }}" id="input-option-value-{{ option_value.product_option_value_id }}" class="form-check-input"/>
+                              <label for="input-option-value-{{ option_value.product_option_value_id }}" class="form-check-label">
+                                {% if option_value.image %}
+                                  <img src="{{ option_value.image }}" alt="{{ option_value.name }} {% if option_value.price %}{{ option_value.price_prefix }} {{ option_value.price }}{% endif %}" class="img-thumbnail"/>{% endif %}
+                                {{ option_value.name }}
+                                {% if option_value.price %}
+                                  ({{ option_value.price_prefix }}{{ option_value.price }})
+                                {% endif %}</label>
+                            </div>
+                          {% endfor %}
+                        </div>
+                        <div id="error-option-{{ option.product_option_id }}" class="invalid-feedback"></div>
+                      </div>
+                    {% endif %}
+
+                    {% if option.type == 'checkbox' %}
+                      <div class="mb-3{% if option.required %} required{% endif %}">
+                        <label class="form-label">{{ option.name }}</label>
+                        <div id="input-option-{{ option.product_option_id }}">
+                          {% for option_value in option.product_option_value %}
+                            <div class="form-check">
+                              <input type="checkbox" name="option[{{ option.product_option_id }}][]" value="{{ option_value.product_option_value_id }}" id="input-option-value-{{ option_value.product_option_value_id }}" class="form-check-input"/> 
+							                <label for="input-option-value-{{ option_value.product_option_value_id }}" class="form-check-label">
+                                {% if option_value.image %}
+                                  <img src="{{ option_value.image }}" alt="{{ option_value.name }} {% if option_value.price %}{{ option_value.price_prefix }} {{ option_value.price }}{% endif %}" class="img-thumbnail"/>{% endif %}
+                                {{ option_value.name }}
+                                {% if option_value.price %}
+                                  ({{ option_value.price_prefix }}{{ option_value.price }})
+                                {% endif %}</label>
+                            </div>
+                          {% endfor %}
+                        </div>
+                        <div id="error-option-{{ option.product_option_id }}" class="invalid-feedback"></div>
+                      </div>
+                    {% endif %}
+
+                    {% if option.type == 'text' %}
+                      <div class="mb-3{% if option.required %} required{% endif %}">
+                        <label for="input-option-{{ option.product_option_id }}" class="form-label">{{ option.name }}</label> <input type="text" name="option[{{ option.product_option_id }}]" value="{{ option.value }}" placeholder="{{ option.name }}" id="input-option-{{ option.product_option_id }}" class="form-control"/>
+                        <div id="error-option-{{ option.product_option_id }}" class="invalid-feedback"></div>
+                      </div>
+                    {% endif %}
+
+                    {% if option.type == 'textarea' %}
+                      <div class="mb-3{% if option.required %} required{% endif %}">
+                        <label for="input-option-{{ option.product_option_id }}" class="form-label">{{ option.name }}</label> <textarea name="option[{{ option.product_option_id }}]" rows="5" placeholder="{{ option.name }}" id="input-option-{{ option.product_option_id }}" class="form-control">{{ option.value }}</textarea>
+                        <div id="error-option-{{ option.product_option_id }}" class="invalid-feedback"></div>
+                      </div>
+                    {% endif %}
+
+                    {% if option.type == 'file' %}
+                      <div class="mb-3{% if option.required %} required{% endif %}">
+                        <label for="button-upload-{{ option.product_option_id }}" class="form-label">{{ option.name }}</label>
+                        <div>
+                          <button type="button" id="button-upload-{{ option.product_option_id }}" data-oc-toggle="upload" data-oc-url="{{ upload }}" data-oc-target="#input-option-{{ option.product_option_id }}" data-oc-size-max="{{ config_file_max_size }}" data-oc-size-error="{{ error_upload_size }}" class="btn btn-light btn-block"><i class="fa-solid fa-upload"></i> {{ button_upload }}</button>
+                          <input type="hidden" name="option[{{ option.product_option_id }}]" value="" id="input-option-{{ option.product_option_id }}"/>
+                        </div>
+                        <div id="error-option-{{ option.product_option_id }}" class="invalid-feedback"></div>
+                      </div>
+                    {% endif %}
+
+                    {% if option.type == 'date' %}
+                      <div class="mb-3{% if option.required %} required{% endif %}">
+                        <label for="input-option-{{ option.product_option_id }}" class="form-label">{{ option.name }}</label>
+                        <input type="date" name="option[{{ option.product_option_id }}]" value="{{ option.value }}" id="input-option-{{ option.product_option_id }}" class="form-control"/>
+                        <div id="error-option-{{ option.product_option_id }}" class="invalid-feedback"></div>
+                      </div>
+                    {% endif %}
+
+                    {% if option.type == 'time' %}
+                      <div class="mb-3{% if option.required %} required{% endif %}">
+                        <label for="input-option-{{ option.product_option_id }}" class="form-label">{{ option.name }}</label>
+                        <input type="time" name="option[{{ option.product_option_id }}]" value="{{ option.value }}" id="input-option-{{ option.product_option_id }}" class="form-control"/>
+                        <div id="error-option-{{ option.product_option_id }}" class="invalid-feedback"></div>
+                      </div>
+                    {% endif %}
+
+                    {% if option.type == 'datetime' %}
+                      <div class="mb-3{% if option.required %} required{% endif %}">
+                        <label for="input-option-{{ option.product_option_id }}" class="form-label">{{ option.name }}</label>
+                        <input type="datetime-local" name="option[{{ option.product_option_id }}]" value="{{ option.value }}" id="input-option-{{ option.product_option_id }}" class="form-control"/>
+                        <div id="error-option-{{ option.product_option_id }}" class="invalid-feedback"></div>
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              {% endif %}
+
+              {% if subscription_plans %}
+                <hr/>
+                <h3>{{ text_subscription }}</h3>
+                <div class="mb-3 required">
+                  <select name="subscription_plan_id" id="input-subscription" class="form-select">
+                    <option value="">{{ text_select }}</option>
+                    {% for subscription_plan in subscription_plans %}
+                      <option value="{{ subscription_plan.subscription_plan_id }}">{{ subscription_plan.name }}</option>
+                    {% endfor %}
+                  </select>
+                  {% for subscription_plan in subscription_plans %}
+                    <div id="subscription-description-{{ subscription_plan.subscription_plan_id }}" class="form-text subscription d-none">{{ subscription_plan.description }}</div>
+                  {% endfor %}
+                  <div id="error-subscription" class="invalid-feedback"></div>
+                </div>
+              {% endif %}
+              <div class="mb-3 bs-buy-wrap">
+                <div class="bs-buy-row">
+                  <span class="bs-buy-row__label"><span class="bs-buy-row__label-full">{{ entry_qty }}</span><span class="bs-buy-row__label-short">К-сть</span></span>
+                  <div class="bs-main-qty" data-main-qty>
+                    <button type="button" class="bs-main-qty__btn" data-main-qty-act="dec" aria-label="Зменшити кількість">&minus;</button>
+                    <input type="number" name="quantity" value="{{ minimum }}" min="{{ minimum }}" size="2" id="input-quantity" class="form-control bs-main-qty__input" inputmode="numeric"/>
+                    <button type="button" class="bs-main-qty__btn" data-main-qty-act="inc" aria-label="Збільшити кількість">+</button>
+                  </div>
+                  {% if _is_preorder %}
+                    <button type="submit" id="button-cart" class="btn bs-btn bs-btn-preorder btn-lg btn-block bs-buy-row__cta" data-main-add-to-cart>Передзамовити</button>
+                  {% else %}
+                    <button type="submit" id="button-cart" class="btn bs-btn bs-btn-primary btn-lg btn-block bs-buy-row__cta" data-main-add-to-cart>У кошик</button>
+                  {% endif %}
+                </div>
+                {% if not pay002_pumb_visible %}{% if pay001_mono_chast_visible %}
+                <!-- PAY-001-PHASE2C-CART-CONTRACT-GATES-20260725 -->
+                <div data-pay001-product-credit data-pay001-price="{{ pay001_mono_chast_price }}" data-pay001-threshold="{{ pay001_mono_chast_min_total }}" data-pay001-cart-total="{{ pay001_mono_chast_cart_total }}" data-pay001-stock="{{ pay001_mono_chast_in_stock ? '1' : '0' }}">
+                  <button type="button" class="bs-btn bs-btn-secondary pay001-product-credit__open pay001-product-credit__open--after-cart" data-pay001-credit-open disabled>Сплатити частинами</button>
+                  <section class="pay001-product-credit is-muted" aria-label="Оплата частинами">
+                    <div class="pay001-product-credit__info">
+                    <div class="pay001-provider-row">
+                      <img src="catalog/view/image/payment/pay001-mono-label.png" alt="monobank" class="pay001-provider-row__mono">
+                      <span><strong>Покупка частинами monobank</strong><small>До 5 платежів</small></span>
+                    </div>
+                    <div class="pay001-provider-row pay001-provider-row--soon">
+                      <img src="catalog/view/image/payment/pay001-pumb.svg" alt="ПУМБ" class="pay001-provider-row__pumb">
+                      <span><strong>Сплачуйте частинами ПУМБ</strong><small>До 5 платежів</small></span>
+                      <em>СКОРО БУДЕ</em>
+                    </div>
+                    </div>
+                    <p class="pay001-product-credit__hint" data-pay001-credit-hint aria-live="polite"></p>
+                  </section>
+                  </div>
+                {% endif %}{% else %}
+                {% if pay001_mono_chast_visible or pay002_pumb_visible %}
+                <!-- PAY-001-PHASE2C-CART-CONTRACT-GATES-20260725 -->
+                <div data-pay001-product-credit{% if pay001_mono_chast_visible %} data-pay001-price="{{ pay001_mono_chast_price }}" data-pay001-threshold="{{ pay001_mono_chast_min_total }}" data-pay001-cart-total="{{ pay001_mono_chast_cart_total }}" data-pay001-stock="{{ pay001_mono_chast_in_stock ? '1' : '0' }}"{% endif %}{% if pay002_pumb_visible %} data-pay002-price="{{ pay002_pumb_price }}" data-pay002-threshold="{{ pay002_pumb_min_total }}" data-pay002-max-total="{{ pay002_pumb_max_total }}" data-pay002-cart-total="{{ pay002_pumb_cart_total }}" data-pay002-stock="{{ pay002_pumb_in_stock ? '1' : '0' }}"{% endif %}>
+                  <button type="button" class="bs-btn bs-btn-secondary pay001-product-credit__open pay001-product-credit__open--after-cart" data-pay001-credit-open disabled>Сплатити частинами</button>
+                  <section class="pay001-product-credit is-muted" aria-label="Оплата частинами">
+                    <div class="pay001-product-credit__info">
+                    {% if pay001_mono_chast_visible %}
+                    <div class="pay001-provider-row">
+                      <img src="catalog/view/image/payment/pay001-mono-label.png" alt="monobank" class="pay001-provider-row__mono">
+                      <span><strong>Покупка частинами monobank</strong><small>До 5 платежів</small></span>
+                    </div>
+                    {% endif %}
+                    {% if pay002_pumb_visible %}
+                    <div class="pay001-provider-row">
+                      <img src="catalog/view/image/payment/pay001-pumb.svg" alt="ПУМБ" class="pay001-provider-row__pumb">
+                      <span><strong>Сплачуйте частинами ПУМБ</strong><small>До {{ pay002_pumb_terms|last }} платежів</small></span>
+                    </div>
+                    {% endif %}
+                    </div>
+                    <p class="pay001-product-credit__hint" data-pay001-credit-hint aria-live="polite"></p>
+                  </section>
+                  </div>
+                {% endif %}
+                {% endif %}
+                <input type="hidden" name="product_id" value="{{ product_id }}" id="input-product-id"/>
+                <div id="error-quantity" class="form-text"></div>
+                <div class="bs-trust-strip" role="list">
+                  {% for item in _trust %}
+                    {% if not loop.first %}<div class="bs-trust-strip__div" aria-hidden="true"></div>{% endif %}
+                    {# CAT-004-TRUST-COPY-20260924 #}<div class="bs-trust-strip__item{% if item.icon == 'truck' %} bs-trust-strip__item--preorder{% endif %}" role="listitem">
+                      {% if item.icon == 'shield' %}
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                          <polyline points="9,12 11,14 15,10"/>
+                        </svg>
+                      {% elseif item.icon == 'zap' %}
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2"/>
+                        </svg>
+                      {% elseif item.icon == 'send' %}
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <line x1="22" y1="2" x2="11" y2="13"/>
+                          <polygon points="22,2 15,22 11,13 2,9 22,2"/>
+                        </svg>
+                      {% elseif item.icon == 'truck' %}
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <rect x="1" y="3" width="15" height="13" rx="1"/>
+                          <path d="M16 8h4l3 3v5h-7V8z"/>
+                          <circle cx="5.5" cy="18.5" r="2.5"/>
+                          <circle cx="18.5" cy="18.5" r="2.5"/>
+                        </svg>
+                      {% endif %}
+                      <span>{{ item.label }}</span>
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+              {% if minimum > 1 %}
+                <div class="alert alert-warning"><i class="fa-solid fa-circle-info"></i> {{ text_minimum }}</div>
+              {% endif %}
+            </form>
+          </div>
+
+          <script>
+          (function() {
+            var wrap = document.querySelector('[data-main-qty]');
+            var input = document.querySelector('#input-quantity');
+
+            if (!wrap || !input || wrap.getAttribute('data-ready') === '1') {
+              return;
+            }
+
+            wrap.setAttribute('data-ready', '1');
+
+            function minQty() {
+              return parseInt(input.getAttribute('min'), 10) || 1;
+            }
+
+            function clamp(value) {
+              var next = parseInt(value, 10);
+              var min = minQty();
+
+              if (isNaN(next) || next < min) {
+                next = min;
+              }
+
+              return next;
+            }
+
+            function publish() {
+              input.dispatchEvent(new Event('input', { bubbles: true }));
+              input.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+
+            wrap.addEventListener('click', function(event) {
+              var button = event.target.closest ? event.target.closest('[data-main-qty-act]') : null;
+
+              if (!button) {
+                return;
+              }
+
+              var current = clamp(input.value);
+              input.value = button.getAttribute('data-main-qty-act') === 'inc' ? current + 1 : Math.max(minQty(), current - 1);
+              publish();
+            });
+
+            input.addEventListener('change', function() {
+              input.value = clamp(input.value);
+            });
+          })();
+          </script>
+
+          {% if reward %}
+            <div class="mt-1" style="font-size:13px;color:var(--bs-ink-3)">{{ text_reward }} {{ reward }}</div>
+          {% endif %}
+
+        </div>
+
+      </div>
+      <ul class="nav nav-tabs">
+        <li class="nav-item"><a href="#tab-description" data-bs-toggle="tab" class="nav-link active">{{ tab_description }}</a></li>
+        {% if attribute_groups %}
+          <li class="nav-item"><a href="#tab-specification" data-bs-toggle="tab" class="nav-link">{{ tab_attribute }}</a></li>
+        {% endif %}
+        <li class="nav-item"><a href="#tab-review" id="bs-tab-review-link" data-bs-toggle="tab" class="nav-link">Відгуки</a></li>
+      </ul>
+
+      <div class="tab-content">
+        <div id="tab-description" class="tab-pane fade show active mb-4">{{ description }}
+          {% if tags %}
+            <p>{{ text_tags }}
+              {% for tag in tags %}
+                <a href="{{ tag.href }}">{{ tag.tag }}</a>{% if not loop.last %},{% endif %}
+              {% endfor %}
+            </p>
+          {% endif %}
+        </div>
+
+        {% if attribute_groups %}
+          <div id="tab-specification" class="tab-pane fade">
+            <div class="table-responsive">
+              <table class="bs-spec-table">
+                {% for attribute_group in attribute_groups %}
+                  <thead>
+                    <tr><td colspan="2">{{ attribute_group.name }}</td></tr>
+                  </thead>
+                  <tbody>
+                    {% for attribute in attribute_group.attribute %}
+                      <tr>
+                        <td>{{ attribute.name }}</td>
+                        <td>{{ attribute.text }}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                {% endfor %}
+              </table>
+            </div>
+          </div>
+        {% endif %}
+
+        <div id="tab-review" class="tab-pane fade mb-4">
+          <div class="bs-review-cards">
+
+            <a href="https://telegram.me/boostershop_tcg" target="_blank" rel="noopener noreferrer" class="bs-review-card bs-review-card--tg">
+              <div class="bs-review-card__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="12" fill="#29B6F6"/>
+                  <path d="M5 11.8l2.8 1.05 1.08 3.47c.07.22.34.3.52.16l1.56-1.27a.37.37 0 0 1 .45-.01l2.82 2.05c.2.15.49.04.55-.2l2.18-9.57c.07-.28-.19-.52-.46-.42L5 10.97a.38.38 0 0 0 0 .73z" fill="#fff"/>
+                </svg>
+              </div>
+              <div class="bs-review-card__body">
+                <div class="bs-review-card__title">Відгуки в Telegram</div>
+                <div class="bs-review-card__sub">Реальні відгуки покупців у каналі</div>
+              </div>
+              <div class="bs-review-card__arrow">›</div>
+            </a>
+
+            <a href="https://www.olx.ua/uk/list/user/ubnF9/?tab=ratings" target="_blank" rel="noopener noreferrer" class="bs-review-card bs-review-card--olx">
+              <div class="bs-review-card__icon">
+                {# UI-FIX-20260903 T3: real OLX brand mark, from the owner's Logo OLX.png #}
+                <img src="/image/catalog/reviews/olx-review-icon-120.png?v=uifix-20260903" alt="OLX" width="40" height="40" loading="lazy" decoding="async">
+              </div>
+              <div class="bs-review-card__body">
+                <div class="bs-review-card__title">Відгуки на OLX</div>
+                <div class="bs-review-card__sub">Оцінки та коментарі покупців</div>
+              </div>
+              <div class="bs-review-card__arrow">›</div>
+            </a>
+
+          </div>
+        </div>
+
+      </div>
+      {{ related }}
+      {# ===== R-04: Sticky Add-to-Cart (mobile only) ===== #}
+      {% set display_price = special ? special : price %}
+      <style>
+        @media (max-width: 768px) {
+          body.bs-sticky-atc-visible {
+            padding-bottom: 76px;
+          }
+
+          .bs-sticky-atc[hidden] {
+            display: none !important;
+          }
+
+          .bs-sticky-atc {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            /* CAT-004-STICKY-ATC-BELOW-MINICART-20260924: modal layer stays above the buy bar. */
+            z-index: var(--bs-z-sticky, 200);
+            padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+            background: rgba(255, 255, 255, 0.98);
+            border-top: 1px solid var(--bs-line, #D8DEE8);
+            box-shadow: 0 -10px 30px rgba(17, 24, 39, 0.12);
+          }
+
+          .bs-sticky-atc__inner {
+            display: grid;
+            grid-template-columns: 112px minmax(0, 1fr);
+            gap: 10px;
+            align-items: center;
+            max-width: 520px;
+            margin: 0 auto;
+          }
+
+          .bs-qty {
+            display: grid;
+            grid-template-columns: 36px minmax(0, 1fr) 36px;
+            height: 44px;
+            overflow: hidden;
+            background: #fff;
+            border: 1px solid var(--bs-line, #D8DEE8);
+            border-radius: 8px;
+          }
+
+          .bs-qty__btn {
+            border: 0;
+            background: #fff;
+            color: var(--bs-ink, #111827);
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1;
+          }
+
+          .bs-qty__input {
+            min-width: 0;
+            border: 0;
+            border-right: 1px solid var(--bs-line, #D8DEE8);
+            border-left: 1px solid var(--bs-line, #D8DEE8);
+            text-align: center;
+            font-weight: 700;
+            -moz-appearance: textfield;
+          }
+
+          .bs-qty__input::-webkit-outer-spin-button,
+          .bs-qty__input::-webkit-inner-spin-button {
+            margin: 0;
+            -webkit-appearance: none;
+          }
+
+          .bs-sticky-atc__cta {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            min-height: 44px;
+            white-space: nowrap;
+          }
+        }
+
+        @media (min-width: 769px) {
+          .bs-sticky-atc {
+            display: none !important;
+          }
+        }
+      </style>
+      <div class="bs-sticky-atc" hidden data-product-id="{{ product_id }}">
+        <div class="bs-sticky-atc__inner">
+          <div class="bs-qty">
+            <button type="button" class="bs-qty__btn" data-act="dec" aria-label="Зменшити кількість">&minus;</button>
+            <input type="number" class="bs-qty__input" value="{{ minimum }}" min="{{ minimum }}" inputmode="numeric" aria-label="Кількість">
+            <button type="button" class="bs-qty__btn" data-act="inc" aria-label="Збільшити кількість">+</button>
+          </div>
+          <button type="button" class="bs-btn bs-btn-primary bs-sticky-atc__cta" data-sticky-add-to-cart>
+            Купити &middot; {{ display_price }}
+          </button>
+        </div>
+      </div>
+
+      <script>
+      (function() {
+        var bar = document.querySelector('.bs-sticky-atc');
+        var mainCta = document.querySelector('[data-main-add-to-cart]');
+        var mainQty = document.querySelector('#input-quantity');
+
+        if (!bar || !mainCta) {
+          return;
+        }
+
+        var stickyQty = bar.querySelector('.bs-qty__input');
+        var stickyCta = bar.querySelector('[data-sticky-add-to-cart]');
+        var minQty = stickyQty ? parseInt(stickyQty.getAttribute('min'), 10) || 1 : 1;
+        var mobileQuery = window.matchMedia ? window.matchMedia('(max-width: 768px)') : null;
+
+        function isMobile() {
+          return !!mobileQuery && mobileQuery.matches;
+        }
+
+        function clampQty(value) {
+          var next = parseInt(value, 10);
+
+          if (isNaN(next) || next < minQty) {
+            next = minQty;
+          }
+
+          return next;
+        }
+
+        function setStickyQty(value) {
+          if (stickyQty) {
+            stickyQty.value = clampQty(value);
+          }
+        }
+
+        function syncStickyFromMain() {
+          if (mainQty && stickyQty) {
+            setStickyQty(mainQty.value);
+          }
+        }
+
+        function syncMainFromSticky() {
+          if (mainQty && stickyQty) {
+            mainQty.value = clampQty(stickyQty.value);
+          }
+        }
+
+        function setBarVisible(visible) {
+          var shouldShow = visible && isMobile();
+          bar.hidden = !shouldShow;
+          document.body.classList.toggle('bs-sticky-atc-visible', shouldShow);
+        }
+
+        function isMainCtaVisible() {
+          var rect = mainCta.getBoundingClientRect();
+          var viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+
+          return rect.bottom > 0 && rect.top < viewportHeight;
+        }
+
+        function updateVisibility() {
+          setBarVisible(!isMainCtaVisible());
+        }
+
+        syncStickyFromMain();
+        updateVisibility();
+
+        if ('IntersectionObserver' in window) {
+          var observer = new IntersectionObserver(function(entries) {
+            if (!entries.length) {
+              updateVisibility();
+              return;
+            }
+
+            setBarVisible(!entries[0].isIntersecting);
+          }, {
+            threshold: 0.01
+          });
+
+          observer.observe(mainCta);
+        } else {
+          window.addEventListener('scroll', updateVisibility, { passive: true });
+        }
+
+        window.addEventListener('resize', updateVisibility);
+
+        if (mobileQuery) {
+          if (typeof mobileQuery.addEventListener === 'function') {
+            mobileQuery.addEventListener('change', updateVisibility);
+          } else if (typeof mobileQuery.addListener === 'function') {
+            mobileQuery.addListener(updateVisibility);
+          }
+        }
+
+        if (mainQty) {
+          mainQty.addEventListener('input', syncStickyFromMain);
+          mainQty.addEventListener('change', syncStickyFromMain);
+        }
+
+        if (stickyQty) {
+          stickyQty.addEventListener('input', function() {
+            setStickyQty(stickyQty.value);
+          });
+
+          stickyQty.addEventListener('change', function() {
+            setStickyQty(stickyQty.value);
+          });
+        }
+
+        bar.addEventListener('click', function(event) {
+          var button = event.target.closest ? event.target.closest('[data-act]') : null;
+
+          if (!button || !stickyQty) {
+            return;
+          }
+
+          var current = clampQty(stickyQty.value);
+          stickyQty.value = button.getAttribute('data-act') === 'inc' ? current + 1 : Math.max(minQty, current - 1);
+        });
+
+        if (stickyCta) {
+          stickyCta.addEventListener('click', function() {
+            syncMainFromSticky();
+            mainCta.click();
+          });
+        }
+      })();
+      </script>
+      {# ===== /R-04 ===== #}
+      <script>
+      // R07MOB10 related carousel progress
+      (function() {
+        var related = document.querySelector('.bs-related');
+        var track = document.querySelector('.bs-related__track');
+        var thumb = document.querySelector('.bs-related__progress-thumb');
+
+        if (!track || !thumb) {
+          return;
+        }
+
+        function getCssVar(name, fallback) {
+          var value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+          return value || fallback;
+        }
+
+        function setCategoryColor() {
+          var crumbs = Array.prototype.slice.call(document.querySelectorAll('.breadcrumb a')).map(function(anchor) {
+            return [
+              anchor.textContent || '',
+              anchor.getAttribute('href') || '',
+              anchor.href || ''
+            ].join(' ');
+          }).join(' ').toLowerCase();
+
+          var color = getCssVar('--bs-blue', '#1E3A8A');
+
+          if (crumbs.indexOf('one-piece') !== -1 || crumbs.indexOf('one piece') !== -1) {
+            color = getCssVar('--bs-onepiece', '#1E40AF');
+          }
+
+          if (crumbs.indexOf('pokemon') !== -1 || crumbs.indexOf('pokémon') !== -1) {
+            color = getCssVar('--bs-pokemon', '#C68A00');
+          }
+
+          (related || track).style.setProperty('--bs-related-progress-color', color);
+        }
+
+        function updateRelatedProgress() {
+          var max = track.scrollWidth - track.clientWidth;
+          var width = 100;
+          var left = 0;
+
+          if (max > 0 && track.scrollWidth > 0) {
+            var progress = Math.max(0, Math.min(1, track.scrollLeft / max));
+            width = Math.max(20, Math.min(46, (track.clientWidth / track.scrollWidth) * 100));
+            left = progress * (100 - width);
+          }
+
+          thumb.style.width = width + '%';
+          thumb.style.left = left + '%';
+        }
+
+        setCategoryColor();
+        track.addEventListener('scroll', updateRelatedProgress, { passive: true });
+        window.addEventListener('resize', updateRelatedProgress);
+        window.requestAnimationFrame(updateRelatedProgress);
+      })();
+      </script>
+      {{ content_bottom }}
+    </div>
+    {{ column_right }}
+  </div>
+</div>
+<script type="text/javascript"><!--
+$('#input-subscription').on('change', function(e) {
+    var element = this;
+
+    $('.subscription').addClass('d-none');
+
+    $('#subscription-description-' + $(element).val()).removeClass('d-none');
+});
+
+// RD-12 canonical toast rebuild 2026-09-22: every product cart result uses window.bsToast.
+// ST-2a.9: cold-session add-to-cart UX guard.
+$('#form-product').on('submit', function(e) {
+    e.preventDefault();
+
+    var form = $(this);
+    var button = $('#button-cart');
+
+    if (form.data('bsCartAddPending')) {
+        return;
+    }
+
+    form.data('bsCartAddPending', true);
+
+    if (button.data('bsOriginalHtml') === undefined) {
+        button.data('bsOriginalHtml', button.html());
+    }
+
+    function resetCartButton() {
+        form.data('bsCartAddPending', false);
+        button.prop('disabled', false).removeClass('disabled');
+        button.button('reset');
+
+        if (button.data('bsOriginalHtml') !== undefined) {
+            button.html(button.data('bsOriginalHtml'));
+        }
+    }
+
+    function showCartRetry(message) {
+        $('#alert .bs-cart-add-timeout').remove();
+        window.bsToast('danger', message);
+    }
+
+    $.ajax({
+        url: 'index.php?route=checkout/cart.add&language={{ language }}',
+        type: 'post',
+        timeout: 12000,
+        data: form.serialize(),
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        cache: false,
+        processData: false,
+        beforeSend: function() {
+            button.button('loading');
+            button.prop('disabled', true).addClass('disabled').html('Додаємо у кошик...');
+        },
+        complete: function() {
+            resetCartButton();
+        },
+        success: function(json) {
+            console.log(json);
+
+            $('#form-product').find('.is-invalid').removeClass('is-invalid');
+            $('#form-product').find('.invalid-feedback').removeClass('d-block');
+
+            if (json['error']) {
+                for (key in json['error']) {
+                    $('#input-' + key.replaceAll('_', '-')).addClass('is-invalid').find('.form-control, .form-select, .form-check-input, .form-check-label').addClass('is-invalid');
+                    $('#error-' + key.replaceAll('_', '-')).html(json['error'][key]).addClass('d-block');
+                }
+            }
+
+            if (json['success']) {
+                $('#alert .bs-cart-add-timeout').remove();
+                window.bsToast('success', json['success']);
+
+                $('#cart').load('index.php?route=common/cart.info&language={{ language }}');
+            }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            var message = ajaxOptions === 'timeout'
+                ? 'Додавання зайняло більше часу, ніж очікувалось. Перевірте кошик або спробуйте ще раз.'
+                : 'Не вдалося додати товар у кошик. Спробуйте ще раз.';
+
+            showCartRetry(message);
+            console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+
+$(document).ready(function() {
+    // RD-25-WP2 gallery switcher; literal attributes preserve the existing 700x700 URLs.
+    $('[data-bs-gallery]').each(function() {
+        var gallery = this;
+        var main = gallery.querySelector('[data-bs-gallery-main]');
+        var thumbs = Array.prototype.slice.call(gallery.querySelectorAll('[data-bs-gallery-thumb]'));
+        var selected = 0;
+        if (!main) { return; }
+        $(gallery).on('click.rd25Gallery', '[data-bs-gallery-thumb]', function(event) {
+            event.preventDefault();
+            selected = thumbs.indexOf(this);
+            main.setAttribute('href', this.getAttribute('href'));
+            main.setAttribute('data-bs-media-kind', this.getAttribute('data-bs-media-kind'));
+            var image = main.querySelector('img');
+            image.setAttribute('src', this.getAttribute('data-bs-gallery-src'));
+            image.setAttribute('width', this.getAttribute('data-bs-gallery-width'));
+            image.setAttribute('height', this.getAttribute('data-bs-gallery-height'));
+            thumbs.forEach(function(thumb) { thumb.removeAttribute('aria-current'); });
+            this.setAttribute('aria-current', 'true');
+        });
+        $(main).on('click.rd25Gallery', function(event) {
+            event.preventDefault();
+            var links = thumbs.length ? thumbs : [main];
+            $.magnificPopup.open({
+                items: links.map(function(link) { return { src: link.getAttribute('href'), title: link.getAttribute('title') }; }),
+                type: 'image',
+                gallery: { enabled: links.length > 1 }
+            }, selected);
+        });
+    });
+});
+//--></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "@id": {{ share|json_encode|raw }},
+  "name": {{ heading_title|json_encode|raw }},
+  "url": {{ share|json_encode|raw }},
+  {% if popup %}
+  "image": [
+    {{ popup|json_encode|raw }}{% for image in images %},
+    {{ image.popup|json_encode|raw }}{% endfor %}
+  ],
+  {% endif %}
+  {% if description %}
+  "description": {{ description|striptags|replace({"\n": " ", "\r": " ", "\t": " "})|trim|json_encode|raw }},
+  {% endif %}
+  {% if manufacturer %}
+  "brand": {
+    "@type": "Brand",
+    "name": {{ manufacturer|striptags|json_encode|raw }}
+  },
+  {% endif %}
+  {% if model %}
+  "sku": {{ model|striptags|trim|json_encode|raw }},
+  {% endif %}
+  {% if price %}
+  "offers": {
+    "@type": "Offer",
+    "url": {{ share|json_encode|raw }},
+    "priceCurrency": "UAH",
+    "price": "{{ (special ? special : price)|striptags|replace({'₴': '', 'грн': '', ' ': '', ',': '.'})|trim }}",
+
+    "availability": "{% set schema_stock = stock|striptags|trim %}{% if schema_stock == 'Передзамовлення' or schema_stock == 'Pre-Order' or schema_stock == 'PreOrder' %}https://schema.org/PreOrder{% elseif schema_stock and schema_stock != 'Немає в наявності' and schema_stock != 'Out Of Stock' and schema_stock != 'Закінчився' %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}",
+    "itemCondition": "https://schema.org/NewCondition",
+    "hasMerchantReturnPolicy": {
+      "@type": "MerchantReturnPolicy",
+      "@id": "https://boostershop.website/information/Obmin-i-povernennya#merchant-return-policy",
+      "applicableCountry": "UA",
+      "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+      "merchantReturnDays": 14,
+      "itemCondition": "https://schema.org/NewCondition",
+      "merchantReturnLink": "https://boostershop.website/information/Obmin-i-povernennya"
+    }{% set schema_price_number = (special ? special : price)|striptags|replace({'₴': '', 'грн': '', ' ': '', ',': '.'})|trim %},
+    "shippingDetails": {
+      "@type": "OfferShippingDetails",
+      "shippingRate": {
+        "@type": "MonetaryAmount",
+        "value": {% if schema_price_number >= 1500 %}0{% else %}100{% endif %},
+        "currency": "UAH"
+      },
+      "shippingDestination": {
+        "@type": "DefinedRegion",
+        "addressCountry": "UA"
+      },
+      "deliveryTime": {
+        "@type": "ShippingDeliveryTime",
+        "handlingTime": {
+          "@type": "QuantitativeValue",
+          "minValue": 0,
+          "maxValue": 1,
+          "unitCode": "DAY"
+        },
+        "transitTime": {
+          "@type": "QuantitativeValue",
+          "minValue": 1,
+          "maxValue": 3,
+          "unitCode": "DAY"
+        }
+      }
+    }
+  }{% if review_status and rating %},
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "{{ rating }}",
+    "reviewCount": "1"
+  }{% endif %}
+  {% endif %}
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://boostershop.website/#organization",
+  "name": "Бустер Шоп",
+  "url": "https://boostershop.website/",
+  "hasShippingService": {
+    "@type": "ShippingService",
+    "@id": "https://boostershop.website/information/oplata-i-dostavka#nova-poshta-shipping",
+    "name": "Доставка Новою Поштою",
+    "description": "Доставка по Україні у відділення, поштомат або кур'єром. Безкоштовна доставка Новою Поштою від 1500 грн; для менших замовлень вартість визначається тарифами Нової Пошти та NovaPay.",
+    "fulfillmentType": "https://schema.org/FulfillmentTypeDelivery",
+    "shippingConditions": [
+      {
+        "@type": "ShippingConditions",
+        "shippingDestination": {
+          "@type": "DefinedRegion",
+          "addressCountry": "UA"
+        },
+        "orderValue": {
+          "@type": "MonetaryAmount",
+          "minValue": 0,
+          "maxValue": 299.99,
+          "currency": "UAH"
+        },
+        "doesNotShip": true
+      },
+      {
+        "@type": "ShippingConditions",
+        "shippingDestination": {
+          "@type": "DefinedRegion",
+          "addressCountry": "UA"
+        },
+        "orderValue": {
+          "@type": "MonetaryAmount",
+          "minValue": 300,
+          "maxValue": 1499.99,
+          "currency": "UAH"
+        },
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": 100,
+          "currency": "UAH"
+        },
+        "transitTime": {
+          "@type": "ServicePeriod",
+          "duration": {
+            "@type": "QuantitativeValue",
+            "minValue": 1,
+            "maxValue": 3,
+            "unitCode": "DAY"
+          }
+        }
+      },
+      {
+        "@type": "ShippingConditions",
+        "shippingDestination": {
+          "@type": "DefinedRegion",
+          "addressCountry": "UA"
+        },
+        "orderValue": {
+          "@type": "MonetaryAmount",
+          "minValue": 1500,
+          "currency": "UAH"
+        },
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": 0,
+          "currency": "UAH"
+        },
+        "transitTime": {
+          "@type": "ServicePeriod",
+          "duration": {
+            "@type": "QuantitativeValue",
+            "minValue": 1,
+            "maxValue": 3,
+            "unitCode": "DAY"
+          }
+        }
+      }
+    ]
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {% for breadcrumb in breadcrumbs %}
+    {
+      "@type": "ListItem",
+      "position": {{ loop.index }},
+                  {% if loop.first %}
+      "name": "Головна",
+      "item": "https://boostershop.website/"
+      {% else %}
+      "name": {{ breadcrumb.text|striptags|json_encode|raw }},
+      "item": {{ breadcrumb.href|replace({'&amp;': '&'})|json_encode|raw }}
+      {% endif %}
+
+
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Booster Shop",
+  "url": "https://boostershop.website/",
+  {% if store_logo %}
+  "logo": {{ store_logo|json_encode|raw }},
+  {% endif %}
+  "sameAs": [
+    "https://telegram.me/boostershop_tcg"
+  ]
+}
+</script>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Booster Shop",
+  "url": "https://boostershop.website/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://boostershop.website/search?search={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+
+
+
+{% if not pay002_pumb_visible %}{% if pay001_mono_chast_visible %}
+<div class="pay001-modal" data-pay001-credit-modal hidden>
+  <div class="pay001-modal__backdrop" data-pay001-credit-close></div>
+  <section class="pay001-modal__sheet" role="dialog" aria-modal="true" aria-labelledby="pay001-credit-title">
+    <button type="button" class="pay001-modal__close" aria-label="Закрити" data-pay001-credit-close>&times;</button>
+    <h2 id="pay001-credit-title">Виберіть кредитну пропозицію</h2>
+    <article class="pay001-modal-provider">
+      <div class="pay001-modal-provider__head"><img src="catalog/view/image/payment/pay001-mono-label.png" alt="monobank"><span><strong>Покупка частинами monobank</strong><small>Без комісії для вас</small></span></div>
+      <div class="pay001-parts" data-pay001-parts>
+        <button type="button" data-pay001-part="3">3 платежі</button><button type="button" data-pay001-part="4">4 платежі</button><button type="button" data-pay001-part="5">5 платежів</button>
+      </div>
+      <div class="pay001-summary"><span>Щомісячний платіж<strong data-pay001-monthly></strong></span><span>Платежів<strong data-pay001-count></strong></span><span>Вартість товару<strong data-pay001-total></strong></span></div>
+      <div class="pay001-modal__actions">
+        <button type="button" class="bs-btn pay001-modal-provider__choose" data-pay001-credit-action="checkout">Додати й оформити</button>
+        <button type="button" class="bs-btn bs-btn-secondary pay001-modal-provider__continue" data-pay001-credit-action="continue">Продовжити покупки</button>
+      </div>
+    </article>
+    <article class="pay001-modal-provider pay001-modal-provider--soon"><div class="pay001-modal-provider__head"><img src="catalog/view/image/payment/pay001-pumb.svg" alt="ПУМБ"><span><strong>Сплачуйте частинами ПУМБ</strong><small>До 5 платежів</small></span><em>СКОРО БУДЕ</em></div></article>
+    <p class="pay001-modal__disclaimer">Без комісії для вас — умови кредитування визначає банк.</p>
+  </section>
+</div>
+<script>
+(function () {
+  var modal = document.querySelector('[data-pay001-credit-modal]');
+  var creditRoot = document.querySelector('[data-pay001-product-credit]');
+  var quantityInput = document.getElementById('input-quantity');
+  if (!modal || !creditRoot || !quantityInput) return;
+  var price = Number(creditRoot.dataset.pay001Price) || 0;
+  var threshold = Number(creditRoot.dataset.pay001Threshold) || 500;
+  var cartTotal = Number(creditRoot.dataset.pay001CartTotal) || 0;
+  var inStock = creditRoot.dataset.pay001Stock === '1';
+  var checkoutUrl = {{ pay001_mono_chast_checkout|replace({'&amp;': '&'})|json_encode|raw }};
+  var parts = 3;
+  var adding = false;
+  function money(value) { return new Intl.NumberFormat('uk-UA', {maximumFractionDigits: 0}).format(Math.ceil(value)) + ' ₴'; }
+  window.pay001PaymentsWord = window.pay001PaymentsWord || function (count) {
+    count = Number(count) || 0;
+    return count >= 2 && count <= 4 ? 'платежі' : 'платежів';
+  };
+  function quantity() { return Math.max(1, parseInt(quantityInput.value, 10) || 1); }
+  function total() { return price * quantity(); }
+  function eligibilityTotal() { return cartTotal + total(); }
+  function renderProductState() {
+    var available = inStock && eligibilityTotal() >= threshold;
+    var button = creditRoot.querySelector('[data-pay001-credit-open]');
+    var panel = creditRoot.querySelector('.pay001-product-credit');
+    var hint = creditRoot.querySelector('[data-pay001-credit-hint]');
+    button.disabled = !available;
+    panel.classList.toggle('is-muted', !available);
+    panel.classList.toggle('is-preorder', !inStock);
+    if (!inStock) {
+      hint.textContent = 'Сплата частинами доступна лише для товарів у наявності.';
+    } else if (!available) {
+      hint.textContent = 'Сплата частинами доступна від ' + money(threshold) + ' — додайте ще ' + money(Math.max(0, threshold - eligibilityTotal())) + '.';
+    } else {
+      hint.textContent = '';
+    }
+  }
+  function render() {
+    modal.querySelectorAll('[data-pay001-part]').forEach(function (button) { button.classList.toggle('is-active', Number(button.dataset.pay001Part) === parts); });
+    modal.querySelector('[data-pay001-monthly]').textContent = money(total() / parts);
+    modal.querySelector('[data-pay001-count]').textContent = parts;
+    modal.querySelector('[data-pay001-total]').textContent = money(total());
+  }
+  function showCartRetry(message) {
+    $('#alert .bs-cart-add-timeout').remove();
+    window.bsToast('danger', message);
+  }
+  function setAdding(button, state) {
+    adding = state;
+    modal.querySelectorAll('[data-pay001-credit-action]').forEach(function (item) {
+      item.disabled = state;
+    });
+    if (state) {
+      button.dataset.pay001OriginalText = button.textContent;
+      button.textContent = 'Додаємо…';
+      button.classList.add('is-loading');
+    } else {
+      modal.querySelectorAll('[data-pay001-credit-action]').forEach(function (item) {
+        item.disabled = false;
+        if (item.dataset.pay001OriginalText) {
+          item.textContent = item.dataset.pay001OriginalText;
+          delete item.dataset.pay001OriginalText;
+        }
+        item.classList.remove('is-loading');
+      });
+    }
+  }
+  function addProduct(action, button) {
+    var form = $('#form-product');
+    if (adding || form.data('bsCartAddPending')) return;
+    setAdding(button, true);
+    $.ajax({
+      url: 'index.php?route=checkout/cart.add&language={{ language }}',
+      type: 'post',
+      timeout: 12000,
+      data: form.serialize(),
+      dataType: 'json',
+      contentType: 'application/x-www-form-urlencoded',
+      cache: false,
+      processData: false,
+      complete: function () { setAdding(button, false); },
+      success: function (json) {
+        form.find('.is-invalid').removeClass('is-invalid');
+        form.find('.invalid-feedback').removeClass('d-block');
+        if (json.error) {
+          Object.keys(json.error).forEach(function (key) {
+            $('#input-' + key.replaceAll('_', '-')).addClass('is-invalid').find('.form-control, .form-select, .form-check-input, .form-check-label').addClass('is-invalid');
+            $('#error-' + key.replaceAll('_', '-')).html(json.error[key]).addClass('d-block');
+          });
+          return;
+        }
+        if (!json.success) return;
+        $('#alert .bs-cart-add-timeout').remove();
+        window.bsToast('success', json.success);
+        $('#cart').load('index.php?route=common/cart.info&language={{ language }}');
+        if (action === 'checkout') {
+          window.location.assign(checkoutUrl + '&mono_chast_parts=' + encodeURIComponent(parts));
+        } else {
+          modal.hidden = true;
+        }
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        showCartRetry(ajaxOptions === 'timeout' ? 'Додавання до кошика зайняло забагато часу. Перевірте кошик або спробуйте ще раз.' : 'Не вдалося додати товар до кошика. Спробуйте ще раз.');
+        console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+      }
+    });
+  }
+  document.querySelectorAll('[data-pay001-credit-open]').forEach(function (button) { button.addEventListener('click', function () { if (!button.disabled) { modal.hidden = false; render(); } }); });
+  modal.querySelectorAll('[data-pay001-credit-close]').forEach(function (button) { button.addEventListener('click', function () { if (!adding) modal.hidden = true; }); });
+  modal.querySelectorAll('[data-pay001-part]').forEach(function (button) { button.addEventListener('click', function () { parts = Number(button.dataset.pay001Part); render(); }); });
+  modal.querySelectorAll('[data-pay001-credit-action]').forEach(function (button) {
+    button.addEventListener('click', function () { addProduct(button.dataset.pay001CreditAction, button); });
+  });
+  quantityInput.addEventListener('input', function () { renderProductState(); render(); });
+  quantityInput.addEventListener('change', function () { renderProductState(); render(); });
+  renderProductState();
+  render();
+}());
+</script>
+{% endif %}{% else %}
+{% if pay001_mono_chast_visible or pay002_pumb_visible %}
+<div class="pay001-modal" data-pay001-credit-modal hidden>
+  <div class="pay001-modal__backdrop" data-pay001-credit-close></div>
+  <section class="pay001-modal__sheet" role="dialog" aria-modal="true" aria-labelledby="pay001-credit-title">
+    <button type="button" class="pay001-modal__close" aria-label="Закрити" data-pay001-credit-close>&times;</button>
+    <h2 id="pay001-credit-title">Виберіть кредитну пропозицію</h2>
+    {% if pay001_mono_chast_visible %}
+    <article class="pay001-modal-provider" data-pay001-modal-provider="mono_chast">
+      <div class="pay001-modal-provider__head"><img src="catalog/view/image/payment/pay001-mono-label.png" alt="monobank"><span><strong>Покупка частинами monobank</strong><small>Без комісії для вас</small></span></div>
+      <div class="pay001-parts" data-pay001-parts>
+        <button type="button" data-pay001-part="3" data-pay001-provider="mono_chast">3 платежі</button><button type="button" data-pay001-part="4" data-pay001-provider="mono_chast">4 платежі</button><button type="button" data-pay001-part="5" data-pay001-provider="mono_chast">5 платежів</button>
+      </div>
+      <div class="pay001-summary"><span>Щомісячний платіж<strong data-pay001-monthly></strong></span><span>Платежів<strong data-pay001-count></strong></span><span>Вартість товару<strong data-pay001-total></strong></span></div>
+      <div class="pay001-modal__actions">
+        <button type="button" class="bs-btn pay001-modal-provider__choose" data-pay001-credit-action="checkout" data-pay001-provider="mono_chast">Додати й оформити</button>
+        <button type="button" class="bs-btn bs-btn-secondary pay001-modal-provider__continue" data-pay001-credit-action="continue" data-pay001-provider="mono_chast">Продовжити покупки</button>
+      </div>
+    </article>
+    {% endif %}
+    {% if pay002_pumb_visible %}
+    <article class="pay001-modal-provider" data-pay001-modal-provider="pumb_credit">
+      <div class="pay001-modal-provider__head"><img src="catalog/view/image/payment/pay001-pumb.svg" alt="ПУМБ"><span><strong>Сплачуйте частинами ПУМБ</strong><small>До {{ pay002_pumb_terms|last }} платежів</small></span></div>
+      <div class="pay001-parts" data-pay001-parts>
+        {% for term in pay002_pumb_terms %}<button type="button" data-pay001-part="{{ term }}" data-pay001-provider="pumb_credit">{{ term }} {{ term == 5 ? 'платежів' : 'платежі' }}</button>{% endfor %}
+      </div>
+      <div class="pay001-summary"><span>Щомісячний платіж<strong data-pay001-monthly></strong></span><span>Платежів<strong data-pay001-count></strong></span><span>Вартість товару<strong data-pay001-total></strong></span></div>
+      <div class="pay001-modal__actions">
+        <button type="button" class="bs-btn pay001-modal-provider__choose" data-pay001-credit-action="checkout" data-pay001-provider="pumb_credit">Додати й оформити</button>
+        <button type="button" class="bs-btn bs-btn-secondary pay001-modal-provider__continue" data-pay001-credit-action="continue" data-pay001-provider="pumb_credit">Продовжити покупки</button>
+      </div>
+    </article>
+    {% endif %}
+    {% if pay001_mono_chast_visible %}<p class="pay001-modal__disclaimer">Без комісії для вас — умови кредитування визначає банк.</p>{% endif %}
+  </section>
+</div>
+<script>
+(function () {
+  var modal = document.querySelector('[data-pay001-credit-modal]');
+  var creditRoot = document.querySelector('[data-pay001-product-credit]');
+  var quantityInput = document.getElementById('input-quantity');
+  if (!modal || !creditRoot || !quantityInput) return;
+  var hasMono = creditRoot.dataset.pay001Price !== undefined;
+  var hasPumb = creditRoot.dataset.pay002Price !== undefined;
+  var price = Number(hasMono ? creditRoot.dataset.pay001Price : creditRoot.dataset.pay002Price) || 0;
+  var cartTotal = Number(hasMono ? creditRoot.dataset.pay001CartTotal : creditRoot.dataset.pay002CartTotal) || 0;
+  var monoThreshold = Number(creditRoot.dataset.pay001Threshold) || 500;
+  var pumbThreshold = Number(creditRoot.dataset.pay002Threshold) || 500;
+  var pumbMaxTotal = Number(creditRoot.dataset.pay002MaxTotal) || 0;
+  var monoInStock = creditRoot.dataset.pay001Stock === '1';
+  var pumbInStock = creditRoot.dataset.pay002Stock === '1';
+  var monoCheckoutUrl = hasMono ? {{ pay001_mono_chast_checkout|replace({'&amp;': '&'})|json_encode|raw }} : '';
+  var pumbCheckoutUrl = hasPumb ? {{ pay002_pumb_checkout|replace({'&amp;': '&'})|json_encode|raw }} : '';
+  var parts = {mono_chast: 3, pumb_credit: 3};
+  var adding = false;
+  function money(value) { return new Intl.NumberFormat('uk-UA', {maximumFractionDigits: 0}).format(Math.ceil(value)) + ' ₴'; }
+  window.pay001PaymentsWord = window.pay001PaymentsWord || function (count) {
+    count = Number(count) || 0;
+    return count >= 2 && count <= 4 ? 'платежі' : 'платежів';
+  };
+  function quantity() { return Math.max(1, parseInt(quantityInput.value, 10) || 1); }
+  function total() { return price * quantity(); }
+  function eligibilityTotal() { return cartTotal + total(); }
+  function providerAvailable(provider) {
+    if (provider === 'mono_chast') return hasMono && monoInStock && eligibilityTotal() >= monoThreshold;
+    return hasPumb && pumbInStock && eligibilityTotal() >= pumbThreshold && (!pumbMaxTotal || eligibilityTotal() <= pumbMaxTotal);
+  }
+  function renderProvider(provider) {
+    var card = modal.querySelector('[data-pay001-modal-provider="' + provider + '"]');
+    if (!card) return;
+    var available = providerAvailable(provider);
+    var count = parts[provider];
+    card.querySelectorAll('[data-pay001-part]').forEach(function (button) {
+      button.classList.toggle('is-active', Number(button.dataset.pay001Part) === count);
+      button.disabled = !available;
+    });
+    card.querySelectorAll('[data-pay001-credit-action]').forEach(function (button) { button.disabled = !available; });
+    card.querySelector('[data-pay001-monthly]').textContent = money(total() / count);
+    card.querySelector('[data-pay001-count]').textContent = count;
+    card.querySelector('[data-pay001-total]').textContent = money(total());
+  }
+  function renderProductState() {
+    var available = providerAvailable('mono_chast') || providerAvailable('pumb_credit');
+    var button = creditRoot.querySelector('[data-pay001-credit-open]');
+    var panel = creditRoot.querySelector('.pay001-product-credit');
+    var hint = creditRoot.querySelector('[data-pay001-credit-hint]');
+    button.disabled = !available;
+    panel.classList.toggle('is-muted', !available);
+    panel.classList.toggle('is-preorder', !(monoInStock || pumbInStock));
+    if (!(monoInStock || pumbInStock)) {
+      hint.textContent = 'Сплата частинами доступна лише для товарів у наявності.';
+    } else if (!available) {
+      var threshold = hasPumb && !hasMono ? pumbThreshold : monoThreshold;
+      hint.textContent = 'Сплата частинами доступна від ' + money(threshold) + ' — додайте ще ' + money(Math.max(0, threshold - eligibilityTotal())) + '.';
+    } else {
+      hint.textContent = '';
+    }
+  }
+  function render() { renderProvider('mono_chast'); renderProvider('pumb_credit'); }
+  function showCartRetry(message) {
+    $('#alert .bs-cart-add-timeout').remove();
+    window.bsToast('danger', message);
+  }
+  function setAdding(button, state) {
+    adding = state;
+    modal.querySelectorAll('[data-pay001-credit-action]').forEach(function (item) { item.disabled = state; });
+    if (state) {
+      button.dataset.pay001OriginalText = button.textContent;
+      button.textContent = 'Додаємо…';
+      button.classList.add('is-loading');
+    } else {
+      render();
+      modal.querySelectorAll('[data-pay001-credit-action]').forEach(function (item) {
+        if (item.dataset.pay001OriginalText) {
+          item.textContent = item.dataset.pay001OriginalText;
+          delete item.dataset.pay001OriginalText;
+        }
+        item.classList.remove('is-loading');
+      });
+    }
+  }
+  function addProduct(action, button) {
+    var provider = String(button.dataset.pay001Provider || '');
+    if (adding || !providerAvailable(provider)) return;
+    var form = $('#form-product');
+    if (form.data('bsCartAddPending')) return;
+    setAdding(button, true);
+    $.ajax({
+      url: 'index.php?route=checkout/cart.add&language={{ language }}',
+      type: 'post',
+      timeout: 12000,
+      data: form.serialize(),
+      dataType: 'json',
+      contentType: 'application/x-www-form-urlencoded',
+      cache: false,
+      processData: false,
+      complete: function () { setAdding(button, false); },
+      success: function (json) {
+        form.find('.is-invalid').removeClass('is-invalid');
+        form.find('.invalid-feedback').removeClass('d-block');
+        if (json.error) {
+          Object.keys(json.error).forEach(function (key) {
+            $('#input-' + key.replaceAll('_', '-')).addClass('is-invalid').find('.form-control, .form-select, .form-check-input, .form-check-label').addClass('is-invalid');
+            $('#error-' + key.replaceAll('_', '-')).html(json.error[key]).addClass('d-block');
+          });
+          return;
+        }
+        if (!json.success) return;
+        $('#alert .bs-cart-add-timeout').remove();
+        window.bsToast('success', json.success);
+        $('#cart').load('index.php?route=common/cart.info&language={{ language }}');
+        if (action === 'checkout') {
+          var checkoutUrl = provider === 'pumb_credit' ? pumbCheckoutUrl : monoCheckoutUrl;
+          var parameter = provider === 'pumb_credit' ? 'pumb_credit_term' : 'mono_chast_parts';
+          window.location.assign(checkoutUrl + '&' + parameter + '=' + encodeURIComponent(parts[provider]));
+        } else {
+          modal.hidden = true;
+        }
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        showCartRetry(ajaxOptions === 'timeout' ? 'Додавання до кошика зайняло забагато часу. Перевірте кошик або спробуйте ще раз.' : 'Не вдалося додати товар до кошика. Спробуйте ще раз.');
+        console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+      }
+    });
+  }
+  document.querySelectorAll('[data-pay001-credit-open]').forEach(function (button) { button.addEventListener('click', function () { if (!button.disabled) { modal.hidden = false; render(); } }); });
+  modal.querySelectorAll('[data-pay001-credit-close]').forEach(function (button) { button.addEventListener('click', function () { if (!adding) modal.hidden = true; }); });
+  modal.querySelectorAll('[data-pay001-part]').forEach(function (button) { button.addEventListener('click', function () { var provider = button.dataset.pay001Provider; parts[provider] = Number(button.dataset.pay001Part); renderProvider(provider); }); });
+  modal.querySelectorAll('[data-pay001-credit-action]').forEach(function (button) { button.addEventListener('click', function () { addProduct(button.dataset.pay001CreditAction, button); }); });
+  quantityInput.addEventListener('input', function () { renderProductState(); render(); });
+  quantityInput.addEventListener('change', function () { renderProductState(); render(); });
+  renderProductState();
+  render();
+}());
+</script>
+{% endif %}
+{% endif %}
+{{ footer }}

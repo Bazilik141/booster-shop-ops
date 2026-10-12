@@ -1,0 +1,419 @@
+{
+  "scope": "Phase 0 only; no patch",
+  "report": {
+    "path": "diagnostics/RD-25-WP2-WP3_phase0_report_20261012.md",
+    "sha256": "fadcf907c4eaada24b6167096e7bea5278509de4ca327f3e7648e5cf479597f1"
+  },
+  "evidence": [
+    {
+      "path": "cart-after-1440.png",
+      "bytes": 145429,
+      "sha256": "fb27cddfe639aa67c6c560931ecfb9f2f600b66f4d11a4aafccb4862f15140b2"
+    },
+    {
+      "path": "cart-after-390.png",
+      "bytes": 127880,
+      "sha256": "4ea332ec2b159f1d67fc3762c1283febe3e5049c094ea2abfcb537bed3007d26"
+    },
+    {
+      "path": "cart-after.html",
+      "bytes": 13099,
+      "sha256": "8e06340111ef923cc0be8b4522d1290446d9e6d4012cccf7d904056d684f9470"
+    },
+    {
+      "path": "cart-before-1440.png",
+      "bytes": 194756,
+      "sha256": "7776d1f56410913c2e15a926c63979fc61be2868e231bb5aa5308ffedceb74bc"
+    },
+    {
+      "path": "cart-before-390.png",
+      "bytes": 140136,
+      "sha256": "784d5fce29400eaa45f789a5a231409ede5ab0671dbe3c2c0ff146c442b5bed4"
+    },
+    {
+      "path": "cart-before.html",
+      "bytes": 12758,
+      "sha256": "5b7aa1d9f9c524248d60d08a7e6c781c22382c7f58bf7194c57290288bda47fc"
+    },
+    {
+      "path": "cart-source.css",
+      "bytes": 4715,
+      "sha256": "7e1b9033b1ba710a8c3369b9a7efcf537019fb52e8dd0e24c2ca2b6e70d7840a"
+    },
+    {
+      "path": "cold-cost.json",
+      "bytes": 58947,
+      "sha256": "930e26c88dfe4dd6838d0e04aa4df5c04ba47faf3c3e49f966e265e2894e2df5"
+    },
+    {
+      "path": "contact-sheet-preview.png",
+      "bytes": 182080,
+      "sha256": "ea99c0b05a8b04cbf2b980416c958377105b8b91d7ceaa34bccf1a026b665fc7"
+    },
+    {
+      "path": "contact-sheet.html",
+      "bytes": 12909,
+      "sha256": "ac8334c146e149705d2250f27f52736eaa4f564b1f107cf0ccf7b8f82f972af3"
+    },
+    {
+      "path": "measured-inventory.json",
+      "bytes": 907373,
+      "sha256": "b1f8acd07bb5f189831a7fbb8ac7f29191ad12c9fe7269aa073ff3deeb730b4b"
+    },
+    {
+      "path": "metadata-validation.json",
+      "bytes": 84,
+      "sha256": "ef1b2d29f3ef49b9f9050495dd5c5652c43c842abc9c3a2e8d7ef3e5eabe975d"
+    },
+    {
+      "path": "mini-cart-after-1440.png",
+      "bytes": 127926,
+      "sha256": "32102baa22d25653c142c7bc9032c1fd35ceb904d8f4404a11f7ee96def134d7"
+    },
+    {
+      "path": "mini-cart-after-390.png",
+      "bytes": 111917,
+      "sha256": "9c59f51ff10597982b43e00bba9641542a4f8bfcbf3c6054e65eec72852ffd95"
+    },
+    {
+      "path": "mini-cart-after.html",
+      "bytes": 11372,
+      "sha256": "f234c3c9715906a892f9f03f84283c125d848732ba3223aa5c0f18da4ef2f17a"
+    },
+    {
+      "path": "mini-cart-before-1440.png",
+      "bytes": 117420,
+      "sha256": "cded692389ac8d20703d410a10af0283f631a42c60a4aead8d2ae4abf0073c8f"
+    },
+    {
+      "path": "mini-cart-before-390.png",
+      "bytes": 102295,
+      "sha256": "2ceb2c756f4a10d5f4eab6d4ad1fa74d6bf532a1be182484d52a337a6e2e88db"
+    },
+    {
+      "path": "mini-cart-before.html",
+      "bytes": 10722,
+      "sha256": "b714d94ef90b721589ff08b9a296c2a1a8d9c1fae774a052de256852a811cd3c"
+    },
+    {
+      "path": "plan.json",
+      "bytes": 574,
+      "sha256": "659834a55e2b0e5140769182edfdec7d4153b38b1d1df7d9d46c90261dbe68a8"
+    },
+    {
+      "path": "product-131-after-1440.png",
+      "bytes": 231804,
+      "sha256": "0c65d137ed40fa5f311af44a32e474b212d64a21704821288b80ff3ffe8065f4"
+    },
+    {
+      "path": "product-131-after-390.png",
+      "bytes": 150345,
+      "sha256": "a1f6b7f8d8a89bb10070f27976efaf6424892056a5eda122ed8ee433f67f87a5"
+    },
+    {
+      "path": "product-131-after.html",
+      "bytes": 4826,
+      "sha256": "a76bae09f32d4f6cca069ea0dc19242b13f368b7e5bf0c7634f8da62820d93ed"
+    },
+    {
+      "path": "product-131-before-1440.png",
+      "bytes": 203849,
+      "sha256": "a67fcfcec645aaf67810fb6a47527178095a1805257e0f1a3c6dec926a8aab81"
+    },
+    {
+      "path": "product-131-before-390.png",
+      "bytes": 130193,
+      "sha256": "299c5014b80057fb42bd263925cd1563197019a4ce2977e83b5c8fc716588139"
+    },
+    {
+      "path": "product-131-before.html",
+      "bytes": 3801,
+      "sha256": "321bf10485ae76f3e8e59622dac34965b5797ac7a3955ebaf858b838634c1fa5"
+    },
+    {
+      "path": "product-144-after-1440.png",
+      "bytes": 78352,
+      "sha256": "cada887f48bd7acb48a6fc6c3dc1527394186a2102c522c2881d022fe5cac838"
+    },
+    {
+      "path": "product-144-after-390.png",
+      "bytes": 56817,
+      "sha256": "6928ce90b091bf684f4335e0193f1f5bb41091d7107bf1c8ef01bd1f4762a006"
+    },
+    {
+      "path": "product-144-after.html",
+      "bytes": 4414,
+      "sha256": "7d7e657a25350d9e39d907d19b9a3dfa214ce8cfa5fcb9afbf7fa1d4760849eb"
+    },
+    {
+      "path": "product-144-before-1440.png",
+      "bytes": 71015,
+      "sha256": "61e9bf842b980fd21d372ae4ea2b2c0f17c97d4b60954d04082785f692eb6bdb"
+    },
+    {
+      "path": "product-144-before-390.png",
+      "bytes": 52421,
+      "sha256": "5c27decae24bcb4de9a34e27b521f449be6d24c1f66e0b26bcd14826c3877851"
+    },
+    {
+      "path": "product-144-before.html",
+      "bytes": 3478,
+      "sha256": "015d32e2c1c9041869f3efcdf1805d2ded4a6258d9815ca9cd9c8e1790b34128"
+    },
+    {
+      "path": "product-201-after-1440.png",
+      "bytes": 541898,
+      "sha256": "dce63457d094942e67ca64ddea5d15bd435b5fe92e5c9527b69ccc18430b5ed7"
+    },
+    {
+      "path": "product-201-after-390.png",
+      "bytes": 361124,
+      "sha256": "3bfed8e7a01b13b2ce67108b7533b4fbf7ceacbda2ade6525cd77a6c499d2311"
+    },
+    {
+      "path": "product-201-after.html",
+      "bytes": 7022,
+      "sha256": "3aa851696088c5e829c33c5cb4fa86d4cc7da62ab7aeb497b35b04f3640abaad"
+    },
+    {
+      "path": "product-201-before-1440.png",
+      "bytes": 378664,
+      "sha256": "d43d69d4f3b3d69de4d13af9df7ddaad91d97b4e841b124f836ffd8b5be09714"
+    },
+    {
+      "path": "product-201-before-390.png",
+      "bytes": 245478,
+      "sha256": "ea2a348debd324fa4b15a77fd67f567a70da01014a449da4372665c57c72f161"
+    },
+    {
+      "path": "product-201-before.html",
+      "bytes": 7160,
+      "sha256": "3e6ec7df24c88df874e2924c024ee0b900f1ee96f3e600d8ae46aaf8e08e5c99"
+    },
+    {
+      "path": "product-77-after-1440.png",
+      "bytes": 229594,
+      "sha256": "3d96c8442a4c1709eef5613d2b17f7f52ad5bf74d427665f62dd8f8ab5730d53"
+    },
+    {
+      "path": "product-77-after-390.png",
+      "bytes": 152613,
+      "sha256": "1a97187f355edbbfa6ec6cac37f063accee44c7dbcd18f0931bdf4a1cc722172"
+    },
+    {
+      "path": "product-77-after.html",
+      "bytes": 3294,
+      "sha256": "7bd1e8ada20e0396c7907b18105425a0ca27500795aa3521a1ebeddce03cbb43"
+    },
+    {
+      "path": "product-77-before-1440.png",
+      "bytes": 220029,
+      "sha256": "26c4c41f7f12274f691eaa9ef1138fbd8a8ffc096f2bfaebe17676226b5ae810"
+    },
+    {
+      "path": "product-77-before-390.png",
+      "bytes": 140126,
+      "sha256": "ce36a9a17b2987d45e5ff6365da3f0360575cce65415a56a0ac35d96a17b5251"
+    },
+    {
+      "path": "product-77-before.html",
+      "bytes": 2879,
+      "sha256": "61bfa3b05d444adf256908981ba4ecbbf2503c99972e390d091c0ed70076b955"
+    },
+    {
+      "path": "product-78-after-1440.png",
+      "bytes": 390889,
+      "sha256": "86a57484f8300dc74d1cb451a1fa938d1a0d0e9e03f9b302ba03d56b8b215fff"
+    },
+    {
+      "path": "product-78-after-390.png",
+      "bytes": 249346,
+      "sha256": "d1b9547bb04b92963c725ecc0fdfcd30bb76feb1a27e087bfba1603716abe6ac"
+    },
+    {
+      "path": "product-78-after.html",
+      "bytes": 4751,
+      "sha256": "eb83c935a7de0047a9d2ab3796184e12039a40b920d64aa984b2a226702e8cc1"
+    },
+    {
+      "path": "product-78-before-1440.png",
+      "bytes": 280178,
+      "sha256": "850231ce6b903852391fac21c92dbb1bc4ea481e47006f97322166b9512e3eec"
+    },
+    {
+      "path": "product-78-before-390.png",
+      "bytes": 176091,
+      "sha256": "3e6b289f4093a9afc9ef9be85bb20970b1407b30c1cd85f0767bcb957965d4ab"
+    },
+    {
+      "path": "product-78-before.html",
+      "bytes": 3771,
+      "sha256": "8e4b3d0d8703502b49019ed278453004b6343d474893e7c15d29bb0dba20593c"
+    },
+    {
+      "path": "product-80-after-1440.png",
+      "bytes": 383841,
+      "sha256": "9744e0bffd607faab0b2d0e19168cd078c802234bcd42643a9f959d30cb79531"
+    },
+    {
+      "path": "product-80-after-390.png",
+      "bytes": 238551,
+      "sha256": "72ceac6c793ed08c5243d3badb9862298737079e4fac7c5d35965b12cada492c"
+    },
+    {
+      "path": "product-80-after.html",
+      "bytes": 4457,
+      "sha256": "188255bdecf3a1f0eade0e0f2e4094d035d0f2654b7ef264682df61cca58b530"
+    },
+    {
+      "path": "product-80-before-1440.png",
+      "bytes": 225821,
+      "sha256": "7554ec83ad3a48bd77dbf5db76d541bd7142f30ab00469ab67fa8728523e7f25"
+    },
+    {
+      "path": "product-80-before-390.png",
+      "bytes": 141639,
+      "sha256": "69d7d194f207bc536e52738ad46a79bc75ad9a2704a716461b93dda0e1c92ef0"
+    },
+    {
+      "path": "product-80-before.html",
+      "bytes": 3591,
+      "sha256": "c191567a9ae327415be2e0400bb958e513c6dd86e98c328d8177105b008f8f7c"
+    },
+    {
+      "path": "product-96-after-1440.png",
+      "bytes": 300407,
+      "sha256": "dfa631d17e12cc975131d266731cca2a06942d47078bb37645761d74b58d2396"
+    },
+    {
+      "path": "product-96-after-390.png",
+      "bytes": 194700,
+      "sha256": "a6984502bb26214b123f889483e0eb4b9a92b267ebbd66fae1a6f39da687ea2a"
+    },
+    {
+      "path": "product-96-after.html",
+      "bytes": 3215,
+      "sha256": "59e4d955716b3119f08e7d1165f7603395cdcf69ac4ed772b9e91318fa2b13b1"
+    },
+    {
+      "path": "product-96-before-1440.png",
+      "bytes": 225991,
+      "sha256": "904cf61777572c9e31b02181669ef213c6df2d5a064abe521f645f0b90083a92"
+    },
+    {
+      "path": "product-96-before-390.png",
+      "bytes": 140760,
+      "sha256": "3a42b3c9a9723449e94bc3b868e5744b15339a75289f72065c80f7f3279d8e51"
+    },
+    {
+      "path": "product-96-before.html",
+      "bytes": 2725,
+      "sha256": "a50ae6e2e9eae654e6ecc9cf39b79ba2a0a8dec5fd9e7a1f793e55e480cf1869"
+    },
+    {
+      "path": "product-contact-1440.jpg",
+      "bytes": 540836,
+      "sha256": "09cbb195a18b1dd6d5df74f0f8499a7db6ec540c17c0e3f1f175760d1d6b41f1"
+    },
+    {
+      "path": "product-contact-390.jpg",
+      "bytes": 506723,
+      "sha256": "2ecefe2ee293df8e784711756deec6cb144c526a26df600eee89662d258f8a1e"
+    },
+    {
+      "path": "product-image-inventory.csv",
+      "bytes": 14923,
+      "sha256": "398879ae40d99dbfbc8b1f48fc5837e05f827164303bcb22425fe7ab6c0ba2f3"
+    },
+    {
+      "path": "prototype.css",
+      "bytes": 2818,
+      "sha256": "41bcacd074db11eb63405858a7f74dc7ec7f3188f6b9dcd33a2e532be5bece5b"
+    },
+    {
+      "path": "public-product-inventory-source.json",
+      "bytes": 75065,
+      "sha256": "2d9e151b3c19c0d0fdcd4080f75459d26c08b1438d416fed0fe34a24446c1aff"
+    },
+    {
+      "path": "rendered-fragments.json",
+      "bytes": 127452,
+      "sha256": "30d87e5205e1537e5ce1d9d3e7fdffaf036cd7cbe6411d2fbea332362c547323"
+    },
+    {
+      "path": "schema-preservation.json",
+      "bytes": 4298,
+      "sha256": "37fe9ce2480e57993c58e4f36c8dec960baf503c32c20aeddfcaa21d2ef257ba"
+    },
+    {
+      "path": "scripts/capture.mjs",
+      "bytes": 6736,
+      "sha256": "739a21c1fa122e76be9c724056157753c514c4d31d0248f58f4eb06aee57a24d"
+    },
+    {
+      "path": "scripts/cost.py",
+      "bytes": 1887,
+      "sha256": "4a7b86f9e05a6fea8fd14b04acc78c1608ed48ff400fc9951e2d9c4d148e3722"
+    },
+    {
+      "path": "scripts/deliver.py",
+      "bytes": 28757,
+      "sha256": "b3c186cff6650b5b35e3273885a80a5117675a78915adefb027e5cfe38e40da3"
+    },
+    {
+      "path": "scripts/prepare.py",
+      "bytes": 1587,
+      "sha256": "a3347e78ce2cb89ed7f48e1a951888f4946181296d4f88af3f8893fe31b03dd3"
+    },
+    {
+      "path": "scripts/probe.php",
+      "bytes": 12347,
+      "sha256": "6fd8a5307a832043df256abea1d9c57c1997eb3c5e5f35621f0b93251aa04ff8"
+    },
+    {
+      "path": "scripts/rd25-wp2-wp3-intake-20261012.py",
+      "bytes": 3645,
+      "sha256": "77bd93138d467501597c1ae30cb3e64d73aa9ffa16a49f718747d64ae1b0a8f0"
+    },
+    {
+      "path": "scripts/README.md",
+      "bytes": 1754,
+      "sha256": "a4d01f19419463333b60cff80e242453707c4b632ce93754251360419574723f"
+    },
+    {
+      "path": "scripts/visuals.py",
+      "bytes": 6301,
+      "sha256": "273011689eccb5d5b553359eb4978a07e55af0281444eddfcc3371ac1c7b29c9"
+    },
+    {
+      "path": "source-gate.json",
+      "bytes": 124732,
+      "sha256": "55fb07c1741e44746f5af24694c9806312469c51991a8653fbba191619879822"
+    },
+    {
+      "path": "source-integrity-after.json",
+      "bytes": 61453,
+      "sha256": "1527b44cb8f2bc16107c71f984266c49dcfcb5c96d1361c7a1f7aec22ef70a40"
+    },
+    {
+      "path": "source-map.json",
+      "bytes": 19191,
+      "sha256": "a03faad5acc9ef4acd7dbe9845535c8a1adb3239ed2508d33de5be08d09e9286"
+    },
+    {
+      "path": "theme-and-image-settings.json",
+      "bytes": 10882,
+      "sha256": "10a29391f13089f636a35c506a0bd56fd2d92b6102edfb353d9f0cc3df927b48"
+    },
+    {
+      "path": "visual-manifest.json",
+      "bytes": 5533,
+      "sha256": "369ac1dc29f5e013ea983be3bf1d033a4016e2f1f06bbf01f4c880eb8b1c64eb"
+    },
+    {
+      "path": "visual-metrics.json",
+      "bytes": 78861,
+      "sha256": "dcbe67ff92c0214610c43ff93752e4f86e735d3f3af862c9aa48d89eb865388b"
+    }
+  ]
+}

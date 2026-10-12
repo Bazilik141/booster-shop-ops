@@ -1,0 +1,36 @@
+--- before/catalog/controller/product/product.php
++++ after/catalog/controller/product/product.php
+@@ -346,9 +346,12 @@
+ 			$this->load->model('tool/image');
+ 			// RD-25-WP2 20261012: view-only fit payload; legacy popup/thumb/images stay intact.
+ 			$data['bs_gallery'] = [];
+-			$bs_gallery_item = function (string $filename, string $popup, string $legacy, int $legacy_width, int $legacy_height): array {
+-				$item = ['popup' => $popup, 'main' => $legacy, 'small' => $legacy,
+-					'kind' => 'legacy', 'main_width' => $legacy_width, 'main_height' => $legacy_height,
++			$bs_gallery_item = function (string $filename, string $popup, string $legacy, int $legacy_width, int $legacy_height, bool $additional = false): array {
++				// RD-25-WP2-FIX 20261012: N1 main fallback uses additional popup; small fallback remains legacy.
++				$item = ['popup' => $popup, 'main' => $additional ? $popup : $legacy, 'small' => $legacy,
++					'kind' => 'legacy',
++					'main_width' => $additional ? (int)$this->config->get('config_image_popup_width') : $legacy_width,
++					'main_height' => $additional ? (int)$this->config->get('config_image_popup_height') : $legacy_height,
+ 					'small_width' => $legacy_width, 'small_height' => $legacy_height];
+ 				$main = $this->model_tool_image->resizeFit($filename, 600, 750);
+ 				$small = $this->model_tool_image->resizeFit($filename, 128, 160);
+@@ -389,8 +392,15 @@
+ 						'thumb' => $this->model_tool_image->resize($result['image'], $this->config->get('config_image_additional_width'), $this->config->get('config_image_additional_height'))
+ 					];
+ 					$bs_legacy_image = $data['images'][count($data['images']) - 1];
+-					$data['bs_gallery'][] = $bs_gallery_item($result['image'], $bs_legacy_image['popup'], $bs_legacy_image['thumb'], (int)$this->config->get('config_image_additional_width'), (int)$this->config->get('config_image_additional_height'));
+-				}
++					$data['bs_gallery'][] = $bs_gallery_item($result['image'], $bs_legacy_image['popup'], $bs_legacy_image['thumb'], (int)$this->config->get('config_image_additional_width'), (int)$this->config->get('config_image_additional_height'), true);
++				}
++			}
++
++			// Ratio belongs to the primary served image and is fixed for this page's gallery.
++			$data['bs_gallery_ratio'] = 0.8;
++			if ($data['bs_gallery']) {
++				$bs_primary = $data['bs_gallery'][0];
++				$data['bs_gallery_ratio'] = max(0.8, min(1.0, $bs_primary['main_width'] / max(1, $bs_primary['main_height'])));
+ 			}
+ 
+ 			if ($this->customer->isLogged() || !$this->config->get('config_customer_price')) {

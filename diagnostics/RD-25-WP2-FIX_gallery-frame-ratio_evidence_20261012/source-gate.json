@@ -1,0 +1,46 @@
+{
+  "archive": "RD-25-WP2-FIX-check-20261012-182229-3901452.tar.gz",
+  "sha256": "091b6d2359593f88acfe95fabcca38862d3265f7fc080e3452027944cfdf8bb6",
+  "files": [
+    {
+      "path": "catalog/controller/product/product.php",
+      "sha256": "74b937525c579a56f67fb62d23cf75f0456e0bc5f034479e600de38e843bb84a",
+      "normalized_sha256": "74b937525c579a56f67fb62d23cf75f0456e0bc5f034479e600de38e843bb84a",
+      "expected_sha256": "74b937525c579a56f67fb62d23cf75f0456e0bc5f034479e600de38e843bb84a",
+      "match": true,
+      "mtime": 1791816581
+    },
+    {
+      "path": "catalog/view/template/product/product.twig",
+      "sha256": "abfa0d62cc7542a34301f9ed8936203ea497a92a6e4deba52e785c1775ee3aec",
+      "normalized_sha256": "abfa0d62cc7542a34301f9ed8936203ea497a92a6e4deba52e785c1775ee3aec",
+      "expected_sha256": "abfa0d62cc7542a34301f9ed8936203ea497a92a6e4deba52e785c1775ee3aec",
+      "match": true,
+      "mtime": 1791816581
+    },
+    {
+      "path": "catalog/view/stylesheet/boostershop-ds.css",
+      "sha256": "213d4b48394644d04a464f497d68a0478af7d220142aa68fd3ce52eeafb9caef",
+      "normalized_sha256": "213d4b48394644d04a464f497d68a0478af7d220142aa68fd3ce52eeafb9caef",
+      "expected_sha256": "213d4b48394644d04a464f497d68a0478af7d220142aa68fd3ce52eeafb9caef",
+      "match": true,
+      "mtime": 1791816581
+    },
+    {
+      "path": "catalog/view/template/common/header.twig",
+      "sha256": "a518ced10c03a339ec2cc8e49bc261a357306e15db6a2b4c091882d80b0cc216",
+      "normalized_sha256": "eec16fbe81c72332d44ab2ecc7ee9f8a613a39206a21ab40ee04d7e2b7007cee",
+      "expected_sha256": "eec16fbe81c72332d44ab2ecc7ee9f8a613a39206a21ab40ee04d7e2b7007cee",
+      "match": true,
+      "mtime": 1791816581
+    },
+    {
+      "path": "extension/ps_enhanced_measurement/catalog/model/analytics/ps_enhanced_measurement.php",
+      "sha256": "eea58d1e247a16c2cc4bc1e61b8a5028e41dc7ed557e9c652d74382f7984b4b4",
+      "normalized_sha256": "eea58d1e247a16c2cc4bc1e61b8a5028e41dc7ed557e9c652d74382f7984b4b4",
+      "expected_sha256": "eea58d1e247a16c2cc4bc1e61b8a5028e41dc7ed557e9c652d74382f7984b4b4",
+      "match": true,
+      "mtime": 1781366680
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+php_lint=ok:C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\work\rd25-wp2-fix-20261012\runner-fixtures-final\ga4\RD-25-WP2-FIX_gallery-frame-ratio_20261012.php
+task=RD-25-WP2-FIX_gallery-frame-ratio_20261012
+cwd=C:/Users/14bez/Downloads/Booster Shop/booster-shop-ops/work/rd25-wp2-fix-20261012/runner-fixtures-final/ga4
+time=2026-10-12T15:34:08+00:00
+context_file=catalog/model/tool/image.php
+context_file=system/library/image.php
+context_file=catalog/controller/product/thumb.php
+context_file=catalog/view/template/product/thumb.twig
+error=context_sha256_mismatch:extension/ps_enhanced_measurement/catalog/model/analytics/ps_enhanced_measurement.php
+restore=not_needed

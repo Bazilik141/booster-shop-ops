@@ -1,0 +1,15 @@
+--- before/catalog/view/template/product/product.twig
++++ after/catalog/view/template/product/product.twig
+@@ -54,10 +54,11 @@
+ 
+         {# === GALLERY === #}
+         {% if thumb or images %}
++        {# RD-25-WP2-FIX 20261012: primary ratio stays fixed when selecting thumbs. #}
+         {# RD-25-WP2 20261012: gallery-only data; legacy images remains additional-only for JSON-LD. #}
+         {% if bs_gallery %}
+         {% set bs_main = bs_gallery|first %}
+-        <div class="bs-product__gallery magnific-popup{% if bs_gallery|length > 1 %} bs-product__gallery--rail{% endif %}" data-bs-gallery>
++        <div class="bs-product__gallery magnific-popup{% if bs_gallery|length > 1 %} bs-product__gallery--rail{% endif %}" data-bs-gallery style="--bs-gallery-ratio:{{ bs_gallery_ratio }}">
+           <div class="bs-product__main-img">
+             <a href="{{ bs_main.popup }}" title="{{ heading_title }}" data-bs-gallery-main data-bs-media-kind="{{ bs_main.kind }}">
+               <img src="{{ bs_main.main }}" title="{{ heading_title }}" alt="{{ heading_title }}" width="{{ bs_main.main_width }}" height="{{ bs_main.main_height }}" decoding="async"/>

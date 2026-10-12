@@ -1,0 +1,200 @@
+{
+  "targets": {
+    "catalog/controller/product/product.php": {
+      "before_sha256": "74b937525c579a56f67fb62d23cf75f0456e0bc5f034479e600de38e843bb84a",
+      "replacements": [
+        {
+          "before": "int $legacy_width, int $legacy_height): array {",
+          "after": "int $legacy_width, int $legacy_height, bool $additional = false): array {"
+        },
+        {
+          "before": "$item = ['popup' => $popup, 'main' => $legacy, 'small' => $legacy,\n\t\t\t\t\t'kind' => 'legacy', 'main_width' => $legacy_width, 'main_height' => $legacy_height,",
+          "after": "// RD-25-WP2-FIX 20261012: N1 main fallback uses additional popup; small fallback remains legacy.\n\t\t\t\t$item = ['popup' => $popup, 'main' => $additional ? $popup : $legacy, 'small' => $legacy,\n\t\t\t\t\t'kind' => 'legacy',\n\t\t\t\t\t'main_width' => $additional ? (int)$this->config->get('config_image_popup_width') : $legacy_width,\n\t\t\t\t\t'main_height' => $additional ? (int)$this->config->get('config_image_popup_height') : $legacy_height,"
+        },
+        {
+          "before": "$bs_legacy_image['thumb'], (int)$this->config->get('config_image_additional_width'), (int)$this->config->get('config_image_additional_height'));",
+          "after": "$bs_legacy_image['thumb'], (int)$this->config->get('config_image_additional_width'), (int)$this->config->get('config_image_additional_height'), true);"
+        },
+        {
+          "before": "\t\t\tif ($this->customer->isLogged() || !$this->config->get('config_customer_price')) {\n\t\t\t\t$data['price'] = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);",
+          "after": "\t\t\t// Ratio belongs to the primary served image and is fixed for this page's gallery.\n\t\t\t$data['bs_gallery_ratio'] = 0.8;\n\t\t\tif ($data['bs_gallery']) {\n\t\t\t\t$bs_primary = $data['bs_gallery'][0];\n\t\t\t\t$data['bs_gallery_ratio'] = max(0.8, min(1.0, $bs_primary['main_width'] / max(1, $bs_primary['main_height'])));\n\t\t\t}\n\n\t\t\tif ($this->customer->isLogged() || !$this->config->get('config_customer_price')) {\n\t\t\t\t$data['price'] = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);"
+        }
+      ],
+      "after_sha256": "7d24f5b7ec992cae6d54ff59a976d71048d8bead3799382bcdebbb5079dba268"
+    },
+    "catalog/view/template/product/product.twig": {
+      "before_sha256": "abfa0d62cc7542a34301f9ed8936203ea497a92a6e4deba52e785c1775ee3aec",
+      "replacements": [
+        {
+          "before": "data-bs-gallery>",
+          "after": "data-bs-gallery style=\"--bs-gallery-ratio:{{ bs_gallery_ratio }}\">"
+        },
+        {
+          "before": "{# RD-25-WP2 20261012: gallery-only data;",
+          "after": "{# RD-25-WP2-FIX 20261012: primary ratio stays fixed when selecting thumbs. #}\n        {# RD-25-WP2 20261012: gallery-only data;"
+        }
+      ],
+      "after_sha256": "1c499f79bd3849ef26e60f0d598f512bc74dcae7f48bb935745dff797febe007"
+    },
+    "catalog/view/stylesheet/boostershop-ds.css": {
+      "before_sha256": "213d4b48394644d04a464f497d68a0478af7d220142aa68fd3ce52eeafb9caef",
+      "replacements": [
+        {
+          "before": ".bs-product__gallery .bs-product__main-img { width: 100%; max-width: 480px; aspect-ratio: 4 / 5; }",
+          "after": "/* RD-25-WP2-FIX 20261012: primary served ratio clamped to 0.8..1; photo centred, cut bottom. */\n.bs-product__gallery .bs-product__main-img { width: 100%; max-width: 480px; aspect-ratio: var(--bs-gallery-ratio, 4 / 5); }"
+        },
+        {
+          "before": "/* Approved 4:5 geometry: main max 480px, desktop rail 64x80 / 10px gap;",
+          "after": "/* Primary-based main frame, max 480px; desktop rail 64x80 / 10px gap;"
+        },
+        {
+          "before": ".bs-product__thumbs > a[data-bs-media-kind=\"cut\"] > img { grid-column: 2; grid-row: 2; }",
+          "after": ".bs-product__thumbs > a[data-bs-media-kind=\"cut\"] > img { grid-column: 2; grid-row: 2; object-position: center bottom; }"
+        },
+        {
+          "before": ".bs-product__thumbs img { display: block; width: 100%; height: 100%; min-width: 0; min-height: 0; object-fit: contain; object-position: center bottom; }",
+          "after": ".bs-product__thumbs img { display: block; width: 100%; height: 100%; min-width: 0; min-height: 0; object-fit: contain; object-position: center center; }"
+        }
+      ],
+      "after_sha256": "e396793de22fdfa588267755a22c13a5c9b260ad086b97af942b3efe6af6b357"
+    },
+    "catalog/view/template/common/header.twig": {
+      "before_sha256": "eec16fbe81c72332d44ab2ecc7ee9f8a613a39206a21ab40ee04d7e2b7007cee",
+      "after_sha256": "eec16fbe81c72332d44ab2ecc7ee9f8a613a39206a21ab40ee04d7e2b7007cee",
+      "replacements": [
+        {
+          "before": "catalog/view/stylesheet/boostershop-ds.css?v=__RD25_TOKEN__",
+          "after": "catalog/view/stylesheet/boostershop-ds.css?v=__RD25_TOKEN__"
+        }
+      ]
+    }
+  },
+  "context": {
+    "catalog/model/tool/image.php": "85cf9489244c48fe915bc25f370cdfdb2b39c9c6d6a42219cec7f84a9e375e71",
+    "system/library/image.php": "7f81dcbb8b5d2d032005ae28ce01cea5ba7542f7334fd9909e538f6952adeff9",
+    "catalog/controller/product/thumb.php": "cf4f8e354b18a4318af159c34bf3c083d0991007b42d03e2c57aa4963c1ed3b1",
+    "catalog/view/template/product/thumb.twig": "d9237b2c9c0cc21cda73a86ba6cf1ff66b7ad956f0da3c24a8e1add6518037d6",
+    "extension/ps_enhanced_measurement/catalog/model/analytics/ps_enhanced_measurement.php": "eea58d1e247a16c2cc4bc1e61b8a5028e41dc7ed557e9c652d74382f7984b4b4"
+  },
+  "ga4_anchors": [
+    {
+      "template": "catalog/view/template/common/header.twig",
+      "search": "<body>",
+      "index": 0,
+      "count": 0
+    },
+    {
+      "template": "catalog/view/template/common/header.twig",
+      "search": "</head>",
+      "index": 2,
+      "count": 1
+    },
+    {
+      "template": "catalog/view/template/product/product.twig",
+      "search": "<button type=\"submit\" id=\"button-cart\"",
+      "index": 0,
+      "count": 2
+    },
+    {
+      "template": "catalog/view/template/product/product.twig",
+      "search": "<button type=\"submit\" formaction=\"{{ add_to_wishlist }}\"",
+      "index": 1,
+      "count": 0
+    },
+    {
+      "template": "catalog/view/template/product/product.twig",
+      "search": "if (json['success']) {",
+      "index": 2,
+      "count": 1
+    },
+    {
+      "template": "catalog/view/template/product/product.twig",
+      "search": "{{ footer }}",
+      "index": 3,
+      "count": 1
+    },
+    {
+      "template": "catalog/view/template/common/cart.twig",
+      "search": "<a href=\"{{ product.href }}\">",
+      "index": 0,
+      "count": 2
+    },
+    {
+      "template": "catalog/view/template/common/cart.twig",
+      "search": "<button type=\"submit\" data-bs-toggle=\"tooltip\" title=\"{{ button_remove }}\"",
+      "index": 1,
+      "count": 0
+    },
+    {
+      "template": "catalog/view/template/common/cart.twig",
+      "search": "<button type=\"button\" data-bs-toggle=\"dropdown\"",
+      "index": 2,
+      "count": 0
+    },
+    {
+      "template": "catalog/view/template/checkout/cart.twig",
+      "search": "<div id=\"shopping-cart\">{{ list }}</div>",
+      "index": 0,
+      "count": 1
+    },
+    {
+      "template": "catalog/view/template/checkout/cart_list.twig",
+      "search": "<a href=\"{{ product.href }}\">",
+      "index": 0,
+      "count": 0
+    },
+    {
+      "template": "catalog/view/template/checkout/cart_list.twig",
+      "search": "<input type=\"text\" name=\"quantity\"",
+      "index": 1,
+      "count": 1
+    },
+    {
+      "template": "catalog/view/template/checkout/cart_list.twig",
+      "search": "<button type=\"submit\" formaction=\"{{ product_edit }}\"",
+      "index": 2,
+      "count": 0
+    },
+    {
+      "template": "catalog/view/template/checkout/cart_list.twig",
+      "search": "<button type=\"submit\" formaction=\"{{ product_remove }}\"",
+      "index": 3,
+      "count": 0
+    },
+    {
+      "template": "catalog/view/template/checkout/cart_list.twig",
+      "search": "<table class=\"table table-bordered\">",
+      "index": 4,
+      "count": 0
+    },
+    {
+      "template": "catalog/view/template/product/product.twig",
+      "search": "<button type=\"submit\" formaction=\"{{ wishlist_add }}\"",
+      "index": 1,
+      "count": 0
+    },
+    {
+      "template": "catalog/view/template/checkout/cart_list.twig",
+      "search": "<button type=\"submit\" formaction=\"{{ edit }}\"",
+      "index": 2,
+      "count": 1
+    },
+    {
+      "template": "catalog/view/template/checkout/cart_list.twig",
+      "search": "<a href=\"{{ product.remove }}\"",
+      "index": 3,
+      "count": 1
+    }
+  ],
+  "repeat_hashes": {
+    "catalog/controller/product/product.php": [
+      "7d24f5b7ec992cae6d54ff59a976d71048d8bead3799382bcdebbb5079dba268"
+    ],
+    "catalog/view/template/product/product.twig": [
+      "1c499f79bd3849ef26e60f0d598f512bc74dcae7f48bb935745dff797febe007"
+    ],
+    "catalog/view/stylesheet/boostershop-ds.css": [
+      "e396793de22fdfa588267755a22c13a5c9b260ad086b97af942b3efe6af6b357"
+    ]
+  }
+}
