@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C · Особисті дані, мобільний (static preview, not production)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Playfair+Display:wght@600;700&amp;display=swap">
+<style>
+body{margin:0}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #F5D27A;outline-offset:2px}
+input::placeholder{color:#9CA3AF}
+input:focus{border-color:#E0A82E}
+</style>
+</head>
+<body>
+<div style="min-height:1700px;background:#0B0F1A;font-family:'Manrope',system-ui,-apple-system,sans-serif;color:#E5E7EB">
+  <div style="height:57px;border-bottom:1px dashed rgba(255,255,255,.14);background:#0B0F1A;display:flex;align-items:center;justify-content:center;font-size:13px;color:#9CA3AF">Шапка сайту — без змін</div>
+  <div style="padding:16px 16px 48px;display:flex;flex-direction:column;gap:16px;box-sizing:border-box">
+
+    <nav aria-label="Розділи кабінету" style="display:flex;gap:8px;overflow-x:auto;margin:0 -16px;padding:0 16px 4px">
+      <a href="C-Mobile-Hub.dc.html" style="flex:0 0 auto;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;background:#131A2B;border:1px solid rgba(255,255,255,.1);color:#E5E7EB;text-decoration:none;font-size:14.5px;font-weight:600;box-sizing:border-box">Кабінет</a>
+      <a href="C-Mobile-Edit.dc.html" aria-current="page" style="flex:0 0 auto;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;background:linear-gradient(135deg,#F5D27A,#C68A00);color:#111827;text-decoration:none;font-size:14.5px;font-weight:800;box-sizing:border-box">Особисті дані</a>
+      <a href="#" style="flex:0 0 auto;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;background:#131A2B;border:1px solid rgba(255,255,255,.1);color:#E5E7EB;text-decoration:none;font-size:14.5px;font-weight:600;box-sizing:border-box">Адреси</a>
+      <a href="#" style="flex:0 0 auto;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;background:#131A2B;border:1px solid rgba(255,255,255,.1);color:#E5E7EB;text-decoration:none;font-size:14.5px;font-weight:600;box-sizing:border-box">Замовлення</a>
+      <a href="#" style="flex:0 0 auto;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;background:#131A2B;border:1px solid rgba(255,255,255,.1);color:#E5E7EB;text-decoration:none;font-size:14.5px;font-weight:600;box-sizing:border-box">Улюблене</a>
+      <span aria-disabled="true" title="Скоро буде доступно" style="flex:0 0 auto;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;background:#131A2B;border:1px solid rgba(255,255,255,.1);color:#9CA3AF;opacity:.5;cursor:not-allowed;font-size:14.5px;font-weight:600;box-sizing:border-box">Налаштування</span>
+      <a href="#" style="flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 16px;border-radius:999px;background:#0B0F1A;border:1px solid rgba(34,158,217,.5);color:#FFFFFF;text-decoration:none;font-size:14.5px;font-weight:700;box-sizing:border-box">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#229ED9" stroke="#229ED9" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M21 3L3 10.5l6 2.2L11 20l3-4.5 5 3.7L21 3z"/></svg>
+        Допомога
+      </a>
+    </nav>
+
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <span aria-hidden="true" style="width:44px;height:3px;border-radius:2px;background:linear-gradient(90deg,#F5D27A,#C68A00)"></span>
+      <h1 style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:28px;line-height:1.2;font-weight:700;color:#FFFFFF">Особисті дані</h1>
+    </div>
+
+    <form style="display:flex;flex-direction:column;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:#131A2B;overflow:hidden">
+      <fieldset style="margin:0;padding:20px 16px;border:0;min-width:0;display:flex;flex-direction:column;gap:16px">
+        <legend style="padding:0;margin-bottom:16px;font-size:18px;font-weight:700;color:#FFFFFF">Основне</legend>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label for="cm-name" style="font-size:14px;font-weight:600;color:#F3F4F6">Імʼя <span style="color:#F87171" aria-hidden="true">*</span></label>
+          <input id="cm-name" type="text" value="Олена" autocomplete="given-name" style="height:48px;padding:0 14px;border:1px solid rgba(255,255,255,.14);border-radius:8px;background:#0B0F1A;font-family:inherit;font-size:16px;color:#F3F4F6;box-sizing:border-box;width:100%">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label for="cm-surname" style="font-size:14px;font-weight:600;color:#F3F4F6">Прізвище <span style="color:#F87171" aria-hidden="true">*</span></label>
+          <input id="cm-surname" type="text" value="Коваленко" autocomplete="family-name" style="height:48px;padding:0 14px;border:1px solid rgba(255,255,255,.14);border-radius:8px;background:#0B0F1A;font-family:inherit;font-size:16px;color:#F3F4F6;box-sizing:border-box;width:100%">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label for="cm-patr" style="font-size:14px;font-weight:600;color:#F3F4F6">По батькові <span style="font-weight:500;color:#9CA3AF">необовʼязково</span></label>
+          <input id="cm-patr" type="text" value="Іванівна" autocomplete="additional-name" style="height:48px;padding:0 14px;border:1px solid rgba(255,255,255,.14);border-radius:8px;background:#0B0F1A;font-family:inherit;font-size:16px;color:#F3F4F6;box-sizing:border-box;width:100%">
+        </div>
+        <span style="font-size:13px;color:#9CA3AF">ПІБ вказуйте лише кирилицею. Допускаються апостроф і дефіс.</span>
+      </fieldset>
+
+      <div aria-hidden="true" style="height:1px;background:rgba(255,255,255,.08)"></div>
+
+      <fieldset style="margin:0;padding:20px 16px;border:0;min-width:0;display:flex;flex-direction:column;gap:16px">
+        <legend style="padding:0;margin-bottom:16px;font-size:18px;font-weight:700;color:#FFFFFF">Контакти</legend>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label for="cm-phone" style="font-size:14px;font-weight:600;color:#F3F4F6">Телефон <span style="color:#F87171" aria-hidden="true">*</span></label>
+          <input id="cm-phone" type="tel" value="+380 50 000 00 00" autocomplete="tel" style="height:48px;padding:0 14px;border:1px solid rgba(255,255,255,.14);border-radius:8px;background:#0B0F1A;font-family:inherit;font-size:16px;color:#F3F4F6;box-sizing:border-box;width:100%">
+          <span style="font-size:13px;color:#9CA3AF">Формат: +380 XX XXX XX XX</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label for="cm-email" style="font-size:14px;font-weight:600;color:#F3F4F6">Email (логін)</label>
+          <input id="cm-email" type="email" value="olena@example.com" readonly style="height:48px;padding:0 14px;border:1px solid rgba(255,255,255,.06);border-radius:8px;background:#1B2236;font-family:inherit;font-size:16px;color:#9CA3AF;box-sizing:border-box;width:100%">
+          <span style="font-size:13px;color:#9CA3AF">Зміна email — у розділі «Налаштування»</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label for="cm-tg" style="font-size:14px;font-weight:600;color:#F3F4F6">Telegram <span style="font-weight:500;color:#9CA3AF">необовʼязково</span></label>
+          <input id="cm-tg" type="text" placeholder="@username" autocomplete="off" style="height:48px;padding:0 14px;border:1px solid rgba(255,255,255,.14);border-radius:8px;background:#0B0F1A;font-family:inherit;font-size:16px;color:#F3F4F6;box-sizing:border-box;width:100%">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label for="cm-vb" style="font-size:14px;font-weight:600;color:#F3F4F6">Viber <span style="font-weight:500;color:#9CA3AF">необовʼязково</span></label>
+          <input id="cm-vb" type="tel" placeholder="+380 XX XXX XX XX" autocomplete="off" style="height:48px;padding:0 14px;border:1px solid rgba(255,255,255,.14);border-radius:8px;background:#0B0F1A;font-family:inherit;font-size:16px;color:#F3F4F6;box-sizing:border-box;width:100%">
+        </div>
+      </fieldset>
+
+      <div style="display:flex;flex-direction:column;gap:8px;padding:16px;background:#0F1526;border-top:1px solid rgba(255,255,255,.08)">
+        <button type="submit" style="min-height:48px;border:0;border-radius:8px;background:linear-gradient(135deg,#F5D27A,#C68A00);color:#111827;font-family:inherit;font-size:14.5px;font-weight:800;cursor:pointer">Зберегти зміни</button>
+        <a href="C-Mobile-Hub.dc.html" style="display:flex;align-items:center;justify-content:center;min-height:48px;border:1px solid rgba(255,255,255,.18);border-radius:8px;background:transparent;color:#F3F4F6;font-size:14.5px;font-weight:700;text-decoration:none;box-sizing:border-box">Скасувати</a>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>

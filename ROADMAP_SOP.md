@@ -259,6 +259,9 @@ session does not have to spend search calls on the same lookups.
 | RD-15 | `3706bf20-bdb4-81a9-9686-c5c90366254a` |
 | RD-21 | `3706bf20-bdb4-815f-8965-f500d1f061c3` |
 | RD-24 | `3e36bf20-bdb4-81a4-a25c-e5e06dd2c2a3` |
+| RD-27 | `3f76bf20-bdb4-8185-ab2b-ed03e51c3072` |
+| RD-28 | `3f76bf20-bdb4-811b-935d-f6a320eb6360` |
+| RD-29 | `3f86bf20-bdb4-81f4-8898-e4e3548b1399` | Added 2026-10-13 on owner instruction ("Заведи окрему задачу під створення темної версії теми сайту"). Dark version of the site theme in direction C «Колекційний сейф»; the owner chose light variant A for the account redesign and kept C for the future dark theme. Reference files: `design/dark-theme/`. Priority and executor left unset (owner decision). ID evidence: registry named no next free `RD-`; a live query of the series returned `RD-01`…`RD-28` plus the suffixed `RD-13.1J`, so `RD-29` was taken with no gap. **Наступний вільний у серії `RD-` — `RD-30`.** `ROADMAP_TASKS` mirror row created in the same session |
 | R-04 | `36a6bf20-bdb4-81a1-afa9-c23904919cd8` |
 | R-11 | `3696bf20-bdb4-81d9-9e9f-c4cf11dca805` |
 | R-11-UI-1 | `36f6bf20-bdb4-8142-b5e2-fadc47bc2172` |
@@ -355,6 +358,7 @@ NCRM-04 through NCRM-12 were renumbered/rescoped on 2026-07-11 under
 
 | Roadmap ID | Notion page_id | Note |
 |---|---|---|
+| CRM-017 | `3f26bf20-bdb4-81bd-ac66-d34a567d9dbd` | Added 2026-10-07 on explicit owner instruction. Rare Pack purchase, stock and cost audit; safe OP09/EB02 purchase classification migration; physical OP01 reconciliation. Live Notion ID query and local scan reserved CRM-001…016; 017 was free. In progress, High, Codex; dashboard mirror created in the same session. Seller receipt evidence remains pending; no live business-data repair or deployment. Audit: `diagnostics/CRM-017_rare-pack-purchases-and-cost_audit_20261007.md`. Next candidate CRM-018 requires a fresh availability check. |
 | CRM-016 | `3e46bf20-bdb4-8161-92fc-f06c468a6967` | Added 2026-09-23 on owner instruction. Purchases tab, CRM order-line correction, ACC-001-BPJP rename, performance review and Telegram diagnosis. The canonical Roadmap ID query returned CRM-001…012; repository artifacts already use CRM-013…015, so 016 avoids identifier reuse. Dashboard mirror created in the same session; no live deployment or Sheet write implied. |
 | NCRM-00 | `38b6bf20-bdb4-81dc-89ba-ddf3ae182f37` | — |
 | NCRM-01 | `38b6bf20-bdb4-8165-b4bb-f9434ee07770` | — |
