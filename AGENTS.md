@@ -6,6 +6,58 @@
 OpenCart e-commerce: boostershop.website (MTG, Pokemon, One Piece, Yu-Gi-Oh).
 Stack: OpenCart (Twig/PHP), custom checkout + NP integration, Google Apps Script CRM, Google Sheets.
 
+## Automatic peer review — owner decision 2026-10-14
+
+For ALL Booster Shop task series, read
+[automatic independent review](docs/BOOSTER_AUTOMATIC_PEER_REVIEW_20261014.md).
+Codex initiates actual Claude review automatically when the required assigned
+stage is ready, through the installed Claude CLI/subscription. No manual owner
+review trigger or separate paid API is implied. This current amendment overrides
+older manual review-trigger/bsreview-default wording below and in CODEX_WORKFLOW.md,
+CLAUDE.md and ROADMAP_SOP.md; other task/Git/status/deployment/owner gates persist.
+For GSS also read [permanent optimizations and the next-stage assistance trial](docs/GSS_OPTIMIZATION_RULES_20261014.md).
+Codex remains the main writer, actual Claude the independent reviewer. The GSS
+one/two-subagent assistance trial is bounded analysis for the next code stage;
+it does not create parallel main-code/Git/status writers or replace Claude.
+
+## GSS series exception — owner decision 2026-09-28
+
+For GSS work, read [docs/GSS_GOVERNANCE.md](docs/GSS_GOVERNANCE.md) and
+[plans/GSS_owner-decisions_20260928.md](plans/GSS_owner-decisions_20260928.md)
+before planning or execution. These GSS-specific rules override conflicting
+legacy role, authorship, Git-authority and sequencing rules below and in
+`CODEX_WORKFLOW.md`, `CLAUDE.md` and `ROADMAP_SOP.md`, for GSS scope only.
+
+- Codex and Claude (including Claude Code as the execution environment) have
+  equal architect, executor, solution-proposal, peer-review and commit/push
+  rights within the owner's assigned and approved GSS task scope. Do not ask
+  again for a routine scoped commit/push under that grant. Preserve unrelated
+  changes; this exception does not authorize other Booster task series.
+- The owner chooses the executor per task. Equal authority does not permit
+  competing writers, self-assignment of another agent's task or changes to an
+  owner-approved functional outcome without the owner's informed approval.
+- Record owner-approved scope departures as decisions, including their impact.
+  Work autonomously inside the agreed scope; involve the owner for decisions,
+  user-interface QA and work impractical with the executor's tools.
+- Approve the overall functional scope after two definition rounds (Codex and
+  Claude) before technical implementation. Decompose the accepted plan into
+  blocks, tasks and subtasks; deeply design each block and task before coding.
+- After the necessary foundation, the first working GSS feature is its roadmap.
+  Every block must show a recommended AI model and reasoning depth in the
+  current working roadmap, with a short rationale. Begin each block, and tasks
+  where needed, with a Ukrainian `nub` summary of scope, architecture, intended
+  functionality, model and reasoning depth. Review related processes and
+  dependencies explicitly before implementation.
+
+- Until the GSS roadmap takes over, the assigned executor may create and update
+  its approved GSS task records/properties/statuses in both Notion and the
+  dashboard mirror. Maintain one writer per task and truthful acceptance
+  evidence. This overrides the legacy Claude-only Notion role for GSS only.
+- The first GSS roadmap manages GSS tasks; other Booster tasks move later.
+
+This Git-authority exception does not grant production deployment or live
+business-data mutation authority.
+
 ## Core authority and writer rules
 
 - Claude never commits or pushes. Claude Code never commits, pushes, or deploys.
@@ -43,9 +95,11 @@ Stack: OpenCart (Twig/PHP), custom checkout + NP integration, Google Apps Script
 - `scripts/auto_review.py` is the canonical implementation behind
   `bs-review.ps1` / `bsreview`. The repository-root `auto_review.py` is a legacy
   duplicate and must not be invoked.
-- Use `bsreview --dry-run` for a read-only automated review. A normal
-  `bsreview` may save a diagnostic and post a Notion comment, but it must never
-  change a Notion property or status.
+- Legacy `bsreview` uses a paid Claude API, including `--dry-run`; it is not
+  the subscription-CLI automatic review path. Do not invoke it as a no-cost
+  preflight or default review under the 2026-10-14 decision. Its normal mode
+  can save a diagnostic/post a Notion comment only under separate applicable
+  authority; it never changes a Notion property or status.
 - Notion search is ranked content search. Prefer a known page ID and direct
   fetch; otherwise search by title or distinctive keywords and verify the
   returned page's Roadmap ID. Do not claim that an exact ID can never match.
@@ -94,7 +148,7 @@ previous executor stops before the new one starts.
 ```
 Claude executor recommendation → Owner assigns executor → Claude handoff
 → Codex OR Claude Code patch → drop to C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\patches\
-→ Claude review (git diff) → Owner deploy (php patch.php in ~/public_html) → Owner QA
+→ Codex-triggered actual Claude review (subscription CLI) → Owner deploy (php patch.php in ~/public_html) → Owner QA
 ```
 
 ## Source of truth
@@ -524,3 +578,14 @@ general knowledge of the market.
 When a value changes, update it here and nowhere else. Skills read this section
 live; a value copied into a handoff, a plan, or a skill file goes stale silently
 and gets trusted anyway.
+
+## GSS current continuity and review amendment — owner 2026-10-09
+
+For continuing GSS work, also read [current execution/review rules](docs/GSS_CURRENT_EXECUTION_RULES_20261009.md),
+[current checkpoint storage](docs/GSS_CHECKPOINT_STORAGE_20261009.md),
+and [the current resume pointer](checkpoints/GSS/CURRENT.md).
+Authority: [GSS-D083](plans/GSS_owner-decision-D083_portability-review-efficiency_20261009.md)
+and [GSS-D084](plans/GSS_owner-decision-D084_checkpoint-storage_20261009.md).
+Keep this conversation active. PC remains primary; prepare a later laptop transition.
+New GSS progress checkpoints belong in checkpoints/GSS; retain pinned historical originals.
+Preserve actual Claude review, dependency coverage, historical evidence bytes and consumed-grant boundaries.

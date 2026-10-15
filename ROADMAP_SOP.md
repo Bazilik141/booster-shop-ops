@@ -10,6 +10,16 @@ writer ownership, page-ID routing, and Definition of Done.
 
 ## 0. Core invariants
 
+> **Automatic independent review — owner 2026-10-14, ALL Booster series:**
+> Follow docs/BOOSTER_AUTOMATIC_PEER_REVIEW_20261014.md. Codex initiates actual
+> Claude review through the subscription CLI when the required assigned stage
+> is ready; the owner need not trigger it manually. For GSS also read
+> docs/GSS_OPTIMIZATION_RULES_20261014.md. A review verdict is exact-stage evidence,
+> not automatic Done, Notion/dashboard mutation, commit/push, deployment or owner
+> QA. Existing task-specific writer/authority/DoD gates remain. GSS's next-stage
+> analysis-assistance trial creates no competing code/Git/status writer.
+
+
 > **GSS-only amendment (owner decision 2026-09-28):** follow
 > `docs/GSS_GOVERNANCE.md` and the GSS exception in root `AGENTS.md`.
 > Codex and Claude have equal architect/executor/reviewer and scoped
@@ -508,8 +518,9 @@ If a task is absent, search by title or distinctive keywords, verify its
 
 ## 6. Definition of Done
 
-- **Default:** approved scope implemented, bounded diff reviewed, required
-  checks pass, Notion status is correct, and `ROADMAP_FLOW` mirrors it.
+- **Default:** approved scope implemented, required independent review stage
+  accepted under the current automatic-review rule, required checks pass,
+  Notion status is correct, and `ROADMAP_FLOW` mirrors it.
 - **Checkout, payment, Hutko, Checkbox, Nova Poshta, or order flow:**
   `bs-checkout-smoke` passes and the owner completes payment/fiscal/CRM manual
   QA before `Done`.

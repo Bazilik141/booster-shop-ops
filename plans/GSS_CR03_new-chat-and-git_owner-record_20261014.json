@@ -1,0 +1,14 @@
+{
+  "recordedUtc": "2026-10-14T20:38:40.245Z",
+  "ownerInstruction": "Завтра продовжимо в новому діалозі. Бачу в цьому сенс, бо цей уже досить довгий. Якщо згоден, дай текстовий хендоф на продовження роботи в новому діалозі і я піду спати. Завтра тоді ним скористаюсь. І зафіксуй поточний прогрес, пуш/коміт, там що ще треба я хз.",
+  "acceptedScope": "Save exact GSS/Booster rule/design recovery, prepare new-chat handoff, scoped commit/push without unrelated changes; stop work after save for sleep.",
+  "newChatRequested": true,
+  "newThreadCreated": false,
+  "sameConversationWordingSupersededForRoutingOnly": true,
+  "currentPcHostUnchanged": true,
+  "commitPushAuthorizedForTaskScope": true,
+  "unrelatedCommitPublicationAuthorized": false,
+  "newNativeGrant": false,
+  "productionApproved": false,
+  "automationCreated": false
+}

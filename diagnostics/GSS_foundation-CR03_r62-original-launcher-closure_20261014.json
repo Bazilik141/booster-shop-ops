@@ -1,0 +1,18 @@
+{
+  "scope": "Observed original launcher closure, not native/SOURCE runtime proof",
+  "actualUtc": "2026-10-14T19:57:52.448Z",
+  "sessionId": 12675,
+  "observedExitCode": 0,
+  "observationSource": "Original write_stdin completion in this task",
+  "run": {
+    "path": "diagnostics/GSS_foundation-CR03_static_claude-review-r62-intake_run_20261012.json",
+    "bytes": 12776,
+    "sha256": "71476FD158574D35511EE81B00A2E8378743A57759044879749B718FB5E7EF74"
+  },
+  "terminal": {
+    "path": "diagnostics/GSS_foundation-CR03_r62-terminal-verification_20261014.json",
+    "bytes": 5192,
+    "sha256": "16C93AAC0182A24B22E90623608023039EF29C9C83E2F52711C37E8A809987AA"
+  },
+  "automaticReplay": false
+}

@@ -1,0 +1,30 @@
+{
+  "scope": "Instruction-only static verification, no runtime/peer/CODE acceptance",
+  "actualUtc": "2026-10-14T20:28:06.078Z",
+  "passed": true,
+  "updatedInstructionsMatched": 4,
+  "newRuleBodiesMatched": 2,
+  "preservedPreimagesMatched": 4,
+  "review62AgentsHistoricalBytesMatched": true,
+  "allFourEntryPointsRouteToBothRules": true,
+  "ownerSubscriptionChoiceMatched": true,
+  "auxiliaryTrialStarted": false,
+  "generalLauncherImplemented": false,
+  "providerCalls": 0,
+  "gitWrites": 0,
+  "decision": {
+    "path": "plans/BOOSTER_review-optimization_owner-decision_20261014.json",
+    "bytes": 5912,
+    "sha256": "19152AF7167BF4BD09F0DA1FC3E6A489D587A69AE4AD0CD31D67B697F1D163CD"
+  },
+  "update": {
+    "path": "diagnostics/BOOSTER_review-rules_owner-update_20261014.json",
+    "bytes": 4116,
+    "sha256": "4367B4861950E51263DEEB2E0962F8E358AE23994E377DCD1ACB99D2769F8E7E"
+  },
+  "producer": {
+    "path": "work/verify-booster-review-rules_20261014.mjs",
+    "bytes": 3885,
+    "sha256": "D354AD10A9CFA477AF09B5B7BEC1CF419D657007B8E58249383A24237B16E3A5"
+  }
+}

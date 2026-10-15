@@ -1,0 +1,60 @@
+{
+  "decisionId": "GSS-CR03-ESCAPED-BYTE-A-20261014",
+  "recordedUtc": "2026-10-14T19:34:27.634Z",
+  "scope": "Direct pre-GSS owner functional choice for local design, checks and subsequently independently reviewed implementation; not real-use activation",
+  "ownerLatestInstruction": "Якщо це не вплине на рівень захисту та безпеки GSS як продукту у використанні, можеш обирати простіший варіант в реалізації.",
+  "priorQuestionItemId": "[\"request_user_input_async\",\"call_9fb8c768bb104c36a5bdf28d98faf33c\",0]",
+  "priorQuestion": "Це про збереження наших рев’ю Claude. Разом із висновком Claude надсилає службові повідомлення; у них випадково можуть бути ключі доступу або особисті дані. Новий захист має знаходити їх навіть у закодованому вигляді. Я рекомендую приховувати такий фрагмент і зберігати решту рев’ю — це варіант B. Варіант A простіший у реалізації, але викидатиме всю відповідь, навіть із коректним висновком. Який результат погоджуєш? Це дозвіл тільки на локальний дизайн і перевірки; технічну реалізацію беру на себе.",
+  "ownerClarification": "Тобто це питання безпеки лише на етапі локального проєктування і не позначиться на загальній безпеці GSS після розгортання у хмарі?",
+  "executorClarification": "This protects the development/review capture process, which may remain in use after launch. A/B does not change cloud GSS authorization, access or data-isolation mechanisms. Review fidelity still matters indirectly for accepting code; retaining text does not automatically accept code.",
+  "executorSelectedOption": "A",
+  "ownerDelegatedSimplerImplementationChoice": true,
+  "conditionalBoundary": "Selection changes review-artifact retention behavior only. It must not weaken product security requirements, public finite screening, independent review or source/acceptance gates. This is a design boundary, not evidence of deployed product security. If subsequent review finds a product security reduction, this conditional permission does not cover it.",
+  "acceptedBehavior": "Keep existing BYTE redaction semantics; add a linear context-free escape-decoded finite public screen without a byte-token quota. A decoded finite hit in either public BYTE stream refuses the entire artifact, including an otherwise valid stdout verdict due to stderr. No copy/result or automatic provider repeat. Malformed stdout diagnostic may become a generic BUILD refusal.",
+  "wholeCopyLossIncludingValidStdoutDisclosed": true,
+  "malformedDiagnosticLossDisclosed": true,
+  "newByteTokenQuotaApproved": false,
+  "rawNodeControlMeaningUnchanged": true,
+  "proposal": {
+    "path": "plans/GSS_CR03_escaped-byte-screen_owner-choice_PROPOSED_20261014.md",
+    "sha256": "1C75804C3DF3ABAEA9BC1384CC0FFC19E9EC206114DC597A0822AECC0EB3F886",
+    "bytes": 4106
+  },
+  "actualReview": {
+    "path": "diagnostics/GSS_foundation-CR03_static_claude-review-r61-intake_result_20261012.md",
+    "sha256": "A905642DD3DEE30ED94F03D531A5AF5A8D82BD994568FE46BF78AF9EEE102A07",
+    "bytes": 15694
+  },
+  "terminal": {
+    "path": "diagnostics/GSS_foundation-CR03_r61-terminal-verification_20261014.json",
+    "sha256": "7CE4BDD0A3689EBF5FE7FF626E39BD71E9D0E86881D8A293F62E5AE230B2C028",
+    "bytes": 4466
+  },
+  "disposition": {
+    "path": "plans/GSS_foundation-CR03_INTAKE61_reviewed-disposition_20261014.md",
+    "sha256": "4D79D16D5C3D711F6A0AC8529B535479B6F2F543CF8BAECA760C5FA27E74A772",
+    "bytes": 4690
+  },
+  "numericDecision": {
+    "path": "plans/GSS_CR03_resource-numbers62_final-owner-approval_20261014.json",
+    "sha256": "0BBF857CAA66BE07E0697A382E655E73DFA124F626544B1958C317D152224CDD",
+    "bytes": 4137
+  },
+  "governance": {
+    "path": "docs/GSS_GOVERNANCE.md",
+    "sha256": "9E72A2BD02B144CB57760566956AC0E1357E4463C14F4B8BEE8201C9E56C9550",
+    "bytes": 21799
+  },
+  "supersedes": "Pending A/B choice only; original proposals and recommendations retained. Numeric/transport/local-use boundaries remain unchanged.",
+  "localDesignAuthorized": true,
+  "independentDesignReviewRequired": true,
+  "dependentImplementationBeforeDesignAcceptance": false,
+  "gssAuthenticatedConfirmationClaimed": false,
+  "realResponsePolicyActivated": false,
+  "sourceAccepted": false,
+  "standardAccepted": false,
+  "newNativeGrant": false,
+  "privateOrProductionAuthority": false,
+  "gitOrStatusAuthority": false,
+  "consumedGrantReplay": false
+}

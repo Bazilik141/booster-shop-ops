@@ -4,6 +4,16 @@ Purpose: define how the owner, Claude, and Codex exchange bounded work through
 the Booster repository. `AGENTS.md` remains the canonical authority and safety
 contract; `ROADMAP_SOP.md` remains canonical for task-status governance.
 
+## Current automatic review amendment — owner 2026-10-14
+
+Read [the shared review rule](docs/BOOSTER_AUTOMATIC_PEER_REVIEW_20261014.md)
+for every Booster task and [the GSS optimization rule](docs/GSS_OPTIMIZATION_RULES_20261014.md)
+for GSS. Codex automatically requests actual Claude at a ready required stage
+through the existing subscription CLI, captures the complete verdict and handles
+scoped repairs. This replaces manual review-trigger wording, not task assignment,
+Git/deployment/status authority or owner QA. GSS-specific authority overrides
+legacy general roles here within its assigned scope.
+
 ## Roles in this workflow
 
 - **Claude** writes handoffs and plans, reviews Codex results from the local
@@ -17,8 +27,8 @@ contract; `ROADMAP_SOP.md` remains canonical for task-status governance.
 
 Codex may commit or push only after a direct, explicit owner request in the
 active task for the exact scope. This is one-time authority and creates no
-standing permission. Otherwise, stop after implementation, checks, and a
-concise diff summary.
+standing permission. Otherwise, complete implementation, required checks, automatic
+independent review/scoped repairs and a concise diff summary; stop before Git writes.
 
 ## Work exchange
 
@@ -27,7 +37,9 @@ concise diff summary.
 3. Codex implements only the approved scope.
 4. Codex places self-contained runners in `patches/` and required reports in
    `diagnostics/`.
-5. Claude or the owner reviews the bounded diff and acceptance evidence.
+5. Codex automatically sends the ready stage and necessary context/evidence to
+   actual Claude through the subscription CLI, records the complete independent
+   verdict and resolves scoped findings. Owner QA remains its separate gate.
 6. The owner uploads and runs any production patch and performs QA.
 7. Claude updates Notion task status when closure is authorized; Codex updates
    `ROADMAP_FLOW` only when that action is part of its authorized scope.
@@ -125,14 +137,15 @@ Codex and Claude never deploy.
 
 ## Review automation
 
-`bs-review.ps1` invokes canonical `scripts/auto_review.py`.
+The current default is Codex-triggered actual Claude through the verified
+subscription CLI; follow docs/BOOSTER_AUTOMATIC_PEER_REVIEW_20261014.md.
 
-- `bsreview --dry-run` may generate and print a Claude review but does not save
-  a file or read/write Notion.
-- A normal `bsreview` may save a diagnostic and, with `NOTION_TOKEN`, query by
-  Roadmap ID and post one Notion comment.
-- It never changes a Notion property or status.
-- The repository-root `auto_review.py` is legacy and must not be invoked.
+`bs-review.ps1` still invokes canonical `scripts/auto_review.py`, a LEGACY
+paid-API/Haiku path. Even --dry-run makes an API call. It is not the approved
+subscription adapter or a no-cost preflight. Normal mode can save a diagnostic
+and post a Notion comment only under separate applicable authority; it never
+changes a Notion property/status. Do not invoke the repository-root duplicate.
+This policy update does not rewrite that program or install a general launcher.
 
 ## Status sources
 

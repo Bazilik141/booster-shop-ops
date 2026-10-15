@@ -1,0 +1,116 @@
+{
+  "scope": "INTAKE62 corrective63c DESIGN terminal; identity/framing only",
+  "actualUtc": "2026-10-14T19:54:10.950Z",
+  "producer": {
+    "path": "work/verify-gss-CR03-r62-evidence_20261014.mjs",
+    "sha256": "C4E0C61297146B9BE77AFC137F39150E565A4545FAC4ACDA329F444D249DAFA3",
+    "bytes": 4758
+  },
+  "checks": {
+    "path": "work/gss-CR03-review62-design-checks_20261014.mjs",
+    "sha256": "0D478E540B97DA79A101D3E9C83C1D0AB3F173CECD8B481E2E67EDB850A0635D",
+    "bytes": 3078
+  },
+  "configuration": {
+    "path": "plans/GSS_CR03_review62-package_20261014.json",
+    "sha256": "70C9BCBEDE2467B511BDF28EDB640940628F372F467025227DE688A2470153A5",
+    "bytes": 22071
+  },
+  "packet": {
+    "path": "diagnostics/GSS_foundation-CR03_static_claude-review-r62-intake_packet_20261012.txt",
+    "sha256": "96D81AF6711BA9D5FF08C58888DED1D4DA6AE8C93FC383613E4DF1010B495111",
+    "bytes": 678864
+  },
+  "manifest": {
+    "path": "diagnostics/GSS_foundation-CR03_static_claude-review-r62-intake_manifest_20261012.json",
+    "sha256": "30213B3B72CDA702BA3F8F032DAFB8578E88A8FC471B88401F98DBC98279E2F8",
+    "bytes": 71127
+  },
+  "requester": {
+    "path": "work/request-gss-CR03-static-review-r62-intake_20261012.mjs",
+    "sha256": "44F446EC0C1F9715913B1F49A09841A835CCAE504BE94111673A9CC0C95B219A",
+    "bytes": 9688
+  },
+  "inputPinsMatched": 201,
+  "fullBodiesMatched": 63,
+  "git": {
+    "head": "a1d0130a7906808a73751d40c77e51c10f7bfb21",
+    "branch": "codex/3dp-payout-approval-status",
+    "trackedStatus": "M AGENTS.md\n D \"Booster Shop CRM — облік товарів - РРЦ.csv\"\n D Taxer_import_2026-04-01_2026-06-30.csv\n M context-index.md\n M dashboard/booster-dashboard.html\n M design/DECISIONS.md\n M docs/CANON_v1_DRAFT_product-content_20260913.md\n M patches/CAT-004_variant-selector_20260916.php\n M plans/3D-P_sku-naming-convention_20260807.md\n M plans/CAT-004_op-rare-packs_identifier-canon_20260916.md\n D \"Версія 153, 28 серп. 2026 р., 0946.csv\"\n D \"Версія 29, 23 серп. 2026 р., 1600.txt\"",
+    "staged": ""
+  },
+  "sourceFacts": {
+    "scope": "DESIGN63c actual61 B1-B3/N1-N8 only, no code/SOURCE/STD or product-security assurance",
+    "historicalChecks": {
+      "scope": "DESIGN63b F1-F6 only, no successor code/SOURCE/STD acceptance",
+      "historicalChecks": {
+        "transport": {
+          "ownerBootstrapCount": 1,
+          "cli": {
+            "path": "C:\\Users\\14bez\\.vscode\\extensions\\anthropic.claude-code-2.1.299-win32-x64\\resources\\native-binary\\claude.exe",
+            "sha256": "295B49EC092F31A7DE9C6FF286D9D8F120A4F029B9AD9A5AC0B12C35CBF4DF2B"
+          },
+          "compatibility": {
+            "path": "diagnostics/GSS_foundation-CR03_transport19-cli-compatibility_20261014.json",
+            "sha256": "235430FAC1B444596EEADCA7C8C938C9790C60F3C9687B4DE1C2A69A2FFD1E3A",
+            "bytes": 24462
+          },
+          "historicalPrimaryCheckerRuntimeDeltaOnly": true,
+          "securityEnforcementProved": false,
+          "transportAcceptedBeforeBootstrap": false
+        },
+        "scope": "Corrective62 and owner-authorized transport19 bootstrap DESIGN/CODE only",
+        "priorBench": {
+          "fictionalOnly": true,
+          "sourceAdopted": false,
+          "actualLocalWorkers": 10,
+          "primaryReportsChecked": true,
+          "historicalPolicyPrefixesMatched": true,
+          "supervisorControlSourceEqualApartFromLiteralPins": true
+        },
+        "actual59Closed": true,
+        "currentReportsChecked": 4,
+        "parserPrefixVersionOnly": true,
+        "transformWorkerDerivationChecked": true,
+        "actualLocalWorkersTotal": 18,
+        "policyId": "GSS_CR03_RESPONSE_RESOURCES_V5_PC",
+        "numericControlsUnchanged": 14,
+        "sourceAdopted": false
+      },
+      "actual60ClosedAndAccepted": true,
+      "acceptedTransport19": true,
+      "finalNumericOwnerRecord": {
+        "path": "plans/GSS_CR03_resource-numbers62_final-owner-approval_20261014.json",
+        "sha256": "0BBF857CAA66BE07E0697A382E655E73DFA124F626544B1958C317D152224CDD",
+        "bytes": 4137
+      },
+      "subject": {
+        "path": "plans/GSS_CR03_resource-fidelity63b_design_PROPOSED_20261014.md",
+        "sha256": "216EDD2BA24E768DE1458C77EAFE20CBB60249DA16333E6B7159DEF582172AD2",
+        "bytes": 27389
+      },
+      "numericControls": 14,
+      "sourceAdopted": false
+    },
+    "actual61ClosedChangesRequested": true,
+    "ownerOptionAConditional": {
+      "path": "plans/GSS_CR03_escaped-byte-A_owner-decision_20261014.json",
+      "sha256": "F696AD48B4722BA8DC318492C391E7048F626F591C137ED184FD6D13764A88BA",
+      "bytes": 4960
+    },
+    "subject": {
+      "path": "plans/GSS_CR03_resource-fidelity63c_design_PROPOSED_20261014.md",
+      "sha256": "6914805411A4E86EF70DB28B2DF27D16841AD8088E359693A33E145829ED7DA1",
+      "bytes": 46924
+    },
+    "sourceAdopted": false
+  },
+  "newNativeOperations": 0,
+  "sourceAdopted": false,
+  "wholeFoundationAccepted": false,
+  "verdict": "## Verdict: Review OK",
+  "actualStartUtc": "2026-10-14T19:46:53.349Z",
+  "actualEndUtc": "2026-10-14T19:53:58.686Z",
+  "completeResultEqualsRunResult": true,
+  "reviewUsable": true
+}

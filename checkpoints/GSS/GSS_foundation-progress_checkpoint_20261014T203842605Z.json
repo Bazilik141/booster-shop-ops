@@ -1,0 +1,90 @@
+{
+  "scope": "PUBLIC GSS PROGRESS RECOVERY ONLY",
+  "actualUtc": "2026-10-14T20:38:42.605Z",
+  "state": {
+    "path": "work/GSS_CR03_new-chat62_git-preparation_state_20261014.json",
+    "sha256": "AAC312B207D699A012FD11DCFB7D7D74C0B283E0D14E20145194D735B3535A6C"
+  },
+  "policy": {
+    "path": "docs/WORK_INTERRUPTION_RECOVERY.md",
+    "sha256": "9DDBA7C2724B779FB4E6EDAC1963DF5C4D826028EE3851C0250ECCCE11714136"
+  },
+  "storage": {
+    "path": "docs/GSS_CHECKPOINT_STORAGE_20261009.md",
+    "sha256": "26B1362CFB3F93C4AC0FC6AF9885932BF374F102B94BC374EA009CD2E33684B4"
+  },
+  "snapshot": {
+    "path": "checkpoints/GSS/GSS_foundation_PROGRESS_20261014T203842605Z.md",
+    "sha256": "8417EF90A585021629B2C53861805F2F8375A60CC1E47A5903E68CE3D7625402"
+  },
+  "previousPointer": {
+    "path": "checkpoints/GSS/GSS_foundation_PROGRESS_20261014T203842605Z_previous-pointer.md",
+    "sha256": "A1D3881FD52F3DD1418B9F435C23D84ED376AF697F8D8AF25E008781E3CCBF6B"
+  },
+  "lastAcceptedCheckpoint": {
+    "path": "handoffs/GSS_foundation_READ51_REVIEWED_checkpoint_20261009.md",
+    "sha256": "A2B691BCF69FA9EF9512A3CD1F57236DE9A1D0027C77FB03377DC29914A7BB7D"
+  },
+  "lastAcceptedReceipt": {
+    "path": "diagnostics/GSS_foundation-read51_reviewed-result_receipt_20261009.json",
+    "sha256": "E94DFAF218F1383F77F8D8DAAD7A9CE12945698FFABD21C85075B68008EC0AAA"
+  },
+  "artifacts": [
+    {
+      "path": "handoffs/GSS_foundation_CR03_NEW_CHAT_after-INTAKE62_20261014.md",
+      "sha256": "19F1EC5E3A5BE3EC62FA9CCCC44F7A883287159D015D70012FB2081389FE8E2A"
+    },
+    {
+      "path": "plans/GSS_CR03_new-chat-and-git_owner-record_20261014.json",
+      "sha256": "F06F6E942B53BC40EB76246DC02DF0420F318E5C75C789C0ED42E6AE8ECB9A74"
+    },
+    {
+      "path": "docs/BOOSTER_AUTOMATIC_PEER_REVIEW_20261014.md",
+      "sha256": "4D4FD0A511BFC6918B95880EC178D8A5AEE233E20867B32819E9B3DF4944DEC8"
+    },
+    {
+      "path": "docs/GSS_OPTIMIZATION_RULES_20261014.md",
+      "sha256": "581F7576CD967E48F3F7E9F804DF49A0EB678A2C2EEC8115942BA75EDF0FFF34"
+    },
+    {
+      "path": "plans/BOOSTER_review-optimization_owner-decision_20261014.json",
+      "sha256": "19152AF7167BF4BD09F0DA1FC3E6A489D587A69AE4AD0CD31D67B697F1D163CD"
+    },
+    {
+      "path": "plans/GSS_CR03_design63c_reviewed-basis_20261014.json",
+      "sha256": "3E0A7B616ACDF36149878451CFD94EE4CCBE5A39603D0B15FDF8D3E267CF2666"
+    },
+    {
+      "path": "plans/GSS_CR03_resource63c_CODE-clarifications_after62_20261014.md",
+      "sha256": "076AA50A9E25EC824715EC2CCC392884E8D854F035A08F89F792D8C5EB7EB0D1"
+    },
+    {
+      "path": "plans/GSS_CR03_resource63c_implementation-sequence_PENDING_20261014.md",
+      "sha256": "689FCB77723A83785118389E76CF12548E2FD779652341EACB964F4CAAD303E9"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_r62-original-launcher-closure_20261014.json",
+      "sha256": "8441AE2AFDF55B3B619B2346D9222101159C5AF5483CA222E844D4D8CA2A8304"
+    },
+    {
+      "path": "work/GSS_BOOSTER_review-rules_verified_state_20261014.json",
+      "sha256": "2638D8649ECF15DA19F77AAB19B8D6ED8286AC22114C5B5E7932FF332D0753AA"
+    },
+    {
+      "path": "work/save-gss-new-chat62_20261014.mjs",
+      "sha256": "991925973F5F1BA27C020F75D1CC994045CEF42EECB69670E85BC30EFCA852DD"
+    }
+  ],
+  "writer": {
+    "path": "work/save-gss-progress-checkpoint-v2_20261009.mjs",
+    "sha256": "8E9E17AC39484E98EB48472F0EDC4A12DEDEBC5BB5566E88E15B2E9B34617D59"
+  },
+  "progressOnly": true,
+  "newAcceptanceClaimed": false,
+  "newNativeOperation": false,
+  "nativeOperationOnResumeAuthorized": false,
+  "originalGrantConsumed": true,
+  "automaticReplay": false,
+  "checkpointWriteFsyncReadback": true,
+  "remoteBackupClaimed": false
+}

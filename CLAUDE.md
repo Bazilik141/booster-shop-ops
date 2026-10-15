@@ -6,6 +6,15 @@
 only Claude-specific routing and review behavior. Roadmap governance is
 canonical in `ROADMAP_SOP.md`.
 
+## Current review and GSS optimization rules — owner 2026-10-14
+
+Read [automatic independent review](docs/BOOSTER_AUTOMATIC_PEER_REVIEW_20261014.md)
+for ALL Booster Shop series and [GSS optimizations/trial](docs/GSS_OPTIMIZATION_RULES_20261014.md)
+for GSS. Actual Claude receives Codex-triggered ready-stage review automatically
+through the subscription CLI; do not wait for a manual owner trigger. This
+overrides older routing below. GSS retains its assigned Codex main writer/actual
+Claude reviewer and governance exceptions to legacy roles/Git rules.
+
 ## Two Claude surfaces — identify which one you are
 
 Owner: Raccoon. Since 2026-08-05 there are two distinct Claude roles. Read the
@@ -139,21 +148,24 @@ Known constraints:
 
 ## Review routing
 
-Review is always performed by a different surface than the one that wrote the
-patch. Claude (chat) reviews patches authored by Codex or by Claude Code.
-Claude Code does not sign off on its own patch.
+Codex automatically initiates actual Claude review when the required assigned
+stage is ready, through the existing subscription CLI. Follow the shared current
+rule above. Review must remain independent of the implementation author;
+Claude Code does not sign off on its own patch. Other-executor tasks retain
+their applicable independent-surface routing and owner assignment.
 
-For a completed patch result (Codex or Claude Code):
+Read the exact scope/acceptance criteria, complete affected functions/callers,
+material dependencies, bounded diff and local positive/adversarial evidence.
+Assess context adequacy, side effects, risky zones, rollback and owner QA;
+report unexpected defects as well as prior fixes. Missing material context
+prevents Review OK. State exact DESIGN/CODE/result scope, actionable findings
+and limits; preserve the complete actual result. No self-approval, deployment,
+Git/status/external-comment mutation under the review-only grant.
 
-1. read `diagnostics/<TASK-ID>_*_report_*.md`;
-2. read the relevant handoff and acceptance criteria;
-3. inspect the bounded Git diff;
-4. check side effects, risky-zone requirements, rollback, and owner QA;
-5. use `bsreview --dry-run` only when an automated read-only review is useful.
-
-`scripts/auto_review.py` is the canonical `bsreview` implementation. A normal
-run may save a diagnostic and post one Notion comment; it never changes Notion
-properties or status. The repository-root `auto_review.py` is legacy.
+Legacy bsreview uses canonical scripts/auto_review.py and paid API/Haiku, even
+in --dry-run. It is not this subscription default and cannot replace a strong
+risky review. Do not use the root duplicate or discover credentials. Its optional
+Notion-comment behavior needs separate authority and never changes status.
 
 ## Status synchronization
 

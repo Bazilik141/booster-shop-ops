@@ -1,0 +1,105 @@
+{
+  "decisionIds": [
+    "BOOSTER-AUTOREVIEW-20261014",
+    "GSS-OPT-20261014"
+  ],
+  "recordedUtc": "2026-10-14T20:26:28.019Z",
+  "ownerInstruction": "Погоджую. Фіксуй апдейт правил та інструкцій для тебе в клода по проєкту GSS по перевіреним оптимізаціям. Наступним етапом погоджую тестування **допоміжної паралельної роботи**, без окремої тривалої фази оптимізації. Також прошу тебе редагувати правила рев'ю для всіх проєктів що стосуються бустер шоп: рев'ю від кодекса до клода йде автоматично по готовності потрібного етапу роботи, через апі. Тобто, той формат оптимізації роботи, який ми відтестували і готові запровадити на постійній основі для GSS, також впроваджуємо і в загальному форматі роботи з задачами Booster Shop. Прошу тебе дати підтвердження, що правильно мене зрозумів. Якщо є питання - кажи.",
+  "clarificationQuestionItemId": "[\"request_user_input_async\",\"call_a245c956d4724f8c83bf41b64f215786\",0]",
+  "clarificationQuestion": "Під «через API» ти маєш на увазі автоматичне рев’ю через вже відтестований Claude CLI за підпискою, чи перехід на окремий платний Anthropic API? Це визначає транспорт; самі правила автоматичного рев’ю й оптимізації вже погоджені.",
+  "clarificationAnswer": "Залишити відтестований Claude CLI за підпискою",
+  "acceptedOutcome": "Permanent verified process baseline for GSS and automatic Codex-to-actual-Claude readiness reviews for all Booster Shop series via subscription CLI. Next GSS CODE stage tests one/two bounded analysis assistants while implementation continues; main writer/reviewer/owner gates retained.",
+  "disclosureAuthority": "Necessary internal code/rules/sanitized technical diagnostics/generated fictional tests for assigned stage to Anthropic via subscription; excludes credentials/private/live/customer/payment/new pilot payloads and paid fallback.",
+  "supersedes": "Manual owner review trigger/legacy bsreview default only; older optimization trials retain history. No transfer of GSS resource/native/Git/status rights to other tasks.",
+  "rules": [
+    {
+      "path": "docs/BOOSTER_AUTOMATIC_PEER_REVIEW_20261014.md",
+      "bytes": 8340,
+      "sha256": "4D4FD0A511BFC6918B95880EC178D8A5AEE233E20867B32819E9B3DF4944DEC8"
+    },
+    {
+      "path": "docs/GSS_OPTIMIZATION_RULES_20261014.md",
+      "bytes": 6116,
+      "sha256": "581F7576CD967E48F3F7E9F804DF49A0EB678A2C2EEC8115942BA75EDF0FFF34"
+    }
+  ],
+  "preservedInputs": [
+    {
+      "original": {
+        "path": "AGENTS.md",
+        "bytes": 34858,
+        "sha256": "6E124730EA43C3F7A9B55536E9BAD75C00C40A71D0F5AC3C62B7348563E6814B"
+      },
+      "copy": {
+        "path": "work/BOOSTER_review-rules_20261014_AGENTS_before.md",
+        "bytes": 34858,
+        "sha256": "6E124730EA43C3F7A9B55536E9BAD75C00C40A71D0F5AC3C62B7348563E6814B"
+      }
+    },
+    {
+      "original": {
+        "path": "CLAUDE.md",
+        "bytes": 8590,
+        "sha256": "2DB79ACA7EF838533F561802B024C5638FCFB7AD4C91B8B6B7627737796D2F16"
+      },
+      "copy": {
+        "path": "work/BOOSTER_review-rules_20261014_CLAUDE_before.md",
+        "bytes": 8590,
+        "sha256": "2DB79ACA7EF838533F561802B024C5638FCFB7AD4C91B8B6B7627737796D2F16"
+      }
+    },
+    {
+      "original": {
+        "path": "CODEX_WORKFLOW.md",
+        "bytes": 5959,
+        "sha256": "4899AF1AEE701662DE0D82430DE75FE8476DDAE189E098335247486826969A9A"
+      },
+      "copy": {
+        "path": "work/BOOSTER_review-rules_20261014_CODEX_WORKFLOW_before.md",
+        "bytes": 5959,
+        "sha256": "4899AF1AEE701662DE0D82430DE75FE8476DDAE189E098335247486826969A9A"
+      }
+    },
+    {
+      "original": {
+        "path": "ROADMAP_SOP.md",
+        "bytes": 66550,
+        "sha256": "5D3D61E22217C75805FCB421F63403B337640418F89B8EA28DF6DB981F2B1822"
+      },
+      "copy": {
+        "path": "work/BOOSTER_review-rules_20261014_ROADMAP_SOP_before.md",
+        "bytes": 66550,
+        "sha256": "5D3D61E22217C75805FCB421F63403B337640418F89B8EA28DF6DB981F2B1822"
+      }
+    }
+  ],
+  "historicalReview62AgentsPin": {
+    "path": "AGENTS.md",
+    "bytes": 34858,
+    "sha256": "6E124730EA43C3F7A9B55536E9BAD75C00C40A71D0F5AC3C62B7348563E6814B"
+  },
+  "historicalReview62InputPreserved": true,
+  "basis": {
+    "path": "plans/GSS_CR03_design63c_reviewed-basis_20261014.json",
+    "bytes": 3342,
+    "sha256": "3E0A7B616ACDF36149878451CFD94EE4CCBE5A39603D0B15FDF8D3E267CF2666"
+  },
+  "productivity": {
+    "path": "diagnostics/GSS_foundation-CR03_design63c-stage-productivity_20261014.json",
+    "bytes": 4670,
+    "sha256": "19AA9295B80C8016909A250C94F9326E7215112AF918726A4891835DFFDFCEBE"
+  },
+  "parallelTrialApproved": true,
+  "parallelTrialScope": "Next local GSS corrective63 CODE/check stage, analysis assistance only, no separate prolonged optimization phase",
+  "parallelTrialStarted": false,
+  "permanentBaselineApproved": true,
+  "automaticReviewInstructionApproved": true,
+  "transport": "INSTALLED_SUBSCRIPTION_CLI",
+  "paidApiApproved": false,
+  "gssAuthenticatedConfirmationClaimed": false,
+  "newNativeGrant": false,
+  "productionOrBusinessDataWriteApproved": false,
+  "gitOrStatusWriteApproved": false,
+  "generalBoosterAdapterImplemented": false,
+  "providerLaunched": false
+}

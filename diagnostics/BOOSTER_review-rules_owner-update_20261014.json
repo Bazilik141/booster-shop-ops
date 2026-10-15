@@ -1,0 +1,120 @@
+{
+  "scope": "Owner-authorized instruction-only update; not launcher implementation or independent CODE verdict",
+  "actualUtc": "2026-10-14T20:26:28.042Z",
+  "producer": {
+    "path": "work/apply-booster-review-rules-v2_20261014.mjs",
+    "bytes": 18939,
+    "sha256": "84FF13998C8C6A4CDD7A773DCFE2D30B6C910DBD3337D7382905A3020D5A6B8E"
+  },
+  "decision": {
+    "path": "plans/BOOSTER_review-optimization_owner-decision_20261014.json",
+    "bytes": 5912,
+    "sha256": "19152AF7167BF4BD09F0DA1FC3E6A489D587A69AE4AD0CD31D67B697F1D163CD"
+  },
+  "preserved": [
+    {
+      "original": {
+        "path": "AGENTS.md",
+        "bytes": 34858,
+        "sha256": "6E124730EA43C3F7A9B55536E9BAD75C00C40A71D0F5AC3C62B7348563E6814B"
+      },
+      "copy": {
+        "path": "work/BOOSTER_review-rules_20261014_AGENTS_before.md",
+        "bytes": 34858,
+        "sha256": "6E124730EA43C3F7A9B55536E9BAD75C00C40A71D0F5AC3C62B7348563E6814B"
+      }
+    },
+    {
+      "original": {
+        "path": "CLAUDE.md",
+        "bytes": 8590,
+        "sha256": "2DB79ACA7EF838533F561802B024C5638FCFB7AD4C91B8B6B7627737796D2F16"
+      },
+      "copy": {
+        "path": "work/BOOSTER_review-rules_20261014_CLAUDE_before.md",
+        "bytes": 8590,
+        "sha256": "2DB79ACA7EF838533F561802B024C5638FCFB7AD4C91B8B6B7627737796D2F16"
+      }
+    },
+    {
+      "original": {
+        "path": "CODEX_WORKFLOW.md",
+        "bytes": 5959,
+        "sha256": "4899AF1AEE701662DE0D82430DE75FE8476DDAE189E098335247486826969A9A"
+      },
+      "copy": {
+        "path": "work/BOOSTER_review-rules_20261014_CODEX_WORKFLOW_before.md",
+        "bytes": 5959,
+        "sha256": "4899AF1AEE701662DE0D82430DE75FE8476DDAE189E098335247486826969A9A"
+      }
+    },
+    {
+      "original": {
+        "path": "ROADMAP_SOP.md",
+        "bytes": 66550,
+        "sha256": "5D3D61E22217C75805FCB421F63403B337640418F89B8EA28DF6DB981F2B1822"
+      },
+      "copy": {
+        "path": "work/BOOSTER_review-rules_20261014_ROADMAP_SOP_before.md",
+        "bytes": 66550,
+        "sha256": "5D3D61E22217C75805FCB421F63403B337640418F89B8EA28DF6DB981F2B1822"
+      }
+    }
+  ],
+  "updated": [
+    {
+      "path": "AGENTS.md",
+      "bytes": 36006,
+      "sha256": "5195090AD58D148CF8522A0A35886F46699C23425418A257749C49957B980E08"
+    },
+    {
+      "path": "CLAUDE.md",
+      "bytes": 9599,
+      "sha256": "A36FAA8E913EF9DA07DF99D6C13C50DC2E7D6F9D81D05CBED4950433C42B0112"
+    },
+    {
+      "path": "CODEX_WORKFLOW.md",
+      "bytes": 7005,
+      "sha256": "19CBD4EF79E8E7DD1C0CD62CF2C48E5F3CF1080EADE15F04F258D952C8702F15"
+    },
+    {
+      "path": "ROADMAP_SOP.md",
+      "bytes": 67240,
+      "sha256": "745A89918553898D30C4CD9A07F303CB1DAE205314D59FC08EBF3FDC93D0E5A5"
+    }
+  ],
+  "rules": [
+    {
+      "path": "docs/BOOSTER_AUTOMATIC_PEER_REVIEW_20261014.md",
+      "bytes": 8340,
+      "sha256": "4D4FD0A511BFC6918B95880EC178D8A5AEE233E20867B32819E9B3DF4944DEC8"
+    },
+    {
+      "path": "docs/GSS_OPTIMIZATION_RULES_20261014.md",
+      "bytes": 6116,
+      "sha256": "581F7576CD967E48F3F7E9F804DF49A0EB678A2C2EEC8115942BA75EDF0FFF34"
+    }
+  ],
+  "previousUncommittedAgentsChangesPreserved": true,
+  "preimagesMatched": true,
+  "eolPreserved": true,
+  "rewriteAtomic": false,
+  "fsyncReadback": true,
+  "preparationFailures": [
+    {
+      "producer": {
+        "path": "work/apply-booster-review-rules_20261014.mjs",
+        "bytes": 17908,
+        "sha256": "D421E30E9787A2BCD69AF1CE7E8B7AB362DCC5377A78BEC95483F6A40D7116C0"
+      },
+      "failure": "Mixed-EOL exact anchor refused before any instruction/owner-record write; no mutation.",
+      "dependentCheckpointAttempt": "ENOENT missing unpublished state, pointer unchanged"
+    }
+  ],
+  "gitWrite": false,
+  "externalWrite": false,
+  "providerLaunched": false,
+  "oldReviewIntervalAcceptanceChanged": false,
+  "oldManifestRewritten": false,
+  "historicalInputResolution": "Old AGENTS review62 bytes preserved under explicit original/copy pins. Future historical verification must resolve that saved identity; current root is intentionally newer. Do not rerun old requester/overwrite old evidence."
+}

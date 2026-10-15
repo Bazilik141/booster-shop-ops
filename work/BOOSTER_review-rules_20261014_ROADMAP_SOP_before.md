@@ -1,0 +1,574 @@
+# ROADMAP_SOP.md — Booster Roadmap Operating Procedure
+
+This file is canonical for Booster task status, lifecycle, synchronization,
+writer ownership, page-ID routing, and Definition of Done.
+
+- `AGENTS.md` is canonical for general authority, safety, and implementation
+  rules.
+- `CODEX_WORKFLOW.md` defines the handoff-to-implementation protocol.
+- `CLAUDE.md` defines Claude-specific context and review routing.
+
+## 0. Core invariants
+
+> **GSS-only amendment (owner decision 2026-09-28):** follow
+> `docs/GSS_GOVERNANCE.md` and the GSS exception in root `AGENTS.md`.
+> Codex and Claude have equal architect/executor/reviewer and scoped
+> commit/push rights; the owner assigns tasks. Until GSS roadmap cutover,
+> the assigned executor creates/updates its approved GSS task records,
+> properties and statuses in both canonical Notion and the dashboard mirror.
+> One writer per task; required acceptance evidence and owner QA still apply.
+> GSS first delivers its own working roadmap after the necessary foundation;
+> other Booster tasks migrate later. This overrides conflicting legacy
+> writer/Git rules below for GSS only. No task migration or status change is
+> performed merely by recording this amendment.
+
+> **2026-07-27 amendment (owner-authorized, permanent):** the owner reassigned
+> the `ROADMAP_FLOW`/dashboard-mirror writer role from Codex-only to Claude,
+> in the same session that created NCRM-18/NCRM-19. This supersedes the
+> Codex-only dashboard-writer wording below and in §3/§4/§7 wherever it
+> conflicts. Codex retains its existing authority to change `ROADMAP_FLOW`
+> when required by its own authorized implementation work (e.g. a migration
+> that changes task scope) — this amendment adds Claude as a second authorized
+> writer for routine status/property mirroring, it does not remove Codex's.
+> Both agents must still avoid writing the same field in the same task at the
+> same time; check the dashboard's own diff before editing.
+>
+> **Known physical limit (2026-07-27, superseded 2026-07-28 — see next
+> amendment):** Claude's mounted access was
+> `booster-shop-ops/dashboard/booster-dashboard.html` (repository mirror)
+> only. The standalone "active dashboard" at
+> `C:\Users\14bez\Downloads\Booster Shop\booster-dashboard.html` (outside the
+> mounted folder) was not reachable by Claude, so the owner had to copy
+> repo mirror → active dashboard after every Claude-authored edit.
+>
+> **2026-07-28 amendment (owner-authorized, permanent): single canonical
+> dashboard file.** The owner retired the standalone "active dashboard" copy.
+> `dashboard/booster-dashboard.html` inside this repository is now the only
+> dashboard file — the owner opens it directly (e.g. via its `file://` path)
+> instead of a separate outside-repo copy. This supersedes the 2026-07-27
+> physical-limit note above, the copy-back requirement it describes, and
+> §4/§8 wherever they still describe two files. Claude and Codex both edit
+> this one file directly; there is no copy step between two dashboard files
+> anymore.
+
+- Notion roadmap is the canonical task-status and priority source.
+- Dashboard `ROADMAP_FLOW` is a mirror, not an independent status source.
+- `context-index.md` contains task-to-evidence routing and never stores status.
+- Claude is the default writer of Booster Notion task properties and status,
+  and, per the 2026-07-27 amendment above, of the `ROADMAP_FLOW` dashboard
+  mirror.
+- Codex owns required `ROADMAP_FLOW` changes in authorized roadmap-affecting
+  work.
+- Agents do not act as parallel writers. A writer exception requires exact
+  owner reassignment.
+- The owner controls production deployment, final manual QA, and the decision
+  that a risky or legal task is ready to close.
+- Claude never commits or pushes. Codex may do so only after direct, explicit,
+  one-time owner authorization for the exact active-task scope.
+- `scripts/auto_review.py` is the canonical `bsreview` implementation. It never
+  changes Notion properties or status.
+
+## 1. Sources of truth
+
+| Information | Canonical source | Purpose |
+|---|---|---|
+| Task status, priority, and task owner | Notion roadmap | Canonical project state |
+| At-a-glance status view | `booster-dashboard.html` → `ROADMAP_FLOW` | Mirror of Notion |
+| Scope, logic, and task evidence | `handoffs/` + `diagnostics/` | Implementation context |
+| Task ID → handoff/diagnostic/page ID | `context-index.md` | Routing index without status |
+| Code, diffs, and patch history | Repository | Implementation history |
+
+Do not store task status in `context-index.md`, filenames, or handoff headers.
+
+Notion roadmap:
+`https://www.notion.so/35c3f8572fc54a7896c8af0efd4cf8d4`
+
+Database: `35c3f857-2fc5-4a78-96c8-af0efd4cf8d4`
+
+View: `?v=eebb19b11cfb4066a8a3b1b097775818`
+
+## 2. Status vocabulary
+
+| Notion `Status` | Dashboard `status` | Meaning |
+|---|---|---|
+| `Not started` | `todo` | Work has not started |
+| `In progress` | `active` | Active work, including a ready handoff waiting for Codex |
+| `Done` | `done` | Required implementation, deployment, and QA evidence are complete |
+
+For watch-only monitoring after implementation, use `Done` and add a
+`watch-only` note in `Owner Decision` or `Stage`. Do not leave completed work in
+`In progress` only because an external system such as Google still needs time.
+
+## 3. Task lifecycle and writers
+
+| Stage | Evidence/action | Notion writer | Dashboard writer | Gate |
+|---|---|---|---|---|
+| 1. Create | Task row and initial scope | Claude | Claude (2026-07-27 amendment), or Codex when mirror creation is authorized | `Not started` / `todo` |
+| 2. Start | Bounded handoff exists | Claude | Claude (2026-07-27 amendment), or Codex when mirror change is authorized | `In progress` / `active` |
+| 3. Implement | Patch/source change + diagnostics | — | Codex only if required by scope | Acceptance checks |
+| 4. Review | Handoff + diagnostic + bounded diff | — | — | Claude/owner verdict |
+| 5. Deploy and QA | Owner runs patch and manual checks | — | — | Owner evidence |
+| 6. Close | Owner authorizes closure after DoD | Claude sets `Done` | Claude mirrors `done` (2026-07-27 amendment), or Codex | Both converge |
+
+Notion and dashboard must converge within the same bounded workflow, but one
+agent does not write both systems by default. If a required writer is
+unavailable, stop and hand off. Do not silently create a competing writer.
+
+## 4. Status read and synchronization procedure
+
+### Read canonical status
+
+1. Prefer a known `page_id` and direct Notion fetch.
+2. If no page ID is known, search by task title or distinctive keywords.
+3. Fetch the result and verify its `Roadmap ID`.
+4. Use `ROADMAP_FLOW` only as the local mirror and drift signal.
+
+Ranked semantic/content search does not guarantee exact-ID recall. Exact-ID
+queries are not categorically forbidden; they simply require result
+verification.
+
+### Write status
+
+- **Notion:** Claude updates properties/status through the available Notion
+  page-update tool.
+- **Dashboard:** `dashboard/booster-dashboard.html` is the single canonical
+  dashboard file (2026-07-28 amendment, §0) — there is no separate active
+  copy anymore. Claude may edit it directly to keep it aligned with Notion.
+  Codex edits the same file within its own authorized implementation scope.
+  Do not have both agents edit the same task's dashboard entry in the same
+  window without checking the other's latest diff first.
+
+If verified implementation or owner QA is newer than Notion, Claude first
+updates canonical Notion state and Codex then aligns the dashboard mirror. If
+the dashboard disagrees without newer evidence, align it to Notion.
+
+### Drift review
+
+At the start of a roadmap-maintenance task:
+
+1. inspect active/todo dashboard entries;
+2. fetch their Notion cards using known page IDs when available;
+3. report mismatches;
+4. correct only the system assigned to the active writer and authorized scope.
+
+Spot-check completed tasks only when evidence suggests drift.
+
+## 4a. Review automation — `bsreview` (AUTO-002)
+
+`bs-review.ps1` invokes `scripts/auto_review.py`.
+
+- `bsreview [TASK-ID]` finds a diagnostic and handoff, reads the Git diff, calls
+  Claude, saves a review diagnostic, and may post one Notion comment when
+  `NOTION_TOKEN` is available.
+- `bsreview` without an ID uses the newest diagnostic.
+- `bsreview --dry-run` may call Claude and print the review but does not save a
+  diagnostic or read/write Notion.
+- Normal mode may query the roadmap by exact `Roadmap ID` through the Notion
+  REST API and post one comment.
+- No mode may update a Notion property or status.
+- The repository-root `auto_review.py` is legacy and must not be invoked.
+- `.env.review` may contain `ANTHROPIC_API_KEY` and `NOTION_TOKEN`; never commit
+  or expose it.
+
+Use manual Claude review in addition to automation for risky or complex
+changes.
+
+## 5. Notion page-ID registry
+
+### ST series
+
+| Roadmap ID | Notion page_id |
+|---|---|
+| ST-3.5 | `3896bf20-bdb4-8174-8a50-fe3d19f8c9ba` |
+| ST-3.6 | `38a6bf20-bdb4-8184-917c-ef3f6c6ca1b1` |
+| ST-3.7 | `38a6bf20-bdb4-8153-8538-db353b2f6a34` |
+| ST-2c | `3896bf20-bdb4-8119-a13b-c1dc1e078328` |
+| ST-6 | `3896bf20-bdb4-81b0-8c67-cb4300ccba9f` |
+| ST-1 | `3896bf20-bdb4-819d-bb33-f1ddcc2dd0de` |
+| ST-2b.5 | `3896bf20-bdb4-81af-9a30-f9f1c909338c` |
+| ST-2b.1–2b.4 | `3896bf20-bdb4-815f-8762-ec1e16c6e146` |
+| ST-2b.6 | `3926bf20-bdb4-81a0-992c-dc6840dc1baf` |
+
+### Frequently used non-ST tasks
+
+| Roadmap ID | Notion page_id | Note |
+|---|---|---|
+| PAY-001 | `3a16bf20-bdb4-819b-99a7-f8535b0c74d6` | Added 2026-07-18: Monobank "Покупка Частинами" |
+| PAY-001-UI | `3a26bf20-bdb4-811f-baf2-ed050b4c78e7` | Added 2026-07-18: design brief |
+| PAY-002 | `3aa6bf20-bdb4-812a-b541-ef4d483f3657` | Added 2026-07-27: PUMB «Сплачуйте частинами». The card existed only in the dashboard mirror until this date |
+| PAY-003 | `3aa6bf20-bdb4-8187-baa7-df479a24d475` | Added 2026-07-27: shared credit-confirmation intermediate page (mono + PUMB), blockedBy PAY-002 |
+| PAY-001-SMOKE | `3aa6bf20-bdb4-8122-86a9-c201c8700185` | Added 2026-07-27: unified final QA gate for mono + PUMB, created immediately after PAY-001 closed |
+| PAY-004 | `3c66bf20-bdb4-81e3-93fd-d503961ab549` | Added 2026-08-24 on owner instruction, executor Codex by owner assignment. PUMB `createPayload()` sends `credit_request.term` from the single admin setting `payment_pumb_credit_term` (= `3`) and `confirm()` never reads a customer-selected term, so a customer choosing 5 payments would receive a 3-payment agreement; mono already passes the choice as `createPayload(array $order, int $parts)`. Evidence: live extension archive `pumb-live_2026-08-14.tar.gz` re-verified against `backup-8.16.2026_08-03-55_boosters.tar.gz`, plus the 2026-08-14 settings dump (`payment_pumb_credit_term = 3` vs `payment_mono_chast_parts = [3,4,5]`). Recorded in no prior PAY-002 artifact — found by the owner in the admin panel. Owner sequencing decision: implement before the first PUMB test order so the test runs on a 4- or 5-payment term. ID evidence: registry named no next free `PAY-`; a live query of the series returned `PAY-001`, `PAY-002`, `PAY-003` plus the suffixed `PAY-001-UI` and `PAY-001-SMOKE`, so `PAY-004` was taken with no gap |
+| PAY-005 | `3cc6bf20-bdb4-8135-a249-c949fff3e7bb` | Added 2026-08-30 on owner instruction as a carve-out from PAY-002. PUMB has no "unavailable" credit row: `pay002PumbGate()` computes `configured`/`available`/`reason`/`threshold`/`payable`/`remaining` but none of it is exported, so a customer below the minimum sees nothing for PUMB where monobank shows a row with the reason. Scope: export `pay002_credit_gate` beside the existing `pay001_credit_gate` in `catalog/controller/checkout/payment_method.php`, and rework the blocked-credit row in `catalog/view/template/checkout/payment_method.twig`, which hardcodes `mono_chast.mono_chast_3`, `pay001Credit: true`, `monoOptions: []`, `preferred: 3` and the mono messaging path. Found during round 4 of the PAY-002 WP1/WP2 patch review (`diagnostics/PAY-002_pumb-checkout-card_review-round4_20260830.md`, note 4); deliberately excluded from WP2 because it is new UI behaviour on the live checkout, not polish of a patch already through four review rounds. Owner sequencing decision, Claude to determine placement: starts only after PAY-002 WP1+WP2 are deployed and owner preview-mode QA passes; hard gate before `payment_pumb_credit_public = 1` and before `PAY-001-SMOKE`, so the final smoke exercises the finished UI. ID evidence: registry named no next free `PAY-`; a live query of the series returned `PAY-001`, `PAY-002`, `PAY-003`, `PAY-004` plus the suffixed `PAY-001-UI` and `PAY-001-SMOKE`, so `PAY-005` was taken with no gap |
+| CRM-001 | `3876bf20-bdb4-81dc-987d-d119fff4d2e9` | — |
+| CRM-002 | `3876bf20-bdb4-8118-9fc7-d7e702832ec4` | — |
+| CRM-003 | `3ac6bf20-bdb4-81cb-a1f3-fb09f399c1e7` | Added 2026-07-29: BOOSTER_CRM_TOKEN rotation (hardcoded exposure found in dashboard.html + docs/index.html) |
+| OPS-CODEMIRROR | `3b66bf20-bdb4-81f8-8ccb-c58955892365` | Added and completed 2026-08-08: both Apps Script projects mirrored in the repository. `crm/apps-script/Code.gs` + `crm/apps-script/SOURCE_STATE.md` (pull 2026-08-08 11:41, owner-reported V89); `3d-print/apps-script-3dp-api/Code.gs` verified byte-identical to live. Rule in `AGENTS.md` → "Apps Script mirrors" |
+| CRM-004 | `3b56bf20-bdb4-812c-99a8-ceb7d3ee89fd` | Added 2026-08-07 from Finding 10 of `diagnostics/3D-P_live-schema-audit_20260803.md`: main-CRM data-validation defects (Паковання dropdown source range overlaps product data; new SKUs trip Недійсне значення). Configuration, not script. Must not be folded into 3D-P tasks |
+| TECH-005-DEEP | `3666bf20-bdb4-8175-a429-e48eb7d6ef2d` | — |
+| TECH-012 | `3666bf20-bdb4-812e-8975-df8827efdb16` | — |
+| TECH-015 | `3666bf20-bdb4-819b-bf27-e27932d87744` | Page ID recorded 2026-09-05 while resolving the GA4 `purchase` regression. Pre-existing row (Sheet migration), not created in that session. Note appended, status left `In progress`. Mirror row created in `ROADMAP_TASKS` on 2026-09-05 on explicit owner instruction — the row had been missing entirely since the Sheet migration |
+| TECH-013 | `3a06bf20-bdb4-810c-b914-e518ca5f7188` | — |
+| TECH-029 | `3786bf20-bdb4-8116-8f66-c856e04a11df` | — |
+| TECH-035 | `3936bf20-bdb4-81d4-a0ee-e21b32119066` | — |
+| TECH-042 | `3a06bf20-bdb4-812b-8cd7-dd45932ff09d` | — |
+| TECH-046 | `3da6bf20-bdb4-8109-a2c7-cd47100854b9` | Added 2026-09-13 on owner instruction ("Задачу в Notion роби") during the GA4 live-traffic verification of TECH-015. Register `payment_type` and `shipping_tier` as GA4 custom dimensions (Admin → Data display → Custom definitions, scope Event). Both are already sent by the live `add_payment_info` / `add_shipping_info` events from TECH-015 WP3, but Custom definitions is empty (`0 of 0`), so GA4 cannot segment by payment method or delivery tier; the 2026-09-12 audit had to rebuild the payment split from the OpenCart SQL dump. ⚠ Registration is NOT retroactive — only traffic collected after it exists carries the dimension. GA4 settings only: no patch, no deployment, and not a fix for the open Hutko `purchase` gap, which stays on TECH-015. Evidence: `diagnostics/TECH-015_ga4-live-traffic-verification_20260912.md` Finding 4. Priority left unset — owner decision. ID evidence: this registry names no next free `TECH-`; a live query of the series returned TECH-001…TECH-035, TECH-042, TECH-043, TECH-044, TECH-045 plus the suffixed TECH-005-DEEP and the known TECH-013 / TECH-029 collisions, so `TECH-046` was taken as max + 1 and the TECH-036…TECH-041 gap was not backfilled. `ROADMAP_TASKS` mirror row created in the same session |
+| TECH-047 | `3ea6bf20-bdb4-81d9-bf87-c7fccc198c4e` | Added 2026-09-29 on owner instruction ("Заведи задачу на перевірку/виправлення кількості відгуків та загалом на реалізацію системи відгуків від гугл"). Part A: live `product.twig` JSON-LD emits `aggregateRating` with literal `"reviewCount": "1"` — dormant today (`ocp5_review` empty on the 2026-09-12 dump, `config_review_status = 1`), fires on the first native review. Part B: Google Customer Reviews opt-in on the checkout success page. Owner sequencing: after TECH-044. Complements `MKT-007`, does not replace it. ID evidence: a live query of the whole `TECH-` series returned TECH-001…TECH-035, TECH-042…TECH-046 plus the suffixed TECH-005-DEEP and the known TECH-013 / TECH-029 collisions; max is 046, so `TECH-047` was taken and the TECH-036…041 gap was not backfilled. `ROADMAP_TASKS` mirror row created in the same session. **Наступний вільний у серії `TECH-` — `TECH-048`.** |
+| UX-008 | `3666bf20-bdb4-8173-b998-cf9ee7316af9` | Page ID recorded 2026-09-29 when closing Done on owner authorization (shipped under other patch IDs; evidence in the page note) |
+| UX-027 | `3666bf20-bdb4-8194-9ab9-d973a66f227f` | Page ID recorded 2026-09-29 when closing Done on owner authorization (shipped as `UI-FIX_mobile-desktop-polish_20260903`) |
+| UX-031 | `3666bf20-bdb4-812e-9375-fcc7773731a3` | Page ID recorded 2026-09-29 when closing Done on owner authorization (owner-confirmed live) |
+| TECH-044 | `3b46bf20-bdb4-81b9-9169-fa9657c0cab0` | Page ID recorded 2026-09-29 when the handoff was written |
+| RD-11 | `3706bf20-bdb4-81a4-b3fa-f35e7610defa` | — |
+| CAT-002 | `36f6bf20-bdb4-817e-99ec-eecce853778c` | — |
+| CAT-004 | `3dc6bf20-bdb4-8164-b001-db2191f9f7e6` | Added 2026-09-15 on owner instruction ("Роби — завести окрему задачу в категорії каталогу"). Варіативність товарів: master/variant + селектор характеристик, скоуп 3D-друк + аксесуари + запечатаний TCG. Поглинає `3D-P-011`, яка того ж дня закрита як superseded (не як виконана). ID evidence: цей реєстр не фіксує наступного вільного для `CAT-`; живий запит усієї серії повернув `CAT-001`, `CAT-002`, `CAT-003` без пропусків, тому взято `CAT-004`. **Наступний вільний у серії `CAT-` — `CAT-005`.** |
+| 3D-P-027 | `3dd6bf20-bdb4-81a8-903b-d89f42510c20` | Added 2026-09-16 on owner instruction ("нова задача") as a follow-up to `3D-P-022`, not a reopening: 022 is Done since 2026-08-08 and its changes are live (verified by reading `crm/apps-script/Code.gs` and the dashboard, not by status). Variant SKU suffixes from ред. 9 of the naming convention are rejected by the create-form validator. ID evidence: registry stated next free `3D-P-027`; a live query of the whole series returned `3D-P-000`…`026` plus the non-numeric `3D-P-CARDCONTENT`, with `009` permanently unused, so `027` was taken. **Наступний вільний у серії `3D-P-` — `3D-P-028`.** |
+| CHECKOUT-001 | `3776bf20-bdb4-8130-bcbf-cbb6259d5654` | — |
+| CHECKOUT-002 | `3946bf20-bdb4-81bf-9f47-cda9044fd2f2` | — |
+| CHECKOUT-004 | `3a16bf20-bdb4-8119-902c-e42e2b56a8bb` | Added 2026-07-18; also covers CHECKOUT-005/006/007/007A |
+| CHECKOUT-008 | `3ac6bf20-bdb4-8135-beb9-c7c7cbba4630` | Added 2026-07-29: IBAN requisites in order-confirmation email + checkout success "copy requisites" button, IBAN-only |
+| CHECKOUT-009 | `3ac6bf20-bdb4-81ab-b82c-e949bc08c990` | Added 2026-07-29, closed Done 2026-07-29: P0 — checkout did not register the selected delivery; Stage 1 deployed and confirmed by the owner |
+| CHECKOUT-010 | `3ac6bf20-bdb4-812b-9403-e41f6b86d77e` | Added 2026-07-29: CHECKOUT-009 Stage 2 checkout-state consolidation + deferred follow-ups; not started, needs owner authorization |
+| LEGAL-002 | `3666bf20-bdb4-81ea-8fed-ff4773081cdb` | — |
+| LEGAL-003 | `3dd6bf20-bdb4-81ea-8d89-e0e969227a59` | Added 2026-09-16 on owner instruction ("Заведи задачу під доповнення оферти"). Offer amendment for the Rare Pack product type; publication gate for the four `-RPK` cards. ID evidence: a live query of the whole series returned `LEGAL-002`, `LEGAL-002B` and `LEGAL-002b-3DP`; numeric max is `002`, so `003` was taken. `LEGAL-001` is absent from the query and the gap is **not** backfilled, per §5. **Наступний вільний у серії `LEGAL-` — `LEGAL-004`.** |
+| MKT-TG-008 | `3d56bf20-bdb4-81ce-949e-fec129a40555` | Created 2026-09-08 on owner instruction during a 13-task status sweep. **Backfill, not a new ID:** `MKT-TG-008` had been in use since 2026-07-21 across `patches/MKT-TG-008_news-curation-and-openai-drafts_20260721.js`, three diagnostics and the dashboard `ROADMAP_TASKS` row, but no Notion page existed — the canonical roadmap showed nothing while the work ran and finished. `MKT-TG-007` has no artefacts anywhere; the gap is deliberate and stays. Created directly as `Done` |
+| ORDER-STATUS-001 | *(no Notion page — deliberate)* | Owner decision 2026-09-08. The dashboard row was called `ORD-PREORDER`, a planning label from `plans/PAY_decomposition_mono-pumb-preorder_20260721.md` §6.4 that never got a Notion page; the work actually shipped as `ORDER-STATUS-001` (patch + report 2026-07-21, on production since then, DB presence confirmed independently in `handoffs/handoff_PAY-001_phase2c_cart-contract-gates_20260722.md`). The owner chose to rename the dashboard row to `ORDER-STATUS-001`, mark it `done`, and **not** create a Notion page for a task that is already finished. Do not re-open `ORD-PREORDER` |
+| R-13.5 | `36c6bf20-bdb4-814c-becb-c451a64b22f8` | — |
+| UX-036 | `3cf6bf20-bdb4-81e2-b1fb-dfe1d7b2bb8f` | Added 2026-09-02 on owner instruction ("Заведи задачі"). Batch of 5 ready Codex UI/copy fixes (`handoffs/handoff_UI-FIX_codex-handoff_20260902.md`) plus 3 PENDING sections awaiting Claude Design output (see UX-036-UI). ID evidence: no `UX-` entry existed in this registry file at all; a live query of the series returned `UX-001` through `UX-035` with no gap, so `UX-036` was taken as next free |
+| UX-036-UI | `3cf6bf20-bdb4-8185-ad0a-fb58a80de250` | Added 2026-09-02 alongside UX-036; suffix pattern mirrors `PAY-001`/`PAY-001-UI`. Visual design brief for Claude Design (`handoffs/handoff_UI-CD_visual-design-brief_20260902.md`) covering credit-modal button sizing, homepage category tiles, subcategory chip row; result folds back into UX-036 once owner-approved |
+| UX-037 | `3cf6bf20-bdb4-8102-ac9c-e0f18d592bb0` | Added 2026-09-02, carved out of the same review as UX-036 because it is a pricing-accuracy defect (Pokémon TCG Inferno X booster box — home/product/category surfaces disagree), not cosmetic polish. Higher priority than UX-036; may need a DB-write approval gate per AGENTS.md convention C6 |
+
+### Page IDs recovered 2026-09-08 (Notion↔dashboard reconciliation sweep)
+
+Added while reconciling all 277 Notion rows against the 130 `ROADMAP_TASKS` rows
+on the dashboard. The Notion **Query Data Source** tool hit its workspace usage
+limit part-way through, so these were recovered one at a time with
+`notion-search` and verified by title. Recording them here means the next
+session does not have to spend search calls on the same lookups.
+
+| Roadmap ID | page_id |
+|---|---|
+| TECH-005 | `3666bf20-bdb4-8166-9519-f42a4015f0b0` |
+| TECH-008 | `3666bf20-bdb4-81ea-bdab-c5f614f91d59` |
+| TECH-009 | `3666bf20-bdb4-815c-a2d6-c1d997cf021e` |
+| TECH-011 | `3666bf20-bdb4-810c-aa4c-db1330d543e8` |
+| TECH-033 | `3786bf20-bdb4-81ce-9fbd-e8055ed547f0` |
+| RD-04 | `3706bf20-bdb4-81d2-8f83-d77c17262526` |
+| RD-12 | `3706bf20-bdb4-81f1-94ed-cf08fd3b7e11` |
+| RD-13 | `3706bf20-bdb4-81c2-82ea-edf0b5434c96` |
+| RD-14 | `3706bf20-bdb4-816e-83d9-d94c2aa2cc70` |
+| RD-15 | `3706bf20-bdb4-81a9-9686-c5c90366254a` |
+| RD-21 | `3706bf20-bdb4-815f-8965-f500d1f061c3` |
+| RD-24 | `3e36bf20-bdb4-81a4-a25c-e5e06dd2c2a3` |
+| RD-27 | `3f76bf20-bdb4-8185-ab2b-ed03e51c3072` |
+| RD-28 | `3f76bf20-bdb4-811b-935d-f6a320eb6360` |
+| RD-29 | `3f86bf20-bdb4-81f4-8898-e4e3548b1399` | Added 2026-10-13 on owner instruction ("Заведи окрему задачу під створення темної версії теми сайту"). Dark version of the site theme in direction C «Колекційний сейф»; the owner chose light variant A for the account redesign and kept C for the future dark theme. Reference files: `design/dark-theme/`. Priority and executor left unset (owner decision). ID evidence: registry named no next free `RD-`; a live query of the series returned `RD-01`…`RD-28` plus the suffixed `RD-13.1J`, so `RD-29` was taken with no gap. **Наступний вільний у серії `RD-` — `RD-30`.** `ROADMAP_TASKS` mirror row created in the same session |
+| R-04 | `36a6bf20-bdb4-81a1-afa9-c23904919cd8` |
+| R-11 | `3696bf20-bdb4-81d9-9e9f-c4cf11dca805` |
+| R-11-UI-1 | `36f6bf20-bdb4-8142-b5e2-fadc47bc2172` |
+| R-11-UI-2 | `36f6bf20-bdb4-813a-aa6e-c5f94310f6c1` |
+| R-11b | `36f6bf20-bdb4-81fc-ae75-e075f4c74db3` |
+| R-12 | `36c6bf20-bdb4-819e-b000-d5460c13ce9a` |
+| R-13 | `36c6bf20-bdb4-8142-a02a-f66f9e09887f` |
+| R-14 | `36c6bf20-bdb4-81a8-8cd9-e6fc1b2b38c9` |
+| R-15 | `36c6bf20-bdb4-819e-be84-c47c382b7ab9` |
+| UX-007 | `3666bf20-bdb4-8148-8d34-cf9d57ca6503` |
+| UX-013 | `3666bf20-bdb4-8199-a15e-f8a89d825076` |
+| UX-014 | `3666bf20-bdb4-81f0-b409-c01c6f72377e` |
+| UX-026 | `3666bf20-bdb4-811f-b3bc-d63a9c4fdef9` |
+| AUTO-002 (партія 2026-05-20) | `3666bf20-bdb4-8137-824a-dc458cf95904` |
+| AUTO-002 (партія 2026-06-21) | `3866bf20-bdb4-8122-9b83-ccbb501239d5` |
+| AUTO-003 (партія 2026-05-20) | `3666bf20-bdb4-8193-b49e-c732d97636dc` |
+| AUTO-003 (партія 2026-06-21) | `3866bf20-bdb4-81a7-b8da-e1cdb86b0522` |
+| AUTO-004 (партія 2026-05-20) | `3666bf20-bdb4-81e7-ba5b-f497c3a7426a` |
+| AUTO-004 (партія 2026-06-21) | `3866bf20-bdb4-81b9-b111-e824601812ee` |
+| AUTO-005 (партія 2026-05-20) | `3666bf20-bdb4-81cf-9bac-e70af7a445b6` |
+| AUTO-005 (партія 2026-06-21) | `3866bf20-bdb4-81ae-8b4e-ce99685481d6` |
+| AUTO-006 (партія 2026-06-21) | `3866bf20-bdb4-81e0-830f-eb19f3b04fcc` |
+| AUTO-007 | `3666bf20-bdb4-8148-bc07-ebb561d17bae` |
+| AUTO-012 | `36d6bf20-bdb4-8137-9654-df98aa15f675` |
+| AUTO-013 | `36d6bf20-bdb4-817b-9fec-f03a749b5dad` |
+| BUG-002 | `3666bf20-bdb4-816f-98ae-c41bda2fbd72` |
+| BUG-003 | `3ed6bf20-bdb4-81b9-9428-c72fb23a7aba` | Added 2026-10-02: phantom stock after order-status change (PKM-JP-OUTL-BST) |
+| BUG-004 | `3ef6bf20-bdb4-81ea-9798-f38226cccbec` | Added 2026-10-04 on owner instruction. Mobile mini-cart: A) the item-count badge on the cart trigger does not render (Claude Design header audit, item 10); B) a swipe down on the open drawer triggers pull-to-refresh instead of closing it (owner report). Diagnostic first. Priority Medium, executor not assigned. Build after the header package of the RD-14/15 + UX-003/005/009 batch. |
+| OPS-003 (партія 2026-05-20, return form) | `3666bf20-bdb4-81af-8195-d93e257997d7` |
+| OPS-003 (партія 2026-05-26, workflow templates) | `36c6bf20-bdb4-818d-a6db-e88d8437f845` |
+| OPS-004 | `3aa6bf20-bdb4-81be-ac5b-fa13d3904970` |
+| TECH-029 (партія 2026-06-07, sitemap audit) | `3786bf20-bdb4-8116-8f66-c856e04a11df` |
+| TECH-029 (партія 2026-08-04, category description) | `3666bf20-bdb4-8157-acfd-c783f2000a3b` |
+| CONTENT-20260721-test (archived) | `3a46bf20-bdb4-81bf-be47-e8dd839e00a0` |
+| DASH-001 | `3886bf20-bdb4-811c-afb5-e603995026f5` |
+| SEO-CRIT-001 | `3666bf20-bdb4-81e1-b224-e089c1e41d6e` |
+| R-05 | `36a6bf20-bdb4-8104-973d-cff73625a5a5` |
+| R-07 | `36a6bf20-bdb4-8122-bf24-f1a5e6a2ea34` |
+| R-08 | `36a6bf20-bdb4-8174-9d84-cbd7934e4066` |
+| R-08.5 | `36c6bf20-bdb4-81fb-b054-edd6f25e6188` |
+
+### Known Roadmap ID collisions
+
+A query by `Roadmap ID` returns **two live pages** for each of the IDs below.
+Both pages are real, different tasks — they are not duplicates of one task, so
+neither may be archived away. Every colliding page carries an
+`[ID-колізія, партія YYYY-MM-DD]` prefix in its `Name`, so a search result shows
+which batch it belongs to. Always confirm which page you have before writing.
+
+| ID | Page A | Page B |
+|---|---|---|
+| AUTO-001 | партія 2026-05-20 — CRM-файл: аудит | партія 2026-06-21 — OLX/ручні замовлення |
+| AUTO-002 | партія 2026-05-20 — Master automation table | партія 2026-06-21 — Авто-ревʼю Codex-патчів |
+| AUTO-003 | партія 2026-05-20 — Звіти продажів | партія 2026-06-21 — Content Pipeline + SEO Monitor |
+| AUTO-004 | партія 2026-05-20 — Аналітика каналів | партія 2026-06-21 — SEO-моніторинг |
+| AUTO-005 | партія 2026-05-20 — Моніторинг конкурентів | партія 2026-06-21 — Авто-нагадування НП |
+| AUTO-006 | партія 2026-05-20 — Класифікація конкурентів | партія 2026-06-21 — Telegram/Viber бот |
+| OPS-003 | партія 2026-05-20 — Return request form | партія 2026-05-26 — Codex/Claude workflow templates |
+| TECH-029 | партія 2026-06-07 — Sitemap audit & fix | партія 2026-08-04 — category description + FAQ |
+
+`NCRM-07b` (three pages) and `TECH-013` (two pages) are a different case: those
+**are** duplicates of one task, and the redundant pages already carry an
+`[ARCHIVED]` prefix. Canonical: `NCRM-07b` = `39f6bf20-bdb4-8185-adc2-cf8c29f6e359`,
+`TECH-013` = `3a06bf20-bdb4-810c-b914-e518ca5f7188`.
+
+### Mirror coverage (closed 2026-09-08)
+
+The dashboard `ROADMAP_TASKS` array now mirrors **every not-closed Notion row**.
+Before the 2026-09-08 reconciliation it held 130 rows against 288 in Notion, and
+about 110 open tasks — the whole `AUTO-` series, `MKT-001…008`, `SEO-002…007`,
+`POLISH-`, `UX-001…034`, `TECH-001…034`, `CONTENT-001…004`, `CAT-003`,
+`PAY-001-SMOKE`, `PAY-003` — had no dashboard row at all and were therefore
+invisible to the owner, who reads the dashboard. 76 rows were generated from
+Notion in that pass; the array is now 206 rows.
+
+Rows created by that generation carry only fields that came from Notion: `id`,
+`title`, `status`, `tool`, `priority`, `lastUpdated`, a `simple` line holding the
+Notion `Category`, and `warn` where Notion has a real `Blocker`. They have no
+invented `simple`/`why` prose — the task body stays in Notion. If you flesh one
+out, take the text from its Notion page, not from the ID.
+
+**Keep it closed.** A Notion row created without its `ROADMAP_TASKS` row is
+invisible; a Notion row closed without its mirror leaves a stale card. Both
+writes belong to the same session — see §0 and the owner instruction of
+2026-08-16.
+
+Full record of the reconciliation:
+`diagnostics/ROADMAP-RECONCILE_notion-dashboard-gap_20260908.md`.
+
+### NCRM series
+
+NCRM-04 through NCRM-12 were renumbered/rescoped on 2026-07-11 under
+`plans/NCRM-financial-model-v2_technical-contract_20260711.md`.
+
+| Roadmap ID | Notion page_id | Note |
+|---|---|---|
+| CRM-017 | `3f26bf20-bdb4-81bd-ac66-d34a567d9dbd` | Added 2026-10-07 on explicit owner instruction. Rare Pack purchase, stock and cost audit; safe OP09/EB02 purchase classification migration; physical OP01 reconciliation. Live Notion ID query and local scan reserved CRM-001…016; 017 was free. In progress, High, Codex; dashboard mirror created in the same session. Seller receipt evidence remains pending; no live business-data repair or deployment. Audit: `diagnostics/CRM-017_rare-pack-purchases-and-cost_audit_20261007.md`. Next candidate CRM-018 requires a fresh availability check. |
+| CRM-016 | `3e46bf20-bdb4-8161-92fc-f06c468a6967` | Added 2026-09-23 on owner instruction. Purchases tab, CRM order-line correction, ACC-001-BPJP rename, performance review and Telegram diagnosis. The canonical Roadmap ID query returned CRM-001…012; repository artifacts already use CRM-013…015, so 016 avoids identifier reuse. Dashboard mirror created in the same session; no live deployment or Sheet write implied. |
+| NCRM-00 | `38b6bf20-bdb4-81dc-89ba-ddf3ae182f37` | — |
+| NCRM-01 | `38b6bf20-bdb4-8165-b4bb-f9434ee07770` | — |
+| NCRM-02 | `38b6bf20-bdb4-8115-b0b3-c8c1e31be4f1` | — |
+| NCRM-03 | `38b6bf20-bdb4-8140-ad7e-e6db16fa8984` | — |
+| NCRM-04 | `38b6bf20-bdb4-8173-8803-d6fb691df55b` | Inventory ledger foundation; formerly Read screens |
+| NCRM-05 | `38b6bf20-bdb4-81de-b682-d0b31c7c4a95` | Mystery fulfillment; formerly Write forms + FIFO COGS |
+| NCRM-06 | `38b6bf20-bdb4-81bf-858f-da5fc957be92` | Returns and cost quality; formerly Expenses + P&L + KPI |
+| NCRM-07 | `38b6bf20-bdb4-81f4-9cce-c56933b6bdbe` | Reporting, forecast, and KPI; formerly OpenCart pipeline |
+| NCRM-07b | `39f6bf20-bdb4-8185-adc2-cf8c29f6e359` | RLS and multi-user role foundation |
+| NCRM-08 | `39a6bf20-bdb4-815a-87d9-cd4348f16ddb` | Read screens; former NCRM-04 scope |
+| NCRM-09 | `39a6bf20-bdb4-81da-81fc-c3bb866981b4` | Write forms + FIFO COGS; former NCRM-05 scope |
+| NCRM-10 | `39a6bf20-bdb4-813c-a5ff-db69193a67e0` | OpenCart pipeline; former NCRM-07 scope |
+| NCRM-11 | `38b6bf20-bdb4-8127-b520-ee5775186f78` | Renumbered from NCRM-08; currency rates |
+| NCRM-12 | `38b6bf20-bdb4-8126-a49e-d4819f0bc496` | Renumbered from NCRM-09; mobile |
+| NCRM-13 | `39f6bf20-bdb4-8170-a4b3-d0c81978b4bf` | Signed inventory adjustment model |
+| NCRM-14 | `3a96bf20-bdb4-812c-95e5-f2dd31cf0ffe` | PUMB order-sync mapping and `discount_total` |
+| NCRM-15 | `3a96bf20-bdb4-8171-b60b-f6e7c1941324` | Mobile scope split from NCRM-12 |
+| NCRM-16 | `3a96bf20-bdb4-81db-9552-ce80397183cb` | Monobazar postpay 2.9% and owner FOP profile |
+| NCRM-17 | `3a96bf20-bdb4-81f5-9892-e76ecb5ba061` | Deploy local-only Next.js application |
+| NCRM-18 | `3aa6bf20-bdb4-819f-a83a-e4d2018362a1` | Added 2026-07-27: migrate roadmap tracking from Notion into NCRM; deferred to end of current backlog (blocked by NCRM-11–17), not yet scoped |
+| NCRM-19 | `3aa6bf20-bdb4-81a1-a1b9-e6863e5fd021` | Added 2026-07-27: Notion↔dashboard sync automation, nearer-term stand-in for NCRM-18; not yet scoped |
+| NCRM-20 | `3ac6bf20-bdb4-8120-a055-f0fa0683c53c` | Added 2026-07-29: backfill orders lost during the Mono sync bug (see NCRM-10) from Apps Script/Sheets into Supabase `sales`; owner-approved, not yet scoped/diagnosed |
+| NCRM-21 | `3e86bf20-bdb4-813e-b89e-c084bb647622` | Added 2026-09-27 on owner instruction ("Відкладаємо задачу на реалізацію в NCRM"): CRM→site stock correction (manual run, diff, per-SKU exclusion, rollback) and owner-selectable preorder ETA, on a shared CRM SKU ↔ OpenCart `product_id` registry. Scope: `plans/NCRM-21_site-stock-sync-and-preorder-eta_scope_20260927.md`. Not started, Medium, Blocker CRM-016. ID evidence: registry ended at NCRM-20; a live query returned NCRM-00…NCRM-20 plus three NCRM-07b pages, so NCRM-21 was taken. ⚠ `ROADMAP_TASKS` mirror row NOT yet created — the dashboard file was mid-edit by Codex for CRM-016; owner decision: add it after CRM-016 commits the dashboard |
+
+### MKT-TG series
+
+| Roadmap ID | Notion page_id | Note |
+|---|---|---|
+| MKT-TG-003 | `38c6bf20-bdb4-8194-ac7b-fe967c7a0849` | — |
+| MKT-TG-004 | `38c6bf20-bdb4-8145-b9e6-d1bebf8636ef` | Done; superseded by MKT-TG-005 |
+| MKT-TG-005 | `3926bf20-bdb4-810f-958d-eb9b249bb45b` | — |
+
+### 3D-P series
+
+> New program added 2026-07-27/28: a friend 3D-prints TCG-themed figurines
+> and accessories; two commercial tracks (site-sale revenue share vs.
+> marketing-freebie purchase). Scoping plan:
+> `plans/3D-P-000_scoping-and-architecture_20260728.md`. Not yet a Codex
+> handoff — discovery/planning stage only, no production writes made.
+
+| Roadmap ID | Notion page_id | Note |
+|---|---|---|
+| 3D-P-000 | `3ab6bf20-bdb4-8135-a58d-fe58e1ceeb27` | Discovery & scoping |
+| 3D-P-001 | `3ab6bf20-bdb4-815d-b16e-cdbc5c9350bf` | Nomenclature & cost/RRP tracking workbook (v1 delivered) |
+| 3D-P-002 | `3ab6bf20-bdb4-81ad-8432-febbb72cea29` | Catalog placement — Pokémon «Фігурки» subcategory, SEO risk-gated |
+| 3D-P-003 | `3ab6bf20-bdb4-814f-8812-c1f540a5f996` | Pricing & sizing market research |
+| 3D-P-004 | `3ab6bf20-bdb4-81c9-aa79-f29053013425` | Marketing-freebie sourcing flow |
+| 3D-P-005 | `3ab6bf20-bdb4-8140-b62e-e1fd4c8622f0` | Future NCRM module, narrow Friend access (deferred) |
+| 3D-P-006 | `3ae6bf20-bdb4-819e-8001-d6927f132f81` | Owner dashboard tab (3D-друк section) — first version shipped 2026-08-02, restructure follow-up is 3D-P-013 |
+| 3D-P-007 | `3ae6bf20-bdb4-81f7-9c7b-fefcfe12ffba` | Serhiy local server, consumer of 3D-P-008's API |
+| 3D-P-008 | `3af6bf20-bdb4-8189-a3a9-e88a374d01b1` | 3D-P Apps Script API foundation (read+write) + reconciliation; 2026-08-02 schema-correction addendum prepared, not yet deployed |
+| 3D-P-010 | `3af6bf20-bdb4-8110-8e88-fdee44316a0d` | Auto-pull packaging + fixture cost from main CRM into 3D-P sheet; Phase 0 investigation blocked on live CRM evidence as of 2026-08-02 |
+| 3D-P-011 | `3af6bf20-bdb4-8119-8158-dccb93c0e5b0` | Added 2026-08-06 (date corrected — originally logged as 08-01 in error): PDP characteristic (e.g. size) selector + product-page UI for multi-variant 3D-print items (Onyx 21cm/15cm trigger). Scope confirmed owner-only within 3D-P, not a general catalog feature. Discovery stage, no priority set, no Codex handoff yet. NOTE (pre-existing in this file when checked 2026-08-06, provenance not independently verified): text referencing a 2026-08-02 ID collision with a dashboard-restructure task (now 3D-P-013) was already present here — see also duplicate 3D-P-011/012 rows in context-index.md flagged to owner for reconciliation |
+| 3D-P-012 | `3af6bf20-bdb4-819b-bcbd-ff058993dc21` | Added 2026-08-06 (date corrected — originally logged as 08-01 in error): short product videos (~5/10/15s) alongside photos on 3D-print product pages. Owner confirmed independent of 3D-P-011 (no blockedBy). Discovery stage, no priority set. Feasibility pre-check: OC4 core has no native video field; marketplace extensions exist for 4.x; compatibility with custom boostershop-ds theme not yet verified against live backup |
+| 3D-P-013 | `3b06bf20-bdb4-81cc-a456-c24c6c557448` | Added 2026-08-02: «3D-друк» dashboard tab restructure (Калькулятор/Вироби/Інформація zones), follow-up to 3D-P-006. Originally misnumbered 3D-P-011, renumbered same day after the collision above was found |
+| 3D-P-014 | `3b16bf20-bdb4-81cc-aa44-da48d4df15ac` | Added 2026-08-03: make CRM→3D-P sync failures visible (durable `_Журнал_синхронізації` tab, `3dp_sync_journal` read action, dashboard panel). Owner sequenced this BEFORE further architecture work. Handoff: `handoffs/handoff_3D-P-014_sync-failure-visibility_20260803.md` |
+| 3D-P-015 | `3b16bf20-bdb4-8146-9f06-faaf2b54f67d` | Added 2026-08-03: rebuild the price model around a single фактична РРЦ + ціна під викуп; removes the three Аналітика price scenarios and everything derived from them; freezes cost/RRP into sale rows. Supersedes 3D-P-008 Addendum #3. Blocked by 3D-P-014. Handoff: `handoffs/handoff_3D-P-015_price-model-rebuild_20260803.md` |
+| 3D-P-016 | `3b56bf20-bdb4-8173-92ad-ca8a9a91d8e8` | Added 2026-08-07 from the gap audit (gap G5): break-even minimum price + discount control. Agreed in V1 §5.4-5.5, never built. Blocked by 3D-P-015 |
+| 3D-P-017 | `3b56bf20-bdb4-81e4-863e-f7cddaeb752e` | Added 2026-08-07 from the gap audit (gap G6): returns as a separate financial operation. Agreed in V1 §5.6, never built. Owner rule locked 2026-08-07 |
+| 3D-P-018 | `3b56bf20-bdb4-8103-99ff-cea734c92408` | Added 2026-08-07 from the gap audit (gap G9): Виробництво/Друк-лог zone in the owner dashboard. The API actions already exist and are unused |
+| 3D-P-019 | `3b56bf20-bdb4-81f6-8f8a-e4c5842ede7e` | Added 2026-08-07 on a new owner requirement: record who paid for each fixture (owner or Serhiy). Affects both tracks. Design note 2026-08-08: `plans/3D-P-019_fixture-payer-model_20260808.md` — found that `Номенклатура!K` already folds the fixture price into Serhiy's production cost with no payer, so the schema half should ship inside 3D-P-015 rather than as a second migration |
+| 3D-P-020 | `3b56bf20-bdb4-8182-8982-e795fde4e9dd` | Added 2026-08-07: Track-2 cost must post to the main CRM Marketing expense line. Closes the 3D-P-004 ledger question |
+| 3D-P-021 | `3b56bf20-bdb4-8125-8e81-eb68f946b69a` | Added 2026-08-07: delete ПРИКЛАД-001 demo rows across 6 tabs and zero the FIG-CHARM-001 test stock, after a named Sheets version. Run before 3D-P-015 |
+
+| 3D-P-022 | `3b66bf20-bdb4-81b0-ad36-d2e9fb81cb52` | Added 2026-08-08 during 3D-P-014 owner QA: the deployed CRM trigger `is3dpPackagingSku_` expects `ACC-3D-` + three digits, but the canonical convention locked 2026-08-07 is `PREFIX-MNEMONIC-XYZ`. Every `ACC-3D-` SKU in the approved table fails the trigger; `BR-`/`FIG-` are unaffected |
+
+| 3D-P-023 | `3b66bf20-bdb4-81da-8569-f1d54a8d94b1` | Added 2026-08-08 during 3D-P-014 QA: the sync-journal timestamp column is labelled Kyiv but renders UTC, because the written string is auto-parsed by Sheets into a Date. Cosmetic, low priority |
+| 3D-P-025 | `3b76bf20-bdb4-81a6-838b-d6a27eff68bc` | Added 2026-08-09 during dashboard QA: the stock-correction field asks for a delta while the owner supplies the actual count, so `99` became `196`. Append-only ledger unchanged; only the input semantics move. Handoff: `handoffs/handoff_3D-P-025_stock-field-actual-count_20260809.md` |
+| 3D-P-026 | `3d56bf20-bdb4-81e1-a642-f04284530fe3` | Added 2026-09-08 on owner instruction as the Done record of the canonical catalogue reset and manufactured-batch FIFO. Catalogue reduced to exactly 72 SKUs across the main CRM and the 3D-P workbook against the owner-approved mapping in `handoffs/handoff_3DP-CATALOG-CANONICAL-DECISIONS_claude-to-codex_20260905.md` (3 article changes, 39 name changes, 3 status changes, 42 rows touched; the owner's 2026-09-05 status decision moved the fixed split from 59/13 to 62/10). Live applies were owner-run on 2026-09-06 with fresh Drive backups before each write. RRP integrity coverage gap closed the same day (`3dp_skus` was called without `include_archived`, hiding four withdrawn-but-priced SKUs): compared=66 + skipped=6 = 72. Published CRM Auto V165 and V166 and 3D-P API V32; deployed-route FIFO smoke returned ok=true. Evidence: `diagnostics/3DP-CATALOG_canonical-correction_report_20260906.md`. |
+| CRM-005 | `3b76bf20-bdb4-8140-8397-f14d1cc785dd` | Added 2026-08-09 after a repeat CRM breakage on SKU creation: a server-side, read-only integrity check returning a bounded problem list, plus rule `OPS-CRMINTEGRITY` and a new-SKU runbook. Owner constraint: the check must not stream sheet contents to an agent. Handoff: `handoffs/handoff_CRM-005_integrity-check-and-rule_20260809.md` |
+| CRM-007 | `3b86bf20-bdb4-814d-a838-fcd3e218601a` | Added 2026-08-10 after `OC-FOP-0314` showed an impossible cost: `LOT-0063` holds the two-box lot value against quantity 1, and the 2026-08-03 box→pack split copied that same value again into `LOT-0119` at 20/24. Owner confirmed the two-box reading and a physical count of 28 packs, and set the standing rule that an internal SKU transfer takes the oldest remaining lot (FIFO). Executor: Codex. Diagnostic: `diagnostics/CRM-COST-SPLIT_OP15-and-MZERO_claude-audit_20260810.md`. Handoff: `handoffs/handoff_CRM-007_op15-split-cost-repair_20260810.md` |
+| CRM-008 | `3b86bf20-bdb4-8129-bddf-e002b9e8cd87` | Added 2026-08-10 for purchase lot `yskh293`: five new `Starter Deck` / `STD` SKUs (`OP-JP-ST32-STD`…`OP-JP-ST36-STD`) plus the six-line purchase. Owner cost split: box ₴3 000, ₴251.40 per deck. Needs two structural additions to `Налаштування` (the format and five set codes), so `OPS-CRMINTEGRITY` applies in full. Must not repair `Товари!B/J` — that belongs to `CRM-006` pass 4. Executor: Codex. Handoff: `handoffs/handoff_CRM-008_starter-decks-sku-and-purchase_20260810.md` |
+| CRM-009 | `3bb6bf20-bdb4-81dd-9b99-e67cb01cdf00` | Added 2026-08-13 as the Done record of the CRM-side work of that day, on owner instruction. Five sub-tasks: `MAN-FOP-0006` test-order purge (CRM V114 / 3D-P V22), the universal marker-driven `test_order_cleanup` dashboard action (V115 / V23), the one-off migration archive (CRM −357 lines, 3D-P −667, five `3dp_setup_*` routes retired), preservation of the Telegram/news subsystem, and bulk RRP editing on the dashboard `Товари` page (V117). The 3D-P accounting delivery of the same period stays under `3D-P-019`. DoD gate: CRM V117 published 2026-08-13 22:48 Kyiv and read back through the API — `integrity_check` `clean=true`, `problems=[]`, `elapsed_ms=8523`; owner QA OK. Executor: Codex. Diagnostics: `diagnostics/CRM-3DP_test-order-purge-and-archive_report_20260813.md`, `diagnostics/CRM_RRP_bulk-dashboard-edit_report_20260813.md`. ID evidence: registry named `CRM-009` as next free and a live query of the whole series returned `CRM-001`…`CRM-008` plus `CRM-006-ORDER` |
+| CHECKOUT-011 | `3be6bf20-bdb4-8128-89d5-e1c6f8653486` | Added 2026-08-16 on owner instruction. Made-to-order 3D goods must be purchasable at zero stock, which `config_stock_checkout = 0` forbids globally; flag is a new stock status "Виготовляємо на замовлення", and the rule is a configurable **list** of checkout-allowed statuses rather than a hardcoded id. Second half: the credit-method gate from `diagnostics/PAY-001_credit-cart-contract_report_20260722.md` rejects the virtual mono method whenever any cart item has `quantity = 0` — after this task that would disable instalments for any cart containing a 3D item, so the rule moves from "quantity zero" to "product not purchasable", shared by monobank (`PAY-001`) and PUMB (`PAY-002`, configured 2026-08-17). Diagnostic first, no code decision before it. Blocks publication of the five Pokémon keychains. ID evidence: live query of the `CHECKOUT-` series returned 001–004 (004 twice), 008, 009, 010 → `CHECKOUT-011` taken, gaps 005–007 not backfilled |
+| CHECKOUT-012 | `3eb6bf20-bdb4-8146-b012-ed762823fb92` | Added 2026-09-30 on owner instruction, split out of RD-15 when the owner chose a visual-only RD-15. Hutko `response()` always redirects to `checkout/success` whatever the payment result, and `success.php` does not check payment state. A customer back from a declined payment may see «Замовлення прийнято» and «чек відправлено», and GA4 `purchase` may fire. Not verified at runtime; diagnostic first. Priority Medium, executor not assigned. |
+| SEO-008 | `3bb6bf20-bdb4-8129-8f63-dd6a8745ec88` | Added 2026-08-16 on owner instruction during QA of the first `BR-` 3D-print card batch: the shop has no keyword-to-page map at all (`AGENTS.md` → `Keyword map location` = `TBD`), so the cannibalisation gate in `bs-content-brief` / `bs-content-qa` / `bs-3dp-card-qa` cannot actually be executed. Live evidence: `брелок One Piece` sits in the supporting keywords of four different product cards, `брелок Pokémon` of two, `аксесуари Pokémon/One Piece` across the whole batch — all category-level terms. Blocks card content scale-out beyond the first batch. ID evidence: registry named no next free `SEO-`; a live query of the series returned `SEO-002`, `SEO-003`, `SEO-005`, `SEO-006`, `SEO-006-1`, `SEO-007`, so `SEO-008` was taken and the `SEO-001`/`SEO-004` gaps were not backfilled |
+| CONTENT-005 | `3b86bf20-bdb4-81d6-acad-dc7d32b55500` | Added 2026-08-10 as the content half of `CRM-008`: ChatGPT drafts five starter-deck product cards → Claude reviews via `bs-content-qa` → Claude Code patches them onto the site → owner deploys. Blocked until the SKUs exist and the deck contents are verified; product specifications must not be invented |
+| CONTENT-006 | `3ca6bf20-bdb4-81d1-9bd1-d3df4853f35d` | Added 2026-08-28 on owner instruction ("пуш, коміт, апдейт роадмап і дашборд") as the Done record of the content-quality wave deployed that day. Six work packages in one handoff `handoffs/handoff_CONTENT-QUALITY_wave_20260828.md`: FAQ accordion recovery on 9 cards, the 28-card content payload from `BOOSTER-SHOP_CONTENT-QUALITY_RELEASE_20260825_v2.zip` with the `/product/` link prefix applied to 5 hrefs, attribute **verification** (owner scoped it to checking, not rewriting), categories 73/74 disabled with corrected keywords, 7 kit-card `BR-` SKUs, and the CRM RRP reconciliation tracked separately as `CRM-010`. DoD gate: production deployment plus read-only verification via `scripts/bs-wave-verify-20260828.sh` — 52 FAQ items, no raw HTML stored, attributes 43/44/55 correct, no capacity attributes created, products 154–162 created with correct status/quantity/price/categories/slug, SVEL at 400 g and 220×160×60, exactly 40 attribute definitions; owner confirmed QA. Two checks reported FAIL only because the script pinned `product_discount_id` values that an admin product save had renumbered — live rows 1177–1180 and 1182 are correct in substance, ⚠ but the WP6 `restore.sql` for the promotion half is therefore stale. Executor: Codex (patch), owner (deploy). Report: `diagnostics/CONTENT-QUALITY_wave_production-verification_20260828.md`. ⚠ Open follow-up: `scripts/bs-cards-export.php` parses descriptions without HTML-entity decoding, so `h2/h3/strong/ul/a = 0` and `faq_items = 0` and `NO_HEADING/NO_EMPHASIS/NO_FAQ` fire on all 94 products — one-line fix, not done. ID evidence: registry named `CONTENT-006` as next free; a live query of the series returned `CONTENT-001`…`CONTENT-005` plus the non-numeric `CONTENT-20260721-test`, so `CONTENT-006` was taken with no gap |
+| CONTENT-007 | `3da6bf20-bdb4-8101-854a-c684d0978996` | Added 2026-09-13 on owner instruction ("Переформатуй, об'єднай чи видали поточні задачі які треба, заведи нові"). Umbrella task for the single Booster Shop content canon and the validator that enforces it. Created `In progress`, not `Not started`, because the work already has committed artefacts at `53a74fd`: `docs/CANON_v1_DRAFT_product-content_20260913.md`, `diagnostics/CONTENT-PIPELINE_card-quality-tier-analysis_20260913.md`, `work/CANON_v1_TEST_three-rewrites_20260913.md`. ID evidence: registry said next free `CONTENT-007`, live query returned `CONTENT-001`…`006` plus the non-numeric test row, no gap. Absorbs `MKT-003` and `SEO-006`; depends on `SEO-008` |
+| CONTENT-008 | `3da6bf20-bdb4-815e-98eb-f0b107f42b15` | Added 2026-09-13 on the same owner instruction. Production content defect found during the Canon v1 calibration test: product 101 `booster-ygo-ocg-blazing-dominion-jp` describes two different Yu-Gi-Oh! sets as one (`BODE` is Burst of Destiny 2021; the pack is `BLAZING DOMINION`, OCG 25 Jan 2026, confirmed from the wrapper photographed by the owner). Also carries the Lumiose City Mini Tin contents verification. Copy is drafted in `work/CANON_v1_TEST_three-rewrites_20260913.md` §5-bis and §3; attribute `Рік випуску` 2022 → 2026 and Meta Title 75 → 51 chars ship with it. Not deployed |
+| CONTENT-009 | `3da6bf20-bdb4-81b1-a500-c3a27cfdab02` | Added 2026-09-13 on the same owner instruction. Product photography floor from Canon v1 §10: minimum 3 images per card, target 5–6, the three required being front, back and contents. Measured baseline across 52 live cards: median 2, and 15 cards with exactly one. Independent of the text canon, so it runs in parallel |
+| CRM-010 | `3ca6bf20-bdb4-81cb-a54c-ed92611e491e` | Added 2026-08-28 on owner instruction as the Done record of WP6 of the content-quality wave: reconcile column E `РРЦ, грн` of `Booster Shop CRM — облік товарів - РРЦ.csv` (95 SKUs, data from row 3) against live site prices and update **visible products only**; RRP is the pre-discount price. Owner decisions: specials untouched except four disabled outright (`MTG-JP-AFRS-BST`, `PKM-EN-PORD-BBN`, `PKM-EN-CHRS-BBN`, `PKM-EN-CHRS-BST`); `PKM-JP-OUTL-BST` keeps 90 base / 80 special as a permanent promotion already reflected in the CRM; the 21 CRM SKUs absent from the site are intentionally excluded; hidden products' placeholder prices are irrelevant. Owner-supplied SKU corrections: `PKM-JP-ABYSS-BST`→`PKM-JP-ABYE-BST`, `PKM-JP-ABYSS-BBX`→`PKM-JP-ABYE-BBX`, `PKM-KR-HWA-BST`→`PKM-KR-HWAK-BST`, `YGO-JP-BODE-BST`→`YGO-JP-BDOM-BST`, `PKM-MEGA-BOX`→`PKM-JP-MSYM-BBX`. DoD gate: all 25 price changes verified against plan by `scripts/bs-wave-verify-20260828.sh`; owner confirmed QA. ⚠ The `restore.sql` rollback for the promotion half is stale (renumbered `product_discount_id`s) — do not run as-is. Two corrections to my own earlier reporting are recorded in the page notes: bulk tiers at `quantity` 2/5 are not displayed specials (`catalog/model/catalog/product.php` requires `quantity = '1'`), and the correct change count is 24 price updates, not the 20 I stated in round 2. Executor: Codex (patch), owner (deploy). Report: `diagnostics/CONTENT-QUALITY_wave_production-verification_20260828.md`. ID evidence: registry named `CRM-010` as next free; a live query of the series returned `CRM-001`…`CRM-009` plus the non-numeric `CRM-006-ORDER`, so `CRM-010` was taken with no gap |
+| CRM-011 | `3d56bf20-bdb4-81b9-b397-d05e00557c12` | Added 2026-09-08 on owner instruction ("наступний вільний у серії CRM-", "одна задача з підпунктами"). Dashboard analytics layer in six independently deployable work packages: WP1 slow stock, WP2 one Apps Script backend pass (payment/creation date columns, `finance_report`, `orders` client enrichment, `ltv_report` extension, `client_orders`, segmentation constants, JPY fallback 3.5→3.2), WP3 Finance tab, WP4 Orders, WP5 Clients, WP6 roadmap filters. Handoff `handoffs/handoff_CRM-011_dashboard-finance-crm-upgrade_20260908.md`, executor Codex (Sol/xhigh). WP2 appends columns to `Закупки` and `Продажі` → `OPS-CRMINTEGRITY` applies in full |
+| CRM-012 | `3d76bf20-bdb4-816d-9e2f-f8eec7058e7c` | Added 2026-09-10 on owner instruction as the follow-up to CRM-011 (CRM-011 is not reopened). Six work packages: WP0 close the mirror gate at V171, WP1 make the ZenMarket missing-UAH counter count instead of returning a hardcoded 1, WP2 record ₴22,000 for `ZEN-HIST-008` and surface the cash-out gap, WP3 stop the sheet purchase form charging non-ZenMarket purchases to the Zen balance and repair `LOT-0181`, WP4 recognise preorder revenue in the month it completes rather than the month it was created, WP5 reconcile 3D product names between the main CRM and the 3D-P catalogue. Handoff `handoffs/handoff_CRM-012_zenmarket-integrity-and-recognition_20260910.md`, evidence `diagnostics/CRM-011_round2-review_20260910.md`, executor Codex (Sol/xhigh) |
+| 3D-P-024 | `3b66bf20-bdb4-8132-a8d5-f3078cf95abb` | Added 2026-08-08 during 3D-P-015 live QA: print time is stored as decimal hours everywhere and nothing said so, so `1:39` and `1,39` silently produced wrong costs. Storage unit unchanged; normalisation moved to every entry point. Deployed and live-verified the same day. Handoff: `handoffs/handoff_3D-P-024_print-time-entry-usability_20260808.md` |
+| ACC-003 | `3c46bf20-bdb4-8147-8107-e7a80c93baa3` | Added 2026-08-22 on owner instruction. P0: OpenCart 4.1 regenerates `login_token` / `register_token` on every render of `account/login` and `account/register` and keeps a single session value, so any second render of the page while the customer is filling the form kills it — the POST returns a bare redirect back to the same form with no message at all. Production access log 31/Jul–21/Aug: 44 silent login bounces out of 66 attempts and 18 out of 22 registrations, all from 06–07/Aug, zero before. Trigger was the Plerdy tag (installed 2026-08-05, re-requested every page ~4–5 s after load); owner removed it from production 2026-08-22, which removes the trigger but not the defect — Chrome speculative prefetch on the login page is already visible in the 21/Aug log. Executor: Claude Code (owner assignment 2026-08-22, override of the Codex recommendation in the handoff). Handoff: `handoffs/handoff_ACC-003_login-register-token-rotation_20260822.md`. ID evidence: registry named no next free `ACC-`; a live query of the series returned `ACC-001` and `ACC-002` only, so `ACC-003` was taken with no gap. ⚠ `ACC-003` is ALSO an unrelated CRM product SKU (see the `CRM-007` row) — the two namespaces collide in text search, they are not the same thing |
+| ACC-004 | `3f86bf20-bdb4-812c-ade0-f152df4d56cc` | Added 2026-10-13 on owner instruction (account redesign round 2, point 7: analysis of customer / cabinet / order data architecture and OpenCart workarounds, report, then a separate implementation task). Read-only analysis; ends with a report and a NEW implementation task. Priority and executor left unset (owner decision). ID evidence: a live query of `ACC-%` returned `ACC-001`…`ACC-003`, so `004` was taken with no gap. `ROADMAP_TASKS` mirror row created in the same session |
+| ACC-005 | `3f86bf20-bdb4-81b6-adec-dfc7232c3d6f` | Added 2026-10-13 on owner instruction. Backend of the account «Налаштування» section (change email/login, change password); design done in variant A; nav item stays disabled until this ships. Priority and executor left unset. ID evidence: same query, next after `ACC-004`. Mirror row created in the same session |
+| ACC-006 | `3f86bf20-bdb4-81cc-9e95-fb7751143503` | Added 2026-10-13 on owner instruction. Restore the stock OpenCart wishlist as «Улюблене»: account section, nav counter, product card and product page button (3 design variants each + block naming are a later design step). Priority and executor left unset. ID evidence: same query, next after `ACC-005`. Mirror row created in the same session |
+| ACC-007 | `3f86bf20-bdb4-81ba-af56-e4d219252e3b` | Added 2026-10-13 on owner instruction. Follow-up package A of ACC-004: customer-facing order status labels, groups, hidden technical states, dated timeline (source-only). ID evidence: a live query of `ACC-` returned `ACC-001`…`ACC-006` (2026-10-13), so the next three IDs were taken with no gap. Priority and executor left unset (owner decision). Mirror row created in the same session. |
+| ACC-008 | `3f86bf20-bdb4-813a-a1ce-c1f5c85cbfbd` | Added 2026-10-13 on owner instruction. Follow-up package B of ACC-004: preserve reserved `custom_field` JSON keys in profile, address and admin saves; prerequisite for ACC-009. ID evidence: a live query of `ACC-` returned `ACC-001`…`ACC-006` (2026-10-13), so the next three IDs were taken with no gap. Priority and executor left unset (owner decision). Mirror row created in the same session. |
+| ACC-009 | `3f86bf20-bdb4-81ae-91a5-e6e3326077ab` | Added 2026-10-13 on owner instruction. Follow-up package C of ACC-004: optional patronymic, Telegram, Viber as registered custom fields plus Ukrainian-name validation; depends on ACC-008; DB metadata step is a separate owner-approved package. ID evidence: a live query of `ACC-` returned `ACC-001`…`ACC-006` (2026-10-13), so the next three IDs were taken with no gap. Priority and executor left unset (owner decision). Mirror row created in the same session. **Наступний вільний у серії `ACC-` — `ACC-010`.** |
+
+**Closed 2026-08-08 after owner QA:** `3D-P-014` (CRM-local sync journal — four
+live cases passed; outage and not-configured cases skipped by owner choice and
+covered by mock tests only), `3D-P-022` (SKU trigger aligned with the canonical
+convention — `ACC-3D-DITTO-410` verified end to end), `3D-P-021` (demo-data
+cleanup — independently confirmed, zero `ПРИКЛАД-001` rows remain in the live
+workbook). **The CRM→3D-P sync worked for the first time on 2026-08-08** after
+three failed attempts.
+
+**Note 2026-08-07 (supersedes the 2026-08-03 note):** `3D-P-009` was never
+issued and has no Notion page. It is referenced only in
+`handoffs/handoff_3D-P-010_crm-packaging-cost-pull_20260802.md`. Decision: the
+number stays permanently unused — do not recycle it. Numbering continued at
+`3D-P-016`; **the next free ID is `3D-P-027`** (`3D-P-022`, `3D-P-023` and
+`3D-P-024` were taken on 2026-08-08, `3D-P-025` on 2026-08-09, `3D-P-026` on
+2026-09-08). In the `CRM-`
+series the next free ID is **`CRM-013`** and in the `CONTENT-` series
+**`CONTENT-010`** (updated 2026-09-13: `CONTENT-007`, `CONTENT-008` and
+`CONTENT-009` were taken that day on owner instruction for the content-pipeline
+batch; a live query of the whole `CONTENT-` series returned `CONTENT-001`…`006`
+plus the non-numeric `CONTENT-20260721-test`, with no gap above `006`.
+Superseded 2026-09-08 wording, kept for history: the next free ID read
+`CONTENT-007` (updated 2026-09-08: `CRM-011` was taken that day for the
+dashboard analytics layer; a live query of the whole `CRM-` series returned
+`CRM-001`…`CRM-010` plus the non-numeric `CRM-006-ORDER`, so `CRM-011` was
+assigned. Superseded 2026-08-28 wording, kept for history: the next free ID
+read `CRM-011` from 2026-08-28 until 2026-09-08, when `CRM-010` and
+`CONTENT-006` were both taken for the content-quality wave; live queries then
+returned `CRM-001`…`CRM-009` plus the non-numeric `CRM-006-ORDER`, and
+`CONTENT-001`…`CONTENT-005` plus the non-numeric `CONTENT-20260721-test`).
+Superseded wording, kept for history: the next free IDs read `CRM-010` and
+`CONTENT-006` from 2026-08-13 until 2026-08-28. Corrected 2026-08-10: this line still read `CRM-006` although
+`CRM-006` and the non-numeric `CRM-006-ORDER` were both created on 2026-08-09
+without updating it. Assignment evidence, 2026-08-10: a live Notion query of the
+whole `CRM-` series returned `CRM-001`…`CRM-006` plus `CRM-006-ORDER`, so `CRM-007`
+and then `CRM-008` were taken; a query of `CONTENT-` returned `CONTENT-001`…`004`
+plus the non-numeric `CONTENT-20260721-test`, so `CONTENT-005` was taken.
+
+**Owner decisions locked 2026-08-07** (full context in
+`diagnostics/3D-P_gap-register-and-work-plan_20260807.md`):
+
+1. `3D-P-015` new business columns are appended **after** the technical `O`/`P`
+   block, becoming `Q`, `R`, `S`. No shift, no migration, no whitelist change.
+2. `3D-P-017` returns: open period reduces the current accrual, an already paid
+   period gets a negative correction next period; the sale row is never deleted.
+3. `3D-P-020` Track-2 cost posts to the **main CRM** Marketing expense line.
+4. `3D-P-019` fixture payer must be recorded per fixture, both tracks.
+5. `3D-P-021` full cleanup, named Sheets version first, stock corrections only
+   through the Addendum #2 ledger.
+6. Build order: workbook + CRM backend → owner dashboard QA → Serhiy's server.
+
+If a task is absent, search by title or distinctive keywords, verify its
+`Roadmap ID`, then add the page ID here. Older completed ST tasks
+(`ST-0`, `ST-2`, and `ST-2a*`) may be backfilled when needed.
+
+## 6. Definition of Done
+
+- **Default:** approved scope implemented, bounded diff reviewed, required
+  checks pass, Notion status is correct, and `ROADMAP_FLOW` mirrors it.
+- **Checkout, payment, Hutko, Checkbox, Nova Poshta, or order flow:**
+  `bs-checkout-smoke` passes and the owner completes payment/fiscal/CRM manual
+  QA before `Done`.
+- **SEO, sitemap, robots, or canonical:** server work is complete and GSC
+  evidence is recorded where applicable. If Google processing remains, use
+  `Done` plus a watch-only note.
+- **CRM, dashboard, or Apps Script:** the new version is deployed and read back
+  through the Apps Script API (`action=summary`/`orders`) or a narrow Sheets
+  range.
+- **Content or legal:** prepared text is not `Done` until owner publication;
+  legal work also requires legal review and verified real business details.
+
+Local checks, source-copy checks, and dry-runs are not deployment or production
+proof.
+
+## 7. Writer and authority summary
+
+- **Claude:** handoffs, reviews, Notion task properties/status, drift
+  reporting, and (2026-07-27 amendment, §0) the `ROADMAP_FLOW` dashboard
+  mirror at `dashboard/booster-dashboard.html`. Never commit, push, or
+  deploy.
+- **Codex:** implementation, diagnostics, and authorized `ROADMAP_FLOW`
+  changes. Commit/push only with exact one-time owner authority. Never deploy.
+- **Owner:** scope decisions, deployment, risky/legal closure decision, and
+  final manual QA. Normally runs prepared Git commands.
+
+If a required writer is unavailable, hand off. Do not use `bsreview` or another
+agent as a status-writer workaround.
+
+## 8. Constraints and safeguards
+
+- Notion MCP bulk-read capabilities may be unavailable because of plan limits.
+  Use per-card direct fetch or verified search results.
+- Direct Notion REST review automation may query the database by exact
+  `Roadmap ID` when `NOTION_TOKEN` is configured.
+- Use `.autosync-pause` around authorized Git writes. The hardened autosync
+  script skips pulls on a dirty tree and can recover stale index state, but
+  that safety net does not replace the sentinel.
+- Dashboard (single canonical file, 2026-07-28 amendment, §0):
+  `dashboard/booster-dashboard.html` inside this repository. The former
+  standalone copy at `C:\Users\14bez\Downloads\Booster Shop\booster-dashboard.html`
+  is retired — do not recreate it or copy into it.
+- Canonical local Booster parent:
+  `C:\Users\14bez\Downloads\Booster Shop`
+- `E:\Personal Files\...` and `E:\Program Files\...` are retired.
+
+## 9. Document precedence
+
+For roadmap status, synchronization, writer ownership, page-ID routing, and
+Definition of Done, this file is canonical.
+
+For general authority, project routing, risky zones, patch conventions, and
+mutation safety, `AGENTS.md` is canonical.
+
+For Codex handoff, patch, diagnostic, and owner-deployment mechanics,
+`CODEX_WORKFLOW.md` is canonical.
+
+For Claude-specific context and review behavior, `CLAUDE.md` is canonical.
+
+When two documents appear to conflict, apply the rule from the file that owns
+that subject above. Current explicit owner instructions still take priority.

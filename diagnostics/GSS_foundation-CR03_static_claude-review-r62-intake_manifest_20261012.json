@@ -1,0 +1,1599 @@
+{
+  "scope": "DESIGN63c option-A loss, private fidelity, closed parent tables and independent differential after actual61; no implementation/activation",
+  "actualUtc": "2026-10-14T19:45:38.050Z",
+  "configuration": {
+    "path": "plans/GSS_CR03_review62-package_20261014.json",
+    "sha256": "70C9BCBEDE2467B511BDF28EDB640940628F372F467025227DE688A2470153A5",
+    "bytes": 22071
+  },
+  "builder": {
+    "path": "work/prepare-gss-CR03-static-review-r62-intake_20261014.mjs",
+    "sha256": "FEA45AA507F2142F475711356C1E8F57F9C938B76F2C0950DE918EA3979BCEE0",
+    "bytes": 3945
+  },
+  "requesterPin": {
+    "path": "work/request-gss-CR03-static-review-r62-intake_20261012.mjs",
+    "sha256": "44F446EC0C1F9715913B1F49A09841A835CCAE504BE94111673A9CC0C95B219A",
+    "bytes": 9688
+  },
+  "reviewInstruction": "Independent actual Claude DESIGN review. Start exactly ## Verdict: Review OK OR ## Verdict: Changes requested, then ## Scope: GSS FOUNDATION INTAKE62 on next line. Subject is complete proposed63c DESIGN resolving ALL actual61 B1-B3/N1-N8 and actual60 F1-F6, not unimplemented63 CODE, full SOURCE/STD or deployed product security. Read full actual61, owner conditional simpler-choice/A decision, unchanged numeric approval, full owning58/current62 modules/callers and material Design43 context. Owner condition authorizes simpler review-retention behavior only if product protection and acceptance gates are not weakened; no deployed safety assurance exists. Critically assess context-free single-pass escape-view semantics without token quota, third valid-stdout/escaped-stderr loss and diagnostic loss, exact parent enum/clean-SUCCESS duplicate/resource correlations/phase4 and journal rows, SAME public-only validator with private-layer reachability and repeated parsing cost, frozen62 complete-byte/span/root/AFTER/classification differential and newly-refused inventory to catch common-mode planner errors, every-finish deadline and protocol/grace crossing, real IPC ownership/fake freshness, parent cost outside watchdog/heap and UTF8 BOM/lone-surrogate equivalence. These are proposed tests, not passed evidence. All old versions frozen, no consumed launcher replay. Identity-only derivation producers/historical17/requester61/old full58 acceptance dependencies are not newly reviewed bodies; current accepted60 transport source and exact ONEBASE checks supplied whole. Six omitted60 deps pinned only for current interval. Current61 checker is whole because new62 checker imports it, with its older primary chain supplied; complete necessary public dependencies are identity-pinned. Missing material context prevents ReviewOK; identify unexpected defects/omissions, do not restrict findings to this list. Assess whether proposed cases discriminate changes and conditional owner boundary remains true. Opus/high/subscription/toolsMCP/hooksoff/no paid fallback. Actual observed CLI hash/resolved model versus literal version metadata distinguished, stale transport label retained for immutable equality. Managed-policy/behavior/N5/hash/import/execution/receiver/clock/forgery/frozen17 limits remain. Verdict grants DESIGN only, no code/SOURCE/STD/native/private/production/Git/status or product-security certification. Context reduction: full owning58 contract and accepted58 disposition remain; actual58 result is historical identity only, superseded findings are fully visible in actual60/actual61. Unchanged62 derivation publishers/instrumenter are identities only; complete produced62 code/current fixture and substantive callers/reports are whole. This does not newly review those omitted producer bodies.",
+  "coverageLedger": [
+    {
+      "requirementOrThreat": "B1/N1 option-A public finite screen, informed local loss and unchanged product protection",
+      "changedSourceContract": [
+        "plans/GSS_CR03_resource-fidelity63c_design_PROPOSED_20261014.md"
+      ],
+      "necessaryContext": [
+        "plans/GSS_CR03_escaped-byte-A_owner-decision_20261014.json",
+        "plans/GSS_CR03_escaped-byte-screen_owner-choice_PROPOSED_20261014.md",
+        "work/gss-CR03-resource-policy62_20261014.mjs",
+        "work/gss-CR03-resource-transform62_20261014.mjs"
+      ],
+      "primaryEvidenceAndLimits": {
+        "artifacts": [
+          "diagnostics/GSS_foundation-CR03_static_claude-review-r61-intake_result_20261012.md"
+        ],
+        "limits": [
+          "No successor code; third whole-copy/diagnostic loss explicitly disclosed, finite privacy only; conditional permission cannot weaken product controls."
+        ]
+      },
+      "reviewerDisposition": "Pending independent DESIGN adequacy and findings; no successor code exists."
+    },
+    {
+      "requirementOrThreat": "B2/N2/N8 closed parent/provenance/journal union and superseded worker-only duplicate",
+      "changedSourceContract": [
+        "plans/GSS_CR03_resource-fidelity63c_design_PROPOSED_20261014.md"
+      ],
+      "necessaryContext": [
+        "plans/GSS_CR03_resource-journal58_contract_20261014.md",
+        "work/gss-CR03-resource-bench62_20261014.mjs",
+        "work/gss-CR03-review-procedure24_20261014.mjs",
+        "plans/GSS_CR03_review59-design43_EXCERPTS_20261014.md"
+      ],
+      "primaryEvidenceAndLimits": {
+        "artifacts": [
+          "plans/GSS_foundation-CR03_INTAKE61_reviewed-disposition_20261014.md"
+        ],
+        "limits": [
+          "Proposed exact correlations; full SOURCE/provenance/physical journals/terminal remain unimplemented; runtime private fidelity cannot be recreated publicly."
+        ]
+      },
+      "reviewerDisposition": "Pending independent DESIGN adequacy and findings; no successor code exists."
+    },
+    {
+      "requirementOrThreat": "B3 independent frozen62 differential versus same-planner common mode",
+      "changedSourceContract": [
+        "plans/GSS_CR03_resource-fidelity63c_design_PROPOSED_20261014.md"
+      ],
+      "necessaryContext": [
+        "work/gss-CR03-resource-policy62_20261014.mjs",
+        "work/gss-CR03-resource-transform62_20261014.mjs",
+        "work/test-gss-CR03-resource-bench62_20261014.mjs",
+        "work/profile-gss-CR03-resource-bench62-extra_20261014.mjs"
+      ],
+      "primaryEvidenceAndLimits": {
+        "artifacts": [
+          "diagnostics/GSS_foundation-CR03_resource-bench62-tests_20261014.json"
+        ],
+        "limits": [
+          "All generated in-budget fixtures and explicit permitted deltas/new-loss inventory; differential not yet implemented."
+        ]
+      },
+      "reviewerDisposition": "Pending independent DESIGN adequacy and findings; no successor code exists."
+    },
+    {
+      "requirementOrThreat": "N3-N6 every-finish deadline/IPC ownership/parent cost/UTF8 and wide fixture",
+      "changedSourceContract": [
+        "plans/GSS_CR03_resource-fidelity63c_design_PROPOSED_20261014.md"
+      ],
+      "necessaryContext": [
+        "work/gss-CR03-resource-supervisor62_20261014.mjs",
+        "work/gss-CR03-worker-events62-fixture_20261014.mjs",
+        "work/preflight-gss-CR03-wide-depth63-fixture_20261014.mjs"
+      ],
+      "primaryEvidenceAndLimits": {
+        "artifacts": [
+          "diagnostics/GSS_foundation-CR03_wide-depth63-fixture-preflight_20261014.json",
+          "diagnostics/GSS_foundation-CR03_resource-bench62-extra-profile_20261014.json"
+        ],
+        "limits": [
+          "New fixture DATA only, no successor Worker; process RSS sample not peak/cap and different layout, parent no hard deadline."
+        ]
+      },
+      "reviewerDisposition": "Pending independent DESIGN adequacy and findings; no successor code exists."
+    },
+    {
+      "requirementOrThreat": "N7/F6 same-review transport, source/context identity and original closure",
+      "changedSourceContract": [
+        "plans/GSS_CR03_resource-fidelity63c_design_PROPOSED_20261014.md"
+      ],
+      "necessaryContext": [
+        "work/gss-CR03-review62-design-checks_20261014.mjs",
+        "work/gss-CR03-review61-design-checks_20261014.mjs",
+        "work/request-gss-CR03-static-review-r60-intake_20261012.mjs"
+      ],
+      "primaryEvidenceAndLimits": {
+        "artifacts": [
+          "diagnostics/GSS_foundation-CR03_r61-terminal-verification_20261014.json",
+          "diagnostics/GSS_foundation-CR03_r61-original-launcher-closure_20261014.json"
+        ],
+        "limits": [
+          "No retrospective interval proof; literal version not observation, binary/managed-policy/forgery/races unproved; original requester61 consumed."
+        ]
+      },
+      "reviewerDisposition": "Pending independent DESIGN adequacy and findings; no successor code exists."
+    }
+  ],
+  "records": [
+    {
+      "path": "work/request-gss-CR03-static-review-r17-intake_20261012.mjs",
+      "sha256": "F6D95E5C253784180E531F72B442969E561FB627CA57424E51E9F307E3D03D36",
+      "bytes": 9682,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "plans/GSS_CR03_resource-fidelity63b_design_PROPOSED_20261014.md",
+      "sha256": "216EDD2BA24E768DE1458C77EAFE20CBB60249DA16333E6B7159DEF582172AD2",
+      "bytes": 27389,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/prepare-gss-CR03-static-review-r61-intake_20261014.mjs",
+      "sha256": "C5E279F4B1E6005E88AAD64C5F5971708CBC91CA8159F5823E7B0CEF0F4B0387",
+      "bytes": 3945,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/verify-gss-CR03-r61-evidence_20261014.mjs",
+      "sha256": "5F54EC70642F6954B34535567F5FA12332978B51965C66F7C4CCA25032F510CE",
+      "bytes": 4758,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "plans/GSS_CR03_review61-package_20261014.json",
+      "sha256": "EAC97EFC6E8143F132820F5D4FED49203D075B51417B2E00A96E8E0925559226",
+      "bytes": 18929,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/prepare-gss-CR03-review61-tools_20261014.mjs",
+      "sha256": "95BD3BF01BDFEE5F863B53BED918167A8A070C0358D0080CF55B2C405B176ECF",
+      "bytes": 15799,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/request-gss-CR03-static-review-r61-intake_20261012.mjs",
+      "sha256": "F9EBC35E9F4EED48FE2FE85902EF8223F409974CDFA3F5047AD7607D9556DA76",
+      "bytes": 9688,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "plans/GSS_CR03_review61-git-baseline_20261014.json",
+      "sha256": "477BD4E94852C8180AA63B95AC693BD8A155777DD6A49BA61C3763B4317A5517",
+      "bytes": 820,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/save-gss-progress-checkpoint-v2_20261009.mjs",
+      "sha256": "8E9E17AC39484E98EB48472F0EDC4A12DEDEBC5BB5566E88E15B2E9B34617D59",
+      "bytes": 7362,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_r58-terminal-verification_20261014.json",
+      "sha256": "611A46E94318F0E5E881B8856A08F0C4124A4BD91FFDDD32D74F9846CEC1313E",
+      "bytes": 5481,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_static_claude-review-r51-intake_result_20261012.md",
+      "sha256": "698BF5542AF245536598936960E1BB9769D0FF07144B69EDC3AAABCA1B93BA9E",
+      "bytes": 9758,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_r51-terminal-verification_20261014.json",
+      "sha256": "457E5AB58C3FD9CB8893E5CDAE41F1707EE0994647E6A0282D5219B8B3F41985",
+      "bytes": 5997,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "plans/GSS_foundation-CR03_INTAKE51_reviewed-disposition_20261014.md",
+      "sha256": "3909D4EFF91F76B84B223ACF3A917BCF96CC2853F22938C08847615C56A4A1BA",
+      "bytes": 4128,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "plans/GSS_CR03_optimization-amendment_owner-record_20261014.md",
+      "sha256": "6DBB9AAB8F41A88C38EAC673C8D9B9E04205A68DDD70AAE7103A44858D0857FF",
+      "bytes": 2141,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "plans/GSS_CR03_resource-bench59_owner-approval_20261014.json",
+      "sha256": "1B5D9BDEF4349E95C40499CADC8DA56AB380CD795CE6E9858A7F078AC7DED9E8",
+      "bytes": 3142,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "plans/GSS_CR03_resource-bench_owner-choice_PROPOSED_20261014.md",
+      "sha256": "A559FF2539294FD6F54FF1F01C84840CFF2A41C6443745E3B83958AAC8919632",
+      "bytes": 4559,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_policy59-tests_20261014.json",
+      "sha256": "64BD99673D668DAFFE97613BF44BF5D70C9B7EF7ACC074D5894691EC9C98FFAC",
+      "bytes": 5003,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_transform59-tests_20261014.json",
+      "sha256": "C2EA0992E8FA24460018F8043816038F4BC4AE6B24BBBD7403C6459A633D04DA",
+      "bytes": 2229,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_resource-bench59-tests_20261014.json",
+      "sha256": "64FFBBFAA6A524443CF5C009F5D88EF8CBAADC0962FBE0F8770D4568B078355B",
+      "bytes": 9748,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_resource-bench59b-corrective_20261014.json",
+      "sha256": "1723E7246FCF44AA596856EDD07C721657F3F0AFEC37EBB9C7829967B8D256AC",
+      "bytes": 2213,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "plans/GSS_CR03_review60-package_20261014.json",
+      "sha256": "84ECE4E46FAB1524634DD3BA58E10DAC1F1AD65333892D10BA7357AB3948C324",
+      "bytes": 25181,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/prepare-gss-CR03-static-review-r60-intake_20261014.mjs",
+      "sha256": "DCAEC1A61025C48192617FFC084653292718B4665D9D7917A517C2FF8F987005",
+      "bytes": 3954,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/verify-gss-CR03-r60-evidence_20261014.mjs",
+      "sha256": "F8AE492A4877D55178897B76B610BCC3EFC8B598D336FA13E4D3DFB261940D9D",
+      "bytes": 4546,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "plans/GSS_CR03_review60-git-baseline_20261014.json",
+      "sha256": "0865BEF66FDA7F930CCE5737A5EEC92BFB9ED154EFCE99800B517E60168E38B4",
+      "bytes": 828,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/reduce-gss-CR03-review59-design-context_20261014.mjs",
+      "sha256": "96385182AC544BAD9F644F16438AF8CC9AA661BAE77C8564BE84979895088F55",
+      "bytes": 4544,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "plans/GSS_CR03_review59-transform-test-encoding_receipt_20261014.json",
+      "sha256": "8E4AF0C94AFB590D6AB890D13E17F4680A50B426CF144C081BEB991123C7ADE6",
+      "bytes": 705,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/encode-gss-CR03-review59-fictional-test_20261014.mjs",
+      "sha256": "8FDB41BB206C31B753349E237D2AD62A2A8035F4B0CD33AFDB23920B84192A6E",
+      "bytes": 3252,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_static_claude-review-r59-intake_result_20261012.md",
+      "sha256": "2FD75707BF4E2F2148D3F4FCA05C4E86963BBFABC453098C573AE85C60E10570",
+      "bytes": 15584,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_r59-terminal-verification_20261014.json",
+      "sha256": "2AD8C851A6342F41A680BFFBD5C2854592C89ABD36F0DBDB7F78F317838BC039",
+      "bytes": 2613,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "plans/GSS_foundation-CR03_INTAKE59_corrective-disposition_20261014.md",
+      "sha256": "F5EEB985C0D47622B9C5AFD48BBEF115885378E91456CA1CFC7E6DA2C004E27E",
+      "bytes": 4269,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/gss-CR03-resource-supervisor62-instrumented_20261014.mjs",
+      "sha256": "E6DE4137F9A970EAD9A75B485819F69F5E7ADECC519434BC4F92D448E3E4558D",
+      "bytes": 5448,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/prepare-gss-CR03-bench62-composition_20261014.mjs",
+      "sha256": "D5EE855D7321B7211A666ACBD240C8A72B12B4ED09E95F9519E2AB11753BB519",
+      "bytes": 860,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "plans/GSS_CR03_transport19_cli-update_owner-choice_PROPOSED_20261014.md",
+      "sha256": "6D9FC88C059247E3B6ED6FD11E09E934D31FDCF5F502AE7CA8D8CAD1DC53ECC8",
+      "bytes": 3392,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/prepare-gss-CR03-review60-transport19_20261014.mjs",
+      "sha256": "8D7C7C3EC01B47D3B5E46BA2E01819706505CC959534A80D3781F6E2B4651870",
+      "bytes": 11976,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/reduce-gss-CR03-review60-context-c_20261014.mjs",
+      "sha256": "CB55798EC0B113C30FE64F6D15332F313925D982720FD94FD66820D13984B61D",
+      "bytes": 7660,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "6E124730EA43C3F7A9B55536E9BAD75C00C40A71D0F5AC3C62B7348563E6814B",
+      "bytes": 34858,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "docs/GSS_GOVERNANCE.md",
+      "sha256": "9E72A2BD02B144CB57760566956AC0E1357E4463C14F4B8BEE8201C9E56C9550",
+      "bytes": 21799,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "plans/GSS_owner-decisions_20260928.md",
+      "sha256": "8492C22F09CBEE33327A2BCCAA09F617622835E5005D867FCBDC7E25FD0FB01C",
+      "bytes": 42992,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/GSS_CR03_role-corpus29-normative-rules_20261012.txt",
+      "sha256": "3B1E7CD0F3C024CA868B27B1A21F57BAC971D00E337F95BB3939BD4AE82D7041",
+      "bytes": 57626,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_static_claude-review-r58-intake_run_20261012.json",
+      "sha256": "40516A71AA4466FBC47657604F72E4CADC08CA33E0E70B45638DF1C441ECB4F2",
+      "bytes": 12854,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_static_claude-review-r58-intake_manifest_20261012.json",
+      "sha256": "DA0062180DC53CCA6556DCCCCE0E33A45681949F4430CCB3BAF65FC0A06AB012",
+      "bytes": 51583,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_static_claude-review-r51-intake_run_20261012.json",
+      "sha256": "D7E0742C7E80A5DD52193980D555421BC858C1C568A5AD732A91AAA67E9D7C6B",
+      "bytes": 10945,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/gss-CR03-resource-policy59_20261014.mjs",
+      "sha256": "1D8A1B8C5F63E6FE5D960D210CAC298FBD9CB5B1FFA09E8452146F51A1949920",
+      "bytes": 29660,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/gss-CR03-resource-policy59-transform-tested_20261014.mjs",
+      "sha256": "8A8828D9C8B9B2530F4AFCEB1112E254DE74E81E6E59E99ACC5689954E57B15F",
+      "bytes": 20940,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/gss-CR03-resource-transform59_20261014.mjs",
+      "sha256": "461797FBAFFCE8B5A6804DA50786D4A7C73DE97E5AFAED255D3B7D13D0927579",
+      "bytes": 5910,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/gss-CR03-resource-bench59_20261014.mjs",
+      "sha256": "95D693F38CB6670836E180240691D60808D23C47F80769B2F4E54D9F45F8AA83",
+      "bytes": 7362,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/gss-CR03-resource-worker59_20261014.mjs",
+      "sha256": "A95B487D08D2A7CEA8BF18774CD1692AAB8BC80590F284049B7E7F5C85022076",
+      "bytes": 2929,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/test-gss-CR03-resource-bench59_20261014.mjs",
+      "sha256": "6FD6ADF8B714A0E17D12951152602F563FDF66773D7EB8BBC5BC959BB10D4F0A",
+      "bytes": 13657,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/prepare-gss-CR03-resource-worker59_20261014.mjs",
+      "sha256": "ED30DB8F9CCFAB15DFF6A89CD1375616A3DBA0822D85B7A52E67E51DCEDDD376",
+      "bytes": 3356,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/record-gss-CR03-bench59-owner_20261014.mjs",
+      "sha256": "853BE97BB4B6E0ED8F7A201E71A2F7D3A32F05DB7B3EBB64922FF5F27AE55CA1",
+      "bytes": 3350,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/save-gss-CR03-bench59-parser-stage_20261014.mjs",
+      "sha256": "F080441C955AD4A6D5E8851E90BF482258C6564B2244C3B671C17D50E118F6C0",
+      "bytes": 2579,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/save-gss-CR03-bench59-state_20261014.mjs",
+      "sha256": "411000D0BC46AD64871B1DBF564602D1373AE2CE68C0C2275385F9F2EA49FE01",
+      "bytes": 2465,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/prepare-gss-CR03-review59-config_20261014.mjs",
+      "sha256": "2FE05EDF390C9EEBE98A820024A39E371BC6EC4780E00F68CE09D85D1350C8B1",
+      "bytes": 11063,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_numeric-control58-comparison_20261014.json",
+      "sha256": "97D1979380D37020170B9F923E05DF786AE7996052F7D04E208D61F061DEBFB6",
+      "bytes": 5270,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "plans/GSS_CR03_resource-bench58_owner-question_PENDING_20261014.json",
+      "sha256": "017DD563458B8FBCE704BCDBAA66AC897AF3BFE2599D39B218406C182C4DB77A",
+      "bytes": 3050,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "handoffs/GSS_foundation_READ51_REVIEWED_checkpoint_20261009.md",
+      "sha256": "A2B691BCF69FA9EF9512A3CD1F57236DE9A1D0027C77FB03377DC29914A7BB7D",
+      "bytes": 5127,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-read51_reviewed-result_receipt_20261009.json",
+      "sha256": "E94DFAF218F1383F77F8D8DAAD7A9CE12945698FFABD21C85075B68008EC0AAA",
+      "bytes": 432871,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "plans/GSS_foundation-CR03_R5_admission-terminal43_design_20261013.md",
+      "sha256": "9221225E4139FDA9310E9B4527C2322C4F4AD1BC3EB44238BA8333CE5E584E59",
+      "bytes": 216277,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/GSS_CR03_review59_config_before-design-excerpts_20261014.json",
+      "sha256": "8600B172CA57FD99DC3C050D63435A8A215A45730531755E89F56231AEBD8D5C",
+      "bytes": 13232,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/GSS_CR03_bench60_review_preparation_state_20261014.json",
+      "sha256": "A471BBA8D2E79A938E9031255C80BB80EAE9462677704F563BBB6AC28E1B3362",
+      "bytes": 2841,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/test-gss-CR03-transform59_20261014.mjs",
+      "sha256": "1B1614BE138D7FB04A34EE9026A4A5DA9651B72E9D049D7A473DCB0F8CAFD953",
+      "bytes": 7469,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/GSS_CR03_review59_config_before-test-encoding_20261014.json",
+      "sha256": "1EAEDDBBD99E84A355245B4F11630F34EA438D627B604C99F670BF57C65B9446",
+      "bytes": 14254,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/gss-CR03-resource-supervisor59-instrumented_20261014.mjs",
+      "sha256": "8CF48FF920E9F8F1396391EBFF850E26F13529141FE411DD62BFD8B75D92BAFA",
+      "bytes": 4746,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/gss-CR03-worker-events59-fixture_20261014.mjs",
+      "sha256": "9F03BC1F2443E11BAA6738DFED6914D540F83D9B5A03B0F1A03CBE3FA7AE4F75",
+      "bytes": 2986,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/prepare-gss-CR03-worker-events59_20261014.mjs",
+      "sha256": "80A627E99E8F64A89E860B1BAFFAFF03434DD4EDDCD15477DD305BC4602EC172",
+      "bytes": 984,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/test-gss-CR03-worker-events59_20261014.mjs",
+      "sha256": "716EAE7007E9D62E7EEA08BE3FEB52BE012EC8E2D493212AA174F1F384257027",
+      "bytes": 3779,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_worker-events59-tests_20261014.json",
+      "sha256": "8EF61FEDFEF382108C20E894BD836EF903CD4DD87A5F33AF997F5C0640AE66E7",
+      "bytes": 17393,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/gss-CR03-resource-transform61_20261014.mjs",
+      "sha256": "F32A158E9ED17387234B473350617457E6488FBADD4BAC35BB4188839AE70932",
+      "bytes": 5910,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/gss-CR03-resource-worker60_20261014.mjs",
+      "sha256": "93663A09AA05EC79ABDD79CCE337589E8AE1694ACDBFCAF6D5447B7308FB15C2",
+      "bytes": 2929,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/gss-CR03-resource-policy60_20261014.mjs",
+      "sha256": "D0EFDCB53D0B65B906EC25C1D7E19FB094A9DD5ABE6B0153251E083CE0972155",
+      "bytes": 31201,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/probe-gss-CR03-bench60-correlation61_20261014.mjs",
+      "sha256": "6C58471BAEAE8C5D2993C4DDCE587F474385F429345CA71FC41F982CCF9FE240",
+      "bytes": 3646,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_bench60-correlation61-probe_20261014.json",
+      "sha256": "8E2E6272832910389F5414E67B59B9A858A4993F0B648822B769ACAB51E169C6",
+      "bytes": 1646,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/prepare-gss-CR03-resource-candidate61_20261014.mjs",
+      "sha256": "3B3FE6F9C1EA2AD333669AB39AAB6C0D6DBFB405A114E72845A3F273CE8430FC",
+      "bytes": 2348,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_resource-correlation61-tests_20261014.json",
+      "sha256": "D6B1868E8781DA541DF972469E80D073B8D7D1583BF0F698C7054B453A66D810",
+      "bytes": 1822,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/prepare-gss-CR03-review60-tools_20261014.mjs",
+      "sha256": "3ACD550F58F34916A610512ACC030C0913EAA820966F7A415773F070E6692F69",
+      "bytes": 7832,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/gss-CR03-review60-code-checks_20261014.mjs",
+      "sha256": "EF3813D428C500836C1936F57F0929D7EEE9A35A89BFE23EAA3EC5067A868F14",
+      "bytes": 3808,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/GSS_CR03_review60_config_before-transport19_20261014.json",
+      "sha256": "871DB813B32877926F0105C23544F1AC082FB8089993B4402CA8C0A03FFEE466",
+      "bytes": 16652,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/GSS_CR03_review60_builder_before-transport19_20261014.mjs",
+      "sha256": "FB3A8327895E963B0D14B453E54C8C4986F2E2C1EDC8790502037F7B5B7093DA",
+      "bytes": 4095,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/GSS_CR03_review60_verifier_before-transport19_20261014.mjs",
+      "sha256": "F75F43A0196613D24B0EF52E777259F2DB9B0208C5178AF4FA73C7E598655EB2",
+      "bytes": 4537,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/request-gss-CR03-transport19-PROPOSED_20261014.mjs",
+      "sha256": "EC270DE0274EB0696D5E09837BAE0CBD013DA84495050C74D2CC9BFBDCA3F4A5",
+      "bytes": 9692,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/prepare-gss-CR03-transport19-proposal_20261014.mjs",
+      "sha256": "5A215A4BDDDD39E0433DFB49E455C2BFA7F6FFA2B3EBB46202A1967A9951F233",
+      "bytes": 10352,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/record-gss-CR03-transport19-bootstrap_20261014.mjs",
+      "sha256": "61F7091D1AC244684AFC4378DC73EDB0EBF3E3783F7E0F02B6F0117EAB48636D",
+      "bytes": 4772,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/GSS_CR03_review60_config_before-ledger-amendment_20261014.json",
+      "sha256": "B09044FE29E61E3444848F34412141AC5270587843FC927D619081EC86CB3740",
+      "bytes": 16359,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/GSS_CR03_review60_builder_before-ledger-amendment_20261014.mjs",
+      "sha256": "36DC43BA4DEEAE2BF9E5D2A36092CD163A20BA79382D308634C8A5C1BF1CB735",
+      "bytes": 4081,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/amend-gss-CR03-review60-ledger_20261014.mjs",
+      "sha256": "11D2D7014E1750EFE80CDD137192ABECED15813CF3C6BE5D5F230A4C958694B5",
+      "bytes": 4818,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_transport19-cli-compatibility_20261014.json",
+      "sha256": "235430FAC1B444596EEADCA7C8C938C9790C60F3C9687B4DE1C2A69A2FFD1E3A",
+      "bytes": 24462,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/gss-CR03-resource-policy59-parser-snapshot_20261014.mjs",
+      "sha256": "3C2957FDF95BF1011B6C78E16868834BB71A70156ACFA0AD60ED62AE29F66EF3",
+      "bytes": 13287,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/gss-CR03-review59-code-checks_20261014.mjs",
+      "sha256": "DC26717370BD06DE287BC9949299C60996352CB25FF2FB1D6EA639815F82FC93",
+      "bytes": 7159,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/gss-CR03-resource-supervisor59_20261014.mjs",
+      "sha256": "BA5D1FA39F4CB8E3E29DF8D5BA4FB6C9BD76B332AA5245C2F706E0491281CE56",
+      "bytes": 4592,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/reduce-gss-CR03-review60-context-b_20261014.mjs",
+      "sha256": "2ED31CA09F32E583AF232264E2E750D5A7AB30284DD4C2573020589D3C548393",
+      "bytes": 7187,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "plans/GSS_CR03_review60-cli-compatibility_EXCERPTS_20261014.md",
+      "sha256": "96A24DC60A4DCC11F36DFDEAEAFBEFB35F4CA40C5BF27F375C404BEBE38A8485",
+      "bytes": 7171,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "plans/GSS_CR03_review60-cli-compatibility-excerpts_receipt_20261014.json",
+      "sha256": "0AB91DF93FBB62B1D0D5D240E5AEFF4E745F823EBB72DE8217DC8DCA4C08D973",
+      "bytes": 2850,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/prepare-gss-CR03-review60-context-reduction-c_20261014.mjs",
+      "sha256": "AF6FF75104C2AAD0F2E95E44C329B85830C2D98ECDA6E0220E72C6CC47C87C19",
+      "bytes": 1657,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/reduce-gss-CR03-review60-context_20261014.mjs",
+      "sha256": "BF75D5858798BD61C936F50B2260C05B29639835795A25FC21539C4CF3AE4665",
+      "bytes": 6841,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/prepare-gss-CR03-review60-context-reduction-b_20261014.mjs",
+      "sha256": "388B213D3F76465D78570418525AC543FDBBB98D8BB9E1AE2456BF3A819E45A6",
+      "bytes": 1824,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/GSS_CR03_review60_config_before-context-reduction_20261014.json",
+      "sha256": "3D03FDA60049058EBCCA7ABD7B33883EE1C6BF55E6FCA90EB94C83EE89F72AC8",
+      "bytes": 20687,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/GSS_CR03_review60_checks_before-context-reduction_20261014.mjs",
+      "sha256": "E934124D4E1282A86EC59FEA96A2CCCBCBB66982E96B8AFECE85B12A77F72E10",
+      "bytes": 6324,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/GSS_CR03_review60_checks_before-excerpt-scope-fix_20261014.mjs",
+      "sha256": "F4ECE830BA824E070DC27EE0473FFA0F4B39B0B13007D810A79D4081D06D382D",
+      "bytes": 7151,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/GSS_CR03_review60_config_before-excerpt-scope-fix_20261014.json",
+      "sha256": "76DBF65E12FC371F2D5414C7C7DC780733AA799F3AE8564389308157B167F963",
+      "bytes": 23861,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/amend-gss-CR03-review60-excerpt-check_20261014.mjs",
+      "sha256": "D8A609490885316AF90E9DE925A18A032CBE6E3607CF23220F94D5609E66B2BB",
+      "bytes": 2061,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/test-gss-CR03-policy59_20261014.mjs",
+      "sha256": "F88B3B9DC5D7C26BF0D90B903B9591C2EFB0C8FFFAF87C8931E1913267834661",
+      "bytes": 5887,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "plans/GSS_CR03_review59-transform-test_COMPLETE_ENCODED_20261014.md",
+      "sha256": "7BBA06344E2C135BD584F62B33C1D1A1616314C14FE8402D173FF00C2B336C95",
+      "bytes": 8086,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/verify-gss-CR03-bench59b_20261014.mjs",
+      "sha256": "FED6CC26B208B042B44BD76F379D75AF9F6E57D5889E77CD8F49FF8276353879",
+      "bytes": 5271,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/GSS_CR03_review60_config_before-historical-tests-reduction_20261014.json",
+      "sha256": "CC7144F118DA9CD21DD15ED475EBE9F06C664CC7B3A20783A98B291D28DF721A",
+      "bytes": 24390,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/reduce-gss-CR03-review60-historical-tests_20261014.mjs",
+      "sha256": "F2BF82B618A79D3105EB0EC540F710FF49E75E9F907DE80EB156235121163CCA",
+      "bytes": 4861,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_static_claude-review-r59-intake_run_20261012.json",
+      "sha256": "97CEDF813A759622599C5FA2E5B211A7240E347575AACF63C0634D5314FF73B3",
+      "bytes": 16794,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_resource-bench60-tests_20261014.json",
+      "sha256": "13E9E9B1D2D6AB0E10D3D9EC045DACDB4284CFC7A19B380B8C431A084F85C89D",
+      "bytes": 7406,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_resource-bench60-joint-profile_20261014.json",
+      "sha256": "949E6D9E433AE7B8B89D507505F865E989472F1E6F822F41D42664E361BEF28A",
+      "bytes": 5282,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/gss-CR03-resource-supervisor60_20261014.mjs",
+      "sha256": "68460A91568E298D8A62AB91E4053741A38EDB3672365D20432F9CC03B0C852B",
+      "bytes": 4592,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/gss-CR03-resource-policy61_20261014.mjs",
+      "sha256": "572F96BB0A55C6182DCC1C9DFC8B0A7FD6C83B06E5542852C4BC45E5767611F9",
+      "bytes": 31644,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/gss-CR03-resource-bench61_20261014.mjs",
+      "sha256": "204761882DA77895D760B13A4D3F5CBB5016488C1CE86A87984E088FA554EF08",
+      "bytes": 7375,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_static_claude-review-r60-intake_run_20261012.json",
+      "sha256": "C2BE6C3864ECADC39D7FBB5AFE2C2FBDB7572D8690D6FEB9D21D44C15A2A5EF1",
+      "bytes": 14137,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_static_claude-review-r60-intake_dispatch_20261012.json",
+      "sha256": "9F3FE398B9FE2ECE6551C31E8BB02AAA3334E6FD6A572BDE3CFE78E5638453BC",
+      "bytes": 615,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_static_claude-review-r60-intake_manifest_20261012.json",
+      "sha256": "DAF9A3C300843E82013A15792A9A5981882676A84896207579C0A51C290B72BE",
+      "bytes": 58489,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_static_claude-review-r60-intake_packet_20261012.txt",
+      "sha256": "30D7DEA521C42B7CE500B6190594D536E8A94137C7107F83C2082DC5005C668E",
+      "bytes": 677635,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_resource-bench62_stage-productivity_20261014.json",
+      "sha256": "668721503D94B2165B32CAE0808099F352995B534219DA2D51E434AFA90F65D6",
+      "bytes": 7839,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_resource-bench62_stage-report_20261014.md",
+      "sha256": "88D5BE0BECDC0097CAD406B0E29163E0AD7FAF441938F85E62340A1D0B72AE3B",
+      "bytes": 2443,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "plans/GSS_CR03_resource-fidelity63_design_PROPOSED_20261014.md",
+      "sha256": "6929A48DB45E9640B60DCA22D8686A8901C3891609511AA188A5597206C6A4A0",
+      "bytes": 25678,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/prepare-gss-CR03-design63b_20261014.mjs",
+      "sha256": "22D96F4EE59D1C90E650E355B38E7D9B357E2D823220FDD75BEDF15D06AEFC7C",
+      "bytes": 4069,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/record-gss-CR03-final-numbers62-owner_20261014.mjs",
+      "sha256": "675E32ADA2C1C5FAA7C3D640EF956038AAC1AE5F40152B7654A56CFBBAD5655D",
+      "bytes": 6004,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/test-gss-CR03-resource-correlation61_20261014.mjs",
+      "sha256": "0F9B490AE5CC48922593579AA202F790A8F372736F4437EFBF338B688AAAA230",
+      "bytes": 4179,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/gss-CR03-resource-transform60_20261014.mjs",
+      "sha256": "4D882B6B5B67FEE501745AE143532BAD15D3F4B1AB42530CFE88729CC8EE2271",
+      "bytes": 5910,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/gss-CR03-resource-bench60_20261014.mjs",
+      "sha256": "5739F4455DDAEAFDAA99C4D4296918F10AEC9FFCE98B5118E5AC1F89644E84A8",
+      "bytes": 7444,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/test-gss-CR03-resource-bench60_20261014.mjs",
+      "sha256": "02E0C72EC1B928230C6FBE308183ADAD6D5935632C1212FCFF14FEB39E458EA4",
+      "bytes": 14266,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/profile-gss-CR03-resource-bench60-joint_20261014.mjs",
+      "sha256": "B724C827EFC177629262F954E1B12AC51D4459B2A8D0C79CEA46B90B7E31754E",
+      "bytes": 6152,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_static_claude-review-r61-intake_run_20261012.json",
+      "sha256": "E44E2D06256D9A90E7B62DC7922CC1C36A17504F77C8315D9B344B612CCC0B74",
+      "bytes": 16925,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_static_claude-review-r61-intake_manifest_20261012.json",
+      "sha256": "95756205F2CD9D90A1D62755212F9FEF28D917976CCFBA201C2FF29469A61C0D",
+      "bytes": 61631,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_static_claude-review-r61-intake_dispatch_20261012.json",
+      "sha256": "248663BFEB81F909349A805664A2742D78E27D72E432D7DEEE68D86AE76D30C3",
+      "bytes": 615,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_static_claude-review-r61-intake_packet_20261012.txt",
+      "sha256": "DAA23659775E9458AB4B84C0F78E0623322AB8CE2C1F2278ED3616C2B8021EF5",
+      "bytes": 642567,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/prepare-gss-CR03-design63c_20261014.mjs",
+      "sha256": "CCBBBD8B0B78854A37E615AE5F9D40AD4BC4099C6C5544F028AD0A13A77D8232",
+      "bytes": 35918,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/record-gss-CR03-escaped-byte-A-owner_20261014.mjs",
+      "sha256": "B819CE3981B82A72021F7E79B63ABE37B7F006E78129297F313EB78F424DA47C",
+      "bytes": 6759,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/prepare-gss-CR03-escaped-byte-owner-choice_20261014.mjs",
+      "sha256": "BC5A3AA1113B45724E326070741BF9E51343CBC00724EF10796CD4E27AEB6A4C",
+      "bytes": 6803,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_static_claude-review-r58-intake_result_20261012.md",
+      "sha256": "DD7F1E32223C31702E04FF7D47BE799C1A68200FDAFA2C424AE8A2DE963278F3",
+      "bytes": 11671,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/prepare-gss-CR03-resource-candidate62_20261014.mjs",
+      "sha256": "8E3A0C40A1A10D87D1E9B9ED05527325F77D62AEA364DFFDC1D462B1190DB295",
+      "bytes": 7887,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/prepare-gss-CR03-resource-worker62_20261014.mjs",
+      "sha256": "0A32149133642D2E9B15024A17D599C142656245A678B18F6AD38CBDE2C22C5D",
+      "bytes": 3447,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/prepare-gss-CR03-worker-events62_20261014.mjs",
+      "sha256": "4531E663FB8DE70EB8B0466DC681E6CA9D4FDBD533B02F0C07A595C8784E7928",
+      "bytes": 872,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/reduce-gss-CR03-review62-history_20261014.mjs",
+      "sha256": "498681FA2ADF9AE080CACFA6ADCCC8821BFD9BA9B96FC961D396091B0D556E47",
+      "bytes": 4310,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    },
+    {
+      "path": "work/GSS_CR03_review62_config_before-history-reduction_20261014.json",
+      "sha256": "6BAAEB400A5B63A0C0CA27D6413F9486F6FC3B6099BC1130AB5B98832DE1B85B",
+      "bytes": 21545,
+      "rendered": false,
+      "role": "Historical identity only; no new body/CODE/source acceptance"
+    }
+  ],
+  "preflight": {
+    "git": {
+      "head": "a1d0130a7906808a73751d40c77e51c10f7bfb21",
+      "branch": "codex/3dp-payout-approval-status",
+      "trackedStatus": "M AGENTS.md\n D \"Booster Shop CRM — облік товарів - РРЦ.csv\"\n D Taxer_import_2026-04-01_2026-06-30.csv\n M context-index.md\n M dashboard/booster-dashboard.html\n M design/DECISIONS.md\n M docs/CANON_v1_DRAFT_product-content_20260913.md\n M patches/CAT-004_variant-selector_20260916.php\n M plans/3D-P_sku-naming-convention_20260807.md\n M plans/CAT-004_op-rare-packs_identifier-canon_20260916.md\n D \"Версія 153, 28 серп. 2026 р., 0946.csv\"\n D \"Версія 29, 23 серп. 2026 р., 1600.txt\"",
+      "staged": ""
+    },
+    "read51NativeOutputChecks": [],
+    "read51CheckLimit": "Vacuous[]; not replay protection",
+    "checkpointRouting": {
+      "pointerPath": "checkpoints/GSS/CURRENT.md",
+      "pointerPinned": false,
+      "snapshot": {
+        "path": "checkpoints/GSS/GSS_foundation_PROGRESS_20261013T134613519Z.md",
+        "sha256": "21B17A4D333D1D9791340C8A537850169B6E37000F7E3661CE9EC3CFE48371FD",
+        "bytes": 7663
+      },
+      "receipt": {
+        "path": "checkpoints/GSS/GSS_foundation-progress_checkpoint_20261013T134613519Z.json",
+        "sha256": "CA29CF1D20C4C6931F9162A42B7644CDA536BC5FD53D51B099D03505C41D0108",
+        "bytes": 6110
+      }
+    },
+    "exportBoundary": {
+      "privateFileBodies": 0,
+      "realSensitiveSpansAdmitted": 0,
+      "finiteScreenSpans": 0,
+      "limit": "Finite public screening; no privacy absence proof"
+    },
+    "selectionScope": "DESIGN63c option-A loss, private fidelity, closed parent tables and independent differential after actual61; no implementation/activation",
+    "sourceFacts": {
+      "scope": "DESIGN63c actual61 B1-B3/N1-N8 only, no code/SOURCE/STD or product-security assurance",
+      "historicalChecks": {
+        "scope": "DESIGN63b F1-F6 only, no successor code/SOURCE/STD acceptance",
+        "historicalChecks": {
+          "transport": {
+            "ownerBootstrapCount": 1,
+            "cli": {
+              "path": "C:\\Users\\14bez\\.vscode\\extensions\\anthropic.claude-code-2.1.299-win32-x64\\resources\\native-binary\\claude.exe",
+              "sha256": "295B49EC092F31A7DE9C6FF286D9D8F120A4F029B9AD9A5AC0B12C35CBF4DF2B"
+            },
+            "compatibility": {
+              "path": "diagnostics/GSS_foundation-CR03_transport19-cli-compatibility_20261014.json",
+              "sha256": "235430FAC1B444596EEADCA7C8C938C9790C60F3C9687B4DE1C2A69A2FFD1E3A",
+              "bytes": 24462
+            },
+            "historicalPrimaryCheckerRuntimeDeltaOnly": true,
+            "securityEnforcementProved": false,
+            "transportAcceptedBeforeBootstrap": false
+          },
+          "scope": "Corrective62 and owner-authorized transport19 bootstrap DESIGN/CODE only",
+          "priorBench": {
+            "fictionalOnly": true,
+            "sourceAdopted": false,
+            "actualLocalWorkers": 10,
+            "primaryReportsChecked": true,
+            "historicalPolicyPrefixesMatched": true,
+            "supervisorControlSourceEqualApartFromLiteralPins": true
+          },
+          "actual59Closed": true,
+          "currentReportsChecked": 4,
+          "parserPrefixVersionOnly": true,
+          "transformWorkerDerivationChecked": true,
+          "actualLocalWorkersTotal": 18,
+          "policyId": "GSS_CR03_RESPONSE_RESOURCES_V5_PC",
+          "numericControlsUnchanged": 14,
+          "sourceAdopted": false
+        },
+        "actual60ClosedAndAccepted": true,
+        "acceptedTransport19": true,
+        "finalNumericOwnerRecord": {
+          "path": "plans/GSS_CR03_resource-numbers62_final-owner-approval_20261014.json",
+          "sha256": "0BBF857CAA66BE07E0697A382E655E73DFA124F626544B1958C317D152224CDD",
+          "bytes": 4137
+        },
+        "subject": {
+          "path": "plans/GSS_CR03_resource-fidelity63b_design_PROPOSED_20261014.md",
+          "sha256": "216EDD2BA24E768DE1458C77EAFE20CBB60249DA16333E6B7159DEF582172AD2",
+          "bytes": 27389
+        },
+        "numericControls": 14,
+        "sourceAdopted": false
+      },
+      "actual61ClosedChangesRequested": true,
+      "ownerOptionAConditional": {
+        "path": "plans/GSS_CR03_escaped-byte-A_owner-decision_20261014.json",
+        "sha256": "F696AD48B4722BA8DC318492C391E7048F626F591C137ED184FD6D13764A88BA",
+        "bytes": 4960
+      },
+      "subject": {
+        "path": "plans/GSS_CR03_resource-fidelity63c_design_PROPOSED_20261014.md",
+        "sha256": "6914805411A4E86EF70DB28B2DF27D16841AD8088E359693A33E145829ED7DA1",
+        "bytes": 46924
+      },
+      "sourceAdopted": false
+    },
+    "notAllR5RolesClassified": true,
+    "gitTransition": {
+      "previousHead": "a1d0130a7906808a73751d40c77e51c10f7bfb21",
+      "currentHead": "a1d0130a7906808a73751d40c77e51c10f7bfb21",
+      "changedPaths": [],
+      "sourceOverlap": false,
+      "chronologyAdversariallyProved": false
+    }
+  },
+  "excerptRegions": [],
+  "rendering": {
+    "frameStartByte": 41823,
+    "preambleSha256": "F8651101C6C3FB67ABA7BFBACB7402C30F1D0BB0238362B26F2659CAA426DD42",
+    "preambleMetadataEqualityChecked": true,
+    "currentPointerExcluded": true
+  },
+  "packets": [
+    {
+      "partition": "INTAKE62",
+      "title": "Corrective DESIGN63c after actual61 and owner simpler-option decision",
+      "path": "diagnostics/GSS_foundation-CR03_static_claude-review-r62-intake_packet_20261012.txt",
+      "sha256": "96D81AF6711BA9D5FF08C58888DED1D4DA6AE8C93FC383613E4DF1010B495111",
+      "bytes": 678864,
+      "bodyInputs": [
+        {
+          "path": "docs/GSS_CURRENT_EXECUTION_RULES_20261009.md",
+          "sha256": "F36F2AF34D9935E6595B5DB7B78EF4212AA3AE3D1720629F785DAA9138002510",
+          "bytes": 9428,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "plans/GSS_claude-review-routing_20261005.md",
+          "sha256": "1A99E6134C877D7040D36D80F5AAB382CA54289D0011F55783B9F6B4D1A12875",
+          "bytes": 2986,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "docs/GSS_CHECKPOINT_STORAGE_20261009.md",
+          "sha256": "26B1362CFB3F93C4AC0FC6AF9885932BF374F102B94BC374EA009CD2E33684B4",
+          "bytes": 3793,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "docs/WORK_INTERRUPTION_RECOVERY.md",
+          "sha256": "9DDBA7C2724B779FB4E6EDAC1963DF5C4D826028EE3851C0250ECCCE11714136",
+          "bytes": 4364,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "docs/GSS_CHECKPOINT_REVIEW_ADDENDUM_20261012.md",
+          "sha256": "C43E74A213683183D2DD2B297536A0BF5839F27A9A64895F15CFC940FAE11091",
+          "bytes": 2010,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "work/gss-CR03-public-artifact-guard_20261011.mjs",
+          "sha256": "05EA420166D79D9899DE941FF1768B705643E27D49EA108F02F2E46C614AFAEC",
+          "bytes": 1421,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "work/gss-CR03-review-procedure15_20261012.mjs",
+          "sha256": "C41D617B9CB1A922650DB6BCF88AA713B2115B20CCA975F26C88275D3A149EBF",
+          "bytes": 23786,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "work/request-gss-CR03-static-review-r60-intake_20261012.mjs",
+          "sha256": "665A9F780030351B3D3DEDD23B7FD49D18A11410C24791DD594BD047EBEBDD80",
+          "bytes": 9688,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "plans/GSS_foundation-CR03_sender-requester_review-egress_owner-record_20261011.json",
+          "sha256": "82A90A3346885B351F253BF2142E5422135270420B752FA26B03B2A592320281",
+          "bytes": 1822,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "plans/GSS_CR03_review59-design43_EXCERPTS_20261014.md",
+          "sha256": "6CBC2A88FF50B3518C2D3B2FA47E76FA71F5A4E454008DA09BF88F947712F702",
+          "bytes": 67034,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "plans/GSS_CR03_review59-design43-excerpts_receipt_20261014.json",
+          "sha256": "37D394BD87B0743BEE71C5A82691972D6FDBE777422EF9E75DC31221D8F1CC89",
+          "bytes": 2358,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "work/gss-CR03-review-procedure24_20261014.mjs",
+          "sha256": "E70A5D3364019B55826C8F69C86FA71EC9A4CDF6320E69805E873E563EEBAF4D",
+          "bytes": 34575,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "plans/GSS_CR03_resource-journal58_contract_20261014.md",
+          "sha256": "1F4F0879DB2A08451F1080EB7721672EE0467841C4F08B23057CCF3E1C68E496",
+          "bytes": 75656,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "plans/GSS_foundation-CR03_INTAKE58_reviewed-disposition_20261014.md",
+          "sha256": "C300D87DBD5F86D492DA3C8DC9836BFBB9EA8A2C988B024392B8EA6B123F79F3",
+          "bytes": 6247,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "plans/GSS_CR03_resource-bench62_corrective-CODE_boundary_20261014.md",
+          "sha256": "C426BDFF00151F1E4AB0C4446A1620E7B6BB4326E3587399DF14FFE0DF52D12C",
+          "bytes": 6682,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "plans/GSS_CR03_resource-fidelity63c_design_PROPOSED_20261014.md",
+          "sha256": "6914805411A4E86EF70DB28B2DF27D16841AD8088E359693A33E145829ED7DA1",
+          "bytes": 46924,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "plans/GSS_CR03_resource-numbers62_final-owner-approval_20261014.json",
+          "sha256": "0BBF857CAA66BE07E0697A382E655E73DFA124F626544B1958C317D152224CDD",
+          "bytes": 4137,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "plans/GSS_CR03_resource-numbers62_final-owner-choice_PROPOSED_20261014.md",
+          "sha256": "94A58A62A00CF8FDB00CD4173FE3239AEED0A251E08E2B75B50C88BC8DF05971",
+          "bytes": 4019,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "plans/GSS_CR03_resource-bench62_reviewed-basis_20261014.json",
+          "sha256": "A5F0FD06AEFE97D9BD886F718E69E5BC01D9ADFADE70565A18A2F514A3B2F94D",
+          "bytes": 3382,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "diagnostics/GSS_foundation-CR03_static_claude-review-r60-intake_result_20261012.md",
+          "sha256": "3218A5749F1ACCE3ECBFB83F746967F7B695BFA05F067BE68E4D37BDD63A279B",
+          "bytes": 12948,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "diagnostics/GSS_foundation-CR03_r60-terminal-verification_20261014.json",
+          "sha256": "7A4C445F59FE2F9A824A8C71BE53916569E265135816DEE486E02F65AB1C6B3D",
+          "bytes": 3722,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "diagnostics/GSS_foundation-CR03_r60-supplemental-identity_20261014.json",
+          "sha256": "CD62EDD6963C0789C4C1A9B1A24D6D7610C7D50EE04B872D35731305ED2B121A",
+          "bytes": 2687,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "plans/GSS_foundation-CR03_INTAKE60_reviewed-disposition_20261014.md",
+          "sha256": "AB245A65DAA39CE418FB78E66FAF6F883F901ED67AF7948A75CFBF7F9C65FE35",
+          "bytes": 5562,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "work/gss-CR03-resource-policy62_20261014.mjs",
+          "sha256": "6D077709BB913B453DCDA1CE0B1F43AD37BA941058EA2853644560260036F4EC",
+          "bytes": 34038,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "work/gss-CR03-resource-transform62_20261014.mjs",
+          "sha256": "20506A6530D109620B0319FCD879C7E1D7241AF2D6642C198B5196F87815D936",
+          "bytes": 5896,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "work/gss-CR03-resource-supervisor62_20261014.mjs",
+          "sha256": "E59FEDBE83B960B76FF4A38115B80CBB0F35A58B26D74C32A53EAE31C83D78A6",
+          "bytes": 5352,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "work/gss-CR03-resource-bench62_20261014.mjs",
+          "sha256": "A20C2161E8D7E6E9B2F0070AC4DBD4121F084A8F1B92A8B82D40AED1F2B1F8A7",
+          "bytes": 7382,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "work/gss-CR03-resource-worker62_20261014.mjs",
+          "sha256": "5C574FF9CF7F59F4A02E87AD169FAAAB5454F6F9347616EDD8972FB1E66B5AB5",
+          "bytes": 3020,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "work/test-gss-CR03-resource-correction62_20261014.mjs",
+          "sha256": "08E31B51D47702E3970B84330709989D5C8B2E3CE7A1CAAA114E17F599443C5B",
+          "bytes": 8199,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "diagnostics/GSS_foundation-CR03_resource-correction62-tests_20261014.json",
+          "sha256": "E896A4E9D91DF55891E70D04B78F7F83475B37D41B19DCC34FE3274519E4155F",
+          "bytes": 2296,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "work/gss-CR03-worker-events62-fixture_20261014.mjs",
+          "sha256": "E1801BBEA746AD23DB1A2996E53EFF97D8CEF0D2B9F2B3C1A7C8321DAE95BD33",
+          "bytes": 3698,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "work/test-gss-CR03-worker-events62_20261014.mjs",
+          "sha256": "E07800B70BA1D6387757857F4D963C20CC8ADF6C37BAE31943E5F4E3EF7D4036",
+          "bytes": 4463,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "diagnostics/GSS_foundation-CR03_worker-events62-tests_20261014.json",
+          "sha256": "3F07DAA6FDED85EF8A1CB6FC75B26CEB99107A26F1C576F05530A6D26D6947BA",
+          "bytes": 20609,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "work/test-gss-CR03-resource-bench62_20261014.mjs",
+          "sha256": "0EA1328AB81E124F92BA6EE6DCF7BA6E1C36F7C88DAD45EC10519D2DF6F94B60",
+          "bytes": 13655,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "diagnostics/GSS_foundation-CR03_resource-bench62-tests_20261014.json",
+          "sha256": "E61FDC347E0232FA6F8290DC7CE5AE317A18582D33CDD566EF3943D70E408FEE",
+          "bytes": 9704,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "work/profile-gss-CR03-resource-bench62-extra_20261014.mjs",
+          "sha256": "3761079AA5BD94AEDBC742C915C4C5302E47A6B1530583E35EE5F4B7070E7851",
+          "bytes": 6857,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "diagnostics/GSS_foundation-CR03_resource-bench62-extra-profile_20261014.json",
+          "sha256": "F33C5E048FA3351B34F873CCF81407A6B43B04556A42DEB368F95360096E60C1",
+          "bytes": 7514,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "plans/GSS_CR03_review58-governance_EXCERPTS_20261014.md",
+          "sha256": "391C955B3CC69E9AA1BCC1F7BC36CA0666EB79F3F858FFADB85A05A8FAE4BCFF",
+          "bytes": 13294,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "plans/GSS_CR03_review58-governance-excerpts_receipt_20261014.json",
+          "sha256": "5A92C0322C59CBD176F93F1A3AB127D1F2598D2A0E52F1521A19FC91878F71D4",
+          "bytes": 1261,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "plans/GSS_CR03_review55-owner-register_EXCERPTS_20261014.md",
+          "sha256": "AAE6F83753714089EF1C5BFD09767C37CB73009FACEF251963F79C6220DA223F",
+          "bytes": 8305,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "plans/GSS_CR03_review55-owner-excerpts_receipt_20261014.json",
+          "sha256": "C7AADE67E0434E5560AE55A16F32DCCFFCF2C4FB585C085A265DE2D259DC0CCD",
+          "bytes": 2756,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "work/gss-CR03-review60-transport19-checks_20261014.mjs",
+          "sha256": "3850C4AE2A1A1DD978210E8FBC830DC51CC9C1319FE8ECBDD3A6173394A24465",
+          "bytes": 7157,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "work/gss-CR03-review59-primary-transport19_20261014.mjs",
+          "sha256": "16014BD7F3241A3DD9DBB3EC2DF96CEB47DA9DC467193E870C9A0267BB3F0FFA",
+          "bytes": 7159,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "plans/GSS_CR03_transport19_bootstrap_owner-approval_20261014.json",
+          "sha256": "2500B6D8BB02C5546ECAADBA3E24C3069EEA1DA6C48FB03E7DA5427B2D7C95B7",
+          "bytes": 2599,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "diagnostics/GSS_foundation-CR03_transport19-cli-drift_20261014.json",
+          "sha256": "5D818C49C077776F05DB6A73B2894870AFB7979D80052FFBD76FA3BD8021A620",
+          "bytes": 3822,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "plans/GSS_CR03_review60-cli-compatibility-c_EXCERPTS_20261014.md",
+          "sha256": "96A24DC60A4DCC11F36DFDEAEAFBEFB35F4CA40C5BF27F375C404BEBE38A8485",
+          "bytes": 7171,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "plans/GSS_CR03_review60-cli-compatibility-c-excerpts_receipt_20261014.json",
+          "sha256": "E948FEF0595E11BC4E17FF9E300C4096304F3B3C7703FED7705BE70135BAEB35",
+          "bytes": 2852,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "work/gss-CR03-review61-design-checks_20261014.mjs",
+          "sha256": "C214CDEAC9CD93039BD2FFCAD8CCFEAC8E090AC8B31FDD993DB727525AD9E3EA",
+          "bytes": 2941,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "work/prepare-gss-CR03-static-review-r62-intake_20261014.mjs",
+          "sha256": "FEA45AA507F2142F475711356C1E8F57F9C938B76F2C0950DE918EA3979BCEE0",
+          "bytes": 3945,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "work/verify-gss-CR03-r62-evidence_20261014.mjs",
+          "sha256": "C4E0C61297146B9BE77AFC137F39150E565A4545FAC4ACDA329F444D249DAFA3",
+          "bytes": 4758,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "plans/GSS_CR03_review62-package_20261014.json",
+          "sha256": "70C9BCBEDE2467B511BDF28EDB640940628F372F467025227DE688A2470153A5",
+          "bytes": 22071,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "work/request-gss-CR03-static-review-r62-intake_20261012.mjs",
+          "sha256": "44F446EC0C1F9715913B1F49A09841A835CCAE504BE94111673A9CC0C95B219A",
+          "bytes": 9688,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "plans/GSS_CR03_review62-git-baseline_20261014.json",
+          "sha256": "9DD4ABA590506AF4F36774359BCF5254572CB07713EDFB4E2D8C02790B2A86B2",
+          "bytes": 820,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "plans/GSS_CR03_escaped-byte-A_owner-decision_20261014.json",
+          "sha256": "F696AD48B4722BA8DC318492C391E7048F626F591C137ED184FD6D13764A88BA",
+          "bytes": 4960,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "plans/GSS_CR03_escaped-byte-screen_owner-choice_PROPOSED_20261014.md",
+          "sha256": "1C75804C3DF3ABAEA9BC1384CC0FFC19E9EC206114DC597A0822AECC0EB3F886",
+          "bytes": 4106,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "diagnostics/GSS_foundation-CR03_static_claude-review-r61-intake_result_20261012.md",
+          "sha256": "A905642DD3DEE30ED94F03D531A5AF5A8D82BD994568FE46BF78AF9EEE102A07",
+          "bytes": 15694,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "diagnostics/GSS_foundation-CR03_r61-terminal-verification_20261014.json",
+          "sha256": "7CE4BDD0A3689EBF5FE7FF626E39BD71E9D0E86881D8A293F62E5AE230B2C028",
+          "bytes": 4466,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "diagnostics/GSS_foundation-CR03_r61-original-launcher-closure_20261014.json",
+          "sha256": "B4F32F152EACF28A1B694B7E23BDA62E51DA7F70D3EBCCD5570B7B155577ED91",
+          "bytes": 694,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "plans/GSS_foundation-CR03_INTAKE61_reviewed-disposition_20261014.md",
+          "sha256": "4D79D16D5C3D711F6A0AC8529B535479B6F2F543CF8BAECA760C5FA27E74A772",
+          "bytes": 4690,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "diagnostics/GSS_foundation-CR03_wide-depth63-fixture-preflight_20261014.json",
+          "sha256": "76CF5EAA2DA80F2C2BB83F306B4466AC99220E368F0B7FF22E262EC663FB2A9B",
+          "bytes": 1513,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "work/preflight-gss-CR03-wide-depth63-fixture_20261014.mjs",
+          "sha256": "258185EE990D54F95BBBDA73E1052EDAE39919B22A3A1B4B8305B8F156442026",
+          "bytes": 3850,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "work/gss-CR03-review62-design-checks_20261014.mjs",
+          "sha256": "0D478E540B97DA79A101D3E9C83C1D0AB3F173CECD8B481E2E67EDB850A0635D",
+          "bytes": 3078,
+          "rendered": "FULL BODY"
+        },
+        {
+          "path": "work/prepare-gss-CR03-review62-tools_20261014.mjs",
+          "sha256": "A05D2DEF1B68BEABFA9FDAFA0F454EEDA2FB8D7C767E0365D41DBF129565BC91",
+          "bytes": 12515,
+          "rendered": "FULL BODY"
+        }
+      ]
+    }
+  ],
+  "adoptionAuthorized": false,
+  "nativeAuthority": false,
+  "wholeFoundationAccepted": false
+}

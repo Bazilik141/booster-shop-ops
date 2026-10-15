@@ -1,0 +1,81 @@
+{
+  "scope": "Direct pre-GSS owner numeric decision for subsequent local SOURCE/STD design and reviewed implementation; no real-use gate",
+  "recordedUtc": "2026-10-14T18:36:33.987Z",
+  "questionItemId": "[\"request_user_input_async\",\"call_20b9a171918040658a11486ae4b8cbd5\",0]",
+  "question": "Після Review OK погоджуєш остаточні 14 лімітів для наступної локальної розробки SOURCE/STD за plans/GSS_CR03_resource-numbers62_final-owner-choice_PROPOSED_20261014.md? Основні: 8 MiB stdout + 1 MiB stderr, спільні 4096 збігів / 1 MiB метаданих, 15 с і 256 MiB heap worker. Увесь процес уже показував близько 374 MiB; піки й найгірші випадки ще не доведені. Перевищення спільного ліміту через stderr або збій журналу можуть втратити відповідь Claude без автоматичного повтору. Шість зауважень треба опрацювати перед STANDARD; цей вибір не дозволяє реальне застосування чи production. Попередній дозвіл був лише на локальні тести, тому фінальні числа погоджуємо окремо.",
+  "answer": "Затвердити для наступної локальної розробки (рекомендовано)",
+  "proposal": {
+    "path": "plans/GSS_CR03_resource-numbers62_final-owner-choice_PROPOSED_20261014.md",
+    "sha256": "94A58A62A00CF8FDB00CD4173FE3239AEED0A251E08E2B75B50C88BC8DF05971",
+    "bytes": 4019
+  },
+  "acceptedBasis": {
+    "path": "plans/GSS_CR03_resource-bench62_reviewed-basis_20261014.json",
+    "sha256": "A5F0FD06AEFE97D9BD886F718E69E5BC01D9ADFADE70565A18A2F514A3B2F94D",
+    "bytes": 3382
+  },
+  "actualReview": {
+    "path": "diagnostics/GSS_foundation-CR03_static_claude-review-r60-intake_result_20261012.md",
+    "sha256": "3218A5749F1ACCE3ECBFB83F746967F7B695BFA05F067BE68E4D37BDD63A279B",
+    "bytes": 12948
+  },
+  "terminal": {
+    "path": "diagnostics/GSS_foundation-CR03_r60-terminal-verification_20261014.json",
+    "sha256": "7A4C445F59FE2F9A824A8C71BE53916569E265135816DEE486E02F65AB1C6B3D",
+    "bytes": 3722
+  },
+  "disposition": {
+    "path": "plans/GSS_foundation-CR03_INTAKE60_reviewed-disposition_20261014.md",
+    "sha256": "AB245A65DAA39CE418FB78E66FAF6F883F901ED67AF7948A75CFBF7F9C65FE35",
+    "bytes": 5562
+  },
+  "productivity": {
+    "path": "diagnostics/GSS_foundation-CR03_resource-bench62_stage-productivity_20261014.json",
+    "sha256": "668721503D94B2165B32CAE0808099F352995B534219DA2D51E434AFA90F65D6",
+    "bytes": 7839
+  },
+  "policy": {
+    "path": "work/gss-CR03-resource-policy62_20261014.mjs",
+    "sha256": "6D077709BB913B453DCDA1CE0B1F43AD37BA941058EA2853644560260036F4EC",
+    "bytes": 34038
+  },
+  "policyIdBasis": "GSS_CR03_RESPONSE_RESOURCES_V5_PC",
+  "controls": {
+    "originalStdoutBytes": 8388608,
+    "originalStderrBytes": 1048576,
+    "maxPatternHits": 4096,
+    "maxMetadataByteCharge": 1048576,
+    "maxEntryPathBytes": 2048,
+    "publicStdoutBytes": 12582912,
+    "publicStderrBytes": 2097152,
+    "maxCanonicalCopyBytes": 25165824,
+    "maxEnvelopeDepth": 128,
+    "maxEnvelopeNodes": 100000,
+    "workerDeadlineMs": 15000,
+    "terminationGraceMs": 5000,
+    "workerOldGenerationMiB": 256,
+    "workerStackMiB": 4
+  },
+  "finalNumbersApprovedForLocalDevelopment": true,
+  "sharedQuotaIncludingStderrLossAcknowledged": true,
+  "journalPersistenceLossAcknowledged": true,
+  "heapNotWholeProcessLimitAcknowledged": true,
+  "finiteSamplesNotPeakOrUniversalProofAcknowledged": true,
+  "carryForwardBeforeStandard": [
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F5",
+    "F6"
+  ],
+  "gssAuthenticatedConfirmationClaimed": false,
+  "realResponsePolicyActivated": false,
+  "sourceAccepted": false,
+  "standardAccepted": false,
+  "pilotAuthorized": false,
+  "newNativeGrant": false,
+  "privateOrProductionAuthority": false,
+  "gitOrStatusAuthority": false,
+  "consumedGrantReplay": false
+}

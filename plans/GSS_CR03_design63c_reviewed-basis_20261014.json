@@ -1,0 +1,89 @@
+{
+  "scope": "Exact DESIGN63c actual62 accepted basis with mandatory CODE obligations",
+  "actualUtc": "2026-10-14T19:57:52.458Z",
+  "designAccepted": true,
+  "codeAccepted": false,
+  "sourceAccepted": false,
+  "standardAccepted": false,
+  "realPolicyActivated": false,
+  "productSecurityCertified": false,
+  "fullFoundationAccepted": false,
+  "primary": [
+    {
+      "path": "plans/GSS_CR03_resource-fidelity63c_design_PROPOSED_20261014.md",
+      "bytes": 46924,
+      "sha256": "6914805411A4E86EF70DB28B2DF27D16841AD8088E359693A33E145829ED7DA1"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_static_claude-review-r62-intake_run_20261012.json",
+      "bytes": 12776,
+      "sha256": "71476FD158574D35511EE81B00A2E8378743A57759044879749B718FB5E7EF74"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_static_claude-review-r62-intake_result_20261012.md",
+      "bytes": 11601,
+      "sha256": "06713954605B3B5103FCF43A7EE860929A8D7F3C558DE23DD2CB6BFBC41DCE7F"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_static_claude-review-r62-intake_dispatch_20261012.json",
+      "bytes": 615,
+      "sha256": "ED4874615996A5370085579206F3D929859B9FE0D19C7F6D2416217D203CD2A5"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_static_claude-review-r62-intake_manifest_20261012.json",
+      "bytes": 71127,
+      "sha256": "30213B3B72CDA702BA3F8F032DAFB8578E88A8FC471B88401F98DBC98279E2F8"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_static_claude-review-r62-intake_packet_20261012.txt",
+      "bytes": 678864,
+      "sha256": "96D81AF6711BA9D5FF08C58888DED1D4DA6AE8C93FC383613E4DF1010B495111"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_r62-terminal-verification_20261014.json",
+      "bytes": 5192,
+      "sha256": "16C93AAC0182A24B22E90623608023039EF29C9C83E2F52711C37E8A809987AA"
+    },
+    {
+      "path": "diagnostics/GSS_foundation-CR03_r62-original-launcher-closure_20261014.json",
+      "bytes": 696,
+      "sha256": "8441AE2AFDF55B3B619B2346D9222101159C5AF5483CA222E844D4D8CA2A8304"
+    },
+    {
+      "path": "plans/GSS_foundation-CR03_INTAKE62_reviewed-disposition_20261014.md",
+      "bytes": 2992,
+      "sha256": "5210A7E2A708BEE0AA7CDFAFF57EA4BDB60A56C03B53C17CE2774C75BD1122E6"
+    },
+    {
+      "path": "plans/GSS_CR03_escaped-byte-A_owner-decision_20261014.json",
+      "bytes": 4960,
+      "sha256": "F696AD48B4722BA8DC318492C391E7048F626F591C137ED184FD6D13764A88BA"
+    },
+    {
+      "path": "plans/GSS_CR03_resource-numbers62_final-owner-approval_20261014.json",
+      "bytes": 4137,
+      "sha256": "0BBF857CAA66BE07E0697A382E655E73DFA124F626544B1958C317D152224CDD"
+    }
+  ],
+  "mandatoryCodeClarifications": {
+    "path": "plans/GSS_CR03_resource63c_CODE-clarifications_after62_20261014.md",
+    "bytes": 8431,
+    "sha256": "076AA50A9E25EC824715EC2CCC392884E8D854F035A08F89F792D8C5EB7EB0D1"
+  },
+  "mandatoryFindings": [
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "C5",
+    "C6"
+  ],
+  "optionalChosen": [
+    "C7"
+  ],
+  "contextSufficientForDesign": true,
+  "privateWorkerRefusalsIndependentlyVerified": false,
+  "ownerDiagnosticAcknowledgment": "Executor characterization; the owner-facing question disclosed whole-response loss, not separate diagnostic categories.",
+  "conditionalOwnerBoundaryHoldsAtDesignOnly": true,
+  "noReplay": true
+}
