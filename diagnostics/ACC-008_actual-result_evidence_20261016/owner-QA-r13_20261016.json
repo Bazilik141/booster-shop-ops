@@ -1,0 +1,35 @@
+{
+  "task": "ACC-008",
+  "source": "Owner response and three screenshots inspected in conversation; private screenshots not copied or disclosed",
+  "profile_save": {
+    "green_account_updated_alert_visible": true,
+    "profile_edit_form_visible_after_save": true,
+    "cart_heading_and_cart_actions_absent": true,
+    "saved_form_values_visible": true,
+    "raw_redirect_URL_not_captured": true
+  },
+  "reload": {"owner_reports_ok": true, "requested_behavior": "One-use success alert disappears"},
+  "empty_firstname": {
+    "inline_error_visible": true,
+    "field_marked_invalid": true,
+    "success_alert_absent": true,
+    "reload_behavior_not_independently_measured": true
+  },
+  "changed_email": {
+    "owner_submits_success_screenshot_for_requested_change": true,
+    "email_field_differs_between_screenshots": true,
+    "green_account_updated_alert_visible": true,
+    "profile_edit_form_remains_visible": true,
+    "email_values_not_recorded": true
+  },
+  "responsive_live_QA": {
+    "status": "deferred_by_owner",
+    "reason": "Owner declines further checks of the old design because a redesign is planned",
+    "not_a_pass": true,
+    "local_390_768_1280_fixture_checks_remain_separate": true
+  },
+  "address_and_admin_after_r13": "Not separately rerun/reported after this follow-up; prior r11 four-form QA and r15 preservation sequence are retained, other three controllers are unchanged",
+  "privacy": "No screenshot files, customer names, email values, telephone, token URLs, identifiers, credentials or raw custom_field values are included",
+  "G2_status": "Await independent actual-result assessment",
+  "wp3_started": false
+}

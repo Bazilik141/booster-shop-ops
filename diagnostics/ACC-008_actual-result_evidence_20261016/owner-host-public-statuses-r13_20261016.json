@@ -1,0 +1,20 @@
+{
+  "task": "ACC-008",
+  "source": "Owner-supplied hosting curl output after r13; anonymous HTTPS GET, follow redirects, discard bodies",
+  "checks": [
+    {"url":"https://boostershop.website/","http":200,"curl_exit":0,"final_url":"https://boostershop.website/"},
+    {"url":"https://boostershop.website/catalog/Pokemon","http":200,"curl_exit":0,"final_url":"https://boostershop.website/catalog/Pokemon"},
+    {"url":"https://boostershop.website/catalog/Pokemon/Pokemon-booster-box","http":200,"curl_exit":0,"final_url":"https://boostershop.website/catalog/Pokemon/Pokemon-booster-box"},
+    {"url":"https://boostershop.website/product/One-Piece-Boosters-OP-11","http":200,"curl_exit":0,"final_url":"https://boostershop.website/product/One-Piece-Boosters-OP-11"},
+    {"url":"https://boostershop.website/product/figurka-charizard-pokemon-3d-druk","http":200,"curl_exit":0,"final_url":"https://boostershop.website/product/figurka-charizard-pokemon-3d-druk"},
+    {"url":"https://boostershop.website/information/oplata-i-dostavka","http":200,"curl_exit":0,"final_url":"https://boostershop.website/information/oplata-i-dostavka"},
+    {"url":"https://boostershop.website/index.php?route=checkout/cart","http":200,"curl_exit":0,"final_url":"https://boostershop.website/index.php?route=checkout/cart"},
+    {"url":"https://boostershop.website/index.php?route=checkout/checkout","http":200,"curl_exit":0,"final_url":"https://boostershop.website/?route=checkout/cart"}
+  ],
+  "assessment": "8/8 final HTTP200 and curl exit0 from owner hosting route; empty checkout redirects to cart",
+  "limitations": [
+    "HTTP/status checks discard bodies and do not establish visual correctness or absence of PHP signatures inside HTTP200 content.",
+    "Earlier Codex route timeouts/fetch errors remain retained; the owner result supplies a distinct successful route, not a proven timeout root cause.",
+    "No nonempty checkout, order, payment, NP API or live business-data mutation proof."
+  ]
+}

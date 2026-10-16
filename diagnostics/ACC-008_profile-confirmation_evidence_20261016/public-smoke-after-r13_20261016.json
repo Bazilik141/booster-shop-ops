@@ -1,0 +1,64 @@
+{
+  "task": "ACC-008-profile-confirmation",
+  "recorded_utc": "2026-10-16T18:36:23.614599+00:00",
+  "source": "Codex public anonymous HTTPS GET after owner r13 apply",
+  "checks": [
+    {
+      "page": "home",
+      "url": "https://boostershop.website/",
+      "error_type": "TimeoutError"
+    },
+    {
+      "page": "category_top",
+      "url": "https://boostershop.website/catalog/Pokemon",
+      "error_type": "TimeoutError"
+    },
+    {
+      "page": "category_nested",
+      "url": "https://boostershop.website/catalog/Pokemon/Pokemon-booster-box",
+      "status": 200,
+      "final_url": "https://boostershop.website/catalog/Pokemon/Pokemon-booster-box",
+      "content_type": "text/html",
+      "bytes_read": 171139,
+      "body_capped": false,
+      "title": "Бустер бокси Pokémon TCG JP/EN — sealed | Booster Shop",
+      "php_error_signature": false
+    },
+    {
+      "page": "sealed_product",
+      "url": "https://boostershop.website/product/One-Piece-Boosters-OP-11",
+      "error_type": "TimeoutError"
+    },
+    {
+      "page": "3d_product_current_home_link",
+      "url": "https://boostershop.website/product/figurka-charizard-pokemon-3d-druk",
+      "error_type": "TimeoutError"
+    },
+    {
+      "page": "information",
+      "url": "https://boostershop.website/information/oplata-i-dostavka",
+      "error_type": "TimeoutError"
+    },
+    {
+      "page": "cart",
+      "url": "https://boostershop.website/index.php?route=checkout/cart",
+      "error_type": "TimeoutError"
+    },
+    {
+      "page": "checkout_entry",
+      "url": "https://boostershop.website/index.php?route=checkout/checkout",
+      "status": 200,
+      "final_url": "https://boostershop.website/?route=checkout/cart",
+      "content_type": "text/html",
+      "bytes_read": 65991,
+      "body_capped": false,
+      "title": "Мій кошик",
+      "php_error_signature": false
+    }
+  ],
+  "passed": false,
+  "limitations": [
+    "Anonymous HTTP/content-signature checks only; no logged-in profile save or visual/interactive QA.",
+    "Empty checkout may redirect to cart; no nonempty checkout, order or payment proof."
+  ]
+}

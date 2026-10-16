@@ -1,0 +1,33 @@
+{
+  "task": "ACC-008",
+  "round": 11,
+  "request_id": "92653326-9e0a-40eb-8a97-5334faf186aa",
+  "recorded_utc": "2026-10-16T11:57:06.943113+00:00",
+  "status": "source_review_ok_r11_CODE_gateway_only_host_dry_run_required",
+  "original_process_id": 8492,
+  "original_process_closed": true,
+  "original_result_captured": true,
+  "full_actual_verdict_read": true,
+  "review_sha256": "20a86cf9418f4afc3884d687cc0ef07fc17af56e8177105dfb6a770b06aeb853",
+  "packet_sha256": "de7ad63b3a9f1525e8a4f5a56a2bda7130db6169ed53d54c69528ea560bb2c6b",
+  "frozen_inputs_unchanged_before_documentation_update": 137,
+  "git_head_unchanged": true,
+  "git_index_unchanged": true,
+  "patch_sha256": "0b0628010d799cd25011210e60a6e56dd30b369511f3b03dc64b8ce6a9acb122",
+  "actual_model": [
+    "claude-opus-5-5"
+  ],
+  "effort": "high",
+  "isUsingOverage": false,
+  "mandatory_defects_for_this_boundary": [],
+  "exact_verdict_boundary": "CODE runner/admission gateway only; no apply/deploy/G2/WP3 acceptance",
+  "nonblocking_disposition": "Retain theme SQL semantics/source proof, syntactic fixture-mutant limitation, trailing-root-slash and aggregated-error/installer-code nits; no optional-nit-only provider/code round. Any actual host deviation requires independent assessment. Active startups remain unadmitted. Source-only checkout/First15/bootstrap limits remain explicit.",
+  "source_provenance_note": "First 31 files came from narrow owner archives, then were compared to the newer full backup in the render-source-intake evidence; other intake bodies came directly from that verified backup. Subsequent host bytes remain unverified.",
+  "next_action": "Owner uploads exact r11 candidate above public_html, verifies SHA, runs --dry-run from public_html, returns complete bounded output; no source apply yet.",
+  "main_runner_unchanged": true,
+  "old_r7_runner_apply_disabled": true,
+  "r11_CODE_gate_accepted_host_execution_pending": true,
+  "runtime_admission": false,
+  "production_acceptance": false,
+  "wp3_started": false
+}

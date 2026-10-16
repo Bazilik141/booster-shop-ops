@@ -1,0 +1,33 @@
+{
+  "evidence_type": "owner_supplied_sanitized_host_console",
+  "mode": "dry-run",
+  "artifact_sha256": "dfbec3da8b8c2c45ba3e4f1e30cb2fdb7dc5931e1c4de7ee83193a6689296b0e",
+  "sha256_check": "OK",
+  "warnings": [
+    "WARNING: MYSQL_OPT_RECONNECT is deprecated and will be removed in a future version."
+  ],
+  "task": "ACC-008",
+  "cwd": "/home2/boosters/public_html",
+  "time": "2026-10-16T19:14:51+00:00",
+  "php_version": "8.0.30",
+  "host_payload_lint": "catalog/controller/account/address.php:ok",
+  "runtime_sources": "exact_reviewed_sources_and_no_generated_ocmod",
+  "cache_dir_config_relative": "../ocartdata/storage/cache",
+  "admin_cache_dir_config_relative": "../ocartdata/storage/cache",
+  "config_admission": "literal_nonpersistent_same_target_and_paths",
+  "event_rows_scanned": "112",
+  "active_startups": "[]",
+  "metadata_summary": {
+    "custom_fields": 27,
+    "disabled_custom_fields": 27,
+    "custom_field_groups": 27,
+    "active_events": 112,
+    "active_startups": 0,
+    "relevant_theme_overrides": 0
+  },
+  "nonpersonal_metadata_sha256": "d20615b587433ccb0c6c80f99b58484f63b5d537f2187f4bf3c12fa048c83fff",
+  "db_preflight": "read_only_ok",
+  "dry_run": "ok",
+  "files_pending": "1",
+  "done": "ok"
+}

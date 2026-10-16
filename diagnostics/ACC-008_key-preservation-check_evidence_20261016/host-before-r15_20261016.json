@@ -1,0 +1,27 @@
+{
+  "evidence_type": "owner_supplied_sanitized_host_console",
+  "task": "ACC-008-key-check",
+  "mode": "before",
+  "time": "2026-10-16T18:22:48+00:00",
+  "artifact": "patches/ACC-008_key-preservation-check-r15_20261016.php",
+  "artifact_sha256": "fc46c2234b07c76be48e0a7c569d88db22d57315673ece1574f7d246bdac3ac0",
+  "prior_owner_console": {"sha256_check": "OK", "php_lint": "No syntax errors detected"},
+  "php_version": "8.0.30",
+  "source_variant": "r11",
+  "cache_dir_config_relative": "../ocartdata/storage/cache",
+  "admin_cache_dir_config_relative": "../ocartdata/storage/cache",
+  "config_admission": "literal_nonpersistent_same_target_and_paths",
+  "warning": "MYSQL_OPT_RECONNECT is deprecated and will be removed in a future version.",
+  "db_access": "SELECT_ONLY",
+  "private_checkpoint_modes": "checked_0700_0600",
+  "private_checkpoint": "saved_outside_public_html",
+  "address_rows": 3,
+  "before": "ok",
+  "done": "ok",
+  "limitations": [
+    "Baseline only; no after comparison or four-form save report received.",
+    "No email, customer identifiers, private checkpoint, names or custom_field values ingested.",
+    "r11 source identities observed; profile-r13 deployment and QA remain pending.",
+    "No G2 or WP3 acceptance."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "task": "ACC-008-profile-confirmation",
+  "source": "Web tool open after incomplete direct anonymous HTTPS smoke",
+  "purpose": "Resolve six direct-request timeouts using an independent fetch channel",
+  "checks": [
+    {"url":"https://boostershop.website/","tool_result":"Failed to fetch: (502) Bad Gateway"},
+    {"url":"https://boostershop.website/catalog/Pokemon","tool_result":"Failed to fetch: (502) Bad Gateway"},
+    {"url":"https://boostershop.website/product/One-Piece-Boosters-OP-11","tool_result":"Failed to fetch: (502) Bad Gateway"},
+    {"url":"https://boostershop.website/product/figurka-charizard-pokemon-3d-druk","tool_result":"URL is not accessible via this tool"},
+    {"url":"https://boostershop.website/information/oplata-i-dostavka","tool_result":"Failed to fetch: (502) Bad Gateway"},
+    {"url":"https://boostershop.website/index.php?route=checkout/cart","tool_result":"URL is not accessible via this tool"}
+  ],
+  "assessment": "Public smoke remains incomplete. Tool fetch errors do not establish an origin HTTP 502 or a causal link to r13. No automatic retries or rollback.",
+  "next": "Owner browser QA and bounded owner-host anonymous URL status checks; coherent actual-result review only after evidence assessment."
+}

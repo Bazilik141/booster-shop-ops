@@ -1,0 +1,34 @@
+{
+  "task": "ACC-008-key-check",
+  "round": 15,
+  "request_id": "7bbfa90a-b23b-4632-8140-995b22f5db3c",
+  "closed_utc": "2026-10-16T13:23:49.644600+00:00",
+  "status": "source_review_ok_owner_only_diagnostic_CODE",
+  "full_actual_verdict_read": true,
+  "frozen_inputs_unchanged_before_documentation_update": 27,
+  "git_head_unchanged": true,
+  "git_index_unchanged": true,
+  "original_process_id": 36460,
+  "original_controlled_session": 77082,
+  "original_process_exit": 0,
+  "original_result_captured": true,
+  "patch_sha256": "fc46c2234b07c76be48e0a7c569d88db22d57315673ece1574f7d246bdac3ac0",
+  "review_sha256": "413e8c65d97db71e3274f8c104a355ce3f4d24e616f162b3313f13d1984c715c",
+  "packet_sha256": "9539aac20c91150a9f8e4472338efe02e1e97b6caedc15007043640bbca56f57",
+  "actual_model": [
+    "claude-opus-5-5"
+  ],
+  "effort": "high",
+  "isUsingOverage": false,
+  "mandatory_CODE_findings": [],
+  "remaining_gates": [
+    "Owner native before/four named form saves/after with name witness and key counts",
+    "Address coverage: one address or attribution to saved keyholding address",
+    "Owner r13 apply receipt and QA still missing",
+    "Coherent actual-result/G2 assessment"
+  ],
+  "optional_notes": "Address attribution, cleanup failure after UNCHANGED without done, empty private directory, additional mutants/transaction, Bash/ASCII email, CLI/web numeric settings. No optional-only code/provider round.",
+  "host_executed": false,
+  "G2_accepted": false,
+  "WP3_started": false
+}

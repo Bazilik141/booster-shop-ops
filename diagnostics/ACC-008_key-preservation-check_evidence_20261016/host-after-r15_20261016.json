@@ -1,0 +1,52 @@
+{
+  "evidence_type": "owner_supplied_sanitized_host_console_and_form_confirmation",
+  "task": "ACC-008-key-check",
+  "mode": "after",
+  "time": "2026-10-16T18:26:46+00:00",
+  "before_time": "2026-10-16T18:22:48+00:00",
+  "phase_duration_seconds": 238,
+  "artifact_sha256_check": "OK",
+  "artifact_sha256": "fc46c2234b07c76be48e0a7c569d88db22d57315673ece1574f7d246bdac3ac0",
+  "php_version": "8.0.30",
+  "source_variant": "r11",
+  "cache_dir_config_relative": "../ocartdata/storage/cache",
+  "admin_cache_dir_config_relative": "../ocartdata/storage/cache",
+  "config_admission": "literal_nonpersistent_same_target_and_paths",
+  "private_checkpoint_modes": "checked_0700_0600",
+  "warning": "MYSQL_OPT_RECONNECT is deprecated and will be removed in a future version.",
+  "db_access": "SELECT_ONLY",
+  "customer_keys_before": 0,
+  "customer_keys_after": 0,
+  "address_rows_before": 3,
+  "address_rows_after": 3,
+  "service_keys": {
+    "bs_first15_pending": {"present_rows": 0, "preserved_rows": 0},
+    "bs_np_v1": {"present_rows": 3, "preserved_rows": 3},
+    "rd13_receiver_middlename": {"present_rows": 0, "preserved_rows": 0}
+  },
+  "existing_keys": 3,
+  "customer_name_changed": "yes",
+  "address_rows_name_changed": 3,
+  "result": "UNCHANGED",
+  "cleanup": "ok",
+  "done": "ok",
+  "exit_status": {"directly_printed": false, "accepted_code_success_branch_returns": 0},
+  "owner_form_saves_confirmed": {
+    "storefront_profile": true,
+    "storefront_all_three_addresses": true,
+    "admin_customer": true,
+    "admin_all_three_addresses": true
+  },
+  "bounded_assessment": {
+    "present_address_key_values_preserved": true,
+    "all_address_rows_changed_names": true,
+    "customer_existing_key_coverage": false,
+    "absent_service_key_coverage": false,
+    "individual_intermediate_save_snapshots": false,
+    "cleanup_reported_by_exact_helper": true,
+    "profile_r13_apply_or_QA_proven": false,
+    "G2_complete": false,
+    "wp3_started": false,
+    "actual_result_review": "Await coherent r13 owner apply and QA results; do not replay consumed CODE requests."
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "task": "ACC-008-WP2",
+  "round": 17,
+  "stage": "ACTUAL_RESULT_EVIDENCE_REVIEW",
+  "request_id": "dec3e0a2-fc4c-4a36-9e47-1ac83358f026",
+  "closed_utc": "2026-10-16T19:27:03.953767+00:00",
+  "status": "actual_result_review_OK_bounded_WP2_technical_evidence_for_G2",
+  "full_actual_verdict_read": true,
+  "frozen_inputs_unchanged_before_documentation_update": 50,
+  "git_head_unchanged": true,
+  "git_index_unchanged": true,
+  "original_process_id": 372,
+  "original_process_exit": 0,
+  "original_controlled_session_id": 83003,
+  "original_result_captured": true,
+  "latest_applied_patch_sha256": "dfbec3da8b8c2c45ba3e4f1e30cb2fdb7dc5931e1c4de7ee83193a6689296b0e",
+  "review_sha256": "f3469afb6a80c12d205d05b5904d8c207102792e8aaca8a94f45d0db8f03fb85",
+  "packet_sha256": "6ef075c4ef7a5ca2c13011e40fe7c2aebc4ad853071e9ec61e5dc54822f76cf3",
+  "actual_model": [
+    "claude-opus-5-5"
+  ],
+  "effort": "high",
+  "isUsingOverage": false,
+  "mandatory_findings": [],
+  "owner_latest_QA": "QA-ok",
+  "bounded_acceptance": [
+    "Owner-deployed exact r11/r13/r16 set with native PHP8.0.30 lint/execution",
+    "Existing bs_np_v1 final-state equality on3 selected addresses across owner-confirmed four-form sequence",
+    "Owner-accepted main data/isolation/admin behavior and profile/address one-use confirmation",
+    "Current post-r16 eight-page final200/basic-content-signature smoke"
+  ],
+  "limits": [
+    "Live responsive widths explicitly deferred by owner, not passed",
+    "No live customer keys or absent-service/unknown-key proof, per-intermediate-write or universal concurrency proof",
+    "No universal NP/auth/activity/shared-writer/nonempty-checkout/order/payment proof",
+    "Private dumps and source-runner self-delete absence not independently verified"
+  ],
+  "external_status_writes": false,
+  "owner_G2_recording_and_WP3a_permission": "Separate owner decision; not granted by review",
+  "wp3_started": false,
+  "source_or_test_changes_in_this_stage": false,
+  "documentation_only_updates_after_closure": true,
+  "consumed_request_never_replay": true
+}

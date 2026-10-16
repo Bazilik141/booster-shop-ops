@@ -1,0 +1,12 @@
+{
+  "task": "ACC-008-address-confirmation",
+  "source": "Direct owner response after supplying r16 hosting receipt",
+  "owner_statement": "QA-ok",
+  "accepted_requested_QA_scope": "Existing saved-address name-only save uses normal green confirmation without cart actions, keeps same saved address/data/NP selection; reload removes the alert",
+  "step_by_step_details_supplied": false,
+  "raw_URL_and_redirect_timing_not_independently_captured": true,
+  "empty_firstname_after_r16_not_separately_reported": true,
+  "responsive_live_QA": "Deferred by earlier explicit owner decision; not requested again or marked passed",
+  "final_actual_result_review": "Pending",
+  "wp3_started": false
+}

@@ -1,0 +1,1123 @@
+{
+  "task": "ACC-008",
+  "stage": "r11_owner_host_dry_run",
+  "recorded_utc": "2026-10-16T12:06:01.574403+00:00",
+  "source": "owner-provided terminal attachment",
+  "attachment_sha256": "5f7b41525de4e7f2f90c4845f268ce1eb8416804afb8d522203545b61dcae037",
+  "runner_sha256_verified": "0b0628010d799cd25011210e60a6e56dd30b369511f3b03dc64b8ce6a9acb122",
+  "host_time_utc": "2026-10-16T12:02:27+00:00",
+  "cli_php_version": "8.0.30",
+  "host_payload_lints_passed": 5,
+  "source_count_attested_by_reviewed_runner": 101,
+  "runtime_sources": "exact_reviewed_sources_and_no_generated_ocmod",
+  "config_admission": "literal_nonpersistent_same_target_and_paths",
+  "catalog_cache_config_relative": "../ocartdata/storage/cache",
+  "admin_cache_config_relative": "../ocartdata/storage/cache",
+  "event_rows_scanned": 112,
+  "metadata": {
+    "custom_fields": [
+      {
+        "custom_field_id": 1,
+        "location": "account",
+        "type": "select",
+        "status": 0
+      },
+      {
+        "custom_field_id": 2,
+        "location": "account",
+        "type": "radio",
+        "status": 0
+      },
+      {
+        "custom_field_id": 3,
+        "location": "account",
+        "type": "checkbox",
+        "status": 0
+      },
+      {
+        "custom_field_id": 4,
+        "location": "account",
+        "type": "text",
+        "status": 0
+      },
+      {
+        "custom_field_id": 5,
+        "location": "account",
+        "type": "textarea",
+        "status": 0
+      },
+      {
+        "custom_field_id": 6,
+        "location": "account",
+        "type": "file",
+        "status": 0
+      },
+      {
+        "custom_field_id": 7,
+        "location": "account",
+        "type": "date",
+        "status": 0
+      },
+      {
+        "custom_field_id": 8,
+        "location": "account",
+        "type": "time",
+        "status": 0
+      },
+      {
+        "custom_field_id": 9,
+        "location": "account",
+        "type": "datetime",
+        "status": 0
+      },
+      {
+        "custom_field_id": 11,
+        "location": "address",
+        "type": "checkbox",
+        "status": 0
+      },
+      {
+        "custom_field_id": 12,
+        "location": "address",
+        "type": "time",
+        "status": 0
+      },
+      {
+        "custom_field_id": 13,
+        "location": "address",
+        "type": "date",
+        "status": 0
+      },
+      {
+        "custom_field_id": 14,
+        "location": "address",
+        "type": "datetime",
+        "status": 0
+      },
+      {
+        "custom_field_id": 15,
+        "location": "address",
+        "type": "file",
+        "status": 0
+      },
+      {
+        "custom_field_id": 16,
+        "location": "address",
+        "type": "radio",
+        "status": 0
+      },
+      {
+        "custom_field_id": 17,
+        "location": "address",
+        "type": "select",
+        "status": 0
+      },
+      {
+        "custom_field_id": 18,
+        "location": "address",
+        "type": "text",
+        "status": 0
+      },
+      {
+        "custom_field_id": 19,
+        "location": "address",
+        "type": "textarea",
+        "status": 0
+      },
+      {
+        "custom_field_id": 20,
+        "location": "affiliate",
+        "type": "checkbox",
+        "status": 0
+      },
+      {
+        "custom_field_id": 21,
+        "location": "affiliate",
+        "type": "date",
+        "status": 0
+      },
+      {
+        "custom_field_id": 22,
+        "location": "affiliate",
+        "type": "datetime",
+        "status": 0
+      },
+      {
+        "custom_field_id": 23,
+        "location": "affiliate",
+        "type": "file",
+        "status": 0
+      },
+      {
+        "custom_field_id": 24,
+        "location": "affiliate",
+        "type": "radio",
+        "status": 0
+      },
+      {
+        "custom_field_id": 25,
+        "location": "affiliate",
+        "type": "select",
+        "status": 0
+      },
+      {
+        "custom_field_id": 26,
+        "location": "affiliate",
+        "type": "text",
+        "status": 0
+      },
+      {
+        "custom_field_id": 27,
+        "location": "affiliate",
+        "type": "textarea",
+        "status": 0
+      },
+      {
+        "custom_field_id": 28,
+        "location": "affiliate",
+        "type": "time",
+        "status": 0
+      }
+    ],
+    "custom_field_groups": [
+      {
+        "custom_field_id": 1,
+        "customer_group_id": 1,
+        "required": 1
+      },
+      {
+        "custom_field_id": 2,
+        "customer_group_id": 1,
+        "required": 1
+      },
+      {
+        "custom_field_id": 3,
+        "customer_group_id": 1,
+        "required": 1
+      },
+      {
+        "custom_field_id": 4,
+        "customer_group_id": 1,
+        "required": 1
+      },
+      {
+        "custom_field_id": 5,
+        "customer_group_id": 1,
+        "required": 1
+      },
+      {
+        "custom_field_id": 6,
+        "customer_group_id": 1,
+        "required": 1
+      },
+      {
+        "custom_field_id": 7,
+        "customer_group_id": 1,
+        "required": 1
+      },
+      {
+        "custom_field_id": 8,
+        "customer_group_id": 1,
+        "required": 1
+      },
+      {
+        "custom_field_id": 9,
+        "customer_group_id": 1,
+        "required": 1
+      },
+      {
+        "custom_field_id": 11,
+        "customer_group_id": 1,
+        "required": 1
+      },
+      {
+        "custom_field_id": 12,
+        "customer_group_id": 1,
+        "required": 1
+      },
+      {
+        "custom_field_id": 13,
+        "customer_group_id": 1,
+        "required": 1
+      },
+      {
+        "custom_field_id": 14,
+        "customer_group_id": 1,
+        "required": 1
+      },
+      {
+        "custom_field_id": 15,
+        "customer_group_id": 1,
+        "required": 1
+      },
+      {
+        "custom_field_id": 16,
+        "customer_group_id": 1,
+        "required": 1
+      },
+      {
+        "custom_field_id": 17,
+        "customer_group_id": 1,
+        "required": 1
+      },
+      {
+        "custom_field_id": 18,
+        "customer_group_id": 1,
+        "required": 1
+      },
+      {
+        "custom_field_id": 19,
+        "customer_group_id": 1,
+        "required": 1
+      },
+      {
+        "custom_field_id": 20,
+        "customer_group_id": 1,
+        "required": 1
+      },
+      {
+        "custom_field_id": 21,
+        "customer_group_id": 1,
+        "required": 1
+      },
+      {
+        "custom_field_id": 22,
+        "customer_group_id": 1,
+        "required": 1
+      },
+      {
+        "custom_field_id": 23,
+        "customer_group_id": 1,
+        "required": 1
+      },
+      {
+        "custom_field_id": 24,
+        "customer_group_id": 1,
+        "required": 1
+      },
+      {
+        "custom_field_id": 25,
+        "customer_group_id": 1,
+        "required": 1
+      },
+      {
+        "custom_field_id": 26,
+        "customer_group_id": 1,
+        "required": 1
+      },
+      {
+        "custom_field_id": 27,
+        "customer_group_id": 1,
+        "required": 1
+      },
+      {
+        "custom_field_id": 28,
+        "customer_group_id": 1,
+        "required": 1
+      }
+    ],
+    "event_inventory_scope": "all_php_truthy_active_raw_inventory_capped",
+    "active_events": [
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "admin/controller/sale/order.call/after",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventAdminControllerSaleOrderAddHistoryAfter",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "admin/view/sale/order_info/before",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventAdminViewSaleOrderInfoBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/controller/account/login.login/after",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogControllerAccountLoginLoginAfter",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/controller/account/newsletter.save/after",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogControllerAccountNewsletterSaveAfter",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/controller/account/register.register/after",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogControllerAccountRegisterRegisterAfter",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/controller/checkout/cart.add/after",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogControllerCheckoutCartAddAfter",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/controller/checkout/payment_method.save/after",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewCheckoutPaymentMethodSaveAfter",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/controller/checkout/register.save/after",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogControllerCheckoutRegisterSaveAfter",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/controller/checkout/shipping_method.save/after",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewCheckoutShippingMethodSaveAfter",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/controller/checkout/success/before",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogControllerCheckoutSuccessBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/controller/extension/opencart/module/bestseller/after",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewExtensionOpencartModuleBestsellerAfter",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/controller/extension/opencart/module/featured/after",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewExtensionOpencartModuleFeaturedAfter",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/controller/extension/opencart/module/latest/after",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewExtensionOpencartModuleLatestAfter",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/controller/extension/opencart/module/special/after",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewExtensionOpencartModuleSpecialAfter",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/controller/information/contact.send/after",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogControllerInformationContactSendAfter",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/view/account/account/before",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewAccountAccountBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/view/account/download/before",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewAccountDownloadBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/view/account/order_info/before",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewAccountOrderInfoBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/view/account/wishlist_list/before",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewAccountWishlistListBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/view/account/wishlist/before",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewAccountWishlistBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/view/checkout/cart_info/before",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewCheckoutCartInfoBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/view/checkout/cart_list/before",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewCheckoutCartListBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/view/checkout/cart/before",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewCheckoutCartBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/view/checkout/checkout/before",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewCheckoutCheckoutBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/view/checkout/confirm/before",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewCheckoutConfirmBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/view/checkout/payment_method/before",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewCheckoutPaymentMethodBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/view/checkout/register/before",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewCheckoutRegisterBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/view/checkout/shipping_method/before",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewCheckoutShippingMethodBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/view/common/cart/before",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewCheckoutCartInfoBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/view/common/header/before",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewCommonHeaderBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/view/common/success/before",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewAccountSuccessBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/view/common/success/before",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewCheckoutSuccessBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/view/common/success/before",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewInformationContactSuccessBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/view/product/category/before",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewProductCategoryBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/view/product/compare/before",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewProductCompareBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/view/product/manufacturer_info/before",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewProductManufacturerInfoBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/view/product/product/before",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewProductProductBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/view/product/search/before",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewProductSearchBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/view/product/special/before",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewProductSpecialBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "catalog/view/product/thumb/before",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewProductThumbBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "captcha_ps_google_recaptcha",
+        "trigger": "admin/controller/common/login.login/after",
+        "action": "extension/ps_google_recaptcha/captcha/ps_google_recaptcha.eventAdminControllerCommonLoginLoginAfter",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "captcha_ps_google_recaptcha",
+        "trigger": "admin/view/common/header/before",
+        "action": "extension/ps_google_recaptcha/captcha/ps_google_recaptcha.eventAdminViewCommonHeaderBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "captcha_ps_google_recaptcha",
+        "trigger": "admin/view/common/login/before",
+        "action": "extension/ps_google_recaptcha/captcha/ps_google_recaptcha.eventAdminViewCommonLoginBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "captcha_ps_google_recaptcha",
+        "trigger": "admin/view/setting/setting/before",
+        "action": "extension/ps_google_recaptcha/captcha/ps_google_recaptcha.eventAdminViewSettingSettingBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "captcha_ps_google_recaptcha",
+        "trigger": "catalog/controller/account/forgotten.confirm/after",
+        "action": "extension/ps_google_recaptcha/captcha/ps_google_recaptcha.eventCatalogControllerAccountForgottenConfirmAfter",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "captcha_ps_google_recaptcha",
+        "trigger": "catalog/controller/account/login.login/after",
+        "action": "extension/ps_google_recaptcha/captcha/ps_google_recaptcha.eventCatalogControllerAccountLoginLoginAfter",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "captcha_ps_google_recaptcha",
+        "trigger": "catalog/view/account/forgotten/before",
+        "action": "extension/ps_google_recaptcha/captcha/ps_google_recaptcha.eventCatalogViewAccountForgottenBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "captcha_ps_google_recaptcha",
+        "trigger": "catalog/view/account/login/before",
+        "action": "extension/ps_google_recaptcha/captcha/ps_google_recaptcha.eventCatalogViewAccountLoginBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "captcha_ps_google_recaptcha",
+        "trigger": "catalog/view/account/register/before",
+        "action": "extension/ps_google_recaptcha/captcha/ps_google_recaptcha.eventGoogleRecaptchaV3AndV2InivisibleButton",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "captcha_ps_google_recaptcha",
+        "trigger": "catalog/view/account/returns_form/before",
+        "action": "extension/ps_google_recaptcha/captcha/ps_google_recaptcha.eventGoogleRecaptchaV3AndV2InivisibleButton",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "captcha_ps_google_recaptcha",
+        "trigger": "catalog/view/checkout/register/before",
+        "action": "extension/ps_google_recaptcha/captcha/ps_google_recaptcha.eventCatalogViewCheckoutRegisterBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "captcha_ps_google_recaptcha",
+        "trigger": "catalog/view/checkout/register/before",
+        "action": "extension/ps_google_recaptcha/captcha/ps_google_recaptcha.eventGoogleRecaptchaV3AndV2InivisibleButton",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "captcha_ps_google_recaptcha",
+        "trigger": "catalog/view/cms/comment/before",
+        "action": "extension/ps_google_recaptcha/captcha/ps_google_recaptcha.eventCatalogViewCmsCommentBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "captcha_ps_google_recaptcha",
+        "trigger": "catalog/view/cms/comment/before",
+        "action": "extension/ps_google_recaptcha/captcha/ps_google_recaptcha.eventGoogleRecaptchaV3AndV2InivisibleButton",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "captcha_ps_google_recaptcha",
+        "trigger": "catalog/view/common/header/before",
+        "action": "extension/ps_google_recaptcha/captcha/ps_google_recaptcha.eventCatalogViewCommonHeaderBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "captcha_ps_google_recaptcha",
+        "trigger": "catalog/view/information/contact/before",
+        "action": "extension/ps_google_recaptcha/captcha/ps_google_recaptcha.eventGoogleRecaptchaV3AndV2InivisibleButton",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "captcha_ps_google_recaptcha",
+        "trigger": "catalog/view/product/review/before",
+        "action": "extension/ps_google_recaptcha/captcha/ps_google_recaptcha.eventCatalogViewProductReviewBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "captcha_ps_google_recaptcha",
+        "trigger": "catalog/view/product/review/before",
+        "action": "extension/ps_google_recaptcha/captcha/ps_google_recaptcha.eventGoogleRecaptchaV3AndV2InivisibleButton",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "module_ps_live_search",
+        "trigger": "catalog/view/common/header/before",
+        "action": "extension/ps_live_search/module/ps_live_search.eventCatalogViewCommonHeaderBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "module_ps_live_search",
+        "trigger": "catalog/view/common/search/before",
+        "action": "extension/ps_live_search/module/ps_live_search.eventCatalogViewCommonSearchBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "module_ps_product_category_filter",
+        "trigger": "admin/model/catalog/product.editProduct/after",
+        "action": "extension/ps_product_category_filter/module/ps_product_category_filter.eventAdminModelCatalogProductEditProductAfter",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "module_ps_product_category_filter",
+        "trigger": "admin/view/catalog/category_form/before",
+        "action": "extension/ps_product_category_filter/module/ps_product_category_filter.eventAdminViewCatalogCategoryFormBefore",
+        "status": 1,
+        "sort_order": 0
+      },
+      {
+        "code": "activity_address_add",
+        "trigger": "catalog/model/account/address.addAddress/after",
+        "action": "event/activity.addAddress",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "activity_address_delete",
+        "trigger": "catalog/model/account/address.deleteAddress/after",
+        "action": "event/activity.deleteAddress",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "activity_address_edit",
+        "trigger": "catalog/model/account/address.editAddress/after",
+        "action": "event/activity.editAddress",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "activity_affiliate_add",
+        "trigger": "catalog/model/account/affiliate.addAffiliate/after",
+        "action": "event/activity.addAffiliate",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "activity_affiliate_edit",
+        "trigger": "catalog/model/account/affiliate.editAffiliate/after",
+        "action": "event/activity.editAffiliate",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "activity_customer_add",
+        "trigger": "catalog/model/account/customer.addCustomer/after",
+        "action": "event/activity.addCustomer",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "activity_customer_edit",
+        "trigger": "catalog/model/account/customer.editCustomer/after",
+        "action": "event/activity.editCustomer",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "activity_customer_forgotten",
+        "trigger": "catalog/model/account/customer.addToken/after",
+        "action": "event/activity.forgotten",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "activity_customer_login",
+        "trigger": "catalog/model/account/customer.deleteLoginAttempts/after",
+        "action": "event/activity.login",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "activity_customer_password",
+        "trigger": "catalog/model/account/customer.editPassword/after",
+        "action": "event/activity.editPassword",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "activity_customer_transaction",
+        "trigger": "catalog/model/account/customer.addTransaction/after",
+        "action": "event/activity.addTransaction",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "activity_order_add",
+        "trigger": "catalog/model/checkout/order.addHistory/before",
+        "action": "event/activity.addHistory",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "activity_return_add",
+        "trigger": "catalog/model/account/returns.addReturn/after",
+        "action": "event/activity.addReturn",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "admin_currency_add",
+        "trigger": "admin/model/localisation/currency.addCurrency/after",
+        "action": "event/currency",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "admin_currency_edit",
+        "trigger": "admin/model/localisation/currency.editCurrency/after",
+        "action": "event/currency",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "admin_currency_setting",
+        "trigger": "admin/model/setting/setting.editSetting/after",
+        "action": "event/currency",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "admin_mail_affiliate_approve",
+        "trigger": "admin/model/customer/customer_approval.approveAffiliate/after",
+        "action": "mail/affiliate.approve",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "admin_mail_affiliate_deny",
+        "trigger": "admin/model/customer/customer_approval.denyAffiliate/after",
+        "action": "mail/affiliate.deny",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "admin_mail_customer_approve",
+        "trigger": "admin/model/customer/customer_approval.approveCustomer/after",
+        "action": "mail/customer.approve",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "admin_mail_customer_deny",
+        "trigger": "admin/model/customer/customer_approval.denyCustomer/after",
+        "action": "mail/customer.deny",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "admin_mail_customer_transaction",
+        "trigger": "admin/model/customer/customer.addTransaction/after",
+        "action": "mail/transaction",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "admin_mail_gdpr",
+        "trigger": "admin/model/customer/gdpr.editStatus/after",
+        "action": "mail/gdpr",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "admin_mail_return",
+        "trigger": "admin/model/sale/returns.addHistory/after",
+        "action": "mail/returns",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "admin_mail_reward",
+        "trigger": "admin/model/customer/customer.addReward/after",
+        "action": "mail/reward",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "admin_mail_user_authorize",
+        "trigger": "admin/controller/common/authorize.send/after",
+        "action": "mail/authorize",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "admin_mail_user_authorize_reset",
+        "trigger": "admin/model/user/user.addToken/after",
+        "action": "mail/authorize.reset",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "admin_mail_user_forgotten",
+        "trigger": "admin/model/user/user.addToken/after",
+        "action": "mail/forgotten",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "mail_affiliate_add",
+        "trigger": "catalog/model/account/affiliate.addAffiliate/after",
+        "action": "mail/affiliate",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "mail_affiliate_alert",
+        "trigger": "catalog/model/account/affiliate.addAffiliate/after",
+        "action": "mail/affiliate.alert",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "mail_customer_add",
+        "trigger": "catalog/model/account/customer.addCustomer/after",
+        "action": "mail/register",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "mail_customer_alert",
+        "trigger": "catalog/model/account/customer.addCustomer/after",
+        "action": "mail/register.alert",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "mail_customer_authorize",
+        "trigger": "catalog/controller/account/authorize.send/after",
+        "action": "mail/authorize",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "mail_customer_authorize_reset",
+        "trigger": "catalog/model/account/customer.addToken/after",
+        "action": "mail/authorize.reset",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "mail_customer_forgotten",
+        "trigger": "catalog/model/account/customer.addToken/after",
+        "action": "mail/forgotten",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "mail_customer_transaction",
+        "trigger": "catalog/model/account/customer.addTransaction/after",
+        "action": "mail/transaction",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "mail_gdpr",
+        "trigger": "catalog/model/account/gdpr.addGdpr/after",
+        "action": "mail/gdpr",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "mail_gdpr_delete",
+        "trigger": "catalog/model/account/gdpr.editStatus/after",
+        "action": "mail/gdpr.remove",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "mail_order",
+        "trigger": "catalog/model/checkout/order.addHistory/before",
+        "action": "mail/order",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "mail_order_alert",
+        "trigger": "catalog/model/checkout/order.addHistory/before",
+        "action": "mail/order.alert",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "mail_review",
+        "trigger": "catalog/model/catalog/review.addReview/after",
+        "action": "mail/review",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "mail_subscription",
+        "trigger": "catalog/model/checkout/subscription.addSubscription/after",
+        "action": "mail/subscription",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "statistics_order_history",
+        "trigger": "catalog/model/checkout/order.addHistory/before",
+        "action": "event/statistics.addHistory",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "statistics_return_add",
+        "trigger": "catalog/model/account/returns.addReturn/after",
+        "action": "event/statistics.addReturn",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "statistics_return_delete",
+        "trigger": "admin/model/sale/returns.deleteReturn/after",
+        "action": "event/statistics.deleteReturn",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "statistics_review_add",
+        "trigger": "catalog/model/catalog/review.addReview/after",
+        "action": "event/statistics.addReview",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "telegram_notification",
+        "trigger": "catalog/model/checkout/order/addHistory/after",
+        "action": "extension/telegram_notify/event/telegram.sendNotification",
+        "status": 1,
+        "sort_order": 1
+      },
+      {
+        "code": "pinta_nova_poshta_admin_controller_sale_order_after",
+        "trigger": "admin/view/sale/order_info/after",
+        "action": "extension/PintaNovaPoshtaCod/payment/pinta_nova_poshta_cod.alterOrderAddedBtn",
+        "status": 1,
+        "sort_order": 99
+      },
+      {
+        "code": "pinta_nova_poshta_controller_checkout_shipping_address_after",
+        "trigger": "catalog/controller/checkout/shipping_address.save/after",
+        "action": "extension/PintaNovaPoshtaCod/payment/pinta_nova_poshta_cod.alterRedirectShippingAddressSave",
+        "status": 1,
+        "sort_order": 99
+      },
+      {
+        "code": "pinta_nova_poshta_view_checkout_register_after",
+        "trigger": "catalog/controller/checkout/register/after",
+        "action": "extension/PintaNovaPoshtaCod/payment/pinta_nova_poshta_cod.alterShippingAddressRegister",
+        "status": 1,
+        "sort_order": 99
+      },
+      {
+        "code": "pinta_nova_poshta_view_checkout_shipping_address_after",
+        "trigger": "catalog/controller/checkout/shipping_address/after",
+        "action": "extension/PintaNovaPoshtaCod/payment/pinta_nova_poshta_cod.alterShippingAddress",
+        "status": 1,
+        "sort_order": 99
+      }
+    ],
+    "active_startups": [],
+    "relevant_theme_overrides": []
+  },
+  "checks": {
+    "checksum_matches_reviewed_artifact": true,
+    "all_expected_host_gates_match_actual_r11_checklist": true,
+    "active_event_multiset_including_status_exact": true,
+    "custom_field_and_group_metadata_exact": true,
+    "active_startups_empty": true,
+    "relevant_theme_overrides_empty": true,
+    "files_pending": 9,
+    "dry_run": "ok",
+    "done": "ok"
+  },
+  "nonfatal_warning": "MYSQL_OPT_RECONNECT deprecation",
+  "proof_boundary": "Successful owner-host read-only admission and PHP8.0.30 payload lint; no source apply, DB mutation, cache cleanup, browser QA, G2 completion or WP3 acceptance.",
+  "next_dependency": "Owner-held fresh DB dump, owner-run source apply/cache cleanup, apply output and owner QA."
+}

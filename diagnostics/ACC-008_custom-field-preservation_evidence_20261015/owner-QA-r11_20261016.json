@@ -1,0 +1,23 @@
+{
+  "task": "ACC-008",
+  "recorded_utc": "2026-10-16T12:33:06.495367+00:00",
+  "source": "Direct owner numbered QA report and private screenshot",
+  "owner_reported": {
+    "profile_data_save": "working_with_wrong_cart_confirmation",
+    "profile_name_change_does_not_change_saved_address": "confirmed",
+    "address_recipient_name_change_does_not_change_profile": "confirmed",
+    "checkout_temporary_recipient_does_not_overwrite_persistent_customer": "confirmed",
+    "admin_customer_edits_persist_and_appear_on_storefront": "confirmed",
+    "overall": "positive_except_profile_cart_toast"
+  },
+  "open_defect": "Account-update success displayed with cart heading/actions; owner confirms cart remains empty.",
+  "not_provided": [
+    "raw custom_field before/after comparison",
+    "explicit all NP delivery variants",
+    "all viewport sizes",
+    "activity row proof",
+    "cross-customer authorization test"
+  ],
+  "privacy": "Private screenshot not copied or supplied to provider; no personal form values retained here.",
+  "gate": "G2 pending follow-up; WP3 unstarted"
+}

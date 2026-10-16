@@ -34,3 +34,8 @@ patches/RD-25-WP1* -text
 diagnostics/RD-25-WP1* -text
 diagnostics/RD-25-WP1*/** -text
 handoffs/handoff_RD-25-WP1-FIX* -text
+
+# ACC-008 WP2 reviewed bytes: preserve runner seals and native evidence SHA ledgers.
+patches/ACC-008* -text
+diagnostics/ACC-008* -text whitespace=cr-at-eol
+diagnostics/ACC-008*/** -text whitespace=cr-at-eol

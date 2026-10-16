@@ -1,0 +1,30 @@
+{
+  "task": "ACC-008-profile-confirmation",
+  "round": 13,
+  "request_id": "8db720fc-5a39-44e2-863b-c58dc31083de",
+  "closed_utc": "2026-10-16T12:44:59.717390+00:00",
+  "status": "source_review_ok_two_file_followup_CODE_only",
+  "M1": "closed raw=true, discriminating URL stub/removal mutant and host-gated login caller equivalence",
+  "full_actual_verdict_read": true,
+  "frozen_inputs_unchanged_before_documentation_update": 159,
+  "git_head_unchanged": true,
+  "git_index_unchanged": true,
+  "original_process_id": 27828,
+  "original_process_exit": 0,
+  "original_controlled_session_id": 67139,
+  "original_result_captured": true,
+  "patch_sha256": "b8758600daece9c37e002e78953bcb22a0a9c6811f89ac34dc4e951321be82a1",
+  "review_sha256": "fd16d9f8ef0bf4b49d06502699391431157f39d926f9df449e713b45441e3196",
+  "packet_sha256": "a30e737b3f224aa24427075f38e78a0d30f519c66911e4b3ffbb1b23235b5c3b",
+  "actual_model": [
+    "claude-opus-5-5"
+  ],
+  "effort": "high",
+  "isUsingOverage": false,
+  "mandatory_CODE_findings": [],
+  "owner_chained_block": "accepted after fresh held DB dump, exact SHA and gates, full output, no retry/bypass; template-only compiled PHP cleanup",
+  "production_followup_apply": false,
+  "G2": "open owner followup QA and hidden-key preservation check",
+  "wp3_started": false,
+  "optional_notes_retained": "URL-body gate, stale flash, global cart error/other forms, ARIA status announcement and additional browser negative URL variant; no optional-nit-only round."
+}

@@ -1,0 +1,230 @@
+{
+  "task": "ACC-008-WP2",
+  "owner_authorization": "Direct request to commit/push WP2 and proceed to WP3",
+  "purpose": "Published release index; prior diagnostic reports/verdicts are retained as historical records, current result is r17",
+  "authoritative_report": "diagnostics/ACC-008_actual-result-r17_report_20261016.md",
+  "applied_source_runners": [
+    "patches/ACC-008_custom-field-preservation-r11_20261016.php",
+    "patches/ACC-008_profile-confirmation-r13_20261016.php",
+    "patches/ACC-008_address-confirmation-r16_20261016.php"
+  ],
+  "approved_readonly_diagnostics": [
+    "patches/ACC-008_key-preservation-check-r15_20261016.php",
+    "patches/ACC-008_runtime-evidence_20261016.php"
+  ],
+  "files": [
+    {
+      "path": "patches/ACC-008_custom-field-preservation-r11_20261016.php",
+      "sha256": "0b0628010d799cd25011210e60a6e56dd30b369511f3b03dc64b8ce6a9acb122"
+    },
+    {
+      "path": "patches/ACC-008_profile-confirmation-r13_20261016.php",
+      "sha256": "b8758600daece9c37e002e78953bcb22a0a9c6811f89ac34dc4e951321be82a1"
+    },
+    {
+      "path": "patches/ACC-008_address-confirmation-r16_20261016.php",
+      "sha256": "dfbec3da8b8c2c45ba3e4f1e30cb2fdb7dc5931e1c4de7ee83193a6689296b0e"
+    },
+    {
+      "path": "patches/ACC-008_key-preservation-check-r15_20261016.php",
+      "sha256": "fc46c2234b07c76be48e0a7c569d88db22d57315673ece1574f7d246bdac3ac0"
+    },
+    {
+      "path": "patches/ACC-008_runtime-evidence_20261016.php",
+      "sha256": "8ed70517c429e30bf6c3ff3b718452ce2ba205dd725d02da7b6fc3eeb409d368"
+    },
+    {
+      "path": "diagnostics/ACC-008_actual-result-r17_report_20261016.md",
+      "sha256": "213cd5716a169c81d93dd121df2910c7cef24a138e5c572cd0212cde2b155ebb"
+    },
+    {
+      "path": "diagnostics/ACC-008_actual-result_claude-review-r17_20261016.md",
+      "sha256": "f3469afb6a80c12d205d05b5904d8c207102792e8aaca8a94f45d0db8f03fb85"
+    },
+    {
+      "path": "diagnostics/ACC-008_actual-result_report_20261016.md",
+      "sha256": "b127ef562f77e4beb2cc11791ba62b37a9306b3d2e60099e2c74837fd0ab000b"
+    },
+    {
+      "path": "diagnostics/ACC-008_address-confirmation_claude-review-r16_20261016.md",
+      "sha256": "00c4c7e86c79d6b1cf4372233fea84e95b40bccaefdc66468e1840fd8ef98c7a"
+    },
+    {
+      "path": "diagnostics/ACC-008_address-confirmation_report_20261016.md",
+      "sha256": "5ab1410bd7842b2dd10bb67039651ed5e0ee5126acb51dd81f2b4a4bfd09818b"
+    },
+    {
+      "path": "diagnostics/ACC-008_custom-field-preservation-r11_report_20261016.md",
+      "sha256": "725177b342f142842301faf1eef7aa291af2c58b7075f4e8c6e0b975473bb9fc"
+    },
+    {
+      "path": "diagnostics/ACC-008_custom-field-preservation_claude-review-r1_20261015.md",
+      "sha256": "7f0bca676f52fb6980cc70271e7651a2bb9599c59cd1f0f9087f5385c2d3360e"
+    },
+    {
+      "path": "diagnostics/ACC-008_custom-field-preservation_claude-review-r5_20261015.md",
+      "sha256": "3eed865d7be340be6606b9e9a17fb29ec3009e595d05ecf07395308ed47b97ed"
+    },
+    {
+      "path": "diagnostics/ACC-008_custom-field-preservation_claude-review-r6_20261015.md",
+      "sha256": "f25f4c8eeef4f61a3ea9002a5c9de9a54ebb35cbcf5853e807e1b100a47a91c9"
+    },
+    {
+      "path": "diagnostics/ACC-008_custom-field-preservation_claude-review-r7_20261015.md",
+      "sha256": "22d7e1b86dfd558aa616e77f3fa44a3d9363ba540349a96f00c06b1cad04bafa"
+    },
+    {
+      "path": "diagnostics/ACC-008_custom-field-preservation_report_20261015.md",
+      "sha256": "64b6ba89b8c59081fdd5e50ad62e5540618ab3aa88d8d50e43e94b7606e029fc"
+    },
+    {
+      "path": "diagnostics/ACC-008_key-preservation-check_claude-review-r14_20261016.md",
+      "sha256": "dc057af8a89622c90cd166aa6ff4afb904c361cb951ea5b328e574106d8b42f1"
+    },
+    {
+      "path": "diagnostics/ACC-008_key-preservation-check_claude-review-r15_20261016.md",
+      "sha256": "413e8c65d97db71e3274f8c104a355ce3f4d24e616f162b3313f13d1984c715c"
+    },
+    {
+      "path": "diagnostics/ACC-008_key-preservation-check_report_20261016.md",
+      "sha256": "8942bff7c2ff3e0dcf40563081154b6d7438990a6ea5500064b5f2a97330b113"
+    },
+    {
+      "path": "diagnostics/ACC-008_profile-confirmation_claude-review-r12_20261016.md",
+      "sha256": "8e64574e80efdd271e33f6337cbb33fb0fcc6cced6108f530fadab0659a48cd4"
+    },
+    {
+      "path": "diagnostics/ACC-008_profile-confirmation_claude-review-r13_20261016.md",
+      "sha256": "fd16d9f8ef0bf4b49d06502699391431157f39d926f9df449e713b45441e3196"
+    },
+    {
+      "path": "diagnostics/ACC-008_profile-confirmation_report_20261016.md",
+      "sha256": "0d971f943c99d2ffeaf9b16b9aca4e1bc5a087a40e1d6e526f758723b5354d89"
+    },
+    {
+      "path": "diagnostics/ACC-008_runtime-admission-status_20261016.md",
+      "sha256": "7e303d2f45553174675f58453cdf7f0f001160ba001f397996b71ad6faf76b20"
+    },
+    {
+      "path": "diagnostics/ACC-008_runtime-admitted-candidate_claude-review-r10_20261016.md",
+      "sha256": "e337dceddb4d58fc1e5bf8f0b01278f70f90dee6ef3bc1d3422b9cd56760bffa"
+    },
+    {
+      "path": "diagnostics/ACC-008_runtime-admitted-candidate_claude-review-r11_20261016.md",
+      "sha256": "20a86cf9418f4afc3884d687cc0ef07fc17af56e8177105dfb6a770b06aeb853"
+    },
+    {
+      "path": "diagnostics/ACC-008_runtime-admitted-candidate_claude-review-r9_20261016.md",
+      "sha256": "395dab46caf33694830b1f283330a330a39c6a1a1c757c8be9d8daf2545cea98"
+    },
+    {
+      "path": "diagnostics/ACC-008_runtime-admitted-candidate_report_20261016.md",
+      "sha256": "6d5281ef796b057f2746e05cea484fe52c32b378c7e3cea553ebd2e957d38d0c"
+    },
+    {
+      "path": "diagnostics/ACC-008_runtime-evidence_claude-review-r8_20261016.md",
+      "sha256": "e4ee69f28b6c2b54168c44349799572e666b9e00d319633f6218d3a516dcc01b"
+    },
+    {
+      "path": "diagnostics/ACC-008_runtime-evidence_report_20261016.md",
+      "sha256": "001f007dd85bf199c64965f532d9c4003c503a05e898e87c441874a4102a3b9e"
+    },
+    {
+      "path": "diagnostics/ACC-008_source-readiness_report_20261015.md",
+      "sha256": "42170fd9dfc463daf0729a37f56337e1a73d28ada0649964a185ec333eaec6c8"
+    },
+    {
+      "path": "diagnostics/ACC-008_custom-field-preservation_evidence_20261015/host-apply-r11_20261016.json",
+      "sha256": "0288895884652ef6cc9833e3854e0d8ab5309f340c8444512977d83cd09ee893"
+    },
+    {
+      "path": "diagnostics/ACC-008_custom-field-preservation_evidence_20261015/host-dry-run-r11_20261016.json",
+      "sha256": "22aad7d636e253bf96eeb707ed98dfc2a70085df02ea15943ab92fc894b9d259"
+    },
+    {
+      "path": "diagnostics/ACC-008_custom-field-preservation_evidence_20261015/owner-QA-r11_20261016.json",
+      "sha256": "a027d9385bb308e33bf16a9128a106dc0de2c4381ac7aa6389bf46aa756e179d"
+    },
+    {
+      "path": "diagnostics/ACC-008_custom-field-preservation_evidence_20261015/public-smoke-after-r11_20261016.json",
+      "sha256": "e7f867b6daf128fb9cfd1d082ec9d0965e0601a396a5f5a4f48b7b0950e36c64"
+    },
+    {
+      "path": "diagnostics/ACC-008_custom-field-preservation_evidence_20261015/review-r11-code-closure.json",
+      "sha256": "f2b20b777a88b8ad1168d516b551e178ff73cc32304abf52748759b426e05381"
+    },
+    {
+      "path": "diagnostics/ACC-008_profile-confirmation_evidence_20261016/host-dry-run-r13_20261016.json",
+      "sha256": "0bf4ca41a7b9170313f33e6a597a49ca96504c1aaa32dbd5d008e4f4d516a68a"
+    },
+    {
+      "path": "diagnostics/ACC-008_profile-confirmation_evidence_20261016/host-apply-r13_20261016.json",
+      "sha256": "2462ed0918bc49b973a0f208482bd95126302d3a94d554f33bbe084228c3c1b7"
+    },
+    {
+      "path": "diagnostics/ACC-008_profile-confirmation_evidence_20261016/review-r13-code-closure.json",
+      "sha256": "7e0e803412c6ab213c0b2756dfdc417a755bb7abeb81ca00c297445748754207"
+    },
+    {
+      "path": "diagnostics/ACC-008_profile-confirmation_evidence_20261016/public-smoke-after-r13_20261016.json",
+      "sha256": "b796b06134bbfb7fe99bce617342755dcd54231b2b26a906317096b597b452e7"
+    },
+    {
+      "path": "diagnostics/ACC-008_profile-confirmation_evidence_20261016/public-smoke-r13-secondary-channel_20261016.json",
+      "sha256": "4ab71d81656f3e1ea832e2e6cc6dfb2ecebb0fe07c6a739b36e6b259cba19918"
+    },
+    {
+      "path": "diagnostics/ACC-008_key-preservation-check_evidence_20261016/host-before-r15_20261016.json",
+      "sha256": "206c0eb0b75493bb13dc0eef162855430bbed70a6ffe00903e199a9095001fb7"
+    },
+    {
+      "path": "diagnostics/ACC-008_key-preservation-check_evidence_20261016/host-after-r15_20261016.json",
+      "sha256": "4247a42b15a1f69d7e0b36423ed4d4cc1cdd0b6acd2b66711b37d6d4f10e51f7"
+    },
+    {
+      "path": "diagnostics/ACC-008_key-preservation-check_evidence_20261016/review-r15-code-closure.json",
+      "sha256": "081865096e1841b887e36f6c74c61764da107a20a6d3d55230f06744f862e3bd"
+    },
+    {
+      "path": "diagnostics/ACC-008_address-confirmation_evidence_20261016/host-dry-run-r16_20261016.json",
+      "sha256": "33a838bcb4654b753cfb8495c68ae81b9cda22b5f354ede20167a85015b4b729"
+    },
+    {
+      "path": "diagnostics/ACC-008_address-confirmation_evidence_20261016/host-apply-r16_20261016.json",
+      "sha256": "f3cef477df628cd32ee098b65a9c2de45b4340f6e8e9652739ce893527c9a7e5"
+    },
+    {
+      "path": "diagnostics/ACC-008_address-confirmation_evidence_20261016/owner-QA-r16_20261016.json",
+      "sha256": "c0625dd0538a5b8b36245448e75f5ac58d492b9daacbab1c303d69f7a70fa34d"
+    },
+    {
+      "path": "diagnostics/ACC-008_address-confirmation_evidence_20261016/public-smoke-after-r16_20261016.json",
+      "sha256": "3803a09fa8faed91810e21b890a57f43b772b99a4104a84454c07d8d5dad115e"
+    },
+    {
+      "path": "diagnostics/ACC-008_address-confirmation_evidence_20261016/review-r16-code-closure.json",
+      "sha256": "a2b057912b9a27984140175677ee1ae2b1cfc5e50b2e0509466d8d726a16bbce"
+    },
+    {
+      "path": "diagnostics/ACC-008_actual-result_evidence_20261016/owner-QA-r13_20261016.json",
+      "sha256": "5eb59f52f17ff1dcc0885771d16fb32d0fd232a9a72c106db4904a74f209872c"
+    },
+    {
+      "path": "diagnostics/ACC-008_actual-result_evidence_20261016/owner-host-public-statuses-r13_20261016.json",
+      "sha256": "5a59bc2392055276cd557874a449e7f6c9943c12424cae0a931952e0ebc51ae2"
+    },
+    {
+      "path": "diagnostics/ACC-008_actual-result_evidence_20261016/review-r17-result-closure.json",
+      "sha256": "ed1f37ec3cdb4bfacc975ac082199aa79ed207357e49894da182c362106013b9"
+    },
+    {
+      "path": ".gitattributes",
+      "sha256": "79834b9d9ebc89612f49b380867e80879af0a80511c91a3f9af378d8fa31f6bf",
+      "basis": "Current origin/master attributes plus task-scoped immutable WP2 artifact rules; original checkout attributes untouched"
+    }
+  ],
+  "excluded": "Draft/rejected runners, archives, private screenshots/customer data/config/dumps, raw CLI account/result logs, scratch fixtures, unrelated project files",
+  "external_status_writes": false,
+  "wp3_changes_in_this_commit": false,
+  "evidence_byte_preservation": "Task-specific attributes prevent line-ending normalization from invalidating runner/review/host evidence SHA ledgers"
+}
