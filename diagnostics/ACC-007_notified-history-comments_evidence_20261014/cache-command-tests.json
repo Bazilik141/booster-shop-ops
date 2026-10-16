@@ -1,0 +1,10 @@
+{
+  "fixture_only": true,
+  "cache_command_from_report": true,
+  "passed": [
+    "nested compiled Twig PHP and cache.* removed",
+    "unrelated fixture files retained",
+    "missing cache stops with exit 1"
+  ],
+  "production_command_executed": false
+}

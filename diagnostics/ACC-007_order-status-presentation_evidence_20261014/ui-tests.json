@@ -1,0 +1,144 @@
+{
+  "fixture_only": true,
+  "breakpoints": [
+    390,
+    1024,
+    1440
+  ],
+  "passed": 69,
+  "tests": [
+    "390 list has seventeen visible fixture rows",
+    "390 draft never rendered",
+    "390 list no document overflow",
+    "390 longest status stays within scrollable table",
+    "390 table supports horizontal scrolling",
+    "390 semantic background В обробці",
+    "390 semantic background Отримано",
+    "390 semantic background Потрібна увага",
+    "390 semantic background Скасовано",
+    "390 semantic background Статус уточнюється",
+    "390 confirmed credit blue not completed green",
+    "390 order link hover visible",
+    "390 order link focus retained",
+    "390 detail unknown raw comments absent",
+    "390 detail truthful credit message",
+    "390 detail has exact Kyiv date time",
+    "390 detail no document overflow with long product/comment",
+    "390 history first page ten records",
+    "390 history link focus visible",
+    "390 link active state",
+    "390 actual retained JS loads page2 with customer token",
+    "390 page2 includes missing ID and unknown date",
+    "390 back to page1 uses real JS",
+    "1024 list has seventeen visible fixture rows",
+    "1024 draft never rendered",
+    "1024 list no document overflow",
+    "1024 longest status stays within scrollable table",
+    "1024 semantic background В обробці",
+    "1024 semantic background Отримано",
+    "1024 semantic background Потрібна увага",
+    "1024 semantic background Скасовано",
+    "1024 semantic background Статус уточнюється",
+    "1024 confirmed credit blue not completed green",
+    "1024 order link hover visible",
+    "1024 order link focus retained",
+    "1024 detail unknown raw comments absent",
+    "1024 detail truthful credit message",
+    "1024 detail has exact Kyiv date time",
+    "1024 detail no document overflow with long product/comment",
+    "1024 history first page ten records",
+    "1024 history link focus visible",
+    "1024 link active state",
+    "1024 actual retained JS loads page2 with customer token",
+    "1024 page2 includes missing ID and unknown date",
+    "1024 back to page1 uses real JS",
+    "1440 list has seventeen visible fixture rows",
+    "1440 draft never rendered",
+    "1440 list no document overflow",
+    "1440 longest status stays within scrollable table",
+    "1440 semantic background В обробці",
+    "1440 semantic background Отримано",
+    "1440 semantic background Потрібна увага",
+    "1440 semantic background Скасовано",
+    "1440 semantic background Статус уточнюється",
+    "1440 confirmed credit blue not completed green",
+    "1440 order link hover visible",
+    "1440 order link focus retained",
+    "1440 detail unknown raw comments absent",
+    "1440 detail truthful credit message",
+    "1440 detail has exact Kyiv date time",
+    "1440 detail no document overflow with long product/comment",
+    "1440 history first page ten records",
+    "1440 history link focus visible",
+    "1440 link active state",
+    "1440 actual retained JS loads page2 with customer token",
+    "1440 page2 includes missing ID and unknown date",
+    "1440 back to page1 uses real JS",
+    "GA4 replacement scripts execute both retained calls",
+    "zero JavaScript runtime errors"
+  ],
+  "errors": [],
+  "history_requests": [
+    {
+      "page": "2",
+      "token": "synthetic",
+      "order": "100"
+    },
+    {
+      "page": "1",
+      "token": "synthetic",
+      "order": "100"
+    },
+    {
+      "page": "2",
+      "token": "synthetic",
+      "order": "100"
+    },
+    {
+      "page": "1",
+      "token": "synthetic",
+      "order": "100"
+    },
+    {
+      "page": "2",
+      "token": "synthetic",
+      "order": "100"
+    },
+    {
+      "page": "1",
+      "token": "synthetic",
+      "order": "100"
+    }
+  ],
+  "colours": {
+    "В обробці": {
+      "background": "rgb(232, 238, 251)",
+      "foreground": "rgb(30, 58, 138)"
+    },
+    "Отримано": {
+      "background": "rgb(243, 251, 246)",
+      "foreground": "rgb(21, 128, 61)"
+    },
+    "Потрібна увага": {
+      "background": "rgb(255, 251, 234)",
+      "foreground": "rgb(146, 64, 14)"
+    },
+    "Скасовано": {
+      "background": "rgb(220, 38, 38)",
+      "foreground": "rgb(255, 255, 255)"
+    },
+    "Статус уточнюється": {
+      "background": "rgb(238, 240, 242)",
+      "foreground": "rgb(31, 41, 55)"
+    }
+  },
+  "screenshots": [
+    "C:\\Users\\14bez\\.codex\\visualizations\\2026\\10\\13\\01a13483-23a0-7601-a23b-0d8e413a1867\\a7i-3i3_371j\\acc007-local\\list-390.png",
+    "C:\\Users\\14bez\\.codex\\visualizations\\2026\\10\\13\\01a13483-23a0-7601-a23b-0d8e413a1867\\a7i-3i3_371j\\acc007-local\\info-390.png",
+    "C:\\Users\\14bez\\.codex\\visualizations\\2026\\10\\13\\01a13483-23a0-7601-a23b-0d8e413a1867\\a7i-3i3_371j\\acc007-local\\list-1024.png",
+    "C:\\Users\\14bez\\.codex\\visualizations\\2026\\10\\13\\01a13483-23a0-7601-a23b-0d8e413a1867\\a7i-3i3_371j\\acc007-local\\info-1024.png",
+    "C:\\Users\\14bez\\.codex\\visualizations\\2026\\10\\13\\01a13483-23a0-7601-a23b-0d8e413a1867\\a7i-3i3_371j\\acc007-local\\list-1440.png",
+    "C:\\Users\\14bez\\.codex\\visualizations\\2026\\10\\13\\01a13483-23a0-7601-a23b-0d8e413a1867\\a7i-3i3_371j\\acc007-local\\info-1440.png"
+  ],
+  "css_basis": "Current owner 74-file drop; jquery library retained Oct12 tooling, not refreshed live integration proof"
+}

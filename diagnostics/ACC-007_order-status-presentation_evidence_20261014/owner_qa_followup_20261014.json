@@ -1,0 +1,23 @@
+{
+  "task": "ACC-007",
+  "date": "2026-10-14",
+  "basis": "Direct owner QA reply and five screenshots; only privacy-safe observations are recorded. Screenshots and live comment/payment values are not copied, quoted or sent to an external reviewer.",
+  "owner_result": "All other QA OK; owner requests notified history comments in the account and removal of wishlist control from mobile header.",
+  "observed_account_history": "Purpose-written messages, date plus time, semantic badges and pagination are visible. Owner-notified history comment text is currently omitted by design.",
+  "original_comment_policy": "Handoff section 2: purpose-written public messages only; never raw history comments.",
+  "new_comment_requirement": "Interpret latest owner clarification as: additionally show history comments marked notify=1 on the owning customer's account; keep notify=0 technical comments hidden; render comment as safe text, never executable HTML. This is a scope/policy update, not a claim that the original implementation violated the accepted handoff. A notify flag records intent, not delivery proof.",
+  "mobile_header_request": "Hide wishlist control on the existing mobile-header breakpoint; preserve desktop and account wishlist functionality. Separate source-only follow-up package after the comment package gate.",
+  "FIG-CHARM-001": "Owner confirms this is an obsolete Tier1 control URL; prior not-found observation is not treated as an ACC-007 regression. No product/SEO/AGENTS URL edit is authorized or performed.",
+  "gate": "G1_FOLLOWUP_CURRENT_SOURCE_REQUIRED",
+  "sequence": [
+    "ACC-007 notified-comment follow-up: source intake, one patch, independent review, owner deploy/QA",
+    "Separate mobile-header wishlist follow-up: one patch, independent review, owner deploy/QA",
+    "ACC-008 only after owner go at the completed gate"
+  ],
+  "original_patches_remain_unchanged": true,
+  "ACC-007_original_patch_sha256": "73d292554bf3f49cca5c13c10551a6b1124390ad527ce71f41012d8ef1fd2221",
+  "ACC-006_original_patch_sha256": "01363fafc078fe7d3c247cf3e3ed1410c5733d54fdc6a55b40fd1c849b40a995",
+  "ACC-008_started": false,
+  "ACC-009_started": false,
+  "git_notion_dashboard_writes": false
+}

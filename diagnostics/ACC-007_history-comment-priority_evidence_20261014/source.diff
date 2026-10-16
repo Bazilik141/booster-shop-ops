@@ -1,0 +1,21 @@
+--- catalog/view/template/account/order_history.twig (owner-hash-verified current)
++++ catalog/view/template/account/order_history.twig (comment priority)
+@@ -1,5 +1,6 @@
+ {# ACC-007_ORDER_STATUS_PRESENTATION_20261014 #}
+ {# ACC-007_NOTIFIED_HISTORY_COMMENTS_20261014 #}
++{# ACC-007_HISTORY_COMMENT_PRIORITY_20261014 #}
+ <div class="table-responsive">
+   <table class="table table-bordered">
+     <thead>
+@@ -15,9 +16,10 @@
+           <tr>
+             <td>{{ history.date_added }}</td>
+             <td>
+-              {{ history.comment }}
+               {% if history.bs_customer_comment is not empty %}
+                 <div class="mt-2 text-break"><strong>{{ column_comment }}:</strong><br>{{ history.bs_customer_comment|escape('html')|nl2br }}</div>
++              {% else %}
++                {{ history.comment }}
+               {% endif %}
+             </td>
+             <td><span class="bs-badge" style="{{ history.bs_status_style }}">{{ history.status }}</span></td>

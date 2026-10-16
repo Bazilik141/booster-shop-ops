@@ -1,0 +1,87 @@
+{
+  "fixture_only": true,
+  "breakpoints": [
+    390,
+    1024,
+    1440
+  ],
+  "passed": 49,
+  "tests": [
+    "390 seventeen visible fixture rows",
+    "390 twelve nonempty notified comment blocks",
+    "390 decoded quotes ampersand newline visible",
+    "390 literal typed entity is preserved",
+    "390 zero comment visible",
+    "390 five generic fallback messages",
+    "390 custom-comment cells never duplicate generic explanation",
+    "390 raw and encoded HTML inert",
+    "390 technical/draft text absent",
+    "390 no document overflow with long unbroken comment",
+    "390 long comment no longer widens table",
+    "390 page one ten records",
+    "390 existing link focus works",
+    "390 existing link active state",
+    "390 page two seven records",
+    "390 no-record fallback retained",
+    "1024 seventeen visible fixture rows",
+    "1024 twelve nonempty notified comment blocks",
+    "1024 decoded quotes ampersand newline visible",
+    "1024 literal typed entity is preserved",
+    "1024 zero comment visible",
+    "1024 five generic fallback messages",
+    "1024 custom-comment cells never duplicate generic explanation",
+    "1024 raw and encoded HTML inert",
+    "1024 technical/draft text absent",
+    "1024 no document overflow with long unbroken comment",
+    "1024 long comment no longer widens table",
+    "1024 page one ten records",
+    "1024 existing link focus works",
+    "1024 existing link active state",
+    "1024 page two seven records",
+    "1024 no-record fallback retained",
+    "1440 seventeen visible fixture rows",
+    "1440 twelve nonempty notified comment blocks",
+    "1440 decoded quotes ampersand newline visible",
+    "1440 literal typed entity is preserved",
+    "1440 zero comment visible",
+    "1440 five generic fallback messages",
+    "1440 custom-comment cells never duplicate generic explanation",
+    "1440 raw and encoded HTML inert",
+    "1440 technical/draft text absent",
+    "1440 no document overflow with long unbroken comment",
+    "1440 long comment no longer widens table",
+    "1440 page one ten records",
+    "1440 existing link focus works",
+    "1440 existing link active state",
+    "1440 page two seven records",
+    "1440 no-record fallback retained",
+    "no browser runtime errors"
+  ],
+  "errors": [],
+  "layout": [
+    {
+      "viewport": 390,
+      "document": 390,
+      "container": 366,
+      "table": 366
+    },
+    {
+      "viewport": 1024,
+      "document": 1024,
+      "container": 936,
+      "table": 936
+    },
+    {
+      "viewport": 1440,
+      "document": 1440,
+      "container": 1296,
+      "table": 1296
+    }
+  ],
+  "screenshots": [
+    "C:\\Users\\14bez\\.codex\\visualizations\\2026\\10\\13\\01a13483-23a0-7601-a23b-0d8e413a1867\\a7p-local\\comments-390.png",
+    "C:\\Users\\14bez\\.codex\\visualizations\\2026\\10\\13\\01a13483-23a0-7601-a23b-0d8e413a1867\\a7p-local\\comments-1024.png",
+    "C:\\Users\\14bez\\.codex\\visualizations\\2026\\10\\13\\01a13483-23a0-7601-a23b-0d8e413a1867\\a7p-local\\comments-1440.png"
+  ],
+  "css_basis": "Both CSS files from the fresh owner archive; no CSS changes"
+}

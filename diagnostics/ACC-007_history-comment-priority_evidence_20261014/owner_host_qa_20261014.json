@@ -1,0 +1,28 @@
+{
+  "task": "ACC-007",
+  "package": "history-comment-priority",
+  "date": "2026-10-14",
+  "evidence_source": "Direct owner confirmation after the reviewed apply/cache command: works; everything good",
+  "owner_apply_authorization": "Explicit owner go after successful host dry-run",
+  "owner_functional_qa": "passed",
+  "accepted_behavior": "Displayable notified comment replaces the standard explanation; rows without a displayable comment retain the explanation",
+  "owner_reported_live_result": "working",
+  "raw_apply_output_supplied": false,
+  "exact_followup_backup_directory_supplied": false,
+  "executor_production_access": false,
+  "new_automated_production_smoke_claim": false,
+  "patch_sha256": "0af604ca61123655c3cc54c054cf9f5d3a82fc8b51b00ac312a742fdeff93de6",
+  "comment_followups_owner_accepted": true,
+  "remaining_sequence": [
+    "Separate mobile-header wishlist follow-up after owner go",
+    "WP2 ACC-008 custom_field preservation after its owner gate",
+    "WP3a ACC-009 read-only compatibility preflight only after ACC-008 live and QA passed",
+    "WP3b and WP3c separately reviewed and owner-gated"
+  ],
+  "next_gate": "WAIT_OWNER_GO_FOR_MOBILE_HEADER_PACKAGE",
+  "mobile_header_started": false,
+  "acc008_started": false,
+  "acc009_started": false,
+  "git_invoked": false,
+  "notion_dashboard_write": false
+}

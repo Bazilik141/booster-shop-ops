@@ -1,0 +1,8 @@
+{
+  "Status": "Done",
+  "Last Updated": "2026-10-16",
+  "Primary Tool": "Codex",
+  "Current Owner": "Owner accepted; Codex implemented WP1",
+  "Stage": "WP1 ACC-007 deployed by owner and final functional QA accepted 2026-10-14. Three independently reviewed runners retained byte-identical. Source-only presentation; no DB writes. Closeout: diagnostics/ACC-007_wp1-closeout_report_20261016.md. ACC-008/ACC-009 and ACC-006 GA4 are separate packages.",
+  "Owner Decision": "2026-10-14: show a nonempty history comment only when notify=1; it replaces the standard status explanation. For notify=0, hide the comment; without an eligible comment, retain the explanation. This supersedes the original blanket ban on comments. 2026-10-16: owner directly requested commit, push and WP1 update after confirming completion; one-time authorization for ACC-007 Git publication and Notion/dashboard closure only."
+}

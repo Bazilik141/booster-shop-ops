@@ -1,0 +1,26 @@
+{
+    "fixture_only": true,
+    "twig_version": "3.28.0",
+    "array_loader_templates": 3,
+    "ga4_anchor_counts": [
+        {
+            "search": "<a href=\"{{ product.href }}\">",
+            "before": 0,
+            "after": 0
+        },
+        {
+            "search": "<a href=\"{{ product.reorder }}\"",
+            "before": 0,
+            "after": 0
+        },
+        {
+            "search": "{{ footer }}",
+            "before": 1,
+            "after": 1
+        }
+    ],
+    "ga4_injected_template": "compiled/rendered",
+    "protected_inline_script_count": 1,
+    "native_controller_history": "rendered_without_raw_comment",
+    "ui_status_count": 17
+}

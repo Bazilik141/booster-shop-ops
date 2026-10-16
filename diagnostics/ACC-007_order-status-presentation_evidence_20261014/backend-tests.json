@@ -1,0 +1,229 @@
+{
+  "fixture_only": true,
+  "database_engine": "SQLite typed in-memory SQL execution; MySQL host remains owner QA",
+  "native_php": "8.3.30",
+  "passed": 51,
+  "results": [
+    {
+      "name": "order rows/count share ownership/store/positive status/draft filter",
+      "passed": true
+    },
+    {
+      "name": "guest orders stay excluded",
+      "passed": true
+    },
+    {
+      "name": "detail is scoped to owner and current store",
+      "passed": true
+    },
+    {
+      "name": "native positive detail return preserves selected transition date",
+      "passed": true
+    },
+    {
+      "name": "wrong_history cannot expose histories",
+      "passed": true
+    },
+    {
+      "name": "draft_history cannot expose histories",
+      "passed": true
+    },
+    {
+      "name": "wrong_store_history cannot expose histories",
+      "passed": true
+    },
+    {
+      "name": "unauthorized history count zero",
+      "passed": true
+    },
+    {
+      "name": "history timestamp ASC plus ID ASC with neutral missing IDs",
+      "passed": true
+    },
+    {
+      "name": "real SQL pages of ten with no repeated rows",
+      "passed": true
+    },
+    {
+      "name": "history count exactly visible rows",
+      "passed": true
+    },
+    {
+      "name": "negative offsets/oversized limits bounded",
+      "passed": true
+    },
+    {
+      "name": "history SQL never selects raw comment/notify/admin name",
+      "passed": true
+    },
+    {
+      "name": "current time only latest appended matching history",
+      "passed": true
+    },
+    {
+      "name": "no history, latest mismatch and latest undated remain unknown",
+      "passed": true
+    },
+    {
+      "name": "creation/modification are never used as transition time",
+      "passed": true
+    },
+    {
+      "name": "accepted mapping 1",
+      "passed": true
+    },
+    {
+      "name": "accepted mapping 3",
+      "passed": true
+    },
+    {
+      "name": "accepted mapping 5",
+      "passed": true
+    },
+    {
+      "name": "accepted mapping 7",
+      "passed": true
+    },
+    {
+      "name": "accepted mapping 10",
+      "passed": true
+    },
+    {
+      "name": "accepted mapping 12",
+      "passed": true
+    },
+    {
+      "name": "accepted mapping 13",
+      "passed": true
+    },
+    {
+      "name": "accepted mapping 14",
+      "passed": true
+    },
+    {
+      "name": "accepted mapping 15",
+      "passed": true
+    },
+    {
+      "name": "accepted mapping 17",
+      "passed": true
+    },
+    {
+      "name": "accepted mapping 18",
+      "passed": true
+    },
+    {
+      "name": "accepted mapping 19",
+      "passed": true
+    },
+    {
+      "name": "accepted mapping 21",
+      "passed": true
+    },
+    {
+      "name": "accepted mapping 22",
+      "passed": true
+    },
+    {
+      "name": "accepted mapping 23",
+      "passed": true
+    },
+    {
+      "name": "accepted mapping 24",
+      "passed": true
+    },
+    {
+      "name": "status19 no completion/delivery promise",
+      "passed": true
+    },
+    {
+      "name": "missing/zero/unknown IDs and language neutral",
+      "passed": true
+    },
+    {
+      "name": "Kyiv wall time retained without UTC shift",
+      "passed": true
+    },
+    {
+      "name": "valid leap day and autumn fold retain date/time",
+      "passed": true
+    },
+    {
+      "name": "invalid/missing date fallback '2026-02-29 03:00:00'",
+      "passed": true
+    },
+    {
+      "name": "invalid/missing date fallback '0000-00-00 00:00:00'",
+      "passed": true
+    },
+    {
+      "name": "invalid/missing date fallback '0000-01-01 00:00:00'",
+      "passed": true
+    },
+    {
+      "name": "invalid/missing date fallback None",
+      "passed": true
+    },
+    {
+      "name": "invalid/missing date fallback ''",
+      "passed": true
+    },
+    {
+      "name": "invalid/missing date fallback '2026-03-29 03:30:00'",
+      "passed": true
+    },
+    {
+      "name": "invalid/missing date fallback '2026-10-14 25:01:00'",
+      "passed": true
+    },
+    {
+      "name": "wrong timezone cannot imply conversion",
+      "passed": true
+    },
+    {
+      "name": "native controller page2_safe",
+      "passed": true
+    },
+    {
+      "name": "native controller negative_page",
+      "passed": true
+    },
+    {
+      "name": "native controller huge_page_no_float",
+      "passed": true
+    },
+    {
+      "name": "native controller detail_history_starts_page1",
+      "passed": true
+    },
+    {
+      "name": "native controller login_required",
+      "passed": true
+    },
+    {
+      "name": "native controller owned_visible_order_required",
+      "passed": true
+    },
+    {
+      "name": "safe controller history contains only explicit presentation fields",
+      "passed": true
+    }
+  ],
+  "emitted_sql": {
+    "orders": "SELECT `o`.*, (SELECT CASE WHEN `last`.`order_status_id` = `o`.`order_status_id` THEN `last`.`date_added` ELSE NULL END FROM `fixture_order_history` `last` WHERE `last`.`order_id` = `o`.`order_id` ORDER BY `last`.`order_history_id` DESC LIMIT 1) AS `bs_status_date_added` FROM `fixture_order` `o` WHERE `o`.`customer_id` = '11' AND `o`.`customer_id` != '0' AND `o`.`store_id` = '0' AND `o`.`order_status_id` > '0' AND COALESCE(`o`.`order_status_id`,0) <> 15 ORDER BY `o`.`order_id` DESC LIMIT 0,10",
+    "orders_all": "SELECT `o`.*, (SELECT CASE WHEN `last`.`order_status_id` = `o`.`order_status_id` THEN `last`.`date_added` ELSE NULL END FROM `fixture_order_history` `last` WHERE `last`.`order_id` = `o`.`order_id` ORDER BY `last`.`order_history_id` DESC LIMIT 1) AS `bs_status_date_added` FROM `fixture_order` `o` WHERE `o`.`customer_id` = '11' AND `o`.`customer_id` != '0' AND `o`.`store_id` = '0' AND `o`.`order_status_id` > '0' AND COALESCE(`o`.`order_status_id`,0) <> 15 ORDER BY `o`.`order_id` DESC LIMIT 0,100",
+    "orders_bounds": "SELECT `o`.*, (SELECT CASE WHEN `last`.`order_status_id` = `o`.`order_status_id` THEN `last`.`date_added` ELSE NULL END FROM `fixture_order_history` `last` WHERE `last`.`order_id` = `o`.`order_id` ORDER BY `last`.`order_history_id` DESC LIMIT 1) AS `bs_status_date_added` FROM `fixture_order` `o` WHERE `o`.`customer_id` = '11' AND `o`.`customer_id` != '0' AND `o`.`store_id` = '0' AND `o`.`order_status_id` > '0' AND COALESCE(`o`.`order_status_id`,0) <> 15 ORDER BY `o`.`order_id` DESC LIMIT 0,100",
+    "orders_count": "SELECT COUNT(*) AS `total` FROM `fixture_order` `o` WHERE `o`.`customer_id` = '11' AND `o`.`customer_id` != '0' AND `o`.`store_id` = '0' AND `o`.`order_status_id` > '0' AND COALESCE(`o`.`order_status_id`,0) <> 15",
+    "detail": "SELECT `o`.*, (SELECT CASE WHEN `last`.`order_status_id` = `o`.`order_status_id` THEN `last`.`date_added` ELSE NULL END FROM `fixture_order_history` `last` WHERE `last`.`order_id` = `o`.`order_id` ORDER BY `last`.`order_history_id` DESC LIMIT 1) AS `bs_status_date_added` FROM `fixture_order` `o` WHERE `o`.`order_id` = '100' AND `o`.`customer_id` = '11' AND `o`.`customer_id` != '0' AND `o`.`store_id` = '0' AND `o`.`order_status_id` > '0' AND COALESCE(`o`.`order_status_id`,0) <> 15",
+    "history_1": "SELECT `oh`.`order_history_id`,`oh`.`order_status_id`,`oh`.`date_added` FROM `fixture_order_history` `oh` INNER JOIN `fixture_order` `o` ON (`o`.`order_id` = `oh`.`order_id`) WHERE `oh`.`order_id` = '100' AND `o`.`customer_id` = '11' AND `o`.`customer_id` != '0' AND `o`.`store_id` = '0' AND `o`.`order_status_id` > '0' AND COALESCE(`o`.`order_status_id`,0) <> 15 AND COALESCE(`oh`.`order_status_id`,0) <> 15 ORDER BY `oh`.`date_added` ASC, `oh`.`order_history_id` ASC LIMIT 0,10",
+    "history_2": "SELECT `oh`.`order_history_id`,`oh`.`order_status_id`,`oh`.`date_added` FROM `fixture_order_history` `oh` INNER JOIN `fixture_order` `o` ON (`o`.`order_id` = `oh`.`order_id`) WHERE `oh`.`order_id` = '100' AND `o`.`customer_id` = '11' AND `o`.`customer_id` != '0' AND `o`.`store_id` = '0' AND `o`.`order_status_id` > '0' AND COALESCE(`o`.`order_status_id`,0) <> 15 AND COALESCE(`oh`.`order_status_id`,0) <> 15 ORDER BY `oh`.`date_added` ASC, `oh`.`order_history_id` ASC LIMIT 10,10",
+    "history_all": "SELECT `oh`.`order_history_id`,`oh`.`order_status_id`,`oh`.`date_added` FROM `fixture_order_history` `oh` INNER JOIN `fixture_order` `o` ON (`o`.`order_id` = `oh`.`order_id`) WHERE `oh`.`order_id` = '100' AND `o`.`customer_id` = '11' AND `o`.`customer_id` != '0' AND `o`.`store_id` = '0' AND `o`.`order_status_id` > '0' AND COALESCE(`o`.`order_status_id`,0) <> 15 AND COALESCE(`oh`.`order_status_id`,0) <> 15 ORDER BY `oh`.`date_added` ASC, `oh`.`order_history_id` ASC LIMIT 0,100",
+    "history_bounds": "SELECT `oh`.`order_history_id`,`oh`.`order_status_id`,`oh`.`date_added` FROM `fixture_order_history` `oh` INNER JOIN `fixture_order` `o` ON (`o`.`order_id` = `oh`.`order_id`) WHERE `oh`.`order_id` = '100' AND `o`.`customer_id` = '11' AND `o`.`customer_id` != '0' AND `o`.`store_id` = '0' AND `o`.`order_status_id` > '0' AND COALESCE(`o`.`order_status_id`,0) <> 15 AND COALESCE(`oh`.`order_status_id`,0) <> 15 ORDER BY `oh`.`date_added` ASC, `oh`.`order_history_id` ASC LIMIT 0,100",
+    "history_count": "SELECT COUNT(*) AS `total` FROM `fixture_order_history` `oh` INNER JOIN `fixture_order` `o` ON (`o`.`order_id` = `oh`.`order_id`) WHERE `oh`.`order_id` = '100' AND `o`.`customer_id` = '11' AND `o`.`customer_id` != '0' AND `o`.`store_id` = '0' AND `o`.`order_status_id` > '0' AND COALESCE(`o`.`order_status_id`,0) <> 15 AND COALESCE(`oh`.`order_status_id`,0) <> 15",
+    "wrong_history": "SELECT `oh`.`order_history_id`,`oh`.`order_status_id`,`oh`.`date_added` FROM `fixture_order_history` `oh` INNER JOIN `fixture_order` `o` ON (`o`.`order_id` = `oh`.`order_id`) WHERE `oh`.`order_id` = '102' AND `o`.`customer_id` = '11' AND `o`.`customer_id` != '0' AND `o`.`store_id` = '0' AND `o`.`order_status_id` > '0' AND COALESCE(`o`.`order_status_id`,0) <> 15 AND COALESCE(`oh`.`order_status_id`,0) <> 15 ORDER BY `oh`.`date_added` ASC, `oh`.`order_history_id` ASC LIMIT 0,10",
+    "wrong_count": "SELECT COUNT(*) AS `total` FROM `fixture_order_history` `oh` INNER JOIN `fixture_order` `o` ON (`o`.`order_id` = `oh`.`order_id`) WHERE `oh`.`order_id` = '102' AND `o`.`customer_id` = '11' AND `o`.`customer_id` != '0' AND `o`.`store_id` = '0' AND `o`.`order_status_id` > '0' AND COALESCE(`o`.`order_status_id`,0) <> 15 AND COALESCE(`oh`.`order_status_id`,0) <> 15",
+    "draft_history": "SELECT `oh`.`order_history_id`,`oh`.`order_status_id`,`oh`.`date_added` FROM `fixture_order_history` `oh` INNER JOIN `fixture_order` `o` ON (`o`.`order_id` = `oh`.`order_id`) WHERE `oh`.`order_id` = '101' AND `o`.`customer_id` = '11' AND `o`.`customer_id` != '0' AND `o`.`store_id` = '0' AND `o`.`order_status_id` > '0' AND COALESCE(`o`.`order_status_id`,0) <> 15 AND COALESCE(`oh`.`order_status_id`,0) <> 15 ORDER BY `oh`.`date_added` ASC, `oh`.`order_history_id` ASC LIMIT 0,10",
+    "wrong_store_history": "SELECT `oh`.`order_history_id`,`oh`.`order_status_id`,`oh`.`date_added` FROM `fixture_order_history` `oh` INNER JOIN `fixture_order` `o` ON (`o`.`order_id` = `oh`.`order_id`) WHERE `oh`.`order_id` = '103' AND `o`.`customer_id` = '11' AND `o`.`customer_id` != '0' AND `o`.`store_id` = '0' AND `o`.`order_status_id` > '0' AND COALESCE(`o`.`order_status_id`,0) <> 15 AND COALESCE(`oh`.`order_status_id`,0) <> 15 ORDER BY `oh`.`date_added` ASC, `oh`.`order_history_id` ASC LIMIT 0,10",
+    "guest_orders": "SELECT `o`.*, (SELECT CASE WHEN `last`.`order_status_id` = `o`.`order_status_id` THEN `last`.`date_added` ELSE NULL END FROM `fixture_order_history` `last` WHERE `last`.`order_id` = `o`.`order_id` ORDER BY `last`.`order_history_id` DESC LIMIT 1) AS `bs_status_date_added` FROM `fixture_order` `o` WHERE `o`.`customer_id` = '0' AND `o`.`customer_id` != '0' AND `o`.`store_id` = '0' AND `o`.`order_status_id` > '0' AND COALESCE(`o`.`order_status_id`,0) <> 15 ORDER BY `o`.`order_id` DESC LIMIT 0,20"
+  }
+}

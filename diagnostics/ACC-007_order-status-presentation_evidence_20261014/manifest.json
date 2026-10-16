@@ -1,0 +1,141 @@
+{
+  "task": "ACC-007",
+  "gate": "G1_WAIT_INDEPENDENT_REVIEW_AND_OWNER_DEPLOY_QA",
+  "patch_sha256": "73d292554bf3f49cca5c13c10551a6b1124390ad527ce71f41012d8ef1fd2221",
+  "patch_bytes": 43083,
+  "owner_source_archive_sha256": "582dcba5debd9989212b1315ea89c112d2ec13fbaf532696df9f5bd9d449e682",
+  "target_count": 7,
+  "modified_existing": 6,
+  "new_helpers": 1,
+  "php_lint": [
+    {
+      "path": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\patches\\ACC-007_order-status-presentation_20261014.php",
+      "result": "syntax_ok"
+    },
+    {
+      "path": "C:\\Users\\14bez\\.codex\\visualizations\\2026\\10\\13\\01a13483-23a0-7601-a23b-0d8e413a1867\\a7i-3i3_371j\\acc007-local\\after\\catalog\\model\\account\\order.php",
+      "result": "syntax_ok"
+    },
+    {
+      "path": "C:\\Users\\14bez\\.codex\\visualizations\\2026\\10\\13\\01a13483-23a0-7601-a23b-0d8e413a1867\\a7i-3i3_371j\\acc007-local\\after\\catalog\\controller\\account\\order.php",
+      "result": "syntax_ok"
+    },
+    {
+      "path": "C:\\Users\\14bez\\.codex\\visualizations\\2026\\10\\13\\01a13483-23a0-7601-a23b-0d8e413a1867\\a7i-3i3_371j\\acc007-local\\after\\extension\\ukrainian\\catalog\\language\\uk-ua\\account\\order.php",
+      "result": "syntax_ok"
+    },
+    {
+      "path": "C:\\Users\\14bez\\.codex\\visualizations\\2026\\10\\13\\01a13483-23a0-7601-a23b-0d8e413a1867\\a7i-3i3_371j\\acc007-local\\after\\system\\library\\acc007_order_status.php",
+      "result": "syntax_ok"
+    }
+  ],
+  "native_php": "8.3.30",
+  "production_php": "8.0.30 owner preflight; apply not run",
+  "new_diff_signature_hits": {
+    "important": 0,
+    "timeout": 0,
+    "absolute_or_fixed": 0,
+    "magic_pixels": 0,
+    "new_twig_include": 0,
+    "html_injection": 0
+  },
+  "unchanged_model_methods": [
+    "getOrdersBySubscriptionId",
+    "getProduct",
+    "getProducts",
+    "getOptions",
+    "getSubscription",
+    "getTotals",
+    "getTotalOrdersByProductId",
+    "getTotalProductsByOrderId",
+    "getTotalOrdersBySubscriptionId"
+  ],
+  "auth_history_method": "byte-identical",
+  "ACC-006_patch_sha256": "01363fafc078fe7d3c247cf3e3ed1410c5733d54fdc6a55b40fd1c849b40a995",
+  "dependencies": [
+    {
+      "path": "index.php",
+      "sha256": "47734307e2bc3dd7c7ac2c02ee87a01ac7334af629e7e5ecb4d00548bc1d1379"
+    },
+    {
+      "path": "system/startup.php",
+      "sha256": "c5ee86e45271c145ee08b4c77b0a1c70d5c104d82ae9d294f82c636a36af695e"
+    },
+    {
+      "path": "catalog/controller/startup/setting.php",
+      "sha256": "474257596017793971e3c2b991b3ddd5202f6db3d958c13bc42977c12bf8ece9"
+    },
+    {
+      "path": "system/config/default.php",
+      "sha256": "c56d41d08336aac6d652a3b5ecd87a11be05334a22b4ff9017fa03dbeaf70870"
+    },
+    {
+      "path": "system/config/catalog.php",
+      "sha256": "fdc5713fa8e9d732a4183485930bf4f29104ea8c1d4f059447a300c033c80443"
+    },
+    {
+      "path": "system/framework.php",
+      "sha256": "7bd21f9b2d9167b3f70c1899687c187d769022443d2091a3de930a41c14b5088"
+    },
+    {
+      "path": "system/library/db/mysqli.php",
+      "sha256": "f47e18c9ffa2b340fdd9df8c5d5c04eb4f899a6d4610a432e5cfd2eb65f8e72f"
+    },
+    {
+      "path": "system/library/template/twig.php",
+      "sha256": "92a6ac0af6ff88053ecafe0acd86e249bddaab664080a549c0a502179f537a69"
+    },
+    {
+      "path": "extension/ps_enhanced_measurement/catalog/controller/analytics/ps_enhanced_measurement.php",
+      "sha256": "7273ac3733c3233cc52c86f07aa2a4714adb575d570e901808c61d3498eff00e"
+    },
+    {
+      "path": "extension/ps_enhanced_measurement/catalog/model/analytics/ps_enhanced_measurement.php",
+      "sha256": "eea58d1e247a16c2cc4bc1e61b8a5028e41dc7ed557e9c652d74382f7984b4b4"
+    }
+  ],
+  "targets": [
+    {
+      "path": "catalog/model/account/order.php",
+      "new": false,
+      "before_lf_sha256": "76326e21882ae44abb92687a637692cc0168e1c8468f7461bf3f1628d4ef5f74",
+      "after_lf_sha256": "81263592f90442f39213434fb1d831311c58a2506aefcbcb6af610cfb4e759d7"
+    },
+    {
+      "path": "catalog/controller/account/order.php",
+      "new": false,
+      "before_lf_sha256": "6089dd0f39e67b8cc14739758cb9709851ee7260790a5387a85e05321f69940f",
+      "after_lf_sha256": "722400d78a2aebe6726f27392c6e2d1a18116af764ece5945b81003509c84f59"
+    },
+    {
+      "path": "catalog/view/template/account/order_list.twig",
+      "new": false,
+      "before_lf_sha256": "929949a1dbdd03716c97f6de195f1a4c6dbd191f101ed254070ff49617679c6e",
+      "after_lf_sha256": "f526db9ccec43c92577be9fd120910e8be4000efa611b9c6ad7c8b02c4a9c241"
+    },
+    {
+      "path": "catalog/view/template/account/order_info.twig",
+      "new": false,
+      "before_lf_sha256": "9d3ae75a48c96d6d0731050631bce3fcf6fe18cd9fabe8dc34c7baea61288f73",
+      "after_lf_sha256": "73067a00da6be949f80b725fbfb608ce62e41cd7cefbca936b83400af0b91793"
+    },
+    {
+      "path": "catalog/view/template/account/order_history.twig",
+      "new": false,
+      "before_lf_sha256": "bdf2f3170c7e0fca76e00125aacc4bb1957e342cc01f0a88f5c6de49814640ed",
+      "after_lf_sha256": "2c1bafbef897059cd34d8eeda46deaf65e29a3ff6934563496d3f71bcacad2fe"
+    },
+    {
+      "path": "extension/ukrainian/catalog/language/uk-ua/account/order.php",
+      "new": false,
+      "before_lf_sha256": "9bc7404c316876170ae882a26e1ce6faf6428d8571131555915fa90efc1517f2",
+      "after_lf_sha256": "bd25abfe02408347c9ef1770e6134df11101a8c98fcc6e4d0dedfbdee841dcea"
+    },
+    {
+      "path": "system/library/acc007_order_status.php",
+      "new": true,
+      "before_lf_sha256": null,
+      "after_lf_sha256": "9086eff917ea2003bdad786d0ddaa680f06cb702b9af1567c30c3916e6ca6885"
+    }
+  ]
+}

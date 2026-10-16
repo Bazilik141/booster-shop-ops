@@ -1,0 +1,60 @@
+{
+  "task": "ACC-007",
+  "package": "history-comment-priority",
+  "patch_sha256": "0af604ca61123655c3cc54c054cf9f5d3a82fc8b51b00ac312a742fdeff93de6",
+  "report_sha256": "233be3593a64f2c6912b9ad5bdbc986c6276b713b73ee79a6c4d6c43ff0d470b",
+  "packet_sha256": "dbc5af4c22773ad986e235dc625368809abdb82466ea60a6cfc6cd256fe9851e",
+  "packet_bytes": 62633,
+  "files": [
+    {
+      "path": "work/acc007-comment-priority-20261014/review-request.md",
+      "sha256": "58af47f880bc0bbdcfc15e96ebb4f6dcb4f800cd0172345f087885387efd7ad4",
+      "bytes": 1925
+    },
+    {
+      "path": "patches/ACC-007_history-comment-priority_20261014.php",
+      "sha256": "0af604ca61123655c3cc54c054cf9f5d3a82fc8b51b00ac312a742fdeff93de6",
+      "bytes": 22399
+    },
+    {
+      "path": "diagnostics/ACC-007_history-comment-priority_report_20261014.md",
+      "sha256": "233be3593a64f2c6912b9ad5bdbc986c6276b713b73ee79a6c4d6c43ff0d470b",
+      "bytes": 7840
+    },
+    {
+      "path": "diagnostics/ACC-007_history-comment-priority_evidence_20261014/source-intake.json",
+      "sha256": "fd2f924e81a49e66e9f40efb64257fcd3c25f843717c73d1a96f22b9a0b79f66",
+      "bytes": 2155
+    },
+    {
+      "path": "diagnostics/ACC-007_history-comment-priority_evidence_20261014/source.diff",
+      "sha256": "bd63004ceffebc6baa01c8c3ac346dc7343ed999f768ff3fc0714dff5bc730b6",
+      "bytes": 978
+    },
+    {
+      "path": "diagnostics/ACC-007_history-comment-priority_evidence_20261014/payload.json",
+      "sha256": "3df25720c3d76979a28f85c36ae769cebd9ecfaa71fe7d2f2f34334eb953461b",
+      "bytes": 4282
+    },
+    {
+      "path": "diagnostics/ACC-007_history-comment-priority_evidence_20261014/runner-tests.json",
+      "sha256": "90328ef23f2eec471ac45e8c7aabc93f76fd0321ea79f79a7c5e8039e1862f3f",
+      "bytes": 1559
+    },
+    {
+      "path": "diagnostics/ACC-007_history-comment-priority_evidence_20261014/backend-ui-tests.json",
+      "sha256": "6b3dbb0a6b32908bb4c52fe58b513ffbf4489d6a94329a2146789d5885f09e48",
+      "bytes": 4860
+    },
+    {
+      "path": "diagnostics/ACC-007_history-comment-priority_evidence_20261014/ui-tests.json",
+      "sha256": "fb8c8fe7eb7de5b52533c2e25107a981a9e178ea08e3cd263cee759e1098fce4",
+      "bytes": 3098
+    },
+    {
+      "path": "diagnostics/ACC-007_history-comment-priority_evidence_20261014/static-tests.json",
+      "sha256": "8fc74f70b15190c162fcca06bbbef7b3667460a7daaad439dd0c75a8b44ecdbc",
+      "bytes": 312
+    }
+  ]
+}

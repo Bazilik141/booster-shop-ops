@@ -1,0 +1,28 @@
+{
+  "task": "ACC-007",
+  "package": "notified-history-comments",
+  "evidence_source": "Owner QA message and two inline screenshots, 2026-10-14; screenshots not copied",
+  "owner_report": "Expected their own history comment to appear; default status message remains visible instead; other behavior reportedly looks correct",
+  "screenshot_observation": "The example history row has customer-notified set to No",
+  "current_reviewed_code": "CASE WHEN order_history.notify = 1 THEN comment ELSE empty string",
+  "code_implication": "The example with notification disabled is excluded by the current comment projection",
+  "unverified": [
+    "Exact deployed source bytes and successful apply/cache output have not been supplied",
+    "Behavior of a nonempty notified history comment in this QA run"
+  ],
+  "owner_decisions_confirmed": {
+    "comment_visibility": "Only comments with customer notification enabled",
+    "empty_comment_behavior": "Show the standard status explanation",
+    "current_patch_matches_selected_policy": true
+  },
+  "diagnostic_conclusion": "The supplied example has notification disabled and is not a valid positive test of notified comment display. No implementation failure for notify=1 has been established.",
+  "next_owner_check": "Read an existing owned order with a nonempty history comment and customer-notified Yes; no new order-history or email action required",
+  "fresh_source_needed_if": "A nonempty notified comment is also absent after the applied patch/cache clear; then obtain exact post-apply source and apply output",
+  "gate": "WAIT_OWNER_QA_NONEMPTY_NOTIFIED_COMMENT",
+  "revision_written": false,
+  "raw_comment_or_customer_payment_data_saved": false,
+  "mobile_header_package_started": false,
+  "acc008_started": false,
+  "git_invoked": false,
+  "notion_dashboard_write": false
+}

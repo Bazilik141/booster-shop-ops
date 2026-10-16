@@ -1,0 +1,81 @@
+{
+  "archive": "ACC-007-followup-current_20261014.tar.gz",
+  "archive_sha256": "5ba0e4b895afcd687a7ffa40a21e54142dfeecd08f14295d7f0f7d4005b1044a",
+  "archive_bytes": 111656,
+  "regular_files": 12,
+  "safe_extraction_outside_repository": true,
+  "installed_acc007_files_match_accepted_candidates": [
+    "catalog/model/account/order.php",
+    "catalog/controller/account/order.php",
+    "catalog/view/template/account/order_history.twig",
+    "extension/ukrainian/catalog/language/uk-ua/account/order.php",
+    "system/library/acc007_order_status.php"
+  ],
+  "files": [
+    {
+      "path": "catalog/model/account/order.php",
+      "bytes": 13806,
+      "sha256": "81263592f90442f39213434fb1d831311c58a2506aefcbcb6af610cfb4e759d7"
+    },
+    {
+      "path": "catalog/controller/account/order.php",
+      "bytes": 18202,
+      "sha256": "722400d78a2aebe6726f27392c6e2d1a18116af764ece5945b81003509c84f59"
+    },
+    {
+      "path": "catalog/view/template/account/order_history.twig",
+      "bytes": 923,
+      "sha256": "2c1bafbef897059cd34d8eeda46deaf65e29a3ff6934563496d3f71bcacad2fe"
+    },
+    {
+      "path": "extension/ukrainian/catalog/language/uk-ua/account/order.php",
+      "bytes": 2469,
+      "sha256": "bd25abfe02408347c9ef1770e6134df11101a8c98fcc6e4d0dedfbdee841dcea"
+    },
+    {
+      "path": "system/library/acc007_order_status.php",
+      "bytes": 4676,
+      "sha256": "9086eff917ea2003bdad786d0ddaa680f06cb702b9af1567c30c3916e6ca6885"
+    },
+    {
+      "path": "system/library/request.php",
+      "bytes": 2260,
+      "sha256": "483c1a44ec0c7c9d6969570d766c1cd8c40e7646d19da0f7a11d0dda7979f52c"
+    },
+    {
+      "path": "catalog/model/checkout/order.php",
+      "bytes": 48008,
+      "sha256": "0324c221cb75cb1aaa04d8b28be5865b295aff3b727139791e03413342c3a800"
+    },
+    {
+      "path": "catalog/controller/mail/order.php",
+      "bytes": 29688,
+      "sha256": "a01489fc9ca07e36579e1aee7a3d838387fed3a4fa70335bae2ac7faf58a158f"
+    },
+    {
+      "path": "catalog/view/template/common/header.twig",
+      "bytes": 30982,
+      "sha256": "ff9f59cb2164e6921e6e5153c002a0684f35114c7cc85f3cfa534c4a1d815d70"
+    },
+    {
+      "path": "catalog/controller/common/header.php",
+      "bytes": 9082,
+      "sha256": "64a96e2fe537887a2de906075bad8dd9862f04c9b965eeb79745cfacde01a6dd"
+    },
+    {
+      "path": "catalog/view/stylesheet/boostershop-ds.css",
+      "bytes": 224951,
+      "sha256": "e396793de22fdfa588267755a22c13a5c9b260ad086b97af942b3efe6af6b357"
+    },
+    {
+      "path": "catalog/view/stylesheet/bootstrap.css",
+      "bytes": 270584,
+      "sha256": "3e6b85215061cd33fc02676958ee706c0e96b877893c244bff473ce4fb9ecc57"
+    }
+  ],
+  "locked_previous_artifacts_unchanged": {
+    "patches/ACC-006_wishlist-restore_20261013.php": "01363fafc078fe7d3c247cf3e3ed1410c5733d54fdc6a55b40fd1c849b40a995",
+    "patches/ACC-007_order-status-presentation_20261014.php": "73d292554bf3f49cca5c13c10551a6b1124390ad527ce71f41012d8ef1fd2221",
+    "diagnostics/ACC-007_order-status-presentation_report_20261014.md": "52072e02c97da639440a83ec8fc37af8ce72ccfd351072f60b853ed9164360da"
+  }
+}

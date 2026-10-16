@@ -1,0 +1,26 @@
+{
+  "task": "ACC-007",
+  "observed_date": "2026-10-14",
+  "method": "Codex in-app browser navigation and complete accessibility page state; anonymous empty-cart session",
+  "evidence_limit": "Visible page content, titles and final URLs only; no HTTP response-code measurement, authenticated customer data, complete three-width live UI test, OpenCart log read, real checkout form or owner acceptance implied.",
+  "web_fetch_attempt": "The separate web fetch tool returned gateway/inaccessibility errors; browser navigation succeeded. Those fetch-tool errors are not attributed to production.",
+  "tier1": [
+    {"requested": "https://boostershop.website/", "result": "content_opened", "title": "One Piece TCG та Pokémon карти | Японські бустери в наявності", "fatal_error_visible": false},
+    {"requested": "https://boostershop.website/catalog/Pokemon", "result": "content_opened", "title": "Pokémon TCG бустери JP / KR / EN — sealed | Booster Shop", "fatal_error_visible": false},
+    {"requested": "https://boostershop.website/catalog/Pokemon/Pokemon-booster-box", "result": "content_opened", "title": "Бустер бокси Pokémon TCG JP/EN — sealed | Booster Shop", "fatal_error_visible": false},
+    {"requested": "https://boostershop.website/product/One-Piece-Boosters-OP-11", "result": "content_opened", "title": "OP-11 A Fist of Divine Speed бустер One Piece JP | Booster Shop", "fatal_error_visible": false},
+    {"requested": "https://boostershop.website/product/FIG-CHARM-001", "result": "not_found_page", "title": "Сторінка не знайдена!", "heading": "Цю сторінку видалено з колоди", "fatal_error_visible": false, "cause": "Not established; no pre-deploy live comparison or product/SEO data audit was done"},
+    {"requested": "https://boostershop.website/information/oplata-i-dostavka", "result": "content_opened", "title": "Оплата і доставка — Booster Shop", "fatal_error_visible": false},
+    {"requested": "https://boostershop.website/index.php?route=checkout/cart", "result": "empty_cart_opened", "title": "Мій кошик", "fatal_error_visible": false},
+    {"requested": "https://boostershop.website/index.php?route=checkout/checkout", "result": "empty_cart_guard_redirect", "final_url": "https://boostershop.website/?route=checkout/cart", "title": "Мій кошик", "fatal_error_visible": false, "owner_required": "Checkout form start with an item in the cart; no order/payment submission"}
+  ],
+  "supplemental": [
+    {"requested": "https://boostershop.website/product/figurka-charizard-pokemon-3d-druk", "basis": "Actual product link observed on the homepage", "result": "content_opened", "title": "Фігурка Charizard (Pokémon) — 3D-друк | Booster Shop", "fatal_error_visible": false, "evidence_limit": "Confirms a currently linked 3D product page works; does not prove it is FIG-CHARM-001 or replace the canonical Tier1 URL without owner acceptance"},
+    {"requested": "https://boostershop.website/index.php?route=account/order", "result": "guest_redirect_to_login", "final_url": "https://boostershop.website/?route=account/login", "fatal_error_visible": false},
+    {"requested": "https://boostershop.website/index.php?route=account/order.history&order_id=0", "result": "guest_redirect_to_login", "final_url": "https://boostershop.website/?route=account/login", "fatal_error_visible": false}
+  ],
+  "owner_qa_pending": ["authenticated status/date/message/pagination checks", "returns form prefill", "controlled cross-customer denial", "three live widths and interactions", "profile/address/account forms", "checkout start with cart item", "new OpenCart errors", "classification/acceptance of the FIG-CHARM-001 not-found control URL"],
+  "gate": "G1_WAIT_OWNER_QA_AND_TIER1_EXCEPTION_RESOLUTION",
+  "ACC-008_started": false,
+  "no_prod_order_payment_profile_or_address_write": true
+}

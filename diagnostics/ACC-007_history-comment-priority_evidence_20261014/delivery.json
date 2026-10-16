@@ -1,0 +1,26 @@
+{
+  "task": "ACC-007",
+  "package": "history-comment-priority",
+  "gate": "WAIT_OWNER_DRY_RUN_THEN_EXPLICIT_GO_FOR_APPLY",
+  "owner_fresh_template_sha256": "1c42a4e3de383e3e94a2fda14838534999470f6ac3ea4de8d7c0e14edd052b8d",
+  "patch_sha256": "0af604ca61123655c3cc54c054cf9f5d3a82fc8b51b00ac312a742fdeff93de6",
+  "report_sha256": "233be3593a64f2c6912b9ad5bdbc986c6276b713b73ee79a6c4d6c43ff0d470b",
+  "review": "Deploy OK; no blocking findings",
+  "review_path": "diagnostics/ACC-007_history-comment-priority_claude-review_20261014.md",
+  "review_sha256": "86566ac92597159c836fcfb5dc4e46effe0890aa73822f53de352562c4abb1a3",
+  "review_limits": "Independent source/document review; no reviewer execution, instrumented hash computation or production proof",
+  "production_targets": [
+    "catalog/view/template/account/order_history.twig"
+  ],
+  "production_apply_performed": false,
+  "local_assertions": {
+    "native_backend_render": 94,
+    "runner": 22,
+    "ui": 49
+  },
+  "prior_artifacts_unchanged": true,
+  "mobile_header_started": false,
+  "acc008_started": false,
+  "git_invoked": false,
+  "notion_dashboard_writes": false
+}

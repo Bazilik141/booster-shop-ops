@@ -1,0 +1,13 @@
+{
+  "task": "ACC-007",
+  "all_three_frozen_runner_hashes_match": true,
+  "copied_files_byte_identical": true,
+  "dashboard_only_ACC007_object_changed": true,
+  "original_checkout_and_index_not_changed": true,
+  "original_primary_dashboard_snapshot_sha256": "88c5e1e7cf4a5de9b70fecf7a6f050486d9d4a4eb7ae72625c77005078a2772d",
+  "canonical_notion_ID_verified": true,
+  "canonical_status_before": "Not started",
+  "canonical_status_target": "Done",
+  "private_owner_analytics_not_in_review": true,
+  "new_application_code_or_production_test": false
+}

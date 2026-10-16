@@ -1,0 +1,43 @@
+{
+  "task": "ACC-007",
+  "round": 1,
+  "owner_authorization": "Direct owner reply, 2026-10-14: use configured Claude API",
+  "canonical_helper": "scripts/auto_review.py::call_claude (scoped read-only transport adapter)",
+  "packet_sha256": "0e5f73b2c439c374a30d307333575a66426aa58a82581cdae4fe547c566a3a0c",
+  "patch_sha256": "f089e31d3b482c107b2f6a719bf1466ab29b224eb79cfcc76947bb242207e9eb",
+  "started_utc": "2026-10-14T13:10:44.999856+00:00",
+  "git_invoked": false,
+  "notion_dashboard_write": false,
+  "patch_report_modified": false,
+  "api_key_logged_or_saved": false,
+  "status": "completed",
+  "model": "claude-opus-5-5",
+  "display_name": "Claude Opus 5.5",
+  "effort": "high",
+  "thinking": "adaptive",
+  "max_output_tokens": 16384,
+  "model_availability": "verified API models.list",
+  "dispatched_utc": "2026-10-14T13:10:46.392139+00:00",
+  "response_id": "msg_011Cg2BhYav1QPXR1i2h3Gzb",
+  "response_model": "claude-opus-5-5",
+  "stop_reason": "end_turn",
+  "usage": {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "inference_geo": "global",
+    "input_tokens": 81439,
+    "output_tokens": 7718,
+    "output_tokens_details": null,
+    "server_tool_use": null,
+    "service_tier": "standard"
+  },
+  "response_text_blocks": 1,
+  "completed_utc": "2026-10-14T13:12:08.913631+00:00",
+  "review_path": "diagnostics/ACC-007_notified-history-comments_claude-review_20261014.md",
+  "review_sha256": "db2de0251d43f1c6c11043c74a81abb0ed9ef519e440271d864895a09bf47f06",
+  "patch_sha_unchanged": true
+}

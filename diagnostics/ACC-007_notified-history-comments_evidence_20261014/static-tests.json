@@ -1,0 +1,55 @@
+{
+  "fixture_only": true,
+  "passed": 26,
+  "checks": [
+    "unique reversible recipe catalog/model/account/order.php",
+    "entire file outside specified edits preserved catalog/model/account/order.php",
+    "candidate SHA catalog/model/account/order.php",
+    "unique reversible recipe catalog/controller/account/order.php",
+    "entire file outside specified edits preserved catalog/controller/account/order.php",
+    "candidate SHA catalog/controller/account/order.php",
+    "unique reversible recipe catalog/view/template/account/order_history.twig",
+    "unique reversible recipe catalog/view/template/account/order_history.twig",
+    "entire file outside specified edits preserved catalog/view/template/account/order_history.twig",
+    "candidate SHA catalog/view/template/account/order_history.twig",
+    "read-only dependency intact extension/ukrainian/catalog/language/uk-ua/account/order.php",
+    "read-only dependency intact system/library/acc007_order_status.php",
+    "read-only dependency intact system/library/request.php",
+    "read-only dependency intact catalog/model/checkout/order.php",
+    "read-only dependency intact catalog/controller/mail/order.php",
+    "read-only dependency intact catalog/view/template/common/header.twig",
+    "read-only dependency intact catalog/controller/common/header.php",
+    "read-only dependency intact catalog/view/stylesheet/boostershop-ds.css",
+    "read-only dependency intact catalog/view/stylesheet/bootstrap.css",
+    "accepted artifact unchanged patches/ACC-006_wishlist-restore_20261013.php",
+    "accepted artifact unchanged patches/ACC-007_order-status-presentation_20261014.php",
+    "accepted artifact unchanged diagnostics/ACC-007_order-status-presentation_report_20261014.md",
+    "native php -l ACC-007_notified-history-comments_20261014.php",
+    "native php -l order.php",
+    "native php -l order.php",
+    "new UI signature scan clean"
+  ],
+  "php_lint": [
+    {
+      "path": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\patches\\ACC-007_notified-history-comments_20261014.php",
+      "result": "syntax_ok"
+    },
+    {
+      "path": "C:\\Users\\14bez\\.codex\\visualizations\\2026\\10\\13\\01a13483-23a0-7601-a23b-0d8e413a1867\\a7c-local\\after\\catalog\\model\\account\\order.php",
+      "result": "syntax_ok"
+    },
+    {
+      "path": "C:\\Users\\14bez\\.codex\\visualizations\\2026\\10\\13\\01a13483-23a0-7601-a23b-0d8e413a1867\\a7c-local\\after\\catalog\\controller\\account\\order.php",
+      "result": "syntax_ok"
+    }
+  ],
+  "new_diff_signatures": {
+    "important": 0,
+    "timeout": 0,
+    "absolute_or_fixed": 0,
+    "magic_pixels": 0,
+    "html_injection": 0,
+    "twig_include": 0
+  },
+  "patch_sha256": "f089e31d3b482c107b2f6a719bf1466ab29b224eb79cfcc76947bb242207e9eb"
+}

@@ -1,0 +1,35 @@
+{
+  "task": "ACC-007",
+  "scope": "one Twig template; nonempty notified comment takes precedence; fallback retained",
+  "owner_fresh_hash_command": "cd ~/public_html && sha256sum catalog/view/template/account/order_history.twig",
+  "owner_returned_raw_sha256": "1c42a4e3de383e3e94a2fda14838534999470f6ac3ea4de8d7c0e14edd052b8d",
+  "retained_reviewed_candidate_matches_current_host": true,
+  "source_provenance": "Exact previous patch candidate, byte-verified by current owner-host SHA; not a newly uploaded archive",
+  "owner_screen_observation": "A nonempty notified comment now appears alongside a duplicate standard message; screenshot not copied and raw text not retained",
+  "locked_previous_artifacts_unchanged": {
+    "patches/ACC-006_wishlist-restore_20261013.php": "01363fafc078fe7d3c247cf3e3ed1410c5733d54fdc6a55b40fd1c849b40a995",
+    "patches/ACC-007_order-status-presentation_20261014.php": "73d292554bf3f49cca5c13c10551a6b1124390ad527ce71f41012d8ef1fd2221",
+    "diagnostics/ACC-007_order-status-presentation_report_20261014.md": "52072e02c97da639440a83ec8fc37af8ce72ccfd351072f60b853ed9164360da",
+    "patches/ACC-007_notified-history-comments_20261014.php": "f089e31d3b482c107b2f6a719bf1466ab29b224eb79cfcc76947bb242207e9eb",
+    "diagnostics/ACC-007_notified-history-comments_report_20261014.md": "39ba71e6b9e5c9590a6a31c2815e84afcc9e78de3682e51eabf26575d96c36e6"
+  },
+  "dependencies": [
+    {
+      "path": "catalog/model/account/order.php",
+      "sha256": "2862fd9d2a5f756fd5c58d2ecfc71df705799a3bf3f2cef24a69af867c127930"
+    },
+    {
+      "path": "catalog/controller/account/order.php",
+      "sha256": "05d7de4ef69585cb5422af9a0badc4f0fa5bef4cd0b33cbc272a39bd00078352"
+    },
+    {
+      "path": "system/library/acc007_order_status.php",
+      "sha256": "9086eff917ea2003bdad786d0ddaa680f06cb702b9af1567c30c3916e6ca6885"
+    },
+    {
+      "path": "extension/ukrainian/catalog/language/uk-ua/account/order.php",
+      "sha256": "bd25abfe02408347c9ef1770e6134df11101a8c98fcc6e4d0dedfbdee841dcea"
+    }
+  ],
+  "new_patch_sha256": "0af604ca61123655c3cc54c054cf9f5d3a82fc8b51b00ac312a742fdeff93de6"
+}

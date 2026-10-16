@@ -1,0 +1,13 @@
+{
+  "reverse_edits_restore_entire_owner_hash_verified_template": true,
+  "single_production_target": true,
+  "backend_no_edits": true,
+  "new_ui_signature_hits": {
+    "important": 0,
+    "timeout": 0,
+    "absolute_fixed": 0,
+    "magic_pixels": 0,
+    "new_include": 0,
+    "unsafe_output": 0
+  }
+}

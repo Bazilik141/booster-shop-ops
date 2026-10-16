@@ -1,0 +1,318 @@
+{
+  "task": "ACC-007",
+  "marker": "ACC-007_ORDER_STATUS_PRESENTATION_20261014",
+  "archive_sha256": "582dcba5debd9989212b1315ea89c112d2ec13fbaf532696df9f5bd9d449e682",
+  "entries": [
+    {
+      "path": "catalog/model/account/order.php",
+      "new": false,
+      "before": "76326e21882ae44abb92687a637692cc0168e1c8468f7461bf3f1628d4ef5f74",
+      "after": "81263592f90442f39213434fb1d831311c58a2506aefcbcb6af610cfb4e759d7",
+      "edits": [
+        {
+          "before": "namespace Opencart\\Catalog\\Model\\Account;\n",
+          "after": "namespace Opencart\\Catalog\\Model\\Account;\n// ACC-007_ORDER_STATUS_PRESENTATION_20261014\nuse Opencart\\System\\Library\\Acc007OrderStatus;\nrequire_once DIR_SYSTEM . 'library/acc007_order_status.php';\n",
+          "count": 1
+        },
+        {
+          "before": "\t\t$order_query = $this->db->query(\"SELECT * FROM `\" . DB_PREFIX . \"order` WHERE `order_id` = '\" . (int)$order_id . \"' AND `customer_id` = '\" . (int)$this->customer->getId() . \"' AND `customer_id` != '0' AND `order_status_id` > '0'\");",
+          "after": "\t\t$order_query = $this->db->query($this->publicOrderSelect() . \" WHERE `o`.`order_id` = '\" . (int)$order_id . \"' AND \" . $this->publicOrderScope());",
+          "count": 1
+        },
+        {
+          "before": "\t\t$query = $this->db->query(\"SELECT * FROM `\" . DB_PREFIX . \"order` WHERE `customer_id` = '\" . (int)$this->customer->getId() . \"' AND `order_status_id` > '0' AND `store_id` = '\" . (int)$this->config->get('config_store_id') . \"' ORDER BY `order_id` DESC LIMIT \" . (int)$start . \",\" . (int)$limit);",
+          "after": "\t\t$limit = min($limit, 100);\n\t\t$query = $this->db->query($this->publicOrderSelect() . \" WHERE \" . $this->publicOrderScope() . \" ORDER BY `o`.`order_id` DESC LIMIT \" . (int)$start . \",\" . (int)$limit);",
+          "count": 1
+        },
+        {
+          "before": "\tpublic function getHistories(int $order_id): array {\n\t\t$query = $this->db->query(\"SELECT `date_added`, `os`.`name` AS `status`, `oh`.`comment`, `oh`.`notify` FROM `\" . DB_PREFIX . \"order_history` `oh` LEFT JOIN `\" . DB_PREFIX . \"order_status` `os` ON `oh`.`order_status_id` = `os`.`order_status_id` WHERE `oh`.`order_id` = '\" . (int)$order_id . \"' AND `os`.`language_id` = '\" . (int)$this->config->get('config_language_id') . \"' ORDER BY `oh`.`date_added`\");\n\n\t\treturn $query->rows;\n\t}\n",
+          "after": "\tpublic function getHistories(int $order_id, int $start = 0, int $limit = 10): array {\n\t\t$start = max(0, $start);\n\t\t$limit = max(1, min(100, $limit));\n\t\t$query = $this->db->query(\"SELECT `oh`.`order_history_id`,`oh`.`order_status_id`,`oh`.`date_added` FROM `\" . DB_PREFIX . \"order_history` `oh` INNER JOIN `\" . DB_PREFIX . \"order` `o` ON (`o`.`order_id` = `oh`.`order_id`) WHERE `oh`.`order_id` = '\" . (int)$order_id . \"' AND \" . $this->publicOrderScope() . \" AND \" . Acc007OrderStatus::visibleSql('`oh`.`order_status_id`') . \" ORDER BY `oh`.`date_added` ASC, `oh`.`order_history_id` ASC LIMIT \" . $start . \",\" . $limit);\n\t\treturn $query->rows;\n\t}\n",
+          "count": 1
+        },
+        {
+          "before": "\tpublic function getTotalHistories(int $order_id): int {\n\t\t$query = $this->db->query(\"SELECT COUNT(*) AS `total` FROM `\" . DB_PREFIX . \"order_history` WHERE `order_id` = '\" . (int)$order_id . \"'\");\n\n\t\tif ($query->num_rows) {\n\t\t\treturn (int)$query->row['total'];\n\t\t} else {\n\t\t\treturn 0;\n\t\t}\n\t}\n",
+          "after": "\tpublic function getTotalHistories(int $order_id): int {\n\t\t$query = $this->db->query(\"SELECT COUNT(*) AS `total` FROM `\" . DB_PREFIX . \"order_history` `oh` INNER JOIN `\" . DB_PREFIX . \"order` `o` ON (`o`.`order_id` = `oh`.`order_id`) WHERE `oh`.`order_id` = '\" . (int)$order_id . \"' AND \" . $this->publicOrderScope() . \" AND \" . Acc007OrderStatus::visibleSql('`oh`.`order_status_id`'));\n\n\t\tif ($query->num_rows) {\n\t\t\treturn (int)$query->row['total'];\n\t\t} else {\n\t\t\treturn 0;\n\t\t}\n\t}\n",
+          "count": 1
+        },
+        {
+          "before": "\t\t$query = $this->db->query(\"SELECT COUNT(*) AS `total` FROM `\" . DB_PREFIX . \"order` `o` WHERE `customer_id` = '\" . (int)$this->customer->getId() . \"' AND `o`.`order_status_id` > '0' AND `o`.`store_id` = '\" . (int)$this->config->get('config_store_id') . \"'\");",
+          "after": "\t\t$query = $this->db->query(\"SELECT COUNT(*) AS `total` FROM `\" . DB_PREFIX . \"order` `o` WHERE \" . $this->publicOrderScope());",
+          "count": 1
+        },
+        {
+          "before": "\n}\n",
+          "after": "\n\tprivate function publicOrderScope(): string {\n\t\treturn \"`o`.`customer_id` = '\" . (int)$this->customer->getId() . \"' AND `o`.`customer_id` != '0' AND `o`.`store_id` = '\" . (int)$this->config->get('config_store_id') . \"' AND `o`.`order_status_id` > '0' AND \" . Acc007OrderStatus::visibleSql('`o`.`order_status_id`');\n\t}\n\n\tprivate function publicOrderSelect(): string {\n\t\t// Only the latest appended history can attest the CURRENT state. An old occurrence of\n\t\t// a recurring status, an undated row or an admin save without history gives unknown time.\n\t\treturn \"SELECT `o`.*, (SELECT CASE WHEN `last`.`order_status_id` = `o`.`order_status_id` THEN `last`.`date_added` ELSE NULL END FROM `\" . DB_PREFIX . \"order_history` `last` WHERE `last`.`order_id` = `o`.`order_id` ORDER BY `last`.`order_history_id` DESC LIMIT 1) AS `bs_status_date_added` FROM `\" . DB_PREFIX . \"order` `o`\";\n\t}\n}\n",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "catalog/controller/account/order.php",
+      "new": false,
+      "before": "6089dd0f39e67b8cc14739758cb9709851ee7260790a5387a85e05321f69940f",
+      "after": "722400d78a2aebe6726f27392c6e2d1a18116af764ece5945b81003509c84f59",
+      "edits": [
+        {
+          "before": "namespace Opencart\\Catalog\\Controller\\Account;\n",
+          "after": "namespace Opencart\\Catalog\\Controller\\Account;\n// ACC-007_ORDER_STATUS_PRESENTATION_20261014\nuse Opencart\\System\\Library\\Acc007OrderStatus;\nrequire_once DIR_SYSTEM . 'library/acc007_order_status.php';\n",
+          "count": 1
+        },
+        {
+          "before": "\t\t\t$order_status_info = $this->model_localisation_order_status->getOrderStatus($result['order_status_id']);\n\n\t\t\tif ($order_status_info) {\n\t\t\t\t$order_status = $order_status_info['name'];\n\t\t\t} else {\n\t\t\t\t$order_status = '';\n\t\t\t}",
+          "after": "\t\t\t$bs_status = Acc007OrderStatus::presentation((int)$this->config->get('config_language_id'), (int)$result['order_status_id']);",
+          "count": 1
+        },
+        {
+          "before": "\t\t\t\t'status'        => $order_status,",
+          "after": "\t\t\t\t'status'        => $bs_status['label'],\n\t\t\t\t'bs_status_style' => $bs_status['style'],\n\t\t\t\t'bs_status_date' => Acc007OrderStatus::date($result['bs_status_date_added'] ?? null, $this->config->get('config_timezone')),",
+          "count": 1
+        },
+        {
+          "before": "\t\t\t$order_status_info = $this->model_localisation_order_status->getOrderStatus($order_info['order_status_id']);\n\n\t\t\tif ($order_status_info) {\n\t\t\t\t$data['order_status'] = $order_status_info['name'];\n\t\t\t} else {\n\t\t\t\t$data['order_status'] = '';\n\t\t\t}",
+          "after": "\t\t\t$bs_status = Acc007OrderStatus::presentation((int)$this->config->get('config_language_id'), (int)$order_info['order_status_id']);\n\t\t\t$data['order_status'] = $bs_status['label'];\n\t\t\t$data['bs_status_style'] = $bs_status['style'];\n\t\t\t$data['bs_status_message'] = $bs_status['message'];\n\t\t\t$data['bs_status_date'] = Acc007OrderStatus::date($order_info['bs_status_date_added'] ?? null, $this->config->get('config_timezone'));",
+          "count": 1
+        },
+        {
+          "before": "\t\t$results = $this->model_account_order->getHistories($order_id);",
+          "after": "\t\t$page = max(1, min($page, intdiv(PHP_INT_MAX, $limit)));\n\t\t$results = $this->model_account_order->getHistories($order_id, ($page - 1) * $limit, $limit);",
+          "count": 1
+        },
+        {
+          "before": "\t\tforeach ($results as $result) {\n\t\t\t$data['histories'][] = [\n\t\t\t\t'comment'    => nl2br($result['comment']),\n\t\t\t\t'date_added' => date($this->language->get('date_format_short'), strtotime($result['date_added']))\n\t\t\t] + $result;\n\t\t}",
+          "after": "\t\tforeach ($results as $result) {\n\t\t\t$bs_status = Acc007OrderStatus::presentation((int)$this->config->get('config_language_id'), (int)$result['order_status_id']);\n\t\t\t$data['histories'][] = [\n\t\t\t\t'comment' => $bs_status['message'],\n\t\t\t\t'status' => $bs_status['label'],\n\t\t\t\t'bs_status_style' => $bs_status['style'],\n\t\t\t\t'date_added' => Acc007OrderStatus::date($result['date_added'], $this->config->get('config_timezone'))\n\t\t\t];\n\t\t}",
+          "count": 1
+        },
+        {
+          "before": "\t\t$limit = 10;\n\n\t\t$data['orders'] = [];",
+          "after": "\t\t$limit = 10;\n\t\t$page = max(1, min($page, intdiv(PHP_INT_MAX, $limit)));\n\n\t\t$data['orders'] = [];",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "catalog/view/template/account/order_list.twig",
+      "new": false,
+      "before": "929949a1dbdd03716c97f6de195f1a4c6dbd191f101ed254070ff49617679c6e",
+      "after": "f526db9ccec43c92577be9fd120910e8be4000efa611b9c6ad7c8b02c4a9c241",
+      "edits": [
+        {
+          "before": "{{ header }}",
+          "after": "{# ACC-007_ORDER_STATUS_PRESENTATION_20261014 #}\n{{ header }}",
+          "count": 1
+        },
+        {
+          "before": "<th>{{ column_date_added }}</th>",
+          "after": "<th>{{ column_status_changed }}</th>",
+          "count": 1
+        },
+        {
+          "before": "<td>{{ order.status }}</td>",
+          "after": "<td><span class=\"bs-badge\" style=\"{{ order.bs_status_style }}\">{{ order.status }}</span></td>",
+          "count": 1
+        },
+        {
+          "before": "<td>{{ order.date_added }}</td>",
+          "after": "<td>{{ order.bs_status_date }}</td>",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "catalog/view/template/account/order_info.twig",
+      "new": false,
+      "before": "9d3ae75a48c96d6d0731050631bce3fcf6fe18cd9fabe8dc34c7baea61288f73",
+      "after": "73067a00da6be949f80b725fbfb608ce62e41cd7cefbca936b83400af0b91793",
+      "edits": [
+        {
+          "before": "{{ header }}",
+          "after": "{# ACC-007_ORDER_STATUS_PRESENTATION_20261014 #}\n{{ header }}",
+          "count": 1
+        },
+        {
+          "before": "      {{ content_top }}",
+          "after": "      {{ content_top }}\n      <div class=\"mb-3\">\n        <p>{{ text_current_status }}: <span class=\"bs-badge\" style=\"{{ bs_status_style }}\">{{ order_status }}</span></p>\n        <p>{{ text_status_date }}: {{ bs_status_date }}</p>\n        <p>{{ bs_status_message }}</p>\n      </div>",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "catalog/view/template/account/order_history.twig",
+      "new": false,
+      "before": "bdf2f3170c7e0fca76e00125aacc4bb1957e342cc01f0a88f5c6de49814640ed",
+      "after": "2c1bafbef897059cd34d8eeda46deaf65e29a3ff6934563496d3f71bcacad2fe",
+      "edits": [
+        {
+          "before": "<div class=\"table-responsive\">",
+          "after": "{# ACC-007_ORDER_STATUS_PRESENTATION_20261014 #}\n<div class=\"table-responsive\">",
+          "count": 1
+        },
+        {
+          "before": "<th>{{ column_date_added }}</th>",
+          "after": "<th>{{ column_status_changed }}</th>",
+          "count": 1
+        },
+        {
+          "before": "<th>{{ column_comment }}</th>",
+          "after": "<th>{{ column_public_message }}</th>",
+          "count": 1
+        },
+        {
+          "before": "<td>{{ history.status }}</td>",
+          "after": "<td><span class=\"bs-badge\" style=\"{{ history.bs_status_style }}\">{{ history.status }}</span></td>",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "extension/ukrainian/catalog/language/uk-ua/account/order.php",
+      "new": false,
+      "before": "9bc7404c316876170ae882a26e1ce6faf6428d8571131555915fa90efc1517f2",
+      "after": "bd25abfe02408347c9ef1770e6134df11101a8c98fcc6e4d0dedfbdee841dcea",
+      "edits": [
+        {
+          "before": "<?php\n",
+          "after": "<?php\n// ACC-007_ORDER_STATUS_PRESENTATION_20261014\n$_['column_status_changed'] = 'Дата зміни статусу (Київ)';\n$_['column_public_message'] = 'Повідомлення';\n$_['text_current_status'] = 'Поточний статус';\n$_['text_status_date'] = 'Дата зміни (Київ)';\n",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "system/library/acc007_order_status.php",
+      "new": true,
+      "before": null,
+      "after": "9086eff917ea2003bdad786d0ddaa680f06cb702b9af1567c30c3916e6ca6885",
+      "content": "<?php\nnamespace Opencart\\System\\Library;\n// ACC-007_ORDER_STATUS_PRESENTATION_20261014\nfinal class Acc007OrderStatus {\n    /** Customer presentation is independent of administrative names/notify bits. */\n    public static function presentation(int $language_id, int $status_id): array {\n        $map = [4 => [\n            1 => ['В обробці', 'in_progress', 'blue', 'Ми обробляємо ваше замовлення.'],\n            3 => ['Передано в доставку', 'in_transit', 'blue', 'Замовлення передано в доставку.'],\n            5 => ['Отримано', 'completed', 'green', 'Замовлення отримано.'],\n            7 => ['Очікує отримання', 'in_transit', 'blue', 'Замовлення очікує отримання.'],\n            10 => ['Потрібна увага', 'cancelled_problem', 'amber', 'Потрібна додаткова перевірка замовлення.'],\n            12 => ['Повернено', 'cancelled_problem', 'amber', 'Для замовлення зафіксовано повернення.'],\n            13 => ['Повернення коштів', 'cancelled_problem', 'amber', 'Для замовлення зафіксовано статус повернення коштів.'],\n            14 => ['Термін оплати минув', 'cancelled_problem', 'amber', 'Термін оплати замовлення минув.'],\n            15 => ['', 'hidden', 'neutral', ''],\n            17 => ['Підтвердьте оплату частинами', 'in_progress', 'amber', 'Потрібне ваше підтвердження оплати частинами.'],\n            18 => ['Оплата частинами — перевірка магазину', 'in_progress', 'blue', 'Магазин перевіряє оплату частинами.'],\n            19 => ['Оплату частинами підтверджено', 'in_progress', 'blue', 'Оплату частинами підтверджено. Це не означає отримання замовлення.'],\n            21 => ['Оплату частинами повернено', 'cancelled_problem', 'amber', 'Для оплати частинами зафіксовано повернення.'],\n            22 => ['Оплату частинами не підтверджено', 'cancelled_problem', 'amber', 'Оплату частинами не підтверджено.'],\n            23 => ['Передзамовлення', 'in_progress', 'blue', 'Замовлення оформлено як передзамовлення.'],\n            24 => ['Скасовано', 'cancelled_problem', 'red', 'Замовлення скасовано.']\n        ]];\n        $value = $map[$language_id][$status_id] ?? ['Статус уточнюється', 'neutral', 'neutral', 'Інформація про цей стан замовлення уточнюється.'];\n        $styles = [\n            'blue' => 'background:var(--bs-blue-soft);color:var(--bs-blue)',\n            'green' => 'background:var(--bs-green-soft);color:var(--bs-green-d)',\n            'amber' => 'background:var(--bs-warning-bg);color:var(--bs-warning-fg)',\n            'red' => 'background:var(--bs-danger);color:var(--bs-paper)',\n            'neutral' => 'background:var(--bs-line-2);color:var(--bs-ink-2)'\n        ];\n        return ['label'=>$value[0], 'group'=>$value[1], 'colour'=>$value[2], 'message'=>$value[3], 'visible'=>$status_id !== 15, 'style'=>$styles[$value[2]]];\n    }\n\n    /** One hidden-status predicate for all public query/count paths; NULL/0 remain neutral in history. */\n    public static function visibleSql(string $column): string {\n        return 'COALESCE(' . $column . ',0) <> 15';\n    }\n\n    /** Verified shop writer uses Kyiv local DATETIME. Preserve its wall time; never shift it as UTC. */\n    public static function date($value, $configured_timezone): string {\n        $unknown = 'Дату зміни не зафіксовано';\n        if ($configured_timezone !== 'Europe/Kyiv' || !is_string($value)\n            || !preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$/D', $value)\n            || (int)substr($value, 0, 4) < 1000) return $unknown;\n        $date = \\DateTimeImmutable::createFromFormat('!Y-m-d H:i:s', $value, new \\DateTimeZone('Europe/Kyiv'));\n        $errors = \\DateTimeImmutable::getLastErrors();\n        if (!$date || ($errors !== false && ($errors['warning_count'] || $errors['error_count']))\n            || $date->format('Y-m-d H:i:s') !== $value) return $unknown;\n        return $date->format('d.m.Y H:i:s');\n    }\n}\n"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "index.php",
+      "sha256": "47734307e2bc3dd7c7ac2c02ee87a01ac7334af629e7e5ecb4d00548bc1d1379"
+    },
+    {
+      "path": "system/startup.php",
+      "sha256": "c5ee86e45271c145ee08b4c77b0a1c70d5c104d82ae9d294f82c636a36af695e"
+    },
+    {
+      "path": "catalog/controller/startup/setting.php",
+      "sha256": "474257596017793971e3c2b991b3ddd5202f6db3d958c13bc42977c12bf8ece9"
+    },
+    {
+      "path": "system/config/default.php",
+      "sha256": "c56d41d08336aac6d652a3b5ecd87a11be05334a22b4ff9017fa03dbeaf70870"
+    },
+    {
+      "path": "system/config/catalog.php",
+      "sha256": "fdc5713fa8e9d732a4183485930bf4f29104ea8c1d4f059447a300c033c80443"
+    },
+    {
+      "path": "system/framework.php",
+      "sha256": "7bd21f9b2d9167b3f70c1899687c187d769022443d2091a3de930a41c14b5088"
+    },
+    {
+      "path": "system/library/db/mysqli.php",
+      "sha256": "f47e18c9ffa2b340fdd9df8c5d5c04eb4f899a6d4610a432e5cfd2eb65f8e72f"
+    },
+    {
+      "path": "system/library/template/twig.php",
+      "sha256": "92a6ac0af6ff88053ecafe0acd86e249bddaab664080a549c0a502179f537a69"
+    },
+    {
+      "path": "extension/ps_enhanced_measurement/catalog/controller/analytics/ps_enhanced_measurement.php",
+      "sha256": "7273ac3733c3233cc52c86f07aa2a4714adb575d570e901808c61d3498eff00e"
+    },
+    {
+      "path": "extension/ps_enhanced_measurement/catalog/model/analytics/ps_enhanced_measurement.php",
+      "sha256": "eea58d1e247a16c2cc4bc1e61b8a5028e41dc7ed557e9c652d74382f7984b4b4"
+    }
+  ],
+  "status_registry": [
+    {
+      "order_status_id": "1",
+      "language_id": "4",
+      "name": "В обробці"
+    },
+    {
+      "order_status_id": "3",
+      "language_id": "4",
+      "name": "Доставляється"
+    },
+    {
+      "order_status_id": "5",
+      "language_id": "4",
+      "name": "Отримано"
+    },
+    {
+      "order_status_id": "7",
+      "language_id": "4",
+      "name": "Доставлено - чекає отримувача"
+    },
+    {
+      "order_status_id": "10",
+      "language_id": "4",
+      "name": "Помилка"
+    },
+    {
+      "order_status_id": "12",
+      "language_id": "4",
+      "name": "Повернено"
+    },
+    {
+      "order_status_id": "13",
+      "language_id": "4",
+      "name": "Повернення коштів"
+    },
+    {
+      "order_status_id": "14",
+      "language_id": "4",
+      "name": "Протерміновано"
+    },
+    {
+      "order_status_id": "15",
+      "language_id": "4",
+      "name": "Чернетка (системний)"
+    },
+    {
+      "order_status_id": "17",
+      "language_id": "4",
+      "name": "Розстрочка — очікує клієнта"
+    },
+    {
+      "order_status_id": "18",
+      "language_id": "4",
+      "name": "Розстрочка — очікує видачі"
+    },
+    {
+      "order_status_id": "19",
+      "language_id": "4",
+      "name": "Розстрочка — оформлено"
+    },
+    {
+      "order_status_id": "21",
+      "language_id": "4",
+      "name": "Розстрочка — повернено"
+    },
+    {
+      "order_status_id": "22",
+      "language_id": "4",
+      "name": "Розстрочка — відхилено"
+    },
+    {
+      "order_status_id": "23",
+      "language_id": "4",
+      "name": "Передзамовлення"
+    },
+    {
+      "order_status_id": "24",
+      "language_id": "4",
+      "name": "Скасовано"
+    }
+  ],
+  "allowed_events": [
+    {
+      "code": "analytics_ps_enhanced_measurement",
+      "trigger": "catalog/view/account/order_info/before",
+      "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewAccountOrderInfoBefore"
+    }
+  ]
+}

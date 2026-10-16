@@ -1,0 +1,13 @@
+{
+  "basis": "Owner cPanel sha256sum reply, 2026-10-14; both matched retained source bytes",
+  "files": [
+    {
+      "path": "extension/ps_enhanced_measurement/catalog/controller/analytics/ps_enhanced_measurement.php",
+      "sha256": "7273ac3733c3233cc52c86f07aa2a4714adb575d570e901808c61d3498eff00e"
+    },
+    {
+      "path": "extension/ps_enhanced_measurement/catalog/model/analytics/ps_enhanced_measurement.php",
+      "sha256": "eea58d1e247a16c2cc4bc1e61b8a5028e41dc7ed557e9c652d74382f7984b4b4"
+    }
+  ]
+}

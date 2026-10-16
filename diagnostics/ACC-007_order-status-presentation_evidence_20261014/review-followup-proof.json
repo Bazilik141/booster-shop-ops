@@ -1,0 +1,9 @@
+{
+  "patch_sha256": "73d292554bf3f49cca5c13c10551a6b1124390ad527ce71f41012d8ef1fd2221",
+  "embedded_payload_equals_sidecar": true,
+  "entry_count": 7,
+  "report_sha256": "52072e02c97da639440a83ec8fc37af8ce72ccfd351072f60b853ed9164360da",
+  "startup_sha256": "474257596017793971e3c2b991b3ddd5202f6db3d958c13bc42977c12bf8ece9",
+  "returns_sha256": "0541d0b5e99685a6c6328324241c349c75a1d5f1c800d0848a3d277373c921cb",
+  "basis": "Actual local SHA-256/JSON/base64 checks; independent reviewer has no execution tools"
+}

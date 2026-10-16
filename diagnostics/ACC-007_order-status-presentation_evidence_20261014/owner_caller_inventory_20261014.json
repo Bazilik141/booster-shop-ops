@@ -1,0 +1,59 @@
+{
+  "task": "ACC-007",
+  "basis": "Owner repeated the exact requested cPanel command on 2026-10-14; six matches reported without error output",
+  "verified_command": "cd ~/public_html && grep -rnoE --include='*.php' 'model_account_order[[:space:]]*->[[:space:]]*getOrders?[[:space:]]*\\(' catalog extension && tar -czf ACC-007-review-files_20261014.tar.gz catalog/controller/account/returns.php",
+  "evidence_limit": "Owner exact direct-call grep over catalog/extension PHP files; not proof against dynamic aliases/multiline calls. Current returns source received and inspected.",
+  "reported_matches": [
+    {
+      "path": "catalog/model/account/order.php",
+      "line": 24,
+      "method": "getOrder",
+      "classification": "PHPDoc example in verified source"
+    },
+    {
+      "path": "catalog/model/account/order.php",
+      "line": 104,
+      "method": "getOrders",
+      "classification": "PHPDoc example in verified source"
+    },
+    {
+      "path": "catalog/controller/account/order.php",
+      "line": 64,
+      "method": "getOrders",
+      "classification": "existing ACC-007 target caller"
+    },
+    {
+      "path": "catalog/controller/account/order.php",
+      "line": 130,
+      "method": "getOrder",
+      "classification": "existing ACC-007 target caller"
+    },
+    {
+      "path": "catalog/controller/account/order.php",
+      "line": 444,
+      "method": "getOrder",
+      "classification": "existing ACC-007 target caller"
+    },
+    {
+      "path": "catalog/controller/account/returns.php",
+      "line": 224,
+      "method": "getOrder",
+      "classification": "Fresh verified returns.php::add form prefill only"
+    }
+  ],
+  "current_source_requested": [
+    "catalog/controller/account/returns.php"
+  ],
+  "patch_sha256": "73d292554bf3f49cca5c13c10551a6b1124390ad527ce71f41012d8ef1fd2221",
+  "patch_changed": false,
+  "archive_expected": "ACC-007-review-files_20261014.tar.gz",
+  "archive_received": true,
+  "gate": "G1_WAIT_REVIEW_ADDENDUM_AND_OWNER_DEPLOY_QA",
+  "no_deploy_or_later_package_authorized": true,
+  "archive_sha256": "b54dd8bd295481cfd6a4bf29383359ccbe1c2ac8103d682a52b5a60f2fc97b00",
+  "archive_bytes": 2865,
+  "current_returns_sha256": "0541d0b5e99685a6c6328324241c349c75a1d5f1c800d0848a3d277373c921cb",
+  "current_returns_bytes": 18878,
+  "member_inventory": "Exactly one regular expected file; no extras, links or duplicate paths",
+  "additional_caller_role": "account/returns::add reads order snapshot for form prefill. It never calls getOrder from save/payment/refund execution."
+}

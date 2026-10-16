@@ -1,0 +1,162 @@
+{
+  "task": "ACC-007",
+  "marker": "ACC-007_NOTIFIED_HISTORY_COMMENTS_20261014",
+  "archive_sha256": "5ba0e4b895afcd687a7ffa40a21e54142dfeecd08f14295d7f0f7d4005b1044a",
+  "entries": [
+    {
+      "path": "catalog/model/account/order.php",
+      "new": false,
+      "before": "81263592f90442f39213434fb1d831311c58a2506aefcbcb6af610cfb4e759d7",
+      "after": "2862fd9d2a5f756fd5c58d2ecfc71df705799a3bf3f2cef24a69af867c127930",
+      "edits": [
+        {
+          "before": "\t\t$query = $this->db->query(\"SELECT `oh`.`order_history_id`,`oh`.`order_status_id`,`oh`.`date_added` FROM `\" . DB_PREFIX . \"order_history` `oh` INNER JOIN `\" . DB_PREFIX . \"order` `o` ON (`o`.`order_id` = `oh`.`order_id`) WHERE `oh`.`order_id` = '\" . (int)$order_id . \"' AND \" . $this->publicOrderScope() . \" AND \" . Acc007OrderStatus::visibleSql('`oh`.`order_status_id`') . \" ORDER BY `oh`.`date_added` ASC, `oh`.`order_history_id` ASC LIMIT \" . $start . \",\" . $limit);",
+          "after": "\t\t// ACC-007_NOTIFIED_HISTORY_COMMENTS_20261014: never select unnotified history comments.\n\t\t$query = $this->db->query(\"SELECT `oh`.`order_history_id`,`oh`.`order_status_id`,`oh`.`date_added`,CASE WHEN `oh`.`notify` = 1 THEN `oh`.`comment` ELSE '' END AS `bs_customer_comment` FROM `\" . DB_PREFIX . \"order_history` `oh` INNER JOIN `\" . DB_PREFIX . \"order` `o` ON (`o`.`order_id` = `oh`.`order_id`) WHERE `oh`.`order_id` = '\" . (int)$order_id . \"' AND \" . $this->publicOrderScope() . \" AND \" . Acc007OrderStatus::visibleSql('`oh`.`order_status_id`') . \" ORDER BY `oh`.`date_added` ASC, `oh`.`order_history_id` ASC LIMIT \" . $start . \",\" . $limit);",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "catalog/controller/account/order.php",
+      "new": false,
+      "before": "722400d78a2aebe6726f27392c6e2d1a18116af764ece5945b81003509c84f59",
+      "after": "05d7de4ef69585cb5422af9a0badc4f0fa5bef4cd0b33cbc272a39bd00078352",
+      "edits": [
+        {
+          "before": "\t\t\t\t'comment' => $bs_status['message'],",
+          "after": "\t\t\t\t'comment' => $bs_status['message'],\n\t\t\t\t// ACC-007_NOTIFIED_HISTORY_COMMENTS_20261014: Request::clean encodes admin text; decode once, escape in Twig.\n\t\t\t\t'bs_customer_comment' => trim(html_entity_decode((string)($result['bs_customer_comment'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8')),",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "catalog/view/template/account/order_history.twig",
+      "new": false,
+      "before": "2c1bafbef897059cd34d8eeda46deaf65e29a3ff6934563496d3f71bcacad2fe",
+      "after": "1c42a4e3de383e3e94a2fda14838534999470f6ac3ea4de8d7c0e14edd052b8d",
+      "edits": [
+        {
+          "before": "{# ACC-007_ORDER_STATUS_PRESENTATION_20261014 #}",
+          "after": "{# ACC-007_ORDER_STATUS_PRESENTATION_20261014 #}\n{# ACC-007_NOTIFIED_HISTORY_COMMENTS_20261014 #}",
+          "count": 1
+        },
+        {
+          "before": "            <td>{{ history.comment }}</td>",
+          "after": "            <td>\n              {{ history.comment }}\n              {% if history.bs_customer_comment is not empty %}\n                <div class=\"mt-2 text-break\"><strong>{{ column_comment }}:</strong><br>{{ history.bs_customer_comment|escape('html')|nl2br }}</div>\n              {% endif %}\n            </td>",
+          "count": 1
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "system/library/acc007_order_status.php",
+      "sha256": "9086eff917ea2003bdad786d0ddaa680f06cb702b9af1567c30c3916e6ca6885"
+    },
+    {
+      "path": "extension/ukrainian/catalog/language/uk-ua/account/order.php",
+      "sha256": "bd25abfe02408347c9ef1770e6134df11101a8c98fcc6e4d0dedfbdee841dcea"
+    },
+    {
+      "path": "system/library/request.php",
+      "sha256": "483c1a44ec0c7c9d6969570d766c1cd8c40e7646d19da0f7a11d0dda7979f52c"
+    },
+    {
+      "path": "catalog/model/checkout/order.php",
+      "sha256": "0324c221cb75cb1aaa04d8b28be5865b295aff3b727139791e03413342c3a800"
+    },
+    {
+      "path": "catalog/controller/mail/order.php",
+      "sha256": "a01489fc9ca07e36579e1aee7a3d838387fed3a4fa70335bae2ac7faf58a158f"
+    }
+  ],
+  "status_registry": [
+    {
+      "order_status_id": "1",
+      "language_id": "4",
+      "name": "В обробці"
+    },
+    {
+      "order_status_id": "3",
+      "language_id": "4",
+      "name": "Доставляється"
+    },
+    {
+      "order_status_id": "5",
+      "language_id": "4",
+      "name": "Отримано"
+    },
+    {
+      "order_status_id": "7",
+      "language_id": "4",
+      "name": "Доставлено - чекає отримувача"
+    },
+    {
+      "order_status_id": "10",
+      "language_id": "4",
+      "name": "Помилка"
+    },
+    {
+      "order_status_id": "12",
+      "language_id": "4",
+      "name": "Повернено"
+    },
+    {
+      "order_status_id": "13",
+      "language_id": "4",
+      "name": "Повернення коштів"
+    },
+    {
+      "order_status_id": "14",
+      "language_id": "4",
+      "name": "Протерміновано"
+    },
+    {
+      "order_status_id": "15",
+      "language_id": "4",
+      "name": "Чернетка (системний)"
+    },
+    {
+      "order_status_id": "17",
+      "language_id": "4",
+      "name": "Розстрочка — очікує клієнта"
+    },
+    {
+      "order_status_id": "18",
+      "language_id": "4",
+      "name": "Розстрочка — очікує видачі"
+    },
+    {
+      "order_status_id": "19",
+      "language_id": "4",
+      "name": "Розстрочка — оформлено"
+    },
+    {
+      "order_status_id": "21",
+      "language_id": "4",
+      "name": "Розстрочка — повернено"
+    },
+    {
+      "order_status_id": "22",
+      "language_id": "4",
+      "name": "Розстрочка — відхилено"
+    },
+    {
+      "order_status_id": "23",
+      "language_id": "4",
+      "name": "Передзамовлення"
+    },
+    {
+      "order_status_id": "24",
+      "language_id": "4",
+      "name": "Скасовано"
+    }
+  ],
+  "allowed_events": [
+    {
+      "code": "analytics_ps_enhanced_measurement",
+      "trigger": "catalog/view/account/order_info/before",
+      "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewAccountOrderInfoBefore"
+    }
+  ]
+}

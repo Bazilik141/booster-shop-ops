@@ -1,0 +1,100 @@
+{
+  "task": "ACC-007 WP1 closeout",
+  "round": 1,
+  "channel": "native Claude Code CLI, saved Claude.ai subscription",
+  "owner_authorization": "Owner explicitly requested automatic subscription CLI review",
+  "packet_sha256": "b494175ba78f356543ac01db5d404ea67382dc6308173ac85c03813923e9fe10",
+  "stage_sha256": "3926e52759e1daea77e4e4924ec3a4bbdc356e63d62abe36a478b49acb422cc2",
+  "started_utc": "2026-10-16T07:45:56.015831+00:00",
+  "status": "completed",
+  "direct_api_key_loaded": false,
+  "api_fallback": false,
+  "billing_settings_changed": false,
+  "private_account_or_credentials_logged": false,
+  "git_invoked": false,
+  "notion_dashboard_write": false,
+  "model_requested": "claude-opus-5-5",
+  "effort": "high",
+  "subscription_auth_verified": true,
+  "cli_version": "2.1.299 (Claude Code)",
+  "model_initialized": "claude-opus-5-5",
+  "tools_initialized": [],
+  "mcp_servers_initialized": 0,
+  "plugins_initialized": 3,
+  "api_key_source_initialized": "none",
+  "rate_limit_info": {
+    "status": "allowed",
+    "resetsAt": 1792147200,
+    "rateLimitType": "five_hour",
+    "overageStatus": "rejected",
+    "overageDisabledReason": "out_of_credits",
+    "isUsingOverage": false
+  },
+  "exit_code": 0,
+  "tool_calls": [],
+  "models_observed": [
+    "claude-opus-5-5"
+  ],
+  "completed_utc": "2026-10-16T07:46:43.399045+00:00",
+  "subtype": "success",
+  "duration_ms": 43454,
+  "num_turns": 1,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 8382,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 4244,
+    "output_tokens_details": {
+      "thinking_tokens": 2669
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 8382,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 4244,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 8382,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 8382
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 2,
+      "outputTokens": 4244,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 8382,
+      "webSearchRequests": 0,
+      "costUSD": 0.15194400000000002,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 2669,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "cost_estimate_note": "CLI client token-price estimate is not a subscription charge; no direct API billing route",
+  "inputs_sha_unchanged": true,
+  "review_path": "diagnostics/ACC-007_wp1-closeout_evidence_20261016/review-original-received.md",
+  "review_sha256": "b183ae61a33bc47e0ad1a19fe1919176ffca6c05f8df7fdf4bd0f566aeaa921e",
+  "canonical_review_path": "diagnostics/ACC-007_wp1-closeout_claude-cli-review_20261016.md",
+  "canonical_review_sha256": "4da441673b973159f8d47c1f53a14f4603d6c67a303c05b53bcf2cc058466d78",
+  "post_capture_change": "Author wrapper title corrected only; complete original retained with original hash; actual Claude response body unchanged."
+}

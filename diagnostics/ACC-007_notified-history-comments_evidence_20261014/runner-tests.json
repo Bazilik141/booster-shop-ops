@@ -1,0 +1,156 @@
+{
+  "fixture_only": true,
+  "native_php": "8.3.30",
+  "results": [
+    {
+      "name": "dry-run verifies three targets and live metadata without backup/write",
+      "passed": true
+    },
+    {
+      "name": "apply and self-delete",
+      "passed": true
+    },
+    {
+      "name": "candidate hash catalog/model/account/order.php",
+      "passed": true
+    },
+    {
+      "name": "candidate hash catalog/controller/account/order.php",
+      "passed": true
+    },
+    {
+      "name": "candidate hash catalog/view/template/account/order_history.twig",
+      "passed": true
+    },
+    {
+      "name": "all nine read-only source files byte-identical",
+      "passed": true
+    },
+    {
+      "name": "idempotent repeat without another backup",
+      "passed": true
+    },
+    {
+      "name": "rollback exact already-deployed ACC-007 originals",
+      "passed": true
+    },
+    {
+      "name": "rollback repeat is safe",
+      "passed": true
+    },
+    {
+      "name": "source drift fails before writes",
+      "passed": true
+    },
+    {
+      "name": "dependency drift fails before writes",
+      "passed": true
+    },
+    {
+      "name": "partial application fails closed",
+      "passed": true
+    },
+    {
+      "name": "anchor precheck independently fails closed",
+      "passed": true
+    },
+    {
+      "name": "metadata gate schema",
+      "passed": true
+    },
+    {
+      "name": "metadata gate notify-type",
+      "passed": true
+    },
+    {
+      "name": "metadata gate comment-type",
+      "passed": true
+    },
+    {
+      "name": "metadata gate index",
+      "passed": true
+    },
+    {
+      "name": "metadata gate language",
+      "passed": true
+    },
+    {
+      "name": "metadata gate registry",
+      "passed": true
+    },
+    {
+      "name": "metadata gate timezone",
+      "passed": true
+    },
+    {
+      "name": "metadata gate theme",
+      "passed": true
+    },
+    {
+      "name": "metadata gate event",
+      "passed": true
+    },
+    {
+      "name": "metadata gate connect",
+      "passed": true
+    },
+    {
+      "name": "metadata gate query",
+      "passed": true
+    },
+    {
+      "name": "automatic exact restore after write",
+      "passed": true
+    },
+    {
+      "name": "automatic exact restore after post-lint",
+      "passed": true
+    },
+    {
+      "name": "rollback later-change setup",
+      "passed": true
+    },
+    {
+      "name": "rollback refuses later changes without overwriting",
+      "passed": true
+    },
+    {
+      "name": "rollback tamper setup",
+      "passed": true
+    },
+    {
+      "name": "rollback backup tamper rejected",
+      "passed": true
+    },
+    {
+      "name": "rollback traversal rejected",
+      "passed": true
+    },
+    {
+      "name": "missing existing target rejected before writes",
+      "passed": true
+    },
+    {
+      "name": "modified repeat setup",
+      "passed": true
+    },
+    {
+      "name": "repeat detects installed content drift",
+      "passed": true
+    },
+    {
+      "name": "CRLF source accepted",
+      "passed": true
+    },
+    {
+      "name": "CRLF preserved in all existing files",
+      "passed": true
+    },
+    {
+      "name": "CRLF rollback restores exact original bytes",
+      "passed": true
+    }
+  ],
+  "passed": 37,
+  "fixture_root": "C:\\Users\\14bez\\.codex\\visualizations\\2026\\10\\13\\01a13483-23a0-7601-a23b-0d8e413a1867\\tcde8"
+}

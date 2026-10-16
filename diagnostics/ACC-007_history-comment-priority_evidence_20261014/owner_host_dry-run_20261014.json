@@ -1,0 +1,23 @@
+{
+  "task": "ACC-007",
+  "package": "history-comment-priority",
+  "evidence_source": "Owner-pasted cPanel Terminal output; not executor server access",
+  "command": "cd ~/public_html && php ACC-007_history-comment-priority_20261014.php --dry-run",
+  "host_time_utc": "2026-10-14T16:03:15+00:00",
+  "cwd": "/home2/boosters/public_html",
+  "php": "8.0.30",
+  "source_gate": "1_target_ok",
+  "db_preflight": "read_only_ok",
+  "time_basis": "verified_shop_Kyiv_wall_time",
+  "db_mutations": "none",
+  "dry_run": "ok",
+  "done": "ok",
+  "warning": "MYSQL_OPT_RECONNECT is deprecated and will be removed in a future version.",
+  "warning_effect_observed": "Did not interrupt this dry-run; root cause not investigated in this package",
+  "patch_sha256_at_delivery": "0af604ca61123655c3cc54c054cf9f5d3a82fc8b51b00ac312a742fdeff93de6",
+  "production_apply_evidence": "pending owner output",
+  "owner_qa_evidence": "pending for this presentation follow-up",
+  "next_gate": "WAIT_OWNER_EXPLICIT_GO_FOR_APPLY",
+  "git_invoked": false,
+  "notion_dashboard_write": false
+}

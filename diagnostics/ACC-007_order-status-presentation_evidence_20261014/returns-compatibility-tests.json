@@ -1,0 +1,72 @@
+{
+  "task": "ACC-007",
+  "fixture_only": true,
+  "php": "8.3.30",
+  "engine": "Native PHP PDO SQLite :memory: with typed fixture columns",
+  "fresh_returns_sha256": "0541d0b5e99685a6c6328324241c349c75a1d5f1c800d0848a3d277373c921cb",
+  "executed": "Unmodified owner returns.php::add with actual before and patched getOrder models",
+  "passed": 14,
+  "results": [
+    {
+      "name": "received native form prefill unchanged",
+      "passed": true
+    },
+    {
+      "name": "finance_confirmed native form prefill unchanged",
+      "passed": true
+    },
+    {
+      "name": "in_progress native form prefill unchanged",
+      "passed": true
+    },
+    {
+      "name": "preorder native form prefill unchanged",
+      "passed": true
+    },
+    {
+      "name": "return purchase date remains creation date, not status-change date",
+      "passed": true
+    },
+    {
+      "name": "draft15 no order snapshot prefills, form still renders",
+      "passed": true
+    },
+    {
+      "name": "cross-store snapshot cannot prefill, form still renders",
+      "passed": true
+    },
+    {
+      "name": "other_customer existing fallback unchanged",
+      "passed": true
+    },
+    {
+      "name": "guest_order existing fallback unchanged",
+      "passed": true
+    },
+    {
+      "name": "zero_status existing fallback unchanged",
+      "passed": true
+    },
+    {
+      "name": "no_order_parameter existing fallback unchanged",
+      "passed": true
+    },
+    {
+      "name": "guest_customer existing fallback unchanged",
+      "passed": true
+    },
+    {
+      "name": "form product prefill and save route retained for excluded order",
+      "passed": true
+    },
+    {
+      "name": "no native model write queries",
+      "passed": true
+    }
+  ],
+  "query_counts": {
+    "before": 10,
+    "after": 10
+  },
+  "production_limits": "No host/MySQL/real customer/native return submission execution. Only form construction add(), never save()."
+}

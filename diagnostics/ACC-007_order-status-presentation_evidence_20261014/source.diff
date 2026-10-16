@@ -1,0 +1,296 @@
+--- catalog/model/account/order.php (owner source)
++++ catalog/model/account/order.php (ACC-007)
+@@ -1,5 +1,8 @@
+ <?php
+ namespace Opencart\Catalog\Model\Account;
++// ACC-007_ORDER_STATUS_PRESENTATION_20261014
++use Opencart\System\Library\Acc007OrderStatus;
++require_once DIR_SYSTEM . 'library/acc007_order_status.php';
+ /**
+  * Class Order
+  *
+@@ -24,7 +27,7 @@
+ 	 * $order_info = $this->model_account_order->getOrder($order_id);
+ 	 */
+ 	public function getOrder(int $order_id): array {
+-		$order_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "order` WHERE `order_id` = '" . (int)$order_id . "' AND `customer_id` = '" . (int)$this->customer->getId() . "' AND `customer_id` != '0' AND `order_status_id` > '0'");
++		$order_query = $this->db->query($this->publicOrderSelect() . " WHERE `o`.`order_id` = '" . (int)$order_id . "' AND " . $this->publicOrderScope());
+ 
+ 		if ($order_query->num_rows) {
+ 			// Country
+@@ -112,7 +115,8 @@
+ 			$limit = 1;
+ 		}
+ 
+-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "order` WHERE `customer_id` = '" . (int)$this->customer->getId() . "' AND `order_status_id` > '0' AND `store_id` = '" . (int)$this->config->get('config_store_id') . "' ORDER BY `order_id` DESC LIMIT " . (int)$start . "," . (int)$limit);
++		$limit = min($limit, 100);
++		$query = $this->db->query($this->publicOrderSelect() . " WHERE " . $this->publicOrderScope() . " ORDER BY `o`.`order_id` DESC LIMIT " . (int)$start . "," . (int)$limit);
+ 
+ 		return $query->rows;
+ 	}
+@@ -271,9 +275,10 @@
+ 	 *
+ 	 * $results = $this->model_account_order->getHistories($order_id);
+ 	 */
+-	public function getHistories(int $order_id): array {
+-		$query = $this->db->query("SELECT `date_added`, `os`.`name` AS `status`, `oh`.`comment`, `oh`.`notify` FROM `" . DB_PREFIX . "order_history` `oh` LEFT JOIN `" . DB_PREFIX . "order_status` `os` ON `oh`.`order_status_id` = `os`.`order_status_id` WHERE `oh`.`order_id` = '" . (int)$order_id . "' AND `os`.`language_id` = '" . (int)$this->config->get('config_language_id') . "' ORDER BY `oh`.`date_added`");
+-
++	public function getHistories(int $order_id, int $start = 0, int $limit = 10): array {
++		$start = max(0, $start);
++		$limit = max(1, min(100, $limit));
++		$query = $this->db->query("SELECT `oh`.`order_history_id`,`oh`.`order_status_id`,`oh`.`date_added` FROM `" . DB_PREFIX . "order_history` `oh` INNER JOIN `" . DB_PREFIX . "order` `o` ON (`o`.`order_id` = `oh`.`order_id`) WHERE `oh`.`order_id` = '" . (int)$order_id . "' AND " . $this->publicOrderScope() . " AND " . Acc007OrderStatus::visibleSql('`oh`.`order_status_id`') . " ORDER BY `oh`.`date_added` ASC, `oh`.`order_history_id` ASC LIMIT " . $start . "," . $limit);
+ 		return $query->rows;
+ 	}
+ 
+@@ -293,7 +298,7 @@
+ 	 * $history_total = $this->model_account_order->getTotalHistories($order_id);
+ 	 */
+ 	public function getTotalHistories(int $order_id): int {
+-		$query = $this->db->query("SELECT COUNT(*) AS `total` FROM `" . DB_PREFIX . "order_history` WHERE `order_id` = '" . (int)$order_id . "'");
++		$query = $this->db->query("SELECT COUNT(*) AS `total` FROM `" . DB_PREFIX . "order_history` `oh` INNER JOIN `" . DB_PREFIX . "order` `o` ON (`o`.`order_id` = `oh`.`order_id`) WHERE `oh`.`order_id` = '" . (int)$order_id . "' AND " . $this->publicOrderScope() . " AND " . Acc007OrderStatus::visibleSql('`oh`.`order_status_id`'));
+ 
+ 		if ($query->num_rows) {
+ 			return (int)$query->row['total'];
+@@ -316,7 +321,7 @@
+ 	 * $order_total = $this->model_account_order->getTotalOrders();
+ 	 */
+ 	public function getTotalOrders(): int {
+-		$query = $this->db->query("SELECT COUNT(*) AS `total` FROM `" . DB_PREFIX . "order` `o` WHERE `customer_id` = '" . (int)$this->customer->getId() . "' AND `o`.`order_status_id` > '0' AND `o`.`store_id` = '" . (int)$this->config->get('config_store_id') . "'");
++		$query = $this->db->query("SELECT COUNT(*) AS `total` FROM `" . DB_PREFIX . "order` `o` WHERE " . $this->publicOrderScope());
+ 
+ 		if ($query->num_rows) {
+ 			return (int)$query->row['total'];
+@@ -395,4 +400,13 @@
+ 
+ 		return (int)$query->row['total'];
+ 	}
++	private function publicOrderScope(): string {
++		return "`o`.`customer_id` = '" . (int)$this->customer->getId() . "' AND `o`.`customer_id` != '0' AND `o`.`store_id` = '" . (int)$this->config->get('config_store_id') . "' AND `o`.`order_status_id` > '0' AND " . Acc007OrderStatus::visibleSql('`o`.`order_status_id`');
++	}
++
++	private function publicOrderSelect(): string {
++		// Only the latest appended history can attest the CURRENT state. An old occurrence of
++		// a recurring status, an undated row or an admin save without history gives unknown time.
++		return "SELECT `o`.*, (SELECT CASE WHEN `last`.`order_status_id` = `o`.`order_status_id` THEN `last`.`date_added` ELSE NULL END FROM `" . DB_PREFIX . "order_history` `last` WHERE `last`.`order_id` = `o`.`order_id` ORDER BY `last`.`order_history_id` DESC LIMIT 1) AS `bs_status_date_added` FROM `" . DB_PREFIX . "order` `o`";
++	}
+ }
+--- catalog/controller/account/order.php (owner source)
++++ catalog/controller/account/order.php (ACC-007)
+@@ -1,5 +1,8 @@
+ <?php
+ namespace Opencart\Catalog\Controller\Account;
++// ACC-007_ORDER_STATUS_PRESENTATION_20261014
++use Opencart\System\Library\Acc007OrderStatus;
++require_once DIR_SYSTEM . 'library/acc007_order_status.php';
+ /**
+  * Class Order
+  *
+@@ -52,6 +55,7 @@
+ 		];
+ 
+ 		$limit = 10;
++		$page = max(1, min($page, intdiv(PHP_INT_MAX, $limit)));
+ 
+ 		$data['orders'] = [];
+ 
+@@ -64,16 +68,12 @@
+ 		$results = $this->model_account_order->getOrders(($page - 1) * $limit, $limit);
+ 
+ 		foreach ($results as $result) {
+-			$order_status_info = $this->model_localisation_order_status->getOrderStatus($result['order_status_id']);
+-
+-			if ($order_status_info) {
+-				$order_status = $order_status_info['name'];
+-			} else {
+-				$order_status = '';
+-			}
++			$bs_status = Acc007OrderStatus::presentation((int)$this->config->get('config_language_id'), (int)$result['order_status_id']);
+ 
+ 			$data['orders'][] = [
+-				'status'        => $order_status,
++				'status'        => $bs_status['label'],
++				'bs_status_style' => $bs_status['style'],
++				'bs_status_date' => Acc007OrderStatus::date($result['bs_status_date_added'] ?? null, $this->config->get('config_timezone')),
+ 				'date_added'    => date($this->language->get('date_format_short'), strtotime($result['date_added'])),
+ 				'product_total' => $this->model_account_order->getTotalProductsByOrderId($result['order_id']),
+ 				'total'         => $this->currency->format($result['total'], $result['currency_code'], $result['currency_value']),
+@@ -176,13 +176,11 @@
+ 			// Order Status
+ 			$this->load->model('localisation/order_status');
+ 
+-			$order_status_info = $this->model_localisation_order_status->getOrderStatus($order_info['order_status_id']);
+-
+-			if ($order_status_info) {
+-				$data['order_status'] = $order_status_info['name'];
+-			} else {
+-				$data['order_status'] = '';
+-			}
++			$bs_status = Acc007OrderStatus::presentation((int)$this->config->get('config_language_id'), (int)$order_info['order_status_id']);
++			$data['order_status'] = $bs_status['label'];
++			$data['bs_status_style'] = $bs_status['style'];
++			$data['bs_status_message'] = $bs_status['message'];
++			$data['bs_status_date'] = Acc007OrderStatus::date($order_info['bs_status_date_added'] ?? null, $this->config->get('config_timezone'));
+ 
+ 			$data['date_added'] = date($this->language->get('date_format_short'), strtotime($order_info['date_added']));
+ 
+@@ -449,13 +447,17 @@
+ 
+ 		$data['histories'] = [];
+ 
+-		$results = $this->model_account_order->getHistories($order_id);
++		$page = max(1, min($page, intdiv(PHP_INT_MAX, $limit)));
++		$results = $this->model_account_order->getHistories($order_id, ($page - 1) * $limit, $limit);
+ 
+ 		foreach ($results as $result) {
++			$bs_status = Acc007OrderStatus::presentation((int)$this->config->get('config_language_id'), (int)$result['order_status_id']);
+ 			$data['histories'][] = [
+-				'comment'    => nl2br($result['comment']),
+-				'date_added' => date($this->language->get('date_format_short'), strtotime($result['date_added']))
+-			] + $result;
++				'comment' => $bs_status['message'],
++				'status' => $bs_status['label'],
++				'bs_status_style' => $bs_status['style'],
++				'date_added' => Acc007OrderStatus::date($result['date_added'], $this->config->get('config_timezone'))
++			];
+ 		}
+ 
+ 		$history_total = $this->model_account_order->getTotalHistories($order_id);
+--- catalog/view/template/account/order_list.twig (owner source)
++++ catalog/view/template/account/order_list.twig (ACC-007)
+@@ -1,3 +1,4 @@
++{# ACC-007_ORDER_STATUS_PRESENTATION_20261014 #}
+ {{ header }}
+ <div id="account-order" class="container">
+   <ul class="breadcrumb">
+@@ -18,7 +19,7 @@
+                 <th class="text-end">{{ column_product_total }}</th>
+                 <th>{{ column_status }}</th>
+                 <th class="text-end">{{ column_total }}</th>
+-                <th>{{ column_date_added }}</th>
++                <th>{{ column_status_changed }}</th>
+                 <th></th>
+               </tr>
+             </thead>
+@@ -27,9 +28,9 @@
+                 <tr>
+                   <td class="text-end">#{{ order.order_id }}</td>
+                   <td class="text-end">{{ order.product_total }}</td>
+-                  <td>{{ order.status }}</td>
++                  <td><span class="bs-badge" style="{{ order.bs_status_style }}">{{ order.status }}</span></td>
+                   <td class="text-end">{{ order.total }}</td>
+-                  <td>{{ order.date_added }}</td>
++                  <td>{{ order.bs_status_date }}</td>
+                   <td class="text-end"><a href="{{ order.view }}" data-bs-toggle="tooltip" title="{{ button_view }}" class="btn btn-info"><i class="fa-solid fa-eye"></i></a></td>
+                 </tr>
+               {% endfor %}
+--- catalog/view/template/account/order_info.twig (owner source)
++++ catalog/view/template/account/order_info.twig (ACC-007)
+@@ -1,3 +1,4 @@
++{# ACC-007_ORDER_STATUS_PRESENTATION_20261014 #}
+ {{ header }}
+ <div id="account-order" class="container">
+   <ul class="breadcrumb">
+@@ -9,6 +10,11 @@
+     {{ column_left }}
+     <div id="content" class="col">
+       {{ content_top }}
++      <div class="mb-3">
++        <p>{{ text_current_status }}: <span class="bs-badge" style="{{ bs_status_style }}">{{ order_status }}</span></p>
++        <p>{{ text_status_date }}: {{ bs_status_date }}</p>
++        <p>{{ bs_status_message }}</p>
++      </div>
+       {% if pay003_credit_url %}<p><a class="btn btn-primary" href="{{ pay003_credit_url }}">Перевірити статус оплати частинами</a></p>{% endif %}
+       <div class="row">
+         <div class="col mb-3">
+--- catalog/view/template/account/order_history.twig (owner source)
++++ catalog/view/template/account/order_history.twig (ACC-007)
+@@ -1,9 +1,10 @@
++{# ACC-007_ORDER_STATUS_PRESENTATION_20261014 #}
+ <div class="table-responsive">
+   <table class="table table-bordered">
+     <thead>
+       <tr>
+-        <th>{{ column_date_added }}</th>
+-        <th>{{ column_comment }}</th>
++        <th>{{ column_status_changed }}</th>
++        <th>{{ column_public_message }}</th>
+         <th>{{ column_status }}</th>
+       </tr>
+     </thead>
+@@ -13,7 +14,7 @@
+           <tr>
+             <td>{{ history.date_added }}</td>
+             <td>{{ history.comment }}</td>
+-            <td>{{ history.status }}</td>
++            <td><span class="bs-badge" style="{{ history.bs_status_style }}">{{ history.status }}</span></td>
+           </tr>
+         {% endfor %}
+       {% else %}
+--- extension/ukrainian/catalog/language/uk-ua/account/order.php (owner source)
++++ extension/ukrainian/catalog/language/uk-ua/account/order.php (ACC-007)
+@@ -1,4 +1,9 @@
+ <?php
++// ACC-007_ORDER_STATUS_PRESENTATION_20261014
++$_['column_status_changed'] = 'Дата зміни статусу (Київ)';
++$_['column_public_message'] = 'Повідомлення';
++$_['text_current_status'] = 'Поточний статус';
++$_['text_status_date'] = 'Дата зміни (Київ)';
+ // Heading
+ $_['heading_title'] = 'Історія замовлень';
+ 
+--- /dev/null
++++ system/library/acc007_order_status.php
+@@ -0,0 +1,53 @@
++<?php
++namespace Opencart\System\Library;
++// ACC-007_ORDER_STATUS_PRESENTATION_20261014
++final class Acc007OrderStatus {
++    /** Customer presentation is independent of administrative names/notify bits. */
++    public static function presentation(int $language_id, int $status_id): array {
++        $map = [4 => [
++            1 => ['В обробці', 'in_progress', 'blue', 'Ми обробляємо ваше замовлення.'],
++            3 => ['Передано в доставку', 'in_transit', 'blue', 'Замовлення передано в доставку.'],
++            5 => ['Отримано', 'completed', 'green', 'Замовлення отримано.'],
++            7 => ['Очікує отримання', 'in_transit', 'blue', 'Замовлення очікує отримання.'],
++            10 => ['Потрібна увага', 'cancelled_problem', 'amber', 'Потрібна додаткова перевірка замовлення.'],
++            12 => ['Повернено', 'cancelled_problem', 'amber', 'Для замовлення зафіксовано повернення.'],
++            13 => ['Повернення коштів', 'cancelled_problem', 'amber', 'Для замовлення зафіксовано статус повернення коштів.'],
++            14 => ['Термін оплати минув', 'cancelled_problem', 'amber', 'Термін оплати замовлення минув.'],
++            15 => ['', 'hidden', 'neutral', ''],
++            17 => ['Підтвердьте оплату частинами', 'in_progress', 'amber', 'Потрібне ваше підтвердження оплати частинами.'],
++            18 => ['Оплата частинами — перевірка магазину', 'in_progress', 'blue', 'Магазин перевіряє оплату частинами.'],
++            19 => ['Оплату частинами підтверджено', 'in_progress', 'blue', 'Оплату частинами підтверджено. Це не означає отримання замовлення.'],
++            21 => ['Оплату частинами повернено', 'cancelled_problem', 'amber', 'Для оплати частинами зафіксовано повернення.'],
++            22 => ['Оплату частинами не підтверджено', 'cancelled_problem', 'amber', 'Оплату частинами не підтверджено.'],
++            23 => ['Передзамовлення', 'in_progress', 'blue', 'Замовлення оформлено як передзамовлення.'],
++            24 => ['Скасовано', 'cancelled_problem', 'red', 'Замовлення скасовано.']
++        ]];
++        $value = $map[$language_id][$status_id] ?? ['Статус уточнюється', 'neutral', 'neutral', 'Інформація про цей стан замовлення уточнюється.'];
++        $styles = [
++            'blue' => 'background:var(--bs-blue-soft);color:var(--bs-blue)',
++            'green' => 'background:var(--bs-green-soft);color:var(--bs-green-d)',
++            'amber' => 'background:var(--bs-warning-bg);color:var(--bs-warning-fg)',
++            'red' => 'background:var(--bs-danger);color:var(--bs-paper)',
++            'neutral' => 'background:var(--bs-line-2);color:var(--bs-ink-2)'
++        ];
++        return ['label'=>$value[0], 'group'=>$value[1], 'colour'=>$value[2], 'message'=>$value[3], 'visible'=>$status_id !== 15, 'style'=>$styles[$value[2]]];
++    }
++
++    /** One hidden-status predicate for all public query/count paths; NULL/0 remain neutral in history. */
++    public static function visibleSql(string $column): string {
++        return 'COALESCE(' . $column . ',0) <> 15';
++    }
++
++    /** Verified shop writer uses Kyiv local DATETIME. Preserve its wall time; never shift it as UTC. */
++    public static function date($value, $configured_timezone): string {
++        $unknown = 'Дату зміни не зафіксовано';
++        if ($configured_timezone !== 'Europe/Kyiv' || !is_string($value)
++            || !preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$/D', $value)
++            || (int)substr($value, 0, 4) < 1000) return $unknown;
++        $date = \DateTimeImmutable::createFromFormat('!Y-m-d H:i:s', $value, new \DateTimeZone('Europe/Kyiv'));
++        $errors = \DateTimeImmutable::getLastErrors();
++        if (!$date || ($errors !== false && ($errors['warning_count'] || $errors['error_count']))
++            || $date->format('Y-m-d H:i:s') !== $value) return $unknown;
++        return $date->format('d.m.Y H:i:s');
++    }
++}

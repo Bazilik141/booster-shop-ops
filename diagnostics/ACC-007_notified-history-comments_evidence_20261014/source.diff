@@ -1,0 +1,45 @@
+--- catalog/model/account/order.php (installed ACC-007)
++++ catalog/model/account/order.php (notified comments)
+@@ -278,7 +278,8 @@
+ 	public function getHistories(int $order_id, int $start = 0, int $limit = 10): array {
+ 		$start = max(0, $start);
+ 		$limit = max(1, min(100, $limit));
+-		$query = $this->db->query("SELECT `oh`.`order_history_id`,`oh`.`order_status_id`,`oh`.`date_added` FROM `" . DB_PREFIX . "order_history` `oh` INNER JOIN `" . DB_PREFIX . "order` `o` ON (`o`.`order_id` = `oh`.`order_id`) WHERE `oh`.`order_id` = '" . (int)$order_id . "' AND " . $this->publicOrderScope() . " AND " . Acc007OrderStatus::visibleSql('`oh`.`order_status_id`') . " ORDER BY `oh`.`date_added` ASC, `oh`.`order_history_id` ASC LIMIT " . $start . "," . $limit);
++		// ACC-007_NOTIFIED_HISTORY_COMMENTS_20261014: never select unnotified history comments.
++		$query = $this->db->query("SELECT `oh`.`order_history_id`,`oh`.`order_status_id`,`oh`.`date_added`,CASE WHEN `oh`.`notify` = 1 THEN `oh`.`comment` ELSE '' END AS `bs_customer_comment` FROM `" . DB_PREFIX . "order_history` `oh` INNER JOIN `" . DB_PREFIX . "order` `o` ON (`o`.`order_id` = `oh`.`order_id`) WHERE `oh`.`order_id` = '" . (int)$order_id . "' AND " . $this->publicOrderScope() . " AND " . Acc007OrderStatus::visibleSql('`oh`.`order_status_id`') . " ORDER BY `oh`.`date_added` ASC, `oh`.`order_history_id` ASC LIMIT " . $start . "," . $limit);
+ 		return $query->rows;
+ 	}
+ 
+--- catalog/controller/account/order.php (installed ACC-007)
++++ catalog/controller/account/order.php (notified comments)
+@@ -454,6 +454,8 @@
+ 			$bs_status = Acc007OrderStatus::presentation((int)$this->config->get('config_language_id'), (int)$result['order_status_id']);
+ 			$data['histories'][] = [
+ 				'comment' => $bs_status['message'],
++				// ACC-007_NOTIFIED_HISTORY_COMMENTS_20261014: Request::clean encodes admin text; decode once, escape in Twig.
++				'bs_customer_comment' => trim(html_entity_decode((string)($result['bs_customer_comment'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8')),
+ 				'status' => $bs_status['label'],
+ 				'bs_status_style' => $bs_status['style'],
+ 				'date_added' => Acc007OrderStatus::date($result['date_added'], $this->config->get('config_timezone'))
+--- catalog/view/template/account/order_history.twig (installed ACC-007)
++++ catalog/view/template/account/order_history.twig (notified comments)
+@@ -1,4 +1,5 @@
+ {# ACC-007_ORDER_STATUS_PRESENTATION_20261014 #}
++{# ACC-007_NOTIFIED_HISTORY_COMMENTS_20261014 #}
+ <div class="table-responsive">
+   <table class="table table-bordered">
+     <thead>
+@@ -13,7 +14,12 @@
+         {% for history in histories %}
+           <tr>
+             <td>{{ history.date_added }}</td>
+-            <td>{{ history.comment }}</td>
++            <td>
++              {{ history.comment }}
++              {% if history.bs_customer_comment is not empty %}
++                <div class="mt-2 text-break"><strong>{{ column_comment }}:</strong><br>{{ history.bs_customer_comment|escape('html')|nl2br }}</div>
++              {% endif %}
++            </td>
+             <td><span class="bs-badge" style="{{ history.bs_status_style }}">{{ history.status }}</span></td>
+           </tr>
+         {% endfor %}

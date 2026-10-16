@@ -1,0 +1,22 @@
+{
+  "task": "ACC-007",
+  "basis": "Direct owner cPanel terminal output on 2026-10-14",
+  "command": "cd ~/public_html && php ACC-007_order-status-presentation_20261014.php --dry-run",
+  "cwd": "/home2/boosters/public_html",
+  "time_utc": "2026-10-14T11:53:55+00:00",
+  "php": "8.0.30",
+  "source_gate": "7_targets_ok",
+  "warning": "MYSQL_OPT_RECONNECT is deprecated and will be removed in a future version.",
+  "warning_observation": "Printed warning; execution continued and returned done=ok. Root cause was not investigated in this package.",
+  "db_preflight": "read_only_ok",
+  "time_basis": "verified_shop_Kyiv_wall_time",
+  "db_mutations": "none",
+  "dry_run": "ok",
+  "done": "ok",
+  "production_apply_confirmed": false,
+  "production_qa_confirmed": false,
+  "gate": "G1_WAIT_OWNER_APPLY_AND_QA",
+  "ACC-008_started": false,
+  "patch_sha256_local": "73d292554bf3f49cca5c13c10551a6b1124390ad527ce71f41012d8ef1fd2221",
+  "hash_evidence_limit": "Hosting dry-run checks target/dependency hashes; it does not print a SHA-256 of the uploaded runner. Local runner hash is recorded separately."
+}

@@ -1,0 +1,243 @@
+Independent ACC-007 WP1 completion/publication review, not a new implementation review. Current direct owner instruction on 2026-10-16: commit, push and update WP1 after asking whether it is complete. The owner already deployed and accepted the order-status and notified-comment-priority behavior on 2026-10-14. This exact active-task update is a one-time reassignment to Codex for ACC-007 Notion/dashboard closure, consistent with prior owner-authorized task-specific closure exceptions; it is not standing role/Git authority. Existing three independently accepted runners remain byte-identical by fixed reviewed hashes; no application source code is modified. Their earlier transport is historical (including paid API under the old request); this new review uses subscription CLI. The prior accepted review bodies/code are reused by their verified identities, not re-reviewed or replayed.
+
+Review the complete closeout, one complete dashboard task object before/after, exact proposed canonical Notion properties and focused checks. Assess truthful source/review/owner QA boundaries, later comment policy overriding historical text, scope-only publication and independent-work preservation. Return Review OK or Return for changes. No tools; do not claim execution, provider/account inspection, production access or direct witness of manual QA. Do not implement, send messages, mutate any property/file or run Git. This review concerns closeout adequacy; it does not certify unseen source or waive original package gates. Raw customer/payment/analytics payloads, private account/config data and unrelated roadmap rows are excluded. The accompanying validation report summarizes bounded technical owner acceptance; no private QA payload is disclosed.
+
+Root rules relevant here: owner alone deploys/final-QAs; Codex commits/pushes only on direct explicit exact-task request; Claude is default Notion writer, with exact owner reassignment required for an exception. Current owner instruction supplies one-time ACC-007 reassignment. Dashboard status mirrors canonical Notion, Done only after owner production QA. Preserve other tasks and the original checkout/index. Original branch is unrelated and remote master is newer, so commit only the exact publication allowlist from a detached remote-master worktree, then non-force push HEAD:master. Do not switch or reset the original branch or include its unrelated changes.
+Frozen runner identity checks: {"patches/ACC-007_order-status-presentation_20261014.php": "73d292554bf3f49cca5c13c10551a6b1124390ad527ce71f41012d8ef1fd2221", "patches/ACC-007_notified-history-comments_20261014.php": "f089e31d3b482c107b2f6a719bf1466ab29b224eb79cfcc76947bb242207e9eb", "patches/ACC-007_history-comment-priority_20261014.php": "0af604ca61123655c3cc54c054cf9f5d3a82fc8b51b00ac312a742fdeff93de6"}
+Publication candidate: 59 files, exact ACC-007 allowlist; diagnostics are historical technical reports/fixtures and no archive/log/credentials. New runtime code: none. New changed dashboard body: one task object. Canonical Notion ID already fetched and verified ACC-007; Status currently Not started, target Done. Schema verified property names/types. Git state remains frozen during this review.
+
+===== diagnostics/ACC-007_wp1-closeout_report_20261016.md =====
+# ACC-007 WP1 — owner-accepted closeout
+
+Date: 2026-10-16
+
+## Outcome and authority
+
+WP1 ACC-007 is deployed and accepted by the owner. The owner explicitly requested commit, push and the WP1 update on 2026-10-16. This is one-time authority to publish ACC-007 and close its canonical Notion task and dashboard mirror; it does not assign other packages or establish standing Git/status permission.
+
+This closeout preserves the three reviewed runners byte-for-byte. Earlier reports, reviews and evidence are historical snapshots: their pending gates and intermediate comment behavior are superseded by the later evidence summarized here, not rewritten.
+
+## Accepted production behavior
+
+- Account order list/detail/history use the approved customer status presentation, recorded change date/time under the verified Kyiv wall-time basis, deterministic history ordering, consistent visibility/counts and SQL pagination.
+- Draft status 15 is hidden; status 19 does not imply completion/receipt; missing definitions and dates have neutral, truthful fallback behavior.
+- The owner's later comment decision supersedes the original blanket ban: show an escaped, nonempty comment only for notify=1. It replaces the generic status explanation. Hidden/unnotified/empty comments retain the generic explanation. notify=1 records notification intent, not proof of delivered email.
+- These are source-only changes: no DB write, administrative status rename, email, payment or stock-flow change.
+
+## Frozen implementation and independent review
+
+| Runner | SHA-256 |
+| --- | --- |
+| `patches/ACC-007_order-status-presentation_20261014.php` | `73d292554bf3f49cca5c13c10551a6b1124390ad527ce71f41012d8ef1fd2221` |
+| `patches/ACC-007_notified-history-comments_20261014.php` | `f089e31d3b482c107b2f6a719bf1466ab29b224eb79cfcc76947bb242207e9eb` |
+| `patches/ACC-007_history-comment-priority_20261014.php` | `0af604ca61123655c3cc54c054cf9f5d3a82fc8b51b00ac312a742fdeff93de6` |
+
+Original implementation reports and actual independent reviews accompany these runners. The initial presentation review's caller-evidence condition was closed by its accepted addendum; the notified-comment and comment-priority changes each received Deploy OK. Their recorded historical transport is preserved honestly, including the earlier API reviews; the new closeout review uses the approved subscription CLI only. No historical review is replayed or represented as a new review of code.
+
+## Production and acceptance evidence
+
+The owner supplied the initial presentation dry-run/apply output on PHP 8.0.30: read-only DB preflight, seven changed targets, lint success and cache completion. Exact initial backup: `_patch_backups/ACC-007_order-status-presentation_20261014-20261014T115816Z-bd7d108c`.
+
+The owner subsequently ran the two comment follow-ups and confirmed the final priority behavior works. The final acceptance is recorded in `ACC-007_history-comment-priority_evidence_20261014/owner_host_qa_20261014.json`. Exact final follow-up apply output and backup directory were not supplied; do not invent them. The owner controls production and must retain the actual per-run backup directories. No Codex production access or independent observation of every manual scenario is claimed.
+
+Local fixture tests and their limits remain in the three original reports/evidence directories; source hashes establish unchanged artifact identity, not fresh production testing. No application code changes or redeploy are part of this closeout, so production QA is not rerun merely to publish its accepted artifacts.
+
+## Publication and synchronization
+
+Only ACC-007 runners, reports, independent reviews, bounded technical evidence, this closeout and the ACC-007 dashboard row are included. Publication is prepared from the current remote master in a detached task worktree; the owner's original branch, index and unrelated dirty changes remain intact. The only dashboard row changed is ACC-007; other tasks retain the remote baseline in the commit and the owner's existing changes in the original checkout.
+
+Canonical target: Notion ACC-007 `Done`, dashboard `done`, last updated 2026-10-16. Planned exact properties and the dashboard row are reviewed before synchronization. The completion record does not start ACC-008/ACC-009, close ACC-006/GA4, change RD-25/RD-27 or implement mobile hero corners.
+
+Rollback remains per runner, using that runner's exact owner-held backup and its documented guarded command, followed by Twig cache clearing. Undoing a Git commit is not production rollback. No DB recovery is required for these read-only presentation patches.
+
+
+===== work/acc007-wp1-closeout-20261016/dashboard-before.txt =====
+    id: 'ACC-007', title: 'Статуси замовлень у кабінеті: клієнтські назви, групи, приховування технічних станів і дата зміни', status: 'todo', tool: '—', priority: '—',
+    lastUpdated: '2026-10-13', blockedBy: [],
+    simple: 'Категорія: Account. Клієнт бачить зрозумілий статус замовлення з датою й часом кожної зміни; технічні та кредитні стани і сирі коментарі з історії приховані. Лише код, без змін у БД.',
+    warn: 'Notion: https://app.notion.com/p/3f86bf20bdb481baaf56e4d219252e3b. 2026-10-13: заведено на доручення власника. Виконавець і пріоритет не призначені. Пакет A після ACC-004. Мапа статусів із звіту ACC-004 (розділ 4): ховаємо «Чернетка» (15), «Розстрочка — оформлено» (19) не показуємо як доставлено, відсутній статус 2 показуємо нейтрально; адмінські назви статусів не змінюємо (mail/order.php перемикається за назвою). Дата й час, пояс Київ. Ризик середній, відкат — відновлення файлів з бекапу й оновлення кешу Twig.',
+    subtasks: []
+  },
+
+===== work/acc007-wp1-closeout-20261016/dashboard-after.txt =====
+    id: 'ACC-007', title: 'Статуси замовлень у кабінеті: клієнтські назви, групи, приховування технічних станів і дата зміни', status: 'done', tool: 'Codex', priority: '—',
+    lastUpdated: '2026-10-16', blockedBy: [],
+    simple: 'Категорія: Account. WP1 завершено: клієнтські статуси замовлень, дата й час змін за Києвом, узгоджені історія та пагінація. Непорожній коментар із позначкою сповіщення замінює стандартне пояснення; інші коментарі приховані.',
+    warn: 'Notion: https://app.notion.com/p/3f86bf20bdb481baaf56e4d219252e3b. 2026-10-16: власник підтвердив завершення WP1 та доручив коміт, пуш і оновлення. Три патчі ACC-007 пройшли незалежне рев’ю, встановлені власником; фінальне QA прийняте 2026-10-14. Чернетка (15) прихована; статус 19 не означає отримання; відсутні статуси мають нейтральний показ. Коментар показується лише за notify=1 і замінює стандартне пояснення; за відсутності такого коментаря лишається стандартне пояснення. Записів у БД, змін пошти, оплати чи складу немає. Фінальний звіт: diagnostics/ACC-007_wp1-closeout_report_20261016.md. Відкат — окремим бекапом відповідного патча з очищенням кешу Twig. ACC-008/ACC-009, GA4 та фото — окремі пакети.',
+    subtasks: []
+  },
+
+===== work/acc007-wp1-closeout-20261016/notion-properties.json =====
+{
+  "Status": "Done",
+  "Last Updated": "2026-10-16",
+  "Primary Tool": "Codex",
+  "Current Owner": "Owner accepted; Codex implemented WP1",
+  "Stage": "WP1 ACC-007 deployed by owner and final functional QA accepted 2026-10-14. Three independently reviewed runners retained byte-identical. Source-only presentation; no DB writes. Closeout: diagnostics/ACC-007_wp1-closeout_report_20261016.md. ACC-008/ACC-009 and ACC-006 GA4 are separate packages.",
+  "Owner Decision": "2026-10-14: show a nonempty history comment only when notify=1; it replaces the standard status explanation. For notify=0, hide the comment; without an eligible comment, retain the explanation. This supersedes the original blanket ban on comments. 2026-10-16: owner directly requested commit, push and WP1 update after confirming completion; one-time authorization for ACC-007 Git publication and Notion/dashboard closure only."
+}
+
+
+===== diagnostics/ACC-007_wp1-closeout_evidence_20261016/validation.json =====
+{
+  "task": "ACC-007",
+  "all_three_frozen_runner_hashes_match": true,
+  "copied_files_byte_identical": true,
+  "dashboard_only_ACC007_object_changed": true,
+  "original_checkout_and_index_not_changed": true,
+  "original_primary_dashboard_snapshot_sha256": "88c5e1e7cf4a5de9b70fecf7a6f050486d9d4a4eb7ae72625c77005078a2772d",
+  "canonical_notion_ID_verified": true,
+  "canonical_status_before": "Not started",
+  "canonical_status_target": "Done",
+  "private_owner_analytics_not_in_review": true,
+  "new_application_code_or_production_test": false
+}
+
+
+===== diagnostics/ACC-007_wp1-closeout_evidence_20261016/dashboard-checks.json =====
+{
+  "all_inline_scripts_parse": true,
+  "inline_scripts": 2,
+  "task_count_unchanged": true,
+  "only_changed_task": "ACC-007",
+  "status": "done",
+  "priority_unchanged": true
+}
+
+
+===== docs/BOOSTER_AUTOMATIC_PEER_REVIEW_20261014.md =====
+# Booster Shop automatic independent review — current owner rule
+
+Date: 2026-10-14. Decision: BOOSTER-AUTOREVIEW-20261014.
+Authority: direct owner instruction and the explicit subscription-CLI choice in
+`plans/BOOSTER_review-optimization_owner-decision_20261014.json`.
+Applies to every Booster Shop task series in this workspace: OpenCart, CRM,
+dashboard, 3D-print, GSS and related operations. Durable instructions: English;
+owner communication: concise Ukrainian.
+
+This amendment supersedes older manual Codex-to-Claude handoff/review-trigger
+wording in AGENTS.md, CODEX_WORKFLOW.md and CLAUDE.md. Scope assignment,
+implementation ownership, Git authority, Notion/dashboard writers, deployment,
+business-data permissions and owner QA remain governed by the active project.
+GSS-specific authority and stronger readiness/no-replay requirements still apply.
+Do not transfer GSS runtime/resource limits or native grants to other tasks.
+
+## Trigger and responsibility
+
+Codex automatically initiates review by actual Claude when the required assigned
+stage is ready. The owner does not have to copy a prompt, invoke bsmain/bsreview,
+or approve each routine review of an already assigned scope. This is the active
+agent's workflow, not a background watcher or a promise to run after the chat stops.
+
+The readiness boundary is explicit: design review before implementation when
+the task requires it; CODE/composition review after meaningful local checks;
+actual-result review separately when runtime/live evidence is required. Related
+changes and their interactions form one coherent stage; optional nits do not
+receive a separate provider round. Do not skip a required design or interaction
+review to reduce calls. Scale context/checks to the task's risk.
+
+Codex owns preparation, dispatch, original-process tracking, complete result
+capture, verification, disposition and technical repair loops. Actual Claude
+independently assesses adequacy and correctness, including unexpected defects.
+Codex or its subagents cannot supply Claude's verdict. A Claude-authored task
+requires its applicable independent reviewer; this Codex-to-Claude rule does
+not authorize self-review or reassign that task.
+
+## Approved transport and disclosure scope
+
+The owner explicitly selected the installed Claude CLI through the existing
+subscription. The phrase "through API" in the first instruction meant automated
+review; the subsequent direct answer selects CLI. No separate Anthropic/OpenAI
+paid API, API-key discovery, paid fallback or purchase is approved here.
+
+Automatic review may disclose necessary internal code, project rules, sanitized
+technical diagnostics and generated fictional tests to Anthropic through that
+subscription. Do not include credentials, account/config secrets, real customer
+or payment data, private business records, bulk backups or unapproved live/pilot
+payloads. Existing task-specific external-data gates remain; this rule does not
+waive GSS D6 or the paired pilot-payload gate. Use bounded public source evidence;
+missing material context blocks a positive verdict.
+
+Use a task-scoped verified CLI adapter with model/effort recorded, tools/MCP/hooks
+disabled and no paid-provider environment fallback. Risky design/CODE/security,
+checkout/payment/CRM/DB/SEO/schema/authority/recovery work retains actual
+Opus/high. GSS uses its accepted exact transport19 identity/admission and fresh
+same-review request identities; its frozen requesters and BASE rules are not a
+general Booster launcher. Mechanical low-risk review can follow the applicable
+approved reviewer-routing rules, without silently weakening a risky review.
+
+Check the actual executable/adapter identity and relevant compatibility before
+dispatch under that adapter's rules. A changed/missing adapter or unavailable
+reviewer blocks dispatch, not unaffected preparation. Preserve the reason and
+resolve it through the applicable transport procedure. No entitlement-probe
+review, automatic replay of a consumed request, unchecked upgrade or fabricated
+verdict. A substantive corrected stage uses a fresh request identity and retains
+prior failures; a lost one-shot result does not become unused authority.
+
+`scripts/auto_review.py` remains the canonical implementation of the legacy
+bsreview command; the root duplicate remains forbidden. Its current paid-API,
+Haiku and optional Notion-comment behavior is NOT this subscription workflow.
+Even --dry-run calls Claude API. Do not use it as a no-cost preflight or the
+default qualifying review under this decision. This instruction update does not
+rewrite that program or install a general Booster CLI adapter. The automatic
+handoff requirement is active; a task must still use an available verified
+adapter, and must report a missing adapter rather than invent execution.
+
+## Readiness, context and evidence
+
+Before dispatch, complete necessary local checks and mechanically validate the
+packet's syntax/schema, required bodies/edges, declared sizes, privacy screen,
+input identities and scope. Estimate size before rendering. Missing paths or
+virtual outputs must not trigger broad reads or noisy retries. Adapter-specific
+limits remain explicit; do not impose GSS's numeric controls on unrelated tasks.
+
+Render complete affected functions/files, callers and material contracts once.
+Supply acceptance criteria, focused positive/adversarial evidence, unresolved
+findings and rollback/side effects where applicable. Use a concise coverage
+ledger proportional to the task. Diffs alone do not replace necessary owning
+context. Prior accepted bodies may be reused by exact identity/scope with their
+limitations; excerpts/omitted bodies are labelled honestly. Expand context if a
+changed dependency makes the old acceptance insufficient.
+
+Freeze the reviewed inputs and Git state for the dispatch interval. Preserve
+unrelated changes. Do not let another chat/subagent commit, edit an input or alter
+shared status during a review requiring unchanged Git. Recovery pointers may
+advance only when excluded from frozen inputs under their established procedure.
+Use parallel reads/tests on independent inputs where they do not compete for
+files, resources or state. Do not create competing implementation/status writers.
+
+Save the dispatch before one launch and retain the original controlled handle.
+Save the full result/failure, requested/resolved reviewer identity, exact inputs,
+closure and post-run unchanged checks. Read the complete actual response before
+recording acceptance. Metadata/hash equality establishes identity, not universal
+correctness or source/execution/production proof.
+
+If Changes requested, resolve substantive findings and affected interactions
+inside approved scope, strengthen discriminating tests, save and send one fresh
+coherent repair stage. If a finding changes functional/business behavior, present
+the concrete owner choice and continue independent work. Review OK applies only
+to its exact design/CODE/result boundary; unresolved mandatory follow-ups remain.
+
+The reviewer does not deploy, commit, publish, change Notion properties/status or
+post external comments under this review-only grant. Owner QA, production/live
+gates and applicable Git authority remain separate. Do not treat a stage verdict
+as Done or whole-project acceptance.
+
+## Permanent measured optimizations
+
+Keep coherent review batches, early preflight, exact reuse of accepted context,
+one accountable writer, strong independent review, bounded meaningful tests and
+regular stage saves. Automate repeated deterministic checks/report fields within
+scope; test a changed checker/adapter before relying on it. Keep stable context
+byte-identical where useful and measure actual cache reuse rather than assuming it.
+
+Record preparation, implementation/checks, reviewer wait and repair time where
+observable; packet bytes/tokens/cache metadata, calls/fix rounds, local preparation
+failures, missed defects/context gaps and integration overhead. Unknown active
+time/subscription debit stays unknown. Smaller packets or unrelated stages do
+not prove causal speedup, quota saving or unchanged quality.
+
+Use the active project's recovery system. GSS additionally follows CURRENT and
+its <=10-minute controllable active-work save cadence. Preserve historical
+violations; local disk saves are not off-device or zero-loss guarantees.
+

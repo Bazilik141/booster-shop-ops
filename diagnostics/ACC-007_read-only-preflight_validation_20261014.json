@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-14",
+  "task": "ACC-007",
+  "mode": "read_only_preflight_local_validation",
+  "php_lint": "passed",
+  "runtime": "PHP 8.3.30 local; host PHP 8.0.30 still to be exercised",
+  "checks": [
+    {
+      "fixture_mode": "normal",
+      "passed": true,
+      "credentials_redacted": true
+    },
+    {
+      "fixture_mode": "cap",
+      "passed": true,
+      "credentials_redacted": true
+    },
+    {
+      "fixture_mode": "query_fail",
+      "passed": true,
+      "credentials_redacted": true
+    },
+    {
+      "fixture_mode": "connect_fail",
+      "passed": true,
+      "credentials_redacted": true
+    }
+  ],
+  "scope": "Synthetic mysqli double; config defaults/catalog copied from fresh source; no actual MySQL, customer data or server access",
+  "live_result": "pending owner command output"
+}

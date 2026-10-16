@@ -1,0 +1,34 @@
+{
+  "task": "ACC-007",
+  "basis": "Direct owner cPanel terminal apply output followed by explicit go QA, 2026-10-14",
+  "db_preflight": "read_only_ok",
+  "time_basis": "verified_shop_Kyiv_wall_time",
+  "db_mutations": "none",
+  "backup": "_patch_backups/ACC-007_order-status-presentation_20261014-20261014T115816Z-bd7d108c",
+  "changed": [
+    "catalog/model/account/order.php",
+    "catalog/controller/account/order.php",
+    "catalog/view/template/account/order_list.twig",
+    "catalog/view/template/account/order_info.twig",
+    "catalog/view/template/account/order_history.twig",
+    "extension/ukrainian/catalog/language/uk-ua/account/order.php",
+    "system/library/acc007_order_status.php"
+  ],
+  "php_lint": {
+    "catalog/model/account/order.php": "ok",
+    "catalog/controller/account/order.php": "ok",
+    "extension/ukrainian/catalog/language/uk-ua/account/order.php": "ok",
+    "system/library/acc007_order_status.php": "ok"
+  },
+  "done": "ok",
+  "cache_cleared": "ok",
+  "cli_wrapper_warning": "Unsuccessful stat on filename containing newline at /var/cpanel/ea4/ea_php_cli.pm line 87.",
+  "warning_observation": "Warning was printed between patch done=ok and cache_cleared=ok. No root-cause or frontend-runtime conclusion is inferred from it.",
+  "owner_production_apply_confirmed": true,
+  "owner_production_qa_confirmed": false,
+  "gate": "G1_WAIT_OWNER_QA",
+  "ACC-008_started": false,
+  "ACC-009_started": false,
+  "git_notion_dashboard_writes": false,
+  "patch_sha256_local": "73d292554bf3f49cca5c13c10551a6b1124390ad527ce71f41012d8ef1fd2221"
+}

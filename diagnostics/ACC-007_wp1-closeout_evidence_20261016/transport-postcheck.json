@@ -1,0 +1,10 @@
+{
+  "adapter_sha256": "59924e55b60625e1f8fc3d60d0330aa452a5d20106e0f6530fffae71f346b29e",
+  "adapter_matches_preparation_hash": true,
+  "cli_executable_sha256": "295b49ec092f31a7de9c6ff286d9d8f120a4f029b9ad9a5ac0b12c35cbf4df2b",
+  "cli_matches_previously_verified_identity": true,
+  "identity_check_timing": "Executable SHA was checked after capture, not before dispatch: generator insertion did not match the base adapter newline pattern. Actual adapter source matches its pre-dispatch preparation hash. Subscription authentication, tool/MCP/hook disabling, model, overage refusal and unchanged inputs were checked in the actual process.",
+  "pre_dispatch_executable_SHA_guard_missing": true,
+  "provider_request_replayed": false,
+  "actual_review_body_preserved": true
+}

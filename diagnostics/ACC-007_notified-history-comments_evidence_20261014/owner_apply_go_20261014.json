@@ -1,0 +1,16 @@
+{
+  "task": "ACC-007",
+  "package": "notified-history-comments",
+  "authority": "Direct owner message: го, after successful owner host dry-run",
+  "authorized_next_step": "Provide the reviewed apply and cache-cleaning command for owner execution",
+  "patch_sha256": "f089e31d3b482c107b2f6a719bf1466ab29b224eb79cfcc76947bb242207e9eb",
+  "dry_run_evidence": "owner_host_dry-run_20261014.json",
+  "executor_server_access": false,
+  "production_apply_evidence": "pending owner output",
+  "production_qa_evidence": "pending owner QA",
+  "next_gate": "WAIT_OWNER_APPLY_OUTPUT_AND_QA",
+  "mobile_header_package_started": false,
+  "acc008_started": false,
+  "git_invoked": false,
+  "notion_dashboard_write": false
+}

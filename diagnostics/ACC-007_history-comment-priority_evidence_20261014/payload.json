@@ -1,0 +1,131 @@
+{
+  "task": "ACC-007",
+  "marker": "ACC-007_HISTORY_COMMENT_PRIORITY_20261014",
+  "entries": [
+    {
+      "path": "catalog/view/template/account/order_history.twig",
+      "new": false,
+      "before": "1c42a4e3de383e3e94a2fda14838534999470f6ac3ea4de8d7c0e14edd052b8d",
+      "after": "322d458b90e70c987082431074e9215afd94b8bdbe6298491b77f472b58abd62",
+      "edits": [
+        {
+          "before": "{# ACC-007_NOTIFIED_HISTORY_COMMENTS_20261014 #}",
+          "after": "{# ACC-007_NOTIFIED_HISTORY_COMMENTS_20261014 #}\n{# ACC-007_HISTORY_COMMENT_PRIORITY_20261014 #}",
+          "count": 1
+        },
+        {
+          "before": "              {{ history.comment }}\n              {% if history.bs_customer_comment is not empty %}\n                <div class=\"mt-2 text-break\"><strong>{{ column_comment }}:</strong><br>{{ history.bs_customer_comment|escape('html')|nl2br }}</div>\n              {% endif %}",
+          "after": "              {% if history.bs_customer_comment is not empty %}\n                <div class=\"mt-2 text-break\"><strong>{{ column_comment }}:</strong><br>{{ history.bs_customer_comment|escape('html')|nl2br }}</div>\n              {% else %}\n                {{ history.comment }}\n              {% endif %}",
+          "count": 1
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "catalog/model/account/order.php",
+      "sha256": "2862fd9d2a5f756fd5c58d2ecfc71df705799a3bf3f2cef24a69af867c127930"
+    },
+    {
+      "path": "catalog/controller/account/order.php",
+      "sha256": "05d7de4ef69585cb5422af9a0badc4f0fa5bef4cd0b33cbc272a39bd00078352"
+    },
+    {
+      "path": "system/library/acc007_order_status.php",
+      "sha256": "9086eff917ea2003bdad786d0ddaa680f06cb702b9af1567c30c3916e6ca6885"
+    },
+    {
+      "path": "extension/ukrainian/catalog/language/uk-ua/account/order.php",
+      "sha256": "bd25abfe02408347c9ef1770e6134df11101a8c98fcc6e4d0dedfbdee841dcea"
+    }
+  ],
+  "status_registry": [
+    {
+      "order_status_id": "1",
+      "language_id": "4",
+      "name": "В обробці"
+    },
+    {
+      "order_status_id": "3",
+      "language_id": "4",
+      "name": "Доставляється"
+    },
+    {
+      "order_status_id": "5",
+      "language_id": "4",
+      "name": "Отримано"
+    },
+    {
+      "order_status_id": "7",
+      "language_id": "4",
+      "name": "Доставлено - чекає отримувача"
+    },
+    {
+      "order_status_id": "10",
+      "language_id": "4",
+      "name": "Помилка"
+    },
+    {
+      "order_status_id": "12",
+      "language_id": "4",
+      "name": "Повернено"
+    },
+    {
+      "order_status_id": "13",
+      "language_id": "4",
+      "name": "Повернення коштів"
+    },
+    {
+      "order_status_id": "14",
+      "language_id": "4",
+      "name": "Протерміновано"
+    },
+    {
+      "order_status_id": "15",
+      "language_id": "4",
+      "name": "Чернетка (системний)"
+    },
+    {
+      "order_status_id": "17",
+      "language_id": "4",
+      "name": "Розстрочка — очікує клієнта"
+    },
+    {
+      "order_status_id": "18",
+      "language_id": "4",
+      "name": "Розстрочка — очікує видачі"
+    },
+    {
+      "order_status_id": "19",
+      "language_id": "4",
+      "name": "Розстрочка — оформлено"
+    },
+    {
+      "order_status_id": "21",
+      "language_id": "4",
+      "name": "Розстрочка — повернено"
+    },
+    {
+      "order_status_id": "22",
+      "language_id": "4",
+      "name": "Розстрочка — відхилено"
+    },
+    {
+      "order_status_id": "23",
+      "language_id": "4",
+      "name": "Передзамовлення"
+    },
+    {
+      "order_status_id": "24",
+      "language_id": "4",
+      "name": "Скасовано"
+    }
+  ],
+  "allowed_events": [
+    {
+      "code": "analytics_ps_enhanced_measurement",
+      "trigger": "catalog/view/account/order_info/before",
+      "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewAccountOrderInfoBefore"
+    }
+  ]
+}

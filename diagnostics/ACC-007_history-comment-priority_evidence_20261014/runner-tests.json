@@ -1,0 +1,31 @@
+{
+  "fixture_only": true,
+  "passed": 22,
+  "tests": [
+    "one-file source and read-only metadata dry-run, no backup/write",
+    "apply exactly one Twig and self-delete",
+    "candidate hash installed",
+    "all backend dependencies byte-identical",
+    "repeat full-hash idempotence without second backup",
+    "rollback restores exact notified-comments Twig",
+    "source drift refuses before backup",
+    "backend drift refuses before backup",
+    "missing Twig refuses before backup",
+    "anchor count independently refuses before backup",
+    "automatic exact restore after write failure",
+    "later-change fixture setup",
+    "rollback preserves later changes by refusing",
+    "rollback traversal refused",
+    "CRLF accepted and preserved",
+    "CRLF rollback byte-exact",
+    "native PHP runner lint",
+    "old artifact unchanged patches/ACC-006_wishlist-restore_20261013.php",
+    "old artifact unchanged patches/ACC-007_order-status-presentation_20261014.php",
+    "old artifact unchanged diagnostics/ACC-007_order-status-presentation_report_20261014.md",
+    "old artifact unchanged patches/ACC-007_notified-history-comments_20261014.php",
+    "old artifact unchanged diagnostics/ACC-007_notified-history-comments_report_20261014.md"
+  ],
+  "php_lint": "runner syntax_ok; no production PHP target changed",
+  "fixture_root": "C:\\Users\\14bez\\.codex\\visualizations\\2026\\10\\13\\01a13483-23a0-7601-a23b-0d8e413a1867\\tpd74",
+  "patch_sha256": "0af604ca61123655c3cc54c054cf9f5d3a82fc8b51b00ac312a742fdeff93de6"
+}

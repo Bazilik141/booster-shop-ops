@@ -1,0 +1,51 @@
+{
+  "packet_sha256": "b494175ba78f356543ac01db5d404ea67382dc6308173ac85c03813923e9fe10",
+  "stage_sha256": "3926e52759e1daea77e4e4924ec3a4bbdc356e63d62abe36a478b49acb422cc2",
+  "files": [
+    {
+      "path": "diagnostics/ACC-007_wp1-closeout_evidence_20261016/review-inputs/00-ACC-007_wp1-closeout_report_20261016.md",
+      "sha256": "3926e52759e1daea77e4e4924ec3a4bbdc356e63d62abe36a478b49acb422cc2",
+      "origin": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\diagnostics\\ACC-007_wp1-closeout_report_20261016.md",
+      "origin_sha256": "3926e52759e1daea77e4e4924ec3a4bbdc356e63d62abe36a478b49acb422cc2"
+    },
+    {
+      "path": "diagnostics/ACC-007_wp1-closeout_evidence_20261016/review-inputs/01-dashboard-before.txt",
+      "sha256": "503d26642e95a6b00aed4c05c5059fd9ab1b4eb265a15a2802a1c0fba0f4492f",
+      "origin": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\acc007-wp1-closeout-20261016\\dashboard-before.txt",
+      "origin_sha256": "503d26642e95a6b00aed4c05c5059fd9ab1b4eb265a15a2802a1c0fba0f4492f"
+    },
+    {
+      "path": "diagnostics/ACC-007_wp1-closeout_evidence_20261016/review-inputs/02-dashboard-after.txt",
+      "sha256": "114bc149ff0aa0c24306704df8f8aea84ddefe1c0bcb90ac3622feadfdcd0e0b",
+      "origin": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\acc007-wp1-closeout-20261016\\dashboard-after.txt",
+      "origin_sha256": "114bc149ff0aa0c24306704df8f8aea84ddefe1c0bcb90ac3622feadfdcd0e0b"
+    },
+    {
+      "path": "diagnostics/ACC-007_wp1-closeout_evidence_20261016/review-inputs/03-notion-properties.json",
+      "sha256": "7c0f63995550f1d5051386ff955a793fda8fa57ee6b1facf87089fe177253992",
+      "origin": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\acc007-wp1-closeout-20261016\\notion-properties.json",
+      "origin_sha256": "7c0f63995550f1d5051386ff955a793fda8fa57ee6b1facf87089fe177253992"
+    },
+    {
+      "path": "diagnostics/ACC-007_wp1-closeout_evidence_20261016/review-inputs/04-validation.json",
+      "sha256": "124f81ce60db347de567620d035e1de4a82044373deb863c4f92529b2845e20f",
+      "origin": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\diagnostics\\ACC-007_wp1-closeout_evidence_20261016\\validation.json",
+      "origin_sha256": "124f81ce60db347de567620d035e1de4a82044373deb863c4f92529b2845e20f"
+    },
+    {
+      "path": "diagnostics/ACC-007_wp1-closeout_evidence_20261016/review-inputs/05-dashboard-checks.json",
+      "sha256": "2a1db46eae743b69dabe67b8ca8d441ace7167ac84440e9bf5a7eb9223949a28",
+      "origin": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\diagnostics\\ACC-007_wp1-closeout_evidence_20261016\\dashboard-checks.json",
+      "origin_sha256": "2a1db46eae743b69dabe67b8ca8d441ace7167ac84440e9bf5a7eb9223949a28"
+    },
+    {
+      "path": "diagnostics/ACC-007_wp1-closeout_evidence_20261016/review-inputs/06-BOOSTER_AUTOMATIC_PEER_REVIEW_20261014.md",
+      "sha256": "4d4fd0a511bfc6918b95880ec178d8a5aee233e20867b32819e9b3df4944dec8",
+      "origin": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\docs\\BOOSTER_AUTOMATIC_PEER_REVIEW_20261014.md",
+      "origin_sha256": "4d4fd0a511bfc6918b95880ec178d8a5aee233e20867b32819e9b3df4944dec8"
+    }
+  ],
+  "packet_bytes": 21960,
+  "frozen_primary_head": "a1d0130a7906808a73751d40c77e51c10f7bfb21",
+  "frozen_worktree_head": "87ca87f3b718fdcea016da70998505ec143463ec"
+}

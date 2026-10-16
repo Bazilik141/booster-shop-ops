@@ -1,0 +1,326 @@
+{
+  "task": "ACC-007",
+  "mode": "read_only_preflight",
+  "php_version": "8.0.30",
+  "db_prefix": "ocp5_",
+  "adminEvhenii_exists": true,
+  "cli_timezone_before_bootstrap": "UTC",
+  "timezone_from_framework_config": "UTC",
+  "openCart_sync_offset": "+00:00",
+  "initial_db_connection": {
+    "session_timezone": "SYSTEM",
+    "global_timezone": "SYSTEM",
+    "system_timezone": "EEST",
+    "utc_offset_seconds": "10800"
+  },
+  "emulated_openCart_connection": {
+    "session_timezone": "+00:00",
+    "global_timezone": "SYSTEM",
+    "system_timezone": "EEST",
+    "utc_offset_seconds": "0"
+  },
+  "kyiv_timezone_supported": "Europe/Kyiv",
+  "languages": [
+    {
+      "language_id": "4",
+      "code": "uk-ua",
+      "status": "1"
+    }
+  ],
+  "order_status": [
+    {
+      "order_status_id": "1",
+      "language_id": "4",
+      "name": "В обробці"
+    },
+    {
+      "order_status_id": "3",
+      "language_id": "4",
+      "name": "Доставляється"
+    },
+    {
+      "order_status_id": "5",
+      "language_id": "4",
+      "name": "Отримано"
+    },
+    {
+      "order_status_id": "7",
+      "language_id": "4",
+      "name": "Доставлено - чекає отримувача"
+    },
+    {
+      "order_status_id": "10",
+      "language_id": "4",
+      "name": "Помилка"
+    },
+    {
+      "order_status_id": "12",
+      "language_id": "4",
+      "name": "Повернено"
+    },
+    {
+      "order_status_id": "13",
+      "language_id": "4",
+      "name": "Повернення коштів"
+    },
+    {
+      "order_status_id": "14",
+      "language_id": "4",
+      "name": "Протерміновано"
+    },
+    {
+      "order_status_id": "15",
+      "language_id": "4",
+      "name": "Чернетка (системний)"
+    },
+    {
+      "order_status_id": "17",
+      "language_id": "4",
+      "name": "Розстрочка — очікує клієнта"
+    },
+    {
+      "order_status_id": "18",
+      "language_id": "4",
+      "name": "Розстрочка — очікує видачі"
+    },
+    {
+      "order_status_id": "19",
+      "language_id": "4",
+      "name": "Розстрочка — оформлено"
+    },
+    {
+      "order_status_id": "21",
+      "language_id": "4",
+      "name": "Розстрочка — повернено"
+    },
+    {
+      "order_status_id": "22",
+      "language_id": "4",
+      "name": "Розстрочка — відхилено"
+    },
+    {
+      "order_status_id": "23",
+      "language_id": "4",
+      "name": "Передзамовлення"
+    },
+    {
+      "order_status_id": "24",
+      "language_id": "4",
+      "name": "Скасовано"
+    }
+  ],
+  "timezone_language_settings": [
+    {
+      "store_id": "0",
+      "key": "config_timezone",
+      "value": "Europe/Kyiv"
+    }
+  ],
+  "history_aggregate": {
+    "total": "564",
+    "status_zero": "4",
+    "status_two": "33",
+    "hidden_draft": "1",
+    "missing_timestamp": "0",
+    "missing_order_reference": "0"
+  },
+  "history_status_counts": [
+    {
+      "order_status_id": "0",
+      "total": "4"
+    },
+    {
+      "order_status_id": "1",
+      "total": "156"
+    },
+    {
+      "order_status_id": "2",
+      "total": "33"
+    },
+    {
+      "order_status_id": "3",
+      "total": "168"
+    },
+    {
+      "order_status_id": "5",
+      "total": "151"
+    },
+    {
+      "order_status_id": "7",
+      "total": "4"
+    },
+    {
+      "order_status_id": "10",
+      "total": "7"
+    },
+    {
+      "order_status_id": "12",
+      "total": "4"
+    },
+    {
+      "order_status_id": "14",
+      "total": "10"
+    },
+    {
+      "order_status_id": "15",
+      "total": "1"
+    },
+    {
+      "order_status_id": "17",
+      "total": "4"
+    },
+    {
+      "order_status_id": "18",
+      "total": "4"
+    },
+    {
+      "order_status_id": "19",
+      "total": "2"
+    },
+    {
+      "order_status_id": "23",
+      "total": "12"
+    },
+    {
+      "order_status_id": "24",
+      "total": "4"
+    }
+  ],
+  "schema": {
+    "order": [
+      {
+        "Field": "order_id",
+        "Type": "int(11)",
+        "Null": "NO",
+        "Key": "PRI",
+        "Default": null,
+        "Extra": "auto_increment"
+      },
+      {
+        "Field": "store_id",
+        "Type": "int(11)",
+        "Null": "YES",
+        "Key": "",
+        "Default": "0",
+        "Extra": ""
+      },
+      {
+        "Field": "customer_id",
+        "Type": "int(11)",
+        "Null": "YES",
+        "Key": "",
+        "Default": "0",
+        "Extra": ""
+      },
+      {
+        "Field": "order_status_id",
+        "Type": "int(11)",
+        "Null": "YES",
+        "Key": "",
+        "Default": "0",
+        "Extra": ""
+      },
+      {
+        "Field": "date_added",
+        "Type": "datetime",
+        "Null": "YES",
+        "Key": "",
+        "Default": null,
+        "Extra": ""
+      },
+      {
+        "Field": "date_modified",
+        "Type": "datetime",
+        "Null": "YES",
+        "Key": "",
+        "Default": null,
+        "Extra": ""
+      }
+    ],
+    "order_history": [
+      {
+        "Field": "order_history_id",
+        "Type": "int(11)",
+        "Null": "NO",
+        "Key": "PRI",
+        "Default": null,
+        "Extra": "auto_increment"
+      },
+      {
+        "Field": "order_id",
+        "Type": "int(11)",
+        "Null": "YES",
+        "Key": "",
+        "Default": null,
+        "Extra": ""
+      },
+      {
+        "Field": "order_status_id",
+        "Type": "int(11)",
+        "Null": "YES",
+        "Key": "",
+        "Default": "0",
+        "Extra": ""
+      },
+      {
+        "Field": "date_added",
+        "Type": "datetime",
+        "Null": "YES",
+        "Key": "",
+        "Default": null,
+        "Extra": ""
+      }
+    ],
+    "order_status": [
+      {
+        "Field": "order_status_id",
+        "Type": "int(11)",
+        "Null": "NO",
+        "Key": "PRI",
+        "Default": null,
+        "Extra": "auto_increment"
+      },
+      {
+        "Field": "language_id",
+        "Type": "int(11)",
+        "Null": "NO",
+        "Key": "PRI",
+        "Default": "0",
+        "Extra": ""
+      },
+      {
+        "Field": "name",
+        "Type": "varchar(32)",
+        "Null": "YES",
+        "Key": "",
+        "Default": null,
+        "Extra": ""
+      }
+    ]
+  },
+  "events": [
+    {
+      "code": "analytics_ps_enhanced_measurement",
+      "trigger": "catalog/view/account/order_info/before",
+      "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewAccountOrderInfoBefore",
+      "status": "1"
+    }
+  ],
+  "themes": [],
+  "source_sha256": {
+    "index.php": "47734307e2bc3dd7c7ac2c02ee87a01ac7334af629e7e5ecb4d00548bc1d1379",
+    "system/startup.php": "c5ee86e45271c145ee08b4c77b0a1c70d5c104d82ae9d294f82c636a36af695e",
+    "catalog/controller/startup/setting.php": "474257596017793971e3c2b991b3ddd5202f6db3d958c13bc42977c12bf8ece9",
+    "system/config/default.php": "c56d41d08336aac6d652a3b5ecd87a11be05334a22b4ff9017fa03dbeaf70870",
+    "system/config/catalog.php": "fdc5713fa8e9d732a4183485930bf4f29104ea8c1d4f059447a300c033c80443",
+    "system/framework.php": "7bd21f9b2d9167b3f70c1899687c187d769022443d2091a3de930a41c14b5088",
+    "system/library/db/mysqli.php": "f47e18c9ffa2b340fdd9df8c5d5c04eb4f899a6d4610a432e5cfd2eb65f8e72f",
+    "catalog/controller/account/order.php": "6089dd0f39e67b8cc14739758cb9709851ee7260790a5387a85e05321f69940f",
+    "catalog/model/account/order.php": "76326e21882ae44abb92687a637692cc0168e1c8468f7461bf3f1628d4ef5f74",
+    "catalog/view/template/account/order_list.twig": "929949a1dbdd03716c97f6de195f1a4c6dbd191f101ed254070ff49617679c6e",
+    "catalog/view/template/account/order_info.twig": "9d3ae75a48c96d6d0731050631bce3fcf6fe18cd9fabe8dc34c7baea61288f73",
+    "catalog/view/template/account/order_history.twig": "bdf2f3170c7e0fca76e00125aacc4bb1957e342cc01f0a88f5c6de49814640ed",
+    "extension/ukrainian/catalog/language/uk-ua/account/order.php": "9bc7404c316876170ae882a26e1ce6faf6428d8571131555915fa90efc1517f2"
+  },
+  "done": "ok"
+}

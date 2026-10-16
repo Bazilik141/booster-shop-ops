@@ -1,0 +1,34 @@
+{
+  "task": "ACC-007",
+  "package": "notified-history-comments",
+  "gate": "G1_FOLLOWUP_WAIT_OWNER_HOST_DRY_RUN_THEN_EXPLICIT_GO_FOR_APPLY",
+  "patch_sha256": "f089e31d3b482c107b2f6a719bf1466ab29b224eb79cfcc76947bb242207e9eb",
+  "report_sha256": "39ba71e6b9e5c9590a6a31c2815e84afcc9e78de3682e51eabf26575d96c36e6",
+  "review_path": "diagnostics/ACC-007_notified-history-comments_claude-review_20261014.md",
+  "review_sha256": "db2de0251d43f1c6c11043c74a81abb0ed9ef519e440271d864895a09bf47f06",
+  "independent_source_review": "Deploy OK; no blockers; reviewer disclosed selective embedded payload review and no execution tools",
+  "local_checks": {
+    "backend_and_render": 76,
+    "runner": 37,
+    "static": 26,
+    "ui": 43,
+    "cache_command": 3
+  },
+  "production_apply_performed": false,
+  "git_invoked": false,
+  "notion_dashboard_writes": false,
+  "locked_original_artifacts_unchanged": true,
+  "next_sequence": [
+    "owner dry-run",
+    "explicit owner go; owner apply and QA",
+    "separate mobile-header package after owner gate",
+    "ACC-008 only after owner go"
+  ],
+  "nonblocking_owner_checks": [
+    "actual notify/comment schema in dry-run",
+    "admin-origin entity encoding in existing comment",
+    "existing notify=1 payment-module comments",
+    "notification flag means intent, not delivery",
+    "entity-only nonbreaking-space comment may look empty"
+  ]
+}
