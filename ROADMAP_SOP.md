@@ -10,6 +10,15 @@ writer ownership, page-ID routing, and Definition of Done.
 
 ## 0. Core invariants
 
+> **Automatic independent review — owner 2026-10-14, ALL Booster series:**
+> Follow docs/BOOSTER_AUTOMATIC_PEER_REVIEW_20261014.md. Codex initiates actual
+> Claude review through the subscription CLI when the required assigned stage
+> is ready; the owner need not trigger it manually. For GSS also read
+> docs/GSS_OPTIMIZATION_RULES_20261014.md. A review verdict is exact-stage evidence,
+> not automatic Done, Notion/dashboard mutation, commit/push, deployment or owner
+> QA. Existing task-specific writer/authority/DoD gates remain. GSS's next-stage
+> analysis-assistance trial creates no competing code/Git/status writer.
+
 > **GSS-only amendment (owner decision 2026-09-28):** follow
 > `docs/GSS_GOVERNANCE.md` and the GSS exception in root `AGENTS.md`.
 > Codex and Claude have equal architect/executor/reviewer and scoped
@@ -222,6 +231,7 @@ changes.
 | RD-11 | `3706bf20-bdb4-81a4-b3fa-f35e7610defa` | — |
 | CAT-002 | `36f6bf20-bdb4-817e-99ec-eecce853778c` | — |
 | CAT-004 | `3dc6bf20-bdb4-8164-b001-db2191f9f7e6` | Added 2026-09-15 on owner instruction ("Роби — завести окрему задачу в категорії каталогу"). Варіативність товарів: master/variant + селектор характеристик, скоуп 3D-друк + аксесуари + запечатаний TCG. Поглинає `3D-P-011`, яка того ж дня закрита як superseded (не як виконана). ID evidence: цей реєстр не фіксує наступного вільного для `CAT-`; живий запит усієї серії повернув `CAT-001`, `CAT-002`, `CAT-003` без пропусків, тому взято `CAT-004`. **Наступний вільний у серії `CAT-` — `CAT-005`.** |
+| CAT-005 | `3fc6bf20-bdb4-81e8-ac86-fa6e70f5f529` | Added 2026-10-17 on owner instruction ("Одна задача на все це діло"): Bulk / Bulk Mix product line (5 SKU in CRM, 3 on the site at launch) together with the public-offer amendment dated 18.10.2026. Closure (`Done`) only after the owner confirms that the cards are live on the site and the offer is published. ID evidence: a live query of the `CAT-` series returned `CAT-001`…`CAT-004`, so `CAT-005` was taken. |
 | 3D-P-027 | `3dd6bf20-bdb4-81a8-903b-d89f42510c20` | Added 2026-09-16 on owner instruction ("нова задача") as a follow-up to `3D-P-022`, not a reopening: 022 is Done since 2026-08-08 and its changes are live (verified by reading `crm/apps-script/Code.gs` and the dashboard, not by status). Variant SKU suffixes from ред. 9 of the naming convention are rejected by the create-form validator. ID evidence: registry stated next free `3D-P-027`; a live query of the whole series returned `3D-P-000`…`026` plus the non-numeric `3D-P-CARDCONTENT`, with `009` permanently unused, so `027` was taken. **Наступний вільний у серії `3D-P-` — `3D-P-028`.** |
 | CHECKOUT-001 | `3776bf20-bdb4-8130-bcbf-cbb6259d5654` | — |
 | CHECKOUT-002 | `3946bf20-bdb4-81bf-9f47-cda9044fd2f2` | — |
@@ -294,6 +304,7 @@ session does not have to spend search calls on the same lookups.
 | OPS-003 (партія 2026-05-20, return form) | `3666bf20-bdb4-81af-8195-d93e257997d7` |
 | OPS-003 (партія 2026-05-26, workflow templates) | `36c6bf20-bdb4-818d-a6db-e88d8437f845` |
 | OPS-004 | `3aa6bf20-bdb4-81be-ac5b-fa13d3904970` |
+| OPS-007 | `3fb6bf20-bdb4-818f-849a-efc383acfa7d` | Added 2026-10-16. Booster Shop alternating PC/laptop workflow and recovery. Codex primary executor by owner; route B one-time Notion creation and dashboard mirror exception completed. Actual Claude joint definition and independent review. GSS remains paused; the reported KODAK HDD is a candidate only. |
 | TECH-029 (партія 2026-06-07, sitemap audit) | `3786bf20-bdb4-8116-8f66-c856e04a11df` |
 | TECH-029 (партія 2026-08-04, category description) | `3666bf20-bdb4-8157-acfd-c783f2000a3b` |
 | CONTENT-20260721-test (archived) | `3a46bf20-bdb4-81bf-be47-e8dd839e00a0` |
@@ -510,8 +521,9 @@ If a task is absent, search by title or distinctive keywords, verify its
 
 ## 6. Definition of Done
 
-- **Default:** approved scope implemented, bounded diff reviewed, required
-  checks pass, Notion status is correct, and `ROADMAP_FLOW` mirrors it.
+- **Default:** approved scope implemented, required independent review stage
+  accepted under the current automatic-review rule, required checks pass,
+  Notion status is correct, and `ROADMAP_FLOW` mirrors it.
 - **Checkout, payment, Hutko, Checkbox, Nova Poshta, or order flow:**
   `bs-checkout-smoke` passes and the owner completes payment/fiscal/CRM manual
   QA before `Done`.

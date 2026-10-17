@@ -72,6 +72,8 @@ status and priority from the verified Notion card. Use dashboard
 
 | Roadmap ID | Назва | Handoff |
 |---|---|---|
+| RD-25 | Product media: catalog fit/classification, product gallery and small thumbnail routing | handoffs/handoff_RD-25_product-media-slot_20261009.md · handoffs/handoff_RD-25-WP1-FIX_media-trim-classification_20261011.md · diagnostics/RD-25-WP1_closure_report_20261011.md |
+| RD-27 | Product image standard (Pixelcut cut-outs, 3D format C, scale images with a real card) | handoffs/handoff_RD-27-RD-28_media-standard-and-logo_20261012.md · handoffs/handoff_RD-27-WP3D_3d-primary-and-scale-rollout_20261014.md · diagnostics/RD-27_pilot_20261012/review/pilot-review.md · diagnostics/RD-27_3d-batch_20261014/review/batch-review.md · design/DECISIONS.md (RD-27 entry) |
 | RD-04 | Картка товару — дизайн-система | handoffs/handoff_RD-04_product-card_thumb-twig_2026-06-01.md |
 | RD-06/07 | Empty state / category / breadcrumb | handoffs/handoff_RD-06-07_empty-state_category_breadcrumb_2026-06-04.md |
 | RD-10 | Сторінка товару — редизайн | handoffs/handoff_RD-10_product-page-parity_2026-06-09.md |
@@ -108,6 +110,7 @@ status and priority from the verified Notion card. Use dashboard
 
 | Roadmap ID | Назва | Handoff |
 |---|---|---|
+| CRM-017 | v6 APPLIED/verified/recovered; independent native checks passed; local temporary code removed; owner live cleanup and dashboard QA pending | diagnostics/CRM-017_complete-recovery_report_20261009.md · diagnostics/CRM-017_completion_evidence_20261009.json · plans/CRM-017_recovery-runbook_20261009.md · diagnostics/CRM-017_v6-tests_20261009.json |
 | DASH-001 | Огляд — три плитки без даних | — |
 | DASH-002 | Огляд — Потребують уваги | — |
 | DASH-WRITE-004 | Облік — редагування записів | handoffs/handoff_DASH-WRITE-004_edit-records_20260619.md |
@@ -183,9 +186,16 @@ status and priority from the verified Notion card. Use dashboard
 | LEGAL-002 | Публічна оферта + Обмін і повернення (mono/ПУМБ розстрочка + архів редакцій, фінальний текст власника) — редакція 24.07.2026 задеплоєна, підтверджено побайтною звіркою проти бекапу 2026-08-05 | handoffs/handoff_LEGAL-002_offer-mono-pumb-archive_20260724.md (актуальний) → handoffs/handoff_LEGAL-002_offer-mono-pumb-archive_20260723.md (попередня чернетка Claude, замінена текстом власника) |
 | LEGAL-002b-3DP | Продовження LEGAL-002: оферта (розділи 3D-друку/Mystery Box, редакція 06.08.2026) + сторінка «Обмін і повернення» + AirPack/FAQ картки Mystery Box + окремий хендоф атрибутів 3D-карток/USB-світильника. Виконавець — Claude Code (не Codex), робота частинами зі звіркою власника. Notion: `3b46bf20-bdb4-8158-bf9c-d90006a7e592` | Джерело: `Booster_Shop_handoff_offer_3D_mystery_2026-07-30.md` (owner edit 2026-08-05, у Cowork-чаті) → чернетки в Cowork outputs: offer_html_20260806_DRAFT.html, offer_html_archive_20260724_DRAFT.html, return_page_20260806_DRAFT.html, mysterybox_airpack_faq_20260806_DRAFT.html (частини I–III підтверджені власником, ще не скопійовані в repo) → хендоф Частини IV/V і технічний хендоф Claude Code — в роботі |
 | LEGAL-003 | Публічна оферта 06.10.2026 — Rare Pack / Outlet + архів редакції 07.08.2026; гейт публікації карток CAT-004 `-RPK`. Notion: `3dd6bf20-bdb4-81ea-8d89-e0e969227a59` | handoffs/handoff_LEGAL-003_offer-rare-pack-and-archive_20261006.md → handoffs/offer_html_20261006.html (готове тіло) · джерело: Booster_Shop_Public_Offer_2026-10-06_FINAL.docx · патч: patches/LEGAL-003_offer-rare-pack-and-archive_20261006.php · звіт: diagnostics/LEGAL-003_offer-rare-pack-and-archive_report_20261006.md |
+| CAT-005 | Лінійка Bulk / Bulk Mix (5 SKU в CRM, 3 на сайті) + оферта 18.10.2026. Notion: `3fc6bf20-bdb4-81e8-ac86-fa6e70f5f529` | handoffs/handoff_CAT-005_bulk-card-copy_chatgpt_20261017.md (для ЧАТ ЖПТ) · джерело оферти: «Зміни та доповнення до публічної оферти Booster Shop» від 17.10.2026 (owner edit, у Cowork-чаті) · хендоф Claude Code — після QA описів |
 | BRAND-OUTLET-001 | Outlet Booster — опис і SEO | — |
 | R-13.5 | НП модуль — master log (ST-серія) | handoffs/handoff_R-13.5_nova-poshta-module_2026-06-12.md |
 | ANALYTICS-001 | Встановлення Plerdy tracking snippet у footer.twig — заведено 2026-08-05, ще не в Notion roadmap (owner to confirm) | handoffs/handoff_ANALYTICS-001_plerdy-tracking-install_20260805.md |
+
+## OPS — Workflow portability
+
+| Roadmap ID | Назва | Handoff / Plan |
+|---|---|---|
+| OPS-007 | Booster Shop alternating PC/laptop workflow and recovery; Codex primary executor, actual Claude joint definition/review; GSS paused; the reported KODAK HDD is a candidate only | handoffs/BOOSTER_two-machine-workflow_NEW_CHAT-b_20261016.md · plans/BOOSTER_two-machine-workflow_owner-requirements-b_20261016.md · plans/BOOSTER_two-machine-workflow_task-intake-b_20261016.md · diagnostics/BOOSTER_two-machine-handoff_baseline_20261016.json |
 
 ## MKT-TG — Telegram контент-автоматизація
 
