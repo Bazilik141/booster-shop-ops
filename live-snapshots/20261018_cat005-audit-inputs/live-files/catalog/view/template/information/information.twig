@@ -1,0 +1,175 @@
+{{ header }}
+<div id="information-information" class="bs-cp-page">
+  <div class="bs-cp-wrap">
+    {% if breadcrumbs is defined and breadcrumbs %}
+      <nav class="bs-cp-breadcrumb" aria-label="Breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          {% if not loop.last %}
+            <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+            <span class="bs-cp-breadcrumb__sep" aria-hidden="true">/</span>
+          {% else %}
+            <span aria-current="page">{{ breadcrumb.text }}</span>
+          {% endif %}
+        {% endfor %}
+      </nav>
+    {% endif %}
+
+    <div class="row bs-cp-row">{{ column_left }}
+      <main id="content" class="col bs-cp-content">{{ content_top }}
+        {% set info_intro = '' %}
+        {% if heading_title == 'Про магазин' %}
+          {% set info_intro = 'Хто ми, що продаємо і чому Booster Shop працює навколо чесного TCG-досвіду для колекціонерів.' %}
+        {% elseif heading_title == 'Оплата і доставка' %}
+          {% set info_intro = 'Відправляємо замовлення по всій Україні через Нову Пошту. Пакуємо акуратно, щоб бустери, бокси й аксесуари доїхали в тому самому стані, у якому ви їх чекали.' %}
+          {% elseif heading_title == 'Обмін і повернення' %}
+          {% set info_intro = 'Правила та умови обміну, повернення товару і коштів.' %}
+        {% elseif heading_title == 'Гарантія оригінальності' %}
+          {% set info_intro = 'Ми додаємо в асортимент тільки той товар, у якому впевнені самі. Нижче коротко пояснюємо, що означають позначки в Booster Shop, звідки береться товар і на що можна розраховувати під час відкриття.' %}
+        {% elseif heading_title == 'Публічна оферта' %}
+          {% set info_intro = 'Офіційні умови купівлі товарів у Booster Shop, порядок оплати, доставки, повернення та відповідальності сторін.' %}
+        {% endif %}
+        {% set is_legal_page = heading_title == 'Публічна оферта' %}
+
+        <article class="bs-cp-article{% if is_legal_page %} bs-cp-article--legal{% endif %}">
+          <header class="bs-cp-hero">
+            <div>
+              <div class="bs-cp-kicker">Booster Shop</div>
+              <h1>{{ heading_title }}</h1>
+              {% if info_intro %}
+                <p class="bs-cp-intro">{{ info_intro }}</p>
+              {% endif %}
+              {% if heading_title == 'Про магазин' %}
+                <div class="bs-cp-slogan bs-cp-slogan--hero">Booster Shop — від колекціонера для колекціонерів.</div>
+              {% endif %}
+            </div>
+          </header>
+
+          {% set page_description = description %}
+          {% if is_legal_page %}
+            {% if 'Призначення платежу' not in page_description %}
+              {% set page_description = page_description|replace({'Банк: <strong>НоваПей</strong></p>': 'Банк: <strong>НоваПей</strong><br>\nПризначення платежу: <strong>оплата за товар</strong></p>'}) %}
+            {% endif %}
+            {% if '10.11.' not in page_description %}
+              {% set page_description = page_description|replace({'<p>10.10. Повернення коштів здійснюється після отримання та перевірки товару продавцем, якщо товар відповідає умовам повернення.</p>': '<p>10.10. Якщо товар відповідає умовам повернення, продавець повертає покупцеві кошти протягом 14 календарних днів з моменту отримання та перевірки поверненого товару.</p>\n\n<p>10.11. Повернення коштів здійснюється тим самим способом, яким була проведена оплата, якщо це технічно можливо. Якщо повернення тим самим способом неможливе, продавець і покупець погоджують інший доступний спосіб повернення коштів.</p>\n\n<p>10.12. Вартість доставки, комісії служб доставки, платіжних сервісів або банків не повертаються, якщо інше не передбачено законодавством України або окремою домовленістю з продавцем.</p>'}) %}
+            {% endif %}
+          {% endif %}
+
+          <div class="bs-cp-layout">
+            <aside class="bs-cp-toc" aria-label="Зміст сторінки">
+              <div class="bs-cp-toc__title">Зміст</div>
+              <ol class="bs-cp-toc__list"></ol>
+            </aside>
+
+            <div class="bs-cp-main">
+              {{ page_description }}
+            </div>
+          </div>
+        </article>
+
+        {{ content_bottom }}</main>
+      {{ column_right }}</div>
+  </div>
+</div>
+
+<script>
+(function() {
+  var main = document.querySelector('.bs-cp-main');
+  var toc = document.querySelector('.bs-cp-toc');
+  var tocList = document.querySelector('.bs-cp-toc__list');
+  var layout = document.querySelector('.bs-cp-layout');
+
+  if (!main || !toc || !tocList) return;
+
+  var headings = main.querySelectorAll('h2');
+  if (!headings.length) {
+    toc.style.display = 'none';
+    if (layout) layout.classList.add('bs-cp-layout--no-toc');
+    return;
+  }
+
+  headings.forEach(function(heading, index) {
+    var id = heading.id || ('cp-' + index);
+    heading.id = id;
+
+    var item = document.createElement('li');
+    var link = document.createElement('a');
+    link.href = window.location.href.replace(/#.*$/, '') + '#' + id;
+    link.className = 'bs-cp-toc__link';
+    /* PAY-001-INFO-1-20260726: preserve approved H2 icons in the generated TOC. */
+    var headingIcon = heading.querySelector('.bs-cp-h2-icon svg');
+    if (headingIcon) {
+      var tocIcon = headingIcon.cloneNode(true);
+      tocIcon.setAttribute('width', '14');
+      tocIcon.setAttribute('height', '14');
+      tocIcon.setAttribute('aria-hidden', 'true');
+      link.appendChild(tocIcon);
+    }
+    link.appendChild(document.createTextNode(heading.textContent));
+
+    item.appendChild(link);
+    tocList.appendChild(item);
+  });
+
+  var links = tocList.querySelectorAll('.bs-cp-toc__link');
+  function setActive(id) {
+    links.forEach(function(link) {
+      link.classList.toggle('is-active', link.hash === '#' + id);
+    });
+  }
+
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          setActive(entry.target.id);
+        }
+      });
+    }, { rootMargin: '-10% 0px -80% 0px' });
+
+    headings.forEach(function(heading) {
+      observer.observe(heading);
+    });
+  }
+
+  if (headings[0]) {
+    setActive(headings[0].id);
+  }
+})();
+</script>
+
+{# PAY-001-INFO-1-20260726: IBAN copy helper #}
+<script>
+document.querySelectorAll('.bs-copy-btn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var text=btn.getAttribute('data-copy');
+    if(navigator.clipboard){navigator.clipboard.writeText(text).then(function(){
+      btn.classList.add('is-copied');
+      setTimeout(function(){btn.classList.remove('is-copied')},1300);
+    }).catch(function(){});}
+  });
+});
+</script>
+{% if breadcrumbs is defined and breadcrumbs %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {% for breadcrumb in breadcrumbs %}
+    {
+      "@type": "ListItem",
+      "position": {{ loop.index }},
+      {% if loop.first %}
+      "name": "Головна",
+      {% else %}
+      "name": {{ breadcrumb.text|striptags|json_encode|raw }},
+      {% endif %}
+      "item": {{ breadcrumb.href|replace({'&amp;': '&'})|json_encode|raw }}
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+{% endif %}
+
+{{ footer }}

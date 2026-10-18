@@ -3,7 +3,14 @@
 Date: 2026-10-18
 Executor: Claude Code · model=Opus · effort/thinking=high — proposal, owner decides. Why: an audit-first task with two DB-write patches (a legal page and new catalog rows plus two new attributes), where the risk is in what the audit finds, not in typing the patch.
 
-Delivery: patch files into `patches/`, an audit report into `diagnostics/`. The owner uploads to `~/public_html` and runs `php <patch>.php`. The executor never commits, pushes or deploys. No staging — patches run on production.
+Delivery: patch files into `patches/`, an audit report into `diagnostics/`. The owner uploads to `~/public_html` and runs `php <patch>.php`. The executor never deploys. No staging — patches run on production.
+
+## 0. Cloud execution (owner-approved override for this task)
+
+- This task runs in a cloud session with the Git repo only. The full backup is not in Git. Audit inputs are in **`live-snapshots/20261018_cat005-audit-inputs/`** (read its README): a catalog-only SQL extract of backup 10.15.2026 and the live template/controller/model files. Everything you cannot see there (theme settings, `ocp5_setting`, Merchant feed module files, customer/order data) is **unverified** — say so in the audit instead of guessing.
+- Base your work on the branch that contains this handoff (`origin/codex/3dp-payout-approval-status` unless it was merged into `master` — check which one has `handoffs/handoff_CAT-005_bulk-cards-and-offer_claude-code_20261018.md`). Work on your own new branch.
+- Owner override for this task only: you may commit the deliverables (audit report, patch files, test reports) and **push your own branch** to origin so the owner and Claude (chat) can review them. Never push to `master` or to the branch you started from, never force-push, never merge. The owner merges after review.
+- You may load `catalog-extract_backup-10.15.2026.sql.txt` into a scratch MariaDB/MySQL in your sandbox for the patch tests; never touch any real database.
 
 ## 1. Task ID
 

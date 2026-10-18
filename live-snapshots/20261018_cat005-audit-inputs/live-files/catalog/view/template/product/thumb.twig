@@ -1,0 +1,123 @@
+{# RD-25-WP1 20261009: fitted listing image and source kind. #}
+{# RD-04 Product card system: all product states.
+   RD-04f: product/thumb.php normalizes bs_state and bs_eta.
+#}
+
+{% set bs_state_value = bs_state|default('') %}
+{% set bs_is_pre = bs_state_value == 'preorder' %}
+{% set bs_is_out = bs_state_value == 'out' %}
+{% set bs_is_rare = bs_is_rare|default(false) %}
+{% set bs_thumb = bs_fit_thumb|default(thumb|default('')) %}
+{% set bs_thumb_lc = bs_thumb|lower %}
+{% set bs_is_sale = special is not empty and not bs_is_out %}
+{% set bs_no_img = bs_thumb is empty or 'no_image' in bs_thumb_lc or 'placeholder' in bs_thumb_lc %}
+
+{% set discount = 0 %}
+{% if bs_is_sale and price_value is defined and special_value is defined and price_value > 0 and special_value > 0 %}
+  {% set discount = ((1 - special_value / price_value) * 100)|round %}
+{% endif %}
+
+<article class="bs-pcard{% if bs_is_out %} bs-pcard--out{% endif %}{% if bs_no_img %} bs-pcard--nophoto{% endif %}">
+  <a class="bs-pcard__media{% if bs_media_kind|default('') in ['cut', 'photo'] %} bs-pcard__media--{{ bs_media_kind }}{% endif %}" href="{{ href }}" tabindex="-1" aria-hidden="true">
+    {% if bs_no_img %}
+      <span class="bs-pcard__img-placeholder" aria-hidden="true"></span>
+    {% else %}
+      <img src="{{ bs_thumb }}" alt="{{ name }}" loading="lazy" width="{{ bs_media_width|default(240) }}" height="{{ bs_media_height|default(240) }}">
+    {% endif %}
+
+    {% if discount > 0 %}
+      <span class="bs-pcard__badge-tr">
+        <span class="bs-badge bs-badge--discount">−{{ discount }}%</span>
+      </span>
+    {% endif %}
+
+{# CAT-004 SD-7: the left corner is a badge column — pre-order or out-of-stock
+   first, «Rare Pack» under it. The inner tags start at column 0 on purpose:
+   Twig emits the whitespace around a tag and swallows only the newline directly
+   after %}, so a tile without the attribute renders byte-identically to the
+   pre-patch template. Do not re-indent them. #}
+    {% if bs_is_pre or bs_is_out or bs_is_rare %}
+      <span class="bs-pcard__badge-tl">
+{% if bs_is_pre %}        <span class="bs-badge bs-badge--preorder">Передзамовлення</span>
+{% elseif bs_is_out %}        <span class="bs-badge bs-badge--out">Немає в наявності</span>
+{% endif %}{% if bs_is_rare %}        <span class="bs-badge bs-badge--rare">Rare Pack</span>
+{% endif %}      </span>
+    {% endif %}
+  </a>
+
+  <div class="bs-pcard__body">
+    <h4 class="bs-pcard__title">
+      <a href="{{ href }}">{{ name }}</a>
+    </h4>
+
+    {% if bs_is_pre and bs_eta|default('') %}
+      <div class="bs-pcard__eta">{{ bs_eta }}</div>
+    {% endif %}
+
+    {% if price %}
+      <div class="bs-pcard__price-row{% if bs_is_sale %} bs-pcard__price-row--sale{% endif %}">
+        <span class="bs-pcard__price-new">{{ bs_is_sale ? special : price }}</span>
+        {% if bs_is_sale %}
+          <span class="bs-pcard__price-old">{{ price }}</span>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="bs-pcard__cta">
+      {% if bs_is_out %}
+        <span class="bs-pcard__unavail">Немає в наявності</span>
+      {% else %}
+        <form method="post"
+              {% if ps_has_options %}
+                {% if ps_track_select_promotion and special %}
+                  data-tech015-ga4-submit="select_promotion"
+                {% elseif ps_track_select_item and not special %}
+                  data-tech015-ga4-submit="select_item"
+                {% endif %}
+              {% elseif ps_track_add_to_cart %}
+                data-tech015-ga4-submit="add_to_cart"
+              {% endif %}
+              data-oc-toggle="ajax"
+              data-oc-load="{{ cart }}"
+              data-oc-target="#cart"
+              class="bs-pcard__form">
+          <button type="submit"
+                  formaction="{{ cart_add }}"
+                  class="bs-btn {% if bs_is_pre %}bs-btn-preorder{% else %}bs-btn-primary{% endif %} bs-pcard__buy-btn">
+            {{ bs_is_pre ? 'Передзамовити' : button_cart }}
+          </button>
+          <input type="hidden" name="product_id" value="{{ product_id }}">
+          <input type="hidden" name="quantity" value="{{ minimum }}">
+        </form>
+      {% endif %}
+      {# ACC-006_WISHLIST_RESTORE_20261013: separate action, including unavailable products. #}
+      <button type="button" class="bs-btn bs-btn-secondary bs-btn-sm w-100 mt-2" data-bs-wishlist-add="{{ product_id }}" aria-label="Додати в улюблене: {{ name }}">В улюблене</button>
+    </div>
+  </div>
+</article>
+<script>
+// TECH-015-WP3B: observe tile submits without preventing or redispatching the cart action.
+(function() {
+  if (window.bsTech015CatalogGa4Bound || !window.jQuery) {
+    return;
+  }
+
+  window.bsTech015CatalogGa4Bound = true;
+
+  window.jQuery(document).on('submit.tech015CatalogGa4', '.bs-pcard__form[data-tech015-ga4-submit]', function() {
+    var form = window.jQuery(this);
+    var eventName = String(form.attr('data-tech015-ga4-submit') || '');
+    var productId = String(form.find('input[name="product_id"]').val() || '');
+    var dataId = eventName + '_' + productId;
+
+    if (!eventName || !productId || !window.ps_dataLayer ||
+        typeof window.ps_dataLayer.onClick !== 'function' ||
+        !window.ps_dataLayer.ga4_data ||
+        !Object.prototype.hasOwnProperty.call(window.ps_dataLayer.ga4_data, dataId)) {
+      return;
+    }
+
+    window.ps_dataLayer.onClick(eventName, productId);
+  });
+})();
+</script>
