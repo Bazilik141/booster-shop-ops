@@ -26,7 +26,7 @@ Our side: the `pumb_credit` module restricts the **inbound bank callback** by so
 Matcher (`allowedIp()` + `ipMatches()` in `extension/pumb_credit/catalog/controller/payment/pumb_credit.php`): exact IPv4/IPv6 and CIDR, `REMOTE_ADDR` only, forwarded headers ignored. Behaviour that matters here:
 
 - **Empty list = allow all (fail-open).**
-- **Non-empty list with a malformed entry = fail closed.**
+- A malformed entry never matches but does not disable valid ones; the list fails closed only when no entry is valid (corrected after `diagnostics/PAY-006_pumb-callback-ip-state_20261016.md` §1).
 
 Last known values (stale, from `diagnostics/PAY-003_prod-callback-registration_review_20260909.md`, 2026-09-09): PROD list = the 16 addresses `194.44.66.16` … `194.44.66.31` enumerated; TEST list **not recorded**; `test_mode=1`, `public=0`, `status=1`. The module has since gone through further work — treat every value above as unverified until read from the newest backup.
 
@@ -124,3 +124,22 @@ Run the `rollback.php` printed by the patch (or the rollback SQL in its header):
 ## Delivery path
 
 Patch file → `patches/`; the owner uploads it to `~/public_html` and runs `php PAY-006_pumb-callback-ip-add_20261016.php`. The executor does not commit, push, deploy or run anything on production. One patch author for this task: if the owner reassigns, the current executor stops first.
+
+## Evidence added 2026-10-16 (Claude chat, read-only extraction from `backup-10.15.2026_13-09-55_boosters.tar.gz`)
+
+Covers deliverable A items 1–3; items 4–5 remain for the executor. Rows from `ocp5_setting`, `code='payment_pumb_credit'`, `store_id=0`, `serialized=0`:
+
+| setting_id | key | value |
+|---|---|---|
+| 11146 | `payment_pumb_credit_callback_ips` | `194.44.66.16,…,194.44.66.31` — 16 enumerated addresses, comma without spaces, non-empty |
+| 11149 | `payment_pumb_credit_test_callback_ips` | identical 16 addresses, non-empty |
+| 11135 | `payment_pumb_credit_status` | `1` |
+| 11137 | `payment_pumb_credit_public` | `1` |
+| 11139 | `payment_pumb_credit_api_base` | `https://api.dts.fuib.com/ext-oic/galadriel/v1` (the TEST endpoint) |
+| 11152 | `payment_pumb_credit_terms` | `[3,4,5]` |
+
+- No `payment_pumb_credit_test_mode` row exists in this backup → `isTestMode()` is falsy.
+- Live controller SHA-256 = `951dcf43a4f4c2712b1f1a124fbac08ed80b57879a5f9bc91ab5cd9bf80a41dd` (unchanged since 2026-09-09); `ipMatches()` present.
+- Both lists non-empty, so the patch precondition holds; the real append target is `…,194.44.66.31` → `…,194.44.66.31,3.123.129.140`.
+- Since 2026-09-09 the module went from `public=0` to `public=1`: callbacks now move real orders. This raises the cost of a bad write, not the scope.
+- Out of scope, report only: `public=1` together with TEST endpoints and no `test_mode` row. Do not change.
