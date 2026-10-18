@@ -10,12 +10,13 @@ Client-facing language: Ukrainian. Everything else in this file is instruction t
 
 ---
 
-## 0. Owner inputs (owner: fill before sending, or leave the defaults)
+## 0. Owner decisions (answered 2026-10-18)
 
-| ID | Question | Default if left blank |
-|---|---|---|
-| O-1 | Create two new product attributes `Кількість карток у наборі` and `Склад за рідкістю` (attribute group 7)? Claude recommends YES: offer 5.6 requires the page to show these characteristics and no existing attribute fits (15 / 16 / 49 describe boosters, boxes and decks). Without them the count and rarity split live only in the name, body and FAQ. | `NO` — use existing attributes only; still return the two values in the `pending_attributes` block so nothing is lost if the owner says yes later. |
-| O-2 | Damage policy sentence, only if the owner wants one stated on the cards (for example, whether visibly bent or creased cards are kept out of sets). | none — make NO claim about damage or wear beyond section 4. |
+| ID | Decision |
+|---|---|
+| O-1 | **YES.** Two new product attributes `Кількість карток у наборі` and `Склад за рідкістю` are created (a separate owner-approved step in the Claude Code patch). Return their values in the `attributes` list like any other attribute. |
+| O-2 | **No** damage-policy sentence. Make NO claim about damage or wear beyond section 4. |
+
 
 ---
 
@@ -103,7 +104,7 @@ Open for the owner (not for you): the CRM product-type column currently offers A
 **Do NOT state, in either direction, anything about:** the five R being different from each other; Energy cards (Pokémon) or DON!! / Leader cards (One Piece) being included or excluded; a minimum number of cards per language; a language split; whether valuable cards were removed from the stock; weighing, sorting or hand selection.
 (The owner deliberately left these out of the offer. An unknown fact is omitted from client copy; it is not turned into a FAQ answer saying «unknown».)
 
-**Condition.** The condition is its own canonical characteristic. The only confirmed wording is: original cards from opened packs; no condition grade is declared. Photos show approximate filling only. If O-2 is filled in, you may add that one sentence; otherwise say nothing about damage.
+**Condition.** The condition is its own canonical characteristic. The only confirmed wording is: original cards from opened packs; no condition grade is declared. Photos show approximate filling only. Say nothing about damage or wear (owner decision O-2).
 
 **Packaging.** The actual packaging is chosen at order assembly, based on volume and the protection the cards need. Say that. Do not describe a box, a bag or any specific container, and do not create the impression of factory packaging. Do not use the word «sealed» about the product except to say it is NOT sealed.
 
@@ -148,8 +149,7 @@ meta_title:              # <= 63 characters INCLUDING the suffix " | Booster Sho
 meta_description:        # <= 155 characters; product + strongest differentiator; no filler
 tags:                    # 5-8 comma-separated Ukrainian/English tags; no repeats of the same word form
 description_html:        # see markup below
-attributes:              # list of  <attribute_id> | <attribute name> | <value>   (section 8)
-pending_attributes:      # only if O-1 is not YES: the two new-attribute values, marked PENDING
+attributes:              # list of  <attribute_id or NEW> | <attribute name> | <value>   (section 8)
 self_qa:                 # the checklist in section 10, each item PASS/FAIL with a quote
 ```
 
@@ -201,10 +201,14 @@ Use only these existing names (attribute group 7 `Характеристики`)
 
 Do not return attributes 15, 16, 19, 49 — they describe boosters, boxes, weighing or decks and would mislabel this product. Do not return `Рік випуску`.
 
-Pending (only used if the owner answers YES to O-1; otherwise returned under `pending_attributes`):
+New attributes (owner decision O-1 = YES). They do not exist yet; Claude Code creates them in group 7. In the `attributes` list mark their id as `NEW`:
 
 | Name | Pokémon Bulk 155 | One Piece Bulk 155 | Pokémon Bulk Mix 100 |
 |---|---|---|---|
+| Кількість карток у наборі | 155 | 155 | 100 |
+| Склад за рідкістю | 150 C/U + 5 R | 150 C/UC + 5 R | 100 C/U |
+
+---|---|---|---|
 | Кількість карток у наборі | 155 | 155 | 100 |
 | Склад за рідкістю | 150 C/U + 5 R | 150 C/UC + 5 R | 100 C/U |
 
