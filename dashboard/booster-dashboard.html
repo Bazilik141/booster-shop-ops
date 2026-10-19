@@ -3194,11 +3194,11 @@ const ROADMAP_TASKS = [
     subtasks: []
   },
   {
-    id: 'TECH-049', title: 'Schema + Merchant-фід: стан товару (itemCondition) для не-запечатаних карток Bulk / Bulk Mix', status: 'active', tool: 'Claude (діагностика) → виконавець за вибором власника', priority: 'High',
+    id: 'TECH-049', title: 'Schema + Merchant-фід: стан товару (itemCondition) для не-запечатаних карток Bulk / Bulk Mix', status: 'done', tool: 'Claude (діагностика) → виконавець за вибором власника', priority: 'High',
     lastUpdated: '2026-10-19', blockedBy: [],
     simple: 'У розмітці товару для Google стан «новий» (NewCondition) вписано жорстко для всіх товарів, у фіді Merchant, імовірно, так само. Картки Bulk / Bulk Mix зібрані з окремих карток, вилучених із бустерів, — це не запечатаний новий товар. Якщо ввімкнути їх як є, Google отримає неправдиве твердження про стан. Задача: знайти, де саме береться NewCondition, і виправити лише для цих карток, не чіпаючи запечатані товари.',
     why: 'Блокує ввімкнення CAT-005. Хибний стан у schema/фіді — ризик для Merchant Center і порушення нашого правила про чесні характеристики товару.',
-    warn: 'Notion: https://app.notion.com/p/3fe6bf20bdb481cebf76d969f014ee43. Заведено 2026-10-19 на доручення власника (D3 з аудиту CAT-005), одразу In progress. Ризикова зона: schema + Merchant feed — потрібні bs-merchant-schema-qa і bs-seo-risk-gate до хендофа, відкат і smoke-тест. 2026-10-19: WP1 (product.twig) і WP2 (генератор фіда) залито власником через scp/ssh, done=ok, Stage A пройдено (фід: 130 × new; запечатаний товар: NewCondition). Stage B (UsedCondition на живих картках + три рядки used у публічному фіді) чекає доказів: публічний merchant-feed.tsv на момент перевірки показував 113 рядків без BULK. Перетинається з TECH-048 лише файлом генератора фіда. Не вигадувати GTIN, рейтинг, наявність.',
+    warn: 'Notion: https://app.notion.com/p/3fe6bf20bdb481cebf76d969f014ee43. Заведено 2026-10-19 на доручення власника (D3 з аудиту CAT-005), одразу In progress. Ризикова зона: schema + Merchant feed — потрібні bs-merchant-schema-qa і bs-seo-risk-gate до хендофа, відкат і smoke-тест. 2026-10-19: WP1 (product.twig) і WP2 (генератор фіда) залито власником через scp/ssh, done=ok, Stage A пройдено (фід: 130 × new; запечатаний товар: NewCondition). 2026-10-19: Stage B пройдено власником — UsedCondition на трьох живих картках Bulk, три рядки used / Bulk Set у серверному і публічному фіді (раніше побачені 113 рядків без BULK були застарілим знімком). Закрито за проханням власника. Лишається спостереження Merchant Center через 24–48 год (watch-only, без задачі). Перетинається з TECH-048 лише файлом генератора фіда. Не вигадувати GTIN, рейтинг, наявність.',
     subtasks: []
   },
   {
