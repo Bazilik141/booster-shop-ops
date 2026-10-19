@@ -3,7 +3,8 @@ declare(strict_types=1);
 /*
  * CAT-005 WP2: create the 3 Bulk / Bulk Mix product cards DISABLED (status=0)
  * plus two new attributes in group 7. Deploy AFTER
- * CAT-005_offer-bulk-and-archive_20261018.php.
+ * CAT-005_offer-bulk-and-archive_20261018.php; refuses (no writes) while
+ * WP1's archive route publichna-oferta-arhiv-2026-10-06 is absent.
  * Run from ~/public_html after a separate owner-held OpenCart database dump.
  * Owner decisions 2026-10-19: subtract=1 (D1); new attributes sort_order 4/5
  * (D2); schema/feed untouched, cards stay status=0 (D3).
@@ -62,6 +63,9 @@ const STOCK_STATUS_ID = 5;
 const WEIGHT_CLASS_ID = 2;
 const LENGTH_CLASS_ID = 1;
 const SUBTRACT = 1;
+// Written by WP1; its presence proves WP1 ran (owner deploy order WP1 → WP2).
+const WP1_ARCHIVE_SLUG = 'publichna-oferta-arhiv-2026-10-06';
+const CACHE_NOTE = 'OpenCart caches information and product lists for about 1 hour; if the page looks stale, wait or clear the data cache';
 
 function bs_log(string $key, string $value = ''): void {
     echo $key . ($value === '' ? '' : '=' . $value) . PHP_EOL;
@@ -414,6 +418,11 @@ function bs_run(): void {
             $row = bs_one(bs_select($db, 'SELECT a.attribute_group_id, ad.name FROM `' . $t['attribute'] . '` a JOIN `' . $t['attribute_description'] . '` ad ON ad.attribute_id=a.attribute_id AND ad.language_id=? WHERE a.attribute_id=?', 'ii', [LANGUAGE_ID, $id]), 'attribute ' . $id);
             if ((int) $row['attribute_group_id'] !== ATTRIBUTE_GROUP_ID || $row['name'] !== bs_oc($name)) bs_fail('Unexpected attribute group/name: ' . $id);
         }
+        // WP1 must be live first. Its archive route is the marker; the live offer
+        // hash is deliberately not compared, so later offer revisions do not block.
+        $wp1 = bs_select($db, 'SELECT seo_url_id FROM `' . $t['seo_url'] . '` WHERE keyword=? AND `key`=\'information_id\' AND store_id=? AND language_id=?', 'sii', [WP1_ARCHIVE_SLUG, STORE_ID, LANGUAGE_ID]);
+        if ($wp1 === []) bs_fail('Run CAT-005_offer-bulk-and-archive_20261018.php first');
+        bs_log('wp1_archive_route', 'ok');
 
         // Existing state of everything this patch would create; lock for the transaction.
         $skus = array_keys($cards);
@@ -445,7 +454,7 @@ function bs_run(): void {
             $db->rollback(); $inTransaction = false;
             bs_log('already_applied', 'yes');
             foreach ($byModel as $sku => $id) bs_log('product_' . $sku, (string) $id);
-            bs_log('done', 'ok'); bs_self_delete(); return;
+            bs_log('done', 'ok'); bs_log('note', CACHE_NOTE); bs_self_delete(); return;
         } else {
             bs_fail('Partial or conflicting CAT-005 state (products=' . count($products) . ', seo=' . count($routes) . ', attributes=' . count($attrRows) . '); no writes permitted');
         }
@@ -458,12 +467,18 @@ function bs_run(): void {
             'products_with_sku' => $products, 'seo_keywords' => $routes, 'new_attribute_names' => $attrRows,
         ]);
 
+        // Every new ID must be above the highest existing one at write time.
+        $attributeMax = (int) bs_one(bs_select($db, 'SELECT COALESCE(MAX(attribute_id),0) AS m FROM `' . $t['attribute'] . '`', '', []), 'attribute max')['m'];
+        $productMax = (int) bs_one(bs_select($db, 'SELECT COALESCE(MAX(product_id),0) AS m FROM `' . $t['product'] . '`', '', []), 'product max')['m'];
+        bs_log('attribute_max_before', (string) $attributeMax);
+        bs_log('product_max_before', (string) $productMax);
+
         $now = date('Y-m-d H:i:s');
         $lang = LANGUAGE_ID;
         $attrIds = [];
         foreach (NEW_ATTRIBUTES as $key => [$name, $sortOrder]) {
             $id = bs_insert($db, 'INSERT INTO `' . $t['attribute'] . '` (attribute_group_id,sort_order) VALUES (?,?)', 'ii', [ATTRIBUTE_GROUP_ID, $sortOrder]);
-            if ($id <= 55) bs_fail('Invalid/protected attribute ID assigned');
+            if ($id <= $attributeMax) bs_fail('Invalid/protected attribute ID assigned');
             bs_insert($db, 'INSERT INTO `' . $t['attribute_description'] . '` (attribute_id,language_id,name) VALUES (?,?,?)', 'iis', [$id, $lang, bs_oc($name)]);
             $attrIds[$key] = $id;
         }
@@ -472,7 +487,7 @@ function bs_run(): void {
             $id = bs_insert($db, 'INSERT INTO `' . $t['product'] . '` (master_id,model,sku,upc,ean,jan,isbn,mpn,location,variant,override,quantity,stock_status_id,image,manufacturer_id,shipping,price,points,tax_class_id,date_available,weight,weight_class_id,length,width,height,length_class_id,subtract,minimum,rating,sort_order,status,date_added,date_modified)'
                 . ' VALUES (0,?,?,NULL,NULL,NULL,NULL,NULL,\'\',\'\',\'\',0,?,\'\',?,1,?,0,0,?,0,?,0,0,0,?,?,1,0,0,0,?,?)',
                 'ssiissiiiss', [$sku, $sku, STOCK_STATUS_ID, $card['manufacturer_id'], $card['price'], substr($now, 0, 10), WEIGHT_CLASS_ID, LENGTH_CLASS_ID, SUBTRACT, $now, $now]);
-            if ($id <= 213) bs_fail('Invalid/protected product ID assigned');
+            if ($id <= $productMax) bs_fail('Invalid/protected product ID assigned');
             $created[$sku] = $id;
             bs_insert($db, 'INSERT INTO `' . $t['product_description'] . '` (product_id,language_id,name,description,tag,meta_title,meta_description,meta_keyword) VALUES (?,?,?,?,?,?,?,\'\')',
                 'iisssss', [$id, $lang, bs_oc($card['name']), bs_oc($card['description']), bs_oc($card['tag']), bs_oc($card['meta_title']), bs_oc($card['meta_description'])]);
@@ -529,7 +544,7 @@ function bs_run(): void {
         foreach ($created as $sku => $id) bs_log('product_' . $sku, (string) $id);
         bs_log('status', 'disabled (0) for all created products');
         bs_log('transaction', 'committed');
-        bs_log('done', 'ok'); bs_self_delete();
+        bs_log('done', 'ok'); bs_log('note', CACHE_NOTE); bs_self_delete();
     } catch (Throwable $e) {
         if ($inTransaction) { $db->rollback(); bs_log('transaction', 'rolled_back'); }
         throw $e;

@@ -42,6 +42,7 @@ const ARCHIVE_SHA256 = '7c699b0e8536c7526fe14a909cc7888ce627c0ee35cd4ee9553effeb
 // Existing archives used as the settings reference; all are protected.
 const MIRROR_ARCHIVES = [6 => '26.05.2026', 7 => '24.07.2026', 8 => '07.08.2026'];
 const MAX_PROTECTED_INFORMATION_ID = 8;
+const CACHE_NOTE = 'OpenCart caches information and product lists for about 1 hour; if the page looks stale, wait or clear the data cache';
 function bs_log(string $key, string $value = ''): void {
     echo $key . ($value === '' ? '' : '=' . $value) . PHP_EOL;
 }
@@ -601,7 +602,7 @@ function bs_run(): void {
             bs_archive_verify($db, $tables, $archiveId, $mirrorInfo);
             $db->rollback(); $inTransaction = false;
             bs_log('already_applied', 'yes'); bs_log('archive_information_id', (string) $archiveId);
-            bs_log('done', 'ok'); bs_self_delete(); return;
+            bs_log('done', 'ok'); bs_log('note', CACHE_NOTE); bs_self_delete(); return;
         }
         if ($sha !== OFFER_PREV_SHA256) bs_fail('Live offer hash differs from expected 06.10.2026 edition; no writes permitted');
         if ($routes !== []) bs_fail('Archive SEO keyword already exists; no writes permitted');
@@ -649,7 +650,7 @@ function bs_run(): void {
         bs_log('updated_offer','description_only'); bs_log('offer_sha256',OFFER_NEW_SHA256);
         bs_log('archive_sha256',ARCHIVE_SHA256); bs_log('archive_information_id',(string)$archiveId);
         bs_log('archive_seo_url_id',(string)$seoId); bs_log('transaction','committed');
-        bs_log('done','ok'); bs_self_delete();
+        bs_log('done','ok'); bs_log('note', CACHE_NOTE); bs_self_delete();
     } catch (Throwable $e) {
         if ($inTransaction) { $db->rollback(); bs_log('transaction','rolled_back'); }
         throw $e;
