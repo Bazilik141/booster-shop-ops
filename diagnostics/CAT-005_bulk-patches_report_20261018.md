@@ -48,21 +48,33 @@ Both are generated from templates and the verbatim inputs, so the embedded conte
 | Re-run after deploy | `already_applied` | WP2 checks identity only: SKU→product, keyword→product, attributes in group 7. | The owner edits status, stock, photos and weight after deploy; a full-field re-check would then fail a legitimate re-run. |
 | Rollback scope (WP2) | created ids | Also deletes rows the owner adds later in any existing `product_*` child table for those ids (images, discounts…). Attributes are deleted only if no product still uses them. | A rollback after photos are uploaded must not leave orphan rows. |
 
+## Changes after review (2026-10-19)
+
+The three non-blocking remarks were applied directly to the patch files. Card copy, offer blob, SHA constants, field values and rollback logic are unchanged: every SHA, blob and nowdoc line is identical to the previous commit.
+
+1. **WP2 ID guards.** The hard-coded `$id <= 55` / `$id <= 213` are gone. Inside the transaction, after the `FOR UPDATE` state reads and before the first insert, the patch reads `MAX(attribute_id)` and `MAX(product_id)` and logs them as `attribute_max_before` / `product_max_before`. Every new `insert_id` must be strictly greater, otherwise it throws, rolls back, exits 1 and keeps the file.
+2. **WP2 refuses to run before WP1.** A read-only precondition placed before any write: the `seo_url` row `publichna-oferta-arhiv-2026-10-06` (`key information_id`, store 0, language 4) must exist, otherwise the patch fails with «Run CAT-005_offer-bulk-and-archive_20261018.php first». The live offer hash is not compared, so later offer revisions do not block WP2. The check also runs, and passes, on an already-applied re-run.
+3. **Cache note.** Both patches print `note=OpenCart caches information and product lists for about 1 hour; if the page looks stale, wait or clear the data cache` after `done=ok`, in the success and the `already_applied` branches.
+
 ## Tests (scratch MariaDB 10.11.14 seeded from the 15.10 catalog extract; PHP 8.3 runtime)
+
+All rows were re-run on the post-review files, except the two marked ¹. Those come from the first run; the review fixes do not touch their code paths. The stored-description SHAs and `status`/`subtract`/`qty` were re-checked.
 
 | Test | Result |
 |---|---|
 | `php -l` both files | no syntax errors |
 | `scripts/check-php-host-compat.php` both files (PHP 8.0 syntax + no-mysqlnd calls) | OK, 0 findings |
-| WP1 fresh apply | `done=ok`, self-deleted. id=3 SHA = `6ec16036…dea`. Archive id 9: banner + body, SHA `7c699b0e…6898`, i.e. the body is byte-identical to the pre-patch id=3. SEO 2371, store 0. |
-| WP1 re-run | `already_applied=yes`, DB dump unchanged |
+| Embedded content | offer SHA `6ec16036…dea` and the three stored-description SHAs (`d87fd016…`, `458c6a16…`, `c584f603…`) are unchanged vs the previous commit and match the rows written in the test |
+| WP2 on a DB without WP1 | exit 1, «Run CAT-005_offer-bulk-and-archive_20261018.php first», file kept, DB dump unchanged |
+| WP1 fresh apply | `done=ok` + `note=…`, self-deleted. id=3 SHA = `6ec16036…dea`. Archive id 9: banner + body, i.e. the body is byte-identical to the pre-patch id=3. SEO 2371, store 0. |
+| WP1 re-run | `already_applied=yes` + `note=…`, DB dump unchanged |
 | WP1 precondition: id=3 body altered | exit 1, file kept, DB unchanged |
 | WP1 precondition: archive keyword exists | exit 1, file kept, DB unchanged |
 | WP1 `rollback.sql` | DB dump identical to pre-patch |
-| WP2 fresh apply (after WP1) | `done=ok`, self-deleted; products 214/215/216, attributes 57/58 |
-| WP2 field check, all 3 cards | `status 0`, `qty 0`, `subtract 1`, 9 attributes, 1 keyword, store 0, correct categories and manufacturer. Stored description = `htmlspecialchars(FINAL)`; decoded = FINAL byte-for-byte. Meta 54/125, 53/124, 50/128 (limits 63/155). |
-| WP2 storefront attribute order (`a.sort_order, ad.name`) | Назва сету · Мова · Тип пакування · Додатковий вміст · Кількість карток у наборі · Склад за рідкістю · Стан · Походження товару · Виробник |
-| WP2 re-run | `already_applied=yes`, DB dump unchanged |
+| WP2 fresh apply (after WP1) | `wp1_archive_route=ok`, `attribute_max_before=55`, `product_max_before=213`, `done=ok` + `note=…`, self-deleted; products 214/215/216, attributes 57/58 |
+| WP2 field check, all 3 cards ¹ | `status 0`, `qty 0`, `subtract 1`, 9 attributes, 1 keyword, store 0, correct categories and manufacturer. Stored description = `htmlspecialchars(FINAL)`; decoded = FINAL byte-for-byte. Meta 54/125, 53/124, 50/128 (limits 63/155). |
+| WP2 storefront attribute order (`a.sort_order, ad.name`) ¹ | Назва сету · Мова · Тип пакування · Додатковий вміст · Кількість карток у наборі · Склад за рідкістю · Стан · Походження товару · Виробник |
+| WP2 re-run | `wp1_archive_route=ok`, `already_applied=yes` + `note=…`, DB dump unchanged |
 | WP2 re-run after simulated owner edits (enable, qty, image + image row) | `already_applied=yes` |
 | WP2 `rollback.sql` after those edits | DB dump identical to pre-WP2 |
 | WP2 precondition: a product with one SKU exists | exit 1 (partial/conflicting state), file kept, DB unchanged |
