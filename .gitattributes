@@ -39,3 +39,8 @@ handoffs/handoff_RD-25-WP1-FIX* -text
 patches/ACC-008* -text
 diagnostics/ACC-008* -text whitespace=cr-at-eol
 diagnostics/ACC-008*/** -text whitespace=cr-at-eol
+
+# MONO-CHECKOUT-PRECHECK-20261020: preserve exact reviewed executable bytes.
+patches/MONO-CHECKOUT-PRECHECK-20261020_recover-missing-order_20261020.php -text
+diagnostics/MONO-CHECKOUT-PRECHECK-20261020_owner-run_20261020.ps1 -text whitespace=cr-at-eol
+diagnostics/MONO-CHECKOUT-PRECHECK-20261020_independent-review_20261020.md -text whitespace=-blank-at-eol,cr-at-eol

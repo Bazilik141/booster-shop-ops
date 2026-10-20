@@ -64,3 +64,6 @@ _patch_backups/
 /*.csv
 /*.txt
 /*.html
+
+# MONO-CHECKOUT-PRECHECK-20261020: pulled production source and review evidence stay local.
+work/mono-checkout-precheck-20261020/
