@@ -1,0 +1,52 @@
+{
+  "task": "ACC-009-QA",
+  "step": "Apply",
+  "acceptance": "expected_receipt_mechanically_closed",
+  "runner_sha256": "55f7efc8d23a1a18959926cbc1c4dd9c3193d06249ba30a54b920ca73171c2a6",
+  "owner_PS_sha256": "fbeb4b6cc635813893334da9eced9fe3abbcf62a824c934bcef2d26f1c2e6de8",
+  "review_closure": "diagnostics\\ACC-009_checkout-QA_evidence_20261021\\qa-code-ready-r2-closure.json",
+  "capture": "work\\acc009-checkout-qa-20261021\\owner-receipts\\Apply-20261021T121548530Z-d5bd5032.json",
+  "capture_sha256": "1d0c40e1c4d1f07938bcc277fad60080d68259bedc5f73cd4b09a75ac9dc0450",
+  "prerequisite_accepted": "diagnostics\\ACC-009_checkout-QA_evidence_20261021\\owner-Preflight-success_20261021.json",
+  "remote_script_identity_matched": true,
+  "remote_script_sha256": "152aedde0e43560d280f83f87c3b54afa94280a3c39067a28568276fc8ea9d8a",
+  "PHP": "/usr/local/bin/php 8.0.30",
+  "applied_utc": "2026-10-21T12:15:47+00:00",
+  "targets": [
+    {
+      "target": "catalog/view/javascript/acc009-checkout.js",
+      "before": "8137d8b6a6b79cef1ad8a7910c452e7420c9fa8273bdf63cbbbf3f4c4d0b4771",
+      "after": "0cb1acff55038642851649c4bc5b82b55faf62769d9993310b45ee5e5305f4f1",
+      "bytes": 32943
+    },
+    {
+      "target": "catalog/view/javascript/checkout-reskin.js",
+      "before": "9af1c78e3c12059e06685e5fcc58f39eaa241f734617ad6f5bf638ed2a334392",
+      "after": "a73a0209021266618ef395bc30d50be0fd3071a02035c43d79c0b5b9c79db8e6",
+      "bytes": 74682
+    },
+    {
+      "target": "catalog/view/template/checkout/checkout.twig",
+      "before": "d989bf48ff149d3cf46f1c827b94a9b3e400e457f7c210f9232331317db1a7f6",
+      "after": "397b85ccfd84c881779d0fc6ebadf40205060e440af7b588d0e249cf250c2146",
+      "bytes": 60138
+    }
+  ],
+  "changed_files": 3,
+  "backup_path": "/home2/boosters/_patch_backups/ACC-009-QA-20261021T121547Z-302d4596",
+  "template_cache_removed_regular_php": 81,
+  "cache_directories_and_nonphp": "retained",
+  "private_runner_post_state": "absent",
+  "db_access": "NONE",
+  "stderr": "",
+  "source_and_cleanup_exit": 0,
+  "owner_invocation_authority": "explicit owner Apply invocation; consumed; no standing grant",
+  "Apply_released": false,
+  "Apply_consumed": true,
+  "owner_run_count": 1,
+  "agent_transport_or_model_call": false,
+  "rendered_owner_QA": "pending",
+  "next_owner_step": "Focused checkout recipient transitions and visual QA; no repeated deployment",
+  "rollback_order": "Rollback this follow-up before parent C1/H1; future separately reviewed owner rollback packet includes bounded template-cache cleanup",
+  "accepted_utc": "2026-10-21T12:18:34.922929+00:00"
+}

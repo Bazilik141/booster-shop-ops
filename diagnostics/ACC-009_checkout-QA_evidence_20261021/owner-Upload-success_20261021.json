@@ -1,0 +1,25 @@
+{
+  "task": "ACC-009-QA",
+  "step": "Upload",
+  "acceptance": "expected_receipt_mechanically_closed",
+  "runner_sha256": "55f7efc8d23a1a18959926cbc1c4dd9c3193d06249ba30a54b920ca73171c2a6",
+  "owner_PS_sha256": "fbeb4b6cc635813893334da9eced9fe3abbcf62a824c934bcef2d26f1c2e6de8",
+  "remote_script_identity_matched": true,
+  "captures": [
+    {
+      "path": "work\\acc009-checkout-qa-20261021\\owner-receipts\\Upload-20261021T121151422Z-2942d6b8.json",
+      "sha256": "1dba7bf175087c60186ef2a7ec8a230a76930241b3dac075a2c2073eea5b3c54"
+    },
+    {
+      "path": "work\\acc009-checkout-qa-20261021\\owner-receipts\\UploadSCP-20261021T121151285Z-0e4a049e.json",
+      "sha256": "2d869212e3f919f67f8f6955913f0c1694d9239ac96267134901fb0d7cd162e8"
+    }
+  ],
+  "scp_exit": 0,
+  "remote_runner_sha_verified": false,
+  "production_targets_changed": false,
+  "agent_transport_or_model_call": false,
+  "next_owner_step": "Verify",
+  "Apply_released": false,
+  "accepted_utc": "2026-10-21T12:12:43.368782+00:00"
+}

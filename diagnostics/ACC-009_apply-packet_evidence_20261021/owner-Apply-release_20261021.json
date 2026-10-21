@@ -1,0 +1,20 @@
+{
+  "task": "ACC-009-C1-H1",
+  "recorded_utc": "2026-10-21T08:22:49.777423+00:00",
+  "owner_reply_verbatim": "ніхуя не зроз але ок",
+  "reply_context": "Direct reply to the final bundled question approving only this exact packet’s PS-validated second SSH cache-cleanup exception and transition to owner-run Apply.",
+  "plain_language_clarification": "The script changes the site files, verifies the complete source receipt, then clears template cache. If cleanup fails, files may already be changed; STOP and assess, no automatic repeat/reapply/rollback.",
+  "main_runner_sha256": "3403f0f2d15c26e81963db5ed7511cd0d38f06eb37369de4874281a16bea6753",
+  "PS_packet_sha256": "fc5ceb936983cf6e33a7f735855a4e3304a55d903b69f6e2107a9cb2bf1c65cc",
+  "review_request_id": "fa7835e5-e517-4608-be93-81cf49538a0a",
+  "M1": "CLOSED_direct_owner_acceptance_current_turn",
+  "M2": "CLOSED_static_no_model_call",
+  "exception_scope": "These two hashes and this ACC-009 invocation only; no general workflow/skill change. Conditional second owner SSH after full source receipt validation replaces literal shared Bash patch && cleanup for this packet.",
+  "release": "One owner-only -Step Apply invocation; the already accepted Upload/Verify/Preflight/browser evidence is reused. Fresh runner guards still apply. No agent server/key operations authorized.",
+  "failure_rule": "Stop on unexpected result; retain backup and complete receipt. No automatic retry/reapply/rollback. Source success then cache failure requires separate assessment and reviewed recovery or owner decision.",
+  "owner_execution_proved": false,
+  "deployment_proved": false,
+  "owner_QA_proved": false,
+  "new_model_call": false,
+  "owner_commands_executed_by_agent": false
+}

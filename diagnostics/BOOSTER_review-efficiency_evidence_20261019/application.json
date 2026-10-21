@@ -1,0 +1,40 @@
+{
+  "applied_utc": "2026-10-19T12:05:47.365090+00:00",
+  "actual_review_request": "9fbf6aa1-c65f-49d0-8737-fd38a0a7484f",
+  "policy_owner_decisions_confirmed": true,
+  "files": [
+    {
+      "path": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\AGENTS.md",
+      "before_sha256": "5195090ad58d148cf8522a0a35886f46699c23425418a257749c49957b980e08",
+      "after_sha256": "fc618f4302ec3360b4c3a807ab38c02964df5854559e16592a2ed7c57a324f19"
+    },
+    {
+      "path": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\docs\\BOOSTER_AUTOMATIC_PEER_REVIEW_20261014.md",
+      "before_sha256": "4d4fd0a511bfc6918b95880ec178d8a5aee233e20867b32819e9b3df4944dec8",
+      "after_sha256": "9e78c981c569450450122ef2d5bdf7d5956ab8acb66c586ae9ed4f3ed8b79cec"
+    },
+    {
+      "path": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\CODEX_WORKFLOW.md",
+      "before_sha256": "19cbd4ef79e8e7dd1c0cd62cf2c48e5f3cf1080eade15f04f258d952c8702f15",
+      "after_sha256": "74e5e53584cc4b7eba02a7aa6c3106fe228be6a825badddcb2026b9e42ee2726"
+    },
+    {
+      "path": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\CLAUDE.md",
+      "before_sha256": "a36faa8e913ef9da07df99d6c13c50dc2e7d6f9d81d05cbed4950433c42b0112",
+      "after_sha256": "b40910f57d2cd4d77fd74ac777b59b85ebadefbd7275d036b3f068157f53bf23"
+    },
+    {
+      "path": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\ROADMAP_SOP.md",
+      "before_sha256": "238529d46098ce02f024b769487b327d7f63a39fba0e9b317d61c2b7014eac9f",
+      "after_sha256": "66753565ecc8ebb97f4d71c9d3ae0b888cb471b88c3f7e1f1c93986eccb0b825"
+    },
+    {
+      "path": "C:\\Users\\14bez\\.codex\\skills\\booster-opencart-patch\\SKILL.md",
+      "before_sha256": "0262c53fb3aa59e575b923da1481d66c0e7f80e470e7be0778389c82d32ab39d",
+      "after_sha256": "b1d4562e310f591686af92b543a8eaea01c08676466cc9b5fd28e70b6362cc0e"
+    }
+  ],
+  "exact_reviewed_afterimages_applied": true,
+  "existing_unrelated_work_preserved": true,
+  "GSS_documents_product_code_Git_external_systems_changed": false
+}

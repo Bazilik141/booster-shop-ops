@@ -1,0 +1,116 @@
+{
+  "closed_utc": "2026-10-21T08:15:42.062217+00:00",
+  "request_id": "fa7835e5-e517-4608-be93-81cf49538a0a",
+  "verdict": "NO_CODE_DEFECT_FOUND. READY to seek final owner Apply permission only after M1 (owner exception) and M2 (deterministic static closure) are both closed. This is not production authorization and grants no deployment authority.",
+  "main_sha256": "3403f0f2d15c26e81963db5ed7511cd0d38f06eb37369de4874281a16bea6753",
+  "packet_sha256": "fc5ceb936983cf6e33a7f735855a4e3304a55d903b69f6e2107a9cb2bf1c65cc",
+  "packet_bytes": 75900,
+  "actual_model_observed": [
+    "claude-opus-5-5"
+  ],
+  "effort_requested": "high",
+  "transport": "Native subscription CLI2.1.303, tools/MCP/hooks disabled; no API fallback or overage",
+  "full_actual_response_read": true,
+  "response_sha256": "dd87b7c008deb1cea9eeadb40db463da4cfaa223948a56367135e97073f7c200",
+  "all_declared_dependencies_exact_after_completion_and_at_closure": true,
+  "mandatory": {
+    "M1": {
+      "state": "CLOSED_direct_owner_acceptance",
+      "owner_record": "diagnostics/ACC-009_apply-packet_evidence_20261021/owner-Apply-release_20261021.json",
+      "original_condition": "Before or together with the final owner Apply permission, the owner records an explicit bounded exception. It must state that, for packet fc5ceb93... with runner 3403f0f2... only, cleanup sequencing is PS-validated conditional with a second SSH call instead of a literal && chain. It must also state the exit-3 consequence: a cleanup failure after source success needs separate assessment and a revised reviewed packet or an owner decision, with no automatic retry or rollback. If the owner declines, the packet must be revised to a literal && chain and re-reviewed."
+    },
+    "M2": {
+      "state": "CLOSED_static_no_model_call",
+      "record": "diagnostics/ACC-009_apply-packet_evidence_20261021/M2-static-contract-closure.json"
+    }
+  },
+  "optional": {
+    "O1": {
+      "state": "RECORDED_no_automatic_change",
+      "finding": "Some header and comment text is stale. The file header still describes the inherited UA-variation Preflight packet. The Invoke-Proc comment still says 'visible passphrase prompt' although the transport is agent-only with BatchMode=yes. The author's prose says 4 replacements while the composition records 5. These are documentation issues only and not blocking. If changed, the packet SHA changes and needs mechanical re-check."
+    },
+    "O2": {
+      "state": "RECORDED_no_automatic_change",
+      "finding": "After a confirmed invocation with CLI_EXIT=0, any receipt-format mismatch in Test-ApplyStdout or Test-RollbackStdout ends with a generic Stop-Draft (exit 2). The RetainNotice does carry do_not_reapply and the backup_path rows. Explicit wording such as 'SOURCE_STATE_LIKELY_CHANGED_RECEIPT_MISMATCH_CACHE_NOT_RUN' would make owner triage clearer. Behaviour is already fail-closed."
+    },
+    "O3": {
+      "state": "RECORDED_no_automatic_change",
+      "finding": "The Apply cache cleanup re-admits PHP with glob 8.0.* rather than the exact 8.0.30 used for the Apply run. Pinning 8.0.30 for 'apply-cache' would be marginally tighter. This is not material, because cleanup runs no runner code."
+    },
+    "O4": {
+      "state": "RECORDED_no_automatic_change",
+      "finding": "Assert-NoPriorLocalRun deliberately allows a rerun when the only prior receipt is a guard refusal that occurred before invocation. This is correct, but worth stating explicitly in owner instructions so the owner knows such a rerun is allowed."
+    }
+  },
+  "repository": {
+    "before": {
+      "HEAD": "306ceb7d99db95d4aa9d5f5476338e43ad5fcaa4",
+      "tracked_paths": [
+        ".gitattributes",
+        ".gitignore",
+        "AGENTS.md",
+        "Booster Shop CRM \u2014 \u043e\u0431\u043b\u0456\u043a \u0442\u043e\u0432\u0430\u0440\u0456\u0432 - \u0420\u0420\u0426.csv",
+        "CLAUDE.md",
+        "CODEX_INSTRUCTIONS.md",
+        "CODEX_WORKFLOW.md",
+        "README.md",
+        "ROADMAP_SOP.md",
+        "Taxer_import_2026-04-01_2026-06-30.csv",
+        "context-index.md",
+        "dashboard/booster-dashboard.html",
+        "design/DECISIONS.md",
+        "docs/CANON_v1_DRAFT_product-content_20260913.md",
+        "patches/CAT-004_variant-selector_20260916.php",
+        "plans/3D-P_sku-naming-convention_20260807.md",
+        "plans/CAT-004_op-rare-packs_identifier-canon_20260916.md",
+        "templates/codex-report-template.md",
+        "templates/handoff-template.md",
+        "\u0412\u0435\u0440\u0441\u0456\u044f 153, 28 \u0441\u0435\u0440\u043f. 2026\u202f\u0440., 0946.csv",
+        "\u0412\u0435\u0440\u0441\u0456\u044f 29, 23 \u0441\u0435\u0440\u043f. 2026\u202f\u0440., 1600.txt"
+      ]
+    },
+    "after": {
+      "HEAD": "306ceb7d99db95d4aa9d5f5476338e43ad5fcaa4",
+      "tracked_paths": [
+        ".gitattributes",
+        ".gitignore",
+        "AGENTS.md",
+        "Booster Shop CRM \u2014 \u043e\u0431\u043b\u0456\u043a \u0442\u043e\u0432\u0430\u0440\u0456\u0432 - \u0420\u0420\u0426.csv",
+        "CLAUDE.md",
+        "CODEX_INSTRUCTIONS.md",
+        "CODEX_WORKFLOW.md",
+        "README.md",
+        "ROADMAP_SOP.md",
+        "Taxer_import_2026-04-01_2026-06-30.csv",
+        "context-index.md",
+        "dashboard/booster-dashboard.html",
+        "design/DECISIONS.md",
+        "docs/CANON_v1_DRAFT_product-content_20260913.md",
+        "patches/CAT-004_variant-selector_20260916.php",
+        "plans/3D-P_sku-naming-convention_20260807.md",
+        "plans/CAT-004_op-rare-packs_identifier-canon_20260916.md",
+        "templates/codex-report-template.md",
+        "templates/handoff-template.md",
+        "\u0412\u0435\u0440\u0441\u0456\u044f 153, 28 \u0441\u0435\u0440\u043f. 2026\u202f\u0440., 0946.csv",
+        "\u0412\u0435\u0440\u0441\u0456\u044f 29, 23 \u0441\u0435\u0440\u043f. 2026\u202f\u0440., 1600.txt"
+      ]
+    },
+    "scope": "No executor Git mutation. Exact declared content preserved; current report/evidence additions are outside executable inputs. Not branch-wide or live-host certification."
+  },
+  "acceptance_limits": [
+    "No production, runtime, QA or deployment proof. All local checks are fictional or syntactic: PS5.1 AST, bash -n, a synthetic filesystem suite and the native b_receipt formatter. Native Unix symlink refusal was skipped on Windows. Production refusal relies on GNU find %y emitting 'l' and on the per-file -L checks.",
+    "The Apply re-runs fresh main source, metadata, web, nonce, seal and OPcache guards. Any substantive mismatch is a STOP. The accepted Preflight (receipt 78810e1a...) and browser observation are reused, not repeated.",
+    "Up to 26 sequential source writes plus about a 2 s OPcache revalidate window, plus the extra seconds before the separate cleanup SSH. Wait at least 3 s before owner QA. There is no C1/H1 observation window.",
+    "Residual compile race: a storefront request that read an old .twig before the write could write a compiled cache file after cleanup. With mtime-based freshness that file could persist. Owner QA must check rendered checkout templates. Re-clearing requires a revised packet or an owner decision, since no CacheOnly mode exists.",
+    "Cleanup refuses when more than 5000 template entries exist, or on unsupported entries or links. Such a refusal after source success gives exit 3, needs assessment and is not retried automatically.",
+    "Rollback via this packet requires that the backup_path row appears exactly once in a captured local Apply receipt. Example: transport is lost after invocation, the runner continues because HUP is ignored, and the local receipt lacks the row. Recovery then needs assessment of the host ~/private/booster-pulls receipt files and a revised, reviewed binding.",
+    "Rollback is source-only for all 26 files and safe with partial states. It cannot undo order, payment, email, CRM or Telegram effects. Roll back ACC-009 before the earlier Mono task, and never mix the /home2/boosters/_patch_backups and public_html/_patch_backups roots.",
+    "The history-derived commit-window concurrency residual is accepted. There is no exactly-once, delivery or full-input-range guarantee. The native Mono getOrder missing-row-only behaviour is retained.",
+    "The hash-to-execution window inside the 0700 private stage and same-UID TOCTOU in the cache tree remain the same accepted residual class as Preflight."
+  ],
+  "Apply_released": true,
+  "owner_commands_executed_by_agent": false,
+  "next": "Owner runs exactly one Apply command. Complete expected result closes mechanically; failure STOP with full receipt, no blind retry. Actual deployment and owner QA remain unproved.",
+  "owner_release_record": "diagnostics/ACC-009_apply-packet_evidence_20261021/owner-Apply-release_20261021.json",
+  "release_closed_utc": "2026-10-21T08:22:49.777423+00:00"
+}

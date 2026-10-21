@@ -44,3 +44,46 @@ diagnostics/ACC-008*/** -text whitespace=cr-at-eol
 patches/MONO-CHECKOUT-PRECHECK-20261020_recover-missing-order_20261020.php -text
 diagnostics/MONO-CHECKOUT-PRECHECK-20261020_owner-run_20261020.ps1 -text whitespace=cr-at-eol
 diagnostics/MONO-CHECKOUT-PRECHECK-20261020_independent-review_20261020.md -text whitespace=-blank-at-eol,cr-at-eol
+
+# ACC-009 checkpoint: preserve reviewed runner, packet and evidence bytes.
+patches/ACC-009* -text
+diagnostics/ACC-009* -text whitespace=cr-at-eol
+diagnostics/ACC-009*/** -text whitespace=cr-at-eol
+diagnostics/BOOSTER_access-current.json -text
+diagnostics/BOOSTER_access_evidence_20261020/** -text whitespace=cr-at-eol
+scripts/booster_ssh_session.ps1 -text whitespace=cr-at-eol
+scripts/booster_claude_access.py -text
+
+# Exact scoped shared procedure/helper inputs retained by this checkpoint.
+AGENTS.md -text whitespace=cr-at-eol
+CLAUDE.md -text whitespace=cr-at-eol
+CODEX_INSTRUCTIONS.md -text whitespace=cr-at-eol
+CODEX_WORKFLOW.md -text whitespace=cr-at-eol
+ROADMAP_SOP.md -text whitespace=cr-at-eol
+docs/BOOSTER_AUTOMATIC_PEER_REVIEW_20261014.md -text whitespace=cr-at-eol
+docs/BOOSTER_LOCAL_ACCESS.md -text whitespace=cr-at-eol
+templates/codex-report-template.md -text whitespace=cr-at-eol
+templates/handoff-template.md -text whitespace=cr-at-eol
+scripts/booster_claude_access.py -text whitespace=cr-at-eol
+scripts/booster_ssh_session.ps1 -text whitespace=cr-at-eol
+scripts/tests/test_booster_claude_access.py -text whitespace=cr-at-eol
+handoffs/ACC-009_CONTINUE_20261021.md -text whitespace=cr-at-eol
+handoffs/handoff_ACC-008-ACC-009_resume-WP2-WP3_20261015.md -text whitespace=cr-at-eol
+handoffs/handoff_ACC-007-ACC-008-ACC-009_account-data-foundation_20261013.md -text whitespace=cr-at-eol
+plans/ACC-009_courier-followup_scope_20261017.md -text whitespace=cr-at-eol
+plans/ACC-009_H1-first-positive-history_design_20261019.md -text whitespace=cr-at-eol
+plans/ACC-009_NP-design-r1_20261016.md -text whitespace=cr-at-eol
+plans/ACC-009_NP-preparation_20261016.md -text whitespace=cr-at-eol
+diagnostics/BOOSTER_access-current.json -text whitespace=cr-at-eol
+diagnostics/BOOSTER_local-access_report_20261020.md -text whitespace=cr-at-eol
+diagnostics/BOOSTER_review-efficiency_adoption_report_20261019.md -text whitespace=cr-at-eol
+work/acc009-checkout-qa-20261021/release-facts.json -text whitespace=cr-at-eol
+work/acc009-checkout-qa-20261021/review-context.md -text whitespace=cr-at-eol
+work/acc009-checkout-qa-20261021/browser-result.json -text whitespace=cr-at-eol
+work/acc009-checkout-qa-20261021/runner-result.json -text whitespace=cr-at-eol
+work/acc009-checkout-qa-20261021/command-check.json -text whitespace=cr-at-eol
+diagnostics/BOOSTER_review-efficiency_evidence_20261019/review-efficiency-r1-closure.json -text whitespace=cr-at-eol
+diagnostics/BOOSTER_review-efficiency_evidence_20261019/application.json -text whitespace=cr-at-eol
+diagnostics/BOOSTER_review-efficiency_evidence_20261019/post-application-verification.json -text whitespace=cr-at-eol
+dashboard/booster-dashboard.html -text whitespace=cr-at-eol
+context-index.md -text whitespace=cr-at-eol

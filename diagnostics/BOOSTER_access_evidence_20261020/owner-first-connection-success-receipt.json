@@ -1,0 +1,36 @@
+{
+  "received_utc": "2026-10-20T09:58:44.991257+00:00",
+  "assessment": "Expected owner first-connection check completed; remote echo observed and native zero exit separately reported after Enter. Mechanical closure, no new model call.",
+  "observations": [
+    {
+      "source": "Previous owner screenshot, visible remote response",
+      "row": "BOOSTER_SSH_OK",
+      "row_count": 1
+    },
+    {
+      "source": "Current owner PowerShell text, after separately executing the already prescribed final status expression",
+      "row": "ssh_exit=0",
+      "exit_code": 0,
+      "row_count": 1
+    }
+  ],
+  "normalization": "Observed rows are kept as two explicitly sourced observations, not fabricated as a single original output block. Shell prompt and typed echo expression are wrappers. The prior screenshot showed the final status expression awaiting Enter; owner then reported its execution.",
+  "review_request_id": "fc70502f-0b8e-42b9-a0fa-2609fbe99243",
+  "reviewed_command_sha256": "84ff27006a0aa4abaff45ef1dd327c1f213469be9dcb5fdb310a94a77231343f",
+  "limits": "Owner evidence is not independent byte-identical execution attestation. Accepted observations support key-only login/remote echo under the reviewed command. They do not prove provider host identity, the exact stored host key or known_hosts persistence. No fingerprint or acceptance prompt was supplied.",
+  "host_trust": "Owner-authorized first-use exception; independently verified provider fingerprint absent",
+  "exception_disposition": "Retired after successful initial connection check; no further unknown-host or changed-key acceptance granted. If strict subsequent connection fails, assess without key deletion or renewed bypass.",
+  "agent_key_or_server_access": false,
+  "new_model_call": false,
+  "repeated_owner_connection_required": false,
+  "ACC009_resumption": {
+    "parent_review_request_id": "c8f00eaf-d438-4b67-ab6e-aadba3eb6d58",
+    "runner_sha256": "94b92a139fae5d39645b151aa6a85fa746d806f3fdd9e89d5d5b7125855c04ae",
+    "PS_packet_sha256": "10aeac12be2afd4e5ef2e62aec8d0b503a617f95170723243b7322dba379fe14",
+    "guide_sha256": "29b4ca83636bfb2c4a6503b109386f2cd5fdc9f427aeaa34ffff21a5b095ccad",
+    "current_bytes_match": true,
+    "next_step": "Existing released Upload invocation only; private staging, no apply",
+    "uploaded": false,
+    "apply_released": false
+  }
+}

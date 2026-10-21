@@ -1,0 +1,14 @@
+{
+  "recorded_utc": "2026-10-20T11:51:01.345025+00:00",
+  "owner_request": "Prepare unlock-before-work / remove-after-work mode and amend relevant rules and scripts.",
+  "informed_context": "Owner was told Windows ssh-agent is account/service-wide rather than one PowerShell window, closing PowerShell does not unload, and other same-user processes can use a loaded key. Owner explicitly permits this mode.",
+  "scope": "Owner-controlled loading/removing only existing encrypted booster_deploy key, local service preparation if needed, and adapting owner-run packets/routing; agent SSH/key/server access remains prohibited.",
+  "not_granted": [
+    "Agent executing ssh/ssh-add/ssh-keygen/SCP or reading owner .ssh/private key",
+    "Passphrase collection/storage",
+    "New keys or removing encryption",
+    "Production Apply/rollback/cache release",
+    "Git/Notion/dashboard/GSS changes"
+  ],
+  "status": "authorized_preparation_not_executed"
+}

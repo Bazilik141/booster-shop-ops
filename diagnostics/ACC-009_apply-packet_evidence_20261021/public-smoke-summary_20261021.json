@@ -1,0 +1,37 @@
+{
+  "task": "ACC-009-C1-H1",
+  "recorded_utc": "2026-10-21T08:45:06.469902+00:00",
+  "result": "Public representative availability checked; strict legacy URL mismatch retained",
+  "canonical_AGENTS_URLs_HTTP200": 7,
+  "canonical_AGENTS_legacy_3d_URL_HTTP404": "https://boostershop.website/product/FIG-CHARM-001",
+  "current_owner_provided_3d_URL_HTTP200": "https://boostershop.website/product/figurka-charizard-pokemon-3d-druk",
+  "representative_page_types_available": 8,
+  "source_files": [
+    {
+      "path": "diagnostics\\ACC-009_apply-packet_evidence_20261021\\public-https-smoke_20261021.json",
+      "sha256": "30c97b83bbb59fc626bbdbdad4e22ae4eb470857b298a460cd08cae89f96f35b"
+    },
+    {
+      "path": "diagnostics\\ACC-009_apply-packet_evidence_20261021\\public-https-smoke-followup_20261021.json",
+      "sha256": "a2c3e9c6ff5fbb15f208a9241c9b452b05d15ab4236e4bd1b23d68c3647c6e5b"
+    },
+    {
+      "path": "diagnostics\\ACC-009_apply-packet_evidence_20261021\\public-3d-current-url_20261021.json",
+      "sha256": "b46daa5007415f7d1557937a7cabc97e82dbe380071b4f3e2e030861d48ae628"
+    }
+  ],
+  "reasoned_limits": [
+    "Do not claim all8 canonical literal URLs passed. Legacy3D404 remains; no SEO/source/rules change or causal attribution to this patch.",
+    "web.open internal failures were not accepted as origin status; native anonymous HTTPS GETs supplied availability evidence.",
+    "Initial4 TimeoutError results got exactly1 sequential follow-up; no provider/SSH/auth setup or model call.",
+    "HTML title/H1 regex fields are informational, not DOM/semantic/SEO proof; category H1 regex captured a CSS comment and is not used in acceptance.",
+    "Full bodies within256KiB cap had no captured PHP fatal marker; no authenticated UI, scripts, populated checkout, payment API or CRM/Telegram delivery proof."
+  ],
+  "next_owner_QA": [
+    "Refresh signed-in checkout; courier house+optional flat entry stays open and saved values survive.",
+    "Courier missing middlename blocks final submission; completed courier and existing branch/postomat selections remain usable.",
+    "Opening/refreshing draft checkout sends no new-order CRM/Telegram action.",
+    "After preceding checks, owner privately submits1 test COD order and checks admin/CRM/Telegram occurrence and duplicates. No agent order/message creation."
+  ],
+  "broader_scope": "C2/N3 TTN transfer/crash fixes are not certified by this C1/H1 release; prior scope gates remain."
+}

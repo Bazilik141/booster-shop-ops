@@ -1,0 +1,17 @@
+{
+  "checks_passed": 8,
+  "checks": [
+    "dry-run exact pins, no source/backup mutation",
+    "drift stops before backup or target write",
+    "actual PHP8 apply, all3 exact after hashes, backups, lint, self-delete",
+    "repeat exact state no source/backup write, self-delete",
+    "rollback-check all targets/backups before mutation",
+    "bad last backup refuses before any rollback write",
+    "partial application rollback preserves original target and restores remaining exact targets",
+    "injected second-target lint failure restores all written files; failure retained"
+  ],
+  "native_PHP": "8.0.30",
+  "bound_runner_sha256": "55f7efc8d23a1a18959926cbc1c4dd9c3193d06249ba30a54b920ca73171c2a6",
+  "fixture_root": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\acc009-checkout-qa-20261021\\runner-akf4ist4",
+  "fake_boundary": "isolated temp filesystem; one declared lint failure injection; no production/app/DB effects"
+}

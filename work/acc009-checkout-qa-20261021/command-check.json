@@ -1,0 +1,31 @@
+{
+  "author_request": "2e348634-a4f9-4606-88a8-2e39789fdba3",
+  "command_sha256": "fbeb4b6cc635813893334da9eced9fe3abbcf62a824c934bcef2d26f1c2e6de8",
+  "runner_sha256": "55f7efc8d23a1a18959926cbc1c4dd9c3193d06249ba30a54b920ca73171c2a6",
+  "independent_check": "Codex before required actual Claude ready review",
+  "repairs": [
+    "canonical owner scp Upload, separate remote Verify",
+    "literal source_apply && cleanup_apply in same Bash",
+    "bounded cache list before deletion; preserve directories/nonPHP",
+    "exact known warning allowlist",
+    "state bound to packet hash",
+    "reject unknown/duplicate wrapper rows",
+    "finite native timeout and keepalive"
+  ],
+  "owner_packet_or_SSH_executed": false,
+  "CODE_review": "PENDING",
+  "PS51_parse_and_native_dry_apply_receipt_helpers": "pass again,4 malformed receipts refused",
+  "Bash_parse_four_blocks": "pass again, parse only",
+  "cache_native_fictional_checks": "normal2 removed, empty0 success; dirs/nonPHP retained. Prior10001-cap refusal reused; cap code unchanged",
+  "bash42_limit": "empty-array idiom corrected; native Git Bash5 only, no claim of actual Bash4.2 host execution",
+  "optional_dispositions": {
+    "O1": "fixed and empty fixture passed",
+    "O2": "nonNP guard + browser check passed",
+    "O3": "inherited10px DS spacing documented",
+    "O4": "requiredMiddle called once",
+    "O5": "deferred stable live-node architecture; visual auto-refresh is covered, screen-reader announcement not certified",
+    "O6": "retain requested prominent blocked hint; owner visual QA",
+    "O7": "auth pre-save assertion added",
+    "O8": "future separately reviewed rollback packet must clear same bounded template cache"
+  }
+}

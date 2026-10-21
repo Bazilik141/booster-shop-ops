@@ -1,0 +1,24 @@
+{
+  "received_utc": "2026-10-20T13:49:43.882591+00:00",
+  "source": "Complete owner-pasted Setup JSON and absolute launcher; not an agent execution",
+  "receipt": {
+    "schema": "booster_ssh_session.v1",
+    "action": "Setup",
+    "status": "ok",
+    "service": "running",
+    "target_loaded": "not_checked",
+    "reason": "service_ready"
+  },
+  "closure": "PASS_expected_receipt",
+  "helper_sha256_verified_locally": "a631153f2ae8dda0c3b398c3b2ad880024cd129223bee6813b0626d86413ff58",
+  "command_byte_identity": "Owner text matches released absolute-path launcher; execution bytes not independently attested",
+  "proved": "Owner reports Setup success and running Windows service",
+  "not_proved": [
+    "key loaded",
+    "native pipe authentication",
+    "key removal",
+    "production Verify or Apply"
+  ],
+  "new_model_call": false,
+  "next": "Unlock once in normal non-elevated owner PowerShell"
+}

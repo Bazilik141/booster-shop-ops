@@ -18,6 +18,10 @@ Codex config: model=<Sol/Terra/Luna> · effort=<low/medium/high/xhigh/ultra>
 ## Acceptance criteria
 - [ ] <observable outcome 1>
 - [ ] <observable outcome 2>
+- [ ] The executor's report includes the exact patch SHA-256, per-target
+      before/after hashes or `absent` states, backup path or `none`, stdout
+      contract and rollback facts. Claude chat composes the owner-run PowerShell
+      packet; its SHA-256 is independently checked alongside the patch hash.
 
 ## QA checklist (owner runs after deploy)
 - [ ] <step>

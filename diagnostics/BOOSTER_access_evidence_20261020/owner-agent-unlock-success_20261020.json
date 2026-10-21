@@ -1,0 +1,25 @@
+{
+  "received_utc": "2026-10-20T13:50:51.773892+00:00",
+  "source": "Complete owner-pasted Unlock JSON and launcher; passphrase not collected",
+  "receipt": {
+    "schema": "booster_ssh_session.v1",
+    "action": "Unlock",
+    "status": "ok",
+    "service": "running",
+    "target_loaded": "yes",
+    "reason": "target_loaded"
+  },
+  "closure": "PASS_expected_receipt",
+  "local_pins_verified": {
+    "scripts/booster_ssh_session.ps1": "a631153f2ae8dda0c3b398c3b2ad880024cd129223bee6813b0626d86413ff58",
+    "diagnostics/ACC-009_C1-H1_owner-agent-PS_20261020.ps1": "2bfb2f1c31669578a1758141d8f68ad8cc3c618b00abe4866ce807e4a85837d9"
+  },
+  "proved": "Owner helper reports native key load and target presence after load",
+  "not_proved": [
+    "server authentication through the Windows agent",
+    "target removal",
+    "production Verify or Apply"
+  ],
+  "new_model_call": false,
+  "next": "Owner agent packet Verify; retain prior Upload; explicit targeted Lock after work"
+}

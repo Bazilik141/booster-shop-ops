@@ -1,0 +1,77 @@
+{
+  "task": "ACC-009-QA",
+  "runner": "patches\\ACC-009-QA_checkout-recipient-hints_20261021.php",
+  "sha256": "55f7efc8d23a1a18959926cbc1c4dd9c3193d06249ba30a54b920ca73171c2a6",
+  "bytes": 89448,
+  "targets": [
+    {
+      "target": "catalog/view/javascript/acc009-checkout.js",
+      "before": "8137d8b6a6b79cef1ad8a7910c452e7420c9fa8273bdf63cbbbf3f4c4d0b4771",
+      "after": "0cb1acff55038642851649c4bc5b82b55faf62769d9993310b45ee5e5305f4f1",
+      "bytes": 32943
+    },
+    {
+      "target": "catalog/view/javascript/checkout-reskin.js",
+      "before": "9af1c78e3c12059e06685e5fcc58f39eaa241f734617ad6f5bf638ed2a334392",
+      "after": "a73a0209021266618ef395bc30d50be0fd3071a02035c43d79c0b5b9c79db8e6",
+      "bytes": 74682
+    },
+    {
+      "target": "catalog/view/template/checkout/checkout.twig",
+      "before": "d989bf48ff149d3cf46f1c827b94a9b3e400e457f7c210f9232331317db1a7f6",
+      "after": "397b85ccfd84c881779d0fc6ebadf40205060e440af7b588d0e249cf250c2146",
+      "bytes": 60138
+    }
+  ],
+  "dependencies": [
+    {
+      "target": "catalog/view/javascript/checkout-state.js",
+      "sha256": "83a9de5bbb2c6184abd5c9ceb89b23841532b415ad1e4cb14cf48315e4c9f97c",
+      "local": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\acc009-checkout-qa-20261021\\before\\catalog\\view\\javascript\\checkout-state.js"
+    },
+    {
+      "target": "catalog/view/template/checkout/register.twig",
+      "sha256": "354d390457dbfb056e5243defe59f4ff587cd690c657e04b853549c6c8cddd20",
+      "local": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\acc009-checkout-qa-20261021\\before\\catalog\\view\\template\\checkout\\register.twig"
+    },
+    {
+      "target": "catalog/view/template/checkout/shipping_address.twig",
+      "sha256": "627047b08f77597aa7eac0224cc0a55b0c8e9f9d3eecb7d6d23a1be9b2380d2a",
+      "local": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\acc009-checkout-qa-20261021\\before\\catalog\\view\\template\\checkout\\shipping_address.twig"
+    },
+    {
+      "target": "catalog/view/template/checkout/shipping_method.twig",
+      "sha256": "dbaa962422edf8e9b5d78a28780f0762153bd056970ee63dd8653ac962f37adc",
+      "local": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\acc009-checkout-qa-20261021\\before\\catalog\\view\\template\\checkout\\shipping_method.twig"
+    },
+    {
+      "target": "catalog/view/template/checkout/payment_method.twig",
+      "sha256": "a6de326763d2b27ca214328b6098513cc62974956b40872162e3b935e2117d57",
+      "local": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\acc009-checkout-qa-20261021\\before\\catalog\\view\\template\\checkout\\payment_method.twig"
+    },
+    {
+      "target": "catalog/view/stylesheet/bootstrap.css",
+      "sha256": "3e6b85215061cd33fc02676958ee706c0e96b877893c244bff473ce4fb9ecc57",
+      "local": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\acc009-checkout-qa-20261021\\public-css\\bootstrap.css"
+    },
+    {
+      "target": "catalog/view/stylesheet/boostershop-ds.css",
+      "sha256": "c5af44b72b362a8090b2f5699d41f06d0e2d1663ca9b82173c66d9d67413af0d",
+      "local": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\acc009-checkout-qa-20261021\\public-css\\boostershop-ds.css"
+    },
+    {
+      "target": "catalog/view/stylesheet/booster-typography.css",
+      "sha256": "9a8ddc85fb6adc85db81df387c3b0c06df46db1ee4f14856fda5728b926d34b5",
+      "local": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\acc009-checkout-qa-20261021\\public-css\\booster-typography.css"
+    },
+    {
+      "target": "catalog/view/javascript/common.js",
+      "sha256": "58605f6df5f8ded195f994d44446920b478e331243c983d75df56e49c48d7c02",
+      "local": "C:\\Users\\14bez\\.codex\\visualizations\\2026\\10\\15\\01a13e6f-7465-7280-a119-9bc675ce1527\\acc009-courier-chain-pxk27cap\\catalog\\view\\javascript\\common.js"
+    }
+  ],
+  "production_applied": false,
+  "backup_pattern": "/home2/boosters/_patch_backups/ACC-009-QA-<UTC>-<8hex>",
+  "cache": "owner packet after success: /home2/boosters/ocartdata/storage/cache/template/ only regular PHP, retain directories",
+  "rollback": "all 3 exact before/after targets and all 3 exact source backups admitted before write; rollback this before parent C1+H1"
+}

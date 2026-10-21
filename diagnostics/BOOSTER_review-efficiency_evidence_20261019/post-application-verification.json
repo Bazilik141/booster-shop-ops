@@ -1,0 +1,10 @@
+{
+  "six_active_targets_match_final_afterimages": true,
+  "GSS_appendix_byte_identical": true,
+  "runner_output_secrets_forbidden": true,
+  "skill_bounded_frontmatter_checks": "pass",
+  "canonical_skill_validator": "PyYAML unavailable; no full YAML/runtime proof claimed",
+  "unrelated_registry_row_preserved": true,
+  "new_model_round": false,
+  "bookkeeping_tool_issue": "One inline final-recording script had a syntax error before execution; no writes from that failed attempt. Corrected versioned finalizer used."
+}

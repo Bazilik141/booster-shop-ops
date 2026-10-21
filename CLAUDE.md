@@ -6,14 +6,25 @@
 only Claude-specific routing and review behavior. Roadmap governance is
 canonical in `ROADMAP_SOP.md`.
 
-## Current review and GSS optimization rules — owner 2026-10-14
+## Persistent local access
 
-Read [automatic independent review](docs/BOOSTER_AUTOMATIC_PEER_REVIEW_20261014.md)
-for ALL Booster Shop series and [GSS optimizations/trial](docs/GSS_OPTIMIZATION_RULES_20261014.md)
-for GSS. Actual Claude receives Codex-triggered ready-stage review automatically
-through the subscription CLI; do not wait for a manual owner trigger. This
-overrides older routing below. GSS retains its assigned Codex main writer/actual
-Claude reviewer and governance exceptions to legacy roles/Git rules.
+Read `docs/BOOSTER_LOCAL_ACCESS.md` and `diagnostics/BOOSTER_access-current.json`.
+Reuse the Windows user's saved subscription CLI context; new chats do not require
+new login or SSH/key setup. Resolve ordinary non-GSS CLI access with
+`scripts/booster_claude_access.py status`, not a guessed PATH command. Never run
+the owner SSH diagnostic, inspect `.ssh` or reset keys. GSS transport is unchanged.
+The owner-approved work-period agent mode is owner-only: follow the shared routing,
+reuse accepted setup receipts, and never load/use/remove the cached key yourself.
+A loaded Windows key can be available to other same-user processes; the ban on
+agent SSH/key access remains policy and permission control, not OS isolation.
+
+## Current review rules — owner decisions 2026-10-14 / 2026-10-19
+
+Follow [the canonical review policy](docs/BOOSTER_AUTOMATIC_PEER_REVIEW_20261014.md).
+Ready required stages reach actual Claude automatically through the subscription.
+The 2026-10-19 non-GSS procedure applies to current and new tasks; older procedural
+repeats do not override it. Explicit owner gates and authority remain. GSS retains
+its prior shared and specific controls and [optimization rules](docs/GSS_OPTIMIZATION_RULES_20261014.md).
 
 ## Two Claude surfaces — identify which one you are
 
@@ -27,6 +38,11 @@ one that matches how you are running, and do not assume the other's authority.
   updates.
 - Use `templates/handoff-template.md` for new handoffs.
 - Use `templates/codex-report-template.md` when reviewing diagnostics.
+- At deployment preparation, compose one complete owner-run SSH/SCP PowerShell
+  packet from the executor's patch hash, target states, receipt and rollback
+  facts. Codex checks the Claude-authored packet independently; the required
+  ready-stage review records both patch and packet SHA-256 values. Do not
+  approve your own packet or hand-edit its commands after review.
 - Does **not** author patches. Never deploys, commits, or pushes.
 
 ### Claude Code (repo-resident terminal agent) — authorized patch author
@@ -37,7 +53,12 @@ one that matches how you are running, and do not assume the other's authority.
   between Codex and Claude Code).
 - Executes from the handoff named by the owner. One work package per patch file.
 - **Never commits, pushes, or deploys.** Delivery is: patch file dropped into
-  `patches/`, owner uploads it to `~/public_html` and runs `php <patch>.php`.
+  `patches/`; the owner uploads it by SCP to the verified private staging path,
+  verifies its hash and runs it by SSH from `~/public_html` as described in
+  `CODEX_WORKFLOW.md`.
+- Never invokes `ssh`, `scp`, `sftp`, `ssh-add`, `ssh-keygen`, reads `~/.ssh`,
+  or requests/uses the owner's private key or passphrase. An exact task-specific
+  owner exception does not grant access to the owner-held key.
 - **Never writes Notion properties or status** — that writer is Claude (chat).
   If a status change is needed, state it and stop.
 - May update `ROADMAP_FLOW` in `dashboard/booster-dashboard.html` only when an
@@ -46,6 +67,17 @@ one that matches how you are running, and do not assume the other's authority.
   production. Assume the owner will run it on the live site.
 
 Both surfaces follow the authority and writer rules in `AGENTS.md`.
+
+### Codex exchanges through the subscription CLI (owner decision 2026-10-19)
+
+Codex communicates with actual Claude through the installed subscription CLI,
+including command drafting and review; never require the owner to relay these
+packets to Claude chat. The CLI may compose the owner-run PowerShell packets
+described above. Codex checks those commands independently. Drafting and the
+required ready-stage review use separate requests; the command author cannot
+be its sole approver. This supersedes the former chat-only command-author rule,
+without changing Notion ownership, server/key restrictions, paid-API restrictions,
+deployment gates or QA authority.
 
 ## Secrets — do not read
 
@@ -161,6 +193,13 @@ report unexpected defects as well as prior fixes. Missing material context
 prevents Review OK. State exact DESIGN/CODE/result scope, actionable findings
 and limits; preserve the complete actual result. No self-approval, deployment,
 Git/status/external-comment mutation under the review-only grant.
+
+Classify findings as mandatory or optional; state their scope and closure
+conditions. Assess the declared dependencies and which test boundaries are real
+native/generated code or fakes. Judge fidelity, not check counts. Explain whether
+a substantive fresh-review trigger fires; do not request another provider round
+for unchanged hashes, expected receipts, bookkeeping or optional wording alone.
+Apply the shared policy's privacy, composition and GSS exceptions.
 
 Legacy bsreview uses canonical scripts/auto_review.py and paid API/Haiku, even
 in --dry-run. It is not this subscription default and cannot replace a strong

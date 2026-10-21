@@ -1,0 +1,44 @@
+{
+  "received_utc": "2026-10-20T19:39:10.639600+00:00",
+  "task": "ACC-009-C1-H1",
+  "step": "Upload",
+  "assessment": "PASS_complete_expected_Upload",
+  "review_request_id": "d9c3597f-132e-4d65-8d14-18104b73a5ad",
+  "runner_sha256": "3403f0f2d15c26e81963db5ed7511cd0d38f06eb37369de4874281a16bea6753",
+  "runner_bytes": 1087629,
+  "PS_packet_sha256": "82362b9f64061c916ae832749d01aff1d94123b52c9a784e2fce4d4183d26ae7",
+  "sources": [
+    {
+      "path": "work/acc009-private-stage-20261019/owner-receipts/ACC-009-C1-H1_upload-precheck_20261020T193840697Z_3403f0f2_99f9e384.log",
+      "sha256": "bf641de5fb74d1eb777b0c593eb1aa55909737f4596965847a7f42bbbf3284a4"
+    },
+    {
+      "path": "work/acc009-private-stage-20261019/owner-receipts/ACC-009-C1-H1_upload-scp_20261020T193841466Z_3403f0f2_f6a67f76.log",
+      "sha256": "05dd670f626cf636310931f9fbf9434b2ea1918b176a5017c2b5ac5a3d5654e1"
+    },
+    {
+      "path": "work/acc009-private-stage-20261019/owner-receipts/acc009_state_3403f0f2.json",
+      "sha256": "cbd26ffa43e243d0e9ae284aefca079b2850298aed3e801b5ec7b4d904e4e787"
+    }
+  ],
+  "normalization": "Exact logger headers; CRLF/LF and trailing empty rows only normalized; complete seven-row payload checked.",
+  "precheck": {
+    "RESOLVED_HOME": "/home2/boosters",
+    "RESOLVED_PUB": "/home2/boosters/public_html",
+    "RESOLVED_STAGE": "/home2/boosters/private/booster-patches",
+    "RESOLVED_PULLS": "/home2/boosters/private/booster-pulls",
+    "ADMIT_DONE": "ok",
+    "DEST_ABSENT": "1",
+    "PRECHECK_DONE": "ok"
+  },
+  "scp_exit": 0,
+  "upload_done": true,
+  "remote_hash_verified": false,
+  "stderr_scope": "Owner-console-only SSH/SCP stderr; complete supplied owner console shows none.",
+  "owner_auth": "Existing owner transport usable at this Upload; no fresh Unlock receipt or key-state guarantee invented.",
+  "limitations": "Transfer proof only. Separate Verify must establish remote SHA/PHP; Preflight and Apply/QA outstanding. No agent SSH/key operation.",
+  "M1": "Upload portion passed; Verify and Preflight remain open",
+  "next_step": "Separate owner Verify",
+  "new_model_call": false,
+  "apply_released": false
+}

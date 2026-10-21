@@ -1,0 +1,30 @@
+{
+  "request_id": "f15e000d-8586-4a44-a471-786b7fbf9ae3",
+  "original_process_id": 8456,
+  "controlled_session_id": 89362,
+  "request_consumed": true,
+  "replay_permitted": false,
+  "closure_utc": "2026-10-18T16:07:27.660382+00:00",
+  "frozen_new": 154,
+  "frozen_reuse": 639,
+  "all_inputs_unchanged": true,
+  "git_unchanged": {
+    "head": "c6b6519735614577a30d7dfa4b716d9ebbc99ae9",
+    "branch": "codex/3dp-payout-approval-status",
+    "index_sha256": "6b94d8347df0f936b634c9a950ab75bd7b21846fcba83a7af7192f9cbe9fb1e4"
+  },
+  "full_original_result_matches_saved_review": true,
+  "review_sha256": "43cd59bed3cc705ded232636081eba142c89cf88ac58b8af0bf6d932fd672350",
+  "model": "claude-opus-5-5/high",
+  "tools_MCP_API_key_fallback": false,
+  "overage_event": {
+    "status": "allowed",
+    "resetsAt": 1792355400,
+    "rateLimitType": "five_hour",
+    "overageStatus": "rejected",
+    "overageDisabledReason": "org_level_disabled",
+    "isUsingOverage": false
+  },
+  "semantic_verdict_requires_complete_main_agent_read": true,
+  "host_or_owner_release_accepted": false
+}

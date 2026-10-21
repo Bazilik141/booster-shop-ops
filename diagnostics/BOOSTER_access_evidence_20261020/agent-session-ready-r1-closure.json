@@ -1,0 +1,51 @@
+{
+  "closed_utc": "2026-10-20T12:17:00.569990+00:00",
+  "request_id": "725f9ff8-231f-4e4c-8761-89e67f234a43",
+  "author_request_id": "a641e115-a9b9-4da9-923f-4e48c82c59b1",
+  "native_backend_author_request": "02adcde2-09cd-44c1-b14f-01117b48ca75",
+  "actual_model": [
+    "claude-opus-5-5"
+  ],
+  "effort": "high",
+  "subscription_verified": true,
+  "tools_used": false,
+  "full_actual_answer_read": true,
+  "response_sha256": "ca5d48de143115ca3769742a5d8e44b9625e6ece181e0ce2bf8505235efdc9f4",
+  "verdict": "Code/composition READY for owner release, gated. Guide READY after mandatory M1 now closed mechanically. No further model call required.",
+  "all22_inputs_unchanged_through_completion_and_before_M1": true,
+  "after_M1_only_authorized_guide_sentence_changed": true,
+  "bindings": {
+    "scripts\\booster_ssh_session.ps1": "a631153f2ae8dda0c3b398c3b2ad880024cd129223bee6813b0626d86413ff58",
+    "diagnostics\\ACC-009_C1-H1_owner-agent-PS_20261020.ps1": "2bfb2f1c31669578a1758141d8f68ad8cc3c618b00abe4866ce807e4a85837d9",
+    "patches\\ACC-009-C1-H1_courier-notifications-private_20261019.php": "94b92a139fae5d39645b151aa6a85fa746d806f3fdd9e89d5d5b7125855c04ae"
+  },
+  "guide_reviewed_sha256": "d7aae30d788a7e2bdb02c1ca47c991036e6a03848642797b8312b3172e336a66",
+  "guide_released_sha256": "6914a32bdba25465f43ed1267ad47b173d3b0e1c7111bfb12fef70e89ffd4f8a",
+  "M1": {
+    "result": "PASS",
+    "old_actual_source": "Якщо помилка сталася під час роботи після успішного Unlock,\nдозволена одна спроба звичайного Lock для завершення; при помилці Lock зупинись.",
+    "replacement_exact_reviewer_sentence": "Якщо Unlock завершився без `status: ok` і показав `target_loaded: yes` або `unknown`, або квитанції не було, або помилка сталася під час роботи після успішного Unlock, виконай одну спробу звичайного Lock; якщо Lock не повернув `status: ok` з `target_loaded: no`, зупинись і надішли обидві квитанції.",
+    "only_one_sentence_substituted": true,
+    "code_changed_after_review": false
+  },
+  "policy_hashes": {
+    "AGENTS.md": "fa98888588dc9b2dcbd20f8dc8913ca3f1f7d8940d533cad6072de2c6963f141",
+    "CLAUDE.md": "bbdcfa4fa39d11a3702ec85328061f55b656a300c81894f39195985a6d0f030e",
+    "CODEX_WORKFLOW.md": "d6cfaa8254f78a95c0372879fff5352c90ba752c9c91a787fdb6933104a93dce",
+    "docs/BOOSTER_LOCAL_ACCESS.md": "1bf250e6268f4a35b35a7f96d77f2d88493e5bcbea6767a4a35fb0fa24765d9e"
+  },
+  "optional_notes": "O1-3/O5/O7 recorded only. O4 exact whole-file reconstruction and static no-PSCommandPath/MyInvocation check pass. O6 exact-one policy anchors applied with original bytes preserved outside blocks; canonical no-agent ban text removed. No optional code loop.",
+  "local_checks": "PS5.1 syntax + 11 synthetic full-dispatch cleanup/error/service cases; native/profile/key/service interfaces mocked, original helper never executed. Original manual packet and PHP runner unchanged.",
+  "owner_release": [
+    "Setup elevated once, service preparation only",
+    "Unlock/Status/Lock normal owner console, target key only",
+    "Existing uploaded ACC-009: agent packet Verify; Preflight separate after accepted Verify"
+  ],
+  "not_released": [
+    "Any agent executing helper/SSH/key/service commands or reading owner .ssh",
+    "Production Apply/rollback/cache",
+    "Git commit/push",
+    "Notion/dashboard/GSS"
+  ],
+  "native_runtime": "Pending owner service/key lifecycle receipts, builtin pipe authentication, and targeted persisted-key removal; fixture/source proof does not replace them."
+}

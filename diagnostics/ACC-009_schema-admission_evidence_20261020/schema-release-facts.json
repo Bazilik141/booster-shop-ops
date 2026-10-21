@@ -1,0 +1,231 @@
+{
+  "task": "ACC-009-C1-H1-schema",
+  "runner": "patches/ACC-009-C1-H1_courier-notifications-schema_20261020.php",
+  "runner_sha256": "3403f0f2d15c26e81963db5ed7511cd0d38f06eb37369de4874281a16bea6753",
+  "runner_bytes": 1087629,
+  "owner_PS": "diagnostics/ACC-009_C1-H1_schema_owner-agent-PS_20261020.ps1",
+  "owner_PS_sha256": "82362b9f64061c916ae832749d01aff1d94123b52c9a784e2fce4d4183d26ae7",
+  "before_state": "All26 before; confirm exact owner-applied Mono afterimage, other existing exact source hashes or absent. No mixed/drift acceptance. Credit template is read-only dependency; owner-applied Mono afterimage pinned.",
+  "targets": [
+    {
+      "target": "system/library/booster_checkout_readiness.php",
+      "before": "absent",
+      "after_planned": "69a7d5fdfb9ee77e34f623f3e4ace59fd3553da102e908ff03f98bfa9e3cb9a8",
+      "dry_run_current_after": "unchanged from actual before",
+      "dry_run_backup": "none",
+      "future_apply_backup": "none"
+    },
+    {
+      "target": "catalog/view/javascript/acc009-checkout.js",
+      "before": "absent",
+      "after_planned": "8137d8b6a6b79cef1ad8a7910c452e7420c9fa8273bdf63cbbbf3f4c4d0b4771",
+      "dry_run_current_after": "unchanged from actual before",
+      "dry_run_backup": "none",
+      "future_apply_backup": "none"
+    },
+    {
+      "target": "catalog/controller/checkout/checkout.php",
+      "before": "dbf4b8b98c5be25286c7e44254484bb78830179092c2340c50f3a81b2949c3a2",
+      "after_planned": "761c051c9286c3022efc1e5deea02979023f2d45600d762cb2d222eda03e4cbf",
+      "dry_run_current_after": "unchanged from actual before",
+      "dry_run_backup": "none",
+      "future_apply_backup": "/home2/boosters/_patch_backups/<actual generated backup name>/2.source (not created; Apply held)"
+    },
+    {
+      "target": "catalog/controller/checkout/confirm.php",
+      "before": "6365c2a36bb575848cf4f578252f3642454ab8e37626ce7c1c14eabf4f60ac17",
+      "after_planned": "333c43b9da2c6101d44e5676a78648b8ab9b75296380675944fef88a3ee69288",
+      "dry_run_current_after": "unchanged from actual before",
+      "dry_run_backup": "none",
+      "future_apply_backup": "/home2/boosters/_patch_backups/<actual generated backup name>/3.source (not created; Apply held)"
+    },
+    {
+      "target": "catalog/controller/checkout/payment_method.php",
+      "before": "0497216e9267f92c385ea43b43e09fc0a9531ff5df71a6e7d954d6f816c9b79c",
+      "after_planned": "dc34248a36f05445502aecb4eff2b03accc6e68bf9318b7f699252023821fbe9",
+      "dry_run_current_after": "unchanged from actual before",
+      "dry_run_backup": "none",
+      "future_apply_backup": "/home2/boosters/_patch_backups/<actual generated backup name>/4.source (not created; Apply held)"
+    },
+    {
+      "target": "catalog/controller/checkout/register.php",
+      "before": "db5537a07b093354a8763e3361307e11c89c0948fd646dadec8f0570f9b5a25a",
+      "after_planned": "5858276323363e09ae727e47a5aa13e2918d2d455991feeefa6daf3e52890c2f",
+      "dry_run_current_after": "unchanged from actual before",
+      "dry_run_backup": "none",
+      "future_apply_backup": "/home2/boosters/_patch_backups/<actual generated backup name>/5.source (not created; Apply held)"
+    },
+    {
+      "target": "catalog/controller/checkout/shipping_address.php",
+      "before": "51a83f3453fc0027c4d0c34f7eecba335abff11375b9c70f8c723c1b1974ad64",
+      "after_planned": "c5e456585fe2da3f9ede3435b1522848ff2a147dc0ad5418d1773bb65cd832b5",
+      "dry_run_current_after": "unchanged from actual before",
+      "dry_run_backup": "none",
+      "future_apply_backup": "/home2/boosters/_patch_backups/<actual generated backup name>/6.source (not created; Apply held)"
+    },
+    {
+      "target": "catalog/view/javascript/checkout-reskin.js",
+      "before": "ab2403e5aca0de41f83b5d0d88a269302c33534dbec09fcb45daa8212f1fb100",
+      "after_planned": "9af1c78e3c12059e06685e5fcc58f39eaa241f734617ad6f5bf638ed2a334392",
+      "dry_run_current_after": "unchanged from actual before",
+      "dry_run_backup": "none",
+      "future_apply_backup": "/home2/boosters/_patch_backups/<actual generated backup name>/7.source (not created; Apply held)"
+    },
+    {
+      "target": "catalog/view/javascript/checkout-state.js",
+      "before": "1bafab528a73d5f5cbb6ecaacd0e384b1a875ab80d3ed101f34e1eed32641a29",
+      "after_planned": "83a9de5bbb2c6184abd5c9ceb89b23841532b415ad1e4cb14cf48315e4c9f97c",
+      "dry_run_current_after": "unchanged from actual before",
+      "dry_run_backup": "none",
+      "future_apply_backup": "/home2/boosters/_patch_backups/<actual generated backup name>/8.source (not created; Apply held)"
+    },
+    {
+      "target": "catalog/view/template/checkout/checkout.twig",
+      "before": "e334d78880c00022095a8767f5788edeb450044f3fcbad0e3f674faee2acd34a",
+      "after_planned": "d989bf48ff149d3cf46f1c827b94a9b3e400e457f7c210f9232331317db1a7f6",
+      "dry_run_current_after": "unchanged from actual before",
+      "dry_run_backup": "none",
+      "future_apply_backup": "/home2/boosters/_patch_backups/<actual generated backup name>/9.source (not created; Apply held)"
+    },
+    {
+      "target": "catalog/view/template/checkout/payment_method.twig",
+      "before": "974d73f62b98b4a562db1478abcea040cd47b7270675e368173a83b3e43bf7c6",
+      "after_planned": "a6de326763d2b27ca214328b6098513cc62974956b40872162e3b935e2117d57",
+      "dry_run_current_after": "unchanged from actual before",
+      "dry_run_backup": "none",
+      "future_apply_backup": "/home2/boosters/_patch_backups/<actual generated backup name>/10.source (not created; Apply held)"
+    },
+    {
+      "target": "catalog/view/template/checkout/register.twig",
+      "before": "5624640133e4ab0050958e2b3768fed406efbbcc70c554acdcde4a986cf4541b",
+      "after_planned": "354d390457dbfb056e5243defe59f4ff587cd690c657e04b853549c6c8cddd20",
+      "dry_run_current_after": "unchanged from actual before",
+      "dry_run_backup": "none",
+      "future_apply_backup": "/home2/boosters/_patch_backups/<actual generated backup name>/11.source (not created; Apply held)"
+    },
+    {
+      "target": "catalog/view/template/checkout/shipping_address.twig",
+      "before": "b16eddbc3916f4331d1452e9a82a182f8c606aa137554c107fc3c2092f9528a6",
+      "after_planned": "627047b08f77597aa7eac0224cc0a55b0c8e9f9d3eecb7d6d23a1be9b2380d2a",
+      "dry_run_current_after": "unchanged from actual before",
+      "dry_run_backup": "none",
+      "future_apply_backup": "/home2/boosters/_patch_backups/<actual generated backup name>/12.source (not created; Apply held)"
+    },
+    {
+      "target": "catalog/view/template/checkout/shipping_method.twig",
+      "before": "21c4f1982f357e428f3a6c843c6cd42ebedce0dd2a1307ec1128c6833268f1db",
+      "after_planned": "dbaa962422edf8e9b5d78a28780f0762153bd056970ee63dd8653ac962f37adc",
+      "dry_run_current_after": "unchanged from actual before",
+      "dry_run_backup": "none",
+      "future_apply_backup": "/home2/boosters/_patch_backups/<actual generated backup name>/13.source (not created; Apply held)"
+    },
+    {
+      "target": "extension/PintaNovaPoshtaCod/catalog/controller/payment/pinta_nova_poshta_cod.php",
+      "before": "67b541503a32fa9621cb65698f387f65aea0de47755a3a2210b011c5ca0b1b41",
+      "after_planned": "ab6ee3f6a61194bf5002389b3419a5e4ae5ead65d4a85f546fe274c4876578d2",
+      "dry_run_current_after": "unchanged from actual before",
+      "dry_run_backup": "none",
+      "future_apply_backup": "/home2/boosters/_patch_backups/<actual generated backup name>/14.source (not created; Apply held)"
+    },
+    {
+      "target": "extension/PintaNovaPoshtaCod/catalog/view/template/shipping/js_checkout_shipping_address_form.twig",
+      "before": "d4421dfe312771b15213b5e65306a03424a5462f03952ca014d359a816c4dc08",
+      "after_planned": "65d527db2f1a821b520ab80c0be6bf5c600e369268603de10c6dce136d7b94d6",
+      "dry_run_current_after": "unchanged from actual before",
+      "dry_run_backup": "none",
+      "future_apply_backup": "/home2/boosters/_patch_backups/<actual generated backup name>/15.source (not created; Apply held)"
+    },
+    {
+      "target": "extension/hutko/catalog/controller/payment/hutko.php",
+      "before": "1bb8fe3deec5dc843c4a93d45cc4ac3c23e7cef620b96bb8f032de999baf6b3c",
+      "after_planned": "84c5683b034a7517cab97f3c82df9b7d0745ba5e1885c757630b779f252f57af",
+      "dry_run_current_after": "unchanged from actual before",
+      "dry_run_backup": "none",
+      "future_apply_backup": "/home2/boosters/_patch_backups/<actual generated backup name>/16.source (not created; Apply held)"
+    },
+    {
+      "target": "extension/mono_chast/catalog/controller/payment/mono_chast.php",
+      "before": "c0cfbb4540c0fb123f2ba31d346b919b5d55300eeaa7b5e45046bf87a153992f",
+      "after_planned": "6c53f4129166dfeb9c8654b33edc99a663925f61d58b0a6cfed700dac76bd2ac",
+      "dry_run_current_after": "unchanged from actual before",
+      "dry_run_backup": "none",
+      "future_apply_backup": "/home2/boosters/_patch_backups/<actual generated backup name>/17.source (not created; Apply held)"
+    },
+    {
+      "target": "extension/opencart/catalog/controller/payment/bank_transfer.php",
+      "before": "f3f573881906c9397c575749d16771b029ec0ef95301d9bef9ca5ab9a1303462",
+      "after_planned": "34042f46f2be7821be463f75cf23b04c15b1ce784d9eb244666eae8403b4d5d0",
+      "dry_run_current_after": "unchanged from actual before",
+      "dry_run_backup": "none",
+      "future_apply_backup": "/home2/boosters/_patch_backups/<actual generated backup name>/18.source (not created; Apply held)"
+    },
+    {
+      "target": "extension/opencart/catalog/controller/payment/cheque.php",
+      "before": "6dd4abd4a7009db8d784d05852f7818bb4feb0140befbe2a0c6f03f5188cc867",
+      "after_planned": "d72668982c2b16891bf27e949ea9a2120d67eb4d8c9f65f0d760c7f2d71ccc83",
+      "dry_run_current_after": "unchanged from actual before",
+      "dry_run_backup": "none",
+      "future_apply_backup": "/home2/boosters/_patch_backups/<actual generated backup name>/19.source (not created; Apply held)"
+    },
+    {
+      "target": "extension/opencart/catalog/controller/payment/cod.php",
+      "before": "be6ce61041d8dc8afd1ef488ece31b5a9e568b52ab11165720ccc479c01cd0da",
+      "after_planned": "e09dec0344f8dde205402a2904d3ca78d4c25ea2ec4d01ed791b999e1af511af",
+      "dry_run_current_after": "unchanged from actual before",
+      "dry_run_backup": "none",
+      "future_apply_backup": "/home2/boosters/_patch_backups/<actual generated backup name>/20.source (not created; Apply held)"
+    },
+    {
+      "target": "extension/opencart/catalog/controller/payment/free_checkout.php",
+      "before": "ce9ea349262195f52b8a98c3da774bef7ceeefae6e3c9567885065b5b3f96630",
+      "after_planned": "e235cacd7e7b3aa9e9c3a459c89df3cdf9ada928431a9577b6f4c301f89e842d",
+      "dry_run_current_after": "unchanged from actual before",
+      "dry_run_backup": "none",
+      "future_apply_backup": "/home2/boosters/_patch_backups/<actual generated backup name>/21.source (not created; Apply held)"
+    },
+    {
+      "target": "extension/pumb_credit/catalog/controller/payment/pumb_credit.php",
+      "before": "951dcf43a4f4c2712b1f1a124fbac08ed80b57879a5f9bc91ab5cd9bf80a41dd",
+      "after_planned": "9cdcfccd5cd5189de44af2d01bd7c276eb0918aaf9d1ac79275e3c23b32e4885",
+      "dry_run_current_after": "unchanged from actual before",
+      "dry_run_backup": "none",
+      "future_apply_backup": "/home2/boosters/_patch_backups/<actual generated backup name>/22.source (not created; Apply held)"
+    },
+    {
+      "target": "system/library/booster_order_notification_guard.php",
+      "before": "absent",
+      "after_planned": "5a9c0ad9840b3f420e2aaa11cc9c736894548ac795d986d5b7b1d18a1ca3832d",
+      "dry_run_current_after": "unchanged from actual before",
+      "dry_run_backup": "none",
+      "future_apply_backup": "none"
+    },
+    {
+      "target": "extension/telegram_notify/catalog/controller/event/telegram.php",
+      "before": "119ee3340a9797b30f1545c68d2539ed50ce85d52bc1ce8ce1bd810430c56461",
+      "after_planned": "d46a49ea556fadc7a901726c12c3d6ea215b73a4a7a882125eb09fea716fd1ee",
+      "dry_run_current_after": "unchanged from actual before",
+      "dry_run_backup": "none",
+      "future_apply_backup": "/home2/boosters/_patch_backups/<actual generated backup name>/24.source (not created; Apply held)"
+    },
+    {
+      "target": "catalog/model/checkout/order.php",
+      "before": "0324c221cb75cb1aaa04d8b28be5865b295aff3b727139791e03413342c3a800",
+      "after_planned": "2ed58b2d537506e47b01dfc3232f3add75e620194f6089f1fc8e9d6729dabe46",
+      "dry_run_current_after": "unchanged from actual before",
+      "dry_run_backup": "none",
+      "future_apply_backup": "/home2/boosters/_patch_backups/<actual generated backup name>/25.source (not created; Apply held)"
+    }
+  ],
+  "dry_run_contract": "No production target or DB writes; exact26 target planned/current receipts changed_files0, known warning only, metadata admitting canonicalV15 and no additional Hutko/PUMB collision, source/web/OPcache seal and done=ok. Temporary minimal public web probe remains unchanged explicit owner exception, removed by runner.",
+  "rollback": "Source-only reverse/partial recovery envelope unchanged, with exact metadata/backup/hash checks; no DB rollback needed, no undo of business remote effects; rollback execution not released",
+  "stage": "~/private/booster-patches/ outside webroot; run cwd ~/public_html",
+  "owner_released_steps": [
+    "After ready review: new private Upload",
+    "Separate Verify",
+    "Separate Preflight"
+  ],
+  "Apply_released": false,
+  "owner_QA": "Required only after later owner Apply release; not performed or accepted here",
+  "review_status": "PENDING actual result/CODE review; one metadata function only. All26 target states/payloads exactly same as Mono candidate. No production step yet released.",
+  "admission_change": "Exact observed nullability NO/YES/YES for history PK/order/status; integer/primary/auto increment/InnoDB/autocommit/events remain mandatory. No DB, SQL mode, index, history cleanup, notification or functional payload change."
+}

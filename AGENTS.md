@@ -6,19 +6,42 @@
 OpenCart e-commerce: boostershop.website (MTG, Pokemon, One Piece, Yu-Gi-Oh).
 Stack: OpenCart (Twig/PHP), custom checkout + NP integration, Google Apps Script CRM, Google Sheets.
 
-## Automatic peer review — owner decision 2026-10-14
+## Reuse local access across chats — owner direction 2026-10-20
 
-For ALL Booster Shop task series, read
-[automatic independent review](docs/BOOSTER_AUTOMATIC_PEER_REVIEW_20261014.md).
-Codex initiates actual Claude review automatically when the required assigned
-stage is ready, through the installed Claude CLI/subscription. No manual owner
-review trigger or separate paid API is implied. This current amendment overrides
-older manual review-trigger/bsreview-default wording below and in CODEX_WORKFLOW.md,
-CLAUDE.md and ROADMAP_SOP.md; other task/Git/status/deployment/owner gates persist.
-For GSS also read [permanent optimizations and the next-stage assistance trial](docs/GSS_OPTIMIZATION_RULES_20261014.md).
-Codex remains the main writer, actual Claude the independent reviewer. The GSS
-one/two-subagent assistance trial is bounded analysis for the next code stage;
-it does not create parallel main-code/Git/status writers or replace Claude.
+Read [shared local access routing](docs/BOOSTER_LOCAL_ACCESS.md) and
+`diagnostics/BOOSTER_access-current.json` before asking the owner about CLI/SSH
+setup. New chats reuse saved user authentication and existing keys/configuration.
+For ordinary non-GSS tasks, `python scripts/booster_claude_access.py status`
+resolves the installed native subscription CLI without relying on PATH or a
+per-task VS Code version path. Do not request login/reset/setup merely because
+a chat is new. Owner-only diagnostics gather SSH facts; do not ask the owner to
+attest technical internals from memory. Agents never run those diagnostics or
+read SSH/key files. GSS retains its accepted exact transport and all prior gates.
+
+Owner decision 2026-10-20 permits owner-controlled SSH work periods for ordinary
+non-GSS tasks: unlock the existing encrypted Booster key before work, explicitly
+remove only that key from the Windows agent afterwards. Use the reviewed helper
+and packet described in `docs/BOOSTER_LOCAL_ACCESS.md`; do not run them as an
+agent. A Windows agent is account-wide and may persist beyond a terminal or
+reboot. This is not a technical isolation boundary against same-user processes.
+The owner keeps the passphrase; AI agents still never invoke SSH/key tools,
+read `.ssh`, load/use/remove the key or access the server. Preparation is not
+proof that this mode has been configured or cleanup has succeeded.
+
+## Automatic peer review — owner decisions 2026-10-14 / 2026-10-19
+
+For ALL Booster tasks read the canonical
+[automatic independent review policy](docs/BOOSTER_AUTOMATIC_PEER_REVIEW_20261014.md).
+Codex initiates actual subscription Claude review at a ready required stage.
+The 2026-10-19 non-GSS procedure also applies to ongoing tasks: coherent reviews,
+declared dependencies, scoped invalidation and mechanical closure of expected
+receipts. It supersedes older general procedural repeats, not explicit owner
+gates, scope/data permissions, Git/status/deployment authority or owner QA.
+AGENTS.md remains the authority/safety contract; ROADMAP_SOP.md governs status.
+For GSS retain its prior shared and specific review/freeze/no-replay controls;
+also read [GSS optimizations](docs/GSS_OPTIMIZATION_RULES_20261014.md).
+The bounded GSS assistance trial creates no parallel main-code/Git/status writer
+and never replaces actual Claude review. See the shared policy for precedence.
 
 ## GSS series exception — owner decision 2026-09-28
 
@@ -59,6 +82,15 @@ This Git-authority exception does not grant production deployment or live
 business-data mutation authority.
 
 ## Core authority and writer rules
+
+- **Claude communication (owner decision 2026-10-19).** Codex communicates with
+  actual Claude through the installed subscription CLI for task exchanges,
+  command drafting and review. Do not require the owner to relay packets to
+  Claude chat. Claude CLI composes owner-run PowerShell packets; Codex checks
+  them independently before the required ready-stage review. Drafting and
+  review are distinct requests; the command author cannot be its sole approver.
+  This replaces the older Claude-chat command-author rule. It grants no paid
+  API fallback, agent SSH/key access, deployment or external-system writes.
 
 - Claude never commits or pushes. Claude Code never commits, pushes, or deploys.
 - **Patch authorship is shared (2026-08-05, owner decision).** Patches in
@@ -136,10 +168,14 @@ templates/    handoff + report templates
 ## Roles & boundaries
 | Agent | Does | Does NOT |
 |-------|------|----------|
-| **Claude** (chat/Cowork) | audit, SEO/UX strategy, handoffs, executor recommendation, post-patch review, git diff, Notion status, prepares ready-to-paste commit/push command | write patches, server access, deploy, git commit/push |
-| **Codex** | patches (`patches/`), reports (`diagnostics/`), authorized `ROADMAP_FLOW` changes | server access, deploy, Notion properties/status, commit/push without exact active-task approval |
-| **Claude Code** (repo agent) | patches (`patches/`), reports (`diagnostics/`), local verification, authorized `ROADMAP_FLOW` changes | server access, deploy, Notion properties/status, commit, push |
-| **Owner** | approves scope, assigns the executor, normally runs prepared Git commands, uploads and runs server patches, performs final QA | — |
+| **Claude** (chat/Cowork) | audit, SEO/UX strategy, handoffs, executor recommendation, post-patch review, git diff, Notion status, prepares owner-run SSH/SCP and commit/push command packets | write patches, server access, SSH/SCP, deploy, git commit/push |
+| **Codex** | patches (`patches/`), reports (`diagnostics/`), authorized `ROADMAP_FLOW` changes | server access, SSH/SCP, deploy, Notion properties/status, commit/push without exact active-task approval |
+| **Claude Code** (repo agent) | patches (`patches/`), reports (`diagnostics/`), local verification, authorized `ROADMAP_FLOW` changes | server access, SSH/SCP, deploy, Notion properties/status, commit, push |
+| **Owner** | approves scope, assigns the executor, normally runs prepared Git commands, runs owner-only SSH/SCP blocks and server patches, performs final QA | — |
+
+Agents do not invoke SSH/SCP/SFTP or key utilities, read `~/.ssh`, or use the
+owner-held private key. An exact active-task owner exception may authorize a
+narrow operation, but never grants access to the owner's private key.
 
 Only one patch author per task per round. If the owner reassigns mid-task, the
 previous executor stops before the new one starts.
@@ -148,14 +184,16 @@ previous executor stops before the new one starts.
 ```
 Claude executor recommendation → Owner assigns executor → Claude handoff
 → Codex OR Claude Code patch → drop to C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\patches\
-→ Codex-triggered actual Claude review (subscription CLI) → Owner deploy (php patch.php in ~/public_html) → Owner QA
+→ Subscription Claude CLI command packet → Codex checks packet → Ready-stage actual Claude review of both hashes (subscription CLI) → Owner deploy → Deterministic receipt check → Owner QA
+Non-GSS result deviations/ambiguity follow the shared review policy; GSS retains its own gates.
 ```
 
 ## Source of truth
 - **Notion roadmap** — canonical task status and priorities.
 - **Dashboard `ROADMAP_FLOW`** — mirror of Notion task status.
 - **This repo** — implementation history, diffs, patch files
-- **Owner cPanel backup drop** — live source for diagnosis (no server access)
+- **Owner cPanel backup drop** — default live source for diagnosis; the owner may
+  also provide a named fresh pull under `CODEX_WORKFLOW.md` (no agent server access)
 - **Roadmap governance** (status, synchronization, Definition of Done, and
   writer roles) — `ROADMAP_SOP.md`.
 - Claude writes Booster Notion task properties/status by default. Codex does
@@ -175,7 +213,7 @@ Claude executor recommendation → Owner assigns executor → Claude handoff
 
 ## Patch conventions (PHP runner)
 Each patch must:
-1. **File exists check** — fail with clear error if target file not found; never blind-edit
+1. **Target state check** — fail if an existing-file target is missing or a new-file target already exists; never blind-edit
 2. **Anchor pre-check** — fail if anchor count != expected
 3. **Backup** to `_patch_backups/<patch>-<ts>/` before write
 4. **`php -l` gate** — restore-on-fail; no silent failures
@@ -190,8 +228,18 @@ Drop to: `C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\patches\<same f
 After patch is ready, respond with:
 - what it does (1-2 sentences)
 - local path to the file
-- run command: `php <filename>` in `~/public_html`
-- one terminal block with the command
+- SHA-256 of the exact patch bytes submitted for review; record the actual
+  Claude verdict only after the packet exists and both hashes are reviewed
+- expected per-target before/after states (`absent` when appropriate), full
+  backup path or `none`, and rollback facts
+- stdout contract and facts needed for subscription Claude CLI to compose the exact
+  owner-run PowerShell packet following `CODEX_WORKFLOW.md`; record the packet
+  SHA-256 alongside the patch SHA-256 after independent review
+
+Do not ask the owner to upload a patch to `public_html` or execute a patch
+stored there.
+The patch is staged under the verified private directory outside the web root;
+the owner invokes it with `~/public_html` as the working directory.
 
 ## UI/CSS patch discipline
 Applies to any patch touching visual/layout CSS, Twig markup styling, or JS that changes visible behavior.
@@ -213,8 +261,9 @@ Naming: `diagnostics/<TASK-ID>_<slug>_report_<YYYYMMDD>.md`
 ## Live source (diagnosis input)
 Live state comes from owner's **cPanel backup drop**.
 - Always use the **newest backup** (check timestamp in filename)
-- If a needed file is missing from backup, ask owner to run:
-  `tar -czf booster-debug-files.tar.gz path/to/file1 path/to/file2`
+- For named files missing from a backup, ask the owner for a narrow fresh pull
+  using the owner-run SSH/SCP method in `CODEX_WORKFLOW.md`; include a file list,
+  UTC timestamp and SHA-256 manifest. Keep collection files outside `public_html`.
 
 ## Apps Script mirrors (OPS-CODEMIRROR, owner decision 2026-08-08)
 Both Apps Script projects are mirrored in the repository so an executor reads real code instead
@@ -456,9 +505,12 @@ write `owner-held`.
 | Product lines | MTG · Pokemon · One Piece · Yu-Gi-Oh · 3D-printed |
 | Production PHP | `8.0` — all PHP code and patches must remain compatible with PHP 8.0 |
 | Web root on server | `~/public_html` |
-| Deploy command | `php <filename>` in `~/public_html`, run by the owner |
+| OpenCart catalog `DIR_STORAGE` | `/home2/boosters/ocartdata/storage/` — owner-confirmed from live `config.php` on 2026-10-19; check the owning application's config before future cache cleanup |
+| OpenCart `DIR_CACHE` / `DIR_MODIFICATION` | Not yet confirmed as runtime constants. Check the owning catalog or admin config with the bounded owner-run lookup in `CODEX_WORKFLOW.md` before any cleanup; do not derive them from `DIR_STORAGE`. |
+| Deploy command | Owner-run PowerShell: SCP to verified `~/private/booster-patches/`, verify SHA-256, then SSH-run from `~/public_html` |
 | Staging / test environment | none — patches execute directly on production |
-| Server access for Claude | none — live state only via owner's cPanel backup drop |
+| Agent server access | none — only the owner uses the SSH key; live state comes from the cPanel backup or an owner-provided narrow pull |
+| Direct DB CLI over SSH | prohibited (`mysql`, `mysqldump`, SQL sessions and DB tunnels); DB patches still require explicit approval, a cPanel DB backup and rollback SQL |
 
 ### Backup and rollback
 
@@ -470,7 +522,7 @@ write `owner-held`.
 | Patch lifecycle | self-deletes after success (C7) — re-running requires re-upload |
 | DB backup | **not covered by C3.** Separate dump required before any DB-touching patch: cPanel → Backup → Download a MySQL Database Backup (the OpenCart database). The full cPanel backup also carries a dump under `mysql/` |
 | DB rollback | rollback SQL in the patch header (convention C6) |
-| Live-state source | newest `backup-*.tar.gz` from the owner's cPanel drop, by filename timestamp |
+| Live-state source | newest `backup-*.tar.gz` from the owner's cPanel drop; a named owner-provided fresh pull may supersede it for those files only |
 
 A logically wrong but syntactically valid write passes C4, reports success and
 self-deletes. That failure class is what post-deploy Tier 1 checks exist for.

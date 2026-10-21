@@ -1,0 +1,41 @@
+{
+  "received_utc": "2026-10-20T19:42:36.910828+00:00",
+  "owner_verify_utc": "2026-10-20T19:41:25Z",
+  "task": "ACC-009-C1-H1",
+  "step": "Verify",
+  "assessment": "PASS_complete_expected_Verify",
+  "review_request_id": "d9c3597f-132e-4d65-8d14-18104b73a5ad",
+  "runner_sha256": "3403f0f2d15c26e81963db5ed7511cd0d38f06eb37369de4874281a16bea6753",
+  "runner_bytes": 1087629,
+  "PS_packet_sha256": "82362b9f64061c916ae832749d01aff1d94123b52c9a784e2fce4d4183d26ae7",
+  "sources": [
+    {
+      "path": "work/acc009-private-stage-20261019/owner-receipts/ACC-009-C1-H1_verify_20261020T194125136Z_3403f0f2_39d59f7d.log",
+      "sha256": "3769a974717cd15180d9a09e89db0e2c704830e1c6b5c8d7879588b86a891650"
+    },
+    {
+      "path": "work/acc009-private-stage-20261019/owner-receipts/acc009_state_3403f0f2.json",
+      "sha256": "b48460f70668fc539b431f2934877bfc78130381ee5f835a1c4c965d54a716d2"
+    }
+  ],
+  "normalization": "Exact logger headers and complete expected payload; only CRLF/LF and trailing empty rows normalized. State identity, saved runtime and receipt path checked.",
+  "remote_hash_verified": true,
+  "verified_catalog_runtime": {
+    "PHP_BIN": "/usr/local/bin/php",
+    "PHP_VERSION": "8.0.30",
+    "PHP_LINT_RC": 0,
+    "DIR_STORAGE": "/home2/boosters/ocartdata/storage/",
+    "DIR_CACHE": "/home2/boosters/ocartdata/storage/cache/",
+    "DIR_MODIFICATION": "UNDEFINED",
+    "TWIG_SHA": "92a6ac0af6ff88053ecafe0acd86e249bddaab664080a549c0a502179f537a69",
+    "DIR_CACHE_STATE": "dir",
+    "TEMPLATE_PATH": "/home2/boosters/ocartdata/storage/cache/template/",
+    "TEMPLATE_STATE": "dir"
+  },
+  "stderr_scope": "SSH stderr is owner-console-only; complete supplied owner console shows none.",
+  "limitations": "Current runner transfer, remote SHA, CLI PHP/lint and catalog paths proved by owner receipt. No web-runtime, source/metadata admission, Apply, cache cleanup or QA proof. DIR_MODIFICATION is report-only UNDEFINED.",
+  "M1": "Upload and Verify passed; separate Preflight remains open",
+  "next_step": "Separate owner Preflight",
+  "new_model_call": false,
+  "apply_released": false
+}

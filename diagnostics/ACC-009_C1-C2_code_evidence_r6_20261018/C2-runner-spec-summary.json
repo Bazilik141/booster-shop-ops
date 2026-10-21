@@ -1,0 +1,269 @@
+{
+  "id": "ACC-009-C2",
+  "target": "extension/PintaNovaPoshtaCod/admin/controller/shipping/internet_document.php",
+  "marker": "ACC-009-C2",
+  "before_sha256": "2138e15643ce4bced1b49698955c78f443617e4b59877325113261042d1c7b93",
+  "after_sha256": "4d84bb039d7c43ede234d76deef698b8e0e7886184800e6bf6eeaaa7a19ca0af",
+  "already_hashes": [
+    "4d84bb039d7c43ede234d76deef698b8e0e7886184800e6bf6eeaaa7a19ca0af"
+  ],
+  "runtime": {
+    "expected": {
+      "adminEvhenii/controller/event/language.php": "ebc011be21aa78f7671dd54484e7dfdefd1441c4b03424d3a3f7c45b05c8243f",
+      "adminEvhenii/controller/event/modification.php": "17aba70d557d5a863ef6550fdf973ed1b2dd6b0b0f84ba6761f701783b6535d0",
+      "adminEvhenii/controller/startup/application.php": "dc83320227ebe9c7c856d2be0d631b60b8f7dd7af4c59b63d63ee045525a5769",
+      "adminEvhenii/controller/startup/authorize.php": "d7c2566422abee3eb20f77e17c58883b2384244eece98a20472b0bda7ace1a00",
+      "adminEvhenii/controller/startup/error.php": "7d714b9b034609ea8dfb951e7897bb836f187294e0476a8a5a381340c5b3468c",
+      "adminEvhenii/controller/startup/event.php": "b906ffe3722f58467988dfa768a6ea3ecc5783b7ba1fc8ee318bb7c535ab1800",
+      "adminEvhenii/controller/startup/extension.php": "451468d5157a7c9729c613fdac1a0d61833c6e200c53e4a8adf2bcd2a941b851",
+      "adminEvhenii/controller/startup/language.php": "a7588fb70553ff311acb2ce24352f6be983044e74ef748d7604c000fe5590643",
+      "adminEvhenii/controller/startup/login.php": "a63c6ab8c9dcc34e3e03a62efe9b8f4da89ee013faffee89a3aa385b372f6580",
+      "adminEvhenii/controller/startup/permission.php": "bc8e21f773414979320766af04263a34009e05d3f702df658f20cdc93273d169",
+      "adminEvhenii/controller/startup/sass.php": "55017771fab9525fb73c814c78f827be72df8fff9239cb19566c9593fb014b0c",
+      "adminEvhenii/controller/startup/session.php": "d9135f37e361f91f3b182efcff54900bf24ac824633d182ad93fef495ecf9ba2",
+      "adminEvhenii/controller/startup/setting.php": "a10ff6b85873248e4ae72d799f62b186b1e3c5ea3a3043e7744d96cfa2bb21bd",
+      "adminEvhenii/controller/startup/startup.php": "0df2aede4f2059fd9b7e4b5e6a6e12586ac61fdc20ba2c7503124fc50e5d0dd2",
+      "adminEvhenii/index.php": "14f442bbf187f52b9d997ff83b3358612fbe85e030f494ca0e084b520be85ad3",
+      "adminEvhenii/model/sale/order.php": "e9005eb4597f6903be133f4d0077d0d4d68a1a6372f68357ce5c25ce8d857b5d",
+      "adminEvhenii/model/setting/event.php": "37861fdaefa84c816ebf313c37ffb333e233eb71a5faa98980c8cc79195ecb24",
+      "adminEvhenii/model/setting/startup.php": "899f055e1b43424cb03bc54f842a00649f954e93d0e00627a2ef1b0aee5dc073",
+      "extension/PintaNovaPoshtaCod/admin/controller/payment/pinta_nova_poshta_cod.php": "33d554108fb10f6482469ba54a12e6f1784757d1cfa41103b3a4ad498b3b77bc",
+      "extension/PintaNovaPoshtaCod/admin/controller/shipping/internet_document.php": "8e07945dacc5b3fab2681266ac4d03811e9b702d22b067008d02c1d71c59d567",
+      "extension/PintaNovaPoshtaCod/admin/controller/shipping/pinta_nova_poshta.php": "e9e3006b79d40f65dd38175c809f8abfb50d003daf113070e46d7bf61f203dd3",
+      "extension/PintaNovaPoshtaCod/admin/controller/shipping/pinta_nova_poshta/pinta_validate_api_result_trait.php": "03eb30d0c3f24a17912fdfccdc7f320357c107417ba450f5d93bda7be01a6eb3",
+      "extension/PintaNovaPoshtaCod/admin/model/module/city.php": "75450aadd80728a079e14a69acd4ef98599956f7d9a73e44ad460c4ff42e24d6",
+      "extension/PintaNovaPoshtaCod/admin/model/module/counterparty.php": "4ac16b4704a98463149f08780504d218aaaf6b4c82e14aca26b0b32046020ae6",
+      "extension/PintaNovaPoshtaCod/admin/model/module/internet_document.php": "fe199ddb226f0d9a75559e5dcff8cc52be93300527f1dc6568b7a9a5a80d1197",
+      "extension/PintaNovaPoshtaCod/admin/model/module/street.php": "8b046699e6300bf10e35f11729226044e9e735d8ff6975a1f52b0ee4c11c3a5a",
+      "extension/PintaNovaPoshtaCod/admin/view/javascript/pinta_nova_poshta/common.js": "9ae5abd0a4a1eb797fee03723dd688fb772f15f5dcdc1756a3e8d966d0bfea69",
+      "extension/PintaNovaPoshtaCod/admin/view/template/shipping/pinta_nova_poshta/create_internet_document.twig": "68424704f5298a9f0c80edf35727decc37a69ff719136049841a1ef3a402bac5",
+      "extension/PintaNovaPoshtaCod/system/library/pintanovaposhta/pintacounterparty.php": "44d138edca35b83eb7e124161cf8fc0fc19d084db8a635f32b901cc00b773bb7",
+      "extension/PintaNovaPoshtaCod/system/library/pintanovaposhta/pintainternetdocument.php": "0a9216e5ab48daac8faa5851ad39cc0ddef9519e6e3fbaae4f77d221d13b00cc",
+      "extension/PintaNovaPoshtaCod/system/library/pintanovaposhta/pintanovaposhtaapi.php": "729c3c6cee6b04f925967a9e42277b9702e51876b37d6df119ba40258b20b19c",
+      "system/config/admin.php": "1a986df8cb5f5ba22d82aadb3fc4d05960abc20c6a1095486c4a30c61331f9af",
+      "system/config/default.php": "c56d41d08336aac6d652a3b5ecd87a11be05334a22b4ff9017fa03dbeaf70870",
+      "system/engine/action.php": "91a4af3775e9c1c599faf55f2b1f9eac89b89d178657c6bd8ec7b61054373e79",
+      "system/engine/autoloader.php": "c310f1cac53180b301dd048f0175a359bee1cce70f4c942851b8ad30539f99b3",
+      "system/engine/config.php": "d1a72407c77f6ddc448ccae90d489cd5907e5cb4108e7decca4b46eb3541bd0d",
+      "system/engine/controller.php": "8a51ef1124da3b9b6ae91b2ec914df1f2bbe95142b753431f7cfa0e750cbe03b",
+      "system/engine/event.php": "7c132a4dd174921461b4774647aee7f4b3974c53fabe84e6a0ccd74b0d737524",
+      "system/engine/factory.php": "fd8a8940915d9ae3db2c0bcd5cebe22544f653257264780066e3a5a2ae7cf7fe",
+      "system/engine/loader.php": "ea2098450ddc567747e2d89001d997ce921e966a313cafb680a308ee369a4723",
+      "system/engine/model.php": "cd3e0426bf80c00e654ba518fa4c0b3e8468666c39f86011e11029ecbe28d950",
+      "system/engine/proxy.php": "569af8b50909be25dcd37f6d8afc3478ada08af3d59d3ec5d166187662ca44d9",
+      "system/engine/registry.php": "325c6e0f67fdfda2092670485b3ac38fcc91167890c2531609acaeb873933637",
+      "system/framework.php": "7bd21f9b2d9167b3f70c1899687c187d769022443d2091a3de930a41c14b5088",
+      "system/library/request.php": "483c1a44ec0c7c9d6969570d766c1cd8c40e7646d19da0f7a11d0dda7979f52c",
+      "system/library/template.php": "7fde6b9569aa8794f14dee8c8c0677591453342defe0882c208d4b6896b306d0",
+      "system/library/template/twig.php": "92a6ac0af6ff88053ecafe0acd86e249bddaab664080a549c0a502179f537a69",
+      "adminEvhenii/model/setting/extension.php": "67edb7eb7399f35de511db3239815e43c4bf1271771d79bed63cf9f0e58f2dfb",
+      "adminEvhenii/model/setting/setting.php": "42315b685d89a26ffcc989c5de999aed736044b3560d9344dd4d8d528ea5a1d7"
+    },
+    "admin_events": [
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "admin/controller/sale/order.call/after",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventAdminControllerSaleOrderAddHistoryAfter",
+        "status": "1",
+        "sort_order": 0
+      },
+      {
+        "code": "analytics_ps_enhanced_measurement",
+        "trigger": "admin/view/sale/order_info/before",
+        "action": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventAdminViewSaleOrderInfoBefore",
+        "status": "1",
+        "sort_order": 0
+      },
+      {
+        "code": "captcha_ps_google_recaptcha",
+        "trigger": "admin/controller/common/login.login/after",
+        "action": "extension/ps_google_recaptcha/captcha/ps_google_recaptcha.eventAdminControllerCommonLoginLoginAfter",
+        "status": "1",
+        "sort_order": 0
+      },
+      {
+        "code": "captcha_ps_google_recaptcha",
+        "trigger": "admin/view/common/header/before",
+        "action": "extension/ps_google_recaptcha/captcha/ps_google_recaptcha.eventAdminViewCommonHeaderBefore",
+        "status": "1",
+        "sort_order": 0
+      },
+      {
+        "code": "captcha_ps_google_recaptcha",
+        "trigger": "admin/view/common/login/before",
+        "action": "extension/ps_google_recaptcha/captcha/ps_google_recaptcha.eventAdminViewCommonLoginBefore",
+        "status": "1",
+        "sort_order": 0
+      },
+      {
+        "code": "captcha_ps_google_recaptcha",
+        "trigger": "admin/view/setting/setting/before",
+        "action": "extension/ps_google_recaptcha/captcha/ps_google_recaptcha.eventAdminViewSettingSettingBefore",
+        "status": "1",
+        "sort_order": 0
+      },
+      {
+        "code": "module_ps_product_category_filter",
+        "trigger": "admin/model/catalog/product.editProduct/after",
+        "action": "extension/ps_product_category_filter/module/ps_product_category_filter.eventAdminModelCatalogProductEditProductAfter",
+        "status": "1",
+        "sort_order": 0
+      },
+      {
+        "code": "module_ps_product_category_filter",
+        "trigger": "admin/view/catalog/category_form/before",
+        "action": "extension/ps_product_category_filter/module/ps_product_category_filter.eventAdminViewCatalogCategoryFormBefore",
+        "status": "1",
+        "sort_order": 0
+      },
+      {
+        "code": "admin_currency_add",
+        "trigger": "admin/model/localisation/currency.addCurrency/after",
+        "action": "event/currency",
+        "status": "1",
+        "sort_order": 1
+      },
+      {
+        "code": "admin_currency_edit",
+        "trigger": "admin/model/localisation/currency.editCurrency/after",
+        "action": "event/currency",
+        "status": "1",
+        "sort_order": 1
+      },
+      {
+        "code": "admin_currency_setting",
+        "trigger": "admin/model/setting/setting.editSetting/after",
+        "action": "event/currency",
+        "status": "1",
+        "sort_order": 1
+      },
+      {
+        "code": "admin_mail_affiliate_approve",
+        "trigger": "admin/model/customer/customer_approval.approveAffiliate/after",
+        "action": "mail/affiliate.approve",
+        "status": "1",
+        "sort_order": 1
+      },
+      {
+        "code": "admin_mail_affiliate_deny",
+        "trigger": "admin/model/customer/customer_approval.denyAffiliate/after",
+        "action": "mail/affiliate.deny",
+        "status": "1",
+        "sort_order": 1
+      },
+      {
+        "code": "admin_mail_customer_approve",
+        "trigger": "admin/model/customer/customer_approval.approveCustomer/after",
+        "action": "mail/customer.approve",
+        "status": "1",
+        "sort_order": 1
+      },
+      {
+        "code": "admin_mail_customer_deny",
+        "trigger": "admin/model/customer/customer_approval.denyCustomer/after",
+        "action": "mail/customer.deny",
+        "status": "1",
+        "sort_order": 1
+      },
+      {
+        "code": "admin_mail_customer_transaction",
+        "trigger": "admin/model/customer/customer.addTransaction/after",
+        "action": "mail/transaction",
+        "status": "1",
+        "sort_order": 1
+      },
+      {
+        "code": "admin_mail_gdpr",
+        "trigger": "admin/model/customer/gdpr.editStatus/after",
+        "action": "mail/gdpr",
+        "status": "1",
+        "sort_order": 1
+      },
+      {
+        "code": "admin_mail_return",
+        "trigger": "admin/model/sale/returns.addHistory/after",
+        "action": "mail/returns",
+        "status": "1",
+        "sort_order": 1
+      },
+      {
+        "code": "admin_mail_reward",
+        "trigger": "admin/model/customer/customer.addReward/after",
+        "action": "mail/reward",
+        "status": "1",
+        "sort_order": 1
+      },
+      {
+        "code": "admin_mail_user_authorize",
+        "trigger": "admin/controller/common/authorize.send/after",
+        "action": "mail/authorize",
+        "status": "1",
+        "sort_order": 1
+      },
+      {
+        "code": "admin_mail_user_authorize_reset",
+        "trigger": "admin/model/user/user.addToken/after",
+        "action": "mail/authorize.reset",
+        "status": "1",
+        "sort_order": 1
+      },
+      {
+        "code": "admin_mail_user_forgotten",
+        "trigger": "admin/model/user/user.addToken/after",
+        "action": "mail/forgotten",
+        "status": "1",
+        "sort_order": 1
+      },
+      {
+        "code": "statistics_return_delete",
+        "trigger": "admin/model/sale/returns.deleteReturn/after",
+        "action": "event/statistics.deleteReturn",
+        "status": "1",
+        "sort_order": 1
+      },
+      {
+        "code": "pinta_nova_poshta_admin_controller_sale_order_after",
+        "trigger": "admin/view/sale/order_info/after",
+        "action": "extension/PintaNovaPoshtaCod/payment/pinta_nova_poshta_cod.alterOrderAddedBtn",
+        "status": "1",
+        "sort_order": 99
+      }
+    ],
+    "extension_codes": [
+      "PintaNovaPoshtaCod",
+      "SimpleCheckout",
+      "ciaccountsidebar",
+      "dv_dialogify",
+      "dv_opencart_patch",
+      "dv_simple_html_dom",
+      "hutko",
+      "mono_chast",
+      "oc_language_example",
+      "oc_ocmod_example",
+      "oc_payment_example",
+      "oc_theme_example",
+      "opencart",
+      "ps_enhanced_measurement",
+      "ps_google_recaptcha",
+      "ps_google_sitemap",
+      "ps_live_search",
+      "ps_popup_dialog_box",
+      "ps_product_category_filter",
+      "pumb_credit",
+      "telegram_notify",
+      "ukrainian",
+      "ventocart"
+    ]
+  },
+  "edits": [
+    {
+      "old_sha256": "2138e15643ce4bced1b49698955c78f443617e4b59877325113261042d1c7b93",
+      "new_sha256": "4d84bb039d7c43ede234d76deef698b8e0e7886184800e6bf6eeaaa7a19ca0af",
+      "old_bytes": 60586,
+      "new_bytes": 70036
+    }
+  ],
+  "candidate_sha256": "8cf559b4e42fa830fe6a32e7793f8ed9ab698ee0afa74ebf51487910b38b9472",
+  "encoded_payload_exact": true,
+  "mutation_modes_released": false
+}

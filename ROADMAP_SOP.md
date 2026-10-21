@@ -10,15 +10,15 @@ writer ownership, page-ID routing, and Definition of Done.
 
 ## 0. Core invariants
 
-> **Automatic independent review — owner 2026-10-14, ALL Booster series:**
+> **Automatic independent review — owner 2026-10-14 / 2026-10-19:**
 > Follow docs/BOOSTER_AUTOMATIC_PEER_REVIEW_20261014.md. Codex initiates actual
-> Claude review through the subscription CLI when the required assigned stage
-> is ready; the owner need not trigger it manually. For GSS also read
-> docs/GSS_OPTIMIZATION_RULES_20261014.md. A review verdict is exact-stage evidence,
-> not automatic Done, Notion/dashboard mutation, commit/push, deployment or owner
-> QA. Existing task-specific writer/authority/DoD gates remain. GSS's next-stage
-> analysis-assistance trial creates no competing code/Git/status writer.
-
+> subscription Claude at a ready required stage. Its non-GSS efficiency procedure
+> applies to ongoing/new tasks; GSS retains its prior shared/specific controls and
+> docs/GSS_OPTIMIZATION_RULES_20261014.md. A verdict is exact-stage evidence, not
+> Done, status mutation, Git/deployment authority or owner QA. Explicit owner gates
+> and writer/DoD authority remain. A task report/ledger is local evidence/work state,
+> not canonical status: Notion remains canonical and ROADMAP_FLOW its mirror.
+> GSS assistance creates no competing main-code/Git/status writer.
 
 > **GSS-only amendment (owner decision 2026-09-28):** follow
 > `docs/GSS_GOVERNANCE.md` and the GSS exception in root `AGENTS.md`.
@@ -534,7 +534,13 @@ If a task is absent, search by title or distinctive keywords, verify its
   legal work also requires legal review and verified real business details.
 
 Local checks, source-copy checks, and dry-runs are not deployment or production
-proof.
+proof. For server patches, the owner-pasted SSH command output must match the
+reviewed patch hash, unchanged command-packet hash and expected receipt in the
+report (`done=ok`, target states and backup paths); the owner then performs the
+required smoke tests and manual QA.
+An expected complete receipt is checked mechanically under
+`docs/BOOSTER_AUTOMATIC_PEER_REVIEW_20261014.md`; it does not trigger another
+model review by itself.
 
 ## 7. Writer and authority summary
 

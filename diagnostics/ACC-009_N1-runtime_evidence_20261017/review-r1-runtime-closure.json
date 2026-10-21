@@ -1,0 +1,42 @@
+{
+  "task": "ACC-009-N1-runtime",
+  "request_id": "5c588f3e-0e6f-4e99-bf36-20ba558ad070",
+  "verified_utc": "2026-10-17T11:16:13.568637+00:00",
+  "original_process_id": 1152,
+  "controlled_session_id": 37697,
+  "original_exit_code": 0,
+  "frozen_inputs_unchanged": 14,
+  "reused_source_inputs_unchanged": 53,
+  "git_head_index_unchanged": true,
+  "runners_unchanged": [
+    {
+      "id": "ACC-009-N1",
+      "patch": "patches\\ACC-009-N1_recipient-snapshot-defaults_20261017.php",
+      "patch_sha256": "b4fe8048951c1bde02567b095d4febbbb41ad86cc33c395f7e9a46f86f172d8f",
+      "before_sha256": "8e07945dacc5b3fab2681266ac4d03811e9b702d22b067008d02c1d71c59d567",
+      "after_sha256": "43dc466f5332d45acecc5e1cb2e82e8f712268af568d6f16de90809a3dd60da1",
+      "edits": 3,
+      "target": "extension/PintaNovaPoshtaCod/admin/controller/shipping/internet_document.php"
+    },
+    {
+      "id": "ACC-009-N3",
+      "patch": "patches\\ACC-009-N3_doors-helper-dependency_20261017.php",
+      "patch_sha256": "6d06a8c57c13211475ae7c1e4a3b4a78f32a81ff6b74b2a8a2065a7c5abf62f0",
+      "before_sha256": "43dc466f5332d45acecc5e1cb2e82e8f712268af568d6f16de90809a3dd60da1",
+      "after_sha256": "2138e15643ce4bced1b49698955c78f443617e4b59877325113261042d1c7b93",
+      "edits": 1,
+      "target": "extension/PintaNovaPoshtaCod/admin/controller/shipping/internet_document.php"
+    }
+  ],
+  "packet_sha256": "fadc048da0008b4206b83b6982a00327ff59aee58bb2f0ea64cbf90cb1cd62c9",
+  "review_path": "diagnostics/ACC-009_N1-runtime_claude-review-r1_20261017.md",
+  "review_sha256": "6006bb05b8f2fc2356c620ecd712ee6709cdce359a6d5bb3d031a0276251d109",
+  "original_result_sha256": "374e58e03dfb99c0f1098bbd8184b142fde7b0496a79139055cc82d3693849cc",
+  "actual_model": "claude-opus-5-5",
+  "effort": "high",
+  "subscription_verified": true,
+  "is_using_overage": false,
+  "api_fallback": false,
+  "tools_mcp_disabled": true,
+  "boundary": "Identity closure only. Read full actual verdict before release. N1 owner apply/QA and N3 remote gate remain."
+}

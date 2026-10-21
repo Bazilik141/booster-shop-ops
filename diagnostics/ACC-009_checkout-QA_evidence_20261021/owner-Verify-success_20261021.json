@@ -1,0 +1,17 @@
+{
+  "task": "ACC-009-QA",
+  "step": "Verify",
+  "acceptance": "expected_receipt_mechanically_closed",
+  "runner_sha256": "55f7efc8d23a1a18959926cbc1c4dd9c3193d06249ba30a54b920ca73171c2a6",
+  "owner_PS_sha256": "fbeb4b6cc635813893334da9eced9fe3abbcf62a824c934bcef2d26f1c2e6de8",
+  "remote_script_identity_matched": true,
+  "capture": "work\\acc009-checkout-qa-20261021\\owner-receipts\\Verify-20261021T121309764Z-0ace4e1e.json",
+  "capture_sha256": "85c0ee240414d4fc348fcaad7108ac4b07fd18519c5d5874cdc60715153982d3",
+  "remote_runner_sha_verified": true,
+  "PHP": "/usr/local/bin/php 8.0.30",
+  "production_targets_changed": false,
+  "agent_transport_or_model_call": false,
+  "next_owner_step": "Preflight",
+  "Apply_released": false,
+  "accepted_utc": "2026-10-21T12:14:21.307954+00:00"
+}

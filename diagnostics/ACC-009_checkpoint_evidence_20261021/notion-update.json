@@ -1,0 +1,60 @@
+{
+  "task": "ACC-009",
+  "page_id": "3f86bf20-bdb4-81ae-91a5-e6e3326077ab",
+  "url": "https://app.notion.com/p/3f86bf20bdb481ae91a5e6e3326077ab?pvs=204",
+  "authority": "Direct owner one-time Codex exception confirmed in this chat; consumed",
+  "result": "verified_update",
+  "before": {
+    "Blocker": "",
+    "Category": "Account",
+    "Current Owner": "",
+    "Last Updated": "2026-10-13",
+    "Name": "ACC-009 — Профіль: необов'язкові поля (по батькові, Telegram, Viber) і українська валідація ПІБ",
+    "Order": "",
+    "Owner Decision": "",
+    "Page / Zone": "custom\\_field registry (DB metadata); account/edit; adminEvhenii customer card; order snapshot display",
+    "Primary Tool": "",
+    "Roadmap ID": "ACC-009",
+    "Sheet Status": "",
+    "Source": "",
+    "Stage": "",
+    "Status": "Not started",
+    "Task Type": "Feature / Backend + DB metadata",
+    "url": "https://app.notion.com/p/3f86bf20bdb481ae91a5e6e3326077ab"
+  },
+  "after": {
+    "Blocker": "",
+    "Category": "Account",
+    "Current Owner": "Codex",
+    "Last Updated": "2026-10-21",
+    "Name": "ACC-009 — Профіль: необов'язкові поля (по батькові, Telegram, Viber) і українська валідація ПІБ",
+    "Order": "",
+    "Owner Decision": "2026-10-21: Owner confirmed QA OK for the checkout follow-up, requested a scoped checkpoint commit/push and new-chat handoff, and explicitly granted Codex this one-time ACC-009 Notion update. Separately approved courier-recipient policy and preparation do not release N3/C2 or WP3b/c. No whole-task Done decision; draft open/refresh notification suppression is not separately confirmed.",
+    "Page / Zone": "custom\\_field registry (DB metadata); account/edit; adminEvhenii customer card; order snapshot display",
+    "Primary Tool": "Codex",
+    "Roadmap ID": "ACC-009",
+    "Sheet Status": "",
+    "Source": "handoffs/ACC-009_CONTINUE_20261021.md; diagnostics/ACC-009_H1_implementation_report_20261019.md; diagnostics/ACC-009_checkpoint_evidence_20261021/checkpoint-manifest.json",
+    "Stage": "C1+H1 and the checkout QA follow-up are deployed; owner QA accepted. N1 is deployed with detailed name QA partial. Continue with N3/C2; original WP3b profile/validation and WP3c metadata remain separate.",
+    "Status": "In progress",
+    "Task Type": "Feature / Backend + DB metadata",
+    "url": "https://app.notion.com/p/3f86bf20bdb481ae91a5e6e3326077ab"
+  },
+  "changed_properties": [
+    "Status",
+    "Current Owner",
+    "Primary Tool",
+    "Last Updated",
+    "Stage",
+    "Owner Decision",
+    "Source"
+  ],
+  "other_properties_preserved": true,
+  "content_replaced": false,
+  "task_done": false,
+  "metadata": {
+    "type": "page"
+  },
+  "page_last_edited_at": "2026-10-21T12:34:56.295Z",
+  "recorded_utc": "2026-10-21T12:35:15.888Z"
+}

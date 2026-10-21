@@ -1,0 +1,101 @@
+{
+  "closed_utc": "2026-10-20T19:29:55.129435+00:00",
+  "request_id": "d9c3597f-132e-4d65-8d14-18104b73a5ad",
+  "actual_model_observed": [
+    "claude-opus-5-5"
+  ],
+  "transport": "Native subscription CLI2.1.303, tools/MCP/hooks disabled, no API fallback/paid overage",
+  "effort_requested": "high; no claim of opaque internal reasoning allocation",
+  "full_actual_response_read": true,
+  "response_sha256": "dc9cab9731880c519e737a677f0fc07e56ad4a53d53ff44deb78b83400944599",
+  "verdict": "CODE/composition OK for owner Upload/Verify/Preflight ONLY",
+  "all36_declared_dependencies_exact_after_completion_and_at_closure": true,
+  "runner_sha256": "3403f0f2d15c26e81963db5ed7511cd0d38f06eb37369de4874281a16bea6753",
+  "runner_bytes": 1087629,
+  "PS_packet_sha256": "82362b9f64061c916ae832749d01aff1d94123b52c9a784e2fce4d4183d26ae7",
+  "code_changed_after_review": false,
+  "mandatory": {
+    "M1": {
+      "state": "OPEN_owner_execution_proof_not_CODE_defect",
+      "required": "New Upload, separate Verify and separate Preflight of exact new bytes. All original source/metadata/PK/engine/autocommit/void/event/Mono/web/OPcache gates must pass; no blind retries or unreviewed code changes on refusal. Mechanical complete expected receipt checks, substantive deviations need targeted assessment."
+    },
+    "M2": {
+      "state": "CLOSED_recorded_no_code_change",
+      "fact": "Exact nullability map NO/YES/YES is admission pin; any drift, including a secondary change to NOTNULL, STOP. No schema change before Apply without appropriate fresh assessment/review."
+    },
+    "M3": {
+      "state": "CLOSED_recorded_no_code_change",
+      "fact": "Unchanged native NCRM legacy filter accepts order_add only. Initial fixture later-status expectation was wrong, corrected to existing behavior; no production regression or new NCRM status feature claimed."
+    }
+  },
+  "optional": {
+    "O1": "Recorded only; same loop visibly checks both secondary nullable pins; no automatic extra mutant round.",
+    "O2": "Existing runner/method/payload/manifest hash bindings retained; no test self-pin code added automatically.",
+    "O3": "original_accepted_C1_fixture_modified=false refers only to retained original file; working copy intentionally differs as native-fixture.diff proves.",
+    "O4": "Historical rows from non-native writers with no qualifying positive history remain unmeasured, same accepted history-derived residual class. No counts/data reads/cleanup/replay added.",
+    "O5": "Absent leading order_id index remains recorded performance concern only; no roadmap/status/index write or new read in this scope.",
+    "O6": "Later Apply must retain accepted getOrder missing-row-only contract, ACC009 rollback before Mono rollback with distinct backup roots, owner-only Unlock as needed."
+  },
+  "review_narrative_limits": [
+    "Snapshot proves schema metadata, not order-data health.",
+    "General SQL-mode effects are broader than INSERT; acceptance here rests on unchanged concrete predicates/integer writes, not a universal SQL-mode claim.",
+    "SQLite validates standard NULL semantics only; no native MySQL, concurrency, performance or delivery proof invented."
+  ],
+  "facts": "diagnostics/ACC-009_schema-admission_evidence_20261020/schema-release-facts.json",
+  "repository_scope": {
+    "HEAD_before": "306ceb7d99db95d4aa9d5f5476338e43ad5fcaa4",
+    "HEAD_after": "306ceb7d99db95d4aa9d5f5476338e43ad5fcaa4",
+    "tracked_paths_before": [
+      ".gitattributes",
+      ".gitignore",
+      "AGENTS.md",
+      "Booster Shop CRM вЂ” РѕР±Р»С–Рє С‚РѕРІР°СЂС–РІ - Р Р Р¦.csv",
+      "CLAUDE.md",
+      "CODEX_INSTRUCTIONS.md",
+      "CODEX_WORKFLOW.md",
+      "README.md",
+      "ROADMAP_SOP.md",
+      "Taxer_import_2026-04-01_2026-06-30.csv",
+      "context-index.md",
+      "dashboard/booster-dashboard.html",
+      "design/DECISIONS.md",
+      "docs/CANON_v1_DRAFT_product-content_20260913.md",
+      "patches/CAT-004_variant-selector_20260916.php",
+      "plans/3D-P_sku-naming-convention_20260807.md",
+      "plans/CAT-004_op-rare-packs_identifier-canon_20260916.md",
+      "templates/codex-report-template.md",
+      "templates/handoff-template.md",
+      "Р’РµСЂСЃС–СЏ 153, 28 СЃРµСЂРї. 2026вЂЇСЂ., 0946.csv",
+      "Р’РµСЂСЃС–СЏ 29, 23 СЃРµСЂРї. 2026вЂЇСЂ., 1600.txt"
+    ],
+    "tracked_paths_after": [
+      ".gitattributes",
+      ".gitignore",
+      "AGENTS.md",
+      "Booster Shop CRM вЂ” РѕР±Р»С–Рє С‚РѕРІР°СЂС–РІ - Р Р Р¦.csv",
+      "CLAUDE.md",
+      "CODEX_INSTRUCTIONS.md",
+      "CODEX_WORKFLOW.md",
+      "README.md",
+      "ROADMAP_SOP.md",
+      "Taxer_import_2026-04-01_2026-06-30.csv",
+      "context-index.md",
+      "dashboard/booster-dashboard.html",
+      "design/DECISIONS.md",
+      "docs/CANON_v1_DRAFT_product-content_20260913.md",
+      "patches/CAT-004_variant-selector_20260916.php",
+      "plans/3D-P_sku-naming-convention_20260807.md",
+      "plans/CAT-004_op-rare-packs_identifier-canon_20260916.md",
+      "templates/codex-report-template.md",
+      "templates/handoff-template.md",
+      "Р’РµСЂСЃС–СЏ 153, 28 СЃРµСЂРї. 2026вЂЇСЂ., 0946.csv",
+      "Р’РµСЂСЃС–СЏ 29, 23 СЃРµСЂРї. 2026вЂЇСЂ., 1600.txt"
+    ],
+    "assessment": "All declared content exact; no Git mutations by this executor. Outside-set bookkeeping creates no scoped content invalidation."
+  },
+  "main_Apply_released": false,
+  "schema_index_SQL_mode_changes_authorized": false,
+  "owner_operations_executed_by_agent": false,
+  "new_model_call_for_M2_M3_records": false,
+  "next": "Owner current normal PS new private Upload; then Verify/Preflight separate. Retain previous stage/state, no source export or diagnostic repeat."
+}

@@ -1,0 +1,72 @@
+{
+  "received_utc": "2026-10-20T19:20:18.224669+00:00",
+  "task": "ACC-009-C1-H1",
+  "assessment": "PASS expected capture only; actual nullable schema is a substantive main-admission deviation requiring targeted CODE assessment.",
+  "source": {
+    "path": "work/acc009-history-schema-20261020/owner-receipts/ACC-009_history-schema-inspect_owner-receipt_20261020T191706079Z_7ef77dad7734.json",
+    "sha256": "255bf7ac8cf956de523778d39ce00059be5eb9b1219211e2fc4fc11e38cd04b8"
+  },
+  "owner_JSON": {
+    "task": "ACC-009-history-inspect",
+    "time": "2026-10-20T19:17:09+00:00",
+    "php_version": "8.0.30",
+    "db_access": "SELECT_ONLY",
+    "metadata": {
+      "columns": [
+        {
+          "field": "order_history_id",
+          "type": "int(11)",
+          "key_type": "PRI",
+          "extra": "auto_increment",
+          "nullable": "NO"
+        },
+        {
+          "field": "order_id",
+          "type": "int(11)",
+          "key_type": "",
+          "extra": "",
+          "nullable": "YES"
+        },
+        {
+          "field": "order_status_id",
+          "type": "int(11)",
+          "key_type": "",
+          "extra": "",
+          "nullable": "YES"
+        }
+      ],
+      "primary_columns": [
+        "order_history_id"
+      ],
+      "table": {
+        "engine": "InnoDB",
+        "next_id_positive": true
+      },
+      "checks": {
+        "history_integer_nonnull": "fail",
+        "history_primary_auto_increment": "ok",
+        "history_engine_nextid": "ok",
+        "default_autocommit": "ok",
+        "order_id_leading_index": "absent",
+        "h1_events": "ok",
+        "checkout_events": "ok",
+        "startup": "ok",
+        "theme": "ok",
+        "providers": "ok",
+        "order_session_columns": "ok",
+        "sql_strict_mode": "not_strict"
+      },
+      "scope": "three_history_columns_plus_remaining_metadata_gates_no_business_rows"
+    },
+    "done": "ok"
+  },
+  "stream_hashes_base64_lengths_exact": true,
+  "known_stderr_only": true,
+  "SSH_and_PHP_exit": 0,
+  "cause_identified": "order_id and order_status_id int11 nullable YES; primary history_id remains int11 NOT NULL/PK/auto_increment. Old guard demanded NO for all3.",
+  "nonblocking_existing_facts": "order_id leading index absent (performance only under current contract), sql_mode not_strict (report-only). No index/schema/SQL-mode change authorized.",
+  "remaining_metadata_gate_limit": "All12 snapshot values captured. Diagnostic checkout-event check advisory; main original gates still re-run in later Preflight. No web proof or Apply.",
+  "current_runner": "4a15dbcf2450b7ca90312cc9a930c1c13cd0acdf145b4d39929c504f41861799",
+  "new_model_call_for_mechanical_capture_closure": false,
+  "substantive_assessment": "Combine with reviewed minimal admission-only successor; do not change live schema, ignore NULL data silently, add indexes or replay notifications."
+}

@@ -1,0 +1,54 @@
+{
+  "checks_passed": 15,
+  "checks": [
+    "auth courier clear immediately blocks and stays specific after real receiver save",
+    "nonNP method does not inherit middlename requirement from a saved courier address",
+    "400ms input debounce persists and enables CTA without blur/payment/reload or extra write",
+    "native declaration accepts blur-saved recipient",
+    "saved 8 -> courier canonical metadata + receiver agree",
+    "saved 8 noncourier clear -> saved courier: loading blocked then specific required hint, including stale quote",
+    "saved 9 -> courier canonical metadata + receiver agree",
+    "saved 9 noncourier clear -> saved courier: loading blocked then specific required hint, including stale quote",
+    "early click drains slow real receiver save, then one accepted declaration and fictional provider",
+    "guest middlename uses native register autosave and declaration",
+    "guest courier address commit succeeds without address-confirmed status alert",
+    "finish refusal -> corrected retry -> success removes resolved alert box and shows ready hint",
+    "layout/long hint/no overflow/disabled/focus/hover/active width 412",
+    "layout/long hint/no overflow/disabled/focus/hover/active width 768",
+    "layout/long hint/no overflow/disabled/focus/hover/active width 1280"
+  ],
+  "layouts": [
+    {
+      "width": 412,
+      "font": 15,
+      "color": "rgb(220, 38, 38)",
+      "weight": "600",
+      "gap": "12px",
+      "scroll": 412,
+      "viewport": 412
+    },
+    {
+      "width": 768,
+      "font": 15,
+      "color": "rgb(220, 38, 38)",
+      "weight": "600",
+      "gap": "12px",
+      "scroll": 768,
+      "viewport": 768
+    },
+    {
+      "width": 1280,
+      "font": 12.5,
+      "color": "rgb(220, 38, 38)",
+      "weight": "600",
+      "gap": "6px",
+      "scroll": 1280,
+      "viewport": 1280
+    }
+  ],
+  "native_PHP_Twig_Request_clean_and_saves": true,
+  "public_CSS_current": true,
+  "external_requests": 0,
+  "production_effects": false,
+  "fake_boundaries": "loopback HTTP; in-memory registry/session/directory; quote/payment JSON; CAPTCHA; provider HTTP only"
+}

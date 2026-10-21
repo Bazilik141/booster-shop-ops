@@ -1,0 +1,30 @@
+{
+  "closed_utc": "2026-10-20T08:00:55.160480+00:00",
+  "request_id": "903d2cd9-af38-4461-bc58-d5a8128c2b14",
+  "verdict": "Code/Composition Review OK, scoped; mandatory record/prose closures complete",
+  "actual_model": "claude-opus-5-5",
+  "effort": "high",
+  "subscription_verified": true,
+  "native_CLI": "2.1.303 (Claude Code)",
+  "CLI_sha256": "1787c60619bad78543c67e4d9d8a868869c35a904f2a85eb9ea46c4808af196b",
+  "response_sha256": "0110ee320c268705bec1c7432df3ee4997cf611fab8439bf861d0d512f76778b",
+  "full_actual_response_read": true,
+  "all21_declared_dependencies_unchanged_at_completion_and_before_closure": true,
+  "helper_sha256": "6648fbb8e3674699f1ebd5250bbbfc5c2e56de9015e237dc038326c7bafddf7c",
+  "owner_diagnostic_sha256": "78f1f4152eda2275dd1a4a804f25565ae6408db6250f4bf26b2b7ac827b4cfe5",
+  "owner_launcher_sha256": "7e6d00091169c384eb3ba52480c36d7234c93ace29111cf8e37a439ff85e5060",
+  "shared_record_before_sha256": "3d51a192219a251dba3a5bd419ba6987e525a1cb31ece5bf34afc752b7494874",
+  "shared_record_after_sha256": "0e42ee4243cfaac393e064d3625bafa6b67a06d0cf2975084fe779824ae6bc1c",
+  "only_permitted_state_fields_changed": [
+    "updated_utc",
+    "ssh.owner_diagnostic",
+    "ssh.state"
+  ],
+  "executable_bytes_unchanged": true,
+  "owner_action_released": "Paste launcher one-line text in Windows PowerShell once; return only JSON or STOP/policy error. Do not run launcher file with -File.",
+  "unknown_or_stopped_handling": "Targeted assessment, never key generation/questionnaire/forced login",
+  "alias_writer_still_held": true,
+  "production_and_GSS_unchanged": true,
+  "no_owner_ssh_key_access_by_agents": true,
+  "optional_O1_O6": "Recorded only; no new task/provider round. Official instruction-discovery URL was already opened successfully in current session."
+}

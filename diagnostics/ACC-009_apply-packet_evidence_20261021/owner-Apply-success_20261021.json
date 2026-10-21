@@ -1,0 +1,352 @@
+{
+  "task": "ACC-009-C1-H1",
+  "received_utc": "2026-10-21T08:39:55.215863+00:00",
+  "assessment": "PASS_complete_expected_owner_Apply_and_cache_cleanup",
+  "review_request_id": "fa7835e5-e517-4608-be93-81cf49538a0a",
+  "main_runner_sha256": "3403f0f2d15c26e81963db5ed7511cd0d38f06eb37369de4874281a16bea6753",
+  "PS_packet_sha256": "fc5ceb936983cf6e33a7f735855a4e3304a55d903b69f6e2107a9cb2bf1c65cc",
+  "owner_release": "diagnostics/ACC-009_apply-packet_evidence_20261021/owner-Apply-release_20261021.json",
+  "source_apply_utc": "2026-10-21T08:36:09+00:00",
+  "outer_utc": "2026-10-21T08:36:10Z",
+  "capture_files": [
+    {
+      "path": "work\\acc009-private-stage-20261019\\owner-receipts\\ACC-009-C1-H1_apply_20261021T083611204Z_3403f0f2_d3d7e60c.log",
+      "sha256": "276dd91d3dfd823819ee3ba4967c332c3db9e5de8fbf6315a85bcc1092c7a19e"
+    },
+    {
+      "path": "work\\acc009-private-stage-20261019\\owner-receipts\\ACC-009-C1-H1_apply-cache_20261021T083612076Z_3403f0f2_455666c4.log",
+      "sha256": "bd1b13e4bef9a1c00e75619978acbad4b1450774ad9041601f1911d4aa08ee34"
+    },
+    {
+      "path": "work\\acc009-private-stage-20261019\\owner-receipts\\ACC-009-C1-H1_apply-record_20261021T083611268Z_3403f0f2_afec5543.json",
+      "sha256": "44d35e68113afdcdc382edfbf11f892387f98f07018306e8f8eefe65e02df990"
+    }
+  ],
+  "owner_paste": "C:\\Users\\14bez\\.codex\\attachments\\65b40f3e-691d-43d5-aaf2-e601184f674a\\\u0412\u0441\u0442\u0430\u0432\u043b\u0435\u043d\u0438\u0439 \u0442\u0435\u043a\u0441\u0442.txt",
+  "owner_paste_sha256": "c53727379e1607888176e0f0f1847cc7805e7e12aa2d8cedef9319025f75fc6e",
+  "complete_raw_capture_in_paste": true,
+  "actual_PHP_exit": 0,
+  "source_SSH_wrapper_exit": 0,
+  "cleanup_SSH_wrapper_exit": 0,
+  "exact_target_rows": [
+    {
+      "target": "system/library/booster_checkout_readiness.php",
+      "sha256_before": "absent",
+      "backup": "none",
+      "syntax_gate": "php_lint_ok",
+      "sha256_after": "69a7d5fdfb9ee77e34f623f3e4ace59fd3553da102e908ff03f98bfa9e3cb9a8",
+      "changed_files": "1",
+      "action": "applied",
+      "current_before": "absent",
+      "current_after": "69a7d5fdfb9ee77e34f623f3e4ace59fd3553da102e908ff03f98bfa9e3cb9a8"
+    },
+    {
+      "target": "catalog/view/javascript/acc009-checkout.js",
+      "sha256_before": "absent",
+      "backup": "none",
+      "syntax_gate": "not_php",
+      "sha256_after": "8137d8b6a6b79cef1ad8a7910c452e7420c9fa8273bdf63cbbbf3f4c4d0b4771",
+      "changed_files": "1",
+      "action": "applied",
+      "current_before": "absent",
+      "current_after": "8137d8b6a6b79cef1ad8a7910c452e7420c9fa8273bdf63cbbbf3f4c4d0b4771"
+    },
+    {
+      "target": "catalog/controller/checkout/checkout.php",
+      "sha256_before": "dbf4b8b98c5be25286c7e44254484bb78830179092c2340c50f3a81b2949c3a2",
+      "backup": "/home2/boosters/_patch_backups/ACC-009-C1-H1-20261021T083609Z-f3425f58/2.source",
+      "syntax_gate": "php_lint_ok",
+      "sha256_after": "761c051c9286c3022efc1e5deea02979023f2d45600d762cb2d222eda03e4cbf",
+      "changed_files": "1",
+      "action": "applied",
+      "current_before": "dbf4b8b98c5be25286c7e44254484bb78830179092c2340c50f3a81b2949c3a2",
+      "current_after": "761c051c9286c3022efc1e5deea02979023f2d45600d762cb2d222eda03e4cbf"
+    },
+    {
+      "target": "catalog/controller/checkout/confirm.php",
+      "sha256_before": "6365c2a36bb575848cf4f578252f3642454ab8e37626ce7c1c14eabf4f60ac17",
+      "backup": "/home2/boosters/_patch_backups/ACC-009-C1-H1-20261021T083609Z-f3425f58/3.source",
+      "syntax_gate": "php_lint_ok",
+      "sha256_after": "333c43b9da2c6101d44e5676a78648b8ab9b75296380675944fef88a3ee69288",
+      "changed_files": "1",
+      "action": "applied",
+      "current_before": "6365c2a36bb575848cf4f578252f3642454ab8e37626ce7c1c14eabf4f60ac17",
+      "current_after": "333c43b9da2c6101d44e5676a78648b8ab9b75296380675944fef88a3ee69288"
+    },
+    {
+      "target": "catalog/controller/checkout/payment_method.php",
+      "sha256_before": "0497216e9267f92c385ea43b43e09fc0a9531ff5df71a6e7d954d6f816c9b79c",
+      "backup": "/home2/boosters/_patch_backups/ACC-009-C1-H1-20261021T083609Z-f3425f58/4.source",
+      "syntax_gate": "php_lint_ok",
+      "sha256_after": "dc34248a36f05445502aecb4eff2b03accc6e68bf9318b7f699252023821fbe9",
+      "changed_files": "1",
+      "action": "applied",
+      "current_before": "0497216e9267f92c385ea43b43e09fc0a9531ff5df71a6e7d954d6f816c9b79c",
+      "current_after": "dc34248a36f05445502aecb4eff2b03accc6e68bf9318b7f699252023821fbe9"
+    },
+    {
+      "target": "catalog/controller/checkout/register.php",
+      "sha256_before": "db5537a07b093354a8763e3361307e11c89c0948fd646dadec8f0570f9b5a25a",
+      "backup": "/home2/boosters/_patch_backups/ACC-009-C1-H1-20261021T083609Z-f3425f58/5.source",
+      "syntax_gate": "php_lint_ok",
+      "sha256_after": "5858276323363e09ae727e47a5aa13e2918d2d455991feeefa6daf3e52890c2f",
+      "changed_files": "1",
+      "action": "applied",
+      "current_before": "db5537a07b093354a8763e3361307e11c89c0948fd646dadec8f0570f9b5a25a",
+      "current_after": "5858276323363e09ae727e47a5aa13e2918d2d455991feeefa6daf3e52890c2f"
+    },
+    {
+      "target": "catalog/controller/checkout/shipping_address.php",
+      "sha256_before": "51a83f3453fc0027c4d0c34f7eecba335abff11375b9c70f8c723c1b1974ad64",
+      "backup": "/home2/boosters/_patch_backups/ACC-009-C1-H1-20261021T083609Z-f3425f58/6.source",
+      "syntax_gate": "php_lint_ok",
+      "sha256_after": "c5e456585fe2da3f9ede3435b1522848ff2a147dc0ad5418d1773bb65cd832b5",
+      "changed_files": "1",
+      "action": "applied",
+      "current_before": "51a83f3453fc0027c4d0c34f7eecba335abff11375b9c70f8c723c1b1974ad64",
+      "current_after": "c5e456585fe2da3f9ede3435b1522848ff2a147dc0ad5418d1773bb65cd832b5"
+    },
+    {
+      "target": "catalog/view/javascript/checkout-reskin.js",
+      "sha256_before": "ab2403e5aca0de41f83b5d0d88a269302c33534dbec09fcb45daa8212f1fb100",
+      "backup": "/home2/boosters/_patch_backups/ACC-009-C1-H1-20261021T083609Z-f3425f58/7.source",
+      "syntax_gate": "not_php",
+      "sha256_after": "9af1c78e3c12059e06685e5fcc58f39eaa241f734617ad6f5bf638ed2a334392",
+      "changed_files": "1",
+      "action": "applied",
+      "current_before": "ab2403e5aca0de41f83b5d0d88a269302c33534dbec09fcb45daa8212f1fb100",
+      "current_after": "9af1c78e3c12059e06685e5fcc58f39eaa241f734617ad6f5bf638ed2a334392"
+    },
+    {
+      "target": "catalog/view/javascript/checkout-state.js",
+      "sha256_before": "1bafab528a73d5f5cbb6ecaacd0e384b1a875ab80d3ed101f34e1eed32641a29",
+      "backup": "/home2/boosters/_patch_backups/ACC-009-C1-H1-20261021T083609Z-f3425f58/8.source",
+      "syntax_gate": "not_php",
+      "sha256_after": "83a9de5bbb2c6184abd5c9ceb89b23841532b415ad1e4cb14cf48315e4c9f97c",
+      "changed_files": "1",
+      "action": "applied",
+      "current_before": "1bafab528a73d5f5cbb6ecaacd0e384b1a875ab80d3ed101f34e1eed32641a29",
+      "current_after": "83a9de5bbb2c6184abd5c9ceb89b23841532b415ad1e4cb14cf48315e4c9f97c"
+    },
+    {
+      "target": "catalog/view/template/checkout/checkout.twig",
+      "sha256_before": "e334d78880c00022095a8767f5788edeb450044f3fcbad0e3f674faee2acd34a",
+      "backup": "/home2/boosters/_patch_backups/ACC-009-C1-H1-20261021T083609Z-f3425f58/9.source",
+      "syntax_gate": "not_php",
+      "sha256_after": "d989bf48ff149d3cf46f1c827b94a9b3e400e457f7c210f9232331317db1a7f6",
+      "changed_files": "1",
+      "action": "applied",
+      "current_before": "e334d78880c00022095a8767f5788edeb450044f3fcbad0e3f674faee2acd34a",
+      "current_after": "d989bf48ff149d3cf46f1c827b94a9b3e400e457f7c210f9232331317db1a7f6"
+    },
+    {
+      "target": "catalog/view/template/checkout/payment_method.twig",
+      "sha256_before": "974d73f62b98b4a562db1478abcea040cd47b7270675e368173a83b3e43bf7c6",
+      "backup": "/home2/boosters/_patch_backups/ACC-009-C1-H1-20261021T083609Z-f3425f58/10.source",
+      "syntax_gate": "not_php",
+      "sha256_after": "a6de326763d2b27ca214328b6098513cc62974956b40872162e3b935e2117d57",
+      "changed_files": "1",
+      "action": "applied",
+      "current_before": "974d73f62b98b4a562db1478abcea040cd47b7270675e368173a83b3e43bf7c6",
+      "current_after": "a6de326763d2b27ca214328b6098513cc62974956b40872162e3b935e2117d57"
+    },
+    {
+      "target": "catalog/view/template/checkout/register.twig",
+      "sha256_before": "5624640133e4ab0050958e2b3768fed406efbbcc70c554acdcde4a986cf4541b",
+      "backup": "/home2/boosters/_patch_backups/ACC-009-C1-H1-20261021T083609Z-f3425f58/11.source",
+      "syntax_gate": "not_php",
+      "sha256_after": "354d390457dbfb056e5243defe59f4ff587cd690c657e04b853549c6c8cddd20",
+      "changed_files": "1",
+      "action": "applied",
+      "current_before": "5624640133e4ab0050958e2b3768fed406efbbcc70c554acdcde4a986cf4541b",
+      "current_after": "354d390457dbfb056e5243defe59f4ff587cd690c657e04b853549c6c8cddd20"
+    },
+    {
+      "target": "catalog/view/template/checkout/shipping_address.twig",
+      "sha256_before": "b16eddbc3916f4331d1452e9a82a182f8c606aa137554c107fc3c2092f9528a6",
+      "backup": "/home2/boosters/_patch_backups/ACC-009-C1-H1-20261021T083609Z-f3425f58/12.source",
+      "syntax_gate": "not_php",
+      "sha256_after": "627047b08f77597aa7eac0224cc0a55b0c8e9f9d3eecb7d6d23a1be9b2380d2a",
+      "changed_files": "1",
+      "action": "applied",
+      "current_before": "b16eddbc3916f4331d1452e9a82a182f8c606aa137554c107fc3c2092f9528a6",
+      "current_after": "627047b08f77597aa7eac0224cc0a55b0c8e9f9d3eecb7d6d23a1be9b2380d2a"
+    },
+    {
+      "target": "catalog/view/template/checkout/shipping_method.twig",
+      "sha256_before": "21c4f1982f357e428f3a6c843c6cd42ebedce0dd2a1307ec1128c6833268f1db",
+      "backup": "/home2/boosters/_patch_backups/ACC-009-C1-H1-20261021T083609Z-f3425f58/13.source",
+      "syntax_gate": "not_php",
+      "sha256_after": "dbaa962422edf8e9b5d78a28780f0762153bd056970ee63dd8653ac962f37adc",
+      "changed_files": "1",
+      "action": "applied",
+      "current_before": "21c4f1982f357e428f3a6c843c6cd42ebedce0dd2a1307ec1128c6833268f1db",
+      "current_after": "dbaa962422edf8e9b5d78a28780f0762153bd056970ee63dd8653ac962f37adc"
+    },
+    {
+      "target": "extension/PintaNovaPoshtaCod/catalog/controller/payment/pinta_nova_poshta_cod.php",
+      "sha256_before": "67b541503a32fa9621cb65698f387f65aea0de47755a3a2210b011c5ca0b1b41",
+      "backup": "/home2/boosters/_patch_backups/ACC-009-C1-H1-20261021T083609Z-f3425f58/14.source",
+      "syntax_gate": "php_lint_ok",
+      "sha256_after": "ab6ee3f6a61194bf5002389b3419a5e4ae5ead65d4a85f546fe274c4876578d2",
+      "changed_files": "1",
+      "action": "applied",
+      "current_before": "67b541503a32fa9621cb65698f387f65aea0de47755a3a2210b011c5ca0b1b41",
+      "current_after": "ab6ee3f6a61194bf5002389b3419a5e4ae5ead65d4a85f546fe274c4876578d2"
+    },
+    {
+      "target": "extension/PintaNovaPoshtaCod/catalog/view/template/shipping/js_checkout_shipping_address_form.twig",
+      "sha256_before": "d4421dfe312771b15213b5e65306a03424a5462f03952ca014d359a816c4dc08",
+      "backup": "/home2/boosters/_patch_backups/ACC-009-C1-H1-20261021T083609Z-f3425f58/15.source",
+      "syntax_gate": "not_php",
+      "sha256_after": "65d527db2f1a821b520ab80c0be6bf5c600e369268603de10c6dce136d7b94d6",
+      "changed_files": "1",
+      "action": "applied",
+      "current_before": "d4421dfe312771b15213b5e65306a03424a5462f03952ca014d359a816c4dc08",
+      "current_after": "65d527db2f1a821b520ab80c0be6bf5c600e369268603de10c6dce136d7b94d6"
+    },
+    {
+      "target": "extension/hutko/catalog/controller/payment/hutko.php",
+      "sha256_before": "1bb8fe3deec5dc843c4a93d45cc4ac3c23e7cef620b96bb8f032de999baf6b3c",
+      "backup": "/home2/boosters/_patch_backups/ACC-009-C1-H1-20261021T083609Z-f3425f58/16.source",
+      "syntax_gate": "php_lint_ok",
+      "sha256_after": "84c5683b034a7517cab97f3c82df9b7d0745ba5e1885c757630b779f252f57af",
+      "changed_files": "1",
+      "action": "applied",
+      "current_before": "1bb8fe3deec5dc843c4a93d45cc4ac3c23e7cef620b96bb8f032de999baf6b3c",
+      "current_after": "84c5683b034a7517cab97f3c82df9b7d0745ba5e1885c757630b779f252f57af"
+    },
+    {
+      "target": "extension/mono_chast/catalog/controller/payment/mono_chast.php",
+      "sha256_before": "c0cfbb4540c0fb123f2ba31d346b919b5d55300eeaa7b5e45046bf87a153992f",
+      "backup": "/home2/boosters/_patch_backups/ACC-009-C1-H1-20261021T083609Z-f3425f58/17.source",
+      "syntax_gate": "php_lint_ok",
+      "sha256_after": "6c53f4129166dfeb9c8654b33edc99a663925f61d58b0a6cfed700dac76bd2ac",
+      "changed_files": "1",
+      "action": "applied",
+      "current_before": "c0cfbb4540c0fb123f2ba31d346b919b5d55300eeaa7b5e45046bf87a153992f",
+      "current_after": "6c53f4129166dfeb9c8654b33edc99a663925f61d58b0a6cfed700dac76bd2ac"
+    },
+    {
+      "target": "extension/opencart/catalog/controller/payment/bank_transfer.php",
+      "sha256_before": "f3f573881906c9397c575749d16771b029ec0ef95301d9bef9ca5ab9a1303462",
+      "backup": "/home2/boosters/_patch_backups/ACC-009-C1-H1-20261021T083609Z-f3425f58/18.source",
+      "syntax_gate": "php_lint_ok",
+      "sha256_after": "34042f46f2be7821be463f75cf23b04c15b1ce784d9eb244666eae8403b4d5d0",
+      "changed_files": "1",
+      "action": "applied",
+      "current_before": "f3f573881906c9397c575749d16771b029ec0ef95301d9bef9ca5ab9a1303462",
+      "current_after": "34042f46f2be7821be463f75cf23b04c15b1ce784d9eb244666eae8403b4d5d0"
+    },
+    {
+      "target": "extension/opencart/catalog/controller/payment/cheque.php",
+      "sha256_before": "6dd4abd4a7009db8d784d05852f7818bb4feb0140befbe2a0c6f03f5188cc867",
+      "backup": "/home2/boosters/_patch_backups/ACC-009-C1-H1-20261021T083609Z-f3425f58/19.source",
+      "syntax_gate": "php_lint_ok",
+      "sha256_after": "d72668982c2b16891bf27e949ea9a2120d67eb4d8c9f65f0d760c7f2d71ccc83",
+      "changed_files": "1",
+      "action": "applied",
+      "current_before": "6dd4abd4a7009db8d784d05852f7818bb4feb0140befbe2a0c6f03f5188cc867",
+      "current_after": "d72668982c2b16891bf27e949ea9a2120d67eb4d8c9f65f0d760c7f2d71ccc83"
+    },
+    {
+      "target": "extension/opencart/catalog/controller/payment/cod.php",
+      "sha256_before": "be6ce61041d8dc8afd1ef488ece31b5a9e568b52ab11165720ccc479c01cd0da",
+      "backup": "/home2/boosters/_patch_backups/ACC-009-C1-H1-20261021T083609Z-f3425f58/20.source",
+      "syntax_gate": "php_lint_ok",
+      "sha256_after": "e09dec0344f8dde205402a2904d3ca78d4c25ea2ec4d01ed791b999e1af511af",
+      "changed_files": "1",
+      "action": "applied",
+      "current_before": "be6ce61041d8dc8afd1ef488ece31b5a9e568b52ab11165720ccc479c01cd0da",
+      "current_after": "e09dec0344f8dde205402a2904d3ca78d4c25ea2ec4d01ed791b999e1af511af"
+    },
+    {
+      "target": "extension/opencart/catalog/controller/payment/free_checkout.php",
+      "sha256_before": "ce9ea349262195f52b8a98c3da774bef7ceeefae6e3c9567885065b5b3f96630",
+      "backup": "/home2/boosters/_patch_backups/ACC-009-C1-H1-20261021T083609Z-f3425f58/21.source",
+      "syntax_gate": "php_lint_ok",
+      "sha256_after": "e235cacd7e7b3aa9e9c3a459c89df3cdf9ada928431a9577b6f4c301f89e842d",
+      "changed_files": "1",
+      "action": "applied",
+      "current_before": "ce9ea349262195f52b8a98c3da774bef7ceeefae6e3c9567885065b5b3f96630",
+      "current_after": "e235cacd7e7b3aa9e9c3a459c89df3cdf9ada928431a9577b6f4c301f89e842d"
+    },
+    {
+      "target": "extension/pumb_credit/catalog/controller/payment/pumb_credit.php",
+      "sha256_before": "951dcf43a4f4c2712b1f1a124fbac08ed80b57879a5f9bc91ab5cd9bf80a41dd",
+      "backup": "/home2/boosters/_patch_backups/ACC-009-C1-H1-20261021T083609Z-f3425f58/22.source",
+      "syntax_gate": "php_lint_ok",
+      "sha256_after": "9cdcfccd5cd5189de44af2d01bd7c276eb0918aaf9d1ac79275e3c23b32e4885",
+      "changed_files": "1",
+      "action": "applied",
+      "current_before": "951dcf43a4f4c2712b1f1a124fbac08ed80b57879a5f9bc91ab5cd9bf80a41dd",
+      "current_after": "9cdcfccd5cd5189de44af2d01bd7c276eb0918aaf9d1ac79275e3c23b32e4885"
+    },
+    {
+      "target": "system/library/booster_order_notification_guard.php",
+      "sha256_before": "absent",
+      "backup": "none",
+      "syntax_gate": "php_lint_ok",
+      "sha256_after": "5a9c0ad9840b3f420e2aaa11cc9c736894548ac795d986d5b7b1d18a1ca3832d",
+      "changed_files": "1",
+      "action": "applied",
+      "current_before": "absent",
+      "current_after": "5a9c0ad9840b3f420e2aaa11cc9c736894548ac795d986d5b7b1d18a1ca3832d"
+    },
+    {
+      "target": "extension/telegram_notify/catalog/controller/event/telegram.php",
+      "sha256_before": "119ee3340a9797b30f1545c68d2539ed50ce85d52bc1ce8ce1bd810430c56461",
+      "backup": "/home2/boosters/_patch_backups/ACC-009-C1-H1-20261021T083609Z-f3425f58/24.source",
+      "syntax_gate": "php_lint_ok",
+      "sha256_after": "d46a49ea556fadc7a901726c12c3d6ea215b73a4a7a882125eb09fea716fd1ee",
+      "changed_files": "1",
+      "action": "applied",
+      "current_before": "119ee3340a9797b30f1545c68d2539ed50ce85d52bc1ce8ce1bd810430c56461",
+      "current_after": "d46a49ea556fadc7a901726c12c3d6ea215b73a4a7a882125eb09fea716fd1ee"
+    },
+    {
+      "target": "catalog/model/checkout/order.php",
+      "sha256_before": "0324c221cb75cb1aaa04d8b28be5865b295aff3b727139791e03413342c3a800",
+      "backup": "/home2/boosters/_patch_backups/ACC-009-C1-H1-20261021T083609Z-f3425f58/25.source",
+      "syntax_gate": "php_lint_ok",
+      "sha256_after": "2ed58b2d537506e47b01dfc3232f3add75e620194f6089f1fc8e9d6729dabe46",
+      "changed_files": "1",
+      "action": "applied",
+      "current_before": "0324c221cb75cb1aaa04d8b28be5865b295aff3b727139791e03413342c3a800",
+      "current_after": "2ed58b2d537506e47b01dfc3232f3add75e620194f6089f1fc8e9d6729dabe46"
+    }
+  ],
+  "changed_targets": 26,
+  "created_targets": 3,
+  "original_files_backed_up": 23,
+  "backup_path": "/home2/boosters/_patch_backups/ACC-009-C1-H1-20261021T083609Z-f3425f58",
+  "composition_barrier": "PASS_between_C1_23_and_H1_3",
+  "PHP_lint": "PASS",
+  "self_delete": "yes_and_runner_post_state_absent",
+  "runtime_metadata_and_providers": "Equal accepted UA Preflight; no new deviation",
+  "web_runtime": {
+    "php_version": "8.0.30",
+    "sapi": "litespeed",
+    "opcache": {
+      "enabled": true,
+      "validate_timestamps": true,
+      "revalidate_freq": 2
+    },
+    "auto_prepend_file_empty": true,
+    "auto_append_file_empty": true
+  },
+  "sealed_probe_cleanup": "ok",
+  "template_cleanup": {
+    "path": "/home2/boosters/ocartdata/storage/cache/template/",
+    "state": "cleared",
+    "regular_PHP_files_deleted": 66,
+    "directories_retained": 131,
+    "other_regular_files_kept": 0,
+    "vanished_concurrently": 0
+  },
+  "stderr": "Exactly known MYSQL deprecation; SSH native stderr remains owner-console-only. Full owner paste has no unexpected error/STOP.",
+  "authority_and_limits": "Owner source deployment and cache cleanup receipt accepted. No agent owner operations. No UI/functional QA, live delivery, exactly-once or future host-state proof. Backup existence/hash facts are from source backup protocol/receipt; no separate backup-body read was performed.",
+  "new_model_call": false,
+  "Apply_release_consumed": true,
+  "next": "Owner checkout/recipient/readiness/CRM-Telegram QA and Tier1 smoke; do not rerun Apply."
+}

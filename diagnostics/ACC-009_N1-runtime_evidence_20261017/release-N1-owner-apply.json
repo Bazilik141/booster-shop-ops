@@ -1,0 +1,39 @@
+{
+  "task": "ACC-009-N1",
+  "recorded_utc": "2026-10-17T11:17:21.464407+00:00",
+  "state": "N1_RUNTIME_REVIEW_OK_WAIT_OWNER_APPLY_RESULT",
+  "request_id": "5c588f3e-0e6f-4e99-bf36-20ba558ad070",
+  "full_actual_verdict_read_by_executor": true,
+  "review": "diagnostics/ACC-009_N1-runtime_claude-review-r1_20261017.md",
+  "closure": "diagnostics\\ACC-009_N1-runtime_evidence_20261017\\review-r1-runtime-closure.json",
+  "owner_apply_command": "work/acc009-np-code-20261017/owner-N1-apply-command.sh",
+  "owner_apply_command_sha256": "be4f8fe0246da5afc714efa9c100bfab5b7734b5c59cf67de3b9baa965a204f4",
+  "runner": {
+    "id": "ACC-009-N1",
+    "patch": "patches\\ACC-009-N1_recipient-snapshot-defaults_20261017.php",
+    "patch_sha256": "b4fe8048951c1bde02567b095d4febbbb41ad86cc33c395f7e9a46f86f172d8f",
+    "before_sha256": "8e07945dacc5b3fab2681266ac4d03811e9b702d22b067008d02c1d71c59d567",
+    "after_sha256": "43dc466f5332d45acecc5e1cb2e82e8f712268af568d6f16de90809a3dd60da1",
+    "edits": 3,
+    "target": "extension/PintaNovaPoshtaCod/admin/controller/shipping/internet_document.php"
+  },
+  "agent_deploy_authorized": false,
+  "production_source_changed": false,
+  "N1_apply_released_to_owner_only": true,
+  "N1_QA": "pending_after_reviewed_apply_receipt_and_wait_gt2s",
+  "freshness_condition": "Recollect read-only evidence if PHP/handler/OPcache or admitted sources changed after11:07:57Z; runner rechecks sources/metadata itself. No competing controller writer before accepted N1 QA.",
+  "required_apply_receipt": [
+    "backup_path",
+    "changed_file",
+    "host_php_lint=ok",
+    "self_deleted=yes",
+    "done=ok",
+    "cli_exit=0",
+    "apply=ok",
+    "known_stderr_only",
+    "target_sha256=43dc466f5332d45acecc5e1cb2e82e8f712268af568d6f16de90809a3dd60da1"
+  ],
+  "rollback": "held_exact_logged_backup_required",
+  "N3": "held_N1_accepted_QA_then_explicit_recipient_AND_sender_Address.save_and_document_ack_required",
+  "git_notion_dashboard_writes": false
+}
