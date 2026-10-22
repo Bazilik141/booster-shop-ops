@@ -1,0 +1,97 @@
+{
+  "duration_api_ms": 323273,
+  "stop_reason": "end_turn",
+  "total_cost_usd": 1.6753079999999998,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 129210,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 32081,
+    "output_tokens_details": {
+      "thinking_tokens": 29194
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 129210,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 32081,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 129210,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 129210
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-opus-5-5": {
+      "inputTokens": 2,
+      "outputTokens": 32081,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 129210,
+      "webSearchRequests": 0,
+      "costUSD": 1.6753079999999998,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 29194,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 1,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "# ACC-009-N3 integrated final CODE/composition review\n\n**Verdict: REVIEW_OK**\n\nI found no mandatory findings. This verdict covers only the two byte identities below. I did not execute anything, and I did not recompute these hashes myself. They come from the supplied facts and the file headers.\n\n## Reviewed identities\n\n| Artifact | SHA256 |\n|---|---|\n| Runner `patches\\ACC-009-N3_doors-helper-private-release_20261021.php` (43998 bytes) | `f97f09a82048be1c4efc2fcff875537fa9023c017307153a129f93761b3d68bc` |\n| Owner packet `diagnostics\\ACC-009-N3_owner-PS_20261021.ps1` | `702dc0d0fb0bca43df30c5ed39c2b0891ab50306bb0d0db55295eaae061bdd93` |\n| Source transform (unchanged) | `43dc466f\u20260da1` \u2192 `2138e156\u20267b93` |\n\n## What was checked and holds\n\n**Source and metadata admission**\n- The embedded spec is the accepted old N3 base64. `build.py` reuses it and asserts the old patch hash.\n- The decoded edit equals `N3.diff`.\n- `acc009s_preflight` correctly replaces the stale target pin (`8e07\u2026`) with the current hash.\n- The 49 pins, OCMOD scan, admin/system events, startups and namespace inventory are rechecked by the unchanged helper span.\n- The runner refuses any current hash other than before or after. It also refuses an after-image without the marker.\n\n**Entry and staging**\n- The runner requires CLI on PHP 8.0.\n- It requires the exact realpath `/home2/boosters/public_html` as the working directory.\n- It checks the root, the stage and `__FILE__` for links and realpath equality, and requires the runner to sit directly in the private stage.\n- Mode admission is strict, and extra arguments are refused.\n- The packet independently checks the real home, the directories, that the stage is outside the webroot, the PHP path and version, and the staged size, hash and realpath before every run.\n\n**Temporary web probe**\n- Creation is exclusive (`fopen 'x'`), with a random 128-bit name and a separate nonce.\n- The probe is sealed by GET method, nonce (`hash_equals`) and a 60-second TTL.\n- It loads no OpenCart, config or NP code.\n- The fetch is bounded: HTTPS with peer and name verification, no redirects, the fixed UA, and an 8193-byte cap.\n- Cleanup runs in `finally` and unlinks only owned bytes. A cleanup failure or changed bytes throws and overrides the return value, so `web_runtime`/`probe_cleanup` are never logged and no source write follows.\n- A file left behind becomes inert after the TTL. The CGI tests exercise the actual generated endpoint.\n\n**Apply, restore and rollback**\n- The order is: verified private backup plus manifest, then a same-directory temp file with hash and mode, then a check that the target still has the expected hash, then atomic rename, lint, and an after-hash check.\n- On failure the runner restores only from before or after. Unknown bytes are left in place and the backup is kept.\n- Rollback admission checks the backup name, manifest, backup bytes and current target before any write, and refuses an after-image that is not N3 (C2 must be reversed first).\n- Rollback is not released in the packet. That is correct.\n\n**Self-delete**\n- Self-delete happens only in `--apply` (including the already-applied case) and in real `--rollback`, never in `--rollback-check`.\n- A failure is classified by the target hash in the wrapper (exit 4).\n\n**PowerShell packet and receipt parser**\n- Each step is a separate invocation.\n- Prerequisites are bound to the runner and packet hashes and expire after 4 hours (Verify) and 30 minutes (Preflight).\n- The Apply marker is written before the remote call and blocks every later step.\n- stdout, stderr and exit codes are captured in full, and stderr is checked against an exact allow-list.\n- I hand-traced `Test-RunnerReceipt` against the real entry output (`entry-apply-receipt.txt`) and against the dry-run and already-applied code paths, including Preflight in the already-applied state. Order and line counts match exactly.\n- Field offsets (`web_runtime=`, `backup_path=` are 12 characters) are correct.\n- The after/before/unknown split is sound.\n- `scp` correctly drops `-T`, and the local path with spaces is quoted.\n\n**Fake boundaries are adequate**\n- The lifecycle adapter replaces only path spelling, the unchanged accepted preflight, and the HTTPS producer.\n- The real fetch and DB metadata are first exercised by the owner's Preflight. That step is a dry run with no source write, and it fails closed.\n\n## Mandatory findings\n\nNone.\n\n## Optional findings\n\nNone of these blocks release. Each is recorded without a new review round.\n\n1. **Restore cannot tell its own write from a concurrent one.** Scope: runner `acc009r_apply` / `acc009r_rollback` catch blocks.\n   - If a second identical runner raced, `actual===after` (or `before` during rollback) would trigger a wrong \"restore\".\n   - This requires concurrent owner runs, and the outcome is still a valid before or after state.\n   - Closure: a \"rename done\" flag plus an advisory `flock`. This is already listed as deferred hardening.\n\n2. **Packet accepts `already_applied` after a \"planned\" Preflight.** Scope: packet Apply classification.\n   - If Preflight showed `planned` and Apply shows `already_applied`, an unknown actor changed the target in between. The packet still reports OK, and no N3 backup is created.\n   - Closure: compare against the Preflight receipt and treat this transition as a result exception. Alternatively, Codex flags it during mechanical closure.\n\n3. **Pre-runner failures are classified as unknown.** Scope: packet Apply.\n   - SSH auth or connect failures, and `hash_ok` failing before the runner starts, are classified `STATE_UNKNOWN` (exit 5).\n   - This is conservative and safe. An explicit \"not started\" wrapper line could refine it.\n\n4. **Probe boolean parsing is narrow.** Scope: probe body.\n   - `ini_get(...)===\"1\"` would report \"false\" for `On`-style values set through `php_value`.\n   - Closure: Codex's mechanical receipt check should compare `web_runtime` with the retained host facts (`true` / `true` / `2`). Any difference should be treated as a result exception, not silently admitted.\n\n5. **Local timeout can interrupt the remote run.** Scope: packet, local 180-second kill.\n   - A SIGPIPE on the remote side could interrupt the runner mid-apply.\n   - The atomic rename keeps the target at before or after, and `STATE_UNKNOWN` is the correct classification.\n   - No change is needed.\n\n6. **Parser coverage is partly by reading only.** The PowerShell parser was not run against the real-entry dry-run receipt or the dry-run already-applied receipt. I verified both by reading. Adding fixtures would be an optional hardening.\n\n7. **Minor host-variant edges, both fail closed.**\n   - If the `tempnam` fallback is used, it could leave a file in `/tmp`.\n   - The probe's `0604` mode could be refused on unusual permission setups.\n\n## Limits\n\n- This is a static, no-tools review. No hashes were recomputed and nothing was executed.\n- Current host state is not proven. The fresh pins in each step decide, and a mismatch means STOP.\n- The real HTTPS self-fetch, mysqli metadata and production self-delete are unexercised until the owner runs Preflight and Apply.\n- The root probe is not proof of admin bytecode.\n- This is not remote NP attribution, end-to-end shipment or owner functional acceptance.\n- File rollback cannot undo remote recipient/sender address or document effects.\n- C2 stays HELD.\n\n## Owner next action\n\n1. Unlock the Booster key per the access doc.\n2. Run the reviewed packet steps Upload, Verify, Preflight and Apply as separate invocations.\n3. STOP at any non-zero exit. Do not retry Apply or run a rollback.\n4. Send the receipts for mechanical closure, including the optional finding 4 comparison.\n5. After a successful Apply, wait longer than the reported `revalidate_freq`, then perform N3 functional QA.\n6. Lock the key.",
+  "ttft_ms": 295870,
+  "type": "result",
+  "duration_ms": 323683,
+  "ttft_stream_ms": 1940,
+  "time_to_request_ms": 407,
+  "first_content_frame_ms": 1940,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

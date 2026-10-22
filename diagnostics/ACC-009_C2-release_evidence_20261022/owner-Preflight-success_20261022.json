@@ -1,0 +1,35 @@
+{
+    "task":  "ACC-009-C2",
+    "stage":  "owner_Upload_Verify_Preflight",
+    "acceptance":  "expected_receipts_mechanically_closed",
+    "accepted_utc":  "2026-10-22T06:17:35.6912196Z",
+    "runner_sha256":  "8645e8f247681529d0a8ec9e42b6a01fa1a656e246fa949a4fb08796206fb9d2",
+    "packet_sha256":  "bc920b06508ee2332ef30120e5f7d8eb715d2ede15d0b01ae216c604dda8a2be",
+    "receipts":  {
+                     "Upload":  {
+                                    "receipt":  "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\acc009-c2-release-20261022\\owner-receipts\\Upload-20261022T061631723Z-7be0b819.json",
+                                    "sha256":  "c777c2bba7acac42b03571c335b25172c44b84eeb7beb01fa4780d6dca383216",
+                                    "accepted":  true
+                                },
+                     "Verify":  {
+                                    "receipt":  "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\acc009-c2-release-20261022\\owner-receipts\\Verify-20261022T061632811Z-74a0e843.json",
+                                    "sha256":  "17f60256251da6125c5c92ec3f9161da0ccd10040e2cb4b1923fad9d39a3a3fc",
+                                    "accepted":  true
+                                },
+                     "Preflight":  {
+                                       "receipt":  "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\acc009-c2-release-20261022\\owner-receipts\\Preflight-20261022T061634164Z-b9c4470b.json",
+                                       "sha256":  "33df99a6f2a61db98c5ada05347d9e7ac14b74d32941658dd9cc5e0848f39c99",
+                                       "accepted":  true
+                                   }
+                 },
+    "runtime_matches_retained_host":  true,
+    "action":  "planned",
+    "changed_files":  0,
+    "backup":  "none",
+    "template_cache":  "untouched",
+    "NP_API_calls":  "none",
+    "directory_schema":  "required_local_address_columns_textual",
+    "Apply_expires_utc":  "2026-10-22T06:46:34.1608918Z",
+    "next":  "Owner separate Apply invocation within original Preflight expiry; no repeat model review or N1 QA",
+    "production_applied":  false
+}

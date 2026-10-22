@@ -1,5 +1,5 @@
 {
-  "updated_utc": "2026-10-21T12:23:08.966140+00:00",
+  "updated_utc": "2026-10-22T07:38:53.739628+00:00",
   "scope": "This Windows user and canonical Booster repo; not other PCs or all Claude products",
   "maintainer": "Current ACC-009 access-cleanup thread; other chats read this record, do not perform parallel setup",
   "canonical_instructions": "docs/BOOSTER_LOCAL_ACCESS.md",
@@ -16,10 +16,20 @@
     "helper": "scripts/booster_claude_access.py",
     "helper_usage": "python scripts/booster_claude_access.py status",
     "limits": "Saved status is not a promise of permanent OAuth or future request success; actual expiration requires targeted assessment, never per-chat reset.",
-    "last_actual_failure": "diagnostics/ACC-009_web-transport_evidence_20261021/web-packet-author-r1-failure-closure.json",
+    "last_actual_failure": "diagnostics/BOOSTER_claude-auth_evidence_20261022/auth-routing-ready-r1-closure.json",
     "saved_status_limit": "Saved login metadata was true but actual request returned expired OAuth401; owner renewal genuinely required. No SSH setup/reset or paid fallback.",
-    "last_actual_success": "diagnostics/ACC-009_web-transport_evidence_20261021/web-code-ready-r1-closure.json",
-    "auth_renewal_owner_report": "Owner replied yes after existing subscription login renewal. Successful actual author/ready answers confirm availability at these calls, not permanent authentication."
+    "last_actual_success": "diagnostics/ACC-009_C2-release_evidence_20261022/c2-code-ready-r2-closure.json",
+    "auth_renewal_owner_report": "Owner replied yes after existing subscription login renewal. Successful actual author/ready answers confirm availability at these calls, not permanent authentication.",
+    "native_refresh_recovery_20261022": {
+      "status": "needed_C2_review_completed_without_owner_relogin",
+      "evidence": "diagnostics/BOOSTER_claude-auth_report_20261022.md",
+      "execution": "Approved checked task adapter outside workspace filesystem sandbox; normal user, native profile refresh; no Claude tools/MCP/hooks or agent token inspection.",
+      "limit": "Present recovery observed; exact denied internal operation and all historical causes unproven. Auth-routing doc final review NOT_REVIEWED due seven_day quota.",
+      "routing_review_request": "f8e0e74b-4a4c-4aa8-aaab-ff7d17855afa",
+      "quota_reset_utc": "2026-10-22T19:00:00Z",
+      "quota_is_not_login_failure": true,
+      "automatic_retry_scheduled": false
+    }
   },
   "ssh": {
     "state": "owner_key_login_check_success_reuse_existing_setup",
@@ -31,7 +41,7 @@
     "first_connection_verified": true,
     "server_access_by_agent": false,
     "owner_diagnostic": "diagnostics/BOOSTER_local-access-check_20261020.ps1 sha256 78f1f4152eda2275dd1a4a804f25565ae6408db6250f4bf26b2b7ac827b4cfe5; Code/Composition Review OK (903d2cd9-af38-4461-bc58-d5a8128c2b14); owner runs once only via the one-line launcher text in diagnostics/BOOSTER_local-access-check_command_20261020.ps1 sha256 7e6d00091169c384eb3ba52480c36d7234c93ace29111cf8e37a439ff85e5060",
-    "next": "Owner same normal PowerShell current schema packet -Step Verify. No repeat Upload/setup/Unlock absent actual expiry; Preflight separate after accepted Verify.",
+    "next": "Owner lifetime choice resolved 2026-10-22: persistent availability across sign-out/reboot accepted; Lock optional, no cleanup receipt gate or automatic expiry required. Reuse existing setup; AI key/SSH/server access remains prohibited.",
     "earlier_alias_writer": "HELD; do not run its unknown key/agent preconditions or restart it from another chat",
     "agent_state": "owner_transport_usable_at_successor_Upload_no_new_Unlock_receipt",
     "owner_receipt": "diagnostics/BOOSTER_access_evidence_20261020/owner-local-resume-r3-success-receipt.json",
@@ -136,14 +146,14 @@
     "strict_host_check_evidence": "diagnostics/ACC-009_private-PS_evidence_20261019/owner-upload-success_20261020.json",
     "owner_agent_work_period": {
       "authority": "diagnostics/BOOSTER_access_evidence_20261020/owner-agent-work-period-decision_20261020.json",
-      "status": "owner_work_period_transport_observed_cleanup_pending",
+      "status": "owner_optional_lock_persistent_availability_accepted",
       "owner_setup_executed": true,
       "owner_setup_succeeded": true,
       "last_setup_receipt": "diagnostics/BOOSTER_access_evidence_20261020/owner-agent-setup-success_20261020.json",
       "owner_unlock_executed": true,
       "owner_lock_executed": true,
       "AI_agent_key_or_SSH_access_allowed": false,
-      "windows_scope": "Windows account/service, not a terminal; explicit targeted removal required",
+      "windows_scope": "Windows account/service, not a terminal; may persist across sign-out/reboot; per-work Lock optional by owner decision 2026-10-22",
       "helper": "scripts/booster_ssh_session.ps1",
       "helper_sha256": "a631153f2ae8dda0c3b398c3b2ad880024cd129223bee6813b0626d86413ff58",
       "ACC009_agent_packet": "diagnostics/ACC-009_C1-H1_owner-agent-PS_20261020.ps1",
@@ -154,11 +164,13 @@
       "review_closure": "diagnostics/BOOSTER_access_evidence_20261020/agent-session-ready-r1-closure.json",
       "owner_guide_sha256": "6914a32bdba25465f43ed1267ad47b173d3b0e1c7111bfb12fef70e89ffd4f8a",
       "setup_needed": "No repeat Setup needed for new chats; owner Setup accepted with ok/running/not_checked/service_ready.",
-      "default_for_new_ordinary_packets": "support owner Unlock/Lock mode; never assume already loaded or permit AI use",
+      "default_for_new_ordinary_packets": "support owner Unlock and optional Lock; no mandatory per-work cleanup receipt; never assume loaded or permit AI use",
       "service_running_last_owner_receipt": true,
       "owner_unlock_succeeded": true,
       "last_unlock_receipt": "diagnostics/BOOSTER_access_evidence_20261020/owner-agent-unlock-success_20261020.json",
-      "owner_lock_required": true,
+      "owner_lock_required": false,
+      "owner_policy_20261022": "Owner explicitly accepts key persistence across sign-out/reboot until optional owner removal. Mandatory per-work Lock removed; no automatic expiry or cleanup hooks required. Canonical rule: docs/BOOSTER_LOCAL_ACCESS.md; historical helper/guide bytes retained.",
+      "session_end_expiry_verified": false,
       "agent_authentication_owner_verified": true,
       "agent_transport_receipt": "diagnostics/ACC-009_private-PS_evidence_20261019/owner-verify-success_20261020.json",
       "owner_lock_succeeded": true,
@@ -351,6 +363,39 @@
       "owner_QA": "pass_owner_all_three_requested_followup_checks",
       "owner_QA_evidence": "Direct owner reply: QA ok. (2026-10-21); scope is the three checks in the immediately preceding owner QA list.",
       "owner_QA_recorded_utc": "2026-10-21T12:23:08.966140+00:00"
+    },
+    "C2_courier_prefill_20261022": {
+      "state": "source_applied_postomat_creation_accepted_courier_QA_pending",
+      "applied_utc": "2026-10-22T06:18:46+00:00",
+      "review_request": "e00b1d8d-92de-4423-9ca8-7b6548980952",
+      "review": "REVIEW_OK",
+      "acceptance": "diagnostics/ACC-009_C2-release_evidence_20261022/owner-Apply-success_20261022.json",
+      "target": "extension/PintaNovaPoshtaCod/admin/controller/shipping/internet_document.php",
+      "sha256_before": "2138e15643ce4bced1b49698955c78f443617e4b59877325113261042d1c7b93",
+      "sha256_after": "4d84bb039d7c43ede234d76deef698b8e0e7886184800e6bf6eeaaa7a19ca0af",
+      "backup": "/home2/boosters/_patch_backups/ACC-009-C2-20261022T061846Z-68be01c7/internet_document.php",
+      "private_runner": "absent",
+      "Apply_consumed": true,
+      "business_API_calls_by_packet": "none",
+      "owner_QA": "Initial courier TTN form without existing document; compare recipient prefill with order. Legitimate later save only, no artificial parcel.",
+      "owner_postomat_QA": {
+        "result": "pass_owner_report_and_screenshots",
+        "date": "2026-10-22",
+        "scope": "Successful postomat TTN creation after C2; admin recipient mode and NP confirmation show postomat. No customer/document/payment identifiers retained.",
+        "courier_prefill_proven": false,
+        "repeat_required": false
+      },
+      "owner_courier_report_20261022": {
+        "result": "general_courier_success_empty_flat_now_passes_owner",
+        "failure_location": "customer_checkout_confirm_not_admin_TTN",
+        "limits": "Current authenticated empty-flat success reported by owner; earlier cause unknown and not reproduced. No guest/viewport/provider-edge inference.",
+        "diagnosis": "diagnostics/ACC-009_optional-flat_report_20261022.md",
+        "source_repair_applied": false,
+        "customer_mode": "authenticated",
+        "investigation": "closed_without_fix_by_owner_direction",
+        "further_collection_required": false,
+        "followup": "Owner will create a separate fix task if symptom recurs; no automatic retry or monitoring."
+      }
     }
   },
   "GSS": "No transport/checkpoint/grant changes; remains governed separately"

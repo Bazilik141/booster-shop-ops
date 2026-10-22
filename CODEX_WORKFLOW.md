@@ -4,14 +4,18 @@ Purpose: define how the owner, Claude, and Codex exchange bounded work through
 the Booster repository. `AGENTS.md` remains the canonical authority and safety
 contract; `ROADMAP_SOP.md` remains canonical for task-status governance.
 
-## Current automatic review — owner decisions 2026-10-14 / 2026-10-19
+## Current automatic review — owner decisions 2026-10-14 / 2026-10-19 / 2026-10-21
 
 Follow [the canonical review policy](docs/BOOSTER_AUTOMATIC_PEER_REVIEW_20261014.md).
-Its non-GSS efficiency procedure applies to ongoing and new tasks. Use coherent
-required stages; close complete expected host receipts mechanically and assess
-deviations/ambiguity as specified there. No repeated owner go is needed for routine
-assigned preparation. Owner scope, privacy, Git/status/deployment and QA authority
-remain. GSS retains its prior shared and specific controls, including
+For Codex-executed non-GSS implementation tasks routed to review, use one
+integrated final independent Claude review of the completed patch and owner-run
+apply packet. Routine bounded work on the existing main CRM Google Sheets workbook
+and canonical dashboard has no Claude review by default; the canonical policy
+sets its scope and exception triggers. Codex owns routine design and packet
+preparation. Early design, domain-exception and result reviews use the owner's
+per-case route choice; expected receipts close mechanically. Owner scope,
+privacy, Git/status/deployment and QA authority remain. GSS retains its prior
+shared and specific controls, including
 [its optimization rules](docs/GSS_OPTIMIZATION_RULES_20261014.md).
 
 ## Roles in this workflow
@@ -36,8 +40,9 @@ from an approved patch, a host receipt, or this workflow.
 
 Codex may commit or push only after a direct, explicit owner request in the
 active task for the exact scope. This is one-time authority and creates no
-standing permission. Otherwise, complete implementation, required checks, automatic
-independent review/scoped repairs and a concise diff summary; stop before Git writes.
+standing permission. Otherwise, complete implementation, required checks, any
+independent review and scoped repairs required by the canonical policy, and a
+concise diff summary; stop before Git writes.
 
 ## Work exchange
 
@@ -48,15 +53,20 @@ independent review/scoped repairs and a concise diff summary; stop before Git wr
 4. The assigned executor places self-contained runners in `patches/` and required reports in
    `diagnostics/`.
 5. The executor supplies the patch and bounded target, receipt and rollback
-   facts. Subscription Claude CLI composes the owner-run command packet; Codex checks it,
-   including when Claude Code authored the patch.
-6. Codex sends the coherent ready stage with both patch and packet SHA-256,
-   context and real-versus-fake test boundaries to actual subscription Claude;
-   records the verdict, resolves scoped findings and closes unchanged identities
-   mechanically under the shared policy.
+   facts and prepares the exact owner-run apply packet. For Codex-executed tasks,
+   Codex authors and locally checks the packet; this does not authorize an agent
+   to run SSH/SCP or access the server.
+6. When the package is ready, check the canonical policy's review route. If
+   review is required or the owner selected it, Codex automatically sends one
+   coherent final CODE/composition package with both exact SHA-256 values, design
+   rationale, dependencies and real-versus-fake test boundaries to actual
+   subscription Claude. Otherwise, record that the routine CRM/Sheets/dashboard
+   exception applies and do not create a Claude call. Resolve scoped findings in
+   one batch and close unchanged identities mechanically under the shared policy.
 7. The owner applies the released patch and performs QA. Codex records the host
-   receipt; a complete expected non-GSS result needs no separate model call.
-   Deviations, ambiguity and explicit owner/GSS gates follow the shared policy.
+   receipt; a complete expected non-GSS result needs no model call. For a
+   material unresolved result exception, present the owner with the short route
+   choice in the shared policy before any separate Claude call or subagent check.
 8. Claude updates Notion task status when closure is authorized; Codex updates
    `ROADMAP_FLOW` only when that action is part of its authorized scope.
 
@@ -118,8 +128,8 @@ report containing:
 - `php -l` result when PHP is involved;
 - idempotency evidence;
 - rollback path;
-- owner-run admission and command-packet facts (or the reviewed packet link
-  after subscription Claude CLI composes it);
+- owner-run admission, the executor-prepared command packet, its local checks
+  and exact SHA-256;
 - post-deploy QA checklist;
 - side effects and unresolved risks.
 
@@ -173,9 +183,10 @@ do not mistake written instructions for a completed setup receipt.
   PowerShell with `ssh-keygen -p -f "$env:USERPROFILE\.ssh\booster_deploy"`.
   The owner enters the old and new passphrases at the prompts; agents never
   request, enter or inspect them.
-- **Owner-controlled work periods (2026-10-20):** for ordinary non-GSS tasks the
+- **Owner-controlled access (2026-10-22):** for ordinary non-GSS tasks the
   owner may unlock the existing encrypted Booster key in the Windows `ssh-agent`
-  before work and explicitly remove only that key after work, using the reviewed
+  once and reuse it across tasks/chats. Lock after work is optional; never require
+  a Lock receipt to close a task/work period. Use the reviewed
   `scripts/booster_ssh_session.ps1` helper. The owner may prepare/start the existing
   Windows service once; key actions run in the normal owner context. No agent
   performs service/key/SSH operations or reads `.ssh`.
@@ -184,8 +195,11 @@ do not mistake written instructions for a completed setup receipt.
   A loaded key can be used by other same-user processes. Keep on-disk encryption,
   no agent forwarding, no automatic key addition and strict stored-host checking.
   Do not promise a time limit unsupported by the installed Windows agent.
-- Work ends only after the helper confirms the Booster identity absent. Removal
-  is targeted: never clear all identities, stop other users' work, edit the agent
+- The owner explicitly accepts persistence across Windows sign-out/reboot until
+  optional owner removal (2026-10-22). Session-bound expiry and automatic cleanup
+  are not required. Do not add cleanup hooks or promise automatic expiry.
+  Canonical details: `docs/BOOSTER_LOCAL_ACCESS.md`.
+  Optional removal is targeted: never clear all identities, stop other users' work, edit the agent
   registry, delete keys or reset the alias. Inaccessible service is not verified
   cleanup; keep a failure unresolved until an exact removal/absence result.
 - The alias below stays compatible with manual passphrase use. A reviewed agent
@@ -236,10 +250,12 @@ do not mistake written instructions for a completed setup receipt.
 
 ### Patch packet and owner commands
 
-Before any deployment, the executor's report supplies these facts to actual
-Claude through the installed subscription CLI, which composes the owner-run
-PowerShell packet. The owner's 2026-10-19 decision replaces the former
-Claude-chat author requirement; no owner relay between chats is required:
+Before any deployment, the executor's report supplies and binds these facts in
+the owner-run PowerShell packet. For Codex-executed work, Codex composes and
+locally validates the packet; no separate Claude drafting request or owner
+relay is required. When the canonical policy routes the task to review, actual
+Claude reviews the completed packet with the patch in one independent final
+CODE/composition review. The owner remains the only one who runs it:
 
 1. The patch's exact local path and SHA-256. The review record binds both this
    patch hash and the SHA-256 of the final command packet.
@@ -259,13 +275,12 @@ Claude-chat author requirement; no owner relay between chats is required:
    permission, backup and rollback requirements for those actions.
 6. The task's post-run checks and owner QA checklist.
 
-Subscription Claude CLI composes one complete PowerShell packet from the executor's facts
-when deployment is prepared. Codex independently checks this Claude-authored
-packet; its author cannot be the sole approver of its own commands. Command
-drafting and ready-stage review are separate CLI requests, with Codex's independent
-command check recorded between them. The required actual Claude
-subscription review covers the patch and packet together at one ready stage.
-The review record names the exact patch SHA-256 and command-packet SHA-256.
+The executor prepares one complete PowerShell packet from the verified facts.
+Codex performs local syntax, path, hash, privacy and receipt-contract checks.
+When the canonical policy routes the task to review, the author does not approve
+their own work: actual Claude independently reviews the final patch and packet
+together. The review record names both exact SHA-256 values in one ready-stage
+verdict.
 The packet may read dynamic receipt values as validated data; no one hand-edits
 its executable commands after review. The owner runs its separate blocks. A
 normal, complete receipt closes mechanically only while both reviewed hashes

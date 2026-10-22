@@ -1,0 +1,37 @@
+{
+  "task": "BOOSTER-CLAUDE-AUTH",
+  "stage": "auth-routing-ready-r1",
+  "request_id": "f8e0e74b-4a4c-4aa8-aaab-ff7d17855afa",
+  "owner_authority": "Owner explicitly requests fixing repeated Claude authentication interruptions; one final independent review of scoped auth routing documentation only. No tools/MCP/hooks, paid fallback, agent credential contents, SSH/key/server or installed CLI edits.",
+  "started_utc": "2026-10-22T06:10:24.722613+00:00",
+  "model_requested": "claude-opus-5-5",
+  "effort": "high",
+  "packet_sha256": "b3b9d6a2ecda58a3aaf1093124d318cbf3d1af300aed0a4490346abd1e5e77fb",
+  "adapter_sha256": "daa7587173a86089eed12b9a66e190f0378886b7047633ba74b13d4807af06b8",
+  "status": "failed",
+  "direct_API_or_paid_fallback": false,
+  "agent_server_or_key_access": false,
+  "subscription_verified": true,
+  "CLI_sha256": "1787c60619bad78543c67e4d9d8a868869c35a904f2a85eb9ea46c4808af196b",
+  "CLI_version": "2.1.303 (Claude Code)",
+  "native_pid": 11816,
+  "model_initialized": "claude-opus-5-5",
+  "tools_initialized": [],
+  "MCP_count": 0,
+  "rate_limit": {
+    "status": "rejected",
+    "resetsAt": 1792695600,
+    "rateLimitType": "seven_day",
+    "overageStatus": "rejected",
+    "overageDisabledReason": "org_level_disabled",
+    "isUsingOverage": false
+  },
+  "stderr_captured": "",
+  "exit_code": 1,
+  "models_observed": [
+    "<synthetic>"
+  ],
+  "tool_calls": [],
+  "completed_utc": "2026-10-22T06:10:27.287699+00:00",
+  "failure": "CLI_error_or_incomplete_or_tools"
+}

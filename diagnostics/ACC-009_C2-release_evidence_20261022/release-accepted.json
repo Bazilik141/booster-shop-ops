@@ -1,0 +1,25 @@
+{
+  "task": "ACC-009-C2",
+  "accepted_utc": "2026-10-22T06:09:10.618126+00:00",
+  "request_id": "e00b1d8d-92de-4423-9ca8-7b6548980952",
+  "review": "REVIEW_OK",
+  "full_response_read_by_main_agent": true,
+  "mandatory_findings": [],
+  "runner_sha256": "8645e8f247681529d0a8ec9e42b6a01fa1a656e246fa949a4fb08796206fb9d2",
+  "owner_packet_sha256": "bc920b06508ee2332ef30120e5f7d8eb715d2ede15d0b01ae216c604dda8a2be",
+  "response_sha256": "16dc5561f7cdb80e559e4f3054afcb4a6d7ae7481318f73e269aaa9752d47e56",
+  "declared_inputs_unchanged": true,
+  "Git_HEAD_index_unchanged": true,
+  "outside_input_change_assessment": "Only review outputs/task evidence, auth investigation report and guarded doc proposals added. No declared source/packet dependency drift. Native Claude profile metadata advanced during approved normal-user review execution; contents never inspected by agent. No server/key/business changes.",
+  "receipt_closure_conditions": {
+    "C1": "Require Preflight planned/current2138 -> Apply applied/one exact C2 backup/current4d84/stage absent; all other pairings need assessment, no invented backup.",
+    "C2": "Compare Preflight/Apply web runtime exactly to PHP8.0.30/litespeed/OPcache enabled true/validate_timestamps true/revalidate_freq2; variation assessed, not silently accepted.",
+    "C3": "Any cleanup STOP => exact generated basename manual assessment; separate owner hash-first cleanup step only, never wildcard/retry."
+  },
+  "optional_disposition": "All6 optional R2 findings recorded in full answer; no source change or additional C2 round. Host schema/pin unknowns fail closed at owner Preflight. Area/warehouse-model unpinned residual is inherited CODE scope, not newly certified.",
+  "source_payload": "Exact prior C2 R3; N3 before2138 -> C2 after4d84",
+  "owner_next": "Separate Upload/Verify/Preflight; return full receipts before Apply release/closure. No packet replay after attempted Apply. C2 owner QA follows application.",
+  "production_applied": false,
+  "auth_recovery": "Native same CLI refreshed stored auth without owner login when checked adapter ran outside workspace filesystem sandbox; normal user, model tools/MCP/hooks disabled. Not a guarantee of permanent auth.",
+  "Git_status_or_server_authority": "none"
+}

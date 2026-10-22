@@ -1,0 +1,34 @@
+{
+  "packet_sha256": "bc920b06508ee2332ef30120e5f7d8eb715d2ede15d0b01ae216c604dda8a2be",
+  "PowerShell_native_parse_and_receipts": "PS5.1_parse_and_pure_receipt_checks=18",
+  "Bash": [
+    {
+      "step": "Upload",
+      "bash_syntax": true,
+      "executed": false,
+      "sha256": "f24494002ab2a1a8e921a12ea2a0284e3a6d55e34ab509c3bd80a841c0803ce6"
+    },
+    {
+      "step": "Verify",
+      "bash_syntax": true,
+      "executed": false,
+      "sha256": "c905c5551ba3f11665451d2c66f396fc4123480ee2d5146a3014a46e3b513eb7"
+    },
+    {
+      "step": "Preflight",
+      "bash_syntax": true,
+      "executed": false,
+      "sha256": "8cbf1a072d48e5bcd99201e380caba3ac35e7b52d640facb8bf22242542ec591"
+    },
+    {
+      "step": "Apply",
+      "bash_syntax": true,
+      "executed": false,
+      "sha256": "490b015ff8e01f78670a545695e3dc520ed3952eda910e43ea3cfb766ad17b5e"
+    }
+  ],
+  "checks_script_sha256": "cbda7318b577420d2c61b47f1d59eba62e12e049f9d396d19f8f0e62dbdaf0eb",
+  "pure_test_sha256": "3b8fe171a11c1e158e9a338a9b2a307c1cd5870ee819b14bccc998e868ea7086",
+  "transport_or_owner_script_executed": false,
+  "receipt_adapter": "Only native fictional fixture backup root relocated to the verified Linux home prefix; metadata/web and self-delete marker are fictional. Production receipt parsing does not normalize machine rows."
+}

@@ -1,0 +1,97 @@
+{
+  "duration_api_ms": 168657,
+  "stop_reason": "end_turn",
+  "total_cost_usd": 0.903216,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 71456,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 16578,
+    "output_tokens_details": {
+      "thinking_tokens": 13274
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 71456,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 16578,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 71456,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 71456
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-opus-5-5": {
+      "inputTokens": 2,
+      "outputTokens": 16578,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 71456,
+      "webSearchRequests": 0,
+      "costUSD": 0.903216,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 13274,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 1,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "# Integrated final CODE/composition review: ACC-009-NP-TRANSPORT diagnostic and owner packet\n\n**Verdict: CHANGES_REQUIRED** (one narrow mandatory finding)\n\n**Bound identities**, as declared in release-facts.json (sha256 4b70b3ce\u2026a9). I did not recompute them because no tools were used.\n\n| Artifact | SHA256 | Bytes |\n|---|---|---|\n| `diagnostics\\ACC-009_NP-transport-inspect_20261021.php` | `996795b304f4e424beb36445868c4af62c4ed82851a3dadf825c4af148ed4dbb` | 15449 |\n| `diagnostics\\ACC-009_NP-transport_owner-PS_20261021.ps1` | `d4e117f1fb018ba2d6e496fc2c7d0e46863001c7d0904519f72eb8d4d58074d4` | \u2014 |\n\n**Internal consistency:**\n- The PS `$Sha`/`$Bytes`, the embedded `pkt_diagnostic_sha256`, the `php -r` arguments and `parse-capture.sh` all carry the same PHP SHA and size.\n- The source pins in the PHP and in `Test-CaptureReceipt` match each other.\n- The pin `2138e156\u20267b93` matches `sha256_after` in the N3 Apply receipt.\n- The plaintext helper block in the PHP is textually identical to `collector_helpers.php.txt`. The embedded base64 copy is checked at runtime against `ecd6a39c\u2026feab` before use.\n\nThis review is invalidated by any change to either bound file.\n\n---\n\n## Mandatory finding\n\n### M1: Cleanup failure is misclassified and the leftover probe name is lost\n\n**Location:** `npd_web` `finally` block, together with the CLI error handler.\n\n**Mechanism:**\n1. The CLI entry installs `set_error_handler(...)`. It throws `runtime_warning_details_withheld` for every warning that `error_reporting()` includes, and E_WARNING is included under any normal production ini.\n2. In the `finally` block, a failing `unlink($path)` emits an E_WARNING, for example permission denied or a race. A failing `hash_file()` inside the ownership guard does the same.\n3. That warning becomes a `RuntimeException` before `npd_fail('probe_cleanup_failed:'.$name)` (or the `probe_changed_do_not_delete` branch) can run.\n4. The outer catch only maps messages with the `probe_cleanup_failed:` or `probe_changed_do_not_delete:` prefixes to `STOP_manual_assessment`.\n5. Result: a probe that may still exist in the production webroot is reported as `probe_cleanup: \"completed_or_not_created\"`, and its basename is never output.\n\n**Impact:**\n- After 120 s the probe returns only 404 and contains no secrets, so direct exposure is low.\n- However, the receipt's core temporary-endpoint claim becomes false. The assessor loses the exact name needed to find and remove the file.\n- Exit 2 still causes `PARTIAL_STOP`, but the saved evidence would actively mislead the manual assessment.\n\n**Closure conditions (all required):**\n1. Any warning, error or exception that arises during the cleanup decision (stat, hash or unlink) produces `probe_cleanup = STOP_manual_assessment` and outputs the exact probe basename.\n2. `completed_or_not_created` (and `ok`) appear only when:\n   - the probe was never created, or\n   - absence was confirmed after an owned-byte unlink.\n3. The original pre-cleanup failure reason is preserved alongside the cleanup failure, or at minimum is not replaced by a generic withheld message.\n4. A local fixture test injects an unlink failure and a hash-read failure in cleanup. It asserts the STOP classification, that the basename is present, and that no other output changes.\n5. Both artifacts are regenerated and `release-facts.json` is rebound to the new PHP and PS SHA256s.\n\nA scoped confirmation of only this cleanup and classification delta, plus the hash rebind, closes M1. A full re-review is not needed.\n\n---\n\n## Optional findings (non-blocking)\n\n- **O1: Strict web runtime assertion can discard the most relevant data.**\n  - `npd_assert_runtime($j['runtime'], true)` requires sapi `litespeed` and PHP `8.0.x`. Any mismatch throws, and the web samples are dropped entirely.\n  - This is a one-shot, no-replay Capture, and web PHP can differ from CLI PHP (for example a MultiPHP handler). If the web SAPI and version are not already pinned by retained N3 host evidence, consider keeping shape-valid web samples and reporting the mismatch as a field.\n\n- **O2: The full transport path was never exercised natively.**\n  - The chain bash \u2192 `php -r` \u2192 `eval(substr($b,5))` was only syntax-checked. The fixture ran the PHP file directly.\n  - A loopback test through the actual `php -r` verifier and eval wrapper would close this small gap: eval-scope constants and functions, exit codes, and `$http_response_header` in function scope.\n\n- **O3: `remoteScriptSha256` is recorded but not compared.**\n  - The expected value is deterministic: it should equal the `parse-capture.sh` SHA `8a8fbd89\u20261369`.\n  - An equality field in the record would let byte-identical streaming be checked mechanically instead of by hand.\n\n- **O4: An SSH-level failure consumes the single Capture.**\n  - Examples: key not unlocked, or a host-key problem. Both yield `STATE_UNKNOWN` with no remote action, and the receipt blocks any rerun.\n  - This is acceptable under the no-replay policy. A one-line owner note would help: remote exit 255 with empty stdout means \"no remote action\" and is a named missing fact for assessment.\n\n- **O5: Transport fidelity limits should be stated in the interpretation.**\n  - The diagnostic forces HTTP/1.1, while the module likely uses the libcurl default (possibly HTTP/2 via ALPN).\n  - Unless shown to match, the module's own verify, proxy and HTTP-version options are unconfirmed.\n\n---\n\n## Assessments\n\n| Area | Assessment |\n|---|---|\n| **Privacy** | Adequate. No app bootstrap, config, DB, `.ssh` or credential reads. Output is limited to versions, errno/class, HTTP code, `ssl_verify_result`, validated peer IP and timings. No raw `curl_error`. Provider body and headers are discarded by callbacks. Version strings are bounded at 160 chars and control characters are rejected. Exception messages could at most reveal known host paths. |\n| **Authority** | Preserved. Owner-only packet. No Unlock/Lock or key inspection. BatchMode with publickey only. No forwarding or password fallback. No SCP/uploader. No Git, status or deploy grants implied. |\n| **No business effects** | Correct. Six fixed-URL HEAD requests with no key, body or cookies. `FOLLOWLOCATION` off. Verification stays ON (`VERIFYPEER` true, `VERIFYHOST` 2). No POST and no contact, address or TTN path. |\n| **Temporary endpoint** | Sound: `x`-mode create, 128-bit random name and nonce, GET only, `hash_equals`, 120 s TTL guard before any helper execution, owned-byte hash check before delete, symlink check. **Except M1.** |\n| **Cleanup** | Correct on the normal and transport-failure paths, which are fixture-tested. Misreported on warning-raising cleanup failures (M1). |\n| **Streaming** | Sound. Quoted heredoc. The base64 alphabet cannot collide with the delimiter or the `__X__` placeholders. Strict decode, length, SHA and `<?php` prefix are checked before eval. `main </dev/null` prevents stdin consumption. A ~21 KB argv is within limits. Worst-case runtime is about 110 s, under the 180 s kill. |\n| **Receipt** | Strict six-line contract. Exact source pins. Each sample is checked for HEAD method, labels and int types. Curl failures do not reject a receipt, which is correct because failures are data. `STARTED` is saved before SSH, and every stdout, stderr and exit outcome is retained. `OBSERVED` is explicitly not integration acceptance. |\n| **Fake boundary** | Honest. The fixture adapts only the Windows root and path, the loopback URLs and the `cli-server` SAPI. Real libcurl results were exercised: 405, TLS35 and refused connection. No synthetic remote TLS success. The receipt fixture changes only the SAPI name. Production `npd_abs` and the eval path were not natively exercised (O2). |\n\n---\n\n## Limits of this review\n\n- **Static only.** I did not execute anything, open any network connection or verify any hash.\n- **No claims about the runtime environment:**\n  - whether the hosting web SAPI is LiteSpeed;\n  - whether `boostershop.website` serves this webroot without a CDN challenge or redirect;\n  - whether `curl_exec` is enabled.\n- **No claims about authenticated NP API behaviour.**\n- **What a Capture can and cannot show:**\n  - A clean Capture does not disprove intermittent failure.\n  - Root-web execution is not the admin bootstrap runtime.\n  - The 10 s timeout and the different user agent do not reproduce the module's 30 s behaviour.\n- **N3 causation.** The context presents N3 as POST-only and the diff shown supports that. I did not re-derive the claim that N3 cannot affect the form-opening GET path.",
+  "ttft_ms": 137371,
+  "type": "result",
+  "duration_ms": 169198,
+  "ttft_stream_ms": 1928,
+  "time_to_request_ms": 536,
+  "first_content_frame_ms": 1928,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

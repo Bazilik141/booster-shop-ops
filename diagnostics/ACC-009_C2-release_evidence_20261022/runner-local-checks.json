@@ -1,0 +1,67 @@
+{
+  "checks": [
+    "actual schema validator accepts textual directory refs/labels",
+    "refusal directory_schema_not_admitted",
+    "refusal directory_schema_not_admitted",
+    "refusal directory_schema_not_admitted",
+    "refusal directory_schema_not_admitted",
+    "unchanged exact N3 to C2 source transformation",
+    "actual platform path admission",
+    "refusal unsafe_absolute_path",
+    "runtime admitted after matching nonce and PHP/SAPI/cache checks",
+    "refusal web_runtime_not_admitted",
+    "refusal web_runtime_not_admitted",
+    "refusal web_runtime_not_admitted",
+    "refusal web_runtime_not_admitted",
+    "refusal web_runtime_not_admitted",
+    "disabled OPcache admitted",
+    "actual native apply writes exact after-image",
+    "full private backup contains exact N3 bytes",
+    "rollback admits exact target AND backup before write",
+    "refusal rollback_bytes_mismatch",
+    "bad backup leaves target untouched",
+    "refusal rollback_bytes_mismatch",
+    "unrelated N1 bytes cannot be rolled back with C2",
+    "rollback-check never writes target",
+    "actual rollback restores exact N3 image",
+    "refusal apply_failed_original_restored",
+    "post-write native lint failure restores original and retains failure",
+    "refusal target_changed_before_replace",
+    "unknown concurrent bytes preserved"
+  ],
+  "PHP": "8.0.30",
+  "fixture_home": "C:/Users/14bez/Downloads/Booster Shop/booster-shop-ops/work/acc009-c2-release-20261022/fixture-46872eaf",
+  "fake_boundaries": "Isolated fictional filesystem. Metadata/HTTP results in receipt fixtures are fictional. Production strict entry and remote effects are not executed. self_deleted receipt marker is fixture-only; native CGI tests actual generated endpoint.",
+  "payload_unchanged": true,
+  "production_root_refused_on_fixture": true,
+  "CGI": [
+    {
+      "file": "probe.php",
+      "method": "GET",
+      "valid_request": true,
+      "passed": true
+    },
+    {
+      "file": "probe.php",
+      "method": "GET",
+      "valid_request": false,
+      "passed": true
+    },
+    {
+      "file": "probe.php",
+      "method": "POST",
+      "valid_request": false,
+      "passed": true
+    },
+    {
+      "file": "expired.php",
+      "method": "GET",
+      "valid_request": false,
+      "passed": true
+    }
+  ],
+  "runner_sha256": "8645e8f247681529d0a8ec9e42b6a01fa1a656e246fa949a4fb08796206fb9d2",
+  "fixture_sha256": "fa12499c3bda01cc0702553acf48520d0f2217fa353959a1d52b3c1807c15049",
+  "checks_script_sha256": "0e23aef581b9f1401c14c4cfa5f2a2dde8e29e000017af44b7b7598dfd469c50",
+  "real_host_or_NP_API_calls": false
+}

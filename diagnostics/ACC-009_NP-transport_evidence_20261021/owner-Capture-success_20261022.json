@@ -1,0 +1,52 @@
+{
+    "task":  "ACC-009-NP-TRANSPORT",
+    "assessment":  "complete_expected_capture_mechanically_closed",
+    "accepted_utc":  "2026-10-22T05:15:23.3472131Z",
+    "observed_utc":  "2026-10-22T05:13:53+00:00",
+    "receipt":  "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\acc009-np-transport-20261021\\owner-receipts\\Capture-20261022T051356989Z-bbc09292.json",
+    "receipt_sha256":  "584aa15f31db8f36f93d998b733f73fd8c4817d8bc522de6361265fc0494bda3",
+    "PHP_sha256":  "a80924850d1a40a81acaf6935fedca483cfeb3212c111176c7d09c93bbed5a3c",
+    "PS_sha256":  "080a1be7e0ba56e0ce4451b61ac427d8035c2a91c9f2153ad76ac27a9beb2728",
+    "remote_script_identity_matches":  true,
+    "source_pins_match":  true,
+    "source_mutations":  0,
+    "probe_cleanup":  "ok",
+    "db_access":  "NONE",
+    "business_API_calls":  "NONE",
+    "samples_total":  6,
+    "samples_successful":  6,
+    "http_codes":  [
+                       200
+                   ],
+    "curl_errno":  [
+                       0
+                   ],
+    "ssl_verify_result":  [
+                              0
+                          ],
+    "total_ms_min":  251.458,
+    "total_ms_max":  295.238,
+    "TLS_elapsed_ms_min":  186.952,
+    "TLS_elapsed_ms_max":  230.043,
+    "CLI_runtime":  {
+                        "php":  "8.0.30",
+                        "sapi":  "cli",
+                        "libcurl":  "8.22.0",
+                        "TLS_backend":  "OpenSSL/1.1.1w"
+                    },
+    "web_runtime":  {
+                        "php":  "8.0.30",
+                        "sapi":  "litespeed",
+                        "libcurl":  "8.22.0",
+                        "TLS_backend":  "OpenSSL/1.1.1w"
+                    },
+    "peer_addresses":  [
+                           "94.131.255.21"
+                       ],
+    "Capture_consumed":  true,
+    "owner_runs":  1,
+    "new_model_call":  false,
+    "conclusion":  "Credential-free HEAD transport healthy in these six samples; previous intermittent timeout/TLS cause not established. No evidence this capture identifies a DNS/IPv6/certificate or N3-induced defect.",
+    "limits":  "Not authenticated Counterparty POST, not admin bootstrap trace, not proof prior failures are fixed. Current root-web/CLI samples are from a later time than owner errors. No proxy settings or API key read.",
+    "next":  "One normal form opening may compare actual working reads with this clean transport snapshot; record outcome/time if the error recurs. No repeated Capture, speculative fix, shipment creation or rollback."
+}

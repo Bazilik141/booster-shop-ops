@@ -1420,3 +1420,634 @@ remain immutable. Parent QA1/2/4 remains accepted; draft notification
 suppression and C2/N3 TTN behavior are outside this QA confirmation.
 Current follow-up is owner accepted. No Git/Notion/dashboard or whole-task
 Done transition; C2/N3 keeps its separate preparation/application gates.
+
+## CURRENT - N3/C2 continuation audit and owner NP acknowledgement (2026-10-21)
+
+Continuation read handoff ACC-009_CONTINUE_20261021.md and current review/access
+rules. Local evidence: diagnostics/ACC-009_continuation_evidence_20261021/N3-C2-readiness.json.
+N3 runner SHA6d06a8c57c13211475ae7c1e4a3b4a78f32a81ff6b74b2a8a2065a7c5abf62f0
+still matches its accepted source-review record. C2 R3 runner SHA8cf559b4e42fa830fe6a32e7793f8ed9ab698ee0afa74ebf51487910b38b9472
+and the selected source/spec inputs match the R6 frozen identities. Both retained
+transformations reproduce their exact after-images. No unchanged fixture suite
+or model review was replayed. The 26 parent and 3 QA-follow-up application targets
+are disjoint from the 49 N3/C2 admin runtime source pins. This is bounded receipt
+composition evidence, not a fresh host inventory or universal interaction proof.
+
+Historical N3 is not released: its entry only admits a runner beside/inside the
+webroot and refuses the current required private staging directory; its stdout
+also lacks the complete per-target hashes/full backup/action receipt contract.
+A separate successor and owner packet require the current integrated review.
+Preserve the accepted source payload and historical artifacts. C2 remains HELD
+and N3-only. No source change, server access, DB/NP call or external status/Git
+write occurred in this audit.
+
+Direct owner reply in this continuation: "Підтверджую обидві адреси й подальші
+виклики накладної". This explicitly acknowledges BOTH recipient and sender
+Address.save plus subsequent document calls, after disclosure that source rollback
+cannot undo remote effects. The NP-effects acknowledgement condition is satisfied;
+it is not an owner execution receipt, deployment or remote-correctness acceptance.
+N1 bounded admin QA remains OPEN: the owner requested the complete step-by-step
+QA instructions, not a pass declaration. Provide that checklist; record unavailable
+cases honestly. N3 command preparation/release still respects the named N1 QA gate.
+
+Current review route: Codex prepares and checks the final patch and owner packet;
+automatically request one actual independent subscription Opus/high CODE/composition
+review binding both exact hashes. No separate routine command-author request,
+design review or expected-result model call. Exceptions require the owner's route
+choice under the current policy. Existing source/CODE acceptance is reused only
+within its exact identities and declared limits.
+
+### N1 owner QA blocked at form opening - cURL timeout (2026-10-21)
+
+Owner reported an error on the first step and did not continue. Screenshot
+shows the NP document form with "Connection timed out after 30001 milliseconds".
+Record N1 QA as BLOCKED / NOT COMPLETED, not failed recipient-name assertions
+or a pass. No Save/Create action was reported. Do not copy customer/order/account
+details from the screenshot into evidence or a review packet.
+
+Retained admitted controller lines265-266 load Sender and Recipient options via
+getCounterpartySelectOptions; its owning method at1359 calls getCounterparties.
+The admitted API library SHA729c3c6cee6b04f925967a9e42277b9702e51876b37d6df119ba40258b20b19c
+sets CURLOPT_TIMEOUT=30 at45 and calls the api.novaposhta.ua HTTPS endpoint.
+The observed message is consistent with that external-read transport path.
+The screenshot does not identify which call failed, its DNS/TCP/TLS phase,
+an NP outage, hosting egress failure, or a code regression. No causal diagnosis
+or timeout/retry/cache/source fix is justified yet. Retained source is not a
+fresh host execution trace.
+
+One bounded owner reopen after a short pause is appropriate to distinguish a
+transient failure from recurrence. No Save/Create/Enter or new test order.
+If the same timeout recurs, stop QA and collect only the named transport facts
+through a separately prepared/reviewed owner diagnostic; no broad archive,
+credentials, API payloads or customer records. No separate model call is needed
+to classify this known transport failure. N3 release remains HELD on N1 QA.
+
+### CURRENT - N1 owner QA accepted; transient timeout cleared (2026-10-21)
+
+The owner confirms that the recipient patronymic visible in the NP document
+form is exactly the test value entered in the patronymic field during shop
+checkout, states that everything else is OK, and explicitly requests recording
+acceptance without completing the numbered QA response form. Record N1 as
+OWNER_QA_ACCEPTED on this direct owner statement; do not request repeat QA or
+a completed checklist. The screenshots support form rendering and the reported
+saved patronymic display. Do not retain or transcribe names, phone numbers,
+addresses, order identifiers, or the literal test value into this ledger.
+
+The owner also reports that the API timeout cleared by itself on the next
+attempt to create a parcel. The previous timeout no longer blocks this QA;
+its technical cause remains unestablished. No transport repair, diagnostic,
+automatic retry, API call or new model review was performed. The wording does
+not establish successful remote shipment creation or an NP mutation receipt.
+
+The owner acceptance does not fabricate individual observations for unavailable
+historical cases, source-encoding inspection or every viewport in the detailed
+matrix. It is the owner's acceptance of the presented N1 behavior. Together
+with the earlier explicit BOTH-recipient-and-sender NP-effects acknowledgement,
+the N1/NP owner prerequisites for the next N3 preparation are satisfied.
+Historical N3 remains unreleased pending its private-staging/receipt successor,
+local checks and one integrated actual Claude review of patch plus owner packet.
+C2 remains HELD until the separate N3 application/QA and C2 release admission.
+This turn records acceptance only; no deployment, Git or roadmap status change.
+
+## CURRENT - N3 private-stage candidate ready locally; review OAuth blocked (2026-10-21)
+
+Owner explicitly requested N3 completion and upload/run commands. Candidate:
+patches/ACC-009-N3_doors-helper-private-release_20261021.php
+SHA256 f97f09a82048be1c4efc2fcff875537fa9023c017307153a129f93761b3d68bc.
+Owner packet: diagnostics/ACC-009-N3_owner-PS_20261021.ps1
+SHA256 702dc0d0fb0bca43df30c5ed39c2b0891ab50306bb0d0db55295eaae061bdd93.
+NOT RELEASED until actual independent final review. Historical N3 remains intact.
+
+Source payload/spec is byte-identical to the accepted N3 spec: target N1 SHA43dc
+to N3 SHA2138, preserving the N1 name behavior and unchanged helper arguments.
+Only release plumbing changes: required private staging/cwd admission, full
+target/hash/backup/action receipts, guarded restore/rollback and self-delete,
+fresh sealed root-web PHP/OPcache observation with owned-byte cleanup. Runtime
+probe does not bootstrap OpenCart or call NP. Read-only metadata admission keeps
+the original49 source pins/admin-system events/startups/namespaces. No DB write,
+cache cleanup, checkout/H1 changes, API mutation, Git or external status write.
+
+Native local PHP8.0.30:23 helper checks,4 actual generated CGI endpoint cases,
+8 lifecycle checks with explicit fictional Windows root/metadata/HTTPS adapters.
+Native PS5.1 pure parser:18 receipt checks;4 Bash bodies syntax-only. Metadata,
+HTTPS provider and persistence remain fictional where declared. No host runtime,
+admin bytecode or remote shipment proof follows. Evidence and release facts:
+diagnostics/ACC-009_N3-release_evidence_20261021/*-local-checks.json and
+work/acc009-n3-release-20261021/release-facts.json. Tests did not execute owner
+SSH/SCP packets or unchanged historical N3 controller suites.
+
+Single integrated CODE/composition request2e28b2d8-6eb3-4605-b209-894efd45e186
+was dispatched through installed subscription Opus/high, tools/MCP empty.
+It failed BEFORE model evaluation with first-party401 expired OAuth (input/output
+usage0), despite saved-auth readiness. Request consumed, never replay. Original
+result and failed closure retained; all36 declared inputs/packet and HEAD/index
+were unchanged. No Claude verdict exists and no paid/API fallback was attempted.
+Owner notified to renew the existing subscription login using the native CLI's
+auth login --claudeai. No key/SSH/setup change or source/QA repetition requested.
+After owner renewal, verify saved subscription and use a fresh request identity
+for the same unchanged patch/packet. Routine final review needs no additional go.
+
+## CURRENT - N3 integrated final review accepted; owner Upload next (2026-10-21)
+
+Owner renewed the existing subscription login. Fresh request
+3ffc97a0-5539-4389-a73c-d9bff7289f6a (n3-code-ready-r2) completed with actual
+claude-opus-5-5/high, no tools/MCP/API-key fallback or overage. Full original
+answer was read by the main executor: REVIEW_OK, zero mandatory findings.
+Both exact hashes remain unchanged:
+
+- Runner patches/ACC-009-N3_doors-helper-private-release_20261021.php,
+  SHA256 f97f09a82048be1c4efc2fcff875537fa9023c017307153a129f93761b3d68bc.
+- Owner packet diagnostics/ACC-009-N3_owner-PS_20261021.ps1,
+  SHA256 702dc0d0fb0bca43df30c5ed39c2b0891ab50306bb0d0db55295eaae061bdd93.
+
+All36 declared inputs and packet unchanged. HEAD/index unchanged; outside-set
+additions are only current N3 review outputs and task-local Git-baseline receipts,
+with no executable/live-target overlap. Original failure/request remains immutable
+and consumed. Acceptance: diagnostics/ACC-009_N3-release_evidence_20261021/release-accepted.json.
+Original full review: n3-code-ready-r2-response.md in that directory. This is
+static/local ready acceptance, not owner-host execution or remote NP acceptance.
+
+Reviewer optional findings are recorded without code changes/provider replay.
+No parallel owner invocations. Compare owner Preflight/Apply actions: an unexpected
+planned -> already_applied transition is unexplained intervention, not proof of
+our own source write/backup. Compare fresh web observations to retained
+PHP8.0.30/litespeed/OPcache true/true/revalidate2; a material difference gets a
+targeted assessment. Conservative unknown/timeout states stay STOP, no Apply
+replay. Additional locking/parser/host-variant hardening is deferred optional.
+
+Owner packet steps are separate Upload, Verify, Preflight, Apply; no automatic
+next step. Verify prerequisites expire4h, Preflight30min. After any Apply attempt
+the packet blocks all repeat steps. Every step rechecks actual private stage and
+runner identity. Preflight/Apply check49 sources/metadata and a fresh sealed
+root-web runtime observation. No NP API, DB writes or cache cleanup. The owner
+alone runs SSH/SCP and manages their existing encrypted key/agent.
+
+One target: extension/PintaNovaPoshtaCod/admin/controller/shipping/internet_document.php,
+before43dc466f5332d45acecc5e1cb2e82e8f712268af568d6f16de90809a3dd60da1,
+after2138e15643ce4bced1b49698955c78f443617e4b59877325113261042d1c7b93.
+Before apply, the backup does not yet exist. The exact actual backup directory is
+printed as backup_path=/home2/boosters/_patch_backups/ACC-009-N3-<UTC>-<8hex>;
+backup=<that exact directory>/internet_document.php and its manifest bind both
+hashes. Never choose a backup by glob/latest. Rollback needs a separately reviewed
+owner packet with target+backup admission, C2 before N3 before N1; no business undo.
+Expected success includes action=planned/changed_files=0 for Preflight,
+action=applied/changed_files=1, exact before/after/current hashes, full backup,
+syntax_gate=php_lint_ok, self_deleted=yes and done=ok for Apply; unchanged exact
+after-image reports already_applied=yes. DB_access is READ_ONLY_METADATA,
+cache_cleanup=NONE. A complete expected receipt closes mechanically.
+
+Next: owner Upload, then separate Verify and Preflight. Inspect any runtime
+variation before Apply; accepted expected output needs no new model call or
+repeat N1 QA. N3 functional QA and C2 release remain later distinct gates.
+
+### CURRENT - N3 owner Upload/Verify/Preflight accepted; Apply next (2026-10-21)
+
+Owner Status reports service running and exact Booster identity loaded. No new
+Unlock is needed from that observation; no lasting key-removal claim is made.
+Owner Upload19:45:45Z, Verify19:45:54Z, Preflight19:46:10Z completed statusOK/exit0.
+Actual runner/packet hashes remain f97f09a8 /702dc0d0 as reviewed above. Bounded
+receipt contract, exact owner remote-script hash, prerequisite binding and
+freshness were independently checked by local pure verifier accept_preflight.ps1;
+the first verifier attempt had a local case-insensitive variable-shadow bug,
+corrected without modifying any owner receipt or production executable. No owner
+action or collection was repeated for this verifier issue.
+
+All49 source identities/no generated OCMOD and exact admin/system metadata pass.
+Web runtime exactly matches retained PHP8.0.30/litespeed/OPcache true/true/freq2;
+probe_cleanup=ok. Exact N1 target before43dc remains unchanged, actionplanned,
+changed_files0, backupnone. Read-only metadata, no cache or NP API effects.
+Only exact preapproved MYSQL_OPT_RECONNECT warning appears on stderr; no new
+result exception or Claude call is needed. Accepted evidence:
+diagnostics/ACC-009_N3-release_evidence_20261021/owner-Preflight-success_20261021.json.
+
+Owner separate Apply may proceed within the original30-minute Preflight window
+(until2026-10-21T20:16:10Z), subject to the same fresh source/metadata/web guards.
+No Apply has run in this acceptance record. Stop on any failure; no retry or
+rollback. N3 QA and C2 remain separate later gates.
+
+### CURRENT - N3 owner Apply accepted; source installed, functional QA next (2026-10-21)
+
+Owner Apply at2026-10-21T19:49:10Z completed statusOK/exit0. The complete saved
+receipt, prior accepted planned Preflight, exact executable/remote-script hashes,
+ordered per-target contract and timestamps were independently validated locally.
+Expected result closes mechanically; no new Claude call. Receipt acceptance:
+diagnostics/ACC-009_N3-release_evidence_20261021/owner-Apply-success_20261021.json.
+
+One controller changed from43dc466f5332d45acecc5e1cb2e82e8f712268af568d6f16de90809a3dd60da1
+to2138e15643ce4bced1b49698955c78f443617e4b59877325113261042d1c7b93;
+native host lint passed. Full retained backup:
+/home2/boosters/_patch_backups/ACC-009-N3-20261021T194910Z-83fd911f/internet_document.php
+with its manifest in the same directory. Never select a different/latest backup.
+PHP8.0.30/litespeed/OPcache true/true/freq2 unchanged; sealed web probe cleanup
+passed. Staged runner is absent after self-delete. Read-only metadata only,
+no DB writes, cache cleanup or NP API calls by this packet. The only stderr is
+the exact preapproved MYSQL_OPT_RECONNECT warning. Actual planned->applied
+transition matches expectations; no unexplained already-applied intervention.
+
+Apply invocation consumed; preserve its STARTED/final receipts and do not repeat
+Upload/Apply or run rollback. Source application is complete. N3 remote-address
+attribution and end-to-end courier behavior remain unproven until separately
+reported legitimate owner workflow; do not manufacture a shipment solely for QA.
+After more than2seconds, source revalidation is expected, but root runtime is
+not proof of admin bytecode. N1 QA remains accepted and is not repeated.
+Close the owner SSH work period with the reviewed key-specific Lock and verify
+its receipt; removal is not yet proven. C2 remains HELD pending N3 owner QA and
+its separate release admission. No task-Done, Git or external status change.
+
+### CURRENT - recurrent NP timeout/TLS report; N3 functional QA remains open (2026-10-21)
+
+After N3 apply, owner reports a timeout again; a subsequent attempt loaded faster
+but displayed "TLS connect error: error:00000000:lib(0):func(0):reason(0)".
+Owner asks whether the patch broke the NP API/extension. Do not dismiss recurrence
+as resolved or infer an NP outage. N3 source application remains proven by its
+receipt; functional/remote acceptance is OPEN. C2 stays HELD.
+
+Fresh local source comparison confirms that removing exactly the N3 marker and
+one PintaCounterparty construction reproduces the entire N1 controller byte for
+byte. No other controller change occurred. Retained/API helper identities match
+the admitted49-source map: PintaCounterparty44d138edca35b83eb7e124161cf8fc0fc19d084db8a635f32b901cc00b773bb7,
+PintaNovaPoshtaApi729c3c6cee6b04f925967a9e42277b9702e51876b37d6df119ba40258b20b19c.
+Its HTTPS endpoint, CURLOPT_TIMEOUT30, HTTP1.1, request shape and TLS defaults
+are unchanged. PintaCounterparty has no active constructor, so its additional
+construction itself makes no network call. The applied release packet did not
+edit php.ini, certificates, API configuration or these library files.
+
+The actual controller calls prepareSenderAddress/prepareRecipientAddress only
+in the POST branch after validation. Their courier paths call saveDoorsAddress.
+The GET form path does not execute the N3 edit; it still calls getCounterparties
+for Sender/Recipient. The earlier identical timeout was observed before N3 apply.
+These facts weigh against N3 altering GET transport, but do not identify the cause
+or certify the full extension. If the failures followed a Save/Create POST, N3
+now makes the previously fatal courier path reach its existing Address.save and
+later document calls; do not infer no remote effects or recommend blind retries.
+
+Asked owner to distinguish form opening from Save/Create. Await that material
+stage fact; no repeated business submission is requested. The current API wrapper
+retains only curl_error/http_code/decoded response, without curl_errno or DNS/
+connect/TLS timings, so the displayed message alone cannot distinguish local
+hosting TLS/network conditions, endpoint/intermediate failures or runtime drift.
+Official reference for SSL/TLS-handshake error meaning:
+https://curl.se/libcurl/c/libcurl-errors.html . No exact numeric errno is claimed
+from the text alone. Existing site self-probe proves only that site's handler;
+it is not an outbound api.novaposhta.ua connectivity test.
+
+Next diagnostic, if required, must be a bounded owner-run transport observation
+from the hosting runtime: unchanged file hashes plus PHP/libcurl/TLS versions,
+DNS/address-family/connect/handshake timings and error numbers for unauthenticated
+NP connectivity; no API key, customer payloads or remote-object mutation. No
+production edits, TLS weakening, paid API, agent SSH, source export or extra
+actual-result model call occurred in this investigation.
+
+### CURRENT - owner confirms GET-only errors; bounded transport capture in review (2026-10-21)
+
+Direct owner answer: errors occur ONLY when opening the NP form, not Save/Create.
+For those reported attempts the N3 saveDoorsAddress edit is not on the execution
+path. Do not claim the whole extension is certified, or infer an NP outage.
+The prior transient timeout happened before N3; this recurrence/TLS error remains
+an unresolved transport symptom. No retry of business submissions is requested.
+
+Prepared credential-free diagnostic and one-shot owner Capture packet:
+diagnostics/ACC-009_NP-transport-inspect_20261021.php,
+SHA256996795b304f4e424beb36445868c4af62c4ed82851a3dadf825c4af148ed4dbb;
+diagnostics/ACC-009_NP-transport_owner-PS_20261021.ps1,
+SHA256d4e117f1fb018ba2d6e496fc2c7d0e46863001c7d0904519f72eb8d4d58074d4.
+HELD pending integrated final review. No production code write or owner run yet.
+The capture checks only3 current NP file hashes and records PHP/cURL/TLS versions,
+errno/error classes, public peer/timings for3 unauthenticated HEAD samples from
+CLI and3 from a nonce/TTL sealed temporary root-web endpoint. It does not use an
+API key, JSON POST, config, DB or customer data. The generated endpoint is removed
+by owned-byte identity. Root-web is not admin bootstrap proof; HEAD/timing success
+is not authenticated NP business acceptance or absence of intermittent failures.
+
+Native PHP8.0.30/local real libcurl:8 focused cases including six safe HEAD
+observations across CLI/web, actual TLS35/connection-refusal capture, drift-before-
+network refusal and cleanup after web collection failure. All network in tests
+is loopback; no live NP/business call. PS5.1 parser6 cases and Bash syntax pass.
+Fixture path/URL/SAPI adaptations are explicit. Final review request
+29808101-d9d7-4df9-9f6b-db42d8c5554c through native subscription Opus/high is
+in progress. This is the ready review of new diagnostic code and owner packet,
+not an automatically commissioned result-exception review of the TLS symptom.
+N3 source Apply remains accepted; N3 functional QA and C2 remain HELD.
+
+### NP transport R1 mandatory cleanup repair; scoped R2 confirmation active
+
+Actual integrated R1 request29808101-d9d7-4df9-9f6b-db42d8c5554c returned
+CHANGES_REQUIRED for one M1: a PHP warning during probe stat/hash/unlink could
+replace the intended cleanup exception and mislabel a leftover probe as cleaned.
+Original answer/closure/frozen packet retained. Nothing was released or run.
+M1 repaired with NpdProbeCleanupFailure: any cleanup-decision throwable records
+STOP_manual_assessment, exact probe basename, cleanup stage and primary failure;
+absence is checked after owned-byte deletion. Hash/unlink warning injections pass,
+preserving primary reason and other output structure. The actual base64/SHA/size/
+eval chain is now exercised locally, closing optional O2. Other optional hardening
+is deferred; module HTTP1.1 is supported by the admitted client source, contrary
+to R1's tentative default-HTTP-version conjecture.
+
+Rebound candidate PHP SHAa80924850d1a40a81acaf6935fedca483cfeb3212c111176c7d09c93bbed5a3c,
+PS SHA080a1be7e0ba56e0ce4451b61ac427d8035c2a91c9f2153ad76ac27a9beb2728.
+Native local PHP8.0.30/libcurl10 cases plus PS6/Bash parse pass. All15 observed
+test HEADs are loopback-only; no NP or business call occurred. Local test output
+is the current repaired verification; the R1 frozen packet preserves its original
+tests/content. Fresh R2 request9fda85f0-7386-4b90-b7f6-4fb26c617b54 is limited to
+M1/affected composition and hash rebind under actual reviewer's closure condition.
+Still HELD until the actual answer; no separate early/result model review.
+
+### CURRENT - NP transport Capture reviewed; one owner invocation next (2026-10-21)
+
+Actual R2 request9fda85f0-7386-4b90-b7f6-4fb26c617b54 completed REVIEW_OK,
+zero remaining mandatory findings. Full response read. Actual Opus/high native
+subscription, tools/MCP absent, no API-key fallback/overage. All26 declared
+identities and packet unchanged; HEAD/index unchanged; outside-set additions only
+current review outputs/task Git baseline, no executable/live-target overlap.
+M1 is closed by actual scoped confirmation; original R1/failure is preserved.
+Acceptance: diagnostics/ACC-009_NP-transport_evidence_20261021/release-accepted.json.
+
+Released exact PHPa80924850d1a40a81acaf6935fedca483cfeb3212c111176c7d09c93bbed5a3c
+and PS080a1be7e0ba56e0ce4451b61ac427d8035c2a91c9f2153ad76ac27a9beb2728
+for ONE owner Capture. No upload needed: exact local code is streamed and checked
+before execution. Existing reviewed owner access helper only; Unlock is idempotent
+when the named key is already loaded. Agents never run either helper or packet.
+Expected complete output is NPDIAG_JSON + done=observed and Capture OBSERVED/exit0;
+curl/HTTP failures are observation data, not automatic replay or integration pass.
+Partial/unknown/cleanup STOP requires bounded assessment, exact saved output, no
+repeat Capture or shipment submission. Full deterministic remote-script hash is
+recorded in release acceptance for result closure. No owner run has happened yet.
+
+No new cURL/TLS/library change, source deployment, DB/config/key/customer access
+or authenticated NP action. The only temporary root-web file is sealed by nonce/
+TTL and removed by exact owned bytes, or its name is reported for STOP assessment.
+After owner work, key-specific Lock still requires actual owner receipt. N3 source
+apply remains proven; N3 functionality/C2 stay open pending this investigation.
+
+### CURRENT - 2026-10-22 owner NP Capture complete; six clean transport samples
+
+Owner ran exactly one reviewed Capture at2026-10-22T05:13:53Z; packet completion
+05:13:56Z, OBSERVED/exit0, empty stderr. Pure local verifier checked the complete
+six-line receipt, both artifact hashes and deterministic streamed-script SHA
+431e14d0793511df1a74896ce54f10bf6b9ae270460c8e624105633d5cf802cd.
+Acceptance: diagnostics/ACC-009_NP-transport_evidence_20261021/owner-Capture-success_20261022.json.
+No extra model call, capture replay, code fix or production mutation.
+
+All3 expected NP hashes match: installed N3 controller2138, counterparty44d138ed,
+API client729c3c6c. Sealed probe cleanup confirmedok. No DB/config/API-key or
+customer read, source mutation or authenticated business API request. Owner
+Unlock reported existing named key already loaded; no subsequent Lock receipt yet.
+
+CLI and root-web both PHP8.0.30/libcurl8.22.0/OpenSSL1.1.1w. All6 unauthenticated
+HEAD samples completed: curl_errno0, HTTP200, SSL verify result0, total times
+251.458..295.238ms. Default and forced IPv4 all used the same public peer IPv4
+94.131.255.21. The appconnect timings are elapsed since start, not pure TLS-only
+duration. These are the first captured native curl/TLS versions here, not proof
+the native libraries never changed historically.
+
+Conclusion is bounded: these sampled connections and certificate checks were
+healthy at capture time. The prior intermittent timeout/TLS error was not
+reproduced; its cause is unresolved. Do not claim a fixed incident, permanent
+NP availability, authenticated Counterparty POST success or admin bytecode proof.
+No basis in this snapshot for an IPv6/TLS/certificate/timeout change or rollback.
+
+Next named missing fact: one normal NP form opening now can compare its actual
+authenticated read path against the clean transport observation. No Save/Create
+or new order/parcel requested. If an error recurs, record exact local time and
+message only; do not repeatedly reload. A later scoped admin request trace would
+need its own reviewed bounded collector and privacy controls; no standing raw log,
+API payload/key or extra result-review authority. Owner should explicitly Lock
+the named key after this work period; closing PowerShell is not removal proof.
+N3 source Apply remains accepted; functional courier QA and C2 remain separate.
+
+### CURRENT - 2026-10-22 owner confirms normal NP form opening
+
+After the accepted transport Capture, the owner reports that the form opens
+normally. This closes the requested single opening check of the real admin read
+path. The earlier intermittent timeout/TLS symptom is currently absent; its cause
+is still unproven. No further Capture, transport change or rollback is indicated.
+This is not courier Address.save/document submission QA. N3 source Apply remains
+accepted; its functional courier QA and the separate C2 release remain open.
+
+Before continuing ACC-009, the owner requests a canonical local-access policy
+change: remove mandatory per-work-period Lock; preserve the absolute prohibition
+on AI agents running key/SSH/server operations. The requested Windows-session
+lifetime is being distinguished from native Windows-agent persistence. No agent
+has run a key/service/SSH operation or installed an automatic cleanup mechanism.
+The earlier per-work-period Lock instructions above are historical and are
+superseded by this explicit owner decision for ordinary non-GSS work.
+
+Owner follow-up 2026-10-22 explicitly accepts persistent key availability even
+after reboot, with no mandatory Lock. This resolves the lifetime choice and
+supersedes the initial Windows-session expiry request. Optional targeted Lock
+remains available to the owner; no automatic cleanup mechanism is requested.
+Canonical AGENTS/access/workflow instructions and shared access readiness now
+record the same choice. AI key/SSH/server access remains prohibited. No helper
+or frozen owner-packet bytes, key/service settings, Git or task status changed.
+
+### CURRENT - 2026-10-22 N3 owner courier save accepted; C2 release preparation
+
+The owner directly confirms successful saving of a legitimate courier TTN after
+N3 installation. This satisfies the named N3 functional owner gate for C2 release
+preparation. No new test parcel was requested, no customer identifiers received,
+and no agent NP/SSH/key action occurred. This scoped confirmation does not prove
+every sender/recipient/API edge or remote-object creation attribution.
+
+Prepare a separate private-staged C2 release and owner packet using the exact
+accepted R3 controller payload (N3 base2138 -> C2 after4d84). Reuse CODE R6
+acceptance by identity. New release transport, directory-schema admission and
+cleanup handling require local checks and one integrated final subscription
+Claude review before owner execution. No C2 upload/apply is released yet.
+
+C2 private-release candidate prepared locally:
+patches/ACC-009-C2_recipient-address-prefill-private-release_20261022.php,
+SHA256 8645e8f247681529d0a8ec9e42b6a01fa1a656e246fa949a4fb08796206fb9d2.
+Owner packet diagnostics/ACC-009-C2_owner-PS_20261022.ps1,
+SHA256 bc920b06508ee2332ef30120e5f7d8eb715d2ede15d0b01ae216c604dda8a2be.
+The complete source spec is byte-identical to accepted C2 R3. New private-release
+envelope reuses the accepted N3 lineage and adds metadata-only required local
+directory-column admission plus cleanup-error filename/primary-reason retention.
+No directory/customer rows, DB writes, NP business call or cache cleanup by runner.
+
+Native PHP8.0.30:29 actual C2 controller cases,28 release-helper/schema cases,
+4 generated CGI requests and10 entry/filesystem lifecycle cases passed. Metadata,
+directory persistence/API effects and HTTPS reply producers are fictional; original
+12 actual Twig/HTML parser checks reused by exact unchanged R3 bindings. Pure
+PS5.1 parser18 cases and4 Bash syntax checks passed without running owner transport.
+Evidence: diagnostics/ACC-009_C2-release_evidence_20261022/*-local-checks.json.
+
+Actual integrated final request0fda91b7-c2e8-4e44-a523-0317cf216d83 returned
+401 expired subscription OAuth before substantive evaluation. Original result,
+failed run and immutable closure retained; review is NOT_REVIEWED. Declared38
+inputs, Git HEAD/index and request bytes unchanged. No paid fallback or tool/MCP
+calls. Owner asked to renew existing native subscription login; do not reset SSH,
+repeat QA or replay the consumed request. C2 remains unreleased pending successful
+fresh final review. No owner upload/apply instructions released.
+
+### CURRENT - 2026-10-22 C2 final REVIEW_OK; native auth recovery observed
+
+Owner's attempted login command did not start Claude (missing path separator).
+Instead, the same native subscription adapter was launched with approved normal
+owner-account execution outside the workspace filesystem sandbox; native profile
+metadata advanced without an owner login. Fresh C2 request
+e00b1d8d-92de-4423-9ca8-7b6548980952 completed REVIEW_OK, no mandatory findings,
+Opus5.5/high, no tools/MCP or overage. Original401 R1 remains failed/consumed.
+Full R2 response read;38 original plus3 failure-evidence inputs unchanged,
+HEAD/index unchanged. Acceptance:
+diagnostics/ACC-009_C2-release_evidence_20261022/release-accepted.json.
+
+Both exact executable hashes are unchanged from the candidate above. C2 may now
+proceed through owner Upload, Verify and Preflight; return complete receipts
+before Apply. Mechanical closure must enforce R2 conditions C1-C3: planned2138
+to applied4d84 with one exact owned C2 backup and staged runner absent; exact
+retained web runtime8.0.30/litespeed/OPcache true/true/freq2, with variations
+assessed; any probe-cleanup STOP needs separately prepared exact-name/hash-first
+owner cleanup. No blind retry, unexpected already-applied acceptance or rollback.
+All6 reviewer optional notes retained without changing accepted source scope.
+
+The owner separately requested fixing repeated auth interruptions. Present
+recovery is observed under the changed execution boundary; no direct token access,
+CLI update or key/server action. Auth routing doc correction is a separate delta
+in diagnostics/BOOSTER_claude-auth_report_20261022.md. Its final independent
+requestf8e0e74b-4a4c-4aa8-aaab-ff7d17855afa hit weekly subscription quota before
+evaluation (reset2026-10-22T19:00Z/22:00 Kyiv). It remains NOT_REVIEWED pending
+quota, no paid fallback or scheduled retry. This does not invalidate the unchanged
+C2 runner/packet review, host gates or owner QA. No C2 application occurred yet.
+
+### CURRENT - 2026-10-22 C2 owner Upload/Verify/Preflight accepted; Apply next
+
+Owner packets completed Upload06:16:31Z, Verify06:16:32Z and Preflight06:16:34Z,
+all statusOK/exit0. Local-only AST extraction of pure pinned packet validators
+checked complete stdout/stderr, both artifact hashes/size, all3 deterministic
+remote script hashes, saved Verify prerequisite and unexpired Preflight. No
+transport or owner packet was executed by the agent. Acceptance:
+diagnostics/ACC-009_C2-release_evidence_20261022/owner-Preflight-success_20261022.json.
+
+Fresh host admission passed49 exact sources/no generated OCMOD, admin/system
+events/startups/namespaces, and required textual directory-column schema. Native
+PHP8.0.30; web runtime exactly matches litespeed/OPcache true/true/freq2. Sealed
+probe cleanup confirmedok. Target remains exact N3 base2138, actionplanned,
+changed_files0, backupnone, no DB writes/NP calls/cache cleanup. Only the exact
+allowlisted MYSQL deprecation warning occurred.
+
+Separate owner Apply may proceed before2026-10-22T06:46:34Z (09:46 Kyiv).
+Expected transition: planned2138 -> applied4d84, changed_files1, one exact owned
+C2 backup, native lint success, staged runner absent/self_deletedyes. Compare
+runtime again and enforce all R2 receipt conditions before mechanical acceptance.
+After any attempted Apply stop on failure/unknown; never retry or run rollback.
+No new model call or repeated N1/N3 QA needed for this expected receipt.
+
+### CURRENT - 2026-10-22 C2 owner Apply accepted; recipient prefill QA next
+
+Owner Apply at2026-10-22T06:18:46Z completed statusOK/exit0. The local-only
+validator checked both exact executable hashes, complete ordered body/wrapper,
+saved planned Preflight identity, matching prerequisite, deterministic remote
+script hash and Apply within its original30-minute window. All reviewer C1-C3
+conditions match the expected outcome; no new model review or transport call.
+Acceptance: diagnostics/ACC-009_C2-release_evidence_20261022/owner-Apply-success_20261022.json.
+
+One controller changed2138 ->4d84, native lint passed. Exact owned backup:
+/home2/boosters/_patch_backups/ACC-009-C2-20261022T061846Z-68be01c7/internet_document.php.
+Manifest is in the same directory. Do not substitute another/latest backup.
+Runtime exactly8.0.30/litespeed/OPcache true/true/freq2;49 source identities and
+directory-column metadata admitted before write. Probe cleanupok, staged runner
+absent after self-delete. No DB writes, NP API calls or cache cleanup by packet.
+Only exact preapproved MYSQL deprecation warning. Apply attempt is consumed;
+never retry Upload/Apply or issue rollback without a separate recovery packet.
+
+C2 source application is complete. Focused owner QA remains: open a courier
+order's initial TTN form when no TTN exists yet, compare recipient delivery type,
+area/city/street/house/optional flat with that order's snapshot. Opening a form
+for an already-saved TTN does not prove new-order defaults. Use an available
+legitimate order; do not create a parcel/order merely for QA. A legitimate later
+save supplies the remaining C2 POST/provider workflow observation. No individual
+case, viewport or external effect is inferred from source application.
+N1/N3 accepted checks remain accepted. N2/WP3b/WP3c and the quota-held auth-routing
+documentation review retain their separate gates. No Notion/dashboard/Done/Git
+change or new server/key authority.
+
+### CURRENT - 2026-10-22 owner postomat TTN creation confirmed
+
+Owner reports successful creation and supplies an admin form plus an NP document
+confirmation. The displayed recipient delivery mode is warehouse/postomat, and
+the resulting NP document shows postomat delivery. Record this as owner-confirmed
+successful postomat TTN creation after C2 application; no identifier, name, phone,
+address or payment value is copied into the technical record. It is not proof of
+parcel handover or delivery, or attribution of newly created remote addresses.
+
+This is a useful warehouse/postomat regression observation, not the courier
+default/round-trip case changed by C2. C2 remains source-applied with courier
+prefill QA pending for an available legitimate courier order without an existing
+TTN. Do not repeat the accepted postomat test, require an artificial order/parcel,
+infer courier QA success or change canonical task status. No extra model review
+is needed to classify this clear scope difference. Other gates remain unchanged.
+
+### CURRENT - 2026-10-22 owner courier success with empty-flat checkout blocker
+
+Owner reports courier delivery generally works, except an empty optional
+apartment prevents client order confirmation with a generic warning. Follow-up
+explicitly identifies customer checkout, not admin TTN save. Record general
+courier success within this exception, not full acceptance of unenumerated cases.
+Apartment must remain optional under the existing approved policy.
+
+Bounded diagnosis: diagnostics/ACC-009_optional-flat_report_20261022.md.
+Actual parent-applied readiness helper permits empty flat;10 native PHP8.0.30
+guest/authenticated declaration+seal cases pass with fictional services. Two
+public frontend scripts exactly match accepted October21 after-images. Failure
+not reproduced; no cause or fix inferred. Exact warning text and guest/auth mode
+requested. No speculative patch, live order/API/DB/SSH action or status change.
+
+### CURRENT - 2026-10-22 empty-flat observation closed without fix by owner
+
+Owner confirms authenticated checkout now accepts an empty apartment and the
+previous failure cannot be reproduced. The original cause remains unknown; no
+source fix was applied or claimed. Owner explicitly ends this investigation and
+will create a separate task if the symptom recurs. Cancel the pending exact-error
+and customer-mode evidence requests; authenticated mode is now known and no
+further capture, test order, source pull or model call is needed for this issue.
+Apartment remains optional. Keep the accepted source/application and general
+owner delivery evidence; do not infer every guest/viewport/provider edge passed.
+This closes only this diagnostic observation, not the remaining ACC-009 profile,
+metadata or auth-routing review work. No canonical roadmap/status change.
+
+### CURRENT - 2026-10-22 resume original WP3b read-only preparation
+
+Owner asks to continue after closing the unreproduced empty-flat observation.
+Return to the original optional profile/admin fields, without repeating accepted
+courier/source/QA gates. Preparation map:
+plans/ACC-009_WP3b_preparation_20261022.md.
+
+Retained r13 profile/admin enumeration and admitted catalog custom-field model
+show generic active account-field enumeration, so metadata insertion alone would
+not enforce profile-only visibility. Design surface controls/mapping and preserve
+r11/r13/r16 guard semantics before any source release or WP3c metadata. Admin
+getCustomers return-contract/caller and delegated order API inventory are still
+required. N2 compatibility-dependent name changes remain separate/HELD; no live
+NP semantic probe or silent regex relaxation. Local preparation proceeds while
+independent-review quota is unavailable; no model retry or owner apply is released.
+
+
+### CURRENT - 2026-10-22 owner-requested checkpoint and status refresh
+
+Owner directly requested the current-state checkpoint, status update, scoped
+commit and push, plus remaining work and redesign sequence. This is fresh
+one-time ACC-009 authority, not standing permission. Canonical Notion remains
+In progress: N3 and C2 are applied, legitimate postomat TTN creation and general
+courier operation are owner-confirmed. Empty-flat investigation is closed
+without fix at the owner's direction. Accepted N1/checkout/courier checks do not
+need repetition; do not infer all individual edge cases passed.
+
+Notion properties were updated and fetched back; all eight requested values
+match after normalizing the fetch representation of one rich-text line break.
+Evidence: diagnostics/ACC-009_checkpoint_evidence_20261022/notion-status.json.
+Dashboard mirrors only this task row. New continuation:
+handoffs/ACC-009_CONTINUE_20261022.md. Original profile/admin source WP3b, N2 name
+compatibility and separately approved WP3c metadata remain open. Auth-routing
+documentation is explicitly NOT_REVIEWED after the recorded weekly quota hit.
+
+Preserve original primary branch, HEAD and index, and unrelated local work.
+Publish through an isolated managed checkout from verified remote master using
+an explicit allowlist. Preserve exact reviewed runner/packet bytes and prior
+reviews/expected-receipt closure; this checkpoint introduces no production code
+change or server/key action. Actual commit/push outcome belongs to the later
+local publication receipt and verified Git history, not an advance claim here.
+
+Live Notion RD-16 is Not started, approved light variant A; shared cabinet shell
+and personal-data redesign precede RD-17 addresses and RD-18 orders. Finish the
+functional profile foundation without restarting accepted data/courier work.
+No redesign deployment date or whole-task Done transition is claimed.

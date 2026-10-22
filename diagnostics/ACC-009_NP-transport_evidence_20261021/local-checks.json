@@ -1,0 +1,21 @@
+{
+  "diagnostic_sha256": "a80924850d1a40a81acaf6935fedca483cfeb3212c111176c7d09c93bbed5a3c",
+  "PHP": "8.0.30",
+  "checks": [
+    "unmodified production entry refuses local root before network",
+    "actual PHP8 libcurl in CLI and local web, six unauthenticated HEAD requests, HTTP405 accepted as transport observation",
+    "actual generated web endpoint and owned-byte cleanup",
+    "actual native libcurl TLS handshake failure captured as TLS35, verification remains enabled",
+    "changed source refuses before any network request",
+    "web collection failure retains CLI observations and removes actual temporary probe",
+    "injected hash warning => STOP + exact basename + primary error preserved; other output structure unchanged",
+    "injected unlink warning => STOP + exact basename + primary error preserved; other output structure unchanged",
+    "native libcurl connection failure captured without response body or raw error dump",
+    "TLS35 and timeout28 classification; no synthetic TLS-success claim"
+  ],
+  "requests_seen": 15,
+  "test_sha256": "57a1958cd3dc9a09a2d86553f95dd0fb310b8daa46583285875146c7d8054b5b",
+  "eval_chain_exercised": true,
+  "production_runtime_or_NP_calls": false,
+  "fake_boundaries": "Fixture adapter: Windows path admission, fixed root/URLs to loopback, web SAPI cli-server accepted. Native real libcurl HTTP405, TLS35 and connect refusal tested; real hosting/remote TLS remains owner observation. Cleanup-failure wrappers inject E_USER_WARNING only in fictional local copies."
+}

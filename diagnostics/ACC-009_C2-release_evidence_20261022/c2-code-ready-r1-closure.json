@@ -1,0 +1,31 @@
+{
+  "task": "ACC-009-C2",
+  "stage": "c2-code-ready-r1",
+  "request_id": "0fda91b7-c2e8-4e44-a523-0317cf216d83",
+  "consumed": true,
+  "replay_permitted": false,
+  "closed_utc": "2026-10-22T05:39:52.200182+00:00",
+  "actual_status": "failed",
+  "actual_error": "Failed to authenticate. API Error: 401 OAuth access token has expired. Re-authenticate to continue.",
+  "full_original_result_sha256": "7b90fe35ff2b97355e42e176c356f09e293ea079ac4306e08f4ff6b1657a3fab",
+  "response_sha256": null,
+  "declared_input_drift": [],
+  "packet_unchanged": true,
+  "model_requested": "claude-opus-5-5",
+  "effort": "high",
+  "model_initialized": "claude-opus-5-5",
+  "tools": [],
+  "MCP_count": 0,
+  "observed_tool_calls": [],
+  "overage": null,
+  "Git_HEAD_unchanged": true,
+  "index_unchanged": true,
+  "changed_status_entries": [
+    "?? diagnostics/ACC-009_C2-release_evidence_20261022/c2-code-ready-r1-original-result.json",
+    "?? diagnostics/ACC-009_C2-release_evidence_20261022/c2-code-ready-r1-run.json",
+    "?? work/acc009-c2-release-20261022/c2-code-ready-r1-git-status-start.bin"
+  ],
+  "composition": "Only declared inputs are frozen; outside-set path impact must be assessed before positive release. No branch-wide certification.",
+  "review_verdict": "NOT_REVIEWED",
+  "production_or_owner_release": false
+}

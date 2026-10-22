@@ -1,0 +1,30 @@
+{
+  "task": "ACC-009-NP-TRANSPORT",
+  "review": "REVIEW_OK",
+  "request_id": "9fda85f0-7386-4b90-b7f6-4fb26c617b54",
+  "accepted_utc": "2026-10-21T20:19:16.420820+00:00",
+  "actual_model": "claude-opus-5-5",
+  "effort": "high",
+  "full_response_read": true,
+  "PHP_sha256": "a80924850d1a40a81acaf6935fedca483cfeb3212c111176c7d09c93bbed5a3c",
+  "PS_sha256": "080a1be7e0ba56e0ce4451b61ac427d8035c2a91c9f2153ad76ac27a9beb2728",
+  "response_sha256": "fa3513ecb3113bd45f4c97e47669ec6c6ef39db215b1991062a12c5cf4afa873",
+  "mandatory_findings": [],
+  "M1": "CLOSED by actual R2 scoped confirmation, original R1 preserved",
+  "tools_MCP_calls": false,
+  "overage": false,
+  "inputs_unchanged": true,
+  "outside_set_assessment": "Only task-local review outputs/Git baseline added; no source/packet target changes. HEAD/index unchanged.",
+  "expected_remote_script_sha256": "431e14d0793511df1a74896ce54f10bf6b9ae270460c8e624105633d5cf802cd",
+  "optional_disposition": {
+    "runtime_variants": "Retain strict admitted runtime; shape/runtime mismatch is a partial observation, not a business acceptance.",
+    "eval_chain": "O2 closed via actual local decode/size/SHA/eval chain.",
+    "remote_script_hash": "Compare actual saved Capture remoteScriptSha256 to expected value during deterministic closure.",
+    "SSH_failures": "Keep no replay/state unknown. Exit255 alone does not prove no remote action.",
+    "HTTP1_1": "Matches retained admitted module line43; HEAD, no-key, timeout10 and UA differences explicitly retained.",
+    "cleanup_subreason_and_additional_edges": "Optional deferred; STOP plus basename/stage and preserved primary error sufficient for release."
+  },
+  "release": "One owner Capture only; no agent server/key access; no production fix/apply or business API action.",
+  "owner_execution_observed": false,
+  "next": "Owner existing key access then one Capture and send complete technical output; no repeat Capture without assessment."
+}

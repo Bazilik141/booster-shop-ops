@@ -47,6 +47,49 @@ tools/MCP/hooks, overage refusal and actual request/result identity controls.
 The helper is discovery/admission only, not a replacement for a reviewed exchange
 adapter, request ledger or exact patch/command review.
 
+### Native OAuth refresh and the execution boundary - correction 2026-10-22
+
+Review status: present recovery is confirmed by the completed C2 review. The
+separate final review of this routing documentation returned a weekly-limit
+refusal before substantive evaluation. This delta is NOT_REVIEWED; retain the
+pending gate and do not describe it as independently approved.
+
+Read-only status discovery may run inside the workspace sandbox. Actual native
+subscription review exchanges need normal owner-account access to Claude's own
+profile so its built-in authentication can refresh and persist normally. Run only
+the checked task-specific exchange adapter through an approved execution call
+outside the workspace filesystem sandbox (`sandbox_permissions=require_escalated`
+where supported). This means normal user rights, not Windows administrator rights.
+Do not change global sandbox settings, broaden filesystem roots or install a
+credential/token refresher. Approval is scoped to the exact checked exchange;
+never use this route for arbitrary shell commands, tools or an unreviewed launcher.
+
+Before that call, verify the installed CLI identity, adapter code/dependency pins,
+subscription/no-API-source admission and complete declared review input set. Keep
+Claude tools/MCP/hooks disabled, provider overrides filtered, custom auth stores
+forbidden and paid overage refused. The agent never opens/prints/edits credential
+contents; only native Claude performs its own built-in authentication. No SSH/key,
+server, deployment, external business-data or GSS permission follows.
+
+A workspace-sandbox401 does not establish a broken saved login. Preserve that
+failed request and inspect the execution boundary first. Where a needed review
+was already authorized, use one fresh request identity under the scoped launch
+rule, not an automatic replay loop or a throwaway model probe. If approval is
+unavailable, stop and explain that execution boundary; do not call it logout.
+Only a real failure to authenticate/refresh in the proper native context, or
+verified absence/revocation of saved login, justifies asking for owner login.
+
+Observed recovery: failed C2 request0fda91b7-c2e8-4e44-a523-0317cf216d83 was
+followed by requeste00b1d8d-92de-4423-9ca8-7b6548980952 outside that sandbox;
+native credentials modification metadata advanced without an owner login.
+The final model outcome is recorded in
+`diagnostics/BOOSTER_claude-auth_report_20261022.md`; metadata alone is not proof
+of model success. Do not claim permanent login or every historical401 explained.
+
+If an interactive login is genuinely needed, prefer a fenced owner command using
+`& (Join-Path $env:USERPROFILE '.local/bin/claude.exe') auth login --claudeai`.
+This avoids the missing-separator typo before `.local`; never ask for tokens.
+
 ### When owner login is actually needed
 
 - Never ask for login solely because a chat is new, PATH lookup fails, the quota
@@ -107,11 +150,14 @@ The owner keeps the existing passphrase-protected key; never request its secret
 or remove on-disk encryption. New hosts still follow the default provider-check
 rule; the retired first-use exception above is not permission for another bypass.
 
-## Owner-controlled SSH work periods - decision 2026-10-20
+## Owner-controlled SSH access - decisions 2026-10-20 / 2026-10-22
 
-The owner explicitly approved unlock-before-work / remove-after-work mode after
-being told that Windows-agent access is account/service-wide and available to
-other same-user processes. It is not confined to one PowerShell window or chat.
+The 2026-10-22 owner decision removes mandatory Lock after each task/work period.
+The owner may unlock once and reuse the key across ordinary non-GSS tasks/chats.
+Do not request a cleanup receipt as a completion gate. Lock remains an optional
+owner action for explicitly ending access early. Windows-agent access remains
+account/service-wide and available to other same-user processes; it is not
+confined to one PowerShell window or chat.
 Agent SSH/key/server access remains prohibited even while the owner has loaded
 the key. Local command denials and project policy are not an OS isolation boundary.
 
@@ -122,15 +168,27 @@ Use reviewed `scripts/booster_ssh_session.ps1` actions only as the owner:
   in a different/elevated user context.
 - `Unlock`: normal owner console, existing named encrypted key and native local
   prompt; confirm the exact Booster identity loaded before using agent packets.
-- `Lock`: explicitly remove only that identity and confirm absence. Preserve
+- `Lock` (optional): explicitly remove only that identity and confirm absence. Preserve
   other keys; never use a remove-all operation. Do not claim cleanup while the
   service is inaccessible or merely stopped.
 - `Status`: bounded owner-local readiness only; never print other identities,
   key material, comments, account/config contents or the passphrase.
 
-Closing PowerShell or rebooting must not be treated as key removal. Do not use
-an unverified lifetime constraint as a substitute for explicit Lock. If work is
-interrupted, use Lock/Status as the next owner action, not an automatic new load.
+Lifetime decision confirmed 2026-10-22: the owner explicitly accepts persistent
+availability, including across Windows sign-out/reboot, until optional owner
+removal. This replaces the initial request for Windows-session-bound access.
+No automatic expiry or session-end cleanup is required, installed or verified.
+Do not introduce cleanup hooks or request another lifetime confirmation. Existing
+loaded-key reports may be reused within their observation limits; do not force
+repeated Unlock/Setup per chat. Persistence acceptance is not current key-state
+proof; owner packets retain their existing fail-closed readiness checks.
+
+The reviewed helper bytes and historical owner guide are preserved. Their older
+"Always run Lock after work" instructions are superseded by this owner decision,
+not a new executable implementation. No launcher, scheduled task, logoff hook,
+service setting, key or SSH configuration was changed. Any new mechanism needs
+local checks, integrated independent review and owner execution before use.
+Native-agent persistence reference: [Win32-OpenSSH issue 1487](https://github.com/PowerShell/Win32-OpenSSH/issues/1487).
 
 The alias remains unchanged with `IdentityAgent none` for manual mode. The new
 reviewed ACC-009 agent packet is

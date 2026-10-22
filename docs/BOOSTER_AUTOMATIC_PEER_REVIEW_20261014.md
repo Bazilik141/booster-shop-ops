@@ -1,9 +1,15 @@
 # Booster Shop automatic independent review — current owner rule
 
-Decisions: BOOSTER-AUTOREVIEW-20261014; owner efficiency adoption 2026-10-19.
-The owner selected the installed Claude CLI/subscription, approved the reviewed
-efficiency proposal, and confirmed: ordinary successful host receipts need no
-new model call; the new procedure also applies to ongoing tasks, including ACC-009.
+Decisions: BOOSTER-AUTOREVIEW-20261014; owner efficiency adoption 2026-10-19;
+owner review-point reduction and CRM/dashboard exception 2026-10-21. For non-GSS
+tasks assigned to Codex, the default is one integrated independent final review
+of the completed package, except routine bounded work on the existing main CRM
+Google Sheets workbook and canonical dashboard, which has no Claude review by
+default.
+Codex prepares the patch and its owner-run apply packet where applicable. Early
+design, domain-exception and actual-result reviews require the owner's route
+choice. This applies to ongoing tasks, including ACC-009. Ordinary expected host
+receipts still close mechanically.
 Durable instructions: English. Owner communication: concise, plain Ukrainian.
 
 ## Scope and precedence
@@ -22,53 +28,128 @@ repeat with an explicit owner gate. Resolve a genuine authority conflict with
 one concrete owner question; do not invent blanket stricter-rule precedence that
 restores the superseded procedures.
 
-**GSS exception:** the 2026-10-19 efficiency changes do not amend GSS governance,
-its frozen-state/no-replay rules, accepted transport identities, readiness gates
-or continuity procedure. GSS retains the prior 2026-10-14 shared review requirements
+**GSS exception:** the 2026-10-19 and 2026-10-21 non-GSS efficiency and review-point
+changes do not amend GSS governance, its frozen-state/no-replay rules, accepted
+transport identities, readiness gates or continuity procedure. GSS retains the prior 2026-10-14 shared review requirements
 and its specific rules. In particular, its applicable Git freeze and separate
 actual-result reviews remain. No GSS task is resumed or grant renewed here.
 The superseded 2026-10-14 shared text stays in force for GSS only. It is reproduced verbatim in the appendix "GSS-retained 2026-10-14 shared review text" at the end of this file (source SHA256 4d4fd0a511bfc6918b95880ec178d8a5aee233e20867b32819e9b3df4944dec8 as pinned in changes.json). Where it differs from the sections above, the appendix controls for GSS.
 
-## Required review and proportional stages
+## Default review and owner-selected exceptions (non-GSS)
 
-Codex automatically initiates actual Claude review at a ready required stage.
-The owner need not copy prompts or authorize each routine in-scope review.
-The executor handles preparation, complete result capture, checks and scoped
-repairs. Subagents are additional internal assistance, not actual Claude verdicts.
-The author cannot approve its own work; other-executor assignments retain their
-applicable independent-review routing.
+For a non-GSS implementation assigned to Codex, the standard route is one
+integrated independent Claude CODE/composition review after meaningful local
+checks and before owner application. Codex owns routine design decisions and
+prepares the patch plus the exact owner-run apply packet. The final review covers
+the concise design rationale, changed logic, runner, admission conditions,
+backup/restore/rollback, receipt contract and both exact hashes together.
+Risky-zone code remains in this final review when the task is routed to review.
+Owner application and live QA stay separate. A task explicitly assigned to
+another executor retains its applicable independent-review routing; no author may
+approve their own work. When this package is ready and this policy requires review,
+Codex automatically initiates the single final review through the installed
+subscription CLI; the owner need not authorize each routine final review separately.
 
-Use coherent stages proportional to risk, not a mandatory number of calls:
+### Routine main CRM Sheets and dashboard work — no Claude review by default
 
-- Design review when architecture, authority or interactions are new, unresolved
-  or contested, or an explicit task gate requires it.
-- CODE/composition review of new or changed logic, including every risky-zone
-  change, after meaningful local checks and before owner application. Supply the
-  intended runner, admission conditions, backup/restore/rollback and receipt
-  contract together; avoid a late implementation round merely to remove HELD.
-- Model assessment of actual results when there is a substantive deviation,
-  ambiguity, partial evidence or a decision not settled by the accepted criteria.
-  A complete expected receipt closes mechanically. Owner live QA stays separate.
+For Codex-executed non-GSS work confined to the existing main CRM Google Sheets
+workbook and canonical `dashboard/booster-dashboard.html`, skip a separate Claude
+review by default when the change is bounded, the relevant schema/data contracts
+and existing workflow are known, and no exception trigger below applies. This
+covers read-only diagnosis, bounded corrections to existing rows/cells or
+formulas, routine dashboard calculation/presentation fixes, and narrow bug fixes
+in an existing CRM/dashboard path. It does not authorize a live write, deployment,
+new data access, or a broader scope.
 
-Reviewer findings are explicitly mandatory or optional, with affected scope and
-the condition for closure. The executor cannot downgrade or defer a mandatory
-finding without the reviewer's reasoned disposition or the owner's informed scope
-decision. Repair substantive findings and interactions as one batch. New logic,
-material dependency changes, mandatory behavioral repairs, new risk/authority/data
-scope or unresolved result deviations require the applicable fresh review.
+The CRM risky-zone safeguards still apply: verify the source and affected cells
+or code path, preserve formulas and dependencies, record bounded evidence and
+rollback facts, and run one focused local/syntax/smoke check when code is changed.
+For any main-CRM structural change, add/remove in `Товари`, `РРЦ`, `Розхідники`
+or `Майстер_Товарів`, or formula-column edit, run the required read-only CRM
+integrity check before and after and record its bounded output. The owner retains
+approval for business values and live mutations, deployment where applicable,
+and final QA. No-Claude routing changes only the independent review call.
+
+Propose an exception when work changes sheet structure or formula architecture;
+adds an integration, authentication or permission path; materially changes
+accounting, stock or order logic; performs broad/destructive mutations; or has
+material unresolved cross-system dependencies or high-impact ambiguity. An
+explicit owner request for independent Claude review also routes the work to
+review. Do not infer an exception solely from the CRM risky-zone label. Before a
+separate exception review, present the owner with the exception card and route
+choices below. If the owner chooses no separate call or a narrow subagent check,
+record the block for special attention in the general review/report as described
+there; unresolved blocking decisions remain open. Do not claim Claude approval
+when no Claude review occurred.
+
+Do not create a separate early design review merely because a choice is new,
+complex or risky. Codex normally resolves bounded design choices, records the
+rationale and presents the finished result in the integrated final review. An
+early design review is an exception only when an explicit owner gate requires a
+pre-code review, the owner requests independent Claude input before a decision,
+or a materially consequential architecture/authority/data interaction remains
+unresolved and cannot be safely closed by reviewing the implementation before
+application. A Claude design review does not replace the final CODE/composition
+review.
+
+An actual-result review is also an exception, not a routine stage. A complete
+expected receipt and outcomes mechanically covered by accepted criteria close
+without a model call. Propose a result-review exception only when an unexpected
+material outcome is ambiguous or partial and could change a continue/stop,
+rollback, acceptance, security or business decision. Known fail-closed outcomes
+are recorded as such; they do not need Claude merely to repeat the classification.
+Owner deployment and live QA remain separate.
+
+Before any separate early-design, CRM/dashboard-domain-exception or actual-result
+review, Codex sends the owner a short exception card: stage and evidence; why the
+default route (including the no-review CRM/dashboard route, when applicable) or
+mechanical criteria are insufficient; the consequence of deferring; and a
+recommended route. The owner chooses one:
+
+1. **Separate Claude review.** Send one bounded actual Claude request for that
+   question. An early design review is followed by the normal final CODE review.
+2. **No separate review.** Put the block in the general review package for
+   special attention. For design, this is the final CODE/composition review.
+   For actual results, include it in the next task-level general review; do not
+   silently create an extra narrow call. If no later general review is planned,
+   state that it remains unreviewed in the outcome report and keep material
+   unresolved decisions open/HELD.
+3. **Narrow subagent check.** The executor may launch a subagent only for the
+   stated question and bounded evidence. Record its conclusion and limits, then
+   flag the block for special attention in the general Claude review. A subagent
+   is internal assistance, not a Claude verdict, and cannot waive a required
+   final review, owner decision, deployment gate or QA.
+
+The route choice controls review routing only. It does not authorize scope,
+data access, production action or substitute for an owner decision. If the owner
+chooses no separate review, do not label the block as Claude-approved. If
+implementation depends on the unresolved design or result, pause that dependent
+work until the owner resolves it or the required evidence is available. If a
+separate review is selected, do not initiate it before the owner's choice.
+
+Repair substantive reviewer findings and their interactions as one batch.
+Material behavior changes, new logic/dependencies, new risk/authority/data scope
+or unresolved result deviations require the applicable fresh review. Do not
+review each finding separately. A complete expected receipt closes mechanically.
+
+Reviewer findings remain explicitly mandatory or optional, with affected scope
+and a closure condition. The executor cannot downgrade or defer a mandatory
+finding without the reviewer's reasoned disposition or the owner's informed
+scope decision. Optional improvements are recorded, not automatic new tasks or
+provider rounds.
 
 Unchanged hashes, report bookkeeping, harmless formatting and reviewer-specified
-literal prose corrections need deterministic checks, not a separate model call,
+literal prose corrections need deterministic checks, not another model call,
 provided they change no behavior, authority, privacy, executable interpretation
-or acceptance meaning. If that equivalence is uncertain, use the next substantive
-review. The old verdict remains bound to its original bytes; append the exact diff
-and mechanical equivalence evidence rather than pretending it reviewed new bytes.
-Optional improvements are recorded, not automatic new tasks or provider rounds.
+or acceptance meaning. If equivalence is uncertain, use the next substantive
+review. Preserve the original verdict's exact byte binding and append the exact
+diff and mechanical-equivalence evidence; do not imply that the old verdict
+reviewed new bytes.
 
 After two consecutive substantive returns in the same interaction class, inspect
-the owning interaction map and fixture fidelity before resubmission; tell the
-owner what remains. This is escalation, not an arbitrary round cap or permission
-to release known defects. Re-baseline expanded business/risky scope concisely.
+the owning interaction map and fixture fidelity before resubmission, then tell
+the owner what remains. This is an escalation check, not a round cap or a reason
+to release known defects. Re-baseline expanded business or risky scope concisely.
 
 ## Evidence, dependencies and tests
 
@@ -164,19 +245,27 @@ failure. Diagnose the actual default config/auth status before owner renewal;
 never create per-task credential stores or reset keys. This routing does not
 replace reviewed exchange adapters or alter GSS's accepted transport/freeze rules.
 
-Owner amendment 2026-10-19: Codex exchanges task, command-drafting and review
-packets with actual Claude through the installed subscription CLI; no owner
-relay to Claude chat. For owner-run PowerShell, Claude CLI drafts and Codex
-independently checks the commands; drafting and required ready-stage review
-are separate requests. The command author cannot be its sole approver. Bind
-the final patch and command-packet hashes in the ready-stage record. This
-replaces the former Claude-chat author requirement, not any privacy, GSS,
-SSH/key, deployment or QA gate.
+Owner amendment 2026-10-21: For Codex-executed non-GSS work routed to review,
+Codex prepares the owner-run apply packet from verified task facts and performs
+local syntax, path, hash, privacy and receipt-contract checks. Do not spend a
+separate Claude CLI request drafting that packet by default. Actual Claude
+independently reviews the final patch and packet together in the single ready
+CODE/composition review; bind both exact SHA-256 values in that review record.
+The packet author cannot be its sole approver. Owner-selected exception routes
+are defined above. Routine existing CRM/dashboard work follows the specific
+no-review default above. This changes command authorship and review staging only;
+it grants no SSH/key access, production authority, paid API fallback, data
+permission or owner-QA waiver.
 
 Use the installed, verified Claude CLI/saved subscription, with model and effort
-recorded, tools/MCP/hooks disabled and no API-key or paid-provider fallback. Risky
-design/CODE/security, checkout/payment/CRM/DB/SEO/schema/authority/recovery work
-retains actual Opus/high; low-risk work uses its approved routing. No silent downgrade.
+recorded, tools/MCP/hooks disabled and no API-key or paid-provider fallback. For
+tasks routed to review, risky design/CODE/security, checkout/payment/CRM/DB/SEO/
+schema/authority/recovery work retains actual Opus/high; low-risk work uses its
+approved routing. No silent downgrade.
+Actual checked subscription exchanges follow the native profile/refresh execution
+boundary in `docs/BOOSTER_LOCAL_ACCESS.md`: scoped approved normal-user launch,
+with Claude tools/MCP/hooks still disabled. This is not a global sandbox bypass
+or SSH/key/production grant. Read-only status alone cannot prove refresh access.
 Check executable/adapter compatibility and saved subscription auth without logging
 private account state. Strip provider/auth override variables from the child only.
 Never load secret files, enable overage, upgrade unchecked or probe entitlement by

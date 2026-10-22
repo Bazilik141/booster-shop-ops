@@ -1,0 +1,21 @@
+{
+  "observations": [
+    {
+      "path": "catalog/view/javascript/acc009-checkout.js",
+      "HTTP": 200,
+      "bytes": 32943,
+      "sha256": "0cb1acff55038642851649c4bc5b82b55faf62769d9993310b45ee5e5305f4f1",
+      "matches_accepted": true,
+      "authenticated": false
+    },
+    {
+      "path": "catalog/view/javascript/checkout-reskin.js",
+      "HTTP": 200,
+      "bytes": 74682,
+      "sha256": "a73a0209021266618ef395bc30d50be0fd3071a02035c43d79c0b5b9c79db8e6",
+      "matches_accepted": true,
+      "authenticated": false
+    }
+  ],
+  "limits": "Public static GET only; no cookies/order/checkout/API request. Not proof of owner browser cache or dynamic checkout template."
+}

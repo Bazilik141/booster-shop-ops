@@ -1,0 +1,19 @@
+{
+  "task": "ACC-009",
+  "page_id": "3f86bf20-bdb4-81ae-91a5-e6e3326077ab",
+  "url": "https://app.notion.com/p/3f86bf20bdb481ae91a5e6e3326077ab?pvs=204",
+  "verified_utc": "2026-10-22T07:57:54.507Z",
+  "page_last_edited_at": "2026-10-22T07:57:14.361Z",
+  "authority": "Direct owner request 2026-10-22: checkpoint, status update, scoped commit and push; one-time ACC-009 scope",
+  "properties": {
+    "Status": "In progress",
+    "Last Updated": "2026-10-22",
+    "Current Owner": "Codex",
+    "Primary Tool": "Codex",
+    "Stage": "N1, C1+H1, checkout follow-up, N3 and C2 applied. Owner confirmed successful postomat TTN and general courier delivery; empty-flat observation closed without fix. Next: WP3b profile/admin fields and validation; N2 name compatibility unresolved; WP3c metadata is a separate owner gate.",
+    "Source": "handoffs/ACC-009_CONTINUE_20261022.md; plans/ACC-009_WP3b_preparation_20261022.md; diagnostics/ACC-009_H1_implementation_report_20261019.md; diagnostics/ACC-009_checkpoint_evidence_20261022/checkpoint-manifest.json",
+    "Owner Decision": "2026-10-21: Owner confirmed QA OK for the checkout follow-up, requested a scoped checkpoint commit/push and new-chat handoff, and explicitly granted Codex this one-time ACC-009 Notion update. Separately approved courier-recipient policy and preparation do not release N3/C2 or WP3b/c. No whole-task Done decision; draft open/refresh notification suppression is not separately confirmed.\n2026-10-22: Owner directly requested this ACC-009 checkpoint, status update, scoped commit and push; this is a fresh one-time task-specific writer authorization. Successful N3/courier and postomat delivery reported; empty-apartment checkout now passes and the unreproduced observation is closed without fix. No whole-task Done or production action authorized by checkpoint.",
+    "Blocker": "N2: approved account-name policy and NP name constraints remain unresolved; compatibility-dependent name changes held. WP3c requires its own reviewed metadata package, fresh DB backup and explicit owner go. Separate auth-routing documentation review awaits subscription quota (recorded reset 2026-10-22 19:00Z); no paid fallback."
+  },
+  "readback": "All 8 requested properties match; fetch renders the single rich-text newline as <br />; other properties/content preserved"
+}

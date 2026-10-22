@@ -1,0 +1,39 @@
+{
+  "task": "ACC-009-NP-TRANSPORT",
+  "stage": "np-transport-ready-r2",
+  "request_id": "9fda85f0-7386-4b90-b7f6-4fb26c617b54",
+  "consumed": true,
+  "replay_permitted": false,
+  "closed_utc": "2026-10-21T20:18:12.247108+00:00",
+  "actual_status": "completed",
+  "actual_error": null,
+  "full_original_result_sha256": "63ccf919efbcfc350a192d002647dd99d50b0d86e70af2f9591a775282d2c031",
+  "response_sha256": "fa3513ecb3113bd45f4c97e47669ec6c6ef39db215b1991062a12c5cf4afa873",
+  "declared_input_drift": [],
+  "packet_unchanged": true,
+  "model_requested": "claude-opus-5-5",
+  "effort": "high",
+  "model_initialized": "claude-opus-5-5",
+  "tools": [],
+  "MCP_count": 0,
+  "observed_tool_calls": [],
+  "overage": {
+    "status": "allowed_warning",
+    "resetsAt": 1792695600,
+    "rateLimitType": "seven_day",
+    "overageStatus": "rejected",
+    "overageDisabledReason": "org_level_disabled",
+    "isUsingOverage": false
+  },
+  "Git_HEAD_unchanged": true,
+  "index_unchanged": true,
+  "changed_status_entries": [
+    "?? diagnostics/ACC-009_NP-transport_evidence_20261021/np-transport-ready-r2-original-result.json",
+    "?? diagnostics/ACC-009_NP-transport_evidence_20261021/np-transport-ready-r2-response.md",
+    "?? diagnostics/ACC-009_NP-transport_evidence_20261021/np-transport-ready-r2-run.json",
+    "?? work/acc009-np-transport-20261021/np-transport-ready-r2-git-status-start.bin"
+  ],
+  "composition": "Only declared inputs are frozen; outside-set path impact must be assessed before positive release. No branch-wide certification.",
+  "review_verdict": "MAIN_AGENT_MUST_READ_FULL_RESPONSE",
+  "production_or_owner_release": false
+}

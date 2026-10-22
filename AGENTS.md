@@ -13,30 +13,39 @@ Read [shared local access routing](docs/BOOSTER_LOCAL_ACCESS.md) and
 setup. New chats reuse saved user authentication and existing keys/configuration.
 For ordinary non-GSS tasks, `python scripts/booster_claude_access.py status`
 resolves the installed native subscription CLI without relying on PATH or a
-per-task VS Code version path. Do not request login/reset/setup merely because
+per-task VS Code version path. Actual checked subscription review exchanges need
+normal owner-account profile write access for native OAuth refresh; follow the
+scoped launch rule in `docs/BOOSTER_LOCAL_ACCESS.md`, not a blanket sandbox bypass. Do not request login/reset/setup merely because
 a chat is new. Owner-only diagnostics gather SSH facts; do not ask the owner to
 attest technical internals from memory. Agents never run those diagnostics or
 read SSH/key files. GSS retains its accepted exact transport and all prior gates.
 
-Owner decision 2026-10-20 permits owner-controlled SSH work periods for ordinary
-non-GSS tasks: unlock the existing encrypted Booster key before work, explicitly
-remove only that key from the Windows agent afterwards. Use the reviewed helper
-and packet described in `docs/BOOSTER_LOCAL_ACCESS.md`; do not run them as an
-agent. A Windows agent is account-wide and may persist beyond a terminal or
-reboot. This is not a technical isolation boundary against same-user processes.
+Owner decision 2026-10-22 supersedes the 2026-10-20 mandatory remove-after-work
+rule for ordinary non-GSS work. The owner unlocks the existing encrypted Booster
+key and may reuse it across tasks/chats; per-task/per-work-period Lock is optional.
+Never require a Lock receipt to close such work. Use the reviewed helper and
+packets described in `docs/BOOSTER_LOCAL_ACCESS.md` only as the owner.
+The owner explicitly accepts that the native Windows agent may retain the key
+beyond sign-out/reboot until optional owner removal. Session-bound expiry and
+automatic cleanup are not required; do not promise them or add cleanup hooks.
+The agent remains account-wide, with no isolation from same-user processes.
 The owner keeps the passphrase; AI agents still never invoke SSH/key tools,
-read `.ssh`, load/use/remove the key or access the server. Preparation is not
-proof that this mode has been configured or cleanup has succeeded.
+read `.ssh`, load/use/remove the key or access the server. GSS is unchanged.
 
-## Automatic peer review — owner decisions 2026-10-14 / 2026-10-19
+## Automatic peer review — owner decisions 2026-10-14 / 2026-10-19 / 2026-10-21
 
 For ALL Booster tasks read the canonical
 [automatic independent review policy](docs/BOOSTER_AUTOMATIC_PEER_REVIEW_20261014.md).
-Codex initiates actual subscription Claude review at a ready required stage.
-The 2026-10-19 non-GSS procedure also applies to ongoing tasks: coherent reviews,
-declared dependencies, scoped invalidation and mechanical closure of expected
-receipts. It supersedes older general procedural repeats, not explicit owner
-gates, scope/data permissions, Git/status/deployment authority or owner QA.
+For Codex-executed non-GSS work, the default is one integrated independent
+subscription Claude review of the completed patch and owner-run apply packet
+before owner application. Routine bounded work on the existing main CRM Google Sheets
+workbook and canonical dashboard has no Claude review by default; the canonical
+policy defines its scope and exception triggers. The 2026-10-19 and 2026-10-21
+non-GSS procedure also applies to ongoing tasks: coherent review when required,
+owner-selected exception routes, declared dependencies, scoped invalidation and
+mechanical closure of expected receipts. It supersedes older general procedural
+repeats, not explicit owner gates, scope/data permissions, Git/status/deployment
+authority or owner QA.
 AGENTS.md remains the authority/safety contract; ROADMAP_SOP.md governs status.
 For GSS retain its prior shared and specific review/freeze/no-replay controls;
 also read [GSS optimizations](docs/GSS_OPTIMIZATION_RULES_20261014.md).
@@ -83,14 +92,19 @@ business-data mutation authority.
 
 ## Core authority and writer rules
 
-- **Claude communication (owner decision 2026-10-19).** Codex communicates with
-  actual Claude through the installed subscription CLI for task exchanges,
-  command drafting and review. Do not require the owner to relay packets to
-  Claude chat. Claude CLI composes owner-run PowerShell packets; Codex checks
-  them independently before the required ready-stage review. Drafting and
-  review are distinct requests; the command author cannot be its sole approver.
-  This replaces the older Claude-chat command-author rule. It grants no paid
-  API fallback, agent SSH/key access, deployment or external-system writes.
+- **Claude review routing (owner decision 2026-10-21).** For Codex-executed
+  non-GSS work routed to review, Codex authors the patch and its owner-run apply
+  PowerShell packet, then performs local syntax/path/hash/privacy/receipt checks.
+  Actual subscription Claude independently reviews both exact hashes in one
+  final CODE/composition request before owner application. Codex initiates that
+  review automatically when required; no separate CLI command-drafting request
+  or routine owner approval is needed. Routine bounded work on the existing main
+  CRM Google Sheets workbook and canonical dashboard has no Claude review by
+  default. Early design, domain-exception and actual-result reviews require the
+  owner's per-case choice of separate Claude review, no separate call with a
+  flagged general-review block, or a narrow subagent check. Follow the canonical
+  policy for scope and triggers. This does not grant paid API fallback, agent
+  SSH/key access, deployment or external-system writes.
 
 - Claude never commits or pushes. Claude Code never commits, pushes, or deploys.
 - **Patch authorship is shared (2026-08-05, owner decision).** Patches in
@@ -168,8 +182,8 @@ templates/    handoff + report templates
 ## Roles & boundaries
 | Agent | Does | Does NOT |
 |-------|------|----------|
-| **Claude** (chat/Cowork) | audit, SEO/UX strategy, handoffs, executor recommendation, post-patch review, git diff, Notion status, prepares owner-run SSH/SCP and commit/push command packets | write patches, server access, SSH/SCP, deploy, git commit/push |
-| **Codex** | patches (`patches/`), reports (`diagnostics/`), authorized `ROADMAP_FLOW` changes | server access, SSH/SCP, deploy, Notion properties/status, commit/push without exact active-task approval |
+| **Claude** (chat/Cowork) | audit, SEO/UX strategy, handoffs, executor recommendation, independent review, git diff, Notion status, owner-run commit/push packets when requested | write patches, server access, SSH/SCP, deploy, git commit/push |
+| **Codex** | patches (`patches/`), reports (`diagnostics/`), owner-run apply packets when assigned executor, authorized `ROADMAP_FLOW` changes | server access, SSH/SCP, deploy, Notion properties/status, commit/push without exact active-task approval |
 | **Claude Code** (repo agent) | patches (`patches/`), reports (`diagnostics/`), local verification, authorized `ROADMAP_FLOW` changes | server access, SSH/SCP, deploy, Notion properties/status, commit, push |
 | **Owner** | approves scope, assigns the executor, normally runs prepared Git commands, runs owner-only SSH/SCP blocks and server patches, performs final QA | — |
 
@@ -184,7 +198,7 @@ previous executor stops before the new one starts.
 ```
 Claude executor recommendation → Owner assigns executor → Claude handoff
 → Codex OR Claude Code patch → drop to C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\patches\
-→ Subscription Claude CLI command packet → Codex checks packet → Ready-stage actual Claude review of both hashes (subscription CLI) → Owner deploy → Deterministic receipt check → Owner QA
+→ Executor prepares patch + owner-run apply packet → integrated ready-stage Claude review when policy requires it (routine existing CRM/Sheets/dashboard work skips it by default) → Owner deploy/apply → Deterministic receipt check → Owner QA
 Non-GSS result deviations/ambiguity follow the shared review policy; GSS retains its own gates.
 ```
 
@@ -228,13 +242,14 @@ Drop to: `C:\Users\14bez\Downloads\Booster Shop\booster-shop-ops\patches\<same f
 After patch is ready, respond with:
 - what it does (1-2 sentences)
 - local path to the file
-- SHA-256 of the exact patch bytes submitted for review; record the actual
-  Claude verdict only after the packet exists and both hashes are reviewed
+- SHA-256 of the exact patch bytes and the executor-prepared owner-run packet;
+  record the actual Claude verdict only after both exact hashes are reviewed
 - expected per-target before/after states (`absent` when appropriate), full
   backup path or `none`, and rollback facts
-- stdout contract and facts needed for subscription Claude CLI to compose the exact
-  owner-run PowerShell packet following `CODEX_WORKFLOW.md`; record the packet
-  SHA-256 alongside the patch SHA-256 after independent review
+- stdout contract and the exact owner-run PowerShell packet following
+  `CODEX_WORKFLOW.md`; record local packet checks and its SHA-256 alongside the
+  patch SHA-256 before the integrated independent review when the canonical
+  policy routes the task to review
 
 Do not ask the owner to upload a patch to `public_html` or execute a patch
 stored there.
@@ -250,7 +265,7 @@ Applies to any patch touching visual/layout CSS, Twig markup styling, or JS that
 4. **No easy justification → offer options, don't default.** If a clean fix (edit source rule, remove dead override, refactor selector) is possible but bigger than scope, present two options to the owner: (a) quick override — 1-line trade-off, (b) proper fix at the source — 1-line trade-off + blast radius. Wait for the owner's choice; do not silently pick the cheaper one.
 5. **UI acceptance criteria cover more than token values.** For any DS/layout/component patch, verify at minimum: 3 breakpoints (not one mobile width only), real long-content edge cases, and interactive states (hover/focus/active) — not only computed hex/token values.
 6. **Shared CSS files are a soft risky zone.** Edits to `boostershop-ds.css`, `stylesheet.css`, or any DS token file affect multiple pages at once — apply the same override-stacking caution as `Risky zones` below, even when no business logic is touched.
-7. **Review must scan for these signatures.** Claude's `git diff` review must explicitly check for `!important`, `setTimeout`, `position:absolute/fixed`, and magic pixel values with no comment. Unexplained hits → send back before commit, do not approve silently.
+7. **Review must scan for these signatures.** When the canonical policy routes a patch to Claude, the integrated final patch review must explicitly check for `!important`, `setTimeout`, `position:absolute/fixed`, and magic pixel values with no comment. Unexplained hits → send back before commit, do not approve silently.
 
 ## Diagnostics report
 Required for: handoff tasks, risky zones, diagnostic investigations.
@@ -307,6 +322,11 @@ contents to an agent. Its companion runbook is `docs/CRM-new-SKU-runbook.md`.
 ## Risky zones — extra care + rollback + smoke test required
 checkout · payment · Hutko · Checkbox · fiscalization · Nova Poshta · order status ·
 Merchant feed · schema/JSON-LD · SEO (sitemap/robots/canonical/.htaccess) · CRM · DB
+
+Risky-zone safeguards remain mandatory. The CRM label alone does not require a
+Claude call for routine bounded work on the existing main CRM Google Sheets workbook
+and canonical dashboard; use the review exception triggers in the canonical
+policy for structural, integration, accounting/stock, broad or ambiguous work.
 
 ## Executor, model and effort recommendation
 

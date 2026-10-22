@@ -34,15 +34,18 @@ one that matches how you are running, and do not assume the other's authority.
 ### Claude (chat / Cowork) — no repository write access to code
 
 - Primary work: strategy, SEO/UX, handoff writing, **executor recommendation**,
-  independent post-patch review, and Booster Notion task-property/status
-  updates.
+  independent post-patch review when required by the canonical policy, and
+  Booster Notion task-property/status updates.
 - Use `templates/handoff-template.md` for new handoffs.
 - Use `templates/codex-report-template.md` when reviewing diagnostics.
-- At deployment preparation, compose one complete owner-run SSH/SCP PowerShell
-  packet from the executor's patch hash, target states, receipt and rollback
-  facts. Codex checks the Claude-authored packet independently; the required
-  ready-stage review records both patch and packet SHA-256 values. Do not
-  approve your own packet or hand-edit its commands after review.
+- For Codex-executed non-GSS work routed to review, review the executor-prepared
+  owner-run PowerShell packet together with the patch in one final
+  CODE/composition review. The review binds both exact SHA-256 values. Routine
+  bounded work on the existing main CRM Google Sheets workbook and canonical
+  dashboard has no Claude review by default; follow the canonical policy's
+  exception triggers. Do not request a separate CLI packet-drafting round by
+  default. Never approve a packet you authored or hand-edit executable commands
+  after review.
 - Does **not** author patches. Never deploys, commits, or pushes.
 
 ### Claude Code (repo-resident terminal agent) — authorized patch author
@@ -68,16 +71,20 @@ one that matches how you are running, and do not assume the other's authority.
 
 Both surfaces follow the authority and writer rules in `AGENTS.md`.
 
-### Codex exchanges through the subscription CLI (owner decision 2026-10-19)
+### Codex review through the subscription CLI (owner decisions 2026-10-19 / 2026-10-21)
 
-Codex communicates with actual Claude through the installed subscription CLI,
-including command drafting and review; never require the owner to relay these
-packets to Claude chat. The CLI may compose the owner-run PowerShell packets
-described above. Codex checks those commands independently. Drafting and the
-required ready-stage review use separate requests; the command author cannot
-be its sole approver. This supersedes the former chat-only command-author rule,
-without changing Notion ownership, server/key restrictions, paid-API restrictions,
-deployment gates or QA authority.
+When the canonical policy requires review, Codex prepares its patch and owner-run
+apply packet, then sends one complete final package to actual Claude through the
+installed subscription CLI for an independent CODE/composition review as soon as
+it is ready; no routine owner approval, owner relay or separate CLI drafting
+request is required. Routine bounded work on the existing main CRM Google Sheets
+workbook and canonical dashboard skips Claude review by default. Before a
+separate early-design, domain-exception or actual-result review, Codex presents
+the owner with the exception reason and obtains the per-case choice specified in
+the canonical policy. A subagent check is additional internal evidence, never a
+Claude verdict. This changes review routing only; Notion ownership, server/key
+restrictions, paid-API restrictions, deployment gates and QA authority remain
+unchanged.
 
 ## Secrets — do not read
 
@@ -180,9 +187,10 @@ Known constraints:
 
 ## Review routing
 
-Codex automatically initiates actual Claude review when the required assigned
-stage is ready, through the existing subscription CLI. Follow the shared current
-rule above. Review must remain independent of the implementation author;
+Codex automatically initiates actual Claude review when the canonical policy
+requires it and the assigned stage is ready, through the existing subscription
+CLI. Routine bounded CRM Google Sheets/canonical dashboard work has no review by
+default. Follow the shared current rule above. Review must remain independent of the implementation author;
 Claude Code does not sign off on its own patch. Other-executor tasks retain
 their applicable independent-surface routing and owner assignment.
 

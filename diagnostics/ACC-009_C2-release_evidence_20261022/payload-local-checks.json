@@ -1,0 +1,18 @@
+{
+  "native_PHP": "8.0.30",
+  "controller_function_cases": {
+    "checks_passed": 29,
+    "scope": "Actual C2 controller private helpers, whole GET and guarded POST with fictional SQL/API spies",
+    "real_DB_NP_or_order_writes": false,
+    "N3_required_before_release": true
+  },
+  "fixture_sha256": "73111917cac016a1d44ec5e3cb08a94ba75dda1b4018c8b6c53053b3312a1921",
+  "original_fixture_byte_identical": true,
+  "payload_sha256": "4d84bb039d7c43ede234d76deef698b8e0e7886184800e6bf6eeaaa7a19ca0af",
+  "prior_verification_sha256": "0f993cd88a98b7b76358b9ff6889baa5f662b8ccef32c8a65dd872e52d5c6a1a",
+  "prior_55_bindings_unchanged": true,
+  "reused_actual_Twig_HTML_checks": 12,
+  "reused_old_runner_cases": 14,
+  "reuse_limit": "Original R3 CODE acceptance and exact 55 input bindings retained. Native PHP8.0 rerun covers 29 actual controller GET/POST/helper cases with fictional DB/API/model effects. Old runner cases do not replace new private-release tests. Twig HTML parser evidence is reused; no new browser or owner C2 QA claim.",
+  "live_effects": false
+}

@@ -1,0 +1,29 @@
+{
+  "task": "ACC-009-N3",
+  "stage": "n3-code-ready-r1",
+  "request_id": "2e28b2d8-6eb3-4605-b209-894efd45e186",
+  "owner_authority": "Owner-requested N3 source release and owner-packet preparation and integrated independent review only; no production release, agent SSH/key or business writes",
+  "started_utc": "2026-10-21T19:13:57.044973+00:00",
+  "model_requested": "claude-opus-5-5",
+  "effort": "high",
+  "packet_sha256": "f6024c965eb4161c76def8af371e6186d379943506b183140455d69f4a06ee27",
+  "adapter_sha256": "40767836ade3947d56ca9497de5941be223c9b7fdc74c36d984673c199f014cb",
+  "status": "failed",
+  "direct_API_or_paid_fallback": false,
+  "agent_server_or_key_access": false,
+  "subscription_verified": true,
+  "CLI_sha256": "1787c60619bad78543c67e4d9d8a868869c35a904f2a85eb9ea46c4808af196b",
+  "CLI_version": "2.1.303 (Claude Code)",
+  "native_pid": 5976,
+  "model_initialized": "claude-opus-5-5",
+  "tools_initialized": [],
+  "MCP_count": 0,
+  "stderr_captured": "",
+  "exit_code": 1,
+  "models_observed": [
+    "<synthetic>"
+  ],
+  "tool_calls": [],
+  "completed_utc": "2026-10-21T19:14:04.023213+00:00",
+  "failure": "CLI_error_or_incomplete_or_tools"
+}

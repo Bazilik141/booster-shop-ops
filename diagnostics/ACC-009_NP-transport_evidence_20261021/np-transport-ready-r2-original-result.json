@@ -1,0 +1,97 @@
+{
+  "duration_api_ms": 80856,
+  "stop_reason": "end_turn",
+  "total_cost_usd": 0.90532,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 93084,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 8032,
+    "output_tokens_details": {
+      "thinking_tokens": 4850
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 93084,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 8032,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 93084,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 93084
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-opus-5-5": {
+      "inputTokens": 2,
+      "outputTokens": 8032,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 93084,
+      "webSearchRequests": 0,
+      "costUSD": 0.90532,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 4850,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 1,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "# R2 scoped confirmation: ACC-009-NP-TRANSPORT M1 delta, composition and hash rebind\n\n**Verdict: REVIEW_OK**\n\nThis review is static only. I did not run anything, open a network connection or recompute any hash. Its scope is limited to the M1 delta, the composition it affects and the hash rebind. All R1 assessments not touched by the delta are reused unchanged.\n\n## Bound identities (from release-facts.json, file SHA `367025bf\u20266572`)\n\n| Artifact | SHA256 | Bytes |\n|---|---|---|\n| `diagnostics\\ACC-009_NP-transport-inspect_20261021.php` | `a80924850d1a40a81acaf6935fedca483cfeb3212c111176c7d09c93bbed5a3c` | 16996 |\n| `diagnostics\\ACC-009_NP-transport_owner-PS_20261021.ps1` | `080a1be7e0ba56e0ce4451b61ac427d8035c2a91c9f2153ad76ac27a9beb2728` | \u2014 |\n\n**Rebind consistency** (as presented in the packet):\n- **PHP identity is consistent everywhere.** The PHP SHA and size of 16996 agree across:\n  - PS `$Sha`/`$Bytes`;\n  - the `pkt_diagnostic_sha256` echo;\n  - the `php -r` SHA and size arguments;\n  - `parse-capture.sh` (`431e14d0\u202602cd`);\n  - `local-checks.json`;\n  - `packet-local-checks.json`.\n- **PS identity is consistent.** The PS SHA in `packet-local-checks.json` equals the release-facts value.\n- **Test identities match.** The recorded test SHAs equal the headers of `test_local.py` and `test_packet.py`.\n- **The helper block is unchanged.** `NPD_HELPERS_SHA` is still `ecd6a39c\u2026feab`, and `collector_helpers.php.txt` carries the same SHA.\n- **The entry block matches the PHP.** `collector_entry.php.txt` is textually identical to the PHP tail shown.\n- **The source pins are unchanged** and still agree with `Test-CaptureReceipt` and the N3 Apply receipt (`2138e156\u20267b93`).\n\nAny change to either bound file invalidates this confirmation.\n\n## M1 closure assessment\n\nAll five closure conditions are met.\n\n1. **Every cleanup-decision failure becomes STOP with the basename.**\n   - `npd_probe_cleanup` wraps every step in `catch(Throwable)`: clearstatcache, lstat, type check, hash, unlink and the absence check.\n   - Any failure is rethrown as `NpdProbeCleanupFailure($name,$stage,$primary)`. This includes warnings converted by the CLI error handler, plain false returns when E_WARNING is not reported, and Errors.\n   - The outer catch maps it by type, not by message prefix, to `STOP_manual_assessment` plus `probe_basename` and `cleanup_stage`.\n   - A failing `fclose` in the finally block is captured separately, cleanup still runs, and the result is classified as STOP with stage `close`.\n\n2. **`ok` and `completed_or_not_created` appear only when justified.**\n   - `ok` is reachable only when the try returns and cleanup completes without throwing. That requires a successful owned-byte unlink and a confirmed absence.\n   - `completed_or_not_created` is reachable only through a non-`NpdProbeCleanupFailure` exception. That means one of two cases:\n     - the failure happened before or at `fopen('x')` (helper identity, random_bytes, or an fopen warning or false), so no probe was created; or\n     - the failure happened inside the try, after which the finally cleanup succeeded and absence was confirmed.\n   - I found no path that throws from the finally block outside these two classified routes.\n\n3. **The primary error is preserved.**\n   - `$primary` is captured in the inner catch before cleanup runs.\n   - `primaryError` holds the original fixed token, with `JsonException` mapped to `web_payload_invalid`.\n   - The cleanup's own withheld warning does not overwrite it. When the primary path succeeded, `primary_error` is `null`.\n\n4. **The fixture covers the required cases.**\n   - Real `E_USER_WARNING` injections are made in the `npd_probe_hash` and `npd_probe_unlink` wrappers, each confirmed to occur exactly once by the `count==1` check.\n   - The test asserts the STOP classification, the stage, the exact basename (with the leftover file present in root), preservation of `primary_error == web_collection_transport`, and that the key set is the partial set plus exactly three new fields.\n   - `requests_seen` of 15 (6 + 3 + 3 + 3) is consistent with these runs. All requests were loopback HEAD.\n\n5. **Both artifacts are regenerated and rebound** (see above).\n\n**Composition effects.** I found no adverse effects:\n- The class and typed properties are valid under PHP 8.0 inside the `eval` scope.\n- The web probe body is unchanged, because it embeds only the helpers.\n- The success-path return value survives a successful finally.\n- If cleanup throws during an in-flight exception, PHP replaces that exception (chaining the original as previous), but the output relies only on the explicitly carried fields.\n- The owned-byte guard is preserved. A partial or failed write leaves `$owned` unequal to the file contents, which produces STOP instead of a deletion.\n- The PS packet does not need to change. Exit 2 still maps to `PARTIAL_STOP`, and stdout, which contains the basename, is retained in the Capture receipt.\n- The privacy surface added is a random hex basename, a fixed stage token and an existing fixed error token. There are no new data reads.\n\n## Mandatory findings\n\nNone.\n\n## Optional findings (non-blocking)\n\n- **R2-O1: The cleanup reason token is discarded.**\n  - Only the stage is emitted. Stage `hash` therefore conflates a hash-read failure with a content mismatch (\"probe changed, do not delete\"). Stage `stat` similarly conflates a missing file with an unexpected type.\n  - Emitting the fixed internal token (for example `probe_changed` or `probe_unknown_type`) would sharpen manual assessment.\n  - Both cases already require STOP and manual inspection before any deletion, so this does not block.\n- **R2-O2: Two cleanup-failure branches are covered by static reasoning only, not by a fixture.**\n  - The success-path failure (`primary_error: null`) and the `close` stage are not exercised.\n  - Stage `close` is conservative: it reports STOP even when absence was confirmed afterwards. That is acceptable.\n- **Carried from R1:**\n  - O1, strict web runtime pins: accepted as an honest partial result.\n  - O3: if adopted, the expected `remoteScriptSha256` is now `431e14d0\u202602cd`, not R1's `8a8fbd89\u20261369`.\n  - O4: an SSH-level failure consumes the single Capture.\n- **Closed:**\n  - O2 is closed by the `php -r` decode/SHA/size/eval chain run in the positive fixture.\n  - O5: I accept the stated module facts (HTTP/1.1 and a 30 s timeout at lines 43/45 of `729c3c6c\u2026b19c`) as declared. That library's source is not in this packet, so I did not verify them. The remaining disclosed differences are HEAD, no key, the 10 s timeout and the user agent.\n\n## Assessments (R1 reused; delta-affected rows updated)\n\n| Area | Assessment |\n|---|---|\n| Privacy | Unchanged. The added outputs are a random basename, a stage token and a fixed primary token. |\n| Authority | Unchanged. Owner-only. Agents get no SSH/key/SCP access, and nothing grants Git, status or deploy. |\n| No business effects | Unchanged. Six fixed HEAD requests with no key, body or cookies, verification on, no POST. |\n| Temporary endpoint | Sound. M1 is closed, and a leftover probe is now reported with its exact name. Exposure is bounded by the GET + nonce + 120 s TTL 404 guard. |\n| Cleanup | Correct on all classified paths. No false `ok` or `completed_or_not_created` follows a cleanup failure. |\n| Streaming | Unchanged and now natively exercised (O2 closed). |\n| Receipt | Unchanged contract. The extra fields appear only on the exit-2 partial path, and stdout is retained. |\n| Fake boundary | Honest. Local-only E_USER_WARNING wrapper injection, loopback real libcurl, and only the web SAPI name adapted in the receipt fixture. |\n\n## Limits\n\n- **Static review only.** No hashes were recomputed and nothing was executed.\n- **No claims about the hosting environment**, including the web SAPI, CDN or redirect behaviour, or curl availability.\n- **No claims about authenticated NP API behaviour.**\n- **A clean Capture does not disprove intermittent failure.** Root-web execution is not admin runtime, and the 10 s timeout differs from the module's 30 s.\n- **N3 causation was not independently re-derived.**\n- **Diagnose only.** This confirmation authorizes no fix, deploy, retry or repeat Capture.",
+  "ttft_ms": 51798,
+  "type": "result",
+  "duration_ms": 81311,
+  "ttft_stream_ms": 1812,
+  "time_to_request_ms": 452,
+  "first_content_frame_ms": 1812,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

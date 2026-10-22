@@ -1,0 +1,33 @@
+{
+  "task": "ACC-009-N3",
+  "stage": "n3-code-ready-r1",
+  "request_id": "2e28b2d8-6eb3-4605-b209-894efd45e186",
+  "consumed": true,
+  "replay_permitted": false,
+  "closed_utc": "2026-10-21T19:14:57.877719+00:00",
+  "actual_status": "failed",
+  "actual_error": "Failed to authenticate. API Error: 401 OAuth access token has expired. Re-authenticate to continue.",
+  "full_original_result_sha256": "5252921ef5060294d6745f7654285b16e4d996f0f4760574c8b5db7025e09128",
+  "response_sha256": null,
+  "declared_input_drift": [],
+  "packet_unchanged": true,
+  "model_requested": "claude-opus-5-5",
+  "effort": "high",
+  "model_initialized": "claude-opus-5-5",
+  "tools": [],
+  "MCP_count": 0,
+  "observed_tool_calls": [],
+  "overage": null,
+  "Git_HEAD_unchanged": true,
+  "index_unchanged": true,
+  "changed_status_entries": [
+    "?? diagnostics/ACC-009_N3-release_evidence_20261021/n3-code-ready-r1-original-result.json",
+    "?? diagnostics/ACC-009_N3-release_evidence_20261021/n3-code-ready-r1-run.json",
+    "?? work/acc009-n3-release-20261021/close_review.py",
+    "?? work/acc009-n3-release-20261021/n3-code-ready-r1-git-start.json",
+    "?? work/acc009-n3-release-20261021/n3-code-ready-r1-git-status-start.bin"
+  ],
+  "composition": "Only declared inputs are frozen; outside-set path impact must be assessed before positive release. No branch-wide certification.",
+  "review_verdict": "NOT_REVIEWED",
+  "production_or_owner_release": false
+}

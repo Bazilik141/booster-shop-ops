@@ -1,0 +1,17 @@
+{
+  "runner_sha256": "f97f09a82048be1c4efc2fcff875537fa9023c017307153a129f93761b3d68bc",
+  "PHP": "8.0.30",
+  "checks": [
+    "full entry dry-run, actual sealed probe file lifecycle with fictional HTTPS reply, no target backup/write",
+    "entry rejects runner inside webroot before target write",
+    "full entry actual apply + backup + lint + source hash + self-delete + sealed probe cleanup",
+    "full entry idempotent after-image self-deletes without a second backup",
+    "full entry rollback-check is nonmutating",
+    "full entry rollback preserves N1 and self-deletes",
+    "HTTP406 fail-closed, actual probe cleanup, target unchanged",
+    "changed probe preserves unknown bytes and reports basename; source unchanged"
+  ],
+  "adapter_diff_sha256": "cced8021dce96e21f1f189c3deb3d96206dcb6eee6ece9c5d242d0ef950ef759",
+  "fixture_home": "C:/Users/14bez/Downloads/Booster Shop/booster-shop-ops/work/acc009-n3-release-20261021/lifecycle-eeghr6o3",
+  "boundary": "Native production main entry/helpers with only Windows fixture path adaptation and fictional metadata/HTTPS producers. No production DB, HTTP, NP or SSH. Actual CGI tests cover generated endpoint separately."
+}

@@ -1,0 +1,62 @@
+{
+  "checks": [
+    "unchanged exact N1 to N3 source transformation",
+    "actual platform path admission",
+    "refusal unsafe_absolute_path",
+    "runtime admitted after matching nonce and PHP/SAPI/cache checks",
+    "refusal web_runtime_not_admitted",
+    "refusal web_runtime_not_admitted",
+    "refusal web_runtime_not_admitted",
+    "refusal web_runtime_not_admitted",
+    "refusal web_runtime_not_admitted",
+    "disabled OPcache admitted",
+    "actual native apply writes exact after-image",
+    "full private backup contains exact N1 bytes",
+    "rollback admits exact target AND backup before write",
+    "refusal rollback_bytes_mismatch",
+    "bad backup leaves target untouched",
+    "refusal rollback_bytes_mismatch",
+    "C2 after-image cannot be rolled back with N3",
+    "rollback-check never writes target",
+    "actual rollback restores exact N1 image",
+    "refusal apply_failed_original_restored",
+    "post-write native lint failure restores original and retains failure",
+    "refusal target_changed_before_replace",
+    "unknown concurrent bytes preserved"
+  ],
+  "PHP": "8.0.30",
+  "fixture_home": "C:/Users/14bez/Downloads/Booster Shop/booster-shop-ops/work/acc009-n3-release-20261021/fixture-d5514534",
+  "fake_boundaries": "Isolated fictional filesystem. Metadata/HTTP results in receipt fixtures are fictional. Production strict entry and remote effects are not executed. self_deleted receipt marker is fixture-only; native CGI tests actual generated endpoint.",
+  "payload_unchanged": true,
+  "production_root_refused_on_fixture": true,
+  "CGI": [
+    {
+      "file": "probe.php",
+      "method": "GET",
+      "valid_request": true,
+      "passed": true
+    },
+    {
+      "file": "probe.php",
+      "method": "GET",
+      "valid_request": false,
+      "passed": true
+    },
+    {
+      "file": "probe.php",
+      "method": "POST",
+      "valid_request": false,
+      "passed": true
+    },
+    {
+      "file": "expired.php",
+      "method": "GET",
+      "valid_request": false,
+      "passed": true
+    }
+  ],
+  "runner_sha256": "f97f09a82048be1c4efc2fcff875537fa9023c017307153a129f93761b3d68bc",
+  "fixture_sha256": "e77accb9e1344cd694ce9596d32b5103dec5f69372c6efa1388e7ace522f3c78",
+  "checks_script_sha256": "46a9639029f7ca9d76bdf1584a2f7c63e2bb193cb4d120cdd6219619fd481f89",
+  "real_host_or_NP_API_calls": false
+}

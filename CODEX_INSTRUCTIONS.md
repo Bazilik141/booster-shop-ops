@@ -47,11 +47,13 @@ Create ONE self-contained PHP patch file per task.
 No scattered supporting files, no unnecessary folders.
 Follow patch conventions in §2.
 
-After creating a patch, give subscription Claude CLI the exact facts required by
-`CODEX_WORKFLOW.md` so it can compose the owner-run PowerShell blocks: private
-staging target, SHA-256, PHP/lint preflight, working directory, receipt,
-rollback states and task checks. Keep upload, verification and run as separate
-owner actions; required cache cleanup may follow the run with `&&`. Add cache
+After creating a patch, use the exact facts required by `CODEX_WORKFLOW.md` to
+compose the owner-run PowerShell blocks yourself: private staging target,
+SHA-256, PHP/lint preflight, working directory, receipt, rollback states and
+task checks. Locally validate the packet; when the canonical policy routes the
+task to review, actual Claude reviews its final hash with the patch hash in one
+independent review. Keep upload, verification and
+run as separate owner actions; required cache cleanup may follow the run with `&&`. Add cache
 cleanup only when the patch requires it. The owner-confirmed live `DIR_STORAGE`
 is recorded in `AGENTS.md`; check the owning application's runtime `DIR_CACHE`
 with the same-shell lookup in `CODEX_WORKFLOW.md` before any future cleanup.
@@ -65,10 +67,11 @@ OpenCart Modifications refresh before its generated copies are available again.
 - **Upload source:** the same repository file; do not create a duplicate in Downloads.
 - Owner uploads by SCP to the verified private staging path and runs from `~/public_html`.
 
-Final executor response must show the local path, patch SHA-256 submitted for
-review, per-target rollback facts and receipt contract. subscription Claude CLI composes the
-task-specific owner-run PowerShell blocks; the independently checked packet
-SHA-256 is recorded with the patch SHA-256 before owner execution.
+Final executor response must show the local path, patch SHA-256, per-target
+rollback facts, receipt contract, locally checked executor-prepared owner-run
+packet and its SHA-256. When review is required by the canonical policy, actual
+Claude reviews both exact hashes together before owner execution; otherwise
+record the applicable no-review route without implying a Claude verdict.
 
 ## 3. Mandatory requirements for every patch
 
@@ -83,12 +86,14 @@ SHA-256 is recorded with the patch SHA-256 before owner execution.
 After creating a patch, show:
 - What it does (1-2 sentences / brief bullets)
 - Local path: `patches/<filename>`
-- SHA-256 submitted for review; add the actual Claude verdict after the
-  command packet exists and both SHA-256 values have been reviewed
+- Patch and executor-prepared command-packet SHA-256 values; add the actual
+  Claude verdict after both exact hashes have been reviewed together when the
+  canonical policy requires review
 - Expected receipt and exact per-target backup/rollback states
 - Patch check: syntax ok or problem
-- Facts for subscription Claude CLI's owner-run PowerShell upload, hash/lint, run and
-  post-run blocks; record the independently checked packet hash when ready
+- Exact owner-run PowerShell upload, hash/lint, run and post-run blocks;
+  record local packet checks and its hash before the integrated review when
+  required by the canonical policy
 
 If there is no `done=ok` or an error after owner runs it → owner sends terminal output → debug.
 
@@ -117,10 +122,11 @@ Roadmap governance: `ROADMAP_SOP.md`.
 
 ## 6. Working with Claude (handoff-driven flow)
 
-Typical flow: **Claude handoff → executor patch and facts → subscription Claude CLI command
-packet → Codex packet check → actual Claude review of both hashes → owner-run
-SSH/SCP → owner QA.** Follow the current
-review policy; unchanged hashes and expected receipts close mechanically.
+Typical flow: **Claude handoff → Codex patch and owner-run packet → local packet
+checks → actual Claude review of both hashes when required by policy → owner-run
+SSH/SCP → owner QA.** Routine bounded work on the existing main CRM Google
+Sheets workbook and canonical dashboard skips Claude review by default. Unchanged
+hashes and expected receipts close mechanically.
 
 When a Claude handoff is provided:
 1. Read the file in `handoffs/` FIRST. Grep `context-index.md` for the task ID to find the right file quickly.
@@ -142,6 +148,11 @@ Context / Problem / What was tried / What did not work / What to check / Risks /
 checkout · payment · Hutko · Checkbox · fiscalization · Nova Poshta · order status ·
 Merchant feed · schema/JSON-LD · SEO (sitemap/robots/canonical/.htaccess) · CRM · DB
 
+Risky-zone precautions remain in force. The CRM label alone does not require
+Claude review for routine bounded work on the existing main CRM Google Sheets
+workbook and canonical dashboard; use the exception triggers in
+`docs/BOOSTER_AUTOMATIC_PEER_REVIEW_20261014.md`.
+
 For any task touching these zones: FIRST explain which files change, whether DB is affected, the risk, and rollback from backup. THEN create the patch (which still makes its own backup).
 
 ## 9. When NOT to create a patch immediately
@@ -159,10 +170,10 @@ Need to check:
 1. ...
 Required files:
 * ...
-Command to collect: executor supplies exact files and purpose; subscription Claude CLI
-composes the owner-run narrow SSH/SCP pull from `CODEX_WORKFLOW.md` with only
-the named files and task-unique archive/manifest paths; Codex checks the
-exclusions before the owner runs it.
+Command to collect: executor supplies the exact files and purpose for the
+owner-run narrow SSH/SCP pull in `CODEX_WORKFLOW.md`, using only named files and
+task-unique archive/manifest paths. Codex checks exclusions and scope before the
+owner runs it.
 ```
 
 ## 10. Diagnostics report
@@ -174,12 +185,20 @@ Naming: `diagnostics/<TASK-ID>_<slug>_report_<YYYYMMDD>.md`
 Template: `templates/codex-report-template.md`
 
 Report must contain: scope · files touched · dry-run result · `php -l` ·
-idempotency · reviewed patch SHA-256 · per-target before/after hashes or
+idempotency · patch SHA-256 (reviewed when required by policy) · per-target before/after hashes or
 `absent` states · exact backup paths or `none` · stdout contract · rollback
-facts for subscription Claude CLI's owner-run PowerShell packet · packet SHA-256 after
-independent check · post-deploy QA checklist.
+facts for the executor-prepared owner-run PowerShell packet · local packet
+checks · packet SHA-256 · bind it with the patch hash in the integrated review
+when required by policy, and record the applicable no-review route otherwise ·
+post-deploy QA checklist.
 
 ## 11. Booster Shop CRM & Automation
+
+Routine bounded work on the existing main CRM Google Sheets workbook and canonical
+`dashboard/booster-dashboard.html` has no Claude review by default. Preserve the
+source/integrity, formula, owner-approval and live-QA requirements; structural,
+integration/authentication, accounting/stock, broad or materially ambiguous work
+uses the owner-selected review route in the canonical policy.
 
 Apps Script API first for read-only checks (not Sheets directly).
 GET endpoints: `action=summary`, `action=orders&status=active|all|shipped|unpaid&limit=N`, `action=stock_alerts`, `action=sku_list`.

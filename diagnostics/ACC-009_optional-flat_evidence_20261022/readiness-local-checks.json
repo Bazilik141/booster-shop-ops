@@ -1,0 +1,60 @@
+{
+  "checks": [
+    {
+      "customer": "guest",
+      "flat_case": "",
+      "ready_declaration_and_payment_seal": "accepted"
+    },
+    {
+      "customer": "guest",
+      "flat_case": "0",
+      "ready_declaration_and_payment_seal": "accepted"
+    },
+    {
+      "customer": "guest",
+      "flat_case": "02",
+      "ready_declaration_and_payment_seal": "accepted"
+    },
+    {
+      "customer": "guest",
+      "flat_case": "  ",
+      "ready_declaration_and_payment_seal": "accepted"
+    },
+    {
+      "customer": "guest",
+      "flat_case": "OMITTED",
+      "ready_declaration_and_payment_seal": "accepted"
+    },
+    {
+      "customer": "authenticated",
+      "flat_case": "",
+      "ready_declaration_and_payment_seal": "accepted"
+    },
+    {
+      "customer": "authenticated",
+      "flat_case": "0",
+      "ready_declaration_and_payment_seal": "accepted"
+    },
+    {
+      "customer": "authenticated",
+      "flat_case": "02",
+      "ready_declaration_and_payment_seal": "accepted"
+    },
+    {
+      "customer": "authenticated",
+      "flat_case": "  ",
+      "ready_declaration_and_payment_seal": "accepted"
+    },
+    {
+      "customer": "authenticated",
+      "flat_case": "OMITTED",
+      "ready_declaration_and_payment_seal": "accepted"
+    }
+  ],
+  "PHP": "8.0.30",
+  "limits": "Actual admitted readiness helper with fictional session/customer/cart/order and declaration. No production endpoint, shipping quote/model, database, API or order write. Passing this does not reproduce or fix the owner issue.",
+  "helper_sha256": "69a7d5fdfb9ee77e34f623f3e4ace59fd3553da102e908ff03f98bfa9e3cb9a8",
+  "fixture_sha256": "a7339af41f505a4ca5d94125d0338b73cd3a574ee2a39418d17c00f90f2d18bb",
+  "owner_issue_reproduced": false,
+  "source_modified": false
+}

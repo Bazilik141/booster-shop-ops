@@ -1,0 +1,10 @@
+{
+  "PHP_sha256": "a80924850d1a40a81acaf6935fedca483cfeb3212c111176c7d09c93bbed5a3c",
+  "PS_sha256": "080a1be7e0ba56e0ce4451b61ac427d8035c2a91c9f2153ad76ac27a9beb2728",
+  "native_PS": "PowerShell5.1_syntax_and_pure_receipt_checks=6; no_owner_packet_executed",
+  "Bash_syntax": "pass",
+  "Bash_sha256": "431e14d0793511df1a74896ce54f10bf6b9ae270460c8e624105633d5cf802cd",
+  "test_sha256": "2fe43d658d70d61e735388508835f83fcaa155a4c0495b472fd18f23004e0d43",
+  "owner_packet_or_SSH_executed": false,
+  "receipt_boundary": "Native loopback fixture, only web SAPI name adapted; no production output normalization."
+}

@@ -1,0 +1,29 @@
+{
+  "task": "ACC-009-C2",
+  "stage": "c2-code-ready-r1",
+  "request_id": "0fda91b7-c2e8-4e44-a523-0317cf216d83",
+  "owner_authority": "Owner-assigned C2 release preparation after explicit N3 owner courier-save QA; one integrated final review of source release and owner packet only. No agent SSH/key/server use, live deployment or business writes.",
+  "started_utc": "2026-10-22T05:39:24.724679+00:00",
+  "model_requested": "claude-opus-5-5",
+  "effort": "high",
+  "packet_sha256": "23cf8e86c37080a6aae5121bc5af888df5836fbc70e388a7a70f7a88958896e6",
+  "adapter_sha256": "4aaa1e2b2cef393914027e555b48bf24507802a04ed13b0fe7e306b015c8621d",
+  "status": "failed",
+  "direct_API_or_paid_fallback": false,
+  "agent_server_or_key_access": false,
+  "subscription_verified": true,
+  "CLI_sha256": "1787c60619bad78543c67e4d9d8a868869c35a904f2a85eb9ea46c4808af196b",
+  "CLI_version": "2.1.303 (Claude Code)",
+  "native_pid": 6884,
+  "model_initialized": "claude-opus-5-5",
+  "tools_initialized": [],
+  "MCP_count": 0,
+  "stderr_captured": "",
+  "exit_code": 1,
+  "models_observed": [
+    "<synthetic>"
+  ],
+  "tool_calls": [],
+  "completed_utc": "2026-10-22T05:39:31.465642+00:00",
+  "failure": "CLI_error_or_incomplete_or_tools"
+}

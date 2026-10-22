@@ -87,3 +87,7 @@ diagnostics/BOOSTER_review-efficiency_evidence_20261019/application.json -text w
 diagnostics/BOOSTER_review-efficiency_evidence_20261019/post-application-verification.json -text whitespace=cr-at-eol
 dashboard/booster-dashboard.html -text whitespace=cr-at-eol
 context-index.md -text whitespace=cr-at-eol
+
+# Preserve authentication-investigation evidence bytes for this checkpoint.
+diagnostics/BOOSTER_claude-auth* -text whitespace=cr-at-eol
+diagnostics/BOOSTER_claude-auth*/** -text whitespace=cr-at-eol

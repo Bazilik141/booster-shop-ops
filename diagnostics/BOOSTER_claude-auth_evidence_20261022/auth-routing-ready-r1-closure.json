@@ -1,0 +1,38 @@
+{
+  "task": "BOOSTER-CLAUDE-AUTH",
+  "stage": "auth-routing-ready-r1",
+  "request_id": "f8e0e74b-4a4c-4aa8-aaab-ff7d17855afa",
+  "consumed": true,
+  "replay_permitted": false,
+  "closed_utc": "2026-10-22T06:11:28.461833+00:00",
+  "actual_status": "failed",
+  "actual_error": "You've hit your weekly limit \u00b7 resets 10pm (Europe/Kyiv)",
+  "full_original_result_sha256": "eae61dc2b4366790e84c6386ebca77119cc9aed8b48bd12e97fe41543979f9f6",
+  "response_sha256": null,
+  "declared_input_drift": [],
+  "packet_unchanged": true,
+  "model_requested": "claude-opus-5-5",
+  "effort": "high",
+  "model_initialized": "claude-opus-5-5",
+  "tools": [],
+  "MCP_count": 0,
+  "observed_tool_calls": [],
+  "overage": {
+    "status": "rejected",
+    "resetsAt": 1792695600,
+    "rateLimitType": "seven_day",
+    "overageStatus": "rejected",
+    "overageDisabledReason": "org_level_disabled",
+    "isUsingOverage": false
+  },
+  "Git_HEAD_unchanged": true,
+  "index_unchanged": true,
+  "changed_status_entries": [
+    "?? diagnostics/BOOSTER_claude-auth_evidence_20261022/auth-routing-ready-r1-original-result.json",
+    "?? diagnostics/BOOSTER_claude-auth_evidence_20261022/auth-routing-ready-r1-run.json",
+    "?? work/booster-claude-auth-20261022/auth-routing-ready-r1-git-status-start.bin"
+  ],
+  "composition": "Only declared inputs are frozen; outside-set path impact must be assessed before positive release. No branch-wide certification.",
+  "review_verdict": "NOT_REVIEWED",
+  "production_or_owner_release": false
+}

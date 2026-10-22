@@ -1,0 +1,19 @@
+{
+  "runner_sha256": "8645e8f247681529d0a8ec9e42b6a01fa1a656e246fa949a4fb08796206fb9d2",
+  "PHP": "8.0.30",
+  "checks": [
+    "full entry dry-run, actual sealed probe file lifecycle with fictional HTTPS reply, no target backup/write",
+    "entry rejects runner inside webroot before target write",
+    "full entry actual apply + backup + lint + source hash + self-delete + sealed probe cleanup",
+    "full entry idempotent after-image self-deletes without a second backup",
+    "full entry rollback-check is nonmutating",
+    "full entry rollback preserves N3 and self-deletes",
+    "HTTP406 fail-closed, actual probe cleanup, target unchanged",
+    "changed probe preserves unknown bytes and reports basename; source unchanged",
+    "cleanup hash warning reports exact leftover name and primary=none; no target write",
+    "cleanup hash warning reports exact leftover name and primary=web_probe_transport_or_HTTP_failed; no target write"
+  ],
+  "adapter_diff_sha256": "f8cc0956662d4c990653ffac693c60db17febfee32c33efe1ebb366070273fc2",
+  "fixture_home": "C:/Users/14bez/Downloads/Booster Shop/booster-shop-ops/work/acc009-c2-release-20261022/lifecycle-98v5yht4",
+  "boundary": "Native production main entry/helpers with Windows fixture path adaptation and fictional metadata/HTTPS producers. Additional explicit warning injection at cleanup hash call verifies real exception reporting with/without a primary HTTP failure. No production DB, HTTP, NP or SSH. Actual CGI tests cover generated endpoint separately."
+}

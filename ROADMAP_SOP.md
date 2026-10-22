@@ -10,10 +10,14 @@ writer ownership, page-ID routing, and Definition of Done.
 
 ## 0. Core invariants
 
-> **Automatic independent review — owner 2026-10-14 / 2026-10-19:**
-> Follow docs/BOOSTER_AUTOMATIC_PEER_REVIEW_20261014.md. Codex initiates actual
-> subscription Claude at a ready required stage. Its non-GSS efficiency procedure
-> applies to ongoing/new tasks; GSS retains its prior shared/specific controls and
+> **Automatic independent review — owner 2026-10-14 / 2026-10-19 / 2026-10-21:**
+> Follow docs/BOOSTER_AUTOMATIC_PEER_REVIEW_20261014.md. For Codex-executed
+> non-GSS implementation routed to review, the default is one integrated final
+> actual subscription Claude review of the patch and owner-run apply packet.
+> Routine bounded work on the existing main CRM Google Sheets workbook and canonical
+> dashboard has no Claude review by default; domain exceptions use the owner's
+> per-case route choice. GSS retains its prior
+> shared/specific controls and
 > docs/GSS_OPTIMIZATION_RULES_20261014.md. A verdict is exact-stage evidence, not
 > Done, status mutation, Git/deployment authority or owner QA. Explicit owner gates
 > and writer/DoD authority remain. A task report/ledger is local evidence/work state,
@@ -116,7 +120,7 @@ For watch-only monitoring after implementation, use `Done` and add a
 | 1. Create | Task row and initial scope | Claude | Claude (2026-07-27 amendment), or Codex when mirror creation is authorized | `Not started` / `todo` |
 | 2. Start | Bounded handoff exists | Claude | Claude (2026-07-27 amendment), or Codex when mirror change is authorized | `In progress` / `active` |
 | 3. Implement | Patch/source change + diagnostics | — | Codex only if required by scope | Acceptance checks |
-| 4. Review | Handoff + diagnostic + bounded diff | — | — | Claude/owner verdict |
+| 4. Review (when required) | Handoff + diagnostic + bounded diff | — | — | Claude verdict, or documented policy no-review route |
 | 5. Deploy and QA | Owner runs patch and manual checks | — | — | Owner evidence |
 | 6. Close | Owner authorizes closure after DoD | Claude sets `Done` | Claude mirrors `done` (2026-07-27 amendment), or Codex | Both converge |
 
@@ -180,8 +184,12 @@ Spot-check completed tasks only when evidence suggests drift.
 - `.env.review` may contain `ANTHROPIC_API_KEY` and `NOTION_TOKEN`; never commit
   or expose it.
 
-Use manual Claude review in addition to automation for risky or complex
-changes.
+Do not add a second manual/legacy `bsreview` call for risky or complex changes.
+For non-GSS work, use the review route required by the canonical policy: one
+integrated independent review when required, with owner-selected exception
+routes. Routine bounded work on the existing main CRM Google Sheets workbook and
+canonical dashboard has no Claude review by default. GSS keeps its own review
+gates and transport.
 
 ## 5. Notion page-ID registry
 

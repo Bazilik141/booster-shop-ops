@@ -1,0 +1,40 @@
+{
+  "task": "ACC-009-N3",
+  "stage": "n3-code-ready-r2",
+  "request_id": "3ffc97a0-5539-4389-a73c-d9bff7289f6a",
+  "consumed": true,
+  "replay_permitted": false,
+  "closed_utc": "2026-10-21T19:31:30.337813+00:00",
+  "actual_status": "completed",
+  "actual_error": null,
+  "full_original_result_sha256": "4e369c17c2d57a4a7d67e82518ba38582b1039677ca5d2c341e9a62ea0c3aaef",
+  "response_sha256": "288f90172f56d6039fdd13f9f17196f35daf20096822aa8bcc55da75cbe7b7bc",
+  "declared_input_drift": [],
+  "packet_unchanged": true,
+  "model_requested": "claude-opus-5-5",
+  "effort": "high",
+  "model_initialized": "claude-opus-5-5",
+  "tools": [],
+  "MCP_count": 0,
+  "observed_tool_calls": [],
+  "overage": {
+    "status": "allowed_warning",
+    "resetsAt": 1792695600,
+    "rateLimitType": "seven_day",
+    "overageStatus": "rejected",
+    "overageDisabledReason": "org_level_disabled",
+    "isUsingOverage": false
+  },
+  "Git_HEAD_unchanged": true,
+  "index_unchanged": true,
+  "changed_status_entries": [
+    "?? diagnostics/ACC-009_N3-release_evidence_20261021/n3-code-ready-r2-original-result.json",
+    "?? diagnostics/ACC-009_N3-release_evidence_20261021/n3-code-ready-r2-response.md",
+    "?? diagnostics/ACC-009_N3-release_evidence_20261021/n3-code-ready-r2-run.json",
+    "?? work/acc009-n3-release-20261021/n3-code-ready-r2-git-start.json",
+    "?? work/acc009-n3-release-20261021/n3-code-ready-r2-git-status-start.bin"
+  ],
+  "composition": "Only declared inputs are frozen; outside-set path impact must be assessed before positive release. No branch-wide certification.",
+  "review_verdict": "MAIN_AGENT_MUST_READ_FULL_RESPONSE",
+  "production_or_owner_release": false
+}
