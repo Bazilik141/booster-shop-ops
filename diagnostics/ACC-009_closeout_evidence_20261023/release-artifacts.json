@@ -1,0 +1,180 @@
+{
+  "task": "ACC-009",
+  "actual_review_request_id": "028ece35-43a3-41e8-8357-257e5e366d41",
+  "parts": {
+    "WP3b": {
+      "runner": "patches/ACC-009-WP3b_profile-admin-source_HELD_r4_20261023.php",
+      "runner_sha256": "0854ffe33ac9239349d95967cca264a378c429a86b2a988f0d028dcc53957166",
+      "runner_bytes": 465933,
+      "owner_packet": "diagnostics/ACC-009-WP3b_owner-PS_HELD_r5_20261023.ps1",
+      "packet_sha256": "9397ee99f49b1d113db87c068fbad8dc02ae6152b55d51b56e3c390ab9e4a1c6",
+      "targets": [
+        {
+          "path": "system/library/booster_account_profile.php",
+          "before": "absent",
+          "after": "5089e0044ac50d101c6fc07300abce625baf0303f35e17dfbb6dc0a200bbe597"
+        },
+        {
+          "path": "catalog/view/javascript/booster-account-profile.js",
+          "before": "absent",
+          "after": "6a36179518eb8e16eb105c052556570a373a581d072a187daf41fc88450150d9"
+        },
+        {
+          "path": "adminEvhenii/view/javascript/booster-account-profile.js",
+          "before": "absent",
+          "after": "6a36179518eb8e16eb105c052556570a373a581d072a187daf41fc88450150d9"
+        },
+        {
+          "path": "catalog/controller/account/edit.php",
+          "before": "e9c1b8457047a3e8528bba84d6d84f49cba825e6af1bba235cf83256d1602f2d",
+          "after": "91a358589fa318df92c9fff8fea6ddd949479f008556a5c15f9750dc01b9dc54"
+        },
+        {
+          "path": "adminEvhenii/controller/customer/customer.php",
+          "before": "7b02ab9666e633cfba0eb1d9f2c6b615785f28e000ef3bf3a50b255dd6bbb94e",
+          "after": "1c52d30916e4243030005e36660545eeb6d790c8408cc8768bd5945706318a2d"
+        },
+        {
+          "path": "catalog/model/account/custom_field.php",
+          "before": "b983dc078dfd1dd0bb5a764b9ec2bbcfd703360c5328839100b2b74ba2549279",
+          "after": "47f5334b0502f1967e7963bd03a2d3d764a6bceafe7b194634615cb5fa7ffe90"
+        },
+        {
+          "path": "adminEvhenii/model/customer/customer.php",
+          "before": "9d2abd0c1b3ede9c6ad362f416d2397da0a4d97ff76fdf16427dffc29d716ceb",
+          "after": "1743e0388573d54ec8c2d396c0fcfbe5af79008acf92180c87e6386ec31426cf"
+        },
+        {
+          "path": "catalog/view/template/account/edit.twig",
+          "before": "707c3788e12888324161dc311c0591ae3ce28c72194d7743b4b82f3f070eeff9",
+          "after": "69b27f6192de5b2dbe1d46604e69cce1f2ab0d9be855aa8fdb8a465b4645f476"
+        },
+        {
+          "path": "adminEvhenii/view/template/customer/customer_form.twig",
+          "before": "29d7c3da6b2c12116de4aa977e55cf12616416d3cc257a7937714d5fdfe1691b",
+          "after": "bab1d6b0120732c82dff128a6dd6a02357b23473bb2722e791947a4210c9e638"
+        }
+      ],
+      "current_disposition": "CONSUMED_OWNER_APPLIED_QA_ACCEPTED_NO_REPLAY"
+    },
+    "N2": {
+      "runner": "patches/ACC-009-N2_unified-name-policy_HELD_r4_20261023.php",
+      "runner_sha256": "8c81393cd73c43a8ec70ae98deab0cf1c107fa3dc6cfd0d63ef58f158c8aff89",
+      "runner_bytes": 900825,
+      "owner_packet": "diagnostics/ACC-009-N2_owner-PS_HELD_r5_20261023.ps1",
+      "packet_sha256": "d251819bf6318b8832b31f9098a97b9c4cf451bfa6ee2ab2113ae5b4f21d7ca1",
+      "targets": [
+        {
+          "path": "catalog/view/javascript/booster-account-universal.js",
+          "before": "absent",
+          "after": "2d9ca8f133bb5e8d9f7c938a8e92d3db86d01edcedb15261525a5353a08ac368"
+        },
+        {
+          "path": "adminEvhenii/view/javascript/booster-account-universal.js",
+          "before": "absent",
+          "after": "2d9ca8f133bb5e8d9f7c938a8e92d3db86d01edcedb15261525a5353a08ac368"
+        },
+        {
+          "path": "catalog/controller/account/register.php",
+          "before": "e9069d84ff5c91dfc8f8c24fb9572e07e819ffad4ad0aa212cee2c2852232e6d",
+          "after": "7fe16bee2637d583cdf8e461a2eb83e4965b64b16556947f10b87faa4b8eb3ef"
+        },
+        {
+          "path": "catalog/controller/account/address.php",
+          "before": "5b8d82ac98d438339c158b174a934c908f20beb2b3fa0867deaeb7bc53f731ca",
+          "after": "462560a1f0d9c2c2c59523a5cab5de320620716a1e0985dc2cbb36986b21dff2"
+        },
+        {
+          "path": "adminEvhenii/controller/customer/address.php",
+          "before": "b4da8a0f6845baa2e5bcaf7873ff6cee21d08aa053f776ab575c960975d0fb95",
+          "after": "a5bd1279846b7f0a50fdc65bd9dea5ad4e44c428f6e31fc85e4d42f93bb9b7b6"
+        },
+        {
+          "path": "catalog/controller/checkout/checkout.php",
+          "before": "761c051c9286c3022efc1e5deea02979023f2d45600d762cb2d222eda03e4cbf",
+          "after": "dab58181bf151676320cc40e8920e9b98296a1d73cba6fd540e5f4372e6096ed"
+        },
+        {
+          "path": "catalog/controller/checkout/register.php",
+          "before": "5858276323363e09ae727e47a5aa13e2918d2d455991feeefa6daf3e52890c2f",
+          "after": "fe5b818905033315f84b139a8769e55b30b4a8113995b6289c3148304cd85967"
+        },
+        {
+          "path": "catalog/controller/checkout/payment_address.php",
+          "before": "2c4ce122546971593c6ca4b6083face8200b311a789f7f7cef82d1a4d4b8c76f",
+          "after": "e8fd4b475fd3d51c49ee046ba062c75b0f7733df7d1b3d59aa5ff054de8ea572"
+        },
+        {
+          "path": "catalog/controller/checkout/shipping_address.php",
+          "before": "c5e456585fe2da3f9ede3435b1522848ff2a147dc0ad5418d1773bb65cd832b5",
+          "after": "94a0f7a1f1b95a0dc3aa2894ee57ad1103d5ca4e7a5727ff883cf09b56bf5fa5"
+        },
+        {
+          "path": "catalog/controller/checkout/receiver.php",
+          "before": "b9a0f64ae025c5f19139220cc8718c1b44301b8d89ea342c4b7e12e8e83794cd",
+          "after": "2b55d995af3d30d6213ef8020c6084fa7ec7759a14dce21f6d9f9cb34240bfe1"
+        },
+        {
+          "path": "catalog/view/template/account/address_form.twig",
+          "before": "a08cab1de895cd0bdb8b4edb03bc0d5dce1b5647727dd01289152e5cd75bd5aa",
+          "after": "a5d2ad5d4d08406994c00583c722c825c45000c05097c7963d44231ba03ed39f"
+        },
+        {
+          "path": "adminEvhenii/view/template/customer/address_form.twig",
+          "before": "99e351fe11f72a27b862eb75e40bc17582705b8c8d0ba26e847fd54f1200f277",
+          "after": "5347342f774d3b323b906c937733baae745c134c6b756024334a817ef5a8d099"
+        },
+        {
+          "path": "extension/PintaNovaPoshtaCod/admin/controller/shipping/internet_document.php",
+          "before": "4d84bb039d7c43ede234d76deef698b8e0e7886184800e6bf6eeaaa7a19ca0af",
+          "after": "d56bd9d502b4899e9149c1f789799feee7f3efb6b26dee2c47840ef87f3531ba"
+        },
+        {
+          "path": "catalog/view/javascript/acc009-checkout.js",
+          "before": "0cb1acff55038642851649c4bc5b82b55faf62769d9993310b45ee5e5305f4f1",
+          "after": "f944c1213925365d83ae5752cea0737f8065ecbe4e5593535a6099e3226ad077"
+        },
+        {
+          "path": "system/library/booster_checkout_readiness.php",
+          "before": "69a7d5fdfb9ee77e34f623f3e4ace59fd3553da102e908ff03f98bfa9e3cb9a8",
+          "after": "a21e8ccf26b7cec24e8faaabc1d59a6ec164e7a487e08f66349942de08dab7c3"
+        },
+        {
+          "path": "catalog/view/template/checkout/checkout.twig",
+          "before": "397b85ccfd84c881779d0fc6ebadf40205060e440af7b588d0e249cf250c2146",
+          "after": "e17c963336b37183c16761cf3e966e2fc47768e5749fe0078b5c6ee14f1b5260"
+        },
+        {
+          "path": "catalog/model/account/customer.php",
+          "before": "2ee614f126bc8f12272ba612e504ad6892298e40d85444b5e1d01558a98c97fb",
+          "after": "06f53290fffb7d86e3f696194912156456329f20a46cb49c51173282a5896797"
+        },
+        {
+          "path": "catalog/controller/checkout/payment_method.php",
+          "before": "dc34248a36f05445502aecb4eff2b03accc6e68bf9318b7f699252023821fbe9",
+          "after": "69fc5f3cd4a9e319374c23cf19a61ff57c5efbea745053165fcde5fcdeeeb43e"
+        }
+      ],
+      "current_disposition": "CONSUMED_OWNER_APPLIED_QA_ACCEPTED_NO_REPLAY"
+    },
+    "WP3c": {
+      "runner": "patches/ACC-009-WP3c_profile-metadata_HELD_r4_20261023.php",
+      "runner_sha256": "4f6b5a180caeb5e72f37eb3df14d7bbc36c401372632f9f98dfe369db460878c",
+      "runner_bytes": 120709,
+      "owner_packet": "diagnostics/ACC-009-WP3c_owner-PS_HELD_r5_20261023.ps1",
+      "packet_sha256": "256a8b5cd860dc57fb538edfac3f4c62c94a98a2dcf60c1d90161afe781e0620",
+      "targets": [],
+      "current_disposition": "CONSUMED_OWNER_APPLIED_QA_ACCEPTED_NO_REPLAY"
+    }
+  },
+  "metadata": {
+    "fields": {
+      "patronymic": 29,
+      "telegram": 30,
+      "viber": 31
+    },
+    "setting_id": 11390,
+    "business_rows_changed_by_metadata_runner": 0
+  },
+  "raw_customer_or_dump_content_included": false
+}

@@ -1,0 +1,32 @@
+{
+  "schema": "acc009.remaining-review-release.v1",
+  "status": "REVIEW_OK",
+  "request_id": "028ece35-43a3-41e8-8357-257e5e366d41",
+  "stage": "remaining-code-ready-r5",
+  "parts": {
+    "WP3b": {
+      "runner_sha256": "0854ffe33ac9239349d95967cca264a378c429a86b2a988f0d028dcc53957166",
+      "packet_sha256": "9397ee99f49b1d113db87c068fbad8dc02ae6152b55d51b56e3c390ab9e4a1c6"
+    },
+    "N2": {
+      "runner_sha256": "8c81393cd73c43a8ec70ae98deab0cf1c107fa3dc6cfd0d63ef58f158c8aff89",
+      "packet_sha256": "d251819bf6318b8832b31f9098a97b9c4cf451bfa6ee2ab2113ae5b4f21d7ca1"
+    },
+    "WP3c": {
+      "runner_sha256": "4f6b5a180caeb5e72f37eb3df14d7bbc36c401372632f9f98dfe369db460878c",
+      "packet_sha256": "256a8b5cd860dc57fb538edfac3f4c62c94a98a2dcf60c1d90161afe781e0620"
+    }
+  },
+  "utc": "2026-10-23T13:47:13.647736+00:00",
+  "response": "diagnostics/ACC-009_remaining_review_evidence_20261023/remaining-code-ready-r5-response.md",
+  "response_sha256": "2e2ac31ef40905de773cfb7d0c8baa0aad78abd9aef3bd52832441a4796b9713",
+  "full_original_result_sha256": "b57b19716b131201c8ec25632b7d11839c9a3eedf9ff04cbd28f042158a41ee8",
+  "scope": "Three exact retained r4 runners plus new r5 owner packets; no host/QA certification.",
+  "conditions": [
+    "Preserve r4 consumed Apply marker/receipts. Exact dispatch reconstruction proves no PHP/source/cache write in the failed attempt.",
+    "Owner r5 WP3b Upload/Verify/Preflight, send complete output before new assessed Apply.",
+    "N2 after WP3b application and focused QA. WP3c separate explicit owner go and fresh consistent full DB backup.",
+    "Any STOP/unknown requires assessment, no automatic replay or blind rollback."
+  ],
+  "server_execution_or_QA_performed_by_agent": false
+}

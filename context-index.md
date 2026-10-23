@@ -312,7 +312,9 @@ Bulk-query (`notion-query-data-sources` / `notion-query-database-view
 
 ## ACC-009 continuation routing
 
-Read `handoffs/ACC-009_CONTINUE_20261022.md` first, then the current section of
-`diagnostics/ACC-009_H1_implementation_report_20261019.md`. Task page:
-`https://app.notion.com/p/3f86bf20bdb481ae91a5e6e3326077ab`. This is routing only;
-Notion remains canonical for task status.
+Read `diagnostics/ACC-009_closeout_report_20261023.md` first, then
+ `handoffs/ACC-009_CONTINUE_20261023.md` for exact artifact, receipt and owner-QA
+references. Portable seals/target states:
+`diagnostics/ACC-009_closeout_evidence_20261023/release-artifacts.json`.
+Task page: `https://app.notion.com/p/3f86bf20bdb481ae91a5e6e3326077ab`.
+This is routing only; Notion remains canonical for task status.

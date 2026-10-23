@@ -1,0 +1,64 @@
+{
+  "condition": "R2",
+  "status": "CLOSED_MECHANICAL",
+  "code_citation": "Retained r4 WP3b/N2/PHP runners ar_replace lines433-446, ar_source_apply lines447-471; explicit chmod before rename, new0644, existing fileperms &0777",
+  "functions": {
+    "ar_replace": "function ar_replace(string $path, ?string $beforeHash, string $body, int $mode): void {\n    $current = is_file($path) ? hash_file('sha256',$path) : null;\n    ar_assert(!is_link($path) && $current === $beforeHash,'target_changed_before_write');\n    $temp = $path . '.acc009-' . bin2hex(random_bytes(8)); $h = fopen($temp,'x');\n    ar_assert($h !== false,'target_temp_failed');\n    try {\n        ar_assert(fwrite($h,$body) === strlen($body) && fflush($h),'target_temp_write_failed');\n        ar_assert(fclose($h),'target_temp_close_failed'); $h = null;\n        ar_assert(chmod($temp,$mode),'target_temp_mode_failed');\n        ar_assert(!is_link($path) && (is_file($path)?hash_file('sha256',$path):null) === $beforeHash,'target_changed_before_rename');\n        ar_assert(rename($temp,$path),'target_rename_failed');\n    } finally { if (is_resource($h)) fclose($h); if (is_file($temp)) unlink($temp); }\n}",
+    "ar_source_apply": "function ar_source_apply(string $root, array $s, array $targets): array {\n    $manifest = ['schema'=>'acc009.source-backup.v1','task'=>$s['id'],'files'=>[]];\n    foreach ($s['files'] as $rel=>$r) $manifest['files'][$rel] = ['before'=>$r['before'],'after'=>$r['after'],'mode'=>$r['before']===null?0644:(fileperms($targets[$rel]['path']) & 0777)];\n    $backup = ar_backup($root,$s,$manifest); $changed = []; $i = 0;\n    foreach ($targets as $rel=>$v) {\n        if ($v['body'] !== null) ar_assert(file_put_contents($backup.'/'.$i.'.source',$v['body'],LOCK_EX) === strlen($v['body']),'backup_write_failed');\n        $i++;\n    }\n    try {\n        foreach ($s['files'] as $rel=>$r) {\n            $body = base64_decode($r['body_b64'],true);ar_assert(is_string($body) && hash('sha256',$body)===$r['after'],'payload_hash_failed');\n            if (substr($rel,-4)==='.php') acc009s_lint_payload($body);\n            $path=$targets[$rel]['path']; $parent=dirname($path);acc009r_abs($parent);\n            ar_replace($path,$r['before'],$body,$manifest['files'][$rel]['mode']);$changed[]=$rel;\n            if (substr($rel,-4)==='.php') acc009s_lint($path);\n            ar_assert(hash_file('sha256',$path)===$r['after'],'post_write_hash_failed');\n        }\n    } catch (Throwable $e) {\n        foreach (array_reverse($changed) as $rel) {\n            $path=$targets[$rel]['path'];ar_assert(hash_file('sha256',$path)===$s['files'][$rel]['after'],'recovery_drift_STOP');\n            if ($targets[$rel]['body'] === null) ar_assert(unlink($path),'recovery_unlink_failed');\n            else ar_replace($path,$s['files'][$rel]['after'],$targets[$rel]['body'],$manifest['files'][$rel]['mode']);\n        }\n        acc009a_fail('source_apply_failed_originals_restored');\n    }\n    return ['backup'=>$backup,'changed_files'=>count($changed),'action'=>'applied'];\n}"
+  },
+  "parts": {
+    "WP3b": {
+      "runner_sha256": "0854ffe33ac9239349d95967cca264a378c429a86b2a988f0d028dcc53957166",
+      "new_targets_0644": [
+        "system/library/booster_account_profile.php",
+        "catalog/view/javascript/booster-account-profile.js",
+        "adminEvhenii/view/javascript/booster-account-profile.js"
+      ],
+      "existing_targets_preserve_original_mode": [
+        "catalog/controller/account/edit.php",
+        "adminEvhenii/controller/customer/customer.php",
+        "catalog/model/account/custom_field.php",
+        "adminEvhenii/model/customer/customer.php",
+        "catalog/view/template/account/edit.twig",
+        "adminEvhenii/view/template/customer/customer_form.twig"
+      ],
+      "same_source_replace_apply_functions_all_three": true,
+      "chmod_precedes_atomic_rename": true
+    },
+    "N2": {
+      "runner_sha256": "8c81393cd73c43a8ec70ae98deab0cf1c107fa3dc6cfd0d63ef58f158c8aff89",
+      "new_targets_0644": [
+        "catalog/view/javascript/booster-account-universal.js",
+        "adminEvhenii/view/javascript/booster-account-universal.js"
+      ],
+      "existing_targets_preserve_original_mode": [
+        "catalog/controller/account/register.php",
+        "catalog/controller/account/address.php",
+        "adminEvhenii/controller/customer/address.php",
+        "catalog/controller/checkout/checkout.php",
+        "catalog/controller/checkout/register.php",
+        "catalog/controller/checkout/payment_address.php",
+        "catalog/controller/checkout/shipping_address.php",
+        "catalog/controller/checkout/receiver.php",
+        "catalog/view/template/account/address_form.twig",
+        "adminEvhenii/view/template/customer/address_form.twig",
+        "extension/PintaNovaPoshtaCod/admin/controller/shipping/internet_document.php",
+        "catalog/view/javascript/acc009-checkout.js",
+        "system/library/booster_checkout_readiness.php",
+        "catalog/view/template/checkout/checkout.twig",
+        "catalog/model/account/customer.php",
+        "catalog/controller/checkout/payment_method.php"
+      ],
+      "same_source_replace_apply_functions_all_three": true,
+      "chmod_precedes_atomic_rename": true
+    },
+    "WP3c": {
+      "runner_sha256": "4f6b5a180caeb5e72f37eb3df14d7bbc36c401372632f9f98dfe369db460878c",
+      "new_targets_0644": [],
+      "existing_targets_preserve_original_mode": [],
+      "same_source_replace_apply_functions_all_three": true,
+      "chmod_precedes_atomic_rename": true
+    }
+  },
+  "limits": "Source citation only; no Unix permission or LiteSpeed static-serving execution. Native Windows PHP mode tests cannot establish Unix permissions."
+}

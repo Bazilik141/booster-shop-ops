@@ -1,0 +1,13 @@
+{
+    "count":  6,
+    "checks":  [
+                   "WP3b exact independent r5 release accepted",
+                   "WP3b altered packet refused",
+                   "N2 exact independent r5 release accepted",
+                   "N2 altered packet refused",
+                   "WP3c exact independent r5 release accepted",
+                   "WP3c altered packet refused"
+               ],
+    "owner_packet_entry_executed":  false,
+    "transport_executed":  false
+}

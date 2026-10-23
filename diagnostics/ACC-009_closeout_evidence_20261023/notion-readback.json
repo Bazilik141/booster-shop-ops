@@ -1,0 +1,20 @@
+{
+  "task": "ACC-009",
+  "page_id": "3f86bf20-bdb4-81ae-91a5-e6e3326077ab",
+  "status": "Done",
+  "last_updated": "2026-10-23",
+  "blocker": "",
+  "updated_fields": [
+    "Status",
+    "Last Updated",
+    "Blocker",
+    "Stage",
+    "Source",
+    "Owner Decision",
+    "Page / Zone"
+  ],
+  "all_requested_properties_match": true,
+  "final_name_rule_and_historical_heading_verified": true,
+  "owner_authority": "Owner directly requested final report, scoped commit/push and update after final QA; one-time ACC-009 closeout writer exception.",
+  "scope": "ACC-009 properties and two exact content replacements only"
+}
