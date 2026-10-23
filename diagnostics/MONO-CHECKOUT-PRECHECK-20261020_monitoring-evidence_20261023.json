@@ -1,0 +1,525 @@
+{
+  "schema": "mono.monitoring_evidence.v1",
+  "task_id": "MONO-CHECKOUT-PRECHECK-20261020",
+  "recorded_date": "2026-10-23",
+  "owner_decision": "watch_only_await_next_organic_production_application",
+  "incident": "unresolved_cause_and_customer_resolution_unproven",
+  "browser_stand": "deferred_by_owner",
+  "owner_apply_receipt_historical_snapshot": {
+    "task_id": "MONO-CHECKOUT-PRECHECK-20261020",
+    "stage": "guard_r2_diagnostic_packet_r3_apply",
+    "owner_receipt_date": "2026-10-23",
+    "source": "owner_pasted_console_output",
+    "packet_sha256": "a256e1bb2e05f94672a1ba407bcd7a0eacf77254a040684ae8d282b3157406c1",
+    "patch_sha256": "04b509078af8e772ea055172f76cf0ca8f364ac366789cbfdcaab3ef7ce957e7",
+    "local_hashes_rechecked": true,
+    "receipt_complete": true,
+    "expected_receipt_match": true,
+    "receipt_lines": 42,
+    "closure": "mechanical_expected_receipt",
+    "source_deployment": "accepted_from_owner_complete_expected_Apply_receipt",
+    "target": "extension/mono_chast/catalog/controller/payment/mono_chast.php",
+    "target_before": "6c53f4129166dfeb9c8654b33edc99a663925f61d58b0a6cfed700dac76bd2ac",
+    "target_after": "bed53fa4185b873dbb782224e7e73f98f4a0cdb962b74226a3501bb7b4957a76",
+    "backup_dir": "/home2/boosters/public_html/_patch_backups/MONO-CHECKOUT-PRECHECK-20261020_guard-codes-r2_20261023-20261023-200152-c19fc2e8",
+    "backup_manifest_sha256": "ffe119f631c578c517ca2c86bf84985d3a80fc2cdbde0b237a0673b2fe1d7669",
+    "recovery_runner_sha256": "04b509078af8e772ea055172f76cf0ca8f364ac366789cbfdcaab3ef7ce957e7",
+    "changed_files": 1,
+    "database_operations": "none",
+    "cache_operations": "none",
+    "staged_patch": "self_deleted_and_absent_per_packet",
+    "separate_native_exit_code": null,
+    "agent_remote_or_key_actions": false,
+    "customer_incident": "unresolved_pending_same_browser_customer_QA",
+    "next_owner_action": "Affected customer refreshes the original cart in the same logged-in browser, retries once, and reports fixed code/error/redirect category or bank handoff outcome without identifiers.",
+    "receipt": [
+      "packet_id=MONO-CHECKOUT-PRECHECK-20261020_guard-codes-r2_20261023",
+      "packet_mode=apply",
+      "local_patch=exact_path_size_sha256",
+      "local_provenance=exact_sha256_not_executed",
+      "staging=private_0700_symlink_free",
+      "staged_patch=exact_sha256_size_mode_0600",
+      "php_runtime=usr_local_bin_php_cli_8.0_admitted",
+      "parent_confirm_php=after_exact",
+      "parent_credit_confirm_twig=after_exact",
+      "dependency_checkout_twig=exact_regular",
+      "dependency_order_php=exact_regular",
+      "dependency_readiness_php=exact_regular",
+      "dependency_credit_php=exact_regular",
+      "target_pin=before",
+      "runner_lint=ok",
+      "patch=MONO-CHECKOUT-PRECHECK-20261020_guard-codes-r2_20261023",
+      "mode=preflight",
+      "admission=before",
+      "target=extension/mono_chast/catalog/controller/payment/mono_chast.php sha256_before=6c53f4129166dfeb9c8654b33edc99a663925f61d58b0a6cfed700dac76bd2ac sha256_after=bed53fa4185b873dbb782224e7e73f98f4a0cdb962b74226a3501bb7b4957a76 backup=none syntax_gate=php_l_ok",
+      "database_touched=no",
+      "cache_cleared_by_runner=no",
+      "done=preflight_ok",
+      "apply_admission=before",
+      "patch=MONO-CHECKOUT-PRECHECK-20261020_guard-codes-r2_20261023",
+      "mode=apply",
+      "backup_dir=/home2/boosters/public_html/_patch_backups/MONO-CHECKOUT-PRECHECK-20261020_guard-codes-r2_20261023-20261023-200152-c19fc2e8",
+      "backup_manifest_sha256=ffe119f631c578c517ca2c86bf84985d3a80fc2cdbde0b237a0673b2fe1d7669",
+      "recovery_runner_sha256=04b509078af8e772ea055172f76cf0ca8f364ac366789cbfdcaab3ef7ce957e7",
+      "target=extension/mono_chast/catalog/controller/payment/mono_chast.php sha256_before=6c53f4129166dfeb9c8654b33edc99a663925f61d58b0a6cfed700dac76bd2ac backup=/home2/boosters/public_html/_patch_backups/MONO-CHECKOUT-PRECHECK-20261020_guard-codes-r2_20261023-20261023-200152-c19fc2e8/extension/mono_chast/catalog/controller/payment/mono_chast.php syntax_gate=php_l_ok sha256_after=bed53fa4185b873dbb782224e7e73f98f4a0cdb962b74226a3501bb7b4957a76",
+      "changed_files=1",
+      "database_touched=no",
+      "cache_cleared_by_runner=no",
+      "self_delete=ok",
+      "done=ok",
+      "apply_changed_files=1",
+      "source_posthash=after_target",
+      "staged_patch_after_apply=absent",
+      "database_operations=none",
+      "cache_operations=none",
+      "host_qa=customer_support_code_pending",
+      "owner_next=customer_refresh_cart_same_logged_in_browser_retry_once_report_MC01_MC02_MC04_MC05_or_no_code_only",
+      "packet_action=apply_ok"
+    ],
+    "limits": "Owner-reported exact deployment/backup/posthash evidence, not independent agent remote execution or FPM/browser/bank/customer-resolution proof. The diagnostic is temporary and must be removed through a reviewed follow-up after classification."
+  },
+  "review_closure_historical_snapshot": {
+    "status": "READY FOR OWNER-RUN",
+    "request_id": "b73b49ce-8207-43fb-b522-7bdf589f7693",
+    "actual_model": "claude-opus-5-5",
+    "effort": "high",
+    "exit_code": 0,
+    "patch_sha256": "04b509078af8e772ea055172f76cf0ca8f364ac366789cbfdcaab3ef7ce957e7",
+    "packet_sha256": "a256e1bb2e05f94672a1ba407bcd7a0eacf77254a040684ae8d282b3157406c1",
+    "response_sha256": "00ddd147a5c879ace55ddc0b74ae92985c6f040f894da1223cb69f90045dbdae",
+    "frozen_dependencies": 29,
+    "dependency_drift": [],
+    "mandatory_findings": [],
+    "optional_findings": {
+      "O6": "Internal patch identity remains r2; print the computed r3 packet hash in the owner wrapper and retain it separately alongside the receipt.",
+      "O7": "Remaining exact dependency/target/preflight checks are still owner-host pending; any STOP remains HELD, no automatic adaptation.",
+      "inherited": "Retain unchanged r2 O1-O5 in full accepted review; no executable changes for optional suggestions."
+    },
+    "mechanical_equivalence": "Only quoted D2S known after-hash and two comment lines; reversing them reproduces full reviewed r2 packet",
+    "privacy": "Accepted H1 technical recipe and compile/deployment hashes only; no raw protected order/Telegram after-image pulled/read/printed",
+    "tools_MCP_API_overage": "none",
+    "agent_transport_or_key_actions": false,
+    "deployment": "not_applied; same r2 runner already staged",
+    "current_host_order_hash": "not known until r3 owner Verify admits exact2ed5 after-image",
+    "next_owner_action": "Verify using the exact new r3 packet from repo root; no repeat Upload. Apply remains a separate owner action after complete expected Verify."
+  },
+  "local_test_result": {
+    "schema": "mono.local_session_matrix.v1",
+    "status": "pass",
+    "runtime": "8.3.30",
+    "cases": 36,
+    "native_controller_sha256": "bed53fa4185b873dbb782224e7e73f98f4a0cdb962b74226a3501bb7b4957a76",
+    "native_readiness_sha256": "a21e8ccf26b7cec24e8faaabc1d59a6ec164e7a487e08f66349942de08dab7c3",
+    "native_confirm_sha256": "333c43b9da2c6101d44e5676a78648b8ab9b75296380675944fef88a3ee69288",
+    "confirm_lifecycle_cases": 12,
+    "native_sources_preserved": true,
+    "real_network_calls": 0,
+    "production_db_operations": 0,
+    "customer_data_used": false,
+    "limits": [
+      "Fictional session/customer/cart/order/credit/DB/transport; real native controller/readiness/engine/language sources.",
+      "Native upstream Confirm executes against fictional persistence/totals/rendering; no real browser or concurrent request scheduling.",
+      "No native credit ownership, native getOrder/addHistory DB, browser/session transport or production PHP 8.0 runtime proof.",
+      "Forced fault states reproduce mechanisms only; the original customer-specific cause and resolution remain unproven."
+    ],
+    "results": [
+      {
+        "case": "authenticated_valid_parts_3",
+        "expected": "fake_bank_create",
+        "result": "pass",
+        "fake_bank_calls": 1,
+        "fake_db_writes": 2,
+        "fake_history_calls": 1
+      },
+      {
+        "case": "authenticated_valid_parts_4",
+        "expected": "fake_bank_create",
+        "result": "pass",
+        "fake_bank_calls": 1,
+        "fake_db_writes": 2,
+        "fake_history_calls": 1
+      },
+      {
+        "case": "authenticated_valid_parts_5",
+        "expected": "fake_bank_create",
+        "result": "pass",
+        "fake_bank_calls": 1,
+        "fake_db_writes": 2,
+        "fake_history_calls": 1
+      },
+      {
+        "case": "guest_valid",
+        "expected": "fake_bank_create",
+        "result": "pass",
+        "fake_bank_calls": 1,
+        "fake_db_writes": 2,
+        "fake_history_calls": 1
+      },
+      {
+        "case": "authenticated_saved_legacy_name",
+        "expected": "fake_bank_create",
+        "result": "pass",
+        "fake_bank_calls": 1,
+        "fake_db_writes": 2,
+        "fake_history_calls": 1
+      },
+      {
+        "case": "guest_same_invalid_name",
+        "expected": "acc009_refusal",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 0
+      },
+      {
+        "case": "authenticated_courier_valid",
+        "expected": "fake_bank_create",
+        "result": "pass",
+        "fake_bank_calls": 1,
+        "fake_db_writes": 2,
+        "fake_history_calls": 1
+      },
+      {
+        "case": "module_disabled",
+        "expected": "MC01",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 0
+      },
+      {
+        "case": "module_disabled_existing_grant",
+        "expected": "MC01_redirect",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 0
+      },
+      {
+        "case": "session_order_absent",
+        "expected": "MC02",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 0
+      },
+      {
+        "case": "session_order_zero",
+        "expected": "MC02",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 0
+      },
+      {
+        "case": "saved_order_missing",
+        "expected": "acc009_refusal",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 0
+      },
+      {
+        "case": "session_order_stale",
+        "expected": "acc009_refusal",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 0
+      },
+      {
+        "case": "saved_order_owner_differs",
+        "expected": "acc009_refusal",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 0
+      },
+      {
+        "case": "logged_in_identity_changed",
+        "expected": "acc009_refusal",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 0
+      },
+      {
+        "case": "store_differs",
+        "expected": "acc009_refusal",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 0
+      },
+      {
+        "case": "saved_payment_differs",
+        "expected": "acc009_refusal",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 0
+      },
+      {
+        "case": "consistent_non_mono_payment",
+        "expected": "acc009_refusal",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 0
+      },
+      {
+        "case": "decoded_order_contract_violated",
+        "expected": "acc009_refusal",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 0
+      },
+      {
+        "case": "session_seal_lost",
+        "expected": "acc009_refusal",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 0
+      },
+      {
+        "case": "browser_token_lost",
+        "expected": "acc009_refusal",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 0
+      },
+      {
+        "case": "browser_token_other_tab",
+        "expected": "acc009_refusal",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 0
+      },
+      {
+        "case": "seal_order_differs",
+        "expected": "acc009_refusal",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 0
+      },
+      {
+        "case": "seal_snapshot_differs",
+        "expected": "acc009_refusal",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 0
+      },
+      {
+        "case": "phone_changed_after_confirm",
+        "expected": "acc009_refusal",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 0
+      },
+      {
+        "case": "address_changed_after_confirm",
+        "expected": "acc009_refusal",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 0
+      },
+      {
+        "case": "saved_np_tuple_incomplete",
+        "expected": "acc009_refusal",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 0
+      },
+      {
+        "case": "courier_missing_middle_name",
+        "expected": "acc009_refusal",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 0
+      },
+      {
+        "case": "cart_empty",
+        "expected": "acc009_refusal",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 0
+      },
+      {
+        "case": "stock_not_available",
+        "expected": "acc009_refusal",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 0
+      },
+      {
+        "case": "below_minimum",
+        "expected": "fixed_pre_bank_error",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 0
+      },
+      {
+        "case": "invalid_phone",
+        "expected": "fixed_pre_bank_error",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 0
+      },
+      {
+        "case": "credit_provider_mismatch",
+        "expected": "fixed_pre_bank_error",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 0
+      },
+      {
+        "case": "existing_usable_transaction",
+        "expected": "existing_transaction",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 1
+      },
+      {
+        "case": "existing_failed_transaction",
+        "expected": "fixed_pre_bank_error",
+        "result": "pass",
+        "fake_bank_calls": 0,
+        "fake_db_writes": 0,
+        "fake_history_calls": 0
+      },
+      {
+        "case": "fake_bank_rejects",
+        "expected": "fake_bank_rejection",
+        "result": "pass",
+        "fake_bank_calls": 1,
+        "fake_db_writes": 2,
+        "fake_history_calls": 0
+      }
+    ],
+    "confirm_lifecycle_results": [
+      {
+        "case": "confirm_new_then_mono",
+        "result": "pass",
+        "outcome": "fake_bank_create",
+        "fake_order_adds": 1,
+        "fake_order_edits": 0,
+        "fake_bank_calls": 1
+      },
+      {
+        "case": "confirm_draft_then_mono",
+        "result": "pass",
+        "outcome": "fake_bank_create",
+        "fake_order_adds": 0,
+        "fake_order_edits": 1,
+        "fake_bank_calls": 1
+      },
+      {
+        "case": "confirm_stale_then_mono",
+        "result": "pass",
+        "outcome": "fake_bank_create",
+        "fake_order_adds": 1,
+        "fake_order_edits": 0,
+        "fake_bank_calls": 1
+      },
+      {
+        "case": "preview_stale_then_forced_mono",
+        "result": "pass",
+        "outcome": "MC02_without_order_write",
+        "fake_order_adds": 0,
+        "fake_order_edits": 0,
+        "fake_bank_calls": 0
+      },
+      {
+        "case": "confirm_missing_declaration",
+        "result": "pass",
+        "outcome": "visible_confirm_refusal_no_order_write",
+        "fake_order_adds": 0,
+        "fake_order_edits": 0,
+        "fake_bank_calls": 0
+      },
+      {
+        "case": "confirm_changed_contact",
+        "result": "pass",
+        "outcome": "visible_confirm_refusal_no_order_write",
+        "fake_order_adds": 0,
+        "fake_order_edits": 0,
+        "fake_bank_calls": 0
+      },
+      {
+        "case": "confirm_incomplete_np",
+        "result": "pass",
+        "outcome": "visible_confirm_refusal_no_order_write",
+        "fake_order_adds": 0,
+        "fake_order_edits": 0,
+        "fake_bank_calls": 0
+      },
+      {
+        "case": "confirm_terminal_changed",
+        "result": "pass",
+        "outcome": "visible_confirm_refusal_no_order_write",
+        "fake_order_adds": 0,
+        "fake_order_edits": 0,
+        "fake_bank_calls": 0
+      },
+      {
+        "case": "confirm_late_autosave",
+        "result": "pass",
+        "outcome": "visible_confirm_refusal_no_order_write",
+        "fake_order_adds": 0,
+        "fake_order_edits": 0,
+        "fake_bank_calls": 0
+      },
+      {
+        "case": "session_order_lost_between_endpoints",
+        "result": "pass",
+        "outcome": "MC02_after_fake_order_created",
+        "fake_order_adds": 1,
+        "fake_order_edits": 0,
+        "fake_bank_calls": 0
+      },
+      {
+        "case": "old_tab_after_second_confirm",
+        "result": "pass",
+        "outcome": "acc009_refusal_no_bank",
+        "fake_order_adds": 1,
+        "fake_order_edits": 1,
+        "fake_bank_calls": 0
+      },
+      {
+        "case": "new_token_after_second_confirm",
+        "result": "pass",
+        "outcome": "fake_bank_create",
+        "fake_order_adds": 1,
+        "fake_order_edits": 1,
+        "fake_bank_calls": 1
+      }
+    ],
+    "recorded_utc": "2026-10-23T20:17:21Z",
+    "total_cases": 48,
+    "harness": "work/mono-checkout-precheck-20261020/test-current-mono-session.php",
+    "harness_sha256": "4d509b5ae5cffd81f2e809821f28b5232c84cff9f5685540b641a242855c5bae",
+    "command": "C:\\laragon\\bin\\php\\php-8.3.30-Win32-vs16-x64\\php.exe -n -d allow_url_fopen=0 work\\mono-checkout-precheck-20261020\\test-current-mono-session.php",
+    "process_exit_code": 0,
+    "syntax_check_exit_code": 0,
+    "owner_comparison": "Owner clarified that both his successful historical attempts and the affected customer's failing attempts used authenticated store accounts.",
+    "customer_retry_available": false,
+    "source_authority": "Current controller after-image accepted from owner Apply receipt, current readiness owner-admitted release after-image, and current Confirm fresh owner source snapshot. This local run is not a post-deploy web/FPM readback."
+  },
+  "limits": "Owner receipt admission and local synthetic tests only. No new remote/browser/bank proof or automated monitoring. Historical next-action fields in embedded snapshots are superseded by this owner decision."
+}

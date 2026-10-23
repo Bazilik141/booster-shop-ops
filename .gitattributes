@@ -91,3 +91,9 @@ context-index.md -text whitespace=cr-at-eol
 # Preserve authentication-investigation evidence bytes for this checkpoint.
 diagnostics/BOOSTER_claude-auth* -text whitespace=cr-at-eol
 diagnostics/BOOSTER_claude-auth*/** -text whitespace=cr-at-eol
+
+# Preserve the exact reviewed Mono diagnostic/owner packet and responses.
+patches/MONO-CHECKOUT-PRECHECK-20261020_guard-codes-r2_20261023.php -text whitespace=cr-at-eol
+diagnostics/MONO-CHECKOUT-PRECHECK-20261020_guard-codes-r3_owner-run_20261023.ps1 -text whitespace=cr-at-eol
+diagnostics/MONO-CHECKOUT-PRECHECK-20261020_guard-codes-r2_independent-review_20261023.md -text whitespace=-blank-at-eol,cr-at-eol
+diagnostics/MONO-CHECKOUT-PRECHECK-20261020_guard-codes-r3_independent-review_20261023.md -text whitespace=-blank-at-eol,cr-at-eol
