@@ -82,6 +82,7 @@ status and priority from the verified Notion card. Use dashboard
 | RD-12 | Mini-cart drawer (dropdown → drawer) + add-to-cart toast (`#alert`, stock Bootstrap, folded into RD-12 scope 2026-09-21 owner decision, no separate ID) | Design brief: handoffs/handoff_RD-11-RD-12_cart-minicart-toast_visual-design-brief_20260921.md → **Codex handoff (ready): handoffs/handoff_RD-12_minicart-toast_20260921.md** |
 | RD-13 | Checkout reskin — visual-only stock checkout | handoffs/HANDOFF-RD13-checkoutV2.md · handoffs/HANDOFF-RD13-checkout-FIXES-round2.md · diagnostics/RD-13_checkout-reskin-round2_report_20260706.md |
 | RD-01/02/03 | Shell DS parity | handoffs/handoff_RD-01-02-03_shell-ds-parity_2026-05-30.md |
+| RD-16 | Account shell + hub + personal data (light variant A); base for RD-17/18/19/20 | handoffs/handoff_RD-16_account-shell-personal-data_20261025.md · boards: design/account-light-A/ · data foundation: ACC-007/008/009 reports |
 
 ---
 
@@ -168,7 +169,7 @@ status and priority from the verified Notion card. Use dashboard
 
 | Roadmap ID | Назва | Handoff |
 |---|---|---|
-| PAY-001 | Monobank Покупка Частинами — інтеграція оплати частинами | **Читати першим:** `handoffs/handoff_PAY-001_RESET_checkout-architecture-correction_20260721.md` (виправлення архітектури чекауту + актуальний стан) → `diagnostics/PAY-001_progress-and-preorder-followup_report_20260721.md` (поточний Codex→Claude стан) → потім `handoffs/handoff_PAY-001_monobank-chastyny-integration_20260718.md` (історія раундів 0–9, повна API-довідка) |
+| PAY-001 | Monobank Покупка Частинами — інтеграція оплати частинами | **Читати першим:** `handoffs/handoff_PAY-001_RESET_checkout-architecture-correction_20260721.md` (виправлення архітектури чекауту + актуальний стан) → `diagnostics/PAY-001_progress-and-preorder-followup_report_20260721.md` (поточний Codex→Claude стан) → потім `handoffs/handoff_PAY-001_monobank-chastyny-integration_20260718.md` (історія раундів 0–9, повна API-довідка); incident evidence diagnostics/MONO-CHECKOUT-PRECHECK-20261020_monobank-checkout_report_20261020.md |
 | PAY-001-UI | Візуальний дизайн-бриф для Claude Design: кнопка + модалка «Купити в кредит» + стани чекауту; готова специфікація отримана 2026-07-19 | handoffs/handoff_PAY-001-UI_visual-design-brief_20260718.md (бриф) → `handoffs/CODEX - PAY-001-credit-flow.md` (готовий результат Claude Design) |
 | PAY-001-DISCLOSURE | Юридична згадка «Покупка частинами» на `information/oplata-i-dostavka` — вимога monobank sales-supervайзера перед тестом оплати (26.07.2026); текст банку копіюється без змін | handoffs/handoff_PAY-001-DISCLOSURE_mono-installment-disclosure_20260726.md |
 | PAY-002 | ПУМБ «Сплачуйте частинами» — другий провайдер розстрочки, окремий extension `pumb_credit` | **Читати першим:** `plans/PAY-002_pumb-protocol-revision_20260727.md` (реальний протокол банку + §7a/§7b/§7c відповіді банку) → `plans/PAY_decomposition_mono-pumb-preorder_20260721.md` §5, §6.5, §7, §10 (факти договору, флоу власника, QA, ризики) → `handoffs/handoff_PAY-002_pumb-credit-skeleton_20260727.md` (Codex-хендофф на скелет, 2026-07-27) → `diagnostics/PAY-002_pumb-credit-skeleton_review_20260728.md` (Claude-review, §6 — знайдений дефект) → `handoffs/handoff_PAY-002_confirm-idempotency-guard_20260729.md` (Codex-хендофф на фікс дефекту §6) → `diagnostics/PAY-002_confirm-idempotency-guard_review_20260729.md` (Claude-review раунд 2: **Review OK, cleared to deploy**; §7 — фікси незалежно перевірені та задеплоєні, QA пройдено) → `handoffs/handoff_PAY-002_founded-state-defensive-fix_20260730.md` + `diagnostics/PAY-002_founded-state-defensive-fix_review_20260730.md` (Claude-review: **Review OK, cleared to deploy** — приймає і FUNDED, і FOUNDED) |
@@ -320,3 +321,13 @@ schema-audit — воно було помилковим.
 
 Notion view: `https://www.notion.so/35c3f8572fc54a7896c8af0efd4cf8d4?v=eebb19b11cfb4066a8a3b1b097775818`
 Bulk-query (`notion-query-data-sources` / `notion-query-database-view
+
+
+## ACC-009 continuation routing
+
+Read `diagnostics/ACC-009_closeout_report_20261023.md` first, then
+ `handoffs/ACC-009_CONTINUE_20261023.md` for exact artifact, receipt and owner-QA
+references. Portable seals/target states:
+`diagnostics/ACC-009_closeout_evidence_20261023/release-artifacts.json`.
+Task page: `https://app.notion.com/p/3f86bf20bdb481ae91a5e6e3326077ab`.
+This is routing only; Notion remains canonical for task status.

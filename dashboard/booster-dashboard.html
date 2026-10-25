@@ -1021,7 +1021,7 @@ async function callPost(payload) {
   });
   if (!r.ok) throw new Error('HTTP ' + r.status);
   const d = await r.json();
-  if (!d.ok) throw new Error(d.error || 'API error');
+  if (!d.ok) { const error=new Error(d.error || 'API error');error.rollback_failure=d.rollback_failure===true;error.not_applied=d.not_applied===true;throw error; }
   invalidateInventorySnapshotBrowserCache_();
   return d;
 }
@@ -1151,7 +1151,7 @@ const accountingState = {
   purchaseSeq: 0,
   writeoffSeq: 0,
   mysterySeq: 0,
-  migration: { context: null, loading: false, saving: '', message: null, requestIds: { box: '', outlet: '' } },
+  migration: { context: null, loading: false, saving: '', rollbackBlocked: false, retryPayload: null, message: null, requestIds: { split: '', outlet: '' } },
   selectedPurchaseLots: {},
   recent: { regular: [], preorders: [], purchases: [] },
   recentLoaded: { regular: false, preorders: false, purchases: false },
@@ -3202,10 +3202,10 @@ const ROADMAP_TASKS = [
     subtasks: []
   },
   {
-    id: 'ACC-004', title: 'Аналітика даних покупця: клієнт, кабінет, замовлення (архітектура OpenCart і милиці)', status: 'active', tool: '—', priority: '—',
-    lastUpdated: '2026-10-13', blockedBy: [],
+    id: 'ACC-004', title: 'Аналітика даних покупця: клієнт, кабінет, замовлення (архітектура OpenCart і милиці)', status: 'done', tool: '—', priority: '—',
+    lastUpdated: '2026-10-25', blockedBy: [],
     simple: 'Категорія: Account. Дослідження без змін на проді: як у OpenCart зберігаються клієнт, адреси, замовлення та статуси, які є милиці й чому дані передаються чи показуються в адмінці незручно. Результат — звіт і нова окрема технічна задача на виправлення.',
-    warn: 'Notion: https://app.notion.com/p/3f86bf20bdb4812cade0f152df4d56cc. 2026-10-13: заведено на доручення власника. Виконавець і пріоритет не призначені. Вхід: нові поля профілю (по батькові, Telegram, Viber), статуси замовлень з датою зміни (order_history), кредитні технічні статуси, wishlist. Власник додасть свої побажання пізніше. Звіт: diagnostics/ACC-004_customer-data-architecture_report_<дата>.md. Кінець задачі = звіт + створена задача-реалізація. 2026-10-13: статус In progress за вказівкою власника. Звіт WP1 пройшов рев’ю (Review OK); рішення власника зафіксовано; наступні задачі ACC-007, ACC-008, ACC-009 заведено. Закриття — після рішення власника.',
+    warn: 'Notion: https://app.notion.com/p/3f86bf20bdb4812cade0f152df4d56cc. 2026-10-13: заведено на доручення власника. Виконавець і пріоритет не призначені. Вхід: нові поля профілю (по батькові, Telegram, Viber), статуси замовлень з датою зміни (order_history), кредитні технічні статуси, wishlist. Власник додасть свої побажання пізніше. Звіт: diagnostics/ACC-004_customer-data-architecture_report_<дата>.md. Кінець задачі = звіт + створена задача-реалізація. 2026-10-13: статус In progress за вказівкою власника. Звіт WP1 пройшов рев’ю (Review OK); рішення власника зафіксовано; наступні задачі ACC-007, ACC-008, ACC-009 заведено. Закриття — після рішення власника. 2026-10-25: Done за дорученням власника — звіт пройшов рев’ю, задачі-реалізації ACC-007/008/009 створені й завершені.',
     subtasks: []
   },
   {
@@ -3230,17 +3230,17 @@ const ROADMAP_TASKS = [
     subtasks: []
   },
   {
-    id: 'ACC-008', title: 'Збереження службових JSON-ключів при збереженні профілю й адрес (custom_field)', status: 'todo', tool: '—', priority: '—',
-    lastUpdated: '2026-10-13', blockedBy: [],
+    id: 'ACC-008', title: 'Збереження службових JSON-ключів при збереженні профілю й адрес (custom_field)', status: 'done', tool: 'Codex', priority: '—',
+    lastUpdated: '2026-10-25', blockedBy: [],
     simple: 'Категорія: Account. Збереження профілю чи адреси (в кабінеті й в адмінці) більше не стирає службові дані в custom_field: bs_first15_pending, bs_np_v1 та інші ключі.',
-    warn: 'Notion: https://app.notion.com/p/3f86bf20bdb4813aa1cec1f5c85cbfbd. 2026-10-13: заведено на доручення власника. Виконавець і пріоритет не призначені. Пакет B після ACC-004, передумова для ACC-009. Ризик високий (дані клієнтів, NP). Відкат коду не відновить дані, перезаписані після деплою, тому перед деплоєм потрібен свіжий дамп БД і тест круговим проходом на синтетичних даних. Без DDL і масових правок.',
+    warn: 'Notion: https://app.notion.com/p/3f86bf20bdb4813aa1cec1f5c85cbfbd. 2026-10-13: заведено на доручення власника. Виконавець і пріоритет не призначені. Пакет B після ACC-004, передумова для ACC-009. Ризик високий (дані клієнтів, NP). Відкат коду не відновить дані, перезаписані після деплою, тому перед деплоєм потрібен свіжий дамп БД і тест круговим проходом на синтетичних даних. Без DDL і масових правок. 2026-10-25: Done за дорученням власника — патчі r11/r13/r16 залиті 16.10, QA власника ok, рев’ю результату OK. Перевірку адаптиву (390/768/1280) перенесено в RD-16, необов’язкові зауваження (тости, повідомлення після перерваного редиректу, доступність алерту адрес) — в RD-17.',
     subtasks: []
   },
   {
-    id: 'ACC-009', title: 'Профіль: необов’язкові поля (по батькові, Telegram, Viber) і українська валідація ПІБ', status: 'todo', tool: '—', priority: '—',
-    lastUpdated: '2026-10-13', blockedBy: ['ACC-008'],
+    id: 'ACC-009', title: 'Профіль: необов’язкові поля (по батькові, Telegram, Viber) і українська валідація ПІБ', status: 'done', tool: 'Codex', priority: '—',
+    lastUpdated: '2026-10-23', blockedBy: [],
     simple: 'Категорія: Account. Три необов’язкові поля профілю (по батькові, Telegram, Viber) як зареєстровані custom fields і валідація ПІБ лише українськими літерами.',
-    warn: 'Notion: https://app.notion.com/p/3f86bf20bdb481ae91a5e6e3326077ab. 2026-10-13: заведено на доручення власника. Виконавець і пріоритет не призначені. Пакет C після ACC-004, залежить від ACC-008. Поля лише в профілі й адмінці, без реєстрації та чекауту; старі імена, що не проходять нове правило, лишаються як є. Реєстрація полів у БД — окремий пакет із дампом і відкатом за доданими ID. 2026-10-13: власник затвердив правила: Telegram — @ + 5–32 символи A–Z, a–z, 0–9, _; імена — апостроф/дефіс/пробіл лише між літерами по одному, апостроф зберігається як ASCII. Виконавець перед впровадженням перевіряє, як API «Нової пошти» обробляє ASCII-апостроф. Ризик високий.',
+    warn: 'Notion: https://app.notion.com/p/3f86bf20bdb481ae91a5e6e3326077ab. 2026-10-23: Done за дорученням власника після фінального QA. WP3b (9 файлів), N2 (18 файлів), WP3c (метадані трьох необов’язкових полів) установлені власником; незалежне рев’ю точних пакетів REVIEW_OK. Порожні/заповнені поля профілю, запис з адмінки та відсутність Telegram/Viber у реєстрації/чекауті перевірені. STOP WP3c через повторене відоме попередження MySQL оцінено: транзакція успішна, повторний Apply заборонений. Звіт: diagnostics/ACC-009_closeout_report_20261023.md. Дизайн RD-16 і видалення SimpleCheckout — окремі роботи.',
     subtasks: []
   },
   {
@@ -3252,9 +3252,9 @@ const ROADMAP_TASKS = [
   },
   {
     id: 'RD-27', title: 'Стандартизація фото товарів (бібліотека, Pixelcut, масова заміна)', status: 'active', tool: 'Codex', priority: '—',
-    lastUpdated: '2026-10-14', blockedBy: [],
+    lastUpdated: '2026-10-24', blockedBy: [],
     simple: 'Категорія: Redesign (RD). Привести всі фото товарів до одного стилю через Pixelcut і замінити їх на сайті одним патчем, без ручної роботи по кожному фото.',
-    warn: 'Notion: https://app.notion.com/p/3f76bf20bdb48185ab2bed03e51c3072. 2026-10-12: заведено на доручення власника. Деплой лише після WP2+WP3 RD-25 і QA. Запечатані товари: тільки видалення фону, без генерації/апскейлу. Хендоф: handoffs/handoff_RD-27-RD-28_media-standard-and-logo_20261012.md. 2026-10-14: In progress за рішенням власника; RD-25 закрито. Канон у design/DECISIONS.md. 3D: 34 з 35 головних фото у форматі C готові (Онікс 130 — у дизайнера). Далі: фото з масштабом, хендоф Codex на заливку, тест аксесуарів.',
+    warn: 'Notion: https://app.notion.com/p/3f76bf20bdb48185ab2bed03e51c3072. 2026-10-12: заведено на доручення власника. Деплой лише після WP2+WP3 RD-25 і QA. Запечатані товари: тільки видалення фону, без генерації/апскейлу. Хендоф: handoffs/handoff_RD-27-RD-28_media-standard-and-logo_20261012.md. 2026-10-14: In progress за рішенням власника; RD-25 закрито. Канон у design/DECISIONS.md. 3D: 34 з 35 головних фото у форматі C готові (Онікс 130 — у дизайнера). Далі: фото з масштабом, хендоф Codex на заливку, тест аксесуарів. 2026-10-24: WP-3D залито й прийнято власником — 34 товари з новими головними фото, 25 з фото поруч із карткою (59 файлів, 59 рядків); права папки виправлено (FixPerm). Лишилось: перевірка в Merchant Center після оновлення фіду, Онікс 130 (дизайнер), 10 пропущених фото з масштабом, тест аксесуарів, запечатані товари.',
     subtasks: []
   },
   {
@@ -3994,10 +3994,10 @@ const ROADMAP_TASKS = [
   },
   {
     id: 'PAY-001', title: 'Monobank Покупка Частинами — інтеграція оплати частинами', status: 'done', tool: 'Claude + Codex', priority: 'Medium',
-    lastUpdated: '2026-09-08', blockedBy: [],
-    simple: 'Новий вид покупки — «Покупка в кредит» (окремо від звичайного чекауту): кнопка на товарній сторінці відкриває інформаційну модалку вибору провайдера (референс COMFY.ua, без API-виклику), де monobank ПЧ стає карткою поряд з існуючим ПУМБ-плейсхолдером (не заміна). order/create викликається на чекауті, на кліку «Оформити». Бізнес-правила власника: мінімальна сума 500 грн, комісію монобанку покриває магазин (без націнки клієнту), максимум 5 платежів через available_parts_count. Реальна тарифна сітка підтверджена: 3→2.9%, 4→4.1%, 5→5.9%. Phase 1 (бекенд) і Phase 2 (UI: cart-add контракт, поріг, preorder-гейт, чекаут-блокер, дизайн ADDENDUM-2) реалізовано.',
+    lastUpdated: '2026-10-23', blockedBy: [],
+    simple: '2026-10-23: потребує нагляду — чекаємо наступну бойову заявку monobank. Причину клієнтського збою не встановлено; діагностику застосовано, 48 локальних сценаріїв пройшли. Новий вид покупки — «Покупка в кредит» (окремо від звичайного чекауту): кнопка на товарній сторінці відкриває інформаційну модалку вибору провайдера (референс COMFY.ua, без API-виклику), де monobank ПЧ стає карткою поряд з існуючим ПУМБ-плейсхолдером (не заміна). order/create викликається на чекауті, на кліку «Оформити». Бізнес-правила власника: мінімальна сума 500 грн, комісію монобанку покриває магазин (без націнки клієнту), максимум 5 платежів через available_parts_count. Реальна тарифна сітка підтверджена: 3→2.9%, 4→4.1%, 5→5.9%. Phase 1 (бекенд) і Phase 2 (UI: cart-add контракт, поріг, preorder-гейт, чекаут-блокер, дизайн ADDENDUM-2) реалізовано.',
     why: 'Безвідсоткова розстрочка на дорогих товарах (бокси/дисплеї) підвищує конверсію без знижки в ціні магазину.',
-    warn: 'HIGH-RISK зона (checkout/payment/order status). Живий sandbox-тест власника 2026-07-25 знайшов 4 дефекти (D1 — реальний order/create падав), усі виправлено: D1 корінь — Array-to-string баг в mono_chast.php; D2 — тотали купона не оновлювались; D3 — строк кредиту залипав на попередньому товарі; D4 — приглушений рядок на чекауті. Окремо Phase 2d lifecycle fail-safe за доказами замовлення #276: point_id тепер обов\'язковий, CREATE_FAILED більше не рахується успіхом, захист від зміни способу оплати на живій mono-транзакції, success-редірект. Повний 15-крок смок ще не перепройдено після цих фіксів — наступний гейт. Production заблоковано: point_id монобанк видає лише після власного тестування інтеграції (не самореєстрація за 3 дні, як вважалось раніше) — спершу стабільний сценарій на sandbox. Читати: handoffs/handoff_PAY-001_RESET_checkout-architecture-correction_20260721.md, далі plans/PAY_decomposition_mono-pumb-preorder_20260721.md, далі handoffs/handoff_PAY-001_phase2c-defects_followup_20260725.md.',
+    warn: '2026-10-23 — потребує нагляду (watch-only). Власник вручну оформив замовлення клієнту; повторний тест із ним недоступний. Обидва були авторизовані, тому успіх власника не підтверджує усунення клієнтського збою. Діагностику guard-codes-r2 застосовано через пакет r3; джерело підтверджене owner Apply, DB/cache не змінено. 48 локальних сценаріїв із підставним банком пройшли; браузерну причину й вирішення інциденту не доведено. Наступний сигнал — нова бойова заявка: чи створилося замовлення, чи є звернення в monobank, фіксований код/категорія помилки без даних клієнта. Додатковий стенд відкладено власником. Звіт: diagnostics/MONO-CHECKOUT-PRECHECK-20261020_monobank-checkout_report_20261020.md. || Historical integration notes: HIGH-RISK зона (checkout/payment/order status). Живий sandbox-тест власника 2026-07-25 знайшов 4 дефекти (D1 — реальний order/create падав), усі виправлено: D1 корінь — Array-to-string баг в mono_chast.php; D2 — тотали купона не оновлювались; D3 — строк кредиту залипав на попередньому товарі; D4 — приглушений рядок на чекауті. Окремо Phase 2d lifecycle fail-safe за доказами замовлення #276: point_id тепер обов\'язковий, CREATE_FAILED більше не рахується успіхом, захист від зміни способу оплати на живій mono-транзакції, success-редірект. Повний 15-крок смок ще не перепройдено після цих фіксів — наступний гейт. Production заблоковано: point_id монобанк видає лише після власного тестування інтеграції (не самореєстрація за 3 дні, як вважалось раніше) — спершу стабільний сценарій на sandbox. Читати: handoffs/handoff_PAY-001_RESET_checkout-architecture-correction_20260721.md, далі plans/PAY_decomposition_mono-pumb-preorder_20260721.md, далі handoffs/handoff_PAY-001_phase2c-defects_followup_20260725.md.',
     subtasks: [
       { id: '1', title: 'Phase 1 — бекенд-екстеншн + sandbox QA', status: 'done', desc: 'DB-схема, OC4-реєстр, адмін-форма, 4 тест-телефони пройдено 2026-07-21. Ізольовано від SimpleCheckout (status=0 + isolation-патч getMethods).' },
       { id: '2', title: 'Phase 2 — UI + чекаут-гейти', status: 'done', desc: 'Cart-add контракт, динамічний поріг, preorder-гейт, фіксований порядок 3/4/5, чекаут-блокер, дизайн ADDENDUM-2. Задеплоєно.' },
@@ -4126,13 +4126,13 @@ const ROADMAP_TASKS = [
     simple: 'Тільки новий вигляд сторінки помилки оплати: зрозуміле повідомлення, посилання на Telegram і на головну. Кнопки «Спробувати знову» не буде — кошик очищується ще до переходу в Hutko.',
     why: 'Сторінка показується рідко: Hutko веде клієнта на «Замовлення прийнято» навіть після невдалої оплати — це окрема задача CHECKOUT-012.', warn: 'Залито 04.10 (патчі 2 і 3b), QA власника пройдено. Повернення з Hutko після невдалої оплати — окрема задача CHECKOUT-012.', subtasks: [] },
   {
-    id: 'RD-ACCOUNT', title: 'Особистий кабінет покупця — новий дизайн', status: 'todo', tool: 'Codex', priority: 'Medium',
-    lastUpdated: '2026-05-30', blockedBy: [],
+    id: 'RD-ACCOUNT', title: 'Особистий кабінет покупця — новий дизайн', status: 'active', tool: 'Codex', priority: 'Medium',
+    lastUpdated: '2026-10-25', blockedBy: [],
     simple: 'Єдиний новий стиль для всіх сторінок кабінету: особисті дані, адреси, вхід в акаунт і реєстрація.',
     why: 'Кабінет поки виглядає по-старому — покупець помічає контраст із рештою сайту.',
     warn: null,
     subtasks: [
-      { id: '1', title: 'RD-16 — Загальний каркас і сторінка особистих даних', status: 'todo', desc: 'Єдиний каркас із бічним меню для всіх сторінок кабінету + форма особистих даних.' },
+      { id: '1', title: 'RD-16 — Загальний каркас і сторінка особистих даних', status: 'active', desc: 'Єдиний каркас із бічним меню для всіх сторінок кабінету + форма особистих даних.' },
       { id: '2', title: 'RD-17 — Збережені адреси', status: 'todo', desc: 'Список адрес картками + форма додавання / редагування.' },
       { id: '3', title: 'RD-19 — Вхід і відновлення пароля', status: 'todo', desc: 'Сторінка входу в акаунт і форма відновлення пароля.' },
       { id: '4', title: 'RD-20 — Реєстрація (2 кроки)', status: 'todo', desc: 'Крок 1: контакти. Крок 2: адреса. Знижка -15% для нових — не чіпати.' }
@@ -4715,15 +4715,17 @@ const ROADMAP_TASKS = [
     subtasks: []
   },
   {
-    id: 'RD-16', title: 'Account hub + personal data', status: 'todo', tool: 'Codex', priority: 'Medium',
-    lastUpdated: '', blockedBy: [],
-    simple: 'Категорія: Redesign (RD).',
+    id: 'RD-16', title: 'Account hub + personal data', status: 'active', tool: 'Codex', priority: 'Medium',
+    lastUpdated: '2026-10-25', blockedBy: [],
+    simple: 'Категорія: Redesign (RD). Каркас кабінету (меню, «Допомога», заглушка теми), головна кабінету і сторінка особистих даних у світлому варіанті A.',
+    warn: 'Notion: https://app.notion.com/p/3706bf20bdb481b396b7e38300a3c8bf. 2026-10-25: хендоф готовий — handoffs/handoff_RD-16_account-shell-personal-data_20261025.md, виконавець Codex; макети в design/account-light-A/. Пакети: WP0 свіжа вибірка файлів → WP1 каркас і головна → WP2 особисті дані (тут і перевірка адаптиву з ACC-008). Відкрите рішення D1: email на сторінці даних лишається редагованим, доки немає ACC-005.',
     subtasks: []
   },
   {
     id: 'RD-17', title: 'Addresses (list + form)', status: 'todo', tool: 'Codex', priority: 'Medium',
-    lastUpdated: '', blockedBy: [],
+    lastUpdated: '2026-10-25', blockedBy: [],
     simple: 'Категорія: Redesign (RD).',
+    warn: 'Notion: https://app.notion.com/p/3706bf20bdb481ad9674c74099d07f77. 2026-10-25: додано з закриття ACC-008 — перестилізувати кошикові тости видалення/попередження на сторінках адрес, перевірити застаріле повідомлення після перерваного редиректу, доступність алерту адрес. Логіку збереження не чіпати.',
     subtasks: []
   },
   {
@@ -5283,17 +5285,17 @@ function inventoryMigrationQty(value) { return Number(value || 0).toLocaleString
 function inventoryMigrationOptions(items, selected) { return '<option value="">Оберіть SKU</option>' + (items || []).map(function(item) { const label=item.sku+' · '+(item.name || '—')+' · доступно: '+inventoryMigrationQty(item.available); return '<option value="'+recEsc(item.sku)+'"'+(item.sku===selected?' selected':'')+'>'+recEsc(label)+'</option>'; }).join(''); }
 function inventoryMigrationFind(items, sku) { return (items || []).find(function(item) { return item.sku===sku; }) || null; }
 function inventoryMigrationRequestId() { return 'migration_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,12); }
-function inventoryMigrationResetRequest(mode) { accountingState.migration.requestIds[mode]=''; }
+function inventoryMigrationResetRequest(mode) { if(!accountingState.migration.rollbackBlocked&&!accountingState.migration.retryPayload)accountingState.migration.requestIds[mode]=''; }
 function inventoryMigrationFilterOptions(searchId,selectId){
   const search=document.getElementById(searchId),select=document.getElementById(selectId),query=String((search||{}).value||'').trim().toLowerCase();if(!select)return;
   Array.from(select.options).forEach(function(option,index){if(!index){option.hidden=false;return;}option.hidden=!!query&&String(option.textContent||'').toLowerCase().indexOf(query)===-1&&!option.selected;});
 }
 function inventoryMigrationSplitSourceChanged_(){
-  const state=accountingState.migration,context=state.context||{},source=inventoryMigrationFind(context.split_sources||[],editValue('migrationSplitSource')),target=document.getElementById('migrationSplitTarget'),qty=document.getElementById('migrationSplitTargetQty'),targetSearch=document.getElementById('migrationSplitTargetSearch');inventoryMigrationResetRequest('split');
-  if(target)target.value='';if(qty)qty.value='';if(targetSearch)targetSearch.value='';inventoryMigrationFilterOptions('migrationSplitTargetSearch','migrationSplitTarget');
-  if(source&&source.fixed_target_sku&&target)target.value=source.fixed_target_sku;if(source&&source.default_target_qty&&qty)qty.value=source.default_target_qty;
+  const target=document.getElementById('migrationSplitTarget'),targetSearch=document.getElementById('migrationSplitTargetSearch');inventoryMigrationResetRequest('split');
+  if(target)target.value='';if(targetSearch)targetSearch.value='';inventoryMigrationFilterOptions('migrationSplitTargetSearch','migrationSplitTarget');
 }
 function inventoryMigrationMessageHtml() { const message=accountingState.migration.message; return message ? '<div class="records-message '+recEsc(message.kind || '')+'" style="margin-top:10px">'+recEsc(message.text || '')+'</div>' : ''; }
+function inventoryMigrationRetryHtml(){const state=accountingState.migration,p=state.retryPayload;if(!p||state.rollbackBlocked)return '';return '<div class="form-actions"><div class="field-hint">Очікує підтвердження: '+recEsc(p.source_sku)+' '+inventoryMigrationQty(p.source_qty)+' → '+recEsc(p.target_sku||'Outlet Mix')+' '+inventoryMigrationQty(p.target_qty||p.source_qty)+' · ID '+recEsc(p.request_id)+'</div><button class="btn-secondary" type="button" onclick="retryInventoryMigration()"'+(state.saving?' disabled':'')+'>Повторити той самий запит</button></div>';}
 function toggleInventoryMigrationWorkspace(details) {
   if (!details || !details.open) return;
   const state = accountingState.migration;
@@ -5303,37 +5305,48 @@ function toggleInventoryMigrationWorkspace(details) {
 function renderInventoryMigrationWorkspace() {
   const root=document.getElementById('inventoryMigrationWorkspace'),state=accountingState.migration;if(!root)return;
   if(state.loading){root.innerHTML='<div class="loading"><div class="spinner"></div><br>Завантажую фактичні FIFO-залишки…</div>';return;}
-  if(!state.context){root.innerHTML=inventoryMigrationMessageHtml()||'<div class="records-message">Немає даних для міграції.</div>';return;}
-  const context=state.context,splitSources=context.split_sources||context.boxes||[],sources=context.pack_sources||[],splitTargets=context.split_targets||context.pack_targets||[],outlet=context.outlet||{},splitSaving=state.saving==='split',outletSaving=state.saving==='outlet';
-  root.innerHTML='<div class="three-dp-note">Історичні «Закупки» не редагуються. Кожен перенос створює зрозумілий рядок у «Міграції_Складу» з FIFO-джерелом і переносить ту саму суму собівартості в цільовий SKU. Повтор того самого запиту не створює дубль.</div>'+
+  if(!state.context){root.innerHTML=(inventoryMigrationMessageHtml()||'<div class="records-message">Немає даних для міграції.</div>')+inventoryMigrationRetryHtml();return;}
+  const context=state.context,splitSources=context.migration_sources||[],sources=context.pack_sources||[],splitTargets=context.migration_targets||[],outlet=context.outlet||{},splitSaving=state.saving==='split',outletSaving=state.saving==='outlet';
+  root.innerHTML='<div class="three-dp-note">Історичні «Закупки» не редагуються. Кожен перенос створює зрозумілий рядок у «Міграції_Складу» з FIFO-джерелом і переносить ту саму суму собівартості в цільовий SKU. Повтор того самого запиту не створює дубль. 3D і Mystery Box мають окремий облік та не доступні в універсальному режимі.</div>'+
     '<div class="grid2" style="margin-top:14px">'+
-      '<div class="write-form"><h4>📦 Упаковка → поштучний SKU</h4><div class="form-row"><label>Пошук джерела за назвою або SKU</label><input id="migrationSplitSourceSearch" type="search" placeholder="Почни вводити назву або артикул" oninput="inventoryMigrationFilterOptions(\'migrationSplitSourceSearch\',\'migrationSplitSource\')"></div><div class="form-row"><label>Бокс / бандл / набір / упаковка</label><select id="migrationSplitSource" onchange="inventoryMigrationSplitSourceChanged_()">'+inventoryMigrationOptions(splitSources,'')+'</select></div><div class="form-row"><label>Пошук цілі за назвою або SKU</label><input id="migrationSplitTargetSearch" type="search" placeholder="Почни вводити назву або артикул" oninput="inventoryMigrationFilterOptions(\'migrationSplitTargetSearch\',\'migrationSplitTarget\')"></div><div class="form-row"><label>Поштучний SKU цілі</label><select id="migrationSplitTarget" onchange="inventoryMigrationResetRequest(\'split\')">'+inventoryMigrationOptions(splitTargets,'')+'</select></div><div class="form-row"><label>Кількість одиниць з 1 упаковки *</label><input id="migrationSplitTargetQty" type="number" min="1" step="1" oninput="inventoryMigrationResetRequest(\'split\')"></div><div class="form-actions"><button id="saveSplitMigrationButton" class="btn-primary" type="button" onclick="submitInventoryMigration(\'split\')"'+(splitSaving?' disabled':'')+'>'+(splitSaving?'Переношу…':'Перенести 1 упаковку')+'</button></div>'+(splitSources.length?'':'<div class="field-hint">Немає доступних боксів, бандлів, наборів, блістерів або ACC-003.</div>')+'</div>'+
-      '<div class="write-form"><h4>🔀 Поштучні паки → Outlet Mix</h4><div class="form-row"><label>SKU поштучного пака (доступний залишок)</label><select id="migrationOutletSource" onchange="inventoryMigrationResetRequest(\'outlet\')">'+inventoryMigrationOptions(sources,'')+'</select></div><div class="form-row"><label>SKU цілі</label><div class="three-dp-readonly mono">'+recEsc(outlet.sku || 'PKM-JP-OUTL-BST')+' · '+recEsc(outlet.name || 'Outlet Mix')+' · зараз: '+inventoryMigrationQty(outlet.available)+'</div></div><div class="form-row"><label>Кількість паків *</label><input id="migrationOutletQty" type="number" min="1" step="1" oninput="inventoryMigrationResetRequest(\'outlet\')"></div><div class="form-actions"><button id="saveOutletMigrationButton" class="btn-primary" type="button" onclick="submitInventoryMigration(\'outlet\')"'+(outletSaving?' disabled':'')+'>'+(outletSaving?'Переношу…':'Перенести в Outlet Mix')+'</button></div>'+(sources.length?'':'<div class="field-hint">Немає доступних поштучних паків для перенесення.</div>')+'</div>'+
-    '</div>'+inventoryMigrationMessageHtml();
+      '<div class="write-form"><h4>Похідний SKU → мігрований SKU</h4><div class="form-row"><label>Пошук джерела за назвою або SKU</label><input id="migrationSplitSourceSearch" type="search" placeholder="Почни вводити назву або артикул" oninput="inventoryMigrationFilterOptions(\'migrationSplitSourceSearch\',\'migrationSplitSource\')"></div><div class="form-row"><label>Похідний SKU</label><select id="migrationSplitSource" onchange="inventoryMigrationSplitSourceChanged_()">'+inventoryMigrationOptions(splitSources,'')+'</select></div><div class="form-row"><label>Кількість із джерела *</label><input id="migrationSplitSourceQty" type="number" min="1" step="1" oninput="inventoryMigrationResetRequest(\'split\')"></div><div class="form-row"><label>Пошук цілі за назвою або SKU</label><input id="migrationSplitTargetSearch" type="search" placeholder="Почни вводити назву або артикул" oninput="inventoryMigrationFilterOptions(\'migrationSplitTargetSearch\',\'migrationSplitTarget\')"></div><div class="form-row"><label>Мігрований SKU</label><select id="migrationSplitTarget" onchange="inventoryMigrationResetRequest(\'split\')">'+inventoryMigrationOptions(splitTargets,'')+'</select></div><div class="form-row"><label>Кількість у цілі *</label><input id="migrationSplitTargetQty" type="number" min="1" step="1" oninput="inventoryMigrationResetRequest(\'split\')"></div><div class="form-actions"><button id="saveSplitMigrationButton" class="btn-primary" type="button" onclick="submitInventoryMigration(\'split\')"'+(splitSaving||state.rollbackBlocked||state.retryPayload?' disabled':'')+'>'+(splitSaving?'Переношу…':'Перенести SKU')+'</button></div>'+(splitSources.length?'':'<div class="field-hint">Немає активних не-3D SKU з доступним залишком.</div>')+'</div>'+
+      '<div class="write-form"><h4>🔀 Поштучні паки → Outlet Mix</h4><div class="form-row"><label>SKU поштучного пака (доступний залишок)</label><select id="migrationOutletSource" onchange="inventoryMigrationResetRequest(\'outlet\')">'+inventoryMigrationOptions(sources,'')+'</select></div><div class="form-row"><label>SKU цілі</label><div class="three-dp-readonly mono">'+recEsc(outlet.sku || 'PKM-JP-OUTL-BST')+' · '+recEsc(outlet.name || 'Outlet Mix')+' · зараз: '+inventoryMigrationQty(outlet.available)+'</div></div><div class="form-row"><label>Кількість паків *</label><input id="migrationOutletQty" type="number" min="1" step="1" oninput="inventoryMigrationResetRequest(\'outlet\')"></div><div class="form-actions"><button id="saveOutletMigrationButton" class="btn-primary" type="button" onclick="submitInventoryMigration(\'outlet\')"'+(outletSaving||state.rollbackBlocked||state.retryPayload?' disabled':'')+'>'+(outletSaving?'Переношу…':'Перенести в Outlet Mix')+'</button></div>'+(sources.length?'':'<div class="field-hint">Немає доступних поштучних паків для перенесення.</div>')+'</div>'+
+    '</div>'+inventoryMigrationMessageHtml()+inventoryMigrationRetryHtml();
 }
 
 async function loadInventoryMigrationContext() {
   const state=accountingState.migration;state.loading=true;renderInventoryMigrationWorkspace();
   try { state.context=await call('inventory_migration_context'); }
-  catch(e) { state.context=null;state.message={kind:'error',text:'Не вдалося завантажити FIFO-залишки: '+e.message}; }
+  catch(e) { state.context=null;state.message={kind:'error',text:(state.message&&['error','success'].includes(state.message.kind)?state.message.text+' ':'')+'Не вдалося завантажити FIFO-залишки: '+e.message}; }
   finally { state.loading=false;renderInventoryMigrationWorkspace(); }
 }
 
 async function submitInventoryMigration(mode) {
-  const state=accountingState.migration,context=state.context;if(!context||state.saving)return;
-  const isSplit=mode==='split',sourceSku=editValue(isSplit?'migrationSplitSource':'migrationOutletSource'),sourceItems=isSplit?(context.split_sources||context.boxes||[]):(context.pack_sources||[]),source=inventoryMigrationFind(sourceItems,sourceSku);
-  const targetSku=isSplit?editValue('migrationSplitTarget'):(context.outlet||{}).sku,quantity=Number(editValue(isSplit?'migrationSplitTargetQty':'migrationOutletQty'));
-  if(!source||!targetSku||!Number.isInteger(quantity)||quantity<=0){state.message={kind:'error',text:'Обери SKU та вкажи цілу кількість більше нуля.'};renderInventoryMigrationWorkspace();return;}
-  if((!isSplit&&quantity>Number(source.available))||(isSplit&&Number(source.available)<1)){state.message={kind:'error',text:'Кількість перевищує завантажений фактичний залишок. Онови форму.'};renderInventoryMigrationWorkspace();return;}
-  const sourceQty=isSplit?1:quantity,targetQty=quantity,question=isSplit?'Перенести 1 × '+sourceSku+' у '+targetQty+' × '+targetSku+'?':'Перенести '+sourceQty+' × '+sourceSku+' у '+targetQty+' × '+targetSku+' (Outlet Mix)?';
+  const state=accountingState.migration,context=state.context;if(!context||state.saving||state.rollbackBlocked||state.retryPayload)return;
+  const isSplit=mode==='split',sourceSku=editValue(isSplit?'migrationSplitSource':'migrationOutletSource'),sourceItems=isSplit?(context.migration_sources||[]):(context.pack_sources||[]),source=inventoryMigrationFind(sourceItems,sourceSku);
+  const targetSku=isSplit?editValue('migrationSplitTarget'):(context.outlet||{}).sku,targetItems=context.migration_targets||[],target=isSplit?inventoryMigrationFind(targetItems,targetSku):context.outlet;
+  const sourceQty=Number(editValue(isSplit?'migrationSplitSourceQty':'migrationOutletQty')),targetQty=isSplit?Number(editValue('migrationSplitTargetQty')):sourceQty;
+  if(!source||!target||sourceSku===targetSku||!Number.isSafeInteger(sourceQty)||sourceQty<=0||!Number.isSafeInteger(targetQty)||targetQty<=0){state.message={kind:'error',text:'Обери різні SKU та вкажи цілі кількості більше нуля.'};renderInventoryMigrationWorkspace();return;}
+  if(sourceQty>Number(source.available)){state.message={kind:'error',text:'Кількість перевищує завантажений фактичний залишок. Онови форму.'};renderInventoryMigrationWorkspace();return;}
+  const question='Перенести '+sourceQty+' × '+sourceSku+' у '+targetQty+' × '+targetSku+'?';
   if(!confirm(question+' Історичні закупки не будуть змінені; CRM збереже FIFO-походження.'))return;
-  if(!state.requestIds[mode])state.requestIds[mode]=inventoryMigrationRequestId();state.saving=mode;state.message={kind:'',text:'Перенесення за FIFO… не натискай повторно.'};renderInventoryMigrationWorkspace();
+  if(!state.requestIds[mode])state.requestIds[mode]=inventoryMigrationRequestId();
+  const payload={action:'inventory_migration',type:isSplit?'sku_to_sku':'packs_to_outlet',source_sku:sourceSku,source_qty:sourceQty,expected_source_available:Number(source.available),request_id:state.requestIds[mode]};
+  if(isSplit){payload.target_sku=targetSku;payload.target_qty=targetQty;}
+  await sendInventoryMigration_(mode,payload);
+}
+
+async function retryInventoryMigration(){
+  const state=accountingState.migration,payload=state.retryPayload;if(!payload||state.saving||state.rollbackBlocked)return;
+  await sendInventoryMigration_(payload.type==='sku_to_sku'?'split':'outlet',payload);
+}
+
+async function sendInventoryMigration_(mode,payload){
+  const state=accountingState.migration;state.saving=mode;state.message={kind:'',text:'Перенесення за FIFO… не натискай повторно.'};renderInventoryMigrationWorkspace();
   try {
-    const payload={action:'inventory_migration',type:isSplit?'container_to_units':'packs_to_outlet',source_sku:sourceSku,expected_source_available:Number(source.available),request_id:state.requestIds[mode]};
-    if(isSplit){payload.target_sku=targetSku;payload.target_qty=targetQty;}else payload.source_qty=sourceQty;
-    const result=await callPost(payload),v=result.verification||{},p=result.preorder_costs||{},preorderNote=p.priced?(' · FIFO-собівартість оновлено для передзамовлень: '+p.priced+'.'):(p.deferred?(' · Передзамовлення без достатньої FIFO-наявності: '+p.deferred+'.'):'');state.requestIds[mode]='';state.message={kind:'success',text:(result.already_applied?'Міграція вже була записана: ':'Міграцію записано: ')+result.operation_id+' · '+result.source_qty+' → '+result.target_qty+' · перенесено '+inventoryMigrationQty(v.management_transferred)+' грн управлінської собівартості.'+preorderNote};
+    const result=await callPost(payload),v=result.verification||{},p=result.preorder_costs||{},preorderNote=p.priced?(' · FIFO-собівартість оновлено для передзамовлень: '+p.priced+'.'):(p.deferred?(' · Передзамовлення без достатньої FIFO-наявності: '+p.deferred+'.'):'');state.requestIds[mode]='';state.retryPayload=null;state.message={kind:'success',text:(result.already_applied?'Міграція вже була записана: ':'Міграцію записано: ')+result.operation_id+' · '+result.source_qty+' → '+result.target_qty+(result.already_applied?' · собівартість перевір у журналі.':' · перенесено '+inventoryMigrationQty(v.management_transferred)+' грн управлінської собівартості.')+preorderNote};
     delete cache.skus;invalidateAccountingCaches();
-  } catch(e) { state.message={kind:'error',text:'Міграцію не записано: '+e.message}; }
+  } catch(e) { if(e.rollback_failure){state.rollbackBlocked=true;state.retryPayload=null;state.message={kind:'error',text:'Міграцію не підтверджено: '+e.message+' Повторне перенесення заблоковано до перевірки стану й перезавантаження сторінки.'};}else if(e.not_applied){state.retryPayload=null;state.requestIds[mode]='';state.message={kind:'error',text:'Міграцію відхилено (не записано): '+e.message};}else{state.retryPayload=payload;state.message={kind:'error',text:'Міграцію не підтверджено: '+e.message+' Перед новою міграцією повтори саме цей запит кнопкою нижче.'};} }
   finally { state.saving='';await loadInventoryMigrationContext(); }
 }
 
@@ -5358,7 +5371,7 @@ async function loadAccounting() {
             '<div class="form-row"><label>Телефон клієнта</label><input id="salePhone"></div>' +
             '<div class="form-row"><label>ПІБ клієнта</label><input id="saleCustomer"></div>' +
             '<div class="form-row"><label>Тип оплати</label>' + formSelect('salePaymentType',PAYMENT_TYPES,'За реквізитами') + '</div>' +
-            '<div class="form-row"><label>Знижка на чек, грн</label><input type="number" min="0" step="0.01" id="saleDiscount"></div>' +
+            '<div class="form-row"><label>Знижка на чек, грн</label><input type="number" min="0" step="0.01" id="saleDiscount" aria-describedby="saleAmountPreview"><div id="saleAmountPreview" class="field-hint" role="status" aria-live="polite">Додай позиції з ціною, щоб побачити суму продажу.</div></div>' +
             '<div class="form-row"><label>Паковання</label>' + formSelect('salePackaging',packagingSelectOptions_(),'') + (packagingChoicesWarning_?'<div class="field-hint">'+recEsc(packagingChoicesWarning_)+'</div>':'') + '</div>' +
             '<div class="form-row"><label>Якщо Інше, грн</label><input type="number" min="0" step="0.01" id="saleCustomPackaging"></div>' +
             '<div class="form-row"><label>Доставка за рахунок магазину</label><input type="number" min="0" step="0.01" id="saleShopDelivery"></div>' +
@@ -5480,6 +5493,7 @@ function addSkuLine(kind, max, withPrice, withManualCost) {
       const sku = accountingState.skus.find(function(item) { return item.sku === sel.value; });
       const price = sku && (sku.rrc != null ? sku.rrc : sku.price);
       if (price != null) document.getElementById(id + 'Price').value = price;
+      if (kind === 'sale') refreshSaleAmountPreview();
       refreshMysteryOptions();
     };
     sel.onchange();
@@ -5488,13 +5502,14 @@ function addSkuLine(kind, max, withPrice, withManualCost) {
   }
 }
 
-function saleAddItem() { addSkuLine('sale',10,true,false); }
+function saleAddItem() { addSkuLine('sale',10,true,false); refreshSaleAmountPreview(); }
 function writeoffAddItem() { addSkuLine('writeoff',10,false,false); }
 function mysteryAddItem() { addSkuLine('mystery',10,false,false); }
 function removeLine(kind, seq) {
   const el = document.getElementById(kind + 'Item' + seq);
   if (el) el.remove();
   if (kind === 'purchase') recalcPurchaseCosts();
+  if (kind === 'sale') refreshSaleAmountPreview();
 }
 
 function purAddItem() {
@@ -5567,11 +5582,80 @@ function collectSkuLines(containerId, prefix, priceField) {
   return items;
 }
 
+function saleAmountRound_(value) {
+  return Math.round((value + Number.EPSILON) * 100) / 100;
+}
+
+function saleAmountParts_(items, discountValue) {
+  const grossRaw = items.reduce(function(sum, item) {
+    const qty = Number(item.qty), price = Number(item.price);
+    return sum + (Number.isFinite(qty) && Number.isFinite(price) ? Math.max(0, qty) * Math.max(0, price) : 0);
+  }, 0);
+  const gross = saleAmountRound_(grossRaw);
+  const enteredDiscount = discountValue == null || discountValue === '' ? 0 : Number(discountValue);
+  const hasFiniteDiscount = Number.isFinite(enteredDiscount);
+  const discount = hasFiniteDiscount ? saleAmountRound_(enteredDiscount) : null;
+  const hasCentPrecision = hasFiniteDiscount && Math.abs(enteredDiscount - discount) < 0.000001;
+  const discountValid = hasCentPrecision && enteredDiscount >= 0 && enteredDiscount <= grossRaw && discount <= gross;
+  return {
+    gross: gross,
+    discount: discount,
+    enteredDiscount: enteredDiscount,
+    discountValid: discountValid,
+    amount: discountValid ? saleAmountRound_(gross - discount) : null
+  };
+}
+
+function saleAmountMoney_(value) {
+  return new Intl.NumberFormat('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value) + ' грн';
+}
+
+function saleAmountDiscountError_(parts) {
+  if (!Number.isFinite(parts.enteredDiscount)) return 'Введи коректну суму знижки.';
+  if (parts.enteredDiscount < 0) return 'Знижка не може бути від’ємною.';
+  if (Math.abs(parts.enteredDiscount - parts.discount) >= 0.000001) return 'Вкажи знижку з точністю до копійок.';
+  return 'Знижка не може перевищувати вартість товарів (' + saleAmountMoney_(parts.gross) + ').';
+}
+
+function refreshSaleAmountPreview() {
+  const preview = document.getElementById('saleAmountPreview');
+  if (!preview) return;
+  const parts = saleAmountParts_(collectSkuLines('saleItems', 'sale', true), editValue('saleDiscount'));
+  if (!parts.discountValid) {
+    preview.textContent = '⚠ ' + saleAmountDiscountError_(parts);
+    return;
+  }
+  if (parts.gross <= 0) {
+    preview.textContent = 'Додай позиції з ціною, щоб побачити суму продажу.';
+    return;
+  }
+  const detail = 'Товари: ' + saleAmountMoney_(parts.gross) + ' · знижка: ' + saleAmountMoney_(parts.discount) + ' · сума продажу: ' + saleAmountMoney_(parts.amount) + '.';
+  preview.textContent = parts.amount <= 0
+    ? '⚠ Сума продажу буде 0 грн. ' + detail + ' Перевір знижку перед збереженням.'
+    : detail;
+}
+
+function refreshSaleAmountPreviewFromEvent_(event) {
+  const target = event && event.target;
+  if (!target) return;
+  if (target.id === 'saleDiscount' || (target.closest && target.closest('#saleItems'))) refreshSaleAmountPreview();
+}
+
+document.addEventListener('input', refreshSaleAmountPreviewFromEvent_);
+document.addEventListener('change', refreshSaleAmountPreviewFromEvent_);
+
 async function submitSale() {
   const items = collectSkuLines('saleItems','sale',true);
   const date = editValue('saleDate');
   if (!date || !items.length || items.some(function(item) { return !item.sku || item.qty <= 0 || item.price < 0 || !isFinite(item.price); })) {
     formMsg('saleMsg','⚠ Перевір дату та всі позиції продажу','error'); return;
+  }
+  const amountParts = saleAmountParts_(items, editValue('saleDiscount'));
+  if (!amountParts.discountValid) {
+    formMsg('saleMsg','⚠ ' + saleAmountDiscountError_(amountParts) + ' Продаж не збережено.','error'); return;
+  }
+  if (amountParts.gross > 0 && amountParts.amount <= 0 && !window.confirm('Після знижки сума продажу буде ' + saleAmountMoney_(amountParts.amount) + '. Якщо це не безоплатний продаж, перевір поле «Знижка на чек». Зберегти все одно?')) {
+    formMsg('saleMsg','Продаж не збережено. Перевір суму та знижку.','error'); return;
   }
   const button=document.getElementById('saveSaleButton'),startedAt=Date.now();if(button){button.disabled=true;button.textContent='Зберігаю…';}
   formMsg('saleMsg','Збереження… 0 с. Не натискай повторно','');
@@ -5580,7 +5664,7 @@ async function submitSale() {
     const result=await callPost({
       action:'add_sale', order_id:editValue('saleOrderId') || undefined, channel:editValue('saleChannel'), date:date,
       customer_phone:editValue('salePhone'), customer_name:editValue('saleCustomer'), payment_type:editValue('salePaymentType'),
-      discount:Number(editValue('saleDiscount')) || 0, packaging_type:editValue('salePackaging'),
+      discount:amountParts.discount, packaging_type:editValue('salePackaging'),
       custom_packaging_cost:editValue('saleCustomPackaging') === '' ? undefined : Number(editValue('saleCustomPackaging')),
       shop_delivery:Number(editValue('saleShopDelivery')) || 0, payment_status:editValue('salePaymentStatus'),
       order_status:editValue('saleOrderStatus'), post:editValue('salePost'), ttn:editValue('saleTtn'), note:editValue('saleNote'),
