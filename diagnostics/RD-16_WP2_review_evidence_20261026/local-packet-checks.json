@@ -1,0 +1,12 @@
+{
+  "packet_sha256": "04633bf5e023e063d46cbbe3ae3c19dbbbd95ef7c4b0c94b5faa971bcfa31cea",
+  "runner_sha_literal_bound": true,
+  "Bash_syntax": [
+    "Verify",
+    "Apply",
+    "RollbackVerify",
+    "Rollback"
+  ],
+  "boundary": "syntax-only rendered fixed command shapes based on packet Common/Cache; no SSH/SCP/owner/main script executed; PS AST checked separately; baseline protocol inherited from reviewed R8",
+  "header_exception": "pending - no owner release"
+}

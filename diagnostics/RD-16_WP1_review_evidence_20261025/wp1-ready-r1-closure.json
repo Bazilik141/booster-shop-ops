@@ -1,0 +1,16 @@
+{
+  "request_id": "b6a39c2a-81db-41af-ae3f-afbd50394d8f",
+  "stage": "wp1-ready-r1",
+  "consumed": true,
+  "replay_permitted": false,
+  "verdict": "Changes requested",
+  "mandatory": [
+    "M1 conservative prefix/superset hook admission and all-trigger validation",
+    "M2 mobile DOM focus order before support"
+  ],
+  "declared_inputs_unchanged_at_completion": true,
+  "packet_sha256": "26e4a6f2785f5e1fe23ef349fad78adaae8f26d890a2dfc4bfa947a1210670e0",
+  "packet_bytes": 351981,
+  "response_sha256": "f30df507da50743fb20bc49f16c74bfae6a50236d00ddc0466725de948c84561",
+  "owner_release": false
+}

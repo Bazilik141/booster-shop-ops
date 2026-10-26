@@ -1,0 +1,18 @@
+{
+  "task": "RD-16-WP1-hook-sources-r1",
+  "receipt_sha256": "f280228d63fbdbde514da20526a0b23b2efe65b1ed6c02668f154f667625dd82",
+  "attempt_sha256": "87e3b1b043c24c0d76c36da9b7f3aa9bb4bfc738c6bf51f9202c00f11333744e",
+  "task_and_both_executable_identities_verified": true,
+  "complete_two_line_payload_valid": true,
+  "source_count": 12,
+  "source_bytes": 395387,
+  "all_source_hashes_and_lengths_verified": true,
+  "all_needed_sources_present": true,
+  "four_core_hashes_unchanged": true,
+  "same_four_denied_event_rows": true,
+  "enabled_rows_scanned": 112,
+  "captured_utc": "2026-10-25T20:00:29Z",
+  "capture_writes": "none",
+  "main_apply": "HELD",
+  "replay_permitted": false
+}

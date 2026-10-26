@@ -1,0 +1,145 @@
+{
+  "boundary": "native Twig/shell/UI block,current profile/common/jQuery JS and full captured Bootstrap/DS/stylesheet plus prior public CSS/fonts; synthetic header/footer/config/data; loopback AJAX response only mocked,no real saves/auth/network",
+  "controlsAndFormDataContexts": 7,
+  "layout": [
+    {
+      "width": 390,
+      "case": "empty",
+      "overflow": false,
+      "groups": 2
+    },
+    {
+      "width": 390,
+      "case": "filled",
+      "overflow": false,
+      "groups": 2
+    },
+    {
+      "width": 390,
+      "case": "long",
+      "overflow": false,
+      "groups": 2
+    },
+    {
+      "width": 390,
+      "case": "escaped",
+      "overflow": false,
+      "groups": 2
+    },
+    {
+      "width": 390,
+      "case": "legacy",
+      "overflow": false,
+      "groups": 2
+    },
+    {
+      "width": 390,
+      "case": "alltypes",
+      "overflow": false,
+      "groups": 2
+    },
+    {
+      "width": 390,
+      "case": "success",
+      "overflow": false,
+      "groups": 2
+    },
+    {
+      "width": 768,
+      "case": "empty",
+      "overflow": false,
+      "groups": 2
+    },
+    {
+      "width": 768,
+      "case": "filled",
+      "overflow": false,
+      "groups": 2
+    },
+    {
+      "width": 768,
+      "case": "long",
+      "overflow": false,
+      "groups": 2
+    },
+    {
+      "width": 768,
+      "case": "escaped",
+      "overflow": false,
+      "groups": 2
+    },
+    {
+      "width": 768,
+      "case": "legacy",
+      "overflow": false,
+      "groups": 2
+    },
+    {
+      "width": 768,
+      "case": "alltypes",
+      "overflow": false,
+      "groups": 2
+    },
+    {
+      "width": 768,
+      "case": "success",
+      "overflow": false,
+      "groups": 2
+    },
+    {
+      "width": 1280,
+      "case": "empty",
+      "overflow": false,
+      "groups": 2
+    },
+    {
+      "width": 1280,
+      "case": "filled",
+      "overflow": false,
+      "groups": 2
+    },
+    {
+      "width": 1280,
+      "case": "long",
+      "overflow": false,
+      "groups": 2
+    },
+    {
+      "width": 1280,
+      "case": "escaped",
+      "overflow": false,
+      "groups": 2
+    },
+    {
+      "width": 1280,
+      "case": "legacy",
+      "overflow": false,
+      "groups": 2
+    },
+    {
+      "width": 1280,
+      "case": "alltypes",
+      "overflow": false,
+      "groups": 2
+    },
+    {
+      "width": 1280,
+      "case": "success",
+      "overflow": false,
+      "groups": 2
+    },
+    {
+      "width": 991,
+      "case": "boundary"
+    },
+    {
+      "width": 992,
+      "case": "boundary"
+    }
+  ],
+  "validationCases": 19,
+  "validationMatricesEqual": true,
+  "legacyCases": 2,
+  "nativeAJAXPostPairEqual": true,
+  "pageErrors": []
+}

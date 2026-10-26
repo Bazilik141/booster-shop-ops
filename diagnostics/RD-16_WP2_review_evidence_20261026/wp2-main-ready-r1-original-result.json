@@ -1,0 +1,97 @@
+{
+  "duration_api_ms": 236854,
+  "stop_reason": "end_turn",
+  "total_cost_usd": 1.6163720000000001,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 143603,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 23377,
+    "output_tokens_details": {
+      "thinking_tokens": 18874
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 143603,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 23377,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 143603,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 143603
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-opus-5-5": {
+      "inputTokens": 2,
+      "outputTokens": 23377,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 143603,
+      "webSearchRequests": 0,
+      "costUSD": 1.6163720000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 18874,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 1,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "# RD-16 WP2 main ready review r1: integrated code, composition and transport\n\n## Verdict: **Review OK, conditional**\n\nThere are no mandatory changes. Optional notes follow at the end.\n\nThis approval is code and composition readiness only. It does **not** release owner Upload, Verify, Apply or Rollback. Those stay **HELD** until the owner explicitly records the WP2 header-token-only exception (see Gates).\n\nIt grants no execution, Git, status, SSH, key, server or deployment authority to me or any agent. It waives no WP2 owner QA.\n\n## Bound artifacts\n\n| Artifact | Bytes | SHA-256 |\n|---|---|---|\n| `patches\\RD-16-WP2_personal-data_20261026.php` | 107,879 | `d03a0e76c63892365ecef4a601456365429828aae8201a1916514f03b989e851` |\n| `diagnostics\\RD-16-WP2_owner_20261026.ps1` | 11,928 | `04633bf5e023e063d46cbbe3ae3c19dbbbd95ef7c4b0c94b5faa971bcfa31cea` |\n\nI had no tools, so I did not recompute either hash. I checked that the supplied values agree with each other:\n- The packet's `$Sha` literal equals the runner hash above.\n- `runner-results.json` and `release-facts.json` both bind `d03a0e76\u2026`.\n- `packet-checks.json` and `release-facts.json` both bind `04633bf5\u2026`.\n- **Packet size reconciles by hand.** Starting from R8's 11,839 bytes:\n\n  | Change | Bytes |\n  |---|---|\n  | HELD line | +82 |\n  | `$Name` and `F=` | \u221214 |\n  | Two backup regexes | \u22128 |\n  | Receipt directory | +2 |\n  | \"seven\" \u2192 \"five\" | \u22121 |\n  | Seven `RD16_` \u2192 `RD16_WP2_` markers, including both heredoc delimiters | +28 |\n  | **Net** | **+89 = 11,928** |\n\n- The runner's growth comes mostly from the embedded base64 payloads, so I did not reconcile it by hand. I relied on the full template and derivation diff instead.\n\nBefore any later release, Codex must confirm that the on-disk bytes match both rows. Any byte change voids this verdict.\n\n## Known CI sidebar intake hold: disposition\n\n**Cleared for WP2 composition on `account/edit` only.** This is a reasoned resolution of intake condition 5 for this module at these exact hashes and metadata. It is not a general waiver of the condition.\n\n**Reasons**\n1. **The module has no execution path on the patched page.**\n   - The patched `index()` no longer calls `common/column_left`, which is the module's only position.\n   - The runner's exact query requires `layout_module` for layout 6 to be exactly `[ciaccountsidebar.account_sidebar, column_left, 0]`, using `LIMIT 2` so a second row is detected.\n   - So the still-called `column_right`, `content_top` and `content_bottom` have nothing to render.\n   - The CI stylesheet is added only inside the module's `index()`, so it is not loaded either.\n   - Nothing is removed unexpectedly. The legacy nav is deliberately replaced by the shell, which is the handoff's \"one nav surface\" acceptance criterion.\n2. **It uses the same mechanism as the accepted, deployed, owner-QA'd hub.**\n   - The caller opts in through `account/shell` and blanks `column_left`.\n   - No global module, layout or other-route change is made.\n3. **Every other route is untouched.**\n   - `address`, `order`, `wishlist` and the rest still call `column_left` and still render the CI sidebar.\n   - That interim inconsistency already existed after WP1 and is within handoff \u00a75: those pages adopt the shell in their own tasks.\n4. **It fails closed on any change.** Owner Verify stops before backup in any of these cases:\n   - drift in any of the three CI source pins, `column_left.php` or `.twig`, or `model/design/layout.php`;\n   - any `layout_route` result other than `[[0,6,'account/%']]` for hub or edit;\n   - any added, removed or moved layout-6 module.\n\n   The CI module's admin config values are not pinned. That does not matter, because the module is never invoked on the edit page.\n\n**Conditions**\n- If Verify or Apply returns `account_layout_changed`, `account_layout_modules_changed` or `dependency_source_drift`, the hold is fully reinstated. Stop, preserve receipts, run a new review, and do not adapt blindly.\n- Owner QA at 768\u2013991 px must confirm exactly one nav on `account/edit`, and that other account pages are visually unchanged.\n\n## Findings by area\n\n### Protected save path\n- **Controller.** Only the single `column_left` call site is replaced.\n  - `semantic-proof` shows that removing the fragment reproduces `before` (`91a35858\u2026`).\n  - The builder asserts that the `save()` and `saveAcc008()` tail is byte-identical (`375d1f48\u2026`).\n  - The redirect-on-invalid-login path is unchanged. OC4's `Response::redirect` exits before the block runs, so `customer_token` use matches the existing breadcrumbs.\n- **Protected sources.** Seven are byte-identical and pinned: the guard, the profile helper, three models, `booster-account-profile.js` and `common.js`.\n- **No new data path.**\n  - No `custom_field` echo, hidden field, action, method or `data-oc-toggle` change.\n  - No JavaScript.\n  - The language file is append-only, and existing error strings are natively compared.\n\n### Form contract\n- All 10 custom-field type branches are retained verbatim apart from wrapper classes, including the ACC-008 checkbox-presence hidden input.\n- Each field renders in exactly one fieldset:\n  - the split is a `== 'name'` / `!= 'name'` partition over the authoritative `kinds()` map;\n  - inactive maps fall into Contacts;\n  - integer and string key lookup matches the existing `data-acc009-kind` expression.\n- A hidden input as a grid child is `display:none`, so it creates no grid item.\n- The ACC-009 hint anchor (`input.parentElement`) and the `#input-*` / `#error-*` mapping in `common.js` are preserved.\n- Email stays editable (D1 default). The read-only email hint, the board name `pattern` and the static phone hint are not added. That is correct.\n\n### UI and accessibility\n- **Layout:** labels sit above fields; there are two legends with an `aria-hidden` dot; Save is the primary action and Cancel the secondary.\n- **Contrast:** white on `--bs-blue` and ink on paper both pass AA. There is no green.\n- **Nav:** \"\u041d\u0430\u043b\u0430\u0448\u0442\u0443\u0432\u0430\u043d\u043d\u044f\" is not focusable, and `aria-current` is on the edit item.\n- **CSS:** every rule is prefixed `.bs-account-edit`. There is no `!important`, positioning layer or timer, and every magic value is commented.\n- **Invalid state:** `.form-control.is-invalid` is correctly re-raised to specificity 0,3,0, so the scoped base rule cannot mask Bootstrap's red border.\n- **Focus:** the input focus indicator meets AA through the 1 px navy border. It is weak, though (see O1).\n\n### Header\n- The change is token-only:\n  - exactly one anchored match;\n  - the normalized body is identical (`54879a99\u2026`);\n  - the `after` bytes are independent of whichever token is present before;\n  - an already-applied state is never retouched.\n- The token bump is genuinely required. Without it, stale DS CSS would leave the new form markup unstyled.\n\n### Runner\n- The diff against the accepted R8 template is limited to:\n  - the identifiers;\n  - 26 event targets;\n  - `edit.twig` in the alternate-template gate;\n  - `account/edit` in the theme check;\n  - counting theme rows regardless of `status`, which is stricter and closes intake O1;\n  - the 5-target order and count.\n- **Apply order** (labels, CSS, header, controller, then view) and **rollback order** (view, controller, header, CSS, labels) are both safe at every intermediate step.\n  - Old view with new controller: `column_left` is empty and the stock form renders.\n  - New view with old controller cannot occur during apply.\n- These are unchanged from R8: the double preflight, private linted restore candidates, lock, self-delete and fault restore.\n- There is no SQL write and no customer read.\n\n### 52 pins\n- Later origins override earlier ones, so values from the fresh 33-file capture win.\n- Pins taken only from WP1 or WP0 trees (the CI sources, `column_left`, the hub controller and template) are fail-closed: any drift is a STOP, never a pass.\n\n### Owner packet\n- It is the R8 protocol with a new task identity and a new state directory, `owner-receipts-main`. No intake state is imported.\n- The `&&` cache sequencing, the one-use Apply and Rollback, the saved-PHP pin and the strict SSH options are all unchanged.\n- Placing a comment before `#requires` and `param` is valid PowerShell.\n\n### Tests\nThe boundaries are honestly stated: a native fragment, shell and Twig render; Chromium with the real `common.js` serializer; the current guard; and the actual file engine with only runtime admission replaced. Host PHP 8.0, MySQL, OPcache, the host Twig vendor version and an authenticated save remain owner Verify and QA items.\n\n## Optional (non-blocking; any adoption requires r2 and a rebind)\n\n- **O1. Focus indicator.** The `outline` uses `--bs-blue-soft`, which is about 1.15:1 on white and effectively invisible. Prefer `outline:2px solid var(--bs-blue)` per the board. The test's `outlineStyle!=='none'` check does not measure visibility.\n- **O2. iOS zoom.** `font:inherit` on `.form-control` replaces Bootstrap's 1rem. If the body text is under 16 px, iOS Safari zooms on focus. Use `font-family:inherit` instead, or assert a computed size of at least 16 px at 390 px.\n- **O3. Pressed state.** `.btn:first-child:active` (Bootstrap, 0,3,0) likely beats the scoped Save and Cancel backgrounds, giving a non-DS pressed color. The test checks text color only. Add scoped `:active` rules that use tokens.\n- **O4. Mobile main column.** The mobile `.bs-account-main{display:flex}` relies on WP1's base rule for `flex-direction:column`. State it explicitly.\n- **O5. Small fidelity points.**\n  - The dot uses `--bs-warning-fg` (brown) where the board shows gold. `--bs-gold` is acceptable for a decorative, `aria-hidden` element.\n  - There is no \"\u043d\u0435\u043e\u0431\u043e\u0432\u02bc\u044f\u0437\u043a\u043e\u0432\u043e\" suffix and no `autocomplete` attributes (WCAG 1.3.5). The old form lacked both, so this is not a regression.\n- **O6. Admission gaps.**\n  - `account/shell.twig` is not in the alternate-template list. This was inherited from WP1.\n  - `language/*` hooks are not classified (intake O4). The new labels could be overridden by such a hook; owner QA would surface that.\n  - Non-uk-ua storefront languages would show raw `rd16_*` keys, the same as the WP1 hub.\n- **O7. Cosmetic.**\n  - The controller block is space-indented in a tab-indented file.\n  - The runner comment still says \"twelve added dependency hashes\".\n  - The `<title>` (`heading_title`) and the H1 (\"\u041e\u0441\u043e\u0431\u0438\u0441\u0442\u0456 \u0434\u0430\u043d\u0456\") differ.\n- **Carried forward:** R8 N1 (the `DIR_MODIFICATION` check is nominal), N2, N4 and N5, and intake O5\u2013O7.\n\n## Gates\n\n1. **No owner Upload, Verify, Apply or Rollback until the owner explicitly grants the WP2 exception.** The scope Codex should present to the owner is:\n   - the DS stylesheet `?v=` token in `common/header.twig` becomes `rd16-wp2-20261026`;\n   - normalized-before `54879a99\u2026` and after `66b626a4\u2026`;\n   - rollback restoring the backed-up token;\n   - no other header byte changes.\n\n   The HELD line is a procedural hold, not a mechanical one. Because granting the exception changes no bytes, the bound hashes survive. Codex must not hand over the packet before the exception is recorded.\n2. **If the owner declines,** this pair is not releasable. The alternative is a separate edit-only stylesheet added through `document->addStyle`, with no header change, as a new reviewed revision.\n3. **After the exception,** run Upload, then Verify, then Apply as separate owner actions with this pair only. On any STOP, preserve receipts and do not replay.\n4. **WP2 owner QA per handoff \u00a78 is mandatory:**\n   - real save and reopen;\n   - clearing the optional fields;\n   - the Latin-name error;\n   - 390, 768 and 1280 px, including the 991/992 boundary;\n   - a single nav on edit;\n   - the success notice;\n   - the Tier 1 smoke URLs.\n\n   RD-16 is not Done until it passes.",
+  "ttft_ms": 194111,
+  "type": "result",
+  "duration_ms": 236967,
+  "ttft_stream_ms": 1773,
+  "time_to_request_ms": 107,
+  "first_content_frame_ms": 1774,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

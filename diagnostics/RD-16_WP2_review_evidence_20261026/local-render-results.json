@@ -1,0 +1,13 @@
+{
+    "boundary": "exact authored index UI fragment,native unchanged shell\/Twig\/profile display helper; fake bootstrap\/auth\/URL\/input data; full save body and protected JS\/guard\/models unchanged,not executed by render fixture",
+    "cases": [
+        "empty",
+        "filled",
+        "long",
+        "escaped",
+        "legacy",
+        "alltypes",
+        "success"
+    ],
+    "fragment_sha256": "a21c2776faf9128610e3898f99cf6ad2e6e69e5a5295926c2e4231f37de5e5f5"
+}

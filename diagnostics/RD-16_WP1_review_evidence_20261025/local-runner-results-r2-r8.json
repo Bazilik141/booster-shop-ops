@@ -1,0 +1,18 @@
+{
+  "boundary": "local PHP8.3 real runner except single host-admission function; one explicit post-lint fault derivative; no host8.0/MySQL/cache/SSH proof",
+  "production_runner_sha256": "2104651019f35584f9fa24ab2310a16c65e2ba3abdeb381baa2472a9e2860651",
+  "host_admission_replaced_bytes_sha256": "ad04fa500999ec49f33e1fe76fa6f4bb17913d87478165af16eff2c77d644c5e",
+  "cases": {
+    "unmodified_runner_missing_config": "refused_zero_target_writes",
+    "roundtrip": "apply_noop_dynamic_token_backup_tamper_refusal_mixed_state_rollback_pass",
+    "target_drift": "refused_before_target_or_backup_writes",
+    "dependency_drift": "refused_before_target_or_backup_writes",
+    "hook_dependency_drift": "refused_before_target_or_backup_writes",
+    "new_collision": "refused_before_target_or_backup_writes",
+    "wrong_admission": "refused_before_target_or_backup_writes",
+    "existing_lock": "refused_before_target_or_backup_writes",
+    "post_lint_failure": "all_original_targets_restored_new_files_absent",
+    "rollback_race": "refused_before_any_rollback_target_write",
+    "restore_candidate_tamper": "refused_before_any_rollback_target_write"
+  }
+}

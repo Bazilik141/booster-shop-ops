@@ -1,0 +1,41 @@
+{
+  "task": "RD-16-WP1-hook-sources",
+  "stage": "wp1-ready-r6",
+  "request_id": "dc8cc5ba-6b02-46e0-89e1-1dea21d3608f",
+  "consumed": true,
+  "replay_permitted": false,
+  "verdict": "Review OK",
+  "mandatory_findings": [],
+  "executables": [
+    {
+      "path": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\diagnostics\\RD-16-WP1_hook-sources_20261025.php",
+      "sha256": "f24136e1a7d01c12128ae3fd58f26645ee3519e08943045f7943fd59bc0b9154",
+      "bytes": 6475
+    },
+    {
+      "path": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\diagnostics\\RD-16-WP1_hook-sources_owner_20261025.ps1",
+      "sha256": "e0c06bc511010eb513517dfee51e6626378b1289e0e3d2a55e5f607129daaaa1",
+      "bytes": 4488
+    }
+  ],
+  "packet_sha256": "1f09d3e1f60f5d5e6ecf9bbd8415f7a92c3944876c6b616197358719f54cd544",
+  "packet_bytes": 72994,
+  "declared_inputs_verified": 28,
+  "inputs_unchanged_before_bookkeeping": true,
+  "reviewed_report_sha256": "c30434b4ce9a4bbb3fe5968ac48264924673eee7f6f2385b068612f01f59779c",
+  "bookkeeping_report_sha256": "41ea06c9358f9dbfc4351bb68017baa0a2de80b7e73ddd3a34c831e11fe01387",
+  "response_sha256": "be7f213501e492c5c37df655e1f768c552e8e5ac8483bfcd0e84a9e9c2fa0188",
+  "model": "claude-opus-5-5",
+  "effort": "high",
+  "subscription_verified": true,
+  "tools": [],
+  "MCP_count": 0,
+  "overage_or_API_fallback": false,
+  "real_attempt_and_stdout_absent": true,
+  "main_R3_pair_unchanged": true,
+  "owner_gate": "one_readonly_hook_source_capture_ready",
+  "owner_capture_executed": false,
+  "main_apply": "HELD",
+  "WP2": "HELD",
+  "closed_utc": "2026-10-25T19:57:08.105093+00:00"
+}

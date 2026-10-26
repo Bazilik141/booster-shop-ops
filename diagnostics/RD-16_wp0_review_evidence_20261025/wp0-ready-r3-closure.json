@@ -1,0 +1,30 @@
+{
+  "task": "RD-16-WP0-menu-supplement",
+  "stage": "wp0-ready-r3",
+  "request_id": "5e37bee8-c238-4d0a-81dc-1cfcb6a39c31",
+  "closed_utc": "2026-10-25T08:05:17.429659+00:00",
+  "consumed": true,
+  "replay_permitted": false,
+  "actual_verdict": "Review OK",
+  "packet_bytes": 93291,
+  "packet_sha256": "d4f9e6f8d7240703f6ba57a1efdc9830ba53436963f43ea90037be18a1bf9fe4",
+  "executable_sha256": {
+    "diagnostics/RD-16_wp0_menu-collect_20261025.sh": "64d8ecfc5844f78661ab9a3fd5de26ac4219b0671d738cfc1f136804a64f9d39",
+    "diagnostics/RD-16_wp0_owner-menu-pull_20261025.ps1": "e194f34fb1b2d939faefeb23f2674c96d6c3cf9e7eb3c6e92ca044e49f334cbc"
+  },
+  "reviewed_dependencies_unchanged_before_bookkeeping": true,
+  "reviewed_report_sha256": "dd376478790f56fb9af4c498a610e0cfd90a21732ccc14b7d1bf40b2c125caf3",
+  "report_after_mechanical_verdict_sha256": "e168284ea43e5f8aaed2382f8c203234948e579119bec13d42bf2ea07add2f75",
+  "response_sha256": "2cbe71748e0217a4f942b74c0b400e71ad1a990787c0cb7812d16bedadeec403",
+  "original_result_sha256": "cad72bb68f2fb9351f98e38c9e07b826a8c6a6f289450a9a678dc6a4e1327187",
+  "models_observed": [
+    "claude-opus-5-5"
+  ],
+  "tools": [],
+  "MCP_count": 0,
+  "isUsingOverage": false,
+  "release": "owner-run three-file menu source supplement once only",
+  "owner_execution": "not_run",
+  "agent_server_key_use": false,
+  "G0_WP1_WP2": "not_released"
+}

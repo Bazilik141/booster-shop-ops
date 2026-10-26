@@ -1,0 +1,16 @@
+{
+  "task": "RD-16-WP1-event-inspect-r1",
+  "accepted_utc": "2026-10-25T19:52:29.045769+00:00",
+  "receipt_sha256": "eacaef19b45e1c7c67788638d1c5303297f440dc8ebfac71ef2aff5596dbe476",
+  "attempt_sha256": "f11c333af9a0fb8447ab6d8f073234ce9708c86be93c9e72304bdd903785de04",
+  "bound_php_and_packet_hashes_match": true,
+  "complete_two_line_payload_valid": true,
+  "source_count": 4,
+  "source_bytes": 6145,
+  "source_hashes_and_lengths_verified": true,
+  "enabled_rows_scanned": 112,
+  "relevant_denied_rows": 4,
+  "source_db_cache_writes": "none",
+  "main_apply": "HELD",
+  "diagnostic_replay": false
+}

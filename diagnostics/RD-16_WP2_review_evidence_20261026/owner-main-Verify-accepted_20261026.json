@@ -1,0 +1,21 @@
+{
+  "task": "RD-16-WP2",
+  "accepted_utc": "2026-10-26T08:54:32.531391+00:00",
+  "owner_report": "RD16_WP2_VERIFY_OK",
+  "receipt": "work\\rd16-wp2-20261026\\owner-receipts-main\\Verify-20261026T0853563489327Z.txt",
+  "receipt_sha256": "0f9f156842c266622a1c3a89a15e106e25056e64d3bdf73d4d7e397b7f5b5c12",
+  "state_sha256": "c20dfb5fbd156d113a21a3f989a28d435501838b0ee37c0c54532f2117b505a3",
+  "runner_sha256": "d03a0e76c63892365ecef4a601456365429828aae8201a1916514f03b989e851",
+  "packet_sha256": "04633bf5e023e063d46cbbe3ae3c19dbbbd95ef7c4b0c94b5faa971bcfa31cea",
+  "admission_sha256": "2aaf5d06a7c4eef932ebfa9c96beeaa93de770f9afbd4050f37b5e2295ddb849",
+  "php_path": "/usr/local/bin/php",
+  "php_version": "8.0.30",
+  "remote_staged_hash_and_runtime_source_metadata_admission": "Passed reviewed check path as recorded by owner receipt; no agent host execution",
+  "syntax_gate": "ok",
+  "production_writes": 0,
+  "backup": "none",
+  "apply_attempted": false,
+  "owner_header_exception_verified": true,
+  "next": "Owner one-use Apply for five admitted targets; retain receipt; no blind replay",
+  "agent_server_access": false
+}

@@ -1,0 +1,15 @@
+{
+  "task": "RD-16-WP2",
+  "accepted_utc": "2026-10-26T08:48:30.360012+00:00",
+  "owner_report": "RD16_WP2_UPLOAD_OK; SCP exit accepted by reviewed owner wrapper",
+  "receipt": "work\\rd16-wp2-20261026\\owner-receipts-main\\Upload-20261026T0847290642974Z.txt",
+  "receipt_sha256": "eb1c212ff3bd6eae156bc3068a6e65625f2a9fe75bda4ea09e13aae06ff06f06",
+  "state_sha256": "9d56fbc183621360f58b870ddd5b06722921bf0251644f6c74a1d34a8447aac9",
+  "runner_sha256": "d03a0e76c63892365ecef4a601456365429828aae8201a1916514f03b989e851",
+  "packet_sha256": "04633bf5e023e063d46cbbe3ae3c19dbbbd95ef7c4b0c94b5faa971bcfa31cea",
+  "uploaded": true,
+  "remote_hash_and_runtime_admission": "Not yet proven; next owner Verify",
+  "source_cache_DB_writes": "No apply or cleanup command in Upload; no production write receipt claimed",
+  "next": "Owner Verify only; no Apply yet",
+  "agent_server_access": false
+}

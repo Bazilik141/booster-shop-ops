@@ -1,0 +1,19 @@
+{
+  "task": "RD-16-WP2",
+  "owner_message_verbatim": "go WP2 + кеш-токен",
+  "owner_message_date": "2026-10-26",
+  "scope": "Release the reviewed WP2 owner-only sequence and grant the shared-header DS CSS cache-token-only exception to rd16-wp2-20261026. No other header byte changes.",
+  "review_request_id": "5624fdc6-9184-4ab9-b154-377a9ca468b4",
+  "runner_sha256": "d03a0e76c63892365ecef4a601456365429828aae8201a1916514f03b989e851",
+  "owner_packet_sha256": "04633bf5e023e063d46cbbe3ae3c19dbbbd95ef7c4b0c94b5faa971bcfa31cea",
+  "unchanged_reviewed_inputs_rechecked": 142,
+  "report_excluded_from_recheck": "Only the previously recorded mechanical review-closure bookkeeping changed in the canonical report; reviewed executable/dependency inputs are unchanged.",
+  "procedural_HELD_comment": "Condition satisfied by this direct owner decision. Exact reviewed packet bytes are retained; no comment/code edit or fresh model review required.",
+  "owner_main_state_at_release": "absent; no owner main step executed yet",
+  "sequence": "Owner Upload, then owner Verify, then owner Apply; inspect complete receipts, STOP on deviations, no blind replay.",
+  "rollback": "Separate owner choice using the exact recorded backup and reviewed rollback sequence; no backup exists yet.",
+  "agent_SSH_key_server_access": false,
+  "agent_deployment": false,
+  "Git_or_roadmap_status_authority": false,
+  "owner_post_Apply_QA_required": true
+}

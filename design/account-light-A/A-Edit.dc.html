@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<title>A · Особисті дані</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0}
+.pib:invalid:not(:placeholder-shown){border-color:#DC2626 !important;background:#FEF2F2 !important}
+.pib-hint{display:none;font-size:13px;color:#B91C1C}
+.pib:invalid:not(:placeholder-shown) ~ .pib-hint{display:block}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #1E3A8A;outline-offset:2px}
+a.nav-link:hover{background:#F7F7F5}
+</style>
+</helmet>
+<div style="min-height:1200px;background:#F7F7F5;font-family:'Manrope',system-ui,-apple-system,sans-serif;color:#1F2937">
+  <div style="height:69px;border-bottom:1px dashed #E5E7EB;background:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:13px;color:#6B7280">Шапка сайту — без змін</div>
+  <div style="max-width:1200px;margin:0 auto;padding:32px 24px 64px;display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start;box-sizing:border-box">
+
+    <aside style="flex:0 0 260px;display:flex;flex-direction:column;gap:16px">
+      <nav aria-label="Розділи кабінету" style="display:flex;flex-direction:column;gap:2px;padding:8px;border-radius:14px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);box-sizing:border-box">
+        <a class="nav-link" href="A-Hub.dc.html" style="display:flex;align-items:center;gap:12px;min-height:48px;padding:0 10px;border-radius:10px;color:#1F2937;text-decoration:none;font-size:14.5px;font-weight:600;box-sizing:border-box">
+          <span style="width:32px;height:32px;border-radius:50%;background:#F7F7F5;color:#6B7280;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"></path><path d="M5 10v10h14V10"></path></svg></span>
+          Кабінет
+        </a>
+        <a class="nav-link" href="A-Edit.dc.html" aria-current="page" style="display:flex;align-items:center;gap:12px;min-height:48px;padding:0 10px;border-radius:10px;background:#FBF4DC;color:#111827;text-decoration:none;font-size:14.5px;font-weight:700;box-sizing:border-box">
+          <span style="width:32px;height:32px;border-radius:50%;background:#C68A00;color:#FFFFFF;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg></span>
+          Особисті дані
+        </a>
+        <a class="nav-link" href="A-Addresses.dc.html" style="display:flex;align-items:center;gap:12px;min-height:48px;padding:0 10px;border-radius:10px;color:#1F2937;text-decoration:none;font-size:14.5px;font-weight:600;box-sizing:border-box">
+          <span style="width:32px;height:32px;border-radius:50%;background:#F7F7F5;color:#6B7280;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 10-14 0c0 4.8 7 11 7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg></span>
+          Адреси доставки
+        </a>
+        <a class="nav-link" href="A-Orders.dc.html" style="display:flex;align-items:center;gap:12px;min-height:48px;padding:0 10px;border-radius:10px;color:#1F2937;text-decoration:none;font-size:14.5px;font-weight:600;box-sizing:border-box">
+          <span style="width:32px;height:32px;border-radius:50%;background:#F7F7F5;color:#6B7280;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5L12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5L12 12l9-4.5M12 12v9"></path></svg></span>
+          Мої замовлення
+        </a>
+        <a class="nav-link" href="A-Favorites.dc.html" style="display:flex;align-items:center;gap:12px;min-height:48px;padding:0 10px;border-radius:10px;color:#1F2937;text-decoration:none;font-size:14.5px;font-weight:600;box-sizing:border-box">
+          <span style="width:32px;height:32px;border-radius:50%;background:#F7F7F5;color:#6B7280;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 00-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 000-7.8z"></path></svg></span>
+          Улюблене
+        </a>
+        <span aria-disabled="true" title="Скоро буде доступно" style="display:flex;align-items:center;gap:12px;min-height:48px;padding:0 10px;border-radius:10px;color:#6B7280;opacity:.55;cursor:not-allowed;font-size:14.5px;font-weight:600;box-sizing:border-box">
+          <span style="width:32px;height:32px;border-radius:50%;background:#F7F7F5;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"></path><circle cx="16" cy="6" r="2"></circle><circle cx="10" cy="12" r="2"></circle><circle cx="18" cy="18" r="2"></circle></svg></span>
+          <span style="flex:1 1 auto">Налаштування</span>
+          <span style="font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase">Скоро</span>
+        </span>
+        <div style="height:1px;background:#EEF0F2;margin:6px 10px"></div>
+        <a class="nav-link" href="#" style="display:flex;align-items:center;gap:12px;min-height:48px;padding:0 10px;border-radius:10px;color:#1F2937;text-decoration:none;font-size:14.5px;font-weight:600;box-sizing:border-box">
+          <span style="width:32px;height:32px;border-radius:50%;background:#F7F7F5;color:#6B7280;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4H5v16h4"></path><path d="M16 8l4 4-4 4M20 12H9"></path></svg></span>
+          Вийти
+        </a>
+      </nav>
+
+      <section aria-labelledby="h-help" style="display:flex;flex-direction:column;gap:12px;padding:16px;border-radius:14px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);box-sizing:border-box">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <h2 id="h-help" style="margin:0;font-size:16px;font-weight:700;color:#111827">Потрібна допомога?</h2>
+          
+        </div>
+        <a href="https://t.me/BoosterShop_Support_bot" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;border-radius:8px;background:#111827;color:#FFFFFF;font-size:14.5px;font-weight:700;text-decoration:none">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#229ED9" stroke="#229ED9" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M21 3L3 10.5l6 2.2L11 20l3-4.5 5 3.7L21 3z"></path></svg>
+          <span>Напишіть нам</span>
+        </a>
+      </section>
+    </aside>
+
+    <main style="flex:999 1 560px;min-width:0;display:flex;flex-direction:column;gap:24px">
+      <h1 style="margin:0;font-size:32px;line-height:1.2;font-weight:800;color:#111827">Особисті дані</h1>
+
+      <form style="max-width:720px;display:flex;flex-direction:column;gap:28px;padding:28px;border-radius:14px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);box-sizing:border-box">
+
+        <fieldset style="margin:0;padding:0;border:0;min-width:0;display:flex;flex-direction:column;gap:16px">
+          <legend style="padding:0;margin-bottom:16px;display:flex;align-items:center;gap:10px;font-size:18px;font-weight:700;color:#111827"><span aria-hidden="true" style="width:8px;height:8px;border-radius:50%;background:#C68A00"></span>Основне</legend>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:16px">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label for="a-name" style="font-size:14px;font-weight:600;color:#111827">Імʼя <span style="color:#DC2626" aria-hidden="true">*</span></label>
+              <input id="a-name" class="pib" pattern="[А-ЩЬЮЯІЇЄҐа-щьюяіїєґ’ʼ' -]+" placeholder=" " type="text" value="Олена" autocomplete="given-name" style="height:46px;padding:0 14px;border:1px solid #E5E7EB;border-radius:8px;background:#F7F7F5;font-family:inherit;font-size:16px;color:#1F2937;box-sizing:border-box;width:100%">
+              <span class="pib-hint" role="status">Лише українські літери, апостроф і дефіс.</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label for="a-surname" style="font-size:14px;font-weight:600;color:#111827">Прізвище <span style="color:#DC2626" aria-hidden="true">*</span></label>
+              <input id="a-surname" class="pib" pattern="[А-ЩЬЮЯІЇЄҐа-щьюяіїєґ’ʼ' -]+" placeholder=" " type="text" value="Коваленко" autocomplete="family-name" style="height:46px;padding:0 14px;border:1px solid #E5E7EB;border-radius:8px;background:#F7F7F5;font-family:inherit;font-size:16px;color:#1F2937;box-sizing:border-box;width:100%">
+              <span class="pib-hint" role="status">Лише українські літери, апостроф і дефіс.</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label for="a-patr" style="font-size:14px;font-weight:600;color:#111827">По батькові <span style="font-weight:500;color:#6B7280">необовʼязково</span></label>
+              <input id="a-patr" class="pib" pattern="[А-ЩЬЮЯІЇЄҐа-щьюяіїєґ’ʼ' -]+" placeholder=" " type="text" value="Іванівна" autocomplete="additional-name" style="height:46px;padding:0 14px;border:1px solid #E5E7EB;border-radius:8px;background:#F7F7F5;font-family:inherit;font-size:16px;color:#1F2937;box-sizing:border-box;width:100%">
+              <span class="pib-hint" role="status">Лише українські літери, апостроф і дефіс.</span>
+            </div>
+          </div>
+          
+        </fieldset>
+
+        <fieldset style="margin:0;padding:0;border:0;min-width:0;display:flex;flex-direction:column;gap:16px">
+          <legend style="padding:0;margin-bottom:16px;display:flex;align-items:center;gap:10px;font-size:18px;font-weight:700;color:#111827"><span aria-hidden="true" style="width:8px;height:8px;border-radius:50%;background:#C68A00"></span>Контакти</legend>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:16px">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label for="a-phone" style="font-size:14px;font-weight:600;color:#111827">Телефон <span style="color:#DC2626" aria-hidden="true">*</span></label>
+              <input id="a-phone" type="tel" value="+380 50 000 00 00" autocomplete="tel" style="height:46px;padding:0 14px;border:1px solid #E5E7EB;border-radius:8px;background:#F7F7F5;font-family:inherit;font-size:16px;color:#1F2937;box-sizing:border-box;width:100%">
+              <span style="font-size:13px;color:#6B7280">Формат: +380 XX XXX XX XX</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label for="a-email" style="font-size:14px;font-weight:600;color:#111827">Email (логін)</label>
+              <input id="a-email" type="email" value="olena@example.com" readonly="" style="height:46px;padding:0 14px;border:1px solid #EEF0F2;border-radius:8px;background:#EEF0F2;font-family:inherit;font-size:16px;color:#6B7280;box-sizing:border-box;width:100%">
+              <span style="font-size:13px;color:#6B7280">Зміна основного email — у розділі «Налаштування»</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label for="a-tg" style="font-size:14px;font-weight:600;color:#111827">Telegram <span style="font-weight:500;color:#6B7280">необовʼязково</span></label>
+              <input id="a-tg" type="text" placeholder="@username" autocomplete="off" style="height:46px;padding:0 14px;border:1px solid #E5E7EB;border-radius:8px;background:#F7F7F5;font-family:inherit;font-size:16px;color:#1F2937;box-sizing:border-box;width:100%">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label for="a-vb" style="font-size:14px;font-weight:600;color:#111827">Viber <span style="font-weight:500;color:#6B7280">необовʼязково</span></label>
+              <input id="a-vb" type="tel" placeholder="+380 XX XXX XX XX" autocomplete="off" style="height:46px;padding:0 14px;border:1px solid #E5E7EB;border-radius:8px;background:#F7F7F5;font-family:inherit;font-size:16px;color:#1F2937;box-sizing:border-box;width:100%">
+            </div>
+          </div>
+        </fieldset>
+
+        <div style="display:flex;flex-wrap:wrap;gap:12px;padding-top:4px">
+          <button type="submit" style="min-height:48px;padding:0 28px;border:0;border-radius:8px;background:#1E3A8A;color:#FFFFFF;font-family:inherit;font-size:14.5px;font-weight:700;cursor:pointer">Зберегти зміни</button>
+          <a href="A-Hub.dc.html" style="display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 24px;border:1px solid #E5E7EB;border-radius:8px;background:#FFFFFF;color:#111827;font-size:14.5px;font-weight:700;text-decoration:none;box-sizing:border-box">Скасувати</a>
+        </div>
+      </form>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1200}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

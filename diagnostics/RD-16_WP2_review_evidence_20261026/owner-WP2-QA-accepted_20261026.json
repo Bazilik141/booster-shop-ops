@@ -1,0 +1,20 @@
+{
+  "task": "RD-16-WP2",
+  "owner_QA": "accepted",
+  "owner_exact_reply": "WP2 QA OK",
+  "owner_reply_date": "2026-10-26",
+  "accepted_scope": "Deployed reviewed WP2 personal-data page and the preceding owner checklist: responsive form and single navigation, save/reopen, optional-field clearing/reopen, success confirmation, Latin-name error, editable email and unchanged other account pages. Acceptance is owner-reported; no extra unreported cases or agent-authenticated execution inferred.",
+  "source_apply_receipt": "owner-main-Apply-accepted_20261026.json",
+  "review_request_id": "5624fdc6-9184-4ab9-b154-377a9ca468b4",
+  "runner_sha256": "d03a0e76c63892365ecef4a601456365429828aae8201a1916514f03b989e851",
+  "owner_packet_sha256": "04633bf5e023e063d46cbbe3ae3c19dbbbd95ef7c4b0c94b5faa971bcfa31cea",
+  "backup": "/home2/boosters/public_html/_patch_backups/RD-16-WP2_personal-data_20261026-20261026T085509Z-9581b50acfd9",
+  "WP1_QA": "Previously accepted; diagnostics/RD-16_WP1_review_evidence_20261025/owner-WP1-QA-accepted_20261026.json",
+  "handoff_acceptance": "Both RD-16 work packages deployed and owner-QA accepted; implementation ready for default Claude canonical Notion closeout and subsequent dashboard synchronization under ROADMAP_SOP.md",
+  "ACC008_deferred_responsive_item": "Closed by RD-16 WP2 owner QA as explicitly stated in handoff section 10; not a new blanket acceptance of unrelated ACC-008 scope",
+  "public_smoke_limit": "Known obsolete FIG-CHARM-001 URL remains baseline 404; current 3D representative passes. Owner QA does not imply all eight literal legacy URLs returned 200.",
+  "canonical_Notion_or_dashboard_status_changed": false,
+  "Git_commit_or_push": false,
+  "agent_server_access": false,
+  "new_feature_or_future_RD_task_authority": false
+}

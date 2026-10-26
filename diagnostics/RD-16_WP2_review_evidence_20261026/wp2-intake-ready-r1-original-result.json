@@ -1,0 +1,97 @@
+{
+  "duration_api_ms": 283628,
+  "stop_reason": "end_turn",
+  "total_cost_usd": 1.003892,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 47273,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 31285,
+    "output_tokens_details": {
+      "thinking_tokens": 27615
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 47273,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 31285,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 47273,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 47273
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-opus-5-5": {
+      "inputTokens": 2,
+      "outputTokens": 31285,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 47273,
+      "webSearchRequests": 0,
+      "costUSD": 1.003892,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 27615,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 1,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "# RD-16 WP2 Read-Only Intake r1: Review of Diagnostic and Owner Launcher\n\n## Verdict: **Review OK**\n\nThere are no mandatory code changes. The binding intake conditions below are mechanical steps for Codex, not code edits. The optional notes do not block release.\n\n## Bound artifacts\n\n| Artifact | Bytes | SHA256 |\n|---|---|---|\n| `diagnostics\\RD-16-WP2_intake_20261026.php` | 9900 | `f3b5cdc13a78b96ffdb92ee8d7ce297b530b4a03b8f6aad7d92777a4eeccd6ba` |\n| `diagnostics\\RD-16-WP2_intake_owner_20261026.ps1` | 4496 | `897303201d8aa5937eebb481aa7925696949f9a16b0e4085e8a567c685133b1a` |\n\n**Binding conditions**\n- I had no tools, so I did not recompute either hash.\n- The launcher's embedded `$Sha` equals the stated PHP hash.\n- Before release, Codex must confirm that the bytes on disk match both rows. Any byte change voids this verdict.\n\n**Derivation check (manual)**\n- **Launcher.** It differs from R6 `e0c06bc5\u2026` only in five places:\n  - the source filename (\u22126 bytes)\n  - the hash (same length)\n  - the receipt directory (+5)\n  - the task string \u00d72 (\u221212)\n  - the markers \u00d72 (\u22124) and the final message (+25)\n  \n  That nets exactly +8 bytes (4488 \u2192 4496). All transport safety from R6 carries over byte for byte: SSH options, argument allowlist, CR refusal, async read, `CreateNew` before dispatch, receipt saved before validation, the `\\z` match, the two-line rule and the contract check.\n- **PHP.** My manual delta from R6 `f24136e1\u2026` came within a few bytes of 9900 but did not reconcile exactly. I did not rely on it. Instead I reviewed the final bytes in full.\n  - The R6 logic is carried unchanged: `rd16_event_check` matching, rd16d_safe structure, the event SQL, the read-only transaction with rollback in `finally`, the row, field and relevant caps, link, size and read checks, the stdout-only STOP path, and the bootstrap.\n  - The changes are exactly these:\n    - the 26 targets\n    - `%` added to the safe character class\n    - schema checks for 3 more tables\n    - 3 bounded metadata queries inside the transaction\n    - 21 added path literals\n    - `DIR_EXTENSION` and `DIR_TEMPLATE` pinning, which closes R6 O1\n    - 2 new reason codes\n    - the task string and markers\n\n## Safety, privacy and composition\n\n**SQL**\n- All statements are SHOW COLUMNS or SELECT. Every SELECT runs inside `START TRANSACTION READ ONLY` with rollback in `finally`. There are no writes and no access to customer, settings, `code` or config values.\n- **Theme query.** It returns counts only. `GROUP BY` over three IN values gives at most 3 rows. The cap check is redundant but harmless.\n- **`layout_route` query.** It uses `'<route>' LIKE `route``, which correctly mirrors OC4 `model/design/layout::getLayout`. Ids are cast to int, and route values pass through `rd16d_safe`. Adding `%` exposes only ASCII route wildcards, so it is not a privacy concern.\n- **Module query.** `layout_module` rows are code, position and int only, and are capped at 16.\n\n**Classifier**\n- The 26 targets cover:\n  - the `account/edit` view\n  - the bare `account/edit` route used by the router for GET\n  - the `.index`/`.save` and `|index`/`|save` variants\n  - the WP1 hub, shell and header\n- Prefix matching through `fnmatch($p.'*')` remains conservative against OC's start-anchored `preg_match` in `Event::trigger`.\n- `allowed` is informational only. I agree it grants no hook admission.\n\n**Sources**\n- There are 33 fixed literals with no globbing or dynamic paths. Each path component is link-checked. The 512 KiB per-file and 2 MiB total caps fail closed.\n- Absent files are reported as `absent`, not as errors. Sources are hashed and base64-encoded, never included.\n- The ~1.23 MiB estimate gives about 1.7 M JSON characters, under the cap.\n\n**Bootstrap**\n- `config.php` is required privately for the DB connection and mapping only.\n- The two new mapping pins match standard OC 4.0.x `config.php`. If the host deviates, the run fails closed with `mapping` and consumes the attempt. That is acceptable.\n\n**Identities and authority**\n- The task ID, both markers and `owner-receipts-intake` are distinct, so the consumed WP1 ledgers cannot collide.\n- One owner-run PowerShell invocation is permitted. No remote staging, temp files, cache or state writes, so no rollback is needed.\n- This review gives no execution, SSH, key, server, Git, status or deployment authority to me or any agent.\n\n## Fixtures\n\n**What passes**\n- The fake-mysqli collector runs against the exact 33 paths, and covers the following, plus the per-file `source_cap`:\n  - success and the `account/%` layout candidate\n  - redaction\n  - row, relevant and schema refusal\n- The predicate checks cover edit view, index, save and pipe triggers.\n- PHP `-n` stdin and `bash -s` \u2192 `exec` PHP give the exact STOP marker.\n- The PowerShell AST, receipt and replay-refusal fixture substitutes only the root and the transport.\n- A failed root substitution would be detected: the missing fixture receipt makes the test throw, and the prepare step asserts the real `attempt.json` is absent.\n\n**Disclosed limits**\n- Local PHP 8.3, synthetic sources, and no host, MySQL, SSH or PHP 8.0 proof.\n\n## Binding intake conditions (Codex, mechanical)\n\n1. **Preconditions.** Before release, both `work\\rd16-wp2-20261026\\owner-receipts-intake\\attempt.json` and `stdout.txt` must be absent. The prepare step asserts only `attempt.json`; check `stdout.txt` too.\n2. **Ledger.**\n   - `phpSha` must be `f3b5cdc1\u2026d6ba`.\n   - `packetSha` must be `89730320\u2026133b1a`.\n   - `php` must be `8.0.30`.\n   - The top-level key set must be exactly what the code emits.\n3. **Payload.**\n   - `sources` must contain exactly the 33 keys.\n   - Each present entry's decoded length and SHA must match.\n   - Their sum must equal `source_bytes`.\n4. **Drift against WP1.**\n   - The 12 R6 paths are compared with the R6 capture.\n   - The WP1-applied targets are compared with the accepted R2 after-hashes: `account/shell.php`, `account/shell.twig`, `boostershop-ds.css`, `common/header.twig` and the uk-ua `account.php`.\n   - Any mismatch is recorded and holds WP2 composition. Do not re-run.\n5. **Holds.** Do not expand the list ad hoc; any new file needs a new reviewed supplement. Hold the affected composition in any of these cases:\n   - a needed path is `absent`\n   - a new relevant row's handler or model is outside the 33\n   - `theme_enabled` is non-empty for a route\n   - the `account/edit` layout candidate is not 6\n   - a non-core module is in layout 6\n6. **R6 O2, resolved now.** Intake eligibility when the launcher throws after saving the receipt:\n   - **Eligible:** a throw inside `ConvertFrom-Json` only. Codex's own parser must then pass conditions 2\u20134 on a receipt that ends with the exact OK marker and has exactly two lines.\n   - **Not eligible:** a throw from the contract mismatch, a non-zero exit code or a STOP marker. In those cases, collect the owner's terminal text and do not retry.\n7. **Private handling.** Treat captured sources as private (R6 O5). Quote only the excerpts later review packets need.\n\n## Optional notes (non-blocking)\n\n- **O1. Theme `status=1` filter.**\n  - The handler (`controller/event/theme.php`) and the model (`model/design/theme.php`) are not captured, so it is unproven that disabled rows are ignored.\n  - Counting by `(route, status)` would be strictly more conservative.\n  - Alternatively, cross-reference the WP0 theme-row evidence.\n  - Adopting this requires r2 and a rebind.\n- **O2. Hard-coded `layout_id=6`.** Deriving the ids from the candidate rows (int-cast, `IN`) would avoid a hold if the edit page maps elsewhere.\n- **O3. Uncaptured files.**\n  - `booster-account-universal.js`, `common/column_left.php` and the account-sidebar module source are not captured. They were in the WP0 list.\n  - This is acceptable if WP2 does not touch them and WP1 evidence covers them. Otherwise hold as in condition 5.\n- **O4. Trigger scope.** `model/*` and `language/*` triggers are not enumerated. This is acceptable because save, model and validation are untouched. If WP2 adds language keys, note that `language/.../after` hooks could override them.\n- **O5. Schema reason codes.** `schema` does not say which table failed (R6 N1).\n- **O6. Test gaps.**\n  - Fake-SQL matching is prefix-only for the metadata queries, and query order relative to `START TRANSACTION` is not asserted.\n  - There are still no tests for: absent source, aggregate cap, `linked_source`, `field_cap`, `io_warning` or rollback failure (R6 O3).\n  - Python `text=True` stdin on Windows may translate `\\n` to CRLF; byte input would be more faithful.\n  - The build step's `replace` calls are still not count-checked (R6 O4).\n- **O7. Launcher wording.** The final message repeats \"send this output\". This is cosmetic.\n- **Still applicable from R6:** N2 (`display_startup_errors`), N3 (remote stderr is not in the receipt), N4 (the launcher does not self-hash) and N6 (rc-file inheritance).\n\n## Gate\n\nOnce Codex has verified both hashes on disk and condition 1, Codex may give the owner one normal PowerShell invocation of the bound launcher.\n\nThis does not open WP2 Upload or Apply, and it does not open a header-token exception, any header or data write, or deployment. **Main WP2 remains HELD** pending its own reviewed ready package.",
+  "ttft_ms": 252345,
+  "type": "result",
+  "duration_ms": 284037,
+  "ttft_stream_ms": 1734,
+  "time_to_request_ms": 404,
+  "first_content_frame_ms": 1735,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

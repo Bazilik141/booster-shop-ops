@@ -1,0 +1,97 @@
+{
+  "duration_api_ms": 133635,
+  "stop_reason": "end_turn",
+  "total_cost_usd": 0.5463560000000001,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 34441,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 13541,
+    "output_tokens_details": {
+      "thinking_tokens": 10532
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 34441,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 13541,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 34441,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 34441
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-opus-5-5": {
+      "inputTokens": 2,
+      "outputTokens": 13541,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 34441,
+      "webSearchRequests": 0,
+      "costUSD": 0.5463560000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 10532,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 1,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "# RD-16 WP1 R6 Review: Hook-Source Supplement Diagnostic and Owner Launcher\n\n## Verdict: **Review OK**\n\nThere are no mandatory findings. The optional notes and intake conditions below do not block release.\n\n## Bound artifacts\n\n| Artifact | Bytes | SHA256 |\n|---|---|---|\n| `diagnostics\\RD-16-WP1_hook-sources_20261025.php` | 6475 | `f24136e1a7d01c12128ae3fd58f26645ee3519e08943045f7943fd59bc0b9154` |\n| `diagnostics\\RD-16-WP1_hook-sources_owner_20261025.ps1` | 4488 | `e0c06bc511010eb513517dfee51e6626378b1289e0e3d2a55e5f607129daaaa1` |\n\n**Binding conditions**\n- I had no tools, so I did not recompute either hash.\n- I did confirm that the launcher's embedded `$Sha` equals the stated PHP hash.\n- Before release, Codex must confirm that the bytes on disk match both rows. Any byte change voids this verdict.\n- The accepted R5 pair (`61c329aa\u2026c448` / `95e8591f\u2026e9c8`), its consumed `attempt.json` and the receipt are not reopened. They are cited only as the derivation base.\n\n**Derivation check (manual count)**\n- I compared both files line by line against the R5 pair.\n- The only PHP changes are: the header comment, 8 added path literals, the two caps, the task string and both markers.\n- These account exactly for +651 bytes (5824 \u2192 6475). By my count: +12 for the comment, +640 for the paths, +2 for the caps, \u22121 for the task string and \u22122 for the markers.\n- The only launcher changes are: the source filename, the hash, the same-length receipt directory, the task string (\u00d72) and the markers (\u00d72). These account exactly for \u22125 bytes (4493 \u2192 4488).\n- `rd16_event_check`, `rd16d_safe`, the SQL, the read-only transaction, rollback in `finally`, the row, field and relevant caps, the bootstrap and mapping checks, the per-component link check, the size and length read check, the error allowlist, the stdout-only STOP path, the SSH options, the argument allowlist, the CR refusal, async stdout read, `CreateNew` before dispatch, receipt-before-validation, the strict `\\z` match, the two-line rule and the contract check are all byte-identical to R5. R5's acceptance therefore carries over for them.\n\n## Scope, privacy and authority\n\n**Paths**\n- The paths are fixed literals. There is no globbing, directory listing, input-derived path or dynamic action traversal.\n- The 8 added paths match the action-route mapping of the four observed denied rows:\n  - 3 handler controllers\n  - 2 owning models, loaded by the enhanced-measurement and reCAPTCHA hooks\n  - 2 JS assets and 1 CSS asset, injected by live search and enhanced measurement\n- The 4 core files are revalidated in the same capture as the event rows.\n\n**Caps**\n- Per-file 512 KiB and total 2 MiB are justified by the historical 266,277-byte controller.\n- Exceeding either cap fails closed (`source_cap`).\n- An absent file is reported as `absent`, not as an error.\n\n**Data and execution**\n- There are no new reads of DB tables, settings or customer data.\n- `config.php` is still `require`d only to connect to the DB, exactly as in R5. Its values are never returned.\n  - The wording \"no config read\" in `source-set.json` should be read as \"no config data returned\".\n- Sources are hashed and base64-encoded, never included or evaluated.\n- There are no remote writes, staging, heredoc or temp files, and no changes to events or admission. No rollback is needed.\n\n**Identities**\n- The task ID, markers and receipt directory (`work\\rd16-hooks-20261025\\owner-receipts`) are distinct, so the consumed R5 ledger cannot be reused or overwritten.\n\n**Authority**\n- One owner-run PowerShell invocation only.\n- This review grants no execution, Git or status, SSH, key, server or deployment authority to me or any agent.\n\n## Tests (within stated fake boundaries)\n\n**What passed**\n- The fake-DB collector test passes using the exact twelve-path list.\n- It covers: success, read-only SQL, redaction, row cap, relevant cap, schema and the per-file `source_cap` at 524,289 bytes.\n- The native PHP stdin failure and the real `bash -s` \u2192 `exec` PHP handoff pass with the exact `RD16_HOOK_SOURCES_STOP reason=php` output.\n- The PowerShell AST, receipt preservation and replay-refusal fixture pass.\n- The fixture writes only under `owner-fixture-<guid>`, not the real receipts directory.\n\n**Limits**\n- The limits are disclosed honestly: local PHP 8.3, fake mysqli, synthetic sources, and no host, SSH or server proof.\n\n## Intake conditions (Codex, mechanical; not code changes)\n\n1. **Preconditions.** The real `work\\rd16-hooks-20261025\\owner-receipts\\attempt.json` and `stdout.txt` must be absent before release.\n2. **Ledger check.** After the run, `attempt.json` must have `phpSha` = `f24136e1\u20269154` and `packetSha` = `e0c06bc5\u2026aaa1`.\n3. **Payload shape.**\n   - `sources` must contain exactly the 12 keys.\n   - Each present entry's decoded length and SHA must match, and their sum must equal `source_bytes`.\n4. **Drift detection.** If either check below fails, hold the composition and do not re-run.\n   - The 4 core source hashes must equal the R5 capture (6,145 bytes total).\n   - `relevant_rows` must equal the R5 set of four (trigger/action) with `allowed=false`.\n5. **Holds.**\n   - If any needed path is `absent`, hold the composition that depends on it.\n   - If a captured handler or model references a file outside the 12 (for example an extension Twig template, language file or helper library), also hold that composition.\n   - Do not expand the list ad hoc. Any new file requires a new reviewed supplement.\n\n## Optional notes (non-blocking)\n\n**O1. `DIR_EXTENSION` is not checked.**\n- The mapping check pins `DIR_OPENCART`, `DIR_SYSTEM` and `DIR_APPLICATION`, but not `DIR_EXTENSION`. Extension autoloader resolution is also not collected.\n- The extension bytes are therefore \"the files at the standard OC4 path\", not proven to be the loaded classes.\n- The practical risk is very low, because the standard config uses `DIR_OPENCART.'extension/'`. Any future supplement should still add the equality check.\n- Intake should record this as an assumption.\n\n**O2. Large JSON line in `ConvertFrom-Json`.**\n- At the caps, the JSON line could reach about 2.8 M characters.\n- I believe Windows PowerShell 5.1 lifts the old v3 2 MB `MaxJsonLength` limit, and the expected real payload is well below that anyway.\n- If `ConvertFrom-Json` throws, the receipt is already saved and the run fails closed. Codex should state up front whether a receipt from a run where the launcher threw after saving it is eligible for mechanical intake.\n\n**O3. Test gaps.**\n- R5 N7 is still open: no tests for aggregate `source_cap` (e.g. 5 \u00d7 512 KiB), absent source, `linked_source`, `field_cap`, `io_warning` or rollback failure.\n- An absent-source test now matters more, since absence is an explicitly expected outcome.\n\n**O4. `build.py` replacements are unchecked.**\n- Only the list replacement is asserted. The other `str.replace` calls are not count-checked.\n- This is harmless here, because I verified the final bytes directly. Future builds should assert replacement counts.\n\n**O5. Treat captured sources as private.**\n- Captured third-party extension code may carry licensing or embedded vendor values.\n- Quote only the excerpts needed in later review packets.\n\n**O6. Carried forward from R5.**\n- N1: reason-code precision.\n- N2: `display_startup_errors`.\n- N3: remote stderr is not in the receipt. On a STOP, collect the owner's terminal text.\n- N4: the launcher does not check its own hash, so Codex must check it on disk.\n- N6: rc-file inheritance.\n\n## Gate\n\nThis verdict permits Codex, after it has verified the hashes on disk, to give the owner one normal PowerShell invocation of the bound launcher. It gives no authority to anyone else.\n\nThe runtime result is unknown until the owner runs the read-only collection. **Main Apply and WP2 remain HELD.** No hook admission or event change follows from this review.",
+  "ttft_ms": 105283,
+  "type": "result",
+  "duration_ms": 133808,
+  "ttft_stream_ms": 1632,
+  "time_to_request_ms": 167,
+  "first_content_frame_ms": 1632,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

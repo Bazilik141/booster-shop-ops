@@ -1,0 +1,35 @@
+{
+    "boundary": "native_proposed_controllers_existing_models_and_Twig_with_fake_DB_bootstrap_localisation_header",
+    "cases": {
+        "empty": {
+            "queries": 3,
+            "latest": null,
+            "favorites": 0,
+            "writes": 0
+        },
+        "hidden_latest": {
+            "queries": 4,
+            "latest": 10482,
+            "favorites": 3,
+            "writes": 0
+        },
+        "visible": {
+            "queries": 4,
+            "latest": 10482,
+            "favorites": 3,
+            "writes": 0
+        },
+        "long": {
+            "queries": 4,
+            "latest": 10482,
+            "favorites": 3,
+            "writes": 0
+        },
+        "escaped": {
+            "queries": 4,
+            "latest": 10482,
+            "favorites": 3,
+            "writes": 0
+        }
+    }
+}

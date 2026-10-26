@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<title>A · Особисті дані, мобільний</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0}
+.pib:invalid:not(:placeholder-shown){border-color:#DC2626 !important;background:#FEF2F2 !important}
+.pib-hint{display:none;font-size:13px;color:#B91C1C}
+.pib:invalid:not(:placeholder-shown) ~ .pib-hint{display:block}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #1E3A8A;outline-offset:2px}
+</style>
+</helmet>
+<div style="min-height:1700px;background:#F7F7F5;font-family:'Manrope',system-ui,-apple-system,sans-serif;color:#1F2937">
+  <div style="height:57px;border-bottom:1px dashed #E5E7EB;background:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:13px;color:#6B7280">Шапка сайту — без змін</div>
+  <div style="padding:16px 16px 48px;display:flex;flex-direction:column;gap:16px;box-sizing:border-box">
+
+    <nav aria-label="Розділи кабінету" style="display:flex;gap:8px;overflow-x:auto;margin:0 -16px;padding:0 16px 4px">
+      <a href="A-Mobile-Hub.dc.html" style="flex:0 0 auto;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.08);color:#1F2937;text-decoration:none;font-size:14.5px;font-weight:600">Кабінет</a>
+      <a href="A-Mobile-Edit.dc.html" aria-current="page" style="flex:0 0 auto;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;background:#C68A00;color:#111827;text-decoration:none;font-size:14.5px;font-weight:800">Особисті дані</a>
+      <a href="A-Mobile-Addresses.dc.html" style="flex:0 0 auto;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.08);color:#1F2937;text-decoration:none;font-size:14.5px;font-weight:600">Адреси</a>
+      <a href="A-Mobile-Orders.dc.html" style="flex:0 0 auto;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.08);color:#1F2937;text-decoration:none;font-size:14.5px;font-weight:600">Замовлення</a>
+      <a href="A-Mobile-Favorites.dc.html" style="flex:0 0 auto;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.08);color:#1F2937;text-decoration:none;font-size:14.5px;font-weight:600">Улюблене</a>
+      <span aria-disabled="true" style="flex:0 0 auto;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;background:#FFFFFF;color:#6B7280;opacity:.55;cursor:not-allowed;font-size:14.5px;font-weight:600">Налаштування</span>
+      <a href="https://t.me/BoosterShop_Support_bot" target="_blank" rel="noopener" style="flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 16px;border-radius:999px;background:#111827;color:#FFFFFF;text-decoration:none;font-size:14.5px;font-weight:700">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#229ED9" stroke="#229ED9" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M21 3L3 10.5l6 2.2L11 20l3-4.5 5 3.7L21 3z"></path></svg>
+        Допомога
+      </a>
+    </nav>
+
+    <h1 style="margin:0;font-size:24px;line-height:1.2;font-weight:800;color:#111827">Особисті дані</h1>
+
+    <form style="display:flex;flex-direction:column;gap:24px;padding:20px 16px;border-radius:14px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);box-sizing:border-box">
+      <fieldset style="margin:0;padding:0;border:0;min-width:0;display:flex;flex-direction:column;gap:16px">
+        <legend style="padding:0;margin-bottom:16px;display:flex;align-items:center;gap:10px;font-size:18px;font-weight:700;color:#111827"><span aria-hidden="true" style="width:8px;height:8px;border-radius:50%;background:#C68A00"></span>Основне</legend>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label for="am-name" style="font-size:14px;font-weight:600;color:#111827">Імʼя <span style="color:#DC2626" aria-hidden="true">*</span></label>
+          <input id="am-name" class="pib" pattern="[А-ЩЬЮЯІЇЄҐа-щьюяіїєґ’ʼ' -]+" placeholder=" " type="text" value="Олена" autocomplete="given-name" style="height:48px;padding:0 14px;border:1px solid #E5E7EB;border-radius:8px;background:#F7F7F5;font-family:inherit;font-size:16px;color:#1F2937;box-sizing:border-box;width:100%">
+              <span class="pib-hint" role="status">Лише українські літери, апостроф і дефіс.</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label for="am-surname" style="font-size:14px;font-weight:600;color:#111827">Прізвище <span style="color:#DC2626" aria-hidden="true">*</span></label>
+          <input id="am-surname" class="pib" pattern="[А-ЩЬЮЯІЇЄҐа-щьюяіїєґ’ʼ' -]+" placeholder=" " type="text" value="Коваленко" autocomplete="family-name" style="height:48px;padding:0 14px;border:1px solid #E5E7EB;border-radius:8px;background:#F7F7F5;font-family:inherit;font-size:16px;color:#1F2937;box-sizing:border-box;width:100%">
+              <span class="pib-hint" role="status">Лише українські літери, апостроф і дефіс.</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label for="am-patr" style="font-size:14px;font-weight:600;color:#111827">По батькові <span style="font-weight:500;color:#6B7280">необовʼязково</span></label>
+          <input id="am-patr" class="pib" pattern="[А-ЩЬЮЯІЇЄҐа-щьюяіїєґ’ʼ' -]+" placeholder=" " type="text" value="Іванівна" autocomplete="additional-name" style="height:48px;padding:0 14px;border:1px solid #E5E7EB;border-radius:8px;background:#F7F7F5;font-family:inherit;font-size:16px;color:#1F2937;box-sizing:border-box;width:100%">
+              <span class="pib-hint" role="status">Лише українські літери, апостроф і дефіс.</span>
+        </div>
+        
+      </fieldset>
+
+      <fieldset style="margin:0;padding:0;border:0;min-width:0;display:flex;flex-direction:column;gap:16px">
+        <legend style="padding:0;margin-bottom:16px;display:flex;align-items:center;gap:10px;font-size:18px;font-weight:700;color:#111827"><span aria-hidden="true" style="width:8px;height:8px;border-radius:50%;background:#C68A00"></span>Контакти</legend>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label for="am-phone" style="font-size:14px;font-weight:600;color:#111827">Телефон <span style="color:#DC2626" aria-hidden="true">*</span></label>
+          <input id="am-phone" type="tel" value="+380 50 000 00 00" autocomplete="tel" style="height:48px;padding:0 14px;border:1px solid #E5E7EB;border-radius:8px;background:#F7F7F5;font-family:inherit;font-size:16px;color:#1F2937;box-sizing:border-box;width:100%">
+          <span style="font-size:13px;color:#6B7280">Формат: +380 XX XXX XX XX</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label for="am-email" style="font-size:14px;font-weight:600;color:#111827">Email (логін)</label>
+          <input id="am-email" type="email" value="olena@example.com" readonly="" style="height:48px;padding:0 14px;border:1px solid #EEF0F2;border-radius:8px;background:#EEF0F2;font-family:inherit;font-size:16px;color:#6B7280;box-sizing:border-box;width:100%">
+          <span style="font-size:13px;color:#6B7280">Зміна email — у розділі «Налаштування»</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label for="am-tg" style="font-size:14px;font-weight:600;color:#111827">Telegram <span style="font-weight:500;color:#6B7280">необовʼязково</span></label>
+          <input id="am-tg" type="text" placeholder="@username" autocomplete="off" style="height:48px;padding:0 14px;border:1px solid #E5E7EB;border-radius:8px;background:#F7F7F5;font-family:inherit;font-size:16px;color:#1F2937;box-sizing:border-box;width:100%">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label for="am-vb" style="font-size:14px;font-weight:600;color:#111827">Viber <span style="font-weight:500;color:#6B7280">необовʼязково</span></label>
+          <input id="am-vb" type="tel" placeholder="+380 XX XXX XX XX" autocomplete="off" style="height:48px;padding:0 14px;border:1px solid #E5E7EB;border-radius:8px;background:#F7F7F5;font-family:inherit;font-size:16px;color:#1F2937;box-sizing:border-box;width:100%">
+        </div>
+      </fieldset>
+
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button type="submit" style="min-height:48px;border:0;border-radius:8px;background:#1E3A8A;color:#FFFFFF;font-family:inherit;font-size:14.5px;font-weight:700;cursor:pointer">Зберегти зміни</button>
+        <a href="A-Mobile-Hub.dc.html" style="display:flex;align-items:center;justify-content:center;min-height:48px;border:1px solid #E5E7EB;border-radius:8px;background:#FFFFFF;color:#111827;font-size:14.5px;font-weight:700;text-decoration:none;box-sizing:border-box">Скасувати</a>
+      </div>
+    </form>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<title>A · Кабінет</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #1E3A8A;outline-offset:2px}
+a.nav-link:hover{background:#F7F7F5}
+</style>
+</helmet>
+<div style="min-height:1080px;background:#F7F7F5;font-family:'Manrope',system-ui,-apple-system,sans-serif;color:#1F2937">
+  <div style="height:69px;border-bottom:1px dashed #E5E7EB;background:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:13px;color:#6B7280">Шапка сайту — без змін</div>
+  <div style="max-width:1200px;margin:0 auto;padding:32px 24px 64px;display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start;box-sizing:border-box">
+
+    <aside style="flex:0 0 260px;display:flex;flex-direction:column;gap:16px">
+      <nav aria-label="Розділи кабінету" style="display:flex;flex-direction:column;gap:2px;padding:8px;border-radius:14px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);box-sizing:border-box">
+        <a class="nav-link" href="A-Hub.dc.html" aria-current="page" style="display:flex;align-items:center;gap:12px;min-height:48px;padding:0 10px;border-radius:10px;background:#FBF4DC;color:#111827;text-decoration:none;font-size:14.5px;font-weight:700;box-sizing:border-box">
+          <span style="width:32px;height:32px;border-radius:50%;background:#C68A00;color:#FFFFFF;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"></path><path d="M5 10v10h14V10"></path></svg></span>
+          Кабінет
+        </a>
+        <a class="nav-link" href="A-Edit.dc.html" style="display:flex;align-items:center;gap:12px;min-height:48px;padding:0 10px;border-radius:10px;color:#1F2937;text-decoration:none;font-size:14.5px;font-weight:600;box-sizing:border-box">
+          <span style="width:32px;height:32px;border-radius:50%;background:#F7F7F5;color:#6B7280;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg></span>
+          Особисті дані
+        </a>
+        <a class="nav-link" href="A-Addresses.dc.html" style="display:flex;align-items:center;gap:12px;min-height:48px;padding:0 10px;border-radius:10px;color:#1F2937;text-decoration:none;font-size:14.5px;font-weight:600;box-sizing:border-box">
+          <span style="width:32px;height:32px;border-radius:50%;background:#F7F7F5;color:#6B7280;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 10-14 0c0 4.8 7 11 7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg></span>
+          Адреси доставки
+        </a>
+        <a class="nav-link" href="A-Orders.dc.html" style="display:flex;align-items:center;gap:12px;min-height:48px;padding:0 10px;border-radius:10px;color:#1F2937;text-decoration:none;font-size:14.5px;font-weight:600;box-sizing:border-box">
+          <span style="width:32px;height:32px;border-radius:50%;background:#F7F7F5;color:#6B7280;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5L12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5L12 12l9-4.5M12 12v9"></path></svg></span>
+          Мої замовлення
+        </a>
+        <a class="nav-link" href="A-Favorites.dc.html" style="display:flex;align-items:center;gap:12px;min-height:48px;padding:0 10px;border-radius:10px;color:#1F2937;text-decoration:none;font-size:14.5px;font-weight:600;box-sizing:border-box">
+          <span style="width:32px;height:32px;border-radius:50%;background:#F7F7F5;color:#6B7280;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 00-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 000-7.8z"></path></svg></span>
+          Улюблене
+        </a>
+        <span aria-disabled="true" title="Скоро буде доступно" style="display:flex;align-items:center;gap:12px;min-height:48px;padding:0 10px;border-radius:10px;color:#6B7280;opacity:.55;cursor:not-allowed;font-size:14.5px;font-weight:600;box-sizing:border-box">
+          <span style="width:32px;height:32px;border-radius:50%;background:#F7F7F5;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"></path><circle cx="16" cy="6" r="2"></circle><circle cx="10" cy="12" r="2"></circle><circle cx="18" cy="18" r="2"></circle></svg></span>
+          <span style="flex:1 1 auto">Налаштування</span>
+          <span style="font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase">Скоро</span>
+        </span>
+        <div style="height:1px;background:#EEF0F2;margin:6px 10px"></div>
+        <a class="nav-link" href="#" style="display:flex;align-items:center;gap:12px;min-height:48px;padding:0 10px;border-radius:10px;color:#1F2937;text-decoration:none;font-size:14.5px;font-weight:600;box-sizing:border-box">
+          <span style="width:32px;height:32px;border-radius:50%;background:#F7F7F5;color:#6B7280;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4H5v16h4"></path><path d="M16 8l4 4-4 4M20 12H9"></path></svg></span>
+          Вийти
+        </a>
+      </nav>
+
+      <section aria-labelledby="h-help" style="display:flex;flex-direction:column;gap:12px;padding:16px;border-radius:14px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);box-sizing:border-box">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <h2 id="h-help" style="margin:0;font-size:16px;font-weight:700;color:#111827">Потрібна допомога?</h2>
+          <p style="margin:0;font-size:13.5px;line-height:1.5;color:#6B7280">Напишіть у Telegram-бот підтримки.</p>
+        </div>
+        <a href="https://t.me/BoosterShop_Support_bot" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;border-radius:8px;background:#111827;color:#FFFFFF;font-size:14.5px;font-weight:700;text-decoration:none">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#229ED9" stroke="#229ED9" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M21 3L3 10.5l6 2.2L11 20l3-4.5 5 3.7L21 3z"></path></svg>
+          Допомога
+        </a>
+      </section>
+
+      <section aria-labelledby="h-theme" style="display:flex;flex-direction:column;gap:12px;padding:16px;border-radius:14px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);box-sizing:border-box">
+        <h2 id="h-theme" style="margin:0;font-size:16px;font-weight:700;color:#111827">Тема сайту</h2>
+        <div style="position:relative;cursor:not-allowed">
+          <div role="group" aria-label="Тема сайту" style="display:flex;gap:4px;padding:4px;border:1px solid #E5E7EB;border-radius:10px;background:#F7F7F5;filter:blur(2px);opacity:.7;pointer-events:none;user-select:none">
+            <button type="button" disabled aria-pressed="true" style="flex:1 1 0;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;border:0;border-radius:8px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.12);color:#111827;font-family:inherit;font-size:14px;font-weight:700">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+              Світла
+            </button>
+            <button type="button" disabled aria-pressed="false" style="flex:1 1 0;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;border:0;border-radius:8px;background:transparent;color:#6B7280;font-family:inherit;font-size:14px;font-weight:600">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+              Темна
+            </button>
+          </div>
+          <span style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:inline-flex;align-items:center;height:28px;padding:0 12px;border-radius:999px;background:#111827;color:#FFFFFF;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap">Скоро</span>
+        </div>
+      </section>
+    </aside>
+
+    <main style="flex:999 1 560px;min-width:0;display:flex;flex-direction:column;gap:24px">
+      <section style="position:relative;overflow:hidden;padding:28px 32px;border-radius:14px;background:#FBF4DC;border:1px solid rgba(198,138,0,.25);display:flex;flex-direction:column;gap:8px">
+        <div aria-hidden="true" style="position:absolute;right:-50px;top:-70px;width:240px;height:240px;border-radius:50%;border:30px solid rgba(198,138,0,.12)"></div>
+        <div aria-hidden="true" style="position:absolute;right:90px;bottom:-60px;width:120px;height:120px;border-radius:50%;border:16px solid rgba(198,138,0,.10)"></div>
+        <h1 style="margin:0;font-size:32px;line-height:1.2;font-weight:800;color:#111827">Особистий кабінет</h1>
+        <p style="margin: 0; font-size: 15px; line-height: 1.6; color: #1F2937; max-width: 500px">Вітаємо! Тут живуть ваші замовлення, адреси та улюблені товари.</p>
+      </section>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:16px">
+        <section aria-labelledby="h-profile" style="display: flex; flex-direction: column; gap: 14px; padding: 20px; border-radius: 14px; background: #FFFFFF; box-shadow: 0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05); box-sizing: border-box">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:44px;height:44px;border-radius:12px;background:#E8EEFB;color:#1E3A8A;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg></div>
+            <h2 id="h-profile" style="margin:0;font-size:18px;font-weight:700;color:#111827">Особисті дані</h2>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:2px;font-size:14px;line-height:1.55">
+            <span style="font-weight:600;color:#1F2937">Олена Коваленко</span>
+            <span style="color:#6B7280">olena@example.com</span>
+            <span style="color:#6B7280">+380 50 000 00 00</span>
+          </div>
+          <a href="A-Edit.dc.html" style="margin-top: auto; display: inline-flex; align-items: center; min-height: 44px; color: #1E3A8A; font-size: 14.5px; font-weight: 700; text-decoration: none">Редагувати →</a>
+        </section>
+
+        <section aria-labelledby="h-addr" style="display:flex;flex-direction:column;gap:14px;padding:20px;border-radius:14px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);box-sizing:border-box">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:44px;height:44px;border-radius:12px;background:#FBF4DC;color:#92400E;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 10-14 0c0 4.8 7 11 7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg></div>
+            <h2 id="h-addr" style="margin:0;font-size:18px;font-weight:700;color:#111827">Адреси доставки</h2>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:14px;line-height:1.55">
+            <span style="align-self:flex-start;padding:3px 8px;border-radius:6px;background:#E8EEFB;color:#1E3A8A;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase">Основна</span>
+            <span style="color:#1F2937">Київ, Нова пошта, відділення №12</span>
+          </div>
+          <a href="A-Addresses.dc.html" style="margin-top:auto;display:inline-flex;align-items:center;min-height:44px;color:#1E3A8A;font-size:14.5px;font-weight:700;text-decoration:none">Керувати адресами →</a>
+        </section>
+
+        <section aria-labelledby="h-orders" style="display:flex;flex-direction:column;gap:14px;padding:20px;border-radius:14px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);box-sizing:border-box">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:44px;height:44px;border-radius:12px;background:#E8EEFB;color:#1E3A8A;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5L12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5L12 12l9-4.5M12 12v9"></path></svg></div>
+            <h2 id="h-orders" style="margin:0;font-size:18px;font-weight:700;color:#111827">Мої замовлення</h2>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:2px;font-size:14px;line-height:1.55">
+            <span style="font-weight:600;color:#1F2937">Останнє: №10482</span>
+            <span style="color:#6B7280">Відправлено 08.10.2026</span>
+          </div>
+          <a href="A-Orders.dc.html" style="margin-top:auto;display:inline-flex;align-items:center;min-height:44px;color:#1E3A8A;font-size:14.5px;font-weight:700;text-decoration:none">Усі замовлення →</a>
+        </section>
+
+        <section aria-labelledby="h-fav" style="display:flex;flex-direction:column;gap:14px;padding:20px;border-radius:14px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);box-sizing:border-box">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:44px;height:44px;border-radius:12px;background:#FEF2F2;color:#DC2626;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 00-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 000-7.8z"></path></svg></div>
+            <h2 id="h-fav" style="margin:0;font-size:18px;font-weight:700;color:#111827">Улюблене</h2>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="width:40px;height:40px;border-radius:6px;background:#F7F7F5;border:1px solid #EEF0F2;box-sizing:border-box"></span>
+            <span style="width:40px;height:40px;border-radius:6px;background:#F7F7F5;border:1px solid #EEF0F2;box-sizing:border-box"></span>
+            <span style="width:40px;height:40px;border-radius:6px;background:#F7F7F5;border:1px solid #EEF0F2;box-sizing:border-box"></span>
+            <span style="margin-left:4px;font-size:14px;color:#6B7280">3 товари</span>
+          </div>
+          <a href="A-Favorites.dc.html" style="margin-top:auto;display:inline-flex;align-items:center;min-height:44px;color:#1E3A8A;font-size:14.5px;font-weight:700;text-decoration:none">Переглянути →</a>
+        </section>
+      </div>
+
+      <section aria-labelledby="h-last" style="display:flex;flex-direction:column;gap:16px">
+        <h2 id="h-last" style="margin:0;font-size:24px;font-weight:700;color:#111827">Останнє замовлення</h2>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;padding:20px;border-radius:14px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);box-sizing:border-box">
+          <div style="display:flex;align-items:center;gap:16px">
+            <span style="width:56px;height:56px;border-radius:8px;background:#F7F7F5;border:1px solid #EEF0F2;box-sizing:border-box"></span>
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <span style="font-size:16px;font-weight:800;color:#111827">№10482</span>
+              <span style="font-size:14px;color:#6B7280">08.10.2026</span>
+            </div>
+          </div>
+          <span style="font-size:16px;font-weight:800;color:#111827">₴4200.00</span>
+          <span style="display:inline-flex;align-items:center;height:26px;padding:0 10px;border-radius:999px;background:#E8EEFB;color:#1E3A8A;font-size:12.5px;font-weight:700">Відправлено</span>
+          <a href="A-Order.dc.html" style="display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 20px;border-radius:8px;background:#1E3A8A;color:#FFFFFF;font-size:14.5px;font-weight:700;text-decoration:none;box-sizing:border-box">Детальніше</a>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1080}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

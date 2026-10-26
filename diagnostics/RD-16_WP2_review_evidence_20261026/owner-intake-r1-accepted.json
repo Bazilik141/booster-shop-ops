@@ -1,0 +1,28 @@
+{
+  "task": "RD-16-WP2-intake",
+  "accepted_utc": "2026-10-26T08:12:01.613658+00:00",
+  "receipt_sha256": "92ad10079855d470cf764fe2b04ba5aa8aafeffe8a7fd83e58a8723f6687b6dc",
+  "attempt_sha256": "fb11efe4653be3abf22ffc7fa822182a7067107d5e171cee5b5ff0b3ddc7fdde",
+  "bound_pair_verified": true,
+  "complete12_topkeys_and_twoLF_lines_verified": true,
+  "sources": 33,
+  "source_bytes": 1227692,
+  "source_hashes_lengths_totals_verified": true,
+  "R6_12source_and_WP1_5after_hashes_unchanged": true,
+  "new_edit_hooks": 0,
+  "same4existing_header_hub_hooks": true,
+  "themes_enabled": 0,
+  "layout": [
+    0,
+    6,
+    "account/%"
+  ],
+  "module": [
+    "ciaccountsidebar.account_sidebar",
+    "column_left",
+    0
+  ],
+  "composition_hold": "intake binding condition5 non-core CI module; request explicit reasoned disposition in subsequent main code/composition review; not silently waived",
+  "capture_writes": "none",
+  "header_exception": "not granted"
+}

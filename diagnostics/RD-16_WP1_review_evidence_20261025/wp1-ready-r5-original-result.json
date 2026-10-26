@@ -1,0 +1,97 @@
+{
+  "duration_api_ms": 127445,
+  "stop_reason": "end_turn",
+  "total_cost_usd": 0.48816000000000004,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28324,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 13078,
+    "output_tokens_details": {
+      "thinking_tokens": 10138
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 28324,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 13078,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 28324,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 28324
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-opus-5-5": {
+      "inputTokens": 2,
+      "outputTokens": 13078,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 28324,
+      "webSearchRequests": 0,
+      "costUSD": 0.48816000000000004,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 10138,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 1,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "# RD-16 WP1 R5 Review: Read-Only Event Diagnostic and Owner Launcher\n\n## Verdict: **Review OK**\n\nThere are no mandatory defects. R4 M1 and M2 are both closed.\n\n### Bound artifacts\n\nThis verdict covers only these exact bytes, as supplied in the input:\n\n| Artifact | Bytes | SHA256 |\n|---|---|---|\n| `diagnostics\\RD-16-WP1_event-inspect_20261025.php` | 5824 | `61c329aa15b358ff3d8b1d43080b4ece8abea45ab1cc3749bcf5da0e9a88c448` |\n| `diagnostics\\RD-16-WP1_event-inspect_owner_20261025.ps1` | 4493 | `95e8591f630a76117e9c61270950968dffd46aa9ea60373e22234f812adae9c8` |\n\nConditions on the binding:\n- I had no tools, so I did not recompute either hash or byte count.\n- I did check one thing internally: the launcher's embedded `$Sha` equals the stated PHP hash.\n- Before release, Codex must confirm that the on-disk bytes match both rows.\n- Any byte change voids this verdict.\n- The accepted R3 pair and `state.json` are untouched. They are cited only as the frozen predicate source and to show nothing changed. Runner `c8a8cc55\u2026abfda1a` and packet `c9976145\u2026aeaf` are not reopened.\n- The predicate binds to the supplied text, which `build.py` extracts between fixed markers. The R3 runner bytes were not in this input.\n\n## R4 mandatory closure\n\n**M1, the failure marker in stdin mode: closed.**\n- The `catch` block no longer references `STDERR`. It clears all output buffers, then writes `RD16_EVENT_INSPECT_STOP reason=<code>` to stdout and calls `exit(1)`.\n- `<code>` comes from a closed literal allowlist. The list covers all 16 messages thrown in the file: php, root, mapping, connect, schema, readonly, row_cap, field_cap, relevant_cap, linked_source, source_cap, source_read, io_warning, transaction_close, prefix and query.\n- Any other `Throwable`, including `Error`, `ParseError` from `config.php` and `TypeError`, maps to `internal`. No exception detail is emitted.\n- The test meets the R4 requirement:\n  - Native `php -n` reading the exact source from stdin returns exit 1, exactly `RD16_EVENT_INSPECT_STOP reason=php\\n`, and empty stderr.\n  - The bash \u2192 `exec` PHP path gives the same result.\n\n**M2, the no-temp-file claim: closed by preferred option (a).**\n- There is no heredoc. The `<<` check in the mock enforces this.\n- The literal here-string ends without a trailing newline. The launcher then appends `\\n` plus the source, so `exec \"$P\" -d display_errors=0 -d log_errors=0` is immediately followed by `<?php`.\n- Bash reads stdin one byte at a time when the input is non-seekable, such as an sshd pipe or socket. If the input is seekable, bash syncs the offset before `exec`. Either way, PHP inherits exactly the remaining source.\n- The two command substitutions, `readlink` and `php -r`, do not read stdin.\n- The real local `bash -s` \u2192 `exec` PHP stdin test proves the remaining source is handed over intact: PHP reached the version check and emitted the exact marker.\n- The report correctly states that `bash -n` covers only the shell prefix.\n\n## Verified within the stated fake boundaries\n\n**SQL and privacy**\n- No change from the R4 acceptance.\n- The SQL is: `SHOW COLUMNS`, which runs after prefix validation; then fail-closed `START TRANSACTION READ ONLY`; then a single `trigger`/`action` `SELECT` with `LIMIT 1025` against a 1024 cap.\n- Caps: 4096 bytes per field and 64 relevant rows. Rollback runs in `finally`.\n- Nothing is written and no customer table is read.\n- Config is used only to connect and is never returned.\n- `rd16d_safe` hash-redacts long or non-canonical values.\n\n**Bootstrap**\n- The new `DIR_SYSTEM` and `DIR_APPLICATION` mapping checks fail closed, so the collected core sources are the ones config actually points to. This closes R4 O1 more strongly than returning booleans would.\n- The PHP 8.0 and CLI checks agree with the bash prefix's exact 8.0.30 check.\n\n**Launcher**\n- O4 closed: the bytes are read once, hashed, and that same buffer is transmitted.\n- O5 closed: the `ssh.exe` check runs before the attempt is consumed.\n- The `CreateNew` exclusive ledger is created before dispatch.\n- O7 closed: the receipt is written before validation, and the success regex uses a strict `\\z` anchor.\n- The output must be exactly two LF lines. After that, the JSON contract fields are checked.\n- The argument allowlist covers every argument. CR characters are refused.\n- Stdout is read asynchronously before stdin is written.\n- O6 is resolved by disclosure: the receipt is decoded UTF-8 text, which is acceptable for an ASCII payload.\n\n**Tests**\n- The fake boundaries are stated honestly:\n  - mysqli is fake and the source files are synthetic.\n  - Only `Invoke-LfBody` and the root are replaced.\n  - The bash test substitutes local PHP `-n` for the host checks.\n- Host PHP 8.0, MySQL, SSH and the server are not claimed as tested.\n- The replay-refusal fixture still passes.\n\n## Optional notes (non-blocking; not automatic new tasks)\n\n**PHP diagnostic**\n\n**N1. Reason codes are less precise in some cases.** Every case below still fails closed; only the reported code is less useful.\n- `connect` is mostly unreachable. A failed `new mysqli` emits an `E_WARNING` even with `MYSQLI_REPORT_OFF`, and the error handler turns that into `io_warning`.\n- A pattern of 4096 bytes or more makes `fnmatch` warn about exceeding `MAXPATHLEN`, which is also reported as `io_warning`.\n- A `NULL` `trigger` or `action` in a relevant row reaches `rd16d_safe(string)` and is reported as `internal`.\n\n**N2. PHP 8.0 shows startup errors by default.**\n- `display_startup_errors` defaults to on in PHP 8.0. Any startup error would therefore land in stdout.\n- This fails closed, through the line-count or regex check.\n- `-d display_startup_errors=0` would keep the receipt clean.\n\n**Owner and Codex procedure**\n\n**N3. Remote stderr is not captured.**\n- Remote stderr goes only to the owner's terminal, not the receipt.\n- On a STOP, ask the owner for the full terminal text along with `stdout.txt`.\n\n**N4. The launcher does not check its own hash.**\n- It only records `packetSha`.\n- Before release, Codex should confirm on disk that the launcher is `95e8591f\u2026e9c8`.\n- After the run, Codex should confirm that `attempt.json` has `phpSha` = `61c329aa\u2026c448` and `packetSha` = `95e8591f\u2026e9c8`.\n\n**N5. Owner precondition (R4 O9 carried forward).**\n- The real `work\\rd16-event-20261025\\owner-receipts\\attempt.json` must not exist before the run.\n\n**N6. Login-shell rc files are an inherited risk.**\n- If an rc file on the remote side writes to stdout or reads stdin, it is inherited from the R3 transport, which is already accepted.\n- This would fail closed through the two-line check.\n\n**Tests and report**\n\n**N7. Test gaps.**\n- R4 O8 is still open: `field_cap`, `linked_source`, absent source, `io_warning` and rollback-failure tests.\n- The owner mock could also assert the exact `exec \u2026\\n<?php` adjacency.\n\n**N8. Stale report wording.**\n- The R4-era section of the report still says \"Raw stdout saved\". The R5 section corrects this.\n\n## Gate\n\nThis verdict permits Codex to give the owner one normal PowerShell invocation of the bound launcher, using the existing strict SSH alias and key. It grants me, and any agent, no authority over execution, Git or status, SSH, keys, the server or deployment.\n\nThe runtime result is unknown until the owner runs the read-only diagnosis. Main Apply and WP2 remain **HELD**.",
+  "ttft_ms": 101389,
+  "type": "result",
+  "duration_ms": 127599,
+  "ttft_stream_ms": 1987,
+  "time_to_request_ms": 151,
+  "first_content_frame_ms": 1987,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

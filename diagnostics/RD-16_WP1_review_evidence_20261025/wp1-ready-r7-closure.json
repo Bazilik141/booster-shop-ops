@@ -1,0 +1,14 @@
+{
+  "request_id": "4db662ca-c696-4b59-9e82-64b7e553949b",
+  "verdict": "Changes requested",
+  "consumed": true,
+  "replay_permitted": false,
+  "declared_inputs_verified": 80,
+  "inputs_unchanged_at_completion": true,
+  "mandatory": "M1 all-store effective theme fallback admission",
+  "accepted_unchanged_scope": "R3 app7, exactpairallowances44pins,fileengine,owner sequencing; theme guard repair only",
+  "runner_sha256": "a46a3addb8f73d83d1ef3645625cddd9f5b9d4f485d7f6cea81bc2d31911f62e",
+  "packet_sha256": "de32ed409ccbbf3e8e67894aceb7eddafdd6836399ec419f3992776972e04e7c",
+  "packet_input_sha256": "d378195712421329bb2578eeead64d3ffe3bae9fd031717db714033924f8e301",
+  "owner_release": false
+}

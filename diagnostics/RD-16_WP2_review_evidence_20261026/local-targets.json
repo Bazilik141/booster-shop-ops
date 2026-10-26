@@ -1,0 +1,33 @@
+[
+  {
+    "path": "catalog/controller/account/edit.php",
+    "before": "91a358589fa318df92c9fff8fea6ddd949479f008556a5c15f9750dc01b9dc54",
+    "after": "c1c31f06556c98a68586dc9562eba4b3397d5d9b5bf98f8cca171cb0e9632113",
+    "bytes": 10003
+  },
+  {
+    "path": "catalog/view/template/account/edit.twig",
+    "before": "69b27f6192de5b2dbe1d46604e69cce1f2ab0d9be855aa8fdb8a465b4645f476",
+    "after": "c061d04d06906474bebd08700a75a659212e8e84a431c5ee5bcdc7961c4fcc2d",
+    "bytes": 24336
+  },
+  {
+    "path": "extension/ukrainian/catalog/language/uk-ua/account/edit.php",
+    "before": "710e41700410dbd8cb14a2985c3d2f85deb106478a53a72737c5c39fe66c6d79",
+    "after": "8e37b5575aae9bc8f0e5a160cb6cd1c42ddc4b8d6228084978351bedd0314622",
+    "bytes": 2177
+  },
+  {
+    "path": "catalog/view/stylesheet/boostershop-ds.css",
+    "before": "ab66de1d4bea57e39f165636c53868dfbb1f518ed17055647bdb3f9e09011b65",
+    "after": "e1d33339b3056de105b430c0a7e5153a4ae3e4be32922f45126118f3b4a2696f",
+    "bytes": 239150
+  },
+  {
+    "path": "catalog/view/template/common/header.twig",
+    "before": "4401309361e51e502754ebba0fad0843da0a98db24711d0c99a76a42225eed83",
+    "after": "66b626a4b99fc6e563fb68754dc49ec3eedce7a509349b43bd5c3bcb2f1d5a51",
+    "bytes": 31153,
+    "normalized_before": "54879a997e8e085166ac2aa40ad4b20b4776de927d68394d871b13c81a83d46c"
+  }
+]

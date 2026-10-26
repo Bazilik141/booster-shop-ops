@@ -1,0 +1,80 @@
+{
+  "task": "RD-16-WP0-menu",
+  "collection_utc": "2026-10-25T08:15:08Z",
+  "archive_sha256": "09ab6fa2a4075ddf7c6a5e06f9d4d2d025ae677ee3002524e05aaf2ead7fb19e",
+  "manifest_sha256": "612dbbe5aa4187ef8082411fecb66ea4ac6b7fc4621de76ab2eef179c59c1dcb",
+  "safe_regular_members": 3,
+  "source_bytes": 9341,
+  "source_sha256": {
+    "extension/ciaccountsidebar/catalog/controller/module/account_sidebar.php": "6b335b9087100215043134c80c4e16cde4fd61c1e90569f6ad9af8858c9441ca",
+    "extension/ciaccountsidebar/catalog/view/template/module/account_sidebar.twig": "ebb511c3943b8410ba0cecdd6b93659735eb1fd3bf4ed3a18f51f1a201e4b1b4",
+    "extension/ciaccountsidebar/catalog/view/stylesheet/accountdashboard/sidebar.css": "59084338ccb9a5813744d4a62707e9e56e8453c8026066d8690d7832858fa370"
+  },
+  "context_sources": 34,
+  "context_pre_post_owner_receipt": "ok",
+  "local_context_hashes": "34_match_original_drop",
+  "privacy_screen": "no_obvious_secret_signatures_not_comprehensive_attestation",
+  "remote_private_export_cleanup": "expected_owner_receipt_ok",
+  "production_writes_reported": 0,
+  "metadata": {
+    "theme": {
+      "account/account": {
+        "rows_all_stores": 0,
+        "enabled_all_stores": 0
+      },
+      "account/edit": {
+        "rows_all_stores": 0,
+        "enabled_all_stores": 0
+      },
+      "common/header": {
+        "rows_all_stores": 0,
+        "enabled_all_stores": 0
+      },
+      "common/column_left": {
+        "rows_all_stores": 0,
+        "enabled_all_stores": 0
+      },
+      "common/footer": {
+        "rows_all_stores": 0,
+        "enabled_all_stores": 0
+      },
+      "extension/opencart/module/account": {
+        "rows_all_stores": 0,
+        "enabled_all_stores": 0
+      },
+      "extension/ciaccountsidebar/module/account_sidebar": {
+        "rows_all_stores": 0,
+        "enabled_all_stores": 0
+      }
+    },
+    "layout_candidates": {
+      "account/account": [
+        {
+          "store_id": 0,
+          "layout_id": 6,
+          "route": "account/%"
+        }
+      ],
+      "account/edit": [
+        {
+          "store_id": 0,
+          "layout_id": 6,
+          "route": "account/%"
+        }
+      ]
+    },
+    "layout_modules": {
+      "6": [
+        {
+          "code": "ciaccountsidebar.account_sidebar",
+          "position": "column_left",
+          "sort_order": 0
+        }
+      ]
+    },
+    "limits": "all stores; route candidates only; default layout, events and active module settings not established",
+    "php": "8.0.30",
+    "template_cache_directory": "/home2/boosters/ocartdata/storage/cache/template/"
+  },
+  "source_root": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd16-wp0-20261025\\current-menu-r1"
+}

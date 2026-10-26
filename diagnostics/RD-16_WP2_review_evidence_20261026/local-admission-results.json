@@ -1,0 +1,23 @@
+{
+    "boundary": "exact new predicate\/template\/multiset functions extracted from runner; native local files; no MySQL\/host",
+    "predicate_block_sha256": "c58f703efe9de735ca6da7c11bfbaedd72e39199ab358d1d99b7dc9b15143799",
+    "baseline_conservative_cases": 19,
+    "new_exact_pair_and_mutation_cases": 22,
+    "new_edit_trigger_cases": 4,
+    "theme_gate": {
+        "absent": "pass",
+        "store0_only": "pass",
+        "basic_absent": "pass",
+        "storeN_basic_absent": "pass",
+        "storeN_inherits_default_directory": "pass",
+        "storeN_unsafe_override": "STOP",
+        "duplicate_store_key": "STOP",
+        "serialized_value": "STOP",
+        "basic_present": "STOP",
+        "storeN_override_present": "STOP",
+        "storeN_inherited_theme_overridden_directory_present": "STOP",
+        "outside_modification_path": "pass",
+        "modification_prefix": "STOP"
+    },
+    "hook_multiset": "exact pass; duplicate\/missing\/extra native-theme row STOP"
+}

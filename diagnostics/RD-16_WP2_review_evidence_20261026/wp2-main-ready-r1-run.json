@@ -1,0 +1,91 @@
+{
+  "task": "RD-16-WP2",
+  "stage": "wp2-main-ready-r1",
+  "request_id": "5624fdc6-9184-4ab9-b154-377a9ca468b4",
+  "owner_authority": "Owner assigned the full RD16 handoff and accepted deployed WP1 QA on 2026-10-26. WP2 source intake or main coherent ready review of exact code/launcher/tests; owner WP2 header-token-only exception still pending. No header exception or main WP2 release, no agent SSH/key/server, deployment, business writes or Git/status mutation.",
+  "started_utc": "2026-10-26T08:18:13.776345+00:00",
+  "model_requested": "claude-opus-5-5",
+  "effort": "high",
+  "packet_sha256": "e9aaa1fec492afd3e30653b79d06d620bf7d2c5446fda6c52f552e57f9164d8e",
+  "packet_bytes": 337419,
+  "adapter_sha256": "c9ee6ec9ad2dd4c7c4b144bfcef490aebadc2f43f2c845468ac785ec717e7c10",
+  "status": "completed",
+  "direct_API_or_paid_fallback": false,
+  "agent_server_or_key_access": false,
+  "subscription_verified": true,
+  "CLI_sha256": "1787c60619bad78543c67e4d9d8a868869c35a904f2a85eb9ea46c4808af196b",
+  "CLI_version": "2.1.303 (Claude Code)",
+  "native_pid": 25156,
+  "model_initialized": "claude-opus-5-5",
+  "tools_initialized": [],
+  "MCP_count": 0,
+  "rate_limit": {
+    "status": "allowed",
+    "resetsAt": 1793016000,
+    "rateLimitType": "five_hour",
+    "overageStatus": "rejected",
+    "overageDisabledReason": "org_level_disabled",
+    "isUsingOverage": false
+  },
+  "stderr_captured": "",
+  "exit_code": 0,
+  "models_observed": [
+    "claude-opus-5-5"
+  ],
+  "tool_calls": [],
+  "completed_utc": "2026-10-26T08:22:12.613548+00:00",
+  "response_sha256": "970e653d9ccfeab464d2bf5e9d8517ce1223cab57307b772ca5281b97dcc9bae",
+  "declared_dependencies_unchanged": true,
+  "duration_ms": 236967,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 143603,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 23377,
+    "output_tokens_details": {
+      "thinking_tokens": 18874
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 143603,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 23377,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 143603,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 143603
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 2,
+      "outputTokens": 23377,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 143603,
+      "webSearchRequests": 0,
+      "costUSD": 1.6163720000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 18874,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "client_cost_estimate_is_not_subscription_debit": true
+}

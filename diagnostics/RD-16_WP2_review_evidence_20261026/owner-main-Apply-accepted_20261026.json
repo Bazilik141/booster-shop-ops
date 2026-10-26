@@ -1,0 +1,22 @@
+{
+  "task": "RD-16-WP2",
+  "accepted_utc": "2026-10-26T08:56:24.596685+00:00",
+  "receipt": "work\\rd16-wp2-20261026\\owner-receipts-main\\Apply-20261026T0855110559444Z.txt",
+  "receipt_sha256": "c9a8fede68a6523a4d6105da06bf73200c22b45e75c062b8013420781ea83b40",
+  "state_sha256": "cce4e8361f2d97799108af8ad7bfa024b3d74391a872ef3926fbf752820fc9b2",
+  "runner_sha256": "d03a0e76c63892365ecef4a601456365429828aae8201a1916514f03b989e851",
+  "packet_sha256": "04633bf5e023e063d46cbbe3ae3c19dbbbd95ef7c4b0c94b5faa971bcfa31cea",
+  "admission_sha256": "2aaf5d06a7c4eef932ebfa9c96beeaa93de770f9afbd4050f37b5e2295ddb849",
+  "owner_wrapper_marker": "RD16_WP2_APPLY_OK_OWNER_QA_REQUIRED",
+  "backup": "/home2/boosters/public_html/_patch_backups/RD-16-WP2_personal-data_20261026-20261026T085509Z-9581b50acfd9",
+  "all_5_before_after_and_backup_rows_exact": true,
+  "changed_files": 5,
+  "self_deleted": true,
+  "template_cache_removed": 57,
+  "template_cache_cleanup": "ok",
+  "staged_runner_absent": true,
+  "proof_boundary": "Complete owner-host receipt for reviewed execution; no agent SSH/key/server operation; no independent remote filesystem read",
+  "rollback": "Reviewed owner rollback sequence, this exact backup only; rollback not requested or executed",
+  "owner_authenticated_UI_QA": "PENDING",
+  "RD16_Done": false
+}

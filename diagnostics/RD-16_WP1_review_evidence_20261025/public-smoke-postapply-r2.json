@@ -1,0 +1,148 @@
+{
+  "task": "RD-16-WP1-main-R2",
+  "captured_utc": "2026-10-25T20:50:22.674711+00:00",
+  "boundary": "Anonymous public HTTPS GET only; no cookie jar/auth/scripts/forms/orders/messages; each body capped262144bytes plus1 truncation marker. Not authenticated hub/render/business QA. Legacy3D404 recorded in existing ACC009 Oct21 report, current representative separately checked.",
+  "checks": [
+    {
+      "name": "home",
+      "requested_url": "https://boostershop.website/",
+      "http_status": 200,
+      "final_path": "/",
+      "final_route": null,
+      "bytes_read": 84374,
+      "truncated": false,
+      "DS_tokens": [
+        "rd16-wp1-20261025"
+      ],
+      "captured_PHP_fatal_marker": false
+    },
+    {
+      "name": "category",
+      "requested_url": "https://boostershop.website/catalog/Pokemon",
+      "http_status": 200,
+      "final_path": "/catalog/Pokemon",
+      "final_route": null,
+      "bytes_read": 171161,
+      "truncated": false,
+      "DS_tokens": [
+        "rd16-wp1-20261025"
+      ],
+      "captured_PHP_fatal_marker": false
+    },
+    {
+      "name": "nested_category",
+      "requested_url": "https://boostershop.website/catalog/Pokemon/Pokemon-booster-box",
+      "http_status": 200,
+      "final_path": "/catalog/Pokemon/Pokemon-booster-box",
+      "final_route": null,
+      "bytes_read": 164998,
+      "truncated": false,
+      "DS_tokens": [
+        "rd16-wp1-20261025"
+      ],
+      "captured_PHP_fatal_marker": false
+    },
+    {
+      "name": "sealed_product",
+      "requested_url": "https://boostershop.website/product/One-Piece-Boosters-OP-11",
+      "http_status": 200,
+      "final_path": "/product/One-Piece-Boosters-OP-11",
+      "final_route": null,
+      "bytes_read": 153348,
+      "truncated": false,
+      "DS_tokens": [
+        "rd16-wp1-20261025"
+      ],
+      "captured_PHP_fatal_marker": false
+    },
+    {
+      "name": "legacy_3d",
+      "requested_url": "https://boostershop.website/product/FIG-CHARM-001",
+      "http_status": 404,
+      "final_path": "/product/FIG-CHARM-001",
+      "final_route": null,
+      "bytes_read": 57087,
+      "truncated": false,
+      "DS_tokens": [
+        "rd16-wp1-20261025"
+      ],
+      "captured_PHP_fatal_marker": false
+    },
+    {
+      "name": "current_3d",
+      "requested_url": "https://boostershop.website/product/figurka-charizard-pokemon-3d-druk",
+      "http_status": 200,
+      "final_path": "/product/figurka-charizard-pokemon-3d-druk",
+      "final_route": null,
+      "bytes_read": 143647,
+      "truncated": false,
+      "DS_tokens": [
+        "rd16-wp1-20261025"
+      ],
+      "captured_PHP_fatal_marker": false
+    },
+    {
+      "name": "information",
+      "requested_url": "https://boostershop.website/information/oplata-i-dostavka",
+      "http_status": 200,
+      "final_path": "/information/oplata-i-dostavka",
+      "final_route": null,
+      "bytes_read": 68315,
+      "truncated": false,
+      "DS_tokens": [
+        "rd16-wp1-20261025"
+      ],
+      "captured_PHP_fatal_marker": false
+    },
+    {
+      "name": "cart",
+      "requested_url": "https://boostershop.website/index.php?route=checkout/cart",
+      "http_status": 200,
+      "final_path": "/index.php",
+      "final_route": "checkout/cart",
+      "bytes_read": 65984,
+      "truncated": false,
+      "DS_tokens": [
+        "rd16-wp1-20261025"
+      ],
+      "captured_PHP_fatal_marker": false
+    },
+    {
+      "name": "checkout_entry",
+      "requested_url": "https://boostershop.website/index.php?route=checkout/checkout",
+      "http_status": 200,
+      "final_path": "/",
+      "final_route": "checkout/cart",
+      "bytes_read": 65975,
+      "truncated": false,
+      "DS_tokens": [
+        "rd16-wp1-20261025"
+      ],
+      "captured_PHP_fatal_marker": false
+    },
+    {
+      "name": "guest_account",
+      "requested_url": "https://boostershop.website/index.php?route=account/account&language=uk-ua",
+      "http_status": 200,
+      "final_path": "/",
+      "final_route": "account/login",
+      "bytes_read": 57526,
+      "truncated": false,
+      "DS_tokens": [
+        "rd16-wp1-20261025"
+      ],
+      "captured_PHP_fatal_marker": false
+    },
+    {
+      "name": "DS_asset",
+      "requested_url": "https://boostershop.website/catalog/view/stylesheet/boostershop-ds.css?v=rd16-wp1-20261025",
+      "http_status": 200,
+      "final_path": "/catalog/view/stylesheet/boostershop-ds.css",
+      "final_route": null,
+      "bytes_read": 234826,
+      "truncated": false,
+      "sha256": "ab66de1d4bea57e39f165636c53868dfbb1f518ed17055647bdb3f9e09011b65",
+      "matches_deployed_after_sha256": true
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "task": "RD-16-WP1-event-inspect",
+  "stage": "wp1-ready-r5",
+  "request_id": "7da25097-fefe-445a-91bc-014c8ed51ecd",
+  "consumed": true,
+  "replay_permitted": false,
+  "verdict": "Review OK",
+  "mandatory_findings": [],
+  "files": [
+    {
+      "path": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\diagnostics\\RD-16-WP1_event-inspect_20261025.php",
+      "sha256": "61c329aa15b358ff3d8b1d43080b4ece8abea45ab1cc3749bcf5da0e9a88c448",
+      "bytes": 5824
+    },
+    {
+      "path": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\diagnostics\\RD-16-WP1_event-inspect_owner_20261025.ps1",
+      "sha256": "95e8591f630a76117e9c61270950968dffd46aa9ea60373e22234f812adae9c8",
+      "bytes": 4493
+    }
+  ],
+  "declared_inputs_verified": 24,
+  "packet_sha256": "e597e564b58c1dc804beff129db6b3b412949050e54d72a7dc1c7f5ae0d668a1",
+  "packet_bytes": 59424,
+  "inputs_unchanged_before_bookkeeping": true,
+  "reviewed_report_sha256": "bab72c76880a31489fd22d0a922f102141eb2c37f5f7465b4ecb0c76ef609ac7",
+  "bookkeeping_report_sha256": "0e82017c03148a939c7a22e90c0d383ad0832e8ba4a597bb73f8f03c8726f99c",
+  "response_sha256": "64edc22a832ca3dfc8aa28c4f0a89437394458458758bc03b8eb4c5689b4605e",
+  "model": "claude-opus-5-5",
+  "effort": "high",
+  "transport": "actual subscription CLI no tools/MCP/overage/API fallback",
+  "diagnostic_attempt_absent_before_release": true,
+  "owner_diagnostic_gate": "ready_one_run",
+  "main_apply": "HELD",
+  "WP2": "HELD",
+  "owner_diagnostic_executed": false,
+  "agent_server_or_key_access": false,
+  "closed_utc": "2026-10-25T19:43:59.763931+00:00"
+}

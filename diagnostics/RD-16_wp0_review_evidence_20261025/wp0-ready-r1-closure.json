@@ -1,0 +1,17 @@
+{
+  "request_id": "450c89ae-8bbd-4e02-b64b-6cd0033d5567",
+  "stage": "wp0-ready-r1",
+  "consumed": true,
+  "replay_permitted": false,
+  "verdict": "Changes requested",
+  "mandatory": [
+    "M1 exact stdin transport and fixture",
+    "M2 normalized cleanup and carriage-return refusal",
+    "M3 retain raw stdout before gates"
+  ],
+  "execution_finished_inputs_unchanged": true,
+  "packet_bytes": 173478,
+  "packet_sha256": "ca49d68e0e6f8b16ea471c62e8d6006fff8f4e27b293e6e2ef5f0f39ee696c32",
+  "response_sha256": "8efea767a8dce0a8258c262a3598136fcd98f05eac29064d72f1a3c4e407113f",
+  "release": false
+}

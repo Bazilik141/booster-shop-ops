@@ -1,0 +1,97 @@
+{
+  "duration_api_ms": 108059,
+  "stop_reason": "end_turn",
+  "total_cost_usd": 0.36155200000000004,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 18158,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 10814,
+    "output_tokens_details": {
+      "thinking_tokens": 7912
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 18158,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 10814,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 18158,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 18158
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-opus-5-5": {
+      "inputTokens": 2,
+      "outputTokens": 10814,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 18158,
+      "webSearchRequests": 0,
+      "costUSD": 0.36155200000000004,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 7912,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 1,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "# RD-16 WP1 affected R3 review: event-namespace predicate, fixtures and identity binding\n\n**Verdict: Review OK**\n\n## Bound identities\n\nThese are the pinned values from the input. I did not recompute them because I had no tools.\n\n| Artifact | Bytes | SHA-256 |\n|---|---|---|\n| Runner `patches/RD-16-WP1_account-shell-hub_20261025.php` | 82,692 | `c8a8cc5559f09fd57e4c027b6f7aac8ec939210a0e090f31980fe53c5abfda1a` |\n| Owner packet `diagnostics/RD-16-WP1_owner_20261025.ps1` | 11,830 | `c99761454e87b9053dee64583318cb6213b2fa9d9944d2357f57643fb730aeaf` |\n\n**These identities agree across the package:**\n- `local-checks.json` and `r3-equivalence.json` carry the same pair.\n- The packet keeps its exact R2 length, which fits a swap of one 64-hex literal.\n- The runner grew by 465 bytes. That fits the supplied block: a widened docblock, a two-line comment, a do/while strip loop, and four `.index` targets.\n\n**What this verdict covers and does not cover:**\n- It applies only to this exact pair.\n- It certifies nothing about host PHP 8.0, MySQL, the live dispatcher or config hooks, OPcache, global JS or authenticated UI.\n- It grants no Git, status, SSH, key, server or deployment authority.\n- The owner's separate Upload, Verify and Apply steps stay owner-only.\n- Native Verify may still legitimately fail closed before any writes.\n\n## Scope of reuse\n\n**Change boundary.** I accept the declared boundary as attested:\n- The runner is byte-identical to R2 outside the predicate block (outside-block digest `f31c2456\u2026`).\n- The packet differs only in its runner-SHA literal.\n\n**Reused R2 results.** Within their fake boundaries, I reuse R2's acceptance of:\n- the DOM and focus order,\n- publish and rollback,\n- CSS, cache and owner sequencing,\n- the ten-case file engine, the five backend cases and the seventeen UI cases.\n\nA change confined to a pure function that those tests never call does not invalidate them. I did not reopen them.\n\n**One reliance stated explicitly.** I rely on R2's full-runner reading that the unchanged runtime caller passes every enabled `trigger`/`action` row to `rd16_event_check()` with no SQL prefix pre-filter. R2's own M1-R2 finding presupposes this: a `system/` row was classified, not dropped. The strip fix is effective only under that reading.\n\n## M1-R2 closure: closed\n\n### Registration model\n\nThe historical `startup/event.php` (interaction evidence only) handles DB rows like this:\n- A `catalog/\u2026` row is registered with its first segment shifted off.\n- `$part[0]` is then re-tested against `system`. So `catalog/system/\u2026` registers both `system/\u2026` and the full original trigger.\n- A row whose first segment is `system` is registered with its full trigger.\n\nThe dispatcher matches with a start-anchored glob. In this source, therefore, a retained `system/\u2026` or full `catalog/system/\u2026` pattern can never fire on `view/\u2026` or `controller/\u2026` triggers.\n\n### Predicate soundness\n\n**Strip loop.** The loop `~^(?:catalog|system)(?:/|$)~` runs to a fixpoint.\n- It terminates, because each pass removes at least one character or the pattern stops changing.\n- It has no ReDoS exposure.\n- It cannot over-strip: `catalogue/\u2026` and `systemx/\u2026` are untouched. Startup never registers those rows anyway (`==` is case-sensitive), so treating them as irrelevant is correct.\n\n**Why stripping never admits a hook.** Every target begins with `view/` or `controller/`.\n- An unstripped `catalog/` or `system/` literal prefix matches no target.\n- Stripping a literal prefix can therefore only add matches.\n- More matches can only add denials. A previously irrelevant (allowed) row can become relevant-and-denied, but no denied row can become allowed.\n\nThe predicate therefore over-approximates every registration variant safely: strip, retain, nested, and both orders. This includes a variant that strips `system/`, which this source does not show.\n\n**Bare and edge rows.**\n- A bare `catalog` or `system` row reduces to `''`. Then `fnmatch('*', \u2026)` matches all fourteen targets. Startup registers `''` for a bare `catalog` row, and an empty anchored regex fires on everything, so the predicate is sound here.\n- `catalog//view\u2026` reduces to `/view\u2026`. The predicate treats it as irrelevant, which agrees with the dispatcher, because it cannot fire either.\n\n**Admission rule unchanged:**\n- All fourteen targets are evaluated, with no `break`.\n- The action is admitted only if it is `event/theme` or `event/theme.index`, after `|`\u2192`.` normalization.\n- The matched trigger must be both `view/\u2026` and `\u2026/before`.\n- Admin is never stripped, so it remains irrelevant.\n- No relaxation was introduced.\n\n**Admitting `system/view/*/before` with `event/theme`** (case 17) is consistent with the existing native theme admission. Under the historical source it is also inert.\n\n**PHP 8.0 compatibility.** The block uses only do/while, `preg_replace`, `fnmatch`, `str_replace`, `in_array` and `substr`. No PHP 8.1+ constructs appear.\n\n### Fixture fidelity\n\n`test-events.php` evals the exact runner slice, from `function rd16_event_check(` up to the runtime marker. It asserts both booleans for each case. I traced all nineteen against the supplied block by hand, and each expected value holds:\n- **Cases 1\u201310:** the R2 ten are preserved.\n- **Cases 11\u201312:** the two R2-mandated `system/` cases return relevant and disallowed.\n- **Cases 13\u201314:** the `.index` controller spellings are matched by exact target (`fnmatch` without `FNM_PERIOD`).\n- **Cases 15\u201316:** bare `catalog`/`system` reduce to `''`, then `*`, so all targets match and the row is denied.\n- **Case 17:** `system/view/*/before` with the theme action is admitted.\n- **Cases 18\u201319:** both nested orders strip fully and are denied.\n\nThe cases discriminate. In particular, cases 11 and 12 would have returned `relevant=false` under the R2 regex.\n\n## Mandatory defects\n\nNone.\n\n## Optional notes (non-blocking)\n\n1. **Legacy `|` method separator.** The new targets cover `account.index` but not `account|index`. The `|`\u2192`.` normalization is applied to actions, not to trigger patterns. A DB pattern spelled `controller/account/account|index/\u2026` would be irrelevant to the predicate. The risk is the same as R2's note 6: low, non-canonical URL only, and broad patterns still catch it. Consider adding the `|index` spellings, or normalizing the pattern, in a future revision.\n2. **Fixture boundaries.** Consider adding negative fixtures:\n   - `catalogue/view/account/account/before` and `systemx/\u2026`, which must be irrelevant;\n   - `system/model/\u2026`, which must be irrelevant and documents the out-of-scope model layer.\n3. **Digest cross-binding.** `event-results.json` hashes the function-only slice (`f26533ec\u2026`). `r3-equivalence.json` hashes the block including its comment (`b443e3e5\u2026`). These are different extents, so the digests correctly differ. Cross-recording one in the other would bind the test artifact to the equivalence proof.\n4. **Possible false STOP.** Conservative stripping can STOP Verify on a host with benign `system/\u2026` or bare-namespace rows that the real dispatcher would never fire. That is an acceptable fail-closed STOP before writes. Owner QA should read such a STOP as \"inspect rows\", not as a defect to relax.\n5. **Carried over from R2.** R2 optional notes 1\u20135 (Twig publish order, the untracked auto-restore candidate, whitespace `:empty`, `:visited` specificity, and R1 O4) are unchanged and remain non-blocking.\n\n## Next step\n\nThe pair `c8a8cc55\u2026` / `c99761454\u2026` is accepted for the owner gate. The owner alone runs Upload, then Verify, and only after a passing Verify, Apply. The deployment, QA and WP2 gates are unchanged.",
+  "ttft_ms": 80638,
+  "type": "result",
+  "duration_ms": 108179,
+  "ttft_stream_ms": 2819,
+  "time_to_request_ms": 117,
+  "first_content_frame_ms": 2820,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

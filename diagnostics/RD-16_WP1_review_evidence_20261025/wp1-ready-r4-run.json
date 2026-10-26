@@ -1,0 +1,91 @@
+{
+  "task": "RD-16-WP1",
+  "stage": "wp1-ready-r4",
+  "request_id": "477f064e-73e5-4570-8d96-c7197b842774",
+  "owner_authority": "Owner explicitly approved go WP1 plus the header DS-token-only exception on 2026-10-25. Canonical integrated independent code/composition review of the exact patch/owner packet; no agent SSH/key/server, deployment, business writes or Git/status mutation.",
+  "started_utc": "2026-10-25T19:35:38.827778+00:00",
+  "model_requested": "claude-opus-5-5",
+  "effort": "high",
+  "packet_sha256": "050360a1e3bb2c462909872663cae790099d2a2112fc032121d883f26727954f",
+  "packet_bytes": 46352,
+  "adapter_sha256": "08f0e1737879a8c9c47024d44c23e8a03d15ee31cd8909a58b066006abaebb5b",
+  "status": "completed",
+  "direct_API_or_paid_fallback": false,
+  "agent_server_or_key_access": false,
+  "subscription_verified": true,
+  "CLI_sha256": "1787c60619bad78543c67e4d9d8a868869c35a904f2a85eb9ea46c4808af196b",
+  "CLI_version": "2.1.303 (Claude Code)",
+  "native_pid": 25592,
+  "model_initialized": "claude-opus-5-5",
+  "tools_initialized": [],
+  "MCP_count": 0,
+  "rate_limit": {
+    "status": "allowed",
+    "resetsAt": 1792974600,
+    "rateLimitType": "five_hour",
+    "overageStatus": "rejected",
+    "overageDisabledReason": "org_level_disabled",
+    "isUsingOverage": false
+  },
+  "stderr_captured": "",
+  "exit_code": 0,
+  "models_observed": [
+    "claude-opus-5-5"
+  ],
+  "tool_calls": [],
+  "completed_utc": "2026-10-25T19:38:54.607615+00:00",
+  "response_sha256": "36afd755ceb70bd6ba44089d82e63c71b53d002174d9397b03f882e93d2e6000",
+  "declared_dependencies_unchanged": true,
+  "duration_ms": 193749,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 22781,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 18330,
+    "output_tokens_details": {
+      "thinking_tokens": 15095
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 22781,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 18330,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 22781,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 22781
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 2,
+      "outputTokens": 18330,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 22781,
+      "webSearchRequests": 0,
+      "costUSD": 0.548856,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 15095,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "client_cost_estimate_is_not_subscription_debit": true
+}

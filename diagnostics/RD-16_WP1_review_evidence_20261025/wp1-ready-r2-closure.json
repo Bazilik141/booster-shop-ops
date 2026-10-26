@@ -1,0 +1,14 @@
+{
+  "request_id": "87083552-aff5-49bd-af6e-d6e4fc4ecbd5",
+  "stage": "wp1-ready-r2",
+  "consumed": true,
+  "replay_permitted": false,
+  "verdict": "Changes requested",
+  "R1_M2": "closed",
+  "mandatory_remaining": "M1-R2 system-prefix conservative coverage",
+  "packet_sha256": "22052c5da5f59b0a2192345332cd8241b9e2c6ed6eb0e892a0a01170c33535e8",
+  "packet_bytes": 219279,
+  "inputs_unchanged_at_completion": true,
+  "response_sha256": "184f110365ce11e557e551feaf63925c1e5e3faf7795f08ba3661997e5f2bb85",
+  "owner_release": false
+}

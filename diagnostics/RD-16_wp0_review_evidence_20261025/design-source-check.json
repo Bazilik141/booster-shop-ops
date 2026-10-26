@@ -1,0 +1,22 @@
+[
+  {
+    "path": "design\\account-light-A\\A-Hub.dc.html",
+    "sha256": "6c1085c3bccc699d8cada99d8c6baed36ad9618ba1e684504f39358f19f967c5",
+    "matches_README": true
+  },
+  {
+    "path": "design\\account-light-A\\A-Edit.dc.html",
+    "sha256": "d74aa76aa11fe84d7e63198748b5130ee14a6e96c5aa2d139603fd50ab7bf8d1",
+    "matches_README": true
+  },
+  {
+    "path": "design\\account-light-A\\A-Mobile-Hub.dc.html",
+    "sha256": "cd407c76c242e0b4a0d24270e9788b205e05a0576f57a9cf1a3136e92069e4c5",
+    "matches_README": true
+  },
+  {
+    "path": "design\\account-light-A\\A-Mobile-Edit.dc.html",
+    "sha256": "ca08dc5aa609df4d5bcbaacb27e7cb3c8a8d3152b4da5b25dd70ac13047a42ce",
+    "matches_README": true
+  }
+]

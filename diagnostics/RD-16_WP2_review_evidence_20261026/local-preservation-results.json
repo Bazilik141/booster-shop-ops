@@ -1,0 +1,17 @@
+{
+    "boundary": "native current guard.account\/assertWritable\/finish and profile static validators; fake locked-row\/transaction backend and in-memory unchanged JSON writer serialization; no actual index\/save\/models\/MySQL execution",
+    "filled_and_cleared_roundtrips": 2,
+    "service_keys_preserved": [
+        "bs_first15_pending",
+        "bs_np_v1",
+        "unknown",
+        "999"
+    ],
+    "checkbox_clear": true,
+    "service_key_injection_refused": true,
+    "native_PHP_name_cases": 10,
+    "native_optional_cases": 8,
+    "client_server_hint_parity": 3,
+    "optional_name_empty": true,
+    "protected_save_tail_and7_sources_byte_equal": true
+}

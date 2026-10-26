@@ -1,0 +1,15 @@
+{
+  "runner_sha256": "d03a0e76c63892365ecef4a601456365429828aae8201a1916514f03b989e851",
+  "boundary": "actual file/lint/apply/rollback/restore/noop engine; ONLY host runtime admission replaced; explicit postwrite/rollback fault derivatives; no SSH/MySQL/cache-server/host8.0 proof",
+  "cases": {
+    "unmodified_missing_config": "zero_writes",
+    "roundtrip": "5apply_dynamic_token_noop_backup_tamper_refusal_mixed_existing_rollback",
+    "target_drift": "refused_before_targets_backups",
+    "protected_dependency_drift": "refused_before_targets_backups",
+    "wrong_admission": "refused_before_targets_backups",
+    "owned_lock": "refused_before_targets_backups",
+    "post_write_fault": "native_restore_all_existing_sources",
+    "rollback_race": "refused_before_any_restore",
+    "restore_candidate_tamper": "refused_before_any_restore"
+  }
+}

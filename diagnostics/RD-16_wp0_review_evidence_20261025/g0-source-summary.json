@@ -1,0 +1,17 @@
+{
+  "task": "RD-16-WP0",
+  "source_files": 37,
+  "source_bytes": 768061,
+  "ACC009_shared_after_hashes": "7_of_7_match",
+  "queried_theme_routes": "7_zero_rows_all_stores",
+  "mechanism": "a_controller_rendered_explicit_per_page_opt_in",
+  "other_account_pages_automatic_rollout": false,
+  "stage": "G0_EVIDENCE_COMPLETE_WAIT_OWNER_WP1",
+  "pending_owner_decisions": [
+    "go_for_WP1",
+    "header_existing_DS_reference_cache_token_only_exception"
+  ],
+  "WP1_implementation_started": false,
+  "WP2_owner_QA_gate_preserved": true,
+  "report_sha256": "060c07e9d135a1aed1501b9352db028f1217731a6e4f11bf3e38319513e1749d"
+}

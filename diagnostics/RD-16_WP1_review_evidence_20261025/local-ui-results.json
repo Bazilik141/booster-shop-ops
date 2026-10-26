@@ -1,0 +1,137 @@
+{
+  "boundary": "native generated hub/shell; full admitted Bootstrap/DS/stylesheet plus public-live CSS/fonts; actual body/main/footer classes; synthetic header/footer contents/data; local HTTP only; no production execution",
+  "results": [
+    {
+      "width": 390,
+      "scenario": "empty",
+      "noOverflow": true,
+      "singleNav": true,
+      "logout": true,
+      "focusOrder": null
+    },
+    {
+      "width": 390,
+      "scenario": "hidden_latest",
+      "noOverflow": true,
+      "singleNav": true,
+      "logout": true,
+      "focusOrder": null
+    },
+    {
+      "width": 390,
+      "scenario": "visible",
+      "noOverflow": true,
+      "singleNav": true,
+      "logout": true,
+      "focusOrder": "nav -> four cards -> latest -> support"
+    },
+    {
+      "width": 390,
+      "scenario": "long",
+      "noOverflow": true,
+      "singleNav": true,
+      "logout": true,
+      "focusOrder": null
+    },
+    {
+      "width": 390,
+      "scenario": "escaped",
+      "noOverflow": true,
+      "singleNav": true,
+      "logout": true,
+      "focusOrder": null
+    },
+    {
+      "width": 768,
+      "scenario": "empty",
+      "noOverflow": true,
+      "singleNav": true,
+      "logout": true,
+      "focusOrder": null
+    },
+    {
+      "width": 768,
+      "scenario": "hidden_latest",
+      "noOverflow": true,
+      "singleNav": true,
+      "logout": true,
+      "focusOrder": null
+    },
+    {
+      "width": 768,
+      "scenario": "visible",
+      "noOverflow": true,
+      "singleNav": true,
+      "logout": true,
+      "focusOrder": "nav -> four cards -> latest -> support"
+    },
+    {
+      "width": 768,
+      "scenario": "long",
+      "noOverflow": true,
+      "singleNav": true,
+      "logout": true,
+      "focusOrder": null
+    },
+    {
+      "width": 768,
+      "scenario": "escaped",
+      "noOverflow": true,
+      "singleNav": true,
+      "logout": true,
+      "focusOrder": null
+    },
+    {
+      "width": 1280,
+      "scenario": "empty",
+      "noOverflow": true,
+      "singleNav": true,
+      "logout": true,
+      "focusOrder": null
+    },
+    {
+      "width": 1280,
+      "scenario": "hidden_latest",
+      "noOverflow": true,
+      "singleNav": true,
+      "logout": true,
+      "focusOrder": null
+    },
+    {
+      "width": 1280,
+      "scenario": "visible",
+      "noOverflow": true,
+      "singleNav": true,
+      "logout": true,
+      "focusOrder": "nav -> four cards -> latest -> support"
+    },
+    {
+      "width": 1280,
+      "scenario": "long",
+      "noOverflow": true,
+      "singleNav": true,
+      "logout": true,
+      "focusOrder": null
+    },
+    {
+      "width": 1280,
+      "scenario": "escaped",
+      "noOverflow": true,
+      "singleNav": true,
+      "logout": true,
+      "focusOrder": null
+    },
+    {
+      "width": 991,
+      "scenario": "breakpoint_boundary",
+      "singleNav": true
+    },
+    {
+      "width": 992,
+      "scenario": "breakpoint_boundary",
+      "singleNav": true
+    }
+  ],
+  "pageErrors": [],
+  "consoleErrors": []
+}

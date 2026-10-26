@@ -1,0 +1,97 @@
+{
+  "duration_api_ms": 126070,
+  "stop_reason": "end_turn",
+  "total_cost_usd": 0.5996600000000001,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 42414,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 13017,
+    "output_tokens_details": {
+      "thinking_tokens": 9279
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 42414,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 13017,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 42414,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 42414
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-opus-5-5": {
+      "inputTokens": 2,
+      "outputTokens": 13017,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 42414,
+      "webSearchRequests": 0,
+      "costUSD": 0.5996600000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 9279,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 1,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "# RD-16 WP0 Menu-Supplement Review: Three-File Collector and Owner Packet\n\n## Verdict: Review OK\n\nI found no mandatory issue. This verdict comes from static source analysis only. I did not execute anything and make no claim about how the host, MySQL, OpenSSH or Windows PowerShell 5.1 will behave at runtime.\n\n### Bound executable identities\n\nThese are taken from the package; I did not recompute them.\n\n| Item | Path | SHA-256 |\n|---|---|---|\n| Menu collector | `diagnostics/RD-16_wp0_menu-collect_20261025.sh` | `64d8ecfc5844f78661ab9a3fd5de26ac4219b0671d738cfc1f136804a64f9d39` |\n| Menu owner packet | `diagnostics/RD-16_wp0_owner-menu-pull_20261025.ps1` | `e194f34fb1b2d939faefeb23f2674c96d6c3cf9e7eb3c6e92ca044e49f334cbc` |\n| Report reviewed | `diagnostics/RD-16_wp0_source-request_report_20261025.md` | `dd376478790f56fb9af4c498a610e0cfd90a21732ccc14b7d1bf40b2c125caf3` |\n| Fixture (Codex evidence) | `work/rd16-wp0-20261025/check-menu-transport.ps1` | `c8dec9752fae4dfd44bb19b076b5640340ba807bfa34eb81b6b14e6bc025a5f7` |\n| Metadata lint copy | `work/rd16-wp0-20261025/menu-metadata-lint.php` | `491219c1af2e991eb94202f76ec1f78d15ac506ac6f9ee8eca41dffbd8442a1d` |\n\n- The packet's `$CollectorSha` equals the menu collector hash above.\n- The report's two new executable identities match both values above.\n- By my reading, the lint copy is identical to the collector's `RD16_PHP` here-doc.\n\n### Launcher adoption\n\nI explicitly adopt this exact launcher as my narrow pull instruction. It is bound to packet `e194f34f\u2026f334cbc` and collector `64d8ecfc\u2026f9d39`:\n\n```powershell\n& 'C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\diagnostics\\RD-16_wp0_owner-menu-pull_20261025.ps1'\n```\n\nThe adoption holds only under these conditions:\n- The owner runs it once.\n- There is no retry on any `STOP`; the result and artifacts are sent as they are.\n- Codex checks delivery and intake.\n- Any byte change to either executable voids this adoption.\n\nThe scope is read-only WP0 collection of the three named files only. It grants nothing for G0, WP1, WP2, status, Git or deployment.\n\n---\n\n## Findings\n\n### 1. Source path provenance: sound\n\nThe three paths follow from the historical controller's own references, not from a wildcard:\n\n- **Controller.** The layout code `ciaccountsidebar.account_sidebar` maps to route `extension/ciaccountsidebar/module/account_sidebar`. That is `extension/ciaccountsidebar/catalog/controller/module/account_sidebar.php`.\n- **View.** `load->view('extension/ciaccountsidebar/module/account_sidebar')` gives `\u2026/catalog/view/template/module/account_sidebar.twig`.\n- **Stylesheet.** `addStyle(HTTP_SERVER . 'extension/ciaccountsidebar/catalog/view/stylesheet/accountdashboard/sidebar.css')` is webroot-relative and exactly the third path.\n\nThe report correctly frames the historical snippets as path locators only, not as current content.\n\n### 2. Context pins: sound\n\n- **Values.** I compared all 34 pinned hashes line by line against the accepted R1 manifest (`3636e66e\u2026`). Paths, order and values are identical, and they include all 7 ACC-009 after-hashes.\n- **Per-entry checks.** Each entry is walked for symlinked components, then checked with `-f` and SHA-256. Any failure stops the script.\n- **Timing.** The check runs before any export work and again after the archive is created. A drift after collection stops before the manifest is written, so no `done=ok` receipt is possible.\n- **Stdin safety.** The `while read` loop reads only its own here-doc. `sha256sum` takes a file argument. Nothing inside the loop can consume the `bash -s` script stream, which preserves the R2 property that no command reads the script's stdin.\n- **Exit behaviour.** `stop` inside the function exits the whole script, because the loop is not in a subshell.\n- **Export boundary.** Context files are hashed only. Nothing in the tar invocation or the manifest re-exports them.\n\n### 3. Collector body: unchanged accepted mechanics\n\nThe following are carried over, retargeted only to the new artifact names:\n- the webroot and private-directory guards;\n- no-replay existence checks followed by `set -C`;\n- the size and total caps;\n- the obvious-secret screen, including the `$?` handling in the `else` branch;\n- the before/after source hashes;\n- per-member archive verification without extraction;\n- the five-line receipt shape.\n\nThe new names `RD-16-menu-20261025-r1.*` cannot collide with the consumed `RD-16-source-*` artifacts.\n\n### 4. Metadata: read-only and bounded\n\nThe only delta is one added route string, `extension/ciaccountsidebar/module/account_sidebar`, in the existing fixed theme-count list.\n- The schema check, `START TRANSACTION READ ONLY`, prepared SELECTs, row and identifier caps, and output allowlist are unchanged.\n- It reads no settings, customer, order or session data, and uses no DB CLI.\n- Bind-by-reference through `foreach \u2026 as $route` still updates the bound parameter correctly.\n\n### 5. Owner packet: R2 M1\u2013M3 preserved\n\n- **M1 (exact stdin transport).** `Invoke-Rd16LfProcess` keeps the same R2-accepted structure:\n  - it writes to `BaseStream` and then closes stdin;\n  - stdout is read asynchronously before the write;\n  - native arguments are allowlisted;\n  - a failed send forces a non-zero code;\n  - the function returns a single object.\n- **M2 (cleanup EOL guards).** The cleanup body is normalized to LF after placeholder substitution and a remaining CR is refused. The helper refuses CR again before launch. Placeholders accept only `[a-f0-9]{64}` captures. `rm` uses exact absolute paths, gated by the symlink, regular-file and both hash checks.\n- **M3 (raw receipt retention).** `owner-receipt-raw.txt` and `cleanup-receipt-raw.txt` are both written before their exit-code and regex checks.\n- **Receipt and local path.**\n  - The receipt regex requires `task=RD-16-WP0-MENU` and `source_files=3`.\n  - The local drop path is new and must be absent beforehand.\n  - The success marker is `RD-16_MENU_SOURCE_READY`.\n\n### 6. Fixture boundary: accurately stated\n\nThe fixture exercises the following using real Bash, tar and SHA-256:\n- the AST-extracted helper, cleanup literal and receipt regex;\n- LF and CRLF runs;\n- exact cleanup;\n- refusal of pre-collection context drift, with no archive created.\n\nPHP is mocked and the three module files are synthetic, as the report says.\n\n---\n\n## Optional notes (not closure conditions)\n\n1. **Extension root is not attested.** The controller and Twig load through `DIR_EXTENSION`; the CSS loads through webroot `HTTP_SERVER`.\n   - The collector assumes `DIR_EXTENSION` is `~/public_html/extension/`. The original 34-file collection made the same assumption for `extension/opencart` and `extension/ukrainian`.\n   - `DIR_CACHE` is already relocated to `/home2/boosters/ocartdata/storage/`.\n   - A future collector could emit a derived `DIR_EXTENSION` alongside the cache path. For now, G0 should state this as a limit rather than a proven fact.\n2. **The visible menu depends on unread settings.** The historical controller builds every link, label, icon, visibility rule and color from `module_account_sidebar_*` settings.\n   - Column-left also gates the module on its status setting; check this against the accepted `column_left.php`.\n   - Source alone therefore cannot establish the rendered link set or order. If G0 needs it, use a separately reviewed bounded read or an owner-captured page, not an inference.\n3. **Possible language dependency.** The historical controller loads the language file `extension/module/account_sidebar`, which may resolve under `catalog/language/<lang>/extension/module/`.\n   - Historically only `heading_title` was read, and the Twig never rendered it.\n   - If the current Twig uses language keys, that file would be a fourth gap, needing another narrow supplement.\n4. **Confirm the theme-count key format.** Check that the route string matches the key format `catalog/controller/event/theme.php` uses for extension views, against the accepted fresh source. A zero count is meaningful only if the key format matches.\n5. **Count the context lines.** The context check does not assert that exactly 34 lines were processed. The list is a hash-pinned literal, so this is defensive only.\n6. **Fixture gaps.** The fixture does not cover a symlinked context component or a context drift after collection. Both paths are correct by reading.\n7. **Packet-side manifest checks.** The packet checks only `archive_sha256` and `done=ok` in the manifest.\n   - The hash binding already ties the manifest to the remote receipt.\n   - Codex intake should still assert `task=RD-16-WP0-MENU`, `source_files=3`, `context_sources=34` and `context_pre_post=ok`.\n8. **Still-open R2 optional notes.** These remain non-blocking:\n   - **BOM under Windows PowerShell 5.1.** The package reports that the first live run of the same helper succeeded. That is Codex's evidence, not mine.\n   - **Stderr visibility.** `STOP=` codes rely on console handle inheritance.\n   - **Directory modes.** The modes of existing private directories are not checked.\n   - **Secret screen.** It is case-insensitive.\n   - **Rollback.** The `$db->rollback()` return value is unchecked.\n   - **Indentation.** The post-receipt block in the packet is indented as if nested, with no behavioural effect.\n\n---\n\n## Not claimed\n\n- No proof of host, DB, SSH/SCP or PowerShell 5.1 runtime behaviour.\n- No claim about the current content of the three module files, or that the module renders.\n- No claim about default layout, active module settings, events or the visible menu.\n- No shell-mechanism or G0 decision, and nothing in WP1 or WP2. Those gates stand unchanged.",
+  "ttft_ms": 92491,
+  "type": "result",
+  "duration_ms": 126328,
+  "ttft_stream_ms": 2150,
+  "time_to_request_ms": 257,
+  "first_content_frame_ms": 2151,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

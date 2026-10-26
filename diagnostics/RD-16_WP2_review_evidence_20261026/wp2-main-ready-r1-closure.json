@@ -1,0 +1,51 @@
+{
+  "task": "RD-16-WP2",
+  "stage": "wp2-main-ready-r1",
+  "closed_utc": "2026-10-26T08:23:46.191221+00:00",
+  "request_id": "5624fdc6-9184-4ab9-b154-377a9ca468b4",
+  "verdict": "Review OK, conditional; no mandatory code changes",
+  "reviewer": "actual subscription Claude Opus 5.5, high; tools/MCP/hooks disabled",
+  "review_packet_bytes": 337419,
+  "review_packet_sha256": "e9aaa1fec492afd3e30653b79d06d620bf7d2c5446fda6c52f552e57f9164d8e",
+  "frozen_inputs_verified": 143,
+  "pre_post_input_bytes_identical": true,
+  "response_sha256": "970e653d9ccfeab464d2bf5e9d8517ce1223cab57307b772ca5281b97dcc9bae",
+  "original_result_sha256": "1caf85167b9e633aefe03fa5526765b8a379c3367de9d5a7f833c8bb218ed09b",
+  "artifacts": [
+    {
+      "path": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\patches\\RD-16-WP2_personal-data_20261026.php",
+      "sha256": "d03a0e76c63892365ecef4a601456365429828aae8201a1916514f03b989e851",
+      "bytes": 107879
+    },
+    {
+      "path": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\diagnostics\\RD-16-WP2_owner_20261026.ps1",
+      "sha256": "04633bf5e023e063d46cbbe3ae3c19dbbbd95ef7c4b0c94b5faa971bcfa31cea",
+      "bytes": 11928
+    }
+  ],
+  "CI_hold": "Explicitly cleared by reviewer for exact account/edit composition only; source/layout/module drift reinstates STOP",
+  "owner_header_token_exception": "PENDING; all owner main steps remain HELD",
+  "header_scope": "Only DS CSS ?v= token becomes rd16-wp2-20261026; normalized header identical; rollback restores backed-up bytes",
+  "owner_execution": "NOT RUN; owner-receipts-main/state.json absent",
+  "host_PHP_MySQL_authenticated_save_owner_QA": "NOT PROVEN; owner Verify and post-Apply QA required",
+  "optional_findings": {
+    "O1": "focus outline contrast; existing navy focus border passes AA",
+    "O2": "iOS zoom/computed control font",
+    "O3": "explicit DS pressed backgrounds",
+    "O4": "explicit mobile flex direction",
+    "O5": "decorative dot/optional/autocomplete fidelity",
+    "O6": "inherited alternate-shell/language-hook/non-UA gaps",
+    "O7": "indent/comment/title cosmetics"
+  },
+  "optional_disposition": "Recorded, not adopted in this revision; no mandatory findings deferred. Changes would require affected review and rebind.",
+  "repository_metadata": {
+    "method": "modified/untracked file mtime since dispatch; not a complete pre-run whole-repo snapshot",
+    "outside_frozen_set_recent_paths": [
+      "diagnostics/RD-16_WP2_review_evidence_20261026/wp2-main-ready-r1-original-result.json",
+      "diagnostics/RD-16_WP2_review_evidence_20261026/wp2-main-ready-r1-response.md",
+      "diagnostics/RD-16_WP2_review_evidence_20261026/wp2-main-ready-r1-run.json",
+      "work/rd16-wp2-20261026/close-main-review-r1.py"
+    ]
+  },
+  "agent_SSH_key_server_deploy_Git_status_writes": false
+}

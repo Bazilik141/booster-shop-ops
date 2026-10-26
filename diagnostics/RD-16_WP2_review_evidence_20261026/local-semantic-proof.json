@@ -1,0 +1,19 @@
+{
+  "index_only_change": "single column_left-call site replaced with presentation-only shell/data block",
+  "controller_outside_UI_fragment_sha256": "91a358589fa318df92c9fff8fea6ddd949479f008556a5c15f9750dc01b9dc54",
+  "entire_save_tail_byte_identical": true,
+  "protected_save_tail_sha256": "375d1f48962ae30ba134e9b44bbc2a7092efb8f10bb26176ba9213d063c4ee89",
+  "lang_prefix_byte_identical": true,
+  "CSS_prefix_byte_identical": true,
+  "header_only_token": true,
+  "new_product_JavaScript": false,
+  "protected_sources": {
+    "system/library/booster_custom_field_guard.php": "9f15aedbd74d48ec58dcef11eeaba4015d9e8f8b35ff43b7d705fc84ad52a66f",
+    "system/library/booster_account_profile.php": "5089e0044ac50d101c6fc07300abce625baf0303f35e17dfbb6dc0a200bbe597",
+    "catalog/model/account/customer.php": "06f53290fffb7d86e3f696194912156456329f20a46cb49c51173282a5896797",
+    "catalog/model/account/custom_field.php": "47f5334b0502f1967e7963bd03a2d3d764a6bceafe7b194634615cb5fa7ffe90",
+    "catalog/model/account/address.php": "a10392f962ab4d92b67f9f97a6d56ec3341940432486ff012dd5e626027795f5",
+    "catalog/view/javascript/booster-account-profile.js": "6a36179518eb8e16eb105c052556570a373a581d072a187daf41fc88450150d9",
+    "catalog/view/javascript/common.js": "58605f6df5f8ded195f994d44446920b478e331243c983d75df56e49c48d7c02"
+  }
+}

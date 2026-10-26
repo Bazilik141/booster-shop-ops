@@ -1,0 +1,36 @@
+{
+  "task": "RD-16-WP0",
+  "stage": "wp0-ready-r2",
+  "request_id": "9a667f74-425f-454c-9915-2964ebb5d3f2",
+  "closed_utc": "2026-10-25T07:04:43.292894+00:00",
+  "consumed": true,
+  "replay_permitted": false,
+  "actual_verdict": "Review OK",
+  "mandatory_R1_closed": [
+    "M1",
+    "M2",
+    "M3"
+  ],
+  "packet_bytes": 81156,
+  "packet_sha256": "1e14b84216e32207f5c2521a969c9c519769dcfc43cd1fbd4c586a824f6d1d62",
+  "reviewed_inputs_unchanged_before_bookkeeping": true,
+  "executable_sha256": {
+    "diagnostics/RD-16_wp0_collect_20261025.sh": "00f14db7e815f4dd0bb9dad5e7f05e7335af1474223a0f0a1536028bd0b421d6",
+    "diagnostics/RD-16_wp0_owner-pull_20261025.ps1": "0ff72f1729a7575e5eb9c6402a1c8f1e6d7e61005157efd68bbc660de3e37be4"
+  },
+  "response_sha256": "6c3cd6c0996248b09c818f121276e23600da3e7b8243a67f377104c8d0bccf92",
+  "original_result_sha256": "a3456c943f01d70ec6db4cc08f5220c9524bb0d153908e0d52579873cfbb429c",
+  "requested_model": "claude-opus-5-5",
+  "observed_models": [
+    "claude-opus-5-5"
+  ],
+  "tool_calls": [],
+  "MCP_count": 0,
+  "isUsingOverage": false,
+  "report_reviewed_sha256": "ec60c4d3a89b10a093c11a599bea888c71001abd656351aea1844b87bca86741",
+  "report_after_mechanical_bookkeeping_sha256": "31f1352d0976730aa456a2ed2b04e724439ef4153249a60e0a49628d8f1ed440",
+  "owner_scope_released": "WP0 read-only collection once; no production source/DB/cache changes",
+  "agent_SSH_key_server_access": false,
+  "owner_execution": "not_run",
+  "G0_WP1_WP2": "not_released"
+}

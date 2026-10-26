@@ -1,0 +1,35 @@
+{
+  "task": "RD-16",
+  "owner_instruction": "Оновлення Notion і дзеркала дашборда, пуш коміт доручаю зробити тобі.",
+  "date": "2026-10-26",
+  "writer_exception": "Direct active-task owner reassignment to Codex; status synchronization and scoped commit/push only",
+  "notion_page": "3706bf20bdb481b396b7e38300a3c8bf",
+  "read_back_properties": {
+    "Blocker": "",
+    "Category": "Redesign (RD)",
+    "Current Owner": "Codex",
+    "Last Updated": "2026-10-26",
+    "Name": "RD-16 — Account hub + personal data",
+    "Order": "15",
+    "Owner Decision": "2026-10-26: WP1 QA OK; WP2 QA OK. Email stays editable per handoff default until ACC-005. Owner explicitly assigned Notion/dashboard closeout and scoped commit/push to Codex.",
+    "Page / Zone": "account/account.twig, account edit",
+    "Primary Tool": "Codex",
+    "Priority": "Medium",
+    "Roadmap ID": "RD-16",
+    "Sheet Status": "",
+    "Source": "",
+    "Stage": "Done — WP1 shell/hub and WP2 personal data deployed; both owner QA accepted 2026-10-26; ACC-008 responsive follow-up covered",
+    "Status": "Done",
+    "Task Type": "Redesign / UX-UI",
+    "url": "https://app.notion.com/p/3706bf20bdb481b396b7e38300a3c8bf"
+  },
+  "notion_readback_last_edited": "2026-10-26T09:09:03.261Z",
+  "dashboard_scope": [
+    "RD-16",
+    "RD-ACCOUNT subtask 1"
+  ],
+  "other_RD_tasks": "unchanged",
+  "Git_isolation": "Detached worktree from fetched origin/master; original divergent checkout and unrelated dirty changes preserved",
+  "Git_push_proof": "Recorded separately only after successful push and remote-ref verification",
+  "server_or_key_access": false
+}

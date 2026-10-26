@@ -1,0 +1,19 @@
+{
+  "protected_dependency_hashes": 32,
+  "signatures": {
+    "important": 0,
+    "setTimeout": 0,
+    "absolute_fixed": 0,
+    "green_token": 0
+  },
+  "PHP": "local8.3.30_not_host8.0",
+  "owner_packet": "PowerShell_AST_parse_pass; four_Bash_syntax_pass; exact_private_staging; strict_agent_SSH; three_separate_actions",
+  "cache_fixture": "one_nested_PHP_deleted_nonPHP_and_outside_PHP_preserved",
+  "runner_sha256": "c8a8cc5559f09fd57e4c027b6f7aac8ec939210a0e090f31980fe53c5abfda1a",
+  "packet_sha256": "c99761454e87b9053dee64583318cb6213b2fa9d9944d2357f57643fb730aeaf",
+  "event_predicate_cases": 19,
+  "runner_cases": 10,
+  "focus_order": "nav->4 cards->latest->support on390/768/1280",
+  "event_targets": 14,
+  "r3_reuse_proof": "r3-equivalence.json"
+}

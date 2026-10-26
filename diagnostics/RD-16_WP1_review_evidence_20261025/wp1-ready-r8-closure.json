@@ -1,0 +1,44 @@
+{
+  "task": "RD-16-WP1-main-R2",
+  "stage": "wp1-ready-r8",
+  "request_id": "88519f3f-bac1-456e-afc7-07bc9249be97",
+  "consumed": true,
+  "replay_permitted": false,
+  "verdict": "Review OK",
+  "mandatory_findings": [],
+  "R7_M1": "closed",
+  "accepted_executables": [
+    {
+      "path": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\patches\\RD-16-WP1_account-shell-hub_20261025_r2.php",
+      "sha256": "2104651019f35584f9fa24ab2310a16c65e2ba3abdeb381baa2472a9e2860651",
+      "bytes": 89497
+    },
+    {
+      "path": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\diagnostics\\RD-16-WP1_owner-r2_20261025.ps1",
+      "sha256": "f1c6ffc2d0f49a4ee6354c17f69f22acf5e619bd546eab6723d21106eed016bd",
+      "bytes": 11839
+    }
+  ],
+  "packet_sha256": "bef718aac9721326fcd896ef71ba7c3320762b459c1de2666497a9245069b3eb",
+  "packet_bytes": 117825,
+  "declared_inputs_verified": 91,
+  "inputs_unchanged_before_bookkeeping": true,
+  "reviewed_report_sha256": "2239a1332127381ce0783860adf589d6728a0ae673d25a547843f8687ea25600",
+  "bookkeeping_report_sha256": "8c3e41fe50a0abd93b8c2f65706d0de7bafec70ea8b1f4c4fd074a156c153b47",
+  "response_sha256": "797ba4600a628e16f939c3e4d1aca2b3c9e7667779ebc75214127083ef9d2c1d",
+  "model": "claude-opus-5-5",
+  "effort": "high",
+  "subscription_verified": true,
+  "tools": [],
+  "MCP_count": 0,
+  "overage_or_API_fallback": false,
+  "reuse": "R7 accepted seven unchanged app targets,44pins,exactpairpredicate,UI17/backend5/composition6,fileengine/rollback/owner sequencing; R8 runtime/guard and fixtures reviewed",
+  "gate": "WP1_R2_READY_OWNER_UPLOAD_VERIFY",
+  "new_owner_state_absent_before_release": true,
+  "owner_successor_execution": "not_run",
+  "main_source_deployed": false,
+  "old_R3_and_R7_pairs": "DO NOT RUN",
+  "WP2": "HELD until deployed-WP1 owner QA acceptance",
+  "agent_server_or_key_access": false,
+  "closed_utc": "2026-10-25T20:35:29.944911+00:00"
+}

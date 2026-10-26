@@ -1,0 +1,97 @@
+{
+  "duration_api_ms": 428346,
+  "stop_reason": "end_turn",
+  "total_cost_usd": 2.352888,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 187550,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 42624,
+    "output_tokens_details": {
+      "thinking_tokens": 39090
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 187550,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 42624,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 187550,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 187550
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-opus-5-5": {
+      "inputTokens": 2,
+      "outputTokens": 42624,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 187550,
+      "webSearchRequests": 0,
+      "costUSD": 2.352888,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 39090,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 1,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "# RD-16 WP1 Integrated CODE/Composition Review\n\n**Verdict: Changes requested**\n\n**Bound executable identities.** I took these from the input pins. I did not recompute them.\n- Runner `patches/RD-16-WP1_account-shell-hub_20261025.php`: 79,815 bytes, SHA-256 `941df6b338b2f65bbefac4ca978068f26453c7214f3856d0a867faf884d9a9e6`\n- Owner packet `diagnostics/RD-16-WP1_owner_20261025.ps1`: SHA-256 `dbc0efc9c69353a6e2eab37b257b9db3017070eb9984e31a22c5b79b8e4b740d`\n\nThe verdict covers only this pair. It does not adopt the owner Upload/Verify/Apply launchers. Fixing M1 and M2 changes the runner bytes, which changes the runner hash pinned inside the packet, so a new pair needs a fresh integrated review.\n\nThese gates stay in place:\n- The owner alone deploys, through separate Upload, Verify and Apply actions.\n- Runtime host admission happens only at the owner Verify step.\n- Owner QA follows Apply.\n- WP2 waits until the owner QA-passes the deployed WP1.\n\nThis review grants no Git, status, deployment, key or server authority. The held Git block is out of scope.\n\n## Mandatory defects\n\n### M1. The event-hook admission check is weaker than the dispatcher it is meant to guard\n**Where:** `rd16_runtime()`, the event loop.\n\nThe report and the code comment promise that any other enabled hook that can modify these views or controllers stops Apply. The check does not deliver that, for two reasons.\n\n**1. The matcher can miss hooks that the live dispatcher would fire.**\n- The check uses `fnmatch($pattern, $trigger)`, which only matches the whole trigger string.\n- OpenCart's `Event::trigger` matches with a regex anchored at the start but not at the end (`'/^' . \u2026 . '/'`). It therefore fires on prefixes too.\n- Example: a DB trigger `catalog/view/account/account` or `catalog/controller/account/` fires on our routes live, but passes this check.\n- `system/engine/event.php` and the action-event config are not among the collected or pinned sources. So the guard cannot claim it mirrors the live semantics.\n\n**2. The loop stops checking after the first match.**\n- Each event's trigger loop `break`s on the first matching trigger.\n- A broad pattern (for example `*`) with action `event/theme` gets admitted on `view/account/account/before`.\n- It is then never checked against the `controller/...` or `/after` triggers it also matches.\n\n**Fix:**\n- Make the matcher a superset of the dispatcher whatever its exact semantics: treat a match as `fnmatch($pattern, $t) || fnmatch($pattern . '*', $t)`.\n- Evaluate every one of the ten triggers for each event.\n- Fail if any matched trigger is not a `view/\u2026/before` trigger with an admitted theme action.\n- Keep the zero-theme-row requirement.\n- Extract this into a small pure function and cover it with a fixture. Include an exact match, a prefix-only trigger, `*` with `event/theme`, and an `admin/` trigger.\n\n### M2. On \u2264991px, keyboard and screen-reader order does not follow the visual order\n**Where:** the hub plus shell markup and the mobile `display:contents` / `order` CSS. This is a WCAG 2.4.3 (Level A) and 1.3.2 issue.\n\nThe DOM order is:\n1. Shell: nav, then the help section with its Telegram link, then the theme section.\n2. `#content`: welcome h1, the four cards with their links, then the latest order and its CTA.\n\nBelow 992px the CSS reorders this visually to: welcome, nav, cards, latest, help, theme.\n\nSo a Tab press goes from the last nav item to \u00ab\u0414\u043e\u043f\u043e\u043c\u043e\u0433\u0430\u00bb, which sits visually below the latest-order row. Focus then jumps back up to the four card links. Screen readers also read \u00ab\u041f\u043e\u0442\u0440\u0456\u0431\u043d\u0430 \u0434\u043e\u043f\u043e\u043c\u043e\u0433\u0430?\u00bb and \u00ab\u0422\u0435\u043c\u0430 \u0441\u0430\u0439\u0442\u0443\u00bb before the H1 and the cards. The UI fixture checked that disabled targets are inert, but never checked focus order against visual order.\n\n**Fix (either is acceptable):**\n- **Preferred:** make the DOM order of interactive content match the mobile visual order.\n  - Let the shell render the nav block and the help/theme aside separately, for example two returned keys or two calls.\n  - Render the aside after the main content in the hub template.\n  - Use `grid-template-areas` or `grid-row` so the aside still sits under the nav on desktop.\n- **Alternative:** keep the current DOM and change the mobile `order` so help/theme follow the nav directly. This deviates from the board order.\n\nIn either case, add a UI assertion: on 390 and 768, the Tab sequence after the nav must reach the card links before the support link.\n\n## Optional notes\n\n**Hardening**\n- **O1. Write order.** Apply renames `account.php` and `account.twig` before `shell.php` exists. For a few milliseconds a request can get an `\\Exception` from `load->controller('account/shell')`. With `autoescape:false`, `{{ rd16_shell }}` would print the exception's message and stack trace. Writing the new shell, language and CSS files first, then the header and Twig, then `account.php` last removes that window.\n- **O2. Rollback race.** Rollback stages candidates based on the first plan, then writes based on the second. If a row changes from `before` to `after` between the two plans, `$rd16_stage[$i]` is undefined. That happens mid-loop, possibly after earlier restores. Either require the second plan's `current` values to equal the first's, or stage from the second plan. Also re-hash each candidate before the rename.\n- **O3. Candidate location.** Rollback and auto-restore candidates (`restore-*.php`, `auto-restore-*`) are written inside the webroot backup directory. The private `$stageRoot` is on the same filesystem and would avoid placing transient `.php` files under `public_html`.\n- **O4. Loose header no-op check.** The no-op check accepts any header token. After a failed automatic restore, a state of six targets at \"after\" plus the old header token would report `already_applied=yes`. This is benign under the packet's one-use Apply rule, but worth documenting.\n\n**CSS and UI**\n- **O5. Hover underline.** `.bs a:hover { text-decoration: underline }` has specificity (0,2,1), which beats `.bs-account-page a { text-decoration: none }`. Nav items and the blue or ink action buttons therefore underline on hover, unlike the board. Add scoped `text-decoration:none` to their `:hover` rules.\n- **O6. Undocumented sizes.** `min-height:56px` (mobile rows) and `max-width:36rem` are not covered by the CSS comment. All other px values are explained. No `!important`, `setTimeout`, absolute/fixed positioning or green token was found in the new CSS or markup.\n- **O7. Other languages.** The labels exist only in the `uk-ua` extension file. If any other storefront language is enabled, the hub will show raw `rd16_*` keys. Confirm the store is single-language, or add a fallback.\n\n**Owner QA and report**\n- **O8. Extra QA checks.**\n  - The profile-save success message now lands on the restyled hub, with `|e` escaping and `role=status`. Confirm it renders correctly after a save. WP1 does not touch the edit page.\n  - If the hub shows an empty shell or raw keys right after Apply, consider OPcache timestamp validation before treating it as a code failure.\n- **O9. Expected Verify stops.** A plausible Verify STOP is an analytics or SEO extension hooked to the `common/header` view. That outcome is correct fail-closed behaviour. It needs a new reviewed pair, not an in-place edit.\n- **O10. One-use Apply is strict.** If admission drifts between Verify and Apply, the runner refuses with zero writes, but the packet has already consumed Apply. A new packet is then required. State this in the report.\n- **O11. Rollback stdout contract.** Document the rollback-check and rollback stdout lines explicitly: `backup=`, `rollback_preflight=ok`, `rollback=ok`, `changed_files=N`, `self_deleted=yes`, `done=ok`.\n\n## What reviews clean\n- **Data sources.**\n  - The latest order uses the unchanged `getOrders(0,1)`. Its `publicOrderScope` already enforces customer, store, status > 0 and ACC-007 hidden status 15.\n  - The label comes from `Acc007OrderStatus::presentation`.\n  - The favorites count uses the same `account/wishlist.total` call as the header.\n  - The address uses the customer-scoped `getAddress` and renders no `custom_field` keys.\n  - All reads are SELECTs, and no model or library body changes.\n- **Shell mechanism.**\n  - The shell is an explicit child render with no includes and no global rollout.\n  - The legacy sidebar is omitted at the hub caller only.\n  - A direct request to the `account/shell` route returns an empty string.\n- **Escaping and links.**\n  - Dynamic text uses `|e` and URLs use `|e('html_attr')`.\n  - Links are decoded once from the controller and keep the existing logout route and arguments.\n- **Runner.**\n  - It is fail-closed throughout: exclusive lock, path and symlink walks, before/absent admission, header check by normalized hash, 32 dependency pins, and an admission hash that includes runtime facts and permissions.\n  - Lint and payload hashes are checked before backup.\n  - Live state is rechecked before the first write.\n  - Restore is automatic, but only after a full plan check.\n  - Rollback checks every target and backup before any write.\n- **Packet.**\n  - Native arguments are allowlisted, and stdin is sent LF-only with no CR.\n  - The receipt is written before any gate check.\n  - Runner and packet SHAs are bound across steps.\n  - Apply and rollback are consumed before dispatch.\n  - PHP path, admission and backup values are pattern-checked before being inserted into the remote script.\n  - Under `set -e`, `apply && cache` still exits nonzero on runner failure, via the self-delete check.\n- **Tests.** The fake boundaries are declared and proportionate. Host mysqli admission remains unexercised by design and is gated at owner Verify.",
+  "ttft_ms": 393919,
+  "type": "result",
+  "duration_ms": 428526,
+  "ttft_stream_ms": 6171,
+  "time_to_request_ms": 175,
+  "first_content_frame_ms": 6172,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

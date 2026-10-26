@@ -1,0 +1,97 @@
+{
+  "duration_api_ms": 164103,
+  "stop_reason": "end_turn",
+  "total_cost_usd": 0.738472,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 54093,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 15286,
+    "output_tokens_details": {
+      "thinking_tokens": 12419
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 54093,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 15286,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 54093,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 54093
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-opus-5-5": {
+      "inputTokens": 2,
+      "outputTokens": 15286,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 54093,
+      "webSearchRequests": 0,
+      "costUSD": 0.738472,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 12419,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 1,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "# RD-16 WP1 main R2, R8 affected ready review\n\n**Verdict: Review OK.** There are no mandatory findings. The R7 M1 is closed. Optional notes follow.\n\nThis approval opens only the owner steps **Upload \u2192 Verify** for the exact pair below:\n- Apply remains a separate owner decision.\n- Deployed-WP1 owner QA must pass before WP2.\n- It grants no execution, Git, status, SSH, key, server or deployment authority to any agent.\n\n## Bound identities (approved)\n\nI had no tools, so these are the supplied values, not recomputed. They are consistent across the facts file, the equivalence record, the runner-fixture result and the packet `$Sha` literal:\n- The runner grew by 2,198 bytes (87,299 \u2192 89,497). That fits the rewritten guard, the multiset function, the longer SQL and the two constant lines.\n- The packet length is unchanged at 11,839 bytes. That fits an equal-length hash-literal swap.\n\n| Artifact | Bytes | SHA-256 | Status |\n|---|---|---|---|\n| `patches/RD-16-WP1_account-shell-hub_20261025_r2.php` | 89,497 | `2104651019f35584f9fa24ab2310a16c65e2ba3abdeb381baa2472a9e2860651` | **Approved for owner Upload \u2192 Verify** |\n| `diagnostics/RD-16-WP1_owner-r2_20261025.ps1` | 11,839 | `f1c6ffc2d0f49a4ee6354c17f69f22acf5e619bd546eab6723d21106eed016bd` | **Approved for owner Upload \u2192 Verify** (binds the runner hash above) |\n\nThe following pairs stay non-runnable:\n- The R7 rejected pair (`a46a3add\u2026` / `de32ed40\u2026`) stays rejected.\n- The R3 pair (`c8a8cc55\u2026` / `c9976145\u2026`) is SUPERSEDED, DO NOT RUN. That holds even if its old Verify could later pass.\n\n## Reused scope, unchanged by exact identity\n\nI accept the stated equivalence and do not reopen these items:\n- the targets blob `b94a9e2f\u2026` and dependencies blob `a636e3b5\u2026`, which are byte-identical to R7;\n- the seven `before`/`after`/`normalized_before` values, which are runner-enforced;\n- the 44 pins;\n- the unchanged `rd16_event_check` (the diff shows no change);\n- the file engine, backup, rollback, lock, no-op and self-delete behaviour;\n- the UI17, backend5 and six-order composition evidence;\n- the owner sequencing.\n\nThe only packet change is the SHA literal. `$Name`, `owner-receipts-r2` and the remote `F=` path match the R7-reviewed text.\n\n## M1: closed\n\n- **Query.** It reads both keys across all stores, ordered by `(store_id,key)`, with `LIMIT 1025` and a 1,024-row cap. It runs inside the READ ONLY transaction. Only a SHA leaves the function, and no values reach output or error codes.\n- **Value bound.** `LEFT(value,257)` with `strlen > 256 \u2192 STOP` cannot create a passing value by truncation. Any oversize value, measured in bytes or characters, stops.\n- **Grouping.**\n  - Store IDs are canonical non-negative integers.\n  - A duplicate `(store,key)` stops.\n  - `serialized !== '0'` stops, including NULL.\n  - This matches the startup decoder: decoding is refused, never guessed.\n- **Effective config.**\n  - `array_replace($stores[0], $values)` reproduces `getSettings` (store 0, then store N, ascending overwrite).\n  - Store 0 is evaluated itself.\n  - Stores without rows, including nonexistent or negative `store_id` values from the request, resolve to store 0 and are covered.\n- **Derivation (O1).**\n  - The theme is `config_theme==='default' ? theme_default_directory : config_theme`. Using `===` is equivalent to the vendor's `==` because the strings are non-numeric. NULL maps to `''`.\n  - The segment must match `^[A-Za-z0-9_-]{0,64}$`. That excludes `.` and `/`.\n  - These prefixes must be absent:\n    - `<theme>/template/`, with an empty theme mapped to `template/template/` (the same POSIX target as the vendor's `//` path);\n    - `default/template/`.\n  - The base prefix is exempt because it holds the targets themselves.\n  - `rd16_walk` refuses linked components. A directory where a file is expected stops via `not_regular_file`.\n  - `basic` with the files absent passes. This removes the R7 false-STOP risk on stock OpenCart 4.\n- **Fixtures.** These discriminate every M1 branch:\n  - store-N unsafe value: STOP;\n  - store-N alternate file: STOP;\n  - inherited `config_theme` with an overridden directory and a file present: STOP;\n  - store 0 only: pass;\n  - duplicate key: STOP;\n  - serialized value: STOP.\n- **Fixture tests.** The admission tests run on functions extracted from the hash-bound runner itself. The 11-case suite reran under `runner-fixture-r8b` and binds `2104\u2026`.\n\nThe batched items are also resolved:\n- **O2:** an exact four-element multiset.\n- **O3:** `DIR_TEMPLATE` required and exact; `DIR_CATALOG` must be undefined.\n- **O4:** comparison against the decoded R3 blob.\n- **O5:** the old pair is retired.\n- **O6:** cross-pair and `|` alias fixtures.\n\nThe code is PHP 8.0-compatible. Arrow functions appear only in the tests.\n\n## Optional (non-blocking)\n\n**N1. The `DIR_MODIFICATION` check is nominal.**\n- `strpos($path, DIR_MODIFICATION)===0` tests whether the template path lies *under* the modification directory.\n- OCMOD-style redirection works differently. It maps `DIR_APPLICATION\u2026` to `DIR_MODIFICATION.'catalog/\u2026'`, and that prefix never matches a public_html path. So if the constant were defined, a redirected copy, including one of the base `header.twig`, would not be detected.\n- This is non-blocking: stock OpenCart 4 `config.php` does not define `DIR_MODIFICATION`, and it was optional at R7.\n- **Recommendation:**\n  - In the next revision, replace the check with \"STOP if `defined('DIR_MODIFICATION')`\".\n  - Until then, read the \"modification_prefix STOP\" evidence as covering the literal prefix case only.\n  - Owner QA of the header token and hub would surface the defect.\n\n**N2. Small fixture gaps.**\n- `default/template/` present \u2192 STOP.\n- Empty theme with `template/template/` present \u2192 STOP.\n- Invalid store ID.\n- A row-cap case.\n\nThe code paths exist; these cases would only document them.\n\n**N3. The multiset is stricter than the R7-accepted predicate.**\n- A database row such as `view/*/before:event/theme` was previously admitted. It now STOPs as an extra row.\n- This is consistent with the live capture of exactly 4 relevant rows. It is fail-closed, not fail-open.\n\n**N4. The rollback path now inherits the stricter constants.**\n- A host `config.php` change after Apply that alters `DIR_TEMPLATE` or defines `DIR_CATALOG` would block the scripted rollback.\n- That is fail-closed and would need a targeted assessment.\n\n**N5. The runtime SQL and constant code has only been reviewed statically.**\n- The fixture stubs `rd16_runtime`.\n- Owner Verify is the first execution of this code. Any defect there would STOP with `runtime_admission_failed` before backup.\n- Host PHP 8.0, MySQL schema and settings, constants, OPcache, the authenticated UI, `common.js` and gtag remain owner Verify/QA items.\n\n**N6. Carried over.** R7 O7 and R3/R2 optional notes 1\u20135 remain non-blocking.\n\n## Gates\n\n1. Owner Upload, then Verify, with the `2104\u2026`/`f1c6\u2026` pair only.\n2. Apply is a separate owner decision.\n3. Deployed-WP1 owner QA must pass before WP2.\n4. On any STOP, preserve receipts and do not replay.",
+  "ttft_ms": 133218,
+  "type": "result",
+  "duration_ms": 164194,
+  "ttft_stream_ms": 1586,
+  "time_to_request_ms": 85,
+  "first_content_frame_ms": 1586,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

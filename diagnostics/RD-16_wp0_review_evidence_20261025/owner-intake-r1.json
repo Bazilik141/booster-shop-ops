@@ -1,0 +1,129 @@
+{
+  "task": "RD-16-WP0",
+  "archive_sha256": "82520fde09a5364124f25e566e227e406cad09dd1250da8d49c3c09e2f6f2b79",
+  "manifest_sha256": "3636e66e4ba8c80e21487e4fe05267b319286dae2982e2d26d4faa2fc9dda29a",
+  "collection_utc": "2026-10-25T07:54:50Z",
+  "regular_members": 34,
+  "total_bytes": 758720,
+  "safe_extraction": true,
+  "obvious_secret_screen": "no_signatures_not_a_comprehensive_secret_guarantee",
+  "remote_private_export_cleanup": "owner_receipt_ok",
+  "production_writes_reported": 0,
+  "metadata": {
+    "theme": {
+      "account/account": {
+        "rows_all_stores": 0,
+        "enabled_all_stores": 0
+      },
+      "account/edit": {
+        "rows_all_stores": 0,
+        "enabled_all_stores": 0
+      },
+      "common/header": {
+        "rows_all_stores": 0,
+        "enabled_all_stores": 0
+      },
+      "common/column_left": {
+        "rows_all_stores": 0,
+        "enabled_all_stores": 0
+      },
+      "common/footer": {
+        "rows_all_stores": 0,
+        "enabled_all_stores": 0
+      },
+      "extension/opencart/module/account": {
+        "rows_all_stores": 0,
+        "enabled_all_stores": 0
+      }
+    },
+    "layout_candidates": {
+      "account/account": [
+        {
+          "store_id": 0,
+          "layout_id": 6,
+          "route": "account/%"
+        }
+      ],
+      "account/edit": [
+        {
+          "store_id": 0,
+          "layout_id": 6,
+          "route": "account/%"
+        }
+      ]
+    },
+    "layout_modules": {
+      "6": [
+        {
+          "code": "ciaccountsidebar.account_sidebar",
+          "position": "column_left",
+          "sort_order": 0
+        }
+      ]
+    },
+    "limits": "all stores; route candidates only; default layout, events and active module settings not established",
+    "php": "8.0.30",
+    "template_cache_directory": "/home2/boosters/ocartdata/storage/cache/template/"
+  },
+  "ACC009_shared_after_hash_checks": [
+    {
+      "part": "WP3b",
+      "path": "system/library/booster_account_profile.php",
+      "expected": "5089e0044ac50d101c6fc07300abce625baf0303f35e17dfbb6dc0a200bbe597",
+      "actual": "5089e0044ac50d101c6fc07300abce625baf0303f35e17dfbb6dc0a200bbe597",
+      "match": true
+    },
+    {
+      "part": "WP3b",
+      "path": "catalog/view/javascript/booster-account-profile.js",
+      "expected": "6a36179518eb8e16eb105c052556570a373a581d072a187daf41fc88450150d9",
+      "actual": "6a36179518eb8e16eb105c052556570a373a581d072a187daf41fc88450150d9",
+      "match": true
+    },
+    {
+      "part": "WP3b",
+      "path": "catalog/controller/account/edit.php",
+      "expected": "91a358589fa318df92c9fff8fea6ddd949479f008556a5c15f9750dc01b9dc54",
+      "actual": "91a358589fa318df92c9fff8fea6ddd949479f008556a5c15f9750dc01b9dc54",
+      "match": true
+    },
+    {
+      "part": "WP3b",
+      "path": "catalog/model/account/custom_field.php",
+      "expected": "47f5334b0502f1967e7963bd03a2d3d764a6bceafe7b194634615cb5fa7ffe90",
+      "actual": "47f5334b0502f1967e7963bd03a2d3d764a6bceafe7b194634615cb5fa7ffe90",
+      "match": true
+    },
+    {
+      "part": "WP3b",
+      "path": "catalog/view/template/account/edit.twig",
+      "expected": "69b27f6192de5b2dbe1d46604e69cce1f2ab0d9be855aa8fdb8a465b4645f476",
+      "actual": "69b27f6192de5b2dbe1d46604e69cce1f2ab0d9be855aa8fdb8a465b4645f476",
+      "match": true
+    },
+    {
+      "part": "N2",
+      "path": "catalog/view/javascript/booster-account-universal.js",
+      "expected": "2d9ca8f133bb5e8d9f7c938a8e92d3db86d01edcedb15261525a5353a08ac368",
+      "actual": "2d9ca8f133bb5e8d9f7c938a8e92d3db86d01edcedb15261525a5353a08ac368",
+      "match": true
+    },
+    {
+      "part": "N2",
+      "path": "catalog/model/account/customer.php",
+      "expected": "06f53290fffb7d86e3f696194912156456329f20a46cb49c51173282a5896797",
+      "actual": "06f53290fffb7d86e3f696194912156456329f20a46cb49c51173282a5896797",
+      "match": true
+    }
+  ],
+  "ACC009_drift": [],
+  "different_from_stale_backup": [
+    "catalog/model/account/customer.php",
+    "catalog/model/account/custom_field.php",
+    "catalog/view/template/account/edit.twig",
+    "catalog/view/template/common/header.twig",
+    "catalog/controller/account/edit.php",
+    "catalog/controller/account/wishlist.php"
+  ],
+  "source_root": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\work\\rd16-wp0-20261025\\current-r1"
+}

@@ -1,0 +1,131 @@
+{
+  "task": "RD-16-WP2",
+  "captured_utc": "2026-10-26T08:57:03.241202+00:00",
+  "boundary": "Anonymous public HTTPS GET only; no cookie jar/auth/scripts/forms/orders/messages. Body capped 262144 bytes plus truncation marker; bodies not saved. Not authenticated UI/save/service-key proof.",
+  "checks": [
+    {
+      "name": "home",
+      "requested_url": "https://boostershop.website/",
+      "http_status": 200,
+      "final_path": "/",
+      "final_route": null,
+      "bytes_read": 84374,
+      "truncated": false,
+      "captured_PHP_fatal_marker": false,
+      "DS_tokens": [
+        "rd16-wp2-20261026"
+      ]
+    },
+    {
+      "name": "category",
+      "requested_url": "https://boostershop.website/catalog/Pokemon",
+      "error_class": "TimeoutError"
+    },
+    {
+      "name": "nested_category",
+      "requested_url": "https://boostershop.website/catalog/Pokemon/Pokemon-booster-box",
+      "error_class": "TimeoutError"
+    },
+    {
+      "name": "sealed_product",
+      "requested_url": "https://boostershop.website/product/One-Piece-Boosters-OP-11",
+      "error_class": "TimeoutError"
+    },
+    {
+      "name": "legacy_3d",
+      "requested_url": "https://boostershop.website/product/FIG-CHARM-001",
+      "http_status": 404,
+      "final_path": "/product/FIG-CHARM-001",
+      "final_route": null,
+      "bytes_read": 57087,
+      "truncated": false,
+      "captured_PHP_fatal_marker": false,
+      "DS_tokens": [
+        "rd16-wp2-20261026"
+      ]
+    },
+    {
+      "name": "current_3d",
+      "requested_url": "https://boostershop.website/product/figurka-charizard-pokemon-3d-druk",
+      "error_class": "TimeoutError"
+    },
+    {
+      "name": "information",
+      "requested_url": "https://boostershop.website/information/oplata-i-dostavka",
+      "http_status": 200,
+      "final_path": "/information/oplata-i-dostavka",
+      "final_route": null,
+      "bytes_read": 68315,
+      "truncated": false,
+      "captured_PHP_fatal_marker": false,
+      "DS_tokens": [
+        "rd16-wp2-20261026"
+      ]
+    },
+    {
+      "name": "cart",
+      "requested_url": "https://boostershop.website/index.php?route=checkout/cart",
+      "http_status": 200,
+      "final_path": "/index.php",
+      "final_route": "checkout/cart",
+      "bytes_read": 65984,
+      "truncated": false,
+      "captured_PHP_fatal_marker": false,
+      "DS_tokens": [
+        "rd16-wp2-20261026"
+      ]
+    },
+    {
+      "name": "checkout_entry",
+      "requested_url": "https://boostershop.website/index.php?route=checkout/checkout",
+      "http_status": 200,
+      "final_path": "/",
+      "final_route": "checkout/cart",
+      "bytes_read": 65975,
+      "truncated": false,
+      "captured_PHP_fatal_marker": false,
+      "DS_tokens": [
+        "rd16-wp2-20261026"
+      ]
+    },
+    {
+      "name": "guest_account",
+      "requested_url": "https://boostershop.website/index.php?route=account/account&language=uk-ua",
+      "http_status": 200,
+      "final_path": "/",
+      "final_route": "account/login",
+      "bytes_read": 57526,
+      "truncated": false,
+      "captured_PHP_fatal_marker": false,
+      "DS_tokens": [
+        "rd16-wp2-20261026"
+      ]
+    },
+    {
+      "name": "DS_asset",
+      "requested_url": "https://boostershop.website/catalog/view/stylesheet/boostershop-ds.css?v=rd16-wp2-20261026",
+      "http_status": 200,
+      "final_path": "/catalog/view/stylesheet/boostershop-ds.css",
+      "final_route": null,
+      "bytes_read": 239150,
+      "truncated": false,
+      "captured_PHP_fatal_marker": false,
+      "sha256": "e1d33339b3056de105b430c0a7e5153a4ae3e4be32922f45126118f3b4a2696f",
+      "matches_deployed_after_sha256": true
+    },
+    {
+      "name": "guest_edit",
+      "requested_url": "https://boostershop.website/index.php?route=account/edit&language=uk-ua",
+      "http_status": 200,
+      "final_path": "/",
+      "final_route": "account/login",
+      "bytes_read": 57526,
+      "truncated": false,
+      "captured_PHP_fatal_marker": false,
+      "DS_tokens": [
+        "rd16-wp2-20261026"
+      ]
+    }
+  ],
+  "legacy_3d_404": "Pre-existing WP1/ACC009 observation; current representative checked separately; no protected SEO change."
+}

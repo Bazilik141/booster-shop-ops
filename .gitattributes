@@ -97,3 +97,11 @@ patches/MONO-CHECKOUT-PRECHECK-20261020_guard-codes-r2_20261023.php -text whites
 diagnostics/MONO-CHECKOUT-PRECHECK-20261020_guard-codes-r3_owner-run_20261023.ps1 -text whitespace=cr-at-eol
 diagnostics/MONO-CHECKOUT-PRECHECK-20261020_guard-codes-r2_independent-review_20261023.md -text whitespace=-blank-at-eol,cr-at-eol
 diagnostics/MONO-CHECKOUT-PRECHECK-20261020_guard-codes-r3_independent-review_20261023.md -text whitespace=-blank-at-eol,cr-at-eol
+
+# RD-16: preserve exact reviewed deployment and evidence bytes.
+patches/RD-16*.php -text whitespace=cr-at-eol
+diagnostics/RD-16*.php -text whitespace=cr-at-eol
+diagnostics/RD-16*.ps1 -text whitespace=cr-at-eol
+diagnostics/RD-16*.sh -text whitespace=cr-at-eol
+diagnostics/RD-16*/** -text whitespace=-blank-at-eol,cr-at-eol
+design/account-light-A/*.dc.html whitespace=-blank-at-eol

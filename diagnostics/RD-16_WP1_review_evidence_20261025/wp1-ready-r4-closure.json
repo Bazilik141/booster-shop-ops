@@ -1,0 +1,14 @@
+{
+  "request_id": "477f064e-73e5-4570-8d96-c7197b842774",
+  "verdict": "Changes requested",
+  "consumed": true,
+  "replay_permitted": false,
+  "inputs_unchanged": true,
+  "packet_sha256": "050360a1e3bb2c462909872663cae790099d2a2112fc032121d883f26727954f",
+  "mandatory": [
+    "M1 stdin failure marker",
+    "M2 heredoc temporary-file claim"
+  ],
+  "owner_diagnostic_released": false,
+  "main_apply": "HELD"
+}

@@ -1,0 +1,56 @@
+{
+  "task": "RD-16-WP2",
+  "captured_utc": "2026-10-26T08:57:59.086333+00:00",
+  "boundary": "Anonymous public HTTPS GET only; no cookie jar/auth/scripts/forms/orders/messages. Body capped 262144 bytes plus truncation marker; bodies not saved. Not authenticated UI/save/service-key proof.",
+  "reason": "Only unresolved TimeoutError outcomes; one longer timeout, concurrency reduced from four to two; original results preserved",
+  "checks": [
+    {
+      "name": "category",
+      "requested_url": "https://boostershop.website/catalog/Pokemon",
+      "http_status": 200,
+      "final_path": "/catalog/Pokemon",
+      "bytes_read": 171161,
+      "truncated": false,
+      "captured_PHP_fatal_marker": false,
+      "DS_tokens": [
+        "rd16-wp2-20261026"
+      ]
+    },
+    {
+      "name": "nested_category",
+      "requested_url": "https://boostershop.website/catalog/Pokemon/Pokemon-booster-box",
+      "http_status": 200,
+      "final_path": "/catalog/Pokemon/Pokemon-booster-box",
+      "bytes_read": 164180,
+      "truncated": false,
+      "captured_PHP_fatal_marker": false,
+      "DS_tokens": [
+        "rd16-wp2-20261026"
+      ]
+    },
+    {
+      "name": "sealed_product",
+      "requested_url": "https://boostershop.website/product/One-Piece-Boosters-OP-11",
+      "http_status": 200,
+      "final_path": "/product/One-Piece-Boosters-OP-11",
+      "bytes_read": 153348,
+      "truncated": false,
+      "captured_PHP_fatal_marker": false,
+      "DS_tokens": [
+        "rd16-wp2-20261026"
+      ]
+    },
+    {
+      "name": "current_3d",
+      "requested_url": "https://boostershop.website/product/figurka-charizard-pokemon-3d-druk",
+      "http_status": 200,
+      "final_path": "/product/figurka-charizard-pokemon-3d-druk",
+      "bytes_read": 143647,
+      "truncated": false,
+      "captured_PHP_fatal_marker": false,
+      "DS_tokens": [
+        "rd16-wp2-20261026"
+      ]
+    }
+  ]
+}

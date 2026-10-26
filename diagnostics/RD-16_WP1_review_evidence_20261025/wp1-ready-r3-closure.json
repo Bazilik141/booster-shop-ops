@@ -1,0 +1,39 @@
+{
+  "task": "RD-16-WP1",
+  "stage": "wp1-ready-r3",
+  "request_id": "2e26aa18-5a2b-4794-b829-2bd45348fc30",
+  "consumed": true,
+  "replay_permitted": false,
+  "verdict": "Review OK",
+  "mandatory_findings": [],
+  "packet_sha256": "c011c44098961d7b97992641ae0e9509512d3886602d94db91cecc8d6b1abbfb",
+  "packet_bytes": 38195,
+  "declared_inputs_count": 85,
+  "inputs_unchanged_at_completion": true,
+  "inputs_rehashed_before_bookkeeping": true,
+  "response_sha256": "77da6d3fb2b5cea17e4c9eaba0e3dbfca4000340bbdf39c1f950cf971b569377",
+  "accepted_executables": [
+    {
+      "path": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\patches\\RD-16-WP1_account-shell-hub_20261025.php",
+      "sha256": "c8a8cc5559f09fd57e4c027b6f7aac8ec939210a0e090f31980fe53c5abfda1a",
+      "bytes": 82692
+    },
+    {
+      "path": "C:\\Users\\14bez\\Downloads\\Booster Shop\\booster-shop-ops\\diagnostics\\RD-16-WP1_owner_20261025.ps1",
+      "sha256": "c99761454e87b9053dee64583318cb6213b2fa9d9944d2357f57643fb730aeaf",
+      "bytes": 11830
+    }
+  ],
+  "reviewed_report_sha256": "63f5b2c18d949b64824c50034bc258dc9c7b1469c9563c1af9330edd7d744f29",
+  "bookkeeping_report_sha256": "48ef26224684d3e3cd7ee2ce0cdd3c059da1acb9c0789eb0c7bde9af2ab5d6fe",
+  "reuse": "Exact R2-to-R3 equivalence; unchanged R2 backend/UI/file-engine/cache coverage within original fake boundaries. Only changed event predicate reexecuted, 19 cases.",
+  "owner_execution": "not_run",
+  "gate": "WP1_READY_OWNER_UPLOAD_VERIFY",
+  "WP2": "held_until_owner_QA_acceptance_of_deployed_WP1",
+  "subscription_verified": true,
+  "tools": [],
+  "MCP_count": 0,
+  "paid_fallback": false,
+  "agent_server_or_key_access": false,
+  "closed_utc": "2026-10-25T10:16:46.577309+00:00"
+}
