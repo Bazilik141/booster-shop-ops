@@ -83,6 +83,8 @@ status and priority from the verified Notion card. Use dashboard
 | RD-13 | Checkout reskin — visual-only stock checkout | handoffs/HANDOFF-RD13-checkoutV2.md · handoffs/HANDOFF-RD13-checkout-FIXES-round2.md · diagnostics/RD-13_checkout-reskin-round2_report_20260706.md |
 | RD-01/02/03 | Shell DS parity | handoffs/handoff_RD-01-02-03_shell-ds-parity_2026-05-30.md |
 | RD-16 | Account shell + hub + personal data (light variant A); base for RD-17/18/19/20 | handoffs/handoff_RD-16_account-shell-personal-data_20261025.md · boards: design/account-light-A/ · data foundation: ACC-007/008/009 reports |
+| RD-17 | Account addresses list + form (light A), ACC-008 carry-over notices; before RD-18 | handoffs/handoff_RD-17_account-addresses_20261026.md · boards: design/account-light-A/ |
+| RD-18 | Account orders list + detail (light A) over ACC-007 status presentation; after RD-17 | handoffs/handoff_RD-18_account-orders_20261026.md · boards: design/account-light-A/ |
 
 ---
 

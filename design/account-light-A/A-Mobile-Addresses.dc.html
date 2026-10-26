@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<title>A · Адреси, мобільний</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0}
+.pib:invalid:not(:placeholder-shown){border-color:#DC2626 !important;background:#FEF2F2 !important}
+.pib-hint{display:none;font-size:13px;color:#B91C1C}
+.pib:invalid:not(:placeholder-shown) ~ .pib-hint{display:block}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #1E3A8A;outline-offset:2px}
+a.nav-link:hover{background:#F7F7F5}
+.addr-toggle{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.addr-new{display:none}
+.addr-toggle:checked ~ .addr-new{display:flex}
+.add-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 20px;border-radius:8px;background:#1E3A8A;color:#FFFFFF;border:1px solid #1E3A8A;font-size:14.5px;font-weight:700;cursor:pointer;box-sizing:border-box;user-select:none}
+.add-btn .t-open{display:none}
+.addr-toggle:checked ~ .hdr .add-btn{background:#FFFFFF;color:#111827;border-color:#E5E7EB}
+.addr-toggle:checked ~ .hdr .add-btn .t-open{display:inline}
+.addr-toggle:checked ~ .hdr .add-btn .t-closed{display:none}
+.addr-toggle:focus-visible ~ .hdr .add-btn{outline:2px solid #1E3A8A;outline-offset:2px}
+.lnk-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:8px;font-size:14.5px;font-weight:700;text-decoration:none;box-sizing:border-box;cursor:pointer}
+</style>
+</helmet>
+<div style="min-height:1300px;background:#F7F7F5;font-family:'Manrope',system-ui,-apple-system,sans-serif;color:#1F2937">
+  <div style="height:57px;border-bottom:1px dashed #E5E7EB;background:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:13px;color:#6B7280">Шапка сайту — без змін</div>
+  <div style="position:relative;padding:16px 16px 48px;display:flex;flex-direction:column;gap:16px;box-sizing:border-box">
+    <nav aria-label="Розділи кабінету" style="display:flex;gap:8px;overflow-x:auto;margin:0 -16px;padding:0 16px 4px">
+      <a href="A-Mobile-Hub.dc.html" style="flex:0 0 auto;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.08);color:#1F2937;text-decoration:none;font-size:14.5px;font-weight:600">Кабінет</a>
+      <a href="A-Mobile-Edit.dc.html" style="flex:0 0 auto;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.08);color:#1F2937;text-decoration:none;font-size:14.5px;font-weight:600">Особисті дані</a>
+      <a href="A-Mobile-Addresses.dc.html" aria-current="page" style="flex:0 0 auto;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;background:#C68A00;color:#111827;text-decoration:none;font-size:14.5px;font-weight:800">Адреси</a>
+      <a href="A-Mobile-Orders.dc.html" style="flex:0 0 auto;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.08);color:#1F2937;text-decoration:none;font-size:14.5px;font-weight:600">Замовлення</a>
+      <a href="A-Mobile-Favorites.dc.html" style="flex:0 0 auto;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.08);color:#1F2937;text-decoration:none;font-size:14.5px;font-weight:600">Улюблене</a>
+      <span aria-disabled="true" title="Скоро буде доступно" style="flex:0 0 auto;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;background:#FFFFFF;color:#6B7280;opacity:.55;cursor:not-allowed;font-size:14.5px;font-weight:600">Налаштування</span>
+      <a href="https://t.me/BoosterShop_Support_bot" target="_blank" rel="noopener" style="flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 16px;border-radius:999px;background:#111827;color:#FFFFFF;text-decoration:none;font-size:14.5px;font-weight:700"><svg width="16" height="16" viewBox="0 0 24 24" fill="#229ED9" stroke="#229ED9" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M21 3L3 10.5l6 2.2L11 20l3-4.5 5 3.7L21 3z"></path></svg>Допомога</a>
+    </nav>
+    <input type="checkbox" id="addr-toggle" class="addr-toggle" aria-label="Показати форму нової адреси">
+    <div class="hdr" style="display:flex;flex-direction:column;gap:12px">
+      <h1 style="margin:0;font-size:24px;line-height:1.2;font-weight:800;color:#111827">Адреси доставки</h1>
+      <label for="addr-toggle" class="add-btn" style="min-height:48px"><span class="t-closed">Додати адресу</span><span class="t-open">Скасувати</span></label>
+    </div>
+      <ul style="list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr;gap:16px">
+        <li style="display:flex;flex-direction:column;gap:16px;padding:20px;background:#FFFFFF;border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);box-sizing:border-box">
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <span style="width:40px;height:40px;border-radius:12px;background:#FBF4DC;color:#92400E;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 10-14 0c0 4.8 7 11 7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg></span>
+            <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+              <span style="align-self:flex-start;padding:3px 8px;border-radius:6px;background:#E8EEFB;color:#1E3A8A;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase">Основна</span>
+              <h2 style="margin:0;font-size:18px;font-weight:700;color:#111827">Олена Іванівна Коваленко</h2>
+              <div style="display:flex;flex-direction:column;gap:2px;font-size:14px;line-height:1.5;color:#1F2937">
+                <span>Київ, Нова пошта, відділення №12</span>
+                <span style="color:#6B7280">Україна, Київська область</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:auto">
+            <label for="addr-toggle" class="lnk-btn" style="border:1px solid #E5E7EB;background:#FFFFFF;color:#111827">Редагувати</label>
+            <a href="#" class="lnk-btn" style="color:#DC2626">Видалити</a>
+          </div>
+        </li>
+        <li style="display:flex;flex-direction:column;gap:16px;padding:20px;background:#FFFFFF;border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);box-sizing:border-box">
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <span style="width:40px;height:40px;border-radius:12px;background:#FBF4DC;color:#92400E;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 10-14 0c0 4.8 7 11 7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg></span>
+            <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+              
+              <h2 style="margin:0;font-size:18px;font-weight:700;color:#111827">Олена Іванівна Коваленко</h2>
+              <div style="display:flex;flex-direction:column;gap:2px;font-size:14px;line-height:1.5;color:#1F2937">
+                <span>Львів, Нова пошта, поштомат №4501</span>
+                <span style="color:#6B7280">Україна, Львівська область</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:auto">
+            <label for="addr-toggle" class="lnk-btn" style="border:1px solid #E5E7EB;background:#FFFFFF;color:#111827">Редагувати</label>
+            <a href="#" class="lnk-btn" style="color:#1E3A8A">Зробити основною</a>
+            <a href="#" class="lnk-btn" style="color:#DC2626">Видалити</a>
+          </div>
+        </li>
+      </ul>
+      <section class="addr-new" id="new-address" aria-labelledby="h-new" style="max-width:720px;flex-direction:column;gap:20px;padding:20px 16px;background:#FFFFFF;border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);box-sizing:border-box">
+        <h2 id="h-new" style="margin:0;font-size:20px;font-weight:700;color:#111827">Нова адреса</h2>
+        <form style="display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label for="ad-name" style="font-size:14px;font-weight:600;color:#111827">Імʼя <span style="color:#DC2626" aria-hidden="true">*</span></label>
+          <input id="ad-name" class="pib" pattern="[А-ЩЬЮЯІЇЄҐа-щьюяіїєґ’ʼ' -]+" placeholder=" " type="text" value="Олена" autocomplete="given-name" style="height:48px;padding:0 14px;border:1px solid #E5E7EB;border-radius:8px;background:#F7F7F5;font-family:inherit;font-size:16px;color:#1F2937;box-sizing:border-box;width:100%">
+          <span class="pib-hint" role="status">Лише українські літери, апостроф і дефіс.</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label for="ad-surname" style="font-size:14px;font-weight:600;color:#111827">Прізвище <span style="color:#DC2626" aria-hidden="true">*</span></label>
+          <input id="ad-surname" class="pib" pattern="[А-ЩЬЮЯІЇЄҐа-щьюяіїєґ’ʼ' -]+" placeholder=" " type="text" value="Коваленко" autocomplete="family-name" style="height:48px;padding:0 14px;border:1px solid #E5E7EB;border-radius:8px;background:#F7F7F5;font-family:inherit;font-size:16px;color:#1F2937;box-sizing:border-box;width:100%">
+          <span class="pib-hint" role="status">Лише українські літери, апостроф і дефіс.</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label for="ad-patr" style="font-size:14px;font-weight:600;color:#111827">По батькові <span style="font-weight:500;color:#6B7280">необовʼязково</span></label>
+          <input id="ad-patr" class="pib" pattern="[А-ЩЬЮЯІЇЄҐа-щьюяіїєґ’ʼ' -]+" placeholder=" " type="text" value="Іванівна" autocomplete="additional-name" style="height:48px;padding:0 14px;border:1px solid #E5E7EB;border-radius:8px;background:#F7F7F5;font-family:inherit;font-size:16px;color:#1F2937;box-sizing:border-box;width:100%">
+          <span class="pib-hint" role="status">Лише українські літери, апостроф і дефіс.</span>
+        </div>
+            </div>
+            <span style="font-size:13px;color:#6B7280">Підставлено з особистих даних — за потреби змініть для цієї адреси.</span>
+          </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label for="ad-city" style="font-size:14px;font-weight:600;color:#111827">Місто <span style="color:#DC2626" aria-hidden="true">*</span></label>
+          <input id="ad-city" placeholder="Почніть вводити назву" type="text" autocomplete="address-level2" style="height:48px;padding:0 14px;border:1px solid #E5E7EB;border-radius:8px;background:#F7F7F5;font-family:inherit;font-size:16px;color:#1F2937;box-sizing:border-box;width:100%">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label for="ad-branch" style="font-size:14px;font-weight:600;color:#111827">Відділення / поштомат <span style="color:#DC2626" aria-hidden="true">*</span></label>
+          <select id="ad-branch" style="height:48px;padding:0 12px;border:1px solid #E5E7EB;border-radius:8px;background:#F7F7F5;font-family:inherit;font-size:16px;color:#1F2937;box-sizing:border-box;width:100%"><option>Спочатку оберіть місто</option></select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label for="ad-street" style="font-size:14px;font-weight:600;color:#111827">Адресна доставка</label>
+          <input id="ad-street" placeholder="Вулиця, будинок, квартира" type="text" autocomplete="street-address" style="height:48px;padding:0 14px;border:1px solid #E5E7EB;border-radius:8px;background:#F7F7F5;font-family:inherit;font-size:16px;color:#1F2937;box-sizing:border-box;width:100%">
+          <span style="font-size:13px;color:#6B7280">Необовʼязково, якщо обрано відділення або поштомат</span>
+        </div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label for="ad-country" style="font-size:14px;font-weight:600;color:#111827">Країна <span style="color:#DC2626" aria-hidden="true">*</span></label>
+          <select id="ad-country" style="height:48px;padding:0 12px;border:1px solid #E5E7EB;border-radius:8px;background:#F7F7F5;font-family:inherit;font-size:16px;color:#1F2937;box-sizing:border-box;width:100%"><option>Україна</option></select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label for="ad-region" style="font-size:14px;font-weight:600;color:#111827">Регіон <span style="color:#DC2626" aria-hidden="true">*</span></label>
+          <select id="ad-region" style="height:48px;padding:0 12px;border:1px solid #E5E7EB;border-radius:8px;background:#F7F7F5;font-family:inherit;font-size:16px;color:#1F2937;box-sizing:border-box;width:100%"><option>Оберіть область</option><option>Київська область</option><option>Львівська область</option><option>Одеська область</option><option>Харківська область</option><option>Дніпропетровська область</option></select>
+        </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;min-height:44px">
+            <input id="ad-default" type="checkbox" style="width:20px;height:20px;margin:0;accent-color:#1E3A8A">
+            <label for="ad-default" style="font-size:14.5px;font-weight:600;color:#1F2937">Зробити основною адресою</label>
+          </div>
+          <div style="display:flex;flex-direction:column;flex-wrap:wrap;gap:12px">
+            <button type="submit" style="min-height:48px;padding:0 28px;border:0;border-radius:8px;background:#1E3A8A;color:#FFFFFF;font-family:inherit;font-size:14.5px;font-weight:700;cursor:pointer">Зберегти адресу</button>
+            <label for="addr-toggle" style="display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 24px;border:1px solid #E5E7EB;border-radius:8px;background:#FFFFFF;color:#111827;font-size:14.5px;font-weight:700;box-sizing:border-box;cursor:pointer">Скасувати</label>
+          </div>
+        </form>
+      </section>
+    <aside aria-label="Примітка до макета" style="padding:16px 20px;border:1px dashed #C68A00;border-radius:14px;background:#FFFBEB;color:#1F2937;font-size:13.5px;line-height:1.55;box-sizing:border-box">
+      <strong style="display:block;margin-bottom:8px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#7A4F00">Примітка до макета · Адреси</strong>
+      <ul style="margin:0;padding-left:18px"><li style="margin:0 0 6px">Форма «Нова адреса» за замовчуванням згорнута і відкривається лише після натискання «Додати адресу» (або «Редагувати» на картці). Повторне натискання або «Скасувати» згортає її.</li><li style="margin:0 0 6px">Верхня дошка — стан за замовчуванням, нижня — відкрита форма.</li></ul>
+    </aside>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1300}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>
