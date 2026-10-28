@@ -7,7 +7,8 @@ Status: **package ready for the independent Claude chat review**. Not applied. N
 | Item | Path | SHA-256 |
 |---|---|---|
 | Patch | `patches/ACC-006-visual-WP1_20261028.php` | `43f9642e1e6d1f8310e83df5cd5df36cf9ff320d04c2172472237391907b1465` |
-| Owner packet | `diagnostics/ACC-006-visual-WP1_owner_20261028.ps1` | `7b31b16e08d640d57f20b351cebeb8cce24040409f07a872ceafc202ef5021ed` |
+| Owner packet (bytes the owner runs: Windows checkout, CRLF per `.gitattributes` `*.ps1 eol=crlf`) | `diagnostics/ACC-006-visual-WP1_owner_20261028.ps1` | `9d34b33a0b7cfcfc697ba4a4dbe1d84715a52175b018c60eba6434060290d14d` |
+| Same packet, LF repository blob (`git show`) | ditto | `7b31b16e08d640d57f20b351cebeb8cce24040409f07a872ceafc202ef5021ed` |
 | Evidence | `diagnostics/ACC-006_visual-wp1_evidence_20261028/` | tests, outputs, `hash-contract.json`, per-target diffs, screenshots |
 
 ## 1. Authority and decisions applied
@@ -173,7 +174,13 @@ powershell -ExecutionPolicy Bypass -File "C:\Users\14bez\Downloads\Booster Shop\
 - the backup-name regex;
 - `changed_files=16`.
 
-The full line diff is in `evidence/packet-diff.txt`. ASCII-only, LF, no BOM.
+The full line diff is in `evidence/packet-diff.txt`. ASCII-only, no BOM.
+
+**Line endings:** the repository stores the packet as LF and checks it out as CRLF (`*.ps1 text eol=crlf`). The RD-16/17/18 packets were pinned with `-text` rules in `.gitattributes`; that file is outside this task's push scope.
+- The reviewed hash is the executed CRLF checkout, `9d34b33a…`.
+- The LF blob is `7b31b16e…`.
+- Every remote body is normalized CRLF→LF by `Invoke-LfBody`, which also rejects any stray CR, so both byte forms send identical commands.
+- Optional owner action when publishing to `master`: add `diagnostics/ACC-006-visual-WP1_owner_20261028.ps1 -text` to `.gitattributes`.
 
 ## 6. Local verification
 | Check | Result | Fidelity / limit |
