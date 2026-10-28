@@ -1,0 +1,12 @@
+--- before/catalog/controller/common/header.php
++++ after/catalog/controller/common/header.php
+@@ -168,6 +168,9 @@
+ 		}
+ 		$data['bs_wishlist_token'] = $this->session->data['acc006_wishlist_token'];
+ 		$data['bs_wishlist_count'] = $this->load->controller('account/wishlist.total');
++		// ACC006_VISUAL_WP1_20261028: visible member IDs for the heart state, read-only.
++		$bs_wishlist_ids = $this->load->controller('account/wishlist.ids');
++		$data['bs_wishlist_ids'] = is_array($bs_wishlist_ids) ? implode(',', array_map('intval', $bs_wishlist_ids)) : '';
+ 		$bs_wishlist_args = 'language=' . rawurlencode((string)$this->config->get('config_language'));
+ 		if ($this->customer->isLogged() && isset($this->session->data['customer_token'])) {
+ 			$bs_wishlist_args .= '&customer_token=' . rawurlencode((string)$this->session->data['customer_token']);

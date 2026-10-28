@@ -1,0 +1,7 @@
+product/thumb          anchors before=[1,0,0] after=[1,0,0] SAME | render before=ok after=ok
+product/product        anchors before=[2,0,1,1] after=[2,0,1,1] SAME | render before=ok after=ok
+account/wishlist       anchors before=[1] after=[1] SAME | render before=ok after=ok
+account/wishlist_list  anchors before=[2,1] after=[2,1] SAME | render before=ok after=ok
+common/header          anchors before=[0,1,1] after=[0,1,1] SAME | render before=ok after=ok
+account/shell          anchors before=[] after=[] SAME | render before=ok after=ok
+anchors=ok

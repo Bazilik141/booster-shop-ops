@@ -1,0 +1,113 @@
+--- before/catalog/view/template/account/wishlist_list.twig
++++ after/catalog/view/template/account/wishlist_list.twig
+@@ -1,58 +1,58 @@
+ {# ACC-006_WISHLIST_RESTORE_20261013 #}
++{# ACC006_VISUAL_WP1_20261028: «Обране» cards. The two product links and the cart button are
++   the PS Enhanced Measurement anchors: keep them byte-exact. Preorder reuses the same button
++   by giving button_cart a per-card value inside the loop. #}
+ <div data-bs-wishlist-list data-count="{{ bs_wishlist_count }}" data-list-url="{{ bs_wishlist_list_url|escape('html_attr') }}">
+ {% if products %}
+-  <div class="table-responsive">
+-    <table class="table table-bordered table-hover">
+-      <thead>
+-        <tr>
+-          <th class="text-center">{{ column_image }}</th>
+-          <th>{{ column_name }}</th>
+-          <th>{{ column_model }}</th>
+-          <th class="text-end">{{ column_stock }}</th>
+-          <th class="text-end">{{ column_price }}</th>
+-          <th class="text-end">{{ column_action }}</th>
+-        </tr>
+-      </thead>
+-      <tbody>
+-        {% set product_row = 0 %}
+-        {% for product in products %}
+-          <tr>
+-            <td class="text-center">{% if product.thumb %}<a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}"/></a>{% endif %}</td>
+-            <td><a href="{{ product.href }}">{{ product.name }}</a>
+-              <form id="form-product-{{ product_row }}" action="{{ cart_add }}" method="post" data-oc-toggle="ajax" data-oc-load="{{ cart }}" data-oc-target="#cart">
+-                <input type="hidden" name="product_id" value="{{ product.product_id }}"/>
+-                <input type="hidden" name="quantity" value="{{ product.minimum }}"/>
+-              </form>
+-            </td>
+-            <td>{{ product.model }}</td>
+-            <td class="text-end">{{ product.stock }}</td>
+-            <td class="text-end text-nowrap">
+-              {% if product.price %}
+-                <div class="price">
+-                  {% if not product.special %}
+-                    {{ product.price }}
+-                  {% else %}
+-                    <b>{{ product.special }}</b> <s>{{ product.price }}</s>
+-                  {% endif %}
+-                </div>
+-              {% endif %}</td>
+-            <td class="text-end text-nowrap" style="width: 1px;">
+-              <div class="d-grid">
+-                {% if product.bs_can_buy %}
+-                  <button type="submit" form="form-product-{{ product_row }}" class="btn btn-primary mb-1">{{ button_cart }}</button>
+-                {% else %}
+-                  <button type="button" class="btn bs-btn bs-btn-secondary mb-1" disabled>Немає в наявності</button>
+-                {% endif %}
+-                <button type="button" class="btn bs-btn bs-btn-secondary" data-bs-wishlist-remove="{{ product.product_id }}">{{ button_remove }}</button>
+-              </div>
+-            </td>
+-          </tr>
+-          {% set product_row = product_row + 1 %}
+-        {% endfor %}
+-      </tbody>
+-    </table>
+-  </div>
++  {% set bs_button_cart = button_cart %}
++  <ul class="bs-fav-grid">
++    {% set product_row = 0 %}
++    {% for product in products %}
++      {% set bs_is_pre = product.bs_preorder %}
++      {% set bs_is_out = not product.bs_can_buy %}
++      <li class="bs-fav-card{% if bs_is_out %} bs-fav-card--out{% endif %}">
++        <div class="bs-fav-card__media{% if product.bs_media_kind in ['cut', 'photo'] %} bs-fav-card__media--{{ product.bs_media_kind }}{% endif %}">
++          <a href="{{ product.href }}">
++            {% if product.bs_fit_thumb %}<img src="{{ product.bs_fit_thumb }}" alt="{{ product.name }}" width="{{ product.bs_media_width }}" height="{{ product.bs_media_height }}" loading="lazy" decoding="async"/>
++            {% elseif product.thumb %}<img src="{{ product.thumb }}" alt="{{ product.name }}" loading="lazy" decoding="async"/>{% endif %}
++          </a>
++          {% if bs_is_pre or product.bs_discount > 0 %}<span class="bs-fav-card__badges">{% if bs_is_pre %}<span class="bs-badge bs-badge--preorder">{{ text_preorder_badge }}</span>{% endif %}{% if product.bs_discount > 0 %}<span class="bs-badge bs-badge--discount">−{{ product.bs_discount }}%</span>{% endif %}</span>{% endif %}
++        </div>
++        <button type="button" class="bs-fav-heart" data-bs-wishlist-remove="{{ product.product_id }}" aria-pressed="true" aria-label="{{ text_remove_named|format(product.name) }}"><svg width="22" height="22" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 17s-7-4.4-7-9a4 4 0 0 1 7-2.4A4 4 0 0 1 17 8c0 4.6-7 9-7 9Z" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
++        <div class="bs-fav-card__body">
++          {% if bs_is_pre %}<span class="bs-badge bs-badge--preorder bs-fav-card__inline-badge">{{ text_preorder_badge }}</span>{% endif %}
++          <h2 class="bs-fav-card__name"><a href="{{ product.href }}">{{ product.name }}</a></h2>
++          {% if bs_is_out %}
++            <p class="bs-fav-card__status">{{ text_unavailable }}</p>
++          {% elseif product.price %}
++            <p class="bs-fav-card__price{% if product.special %} bs-fav-card__price--sale{% endif %}">
++              {% if not product.special %}<span class="bs-fav-card__price-new">{{ product.price }}</span>
++              {% else %}<span class="bs-fav-card__price-new">{{ product.special }}</span> <s class="bs-fav-card__price-old">{{ product.price }}</s>{% endif %}
++            </p>
++          {% endif %}
++          <form id="form-product-{{ product_row }}" action="{{ cart_add }}" method="post" data-oc-toggle="ajax" data-oc-load="{{ cart }}" data-oc-target="#cart">
++            <input type="hidden" name="product_id" value="{{ product.product_id }}"/>
++            <input type="hidden" name="quantity" value="{{ product.minimum }}"/>
++          </form>
++        </div>
++        <div class="bs-fav-card__action{% if bs_is_pre %} bs-fav-card__action--pre{% endif %}">
++          {% if product.bs_can_buy %}
++            {% set button_cart = bs_is_pre ? text_preorder : bs_button_cart %}
++            <button type="submit" form="form-product-{{ product_row }}" class="btn btn-primary mb-1">{{ button_cart }}</button>
++          {% else %}
++            <button type="button" class="btn bs-btn bs-btn-secondary mb-1" disabled>{{ text_unavailable }}</button>
++          {% endif %}
++        </div>
++      </li>
++      {% set product_row = product_row + 1 %}
++    {% endfor %}
++  </ul>
+ {% else %}
+-  <p>{{ text_no_results }}</p>
++  <section class="bs-fav-empty">
++    <svg width="44" height="44" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 17s-7-4.4-7-9a4 4 0 0 1 7-2.4A4 4 0 0 1 17 8c0 4.6-7 9-7 9Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
++    <h2>{{ text_no_results }}</h2>
++    <p>{{ text_empty_body }}</p>
++    <a class="bs-account-action" href="{{ bs_catalog_url }}">{{ text_catalog }}</a>
++  </section>
+ {% endif %}
+ </div>

@@ -1,0 +1,12 @@
+--- before/catalog/view/template/product/thumb.twig
++++ after/catalog/view/template/product/thumb.twig
+@@ -91,7 +91,8 @@
+         </form>
+       {% endif %}
+       {# ACC-006_WISHLIST_RESTORE_20261013: separate action, including unavailable products. #}
+-      <button type="button" class="bs-btn bs-btn-secondary bs-btn-sm w-100 mt-2" data-bs-wishlist-add="{{ product_id }}" aria-label="Додати в улюблене: {{ name }}">В улюблене</button>
++      {# ACC006_VISUAL_WP1_20261028: toggle; JS sets aria-pressed/label/text from the visible member IDs. #}
++      <button type="button" class="bs-btn bs-btn-secondary bs-btn-sm w-100 mt-2" data-bs-wishlist-add="{{ product_id }}" data-bs-wishlist-name="{{ name }}" aria-pressed="false" aria-label="Додати в обране: {{ name }}"><span data-bs-wishlist-text>Додати в обране</span></button>
+     </div>
+   </div>
+ </article>

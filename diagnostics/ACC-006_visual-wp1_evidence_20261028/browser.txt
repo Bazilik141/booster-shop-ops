@@ -1,0 +1,100 @@
+ok   390 logged cat: server ids mark tile pressed
+ok   390 logged cat: double-click = one add request
+ok   390 logged cat: pressed + counter 2
+ok   390 logged cat: exactly one add_to_wishlist
+ok   390 logged cat: notice text/links/in viewport
+ok   390 logged cat: notice inside viewport
+ok   390 logged cat: button one line, no overflow, tile height same
+ok   390 logged cat: second tap removes, no GA
+ok   390 logged cat: focusable
+ok   390 logged cat: no page errors
+ok   390 logged product: add pressed + one GA + sticky bar present
+ok   390 logged product: no page errors
+ok   390 guest cat: server ids mark tile pressed
+ok   390 guest cat: double-click = one add request
+ok   390 guest cat: pressed + counter 2
+ok   390 guest cat: exactly one add_to_wishlist
+ok   390 guest cat: notice text/links/in viewport
+ok   390 guest cat: notice inside viewport
+ok   390 guest cat: button one line, no overflow, tile height same
+ok   390 guest cat: second tap removes, no GA
+ok   390 guest cat: focusable
+ok   390 guest cat: no page errors
+ok   390 guest product: add pressed + one GA + sticky bar present
+ok   390 guest product: no page errors
+ok   390 favorites: no horizontal overflow
+ok   390 favorites: heart bottom-right on photo (desktop) / row right (mobile)
+ok   390 favorites: out dimmed .45, heart not dimmed
+ok   390 favorites: buttons/colours
+ok   390 favorites: columns
+ok   390 favorites: count label + nav count
+ok   390 favorites: remove updates label/nav/header
+ok   390 favorites: no page errors
+ok   390 favorites empty: «До каталогу» blue
+ok   768 logged cat: server ids mark tile pressed
+ok   768 logged cat: double-click = one add request
+ok   768 logged cat: pressed + counter 2
+ok   768 logged cat: exactly one add_to_wishlist
+ok   768 logged cat: notice text/links/in viewport
+ok   768 logged cat: notice inside viewport
+ok   768 logged cat: button one line, no overflow, tile height same
+ok   768 logged cat: second tap removes, no GA
+ok   768 logged cat: focusable
+ok   768 logged cat: no page errors
+ok   768 logged product: add pressed + one GA + sticky bar present
+ok   768 logged product: no page errors
+ok   768 guest cat: server ids mark tile pressed
+ok   768 guest cat: double-click = one add request
+ok   768 guest cat: pressed + counter 2
+ok   768 guest cat: exactly one add_to_wishlist
+ok   768 guest cat: notice text/links/in viewport
+ok   768 guest cat: notice inside viewport
+ok   768 guest cat: button one line, no overflow, tile height same
+ok   768 guest cat: second tap removes, no GA
+ok   768 guest cat: focusable
+ok   768 guest cat: no page errors
+ok   768 guest product: add pressed + one GA + sticky bar present
+ok   768 guest product: no page errors
+ok   768 favorites: no horizontal overflow
+ok   768 favorites: heart bottom-right on photo (desktop) / row right (mobile)
+ok   768 favorites: out dimmed .45, heart not dimmed
+ok   768 favorites: buttons/colours
+ok   768 favorites: columns
+ok   768 favorites: count label + nav count
+ok   768 favorites: remove updates label/nav/header
+ok   768 favorites: no page errors
+ok   768 favorites empty: «До каталогу» blue
+ok   1280 logged cat: server ids mark tile pressed
+ok   1280 logged cat: double-click = one add request
+ok   1280 logged cat: pressed + counter 2
+ok   1280 logged cat: exactly one add_to_wishlist
+ok   1280 logged cat: notice text/links/in viewport
+ok   1280 logged cat: notice inside viewport
+ok   1280 logged cat: button one line, no overflow, tile height same
+ok   1280 logged cat: second tap removes, no GA
+ok   1280 logged cat: focusable
+ok   1280 logged cat: no page errors
+ok   1280 logged product: add pressed + one GA + sticky bar present
+ok   1280 logged product: no page errors
+ok   1280 guest cat: server ids mark tile pressed
+ok   1280 guest cat: double-click = one add request
+ok   1280 guest cat: pressed + counter 2
+ok   1280 guest cat: exactly one add_to_wishlist
+ok   1280 guest cat: notice text/links/in viewport
+ok   1280 guest cat: notice inside viewport
+ok   1280 guest cat: button one line, no overflow, tile height same
+ok   1280 guest cat: second tap removes, no GA
+ok   1280 guest cat: focusable
+ok   1280 guest cat: no page errors
+ok   1280 guest product: add pressed + one GA + sticky bar present
+ok   1280 guest product: no page errors
+ok   1280 favorites: no horizontal overflow
+ok   1280 favorites: heart bottom-right on photo (desktop) / row right (mobile)
+ok   1280 favorites: out dimmed .45, heart not dimmed
+ok   1280 favorites: buttons/colours
+ok   1280 favorites: columns
+ok   1280 favorites: count label + nav count
+ok   1280 favorites: remove updates label/nav/header
+ok   1280 favorites: no page errors
+ok   1280 favorites empty: «До каталогу» blue
+browser_checks=99 failed=0

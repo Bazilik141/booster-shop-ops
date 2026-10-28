@@ -1,0 +1,62 @@
+--- before/extension/ukrainian/catalog/language/uk-ua/account/wishlist.php
++++ after/extension/ukrainian/catalog/language/uk-ua/account/wishlist.php
+@@ -1,16 +1,16 @@
+ <?php
+ // ACC-006_WISHLIST_RESTORE_20261013
+ // Heading
+-$_['heading_title'] = 'Улюблене';
++$_['heading_title'] = 'Обране';
+ 
+ // Text
+ $_['text_account'] = 'Особистий кабінет';
+ $_['text_instock'] = 'В наявності';
+-$_['text_wishlist'] = 'Улюблене (%s)';
+-$_['text_login'] = 'Ви повинні <a href="%s">виконати вхід</a> або <a href="%s">створити обліковий запис</a>, щоб зберегти <a href="%s">%s</a> у <a href="%s">список закладок</a>!';
+-$_['text_success'] = 'Ви додали <a href="%s">%s</a> у <a href="%s">Закладки</a>!';
+-$_['text_remove'] = 'Список закладок успішно змінено!';
+-$_['text_no_results'] = 'В улюбленому поки немає товарів';
++$_['text_wishlist'] = 'Обране (%s)';
++$_['text_login'] = 'Ви повинні <a href="%s">виконати вхід</a> або <a href="%s">створити обліковий запис</a>, щоб зберегти <a href="%s">%s</a> в <a href="%s">обране</a>!';
++$_['text_success'] = 'Ви додали <a href="%s">%s</a> в <a href="%s">обране</a>!';
++$_['text_remove'] = 'Обране змінено.';
++$_['text_no_results'] = 'Тут збиратимуться ваші товари';
+ 
+ // Column
+ $_['column_image'] = 'Зображення';
+@@ -24,6 +24,31 @@
+ $_['error_product'] = 'Товар не знайдено або недоступний.';
+ $_['error_method'] = 'Некоректний спосіб виконання дії.';
+ $_['error_auth'] = 'Оновіть сторінку та повторіть дію.';
+-$_['text_added_plain'] = 'Товар додано в улюблене.';
+-$_['text_saved_guest'] = 'Товар збережено до входу. Увійдіть, щоб перенести його у ваш список.';
+-$_['text_removed_plain'] = 'Товар видалено з улюбленого.';
+\ No newline at end of file
++$_['text_added_plain'] = 'Додано в обране';
++$_['text_saved_guest'] = 'Збережено в цьому браузері до входу';
++$_['text_removed_plain'] = 'Прибрано з обраного';
++// ACC006_VISUAL_WP1_20261028: «Обране» page, shell labels and count phrases.
++$_['text_empty_body'] = 'Натисніть на серце на картці товару — і він з’явиться тут.';
++$_['text_catalog'] = 'До каталогу';
++$_['text_preorder'] = 'Передзамовити';
++$_['text_preorder_badge'] = 'Передзамовлення';
++$_['text_unavailable'] = 'Немає в наявності';
++$_['text_remove_named'] = 'Прибрати з обраного: %s';
++$_['text_count_one'] = '%s товар';
++$_['text_count_few'] = '%s товари';
++$_['text_count_many'] = '%s товарів';
++$_['rd16_account'] = 'Кабінет';
++$_['rd16_edit'] = 'Особисті дані';
++$_['rd16_address'] = 'Адреси доставки';
++$_['rd16_order'] = 'Мої замовлення';
++$_['rd16_wishlist'] = 'Обране';
++$_['rd16_settings'] = 'Налаштування';
++$_['rd16_logout'] = 'Вийти';
++$_['rd16_nav'] = 'Розділи кабінету';
++$_['rd16_soon'] = 'Скоро';
++$_['rd16_help'] = 'Допомога';
++$_['rd16_help_title'] = 'Потрібна допомога?';
++$_['rd16_help_body'] = 'Напишіть у Telegram-бот підтримки.';
++$_['rd16_theme'] = 'Тема сайту';
++$_['rd16_light'] = 'Світла';
++$_['rd16_dark'] = 'Темна';
+\ No newline at end of file

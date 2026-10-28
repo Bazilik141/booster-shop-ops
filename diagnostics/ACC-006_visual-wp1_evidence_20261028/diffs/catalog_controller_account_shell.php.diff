@@ -1,0 +1,20 @@
+--- before/catalog/controller/account/shell.php
++++ after/catalog/controller/account/shell.php
+@@ -11,13 +11,16 @@
+         $labels = $options['labels'];
+         $links = $options['links'];
+         $active = $options['active'] ?? 'account';
++        // ACC006_VISUAL_WP1_20261028: «Обране» shows the same visible count as the header.
++        $wishlist_count = $this->load->controller('account/wishlist.total');
+         $items = [];
+         foreach (['account', 'edit', 'address', 'order', 'wishlist', 'settings', 'logout'] as $key) {
+             $items[] = [
+                 'key' => $key,
+                 'label' => $labels[$key],
+                 'href' => $key === 'settings' ? '' : $links[$key],
+-                'active' => $key !== 'settings' && $key === $active
++                'active' => $key !== 'settings' && $key === $active,
++                'count' => $key === 'wishlist' && is_int($wishlist_count) ? $wishlist_count : null
+             ];
+         }
+         $data = [

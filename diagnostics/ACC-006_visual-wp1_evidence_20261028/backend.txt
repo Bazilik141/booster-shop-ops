@@ -1,0 +1,22 @@
+ok   guest add: added, pending, ids [5], count 1
+ok   guest repeat add: added false
+ok   guest remove: pending cleared, no DB/model
+ok   guest remove id 0: error_product, no delete-all
+ok   guest remove array id: error_product
+ok   guest remove bad token: error_auth
+ok   guest remove GET: error_method
+ok   logged add: model add, ids from SQL
+ok   logged remove: model delete
+ok   logged remove invalid customer token: error_auth
+ok   ids SQL = total SQL filter
+ok   guest ids sanitized
+ok   index: shell page/wishlist, column_left empty
+ok   index: heading Обране, label 4 товари
+ok   list: fit thumb + kind
+ok   list: states
+ok   list: discount 20 on sale, 0 otherwise
+ok   list: catalog url
+ok   plural forms
+ok   shell: wishlist count 2, others null
+ok   shell: guest returns empty
+backend_checks=21 failed=0

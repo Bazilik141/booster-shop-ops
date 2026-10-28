@@ -1,0 +1,11 @@
+ok   preorder button text
+ok   buy button text (incl. card after preorder)
+ok   ga4 cart attrs on 4 buyable
+ok   ga4 select_item links
+ok   disabled out
+ok   forms 0..3
+ok   remove hearts
+ok   encoded name kept
+ok   discount badge
+ok   empty state
+ok   nav count
