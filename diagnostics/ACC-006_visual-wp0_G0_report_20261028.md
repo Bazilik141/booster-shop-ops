@@ -10,7 +10,11 @@ Status: **stopped at G0**. No patch, no packet. Nothing executed against product
 - Collector `diagnostics/ACC-006_wp0_collect_20261028.sh` (`d165e341…`) and packet `diagnostics/ACC-006_wp0_owner-pull_20261028.ps1` (`8257008b…`).
 - The archive was extracted outside the repository and is not committed.
 - No DB template overrides for any affected route: `oc_theme` count is 0.
-- **Live site not reachable from this session.** The environment's network policy denies `boostershop.website`. Section 5 is therefore computed from live CSS plus recorded RD-25 measurements of real products. These are not live screenshots.
+- Live public pages: the owner allowed `boostershop.website` for this session on 2026-10-28. Section 5 was measured with headless Chromium on read-only public category and home pages. Evidence: `diagnostics/ACC-006_visual-wp0_G0_evidence_20261028/`.
+  - `live-tile-overlay.json`: per-tile measurements;
+  - `overlay-measure.js`: the script that produced them;
+  - three screenshots with a mock heart injected client-side only.
+  - One `/catalog/Pokemon` load at 390 returned 502 (transient). The same width is covered by booster-box, accessories and home.
 
 ## 2. Drift against recorded post-release states
 
@@ -86,23 +90,23 @@ Both are in the r2 request below.
 
 **Handoff premise is stale.** RD-25 no longer bottom-aligns cuts in 84%×94%. Since `ACC-006_RD-25_HEADER_MEDIA_CENTERING_20261014` (`ds.css:272-276`), cut images are centred in an 84%×88% box: 8% left, 6% top and 6% bottom. Photos fill the slot (`contain`, centred). The slot is 1:1, and 4:5 at ≤767.98px.
 
-**Tile sizes** are derived from live CSS and the RD-25-recorded `#product-list` classes (`row-cols-sm-2 row-cols-md-2 row-cols-lg-4`), assuming no left column on the category page. They are not measured live:
+**Tile sizes, measured live.** No category page has a left column.
 
-| Width | Tile |
-|---|---|
-| 390 | 176×220 |
-| 768 | 364×364 |
-| 1280 | 261×261 |
+| Width | Category tile | Home-module tile |
+|---|---|---|
+| 390 | 176×220 | 176×220 |
+| 768 | 362×362 | 249×249 |
+| 1280 | 261×261 | 261×261 |
 
-**Overlap** below means the 44px heart's overlap with the product's image box, from the RD-25 recorded real-product fits rescaled to the 88% box:
+**Overlap, measured live.** Each figure is the 44px heart at an 8px inset against the image's actual drawn content box (`object-fit:contain` resolved from natural size), over 40 tiles per width on booster-box, accessories, Pokémon and home pages. Three representative real products:
 
-| Product | Inset | 390 | 768 | 1280 |
-|---|---|---|---|---|
-| OP-15 booster #143 (tall cut) | 8px | 12×39px corner, 2.6% | none | none |
-| OP-17 booster box #123 (cut) | 8px | 22×39px, 3.9% | none | none |
-| Outlet Mix #235 (wide cut) | 8px | none | none | none |
-| Album 360 white #103 (photo) | 8px | 44×30px, 4.3% | 44×44, 1.5% | 44×44, 2.8% |
-| same set | 12px | 3.7% / 5.0% / 0 / 4.8% | photo only 1.5% | photo only 2.8% |
+| Product | 390 | 768 | 1280 |
+|---|---|---|---|
+| Бустер бокс Hot Wind Arena (tall cut, sale) | 27×39px, 4.3% of image | none | none |
+| Бустер бокс Abyss Eye (square cut) | 38×16px, 2.8% | 23×23px, 0.6% | 31×31px, 2.0% |
+| Альбом на 360 карток (photo) | 44×30px, 4.3% | 44×44px, 1.5% | 44×44px, 2.8% |
+
+Across all measured tiles the maximum is 5.0% at 390 and 2.8% at 768/1280. The lowest badge bottom is 32px from the slot top; the heart's top is at 168/197/209/310px. No collision is possible.
 
 **Proposal: inset `var(--bs-s2)` (8px) from the right and bottom edges of the media slot, at every width.**
 - Cut products are touched only at 390, at the pack's bottom-right corner.
@@ -154,21 +158,29 @@ extension/ukrainian/catalog/language/uk-ua/account/edit.php
 extension/ukrainian/catalog/language/uk-ua/account/order.php
 catalog/controller/account/order.php
 catalog/view/template/account/order_list.twig
-catalog/view/template/product/category.twig
 ```
 - The three language files carry the shell nav label.
 - `order.php` and `order_list.twig` are the reference for opting a page into the RD-16 shell in page mode.
-- `category.twig` confirms the grid columns and any left column for the tile sizes.
+
+`category.twig` is no longer needed: the live measurement settled the grid and the absence of a left column.
 
 Inventories (paths, line numbers and matched word only, as in r1):
 1. `grep -rno -e 'закладк' -e 'Закладк'` over `catalog extension/ukrainian extension/opencart/catalog/view/template`;
 2. `grep -rl 'product/thumb'` over `extension/*/catalog/controller`.
 
-For the real-image overlay check, either:
-- the owner allows `boostershop.website` in this cloud environment's network settings; I then measure 3 real products at 390/768/1280 with headless Chromium, read-only public pages; or
-- the owner sends three category screenshots at those widths.
+## 9. Owner decisions at G0
 
-## 9. Owner decisions needed at G0
+**Taken 2026-10-28:**
+- **D1 = A**: a true toggle, with the narrow exception listed below.
+- **D2**: the proposed guest wording, with «Увійти» only.
+- **D3**: the ≤767.98px breakpoint.
+
+**Package split that follows from D1 = A.** All behaviour changes sit in WP1, so WP2 and WP3 are presentation only:
+- **WP1:** header IDs, the JS toggle and sync, guest pending removal, the `getList()` image size, names, notices and the «Обране» page. After WP1 the existing text buttons already toggle as «Додати в обране» / «В обраному».
+- **WP2:** tile heart markup and CSS.
+- **WP3:** product hearts markup and CSS.
+
+The options as presented at G0 are kept below for the record.
 
 - **D1 — heart behaviour.**
   - **A (recommended): a true toggle.** It needs a narrow owner exception:
