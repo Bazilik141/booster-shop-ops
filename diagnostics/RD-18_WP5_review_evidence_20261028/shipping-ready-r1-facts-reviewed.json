@@ -1,0 +1,19 @@
+{
+  "task": "RD-18-WP5",
+  "runner": "patches\\RD-18-WP5_shipping-display_20261028.php",
+  "runner_sha256": "0274bc8dae812feb09121907ec6576ae73adc0201a491d5e5b4a6a9b3d947fd7",
+  "runner_bytes": 151558,
+  "packet": "diagnostics\\RD-18-WP5_owner_20261028.ps1",
+  "packet_sha256": "07dc12dab06f1e2486da92efed471cd76fd2582edb49f95d417eef415c208a39",
+  "packet_bytes": 11854,
+  "targets": 3,
+  "existing_targets": 3,
+  "new_targets": 0,
+  "dependencies": 96,
+  "status": "LOCAL_IMPLEMENTATION_NOT_REVIEWED",
+  "DB_writes": 0,
+  "shipping_API_requests": 0,
+  "CSS_header_shell": "unchanged byte for byte, dependency-pinned; no asset cache token mutation",
+  "policy": "stored UAH payable >=2000 inclusive after discounts; saved estimate/tariff display below; foreign context saved-payer fallback, no guessed rate; nonzero shipping totals preserved",
+  "shared_lock": "RD-18-WP1_orders_20261027.lock"
+}

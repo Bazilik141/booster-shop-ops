@@ -1,0 +1,44 @@
+{
+  "task": "RD-17-WP1A-UI",
+  "status": "OWNER_APPLY_EXPECTED_CONTRACT_ACCEPTED_OWNER_QA_REQUIRED",
+  "checked_utc": "2026-10-26T19:35:24.867226+00:00",
+  "owner_receipt": "work\\rd17-profile-ui-20261026\\owner-receipts\\Apply-20261026T1934159177915Z.txt",
+  "owner_receipt_sha256": "d424c941678715cbca77e45e2c2005a1545dac2ad5faade9d540145adeac7bab",
+  "owner_state_sha256": "ba3aa9c0931bed56260e4cb728184c36b8655878113de97cc034836112f36015",
+  "runner_sha256": "1f9d7ee4a15d7fc4d8352d19243294cd35d0821043380f5a72a155c4f3b5e269",
+  "packet_sha256": "76562834f3ce773369b4d7e67f9d9330c666decfbbf2b5bfc2add5630be93fba",
+  "review_request_id": "2b7d1ce0-12ed-4605-af7a-655ef4cb9732",
+  "admission_sha256": "18d6730346048507f7fd0137e41356d667f76585ffa311e4a89c4d57d01bba66",
+  "php_path": "/usr/local/bin/php",
+  "php_version": "8.0.30",
+  "backup": "/home2/boosters/public_html/_patch_backups/RD-17-WP1A-UI_profile-action_20261026-20261026T193415Z-c30f9981374a",
+  "targets": [
+    {
+      "path": "catalog/view/stylesheet/checkout-profile-action.css",
+      "before": "absent",
+      "after": "eab7c2ce994d05ecb98f34d36a3f46416489cd4e6f07af9ce18c8160332a9ace",
+      "bytes": 3393
+    },
+    {
+      "path": "catalog/view/javascript/checkout-profile-action.js",
+      "before": "absent",
+      "after": "664d5f03f0565fb255377d1c0bbf8d2ca051b841815605197bdac60b8d1d0258",
+      "bytes": 2421
+    },
+    {
+      "path": "catalog/view/template/checkout/checkout.twig",
+      "before": "d8cd655d1ae69727fc895b92f56429f0c27c7b39f5e9acb6c852f190c3157f46",
+      "after": "5d16becdaf2bc16ae839960c216c12395eaec5a22084b6033b9e816f2ed30e90",
+      "bytes": 60514
+    }
+  ],
+  "created_asset_backups": "none",
+  "replaced_Twig_backup": "/home2/boosters/public_html/_patch_backups/RD-17-WP1A-UI_profile-action_20261026-20261026T193415Z-c30f9981374a/original-2",
+  "changed_files": 3,
+  "template_cache_removed": 43,
+  "template_cache_cleanup": "ok",
+  "self_deleted": true,
+  "staged_runner_absent": true,
+  "acceptance_basis": "Complete owner-host Apply receipt and saved owner state match reviewed exact identities and every admitted target/backup. Mechanical closure; no new model call.",
+  "limits": "Source deployment proof from owner receipt; no agent server action or independent live rendering/owner QA claim. Base bridge remains installed; UI owner visual/function QA pending. WP1B waiting; RD18 unstarted."
+}

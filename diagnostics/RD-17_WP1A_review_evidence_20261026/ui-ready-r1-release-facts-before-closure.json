@@ -1,0 +1,15 @@
+{
+  "runner": "patches\\RD-17-WP1A-UI_profile-action_20261026.php",
+  "runner_sha256": "1f9d7ee4a15d7fc4d8352d19243294cd35d0821043380f5a72a155c4f3b5e269",
+  "runner_bytes": 170663,
+  "packet": "diagnostics\\RD-17-WP1A-UI_owner_20261026.ps1",
+  "packet_sha256": "76562834f3ce773369b4d7e67f9d9330c666decfbbf2b5bfc2add5630be93fba",
+  "packet_bytes": 11897,
+  "targets": 3,
+  "new_files": 2,
+  "dependencies": 113,
+  "production_scope": "Two new checkout-only CSS/JS assets plus exactly two literal asset insertions in checkout.twig; installed profile logic/reskin/coordinator/backend and shared DS/header untouched.",
+  "shared_lock": "RD-17-WP1A_profile-receiver_20261026.lock",
+  "backup_ID": "RD-17-WP1A-UI_profile-action_20261026",
+  "status": "LOCAL_CANDIDATE_NOT_REVIEWED"
+}

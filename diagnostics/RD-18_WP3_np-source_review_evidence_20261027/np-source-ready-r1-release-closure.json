@@ -1,0 +1,30 @@
+{
+  "task": "RD-18-WP3-np-source",
+  "closed_utc": "2026-10-27T20:33:00.489297+00:00",
+  "verdict": "Review OK; no mandatory findings; owner source-only run ready",
+  "request_id": "293c54b8-af31-4aed-9a4a-1b3199fba4dc",
+  "review_packet_bytes": 51823,
+  "review_packet_sha256": "2f4969ee6a635c5899b3e6fafbb7451ab1953b5c30ca669a97955f74502d239f",
+  "response_sha256": "ba68aedf857ec70d93f92b67924319758916886752a5574b4e28576b9ad4d9b2",
+  "collector_sha256": "d52a1b416ec9eedf8624ef1b241d9ac487193bbe6fc3271470bbb56f436c053f",
+  "owner_packet_sha256": "108578c6ea554b588b8964a3c3293ea99589fd0c96003507e2e49f38721dff3f",
+  "all_frozen_inputs_verified_before_bookkeeping": true,
+  "mandatory_findings": [],
+  "optional_closures": {
+    "O1": "Precisely a keyed-form literal screen, not comprehensive; local intake also screens any quoted32hex before writing source files. No secrets-free guarantee.",
+    "O2": "Existing stdin STDERR catch can omit its private PHP marker; outer Bash metadata_failed still fails closed. Optional improvement deferred, no code/hash changes.",
+    "O3": "Exact embedded PHP equals tested extracted bytes, freshly verified mechanically and hashed here",
+    "embedded_php_sha256": "92e1ecca3c3f689536fb2a409bba81ec67f12bf5fbb6b7f402dba39319e9cb06",
+    "O4": "Generic missing-source STOP accepted; preserve receipt/artifacts and assess without retry.",
+    "O5": "Unused image-root boolean/old labels retained; no tracker/image execution; literal readonly event SELECT only.",
+    "O6": "Prepared intake validates exact7member names/order/types/hash/caps and forbids archive links before any source writes; no extractall.",
+    "O7": "Exact future archive path git check-ignore returned0; no Git write performed.",
+    "O8": "Cosmetic indentation unchanged; no functional repair required."
+  },
+  "local_drop": "absent at release",
+  "production_source_DB_cache_writes": 0,
+  "NP_API_requests": 0,
+  "agent_SSH_or_key_action": false,
+  "review_scope": "Source-only collector/commands only. New UI draft/history direction/support-return/NP tracker not approved by this verdict.",
+  "next": "Owner runs exact source collector ONCE; expected RD18_NP_SOURCE_READY. Return output. No Step/Apply, old WP2 packet or collector replay."
+}

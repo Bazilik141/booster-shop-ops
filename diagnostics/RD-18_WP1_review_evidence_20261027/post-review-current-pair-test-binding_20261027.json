@@ -1,0 +1,37 @@
+{
+  "task": "RD18-WP1",
+  "recorded_utc": "2026-10-27T08:34:06.148681+00:00",
+  "pair_before_tests": {
+    "runner": "f2bd1d4312923ba7c1d4cdc46cf83ccf44a631f50a027e87f9e3a6bd9a428221",
+    "packet": "2b2713c0ff86a824dacf224b8105ed779d198893943f1d138e8bccb5a3724b91"
+  },
+  "pair_after_tests": {
+    "runner": "f2bd1d4312923ba7c1d4cdc46cf83ccf44a631f50a027e87f9e3a6bd9a428221",
+    "packet": "2b2713c0ff86a824dacf224b8105ed779d198893943f1d138e8bccb5a3724b91"
+  },
+  "pair_unchanged": true,
+  "results": [
+    {
+      "test": 0,
+      "exit": 0,
+      "stdout": "runner_engine=pass 7"
+    },
+    {
+      "test": 1,
+      "exit": 0,
+      "stdout": "profile_packet_steps=6; replay_refusal=pass; no_network"
+    },
+    {
+      "test": 2,
+      "exit": 0,
+      "stdout": "profile_packet_steps=6; replay_refusal=pass; no_network"
+    }
+  ],
+  "result_sha256": {
+    "runner-results.json": "f04de23e09c80c96350f3e0c8e2b116e747724744c04b73d121a4cda10ddf85f",
+    "packet-PS51-results.json": "8371300e0b0312f9a147b7786c095a0e4044640d3f627f5c6907dac99621a7fc",
+    "packet-PS7-results.json": "8ae19c06c5e226e54ba99024a28e1cc44c7d643ac1f3dc2b1739c561b0a46fbc"
+  },
+  "shipping_markup_additional_proof": "Native generated final HTML delivery block has p \u041d\u043e\u0432\u0430 \u043f\u043e\u0448\u0442\u0430 / no literal strong markup; lexical source check, not a new browser scenario",
+  "boundary": "Unchanged reviewed tests; file engine/runtime-dependency fake and complete SSH/SCP/transport mocks; no production/DB/business/provider/key action. Product source/packet unchanged."
+}

@@ -1,0 +1,15 @@
+{
+  "request_id": "fe3fd821-eae1-4197-8171-8d818597d748",
+  "verdict": "Changes requested",
+  "response_sha256": "be51060f76f6d48976198ce366d9c49d46c7d60e4832def3243c6d6d7db13603",
+  "exact_pair": [
+    "4f567fe712a1fcb98bc264efb3e511bf4f459d3b1c63d5a148e94a9e7ee48d5c",
+    "6f4a2ed1b299c35fb5ee6a8c67ffdfc3c31f86d5b88ba1cc2bfc61f984e936b5"
+  ],
+  "declared_inputs_unchanged_at_completion": 121,
+  "mandatory": [
+    "M1: actual Loader model event names use dot; guard slash-only coverage misses them"
+  ],
+  "not_released_or_uploaded": true,
+  "repair": "Affected fresh ready request required; same r3 candidate filenames may be rebuilt because no owner receipt/state exists. Preserve consumed request and before snapshots."
+}

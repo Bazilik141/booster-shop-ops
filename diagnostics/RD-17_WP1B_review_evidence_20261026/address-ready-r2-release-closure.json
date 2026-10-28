@@ -1,0 +1,13 @@
+{
+  "status": "REVIEW_OK_OWNER_UPLOAD_VERIFY_READY_APPLY_HELD",
+  "request_id": "642e5ac7-c47a-4dc1-aa8d-0cecd8a29a75",
+  "checked_utc": "2026-10-26T20:22:10.060387+00:00",
+  "runner_sha256": "4fdcb89f6a652a6a6fc270cfbbf51757bdf998b1c7394a345c228230f0194523",
+  "packet_sha256": "88f9f06452ca3c0f2daf27eb787ee9d3b971c3ba8b9e443024ea7fc81a3be5dd",
+  "declared_inputs_at_closure": 143,
+  "owner_receipts_absent": true,
+  "report_before_sha256": "4a972c1e4ee6d23e1d5d5b6b73f1502abf7397c8845652d051d1745022085904",
+  "report_after_sha256": "ae06550669678cea76a3d12ad6152b444bb02587e620808a7c1cdca32b240c6c",
+  "bookkeeping_diff_sha256": "3c8f697dd0c9facbc73063223ac77faf8c5f551a7eb575b59818b70a28f55b0b",
+  "scope": "Local report/verdict/status bookkeeping only after immutable review. Owner Upload/Verify released; Apply held; no executable changes or deployment."
+}

@@ -1,0 +1,77 @@
+{
+  "task": "RD-17-WP1A",
+  "stage": "owner_r3_Apply",
+  "classification": "COMPLETE_EXPECTED_APPLY_RECEIPT_MECHANICALLY_ACCEPTED",
+  "source": "owner console plus saved raw stdout and local packet state",
+  "runner_sha256": "ef0d7a7d87c58340b73cfdbb0fc26a497920adb7c38eeceaf8913dbe803f8e85",
+  "packet_sha256": "0a2b8c0935a56197398268ba549857bf07badeae722f7b8c5c5ac1bfd6912712",
+  "review_request_id": "f7518901-281c-4d55-a1ea-a69fa9aa1092",
+  "raw_receipt": "work\\rd17-main-20261026\\owner-profile-r3-receipts\\Apply-20261026T1809402752393Z.txt",
+  "raw_receipt_sha256": "782a119dc147319ff782b578012af7ef514d11b95d1a50dedb3a7ab2e9773e18",
+  "raw_machine_rows": 18,
+  "state_sha256": "d83d1266f27914176ed69103355c144faeb027b6c06f3b0f5d75881924d82483",
+  "admission_sha256": "4c0d695d63f276d126c56ff0477ddae477f12d445a7cf4c22cc4b8d732eb3ef1",
+  "php": "/usr/local/bin/php 8.0.30",
+  "backup_dir": "/home2/boosters/public_html/_patch_backups/RD-17-WP1A_profile-receiver_20261026-20261026T180939Z-9883d4aa4c3b",
+  "targets": [
+    {
+      "path": "system/library/booster_checkout_profile_receiver.php",
+      "before": "absent",
+      "after": "51b644c8ff74e01fb5fe5dae0d53d6c745625ec548cff3c02686eda778fe4389",
+      "backup": "none"
+    },
+    {
+      "path": "system/library/booster_checkout_readiness.php",
+      "before": "a21e8ccf26b7cec24e8faaabc1d59a6ec164e7a487e08f66349942de08dab7c3",
+      "after": "3141e73fab09199c56927b7593f1547169a5c8f06c83e40e552f356dfd7c9529",
+      "backup": "/home2/boosters/public_html/_patch_backups/RD-17-WP1A_profile-receiver_20261026-20261026T180939Z-9883d4aa4c3b/original-1"
+    },
+    {
+      "path": "catalog/controller/checkout/confirm.php",
+      "before": "333c43b9da2c6101d44e5676a78648b8ab9b75296380675944fef88a3ee69288",
+      "after": "30e8d442cc997d2b6e975eb3d3d09bcef856344456807f7d2633fb6ff6fb8a1e",
+      "backup": "/home2/boosters/public_html/_patch_backups/RD-17-WP1A_profile-receiver_20261026-20261026T180939Z-9883d4aa4c3b/original-2"
+    },
+    {
+      "path": "catalog/controller/checkout/checkout.php",
+      "before": "dab58181bf151676320cc40e8920e9b98296a1d73cba6fd540e5f4372e6096ed",
+      "after": "0491ddbda5f7b33246071a520379ee7bde80d6785505c9218d8ba393e0b23a94",
+      "backup": "/home2/boosters/public_html/_patch_backups/RD-17-WP1A_profile-receiver_20261026-20261026T180939Z-9883d4aa4c3b/original-3"
+    },
+    {
+      "path": "catalog/controller/checkout/receiver.php",
+      "before": "2b55d995af3d30d6213ef8020c6084fa7ec7759a14dce21f6d9f9cb34240bfe1",
+      "after": "f429b304e3fabfbd2510f36a3ea270fd3fed891de9c865fa7d86063748f43d01",
+      "backup": "/home2/boosters/public_html/_patch_backups/RD-17-WP1A_profile-receiver_20261026-20261026T180939Z-9883d4aa4c3b/original-4"
+    },
+    {
+      "path": "catalog/view/template/checkout/checkout.twig",
+      "before": "e17c963336b37183c16761cf3e966e2fc47768e5749fe0078b5c6ee14f1b5260",
+      "after": "d8cd655d1ae69727fc895b92f56429f0c27c7b39f5e9acb6c852f190c3157f46",
+      "backup": "/home2/boosters/public_html/_patch_backups/RD-17-WP1A_profile-receiver_20261026-20261026T180939Z-9883d4aa4c3b/original-5"
+    },
+    {
+      "path": "catalog/view/javascript/checkout-reskin.js",
+      "before": "a73a0209021266618ef395bc30d50be0fd3071a02035c43d79c0b5b9c79db8e6",
+      "after": "dbafb5c8beba1582f72cb0177f9ba9c57e06e3f4d24c76ac18d9f2d16117e212",
+      "backup": "/home2/boosters/public_html/_patch_backups/RD-17-WP1A_profile-receiver_20261026-20261026T180939Z-9883d4aa4c3b/original-6"
+    }
+  ],
+  "changed_files": 7,
+  "self_deleted": "yes",
+  "done": "ok",
+  "template_cache_removed": 81,
+  "template_cache_cleanup": "ok",
+  "private_staged_runner_absent": "yes",
+  "owner_console_final_marker": "RD17_WP1A_APPLY_OK_OWNER_QA_REQUIRED",
+  "normalization": "CRLF->LF plus trailing newlines only; every ordered machine row exact, no omission/join/repair.",
+  "accepted_scope": "Owner-reported exact deployment/backup/afterhash/lint/cache/self-delete contract, backed by reviewed packet state.",
+  "limits": "No independent server observation/byte-identical command attestation, separate native exit-code line, authenticated browser/FPM/payment/NP/customer behavior or owner-QA acceptance.",
+  "DB_or_provider_action_by_patch": "none",
+  "agent_server_key_or_business_writes": false,
+  "replay": "Do not repeat Apply; applyAttempted/applied recorded.",
+  "new_model_result_review": "not needed for complete expected receipt",
+  "owner_QA": "PENDING",
+  "RD17_whole_task": "not complete; address WP1B and owner QA remain",
+  "RD18": "not started"
+}

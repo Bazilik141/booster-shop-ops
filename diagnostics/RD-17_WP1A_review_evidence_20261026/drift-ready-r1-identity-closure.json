@@ -1,0 +1,35 @@
+{
+  "stage": "drift-ready-r1",
+  "request_id": "d3a5c7af-7c10-495e-a960-421af14f41fa",
+  "input_packet_sha256": "ba1c40ee88ec9efed122fc83f25b410748cc54cf913e01622bc82a50d88e4761",
+  "input_packet_bytes": 357981,
+  "declared_inputs_checked": 31,
+  "declared_input_changes": [],
+  "tracked_dirty_repository_content_changes_during_review": [
+    {
+      "path": "ROADMAP_SOP.md",
+      "before": "f55a6b5bbf4630d96c011848d25d7f46eecfacbfcd4c216caeef2fa82758c33c",
+      "after": "089f58988e58b713dfd0dba9daac9e4dfadfd3b3255717d5dc27d9ff5e01c62c"
+    },
+    {
+      "path": "dashboard/booster-dashboard.html",
+      "before": "19a572610232b7a0fcea59ce4a5d85dca234c6ec4fe93bdd26864c7569712b93",
+      "after": "225cad335331478db237afa4dd0ef26dd8d29774625601ae15f5156c80362be6"
+    }
+  ],
+  "repository_monitor_limit": "declared inputs plus tracked dirty content; not whole untracked repository or host certification",
+  "PHP_sha256": "55e5339d45e4aa6e414617c4cf5c0bd330d135aa051061d906467efaa1f407da",
+  "PS_sha256": "acafd789f9fad535e975ef5ca034c8a82543e512ac3282587ebc742ae113eed3",
+  "response_sha256": "d7e72def3a40942a2f74cca42c883260f6b7e68ce62d38f7b145119ce17679bb",
+  "response_binds_PHP": true,
+  "response_binds_PS": true,
+  "model_initialized": "claude-opus-5-5",
+  "model_observed": [
+    "claude-opus-5-5"
+  ],
+  "tool_calls": [],
+  "subscription_verified": true,
+  "main_pair_unchanged": true,
+  "host_observation_or_main_Apply": false,
+  "finding_disposition": "Read complete actual response; this identity check is not semantic approval."
+}

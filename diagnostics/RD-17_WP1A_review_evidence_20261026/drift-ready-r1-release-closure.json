@@ -1,0 +1,94 @@
+{
+  "stage": "drift-ready-r1",
+  "request_id": "d3a5c7af-7c10-495e-a960-421af14f41fa",
+  "input_packet_sha256": "ba1c40ee88ec9efed122fc83f25b410748cc54cf913e01622bc82a50d88e4761",
+  "input_packet_bytes": 357981,
+  "declared_inputs_checked": 31,
+  "declared_input_changes": [],
+  "tracked_dirty_repository_content_changes_during_review": [
+    {
+      "path": "ROADMAP_SOP.md",
+      "before": "f55a6b5bbf4630d96c011848d25d7f46eecfacbfcd4c216caeef2fa82758c33c",
+      "after": "089f58988e58b713dfd0dba9daac9e4dfadfd3b3255717d5dc27d9ff5e01c62c"
+    },
+    {
+      "path": "dashboard/booster-dashboard.html",
+      "before": "19a572610232b7a0fcea59ce4a5d85dca234c6ec4fe93bdd26864c7569712b93",
+      "after": "225cad335331478db237afa4dd0ef26dd8d29774625601ae15f5156c80362be6"
+    }
+  ],
+  "repository_monitor_limit": "declared inputs plus tracked dirty content; not whole untracked repository or host certification",
+  "PHP_sha256": "55e5339d45e4aa6e414617c4cf5c0bd330d135aa051061d906467efaa1f407da",
+  "PS_sha256": "acafd789f9fad535e975ef5ca034c8a82543e512ac3282587ebc742ae113eed3",
+  "response_sha256": "d7e72def3a40942a2f74cca42c883260f6b7e68ce62d38f7b145119ce17679bb",
+  "response_binds_PHP": true,
+  "response_binds_PS": true,
+  "model_initialized": "claude-opus-5-5",
+  "model_observed": [
+    "claude-opus-5-5"
+  ],
+  "tool_calls": [],
+  "subscription_verified": true,
+  "main_pair_unchanged": true,
+  "host_observation_or_main_Apply": false,
+  "finding_disposition": "Read complete actual response; this identity check is not semantic approval.",
+  "verdict": "Review OK for one owner hash capture only",
+  "mandatory_findings_remaining": [],
+  "composition": {
+    "changed_outside_declared_set": [
+      {
+        "path": "ROADMAP_SOP.md",
+        "before": "f55a6b5bbf4630d96c011848d25d7f46eecfacbfcd4c216caeef2fa82758c33c",
+        "after": "089f58988e58b713dfd0dba9daac9e4dfadfd3b3255717d5dc27d9ff5e01c62c"
+      },
+      {
+        "path": "dashboard/booster-dashboard.html",
+        "before": "19a572610232b7a0fcea59ce4a5d85dca234c6ec4fe93bdd26864c7569712b93",
+        "after": "225cad335331478db237afa4dd0ef26dd8d29774625601ae15f5156c80362be6"
+      }
+    ],
+    "assessment": "DISJOINT: current dashboard diff adds a TECH-050 future staging/PHP-migration roadmap row and records already-approved RD18 H1/D2 prose; SOP diff contains canonical review/receipt guidance and the TECH-050 registry row. Neither file is read/executed by this fixed-path diagnostic, changes its 114 paths/hashes, modifies the existing main pair/state, or establishes an actual host PHP/runtime change. No dashboard/SOP/status write by this executor. Preserve these edits. Source/runtime gates remain enforced by owner capture.",
+    "limit": "Before snapshot tracked dirty-content hashes, not complete old bytes. Current bounded Git diff and task/source target inspection support disjointness; do not claim an exact attribution of every pre-existing vs during-review hunk."
+  },
+  "review_duration_ms": 267594,
+  "observed_usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 185863,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 27372,
+    "output_tokens_details": {
+      "thinking_tokens": 23367
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 185863,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 27372,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 185863,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 185863
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "reviewed_report_sha256": "d95a488437e668ccd5ee07691bcc61ba8223bb1e05af9de72a9ce280cc091f97",
+  "closure_report_sha256": "8c96d0d2f84e78093000178ba2f778d091aa5b65565a948f81101fb9e29789f8",
+  "post_review_delta": "Report-only verdict/optional-note/literal-wording bookkeeping; original preserved. Both diagnostic executable hashes and original main pair unchanged.",
+  "owner_shell": "Explicit tested Windows PowerShell5.1; avoids optional PS7.0-7.4 date coercion.",
+  "main_Apply": "HELD_DEPENDENCY_DRIFT",
+  "host_capture_executed": false
+}

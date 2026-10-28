@@ -1,0 +1,104 @@
+{
+  "task": "RD-18-WP4",
+  "closed_utc": "2026-10-28T08:40:59.756820+00:00",
+  "status": "ACTUAL_SUBSCRIPTION_REVIEW_OK_OWNER_UPLOAD_VERIFY_READY",
+  "verdict": "Review OK; no mandatory findings",
+  "request_id": "2456770f-2dd7-4b17-aa88-5b48975b91af",
+  "review_payload_bytes": 311020,
+  "review_payload_sha256": "9331e1ad851919c03212eabead48a1cbd2c8fdda445579da8ebc0310d52e8026",
+  "response_sha256": "ff0b11ca38a5e068a468480f4c81670ab64c2baeebcb0f6d9d435415bbdc85b7",
+  "runner": {
+    "path": "patches\\RD-18-WP4_detail-polish_20261028.php",
+    "sha256": "6e0228de91fa957afca9dc63a908e160633c1fab401ccecdbd52e1ddf7c46e9b",
+    "bytes": 661890
+  },
+  "packet": {
+    "path": "diagnostics\\RD-18-WP4_owner_20261028.ps1",
+    "sha256": "b5e92850ebb857afbce0469877f2512ef79e66533a1de058e412780c605719ab",
+    "bytes": 11841
+  },
+  "frozen_inputs_verified_before_bookkeeping": 162,
+  "bound_checks": 11,
+  "targets": [
+    {
+      "path": "catalog/controller/account/order.php",
+      "before": "1fe8c974106e33a7b5035c907ea137c9f1eda864586db9e7a79278f9d1056629",
+      "after": "e47cf549b0084dc51fcdc957cce07d59f481cb42ac2a6cd7bbdc9cc29449b56d",
+      "bytes": 32895
+    },
+    {
+      "path": "catalog/view/template/account/order_info.twig",
+      "before": "7e4741fab901d78b179bc4fec733d4ff8bf63af59e4a117248f23d4d6b1eacd3",
+      "after": "2be28eb165c1f470f5600d73a62a4329ab45216509439efd6088f46b95d5051a",
+      "bytes": 14314
+    },
+    {
+      "path": "extension/opencart/catalog/language/uk-ua/payment/bank_transfer.php",
+      "before": "a3f0f5efcc62b9bd6ca1e44cf7d98721d192470fad84ec918c6bc9cda56ca6e5",
+      "after": "1e7434ab133f61c024a6fd39c5bf43aa4bae7df792dc14815d0803493e522677",
+      "bytes": 498
+    },
+    {
+      "path": "catalog/view/stylesheet/boostershop-ds.css",
+      "before": "301f031d943eb42408623a69f911abae8b2a78095d7f9f576e3a4801524668cd",
+      "after": "ff548b2b7bf52eeae34e5e5d18f6313b913451e0b113997a108faf254c283293",
+      "bytes": 267374
+    },
+    {
+      "path": "catalog/view/template/common/header.twig",
+      "before": "9f37207e9c4eac9fbf65882ea15b54f5139183a1d30e799e685cd913d7769635",
+      "after": "96abebbd32f15a5f0bf574f6bc273e43a8ca422a382f0f7fb9ae7987df986ffc",
+      "bytes": 31163
+    },
+    {
+      "path": "extension/ukrainian/extension/opencart/catalog/language/uk-ua/payment/bank_transfer.php",
+      "before": "a3f0f5efcc62b9bd6ca1e44cf7d98721d192470fad84ec918c6bc9cda56ca6e5",
+      "after": "1e7434ab133f61c024a6fd39c5bf43aa4bae7df792dc14815d0803493e522677",
+      "bytes": 498
+    },
+    {
+      "path": "extension/ukrainian/catalog/language/uk-ua/account/order.php",
+      "before": "0451f91789957a6c96c5a7341aebdc48b4117bb002e018d1c76361521bb890c4",
+      "after": "91aac1db33337e26eb11b3c163c0fc3d5712f7565ad9dcaa46b17460279292ba",
+      "bytes": 5656
+    },
+    {
+      "path": "catalog/view/javascript/booster-order-tracking.js",
+      "before": "07a0783293a4741e04c6bc97ed252a81079fd6dce9f069713fbf6da2b6000eb1",
+      "after": "92e24e95b0c1d0c7b7904c2010ad8a411158c27129730a64af8f33980101f257",
+      "bytes": 2244
+    },
+    {
+      "path": "catalog/view/stylesheet/booster-nova-poshta.svg",
+      "before": "absent",
+      "after": "f2887da5a798f3998aa73ab350c8bc13bc8b0b1185e0277a47e02477920d3b0f",
+      "bytes": 732
+    }
+  ],
+  "backup": "none - WP4 not deployed",
+  "future_backup_pattern": "/home2/boosters/public_html/_patch_backups/RD-18-WP4_detail-polish_20261028-<UTC>-<12hex>/original-0..7",
+  "new_file_backup": "none for index8 SVG; separate admitted rollback removes only exact expected after-file",
+  "optional_disposition": {
+    "O1": "Post-review mechanical native helper link comparison on two fictional14digit numbers matches JS fixed-route algorithm. No API/network. Real TTN click remains owner QA.",
+    "O2": "Accepted optional initial loading/layout shift and one endpoint read per detail; unchanged backend cache/deadlines. Owner QA, no new scope.",
+    "O3": "Unused labels and phone localization cosmetic; deferred, no automatic implementation.",
+    "O4": "On failure assess primary runner error first; secondary runner_did_not_self_delete line does not authorize replay/reset.",
+    "O5": "Do not RollbackUpload after rollbackAttempted; any rollback deviation needs assessment, no re-upload/replay.",
+    "O6": "Compact weight/point qualifiers can become generic branch label; inspect real stored delivery in owner QA. No NP metadata mutation.",
+    "O7": "UK phrase only; other languages outside requested scope."
+  },
+  "supplemental_local_evidence": {
+    "active_4widths_sha256": "0c7c00e9b439290382b573e0a03c6749c703ea9fa8d554a593afdcc20fb7c36d",
+    "native_link_2cases_sha256": "78b826d2a92f2d94b4972adeb535023aa57925dae1f2f3ca51dab90ed559be54",
+    "limit": "Additional local expected-state checks only, not inputs read by peer reviewer; no frozen source/command/dependency modified."
+  },
+  "post_review_changes": "Nonsemantic report/facts/current-gate bookkeeping only; exact runner/packet/9payloads/90deps/tests unchanged. r1/r2 packages were prepared but never dispatched; r3 is first and only actual final WP4 call.",
+  "current_production": "WP3 owner Apply previously accepted; RD18 QA still open",
+  "agent_SSH_key_server_action": false,
+  "real_NP_requests_by_agent": 0,
+  "DB_writes": 0,
+  "private_raw_acquired_bodies_transferred": false,
+  "owner_receipts": "absent at release",
+  "owner_QA": "pending after owner deployment",
+  "next": "Owner hash-checks exact packet then Upload -> Verify ONCE and sends receipt. Apply not yet released. STOP preserves state; never replay/reset or widen guards."
+}

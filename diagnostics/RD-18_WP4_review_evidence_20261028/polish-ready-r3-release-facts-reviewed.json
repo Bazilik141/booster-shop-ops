@@ -1,0 +1,23 @@
+{
+  "task": "RD-18-WP4",
+  "runner": "patches\\RD-18-WP4_detail-polish_20261028.php",
+  "runner_sha256": "6e0228de91fa957afca9dc63a908e160633c1fab401ccecdbd52e1ddf7c46e9b",
+  "runner_bytes": 661890,
+  "packet": "diagnostics\\RD-18-WP4_owner_20261028.ps1",
+  "packet_sha256": "b5e92850ebb857afbce0469877f2512ef79e66533a1de058e412780c605719ab",
+  "packet_bytes": 11841,
+  "targets": 9,
+  "existing_targets": 8,
+  "new_targets": 1,
+  "dependencies": 90,
+  "status": "LOCAL_IMPLEMENTATION_NOT_REVIEWED",
+  "owner_QA": "not deployed",
+  "DB_writes": 0,
+  "agent_NP_requests": 0,
+  "reuse": "WP3 native photos/history/NP helper/model/login/read-only API cache unchanged and dependency-pinned",
+  "bank_guard": "translation text_payment COUNT only, all stores/languages for both routes; refuse competing override, no value export or DB write",
+  "H1": "DS token value only",
+  "shared_writer_lock": "RD-18-WP1_orders_20261027.lock",
+  "old_comments": "stored and displayed unchanged",
+  "public_logo": "Exact official public tracking IconLogo shape attributes, standalone SVG wrapper, no external references"
+}

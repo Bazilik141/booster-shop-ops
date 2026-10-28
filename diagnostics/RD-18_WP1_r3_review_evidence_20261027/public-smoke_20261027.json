@@ -1,0 +1,73 @@
+{
+  "task": "RD-18",
+  "checked_utc": "2026-10-27T17:23:09.845587+00:00",
+  "method": "Anonymous TLS HTTPS GET, same-origin redirects only, no cookies/auth/cart/order/provider writes;256KiB prefix cap;20s timeout;max3concurrent.",
+  "URL_exception": "Retired FIG-CHARM-001 replaced by prior owner-provided current Charizard3D URL, same accepted RD17Tier1 substitution. No claim old literal passes.",
+  "rows": [
+    {
+      "path": "/",
+      "http": 200,
+      "final_url": "https://boostershop.website/",
+      "bytes_read": 84374,
+      "body_capped": false,
+      "fatal_marker_in_prefix": false
+    },
+    {
+      "path": "/catalog/Pokemon",
+      "http": 200,
+      "final_url": "https://boostershop.website/catalog/Pokemon",
+      "bytes_read": 170971,
+      "body_capped": false,
+      "fatal_marker_in_prefix": false
+    },
+    {
+      "path": "/catalog/Pokemon/Pokemon-booster-box",
+      "http": 200,
+      "final_url": "https://boostershop.website/catalog/Pokemon/Pokemon-booster-box",
+      "bytes_read": 164936,
+      "body_capped": false,
+      "fatal_marker_in_prefix": false
+    },
+    {
+      "path": "/product/One-Piece-Boosters-OP-11",
+      "http": 200,
+      "final_url": "https://boostershop.website/product/One-Piece-Boosters-OP-11",
+      "bytes_read": 153185,
+      "body_capped": false,
+      "fatal_marker_in_prefix": false
+    },
+    {
+      "path": "/product/figurka-charizard-pokemon-3d-druk",
+      "http": 200,
+      "final_url": "https://boostershop.website/product/figurka-charizard-pokemon-3d-druk",
+      "bytes_read": 143647,
+      "body_capped": false,
+      "fatal_marker_in_prefix": false
+    },
+    {
+      "path": "/information/oplata-i-dostavka",
+      "http": 200,
+      "final_url": "https://boostershop.website/information/oplata-i-dostavka",
+      "bytes_read": 68315,
+      "body_capped": false,
+      "fatal_marker_in_prefix": false
+    },
+    {
+      "path": "/index.php?route=checkout/cart",
+      "http": 200,
+      "final_url": "https://boostershop.website/index.php?route=checkout/cart",
+      "bytes_read": 65984,
+      "body_capped": false,
+      "fatal_marker_in_prefix": false
+    },
+    {
+      "path": "/index.php?route=checkout/checkout",
+      "http": 200,
+      "final_url": "https://boostershop.website/?route=checkout/cart",
+      "bytes_read": 65975,
+      "body_capped": false,
+      "fatal_marker_in_prefix": false
+    }
+  ],
+  "limits": "Public HTTP availability only. No authenticated account UI/DB/GA4/provider or final owner QA proof."
+}

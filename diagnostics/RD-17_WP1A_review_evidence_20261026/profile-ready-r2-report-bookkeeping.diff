@@ -1,0 +1,54 @@
+--- reviewed-report
++++ closure-report
+@@ -1,7 +1,7 @@
+ # RD-17 WP1A: profile recipient bridge
+ 
+ Date: 2026-10-26. Executor: Codex, assigned by owner. Current status:
+-LOCAL_CANDIDATE_NOT_REVIEWED_NOT_RELEASED. No production execution or owner QA.
++REVIEW_OK_OWNER_UPLOAD_VERIFY_PENDING. No production execution or owner QA.
+ 
+ ## Result and owner authority
+ 
+@@ -247,3 +247,42 @@
+ tests/fake boundaries, admission/receipt/rollback and privacy before owner use.
+ No Git, Notion or roadmap status mutation, deployment, owner QA, or RD17/RD18
+ completion is claimed. Next action is the integrated ready-stage review.
++
++
++## Accepted r2 review and mechanical release closure
++
++Actual independent subscription Claude returned **Review OK for owner Upload
++and Verify**, request `c6136634-dd50-4169-a055-7887fed66065`, model
++`claude-opus-5-5`, effort high, tools/MCP/hooks disabled, no paid/API fallback.
++Complete response and original provider result are preserved under
++`diagnostics/RD-17_WP1A_review_evidence_20261026/profile-ready-r2-*`.
++The verdict binds runner
++`27c6bec2e5113d03313b5ed3ca5074e48748f20bdfbe73d6e09968feda2e6bd4`
++and owner packet
++`ae92eb4a2f3db35a186c912af5c85017a09f2cf4a2238906e3f2a293b3d190ff`.
++
++No mandatory findings remain. Actual review closed M1 by the implemented
++deterministic degradation and M2 by the explicit recipient-change/QA statement.
++O1/O5 were repaired and rechecked; remaining optional notes are recorded above.
++Additional r2 optional note: legacy profile first/surname that fail the existing
++ACC009 name rules (including too-short or Latin names) skip the bridge and
++patronymic seed entirely, preserving the pre-patch checkout projection. This
++does not change name rules or rewrite legacy profile data. The pinned mysqli
++driver contract is required; a transient metadata DB error deliberately blocks
++the unverified new-default snapshot until recovery. A forged copy POST with
++invalid required profile names receives a generic missing-middle refusal; the
++normal UI hides that button.
++
++All 75 declared inputs and the exact pair remained unchanged through review;
++the tracked dirty-repository content comparison found no changes. The monitor
++covers that declared set plus tracked dirty content, not a whole-untracked-tree
++or production certification. Local closure separately recomputed payload,
++runner and owner-packet identities; the reviewer bound the declared hashes
++and stated that it did not itself recompute SHA-256. The original reviewed
++report is preserved as `profile-ready-r2-reviewed-report.md`; this appended
++verdict/status bookkeeping changes no executable bytes or acceptance behavior.
++
++Host Verify must establish all 107 conditional pins and runtime admission.
++The next owner action is Upload then Verify and return the complete receipt
++before Apply. No host execution, deployment, owner QA, address-WP1B release,
++RD17 completion, RD18 work, Git, Notion or canonical status update is claimed.

@@ -1,0 +1,26 @@
+{
+  "stage": "profile-successor-ready-r2",
+  "request_id": "f7518901-281c-4d55-a1ea-a69fa9aa1092",
+  "input_packet_sha256": "be9f7e1ca17742e21a83c6b1a1fe9a4be9d09c0a36c3fdb26c5abf01255ea66a",
+  "input_packet_bytes": 841932,
+  "declared_inputs_checked": 59,
+  "declared_input_changes": [],
+  "tracked_dirty_repository_content_changes_during_review": [],
+  "repository_monitor_limit": "Declared set plus tracked dirty content; not a whole-untracked-tree or host certification.",
+  "runner_sha256": "ef0d7a7d87c58340b73cfdbb0fc26a497920adb7c38eeceaf8913dbe803f8e85",
+  "packet_sha256": "0a2b8c0935a56197398268ba549857bf07badeae722f7b8c5c5ac1bfd6912712",
+  "response_sha256": "a262ef1f5de6e59c7d264c35ce099354c8edd23c56f47b9f4110a5141a626fee",
+  "response_binds_runner": true,
+  "response_binds_packet": true,
+  "actual_model_initialized": "claude-opus-5-5",
+  "actual_models_observed": [
+    "claude-opus-5-5"
+  ],
+  "subscription_verified": true,
+  "tool_calls": [],
+  "old_pair_unchanged": true,
+  "old_owner_state_preserved": true,
+  "new_owner_receipts_absent": true,
+  "production_Apply_or_QA": false,
+  "semantic_disposition": "Read complete actual response; identity checks alone are not semantic acceptance."
+}

@@ -1,0 +1,76 @@
+{
+  "task": "RD-18-WP2",
+  "closed_utc": "2026-10-27T19:53:06.782954+00:00",
+  "verdict": "Review OK - ready for NEW owner Upload then Verify only",
+  "request_id": "74b56916-585b-44e0-b4a8-3d39b24a0204",
+  "review_payload_bytes": 321475,
+  "review_payload_sha256": "8d5aaf173817af820660a3dfeaa5125a9c9276130865593bc436a2ebf82cda7d",
+  "response_sha256": "abc0041d445ce54e74333cfc7cecd5fafc5e985e8404cde49a4d3a7c728c3683",
+  "runner": {
+    "path": "patches\\RD-18-WP2_detail-visual_20261027.php",
+    "sha256": "7848eea3a118ecfaf89f948bebffbee83a9d06dbd8b22682216067322853df7a",
+    "bytes": 614028
+  },
+  "owner_packet": {
+    "path": "diagnostics\\RD-18-WP2_owner_20261027.ps1",
+    "sha256": "b212cb6591594071429fc6d1ab499acf20882f751d6720b06074c8ba91b9d9b1",
+    "bytes": 11844
+  },
+  "all_127_frozen_inputs_verified_before_bookkeeping": true,
+  "reviewed_report_snapshot_sha256": "df360d2632472a6aa04f8bca99097f35df2c1dd1a0800a236fabe27496303e83",
+  "updated_report_sha256": "9fe0fc54aa4691ecfe41927c08628e06eb2274ad5bb6851041613a0cf9770fc9",
+  "changes_after_review": "Nonsemantic report/facts/current-gate bookkeeping and additive local focus audit only; runner, owner packet, five payloads, tests and dependencies unchanged.",
+  "focus_audit": {
+    "script_sha256": "2f3032198ae7b7a23329eee2f1e27952a73ceff012a4cf6993f72a77d20c3845",
+    "result_sha256": "46348457fd6e6269ca2f2a171ba12adb044922ac82986e60f1ac3e0a1582b70b",
+    "visible_states": 21,
+    "root_cause": "Stock outline suppression is button-only; existing account a:focus-visible DS7360 already covers return/thumb/title links. No code defect reproduced."
+  },
+  "mandatory_closures": {
+    "M1": "Owner checks exact packet hash in released command before first step",
+    "M2": "Complete no-write Verify receipt assessed before separate Apply",
+    "M3": "Report narrowed original test claim; additive actual Chrome focus audit all21pass",
+    "M4": "Owner final visual/real-photo/data/focus QA required after deployment",
+    "M5": "Exact target rollback scope and retained image-cache derivatives documented"
+  },
+  "targets": [
+    {
+      "path": "catalog/controller/account/order.php",
+      "before": "d024d4a2f97cd14aa5f0ddda115acc2dc6a3a270fe59910e99b53bf74509a03f",
+      "after": "0ef2b9207054d186475a005fece05257934bc2e7c123fc03ec3dc275ddbd2c8f",
+      "bytes": 27565
+    },
+    {
+      "path": "catalog/view/template/account/order_info.twig",
+      "before": "3a7a46587a4d8da8bc5e6152a92b4fcace2186b28b5a84fd6bb8a1b986dbe041",
+      "after": "b48bafd5885c2ea435fde1ca6309ebd4672a932d7aa9508f898ebf2b33573442",
+      "bytes": 12094
+    },
+    {
+      "path": "catalog/view/template/account/order_history.twig",
+      "before": "be4e25f2742ce7a46fa1084213ed3418265f8407f98bf053d814430d947cc98f",
+      "after": "5967a285ba6b8a99e42f0b2abcfbb1dd4dababccae7055d7eb3bea8bda9f7289",
+      "bytes": 1167
+    },
+    {
+      "path": "catalog/view/stylesheet/boostershop-ds.css",
+      "before": "b3db6ec93a0d9954efd89e1d99abc7d5481df28bcd87750855ff01fded7c104a",
+      "after": "6b055925986a323a545eb2e81fe2c9734491c1e16adfd3d94b10dba1c6604868",
+      "bytes": 263958
+    },
+    {
+      "path": "catalog/view/template/common/header.twig",
+      "before": "e578f64fa92a666aff7d3fa8e3436df071d287b6fae9db3d4b2a5e1aa8144a32",
+      "after": "806798230452c27f8a19cabd6019065a028128e2e9cec2281c7a74481074c14f",
+      "bytes": 31159
+    }
+  ],
+  "backup": "none - not deployed",
+  "future_backup_pattern": "/home2/boosters/public_html/_patch_backups/RD-18-WP2_detail-visual_20261027-<UTC>-<12hex>/original-0..4",
+  "rollback": "Separate owner choice and recorded backup; views first/header last; changed target STOP; no SQL; derived image cache retained",
+  "owner_receipts": "absent",
+  "production_writes_by_agent": 0,
+  "agent_SSH_or_key_access": false,
+  "owner_QA": "pending",
+  "release": "NEW Upload -> Verify; send complete output; no Apply released"
+}

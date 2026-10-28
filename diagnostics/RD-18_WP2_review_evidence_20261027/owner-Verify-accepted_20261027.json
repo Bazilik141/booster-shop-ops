@@ -1,0 +1,19 @@
+{
+  "task": "RD-18-WP2",
+  "accepted_utc": "2026-10-27T19:54:36.533160+00:00",
+  "source": "work\\rd18-visual-20261027\\owner-receipts\\Verify-20261027T1953558944925Z.txt",
+  "source_sha256": "7e105b432485e3d73967c1497649b6332fc4b8ec67199023e6fcb9d62ee67fb4",
+  "state_sha256_at_acceptance": "784a6c23441561819e1d52c384660e0bf3d53a7c7505f24c6559b2639883e0bc",
+  "runner_sha256": "7848eea3a118ecfaf89f948bebffbee83a9d06dbd8b22682216067322853df7a",
+  "packet_sha256": "b212cb6591594071429fc6d1ab499acf20882f751d6720b06074c8ba91b9d9b1",
+  "review_request": "74b56916-585b-44e0-b4a8-3d39b24a0204",
+  "admission_sha256": "63e1b362f76987126c3364295668980dd03e25a24e2aa54408d1e4db7da18a63",
+  "php_version": "8.0.30",
+  "production_writes": 0,
+  "backup": "none",
+  "owner_terminal_banner": "RD18_WP2_VERIFY_OK",
+  "verdict": "Expected receipt accepted mechanically; owner may invoke exact packet Apply once",
+  "apply_not_yet_attempted": true,
+  "agent_server_or_key_action": false,
+  "owner_QA": "pending after owner Apply"
+}

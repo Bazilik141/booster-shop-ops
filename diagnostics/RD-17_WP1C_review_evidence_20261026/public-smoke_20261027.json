@@ -1,0 +1,64 @@
+{
+  "task": "RD-17",
+  "checked_utc": "2026-10-27T06:42:31.641391+00:00",
+  "method": "Anonymous public HTTPS GET; TLS verification, same-origin redirects, no cookies/auth/cart/order/provider writes; 256KiB body cap, 20s timeout, max3 concurrent.",
+  "URL_exception": "Retired FIG-CHARM-001 replaced with owner-provided current 3D URL from accepted ACC009 October21 smoke. No claim the retired literal passes.",
+  "rows": [
+    {
+      "path": "/",
+      "http": null,
+      "error_class": "TimeoutError"
+    },
+    {
+      "path": "/catalog/Pokemon",
+      "http": null,
+      "error_class": "TimeoutError"
+    },
+    {
+      "path": "/catalog/Pokemon/Pokemon-booster-box",
+      "http": 200,
+      "final_url": "https://boostershop.website/catalog/Pokemon/Pokemon-booster-box",
+      "bytes_read": 164342,
+      "body_capped": false,
+      "fatal_marker_in_prefix": false
+    },
+    {
+      "path": "/product/One-Piece-Boosters-OP-11",
+      "http": 200,
+      "final_url": "https://boostershop.website/product/One-Piece-Boosters-OP-11",
+      "bytes_read": 153186,
+      "body_capped": false,
+      "fatal_marker_in_prefix": false
+    },
+    {
+      "path": "/product/figurka-charizard-pokemon-3d-druk",
+      "http": 200,
+      "final_url": "https://boostershop.website/product/figurka-charizard-pokemon-3d-druk",
+      "bytes_read": 143648,
+      "body_capped": false,
+      "fatal_marker_in_prefix": false
+    },
+    {
+      "path": "/information/oplata-i-dostavka",
+      "http": 200,
+      "final_url": "https://boostershop.website/information/oplata-i-dostavka",
+      "bytes_read": 68316,
+      "body_capped": false,
+      "fatal_marker_in_prefix": false
+    },
+    {
+      "path": "/index.php?route=checkout/cart",
+      "http": null,
+      "error_class": "TimeoutError"
+    },
+    {
+      "path": "/index.php?route=checkout/checkout",
+      "http": 200,
+      "final_url": "https://boostershop.website/?route=checkout/cart",
+      "bytes_read": 65976,
+      "body_capped": false,
+      "fatal_marker_in_prefix": false
+    }
+  ],
+  "limits": "Public HTTP availability only; owner supplies authenticated UI acceptance. No server log access or invented individual live NP/provider test."
+}

@@ -1,0 +1,26 @@
+{
+  "task": "RD-17-source-supplement",
+  "request_id": "95edcec0-bc6c-4acf-accf-37bfcbe6a244",
+  "verdict": "Code/Composition Review OK",
+  "closed_utc": "2026-10-26T11:16:03.496641+00:00",
+  "collector_sha256": "c8aca9e1106e4629384fc44e629f4fbe24f450b2f8452f87c1f3d057f1997ae5",
+  "owner_packet_sha256": "61ffc18ef3d4f2c48f69fda95617746d78fd2d83aafdfea1978db46d7b7aed0f",
+  "review_packet_sha256": "2cd81f8ec9895cd74016a73f341891fc558c1730a50110d0ee87c8e77e84e2c0",
+  "review_packet_bytes": 145819,
+  "response_sha256": "f15235311de4e06bdb2bf77be0403b3a29e31001bb27979343ffc992ac0a2a7e",
+  "model": "claude-opus-5-5",
+  "effort": "high",
+  "mandatory_findings": [],
+  "optional_notes": [
+    "O1 negated exclusion fixture assertion is ineffective under set-e; exclusion bound by exact count and per-member verification; fix next harness touch",
+    "O2 symlink,size,secret-signature,archive-mismatch branches inspection only",
+    "O3 pre-remote auth failure consumes identity; no manual drop deletion/retry",
+    "O4 packet indentation cosmetic",
+    "O5 tar owner names are bounded metadata"
+  ],
+  "owner_capture": "not run",
+  "scope": "read-only collector only; no functional patch release",
+  "executables_unchanged": true,
+  "disclosure_requirement": "strict intake plus privacy sanitizer/allowlist before source bodies sent to model; no raw order/notification literals",
+  "agent_SSH_key_server_DB_cache_provider": "none"
+}

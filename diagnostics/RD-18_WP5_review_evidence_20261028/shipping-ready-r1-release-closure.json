@@ -1,0 +1,66 @@
+{
+  "task": "RD-18-WP5",
+  "closed_utc": "2026-10-28T10:22:17.729443+00:00",
+  "status": "ACTUAL_SUBSCRIPTION_REVIEW_OK_OWNER_UPLOAD_VERIFY_READY",
+  "verdict": "Review OK; no mandatory code findings",
+  "request_id": "50e2dba4-1513-4503-8901-e07b58715a0b",
+  "review_payload_bytes": 241235,
+  "review_payload_sha256": "8b7bd8422bd955347f0acb9c925cdd89f45a476543a44afcf2742533544c2cf1",
+  "response_sha256": "09480cc25dc2d7fc984389010f2e9076456671a5c3dfcd801bfb48d22d8c0f36",
+  "runner": {
+    "path": "patches\\RD-18-WP5_shipping-display_20261028.php",
+    "sha256": "0274bc8dae812feb09121907ec6576ae73adc0201a491d5e5b4a6a9b3d947fd7",
+    "bytes": 151558
+  },
+  "packet": {
+    "path": "diagnostics\\RD-18-WP5_owner_20261028.ps1",
+    "sha256": "07dc12dab06f1e2486da92efed471cd76fd2582edb49f95d417eef415c208a39",
+    "bytes": 11854
+  },
+  "frozen_identities_verified_before_bookkeeping": 143,
+  "bound_checks": 9,
+  "targets": [
+    {
+      "path": "catalog/controller/account/order.php",
+      "before": "e47cf549b0084dc51fcdc957cce07d59f481cb42ac2a6cd7bbdc9cc29449b56d",
+      "after": "abc1fc3aed97d2a9c1b46125a83885197fd97dc76d46c838d403a7085bb676c0",
+      "bytes": 36125
+    },
+    {
+      "path": "catalog/view/template/account/order_info.twig",
+      "before": "2be28eb165c1f470f5600d73a62a4329ab45216509439efd6088f46b95d5051a",
+      "after": "c25bd288883711d880d78cb3248b8ad10a87245a5798424c4197847761d7a26d",
+      "bytes": 14561
+    },
+    {
+      "path": "extension/ukrainian/catalog/language/uk-ua/account/order.php",
+      "before": "91aac1db33337e26eb11b3c163c0fc3d5712f7565ad9dcaa46b17460279292ba",
+      "after": "917f6cc7e0af8a5813d6c1a3c3b702f4c870c30015782a52cf2a2cbe65fe50c5",
+      "bytes": 5954
+    }
+  ],
+  "backup": "none - not deployed",
+  "future_backup_pattern": "/home2/boosters/public_html/_patch_backups/RD-18-WP5_shipping-display_20261028-<UTC>-<12hex>/original-0..2",
+  "mandatory_owner_gates": [
+    "M-G1 owner Upload/Verify complete expected no-write receipt,96dep hashes including newconfirm pin; drift STOP",
+    "M-G2 separate ownerApply3targets/hashcount/selfdelete/cachecleanup/stagedabsence/backuppath only after acceptedVerify",
+    "M-G3 final real owner mobile/desktopQA"
+  ],
+  "optional_disposition": {
+    "O1": "Saved estimate remains informational and accompanied by exact separate-payment notice; owner QA may request approximate prefix. No extra invented quote/API fetch.",
+    "O2": "Owner directly specified2000 presentation policy. This explicit current decision authorizes zero-NP-row threshold display, including stale historical labels; no live config identity or retroactive DB mutation is claimed. No technical attestation from owner memory or new gate inferred from optional recommendation.",
+    "O3": "Kopeck rounding intentionally matches visible UAH boundary; checkout calculation unchanged.",
+    "O4": "Four additional native-helper fictional fallbacks passed post-review (foreignfree, foreigntariff-only, zero/nonnumericrate). Supplemental test not read by reviewer; all original143 frozen identities still match.",
+    "O5": "Pinned order_list.twig checked locally: it contains no rd18.support or rd18_support reference; old unused language key has no list output impact.",
+    "O6": "PHP8.0 gate remains; invalid UTF8 forward-compatibility cleanup deferred, no code change.",
+    "O7": "Legacy comment and RollbackUpload edge retained; actual3target contracts/counters are authoritative. Do not RollbackUpload after an attempted rollback."
+  },
+  "supplemental_fallback_sha256": "a85dd8b289dd601d8c3e57bd17b0556b537932fb827d34ecebe389d9bddca913",
+  "post_review_changes": "Report/facts/current-gate bookkeeping only; exact executable pair/3payloads/96deps/frozen fixtures and results unchanged. Additional fallback checks only, no model result call.",
+  "owner_receipts": "absent at release",
+  "owner_QA": "pending",
+  "agent_SSH_key_server_action": false,
+  "DB_writes": 0,
+  "real_NP_calls": 0,
+  "next": "Owner packet hash, Upload then Verify ONCE; return full receipt. Apply not yet released; no oldWP4/sourcepacket replay/reset."
+}

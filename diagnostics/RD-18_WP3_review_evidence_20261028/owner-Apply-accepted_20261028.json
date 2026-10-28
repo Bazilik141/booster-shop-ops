@@ -1,0 +1,78 @@
+{
+  "task": "RD-18-WP3",
+  "accepted_utc": "2026-10-28T07:35:08.116762+00:00",
+  "receipt": "work\\rd18-followup-20261027\\owner-receipts\\Apply-20261028T0658580010198Z.txt",
+  "receipt_sha256": "b54ac72e83007368c1a58b800c0d449968bbe837b3f124cadaf5a5710c2e1df2",
+  "review_request": "14467fd5-b388-44e6-a140-2d2a04007025",
+  "runner_sha256": "dfe35673ae48b678b2483e39cc78f6d486c98ac6056ce18c0cf1c0a0a5cf43b7",
+  "packet_sha256": "9829523685372e716acb287e33020b708607cb1c53bfc5cd598b3d300154d309",
+  "admission_sha256": "9e30ff3c4ef48d4ef77cc5af2a2d1b9422b1c3f3fb07b187528cdcd7db736fbd",
+  "targets": [
+    {
+      "path": "catalog/controller/account/order.php",
+      "before": "0ef2b9207054d186475a005fece05257934bc2e7c123fc03ec3dc275ddbd2c8f",
+      "after": "1fe8c974106e33a7b5035c907ea137c9f1eda864586db9e7a79278f9d1056629",
+      "bytes": 30553
+    },
+    {
+      "path": "catalog/view/template/account/order_info.twig",
+      "before": "b48bafd5885c2ea435fde1ca6309ebd4672a932d7aa9508f898ebf2b33573442",
+      "after": "7e4741fab901d78b179bc4fec733d4ff8bf63af59e4a117248f23d4d6b1eacd3",
+      "bytes": 13952
+    },
+    {
+      "path": "catalog/view/template/account/order_history.twig",
+      "before": "5967a285ba6b8a99e42f0b2abcfbb1dd4dababccae7055d7eb3bea8bda9f7289",
+      "after": "76e6a04fb69371333512775ab30f772a0f341617bc42ba5ae02d0340d56a2144",
+      "bytes": 1181
+    },
+    {
+      "path": "catalog/view/stylesheet/boostershop-ds.css",
+      "before": "6b055925986a323a545eb2e81fe2c9734491c1e16adfd3d94b10dba1c6604868",
+      "after": "301f031d943eb42408623a69f911abae8b2a78095d7f9f576e3a4801524668cd",
+      "bytes": 266743
+    },
+    {
+      "path": "catalog/view/template/common/header.twig",
+      "before": "806798230452c27f8a19cabd6019065a028128e2e9cec2281c7a74481074c14f",
+      "after": "9f37207e9c4eac9fbf65882ea15b54f5139183a1d30e799e685cd913d7769635",
+      "bytes": 31158
+    },
+    {
+      "path": "catalog/model/account/order.php",
+      "before": "2862fd9d2a5f756fd5c58d2ecfc71df705799a3bf3f2cef24a69af867c127930",
+      "after": "13afd444187dfafb1400714a7c0aa5303efd0da89c7bd8a36f95763f0f272789",
+      "bytes": 14654
+    },
+    {
+      "path": "extension/ukrainian/catalog/language/uk-ua/account/order.php",
+      "before": "f6f5124797bfa6e8cb2b3f8b4d3c41fa947e6582bdd3db5ab0bc12e902ad8d06",
+      "after": "0451f91789957a6c96c5a7341aebdc48b4117bb002e018d1c76361521bb890c4",
+      "bytes": 5427
+    },
+    {
+      "path": "system/library/booster_order_tracking.php",
+      "before": "absent",
+      "after": "6c5c2684667acac07ddd4fb55df02a61023c4d201964e44dc08dd4b5bef32c8e",
+      "bytes": 5568
+    },
+    {
+      "path": "catalog/view/javascript/booster-order-tracking.js",
+      "before": "absent",
+      "after": "07a0783293a4741e04c6bc97ed252a81079fd6dce9f069713fbf6da2b6000eb1",
+      "bytes": 2817
+    }
+  ],
+  "changed_files": 9,
+  "backup": "/home2/boosters/public_html/_patch_backups/RD-18-WP3_order-followup_20261027-20261028T065858Z-ab4ed879e027",
+  "existing_backup_count": 7,
+  "new_targets_backup": "none for7,8",
+  "template_cache_removed": 48,
+  "template_cache_cleanup": "ok",
+  "self_deleted": true,
+  "staged_runner_absent": true,
+  "one_use_apply_consumed": true,
+  "verdict": "Expected owner Apply receipt accepted mechanically; owner supplied seven further QA changes, final acceptance not given",
+  "agent_SSH_key_or_server_action": false,
+  "next": "Prepare WP4 seven requested presentation/source corrections; never replay WP3 Apply/Verify."
+}

@@ -1,0 +1,80 @@
+{
+  "task": "RD-17-WP0",
+  "remaining3_historical_comparisons": [
+    {
+      "path": "catalog/view/template/account/address.twig",
+      "baseline": "2026-10-15 backup; historical only",
+      "baseline_sha256": "d112f21ae397d390e06ebb1f828b3b2e2b1a838ef2931df8ed1aa435415427c2",
+      "actual_sha256": "d112f21ae397d390e06ebb1f828b3b2e2b1a838ef2931df8ed1aa435415427c2",
+      "match": true
+    },
+    {
+      "path": "catalog/view/template/account/address_list.twig",
+      "baseline": "2026-10-15 backup; historical only",
+      "baseline_sha256": "8d8e5b454ace66b2b515825997eaade60ad0c2a899cbe0c7607a811fb2cbf20e",
+      "actual_sha256": "8d8e5b454ace66b2b515825997eaade60ad0c2a899cbe0c7607a811fb2cbf20e",
+      "match": true
+    },
+    {
+      "path": "extension/ukrainian/catalog/language/uk-ua/account/address.php",
+      "baseline": "2026-10-15 backup; historical only",
+      "baseline_sha256": "a3a1a85269f27a755d629e6e3de0224e600f6da9eb48d3b9e79b5173c25c5cf2",
+      "actual_sha256": "a3a1a85269f27a755d629e6e3de0224e600f6da9eb48d3b9e79b5173c25c5cf2",
+      "match": true
+    }
+  ],
+  "ACC008_r16_controller_before_ACC009_N2_verified": true,
+  "NP_helpers_byte_identical_to_ACC008_r16": true,
+  "ACC008_r16_confirmation_block_byte_identical": true,
+  "ACC008_guard_byte_identical": true,
+  "NP_and_country_inline_scripts_byte_identical_to_ACC008_source": true,
+  "public_methods": [
+    "index",
+    "list",
+    "npMetadata",
+    "form",
+    "save",
+    "delete"
+  ],
+  "form_names": [
+    "company",
+    "postcode",
+    "firstname",
+    "lastname",
+    "city",
+    "address_1",
+    "address_2",
+    "country_id",
+    "zone_id",
+    "bs_np_area_ref",
+    "bs_np_city_ref",
+    "bs_np_point_ref",
+    "bs_np_area_label",
+    "bs_np_city_label",
+    "bs_np_type",
+    "bs_np_point_label",
+    "bs_np_house",
+    "bs_np_flat",
+    "custom_field[{{ custom_field.custom_field_id }}]",
+    "custom_field[{{ custom_field.custom_field_id }}]",
+    "acc008_custom_field_present[{{ custom_field.custom_field_id }}]",
+    "custom_field[{{ custom_field.custom_field_id }}][]",
+    "custom_field[{{ custom_field.custom_field_id }}]",
+    "custom_field[{{ custom_field.custom_field_id }}]",
+    "custom_field[{{ custom_field.custom_field_id }}]",
+    "custom_field[{{ custom_field.custom_field_id }}]",
+    "custom_field[{{ custom_field.custom_field_id }}]",
+    "custom_field[{{ custom_field.custom_field_id }}]",
+    "default",
+    "default"
+  ],
+  "dedicated_recipient_patronymic_in_source": false,
+  "profile_patronymic_hidden_by_catalogHidden": true,
+  "dynamic_address_custom_field_definitions_not_exported": true,
+  "theme_route_exact_match_confirmed_from_fresh_model": true,
+  "limitations": [
+    "No authenticated browser runtime, customer records or new save performed",
+    "No current event/OCMOD admission claim; before application only",
+    "Arbitrary DB-defined address custom-field names are not known; preserve renderer unchanged"
+  ]
+}

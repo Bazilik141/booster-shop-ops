@@ -1,0 +1,13 @@
+{
+  "scope": "Only local report/status/verdict bookkeeping after frozen review; exact executable pair unchanged",
+  "request_id": "2b7d1ce0-12ed-4605-af7a-655ef4cb9732",
+  "owner_receipts_absent": true,
+  "runner_sha256": "1f9d7ee4a15d7fc4d8352d19243294cd35d0821043380f5a72a155c4f3b5e269",
+  "owner_packet_sha256": "76562834f3ce773369b4d7e67f9d9330c666decfbbf2b5bfc2add5630be93fba",
+  "report_before_sha256": "2620becd57a098f9add6e907af2a0a4b7e5cbf79743a2e9fd53730865e435a85",
+  "report_after_sha256": "efb10608ecc61e13b9d677133169ed3f1dd3a68d46a60beec61345e8161dae87",
+  "release_facts_before_sha256": "ee0965850d29fd33ba985a1eb4eae952adf3f2a322d1bfa754647019eaa49465",
+  "release_facts_after_sha256": "0b7ec4ffba84641efb8ac1f849c0a68af2e340a093039f8f69de211b46caac7b",
+  "diff_sha256": "62ceb124fce9cf28f987ab8ce4de38419d060742129f9de13016af8ebaf420b1",
+  "released": "Owner Upload and Verify only; Apply held; owner deployment and QA still required"
+}

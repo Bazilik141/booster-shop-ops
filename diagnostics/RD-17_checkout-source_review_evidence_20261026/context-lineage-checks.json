@@ -1,0 +1,191 @@
+[
+  {
+    "path": "catalog/controller/account/edit.php",
+    "expected": "e9c1b8457047a3e8528bba84d6d84f49cba825e6af1bba235cf83256d1602f2d",
+    "actual": "c1c31f06556c98a68586dc9562eba4b3397d5d9b5bf98f8cca171cb0e9632113",
+    "match": false,
+    "later_release_may_supersede": true
+  },
+  {
+    "path": "catalog/view/template/account/edit.twig",
+    "expected": "707c3788e12888324161dc311c0591ae3ce28c72194d7743b4b82f3f070eeff9",
+    "actual": "c061d04d06906474bebd08700a75a659212e8e84a431c5ee5bcdc7961c4fcc2d",
+    "match": false,
+    "later_release_may_supersede": true
+  },
+  {
+    "path": "catalog/controller/account/login.php",
+    "expected": "425b640d20bbe18598539b1a22cbed18def29c5c525d258e17a7ff2829bc2eee",
+    "actual": "425b640d20bbe18598539b1a22cbed18def29c5c525d258e17a7ff2829bc2eee",
+    "match": true,
+    "later_release_may_supersede": true
+  },
+  {
+    "path": "catalog/controller/checkout/checkout.php",
+    "expected": "761c051c9286c3022efc1e5deea02979023f2d45600d762cb2d222eda03e4cbf",
+    "actual": "dab58181bf151676320cc40e8920e9b98296a1d73cba6fd540e5f4372e6096ed",
+    "match": false,
+    "later_release_may_supersede": true
+  },
+  {
+    "path": "catalog/controller/checkout/confirm.php",
+    "expected": "333c43b9da2c6101d44e5676a78648b8ab9b75296380675944fef88a3ee69288",
+    "actual": "333c43b9da2c6101d44e5676a78648b8ab9b75296380675944fef88a3ee69288",
+    "match": true,
+    "later_release_may_supersede": true
+  },
+  {
+    "path": "catalog/controller/checkout/shipping_address.php",
+    "expected": "c5e456585fe2da3f9ede3435b1522848ff2a147dc0ad5418d1773bb65cd832b5",
+    "actual": "94a0f7a1f1b95a0dc3aa2894ee57ad1103d5ca4e7a5727ff883cf09b56bf5fa5",
+    "match": false,
+    "later_release_may_supersede": true
+  },
+  {
+    "path": "catalog/controller/checkout/payment_address.php",
+    "expected": "2c4ce122546971593c6ca4b6083face8200b311a789f7f7cef82d1a4d4b8c76f",
+    "actual": "e8fd4b475fd3d51c49ee046ba062c75b0f7733df7d1b3d59aa5ff054de8ea572",
+    "match": false,
+    "later_release_may_supersede": true
+  },
+  {
+    "path": "catalog/controller/checkout/register.php",
+    "expected": "5858276323363e09ae727e47a5aa13e2918d2d455991feeefa6daf3e52890c2f",
+    "actual": "fe5b818905033315f84b139a8769e55b30b4a8113995b6289c3148304cd85967",
+    "match": false,
+    "later_release_may_supersede": true
+  },
+  {
+    "path": "catalog/controller/checkout/payment_method.php",
+    "expected": "dc34248a36f05445502aecb4eff2b03accc6e68bf9318b7f699252023821fbe9",
+    "actual": "69fc5f3cd4a9e319374c23cf19a61ff57c5efbea745053165fcde5fcdeeeb43e",
+    "match": false,
+    "later_release_may_supersede": true
+  },
+  {
+    "path": "catalog/controller/checkout/success.php",
+    "expected": "90bea312550bdd42b37129273e7a5aa8a3b80fc4ccc11a70e8ed6d053077737b",
+    "actual": "90bea312550bdd42b37129273e7a5aa8a3b80fc4ccc11a70e8ed6d053077737b",
+    "match": true,
+    "later_release_may_supersede": true
+  },
+  {
+    "path": "catalog/view/javascript/checkout-reskin.js",
+    "expected": "a73a0209021266618ef395bc30d50be0fd3071a02035c43d79c0b5b9c79db8e6",
+    "actual": "a73a0209021266618ef395bc30d50be0fd3071a02035c43d79c0b5b9c79db8e6",
+    "match": true,
+    "later_release_may_supersede": true
+  },
+  {
+    "path": "catalog/view/javascript/checkout-state.js",
+    "expected": "83a9de5bbb2c6184abd5c9ceb89b23841532b415ad1e4cb14cf48315e4c9f97c",
+    "actual": "83a9de5bbb2c6184abd5c9ceb89b23841532b415ad1e4cb14cf48315e4c9f97c",
+    "match": true,
+    "later_release_may_supersede": true
+  },
+  {
+    "path": "catalog/view/javascript/acc009-checkout.js",
+    "expected": "0cb1acff55038642851649c4bc5b82b55faf62769d9993310b45ee5e5305f4f1",
+    "actual": "f944c1213925365d83ae5752cea0737f8065ecbe4e5593535a6099e3226ad077",
+    "match": false,
+    "later_release_may_supersede": true
+  },
+  {
+    "path": "catalog/view/template/checkout/checkout.twig",
+    "expected": "397b85ccfd84c881779d0fc6ebadf40205060e440af7b588d0e249cf250c2146",
+    "actual": "e17c963336b37183c16761cf3e966e2fc47768e5749fe0078b5c6ee14f1b5260",
+    "match": false,
+    "later_release_may_supersede": true
+  },
+  {
+    "path": "catalog/view/template/checkout/register.twig",
+    "expected": "354d390457dbfb056e5243defe59f4ff587cd690c657e04b853549c6c8cddd20",
+    "actual": "354d390457dbfb056e5243defe59f4ff587cd690c657e04b853549c6c8cddd20",
+    "match": true,
+    "later_release_may_supersede": true
+  },
+  {
+    "path": "catalog/view/template/checkout/shipping_address.twig",
+    "expected": "627047b08f77597aa7eac0224cc0a55b0c8e9f9d3eecb7d6d23a1be9b2380d2a",
+    "actual": "627047b08f77597aa7eac0224cc0a55b0c8e9f9d3eecb7d6d23a1be9b2380d2a",
+    "match": true,
+    "later_release_may_supersede": true
+  },
+  {
+    "path": "catalog/view/template/checkout/payment_address.twig",
+    "expected": "8565e5070f33d71700d052c54c8edff2a29342a8e8d5f0ee033b09a7b97c05c9",
+    "actual": "8565e5070f33d71700d052c54c8edff2a29342a8e8d5f0ee033b09a7b97c05c9",
+    "match": true,
+    "later_release_may_supersede": true
+  },
+  {
+    "path": "extension/PintaNovaPoshtaCod/catalog/model/shipping/pinta_nova_poshta.php",
+    "expected": "24923ef2c40b28fc2045c487db41713a5e653aeac7ceb35ebe48ecdd7ce7ab23",
+    "actual": "24923ef2c40b28fc2045c487db41713a5e653aeac7ceb35ebe48ecdd7ce7ab23",
+    "match": true,
+    "later_release_may_supersede": true
+  },
+  {
+    "path": "extension/PintaNovaPoshtaCod/catalog/view/template/shipping/checkout_shipping_address_form.twig",
+    "expected": "51204755ae24456d44c5b2df8fa2af31de921d7d72056b209612465c07f8a10e",
+    "actual": "51204755ae24456d44c5b2df8fa2af31de921d7d72056b209612465c07f8a10e",
+    "match": true,
+    "later_release_may_supersede": true
+  },
+  {
+    "path": "extension/PintaNovaPoshtaCod/catalog/view/template/shipping/checkout_shipping_address_form_register.twig",
+    "expected": "ed27e7a0f925363db73c57064af32b1d21d97d157c10e418e61ac860588ec9f6",
+    "actual": "ed27e7a0f925363db73c57064af32b1d21d97d157c10e418e61ac860588ec9f6",
+    "match": true,
+    "later_release_may_supersede": true
+  },
+  {
+    "path": "extension/PintaNovaPoshtaCod/catalog/view/template/shipping/js_checkout_shipping_address_form.twig",
+    "expected": "65d527db2f1a821b520ab80c0be6bf5c600e369268603de10c6dce136d7b94d6",
+    "actual": "65d527db2f1a821b520ab80c0be6bf5c600e369268603de10c6dce136d7b94d6",
+    "match": true,
+    "later_release_may_supersede": true
+  },
+  {
+    "path": "catalog/controller/account/address.php",
+    "expected": "5b8d82ac98d438339c158b174a934c908f20beb2b3fa0867deaeb7bc53f731ca",
+    "actual": "462560a1f0d9c2c2c59523a5cab5de320620716a1e0985dc2cbb36986b21dff2",
+    "match": false,
+    "later_release_may_supersede": true
+  },
+  {
+    "path": "catalog/view/template/account/address_form.twig",
+    "expected": "a08cab1de895cd0bdb8b4edb03bc0d5dce1b5647727dd01289152e5cd75bd5aa",
+    "actual": "a5d2ad5d4d08406994c00583c722c825c45000c05097c7963d44231ba03ed39f",
+    "match": false,
+    "later_release_may_supersede": true
+  },
+  {
+    "path": "catalog/model/account/address.php",
+    "expected": "a10392f962ab4d92b67f9f97a6d56ec3341940432486ff012dd5e626027795f5",
+    "actual": "a10392f962ab4d92b67f9f97a6d56ec3341940432486ff012dd5e626027795f5",
+    "match": true,
+    "later_release_may_supersede": true
+  },
+  {
+    "path": "catalog/model/account/customer.php",
+    "expected": "2ee614f126bc8f12272ba612e504ad6892298e40d85444b5e1d01558a98c97fb",
+    "actual": "06f53290fffb7d86e3f696194912156456329f20a46cb49c51173282a5896797",
+    "match": false,
+    "later_release_may_supersede": true
+  },
+  {
+    "path": "catalog/model/account/custom_field.php",
+    "expected": "b983dc078dfd1dd0bb5a764b9ec2bbcfd703360c5328839100b2b74ba2549279",
+    "actual": "47f5334b0502f1967e7963bd03a2d3d764a6bceafe7b194634615cb5fa7ffe90",
+    "match": false,
+    "later_release_may_supersede": true
+  },
+  {
+    "path": "catalog/model/checkout/order.php",
+    "expected": "2ed58b2d537506e47b01dfc3232f3add75e620194f6089f1fc8e9d6729dabe46",
+    "actual": "2ed58b2d537506e47b01dfc3232f3add75e620194f6089f1fc8e9d6729dabe46",
+    "match": true,
+    "later_release_may_supersede": true
+  }
+]

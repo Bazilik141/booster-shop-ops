@@ -1,0 +1,13 @@
+{
+  "task": "RD18-WP1",
+  "recorded_utc": "2026-10-27T08:49:07.358105+00:00",
+  "result": "EXPECTED_FAIL_CLOSED_VERIFY_UNADMITTED_EVENT",
+  "runner_sha256": "f2bd1d4312923ba7c1d4cdc46cf83ccf44a631f50a027e87f9e3a6bd9a428221",
+  "packet_sha256": "2b2713c0ff86a824dacf224b8105ed779d198893943f1d138e8bccb5a3724b91",
+  "Verify_receipt": "work\\rd18-main-20261027\\owner-receipts\\Verify-20261027T0844499691055Z.txt",
+  "Verify_sha256": "1e00326b6527f36e6f49dee8b84a1c9659b10b818c0a7959906b258bed5a8edd",
+  "owner_state_sha256": "46320ed777268ab39e3185702c543e02e7f6dd097ed2a6c5f5f8db9f459fad6f",
+  "owner_state": "uploaded true; no verified/admission/applyAttempted",
+  "production_write_boundary": "Failure in rd16_runtime before target admission/backup/source-write branch; owner Verify does not execute Apply or cache cleanup. No source/DB/cache write, no rollback needed. Private stage remains.",
+  "next": "Standalone metadata-only exact-classifier diagnosis, no main retry/re-pin/state reset."
+}

@@ -1,0 +1,22 @@
+{
+  "task": "RD-17-WP1A-UI",
+  "acceptance": "OWNER_VERIFY_EXPECTED_CONTRACT_ACCEPTED_APPLY_READY",
+  "checked_utc": "2026-10-26T19:34:02.773851+00:00",
+  "authority": "Owner supplies successful Upload and Verify outputs in active task; exact reviewed pair matches saved owner state. Owner alone executes separate Apply.",
+  "runner_sha256": "1f9d7ee4a15d7fc4d8352d19243294cd35d0821043380f5a72a155c4f3b5e269",
+  "packet_sha256": "76562834f3ce773369b4d7e67f9d9330c666decfbbf2b5bfc2add5630be93fba",
+  "review_request_id": "2b7d1ce0-12ed-4605-af7a-655ef4cb9732",
+  "admission_sha256": "18d6730346048507f7fd0137e41356d667f76585ffa311e4a89c4d57d01bba66",
+  "php_path": "/usr/local/bin/php",
+  "php_version": "8.0.30",
+  "production_writes": 0,
+  "backup": "none",
+  "upload_receipt": "work\\rd17-profile-ui-20261026\\owner-receipts\\Upload-20261026T1932470778463Z.txt",
+  "upload_receipt_sha256": "eb1c212ff3bd6eae156bc3068a6e65625f2a9fe75bda4ea09e13aae06ff06f06",
+  "verify_receipt": "work\\rd17-profile-ui-20261026\\owner-receipts\\Verify-20261026T1932508171259Z.txt",
+  "verify_receipt_sha256": "3928a863b3d8b7a75d142532bea33b679d900591fee49c1d105f8825ae7ac4d5",
+  "state_sha256_at_acceptance": "4ddbbd62a1d92fb0b4b1618cc2497ddfa98637db309c50cc556326c5f0f2f6e7",
+  "expected_Apply_targets": 3,
+  "Apply_already_run": false,
+  "limits": "No agent server action. Verify is host admission/lint only, not deployment, rendering or owner QA. Apply rechecks current admission; drift is STOP, no replay/re-pinning."
+}

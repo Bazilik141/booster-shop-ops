@@ -1,0 +1,58 @@
+--- reviewed-checkbox-report
++++ report-after-verdict-bookkeeping
+@@ -1,7 +1,7 @@
+ # RD17 WP1C compact default-address checkbox
+ 
+ Date:2026-10-26. Executor:Codex, owner-assigned.
+-Status:LOCAL_CANDIDATE_NOT_REVIEWED; no owner Upload/Verify/Apply release.
++Status:REVIEW_OK_OWNER_UPLOAD_VERIFY_READY. Separate Apply held pending complete owner Verify receipt.
+ 
+ Owner reports address/default/save functionality OK after WP1B deployment,
+ but requests a short checkbox in place of stock yes/no and the long sentence.
+@@ -145,3 +145,46 @@
+ |catalog/view/template/account/address_form.twig|67929316263952efc6c6840dcf1789d5a9a5f56cb72e4e68574f3136b6574980|e7ad580e87875565d129c08ee0f223262e3a86c51832f2d5b083bc85fbadaf50|original-0|
+ |catalog/view/stylesheet/boostershop-ds.css|44a3bd466cc4914975ce1807a65f7db809bf49546b828eacbaa970c6235bc995|f1411862e5aed5da5e0da32b41e49e22e78f4ca8d297a7367bcac7b7be89ba67|original-1|
+ |catalog/view/template/common/header.twig|686742eb5f0fff2d3bcf3f8cf2e2b8d2ef2b74263813e8f3b450b02e084ddfbd|dfeb11467afd43eb760bc95ea1cb0f38a0640e85ce3a90c77f5439fb7a2f33a2|original-2|
++
++
++## Accepted independent review and mechanical release closure
++
++Actual subscription Claude Opus5-5/high returned Review OK with no mandatory
++findings, requestbeb4ec74-8e04-42de-ba15-e930625cea33. Exact reviewed pair remains:
++runner5821c91f9e5f649cbfec65623ee3c118ccb1dd01e4804e592aad334c3165853a;
++packet7fa079594688c4389e3021a6ce9bdc3fedc08f9b9c6f2ea661b2945daa771fb4.
++All114 declared inputs match at completion; no tracked content changed during
++review. Native Get-FileHash confirms the pair; owner receipt folder absent.
++Review original result/run/response/identity closure are preserved under
++checkbox-ready-r1 in diagnostics/RD-17_WP1C_review_evidence_20261026.
++Response SHA256 a8f848e00d8b7c5660255797916a0926258c61a951a8d9d0cd9828b0d7f73e7a.
++Subscription verified, no tools/MCP, no API or paid fallback. Original report
++and release-facts retained before this verdict/status-only local bookkeeping;
++code/commands/tests are unchanged. No extra result model call is required.
++
++Review limits and optional dispositions recorded, no new task/code change:
++-the reviewer read complete current runtime code but did not recompute its
++ identity against parent body; executor's exact native comparison/static hash
++ supplies that evidence. No visual screenshot inspection by the reviewer.
++-rollback order may briefly republish old token before old CSS. Cosmetic narrow
++ rollback-only window recorded; no rollback/recovery is requested or run.
++-existing guard rejects unsetting current main with legacy deletion-worded
++ error_default. It is unchanged from selecting No; owner QA should recognize it.
++-no-op marker can report installed content after an unresolved restore with old
++ token; owner packet already STOPs and never permits replay/reset. No recovery
++ inference follows a no-op. Preserve consumed owner state on every unexpected
++ outcome.
++-minor typography/inherited classifier comments remain; accepted literal CSS
++ token values and actual source/tests are authoritative, not stale comment counts.
++-review's suggested dark-theme QA is outside the explicitly assigned light-A
++ scope and deferred RD29. It does not grant RD29 work or waive required light-A
++ owner QA. Existing theme preview remains unavailable/unchanged. No dark work.
++
++Release only exact owner packet -Step Upload then -Step Verify, with full output
++returned before separate Apply. Expected RD17_WP1C_UPLOAD_OK, admission64hex,
++syntax_gate=ok,production_writes=0,backup=none,done=ok,RD17_WP1C_VERIFY_OK.
++Any target/dependency/header-non-token/metadata drift is STOP, not a blind re-pin
++or retry. Apply and final owner mobile/desktop visual and saved0/1 confirmation
++remain separate gates. Existing checkout selection remains by reviewed contract.
++No source deployment yet for WP1C, no full RD17 closure or RD18 execution,
++no agent server/key/DB/customer/provider/Git or canonical status write.

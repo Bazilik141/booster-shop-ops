@@ -1,0 +1,27 @@
+{
+  "checked_utc": "2026-10-27T06:42:47.952162+00:00",
+  "method": "One bounded followup for three initial timeouts only; anonymous TLS HTTPS GET40s, body prefix256KiB; no authenticated/provider writes",
+  "rows": [
+    {
+      "path": "/",
+      "http": 200,
+      "final_url": "https://boostershop.website/",
+      "body_capped": false,
+      "fatal_marker_in_prefix": false
+    },
+    {
+      "path": "/catalog/Pokemon",
+      "http": 200,
+      "final_url": "https://boostershop.website/catalog/Pokemon",
+      "body_capped": false,
+      "fatal_marker_in_prefix": false
+    },
+    {
+      "path": "/index.php?route=checkout/cart",
+      "http": 200,
+      "final_url": "https://boostershop.website/index.php?route=checkout/cart",
+      "body_capped": false,
+      "fatal_marker_in_prefix": false
+    }
+  ]
+}

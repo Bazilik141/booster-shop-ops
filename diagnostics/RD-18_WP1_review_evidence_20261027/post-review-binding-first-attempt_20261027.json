@@ -1,0 +1,7 @@
+{
+  "test": "additional hash-binding witness only",
+  "result": "engine passed; Python-launched PS5 failed module autoload Get-FileHash before mock steps",
+  "cause": "Inherited PSModulePath from PS7 in Python child; earlier direct nativePS5 checks passed",
+  "correction": "Explicit child-only Desktop PSModulePath for PS5, no code/packet/product change",
+  "production_operations": false
+}

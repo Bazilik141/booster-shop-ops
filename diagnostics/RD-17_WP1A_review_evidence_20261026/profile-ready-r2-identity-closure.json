@@ -1,0 +1,23 @@
+{
+  "stage": "profile-ready-r2",
+  "request_id": "c6136634-dd50-4169-a055-7887fed66065",
+  "input_packet_sha256": "fd1c04acb14df1ad2137ba66da1f8de916b21cd5940efd89ac352f3ddb2d4fc1",
+  "input_packet_bytes": 1239654,
+  "declared_inputs_checked": 75,
+  "declared_input_changes": [],
+  "tracked_dirty_repository_content_changes_during_review": [],
+  "repository_monitor_limit": "tracked dirty-set/content plus all declared artifacts; not a blanket whole-untracked-repository certification",
+  "runner_sha256": "27c6bec2e5113d03313b5ed3ca5074e48748f20bdfbe73d6e09968feda2e6bd4",
+  "owner_packet_sha256": "ae92eb4a2f3db35a186c912af5c85017a09f2cf4a2238906e3f2a293b3d190ff",
+  "response_sha256": "f1be897c1e7b1bc02f6a23a41fdb6593e033decb31bfcd0eab9e698a7d405c02",
+  "response_binds_runner": true,
+  "response_binds_owner_packet": true,
+  "model_initialized": "claude-opus-5-5",
+  "model_observed": [
+    "claude-opus-5-5"
+  ],
+  "tool_calls": [],
+  "subscription_verified": true,
+  "deployment_or_owner_QA": false,
+  "finding_disposition": "Must read complete response; identity checks are not semantic approval."
+}

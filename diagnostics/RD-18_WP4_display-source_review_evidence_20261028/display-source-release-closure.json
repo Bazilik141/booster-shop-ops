@@ -1,0 +1,26 @@
+{
+  "task": "RD-18-WP4-display-source",
+  "closed_utc": "2026-10-28T08:02:00.725123+00:00",
+  "status": "REVIEW_OK_OWNER_SOURCE_ONLY_READY",
+  "request_id": "4ae393a6-4a77-4fb3-b157-0939f6217a8a",
+  "verdict": "Actual subscription Claude Review OK; no mandatory findings, R1 M1 closed",
+  "review_packet_bytes": 95955,
+  "review_packet_sha256": "979d2a06da90a37cd1153cbdb5675a40016b45513dccab5b0f8a29b8215c3c2d",
+  "response_sha256": "8c04359df58958ed7eb2f38c9b575b3c812cbac86a6433af206097aaef385daf",
+  "collector_sha256": "b47cc0be5e9f9d8bfd71df8fc83012c373c3814552bb25308631e9d58a43b0f4",
+  "packet_sha256": "1881285ee80e8d888a2407e4ca01d83036c0120da5ca6f3bd45a0d5cb76c580f",
+  "declared_inputs_verified": 53,
+  "exact_pair_unchanged": true,
+  "local_drop": "absent at release",
+  "mandatory_findings": [],
+  "optional_disposition": {
+    "N1": "Accepted nonblocking limit: PHP/Bash fixture outputs lack embedded artifact hash. Frozen inputs, extraction equality and PS pair hashes preserved. Future result writers should include hash; no retrospective runtime binding claim.",
+    "N2": "Accepted nonblocking test guard omission; passing collector-hash refusal proves replacement. Do not run test with native transports.",
+    "N3": "Collected files remain owner-local, inspect locally before any external transfer; never transfer raw banking values/config/keys/customer data.",
+    "N4": "Interpret format_nonempty as trimmed presence only, not exact native PHP truthiness for whitespace/zero.",
+    "N5": "Bounded discover list is not completeness proof; do not follow symlink directories. Resolve missing chain before implementation."
+  },
+  "outside_set_work_during_review": "New local mechanical intake helper and public NP-logo discovery candidates only, no reviewed source/packet/dependency modifications, no production writes. Intake helper/public asset not covered by collector verdict; validate owning implementation in final WP4 stage.",
+  "scope": "Source-only collector/owner command release. No final UI/payment-language patch or runtime/source/DB/cache admission. Source-facts remains immutable reviewed pre-release snapshot; this closure supplies current owner gate.",
+  "next": "Owner runs exact reviewed source packet ONCE with -OrderId 462. Expected RD18_WP4_SOURCE_READY. No Step/Apply or old packet replay. STOP preserves artifacts for bounded assessment."
+}

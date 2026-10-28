@@ -1,0 +1,14 @@
+{
+  "task": "RD-18",
+  "recorded_utc": "2026-10-27T07:44:57.619921+00:00",
+  "owner_reply": "1 \u044f\u043a \u043d\u0430 \u043c\u0430\u043a\u0435\u0442\u0456. \u0456\u043d\u0448\u0435 \u043e\u043a",
+  "accepted": [
+    "first stored product name plus remaining product positions; <=10 additional existing getProducts reads per page",
+    "native numeric pager, limit10",
+    "recorded history only, no synthetic future step",
+    "native per-product reorder action, no bulk endpoint"
+  ],
+  "D2": "previously accepted variant1, no green status badges",
+  "H1": "previously granted existing DS token value only",
+  "deployment_QA_Git_status_or_live_data_grant": false
+}

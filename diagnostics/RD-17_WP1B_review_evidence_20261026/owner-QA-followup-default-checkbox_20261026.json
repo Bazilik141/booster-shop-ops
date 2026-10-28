@@ -1,0 +1,11 @@
+{
+  "task": "RD17",
+  "recorded_utc": "2026-10-26T21:05:24.031277+00:00",
+  "owner_functional_report": "Встановлення адреси, збереження та інше ок.",
+  "acceptance_scope": "Owner accepts reported address/default/save functionality; overall UI QA remains open for the default selector. No unreported individual NPCourier/provider or order tests invented.",
+  "UI_request": "Replace stock yes/no and long phrase by one compact checkbox; use existing label Основна адреса and keep native default0/1 save semantics.",
+  "checkout_clarification": "Owner confirms another address was already selected. Current shipping.index adopts the default only when shipping_address session is empty. Changing the address-book default intentionally does not overwrite an existing checkout selection. No checkout change is requested or prepared on that evidence.",
+  "privacy": "Attached screenshot inspected locally only; no private name/address/image contents exported to peer review. Derived nonpersonal visual complaint only.",
+  "next": "RD17 WP1C checkbox-only presentation package; RD18 still unstarted.",
+  "external_status_write": false
+}

@@ -1,0 +1,34 @@
+{
+    "results":  [
+                    {
+                        "completed":  true,
+                        "step":  "Upload"
+                    },
+                    {
+                        "completed":  true,
+                        "step":  "Verify"
+                    },
+                    {
+                        "completed":  true,
+                        "step":  "Apply"
+                    },
+                    {
+                        "completed":  true,
+                        "step":  "RollbackUpload"
+                    },
+                    {
+                        "completed":  true,
+                        "step":  "RollbackVerify"
+                    },
+                    {
+                        "completed":  true,
+                        "step":  "Rollback"
+                    }
+                ],
+    "PS_version":  "5.1.26100.9711",
+    "boundary":  "actual packet AST/steps/receipt/state; native SSH/SCP function and upload replaced with local deterministic mocks",
+    "passed_steps":  6,
+    "actual_network_or_server":  false,
+    "state":  "apply and rollback markers correct",
+    "apply_replay":  "refused"
+}

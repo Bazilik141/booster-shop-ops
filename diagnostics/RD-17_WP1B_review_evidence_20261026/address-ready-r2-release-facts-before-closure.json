@@ -1,0 +1,14 @@
+{
+  "runner": "patches\\RD-17-WP1B_addresses_20261026.php",
+  "runner_sha256": "4fdcb89f6a652a6a6fc270cfbbf51757bdf998b1c7394a345c228230f0194523",
+  "runner_bytes": 201799,
+  "packet": "diagnostics\\RD-17-WP1B_owner_20261026.ps1",
+  "packet_sha256": "88f9f06452ca3c0f2daf27eb787ee9d3b971c3ba8b9e443024ea7fc81a3be5dd",
+  "packet_bytes": 11840,
+  "targets": 9,
+  "new": 2,
+  "dependencies": 58,
+  "H1": "granted; header token only",
+  "status": "LOCAL_CANDIDATE_NOT_REVIEWED",
+  "production_DB_writes_by_runner": 0
+}

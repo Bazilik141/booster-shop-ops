@@ -1,0 +1,19 @@
+{
+  "task": "RD-18-WP3",
+  "accepted_utc": "2026-10-28T06:55:28.009842+00:00",
+  "receipt": "work\\rd18-followup-20261027\\owner-receipts\\Verify-20261028T0653419570457Z.txt",
+  "receipt_sha256": "070341bab6abf3c24ee5982c4ee082e43081152436a5f892bacb07fcf4ea72ab",
+  "state_sha256_at_acceptance": "3b9d652f264ccfc4fee09c2ede9239e04ceeeeb625f036553b718e111ebef05a",
+  "review_request": "14467fd5-b388-44e6-a140-2d2a04007025",
+  "runner_sha256": "dfe35673ae48b678b2483e39cc78f6d486c98ac6056ce18c0cf1c0a0a5cf43b7",
+  "packet_sha256": "9829523685372e716acb287e33020b708607cb1c53bfc5cd598b3d300154d309",
+  "admission_sha256": "9e30ff3c4ef48d4ef77cc5af2a2d1b9422b1c3f3fb07b187528cdcd7db736fbd",
+  "php_version": "8.0.30",
+  "production_writes": 0,
+  "backup": "none",
+  "owner_terminal_banner": "RD18_WP3_VERIFY_OK",
+  "verdict": "Expected Verify receipt accepted mechanically; exact reviewed packet Apply may be invoked by owner once",
+  "apply_not_yet_attempted": true,
+  "limits": "Host admission/lint only. No live NP/provider request, visual/functional QA or deployment acceptance follows.",
+  "agent_SSH_key_or_server_action": false
+}

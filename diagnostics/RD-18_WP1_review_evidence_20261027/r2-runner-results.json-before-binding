@@ -1,0 +1,14 @@
+{
+  "passed": 7,
+  "cases": {
+    "roundtrip_partial_rollback": "9 exact payloads/backups; later append/token no-op; backup tamper/target drift STOP;8 partial restores; dynamic header restored",
+    "target_drift": "refused before source writes/backups",
+    "dependency_drift": "refused before source writes/backups",
+    "owned_lock": "refused before source writes/backups",
+    "wrong_admission": "refused before source writes/backups",
+    "header_non_token_drift": "refused before source writes/backups",
+    "post_write_fault": "exact automatic restore after language/CSS/controller writes"
+  },
+  "native": "PHP8.0.30 file engine with nine actual payloads",
+  "fake": "runtime metadata and dependency hashes replaced; no MySQL/host/real ownership/SSH"
+}

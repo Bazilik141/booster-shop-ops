@@ -1,0 +1,77 @@
+--- reviewed-report
++++ closure-report
+@@ -1,7 +1,7 @@
+ # RD-17 WP1A: profile recipient bridge
+ 
+ Date: 2026-10-26. Executor: Codex, assigned by owner. Current status:
+-R3_SOURCE_RECONCILED_REVIEW_HELD_CLAUDE_LIMIT. No Apply or owner QA.
++R3_REVIEW_OK_OWNER_UPLOAD_VERIFY_PENDING. No Apply or owner QA.
+ 
+ ## Result and owner authority
+ 
+@@ -540,3 +540,54 @@
+ request and its original result. The exact pair stays HELD until an actual
+ accepted verdict and identity closure. No owner Upload/Verify/Apply or agent
+ server/SSH/key action follows merely from this resumption.
++
++
++### Successor r3: accepted review and mechanical release closure
++
++Fresh actual subscription request `f7518901-281c-4d55-a1ea-a69fa9aa1092`,
++claude-opus-5-5 / high, returned **Review OK for owner Upload and Verify of the
++r3 pair only**. No mandatory findings remain. Original complete response/result/
++run and identity closure are preserved under `profile-successor-ready-r2-*` in
++the existing review-evidence folder. Prior consumed quota failure is retained;
++it was not replayed and is not a verdict.
++
++Accepted exact pair:
++- runner `ef0d7a7d87c58340b73cfdbb0fc26a497920adb7c38eeceaf8913dbe803f8e85`
++- owner PS `0a2b8c0935a56197398268ba549857bf07badeae722f7b8c5c5ac1bfd6912712`
++
++All59 declared inputs stayed unchanged during review; tracked dirty repository
++content comparison found no changes. Original uploaded pair/state are preserved
++and the new r3 receipt directory is absent. The scope monitor is not a whole
++untracked-tree or host certification. The reviewer bound declared identities
++and sampled the encoded Mono row; it expressly did not recompute SHA256. Local
++closure recomputes exact artifact identities, manifest/recipe/payload preservation
++and the source lineage evidence already recorded above.
++
++Review O-1 is closed by a recorded sequencing decision: keep the existing Mono
++diagnostic unchanged through WP1A Upload/Verify/Apply. Its own cleanup is outside
++this release. A Mono change before Apply causes a new STOP, not a pin bypass.
++After WP1A applies, the old Mono removal/rollback/recovery wrappers' exact parent
++pins for Confirm/checkout.twig/readiness no longer match; any later cleanup must
++use a reviewed compatible successor, or follow an explicitly selected reviewed
++WP1A rollback. No automatic rollback or unrelated Mono cleanup is granted.
++The same note is in `diagnostics/RD-17_WP1A_r3_owner-handoff_20261026.md`.
++
++Review O-2 is closed mechanically: only the Mono row in
++`profile-dependency-origins.json` is relabelled to the owner-applied October23
++diagnostic/current capture lineage. The original metadata/report and exact
++bookkeeping diffs are preserved. No executable, target, pin or acceptance
++behavior changed after the verdict, so no new model call or unchanged test
++rerun is needed.
++
++O-3/O-4/O-5 remain recorded: old inert staged runner is preserved and must not be
++invoked manually; any leftover shared lock is assessed, not automatically
++deleted; host source/runtime/event/theme/payment/profile drift after capture
++still blocks Verify/Apply. Existing r2 optional notes and fake/runtime/QA limits
++are unchanged. No claim that source review establishes FPM/bank/customer proof.
++
++Owner next: only new r3 Upload then Verify using the tested Windows
++PowerShell5.1 command in the owner handoff; return complete receipt before
++Apply. Expected RD17_WP1A_UPLOAD_OK then admission/syntax/zero-production-write/
++backup=none/done=ok and RD17_WP1A_VERIFY_OK. No main Apply, receipt, deployment,
++owner QA, address WP1B or RD18 execution has happened. No agent SSH/key/server,
++Git, canonical status or external business writes occurred.
+--- reviewed-dependency-origins
++++ reviewer-O2-correction
+@@ -41,7 +41,7 @@
+   "extension/PintaNovaPoshtaCod/catalog/controller/payment/pinta_nova_poshta_cod.php": "accepted relevant event callback",
+   "catalog/model/setting/extension.php": "accepted ACC009 N2 context",
+   "extension/hutko/catalog/controller/payment/hutko.php": "accepted ACC009 N2 context",
+-  "extension/mono_chast/catalog/controller/payment/mono_chast.php": "accepted ACC009 N2 context",
++  "extension/mono_chast/catalog/controller/payment/mono_chast.php": "owner-applied Mono diagnostic guard-r2, 2026-10-23; current bed53fa source reconciled by owner-drift-r1 at 2026-10-26T13:53:06Z",
+   "extension/opencart/catalog/controller/payment/bank_transfer.php": "accepted ACC009 N2 context",
+   "extension/opencart/catalog/controller/payment/cheque.php": "accepted ACC009 N2 context",
+   "extension/opencart/catalog/controller/payment/cod.php": "accepted ACC009 N2 context",

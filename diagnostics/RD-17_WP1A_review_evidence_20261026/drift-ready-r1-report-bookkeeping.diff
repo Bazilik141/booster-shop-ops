@@ -1,0 +1,68 @@
+--- reviewed-report
++++ closure-report
+@@ -318,12 +318,13 @@
+ against that manifest. The owner streams PHP via the existing noninteractive
+ strict-host-key SSH transport, with no uploaded diagnostic file or remote export.
+ It uses PHP8.0 -n, never requires config or application code, reads no DB/session/
+-log/customer/source bodies, and emits only named technical paths, SHA256, file
++log/customer records and exports no source bodies; it emits only named technical paths, SHA256, file
+ sizes, timestamps and matching flags. It checks the existing private staged
+ main runner hash, exact cwd/root/canonical paths, no symlinks, and stable double
+ hash/stat observations. Missing files/parents are reported absent. No production
+ target/metadata/cache writes, provider calls, key/setup/reset or auto-retry.
+-Backup/rollback/self-delete: none needed; remote diagnostic exists only on stdin.
++Backup/rollback/self-delete: none needed; stdin/heredoc only; no persisted remote diagnostic file. A shell may use an
++unlinked transient heredoc temporary file.
+ 
+ Owner transport verifies exact local inspector/main/main-packet hashes and the
+ uploaded/not-applied state; it does not modify that state. One capture creates
+@@ -356,3 +357,49 @@
+ the changed owning source/accepted release, request only needed fresh content
+ if required, repair/review affected logic before a successor admission. Do not
+ replace one hash blindly. Main WP1A Apply/QA, address WP1B and RD18 remain pending.
++
++
++### Hash diagnostic: Review OK and mechanical closure
++
++Actual subscription `claude-opus-5-5`, effort high, request
++`d3a5c7af-7c10-495e-a960-421af14f41fa` returned **Review OK for one owner hash
++capture only**, with no mandatory findings. Complete original result/response/
++run and scoped identity checks are preserved as `drift-ready-r1-*` in the
++existing WP1A review-evidence folder. Binding pair:
++
++- PHP `55e5339d45e4aa6e414617c4cf5c0bd330d135aa051061d906467efaa1f407da`
++- PS `acafd789f9fad535e975ef5ca034c8a82543e512ac3282587ebc742ae113eed3`
++- Decoded 114-row manifest `409bfa8a9a50f5a644ec62d9dd49939c08249d42a02e773cf43f8323528b412e`
++
++All 31 declared inputs stayed unchanged during review. The original main pair
++and local uploaded/not-applied state remain unchanged. The reviewer bound the
++declared hashes, sampled encoded spans and expressly did not recompute SHA256;
++local mechanical closure supplies exact byte identities and builder/manifest
++equality evidence. No source-pin refresh or production proof follows.
++
++Two outside-set files changed during review: ROADMAP_SOP.md and the dashboard.
++Their bounded current diffs concern TECH-050 future staging/PHP migration,
++already-recorded RD18 H1/D2 prose, and canonical review/receipt governance. They
++are not read/executed by this inspector, affect no diagnostic/main target/hash,
++and do not prove a host PHP change. They were preserved, not authored here.
++The identity closure records before/after hashes and the scoped monitor limit;
++this is no whole-untracked-repository or host certification.
++
++Optional notes recorded: stderr visibility/transport stalls or a local failure
++may leave an empty/raw-only drop; return its evidence rather than rerunning.
++PowerShell7.0-7.4 may coerce ISO strings then refuse the receipt, so the released
++one-line owner command explicitly uses the locally tested Windows PowerShell5.1.
++If such parsing already failed elsewhere, revalidate saved raw stdout locally;
++do not recapture. Stdin/heredoc has no persisted remote diagnostic file, though
++bash may create an unlinked temporary file. `absent` means not visible to the
++owner account, not independent proof of deletion. Additional parser/state/TTY
++hardening suggestions are optional and deferred; executable bytes are unchanged.
++Linux filesystem/actual SSH transport were not exercised locally. The report's
++wording/this verdict bookkeeping does not change diagnostic acceptance or code.
++
++Next owner action: one `-NoProfile -File` invocation of the diagnostic owner PS
++using `C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe`, no -Step.
++Return console output; raw/validated receipts will be available locally at the
++named work drop. No main Verify/Apply, pin edits, remote cleanup, key setup,
++deployment, customer/order/DB writes, QA or RD18 work is authorized by this
++capture. Main WP1A stays HELD until bounded source reconciliation is complete.

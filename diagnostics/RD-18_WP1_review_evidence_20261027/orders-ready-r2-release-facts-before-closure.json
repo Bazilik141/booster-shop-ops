@@ -1,0 +1,15 @@
+{
+  "runner": "patches\\RD-18-WP1_orders_20261027.php",
+  "runner_sha256": "f2bd1d4312923ba7c1d4cdc46cf83ccf44a631f50a027e87f9e3a6bd9a428221",
+  "runner_bytes": 163542,
+  "packet": "diagnostics\\RD-18-WP1_owner_20261027.ps1",
+  "packet_sha256": "2b2713c0ff86a824dacf224b8105ed779d198893943f1d138e8bccb5a3724b91",
+  "packet_bytes": 11814,
+  "targets": 9,
+  "new": 0,
+  "dependencies": 66,
+  "status": "R1_REVIEW_OK_OPTIONAL_REPAIRS_READY_AFFECTED_REVIEW_PENDING",
+  "production_DB_writes": 0,
+  "H1": "Granted; only DS token value",
+  "G0": "Owner accepted first product as board, other recommendations OK"
+}

@@ -1,0 +1,30 @@
+{
+  "request_id": "c5ce87dc-fd49-4c65-a81c-cd49ae8edf4b",
+  "status": "NOT_REVIEWED_PROVIDER_FIVE_HOUR_LIMIT",
+  "request_consumed": true,
+  "actual_substantive_CODE_verdict": null,
+  "failure_result_sha256": "6f75934baf1193eb87a901ba0d6f7b15bd46dbbc278ed5030844bca5e9e2cde2",
+  "provider_message": "You've hit your session limit \u00b7 resets 7:50pm (Europe/Kyiv)",
+  "resets_at_utc": "2026-10-26T17:50:00+00:00",
+  "resets_at_provider_local": "2026-10-26 19:50 Europe/Kyiv",
+  "requested_model": "claude-opus-5-5",
+  "effort": "high",
+  "models_observed": [
+    "<synthetic>"
+  ],
+  "subscription_verified": true,
+  "tool_calls": [],
+  "is_using_overage": false,
+  "input_packet_sha256": "40d2fa985d56a8d71c625603b4ee742165c4392017cb3907302ecab1bcbda170",
+  "input_packet_bytes": 833914,
+  "declared_inputs_checked": 57,
+  "declared_input_changes": [],
+  "tracked_dirty_repository_content_changes": [],
+  "scope_limit": "Declared inputs and tracked dirty content only; no whole-untracked-tree/host certification.",
+  "runner_sha256": "ef0d7a7d87c58340b73cfdbb0fc26a497920adb7c38eeceaf8913dbe803f8e85",
+  "owner_packet_sha256": "0a2b8c0935a56197398268ba549857bf07badeae722f7b8c5c5ac1bfd6912712",
+  "submitted_report_sha256": "2638156e54c3cc0de5fee7f7559e8373c754d7cbf3f4ace9366c84e3a9e9c30d",
+  "updated_report_sha256": "65bc3f2e3c0c8741f322effd763f3a00673204939c211ffc3a9c69f09c15fa54",
+  "post_dispatch_delta": "Only current report/facts failure/capture bookkeeping; executable pair unchanged.",
+  "resume": "Fresh stage/request after quota availability; preserve consumed failure and local evidence. No automatic retry/auth/key/paid fallback/source pull/rebuild."
+}

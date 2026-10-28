@@ -1,0 +1,37 @@
+{
+  "task": "RD-18-WP1-r3",
+  "recorded_utc": "2026-10-27T09:47:55.345630+00:00",
+  "status": "REVIEW_OK_OWNER_UPLOAD_VERIFY_READY",
+  "review_request_id": "337649a7-7162-47a3-8071-ce72851d7695",
+  "verdict": "Review OK",
+  "mandatory_findings": [],
+  "M1": "Closed by option(a), actual Loader dot-form guard coverage for all10methods/20native events; old20misses and new69reject checks",
+  "runner_sha256": "bc6c7ab5cf137e1e5b3825f72980b4e1726e242c35bc66a892f1cdb3e0bedd60",
+  "packet_sha256": "d7b0d9b12f30f2fca2cfaa67a388345910a2e9b79286f0af10cbf34da14fb20e",
+  "response_sha256": "86f1d2ea1cc59df3c2f063a3aed4e69e6b165a05674d8dbd55a86d08648d8bcf",
+  "review_packet_sha256": "68200462a0f38760c945915bac3b1163af12a081ccabca48ed007856aa14df0b",
+  "declared_inputs_unchanged_at_completion": 130,
+  "source_and_pair_unchanged": true,
+  "subscription_verified": true,
+  "model": "claude-opus-5-5",
+  "tools": [],
+  "optional": {
+    "N1": "Nonblocking stale twenty-six docblock recorded; actual86trigger targets. Keep exact accepted executable bytes; no postreview literal/hash churn. Complete dependency comment was corrected as recorded.",
+    "N2": "Proxy join read from actual Loader::model, not executed; callback emits20strings in discriminating test. No expanded runtime claim.",
+    "N3": "Hook result JSON omits mode/template hash; bracketing fixture source, before/after job identities and exact target hashes retained. Recorded result self-identification limit; no new test/artifact behavior.",
+    "N4": "Mechanical snapshot identity verified now: preserved initial r3 source exactly4f567fe712a1fcb98bc264efb3e511bf4f459d3b1c63d5a148e94a9e7ee48d5c. Native fixture itself has no old-copy hash assertion; provenance is closure check plus preserved pre-repair snapshot.",
+    "N5": "Old R2 packet superseded BOTH because stale4rowmultiset and missing dot-model coverage. Must never run. Stage/state remain preserved; cleanup is separate owner action.",
+    "O1_O5": "Language/other-model/catalog/manufacturer service bodies/hooks outside declared pins/admission; bare Twig ArrayLoader omits production wrapper/cache. Recorded limits; no whole-store/GA4/server certification."
+  },
+  "local_tests": "9jobs exact pair bracketed before/after; fixture/result hashes accepted and rechecked; R2UIpayloads exact unchanged",
+  "new_owner_receipts": "absent",
+  "old_pair_and_uploaded_only_state": "unchanged and superseded; no replay/reset/cleanup",
+  "next_owner_action": "NEW r3 Upload then Verify only; return full output before separate Apply. Unknown event/source/dependency/runtime drift STOP.",
+  "backup_pattern": "/home2/boosters/public_html/_patch_backups/RD-18-WP1_orders-r3_20261027-<UTC>-<12hex>/original-0..8; none created yet",
+  "limits": "No tools/decoder/execution/screenshots by reviewer. Full compiled runner frozen; two unchanged encoded contract bodies elided only from second review excerpt. All9payloads/66pins equal R2; future freshhostVerify required. No actual source/cache/DB writes, server/SSH/key/business/GA4 proof or final owner QA.",
+  "post_closure_mechanical_bookkeeping": [
+    "Preserved frozen preclosure report/facts in evidence; only report/facts/current pointers changed after identity closure.",
+    "Main historical report supersession note appended; no owner state, executable, payload, packet, source dependency or acceptance meaning changed.",
+    "Final exact pair hashes match accepted verdict; actual successor owner state absent and old state uploaded-only."
+  ]
+}

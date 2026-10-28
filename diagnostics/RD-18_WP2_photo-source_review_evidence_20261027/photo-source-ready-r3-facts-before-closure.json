@@ -1,0 +1,23 @@
+{
+  "task": "RD-18-WP2-photo-source",
+  "collector": "diagnostics\\RD-18-WP2_photo-source_collect_20261027.sh",
+  "collector_sha256": "9880a4d6ecaf52123f0805f1304586c1ac9efac8aff9e877dd44818e84fe27f8",
+  "packet": "diagnostics\\RD-18-WP2_photo-source_owner_20261027.ps1",
+  "packet_sha256": "67975e481a020917a81bcfd04f1da430b6eb29a1fc4f0b05eb3f56a12f34fd08",
+  "source_files": [
+    "catalog/model/catalog/product.php",
+    "catalog/model/tool/image.php",
+    "system/library/image.php"
+  ],
+  "status": "LOCAL_SOURCE_COLLECTOR_NOT_REVIEWED",
+  "owner_photo_decision": "Current catalogue photos; placeholder for removed/unavailable products",
+  "owner_drop": "work/rd18-visual-20261027/owner-photo-drop-r1",
+  "predicate_sha256": "c64e78d2e10f1d6969a18e8e8decc7d512f809570ff497918eeae7318a4fcdd8",
+  "metadata": "Enabled technical event pairs only across already protected account surfaces plus new catalog/product.getProduct and tool/image.resize native dot/legacy slash before/after;5routingcore hashes; image-root boolean; no callbacks/catalog/customer/order rows/admission or source/DB/cache writes. Only2private artifacts then owner-transport cleanup exact names.",
+  "known_limit": "Collector prepares evidence only, does not authorize an unknown handler or patch deployment. Source body obvious-secret screen is not a secret-free guarantee.",
+  "local_checks": [
+    "native PHP8lint/helper fakeDB",
+    "Bash/tar/sourcehashes4localcases fakePHP",
+    "PS5.1+7fullpacket mocked transport/hash/download/cleanup/replay"
+  ]
+}

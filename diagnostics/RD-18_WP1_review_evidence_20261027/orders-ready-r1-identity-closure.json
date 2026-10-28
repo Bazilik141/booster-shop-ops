@@ -1,0 +1,16 @@
+{
+  "task": "RD-18-WP1",
+  "stage": "orders-ready-r1",
+  "request_id": "d8eb3b6d-54fc-4ca2-8c06-4ee1791c652c",
+  "recorded_utc": "2026-10-27T08:20:51.257506+00:00",
+  "declared_inputs_unchanged": 122,
+  "input_drift": [],
+  "review_packet_sha256": "ebbb904c775cc35bfbd43275bf522bbc5c87ed48429a90cfa25566ddb963a81e",
+  "runner_sha256": "1219a01e03dbe8a51300bd0b0289f47bda21f6e029f720ef277bbd815b1da12e",
+  "owner_packet_sha256": "9010a8ce81f8beb17080996904ff4f27fcd3d3038709ef4a689f365a3b11bc51",
+  "response_sha256": "c535d9a9a89f6825873cd2ada1cd3ed93f1274031028a04d3a8b133634700468",
+  "model": "claude-opus-5-5",
+  "subscription_verified": true,
+  "tools": [],
+  "scope": "Identity closure only. Actual verdict and mandatory/optional dispositions must be recorded before owner release. No owner deployment or QA proof."
+}

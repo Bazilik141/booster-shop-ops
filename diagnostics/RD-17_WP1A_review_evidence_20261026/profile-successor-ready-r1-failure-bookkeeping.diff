@@ -1,0 +1,48 @@
+--- submitted-report
++++ failure-recorded-report
+@@ -1,7 +1,7 @@
+ # RD-17 WP1A: profile recipient bridge
+ 
+ Date: 2026-10-26. Executor: Codex, assigned by owner. Current status:
+-OWNER_VERIFY_STOP_DEPENDENCY_DRIFT_MAIN_HELD. Owner Verify ran; no Apply or owner QA.
++R3_SOURCE_RECONCILED_REVIEW_HELD_CLAUDE_LIMIT. No Apply or owner QA.
+ 
+ ## Result and owner authority
+ 
+@@ -490,3 +490,36 @@
+ future guarantee. New paths isolate state, while the unchanged shared lock
+ serializes writers. No main deployment, source pin edit on the server, real
+ bank/customer/DB action, Git, status/Notion/dashboard write or RD18 work here.
++
++
++### Successor r3 review dispatch refused by subscription session limit
++
++Fresh actual request `c5ce87dc-fd49-4c65-a81c-cd49ae8edf4b` was consumed on
++2026-10-26. Native saved-subscription admission passed, tools/MCP/hooks were
++disabled, requested model `claude-opus-5-5`, effort high. The provider returned
++exit1/is_error=true with a five_hour rejection before substantive review:
++`You've hit your session limit · resets 7:50pm (Europe/Kyiv)`.
++Observed reset is 2026-10-26T17:50:00Z (19:50 Kyiv). No paid overage/API fallback,
++auth reset/login/key operation, retry, substitute model or model verdict.
++The actual observed assistant model was synthetic refusal, not an Opus CODE
++review. Full original result and run are preserved as
++`profile-successor-ready-r1-original-result.json` / `-run.json`.
++
++All57 declared inputs and exact successor pair remain unchanged after refusal;
++the input packet is 833914 bytes, SHA256
++`40d2fa985d56a8d71c625603b4ee742165c4392017cb3907302ecab1bcbda170`.
++The original submitted report is preserved separately; this appended failure
++bookkeeping does not change either executable. No old accepted verdict covers
++the new r3 admission contract. Successor remains NOT_REVIEWED / HELD despite
++completed source reconciliation, local16 native interaction cases, eight engine
++packaging cases and six mocked owner steps on both tested PowerShell engines.
++
++The hash diagnostic is closed mechanically on its complete expected receipt;
++source identity is reconciled and no fresh pull is needed. Old uploaded
++runner/state/pair is preserved, never retried or applied. No owner action is
++needed now; do not run old/new Upload/Verify/Apply before successor Review OK.
++On a later continuation after reported quota reset, verify unchanged artifacts
++and use a fresh review identity with retained history; never replay this consumed
++request or rebuild unaffected code/tests solely for quota. No automatic retry,
++scheduled continuation or background execution is installed or promised.
++Owner deployment/QA, address WP1B and all RD18 work remain pending.

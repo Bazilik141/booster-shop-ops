@@ -105,3 +105,13 @@ diagnostics/RD-16*.ps1 -text whitespace=cr-at-eol
 diagnostics/RD-16*.sh -text whitespace=cr-at-eol
 diagnostics/RD-16*/** -text whitespace=-blank-at-eol,cr-at-eol
 design/account-light-A/*.dc.html whitespace=-blank-at-eol
+
+# RD-17/RD-18: preserve reviewed deployment, evidence and reference bytes.
+patches/RD-17*.php -text whitespace=cr-at-eol
+patches/RD-18*.php -text whitespace=cr-at-eol
+diagnostics/RD-17* -text whitespace=-blank-at-eol,cr-at-eol
+diagnostics/RD-18* -text whitespace=-blank-at-eol,cr-at-eol
+diagnostics/RD-17*/** -text whitespace=-blank-at-eol,cr-at-eol
+diagnostics/RD-18*/** -text whitespace=-blank-at-eol,cr-at-eol
+design/account-light-A/*Addresses*.dc.html -text whitespace=-blank-at-eol,cr-at-eol
+design/account-light-A/*Order*.dc.html -text whitespace=-blank-at-eol,cr-at-eol

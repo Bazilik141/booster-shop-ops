@@ -1,0 +1,100 @@
+{
+  "task": "RD-18-WP3",
+  "closed_utc": "2026-10-28T06:50:58.251781+00:00",
+  "verdict": "Review OK; no mandatory code/composition findings; NEW owner Upload -> Verify only",
+  "request_id": "14467fd5-b388-44e6-a140-2d2a04007025",
+  "review_payload_bytes": 432223,
+  "review_payload_sha256": "ee5ffa4ac33188d86a1603023f5a1d8b2d3d42bf0b931de48d91158cafc92162",
+  "response_sha256": "8e8714e5af93e368959d321fbf5e87e83ec52742a6482b3e016f43329f243a0f",
+  "runner": {
+    "path": "patches\\RD-18-WP3_order-followup_20261027.php",
+    "sha256": "dfe35673ae48b678b2483e39cc78f6d486c98ac6056ce18c0cf1c0a0a5cf43b7",
+    "bytes": 686314
+  },
+  "owner_packet": {
+    "path": "diagnostics\\RD-18-WP3_owner_20261027.ps1",
+    "sha256": "9829523685372e716acb287e33020b708607cb1c53bfc5cd598b3d300154d309",
+    "bytes": 11850
+  },
+  "frozen_inputs_verified_before_bookkeeping": 148,
+  "bound_check_count": 14,
+  "reviewed_report_snapshot_sha256": "ef8adde50312294d89eaded71fea591cea79e2cec1d9f11b85454c92ea3e27a7",
+  "updated_report_sha256": "505c5669ea1c9ecd01b1483a3d729eff6668b8f6792adae39a1bdee40c2777c5",
+  "post_review_changes": "Nonsemantic report/release-facts/current-gate records only; exact runner/packet/9payloads/78deps/tests unchanged.",
+  "mandatory_code_findings": [],
+  "mandatory_owner_gates": [
+    "Exact packet hash before first invocation",
+    "Complete PHP8.0.x/admission64hex/syntax_gate=ok/production_writes=0/backup=none/done=ok/RD18_WP3_VERIFY_OK receipt before separate Apply",
+    "Apply9exact target rows/count9/cachecleanup/selfdelete/stagedabsence",
+    "No replay/reset/forced rollback",
+    "Owner live visual/function/NP/focus QA before acceptance"
+  ],
+  "optional_findings": "O1current generic message placement;O2lazy carrier placement;O3nativeDateTime schema assumptions/multiTTN;O4liveAPI/keyless/language/notfound behavior;O5canonicalorigin;O6disabledreason;O7SPAroutefuture;O8derivedcache retention;O9cosmetic. Recorded in report and deferred to QA/later owner-requested scope, no implicit new task.",
+  "targets": [
+    {
+      "path": "catalog/controller/account/order.php",
+      "before": "0ef2b9207054d186475a005fece05257934bc2e7c123fc03ec3dc275ddbd2c8f",
+      "after": "1fe8c974106e33a7b5035c907ea137c9f1eda864586db9e7a79278f9d1056629",
+      "bytes": 30553
+    },
+    {
+      "path": "catalog/view/template/account/order_info.twig",
+      "before": "b48bafd5885c2ea435fde1ca6309ebd4672a932d7aa9508f898ebf2b33573442",
+      "after": "7e4741fab901d78b179bc4fec733d4ff8bf63af59e4a117248f23d4d6b1eacd3",
+      "bytes": 13952
+    },
+    {
+      "path": "catalog/view/template/account/order_history.twig",
+      "before": "5967a285ba6b8a99e42f0b2abcfbb1dd4dababccae7055d7eb3bea8bda9f7289",
+      "after": "76e6a04fb69371333512775ab30f772a0f341617bc42ba5ae02d0340d56a2144",
+      "bytes": 1181
+    },
+    {
+      "path": "catalog/view/stylesheet/boostershop-ds.css",
+      "before": "6b055925986a323a545eb2e81fe2c9734491c1e16adfd3d94b10dba1c6604868",
+      "after": "301f031d943eb42408623a69f911abae8b2a78095d7f9f576e3a4801524668cd",
+      "bytes": 266743
+    },
+    {
+      "path": "catalog/view/template/common/header.twig",
+      "before": "806798230452c27f8a19cabd6019065a028128e2e9cec2281c7a74481074c14f",
+      "after": "9f37207e9c4eac9fbf65882ea15b54f5139183a1d30e799e685cd913d7769635",
+      "bytes": 31158
+    },
+    {
+      "path": "catalog/model/account/order.php",
+      "before": "2862fd9d2a5f756fd5c58d2ecfc71df705799a3bf3f2cef24a69af867c127930",
+      "after": "13afd444187dfafb1400714a7c0aa5303efd0da89c7bd8a36f95763f0f272789",
+      "bytes": 14654
+    },
+    {
+      "path": "extension/ukrainian/catalog/language/uk-ua/account/order.php",
+      "before": "f6f5124797bfa6e8cb2b3f8b4d3c41fa947e6582bdd3db5ab0bc12e902ad8d06",
+      "after": "0451f91789957a6c96c5a7341aebdc48b4117bb002e018d1c76361521bb890c4",
+      "bytes": 5427
+    },
+    {
+      "path": "system/library/booster_order_tracking.php",
+      "before": "absent",
+      "after": "6c5c2684667acac07ddd4fb55df02a61023c4d201964e44dc08dd4b5bef32c8e",
+      "bytes": 5568
+    },
+    {
+      "path": "catalog/view/javascript/booster-order-tracking.js",
+      "before": "absent",
+      "after": "07a0783293a4741e04c6bc97ed252a81079fd6dce9f069713fbf6da2b6000eb1",
+      "bytes": 2817
+    }
+  ],
+  "backup": "none - not deployed",
+  "future_backup_pattern": "/home2/boosters/public_html/_patch_backups/RD-18-WP3_order-followup_20261027-<UTC>-<12hex>/original-0..6",
+  "new_targets_backup": "none for indices7,8; remove exact afterfiles on separate admitted rollback",
+  "rollback": "Exact unchanged targets/backups only, views/controller/model restored before new assets removed, header last. Derived image/NP cache retained; target drift STOP.",
+  "source_photo_NP_bodies_transferred": false,
+  "real_customer_or_auth_values_transferred": false,
+  "agent_SSH_or_key_access": false,
+  "real_NP_requests_by_agent": 0,
+  "actual_new_owner_receipts": "absent",
+  "owner_QA": "pending",
+  "release": "NEW Upload -> Verify; send receipt; Apply not yet released"
+}

@@ -1,0 +1,27 @@
+{
+  "task": "RD-17-WP0",
+  "closed_utc": "2026-10-26T10:16:05.520947+00:00",
+  "request_id": "a787f5b4-d2dc-439a-bac7-6fee7ea1f99f",
+  "verdict": "Code/Composition Review OK",
+  "scope": "owner source collection only; G0 not passed",
+  "collector_sha256": "6559ddced3910e3f922a09744ea5a01d84806bdd153463b82c4fbafae28d7e9b",
+  "owner_packet_sha256": "7b799c408aceab7a3de1b08d709a20c032b58798ddf49acca6c33014bbc05a5a",
+  "response_sha256": "81c91088af0efd885a062dd96c9a7a66899ae96b87ddf7859a988aa8c06abe9e",
+  "review_packet_sha256": "c9532fe5cd3117325f2b86852d5751d166f0d6b012adcc7864a32e7b66af07aa",
+  "review_packet_bytes": 158045,
+  "model": "claude-opus-5-5",
+  "effort": "high",
+  "mandatory_findings": [],
+  "optional_recorded": [
+    "O1 confirm fresh theme route form before interpreting zeros",
+    "O2 SSH failure consumes r1; targeted assessment only",
+    "O3 startup stdout fails closed",
+    "O4 possible Framework BOM inherited transport limitation",
+    "O5 mocked metadata and unexecuted owner native/DB boundaries",
+    "O6 task work directory ignored locally; original formatting unchanged",
+    "O7 duplicate adapter assert; never use python -O; adapter outside verdict"
+  ],
+  "reviewed_executables_unchanged": true,
+  "production_source_DB_cache_writes": 0,
+  "deployment_QA_WP1_RD18_authority": false
+}

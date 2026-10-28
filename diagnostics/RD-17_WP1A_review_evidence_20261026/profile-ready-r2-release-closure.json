@@ -1,0 +1,70 @@
+{
+  "stage": "profile-ready-r2",
+  "request_id": "c6136634-dd50-4169-a055-7887fed66065",
+  "input_packet_sha256": "fd1c04acb14df1ad2137ba66da1f8de916b21cd5940efd89ac352f3ddb2d4fc1",
+  "input_packet_bytes": 1239654,
+  "declared_inputs_checked": 75,
+  "declared_input_changes": [],
+  "tracked_dirty_repository_content_changes_during_review": [],
+  "repository_monitor_limit": "tracked dirty-set/content plus all declared artifacts; not a blanket whole-untracked-repository certification",
+  "runner_sha256": "27c6bec2e5113d03313b5ed3ca5074e48748f20bdfbe73d6e09968feda2e6bd4",
+  "owner_packet_sha256": "ae92eb4a2f3db35a186c912af5c85017a09f2cf4a2238906e3f2a293b3d190ff",
+  "response_sha256": "f1be897c1e7b1bc02f6a23a41fdb6593e033decb31bfcd0eab9e698a7d405c02",
+  "response_binds_runner": true,
+  "response_binds_owner_packet": true,
+  "model_initialized": "claude-opus-5-5",
+  "model_observed": [
+    "claude-opus-5-5"
+  ],
+  "tool_calls": [],
+  "subscription_verified": true,
+  "deployment_or_owner_QA": false,
+  "finding_disposition": "Must read complete response; identity checks are not semantic approval.",
+  "verdict": "Review OK for owner Upload and Verify",
+  "mandatory_findings_remaining": [],
+  "mandatory_r1_closed": [
+    "M1 option(a) availability degradation plus native lifecycle tests",
+    "M2 explicit saved-address recipient change/QA"
+  ],
+  "review_duration_ms": 176366,
+  "observed_usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 741669,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 16138,
+    "output_tokens_details": {
+      "thinking_tokens": 12164
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 741669,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 16138,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 741669,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 741669
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "reviewed_report_sha256": "f67ff470360d22386da5377193b8b72bc3461a384c966be30ef936ed6071ea88",
+  "closure_report_sha256": "f3701d30d4c1c3b63ec514c048f9fb82e90166163ccc5717ce0339d4a7f442ea",
+  "post_verdict_delta": "Only appended review/optional-note/status bookkeeping, exact original report and diff retained. No executable change.",
+  "owner_next": "Upload -> Verify -> return complete receipt before Apply",
+  "source_or_business_writes_by_agent": false,
+  "deployment_and_owner_QA": false
+}

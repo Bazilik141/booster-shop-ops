@@ -1,0 +1,15 @@
+{
+  "runner": "patches\\RD-17-WP1C_default-checkbox_20261026.php",
+  "runner_sha256": "5821c91f9e5f649cbfec65623ee3c118ccb1dd01e4804e592aad334c3165853a",
+  "runner_bytes": 99726,
+  "packet": "diagnostics\\RD-17-WP1C_owner_20261026.ps1",
+  "packet_sha256": "7fa079594688c4389e3021a6ce9bdc3fedc08f9b9c6f2ea661b2945daa771fb4",
+  "packet_bytes": 11875,
+  "targets": 3,
+  "existing": 3,
+  "new": 0,
+  "dependencies": 64,
+  "status": "LOCAL_CANDIDATE_NOT_REVIEWED",
+  "H1": "already granted; only current DS token value",
+  "shared_lock": "RD-17-WP1B_addresses_20261026.lock"
+}

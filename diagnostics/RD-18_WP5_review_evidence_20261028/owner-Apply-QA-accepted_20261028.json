@@ -1,0 +1,49 @@
+{
+  "task": "RD-18",
+  "work_package": "RD-18-WP5",
+  "recorded_utc": "2026-10-28T11:53:26.710647+00:00",
+  "technical_acceptance": "OWNER_DEPLOYMENT_AND_FINAL_QA_ACCEPTED",
+  "owner_QA": "Owner explicitly said QA ok after the successful WP5 Apply receipt on 2026-10-28",
+  "receipt": "work\\rd18-wp5-20261028\\owner-receipts\\Apply-20261028T1145464120877Z.txt",
+  "receipt_sha256": "5f56f2e705ddacb8109116244102395d33a5ccfd7bc60711103b84a34476cc0a",
+  "review_request": "50e2dba4-1513-4503-8901-e07b58715a0b",
+  "runner_sha256": "0274bc8dae812feb09121907ec6576ae73adc0201a491d5e5b4a6a9b3d947fd7",
+  "packet_sha256": "07dc12dab06f1e2486da92efed471cd76fd2582edb49f95d417eef415c208a39",
+  "admission_sha256": "b093a6d9321adfe98bc27de2fb6adfa0a3181d6ce72f4ad8b70df2417c35d520",
+  "targets": [
+    {
+      "path": "catalog/controller/account/order.php",
+      "before": "e47cf549b0084dc51fcdc957cce07d59f481cb42ac2a6cd7bbdc9cc29449b56d",
+      "after": "abc1fc3aed97d2a9c1b46125a83885197fd97dc76d46c838d403a7085bb676c0",
+      "bytes": 36125
+    },
+    {
+      "path": "catalog/view/template/account/order_info.twig",
+      "before": "2be28eb165c1f470f5600d73a62a4329ab45216509439efd6088f46b95d5051a",
+      "after": "c25bd288883711d880d78cb3248b8ad10a87245a5798424c4197847761d7a26d",
+      "bytes": 14561
+    },
+    {
+      "path": "extension/ukrainian/catalog/language/uk-ua/account/order.php",
+      "before": "91aac1db33337e26eb11b3c163c0fc3d5712f7565ad9dcaa46b17460279292ba",
+      "after": "917f6cc7e0af8a5813d6c1a3c3b702f4c870c30015782a52cf2a2cbe65fe50c5",
+      "bytes": 5954
+    }
+  ],
+  "changed_files": 3,
+  "backup": "/home2/boosters/public_html/_patch_backups/RD-18-WP5_shipping-display_20261028-20261028T114546Z-9c641c71230e",
+  "backup_count": 3,
+  "template_cache_removed": 34,
+  "template_cache_cleanup": "ok",
+  "self_deleted": true,
+  "staged_runner_absent": true,
+  "apply_consumed": true,
+  "post_apply_model_review": "not required: complete expected contract; mechanically accepted, owner QA separately explicit",
+  "remaining_implementation_work": "none within RD-17 then RD-18 scope",
+  "roadmap_note": "No Notion writes authorized. Canonical status synchronization remains separate; dashboard done status not independently advanced. Notion connector returned an unverified indexed In progress snapshot last edited2026-10-26, not current-state proof. Existing dashboard row also has pre-existing local changes; preserved.",
+  "agent_SSH_key_server_action": false,
+  "DB_writes_by_agent": 0,
+  "real_NP_requests_by_agent": 0,
+  "Git_commit_push": false,
+  "next": "No further execution required. Preserve backups/evidence; never replay consumed packets."
+}

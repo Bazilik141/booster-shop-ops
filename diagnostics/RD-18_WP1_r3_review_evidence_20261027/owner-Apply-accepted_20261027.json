@@ -1,0 +1,90 @@
+{
+  "task": "RD-18-WP1-r3",
+  "recorded_utc": "2026-10-27T17:24:08.733254+00:00",
+  "status": "DEPLOYED_OWNER_QA_PENDING",
+  "classification": "Complete expected owner-host Apply receipt accepted mechanically under exact existing Review OK; no actual-result exception/model call needed.",
+  "runner_sha256": "bc6c7ab5cf137e1e5b3825f72980b4e1726e242c35bc66a892f1cdb3e0bedd60",
+  "packet_sha256": "d7b0d9b12f30f2fca2cfaa67a388345910a2e9b79286f0af10cbf34da14fb20e",
+  "review_request_id": "337649a7-7162-47a3-8071-ce72851d7695",
+  "admission_sha256": "393cc4520ba1911f1437399824172934e30711663504598e01a317945063d926",
+  "receipt": "work\\rd18-admission-20261027\\owner-receipts\\Apply-20261027T1722053616961Z.txt",
+  "receipt_sha256": "24ffbba9f88a78a1fc698947c0ff0810a9014e8d90e04e3d55557f0b9f6b8430",
+  "state_sha256": "bd83356aa45f9ea57a54be1599df5091758ea93ecdf12897779a6b019cb9b8fc",
+  "backup": "/home2/boosters/public_html/_patch_backups/RD-18-WP1_orders-r3_20261027-20261027T172205Z-2bca660786c1",
+  "targets": [
+    {
+      "path": "catalog/controller/account/order.php",
+      "before": "05d7de4ef69585cb5422af9a0badc4f0fa5bef4cd0b33cbc272a39bd00078352",
+      "after": "d024d4a2f97cd14aa5f0ddda115acc2dc6a3a270fe59910e99b53bf74509a03f",
+      "bytes": 25114
+    },
+    {
+      "path": "catalog/view/template/account/order_list.twig",
+      "before": "f526db9ccec43c92577be9fd120910e8be4000efa611b9c6ad7c8b02c4a9c241",
+      "after": "8b97d74cfa8997ecde2bda0869724f84d1502bc4f2a3e2102f2e659a5bcb917a",
+      "bytes": 3931
+    },
+    {
+      "path": "catalog/view/template/account/order_info.twig",
+      "before": "73067a00da6be949f80b725fbfb608ce62e41cd7cefbca936b83400af0b91793",
+      "after": "3a7a46587a4d8da8bc5e6152a92b4fcace2186b28b5a84fd6bb8a1b986dbe041",
+      "bytes": 10396
+    },
+    {
+      "path": "catalog/view/template/account/order_history.twig",
+      "before": "322d458b90e70c987082431074e9215afd94b8bdbe6298491b77f472b58abd62",
+      "after": "be4e25f2742ce7a46fa1084213ed3418265f8407f98bf053d814430d947cc98f",
+      "bytes": 1137
+    },
+    {
+      "path": "catalog/controller/account/account.php",
+      "before": "fcb06de0862686ab1d8afc333651a7f97fb6aa9615d5bf13909d3a1b6a055b5c",
+      "after": "00d61ca1c85529a79581fe35f293264f143ab8f7110017dc9ad6386506df1aaa",
+      "bytes": 8596
+    },
+    {
+      "path": "catalog/view/template/account/account.twig",
+      "before": "7cf795ace7b9c8f81ddfc44d246eb8273c1aa9dc77f55a7b751c93d08b166520",
+      "after": "745a669b8a1cf46c754801a9f8abf4e646d9aece9969f4198290ec7c4c00f0e8",
+      "bytes": 5971
+    },
+    {
+      "path": "extension/ukrainian/catalog/language/uk-ua/account/order.php",
+      "before": "bd25abfe02408347c9ef1770e6134df11101a8c98fcc6e4d0dedfbdee841dcea",
+      "after": "f6f5124797bfa6e8cb2b3f8b4d3c41fa947e6582bdd3db5ab0bc12e902ad8d06",
+      "bytes": 4671
+    },
+    {
+      "path": "catalog/view/stylesheet/boostershop-ds.css",
+      "before": "f1411862e5aed5da5e0da32b41e49e22e78f4ca8d297a7367bcac7b7be89ba67",
+      "after": "b3db6ec93a0d9954efd89e1d99abc7d5481df28bcd87750855ff01fded7c104a",
+      "bytes": 258900
+    },
+    {
+      "path": "catalog/view/template/common/header.twig",
+      "before": "dfeb11467afd43eb760bc95ea1cb0f38a0640e85ce3a90c77f5439fb7a2f33a2",
+      "after": "e578f64fa92a666aff7d3fa8e3436df071d287b6fae9db3d4b2a5e1aa8144a32",
+      "bytes": 31153
+    }
+  ],
+  "target_backup_indices": "original-0..8, exact receipt paths",
+  "changed_files": 9,
+  "syntax_gate": "ok",
+  "self_deleted": true,
+  "template_cache_removed": 53,
+  "template_cache_cleanup": "ok",
+  "staged_runner_absent": true,
+  "source_state": "All9exact per-target before/after hashes match reviewed contract",
+  "DB_writes_contract": 0,
+  "public_smoke": {
+    "path": "diagnostics\\RD-18_WP1_r3_review_evidence_20261027\\public-smoke_20261027.json",
+    "sha256": "a46d23840e3ed4db7c3ad2790ae14411056d3daf6ce2dcceca228d776adb73f5",
+    "pages": 8,
+    "HTTP200": 8,
+    "fatal_markers": 0,
+    "limits": "Anonymous HTTP availability only; retiredFIG-CHARM-001 substituted by already owner-provided current Charizard3D URL. Empty-cart checkout entry redirects to cart normally. No authenticated UI/GA4/provider/real order data verification."
+  },
+  "next": "Owner authenticated desktop/mobile list/detail/status/history/snapshot/totals/native-action QA per handoff and accepted G0; no real order/payment placement.",
+  "no_replay": "Apply consumed; do not rerun Upload/Verify/Apply/diagnostic or old packet. Rollback only by separate owner decision using exact receipt backup.",
+  "no_agent_actions": "No SSH/key/server files/DB/customer/provider/cart write, Notion/dashboard/Git mutation or final owner QA claim."
+}

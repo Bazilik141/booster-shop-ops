@@ -1,0 +1,12 @@
+{
+  "task": "RD18-WP1-event-inspect-r1",
+  "status": "LOCAL_CHECKS_AND_INDEPENDENT_READY_REVIEW_PENDING",
+  "PHP": "diagnostics\\RD-18-WP1_event-inspect_20261027.php",
+  "PHP_sha256": "13c3bfe0b98a2d421caf53a902f503263c67f4b2db2619a3032675183430ae77",
+  "packet": "diagnostics\\RD-18-WP1_event-inspect_owner_20261027.ps1",
+  "packet_sha256": "aeb647be7552c110237799341fb3f3e4236094bc08c7c0bfb9b6f0251af8f310",
+  "classifier_sha256": "48f8b701b3034c40256a2a79e8da08e93e8015edf912ac51a9c8fc4cf6c78d6b",
+  "source_runner_sha256": "f2bd1d4312923ba7c1d4cdc46cf83ccf44a631f50a027e87f9e3a6bd9a428221",
+  "source_packet_sha256": "2b2713c0ff86a824dacf224b8105ed779d198893943f1d138e8bccb5a3724b91",
+  "scope": "One owner-streamed metadata-only capture; zero source/DB/cache/stage/main-state writes. No admission, hook execution, Verify retry or Apply. Four fixed core source hashes only, no source bodies."
+}

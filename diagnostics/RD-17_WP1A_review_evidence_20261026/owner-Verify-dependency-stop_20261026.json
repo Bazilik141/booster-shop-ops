@@ -1,0 +1,14 @@
+{
+  "classification": "KNOWN_FAIL_CLOSED_DEPENDENCY_STOP",
+  "owner_verify_receipt_sha256": "937d88120ebd6be5bb27da2a5be699e1592da54b528f0e1522256eff2b64f7b7",
+  "local_owner_state_sha256": "322c324731bc6086795eea3ae9c1f8372c046189f535c1ebc218a7f99ce782ee",
+  "received_utc": "2026-10-26T13:38:05.830102+00:00",
+  "main_runner_sha256": "27c6bec2e5113d03313b5ed3ca5074e48748f20bdfbe73d6e09968feda2e6bd4",
+  "main_owner_packet_sha256": "ae92eb4a2f3db35a186c912af5c85017a09f2cf4a2238906e3f2a293b3d190ff",
+  "Apply_attempt_recorded": false,
+  "verified_admission_recorded": false,
+  "source_writes_by_check_mode": 0,
+  "unknown": "Which of 107 dependency paths differs; generic error has no path. No independent current-host hash identities.",
+  "receipt_limit": "Saved owner packet output/state matches the reported stop; not universal proof against unrelated host changes or byte-identical manual execution.",
+  "next": "Owner fixed-path hash capture only; preserve main uploaded pair and state. No blind retry, Apply or pin update."
+}

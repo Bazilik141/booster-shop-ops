@@ -1,0 +1,82 @@
+{
+  "task": "RD-18-WP2-photo-source",
+  "recorded_utc": "2026-10-27T18:18:42.639696+00:00",
+  "status": "SOURCE_INTAKE_ACCEPTED_NO_PATCH_ADMISSION",
+  "source_hashes": {
+    "catalog/model/catalog/product.php": "ecf96b214b47f1efd5e3826caedeae6cc25d8d84650ae8a3915330f6f5561dc7",
+    "catalog/model/tool/image.php": "85cf9489244c48fe915bc25f370cdfdb2b39c9c6d6a42219cec7f84a9e375e71",
+    "system/library/image.php": "7f81dcbb8b5d2d032005ae28ce01cea5ba7542f7334fd9909e538f6952adeff9"
+  },
+  "source_bytes": 76342,
+  "archive_sha256": "08e6f59e447014f55cc8c6c9109479344db406c7429d764a8eb16fa74f74ab8c",
+  "manifest_sha256": "4597c181aa768cb4cf67883257e3993c31e6ca561b1b8d680c5d6f1a4a2f6948",
+  "collector_sha256": "9880a4d6ecaf52123f0805f1304586c1ac9efac8aff9e877dd44818e84fe27f8",
+  "packet_sha256": "67975e481a020917a81bcfd04f1da430b6eb29a1fc4f0b05eb3f56a12f34fd08",
+  "metadata": {
+    "enabled_event_rows": 112,
+    "relevant_rows": [
+      {
+        "trigger": {
+          "value": "catalog/view/account/account/before"
+        },
+        "action": {
+          "value": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewAccountAccountBefore"
+        },
+        "already_reviewed": true
+      },
+      {
+        "trigger": {
+          "value": "catalog/view/account/order_info/before"
+        },
+        "action": {
+          "value": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewAccountOrderInfoBefore"
+        },
+        "already_reviewed": true
+      },
+      {
+        "trigger": {
+          "value": "catalog/view/common/header/before"
+        },
+        "action": {
+          "value": "extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewCommonHeaderBefore"
+        },
+        "already_reviewed": true
+      },
+      {
+        "trigger": {
+          "value": "catalog/view/common/header/before"
+        },
+        "action": {
+          "value": "extension/ps_google_recaptcha/captcha/ps_google_recaptcha.eventCatalogViewCommonHeaderBefore"
+        },
+        "already_reviewed": true
+      },
+      {
+        "trigger": {
+          "value": "catalog/view/common/header/before"
+        },
+        "action": {
+          "value": "extension/ps_live_search/module/ps_live_search.eventCatalogViewCommonHeaderBefore"
+        },
+        "already_reviewed": true
+      }
+    ],
+    "routing_core_sha256": {
+      "catalog/controller/startup/event.php": "3980d587897a287329d55a71c42f77116fe8e9dfc33f97a91c638b82b3433bc1",
+      "catalog/model/setting/event.php": "82245810cbdd90cb2cc765259577bfb3c399d24f8afac257381be178920de63e",
+      "system/engine/event.php": "7c132a4dd174921461b4774647aee7f4b3974c53fabe84e6a0ccd74b0d737524",
+      "system/engine/action.php": "91a4af3775e9c1c599faf55f2b1f9eac89b89d178657c6bd8ec7b61054373e79",
+      "system/engine/loader.php": "ea2098450ddc567747e2d89001d997ce921e966a313cafb680a308ee369a4723"
+    },
+    "php": "8.0.30",
+    "image_root_is_expected": true,
+    "writes": "none",
+    "customer_or_catalog_rows": "none",
+    "admission": "none"
+  },
+  "unreviewed_relevant_rows": [],
+  "redacted_relevant_rows": [],
+  "image_root_is_expected": true,
+  "scope": "Local source capture only. No model/image/callback/PHP execution, no patch/source admission or production change. Current catalogue source bodies remain local; external transfer requires its applicable exact authority.",
+  "next": "Inspect complete native getter/resize paths and any unreviewed hooks; implement only presentation photo aliases, preserve stored order data. Final guarded patch+packet need integrated ready review and owner deployment/QA."
+}

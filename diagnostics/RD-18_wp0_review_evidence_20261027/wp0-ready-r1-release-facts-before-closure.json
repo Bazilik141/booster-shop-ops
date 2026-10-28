@@ -1,0 +1,9 @@
+{
+  "collector": "diagnostics\\RD-18_wp0_collect_20261027.sh",
+  "collector_sha256": "18348636391bc60acc48f2556f135d1e3663264355b999592d17117744207744",
+  "owner_packet": "diagnostics\\RD-18_wp0_owner-pull_20261027.ps1",
+  "owner_packet_sha256": "fe60983a3c2765b3005dfb14ea3c86217f4858630590b94488918251fc6a74b8",
+  "files": 30,
+  "status": "LOCAL_CHECKS_PASSED_READY_REVIEW_PENDING",
+  "scope": "Source-only owner pull; zero source/DB/cache writes. Fresh-source G0 stop required. RD17 deploy and owner QA accepted before creation."
+}

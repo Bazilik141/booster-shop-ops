@@ -1,0 +1,17 @@
+{
+  "runner": "patches\\RD-18-WP1_orders-r3_20261027.php",
+  "runner_sha256": "bc6c7ab5cf137e1e5b3825f72980b4e1726e242c35bc66a892f1cdb3e0bedd60",
+  "runner_bytes": 164754,
+  "packet": "diagnostics\\RD-18-WP1_owner-r3_20261027.ps1",
+  "packet_sha256": "d7b0d9b12f30f2fca2cfaa67a388345910a2e9b79286f0af10cbf34da14fb20e",
+  "packet_bytes": 11852,
+  "targets": 9,
+  "new": 0,
+  "dependencies": 66,
+  "status": "M1_REPAIRED_LOCAL_CHECKS_PASSED_AFFECTED_READY_REVIEW_PENDING",
+  "production_DB_writes": 0,
+  "shared_lock": "RD-18-WP1_orders_20261027.lock",
+  "H1": "Previously granted; same sole DS token value",
+  "old_pair_unchanged": true,
+  "capture_limit": "Old classifier capture does not prove absence of dot-form model hooks; corrected future Verify rescans all enabled rows and fails closed."
+}

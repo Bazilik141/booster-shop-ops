@@ -1,0 +1,9 @@
+{
+  "predicate_definition": "predicate_sha256 hashes exact function substring copied from r3+additional target names, excluding the6byte <?php+LF wrapper; full wrapper file SHA differs by design.",
+  "predicate_body_sha256": "c64e78d2e10f1d6969a18e8e8decc7d512f809570ff497918eeae7318a4fcdd8",
+  "predicate_file_sha256": "15cb68d5786735eba93ec1551118b175c5790b49192da927e15909e11070b8a6",
+  "embedded_PHP_equals_native_linted_test_source_rstrip": true,
+  "native_metadata_source_sha256": "84397dc84c90c24f45b8a2461bf63fa12b0fd044100c03e5aab0ef75ad8ab7ca",
+  "embedded_PHP_sha256": "9491c412971dbf7bea8a4d6dfa2bb5e93d19c13946e04be44d65d1f9b007cd2b",
+  "intake_conditions": "intake-photo-source.py requires all5corehashes match WP1deps; unknown/redacted rows or unexpectedimage mapping remain held; no patch admission."
+}

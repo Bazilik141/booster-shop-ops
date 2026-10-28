@@ -72,6 +72,8 @@ status and priority from the verified Notion card. Use dashboard
 
 | Roadmap ID | Назва | Handoff |
 |---|---|---|
+| RD-17 | Account addresses list + form (light A), ACC-008 carry-over notices; before RD-18 | handoffs/handoff_RD-17_account-addresses_20261026.md · boards: design/account-light-A/ · evidence: diagnostics/RD-17_closeout_report_20261027.md · diagnostics/RD-17_RD-18_closure_report_20261028.md |
+| RD-18 | Account orders list + detail (light A) over ACC-007 status presentation; after RD-17 | handoffs/handoff_RD-18_account-orders_20261026.md · boards: design/account-light-A/ · evidence: diagnostics/RD-18_WP5_shipping-display_report_20261028.md · diagnostics/RD-17_RD-18_closure_report_20261028.md |
 | RD-25 | Product media: catalog fit/classification, product gallery and small thumbnail routing | handoffs/handoff_RD-25_product-media-slot_20261009.md · handoffs/handoff_RD-25-WP1-FIX_media-trim-classification_20261011.md · diagnostics/RD-25-WP1_closure_report_20261011.md |
 | RD-04 | Картка товару — дизайн-система | handoffs/handoff_RD-04_product-card_thumb-twig_2026-06-01.md |
 | RD-06/07 | Empty state / category / breadcrumb | handoffs/handoff_RD-06-07_empty-state_category_breadcrumb_2026-06-04.md |

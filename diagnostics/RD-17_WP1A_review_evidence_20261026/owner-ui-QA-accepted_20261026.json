@@ -1,0 +1,12 @@
+{
+  "task": "RD-17-WP1A-UI",
+  "owner_statement": "qa ok",
+  "recorded_utc": "2026-10-26T19:39:31.022776+00:00",
+  "acceptance_scope": "Owner accepted the post-Apply desktop/mobile button presentation and requested profile-copy/collapse QA. Closes the prerequisite bridge/UI gate for address WP1B; does not close the full RD17 task or invent unreported provider/order tests.",
+  "runner_sha256": "1f9d7ee4a15d7fc4d8352d19243294cd35d0821043380f5a72a155c4f3b5e269",
+  "packet_sha256": "76562834f3ce773369b4d7e67f9d9330c666decfbbf2b5bfc2add5630be93fba",
+  "source_receipt_sha256": "d424c941678715cbca77e45e2c2005a1545dac2ad5faade9d540145adeac7bab",
+  "backup": "/home2/boosters/public_html/_patch_backups/RD-17-WP1A-UI_profile-action_20261026-20261026T193415Z-c30f9981374a",
+  "next": "Continue authorized RD17 address/default-action package; RD18 remains unstarted.",
+  "external_status_writes": false
+}

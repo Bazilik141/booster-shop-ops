@@ -1,0 +1,73 @@
+{
+  "task": "RD-18-WP4",
+  "accepted_utc": "2026-10-28T09:55:28.344522+00:00",
+  "receipt": "work\\rd18-wp4-20261028\\owner-receipts\\Apply-20261028T0945174207289Z.txt",
+  "receipt_sha256": "e666ef685e2f6f64fd139348471b7aac86bf85fe9bd2b8d889aa97c279110686",
+  "changed_files": 9,
+  "targets": [
+    {
+      "path": "catalog/controller/account/order.php",
+      "before": "1fe8c974106e33a7b5035c907ea137c9f1eda864586db9e7a79278f9d1056629",
+      "after": "e47cf549b0084dc51fcdc957cce07d59f481cb42ac2a6cd7bbdc9cc29449b56d",
+      "bytes": 32895
+    },
+    {
+      "path": "catalog/view/template/account/order_info.twig",
+      "before": "7e4741fab901d78b179bc4fec733d4ff8bf63af59e4a117248f23d4d6b1eacd3",
+      "after": "2be28eb165c1f470f5600d73a62a4329ab45216509439efd6088f46b95d5051a",
+      "bytes": 14314
+    },
+    {
+      "path": "extension/opencart/catalog/language/uk-ua/payment/bank_transfer.php",
+      "before": "a3f0f5efcc62b9bd6ca1e44cf7d98721d192470fad84ec918c6bc9cda56ca6e5",
+      "after": "1e7434ab133f61c024a6fd39c5bf43aa4bae7df792dc14815d0803493e522677",
+      "bytes": 498
+    },
+    {
+      "path": "catalog/view/stylesheet/boostershop-ds.css",
+      "before": "301f031d943eb42408623a69f911abae8b2a78095d7f9f576e3a4801524668cd",
+      "after": "ff548b2b7bf52eeae34e5e5d18f6313b913451e0b113997a108faf254c283293",
+      "bytes": 267374
+    },
+    {
+      "path": "catalog/view/template/common/header.twig",
+      "before": "9f37207e9c4eac9fbf65882ea15b54f5139183a1d30e799e685cd913d7769635",
+      "after": "96abebbd32f15a5f0bf574f6bc273e43a8ca422a382f0f7fb9ae7987df986ffc",
+      "bytes": 31163
+    },
+    {
+      "path": "extension/ukrainian/extension/opencart/catalog/language/uk-ua/payment/bank_transfer.php",
+      "before": "a3f0f5efcc62b9bd6ca1e44cf7d98721d192470fad84ec918c6bc9cda56ca6e5",
+      "after": "1e7434ab133f61c024a6fd39c5bf43aa4bae7df792dc14815d0803493e522677",
+      "bytes": 498
+    },
+    {
+      "path": "extension/ukrainian/catalog/language/uk-ua/account/order.php",
+      "before": "0451f91789957a6c96c5a7341aebdc48b4117bb002e018d1c76361521bb890c4",
+      "after": "91aac1db33337e26eb11b3c163c0fc3d5712f7565ad9dcaa46b17460279292ba",
+      "bytes": 5656
+    },
+    {
+      "path": "catalog/view/javascript/booster-order-tracking.js",
+      "before": "07a0783293a4741e04c6bc97ed252a81079fd6dce9f069713fbf6da2b6000eb1",
+      "after": "92e24e95b0c1d0c7b7904c2010ad8a411158c27129730a64af8f33980101f257",
+      "bytes": 2244
+    },
+    {
+      "path": "catalog/view/stylesheet/booster-nova-poshta.svg",
+      "before": "absent",
+      "after": "f2887da5a798f3998aa73ab350c8bc13bc8b0b1185e0277a47e02477920d3b0f",
+      "bytes": 732
+    }
+  ],
+  "backup": "/home2/boosters/public_html/_patch_backups/RD-18-WP4_detail-polish_20261028-20261028T094517Z-6df334e56edf",
+  "backups": 8,
+  "new_file_backup": "none index8",
+  "cache_removed": 66,
+  "self_deleted": true,
+  "staged_absent": true,
+  "one_use_apply_consumed": true,
+  "status": "OWNER_APPLY_ACCEPTED_TWO_FURTHER_QA_CHANGES",
+  "next": "WP5 support question + truthful stored NP delivery price, no writer changes; never replay WP4",
+  "agent_server_action": false
+}

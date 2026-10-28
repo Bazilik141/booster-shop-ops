@@ -1,0 +1,38 @@
+{
+  "task": "RD-17-WP1C",
+  "recorded_utc": "2026-10-27T06:41:57.774869+00:00",
+  "result": "EXPECTED_APPLY_ACCEPTED_OWNER_QA_ACCEPTED",
+  "receipt": "work\\rd17-default-check-20261026\\owner-receipts\\Apply-20261026T2122373669436Z.txt",
+  "receipt_sha256": "b1f77a44f459261b03f17503504d1e5db9190abdb409d6bdc1cb910c33fbe5f1",
+  "state_sha256": "efcf09d7018126647630b320a795c71feecfa37d188f2b343bb24e2ea6e3b27c",
+  "backup": "/home2/boosters/public_html/_patch_backups/RD-17-WP1C_default-checkbox_20261026-20261026T212236Z-57c2094a8236",
+  "runner_sha256": "5821c91f9e5f649cbfec65623ee3c118ccb1dd01e4804e592aad334c3165853a",
+  "packet_sha256": "7fa079594688c4389e3021a6ce9bdc3fedc08f9b9c6f2ea661b2945daa771fb4",
+  "targets": [
+    {
+      "path": "catalog/view/template/account/address_form.twig",
+      "before": "67929316263952efc6c6840dcf1789d5a9a5f56cb72e4e68574f3136b6574980",
+      "after": "e7ad580e87875565d129c08ee0f223262e3a86c51832f2d5b083bc85fbadaf50",
+      "bytes": 29817
+    },
+    {
+      "path": "catalog/view/stylesheet/boostershop-ds.css",
+      "before": "44a3bd466cc4914975ce1807a65f7db809bf49546b828eacbaa970c6235bc995",
+      "after": "f1411862e5aed5da5e0da32b41e49e22e78f4ca8d297a7367bcac7b7be89ba67",
+      "bytes": 248523
+    },
+    {
+      "path": "catalog/view/template/common/header.twig",
+      "before": "686742eb5f0fff2d3bcf3f8cf2e2b8d2ef2b74263813e8f3b450b02e084ddfbd",
+      "after": "dfeb11467afd43eb760bc95ea1cb0f38a0640e85ce3a90c77f5439fb7a2f33a2",
+      "bytes": 31154
+    }
+  ],
+  "template_cache_removed": 42,
+  "owner_reply": "done. QA ok",
+  "owner_reply_date_local": "2026-10-27",
+  "acceptance_scope": "Owner reports Apply done and accepts final checkbox QA. Earlier address/default/save and profile-action QA retained. No invented per-case live/provider results.",
+  "agent_server_key_DB_or_deployment": false,
+  "canonical_status_write": false,
+  "closure": "Complete expected receipt closes mechanically under current policy; no extra model call."
+}

@@ -4079,13 +4079,13 @@ const ROADMAP_TASKS = [
     why: 'Сторінка показується рідко: Hutko веде клієнта на «Замовлення прийнято» навіть після невдалої оплати — це окрема задача CHECKOUT-012.', warn: 'Рішення власника 30.09: тільки вигляд. Пакет A разом з RD-14. Бриф: handoffs/handoff_RD-14-15_UX-003-005-009_visual-design-brief_20260930.md', subtasks: [] },
   {
     id: 'RD-ACCOUNT', title: 'Особистий кабінет покупця — новий дизайн', status: 'active', tool: 'Codex', priority: 'Medium',
-    lastUpdated: '2026-10-26', blockedBy: [],
+    lastUpdated: '2026-10-28', blockedBy: [],
     simple: 'Єдиний новий стиль для всіх сторінок кабінету: особисті дані, адреси, вхід в акаунт і реєстрація.',
     why: 'Кабінет поки виглядає по-старому — покупець помічає контраст із рештою сайту.',
     warn: null,
     subtasks: [
       { id: '1', title: 'RD-16 — Загальний каркас і сторінка особистих даних', status: 'done', desc: 'Каркас, головна кабінету й особисті дані застосовані; WP1/WP2 QA власника OK 26.10.2026. Інші сторінки приймають каркас у своїх задачах.' },
-      { id: '2', title: 'RD-17 — Збережені адреси', status: 'todo', desc: 'Список адрес картками + форма додавання / редагування.' },
+      { id: '2', title: 'RD-17 — Збережені адреси', status: 'done', desc: 'Адреси, основна адреса та checkout готові; деплой і QA власника прийнято до RD-18.' },
       { id: '3', title: 'RD-19 — Вхід і відновлення пароля', status: 'todo', desc: 'Сторінка входу в акаунт і форма відновлення пароля.' },
       { id: '4', title: 'RD-20 — Реєстрація (2 кроки)', status: 'todo', desc: 'Крок 1: контакти. Крок 2: адреса. Знижка -15% для нових — не чіпати.' }
     ]
@@ -4656,15 +4656,17 @@ const ROADMAP_TASKS = [
     subtasks: []
   },
   {
-    id: 'RD-17', title: 'Addresses (list + form)', status: 'todo', tool: 'Codex', priority: 'Medium',
-    lastUpdated: '', blockedBy: [],
+    id: 'RD-17', title: 'Addresses (list + form)', status: 'done', tool: 'Codex', priority: 'Medium',
+    lastUpdated: '2026-10-28', blockedBy: [],
     simple: 'Категорія: Redesign (RD).',
+    warn: 'Notion: https://app.notion.com/p/3706bf20bdb481ad9674c74099d07f77. 2026-10-25: додано з закриття ACC-008 — перестилізувати кошикові тости видалення/попередження на сторінках адрес, перевірити застаріле повідомлення після перерваного редиректу, доступність алерту адрес. Логіку збереження не чіпати. 2026-10-26: хендоф готовий — handoffs/handoff_RD-17_account-addresses_20261026.md, виконавець Codex, макети в design/account-light-A/. Іде першою, RD-18 — після її QA. Рішення на старті (G0): форма адреси вбудована й згорнута чи окремою сторінкою; «Зробити основною» лише якщо така дія вже є. 2026-10-28: завершено, деплой і QA власника прийняті до старту RD-18. Підсумок: diagnostics/RD-17_closeout_report_20261027.md. Закриття: diagnostics/RD-17_RD-18_closure_report_20261028.md.',
     subtasks: []
   },
   {
-    id: 'RD-18', title: 'Orders (all orders list + order detail)', status: 'todo', tool: 'Codex', priority: 'Low',
-    lastUpdated: '', blockedBy: [],
-    simple: 'Категорія: Redesign (RD).',
+    id: 'RD-18', title: 'Orders (all orders list + order detail)', status: 'done', tool: 'Codex', priority: 'Low',
+    lastUpdated: '2026-10-28', blockedBy: [],
+    simple: 'Категорія: Redesign (RD). Список замовлень і сторінка замовлення в новому стилі кабінету; статуси й дати — з ACC-007, логіка не змінюється.',
+    warn: 'Notion: https://app.notion.com/p/3706bf20bdb4813f895ad7953dfc9c36. 2026-10-26: хендоф готовий — handoffs/handoff_RD-18_account-orders_20261026.md, виконавець Codex. Стартує після деплою й QA RD-17. Рішення власника 26.10: H1 — дозвіл міняти лише версію стилів у шапці; D2 — варіант 1: «завершено» темний бейдж із галочкою, без зеленого, однаково на головній кабінету, у списку й у деталях. 2026-10-28: WP1–WP5 застосовані, фінальний QA власника OK; незалежні рев’ю Claude пройдено. Підсумок: diagnostics/RD-18_WP5_shipping-display_report_20261028.md. Закриття: diagnostics/RD-17_RD-18_closure_report_20261028.md.',
     subtasks: []
   },
   {

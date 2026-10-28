@@ -1,0 +1,65 @@
+--- reviewed-report
++++ report-after-bookkeeping
+@@ -1,7 +1,7 @@
+ # RD-17 WP1A: profile recipient bridge
+ 
+ Date: 2026-10-26. Executor: Codex, assigned by owner. Current status:
+-OWNER_VISUAL_QA_RETURN_PROFILE_ACTION_UI_CANDIDATE. Base deployment accepted; owner QA not accepted.
++PROFILE_ACTION_UI_REVIEW_OK_OWNER_UPLOAD_VERIFY_READY. UI Apply is held pending complete owner Verify receipt; base deployment accepted, overall owner QA not accepted.
+ 
+ ## Result and owner authority
+ 
+@@ -817,3 +817,53 @@
+ old base/Mono recovery runners by hand. Current release keeps the installed
+ bridge/Mono unchanged. After UI deployment, owner visual/function QA is required
+ before address WP1B; all RD18 work waits for all RD17 deployment/QA.
++
++
++## UI integrated review and mechanical release closure
++
++Actual independent subscription Claude CODE/composition review completed under
++request2b7d1ce0-12ed-4605-af7a-655ef4cb9732, model claude-opus-5-5/high.
++Verdict: Review OK for owner Upload and Verify; no mandatory findings. Apply
++remains held for the complete Verify receipt. Review did not visually inspect
++the previews or waive host Verify, deployment or owner aesthetic/function QA.
++Saved subscription admission, no API/paid fallback, tools/MCP empty. Agent did
++not perform any server/key/deployment/customer/DB/order/provider/Git/status write.
++
++Exact reviewed executable pair remains unchanged:
++- runner SHA256 1f9d7ee4a15d7fc4d8352d19243294cd35d0821043380f5a72a155c4f3b5e269;
++- owner packet SHA256 76562834f3ce773369b4d7e67f9d9330c666decfbbf2b5bfc2add5630be93fba.
++
++Evidence in diagnostics/RD-17_WP1A_review_evidence_20261026:
++ui-ready-r1-response.md, original-result.json, run.json, identity-closure.json.
++Response SHA256 f27cb3775016e64e471bcb4db29d77b97783db24849434683c89ca0301dc55a0.
++All52 declared inputs matched at completion; no tracked repository content
++changed during review. Native Get-FileHash confirms the pair; fresh owner
++receipt directory is absent before release. Original reviewed report and
++release-facts bytes are retained before this status/verdict-only bookkeeping;
++the closure diff/identities are saved. No code, command, tests or acceptance
++meaning is changed by bookkeeping, and no extra model call is required.
++
++Optional findings disposition, recorded without implementation/new task:
++O-1 mobile compact header padding/icon/chevron alignment differs from sibling
++cards; O-2 existing keyboard-copy focus falls to body while the action hides;
++O-3 toggle focus outline can clip at the card edge; O-4 hidden-action grid leaves
++a small gap/default gap cursor; O-5 isolated CSS/JS asset failure degrades styling.
++These were classified nonblocking by the reviewer. Include them in owner visual/
++keyboard QA rather than silently changing the reviewed executable pair.
++
++O-6 release sequencing is recorded explicitly: Mono bed53fa and all installed
++base after-states stay pinned. Any change between Verify and Apply is STOP,
++not re-pinning. After UI Apply, existing base/Mono recovery parent hashes do not
++consume UI Twig5d16becd. Select the reviewed UI rollback first, or prepare an
++admitted compatible successor; never invoke old runners by hand. Future WP1B
++writers of checkout.twig or the reskin recap must use the UI after-state and
++native selectors in this review. This grants no Mono cleanup/base rollback.
++
++Owner next action is only the exact UI packet Upload followed by Verify, not
++the old base packet. Complete expected receipt closes mechanically, then
++separate Apply can be released. Error/drift/STOP means hold and send receipt;
++do not repeat or Apply. Owner QA after deployment covers desktop1280/~1000,
++mobile390/320, full label/alignment, Tab/Enter, native chevron/collapse and both
++predicate directions, current profile-copy result without reload/phone change,
++and guest checkout. UI is not deployed and owner QA is not accepted yet. Address
++WP1B waits; RD18 remains unstarted. No canonical status/dashboard was changed.

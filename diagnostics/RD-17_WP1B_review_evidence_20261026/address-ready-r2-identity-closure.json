@@ -1,0 +1,16 @@
+{
+  "request_id": "642e5ac7-c47a-4dc1-aa8d-0cecd8a29a75",
+  "stage": "address-ready-r2",
+  "review_status": "completed",
+  "declared_inputs_checked": 143,
+  "declared_input_drift": [],
+  "tracked_repository_content_changes_during_review": [],
+  "packet_sha256": "b0f833444c41d3550e12d496b849aee899098c6ed0f7a792fbfce3faaa0f34a4",
+  "response_sha256": "e04c9c2a11f926864c38e1fe0a1eaf94ce1a8ee2614e388ec225326e2c5ee9f6",
+  "runner_sha256": "4fdcb89f6a652a6a6fc270cfbbf51757bdf998b1c7394a345c228230f0194523",
+  "owner_packet_sha256": "88f9f06452ca3c0f2daf27eb787ee9d3b971c3ba8b9e443024ea7fc81a3be5dd",
+  "model": "claude-opus-5-5",
+  "subscription_verified": true,
+  "tools": [],
+  "scope": "Identity closure only; verdict must be read and disposed before release. No owner deployment or QA proof."
+}

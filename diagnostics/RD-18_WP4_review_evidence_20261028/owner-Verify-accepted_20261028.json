@@ -1,0 +1,22 @@
+{
+  "task": "RD-18-WP4",
+  "recorded_utc": "2026-10-28T09:27:11.538773+00:00",
+  "status": "OWNER_VERIFY_ACCEPTED_APPLY_READY",
+  "receipt": "work\\rd18-wp4-20261028\\owner-receipts\\Verify-20261028T0925249976830Z.txt",
+  "receipt_sha256": "5e4ef0ffed8c71cbcdeb269021315c51697edbbabb4a8afae2af07f0303dac33",
+  "upload_receipt_sha256": "eb1c212ff3bd6eae156bc3068a6e65625f2a9fe75bda4ea09e13aae06ff06f06",
+  "runner_sha256": "6e0228de91fa957afca9dc63a908e160633c1fab401ccecdbd52e1ddf7c46e9b",
+  "packet_sha256": "b5e92850ebb857afbce0469877f2512ef79e66533a1de058e412780c605719ab",
+  "admission_sha256": "7e79a7a74b77dc6f54babd7eae538b729d627d259091bd22bfe539626ccd8f42",
+  "php_path": "/usr/local/bin/php",
+  "php_version": "8.0.30",
+  "targets": 9,
+  "production_writes": 0,
+  "backup": "none",
+  "local_apply_attempted": false,
+  "reviewed_input_check": "162 identities verified, using immutable reviewed snapshots for authorized report/facts bookkeeping only",
+  "new_Claude_result_call": false,
+  "owner_state_edited": false,
+  "agent_server_action": false,
+  "next": "Owner exact packet -Step Apply ONCE. Send full receipt. No Verify/Upload replay or state reset; final owner QA follows Apply."
+}

@@ -1,0 +1,31 @@
+{
+  "task": "RD-18-WP1-r3",
+  "recorded_utc": "2026-10-27T17:21:43.171540+00:00",
+  "status": "OWNER_VERIFY_ACCEPTED_APPLY_READY",
+  "review_request_id": "337649a7-7162-47a3-8071-ce72851d7695",
+  "runner_sha256": "bc6c7ab5cf137e1e5b3825f72980b4e1726e242c35bc66a892f1cdb3e0bedd60",
+  "packet_sha256": "d7b0d9b12f30f2fca2cfaa67a388345910a2e9b79286f0af10cbf34da14fb20e",
+  "state_sha256": "4650de7bb7744510fd89dbbc4fbb703b7213373685379b131cd57c6f667889cf",
+  "receipts": [
+    {
+      "path": "work\\rd18-admission-20261027\\owner-receipts\\Upload-20261027T1720135300754Z.txt",
+      "sha256": "eb1c212ff3bd6eae156bc3068a6e65625f2a9fe75bda4ea09e13aae06ff06f06",
+      "bytes": 63
+    },
+    {
+      "path": "work\\rd18-admission-20261027\\owner-receipts\\Verify-20261027T1720239120893Z.txt",
+      "sha256": "4e337cb37298805cee180b6ea26ac185b80489791b37fbbed3bcf67aeb010d78",
+      "bytes": 286
+    }
+  ],
+  "admission_sha256": "393cc4520ba1911f1437399824172934e30711663504598e01a317945063d926",
+  "PHP": "8.0.30",
+  "syntax_gate": "ok",
+  "production_writes": 0,
+  "backup": "none",
+  "done": "ok",
+  "owner_state": "uploaded+verified only; no Apply/rollback attempt/backup",
+  "unchanged_local_contracts": "9target payloads and66source dependencies match",
+  "classification": "Complete expected owner-host Verify receipt accepted mechanically under existing Review OK. No new review, source code/packet change, deployment or owner QA claim.",
+  "next": "Owner exact new r3 packet -Step Apply ONCE; then return full receipt. No old diagnostic/Upload/Verify replay."
+}

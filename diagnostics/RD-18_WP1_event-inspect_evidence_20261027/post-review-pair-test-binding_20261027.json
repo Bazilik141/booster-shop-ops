@@ -1,0 +1,30 @@
+{
+  "pair_before": {
+    "PHP": "13c3bfe0b98a2d421caf53a902f503263c67f4b2db2619a3032675183430ae77",
+    "packet": "aeb647be7552c110237799341fb3f3e4236094bc08c7c0bfb9b6f0251af8f310"
+  },
+  "pair_after": {
+    "PHP": "13c3bfe0b98a2d421caf53a902f503263c67f4b2db2619a3032675183430ae77",
+    "packet": "aeb647be7552c110237799341fb3f3e4236094bc08c7c0bfb9b6f0251af8f310"
+  },
+  "unchanged": true,
+  "runs": [
+    {
+      "test": 0,
+      "exit": 0,
+      "stdout": "diagnostic_fixture=pass cases=12"
+    },
+    {
+      "test": 1,
+      "exit": 0,
+      "stdout": "diagnostic_packet_fixture=pass4 replay preserved; native transport mocked"
+    },
+    {
+      "test": 2,
+      "exit": 0,
+      "stdout": "diagnostic_packet_fixture=pass4 replay preserved; native transport mocked"
+    }
+  ],
+  "source_or_owner_packet_change": false,
+  "boundary": "Exact native collector/fake mysqli and complete packet transport mocks; no real server/SQL/key/main runner action"
+}
