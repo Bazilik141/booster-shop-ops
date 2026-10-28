@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<title>Кабінет · Обране</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#1E3A8A}a:hover{color:#172554}
+button:focus-visible,a:focus-visible{outline:2px solid #1E3A8A;outline-offset:2px}
+</style>
+</helmet>
+<div style="min-height:1080px;background:#F7F7F5;font-family:'Manrope',system-ui,sans-serif;color:#1F2937">
+  <div style="height:69px;border-bottom:1px dashed #E5E7EB;background:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:13px;color:#6B7280">Шапка сайту — без змін (серце з лічильником уже є)</div>
+  <div style="max-width:1200px;margin:0 auto;padding:32px 24px 64px;display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start;box-sizing:border-box">
+
+    <aside style="flex:0 0 260px;display:flex;flex-direction:column;gap:16px">
+      <nav aria-label="Розділи кабінету" style="display:flex;flex-direction:column;gap:2px;padding:8px;background:#FFFFFF;border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05)">
+        <a href="#" style="display:flex;align-items:center;min-height:48px;padding:0 12px;border-radius:10px;color:#1F2937;text-decoration:none;font-size:14.5px;font-weight:600">Кабінет</a>
+        <a href="#" style="display:flex;align-items:center;min-height:48px;padding:0 12px;border-radius:10px;color:#1F2937;text-decoration:none;font-size:14.5px;font-weight:600">Особисті дані</a>
+        <a href="#" style="display:flex;align-items:center;min-height:48px;padding:0 12px;border-radius:10px;color:#1F2937;text-decoration:none;font-size:14.5px;font-weight:600">Адреси доставки</a>
+        <a href="#" style="display:flex;align-items:center;min-height:48px;padding:0 12px;border-radius:10px;color:#1F2937;text-decoration:none;font-size:14.5px;font-weight:600">Мої замовлення</a>
+        <a href="#" aria-current="page" style="display:flex;align-items:center;gap:8px;min-height:48px;padding:0 12px;border-radius:10px;background:#FBF4DC;color:#111827;text-decoration:none;font-size:14.5px;font-weight:700"><span style="flex:1 1 auto">Обране</span><span style="min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:#FFFFFF;font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box">4</span></a>
+        <span aria-disabled="true" style="display:flex;align-items:center;min-height:48px;padding:0 12px;color:#6B7280;opacity:.55;font-size:14.5px;font-weight:600"><span style="flex:1 1 auto">Налаштування</span><span style="font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase">Скоро</span></span>
+        <div style="height:1px;background:#EEF0F2;margin:6px 10px"></div>
+        <a href="#" style="display:flex;align-items:center;min-height:48px;padding:0 12px;border-radius:10px;color:#1F2937;text-decoration:none;font-size:14.5px;font-weight:600">Вийти</a>
+      </nav>
+      <section style="display:flex;flex-direction:column;gap:12px;padding:16px;background:#FFFFFF;border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05)">
+        <h2 style="margin:0;font-size:16px;font-weight:700;color:#111827">Потрібна допомога?</h2>
+        <a href="https://t.me/BoosterShop_Support_bot" style="display:flex;align-items:center;justify-content:center;min-height:44px;border-radius:8px;background:#111827;color:#FFFFFF;font-size:14.5px;font-weight:700;text-decoration:none">Допомога</a>
+      </section>
+    </aside>
+
+    <main style="flex:999 1 560px;min-width:0;display:flex;flex-direction:column;gap:24px">
+      <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 16px">
+        <h1 style="margin:0;font-size:32px;line-height:1.2;font-weight:800;color:#111827">Обране</h1>
+        <span style="font-size:14px;color:#6B7280">4 товари</span>
+      </div>
+
+      <ul style="list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px">
+        <li style="display:flex;flex-direction:column;gap:10px;padding:14px;background:#FFFFFF;border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05)">
+          <div style="position:relative;aspect-ratio:1/1;border-radius:10px;background:#F7F7F5;display:flex;align-items:center;justify-content:center;color:#9CA3AF;font-size:12px">Фото
+            <button type="button" aria-label="Прибрати з обраного" style="position:absolute;right:8px;bottom:8px;width:44px;height:44px;border:1px solid #E5E7EB;border-radius:50%;background:#FFFFFF;color:{{heart}};display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M10 17s-7-4.4-7-9a4 4 0 0 1 7-2.4A4 4 0 0 1 17 8c0 4.6-7 9-7 9Z"></path></svg></button>
+          </div>
+          <a href="#" style="font-size:14px;font-weight:600;line-height:1.4;text-decoration:none">Бустер бокс Pokémon TCG: Abyss Eye (Японське видання)</a>
+          <span style="font-size:16px;font-weight:800;color:#111827">₴4800.00</span>
+          <button type="button" style="margin-top:auto;height:44px;border:0;border-radius:8px;background:#12883E;color:#FFFFFF;font-family:inherit;font-size:16px;font-weight:700">Купити</button>
+        </li>
+        <li style="display:flex;flex-direction:column;gap:10px;padding:14px;background:#FFFFFF;border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05)">
+          <div style="position:relative;aspect-ratio:1/1;border-radius:10px;background:#F7F7F5;display:flex;align-items:center;justify-content:center;color:#9CA3AF;font-size:12px">Фото
+            <span style="position:absolute;left:8px;top:8px;padding:3px 8px;border-radius:6px;background:#111827;color:#FFFFFF;font-size:10.5px;font-weight:700">-6%</span>
+            <button type="button" aria-label="Прибрати з обраного" style="position:absolute;right:8px;bottom:8px;width:44px;height:44px;border:1px solid #E5E7EB;border-radius:50%;background:#FFFFFF;color:{{heart}};display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M10 17s-7-4.4-7-9a4 4 0 0 1 7-2.4A4 4 0 0 1 17 8c0 4.6-7 9-7 9Z"></path></svg></button>
+          </div>
+          <a href="#" style="font-size:14px;font-weight:600;line-height:1.4;text-decoration:none">Бустер бокс Pokémon TCG: Hot Wind Arena (Корейське видання)</a>
+          <span style="display:flex;align-items:baseline;gap:8px"><span style="font-size:17px;font-weight:800;color:#DC2626">₴2900.00</span><span style="font-size:12.5px;color:#9CA3AF;text-decoration:line-through">₴3100.00</span></span>
+          <button type="button" style="margin-top:auto;height:44px;border:0;border-radius:8px;background:#12883E;color:#FFFFFF;font-family:inherit;font-size:16px;font-weight:700">Купити</button>
+        </li>
+        <li style="display:flex;flex-direction:column;gap:10px;padding:14px;background:#FFFFFF;border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05)">
+          <div style="position:relative;aspect-ratio:1/1;border-radius:10px;background:#F7F7F5;display:flex;align-items:center;justify-content:center;color:#9CA3AF;font-size:12px">Фото
+            <span style="position:absolute;left:8px;top:8px;padding:3px 8px;border-radius:6px;background:#FEF3C7;border:1px solid #F59E0B;color:#92400E;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase">Передзамовлення</span>
+            <button type="button" aria-label="Прибрати з обраного" style="position:absolute;right:8px;bottom:8px;width:44px;height:44px;border:1px solid #E5E7EB;border-radius:50%;background:#FFFFFF;color:{{heart}};display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M10 17s-7-4.4-7-9a4 4 0 0 1 7-2.4A4 4 0 0 1 17 8c0 4.6-7 9-7 9Z"></path></svg></button>
+          </div>
+          <a href="#" style="font-size:14px;font-weight:600;line-height:1.4;text-decoration:none">Бустер бокс Pokémon TCG: Mega Symphonia (Японське видання)</a>
+          <span style="font-size:16px;font-weight:800;color:#111827">₴4500.00</span>
+          <button type="button" style="margin-top:auto;height:44px;border:0;border-radius:8px;background:#3B82F6;color:#FFFFFF;font-family:inherit;font-size:14.5px;font-weight:700">Передзамовити</button>
+        </li>
+        <li style="display:flex;flex-direction:column;gap:10px;padding:14px;background:#FFFFFF;border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05)">
+          <div style="position:relative;aspect-ratio:1/1;border-radius:10px;background:#F7F7F5;display:flex;align-items:center;justify-content:center;color:#C4C8CE;font-size:12px">Фото (приглушене)
+            <button type="button" aria-label="Прибрати з обраного" style="position:absolute;right:8px;bottom:8px;width:44px;height:44px;border:1px solid #E5E7EB;border-radius:50%;background:#FFFFFF;color:{{heart}};display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M10 17s-7-4.4-7-9a4 4 0 0 1 7-2.4A4 4 0 0 1 17 8c0 4.6-7 9-7 9Z"></path></svg></button>
+          </div>
+          <a href="#" style="font-size:14px;font-weight:600;line-height:1.4;text-decoration:none">Бустер бокс Pokémon TCG: Inferno X (Японське видання)</a>
+          <span style="font-size:13px;font-weight:600;color:#6B7280">Немає в наявності</span>
+          <button type="button" disabled style="margin-top:auto;height:44px;border:1px solid #E5E7EB;border-radius:8px;background:#EEF0F2;color:#1F2937;font-family:inherit;font-size:14.5px;font-weight:700;cursor:not-allowed">Немає в наявності</button>
+        </li>
+      </ul>
+
+      <div style="display:flex;flex-direction:column;gap:12px;padding-top:8px">
+        <span style="font-size:12px;font-weight:700;color:#6B7280">Порожній стан</span>
+        <section style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:40px 24px;background:#FFFFFF;border-radius:14px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05)">
+          <span style="width:56px;height:56px;border-radius:50%;background:#F7F7F5;color:#6B7280;display:flex;align-items:center;justify-content:center"><svg width="26" height="26" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M10 17s-7-4.4-7-9a4 4 0 0 1 7-2.4A4 4 0 0 1 17 8c0 4.6-7 9-7 9Z"></path></svg></span>
+          <h2 style="margin:0;font-size:20px;font-weight:800;color:#111827">Тут збиратимуться ваші товари</h2>
+          <p style="margin:0;max-width:420px;font-size:15px;line-height:1.6;color:#1F2937">Натисніть на серце на картці товару — і він з’явиться тут. Зручно, щоб стежити за ціною і наявністю.</p>
+          <a href="#" style="display:inline-flex;align-items:center;min-height:44px;padding:0 20px;border-radius:8px;background:#1E3A8A;color:#FFFFFF;font-size:14.5px;font-weight:700;text-decoration:none">До каталогу</a>
+        </section>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"heartColor":{"editor":"color","default":"#DC2626","options":["#DC2626","#111827","#1E3A8A"]},"$preview":{"width":1280,"height":1080}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { heart: this.props.heartColor ?? '#DC2626' };
+  }
+}
+</script>
+</body>
+</html>
