@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<title>Назва блоку і повідомлення</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#1E3A8A}a:hover{color:#172554}
+</style>
+</helmet>
+<div style="width:1280px;height:760px;box-sizing:border-box;padding:48px 56px;background:#FFFFFF;font-family:'Manrope',system-ui,sans-serif;color:#1F2937;display:flex;flex-direction:column;gap:32px">
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <h1 style="margin:0;font-size:32px;font-weight:800;color:#111827">Як назвати блок</h1>
+    <p style="margin:0;font-size:15px;line-height:1.6;color:#6B7280">Одна назва всюди: меню кабінету, шапка, кнопка, повідомлення.</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px">
+    <section style="display:flex;flex-direction:column;gap:12px;padding:20px;border:1px solid #E5E7EB;border-radius:14px">
+      <span style="align-self:flex-start;padding:4px 10px;border-radius:999px;background:#F7F7F5;color:#1F2937;font-size:12px;font-weight:700">Зараз на сайті</span>
+      <h2 style="margin:0;font-size:24px;font-weight:800;color:#111827">Улюблене</h2>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:14px;line-height:1.5">
+        <span>Меню: <strong>Улюблене · 4</strong></span>
+        <span>Кнопка: <strong>Додати в улюблене</strong> / <strong>В улюбленому</strong></span>
+        <span>Повідомлення: <strong>Додано в улюблене</strong></span>
+      </div>
+      <p style="margin:0;font-size:13px;line-height:1.5;color:#6B7280">Тепло, по-людськи, збігається з сердечком. Вже знайоме тим, хто бачив кнопку.</p>
+    </section>
+    <section style="display:flex;flex-direction:column;gap:12px;padding:20px;border:2px solid #1E3A8A;border-radius:14px">
+      <span style="align-self:flex-start;padding:4px 10px;border-radius:999px;background:#1E3A8A;color:#FFFFFF;font-size:12px;font-weight:700">Обрано власником</span>
+      <h2 style="margin:0;font-size:24px;font-weight:800;color:#111827">Обране</h2>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:14px;line-height:1.5">
+        <span>Меню: <strong>Обране · 4</strong></span>
+        <span>Кнопка: <strong>Додати в обране</strong> / <strong>В обраному</strong></span>
+        <span>Повідомлення: <strong>Додано в обране</strong></span>
+      </div>
+      <p style="margin:0;font-size:13px;line-height:1.5;color:#6B7280">Звичне слово для інтернет-магазинів. Трохи сухіше, менше емоції.</p>
+    </section>
+    <section style="display:flex;flex-direction:column;gap:12px;padding:20px;border:1px solid #E5E7EB;border-radius:14px">
+      <span style="align-self:flex-start;padding:4px 10px;border-radius:999px;background:#F7F7F5;color:#1F2937;font-size:12px;font-weight:700">Варіант</span>
+      <h2 style="margin:0;font-size:24px;font-weight:800;color:#111827">Збережене</h2>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:14px;line-height:1.5">
+        <span>Меню: <strong>Збережене · 4</strong></span>
+        <span>Кнопка: <strong>Зберегти</strong> / <strong>Збережено</strong></span>
+        <span>Повідомлення: <strong>Товар збережено</strong></span>
+      </div>
+      <p style="margin:0;font-size:13px;line-height:1.5;color:#6B7280">Найкоротша кнопка. Але з сердечком в'яжеться гірше — частіше малюють закладку.</p>
+    </section>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <h2 style="margin:0;font-size:20px;font-weight:800;color:#111827">Повідомлення після натискання</h2>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;align-items:start">
+      <div role="status" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:10px;background:#FFFFFF;border:1px solid #E5E7EB;box-shadow:0 8px 24px rgba(17,24,39,.12)">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="{{heart}}" stroke="{{heart}}" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M10 17s-7-4.4-7-9a4 4 0 0 1 7-2.4A4 4 0 0 1 17 8c0 4.6-7 9-7 9Z"></path></svg>
+        <span style="flex:1 1 auto;font-size:14.5px;font-weight:600;color:#111827">Додано в обране</span>
+        <a href="#" style="font-size:14px;font-weight:700;text-decoration:none">Переглянути</a>
+      </div>
+      <div role="status" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:10px;background:#FFFFFF;border:1px solid #E5E7EB;box-shadow:0 8px 24px rgba(17,24,39,.12)">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#6B7280" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M10 17s-7-4.4-7-9a4 4 0 0 1 7-2.4A4 4 0 0 1 17 8c0 4.6-7 9-7 9Z"></path></svg>
+        <span style="flex:1 1 auto;font-size:14.5px;font-weight:600;color:#111827">Прибрано з обраного</span>
+      </div>
+      <div role="status" style="display:flex;flex-direction:column;gap:10px;padding:14px 16px;border-radius:10px;background:#FFFFFF;border:1px solid #E5E7EB;box-shadow:0 8px 24px rgba(17,24,39,.12)">
+        <span style="font-size:14.5px;font-weight:700;color:#111827">Збережено поки що на цьому пристрої</span>
+        <span style="font-size:13.5px;line-height:1.5;color:#1F2937">Увійдіть, і товар перейде у ваш кабінет.</span>
+        <div style="display:flex;gap:8px"><a href="#" style="display:inline-flex;align-items:center;min-height:40px;padding:0 16px;border-radius:8px;background:#1E3A8A;color:#FFFFFF;font-size:14px;font-weight:700;text-decoration:none">Увійти</a><a href="#" style="display:inline-flex;align-items:center;min-height:40px;padding:0 12px;font-size:14px;font-weight:700;text-decoration:none">Зареєструватися</a></div>
+      </div>
+    </div>
+    <p style="margin:0;font-size:13px;line-height:1.5;color:#6B7280">Третє — для гостя без входу: сайт уже тримає вибір до входу й переносить його в кабінет.</p>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"heartColor":{"editor":"color","default":"#DC2626","options":["#DC2626","#111827","#1E3A8A"]},"$preview":{"width":1280,"height":760}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { heart: this.props.heartColor ?? '#DC2626' };
+  }
+}
+</script>
+</body>
+</html>
