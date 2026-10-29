@@ -1,0 +1,177 @@
+<!doctype html>
+<!-- CAT-006 product admin editor · approved design v0.1 layout + D3 colour scheme (2026-10-28).
+     Static reference rendered from the Claude Design canvas sources in ../source/. Not production code:
+     recreate with Bootstrap 5 + plain JS inside the OpenCart admin shell. Interactions are described in the spec. -->
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CAT-006 · Вибір фото: завантаження (D3, static reference)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap">
+<style>
+html,body{height:100%;margin:0}#dc-root,#dc-root>.sc-host{height:100%}
+body{margin:0}
+
+body{margin:0}
+a{color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
+input,select,textarea{background-color:transparent}
+:focus-visible{outline:2px solid #3B82F6;outline-offset:2px}
+@keyframes bs-spin{to{transform:rotate(360deg)}}
+
+</style>
+</head>
+<body>
+<div><div style="width: 100%;"><div><div style="font-family: Manrope, system-ui, -apple-system, sans-serif; color-scheme: dark; color: #E2E2E8; background: #111114; min-height: 1000px; font-size: 14px; position: relative; overflow: hidden;">
+  <header style="height: 52px; background: #1B1B20; border-bottom: 1px solid #36363F; display: flex; align-items: center; padding: 0px 20px; box-sizing: border-box; color: #A6A6B3; font-weight: 600; font-size: 13px; gap: 10px;"><span aria-hidden="true" style="width: 28px; height: 28px; border-radius: 6px; background: #36363F; display: inline-block;"></span>OpenCart · Адмінпанель</header>
+  <div aria-hidden="true" style="display: flex; min-height: 948px;">
+    <div style="flex: 0 0 220px; border-right: 1px solid #36363F;"></div>
+    <div style="flex: 1 1 auto; background: #1B1B20; padding: 24px 28px;">
+      <div style="font-size: 22px; font-weight: 800; color: #FAFAFC;">Бустер-бокс Mega Symphonia (японське видання)</div>
+      <div style="margin-top: 32px; font-size: 16px; font-weight: 700; color: #FAFAFC;">Фото</div>
+      <div style="margin-top: 12px; display: grid; grid-template-columns: repeat(5, 160px); gap: 12px;">
+        <span style="height: 160px; border-radius: 10px; background: #25252C; border: 2px solid #F2B544;"></span>
+        <span style="height: 160px; border-radius: 10px; background: #25252C; border: 1px solid #36363F;"></span>
+        <span style="height: 160px; border-radius: 10px; background: #25252C; border: 1px solid #36363F;"></span>
+      </div>
+    </div>
+  </div>
+  <div aria-hidden="true" style="position: absolute; inset: 0px; background: rgba(17, 24, 39, 0.45); z-index: 300;"></div>
+
+  <div role="dialog" aria-modal="true" aria-labelledby="pick-title" style="position: absolute; top: 64px; left: 50%; transform: translateX(-50%); width: 1080px; max-width: calc(100% - 32px); height: 872px; background: #1B1B20; border-radius: 14px; z-index: 400; display: flex; flex-direction: column; box-shadow: rgba(0, 0, 0, 0.12) 0px 8px 24px, rgba(0, 0, 0, 0.07) 0px 2px 6px; overflow: hidden;">
+    <div style="padding: 20px 24px 0px; display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <h2 id="pick-title" style="margin: 0px; font-size: 20px; font-weight: 800; color: #FAFAFC;">Додати фото</h2>
+        <a href="11-product-page.html" aria-label="Закрити" style="width: 36px; height: 36px; border-radius: 8px; color: #A6A6B3; display: inline-flex; align-items: center; justify-content: center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg></a>
+      </div>
+      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+        <div style="position: relative; flex: 1 1 360px;">
+          <span style="position: absolute; left: 14px; top: 14px; color: #A6A6B3; display: inline-flex;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span>
+          <input type="search" aria-label="Пошук за назвою файлу" placeholder="Пошук за назвою файлу — напр. «msym» або «ditto»" value="" style="width: 100%; box-sizing: border-box; height: 44px; border: 1px solid #36363F; border-radius: 8px; padding: 0px 12px 0px 40px; background: #25252C; font-size: 14px;">
+        </div>
+        <div style="display: inline-flex; border: 1px solid #36363F; border-radius: 8px; overflow: hidden;">
+          
+            <button type="button" aria-pressed="true" style="height: 42px; padding: 0px 14px; border: 0px; background: #F2B544; color: #1B1B20; font-weight: 700; font-size: 13px; cursor: pointer;"><span class="sc-interp">Нещодавні</span></button>
+          
+            <button type="button" aria-pressed="false" style="height: 42px; padding: 0px 14px; border: 0px; background: #1B1B20; color: #E2E2E8; font-weight: 700; font-size: 13px; cursor: pointer;"><span class="sc-interp">Цього товару</span></button>
+          
+            <button type="button" aria-pressed="false" style="height: 42px; padding: 0px 14px; border: 0px; background: #1B1B20; color: #E2E2E8; font-weight: 700; font-size: 13px; cursor: pointer;"><span class="sc-interp">Усі файли</span></button>
+          
+        </div>
+      </div>
+      <div style="border: 2px dashed #F2B544; background: #33291A; border-radius: 10px; height: 64px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 13.5px; color: #E2E2E8;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F2B544" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"></path><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"></path></svg>
+        <span><span class="sc-interp">Відпустіть файли, щоб завантажити їх сюди</span></span>
+        <button type="button" style="height: 34px; padding: 0px 12px; border-radius: 8px; border: 1px solid #F2B544; background: #1B1B20; color: #F2B544; font-weight: 700; font-size: 13px; cursor: pointer;">Вибрати файли</button>
+        <span style="color: #A6A6B3; font-size: 12.5px;">JPG, PNG, WebP</span>
+      </div>
+      <div style="font-size: 13px; color: #A6A6B3;"><span class="sc-interp">Останні завантаження, нові — першими</span></div>
+    </div>
+
+    <div style="flex: 1 1 auto; overflow-y: auto; padding: 12px 24px 20px;">
+      
+      <div style="display: grid; grid-template-columns: repeat(5, minmax(0px, 1fr)); gap: 14px;">
+        
+          <div style="border: 1px solid #36363F; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column;">
+            <div style="aspect-ratio: 1 / 1; background: #25252C; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 16px; box-sizing: border-box;">
+              
+                <span style="font-size: 12.5px; font-weight: 700; color: #E2E2E8;">Завантаження <span class="sc-interp">64%</span></span>
+                <span style="width: 100%; height: 6px; border-radius: 999px; background: #36363F; overflow: hidden;"><span style="display: block; height: 100%; width: 64%; background: #F2B544;"></span></span>
+              
+              
+            </div>
+            <div style="padding: 8px 10px; font-size: 12px; font-weight: 600; color: #E2E2E8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">msym-bbx-top.jpg</span></div>
+          </div>
+        
+          <div style="border: 1px solid #36363F; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column;">
+            <div style="aspect-ratio: 1 / 1; background: #25252C; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 16px; box-sizing: border-box;">
+              
+                <span style="font-size: 12.5px; font-weight: 700; color: #E2E2E8;">Завантаження <span class="sc-interp">18%</span></span>
+                <span style="width: 100%; height: 6px; border-radius: 999px; background: #36363F; overflow: hidden;"><span style="display: block; height: 100%; width: 18%; background: #F2B544;"></span></span>
+              
+              
+            </div>
+            <div style="padding: 8px 10px; font-size: 12px; font-weight: 600; color: #E2E2E8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">msym-bbx-shrink.jpg</span></div>
+          </div>
+        
+          <div style="border: 1px solid #FF7A7A; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column;">
+            <div style="aspect-ratio: 1 / 1; background: #25252C; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 16px; box-sizing: border-box;">
+              
+              
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF7A7A" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7.5v5.5M12 16.5v.01"></path></svg>
+                <span style="font-size: 12px; color: #FF7A7A; font-weight: 600; text-align: center; line-height: 1.4;"><span class="sc-interp">Формат HEIC не підтримується. Збережіть як JPG або WebP.</span></span>
+              
+            </div>
+            <div style="padding: 8px 10px; font-size: 12px; font-weight: 600; color: #E2E2E8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">IMG_4471.HEIC</span></div>
+          </div>
+        
+        
+          <button type="button" disabled="" aria-pressed="false" aria-label="Уже в товарі: msym-bbx-front.webp" style="border: 2px solid #36363F; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; padding: 0px; background: #1B1B20; cursor: default; text-align: left; position: relative;">
+            <span style="aspect-ratio: 1 / 1; width: 100%; background: #25252C; display: flex; align-items: center; justify-content: center; color: #73737F; opacity: 0.5;"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"></rect><circle cx="9" cy="10" r="2"></circle><path d="m21 17-5-5-9 8"></path></svg></span>
+            <span style="position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; border-radius: 999px; border: 2px solid transparent; background: transparent; display: inline-flex; align-items: center; justify-content: center; color: #1B1B20; box-sizing: border-box;"></span>
+            <span style="position: absolute; top: 8px; left: 8px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 3px 6px; border-radius: 6px; background: #FAFAFC; color: #1B1B20;">Уже в товарі</span>
+            <span style="padding: 8px 10px 2px; font-size: 12.5px; font-weight: 600; color: #E2E2E8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; box-sizing: border-box;"><span class="sc-interp">msym-bbx-front.webp</span></span>
+            <span style="padding: 0px 10px 8px; font-size: 11.5px; color: #A6A6B3;"><span class="sc-interp">28.10 · 1600×1600</span></span>
+          </button>
+        
+          <button type="button" disabled="" aria-pressed="false" aria-label="Уже в товарі: msym-bbx-back.webp" style="border: 2px solid #36363F; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; padding: 0px; background: #1B1B20; cursor: default; text-align: left; position: relative;">
+            <span style="aspect-ratio: 1 / 1; width: 100%; background: #25252C; display: flex; align-items: center; justify-content: center; color: #73737F; opacity: 0.5;"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"></rect><circle cx="9" cy="10" r="2"></circle><path d="m21 17-5-5-9 8"></path></svg></span>
+            <span style="position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; border-radius: 999px; border: 2px solid transparent; background: transparent; display: inline-flex; align-items: center; justify-content: center; color: #1B1B20; box-sizing: border-box;"></span>
+            <span style="position: absolute; top: 8px; left: 8px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 3px 6px; border-radius: 6px; background: #FAFAFC; color: #1B1B20;">Уже в товарі</span>
+            <span style="padding: 8px 10px 2px; font-size: 12.5px; font-weight: 600; color: #E2E2E8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; box-sizing: border-box;"><span class="sc-interp">msym-bbx-back.webp</span></span>
+            <span style="padding: 0px 10px 8px; font-size: 11.5px; color: #A6A6B3;"><span class="sc-interp">28.10 · 1600×1600</span></span>
+          </button>
+        
+          <button type="button" aria-pressed="true" aria-label="Обрано: msym-bbx-seal-closeup.webp" style="border: 2px solid #F2B544; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; padding: 0px; background: #1B1B20; cursor: pointer; text-align: left; position: relative;">
+            <span style="aspect-ratio: 1 / 1; width: 100%; background: #25252C; display: flex; align-items: center; justify-content: center; color: #73737F; opacity: 1;"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"></rect><circle cx="9" cy="10" r="2"></circle><path d="m21 17-5-5-9 8"></path></svg></span>
+            <span style="position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; border-radius: 999px; border: 2px solid #F2B544; background: #F2B544; display: inline-flex; align-items: center; justify-content: center; color: #1B1B20; box-sizing: border-box;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></span>
+            
+            <span style="padding: 8px 10px 2px; font-size: 12.5px; font-weight: 600; color: #E2E2E8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; box-sizing: border-box;"><span class="sc-interp">msym-bbx-seal-closeup.webp</span></span>
+            <span style="padding: 0px 10px 8px; font-size: 11.5px; color: #A6A6B3;"><span class="sc-interp">28.10 · 1600×1600</span></span>
+          </button>
+        
+          <button type="button" aria-pressed="true" aria-label="Обрано: msym-bbx-in-hand.webp" style="border: 2px solid #F2B544; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; padding: 0px; background: #1B1B20; cursor: pointer; text-align: left; position: relative;">
+            <span style="aspect-ratio: 1 / 1; width: 100%; background: #25252C; display: flex; align-items: center; justify-content: center; color: #73737F; opacity: 1;"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"></rect><circle cx="9" cy="10" r="2"></circle><path d="m21 17-5-5-9 8"></path></svg></span>
+            <span style="position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; border-radius: 999px; border: 2px solid #F2B544; background: #F2B544; display: inline-flex; align-items: center; justify-content: center; color: #1B1B20; box-sizing: border-box;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></span>
+            
+            <span style="padding: 8px 10px 2px; font-size: 12.5px; font-weight: 600; color: #E2E2E8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; box-sizing: border-box;"><span class="sc-interp">msym-bbx-in-hand.webp</span></span>
+            <span style="padding: 0px 10px 8px; font-size: 11.5px; color: #A6A6B3;"><span class="sc-interp">28.10 · 1600×1600</span></span>
+          </button>
+        
+          <button type="button" aria-pressed="false" aria-label="Обрати: msym-bst-front.webp" style="border: 2px solid #36363F; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; padding: 0px; background: #1B1B20; cursor: pointer; text-align: left; position: relative;">
+            <span style="aspect-ratio: 1 / 1; width: 100%; background: #25252C; display: flex; align-items: center; justify-content: center; color: #73737F; opacity: 1;"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"></rect><circle cx="9" cy="10" r="2"></circle><path d="m21 17-5-5-9 8"></path></svg></span>
+            <span style="position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; border-radius: 999px; border: 2px solid #73737F; background: #1B1B20; display: inline-flex; align-items: center; justify-content: center; color: #1B1B20; box-sizing: border-box;"></span>
+            
+            <span style="padding: 8px 10px 2px; font-size: 12.5px; font-weight: 600; color: #E2E2E8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; box-sizing: border-box;"><span class="sc-interp">msym-bst-front.webp</span></span>
+            <span style="padding: 0px 10px 8px; font-size: 11.5px; color: #A6A6B3;"><span class="sc-interp">27.10 · 1200×1200</span></span>
+          </button>
+        
+          <button type="button" aria-pressed="false" aria-label="Обрати: msym-bst-back.webp" style="border: 2px solid #36363F; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; padding: 0px; background: #1B1B20; cursor: pointer; text-align: left; position: relative;">
+            <span style="aspect-ratio: 1 / 1; width: 100%; background: #25252C; display: flex; align-items: center; justify-content: center; color: #73737F; opacity: 1;"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"></rect><circle cx="9" cy="10" r="2"></circle><path d="m21 17-5-5-9 8"></path></svg></span>
+            <span style="position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; border-radius: 999px; border: 2px solid #73737F; background: #1B1B20; display: inline-flex; align-items: center; justify-content: center; color: #1B1B20; box-sizing: border-box;"></span>
+            
+            <span style="padding: 8px 10px 2px; font-size: 12.5px; font-weight: 600; color: #E2E2E8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; box-sizing: border-box;"><span class="sc-interp">msym-bst-back.webp</span></span>
+            <span style="padding: 0px 10px 8px; font-size: 11.5px; color: #A6A6B3;"><span class="sc-interp">27.10 · 1200×1200</span></span>
+          </button>
+        
+          <button type="button" aria-pressed="false" aria-label="Обрати: hwak-bbx-front.webp" style="border: 2px solid #36363F; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; padding: 0px; background: #1B1B20; cursor: pointer; text-align: left; position: relative;">
+            <span style="aspect-ratio: 1 / 1; width: 100%; background: #25252C; display: flex; align-items: center; justify-content: center; color: #73737F; opacity: 1;"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"></rect><circle cx="9" cy="10" r="2"></circle><path d="m21 17-5-5-9 8"></path></svg></span>
+            <span style="position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; border-radius: 999px; border: 2px solid #73737F; background: #1B1B20; display: inline-flex; align-items: center; justify-content: center; color: #1B1B20; box-sizing: border-box;"></span>
+            
+            <span style="padding: 8px 10px 2px; font-size: 12.5px; font-weight: 600; color: #E2E2E8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; box-sizing: border-box;"><span class="sc-interp">hwak-bbx-front.webp</span></span>
+            <span style="padding: 0px 10px 8px; font-size: 11.5px; color: #A6A6B3;"><span class="sc-interp">24.10 · 1600×1600</span></span>
+          </button>
+        
+      </div>
+    </div>
+
+    <div style="border-top: 1px solid #36363F; padding: 14px 24px; display: flex; align-items: center; gap: 12px;">
+      <span style="font-size: 14px; font-weight: 700; color: #FAFAFC;">Обрано: <span class="sc-interp">2</span></span>
+      <button type="button" style="border: 0px; background: none; color: #F2B544; font-weight: 700; font-size: 13px; cursor: pointer; padding: 4px;">Зняти вибір</button>
+      <span style="flex: 1 1 0%;"></span>
+      <a href="11-product-page.html" style="height: 44px; padding: 0px 16px; border-radius: 8px; border: 1px solid #36363F; color: #E2E2E8; font-weight: 700; font-size: 14.5px; display: inline-flex; align-items: center; text-decoration: none;">Скасувати</a>
+      <a href="11-product-page.html" aria-disabled="false" style="height: 44px; padding: 0px 18px; border-radius: 8px; background: #F2B544; color: #1B1B20; font-weight: 700; font-size: 14.5px; display: inline-flex; align-items: center; text-decoration: none;"><span class="sc-interp">Додати 2 фото</span></a>
+    </div>
+  </div></div></div></div></div>
+</body>
+</html>

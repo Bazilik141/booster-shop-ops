@@ -18,6 +18,7 @@ Repository home: `design/`. Claude (chat) maintains these documents; the owner c
 | `tokens/tokens.css` | Mockup tokens only (old gold and shadows; see `TOKENS.md`). |
 | `specs/` | Original implementation handoffs (Ukrainian / English). Full detail: markup, CSS values, acceptance criteria, do-not-touch lists. |
 | `reference/` | Final approved mockups (HTML + JSX/CSS). Open `*.html` in a browser. |
+| `cat-006-product-editor/` | Approved admin product editor design (CAT-006): spec, D3 tokens, static HTML snapshots, screenshots. Admin only. |
 | `assets/` | Brand assets used by the site and mockups. `assets/logo/` = canonical logo files (designer package, 2026-10-09). `bs-logo-crop.png` = old raster, superseded. |
 
 ## Precedence (when sources disagree)

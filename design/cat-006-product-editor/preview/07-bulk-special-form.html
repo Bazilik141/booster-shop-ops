@@ -1,0 +1,257 @@
+<!doctype html>
+<!-- CAT-006 product admin editor · approved design v0.1 layout + D3 colour scheme (2026-10-28).
+     Static reference rendered from the Claude Design canvas sources in ../source/. Not production code:
+     recreate with Bootstrap 5 + plain JS inside the OpenCart admin shell. Interactions are described in the spec. -->
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CAT-006 · Масові дії: акційна ціна, налаштування (D3, static reference)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap">
+<style>
+html,body{height:100%;margin:0}#dc-root,#dc-root>.sc-host{height:100%}
+body{margin:0}
+
+body{margin:0}
+a{color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
+input,select,textarea{background-color:transparent}
+:focus-visible{outline:2px solid #3B82F6;outline-offset:2px}
+@keyframes bs-spin{to{transform:rotate(360deg)}}
+
+</style>
+</head>
+<body>
+<div><div style="width: 100%;"><div><div style="font-family: Manrope, system-ui, -apple-system, sans-serif; color-scheme: dark; color: #E2E2E8; background: #111114; min-height: 1180px; font-size: 14px; position: relative; overflow: hidden;">
+  <header style="height: 52px; background: #1B1B20; border-bottom: 1px solid #36363F; display: flex; align-items: center; justify-content: space-between; padding: 0px 20px; box-sizing: border-box;">
+    <div style="display: flex; align-items: center; gap: 10px; color: #A6A6B3; font-weight: 600; font-size: 13px;"><span aria-hidden="true" style="width: 28px; height: 28px; border-radius: 6px; background: #36363F; display: inline-block;"></span>OpenCart · Адмінпанель</div>
+    <div style="display: flex; gap: 16px; color: #A6A6B3; font-size: 13px;"><span>Raccoon</span><span>Вийти</span></div>
+  </header>
+  <div style="display: flex; align-items: stretch; min-height: 1128px;">
+    <div aria-hidden="true" style="flex: 0 0 220px; background: #111114; border-right: 1px solid #36363F; padding: 16px 12px; box-sizing: border-box; display: flex; flex-direction: column; gap: 2px; font-size: 13px; color: #A6A6B3;">
+      <span style="padding: 8px 10px;">Панель керування</span>
+      <span style="padding: 8px 10px; color: #E2E2E8; font-weight: 700;">Каталог</span>
+      <span style="padding: 7px 10px 7px 22px;">Категорії</span>
+      <span style="padding: 7px 10px 7px 22px; color: #FAFAFC; background: #1B1B20; border: 1px solid #36363F; border-radius: 6px; font-weight: 700;">Товари Booster</span>
+      <span style="padding: 7px 10px 7px 22px;">Атрибути</span>
+      <span style="padding: 7px 10px 7px 22px;">Виробники</span>
+      <span style="padding: 8px 10px;">Розширення</span>
+      <span style="padding: 8px 10px;">Продажі</span>
+      <span style="padding: 8px 10px;">Система</span>
+    </div>
+    <div aria-hidden="true" style="flex: 1 1 auto; min-width: 0px; background: #1B1B20; padding: 24px 28px; box-sizing: border-box;">
+      <div style="font-size: 26px; font-weight: 800; color: #FAFAFC;">Товари</div>
+      <div style="margin-top: 20px; height: 44px; width: 420px; border: 1px solid #36363F; border-radius: 8px; background: #25252C;"></div>
+      <div style="margin-top: 20px; border: 1px solid #36363F; border-radius: 10px; overflow: hidden;">
+        
+          <div style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px; align-items: center; height: 60px; border-bottom: 1px solid #2C2C34; background: #25221C;">
+            <span style="display: flex; justify-content: center;"><span style="width: 14px; height: 14px; border-radius: 3px; border: 1.5px solid #F2B544; background: #F2B544;"></span></span>
+            <span style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box;"></span>
+            <span style="font-size: 13.5px; font-weight: 600; color: #FAFAFC; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 16px;"><span class="sc-interp">Бустер Pokémon TCG Mega Symphonia (японське видання)</span></span>
+            <span style="font-size: 13px; font-weight: 800; color: #FAFAFC;"><span class="sc-interp">170 грн</span></span>
+          </div>
+        
+          <div style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px; align-items: center; height: 60px; border-bottom: 1px solid #2C2C34; background: #25221C;">
+            <span style="display: flex; justify-content: center;"><span style="width: 14px; height: 14px; border-radius: 3px; border: 1.5px solid #F2B544; background: #F2B544;"></span></span>
+            <span style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box;"></span>
+            <span style="font-size: 13.5px; font-weight: 600; color: #FAFAFC; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 16px;"><span class="sc-interp">Бустер-бокс Mega Symphonia (японське видання)</span></span>
+            <span style="font-size: 13px; font-weight: 800; color: #FAFAFC;"><span class="sc-interp">4500 грн</span></span>
+          </div>
+        
+          <div style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px; align-items: center; height: 60px; border-bottom: 1px solid #2C2C34; background: #25221C;">
+            <span style="display: flex; justify-content: center;"><span style="width: 14px; height: 14px; border-radius: 3px; border: 1.5px solid #F2B544; background: #F2B544;"></span></span>
+            <span style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box;"></span>
+            <span style="font-size: 13.5px; font-weight: 600; color: #FAFAFC; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 16px;"><span class="sc-interp">Бустер-бокс Hot Wind Arena (корейське видання)</span></span>
+            <span style="font-size: 13px; font-weight: 800; color: #FAFAFC;"><span class="sc-interp">3000 грн</span></span>
+          </div>
+        
+          <div style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px; align-items: center; height: 60px; border-bottom: 1px solid #2C2C34; background: #25221C;">
+            <span style="display: flex; justify-content: center;"><span style="width: 14px; height: 14px; border-radius: 3px; border: 1.5px solid #F2B544; background: #F2B544;"></span></span>
+            <span style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box;"></span>
+            <span style="font-size: 13.5px; font-weight: 600; color: #FAFAFC; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 16px;"><span class="sc-interp">Бустер Pokémon TCG Terastal Festival ex (японське видання)</span></span>
+            <span style="font-size: 13px; font-weight: 800; color: #FAFAFC;"><span class="sc-interp">290 грн</span></span>
+          </div>
+        
+          <div style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px; align-items: center; height: 60px; border-bottom: 1px solid #2C2C34; background: #1B1B20;">
+            <span style="display: flex; justify-content: center;"><span style="width: 14px; height: 14px; border-radius: 3px; border: 1.5px solid #73737F; background: #1B1B20;"></span></span>
+            <span style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box;"></span>
+            <span style="font-size: 13.5px; font-weight: 600; color: #FAFAFC; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 16px;"><span class="sc-interp">Бустер-бокс Abyss Eye (японське видання)</span></span>
+            <span style="font-size: 13px; font-weight: 800; color: #FAFAFC;"><span class="sc-interp">5200 грн</span></span>
+          </div>
+        
+          <div style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px; align-items: center; height: 60px; border-bottom: 1px solid #2C2C34; background: #1B1B20;">
+            <span style="display: flex; justify-content: center;"><span style="width: 14px; height: 14px; border-radius: 3px; border: 1.5px solid #73737F; background: #1B1B20;"></span></span>
+            <span style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box;"></span>
+            <span style="font-size: 13.5px; font-weight: 600; color: #FAFAFC; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 16px;"><span class="sc-interp">Бустер Pokémon TCG Abyss Eye (японське видання)</span></span>
+            <span style="font-size: 13px; font-weight: 800; color: #FAFAFC;"><span class="sc-interp">180 грн</span></span>
+          </div>
+        
+          <div style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px; align-items: center; height: 60px; border-bottom: 1px solid #2C2C34; background: #1B1B20;">
+            <span style="display: flex; justify-content: center;"><span style="width: 14px; height: 14px; border-radius: 3px; border: 1.5px solid #73737F; background: #1B1B20;"></span></span>
+            <span style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box;"></span>
+            <span style="font-size: 13.5px; font-weight: 600; color: #FAFAFC; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 16px;"><span class="sc-interp">Стартова колода Pokémon ex Start Deck — випадкова</span></span>
+            <span style="font-size: 13px; font-weight: 800; color: #FAFAFC;"><span class="sc-interp">520 грн</span></span>
+          </div>
+        
+          <div style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px; align-items: center; height: 60px; border-bottom: 1px solid #2C2C34; background: #25221C;">
+            <span style="display: flex; justify-content: center;"><span style="width: 14px; height: 14px; border-radius: 3px; border: 1.5px solid #F2B544; background: #F2B544;"></span></span>
+            <span style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box;"></span>
+            <span style="font-size: 13.5px; font-weight: 600; color: #FAFAFC; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 16px;"><span class="sc-interp">Бустер One Piece Card Game OP-13 Carrying On His Will</span></span>
+            <span style="font-size: 13px; font-weight: 800; color: #FAFAFC;"><span class="sc-interp">160 грн</span></span>
+          </div>
+        
+          <div style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px; align-items: center; height: 60px; border-bottom: 1px solid #2C2C34; background: #25221C;">
+            <span style="display: flex; justify-content: center;"><span style="width: 14px; height: 14px; border-radius: 3px; border: 1.5px solid #F2B544; background: #F2B544;"></span></span>
+            <span style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box;"></span>
+            <span style="font-size: 13.5px; font-weight: 600; color: #FAFAFC; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 16px;"><span class="sc-interp">Бустер-бокс One Piece OP-13 Carrying On His Will</span></span>
+            <span style="font-size: 13px; font-weight: 800; color: #FAFAFC;"><span class="sc-interp">3800 грн</span></span>
+          </div>
+        
+          <div style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px; align-items: center; height: 60px; border-bottom: 1px solid #2C2C34; background: #1B1B20;">
+            <span style="display: flex; justify-content: center;"><span style="width: 14px; height: 14px; border-radius: 3px; border: 1.5px solid #73737F; background: #1B1B20;"></span></span>
+            <span style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box;"></span>
+            <span style="font-size: 13.5px; font-weight: 600; color: #FAFAFC; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 16px;"><span class="sc-interp">Стартова колода One Piece ST-32 (японське видання)</span></span>
+            <span style="font-size: 13px; font-weight: 800; color: #FAFAFC;"><span class="sc-interp">750 грн</span></span>
+          </div>
+        
+          <div style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px; align-items: center; height: 60px; border-bottom: 1px solid #2C2C34; background: #1B1B20;">
+            <span style="display: flex; justify-content: center;"><span style="width: 14px; height: 14px; border-radius: 3px; border: 1.5px solid #73737F; background: #1B1B20;"></span></span>
+            <span style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box;"></span>
+            <span style="font-size: 13.5px; font-weight: 600; color: #FAFAFC; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 16px;"><span class="sc-interp">Брелок-спінер Ditto</span></span>
+            <span style="font-size: 13px; font-weight: 800; color: #FAFAFC;"><span class="sc-interp">180 грн</span></span>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div aria-hidden="true" style="position: absolute; inset: 0px; background: rgba(17, 24, 39, 0.28); z-index: 300;"></div>
+
+  <aside role="dialog" aria-modal="true" aria-labelledby="bulk-title" style="position: absolute; top: 0px; right: 0px; bottom: 0px; width: 900px; max-width: 100%; background: #1B1B20; z-index: 400; display: flex; flex-direction: column; box-shadow: rgba(0, 0, 0, 0.12) 0px 8px 24px, rgba(0, 0, 0, 0.07) 0px 2px 6px;">
+    <div style="padding: 20px 24px 0px; display: flex; flex-direction: column; gap: 14px; border-bottom: 1px solid #36363F;">
+      <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;">
+        <div>
+          <h2 id="bulk-title" style="margin: 0px; font-size: 20px; font-weight: 800; color: #FAFAFC;">Масові дії</h2>
+          <div style="margin-top: 4px; font-size: 13px; color: #A6A6B3;">Обрано 6 товарів. Список ліворуч не змінюється, доки ви не застосуєте дію.</div>
+        </div>
+        <a href="01-list.html" aria-label="Закрити панель" style="width: 36px; height: 36px; border-radius: 8px; color: #A6A6B3; display: inline-flex; align-items: center; justify-content: center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg></a>
+      </div>
+      <div aria-label="Тип дії" style="display: flex; gap: 4px;">
+        
+          <button type="button" aria-pressed="true" style="height: 40px; padding: 0px 14px; border-width: 0px 0px 2px; border-style: none none solid; border-color: currentcolor currentcolor #F2B544; border-image: none; background: transparent; color: #F2B544; font-weight: 700; font-size: 14px; cursor: pointer;"><span class="sc-interp">Акційна ціна</span></button>
+        
+          <button type="button" aria-pressed="false" style="height: 40px; padding: 0px 14px; border-width: 0px 0px 2px; border-style: none none solid; border-color: currentcolor currentcolor transparent; border-image: none; background: transparent; color: #A6A6B3; font-weight: 700; font-size: 14px; cursor: pointer;"><span class="sc-interp">Знижка від кількості</span></button>
+        
+          <button type="button" aria-pressed="false" style="height: 40px; padding: 0px 14px; border-width: 0px 0px 2px; border-style: none none solid; border-color: currentcolor currentcolor transparent; border-image: none; background: transparent; color: #A6A6B3; font-weight: 700; font-size: 14px; cursor: pointer;"><span class="sc-interp">Кількість</span></button>
+        
+          <button type="button" aria-pressed="false" style="height: 40px; padding: 0px 14px; border-width: 0px 0px 2px; border-style: none none solid; border-color: currentcolor currentcolor transparent; border-image: none; background: transparent; color: #A6A6B3; font-weight: 700; font-size: 14px; cursor: pointer;"><span class="sc-interp">Статус</span></button>
+        
+      </div>
+    </div>
+
+    <div style="padding: 14px 24px; display: flex; align-items: center; gap: 10px; font-size: 13px; color: #A6A6B3; border-bottom: 1px solid #2C2C34;">
+      
+        <span style="display: inline-flex; align-items: center; gap: 8px;">
+          <span style="width: 22px; height: 22px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; background: #F2B544; color: #1B1B20;"><span class="sc-interp">1</span></span>
+          <span style="font-weight: 700; color: #FAFAFC;"><span class="sc-interp">Налаштування</span></span>
+          <span aria-hidden="true" style="color: #4E4E5A; margin: 0px 4px;">—</span>
+        </span>
+      
+        <span style="display: inline-flex; align-items: center; gap: 8px;">
+          <span style="width: 22px; height: 22px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; background: #2C2C34; color: #A6A6B3;"><span class="sc-interp">2</span></span>
+          <span style="font-weight: 500; color: #A6A6B3;"><span class="sc-interp">Перевірка</span></span>
+          <span aria-hidden="true" style="color: #4E4E5A; margin: 0px 4px;">—</span>
+        </span>
+      
+        <span style="display: inline-flex; align-items: center; gap: 8px;">
+          <span style="width: 22px; height: 22px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; background: #2C2C34; color: #A6A6B3;"><span class="sc-interp">3</span></span>
+          <span style="font-weight: 500; color: #A6A6B3;"><span class="sc-interp">Результат</span></span>
+          
+        </span>
+      
+    </div>
+
+    <div style="flex: 1 1 auto; overflow-y: auto; padding: 20px 24px 24px; display: flex; flex-direction: column; gap: 18px;">
+
+      
+        <fieldset style="border: 0px; margin: 0px; padding: 0px; display: flex; flex-direction: column; gap: 8px;">
+          <legend style="font-size: 15px; font-weight: 700; color: #FAFAFC; margin-bottom: 8px; padding: 0px;">Як рахувати акційну ціну</legend>
+          <label style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; border: 1px solid #36363F; border-radius: 10px; background: #1B1B20; cursor: pointer;">
+            <input type="radio" name="mode" style="accent-color: #F2B544; width: 16px; height: 16px;">
+            <span>Мінус</span>
+            <input aria-label="Скільки гривень відняти" inputmode="numeric" value="100" style="width: 80px; height: 32px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 8px; font-weight: 700;">
+            <span>грн від основної ціни</span>
+          </label>
+          <label style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; border: 1px solid #36363F; border-radius: 10px; background: #1B1B20; cursor: pointer;">
+            <input type="radio" name="mode" style="accent-color: #F2B544; width: 16px; height: 16px;">
+            <span>Встановити ціну</span>
+            <input aria-label="Нова ціна для всіх" inputmode="numeric" value="150" style="width: 80px; height: 32px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 8px; font-weight: 700;">
+            <span>грн для всіх обраних</span>
+          </label>
+          <label style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; border: 1px solid #F2B544; border-radius: 10px; background: #25221C; cursor: pointer;">
+            <input type="radio" name="mode" checked="" style="accent-color: #F2B544; width: 16px; height: 16px;">
+            <span>Мінус</span>
+            <input aria-label="Відсоток знижки" inputmode="numeric" value="10" style="width: 60px; height: 32px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 8px; font-weight: 700;">
+            <span>% з округленням вниз до</span>
+            <select aria-label="Крок округлення" style="height: 32px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 8px; background: #1B1B20; font-weight: 700;">
+              <option value="10">10</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+            <span>грн</span>
+          </label>
+          <div style="font-size: 13px; color: #A6A6B3; padding-left: 2px;">Приклад: Бустер-бокс Mega Symphonia, 4500 грн → <strong style="color: #FAFAFC;"><span class="sc-interp">4050 грн</span></strong></div>
+        </fieldset>
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0px, 1fr)); gap: 12px;">
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #E2E2E8;">Початок<input type="date" value="2026-11-01" style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 10px; font-weight: 500;"></label>
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #E2E2E8;">Кінець<input type="date" value="2026-11-15" style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 10px; font-weight: 500;"></label>
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #E2E2E8;">Група покупців<select style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 10px; background: #1B1B20; font-weight: 500;"><option>Default — за замовчуванням</option></select></label>
+        </div>
+      
+
+      
+
+      
+
+      
+
+      
+        <div>
+          <div style="font-size: 13px; font-weight: 700; color: #A6A6B3; margin-bottom: 8px;">Обрані товари</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+            
+              <span style="height: 28px; padding: 0px 10px; border-radius: 999px; background: #25252C; border: 1px solid #36363F; font-size: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; display: inline-flex; align-items: center;"><span class="sc-interp">PKM-JP-MSYM-BST</span></span>
+            
+              <span style="height: 28px; padding: 0px 10px; border-radius: 999px; background: #25252C; border: 1px solid #36363F; font-size: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; display: inline-flex; align-items: center;"><span class="sc-interp">PKM-JP-MSYM-BBX</span></span>
+            
+              <span style="height: 28px; padding: 0px 10px; border-radius: 999px; background: #25252C; border: 1px solid #36363F; font-size: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; display: inline-flex; align-items: center;"><span class="sc-interp">PKM-KR-HWAK-BBX</span></span>
+            
+              <span style="height: 28px; padding: 0px 10px; border-radius: 999px; background: #25252C; border: 1px solid #36363F; font-size: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; display: inline-flex; align-items: center;"><span class="sc-interp">PKM-JP-SV8A-BST</span></span>
+            
+              <span style="height: 28px; padding: 0px 10px; border-radius: 999px; background: #25252C; border: 1px solid #36363F; font-size: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; display: inline-flex; align-items: center;"><span class="sc-interp">OP-JP-OP13-BST</span></span>
+            
+              <span style="height: 28px; padding: 0px 10px; border-radius: 999px; background: #25252C; border: 1px solid #36363F; font-size: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; display: inline-flex; align-items: center;"><span class="sc-interp">OP-JP-OP13-BBX</span></span>
+            
+          </div>
+        </div>
+      
+
+      
+
+      
+
+      
+    </div>
+
+    <div style="border-top: 1px solid #36363F; padding: 14px 24px; display: flex; align-items: center; gap: 12px; background: #1B1B20;">
+      
+        <a href="01-list.html" style="height: 44px; padding: 0px 16px; border-radius: 8px; border: 1px solid #36363F; color: #E2E2E8; font-weight: 700; font-size: 14.5px; display: inline-flex; align-items: center; text-decoration: none;">Скасувати</a>
+        <span style="flex: 1 1 0%;"></span>
+        <button type="button" style="height: 44px; padding: 0px 18px; border-radius: 8px; border: 0px; background: #F2B544; color: #1B1B20; font-weight: 700; font-size: 14.5px; cursor: pointer;">Переглянути зміни →</button>
+      
+      
+      
+    </div>
+  </aside></div></div></div></div>
+</body>
+</html>

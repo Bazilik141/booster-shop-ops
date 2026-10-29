@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<title>Родина варіантів — редактор Booster</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+body{margin:0}
+a{color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
+input,select,textarea{background-color:transparent}
+:focus-visible{outline:2px solid #3B82F6;outline-offset:2px}
+@keyframes bs-spin{to{transform:rotate(360deg)}}
+</style>
+</helmet>
+<div style="font-family: Manrope, system-ui, -apple-system, sans-serif; color-scheme: {{ t.scheme }}; color: {{ t.ink2 }}; background: {{ t.shell }}; min-height: 1000px; font-size: 14px">
+  <header style="height: 52px; background: {{ t.paper }}; border-bottom: 1px solid {{ t.line }}; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box">
+    <div style="display: flex; align-items: center; gap: 10px; color: {{ t.ink3 }}; font-weight: 600; font-size: 13px"><span aria-hidden="true" style="width: 28px; height: 28px; border-radius: 6px; background: {{ t.line }}; display: inline-block"></span>OpenCart · Адмінпанель</div>
+    <div style="display: flex; gap: 16px; color: {{ t.ink3 }}; font-size: 13px"><span>Raccoon</span><a href="#" style="color: {{ t.ink3 }}">Вийти</a></div>
+  </header>
+  <div style="display: flex; flex-wrap: wrap; align-items: stretch">
+    <nav aria-label="Меню адмінки" style="flex: 0 0 220px; background: {{ t.shell }}; border-right: 1px solid {{ t.line }}; padding: 16px 12px; box-sizing: border-box; display: flex; flex-direction: column; gap: 2px; font-size: 13px; color: {{ t.ink3 }}">
+      <a href="#" style="color: {{ t.ink3 }}; text-decoration: none; padding: 8px 10px">Панель керування</a>
+      <span style="padding: 8px 10px; color: {{ t.ink2 }}; font-weight: 700">Каталог</span>
+      <a href="#" style="color: {{ t.ink3 }}; text-decoration: none; padding: 7px 10px 7px 22px">Категорії</a>
+      <a href="Main.dc.html" style="color: {{ t.ink }}; text-decoration: none; padding: 7px 10px 7px 22px; border-radius: 6px; background: {{ t.paper }}; border: 1px solid {{ t.line }}; font-weight: 700">Товари Booster</a>
+      <a href="#" style="color: {{ t.ink3 }}; text-decoration: none; padding: 7px 10px 7px 22px">Атрибути</a>
+      <a href="#" style="color: {{ t.ink3 }}; text-decoration: none; padding: 7px 10px 7px 22px">Виробники</a>
+      <a href="#" style="color: {{ t.ink3 }}; text-decoration: none; padding: 8px 10px">Розширення</a>
+      <a href="#" style="color: {{ t.ink3 }}; text-decoration: none; padding: 8px 10px">Продажі</a>
+      <a href="#" style="color: {{ t.ink3 }}; text-decoration: none; padding: 8px 10px">Система</a>
+    </nav>
+    <main style="flex: 999 1 560px; min-width: 0; background: {{ t.paper }}; padding: 0 28px 40px; box-sizing: border-box">
+      <div style="position: sticky; top: 0; z-index: 200; background: {{ t.paper }}; border-bottom: 1px solid {{ t.line }}; padding: 16px 0 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+        <div style="flex: 1 1 400px; min-width: 0">
+          <div style="font-size: 12.5px; color: {{ t.ink3 }}"><a href="Main.dc.html" style="color: {{ t.ink3 }}">Товари</a> / <a href="Product.dc.html" style="color: {{ t.ink3 }}">Бустер-бокс Mega Symphonia</a> / Родина варіантів</div>
+          <h1 style="margin: 4px 0 0; font-size: 22px; font-weight: 800; color: {{ t.ink }}">Родина варіантів <span style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 18px">PKM-JP-MSYM</span></h1>
+        </div>
+        <sc-if value="{{ dirty }}" hint-placeholder-val="{{ false }}"><span style="font-size: 12.5px; font-weight: 700; padding: 5px 10px; border-radius: 999px; background: {{ t.warnBg }}; border: 1px solid {{ t.warnLine }}; color: {{ t.warnFg }}">Є незбережені зміни</span></sc-if>
+        <sc-if value="{{ saved }}" hint-placeholder-val="{{ false }}"><span style="display: inline-flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 700; color: {{ t.ok }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg>Збережено</span></sc-if>
+        <button type="button" onClick="{{ save }}" style="height: 44px; padding: 0 20px; border-radius: 8px; border: 0; background: {{ t.blue }}; color: {{ t.paper }}; font-weight: 700; font-size: 14.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px"><sc-if value="{{ saving }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(255,255,255,.4); border-top-color: {{ t.paper }}; animation: bs-spin .8s linear infinite; display: inline-block; box-sizing: border-box"></span></sc-if>Зберегти</button>
+      </div>
+
+      <div style="display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 24px; margin-top: 24px; align-items: start">
+        <div style="display: flex; flex-direction: column; gap: 20px; min-width: 0">
+          <section style="border: 1px solid {{ t.line }}; border-radius: 10px; padding: 20px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
+            <div style="display: flex; flex-direction: column; gap: 6px">
+              <span style="font-size: 13px; font-weight: 600">Ключ родини</span>
+              <span style="height: 40px; display: flex; align-items: center; padding: 0 12px; border-radius: 6px; background: {{ t.bg }}; border: 1px solid {{ t.line }}; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13.5px">PKM-JP-MSYM</span>
+              <span style="font-size: 12px; color: {{ t.ink3 }}">Ключ не змінюється тут. Щоб перенести товар в іншу родину, відкрийте його сторінку.</span>
+            </div>
+            <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Підпис осі
+              <input value="{{ axis }}" onChange="{{ onAxis }}" style="height: 40px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 12px; font-weight: 600; font-size: 14px">
+              <span style="font-size: 12px; color: {{ t.ink3 }}; font-weight: 400">Показується на сайті над перемикачем, напр. «Формат», «Розмір», «Стан».</span>
+            </label>
+          </section>
+
+          <section aria-labelledby="members-h" style="border: 1px solid {{ t.line }}; border-radius: 10px; overflow: hidden">
+            <div style="padding: 16px 20px; display: flex; align-items: baseline; justify-content: space-between; gap: 12px">
+              <h2 id="members-h" style="margin: 0; font-size: 16px; font-weight: 700; color: {{ t.ink }}">Товари в родині · {{ count }}</h2>
+              <span style="font-size: 12.5px; color: {{ t.ink3 }}">Перетягніть рядок за ручку або використайте стрілки. Порядок = порядок на сайті.</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 76px 48px minmax(0, 1fr) 170px 104px 70px 84px 40px; gap: 10px; align-items: center; padding: 0 16px; height: 36px; background: {{ t.bg }}; border-top: 1px solid {{ t.line }}; border-bottom: 1px solid {{ t.line }}; font-size: 12px; font-weight: 700; color: {{ t.ink3 }}">
+              <span>Порядок</span><span></span><span>Товар</span><span>Підпис значення</span><span>Ціна</span><span>К-сть</span><span>Статус</span><span></span>
+            </div>
+            <sc-for list="{{ members }}" as="m" hint-placeholder-count="3">
+              <div draggable="true" onDragStart="{{ m.dragStart }}" onDragOver="{{ m.dragOver }}" onDrop="{{ m.drop }}" onDragEnd="{{ dragEnd }}" style="display: grid; grid-template-columns: 76px 48px minmax(0, 1fr) 170px 104px 70px 84px 40px; gap: 10px; align-items: center; padding: 10px 16px; border-bottom: 1px solid {{ t.line2 }}; background: {{ m.bg }}; border-top: 2px solid {{ m.dropLine }}">
+                <span style="display: flex; align-items: center; gap: 2px">
+                  <span title="Перетягнути" aria-hidden="true" style="width: 20px; height: 32px; color: {{ t.ink4 }}; cursor: grab; display: inline-flex; align-items: center; justify-content: center"><svg width="12" height="18" viewBox="0 0 12 18" fill="currentColor" aria-hidden="true"><circle cx="3" cy="3" r="1.6"></circle><circle cx="9" cy="3" r="1.6"></circle><circle cx="3" cy="9" r="1.6"></circle><circle cx="9" cy="9" r="1.6"></circle><circle cx="3" cy="15" r="1.6"></circle><circle cx="9" cy="15" r="1.6"></circle></svg></span>
+                  <button type="button" onClick="{{ m.up }}" disabled="{{ m.first }}" aria-label="Перемістити вище" style="width: 26px; height: 28px; border: 1px solid {{ t.line }}; border-radius: 6px; background: {{ t.paper }}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; color: {{ t.ink2 }}; opacity: {{ m.upOp }}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 15 6-6 6 6"></path></svg></button>
+                  <button type="button" onClick="{{ m.down }}" disabled="{{ m.last }}" aria-label="Перемістити нижче" style="width: 26px; height: 28px; border: 1px solid {{ t.line }}; border-radius: 6px; background: {{ t.paper }}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; color: {{ t.ink2 }}; opacity: {{ m.downOp }}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button>
+                </span>
+                <span aria-hidden="true" style="width: 44px; height: 44px; border-radius: 6px; background: {{ t.bg }}; border: 1px solid {{ t.line }}; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: {{ t.ink3 }}">{{ m.type }}</span>
+                <span style="display: flex; flex-direction: column; gap: 2px; min-width: 0">
+                  <span style="font-weight: 600; font-size: 13.5px; color: {{ m.nameColor }}; line-height: 1.35">{{ m.name }}<sc-if value="{{ m.current }}" hint-placeholder-val="{{ false }}"> <span style="font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: 2px 6px; border-radius: 6px; background: {{ t.blueSoft }}; color: {{ t.blue }}">цей товар</span></sc-if></span>
+                  <span style="font-size: 12px; color: {{ t.ink3 }}; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">{{ m.model }}</span>
+                </span>
+                <input aria-label="Підпис значення для {{ m.model }}" value="{{ m.label }}" onChange="{{ m.onLabel }}" style="height: 36px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 10px; font-weight: 600; font-size: 13.5px; min-width: 0">
+                <span style="font-weight: 800; color: {{ t.ink }}">{{ m.price }}</span>
+                <span style="font-weight: 700; color: {{ m.qtyColor }}">{{ m.qty }}</span>
+                <span style="font-size: 12px; font-weight: 700; color: {{ m.statusColor }}">{{ m.status }}</span>
+                <a href="Product.dc.html" aria-label="Відкрити товар" style="width: 32px; height: 32px; border-radius: 6px; color: {{ t.ink2 }}; display: inline-flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></a>
+              </div>
+            </sc-for>
+            <div style="padding: 14px 16px; display: flex; gap: 8px; align-items: center">
+              <div style="position: relative; flex: 0 1 420px">
+                <span style="position: absolute; left: 12px; top: 12px; color: {{ t.ink3 }}; display: inline-flex"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span>
+                <input aria-label="Додати товар до родини" placeholder="Додати товар до родини: пошук за назвою або моделлю" style="width: 100%; box-sizing: border-box; height: 38px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 10px 0 34px; font-size: 13px; background: {{ t.bg }}">
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <aside style="border: 1px solid {{ t.line }}; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 12px; position: sticky; top: 96px">
+          <h2 style="margin: 0; font-size: 15px; font-weight: 700; color: {{ t.ink }}">Так виглядає на сайті</h2>
+          <div style="font-size: 14px; font-weight: 600; color: {{ t.ink2 }}">{{ axis }}:</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px">
+            <sc-for list="{{ chips }}" as="c" hint-placeholder-count="2">
+              <span style="height: 40px; padding: 0 14px; border-radius: 6px; border: 1px solid {{ c.line }}; background: {{ c.bg }}; color: {{ c.fg }}; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center">{{ c.label }}</span>
+            </sc-for>
+          </div>
+          <sc-if value="{{ hasHidden }}" hint-placeholder-val="{{ true }}"><div style="font-size: 12.5px; color: {{ t.ink3 }}; line-height: 1.5">Вимкнені товари на сайті не показуються: {{ hidden }}.</div></sc-if>
+          <div style="font-size: 12.5px; color: {{ t.ink3 }}; line-height: 1.5; border-top: 1px solid {{ t.line2 }}; padding-top: 12px">Ці зміни зберігаються через той самий механізм, що й поля родини на сторінці товару.</div>
+        </aside>
+      </div>
+
+      <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+        <div role="status" style="position: fixed; top: 68px; right: 24px; z-index: 500; background: {{ t.paper }}; border: 1px solid {{ t.line }}; border-radius: 10px; padding: 12px 14px; display: flex; gap: 10px; align-items: center; box-shadow: 0 8px 24px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.07); font-size: 13px"><span style="color: {{ t.ok }}; display: inline-flex"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></span>Родину збережено: порядок і підписи оновлено для 3 товарів.</div>
+      </sc-if>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["canon","dark","teal","contrast","darkNavy","darkViolet","darkHybrid"],"default":"darkHybrid"},"$preview":{"width":1440,"height":1000}}'>
+const M = [
+  { id: 1, type: 'BST', name: 'Бустер Pokémon TCG Mega Symphonia (японське видання)', model: 'PKM-JP-MSYM-BST', label: 'Бустер', price: 170, qty: 11, on: true },
+  { id: 2, type: 'BBX', name: 'Бустер-бокс Mega Symphonia (японське видання)', model: 'PKM-JP-MSYM-BBX', label: 'Бустер-бокс', price: 4500, qty: 2, on: true, current: true },
+  { id: 13, type: 'B10', name: 'Набір 10 бустерів Mega Symphonia (японське видання)', model: 'PKM-JP-MSYM-B10', label: '10 бустерів', price: 1650, qty: 0, on: false }
+];
+class Component extends DCLogic {
+  state = { list: M.map((m) => Object.assign({}, m)), axis: 'Формат', dirty: false, saving: false, saved: false, toast: false, drag: -1, over: -1 };
+  move(from, to) {
+    if (to < 0 || to >= this.state.list.length || from === to) return;
+    const l = this.state.list.slice();
+    const it = l.splice(from, 1)[0];
+    l.splice(to, 0, it);
+    this.setState({ list: l, dirty: true, saved: false });
+  }
+  save() {
+    this.setState({ saving: true });
+    setTimeout(() => {
+      this.setState({ saving: false, dirty: false, saved: true, toast: true });
+      setTimeout(() => this.setState({ toast: false }), 3500);
+    }, 900);
+  }
+  renderVals() {
+    const THEMES = {
+      canon: { scheme: 'light', paper: '#FFFFFF', shell: '#F3F4F6', bg: '#F7F7F5', line: '#E5E7EB', line2: '#EEF0F2', line3: '#D1D5DB', ink4: '#9CA3AF', ink3: '#6B7280', ink3b: '#4B5563', ink2: '#1F2937', ink: '#111827', blue: '#1E3A8A', blueSoft: '#E8EEFB', sel: '#F5F8FE', danger: '#DC2626', warnBg: '#FFFBEA', warnFg: '#92400E', warnLine: '#FCD34D', ok: '#15803D', okBg: '#F3FBF6', gold: '#C68A00' },
+      darkHybrid: { scheme: 'dark', paper: '#1B1B20', shell: '#111114', bg: '#25252C', line: '#36363F', line2: '#2C2C34', line3: '#4E4E5A', ink4: '#73737F', ink3: '#A6A6B3', ink3b: '#3C3C46', ink2: '#E2E2E8', ink: '#FAFAFC', blue: '#F2B544', blueSoft: '#33291A', sel: '#25221C', danger: '#FF7A7A', warnBg: '#2C1E14', warnFg: '#FDBA74', warnLine: '#9A4F16', ok: '#5EEAD4', okBg: '#12282A', gold: '#F2B544' }
+    };
+    const t = THEMES[this.props.theme || 'darkHybrid'] || THEMES.darkHybrid;
+    const fix = (x) => {
+      if (typeof x === 'string') return x.indexOf('{{ t.') < 0 ? x : x.replace(/\{\{ t\.(\w+) \}\}/g, (m, k) => t[k]);
+      if (Array.isArray(x)) return x.map(fix);
+      if (x && typeof x === 'object' && Object.getPrototypeOf(x) === Object.prototype) { const o = {}; Object.keys(x).forEach((k) => { o[k] = fix(x[k]); }); return o; }
+      return x;
+    };
+    const v = fix(this.baseVals());
+    v.t = t;
+    return v;
+  }
+  baseVals() {
+    const s = this.state;
+    const n = s.list.length;
+    const members = s.list.map((m, i) => ({
+      type: m.type, name: m.name, model: m.model, label: m.label, current: !!m.current,
+      price: m.price + ' грн', qty: m.qty + ' шт', qtyColor: m.qty === 0 ? '{{ t.danger }}' : '{{ t.ink }}',
+      status: m.on ? 'Увімкнено' : 'Вимкнено', statusColor: m.on ? '{{ t.blue }}' : '{{ t.ink3 }}', nameColor: m.on ? '{{ t.ink }}' : '{{ t.ink3 }}',
+      bg: s.drag === i ? '{{ t.bg }}' : m.current ? '{{ t.sel }}' : '{{ t.paper }}', dropLine: s.over === i && s.drag !== i ? '{{ t.blue }}' : 'transparent',
+      first: i === 0, last: i === n - 1, upOp: i === 0 ? '0.4' : '1', downOp: i === n - 1 ? '0.4' : '1',
+      up: () => this.move(i, i - 1), down: () => this.move(i, i + 1),
+      onLabel: (e) => { const l = this.state.list.slice(); l[i] = Object.assign({}, l[i], { label: e.target.value }); this.setState({ list: l, dirty: true, saved: false }); },
+      dragStart: (e) => { try { e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', String(i)); } catch (x) {} this.setState({ drag: i }); },
+      dragOver: (e) => { e.preventDefault(); if (this.state.over !== i) this.setState({ over: i }); },
+      drop: (e) => { e.preventDefault(); const from = this.state.drag; this.setState({ drag: -1, over: -1 }); this.move(from, i); }
+    }));
+    const vis = s.list.filter((m) => m.on);
+    const hid = s.list.filter((m) => !m.on);
+    return {
+      members: members, count: n, axis: s.axis,
+      onAxis: (e) => this.setState({ axis: e.target.value, dirty: true, saved: false }),
+      dragEnd: () => this.setState({ drag: -1, over: -1 }),
+      chips: vis.map((m) => ({ label: m.label, line: m.current ? '{{ t.blue }}' : '{{ t.line }}', bg: m.current ? '{{ t.blueSoft }}' : '{{ t.paper }}', fg: m.current ? '{{ t.blue }}' : '{{ t.ink2 }}' })),
+      hasHidden: hid.length > 0, hidden: hid.map((m) => '«' + m.label + '»').join(', '),
+      dirty: s.dirty, saving: s.saving, saved: s.saved && !s.dirty, toast: s.toast,
+      save: () => this.save()
+    };
+  }
+}
+</script>
+</body>
+</html>

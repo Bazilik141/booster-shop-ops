@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<title>Вибір фото — редактор Booster</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+body{margin:0}
+a{color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
+input,select,textarea{background-color:transparent}
+:focus-visible{outline:2px solid #3B82F6;outline-offset:2px}
+@keyframes bs-spin{to{transform:rotate(360deg)}}
+</style>
+</helmet>
+<div style="font-family: Manrope, system-ui, -apple-system, sans-serif; color-scheme: {{ t.scheme }}; color: {{ t.ink2 }}; background: {{ t.shell }}; min-height: 1000px; font-size: 14px; position: relative; overflow: hidden">
+  <header style="height: 52px; background: {{ t.paper }}; border-bottom: 1px solid {{ t.line }}; display: flex; align-items: center; padding: 0 20px; box-sizing: border-box; color: {{ t.ink3 }}; font-weight: 600; font-size: 13px; gap: 10px"><span aria-hidden="true" style="width: 28px; height: 28px; border-radius: 6px; background: {{ t.line }}; display: inline-block"></span>OpenCart · Адмінпанель</header>
+  <div aria-hidden="true" style="display: flex; min-height: 948px">
+    <div style="flex: 0 0 220px; border-right: 1px solid {{ t.line }}"></div>
+    <div style="flex: 1 1 auto; background: {{ t.paper }}; padding: 24px 28px">
+      <div style="font-size: 22px; font-weight: 800; color: {{ t.ink }}">Бустер-бокс Mega Symphonia (японське видання)</div>
+      <div style="margin-top: 32px; font-size: 16px; font-weight: 700; color: {{ t.ink }}">Фото</div>
+      <div style="margin-top: 12px; display: grid; grid-template-columns: repeat(5, 160px); gap: 12px">
+        <span style="height: 160px; border-radius: 10px; background: {{ t.bg }}; border: 2px solid {{ t.blue }}"></span>
+        <span style="height: 160px; border-radius: 10px; background: {{ t.bg }}; border: 1px solid {{ t.line }}"></span>
+        <span style="height: 160px; border-radius: 10px; background: {{ t.bg }}; border: 1px solid {{ t.line }}"></span>
+      </div>
+    </div>
+  </div>
+  <div aria-hidden="true" style="position: absolute; inset: 0; background: rgba(17,24,39,.45); z-index: 300"></div>
+
+  <div role="dialog" aria-modal="true" aria-labelledby="pick-title" onDragOver="{{ dragOver }}" onDragLeave="{{ dragLeave }}" onDrop="{{ drop }}" style="position: absolute; top: 64px; left: 50%; transform: translateX(-50%); width: 1080px; max-width: calc(100% - 32px); height: 872px; background: {{ t.paper }}; border-radius: 14px; z-index: 400; display: flex; flex-direction: column; box-shadow: 0 8px 24px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.07); overflow: hidden">
+    <div style="padding: 20px 24px 0; display: flex; flex-direction: column; gap: 14px">
+      <div style="display: flex; align-items: center; justify-content: space-between">
+        <h2 id="pick-title" style="margin: 0; font-size: 20px; font-weight: 800; color: {{ t.ink }}">Додати фото</h2>
+        <a href="Product.dc.html" aria-label="Закрити" style="width: 36px; height: 36px; border-radius: 8px; color: {{ t.ink3 }}; display: inline-flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg></a>
+      </div>
+      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap">
+        <div style="position: relative; flex: 1 1 360px">
+          <span style="position: absolute; left: 14px; top: 14px; color: {{ t.ink3 }}; display: inline-flex"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span>
+          <input type="search" aria-label="Пошук за назвою файлу" value="{{ q }}" onChange="{{ onQ }}" placeholder="Пошук за назвою файлу — напр. «msym» або «ditto»" style="width: 100%; box-sizing: border-box; height: 44px; border: 1px solid {{ t.line }}; border-radius: 8px; padding: 0 12px 0 40px; background: {{ t.bg }}; font-size: 14px">
+        </div>
+        <div style="display: inline-flex; border: 1px solid {{ t.line }}; border-radius: 8px; overflow: hidden">
+          <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+            <button type="button" onClick="{{ t.pick }}" aria-pressed="{{ t.active }}" style="height: 42px; padding: 0 14px; border: 0; background: {{ t.bg }}; color: {{ t.fg }}; font-weight: 700; font-size: 13px; cursor: pointer">{{ t.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+      <div style="border: 2px dashed {{ dropLine }}; background: {{ dropBg }}; border-radius: 10px; height: 64px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 13.5px; color: {{ t.ink2 }}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{ t.blue }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"></path><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"></path></svg>
+        <span>{{ dropText }}</span>
+        <button type="button" onClick="{{ simulateUpload }}" style="height: 34px; padding: 0 12px; border-radius: 8px; border: 1px solid {{ t.blue }}; background: {{ t.paper }}; color: {{ t.blue }}; font-weight: 700; font-size: 13px; cursor: pointer">Вибрати файли</button>
+        <span style="color: {{ t.ink3 }}; font-size: 12.5px">JPG, PNG, WebP</span>
+      </div>
+      <div style="font-size: 13px; color: {{ t.ink3 }}">{{ caption }}</div>
+    </div>
+
+    <div style="flex: 1 1 auto; overflow-y: auto; padding: 12px 24px 20px">
+      <sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
+        <div style="padding: 60px 0; text-align: center; color: {{ t.ink3 }}">Файлів із «{{ q }}» у назві немає. Спробуйте коротший запит або завантажте фото.</div>
+      </sc-if>
+      <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px">
+        <sc-for list="{{ uploads }}" as="u" hint-placeholder-count="0">
+          <div style="border: 1px solid {{ u.line }}; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column">
+            <div style="aspect-ratio: 1 / 1; background: {{ t.bg }}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 16px; box-sizing: border-box">
+              <sc-if value="{{ u.loading }}" hint-placeholder-val="{{ true }}">
+                <span style="font-size: 12.5px; font-weight: 700; color: {{ t.ink2 }}">Завантаження {{ u.pct }}</span>
+                <span style="width: 100%; height: 6px; border-radius: 999px; background: {{ t.line }}; overflow: hidden"><span style="display: block; height: 100%; width: {{ u.pct }}; background: {{ t.blue }}"></span></span>
+              </sc-if>
+              <sc-if value="{{ u.error }}" hint-placeholder-val="{{ false }}">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{ t.danger }}" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7.5v5.5M12 16.5v.01"></path></svg>
+                <span style="font-size: 12px; color: {{ t.danger }}; font-weight: 600; text-align: center; line-height: 1.4">{{ u.msg }}</span>
+              </sc-if>
+            </div>
+            <div style="padding: 8px 10px; font-size: 12px; font-weight: 600; color: {{ t.ink2 }}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{ u.name }}</div>
+          </div>
+        </sc-for>
+        <sc-for list="{{ files }}" as="f" hint-placeholder-count="10">
+          <button type="button" onClick="{{ f.toggle }}" disabled="{{ f.linked }}" aria-pressed="{{ f.sel }}" aria-label="{{ f.aria }}" style="border: 2px solid {{ f.line }}; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; padding: 0; background: {{ t.paper }}; cursor: {{ f.cursor }}; text-align: left; position: relative">
+            <span style="aspect-ratio: 1 / 1; width: 100%; background: {{ t.bg }}; display: flex; align-items: center; justify-content: center; color: {{ t.ink4 }}; opacity: {{ f.op }}"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"></rect><circle cx="9" cy="10" r="2"></circle><path d="m21 17-5-5-9 8"></path></svg></span>
+            <span style="position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; border-radius: 999px; border: 2px solid {{ f.dotLine }}; background: {{ f.dotBg }}; display: inline-flex; align-items: center; justify-content: center; color: {{ t.paper }}; box-sizing: border-box"><sc-if value="{{ f.sel }}" hint-placeholder-val="{{ false }}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></sc-if></span>
+            <sc-if value="{{ f.linked }}" hint-placeholder-val="{{ false }}"><span style="position: absolute; top: 8px; left: 8px; font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: 3px 6px; border-radius: 6px; background: {{ t.ink }}; color: {{ t.paper }}">Уже в товарі</span></sc-if>
+            <span style="padding: 8px 10px 2px; font-size: 12.5px; font-weight: 600; color: {{ t.ink2 }}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; box-sizing: border-box">{{ f.name }}</span>
+            <span style="padding: 0 10px 8px; font-size: 11.5px; color: {{ t.ink3 }}">{{ f.meta }}</span>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="border-top: 1px solid {{ t.line }}; padding: 14px 24px; display: flex; align-items: center; gap: 12px">
+      <span style="font-size: 14px; font-weight: 700; color: {{ t.ink }}">Обрано: {{ selCount }}</span>
+      <sc-if value="{{ hasSel }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ clearSel }}" style="border: 0; background: none; color: {{ t.blue }}; font-weight: 700; font-size: 13px; cursor: pointer; padding: 4px">Зняти вибір</button></sc-if>
+      <span style="flex: 1"></span>
+      <a href="Product.dc.html" style="height: 44px; padding: 0 16px; border-radius: 8px; border: 1px solid {{ t.line }}; color: {{ t.ink2 }}; font-weight: 700; font-size: 14.5px; display: inline-flex; align-items: center; text-decoration: none">Скасувати</a>
+      <a href="Product.dc.html" aria-disabled="{{ noSel }}" style="height: 44px; padding: 0 18px; border-radius: 8px; background: {{ addBg }}; color: {{ addFg }}; font-weight: 700; font-size: 14.5px; display: inline-flex; align-items: center; text-decoration: none">{{ addLabel }}</a>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["canon","dark","teal","contrast","darkNavy","darkViolet","darkHybrid"],"default":"darkHybrid"},"scene":{"editor":"enum","options":["default","upload"],"default":"default"},"$preview":{"width":1440,"height":1000}}'>
+const F = [
+  { n: 'msym-bbx-front.webp', d: '28.10', s: '1600×1600', linked: true, recent: 1 },
+  { n: 'msym-bbx-back.webp', d: '28.10', s: '1600×1600', linked: true, recent: 2 },
+  { n: 'msym-bbx-side.webp', d: '27.10', s: '1600×1600', linked: true, recent: 0 },
+  { n: 'msym-bbx-seal-closeup.webp', d: '28.10', s: '1600×1600', linked: false, recent: 3 },
+  { n: 'msym-bbx-in-hand.webp', d: '28.10', s: '1600×1600', linked: false, recent: 4 },
+  { n: 'msym-bst-front.webp', d: '27.10', s: '1200×1200', linked: false, recent: 5 },
+  { n: 'msym-bst-back.webp', d: '27.10', s: '1200×1200', linked: false, recent: 6 },
+  { n: 'hwak-bbx-front.webp', d: '24.10', s: '1600×1600', linked: false, recent: 7 },
+  { n: 'op13-bbx-front.webp', d: '21.10', s: '1600×1600', linked: false, recent: 0 },
+  { n: 'op13-bst-front.webp', d: '21.10', s: '1200×1200', linked: false, recent: 0 },
+  { n: 'ditto-spinner-400-01.webp', d: '18.10', s: '1200×1200', linked: false, recent: 0 },
+  { n: 'sv8a-bst-front.webp', d: '12.10', s: '1200×1200', linked: false, recent: 0 },
+  { n: 'm5-bbx-front.webp', d: '09.10', s: '1600×1600', linked: false, recent: 0 },
+  { n: 'st32-std-front.webp', d: '02.10', s: '1200×1200', linked: false, recent: 0 }
+];
+class Component extends DCLogic {
+  state = { tab: 'recent', q: '', sel: { 'msym-bbx-seal-closeup.webp': 1, 'msym-bbx-in-hand.webp': 1 }, drag: false, uploads: [], files: F.slice(), sc: '' };
+  componentDidMount() { this.applyScene(); }
+  componentDidUpdate() { if ((this.props.scene || 'default') !== this.state.sc) this.applyScene(); }
+  applyScene() {
+    const sc = this.props.scene || 'default';
+    if (sc === 'upload') {
+      this.setState({ sc: sc, drag: true, uploads: [
+        { name: 'msym-bbx-top.jpg', loading: true, pct: '64%' },
+        { name: 'msym-bbx-shrink.jpg', loading: true, pct: '18%' },
+        { name: 'IMG_4471.HEIC', error: true, msg: 'Формат HEIC не підтримується. Збережіть як JPG або WebP.' }
+      ] });
+    } else this.setState({ sc: sc, drag: false, uploads: [] });
+  }
+  simulateUpload() {
+    this.setState({ drag: false, uploads: [{ name: 'msym-bbx-top.jpg', loading: true, pct: '35%' }, { name: 'msym-bbx-shrink.jpg', loading: true, pct: '10%' }] });
+    setTimeout(() => this.setState({ uploads: [{ name: 'msym-bbx-top.jpg', loading: true, pct: '90%' }, { name: 'msym-bbx-shrink.jpg', loading: true, pct: '62%' }] }), 700);
+    setTimeout(() => {
+      const added = [{ n: 'msym-bbx-top.jpg', d: '28.10', s: '2000×2000', linked: false, recent: -2 }, { n: 'msym-bbx-shrink.jpg', d: '28.10', s: '2000×2000', linked: false, recent: -1 }];
+      const sel = Object.assign({}, this.state.sel, { 'msym-bbx-top.jpg': 1, 'msym-bbx-shrink.jpg': 1 });
+      this.setState({ uploads: [], files: added.concat(this.state.files), sel: sel, tab: 'recent' });
+    }, 1500);
+  }
+  renderVals() {
+    const THEMES = {
+      canon: { scheme: 'light', paper: '#FFFFFF', shell: '#F3F4F6', bg: '#F7F7F5', line: '#E5E7EB', line2: '#EEF0F2', line3: '#D1D5DB', ink4: '#9CA3AF', ink3: '#6B7280', ink3b: '#4B5563', ink2: '#1F2937', ink: '#111827', blue: '#1E3A8A', blueSoft: '#E8EEFB', sel: '#F5F8FE', danger: '#DC2626', warnBg: '#FFFBEA', warnFg: '#92400E', warnLine: '#FCD34D', ok: '#15803D', okBg: '#F3FBF6', gold: '#C68A00' },
+      dark: { scheme: 'dark', paper: '#171A21', shell: '#0F1115', bg: '#1F242C', line: '#2F3542', line2: '#272C36', line3: '#4A5263', ink4: '#6E7787', ink3: '#9AA3B2', ink3b: '#3A4150', ink2: '#D7DCE3', ink: '#F3F5F8', blue: '#8AB4F8', blueSoft: '#1F2C48', sel: '#1B2333', danger: '#F87171', warnBg: '#2B2416', warnFg: '#FBBF24', warnLine: '#8A6A12', ok: '#4ADE80', okBg: '#14281C', gold: '#E0A526' },
+      teal: { scheme: 'light', paper: '#FFFFFF', shell: '#ECF1F1', bg: '#F3F7F7', line: '#D8E2E2', line2: '#E7EEEE', line3: '#C5D1D1', ink4: '#8E9D9D', ink3: '#566565', ink3b: '#3E4D4D', ink2: '#1B2929', ink: '#0D1A1A', blue: '#0B5E66', blueSoft: '#DDF0F1', sel: '#EEF8F8', danger: '#C62828', warnBg: '#FFF7E6', warnFg: '#8A4B08', warnLine: '#F2C26B', ok: '#167A43', okBg: '#ECF8F1', gold: '#B7791F' },
+      contrast: { scheme: 'light', paper: '#FFFFFF', shell: '#D9E0EA', bg: '#E4EBF6', line: '#BCC7D6', line2: '#D3DBE6', line3: '#A7B3C3', ink4: '#768296', ink3: '#465063', ink3b: '#4B5563', ink2: '#0F172A', ink: '#0A0F1E', blue: '#1D4ED8', blueSoft: '#CFDDFB', sel: '#DCE7FD', danger: '#C81E1E', warnBg: '#FFF1BF', warnFg: '#7A3306', warnLine: '#F0B400', ok: '#0E7A38', okBg: '#D9F3E3', gold: '#C68A00' },
+      darkNavy: { scheme: 'dark', paper: '#121C30', shell: '#0A1222', bg: '#18243D', line: '#26355A', line2: '#1E2B48', line3: '#3A4A70', ink4: '#6E7FA3', ink3: '#9FB0D0', ink3b: '#2E3D60', ink2: '#DCE4F2', ink: '#F5F8FF', blue: '#F2B544', blueSoft: '#3A2E12', sel: '#1A2A4C', danger: '#FF7A7A', warnBg: '#2E1C10', warnFg: '#FDBA74', warnLine: '#9A4F16', ok: '#5EEAD4', okBg: '#0E2A2B', gold: '#F2B544' },
+      darkViolet: { scheme: 'dark', paper: '#1B1B20', shell: '#111114', bg: '#25252C', line: '#36363F', line2: '#2C2C34', line3: '#4E4E5A', ink4: '#73737F', ink3: '#A6A6B3', ink3b: '#3C3C46', ink2: '#E2E2E8', ink: '#FAFAFC', blue: '#B79CFF', blueSoft: '#2E2545', sel: '#241F33', danger: '#FF6B81', warnBg: '#2B2513', warnFg: '#F5C451', warnLine: '#7D6420', ok: '#4ADE80', okBg: '#13281C', gold: '#F5C451' },
+      darkHybrid: { scheme: 'dark', paper: '#1B1B20', shell: '#111114', bg: '#25252C', line: '#36363F', line2: '#2C2C34', line3: '#4E4E5A', ink4: '#73737F', ink3: '#A6A6B3', ink3b: '#3C3C46', ink2: '#E2E2E8', ink: '#FAFAFC', blue: '#F2B544', blueSoft: '#33291A', sel: '#25221C', danger: '#FF7A7A', warnBg: '#2C1E14', warnFg: '#FDBA74', warnLine: '#9A4F16', ok: '#5EEAD4', okBg: '#12282A', gold: '#F2B544' }
+    };
+    const t = THEMES[this.props.theme || 'darkHybrid'] || THEMES.darkHybrid;
+    const fix = (x) => {
+      if (typeof x === 'string') return x.indexOf('{{ t.') < 0 ? x : x.replace(/\{\{ t\.(\w+) \}\}/g, (m, k) => t[k]);
+      if (Array.isArray(x)) return x.map(fix);
+      if (x && typeof x === 'object' && Object.getPrototypeOf(x) === Object.prototype) { const o = {}; Object.keys(x).forEach((k) => { o[k] = fix(x[k]); }); return o; }
+      return x;
+    };
+    const v = fix(this.baseVals());
+    v.t = t;
+    return v;
+  }
+  baseVals() {
+    const s = this.state;
+    const q = s.q.trim().toLowerCase();
+    let list;
+    if (q) list = s.files.filter((f) => f.n.toLowerCase().indexOf(q) >= 0);
+    else if (s.tab === 'recent') list = s.files.filter((f) => f.recent).sort((a, b) => a.recent - b.recent);
+    else if (s.tab === 'product') list = s.files.filter((f) => f.linked);
+    else list = s.files;
+    const selCount = Object.keys(s.sel).length;
+    const TL = [['recent', 'Нещодавні'], ['product', 'Цього товару'], ['all', 'Усі файли']];
+    const caption = q ? 'Результати пошуку в усіх файлах: ' + list.length
+      : s.tab === 'recent' ? 'Останні завантаження, нові — першими'
+      : s.tab === 'product' ? 'Фото, які вже прив’язані до цього товару'
+      : 'Усі файли магазину · ' + list.length;
+    return {
+      q: s.q, onQ: (e) => this.setState({ q: e.target.value }),
+      tabs: TL.map((t) => ({ label: t[1], active: !q && s.tab === t[0], bg: !q && s.tab === t[0] ? '{{ t.blue }}' : '{{ t.paper }}', fg: !q && s.tab === t[0] ? '{{ t.paper }}' : '{{ t.ink2 }}', pick: () => this.setState({ tab: t[0], q: '' }) })),
+      caption: caption, empty: list.length === 0 && s.uploads.length === 0,
+      dropLine: s.drag ? '{{ t.blue }}' : '{{ t.line3 }}', dropBg: s.drag ? '{{ t.blueSoft }}' : '{{ t.paper }}',
+      dropText: s.drag ? 'Відпустіть файли, щоб завантажити їх сюди' : 'Перетягніть фото в це вікно або',
+      dragOver: (e) => { e.preventDefault(); if (!this.state.drag) this.setState({ drag: true }); },
+      dragLeave: (e) => { if (e.currentTarget === e.target) this.setState({ drag: false }); },
+      drop: (e) => { e.preventDefault(); this.simulateUpload(); },
+      simulateUpload: () => this.simulateUpload(),
+      uploads: s.uploads.map((u) => ({ name: u.name, loading: !!u.loading, pct: u.pct || '', error: !!u.error, msg: u.msg || '', line: u.error ? '{{ t.danger }}' : '{{ t.line }}' })),
+      files: list.map((f) => {
+        const sel = !!s.sel[f.n];
+        return {
+          name: f.n, meta: f.d + ' · ' + f.s, linked: f.linked, sel: sel,
+          aria: (f.linked ? 'Уже в товарі: ' : sel ? 'Обрано: ' : 'Обрати: ') + f.n,
+          line: sel ? '{{ t.blue }}' : '{{ t.line }}', op: f.linked ? '0.5' : '1', cursor: f.linked ? 'default' : 'pointer',
+          dotLine: f.linked ? 'transparent' : sel ? '{{ t.blue }}' : '{{ t.ink4 }}', dotBg: sel ? '{{ t.blue }}' : f.linked ? 'transparent' : '{{ t.paper }}',
+          toggle: () => { if (f.linked) return; const m = Object.assign({}, this.state.sel); if (m[f.n]) delete m[f.n]; else m[f.n] = 1; this.setState({ sel: m }); }
+        };
+      }),
+      selCount: selCount, hasSel: selCount > 0, noSel: selCount === 0, clearSel: () => this.setState({ sel: {} }),
+      addBg: selCount ? '{{ t.blue }}' : '{{ t.line2 }}', addFg: selCount ? '{{ t.paper }}' : '{{ t.ink3 }}',
+      addLabel: selCount ? 'Додати ' + selCount + ' фото' : 'Оберіть фото'
+    };
+  }
+}
+</script>
+</body>
+</html>

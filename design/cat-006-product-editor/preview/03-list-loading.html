@@ -1,0 +1,269 @@
+<!doctype html>
+<!-- CAT-006 product admin editor · approved design v0.1 layout + D3 colour scheme (2026-10-28).
+     Static reference rendered from the Claude Design canvas sources in ../source/. Not production code:
+     recreate with Bootstrap 5 + plain JS inside the OpenCart admin shell. Interactions are described in the spec. -->
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CAT-006 · Список: завантаження (D3, static reference)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap">
+<style>
+html,body{height:100%;margin:0}#dc-root,#dc-root>.sc-host{height:100%}
+body{margin:0}
+
+body{margin:0}
+a{color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
+input,select,textarea{background-color:transparent}
+:focus-visible{outline:2px solid #3B82F6;outline-offset:2px}
+@keyframes bs-spin{to{transform:rotate(360deg)}}
+@keyframes bs-pulse{0%,100%{opacity:1}50%{opacity:.45}}
+.bs-cell:hover{border-color:rgba(127,127,127,.35) !important;background:rgba(127,127,127,.10) !important}
+.bs-row:hover{background:rgba(127,127,127,.05)}
+
+</style>
+</head>
+<body>
+<div><div style="width: 100%;"><div><div style="font-family: Manrope, system-ui, -apple-system, sans-serif; color-scheme: dark; color: #E2E2E8; background: #111114; min-height: 1180px; font-size: 14px;">
+  <header style="height: 52px; background: #1B1B20; border-bottom: 1px solid #36363F; display: flex; align-items: center; justify-content: space-between; padding: 0px 20px; box-sizing: border-box;">
+    <div style="display: flex; align-items: center; gap: 10px; color: #A6A6B3; font-weight: 600; font-size: 13px;"><span aria-hidden="true" style="width: 28px; height: 28px; border-radius: 6px; background: #36363F; display: inline-block;"></span>OpenCart · Адмінпанель</div>
+    <div style="display: flex; gap: 16px; color: #A6A6B3; font-size: 13px;"><span>Raccoon</span><a href="#" style="color: #A6A6B3;">Вийти</a></div>
+  </header>
+  <div style="display: flex; flex-wrap: wrap; align-items: stretch;">
+    <nav aria-label="Меню адмінки" style="flex: 0 0 220px; background: #111114; border-right: 1px solid #36363F; padding: 16px 12px; box-sizing: border-box; display: flex; flex-direction: column; gap: 2px; font-size: 13px; color: #A6A6B3;">
+      <a href="#" style="color: #A6A6B3; text-decoration: none; padding: 8px 10px; border-radius: 6px;">Панель керування</a>
+      <span style="padding: 8px 10px; color: #E2E2E8; font-weight: 700;">Каталог</span>
+      <a href="#" style="color: #A6A6B3; text-decoration: none; padding: 7px 10px 7px 22px; border-radius: 6px;">Категорії</a>
+      <a href="01-list.html" aria-current="page" style="color: #FAFAFC; text-decoration: none; padding: 7px 10px 7px 22px; border-radius: 6px; background: #1B1B20; border: 1px solid #36363F; font-weight: 700;">Товари Booster</a>
+      <a href="#" style="color: #A6A6B3; text-decoration: none; padding: 7px 10px 7px 22px; border-radius: 6px;">Атрибути</a>
+      <a href="#" style="color: #A6A6B3; text-decoration: none; padding: 7px 10px 7px 22px; border-radius: 6px;">Виробники</a>
+      <a href="#" style="color: #A6A6B3; text-decoration: none; padding: 8px 10px; border-radius: 6px;">Розширення</a>
+      <a href="#" style="color: #A6A6B3; text-decoration: none; padding: 8px 10px; border-radius: 6px;">Дизайн</a>
+      <a href="#" style="color: #A6A6B3; text-decoration: none; padding: 8px 10px; border-radius: 6px;">Продажі</a>
+      <a href="#" style="color: #A6A6B3; text-decoration: none; padding: 8px 10px; border-radius: 6px;">Клієнти</a>
+      <a href="#" style="color: #A6A6B3; text-decoration: none; padding: 8px 10px; border-radius: 6px;">Маркетинг</a>
+      <a href="#" style="color: #A6A6B3; text-decoration: none; padding: 8px 10px; border-radius: 6px;">Система</a>
+      <a href="#" style="color: #A6A6B3; text-decoration: none; padding: 8px 10px; border-radius: 6px;">Звіти</a>
+    </nav>
+    <main style="flex: 999 1 560px; min-width: 0px; background: #1B1B20; padding: 24px 28px 40px; box-sizing: border-box; position: relative;">
+
+      <div style="display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 16px;">
+        <div>
+          <h1 style="margin: 0px; font-size: 26px; font-weight: 800; color: #FAFAFC; letter-spacing: -0.01em;">Товари</h1>
+          <p style="margin: 4px 0px 0px; font-size: 13px; color: #A6A6B3;">Клікніть на ціну, кількість або статус, щоб змінити просто в рядку.</p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px;">
+            <span style="font-size: 12.5px; color: #A6A6B3;">Дані CRM: <strong style="color: #E2E2E8; font-weight: 700;"><span class="sc-interp">28.10, 09:14</span></strong></span>
+            
+          </div>
+          <button type="button" style="height: 40px; padding: 0px 14px; border-radius: 8px; border: 1px solid #36363F; background: #1B1B20; color: #E2E2E8; font-weight: 700; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer;">
+            
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"></path><path d="M21 3v6h-6"></path></svg>Оновити з CRM
+          </button>
+          <a href="11-product-page.html" style="height: 40px; padding: 0px 16px; border-radius: 8px; background: #F2B544; color: #1B1B20; font-weight: 700; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; text-decoration: none;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Новий товар</a>
+        </div>
+      </div>
+
+      
+
+      <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 12px;">
+        <div style="position: relative; max-width: 560px;">
+          <span style="position: absolute; left: 14px; top: 14px; color: #A6A6B3; display: inline-flex;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span>
+          <label for="bs-q" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px);">Пошук товарів</label>
+          <input id="bs-q" type="search" placeholder="Пошук за будь-якою частиною назви або моделі — напр. «msym» чи «ditto»" value="" style="width: 100%; height: 44px; box-sizing: border-box; border: 1px solid #36363F; border-radius: 8px; padding: 0px 40px; font-size: 14px; background: #25252C; color: #FAFAFC;">
+          
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
+          <select aria-label="Категорія" style="height: 36px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 10px; background: #1B1B20; font-size: 13px;">
+            <option value="">Категорія: усі</option>
+            <option value="pokemon">Pokémon TCG</option>
+            <option value="onepiece">One Piece Card Game</option>
+            <option value="3d">3D-друк</option>
+          </select>
+          <select aria-label="Виробник" style="height: 36px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 10px; background: #1B1B20; font-size: 13px;">
+            <option value="">Виробник: усі</option>
+            <option value="The Pokémon Company">The Pokémon Company</option>
+            <option value="Bandai">Bandai</option>
+            <option value="Booster Shop 3D">Booster Shop 3D</option>
+          </select>
+          <select aria-label="Статус" style="height: 36px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 10px; background: #1B1B20; font-size: 13px;">
+            <option value="">Статус: усі</option>
+            <option value="on">Увімкнені</option>
+            <option value="off">Вимкнені</option>
+          </select>
+          <select aria-label="Наявність" style="height: 36px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 10px; background: #1B1B20; font-size: 13px;">
+            <option value="">Наявність: усі</option>
+            <option value="in">В наявності</option>
+            <option value="out">Немає в наявності</option>
+          </select>
+          <select aria-label="Акція" style="height: 36px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 10px; background: #1B1B20; font-size: 13px;">
+            <option value="">Акція: усі</option>
+            <option value="yes">З акцією</option>
+            <option value="no">Без акції</option>
+          </select>
+          <div style="display: inline-flex; align-items: center; gap: 6px; height: 36px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 8px; font-size: 13px; color: #A6A6B3;">
+            <span>Ціна, грн</span>
+            <input aria-label="Ціна від" inputmode="numeric" placeholder="від" value="150" style="width: 56px; height: 26px; border: 1px solid #36363F; border-radius: 4px; padding: 0px 6px; font-size: 13px; color: #FAFAFC;">
+            <span aria-hidden="true">–</span>
+            <input aria-label="Ціна до" inputmode="numeric" placeholder="до" value="" style="width: 56px; height: 26px; border: 1px solid #36363F; border-radius: 4px; padding: 0px 6px; font-size: 13px; color: #FAFAFC;">
+          </div>
+          <div style="display: inline-flex; align-items: center; gap: 6px; height: 36px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 8px; font-size: 13px; color: #A6A6B3;">
+            <span>Кількість</span>
+            <input aria-label="Кількість від" inputmode="numeric" placeholder="від" value="" style="width: 44px; height: 26px; border: 1px solid #36363F; border-radius: 4px; padding: 0px 6px; font-size: 13px; color: #FAFAFC;">
+            <span aria-hidden="true">–</span>
+            <input aria-label="Кількість до" inputmode="numeric" placeholder="до" value="" style="width: 44px; height: 26px; border: 1px solid #36363F; border-radius: 4px; padding: 0px 6px; font-size: 13px; color: #FAFAFC;">
+          </div>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-height: 30px;">
+          <span style="font-size: 13px; font-weight: 700; color: #FAFAFC;">Знайдено: <span class="sc-interp">…</span></span>
+          
+            <span aria-hidden="true" style="color: #4E4E5A;">|</span>
+            
+              <span style="display: inline-flex; align-items: center; gap: 4px; height: 28px; padding: 0px 4px 0px 10px; border-radius: 999px; background: #33291A; color: #F2B544; font-size: 12.5px; font-weight: 600;"><span class="sc-interp">Ціна: від 150 грн</span><button type="button" aria-label="Прибрати фільтр" style="width: 22px; height: 22px; border: 0px; border-radius: 999px; background: transparent; color: #F2B544; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg></button></span>
+            
+            <button type="button" style="border: 0px; background: transparent; color: #F2B544; font-size: 12.5px; font-weight: 700; cursor: pointer; padding: 4px;">Скинути всі</button>
+          
+          <span style="margin-left: auto; font-size: 12px; color: #A6A6B3; display: inline-flex; align-items: center; gap: 14px;">
+            <span style="display: inline-flex; align-items: center; gap: 4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="#FDBA74" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"></path></svg>ціна ≠ CRM</span>
+            <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="font-size: 9.5px; font-weight: 800; padding: 1px 4px; border-radius: 4px; background: #2C1E14; border: 1px solid #9A4F16; color: #FDBA74;">CRM</span>кількість ≠ CRM</span>
+            <span>Фільтри зберігаються, коли ви відкриваєте товар і повертаєтесь</span>
+          </span>
+        </div>
+      </div>
+
+      <div style="margin-top: 8px; border: 1px solid #36363F; border-radius: 10px; overflow-x: auto;">
+        <div style="min-width: 1100px;">
+          <div style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; height: 40px; background: #25252C; border-bottom: 1px solid #36363F; font-size: 12px; font-weight: 700; color: #A6A6B3;">
+            <span style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати всі знайдені" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
+            <span></span>
+            <span>Назва</span>
+            <span>Модель</span>
+            <span style="padding-left: 9px;">Ціна на сайті</span>
+            <span style="padding-left: 9px;">Кількість</span>
+            <span>Статус</span>
+            <span>Акція</span>
+            <span></span>
+          </div>
+
+          
+            <div aria-busy="true" aria-label="Список завантажується">
+              
+                <div style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; height: 64px; border-bottom: 1px solid #2C2C34; animation: 1.4s ease-in-out 0s infinite normal none running bs-pulse;">
+                  <span style="display: flex; justify-content: center;"><span style="width: 16px; height: 16px; border-radius: 4px; background: #2C2C34;"></span></span>
+                  <span style="width: 40px; height: 40px; border-radius: 6px; background: #2C2C34;"></span>
+                  <span style="display: flex; flex-direction: column; gap: 6px; padding-right: 24px;"><span style="height: 12px; border-radius: 4px; background: #2C2C34; width: 72%;"></span><span style="height: 10px; border-radius: 4px; background: #111114; width: 40%;"></span></span>
+                  <span style="height: 12px; width: 110px; border-radius: 4px; background: #2C2C34;"></span>
+                  <span style="height: 12px; width: 70px; border-radius: 4px; background: #2C2C34; margin-left: 9px;"></span>
+                  <span style="height: 12px; width: 40px; border-radius: 4px; background: #2C2C34; margin-left: 9px;"></span>
+                  <span style="height: 20px; width: 36px; border-radius: 999px; background: #2C2C34;"></span>
+                  <span></span><span></span>
+                </div>
+              
+                <div style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; height: 64px; border-bottom: 1px solid #2C2C34; animation: 1.4s ease-in-out 0s infinite normal none running bs-pulse;">
+                  <span style="display: flex; justify-content: center;"><span style="width: 16px; height: 16px; border-radius: 4px; background: #2C2C34;"></span></span>
+                  <span style="width: 40px; height: 40px; border-radius: 6px; background: #2C2C34;"></span>
+                  <span style="display: flex; flex-direction: column; gap: 6px; padding-right: 24px;"><span style="height: 12px; border-radius: 4px; background: #2C2C34; width: 55%;"></span><span style="height: 10px; border-radius: 4px; background: #111114; width: 40%;"></span></span>
+                  <span style="height: 12px; width: 110px; border-radius: 4px; background: #2C2C34;"></span>
+                  <span style="height: 12px; width: 70px; border-radius: 4px; background: #2C2C34; margin-left: 9px;"></span>
+                  <span style="height: 12px; width: 40px; border-radius: 4px; background: #2C2C34; margin-left: 9px;"></span>
+                  <span style="height: 20px; width: 36px; border-radius: 999px; background: #2C2C34;"></span>
+                  <span></span><span></span>
+                </div>
+              
+                <div style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; height: 64px; border-bottom: 1px solid #2C2C34; animation: 1.4s ease-in-out 0s infinite normal none running bs-pulse;">
+                  <span style="display: flex; justify-content: center;"><span style="width: 16px; height: 16px; border-radius: 4px; background: #2C2C34;"></span></span>
+                  <span style="width: 40px; height: 40px; border-radius: 6px; background: #2C2C34;"></span>
+                  <span style="display: flex; flex-direction: column; gap: 6px; padding-right: 24px;"><span style="height: 12px; border-radius: 4px; background: #2C2C34; width: 80%;"></span><span style="height: 10px; border-radius: 4px; background: #111114; width: 40%;"></span></span>
+                  <span style="height: 12px; width: 110px; border-radius: 4px; background: #2C2C34;"></span>
+                  <span style="height: 12px; width: 70px; border-radius: 4px; background: #2C2C34; margin-left: 9px;"></span>
+                  <span style="height: 12px; width: 40px; border-radius: 4px; background: #2C2C34; margin-left: 9px;"></span>
+                  <span style="height: 20px; width: 36px; border-radius: 999px; background: #2C2C34;"></span>
+                  <span></span><span></span>
+                </div>
+              
+                <div style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; height: 64px; border-bottom: 1px solid #2C2C34; animation: 1.4s ease-in-out 0s infinite normal none running bs-pulse;">
+                  <span style="display: flex; justify-content: center;"><span style="width: 16px; height: 16px; border-radius: 4px; background: #2C2C34;"></span></span>
+                  <span style="width: 40px; height: 40px; border-radius: 6px; background: #2C2C34;"></span>
+                  <span style="display: flex; flex-direction: column; gap: 6px; padding-right: 24px;"><span style="height: 12px; border-radius: 4px; background: #2C2C34; width: 62%;"></span><span style="height: 10px; border-radius: 4px; background: #111114; width: 40%;"></span></span>
+                  <span style="height: 12px; width: 110px; border-radius: 4px; background: #2C2C34;"></span>
+                  <span style="height: 12px; width: 70px; border-radius: 4px; background: #2C2C34; margin-left: 9px;"></span>
+                  <span style="height: 12px; width: 40px; border-radius: 4px; background: #2C2C34; margin-left: 9px;"></span>
+                  <span style="height: 20px; width: 36px; border-radius: 999px; background: #2C2C34;"></span>
+                  <span></span><span></span>
+                </div>
+              
+                <div style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; height: 64px; border-bottom: 1px solid #2C2C34; animation: 1.4s ease-in-out 0s infinite normal none running bs-pulse;">
+                  <span style="display: flex; justify-content: center;"><span style="width: 16px; height: 16px; border-radius: 4px; background: #2C2C34;"></span></span>
+                  <span style="width: 40px; height: 40px; border-radius: 6px; background: #2C2C34;"></span>
+                  <span style="display: flex; flex-direction: column; gap: 6px; padding-right: 24px;"><span style="height: 12px; border-radius: 4px; background: #2C2C34; width: 70%;"></span><span style="height: 10px; border-radius: 4px; background: #111114; width: 40%;"></span></span>
+                  <span style="height: 12px; width: 110px; border-radius: 4px; background: #2C2C34;"></span>
+                  <span style="height: 12px; width: 70px; border-radius: 4px; background: #2C2C34; margin-left: 9px;"></span>
+                  <span style="height: 12px; width: 40px; border-radius: 4px; background: #2C2C34; margin-left: 9px;"></span>
+                  <span style="height: 20px; width: 36px; border-radius: 999px; background: #2C2C34;"></span>
+                  <span></span><span></span>
+                </div>
+              
+                <div style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; height: 64px; border-bottom: 1px solid #2C2C34; animation: 1.4s ease-in-out 0s infinite normal none running bs-pulse;">
+                  <span style="display: flex; justify-content: center;"><span style="width: 16px; height: 16px; border-radius: 4px; background: #2C2C34;"></span></span>
+                  <span style="width: 40px; height: 40px; border-radius: 6px; background: #2C2C34;"></span>
+                  <span style="display: flex; flex-direction: column; gap: 6px; padding-right: 24px;"><span style="height: 12px; border-radius: 4px; background: #2C2C34; width: 48%;"></span><span style="height: 10px; border-radius: 4px; background: #111114; width: 40%;"></span></span>
+                  <span style="height: 12px; width: 110px; border-radius: 4px; background: #2C2C34;"></span>
+                  <span style="height: 12px; width: 70px; border-radius: 4px; background: #2C2C34; margin-left: 9px;"></span>
+                  <span style="height: 12px; width: 40px; border-radius: 4px; background: #2C2C34; margin-left: 9px;"></span>
+                  <span style="height: 20px; width: 36px; border-radius: 999px; background: #2C2C34;"></span>
+                  <span></span><span></span>
+                </div>
+              
+                <div style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; height: 64px; border-bottom: 1px solid #2C2C34; animation: 1.4s ease-in-out 0s infinite normal none running bs-pulse;">
+                  <span style="display: flex; justify-content: center;"><span style="width: 16px; height: 16px; border-radius: 4px; background: #2C2C34;"></span></span>
+                  <span style="width: 40px; height: 40px; border-radius: 6px; background: #2C2C34;"></span>
+                  <span style="display: flex; flex-direction: column; gap: 6px; padding-right: 24px;"><span style="height: 12px; border-radius: 4px; background: #2C2C34; width: 76%;"></span><span style="height: 10px; border-radius: 4px; background: #111114; width: 40%;"></span></span>
+                  <span style="height: 12px; width: 110px; border-radius: 4px; background: #2C2C34;"></span>
+                  <span style="height: 12px; width: 70px; border-radius: 4px; background: #2C2C34; margin-left: 9px;"></span>
+                  <span style="height: 12px; width: 40px; border-radius: 4px; background: #2C2C34; margin-left: 9px;"></span>
+                  <span style="height: 20px; width: 36px; border-radius: 999px; background: #2C2C34;"></span>
+                  <span></span><span></span>
+                </div>
+              
+                <div style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; height: 64px; border-bottom: 1px solid #2C2C34; animation: 1.4s ease-in-out 0s infinite normal none running bs-pulse;">
+                  <span style="display: flex; justify-content: center;"><span style="width: 16px; height: 16px; border-radius: 4px; background: #2C2C34;"></span></span>
+                  <span style="width: 40px; height: 40px; border-radius: 6px; background: #2C2C34;"></span>
+                  <span style="display: flex; flex-direction: column; gap: 6px; padding-right: 24px;"><span style="height: 12px; border-radius: 4px; background: #2C2C34; width: 58%;"></span><span style="height: 10px; border-radius: 4px; background: #111114; width: 40%;"></span></span>
+                  <span style="height: 12px; width: 110px; border-radius: 4px; background: #2C2C34;"></span>
+                  <span style="height: 12px; width: 70px; border-radius: 4px; background: #2C2C34; margin-left: 9px;"></span>
+                  <span style="height: 12px; width: 40px; border-radius: 4px; background: #2C2C34; margin-left: 9px;"></span>
+                  <span style="height: 20px; width: 36px; border-radius: 999px; background: #2C2C34;"></span>
+                  <span></span><span></span>
+                </div>
+              
+            </div>
+          
+
+          
+
+          
+        </div>
+      </div>
+
+      
+        <div style="position: sticky; bottom: 16px; margin-top: 16px; z-index: 200; background: #FAFAFC; color: #1B1B20; border-radius: 10px; padding: 10px 12px 10px 18px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; box-shadow: rgba(0, 0, 0, 0.12) 0px 8px 24px, rgba(0, 0, 0, 0.07) 0px 2px 6px;">
+          <strong style="font-size: 14px;">Обрано: <span class="sc-interp">6</span></strong>
+          <span aria-hidden="true" style="color: #A6A6B3;">·</span>
+          <span style="font-size: 13px; color: #4E4E5A;">Масові дії:</span>
+          <a href="07-bulk-special-form.html" style="height: 34px; padding: 0px 12px; border-radius: 8px; background: #1B1B20; color: #FAFAFC; font-weight: 700; font-size: 13px; display: inline-flex; align-items: center; text-decoration: none;">Акційна ціна</a>
+          <a href="07-bulk-special-form.html" style="height: 34px; padding: 0px 12px; border-radius: 8px; border: 1px solid #3C3C46; color: #1B1B20; font-weight: 700; font-size: 13px; display: inline-flex; align-items: center; text-decoration: none;">Знижка від кількості</a>
+          <a href="07-bulk-special-form.html" style="height: 34px; padding: 0px 12px; border-radius: 8px; border: 1px solid #3C3C46; color: #1B1B20; font-weight: 700; font-size: 13px; display: inline-flex; align-items: center; text-decoration: none;">Кількість</a>
+          <a href="07-bulk-special-form.html" style="height: 34px; padding: 0px 12px; border-radius: 8px; border: 1px solid #3C3C46; color: #1B1B20; font-weight: 700; font-size: 13px; display: inline-flex; align-items: center; text-decoration: none;">Статус</a>
+          <button type="button" style="margin-left: auto; height: 34px; padding: 0px 12px; border-radius: 8px; border: 0px; background: transparent; color: #4E4E5A; font-weight: 700; font-size: 13px; cursor: pointer;">Зняти вибір</button>
+        </div>
+      
+
+      
+    </main>
+  </div></div></div></div></div>
+</body>
+</html>
