@@ -1,0 +1,50 @@
+9,10c9,10
+< $Name='ACC-006-visual-WP2_20261029.php'
+< $Sha='32d4ed48ea68b70af2357b0004b6880e89718fa34da46985926934a03d0cc95c'
+---
+> $Name='ACC-006-visual-WP3_20261029.php'
+> $Sha='5d4b7e3ea91e6b47ae33438ceb1820ade4e1b5bfdaa5754de2459df7d1adbae5'
+12c12
+< $Receipts=Join-Path $Root 'work\acc006-visual-wp2-20261029\owner-receipts'
+---
+> $Receipts=Join-Path $Root 'work\acc006-visual-wp3-20261029\owner-receipts'
+66c66
+< F=$S/ACC-006-visual-WP2_20261029.php
+---
+> F=$S/ACC-006-visual-WP3_20261029.php
+90c90
+< "$P" -d display_errors=0 -d log_errors=0 <<'ACC006_WP2_CACHE_PHP'
+---
+> "$P" -d display_errors=0 -d log_errors=0 <<'ACC006_WP3_CACHE_PHP'
+115c115
+< ACC006_WP2_CACHE_PHP
+---
+> ACC006_WP3_CACHE_PHP
+128c128
+<     Write-Host ('ACC006_WP2_'+$Step.ToUpperInvariant()+'_OK')
+---
+>     Write-Host ('ACC006_WP3_'+$Step.ToUpperInvariant()+'_OK')
+141c141
+<     Write-Host 'ACC006_WP2_VERIFY_OK'
+---
+>     Write-Host 'ACC006_WP3_VERIFY_OK'
+152c152
+<     $Backup=[regex]::Match($Result.Stdout,'(?m)^backup=(/home2/boosters/public_html/_patch_backups/ACC-006-visual-WP2_20261029-[0-9]{8}T[0-9]{6}Z-[a-f0-9]{12})$')
+---
+>     $Backup=[regex]::Match($Result.Stdout,'(?m)^backup=(/home2/boosters/public_html/_patch_backups/ACC-006-visual-WP3_20261029-[0-9]{8}T[0-9]{6}Z-[a-f0-9]{12})$')
+156c156
+<     Write-Host 'ACC006_WP2_APPLY_OK_OWNER_QA_REQUIRED'
+---
+>     Write-Host 'ACC006_WP3_APPLY_OK_OWNER_QA_REQUIRED'
+163c163
+< if ($BackupPath -cnotmatch '^/home2/boosters/public_html/_patch_backups/ACC-006-visual-WP2_20261029-[0-9]{8}T[0-9]{6}Z-[a-f0-9]{12}$') { throw 'STOP: unsafe saved backup.' }
+---
+> if ($BackupPath -cnotmatch '^/home2/boosters/public_html/_patch_backups/ACC-006-visual-WP3_20261029-[0-9]{8}T[0-9]{6}Z-[a-f0-9]{12}$') { throw 'STOP: unsafe saved backup.' }
+170c170
+<     Write-Host 'ACC006_WP2_ROLLBACK_VERIFY_OK'
+---
+>     Write-Host 'ACC006_WP3_ROLLBACK_VERIFY_OK'
+179c179
+< Write-Host 'ACC006_WP2_ROLLBACK_OK_OWNER_QA_REQUIRED'
+---
+> Write-Host 'ACC006_WP3_ROLLBACK_OK_OWNER_QA_REQUIRED'

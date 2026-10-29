@@ -1,0 +1,129 @@
+ok   390 cat.html: one heart per tile, no text button
+ok   390 cat.html: heart 44x44 at 8px bottom-right of media
+ok   390 cat.html: heart clear of top badges
+ok   390 cat.html: heart outside link and cart form
+ok   390 cat.html: member heart red filled on load
+ok   390 cat.html: non-member heart outline ink-2
+ok   390 cat.html: tap = one add, red fill, one GA, notice
+ok   390 cat.html: second tap removes, no GA
+ok   390 cat.html: heart keyboard-focusable
+ok   390 load-more append: inserted member tile synced
+ok   390 filter replace: replaced member tile synced
+ok   390 cat.html: no page errors
+ok   390 acc.html: one heart per tile, no text button
+ok   390 acc.html: heart 44x44 at 8px bottom-right of media
+ok   390 acc.html: heart clear of top badges
+ok   390 acc.html: heart outside link and cart form
+ok   390 acc.html: member heart red filled on load
+ok   390 acc.html: non-member heart outline ink-2
+ok   390 acc.html: tap = one add, red fill, one GA, notice
+ok   390 acc.html: second tap removes, no GA
+ok   390 acc.html: heart keyboard-focusable
+ok   390 acc.html: no page errors
+ok   390 home.html: one heart per tile, no text button
+ok   390 home.html: heart 44x44 at 8px bottom-right of media
+ok   390 home.html: heart clear of top badges
+ok   390 home.html: heart outside link and cart form
+ok   390 home.html: member heart red filled on load
+ok   390 home.html: non-member heart outline ink-2
+ok   390 home.html: tap = one add, red fill, one GA, notice
+ok   390 home.html: second tap removes, no GA
+ok   390 home.html: heart keyboard-focusable
+ok   390 home.html: no page errors
+ok   390 prod.html: one heart per tile, no text button
+ok   390 prod.html: heart 44x44 at 8px bottom-right of media
+ok   390 prod.html: heart clear of top badges
+ok   390 prod.html: heart outside link and cart form
+ok   390 prod.html: out-of-stock image .45, heart not dimmed
+ok   390 prod.html: member heart red filled on load
+ok   390 prod.html: non-member heart outline ink-2
+ok   390 prod.html: tap = one add, red fill, one GA, notice
+ok   390 prod.html: second tap removes, no GA
+ok   390 prod.html: heart keyboard-focusable
+ok   390 prod.html: no page errors
+ok   768 cat.html: one heart per tile, no text button
+ok   768 cat.html: heart 44x44 at 8px bottom-right of media
+ok   768 cat.html: heart clear of top badges
+ok   768 cat.html: heart outside link and cart form
+ok   768 cat.html: member heart red filled on load
+ok   768 cat.html: non-member heart outline ink-2
+ok   768 cat.html: tap = one add, red fill, one GA, notice
+ok   768 cat.html: second tap removes, no GA
+ok   768 cat.html: heart keyboard-focusable
+ok   768 cat.html: no page errors
+ok   768 acc.html: one heart per tile, no text button
+ok   768 acc.html: heart 44x44 at 8px bottom-right of media
+ok   768 acc.html: heart clear of top badges
+ok   768 acc.html: heart outside link and cart form
+ok   768 acc.html: member heart red filled on load
+ok   768 acc.html: non-member heart outline ink-2
+ok   768 acc.html: tap = one add, red fill, one GA, notice
+ok   768 acc.html: second tap removes, no GA
+ok   768 acc.html: heart keyboard-focusable
+ok   768 acc.html: no page errors
+ok   768 home.html: one heart per tile, no text button
+ok   768 home.html: heart 44x44 at 8px bottom-right of media
+ok   768 home.html: heart clear of top badges
+ok   768 home.html: heart outside link and cart form
+ok   768 home.html: member heart red filled on load
+ok   768 home.html: non-member heart outline ink-2
+ok   768 home.html: tap = one add, red fill, one GA, notice
+ok   768 home.html: second tap removes, no GA
+ok   768 home.html: heart keyboard-focusable
+ok   768 home.html: no page errors
+ok   768 prod.html: one heart per tile, no text button
+ok   768 prod.html: heart 44x44 at 8px bottom-right of media
+ok   768 prod.html: heart clear of top badges
+ok   768 prod.html: heart outside link and cart form
+ok   768 prod.html: out-of-stock image .45, heart not dimmed
+ok   768 prod.html: member heart red filled on load
+ok   768 prod.html: non-member heart outline ink-2
+ok   768 prod.html: tap = one add, red fill, one GA, notice
+ok   768 prod.html: second tap removes, no GA
+ok   768 prod.html: heart keyboard-focusable
+ok   768 prod.html: no page errors
+ok   1280 cat.html: one heart per tile, no text button
+ok   1280 cat.html: heart 44x44 at 8px bottom-right of media
+ok   1280 cat.html: heart clear of top badges
+ok   1280 cat.html: heart outside link and cart form
+ok   1280 cat.html: member heart red filled on load
+ok   1280 cat.html: non-member heart outline ink-2
+ok   1280 cat.html: tap = one add, red fill, one GA, notice
+ok   1280 cat.html: second tap removes, no GA
+ok   1280 cat.html: heart keyboard-focusable
+ok   1280 cat.html: no page errors
+ok   1280 acc.html: one heart per tile, no text button
+ok   1280 acc.html: heart 44x44 at 8px bottom-right of media
+ok   1280 acc.html: heart clear of top badges
+ok   1280 acc.html: heart outside link and cart form
+ok   1280 acc.html: member heart red filled on load
+ok   1280 acc.html: non-member heart outline ink-2
+ok   1280 acc.html: tap = one add, red fill, one GA, notice
+ok   1280 acc.html: second tap removes, no GA
+ok   1280 acc.html: heart keyboard-focusable
+ok   1280 acc.html: no page errors
+ok   1280 home.html: one heart per tile, no text button
+ok   1280 home.html: heart 44x44 at 8px bottom-right of media
+ok   1280 home.html: heart clear of top badges
+ok   1280 home.html: heart outside link and cart form
+ok   1280 home.html: member heart red filled on load
+ok   1280 home.html: non-member heart outline ink-2
+ok   1280 home.html: tap = one add, red fill, one GA, notice
+ok   1280 home.html: second tap removes, no GA
+ok   1280 home.html: heart keyboard-focusable
+ok   1280 home.html: no page errors
+ok   1280 prod.html: one heart per tile, no text button
+ok   1280 prod.html: heart 44x44 at 8px bottom-right of media
+ok   1280 prod.html: heart clear of top badges
+ok   1280 prod.html: heart outside link and cart form
+ok   1280 prod.html: out-of-stock image .45, heart not dimmed
+ok   1280 prod.html: member heart red filled on load
+ok   1280 prod.html: non-member heart outline ink-2
+ok   1280 prod.html: tap = one add, red fill, one GA, notice
+ok   1280 prod.html: second tap removes, no GA
+ok   1280 prod.html: heart keyboard-focusable
+ok   1280 prod.html: no page errors
+ok   error notice stays visible after 5.6 s
+ok   confirmation closes after 5 s
+tiles_transformed=150
+browser_checks=127 failed=0

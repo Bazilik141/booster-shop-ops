@@ -1,0 +1,49 @@
+--- before/catalog/view/template/account/wishlist.twig
++++ after/catalog/view/template/account/wishlist.twig
+@@ -1,16 +1,36 @@
+ {# ACC-006_WISHLIST_RESTORE_20261013 #}
++{# ACC006_VISUAL_WP1_20261028: «Обране» in the RD-16 shell; the GA4 list anchor stays byte-exact. #}
+ {{ header }}
+-<div id="account-wishlist" class="container">
+-  <ul class="breadcrumb">
+-    {% for breadcrumb in breadcrumbs %}<li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>{% endfor %}
+-  </ul>
+-  <div class="row">{{ column_left }}
+-    <div id="content" class="col">{{ content_top }}
+-      <h1>{{ heading_title }} (<span data-bs-wishlist-count>{{ bs_wishlist_count }}</span>)</h1>
++<div id="account-wishlist" class="container bs-account-page bs-account-favorites">
++  <ul class="breadcrumb">{% for breadcrumb in breadcrumbs %}<li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>{% endfor %}</ul>
++  <div class="bs-account-layout">
++    {{ rd16_shell.nav }}
++    <div id="content" class="bs-account-main">
++      <div class="bs-account-content-top">{{ content_top }}</div>
++      <div class="bs-fav-heading">
++        <h1>{{ heading_title }}</h1>
++        <span class="bs-fav-heading__count" data-bs-wishlist-count-label data-forms="{{ text_count_one|e('html_attr') }}|{{ text_count_few|e('html_attr') }}|{{ text_count_many|e('html_attr') }}">{{ bs_wishlist_count_label }}</span>
++      </div>
+       <div id="wishlist">{{ list }}</div>
+-      <div class="text-end"><a href="{{ continue }}" class="btn bs-btn bs-btn-primary">{{ button_continue }}</a></div>
+-      {{ content_bottom }}
+-    </div>{{ column_right }}
++      <div class="bs-account-content-bottom">{{ content_bottom }}</div>
++    </div>
++    {{ rd16_shell.aside }}
+   </div>
+ </div>
++<script>
++// ACC006_VISUAL_WP1_20261028: reveal the current chip inside this page's nav (same as RD-18 orders).
++(function () {
++    function reveal() {
++        if (!window.matchMedia('(max-width: 991.98px)').matches) return;
++        var nav = document.querySelector('.bs-account-favorites .bs-account-nav--page');
++        var current = nav && nav.querySelector('[aria-current="page"]');
++        if (!current) return;
++        var parentBox = nav.getBoundingClientRect();
++        var currentBox = current.getBoundingClientRect();
++        nav.scrollLeft += currentBox.left - parentBox.left - (parentBox.width - currentBox.width) / 2;
++    }
++    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', reveal, {once:true});
++    else reveal();
++}());
++</script>
+ {{ footer }}

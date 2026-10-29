@@ -1,0 +1,28 @@
+ok   check: admission, zero writes, runner kept
+ok   apply with wrong admission: refused, no writes
+ok   apply: 4 targets after, changed_files=4, self-deleted
+ok   apply: stdout one line per target with before/after/backup
+ok   backup: 4 originals match before hashes
+ok   repeat: already_applied=yes, no writes
+ok   rollback-check: preflight ok, no writes
+ok   rollback: all 4 restored, self-deleted
+ok   after rollback: check admits again
+ok   rollback: unsafe backup path refused
+ok   token drift: apply ok, header gets the package tokens
+ok   token drift: rollback restores later token bytes
+ok   header non-token drift: refused
+ok   target drift: target_before_mismatch
+ok   dependency drift: refused
+ok   partial state: refused, no writes
+ok   theme override: refused
+ok   extra relevant hook: refused, pairs listed
+ok   wildcard hook: refused
+ok   missing reviewed hook: refused
+ok   alternate theme template: refused
+ok   runner in web root: refused
+ok   no mode: refused
+ok   injected failure: automatic restore, all before, runner kept
+ok   later CSS append: rollback refused before writes
+ok   later CSS append: still already_applied
+ok   runner source: no DB write statements
+runner_checks=27 failed=0

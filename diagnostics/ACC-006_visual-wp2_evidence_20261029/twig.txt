@@ -1,0 +1,24 @@
+ok   product/thumb anchors [1,0,0] = [1,0,0]
+ok   common/header anchors [0,1,1] = [0,1,1]
+ok   in stock: one heart, outside <a> and <form>
+ok   in stock: text button gone
+ok   in stock: media link byte-identical (slot, badges, CAT-004 whitespace)
+ok   in stock: rest of tile identical (cart form, TECH-015 script), whitespace aside
+ok   sale: one heart, outside <a> and <form>
+ok   sale: text button gone
+ok   sale: media link byte-identical (slot, badges, CAT-004 whitespace)
+ok   sale: rest of tile identical (cart form, TECH-015 script), whitespace aside
+ok   preorder+rare: one heart, outside <a> and <form>
+ok   preorder+rare: text button gone
+ok   preorder+rare: media link byte-identical (slot, badges, CAT-004 whitespace)
+ok   preorder+rare: rest of tile identical (cart form, TECH-015 script), whitespace aside
+ok   out: one heart, outside <a> and <form>
+ok   out: text button gone
+ok   out: media link byte-identical (slot, badges, CAT-004 whitespace)
+ok   out: rest of tile identical (cart form, TECH-015 script), whitespace aside
+ok   no image: one heart, outside <a> and <form>
+ok   no image: text button gone
+ok   no image: media link byte-identical (slot, badges, CAT-004 whitespace)
+ok   no image: rest of tile identical (cart form, TECH-015 script), whitespace aside
+ok   header: only the two token values differ
+twig=ok

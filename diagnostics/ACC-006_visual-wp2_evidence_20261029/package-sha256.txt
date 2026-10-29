@@ -1,0 +1,3 @@
+32d4ed48ea68b70af2357b0004b6880e89718fa34da46985926934a03d0cc95c  patches/ACC-006-visual-WP2_20261029.php
+c65b7cb2c81ff7e8db9bb6b1d85e35a90ff181c9d3a1a4f7c9c7773fd78fda29  diagnostics/ACC-006-visual-WP2_owner_20261029.ps1 (CRLF checkout, executed)
+c204b5f241e20f845a86050e6109a4ce59d222f7876bb9522d4332e027da6539  diagnostics/ACC-006-visual-WP2_owner_20261029.ps1 (LF repository blob)

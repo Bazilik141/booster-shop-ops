@@ -1,0 +1,122 @@
+--- before/catalog/controller/account/wishlist.php
++++ after/catalog/controller/account/wishlist.php
+@@ -50,10 +50,22 @@
+ 
+ 		$data['list'] = $this->getList();
+ 		$data['bs_wishlist_count'] = $this->total();
++		// ACC006_VISUAL_WP1_20261028: «Обране» opts into the RD-16 account shell (page mode).
++		$data['bs_wishlist_count_label'] = $this->countLabel($data['bs_wishlist_count']);
++		$data['rd16'] = [];
++		foreach (['account','edit','address','order','wishlist','settings','logout','nav','soon','help','help_title','help_body','theme','light','dark'] as $key) {
++			$data['rd16'][$key] = $this->language->get('rd16_' . $key);
++		}
++		$rd16_links = [];
++		foreach (['account','edit','address','order','wishlist','logout'] as $key) {
++			$rd16_links[$key] = html_entity_decode($this->url->link('account/' . $key, 'language=' . $this->config->get('config_language') . '&customer_token=' . $this->session->data['customer_token']), ENT_QUOTES, 'UTF-8');
++		}
++		$data['rd16_shell'] = $this->load->controller('account/shell', ['mode' => 'page', 'active' => 'wishlist', 'labels' => $data['rd16'], 'links' => $rd16_links]);
+ 
+ 		$data['continue'] = $this->url->link('account/account', 'language=' . $this->config->get('config_language') . (isset($this->session->data['customer_token']) ? '&customer_token=' . $this->session->data['customer_token'] : ''));
+ 
+-		$data['column_left'] = $this->load->controller('common/column_left');
++		// The shell replaces the legacy account module; omit the call, not just its output.
++		$data['column_left'] = '';
+ 		$data['column_right'] = $this->load->controller('common/column_right');
+ 		$data['content_top'] = $this->load->controller('common/content_top');
+ 		$data['content_bottom'] = $this->load->controller('common/content_bottom');
+@@ -142,6 +154,21 @@
+ 					$special = false;
+ 				}
+ 
++				// ACC006_VISUAL_WP1_20261028: card photo uses the RD-25 listing fit and source kind.
++				$bs_fit = ['bs_fit_thumb' => '', 'bs_media_kind' => '', 'bs_media_width' => 0, 'bs_media_height' => 0];
++				if ($image !== '') {
++					$bs_fit_url = $this->model_tool_image->resizeFit($product_info['image'], 700, 875);
++					if ($bs_fit_url !== '' && ($bs_media = $this->model_tool_image->mediaInfo($product_info['image']))) {
++						$bs_scale = min(1.0, 700 / $bs_media['crop_width'], 875 / $bs_media['crop_height']);
++						$bs_fit = ['bs_fit_thumb' => $bs_fit_url, 'bs_media_kind' => $bs_media['kind'], 'bs_media_width' => max(1, (int)floor($bs_media['crop_width'] * $bs_scale)), 'bs_media_height' => max(1, (int)floor($bs_media['crop_height'] * $bs_scale))];
++					}
++				}
++				$bs_can_buy = (int)$product_info['quantity'] > 0 || $this->isPreorder($product_info, (string)$stock);
++				$bs_discount = 0;
++				if ($bs_can_buy && $price !== false && $special !== false && (float)$product_info['price'] > 0) {
++					$bs_discount = (int)round((1 - (float)$product_info['special'] / (float)$product_info['price']) * 100);
++				}
++
+ 				$data['products'][] = [
+ 					'thumb'   => $image,
+ 					'stock'   => $stock,
+@@ -151,13 +178,15 @@
+ 					'special' => $special,
+ 					'minimum' => $product_info['minimum'] > 0 ? $product_info['minimum'] : 1,
+ 					'href'    => $this->url->link('product/product', 'language=' . $this->config->get('config_language') . '&product_id=' . $product_info['product_id']),
++					'bs_discount' => $bs_discount,
+ 					'remove'  => $this->url->link('account/wishlist.remove', 'language=' . $this->config->get('config_language') . '&product_id=' . $product_info['product_id'] . (isset($this->session->data['customer_token']) ? '&customer_token=' . $this->session->data['customer_token'] : ''))
+-				] + $product_info;
++				] + $bs_fit + $product_info;
+ 			}
+ 		}
+ 
+ 		$data['bs_wishlist_count'] = count($data['products']);
+ 		$data['bs_wishlist_list_url'] = $this->accountUrl('account/wishlist.list');
++		$data['bs_catalog_url'] = $this->url->link('common/home', 'language=' . $this->config->get('config_language'));
+ 		return $this->load->view('account/wishlist_list', $data);
+ 	}
+ 
+@@ -208,15 +237,17 @@
+ 	public function remove(): void {
+ 		$this->load->language('account/wishlist');
+ 		if (!$this->validRequest('POST')) return;
+-		if (!$this->customer->isLogged()) {
+-			$this->reply(['error' => $this->language->get('error_auth')]);
+-			return;
+-		}
+ 		$product_id = $this->positiveId($this->request->post['product_id'] ?? null);
+ 		if (!$product_id) {
+ 			$this->reply(['error' => $this->language->get('error_product')]);
+ 			return;
+ 		}
++		// ACC006_VISUAL_WP1_20261028: a guest removes only a choice held in this session; no DB access.
++		if (!$this->customer->isLogged()) {
++			$this->clearPending($product_id);
++			$this->reply(['success' => $this->language->get('text_removed_plain')] + $this->stateData());
++			return;
++		}
+ 		$this->load->model('account/wishlist');
+ 		$this->model_account_wishlist->deleteWishlist($this->customer->getId(), $product_id);
+ 		$this->clearPending($product_id);
+@@ -238,6 +269,25 @@
+ 		return (int)$query->row['total'];
+ 	}
+ 
++	/** Internal visible-membership IDs for heart state; read-only, same visibility filter as total(). */
++	public function ids(): array {
++		if (!$this->customer->isLogged()) return array_values($this->pendingIds());
++		$query = $this->db->query("SELECT DISTINCT `cw`.`product_id` FROM `" . DB_PREFIX . "customer_wishlist` `cw` INNER JOIN `" . DB_PREFIX . "product_to_store` `p2s` ON (`p2s`.`product_id` = `cw`.`product_id` AND `p2s`.`store_id` = `cw`.`store_id`) INNER JOIN `" . DB_PREFIX . "product` `p` ON (`p`.`product_id` = `cw`.`product_id` AND `p`.`status` = '1' AND `p`.`date_available` <= NOW()) INNER JOIN `" . DB_PREFIX . "product_description` `pd` ON (`pd`.`product_id` = `p`.`product_id` AND `pd`.`language_id` = '" . (int)$this->config->get('config_language_id') . "') WHERE `cw`.`customer_id` = '" . (int)$this->customer->getId() . "' AND `cw`.`store_id` = '" . (int)$this->config->get('config_store_id') . "' ORDER BY `cw`.`product_id`");
++		$ids = [];
++		foreach ($query->rows as $row) {
++			$id = $this->positiveId($row['product_id'] ?? null);
++			if ($id) $ids[] = $id;
++		}
++		return $ids;
++	}
++
++	/** Ukrainian count phrase for the page heading: 1 товар, 2 товари, 5 товарів. */
++	private function countLabel(int $count): string {
++		$last = $count % 10; $ending = $count % 100;
++		$key = ($last === 1 && $ending !== 11) ? 'text_count_one' : (($last >= 2 && $last <= 4 && ($ending < 12 || $ending > 14)) ? 'text_count_few' : 'text_count_many');
++		return sprintf($this->language->get($key), $count);
++	}
++
+ 	private function validRequest(string $method): bool {
+ 		if (($this->request->server['REQUEST_METHOD'] ?? '') !== $method) {
+ 			$this->reply(['error' => $this->language->get('error_method')]);
+@@ -310,7 +360,7 @@
+ 
+ 	private function stateData(): array {
+ 		$count = $this->total();
+-		return ['count' => $count, 'total' => sprintf($this->language->get('text_wishlist'), $count),
++		return ['count' => $count, 'ids' => $this->ids(), 'total' => sprintf($this->language->get('text_wishlist'), $count),
+ 			'wishlist_url' => $this->accountUrl('account/wishlist'), 'list_url' => $this->accountUrl('account/wishlist.list')];
+ 	}
+ 

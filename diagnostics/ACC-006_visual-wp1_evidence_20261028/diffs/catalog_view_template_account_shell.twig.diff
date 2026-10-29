@@ -1,0 +1,10 @@
+--- before/catalog/view/template/account/shell.twig
++++ after/catalog/view/template/account/shell.twig
+@@ -19,6 +19,7 @@
+       {% endif %}
+           <span class="bs-account-nav__icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="{{ icons[item.key]|e('html_attr') }}"/></svg></span>
+           <span class="bs-account-nav__label">{{ item.label|e }}</span>
++          {% if item.count is not null %}<span class="bs-account-nav__count" data-bs-wishlist-count>{{ item.count }}</span>{% endif %}
+           {% if item.key == 'settings' %}<span class="bs-account-soon">{{ rd16.soon|e }}</span>{% endif %}
+       {% if item.href %}</a>{% else %}</span>{% endif %}
+     {% endfor %}

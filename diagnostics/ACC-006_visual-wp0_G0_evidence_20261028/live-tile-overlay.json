@@ -1,0 +1,2455 @@
+[
+ {
+  "w": 390,
+  "url": "https://boostershop.website/catalog/Pokemon",
+  "status": 502,
+  "colLeft": 0,
+  "tiles": []
+ },
+ {
+  "w": 390,
+  "url": "https://boostershop.website/catalog/Pokemon/Pokemon-booster-box",
+  "status": 200,
+  "colLeft": 0,
+  "tiles": [
+   {
+    "name": "Бустер бокс Pokémon TCG: Abyss Eye (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     176,
+     220
+    ],
+    "img": [
+     14,
+     36,
+     148,
+     148
+    ],
+    "overlap": {
+     "ox": 38,
+     "oy": 16,
+     "pct": 2.8
+    },
+    "badgeBottom": 0,
+    "heartTop": 168
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: Hot Wind Arena (Корейське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     176,
+     220
+    ],
+    "img": [
+     25,
+     13,
+     127,
+     194
+    ],
+    "overlap": {
+     "ox": 27,
+     "oy": 39,
+     "pct": 4.3
+    },
+    "badgeBottom": 29,
+    "heartTop": 168
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: Inferno X (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     176,
+     220
+    ],
+    "img": [
+     14,
+     37,
+     148,
+     145
+    ],
+    "overlap": {
+     "ox": 38,
+     "oy": 15,
+     "pct": 2.6
+    },
+    "badgeBottom": 0,
+    "heartTop": 168
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: Mega Dream EX (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     176,
+     220
+    ],
+    "img": [
+     38,
+     13,
+     101,
+     194
+    ],
+    "overlap": {
+     "ox": 14,
+     "oy": 39,
+     "pct": 2.9
+    },
+    "badgeBottom": 0,
+    "heartTop": 168
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: Mega Symphonia (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     176,
+     220
+    ],
+    "img": [
+     14,
+     36,
+     148,
+     148
+    ],
+    "overlap": {
+     "ox": 38,
+     "oy": 16,
+     "pct": 2.7
+    },
+    "badgeBottom": 0,
+    "heartTop": 168
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: Munikis Zero (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     176,
+     220
+    ],
+    "img": [
+     14,
+     37,
+     148,
+     146
+    ],
+    "overlap": {
+     "ox": 38,
+     "oy": 15,
+     "pct": 2.6
+    },
+    "badgeBottom": 0,
+    "heartTop": 168
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: Ninja Spinner (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     176,
+     220
+    ],
+    "img": [
+     14,
+     38,
+     148,
+     144
+    ],
+    "overlap": {
+     "ox": 38,
+     "oy": 14,
+     "pct": 2.5
+    },
+    "badgeBottom": 0,
+    "heartTop": 168
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: Storm Emeralda (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     176,
+     220
+    ],
+    "img": [
+     14,
+     39,
+     148,
+     142
+    ],
+    "overlap": {
+     "ox": 38,
+     "oy": 13,
+     "pct": 2.4
+    },
+    "badgeBottom": 0,
+    "heartTop": 168
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: Black Bolt (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     176,
+     220
+    ],
+    "img": [
+     14,
+     26,
+     148,
+     167
+    ],
+    "overlap": {
+     "ox": 38,
+     "oy": 26,
+     "pct": 3.9
+    },
+    "badgeBottom": 29,
+    "heartTop": 168
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: Mega Brave (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     176,
+     220
+    ],
+    "img": [
+     14,
+     37,
+     148,
+     146
+    ],
+    "overlap": {
+     "ox": 38,
+     "oy": 15,
+     "pct": 2.7
+    },
+    "badgeBottom": 29,
+    "heartTop": 168
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: The Glory of Team Rocket (Японське ",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     176,
+     220
+    ],
+    "img": [
+     14,
+     41,
+     148,
+     138
+    ],
+    "overlap": {
+     "ox": 38,
+     "oy": 11,
+     "pct": 2
+    },
+    "badgeBottom": 29,
+    "heartTop": 168
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: White Flare (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     176,
+     220
+    ],
+    "img": [
+     14,
+     38,
+     148,
+     145
+    ],
+    "overlap": {
+     "ox": 38,
+     "oy": 14,
+     "pct": 2.5
+    },
+    "badgeBottom": 29,
+    "heartTop": 168
+   }
+  ]
+ },
+ {
+  "w": 390,
+  "url": "https://boostershop.website/",
+  "status": 200,
+  "colLeft": 0,
+  "tiles": [
+   {
+    "name": "Бустер One Piece Card Game OP-16: The Time of Battle (Японсь",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     176,
+     220
+    ],
+    "img": [
+     40,
+     13,
+     96,
+     194
+    ],
+    "overlap": {
+     "ox": 12,
+     "oy": 39,
+     "pct": 2.5
+    },
+    "badgeBottom": 0,
+    "heartTop": 168
+   },
+   {
+    "name": "Бустер Pokémon TCG: Storm Emeralda (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     176,
+     220
+    ],
+    "img": [
+     40,
+     13,
+     97,
+     194
+    ],
+    "overlap": {
+     "ox": 12,
+     "oy": 39,
+     "pct": 2.6
+    },
+    "badgeBottom": 0,
+    "heartTop": 168
+   },
+   {
+    "name": "Фігурка Charizard (Pokémon) — 3D-друк",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     176,
+     220
+    ],
+    "img": [
+     14,
+     32,
+     148,
+     155
+    ],
+    "overlap": {
+     "ox": 38,
+     "oy": 19,
+     "pct": 3.2
+    },
+    "badgeBottom": 0,
+    "heartTop": 168
+   },
+   {
+    "name": "Підставка для картки в акриловому кейсі — 3D-друк",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     176,
+     220
+    ],
+    "img": [
+     44,
+     13,
+     88,
+     194
+    ],
+    "overlap": {
+     "ox": 8,
+     "oy": 39,
+     "pct": 1.8
+    },
+    "badgeBottom": 0,
+    "heartTop": 168
+   }
+  ]
+ },
+ {
+  "w": 390,
+  "url": "https://boostershop.website/catalog/acsesuary",
+  "status": 200,
+  "colLeft": 0,
+  "tiles": [
+   {
+    "name": "Акрилова підставка для карток, 55 мм",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     176,
+     220
+    ],
+    "img": [
+     14,
+     15,
+     148,
+     189
+    ],
+    "overlap": {
+     "ox": 38,
+     "oy": 37,
+     "pct": 5
+    },
+    "badgeBottom": 0,
+    "heartTop": 168
+   },
+   {
+    "name": "Акриловий протектор-кейс для картки без магніта, 1 шт",
+    "kind": "bs-pcard__media--photo",
+    "out": false,
+    "tile": [
+     176,
+     220
+    ],
+    "img": [
+     0,
+     22,
+     176,
+     176
+    ],
+    "overlap": {
+     "ox": 44,
+     "oy": 30,
+     "pct": 4.3
+    },
+    "badgeBottom": 0,
+    "heartTop": 168
+   },
+   {
+    "name": "Альбом для колекційних карток на 160 карток, на резинці, син",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     176,
+     220
+    ],
+    "img": [
+     14,
+     37,
+     148,
+     146
+    ],
+    "overlap": {
+     "ox": 38,
+     "oy": 15,
+     "pct": 2.6
+    },
+    "badgeBottom": 0,
+    "heartTop": 168
+   },
+   {
+    "name": "Альбом для колекційних карток на 360 карток, білий",
+    "kind": "bs-pcard__media--photo",
+    "out": false,
+    "tile": [
+     176,
+     220
+    ],
+    "img": [
+     0,
+     22,
+     176,
+     176
+    ],
+    "overlap": {
+     "ox": 44,
+     "oy": 30,
+     "pct": 4.3
+    },
+    "badgeBottom": 0,
+    "heartTop": 168
+   },
+   {
+    "name": "Альбом для колекційних карток на 360 карток, чорний",
+    "kind": "bs-pcard__media--photo",
+    "out": false,
+    "tile": [
+     176,
+     220
+    ],
+    "img": [
+     0,
+     22,
+     176,
+     176
+    ],
+    "overlap": {
+     "ox": 44,
+     "oy": 30,
+     "pct": 4.3
+    },
+    "badgeBottom": 0,
+    "heartTop": 168
+   },
+   {
+    "name": "Альбом для колекційних карток на 400 карток, жовтий",
+    "kind": "bs-pcard__media--photo",
+    "out": false,
+    "tile": [
+     176,
+     220
+    ],
+    "img": null,
+    "overlap": null,
+    "badgeBottom": 0,
+    "heartTop": 168
+   },
+   {
+    "name": "Аркуш для карток на 9 кишеньок Games 7 Days Premium Series",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     176,
+     220
+    ],
+    "img": [
+     18,
+     13,
+     140,
+     194
+    ],
+    "overlap": {
+     "ox": 34,
+     "oy": 39,
+     "pct": 4.9
+    },
+    "badgeBottom": 0,
+    "heartTop": 168
+   },
+   {
+    "name": "Жорсткий протектор для японського бустера, 1 шт",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     176,
+     220
+    ],
+    "img": [
+     41,
+     13,
+     93,
+     194
+    ],
+    "overlap": {
+     "ox": 11,
+     "oy": 39,
+     "pct": 2.3
+    },
+    "badgeBottom": 0,
+    "heartTop": 168
+   },
+   {
+    "name": "Коробка для карток Покебол (Pokémon), квадратна — 3D-друк",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     176,
+     220
+    ],
+    "img": [
+     14,
+     20,
+     148,
+     180
+    ],
+    "overlap": {
+     "ox": 38,
+     "oy": 32,
+     "pct": 4.6
+    },
+    "badgeBottom": 0,
+    "heartTop": 168
+   },
+   {
+    "name": "М'який протектор для японського бустера, 1 шт",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     176,
+     220
+    ],
+    "img": [
+     14,
+     43,
+     148,
+     135
+    ],
+    "overlap": {
+     "ox": 38,
+     "oy": 9,
+     "pct": 1.8
+    },
+    "badgeBottom": 0,
+    "heartTop": 168
+   },
+   {
+    "name": "М’які протектори для карток Dragon Guard, 300 шт",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     176,
+     220
+    ],
+    "img": [
+     17,
+     13,
+     142,
+     194
+    ],
+    "overlap": {
+     "ox": 35,
+     "oy": 39,
+     "pct": 4.9
+    },
+    "badgeBottom": 0,
+    "heartTop": 168
+   },
+   {
+    "name": "Магнітний кейс для карт 35PT",
+    "kind": "bs-pcard__media--photo",
+    "out": false,
+    "tile": [
+     176,
+     220
+    ],
+    "img": [
+     0,
+     22,
+     176,
+     176
+    ],
+    "overlap": {
+     "ox": 44,
+     "oy": 30,
+     "pct": 4.3
+    },
+    "badgeBottom": 0,
+    "heartTop": 168
+   }
+  ]
+ },
+ {
+  "w": 768,
+  "url": "https://boostershop.website/catalog/Pokemon",
+  "status": 200,
+  "colLeft": 0,
+  "tiles": [
+   {
+    "name": "Містері бокс Pokémon TCG: Mystery Mix Standard (Японське вид",
+    "kind": "bs-pcard__media--photo",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     0,
+     0,
+     362,
+     362
+    ],
+    "overlap": {
+     "ox": 44,
+     "oy": 44,
+     "pct": 1.5
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "Містері бокс Pokémon TCG: Mystery Mix XL (Японське видання)",
+    "kind": "bs-pcard__media--photo",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     0,
+     0,
+     362,
+     362
+    ],
+    "overlap": {
+     "ox": 44,
+     "oy": 44,
+     "pct": 1.5
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "Набір Pokémon S&V ex Special Set — Snow Hazard & Clay Burst ",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     71,
+     22,
+     220,
+     319
+    ],
+    "overlap": {
+     "ox": 0,
+     "oy": 30,
+     "pct": 0
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "Набір Pokémon TCG: Bulk 155 — 150 C/U + 5 R (Японське виданн",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     32,
+     22,
+     299,
+     319
+    ],
+    "overlap": {
+     "ox": 20,
+     "oy": 30,
+     "pct": 0.6
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "Набір Pokémon TCG: Bulk Mix 100 — C/U (Мікс видань: JP / EN ",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     29,
+     42,
+     304,
+     277
+    ],
+    "overlap": {
+     "ox": 23,
+     "oy": 10,
+     "pct": 0.3
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "Набір Pokémon TCG: Special Card Set MEGA Gallade EX (Японськ",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     76,
+     22,
+     210,
+     319
+    ],
+    "overlap": {
+     "ox": 0,
+     "oy": 30,
+     "pct": 0
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "Pokémon TCG: Lumiose City Mini Tin — Salamence & Litleo (Анг",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     79,
+     22,
+     204,
+     319
+    ],
+    "overlap": {
+     "ox": 0,
+     "oy": 30,
+     "pct": 0
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "Pokemon TCG: Mega Evolution — Chaos Rising Premium Checklane",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     95,
+     22,
+     173,
+     319
+    ],
+    "overlap": {
+     "ox": 0,
+     "oy": 30,
+     "pct": 0
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "Брелок Umbreon (Pokémon), сидячий — 3D-друк",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     29,
+     25,
+     304,
+     311
+    ],
+    "overlap": {
+     "ox": 23,
+     "oy": 27,
+     "pct": 0.6
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "Бустер Pokémon TCG: Abyss Eye (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     102,
+     22,
+     158,
+     319
+    ],
+    "overlap": {
+     "ox": 0,
+     "oy": 30,
+     "pct": 0
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "Бустер Pokémon TCG: Black Bolt (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     102,
+     22,
+     159,
+     319
+    ],
+    "overlap": {
+     "ox": 0,
+     "oy": 30,
+     "pct": 0
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "Бустер Pokémon TCG: Hot Wind Arena (Корейське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     102,
+     22,
+     159,
+     319
+    ],
+    "overlap": {
+     "ox": 0,
+     "oy": 30,
+     "pct": 0
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   }
+  ]
+ },
+ {
+  "w": 768,
+  "url": "https://boostershop.website/catalog/Pokemon/Pokemon-booster-box",
+  "status": 200,
+  "colLeft": 0,
+  "tiles": [
+   {
+    "name": "Бустер бокс Pokémon TCG: Abyss Eye (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     29,
+     29,
+     304,
+     304
+    ],
+    "overlap": {
+     "ox": 23,
+     "oy": 23,
+     "pct": 0.6
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: Hot Wind Arena (Корейське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     77,
+     22,
+     209,
+     319
+    ],
+    "overlap": {
+     "ox": 0,
+     "oy": 30,
+     "pct": 0
+    },
+    "badgeBottom": 32,
+    "heartTop": 310
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: Inferno X (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     29,
+     32,
+     304,
+     298
+    ],
+    "overlap": {
+     "ox": 23,
+     "oy": 20,
+     "pct": 0.5
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: Mega Dream EX (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     98,
+     22,
+     166,
+     319
+    ],
+    "overlap": {
+     "ox": 0,
+     "oy": 30,
+     "pct": 0
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: Mega Symphonia (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     29,
+     29,
+     304,
+     304
+    ],
+    "overlap": {
+     "ox": 23,
+     "oy": 23,
+     "pct": 0.6
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: Munikis Zero (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     29,
+     31,
+     304,
+     300
+    ],
+    "overlap": {
+     "ox": 23,
+     "oy": 21,
+     "pct": 0.5
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: Ninja Spinner (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     29,
+     33,
+     304,
+     297
+    ],
+    "overlap": {
+     "ox": 23,
+     "oy": 19,
+     "pct": 0.5
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: Storm Emeralda (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     29,
+     35,
+     304,
+     293
+    ],
+    "overlap": {
+     "ox": 23,
+     "oy": 17,
+     "pct": 0.4
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: Black Bolt (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     40,
+     22,
+     282,
+     319
+    ],
+    "overlap": {
+     "ox": 12,
+     "oy": 30,
+     "pct": 0.4
+    },
+    "badgeBottom": 30,
+    "heartTop": 310
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: Mega Brave (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     29,
+     31,
+     304,
+     301
+    ],
+    "overlap": {
+     "ox": 23,
+     "oy": 21,
+     "pct": 0.5
+    },
+    "badgeBottom": 30,
+    "heartTop": 310
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: The Glory of Team Rocket (Японське ",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     29,
+     39,
+     304,
+     284
+    ],
+    "overlap": {
+     "ox": 23,
+     "oy": 13,
+     "pct": 0.3
+    },
+    "badgeBottom": 30,
+    "heartTop": 310
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: White Flare (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     29,
+     32,
+     304,
+     298
+    ],
+    "overlap": {
+     "ox": 23,
+     "oy": 20,
+     "pct": 0.5
+    },
+    "badgeBottom": 30,
+    "heartTop": 310
+   }
+  ]
+ },
+ {
+  "w": 768,
+  "url": "https://boostershop.website/",
+  "status": 200,
+  "colLeft": 0,
+  "tiles": [
+   {
+    "name": "Бустер One Piece Card Game OP-16: The Time of Battle (Японсь",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     249,
+     249
+    ],
+    "img": [
+     70,
+     15,
+     109,
+     219
+    ],
+    "overlap": {
+     "ox": 0,
+     "oy": 37,
+     "pct": 0
+    },
+    "badgeBottom": 0,
+    "heartTop": 197
+   },
+   {
+    "name": "Бустер Pokémon TCG: Storm Emeralda (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     249,
+     249
+    ],
+    "img": [
+     70,
+     15,
+     110,
+     219
+    ],
+    "overlap": {
+     "ox": 0,
+     "oy": 37,
+     "pct": 0
+    },
+    "badgeBottom": 0,
+    "heartTop": 197
+   },
+   {
+    "name": "Фігурка Charizard (Pokémon) — 3D-друк",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     249,
+     249
+    ],
+    "img": [
+     20,
+     15,
+     209,
+     219
+    ],
+    "overlap": {
+     "ox": 32,
+     "oy": 37,
+     "pct": 2.6
+    },
+    "badgeBottom": 0,
+    "heartTop": 197
+   },
+   {
+    "name": "Підставка для картки в акриловому кейсі — 3D-друк",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     249,
+     249
+    ],
+    "img": [
+     75,
+     15,
+     99,
+     219
+    ],
+    "overlap": {
+     "ox": 0,
+     "oy": 37,
+     "pct": 0
+    },
+    "badgeBottom": 0,
+    "heartTop": 197
+   }
+  ]
+ },
+ {
+  "w": 768,
+  "url": "https://boostershop.website/catalog/acsesuary",
+  "status": 200,
+  "colLeft": 0,
+  "tiles": [
+   {
+    "name": "Акрилова підставка для карток, 55 мм",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     56,
+     22,
+     249,
+     319
+    ],
+    "overlap": {
+     "ox": 0,
+     "oy": 30,
+     "pct": 0
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "Акриловий протектор-кейс для картки без магніта, 1 шт",
+    "kind": "bs-pcard__media--photo",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     0,
+     0,
+     362,
+     362
+    ],
+    "overlap": {
+     "ox": 44,
+     "oy": 44,
+     "pct": 1.5
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "Альбом для колекційних карток на 160 карток, на резинці, син",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     29,
+     31,
+     304,
+     299
+    ],
+    "overlap": {
+     "ox": 23,
+     "oy": 21,
+     "pct": 0.5
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "Альбом для колекційних карток на 360 карток, білий",
+    "kind": "bs-pcard__media--photo",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     0,
+     0,
+     362,
+     362
+    ],
+    "overlap": {
+     "ox": 44,
+     "oy": 44,
+     "pct": 1.5
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "Альбом для колекційних карток на 360 карток, чорний",
+    "kind": "bs-pcard__media--photo",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     0,
+     0,
+     362,
+     362
+    ],
+    "overlap": {
+     "ox": 44,
+     "oy": 44,
+     "pct": 1.5
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "Альбом для колекційних карток на 400 карток, жовтий",
+    "kind": "bs-pcard__media--photo",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     0,
+     61,
+     362,
+     241
+    ],
+    "overlap": {
+     "ox": 44,
+     "oy": 0,
+     "pct": 0
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "Аркуш для карток на 9 кишеньок Games 7 Days Premium Series",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     66,
+     22,
+     231,
+     319
+    ],
+    "overlap": {
+     "ox": 0,
+     "oy": 30,
+     "pct": 0
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "Жорсткий протектор для японського бустера, 1 шт",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     104,
+     22,
+     153,
+     319
+    ],
+    "overlap": {
+     "ox": 0,
+     "oy": 30,
+     "pct": 0
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "Коробка для карток Покебол (Pokémon), квадратна — 3D-друк",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     50,
+     22,
+     261,
+     319
+    ],
+    "overlap": {
+     "ox": 2,
+     "oy": 30,
+     "pct": 0.1
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "М'який протектор для японського бустера, 1 шт",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     29,
+     42,
+     304,
+     277
+    ],
+    "overlap": {
+     "ox": 23,
+     "oy": 10,
+     "pct": 0.3
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "М’які протектори для карток Dragon Guard, 300 шт",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     64,
+     22,
+     233,
+     319
+    ],
+    "overlap": {
+     "ox": 0,
+     "oy": 30,
+     "pct": 0
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   },
+   {
+    "name": "Магнітний кейс для карт 35PT",
+    "kind": "bs-pcard__media--photo",
+    "out": false,
+    "tile": [
+     362,
+     362
+    ],
+    "img": [
+     0,
+     0,
+     362,
+     362
+    ],
+    "overlap": {
+     "ox": 44,
+     "oy": 44,
+     "pct": 1.5
+    },
+    "badgeBottom": 0,
+    "heartTop": 310
+   }
+  ]
+ },
+ {
+  "w": 1280,
+  "url": "https://boostershop.website/catalog/Pokemon",
+  "status": 200,
+  "colLeft": 0,
+  "tiles": [
+   {
+    "name": "Містері бокс Pokémon TCG: Mystery Mix Standard (Японське вид",
+    "kind": "bs-pcard__media--photo",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     0,
+     0,
+     261,
+     261
+    ],
+    "overlap": {
+     "ox": 44,
+     "oy": 44,
+     "pct": 2.8
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Містері бокс Pokémon TCG: Mystery Mix XL (Японське видання)",
+    "kind": "bs-pcard__media--photo",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     0,
+     0,
+     261,
+     261
+    ],
+    "overlap": {
+     "ox": 44,
+     "oy": 44,
+     "pct": 2.8
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Набір Pokémon S&V ex Special Set — Snow Hazard & Clay Burst ",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     51,
+     16,
+     158,
+     230
+    ],
+    "overlap": {
+     "ox": 1,
+     "oy": 36,
+     "pct": 0.1
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Набір Pokémon TCG: Bulk 155 — 150 C/U + 5 R (Японське виданн",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     23,
+     16,
+     216,
+     230
+    ],
+    "overlap": {
+     "ox": 29,
+     "oy": 36,
+     "pct": 2.1
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Набір Pokémon TCG: Bulk Mix 100 — C/U (Мікс видань: JP / EN ",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     21,
+     31,
+     219,
+     200
+    ],
+    "overlap": {
+     "ox": 31,
+     "oy": 21,
+     "pct": 1.5
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Набір Pokémon TCG: Special Card Set MEGA Gallade EX (Японськ",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     55,
+     16,
+     151,
+     230
+    ],
+    "overlap": {
+     "ox": 0,
+     "oy": 36,
+     "pct": 0
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Pokémon TCG: Lumiose City Mini Tin — Salamence & Litleo (Анг",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     57,
+     16,
+     147,
+     230
+    ],
+    "overlap": {
+     "ox": 0,
+     "oy": 36,
+     "pct": 0
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Pokemon TCG: Mega Evolution — Chaos Rising Premium Checklane",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     68,
+     16,
+     125,
+     230
+    ],
+    "overlap": {
+     "ox": 0,
+     "oy": 36,
+     "pct": 0
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Брелок Umbreon (Pokémon), сидячий — 3D-друк",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     21,
+     18,
+     219,
+     225
+    ],
+    "overlap": {
+     "ox": 31,
+     "oy": 34,
+     "pct": 2.1
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Бустер Pokémon TCG: Abyss Eye (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     74,
+     16,
+     114,
+     230
+    ],
+    "overlap": {
+     "ox": 0,
+     "oy": 36,
+     "pct": 0
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Бустер Pokémon TCG: Black Bolt (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     73,
+     16,
+     114,
+     230
+    ],
+    "overlap": {
+     "ox": 0,
+     "oy": 36,
+     "pct": 0
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Бустер Pokémon TCG: Hot Wind Arena (Корейське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     73,
+     16,
+     114,
+     230
+    ],
+    "overlap": {
+     "ox": 0,
+     "oy": 36,
+     "pct": 0
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   }
+  ]
+ },
+ {
+  "w": 1280,
+  "url": "https://boostershop.website/catalog/Pokemon/Pokemon-booster-box",
+  "status": 200,
+  "colLeft": 0,
+  "tiles": [
+   {
+    "name": "Бустер бокс Pokémon TCG: Abyss Eye (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     21,
+     21,
+     219,
+     219
+    ],
+    "overlap": {
+     "ox": 31,
+     "oy": 31,
+     "pct": 2
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: Hot Wind Arena (Корейське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     55,
+     16,
+     150,
+     230
+    ],
+    "overlap": {
+     "ox": 0,
+     "oy": 36,
+     "pct": 0
+    },
+    "badgeBottom": 32,
+    "heartTop": 209
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: Inferno X (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     21,
+     23,
+     219,
+     215
+    ],
+    "overlap": {
+     "ox": 31,
+     "oy": 29,
+     "pct": 1.9
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: Mega Dream EX (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     71,
+     16,
+     119,
+     230
+    ],
+    "overlap": {
+     "ox": 0,
+     "oy": 36,
+     "pct": 0
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: Mega Symphonia (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     21,
+     21,
+     219,
+     219
+    ],
+    "overlap": {
+     "ox": 31,
+     "oy": 31,
+     "pct": 2
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: Munikis Zero (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     21,
+     22,
+     219,
+     216
+    ],
+    "overlap": {
+     "ox": 31,
+     "oy": 30,
+     "pct": 1.9
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: Ninja Spinner (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     21,
+     24,
+     219,
+     214
+    ],
+    "overlap": {
+     "ox": 31,
+     "oy": 28,
+     "pct": 1.9
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: Storm Emeralda (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     21,
+     25,
+     219,
+     211
+    ],
+    "overlap": {
+     "ox": 31,
+     "oy": 27,
+     "pct": 1.8
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: Black Bolt (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     29,
+     16,
+     203,
+     230
+    ],
+    "overlap": {
+     "ox": 23,
+     "oy": 36,
+     "pct": 1.8
+    },
+    "badgeBottom": 30,
+    "heartTop": 209
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: Mega Brave (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     21,
+     22,
+     219,
+     217
+    ],
+    "overlap": {
+     "ox": 31,
+     "oy": 30,
+     "pct": 2
+    },
+    "badgeBottom": 30,
+    "heartTop": 209
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: The Glory of Team Rocket (Японське ",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     21,
+     28,
+     219,
+     204
+    ],
+    "overlap": {
+     "ox": 31,
+     "oy": 24,
+     "pct": 1.6
+    },
+    "badgeBottom": 30,
+    "heartTop": 209
+   },
+   {
+    "name": "Бустер бокс Pokémon TCG: White Flare (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     21,
+     23,
+     219,
+     215
+    ],
+    "overlap": {
+     "ox": 31,
+     "oy": 29,
+     "pct": 1.9
+    },
+    "badgeBottom": 30,
+    "heartTop": 209
+   }
+  ]
+ },
+ {
+  "w": 1280,
+  "url": "https://boostershop.website/",
+  "status": 200,
+  "colLeft": 0,
+  "tiles": [
+   {
+    "name": "Бустер One Piece Card Game OP-16: The Time of Battle (Японсь",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     73,
+     16,
+     114,
+     230
+    ],
+    "overlap": {
+     "ox": 0,
+     "oy": 36,
+     "pct": 0
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Бустер Pokémon TCG: Storm Emeralda (Японське видання)",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": null,
+    "overlap": null,
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Фігурка Charizard (Pokémon) — 3D-друк",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     21,
+     16,
+     219,
+     230
+    ],
+    "overlap": {
+     "ox": 31,
+     "oy": 36,
+     "pct": 2.2
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Підставка для картки в акриловому кейсі — 3D-друк",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     79,
+     16,
+     104,
+     230
+    ],
+    "overlap": {
+     "ox": 0,
+     "oy": 36,
+     "pct": 0
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   }
+  ]
+ },
+ {
+  "w": 1280,
+  "url": "https://boostershop.website/catalog/acsesuary",
+  "status": 200,
+  "colLeft": 0,
+  "tiles": [
+   {
+    "name": "Акрилова підставка для карток, 55 мм",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     41,
+     16,
+     180,
+     230
+    ],
+    "overlap": {
+     "ox": 11,
+     "oy": 36,
+     "pct": 1
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Акриловий протектор-кейс для картки без магніта, 1 шт",
+    "kind": "bs-pcard__media--photo",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     0,
+     0,
+     261,
+     261
+    ],
+    "overlap": {
+     "ox": 44,
+     "oy": 44,
+     "pct": 2.8
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Альбом для колекційних карток на 160 карток, на резинці, син",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     21,
+     23,
+     219,
+     216
+    ],
+    "overlap": {
+     "ox": 31,
+     "oy": 29,
+     "pct": 1.9
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Альбом для колекційних карток на 360 карток, білий",
+    "kind": "bs-pcard__media--photo",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     0,
+     0,
+     261,
+     261
+    ],
+    "overlap": {
+     "ox": 44,
+     "oy": 44,
+     "pct": 2.8
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Альбом для колекційних карток на 360 карток, чорний",
+    "kind": "bs-pcard__media--photo",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     0,
+     0,
+     261,
+     261
+    ],
+    "overlap": {
+     "ox": 44,
+     "oy": 44,
+     "pct": 2.8
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Альбом для колекційних карток на 400 карток, жовтий",
+    "kind": "bs-pcard__media--photo",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     0,
+     44,
+     261,
+     174
+    ],
+    "overlap": {
+     "ox": 44,
+     "oy": 8,
+     "pct": 0.8
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Аркуш для карток на 9 кишеньок Games 7 Days Premium Series",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     47,
+     16,
+     167,
+     230
+    ],
+    "overlap": {
+     "ox": 5,
+     "oy": 36,
+     "pct": 0.5
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Жорсткий протектор для японського бустера, 1 шт",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     75,
+     16,
+     110,
+     230
+    ],
+    "overlap": {
+     "ox": 0,
+     "oy": 36,
+     "pct": 0
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Коробка для карток Покебол (Pokémon), квадратна — 3D-друк",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     36,
+     16,
+     188,
+     230
+    ],
+    "overlap": {
+     "ox": 16,
+     "oy": 36,
+     "pct": 1.3
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "М'який протектор для японського бустера, 1 шт",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     21,
+     31,
+     219,
+     200
+    ],
+    "overlap": {
+     "ox": 31,
+     "oy": 21,
+     "pct": 1.5
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "М’які протектори для карток Dragon Guard, 300 шт",
+    "kind": "bs-pcard__media--cut",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     46,
+     16,
+     168,
+     230
+    ],
+    "overlap": {
+     "ox": 6,
+     "oy": 36,
+     "pct": 0.5
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   },
+   {
+    "name": "Магнітний кейс для карт 35PT",
+    "kind": "bs-pcard__media--photo",
+    "out": false,
+    "tile": [
+     261,
+     261
+    ],
+    "img": [
+     0,
+     0,
+     261,
+     261
+    ],
+    "overlap": {
+     "ox": 44,
+     "oy": 44,
+     "pct": 2.8
+    },
+    "badgeBottom": 0,
+    "heartTop": 209
+   }
+  ]
+ }
+]

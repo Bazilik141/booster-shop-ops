@@ -1,0 +1,126 @@
+--- before/catalog/view/javascript/booster-wishlist.js
++++ after/catalog/view/javascript/booster-wishlist.js
+@@ -24,19 +24,70 @@
+   function count(value) {
+     if (!Number.isSafeInteger(value) || value < 0) throw publicError('Не вдалося оновити список. Оновіть сторінку.');
+     document.querySelectorAll('[data-bs-wishlist-count]').forEach(function (node) { node.textContent = String(value); });
++    // ACC006_VISUAL_WP1_20261028: «4 товари» heading phrase; forms come from the page language.
++    document.querySelectorAll('[data-bs-wishlist-count-label]').forEach(function (node) {
++      var forms = (node.getAttribute('data-forms') || '').split('|');
++      var last = value % 10, ending = value % 100;
++      var form = forms[last === 1 && ending !== 11 ? 0 : (last >= 2 && last <= 4 && (ending < 12 || ending > 14) ? 1 : 2)];
++      if (form) node.textContent = form.replace('%s', String(value));
++    });
++  }
++  // ACC006_VISUAL_WP1_20261028: heart state. Server-rendered visible IDs, then each response's ids.
++  var members = new Set();
++  function setMembers(list) {
++    if (!Array.isArray(list)) return;
++    members = new Set(list.map(String).filter(function (id) { return /^[1-9][0-9]{0,9}$/.test(id); }));
++    sync();
++  }
++  function sync() {
++    document.querySelectorAll('[data-bs-wishlist-add]').forEach(function (button) {
++      var pressed = members.has(button.getAttribute('data-bs-wishlist-add'));
++      var name = button.getAttribute('data-bs-wishlist-name');
++      var text = button.querySelector('[data-bs-wishlist-text]');
++      button.setAttribute('aria-pressed', pressed ? 'true' : 'false');
++      if (name) button.setAttribute('aria-label', (pressed ? 'Прибрати з обраного: ' : 'Додати в обране: ') + name);
++      if (text) text.textContent = pressed ? 'В обраному' : 'Додати в обране';
++    });
++  }
++  var noticeTimer = 0;
++  function noticeLink(label, href) {
++    var link = document.createElement('a');
++    link.href = localUrl(href).href;
++    link.textContent = label;
++    return link;
+   }
+-  function notice(message, login) {
++  // DS popover in the existing live region. Links are built from same-origin URLs only.
++  function notice(message, options) {
+     var node = document.querySelector('[data-bs-wishlist-notice]');
+     if (!node) return;
+-    node.replaceChildren(document.createTextNode(String(message || '')));
+-    if (login) {
+-      var link = document.createElement('a');
+-      link.href = localUrl(login).href;
+-      link.textContent = 'Увійти';
+-      link.className = 'ms-2';
+-      node.appendChild(link);
++    options = options || {};
++    var body = document.createElement('div');
++    body.className = 'bs-wishlist-notice__body';
++    var title = document.createElement('strong');
++    title.textContent = String(message || '');
++    body.appendChild(title);
++    if (options.detail) {
++      var detail = document.createElement('span');
++      detail.textContent = options.detail;
++      body.appendChild(detail);
+     }
++    var actions = document.createElement('div');
++    actions.className = 'bs-wishlist-notice__actions';
++    if (options.view) actions.appendChild(noticeLink('Переглянути', options.view));
++    if (options.login) actions.appendChild(noticeLink('Увійти', options.login));
++    if (actions.childNodes.length) body.appendChild(actions);
++    var close = document.createElement('button');
++    close.type = 'button';
++    close.className = 'bs-wishlist-notice__close';
++    close.setAttribute('aria-label', 'Закрити');
++    close.textContent = '×';
++    close.addEventListener('click', function () { node.hidden = true; });
++    node.replaceChildren(body, close);
++    node.classList.toggle('bs-wishlist-notice--error', options.error === true);
+     node.hidden = false;
++    window.clearTimeout(noticeTimer);
++    // Short confirmations close themselves; a notice with a login action stays until closed.
++    if (!options.login) noticeTimer = window.setTimeout(function () { node.hidden = true; }, 5000);
+   }
+   async function request(action, id) {
+     var settings = config();
+@@ -94,21 +145,27 @@
+     var button = event.target.closest && event.target.closest('[data-bs-wishlist-add], [data-bs-wishlist-remove]');
+     if (!button || button.disabled) return;
+     event.preventDefault();
+-    var action = button.hasAttribute('data-bs-wishlist-add') ? 'add' : 'remove';
+-    var id = button.getAttribute('data-bs-wishlist-' + action);
++    var heart = button.hasAttribute('data-bs-wishlist-add');
++    var id = button.getAttribute(heart ? 'data-bs-wishlist-add' : 'data-bs-wishlist-remove');
+     if (!/^[1-9][0-9]{0,9}$/.test(id || '') || pending[id]) return;
++    // ACC006_VISUAL_WP1_20261028: a heart toggles; the «Обране» page control only removes.
++    var action = heart && !members.has(id) ? 'add' : 'remove';
+     pending[id] = true;
+     busy(button, true);
+     enqueue(async function () {
+       var json = await request(action, id);
+-      if (action === 'remove') await refreshList(json.list_url);
+-      else {
+-        button.textContent = json.requires_login ? 'Збережено' : 'Додано';
++      if (Array.isArray(json.ids)) setMembers(json.ids);
++      else { members[action === 'add' ? 'add' : 'delete'](id); sync(); }
++      if (action === 'remove') {
++        if (!heart || document.getElementById('wishlist')) await refreshList(json.list_url);
++        notice(json.success);
++      } else {
+         trackAddition(json, id);
++        if (json.requires_login) notice(json.success, { detail: 'Увійдіть, і товар перейде у ваш кабінет.', login: json.login_url });
++        else notice(json.success, { view: json.wishlist_url });
+       }
+-      notice(json.success, json.requires_login ? json.login_url : null);
+     }).catch(function (error) {
+-      notice(error && error.bsWishlistPublic === true ? error.message : 'Не вдалося виконати дію. Перевірте з’єднання та повторіть спробу.');
++      notice(error && error.bsWishlistPublic === true ? error.message : 'Не вдалося виконати дію. Перевірте з’єднання та повторіть спробу.', { error: true });
+     }).finally(function () {
+       delete pending[id];
+       busy(button, false);
+@@ -117,6 +174,8 @@
+   // The header's server count and the list's visible count use the same product filter.
+   // Refresh on back/forward restore; no duplicate requests on an ordinary initial render.
+   window.addEventListener('pageshow', function (event) {
+-    if (event.persisted && config()) enqueue(function () { return request('state'); }).catch(function () {});
++    if (event.persisted && config()) enqueue(function () { return request('state').then(function (json) { setMembers(json.ids); }); }).catch(function () {});
+   });
++  var initial = config();
++  if (initial) setMembers((initial.getAttribute('data-ids') || '').split(',').filter(Boolean));
+ })();

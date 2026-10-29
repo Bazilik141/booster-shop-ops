@@ -1,0 +1,37 @@
+--- before/catalog/view/template/product/product.twig
++++ after/catalog/view/template/product/product.twig
+@@ -58,11 +58,14 @@
+         {# RD-25-WP2 20261012: gallery-only data; legacy images remains additional-only for JSON-LD. #}
+         {% if bs_gallery %}
+         {% set bs_main = bs_gallery|first %}
++        {% set bs_heart_on_photo = true %}
+         <div class="bs-product__gallery magnific-popup{% if bs_gallery|length > 1 %} bs-product__gallery--rail{% endif %}" data-bs-gallery style="--bs-gallery-ratio:{{ bs_gallery_ratio }}">
+           <div class="bs-product__main-img">
+             <a href="{{ bs_main.popup }}" title="{{ heading_title }}" data-bs-gallery-main data-bs-media-kind="{{ bs_main.kind }}">
+               <img src="{{ bs_main.main }}" title="{{ heading_title }}" alt="{{ heading_title }}" width="{{ bs_main.main_width }}" height="{{ bs_main.main_height }}" decoding="async"/>
+             </a>
++            {# ACC006_VISUAL_WP3_20261029: mobile heart (variant C), sibling of the Magnific link so a tap never opens the popup. #}
++            <button type="button" class="bs-product-heart bs-product-heart--gallery" data-bs-wishlist-add="{{ product_id }}" data-bs-wishlist-name="{{ heading_title }}" aria-pressed="false" aria-label="Додати в обране: {{ heading_title }}"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 17s-7-4.4-7-9a4 4 0 0 1 7-2.4A4 4 0 0 1 17 8c0 4.6-7 9-7 9Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></button>
+           </div>
+           {% if bs_gallery|length > 1 %}
+           <div class="bs-product__thumbs" aria-label="Фотографії товару">
+@@ -375,6 +378,9 @@
+                   {% else %}
+                     <button type="submit" id="button-cart" class="btn bs-btn bs-btn-primary btn-lg btn-block bs-buy-row__cta" data-main-add-to-cart>У кошик</button>
+                   {% endif %}
++                  {# ACC006_VISUAL_WP3_20261029: desktop heart (variant A); type=button keeps it off the form submit path.
++                     Without a gallery it is the only heart, so it stays visible on mobile too (--solo). #}
++                  <button type="button" class="bs-product-heart bs-product-heart--row{% if not bs_heart_on_photo|default(false) %} bs-product-heart--solo{% endif %}" data-bs-wishlist-add="{{ product_id }}" data-bs-wishlist-name="{{ heading_title }}" aria-pressed="false" aria-label="Додати в обране: {{ heading_title }}"><svg width="22" height="22" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 17s-7-4.4-7-9a4 4 0 0 1 7-2.4A4 4 0 0 1 17 8c0 4.6-7 9-7 9Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></button>
+                 </div>
+                 {% if not pay002_pumb_visible %}{% if pay001_mono_chast_visible %}
+                 <!-- PAY-001-PHASE2C-CART-CONTRACT-GATES-20260725 -->
+@@ -457,9 +463,6 @@
+                 <div class="alert alert-warning"><i class="fa-solid fa-circle-info"></i> {{ text_minimum }}</div>
+               {% endif %}
+             </form>
+-            {# ACC-006_WISHLIST_RESTORE_20261013: outside the cart/payment form. #}
+-            {# ACC006_VISUAL_WP1_20261028: toggle; JS sets aria-pressed/label/text from the visible member IDs. #}
+-            <button type="button" class="bs-btn bs-btn-secondary mt-2" data-bs-wishlist-add="{{ product_id }}" data-bs-wishlist-name="{{ heading_title }}" aria-pressed="false" aria-label="Додати в обране: {{ heading_title }}"><span data-bs-wishlist-text>Додати в обране</span></button>
+           </div>
+ 
+           <script>

@@ -1,0 +1,11 @@
+--- before/extension/ukrainian/catalog/language/uk-ua/account/edit.php
++++ after/extension/ukrainian/catalog/language/uk-ua/account/edit.php
+@@ -29,7 +29,7 @@
+ $_['rd16_edit'] = 'Особисті дані';
+ $_['rd16_address'] = 'Адреси доставки';
+ $_['rd16_order'] = 'Мої замовлення';
+-$_['rd16_wishlist'] = 'Улюблене';
++$_['rd16_wishlist'] = 'Обране';
+ $_['rd16_settings'] = 'Налаштування';
+ $_['rd16_logout'] = 'Вийти';
+ $_['rd16_nav'] = 'Розділи кабінету';

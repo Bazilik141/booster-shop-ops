@@ -1,0 +1,12 @@
+--- before/catalog/view/javascript/booster-wishlist.js
++++ after/catalog/view/javascript/booster-wishlist.js
+@@ -87,7 +87,8 @@
+     node.hidden = false;
+     window.clearTimeout(noticeTimer);
+     // Short confirmations close themselves; a login action or an error stays until closed (ACC006_VISUAL_WP2_20261029).
+-    if (!options.login && options.error !== true) noticeTimer = window.setTimeout(function () { node.hidden = true; }, 5000);
++    // ACC006_VISUAL_WP3_20261029: confirmations close after 4 s (owner, was 5 s).
++    if (!options.login && options.error !== true) noticeTimer = window.setTimeout(function () { node.hidden = true; }, 4000);
+   }
+   async function request(action, id) {
+     var settings = config();
