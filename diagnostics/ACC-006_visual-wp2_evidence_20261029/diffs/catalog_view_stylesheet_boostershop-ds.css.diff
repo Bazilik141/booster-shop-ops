@@ -1,0 +1,23 @@
+--- before/catalog/view/stylesheet/boostershop-ds.css
++++ after/catalog/view/stylesheet/boostershop-ds.css
+@@ -7806,3 +7806,20 @@
+   .bs-account-favorites .bs-fav-card__action .btn { min-height:48px; }
+ }
+ /* /ACC006_VISUAL_WP1_20261028 */
++
++/* ACC006_VISUAL_WP2_20261029: catalog tile heart, variant A (owner 2026-10-28), every width.
++   Root cause of the old look: thumb.twig's full-width wishlist text button under «Купити».
++   The heart is a sibling of the aria-hidden media link inside a new wrapper; grid overlap puts
++   it bottom-right of the RD-25 slot with the G0-measured 8px inset, so no absolute positioning
++   is added and the RD-25 box, badges and the out-of-stock image dim are untouched (the dim
++   targets the img only). 44px is the board's touch target; 22px icon matches the board. */
++.bs-pcard__media-wrap { display:grid; grid-template-columns:minmax(0, 1fr); }
++.bs-pcard__media-wrap > .bs-pcard__media, .bs-pcard__media-wrap > .bs-pcard__heart { grid-area:1 / 1; }
++.bs-pcard__heart { display:grid; z-index:1; align-self:end; justify-self:end; place-items:center; width:44px; height:44px; margin:var(--bs-s2); padding:0; border:1px solid var(--bs-line); border-radius:50%; background:var(--bs-paper); color:var(--bs-ink-2); box-shadow:var(--bs-sh-sm); cursor:pointer; transition:border-color .15s, background .15s, color .15s; }
++.bs-pcard__heart[aria-pressed="true"] { color:var(--bs-danger); }
++.bs-pcard__heart[aria-pressed="true"] svg path { fill:currentColor; }
++.bs-pcard__heart:hover { border-color:var(--bs-danger); color:var(--bs-danger); }
++.bs-pcard__heart:active { background:var(--bs-line-2); }
++.bs-pcard__heart:focus-visible { outline:2px solid var(--bs-blue); outline-offset:2px; }
++.bs-pcard__heart[aria-busy="true"] { opacity:.6; cursor:progress; }
++/* /ACC006_VISUAL_WP2_20261029 */

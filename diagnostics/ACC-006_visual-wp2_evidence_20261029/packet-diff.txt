@@ -1,0 +1,56 @@
+9,10c9,10
+< $Name='ACC-006-visual-WP1_20261028.php'
+< $Sha='43f9642e1e6d1f8310e83df5cd5df36cf9ff320d04c2172472237391907b1465'
+---
+> $Name='ACC-006-visual-WP2_20261029.php'
+> $Sha='32d4ed48ea68b70af2357b0004b6880e89718fa34da46985926934a03d0cc95c'
+12c12
+< $Receipts=Join-Path $Root 'work\acc006-visual-wp1-20261028\owner-receipts'
+---
+> $Receipts=Join-Path $Root 'work\acc006-visual-wp2-20261029\owner-receipts'
+66c66
+< F=$S/ACC-006-visual-WP1_20261028.php
+---
+> F=$S/ACC-006-visual-WP2_20261029.php
+90c90
+< "$P" -d display_errors=0 -d log_errors=0 <<'ACC006_WP1_CACHE_PHP'
+---
+> "$P" -d display_errors=0 -d log_errors=0 <<'ACC006_WP2_CACHE_PHP'
+115c115
+< ACC006_WP1_CACHE_PHP
+---
+> ACC006_WP2_CACHE_PHP
+128c128
+<     Write-Host ('ACC006_WP1_'+$Step.ToUpperInvariant()+'_OK')
+---
+>     Write-Host ('ACC006_WP2_'+$Step.ToUpperInvariant()+'_OK')
+141,142c141,142
+<     Write-Host 'ACC006_WP1_VERIFY_OK'
+<     Write-Host 'Next owner deployment action: -Step Apply. This writes the sixteen admitted targets.'
+---
+>     Write-Host 'ACC006_WP2_VERIFY_OK'
+>     Write-Host 'Next owner deployment action: -Step Apply. This writes the four admitted targets.'
+152c152
+<     $Backup=[regex]::Match($Result.Stdout,'(?m)^backup=(/home2/boosters/public_html/_patch_backups/ACC-006-visual-WP1_20261028-[0-9]{8}T[0-9]{6}Z-[a-f0-9]{12})$')
+---
+>     $Backup=[regex]::Match($Result.Stdout,'(?m)^backup=(/home2/boosters/public_html/_patch_backups/ACC-006-visual-WP2_20261029-[0-9]{8}T[0-9]{6}Z-[a-f0-9]{12})$')
+154c154
+<     if ($Result.Code -ne 0 -or !$Backup.Success -or $Result.Stdout -notmatch '(?m)^changed_files=16$' -or $Result.Stdout -notmatch '(?m)^self_deleted=yes$' -or $Result.Stdout -notmatch '(?m)^template_cache_cleanup=ok$' -or $Result.Stdout -notmatch '(?m)^staged_runner_absent=yes$') { throw 'STOP: apply/cache result unresolved. Preserve receipts; do not replay. Send the result.' }
+---
+>     if ($Result.Code -ne 0 -or !$Backup.Success -or $Result.Stdout -notmatch '(?m)^changed_files=4$' -or $Result.Stdout -notmatch '(?m)^self_deleted=yes$' -or $Result.Stdout -notmatch '(?m)^template_cache_cleanup=ok$' -or $Result.Stdout -notmatch '(?m)^staged_runner_absent=yes$') { throw 'STOP: apply/cache result unresolved. Preserve receipts; do not replay. Send the result.' }
+156c156
+<     Write-Host 'ACC006_WP1_APPLY_OK_OWNER_QA_REQUIRED'
+---
+>     Write-Host 'ACC006_WP2_APPLY_OK_OWNER_QA_REQUIRED'
+163c163
+< if ($BackupPath -cnotmatch '^/home2/boosters/public_html/_patch_backups/ACC-006-visual-WP1_20261028-[0-9]{8}T[0-9]{6}Z-[a-f0-9]{12}$') { throw 'STOP: unsafe saved backup.' }
+---
+> if ($BackupPath -cnotmatch '^/home2/boosters/public_html/_patch_backups/ACC-006-visual-WP2_20261029-[0-9]{8}T[0-9]{6}Z-[a-f0-9]{12}$') { throw 'STOP: unsafe saved backup.' }
+170c170
+<     Write-Host 'ACC006_WP1_ROLLBACK_VERIFY_OK'
+---
+>     Write-Host 'ACC006_WP2_ROLLBACK_VERIFY_OK'
+179c179
+< Write-Host 'ACC006_WP1_ROLLBACK_OK_OWNER_QA_REQUIRED'
+---
+> Write-Host 'ACC006_WP2_ROLLBACK_OK_OWNER_QA_REQUIRED'

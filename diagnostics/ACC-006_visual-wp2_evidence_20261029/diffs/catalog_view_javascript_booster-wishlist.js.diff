@@ -1,0 +1,30 @@
+--- before/catalog/view/javascript/booster-wishlist.js
++++ after/catalog/view/javascript/booster-wishlist.js
+@@ -86,8 +86,8 @@
+     node.classList.toggle('bs-wishlist-notice--error', options.error === true);
+     node.hidden = false;
+     window.clearTimeout(noticeTimer);
+-    // Short confirmations close themselves; a notice with a login action stays until closed.
+-    if (!options.login) noticeTimer = window.setTimeout(function () { node.hidden = true; }, 5000);
++    // Short confirmations close themselves; a login action or an error stays until closed (ACC006_VISUAL_WP2_20261029).
++    if (!options.login && options.error !== true) noticeTimer = window.setTimeout(function () { node.hidden = true; }, 5000);
+   }
+   async function request(action, id) {
+     var settings = config();
+@@ -178,4 +178,16 @@
+   });
+   var initial = config();
+   if (initial) setMembers((initial.getAttribute('data-ids') || '').split(',').filter(Boolean));
++  // ACC006_VISUAL_WP2_20261029: tiles inserted later (UX-003 load more and filters) get the same state.
++  // sync() changes attributes and text only, so it never re-triggers this child-list observer.
++  if (window.MutationObserver && document.body) {
++    new MutationObserver(function (records) {
++      for (var i = 0; i < records.length; i++) {
++        for (var j = 0; j < records[i].addedNodes.length; j++) {
++          var node = records[i].addedNodes[j];
++          if (node.nodeType === 1 && (node.matches('[data-bs-wishlist-add]') || node.querySelector('[data-bs-wishlist-add]'))) { sync(); return; }
++        }
++      }
++    }).observe(document.body, { childList: true, subtree: true });
++  }
+ })();
