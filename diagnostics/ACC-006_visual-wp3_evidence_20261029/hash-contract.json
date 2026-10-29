@@ -1,0 +1,71 @@
+{
+ "targets": [
+  {
+   "path": "catalog/view/stylesheet/boostershop-ds.css",
+   "before": "8f6272a091edc61408a659f289c7119406250e29ac4e93fdd01f50b56ce976ed",
+   "after": "a954513b3070cf1f2629f664660aba39bbe11a90675b11afcaaf9b97ee32539a"
+  },
+  {
+   "path": "catalog/view/javascript/booster-wishlist.js",
+   "before": "723b4899f7bbacd2a44d8506b808128d1734dae3d769262973b770c7b21cd7f2",
+   "after": "1923cb2ee620e29b0455982aaedbbfa221d36ecb66ac51a038b33d250acad718"
+  },
+  {
+   "path": "catalog/view/template/product/product.twig",
+   "before": "3f957f3d07bb7ee68e40fc0cc5d5c84fe657ef05458299487d3f264af0a1a32b",
+   "after": "2e1b6e6331a78263cb1f3928e0d7d2c408cd6b84dc6a3d9eed0622a9bb17b2e6"
+  },
+  {
+   "path": "catalog/view/template/common/header.twig",
+   "before": "178b19ea9c641d4800e2283be27b0c765d713fc1384b806a2368716dcb36448d",
+   "after": "b8eddde695f237e0d083f94b3708201348f60b486d8e2975242f78c82221950e",
+   "normalized_before": "d7429f63a2c5984a7a4f6da8597ec8639158c5a487e7d105ce1bdc806a79e68a",
+   "normalized_after": "d7429f63a2c5984a7a4f6da8597ec8639158c5a487e7d105ce1bdc806a79e68a"
+  }
+ ],
+ "dependencies": {
+  "catalog/controller/event/language.php": "25df1f4a70b4f50b34bc52935fe5c798118981b8b0be2228eab4c829a3d465d5",
+  "catalog/controller/event/theme.php": "0ea789a4553ea11ec82e3e5861a9693e826da682702aa63c80a70622d0eb0b33",
+  "catalog/controller/event/translation.php": "9d40eafe59874a171156306425e10cf16e58fa23606b1f47a74115fd88fb31e5",
+  "catalog/controller/startup/event.php": "3980d587897a287329d55a71c42f77116fe8e9dfc33f97a91c638b82b3433bc1",
+  "catalog/controller/startup/language.php": "b7374ee820f29b47d060b4e2709b0c97115fc6281e5f137d3b9c7780daeb79e2",
+  "catalog/controller/startup/setting.php": "474257596017793971e3c2b991b3ddd5202f6db3d958c13bc42977c12bf8ece9",
+  "catalog/model/account/wishlist.php": "bb4de1f2df67bf0ab96ea034084152975150675adfebb2075068eabd1bddb992",
+  "catalog/model/catalog/product.php": "ecf96b214b47f1efd5e3826caedeae6cc25d8d84650ae8a3915330f6f5561dc7",
+  "catalog/model/design/theme.php": "32b306e1700b7e636617e0439208764c09d129103260fa96980f970c523f1044",
+  "catalog/model/setting/event.php": "82245810cbdd90cb2cc765259577bfb3c399d24f8afac257381be178920de63e",
+  "catalog/model/tool/image.php": "85cf9489244c48fe915bc25f370cdfdb2b39c9c6d6a42219cec7f84a9e375e71",
+  "catalog/view/javascript/common.js": "58605f6df5f8ded195f994d44446920b478e331243c983d75df56e49c48d7c02",
+  "catalog/view/javascript/jquery/jquery-3.7.1.min.js": "04347849a46b612ba6d94149b329b26db9d0ac775d1325d939f134bf60dfe373",
+  "catalog/view/stylesheet/bootstrap.css": "3e6b85215061cd33fc02676958ee706c0e96b877893c244bff473ce4fb9ecc57",
+  "catalog/view/stylesheet/stylesheet.css": "02135431f716403cfb4a9bafb37bf367c242d15a267b2de8268cb3b90546eacd",
+  "extension/ps_enhanced_measurement/catalog/controller/analytics/ps_enhanced_measurement.php": "cd8910524931b33244ae24db4d082c48aba9ae6e635de53a6c16cd2f614f43a1",
+  "extension/ps_enhanced_measurement/catalog/model/analytics/ps_enhanced_measurement.php": "eea58d1e247a16c2cc4bc1e61b8a5028e41dc7ed557e9c652d74382f7984b4b4",
+  "extension/ps_enhanced_measurement/catalog/view/javascript/ps-enhanced-measurement.js": "fa103e101401196e647da4e833436c19580bf6d20b20afdda1eb5417485cdb13",
+  "extension/ps_google_recaptcha/catalog/controller/captcha/ps_google_recaptcha.php": "db1a36732b9843b0123035a38fe09ac5a17d789f640570f34c08bee017024aea",
+  "extension/ps_google_recaptcha/catalog/model/captcha/ps_google_recaptcha.php": "412abd3ddfaa886210a4870106a8241df6af8141d928265ede200651a56bb682",
+  "extension/ps_live_search/catalog/controller/module/ps_live_search.php": "b66afbc1c6e74e51d57238696901a50e23db9cd17688f9311943117a5eed12a7",
+  "extension/ps_live_search/catalog/view/javascript/ps_live_search.js": "6d6e28f7a7efe196991f777e2d40d3b3911a5a160e6c1f256a226374ac5751ec",
+  "extension/ps_live_search/catalog/view/stylesheet/ps_live_search.css": "4aca3d43e429652396e22f1cebb849e4604c87ad0c5413758284c4d20664aa77",
+  "system/config/catalog.php": "fdc5713fa8e9d732a4183485930bf4f29104ea8c1d4f059447a300c033c80443",
+  "system/engine/action.php": "91a4af3775e9c1c599faf55f2b1f9eac89b89d178657c6bd8ec7b61054373e79",
+  "system/engine/event.php": "7c132a4dd174921461b4774647aee7f4b3974c53fabe84e6a0ccd74b0d737524",
+  "system/engine/loader.php": "ea2098450ddc567747e2d89001d997ce921e966a313cafb680a308ee369a4723",
+  "system/library/image.php": "7f81dcbb8b5d2d032005ae28ce01cea5ba7542f7334fd9909e538f6952adeff9",
+  "system/library/language.php": "01057ed19701bf4208e684b092ac595427c4b48708f9b08aebeb0ea85f24d4a5",
+  "system/library/template/twig.php": "92a6ac0af6ff88053ecafe0acd86e249bddaab664080a549c0a502179f537a69",
+  "catalog/controller/product/thumb.php": "cf4f8e354b18a4318af159c34bf3c083d0991007b42d03e2c57aa4963c1ed3b1",
+  "catalog/controller/product/product.php": "7d24f5b7ec992cae6d54ff59a976d71048d8bead3799382bcdebbb5079dba268",
+  "catalog/controller/common/header.php": "1fb9427799b443eb536a213c41fb3c13912b76f789c24faa06284d9ce6497d32",
+  "catalog/controller/account/wishlist.php": "b5aa26bd04f90787b9b83d2a9729d6d5652357d7428231bd0bcf306ebfe8704a",
+  "catalog/view/template/product/thumb.twig": "2a414ce2e18410b19b3c3bcdcb8fe33c805db9d8ef5714a1075eb632b8d1068d",
+  "catalog/view/template/account/wishlist_list.twig": "7c73293b24d440d53e6bd5367b3ac89c0eda2ccdb044c1bb44995e7b42ba6b33",
+  "extension/ukrainian/catalog/language/uk-ua/account/wishlist.php": "2ef8f622c5dd089e56bca561fc19c3c9d2a25636f0196a9e194ea5483de6b9a1"
+ },
+ "hooks": [
+  "catalog/view/common/header/before:extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewCommonHeaderBefore",
+  "catalog/view/common/header/before:extension/ps_google_recaptcha/captcha/ps_google_recaptcha.eventCatalogViewCommonHeaderBefore",
+  "catalog/view/common/header/before:extension/ps_live_search/module/ps_live_search.eventCatalogViewCommonHeaderBefore",
+  "catalog/view/product/product/before:extension/ps_enhanced_measurement/analytics/ps_enhanced_measurement.eventCatalogViewProductProductBefore"
+ ]
+}

@@ -1,0 +1,35 @@
+--- before/catalog/view/stylesheet/boostershop-ds.css
++++ after/catalog/view/stylesheet/boostershop-ds.css
+@@ -7823,3 +7823,32 @@
+ .bs-pcard__heart:focus-visible { outline:2px solid var(--bs-blue); outline-offset:2px; }
+ .bs-pcard__heart[aria-busy="true"] { opacity:.6; cursor:progress; }
+ /* /ACC006_VISUAL_WP2_20261029 */
++
++/* ACC006_VISUAL_WP3_20261029: product page heart (owner 2026-10-28, D3 2026-10-28).
++   Root cause of the old look: product.twig's full-width wishlist text button under the form.
++   Desktop (>=768px, two-column layout): square after «У кошик» in .bs-buy-row, variant A. It is 44x44,
++   the live row height: the board's 48 equals its own 48px row, and a 48px heart here would stretch the
++   label and quantity to 48 (RD-10D3 align-items:stretch !important) while the 44px CTA stays top-aligned.
++   Mobile (<=767.98px, the layout's own single-column switch): 44px round heart on the main
++   gallery photo, top-right with the board's 12px inset, variant C. display:none switches the
++   variants, so exactly one heart is visible and in the tab order; --solo keeps the row heart on
++   mobile when a product has no gallery. Grid overlap places the photo heart (no absolute
++   positioning); the RD-25 frame, thumbnails and the Magnific binding on the <a> are untouched.
++   44px is the touch target and 8px radius matches .bs-btn. The RD-10D3 row rules
++   (!important on label, qty and CTA) are not edited; the heart only adds its own flex basis. */
++.bs-product-heart { display:grid; place-items:center; padding:0; border:1px solid var(--bs-line); background:var(--bs-paper); color:var(--bs-ink-2); cursor:pointer; transition:border-color .15s, background .15s, color .15s; }
++.bs-product-heart[aria-pressed="true"] { border-color:var(--bs-danger); color:var(--bs-danger); }
++.bs-product-heart[aria-pressed="true"] svg path { fill:currentColor; }
++.bs-product-heart:hover { border-color:var(--bs-danger); color:var(--bs-danger); }
++.bs-product-heart:active { background:var(--bs-line-2); }
++.bs-product-heart:focus-visible { outline:2px solid var(--bs-blue); outline-offset:2px; }
++.bs-product-heart[aria-busy="true"] { opacity:.6; cursor:progress; }
++.bs-product-heart--row { flex:0 0 44px; align-self:center; width:44px; height:44px; border-radius:8px; }
++.bs-product-heart--gallery { display:none; }
++@media (max-width:767.98px) {
++  .bs-product-heart--row:not(.bs-product-heart--solo) { display:none; }
++  .bs-product__gallery .bs-product__main-img { display:grid; grid-template:minmax(0, 1fr) / minmax(0, 1fr); }
++  .bs-product__main-img > a, .bs-product__main-img > .bs-product-heart--gallery { grid-area:1 / 1; }
++  .bs-product-heart--gallery { display:grid; z-index:1; align-self:start; justify-self:end; width:44px; height:44px; margin:var(--bs-s3); border-radius:50%; box-shadow:var(--bs-sh-sm); }
++}
++/* /ACC006_VISUAL_WP3_20261029 */

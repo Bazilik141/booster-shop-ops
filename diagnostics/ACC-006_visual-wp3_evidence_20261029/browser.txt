@@ -1,0 +1,79 @@
+ok   prod.html 390: exactly one heart visible/focusable (gallery)
+ok   prod.html 390: gallery heart 44x44 at 12px top-right
+ok   prod.html 390: tap = one add, both hearts pressed, visible red fill+border, one GA, no popup, no form submit
+ok   prod.html 390: confirmation visible at 3.5 s, closed by 4.4 s
+ok   prod.html 390: second tap removes, no GA
+ok   prod.html 390: tapping the photo still opens Magnific
+ok   prod.html 390: visible heart keyboard-focusable
+ok   prod.html 390: no page errors
+ok   prod.html 390: sticky ATC bar behaves as on the live page
+ok   prod.html 767: exactly one heart visible/focusable (gallery)
+ok   prod.html 767: gallery heart 44x44 at 12px top-right
+ok   prod.html 767: tap = one add, both hearts pressed, visible red fill+border, one GA, no popup, no form submit
+ok   prod.html 767: confirmation visible at 3.5 s, closed by 4.4 s
+ok   prod.html 767: second tap removes, no GA
+ok   prod.html 767: tapping the photo still opens Magnific
+ok   prod.html 767: visible heart keyboard-focusable
+ok   prod.html 767: no page errors
+ok   prod.html 768: exactly one heart visible/focusable (row)
+ok   prod.html 768: row heart 44x44 after #button-cart in .bs-buy-row, centred, one line, CTA text fits
+ok   prod.html 768: tap = one add, both hearts pressed, visible red fill+border, one GA, no popup, no form submit
+ok   prod.html 768: confirmation visible at 3.5 s, closed by 4.4 s
+ok   prod.html 768: second tap removes, no GA
+ok   prod.html 768: visible heart keyboard-focusable
+ok   prod.html 768: no page errors
+ok   prod.html 1024: exactly one heart visible/focusable (row)
+ok   prod.html 1024: row heart 44x44 after #button-cart in .bs-buy-row, centred, one line, CTA text fits
+ok   prod.html 1024: tap = one add, both hearts pressed, visible red fill+border, one GA, no popup, no form submit
+ok   prod.html 1024: confirmation visible at 3.5 s, closed by 4.4 s
+ok   prod.html 1024: second tap removes, no GA
+ok   prod.html 1024: visible heart keyboard-focusable
+ok   prod.html 1024: no page errors
+ok   prod.html 1280: exactly one heart visible/focusable (row)
+ok   prod.html 1280: row heart 44x44 after #button-cart in .bs-buy-row, centred, one line, CTA text fits
+ok   prod.html 1280: tap = one add, both hearts pressed, visible red fill+border, one GA, no popup, no form submit
+ok   prod.html 1280: confirmation visible at 3.5 s, closed by 4.4 s
+ok   prod.html 1280: second tap removes, no GA
+ok   prod.html 1280: visible heart keyboard-focusable
+ok   prod.html 1280: no page errors
+ok   pre.html 390: exactly one heart visible/focusable (gallery)
+ok   pre.html 390: gallery heart 44x44 at 12px top-right
+ok   pre.html 390: tap = one add, both hearts pressed, visible red fill+border, one GA, no popup, no form submit
+ok   pre.html 390: confirmation visible at 3.5 s, closed by 4.4 s
+ok   pre.html 390: second tap removes, no GA
+ok   pre.html 390: tapping the photo still opens Magnific
+ok   pre.html 390: visible heart keyboard-focusable
+ok   pre.html 390: no page errors
+ok   pre.html 390: sticky ATC bar behaves as on the live page
+ok   pre.html 767: exactly one heart visible/focusable (gallery)
+ok   pre.html 767: gallery heart 44x44 at 12px top-right
+ok   pre.html 767: tap = one add, both hearts pressed, visible red fill+border, one GA, no popup, no form submit
+ok   pre.html 767: confirmation visible at 3.5 s, closed by 4.4 s
+ok   pre.html 767: second tap removes, no GA
+ok   pre.html 767: tapping the photo still opens Magnific
+ok   pre.html 767: visible heart keyboard-focusable
+ok   pre.html 767: no page errors
+ok   pre.html 768: exactly one heart visible/focusable (row)
+ok   pre.html 768: row heart 44x44 after #button-cart in .bs-buy-row, centred, one line, CTA text fits
+ok   pre.html 768: tap = one add, both hearts pressed, visible red fill+border, one GA, no popup, no form submit
+ok   pre.html 768: confirmation visible at 3.5 s, closed by 4.4 s
+ok   pre.html 768: second tap removes, no GA
+ok   pre.html 768: visible heart keyboard-focusable
+ok   pre.html 768: no page errors
+ok   pre.html 1024: exactly one heart visible/focusable (row)
+ok   pre.html 1024: row heart 44x44 after #button-cart in .bs-buy-row, centred, one line, CTA text fits
+ok   pre.html 1024: tap = one add, both hearts pressed, visible red fill+border, one GA, no popup, no form submit
+ok   pre.html 1024: confirmation visible at 3.5 s, closed by 4.4 s
+ok   pre.html 1024: second tap removes, no GA
+ok   pre.html 1024: visible heart keyboard-focusable
+ok   pre.html 1024: no page errors
+ok   pre.html 1280: exactly one heart visible/focusable (row)
+ok   pre.html 1280: row heart 44x44 after #button-cart in .bs-buy-row, centred, one line, CTA text fits
+ok   pre.html 1280: tap = one add, both hearts pressed, visible red fill+border, one GA, no popup, no form submit
+ok   pre.html 1280: confirmation visible at 3.5 s, closed by 4.4 s
+ok   pre.html 1280: second tap removes, no GA
+ok   pre.html 1280: visible heart keyboard-focusable
+ok   pre.html 1280: no page errors
+ok   no-gallery fallback 390: the --solo row heart is the one visible heart
+ok   no-gallery fallback 1280: the --solo row heart is the one visible heart
+browser_checks=78 failed=0

@@ -1,0 +1,33 @@
+ok   product/product anchors [2,0,1,1] = [2,0,1,1]
+ok   common/header anchors [0,1,1] = [0,1,1]
+ok   in stock, gallery: row heart in .bs-buy-row after #button-cart, type=button
+ok   in stock, gallery: gallery heart once, sibling after the Magnific <a>
+ok   in stock, gallery: WP1 text button gone, exactly two/one hearts
+ok   in stock, gallery: sticky ATC bar byte-identical
+ok   in stock, gallery: credit/installment block byte-identical
+ok   in stock, gallery: variant selector byte-identical
+ok   in stock, gallery: gallery main link byte-identical
+ok   in stock, gallery: JSON-LD byte-identical
+ok   in stock, gallery: cart button + GA4 hidden input byte-identical
+ok   in stock, gallery: rest of page identical (whitespace aside)
+ok   preorder: row heart in .bs-buy-row after #button-cart, type=button
+ok   preorder: gallery heart once, sibling after the Magnific <a>
+ok   preorder: WP1 text button gone, exactly two/one hearts
+ok   preorder: sticky ATC bar byte-identical
+ok   preorder: credit/installment block byte-identical
+ok   preorder: variant selector byte-identical
+ok   preorder: gallery main link byte-identical
+ok   preorder: JSON-LD byte-identical
+ok   preorder: cart button + GA4 hidden input byte-identical
+ok   preorder: rest of page identical (whitespace aside)
+ok   no gallery: row heart in .bs-buy-row after #button-cart, type=button, --solo
+ok   no gallery: gallery heart absent
+ok   no gallery: WP1 text button gone, exactly two/one hearts
+ok   no gallery: sticky ATC bar byte-identical
+ok   no gallery: credit/installment block byte-identical
+ok   no gallery: variant selector byte-identical
+ok   no gallery: JSON-LD byte-identical
+ok   no gallery: cart button + GA4 hidden input byte-identical
+ok   no gallery: rest of page identical (whitespace aside)
+ok   header: only the two token values differ
+twig=ok
