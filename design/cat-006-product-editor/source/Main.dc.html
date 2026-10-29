@@ -17,11 +17,11 @@ input,select,textarea{background-color:transparent}
 :focus-visible{outline:2px solid #3B82F6;outline-offset:2px}
 @keyframes bs-spin{to{transform:rotate(360deg)}}
 @keyframes bs-pulse{0%,100%{opacity:1}50%{opacity:.45}}
-.bs-cell:hover{border-color:rgba(127,127,127,.35) !important;background:rgba(127,127,127,.10) !important}
-.bs-row:hover{background:rgba(127,127,127,.05)}
+.bs-cell:hover{border-color:var(--bse-hover-line) !important;background:var(--bse-hover) !important}
+.bs-row:hover{background:var(--bse-hover-row)}
 </style>
 </helmet>
-<div style="font-family: Manrope, system-ui, -apple-system, sans-serif; color-scheme: {{ t.scheme }}; color: {{ t.ink2 }}; background: {{ t.shell }}; min-height: 1180px; font-size: 14px">
+<div style="--bse-hover: {{ t.hover }}; --bse-hover-row: {{ t.hoverRow }}; --bse-hover-line: {{ t.hoverLine }}; font-family: Manrope, system-ui, -apple-system, sans-serif; color-scheme: {{ t.scheme }}; color: {{ t.ink2 }}; background: {{ t.shell }}; min-height: 1640px; font-size: 14px">
   <header style="height: 52px; background: {{ t.paper }}; border-bottom: 1px solid {{ t.line }}; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box">
     <div style="display: flex; align-items: center; gap: 10px; color: {{ t.ink3 }}; font-weight: 600; font-size: 13px"><span aria-hidden="true" style="width: 28px; height: 28px; border-radius: 6px; background: {{ t.line }}; display: inline-block"></span>OpenCart · Адмінпанель</div>
     <div style="display: flex; gap: 16px; color: {{ t.ink3 }}; font-size: 13px"><span>Raccoon</span><a href="#" style="color: {{ t.ink3 }}">Вийти</a></div>
@@ -60,7 +60,7 @@ input,select,textarea{background-color:transparent}
             <sc-if value="{{ crmLoading }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="width: 14px; height: 14px; border-radius: 50%; border: 2px solid {{ t.line3 }}; border-top-color: {{ t.blue }}; animation: bs-spin .8s linear infinite; display: inline-block; box-sizing: border-box"></span>Оновлюємо…</sc-if>
             <sc-if value="{{ crmIdle }}" hint-placeholder-val="{{ true }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"></path><path d="M21 3v6h-6"></path></svg>Оновити з CRM</sc-if>
           </button>
-          <a href="Product.dc.html" style="height: 40px; padding: 0 16px; border-radius: 8px; background: {{ t.blue }}; color: {{ t.paper }}; font-weight: 700; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; text-decoration: none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Новий товар</a>
+          <a href="ProductCreate.dc.html" style="height: 40px; padding: 0 16px; border-radius: 8px; background: {{ t.blue }}; color: {{ t.paper }}; font-weight: 700; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; text-decoration: none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Новий товар</a>
         </div>
       </div>
 
@@ -145,18 +145,25 @@ input,select,textarea{background-color:transparent}
         </div>
       </div>
 
+      <sc-if value="{{ offerAll }}" hint-placeholder-val="{{ false }}">
+        <div role="status" style="margin-top: 8px; padding: 10px 14px; border-radius: 10px; background: {{ t.blueSoft }}; color: {{ t.ink2 }}; font-size: 13px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap">Обрано всі {{ pageCount }} на цій сторінці.<button type="button" onClick="{{ selectAllFound }}" style="border: 0; background: none; padding: 0; color: {{ t.blue }}; font-weight: 700; font-size: 13px; cursor: pointer; text-decoration: underline">Обрати всі {{ totalText }} знайдених</button></div>
+      </sc-if>
+      <sc-if value="{{ foundAllNote }}" hint-placeholder-val="{{ false }}">
+        <div role="status" style="margin-top: 8px; padding: 10px 14px; border-radius: 10px; background: {{ t.blueSoft }}; color: {{ t.ink2 }}; font-size: 13px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap">Обрано всі {{ totalText }} знайдених товарів.<button type="button" onClick="{{ clearSel }}" style="border: 0; background: none; padding: 0; color: {{ t.blue }}; font-weight: 700; font-size: 13px; cursor: pointer; text-decoration: underline">Зняти вибір</button></div>
+      </sc-if>
+
       <div style="margin-top: 8px; border: 1px solid {{ t.line }}; border-radius: 10px; overflow-x: auto">
-        <div style="min-width: 1100px">
-          <div style="display: grid; grid-template-columns: 40px 52px minmax(0, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; height: 40px; background: {{ t.bg }}; border-bottom: 1px solid {{ t.line }}; font-size: 12px; font-weight: 700; color: {{ t.ink3 }}">
-            <span style="display: flex; justify-content: center"><input type="checkbox" checked="{{ allSel }}" onChange="{{ toggleAll }}" aria-label="Обрати всі знайдені" style="width: 16px; height: 16px; accent-color: {{ t.blue }}"></span>
-            <span></span>
-            <span>Назва</span>
-            <span>Модель</span>
-            <span style="padding-left: 9px">Ціна на сайті</span>
-            <span style="padding-left: 9px">Кількість</span>
-            <span>Статус</span>
-            <span>Акція</span>
-            <span></span>
+        <div role="table" aria-label="Товари" aria-rowcount="{{ totalText }}" style="min-width: 1100px">
+          <div role="row" style="display: grid; grid-template-columns: 40px 52px minmax(0, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; height: 40px; background: {{ t.bg }}; border-bottom: 1px solid {{ t.line }}; font-size: 12px; font-weight: 700; color: {{ t.ink3 }}">
+            <span role="columnheader" style="display: flex; justify-content: center"><input type="checkbox" checked="{{ allSel }}" onChange="{{ toggleAll }}" aria-label="Обрати всі на цій сторінці" title="Обрати всі на цій сторінці" style="width: 16px; height: 16px; accent-color: {{ t.blue }}"></span>
+            <span role="columnheader"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Фото</span></span>
+            <span role="columnheader" aria-sort="{{ sh.name.aria }}"><button type="button" onClick="{{ sortBy.name }}" aria-label="{{ sh.name.label }}" style="border: 0; background: none; padding: 4px 0; font-size: 12px; font-weight: 700; color: {{ sh.name.color }}; cursor: pointer; display: inline-flex; align-items: center; gap: 4px">Назва<span aria-hidden="true" style="color: {{ sh.name.arrowColor }}">{{ sh.name.arrow }}</span></button></span>
+            <span role="columnheader" aria-sort="{{ sh.model.aria }}"><button type="button" onClick="{{ sortBy.model }}" aria-label="{{ sh.model.label }}" style="border: 0; background: none; padding: 4px 0; font-size: 12px; font-weight: 700; color: {{ sh.model.color }}; cursor: pointer; display: inline-flex; align-items: center; gap: 4px">Модель<span aria-hidden="true" style="color: {{ sh.model.arrowColor }}">{{ sh.model.arrow }}</span></button></span>
+            <span role="columnheader" aria-sort="{{ sh.price.aria }}" style="padding-left: 9px"><button type="button" onClick="{{ sortBy.price }}" aria-label="{{ sh.price.label }}" style="border: 0; background: none; padding: 4px 0; font-size: 12px; font-weight: 700; color: {{ sh.price.color }}; cursor: pointer; display: inline-flex; align-items: center; gap: 4px">Ціна на сайті<span aria-hidden="true" style="color: {{ sh.price.arrowColor }}">{{ sh.price.arrow }}</span></button></span>
+            <span role="columnheader" aria-sort="{{ sh.qty.aria }}" style="padding-left: 9px"><button type="button" onClick="{{ sortBy.qty }}" aria-label="{{ sh.qty.label }}" style="border: 0; background: none; padding: 4px 0; font-size: 12px; font-weight: 700; color: {{ sh.qty.color }}; cursor: pointer; display: inline-flex; align-items: center; gap: 4px">Кількість<span aria-hidden="true" style="color: {{ sh.qty.arrowColor }}">{{ sh.qty.arrow }}</span></button></span>
+            <span role="columnheader">Статус</span>
+            <span role="columnheader">Акція</span>
+            <span role="columnheader"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Дії</span></span>
           </div>
 
           <sc-if value="{{ loading }}" hint-placeholder-val="{{ false }}">
@@ -190,16 +197,16 @@ input,select,textarea{background-color:transparent}
 
           <sc-if value="{{ showRows }}" hint-placeholder-val="{{ true }}">
             <sc-for list="{{ items }}" as="r" hint-placeholder-count="10">
-              <div class="bs-row" style="display: grid; grid-template-columns: 40px 52px minmax(0, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; min-height: 64px; padding: 8px 0; box-sizing: border-box; border-bottom: 1px solid {{ t.line2 }}; background: {{ r.rowBg }}">
-                <span style="display: flex; justify-content: center"><input type="checkbox" checked="{{ r.selected }}" onChange="{{ r.toggleSel }}" aria-label="Обрати: {{ r.name }}" style="width: 16px; height: 16px; accent-color: {{ t.blue }}"></span>
-                <span aria-hidden="true" style="width: 40px; height: 40px; border-radius: 6px; background: {{ t.bg }}; border: 1px solid {{ t.line }}; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: {{ t.ink3 }}; opacity: {{ r.thumbOpacity }}">{{ r.thumb }}</span>
-                <span style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px; min-width: 0">
+              <div role="row" class="bs-row" style="display: grid; grid-template-columns: 40px 52px minmax(0, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; min-height: 64px; padding: 8px 0; box-sizing: border-box; border-bottom: 1px solid {{ t.line2 }}; background: {{ r.rowBg }}">
+                <span role="cell" style="display: flex; justify-content: center"><input type="checkbox" checked="{{ r.selected }}" onChange="{{ r.toggleSel }}" aria-label="Обрати: {{ r.name }}" style="width: 16px; height: 16px; accent-color: {{ t.blue }}"></span>
+                <span role="cell" aria-hidden="true" style="width: 40px; height: 40px; border-radius: 6px; background: {{ t.bg }}; border: 1px solid {{ t.line }}; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: {{ t.ink3 }}; opacity: {{ r.thumbOpacity }}">{{ r.thumb }}</span>
+                <span role="cell" style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px; min-width: 0">
                   <a href="Product.dc.html" style="color: {{ r.nameColor }}; font-weight: 600; font-size: 13.5px; line-height: 1.35; text-decoration: none">{{ r.name }}</a>
                   <span style="font-size: 12px; color: {{ t.ink3 }}; display: flex; gap: 8px; align-items: center">{{ r.meta }}<sc-if value="{{ r.off }}" hint-placeholder-val="{{ false }}"><span style="font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: 2px 6px; border-radius: 6px; background: {{ t.line2 }}; color: {{ t.ink2 }}">Вимкнено</span></sc-if></span>
                 </span>
-                <span style="font-size: 12.5px; color: {{ t.ink2 }}; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">{{ r.model }}</span>
+                <span role="cell" style="font-size: 12.5px; color: {{ t.ink2 }}; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">{{ r.model }}</span>
 
-                <span style="position: relative; display: flex; flex-direction: column; gap: 2px">
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px">
                   <sc-if value="{{ r.priceEdit }}" hint-placeholder-val="{{ false }}">
                     <input type="text" inputMode="numeric" value="{{ draft }}" onChange="{{ onDraft }}" onKeyDown="{{ r.priceKey }}" autoFocus="{{ true }}" aria-label="Нова ціна, грн" style="width: 120px; height: 32px; box-sizing: border-box; border: 2px solid {{ t.blue }}; border-radius: 6px; padding: 0 8px; font-weight: 800; font-size: 14px; background: {{ t.paper }}; color: {{ t.ink }}">
                     <span style="font-size: 11px; color: {{ t.ink3 }}">Enter — зберегти · Esc — скасувати</span>
@@ -211,7 +218,7 @@ input,select,textarea{background-color:transparent}
                         <span style="position: relative; display: inline-flex">
                           <button type="button" onMouseEnter="{{ r.tipPriceOn }}" onMouseLeave="{{ tipOff }}" onFocus="{{ r.tipPriceOn }}" onBlur="{{ tipOff }}" aria-label="{{ r.crmPriceTip }}" style="border: 0; background: transparent; padding: 3px; color: {{ t.warnFg }}; cursor: help; display: inline-flex"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"></path></svg></button>
                           <sc-if value="{{ r.showPriceTip }}" hint-placeholder-val="{{ false }}">
-                            <span style="position: absolute; left: 50%; top: 26px; transform: translateX(-50%); background: {{ t.ink }}; color: {{ t.paper }}; font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: 6px; white-space: nowrap; z-index: 100; box-shadow: 0 8px 24px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.07)">{{ r.crmPriceTip }}</span>
+                            <span style="position: absolute; left: 50%; top: 26px; transform: translateX(-50%); background: {{ t.ink }}; color: {{ t.paper }}; font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: 6px; white-space: nowrap; z-index: 100; box-shadow: {{ t.shadowPop }}">{{ r.crmPriceTip }}</span>
                           </sc-if>
                         </span>
                       </sc-if>
@@ -223,7 +230,7 @@ input,select,textarea{background-color:transparent}
                   </sc-if>
                 </span>
 
-                <span style="position: relative; display: flex; flex-direction: column; gap: 2px">
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px">
                   <sc-if value="{{ r.qtyEdit }}" hint-placeholder-val="{{ false }}">
                     <input type="text" inputMode="numeric" value="{{ draft }}" onChange="{{ onDraft }}" onKeyDown="{{ r.qtyKey }}" autoFocus="{{ true }}" aria-label="Нова кількість, шт" style="width: 80px; height: 32px; box-sizing: border-box; border: 2px solid {{ t.blue }}; border-radius: 6px; padding: 0 8px; font-weight: 700; font-size: 14px; background: {{ t.paper }}; color: {{ t.ink }}">
                     <span style="font-size: 11px; color: {{ t.ink3 }}">Enter · Esc</span>
@@ -235,7 +242,7 @@ input,select,textarea{background-color:transparent}
                         <span style="position: relative; display: inline-flex">
                           <button type="button" onMouseEnter="{{ r.tipQtyOn }}" onMouseLeave="{{ tipOff }}" onFocus="{{ r.tipQtyOn }}" onBlur="{{ tipOff }}" aria-label="{{ r.crmQtyTip }}" style="border: 0; background: transparent; padding: 3px; cursor: help; display: inline-flex"><span style="font-size: 9.5px; font-weight: 800; padding: 1px 4px; border-radius: 4px; background: {{ t.warnBg }}; border: 1px solid {{ t.warnLine }}; color: {{ t.warnFg }}">CRM</span></button>
                           <sc-if value="{{ r.showQtyTip }}" hint-placeholder-val="{{ false }}">
-                            <span style="position: absolute; left: 50%; top: 26px; transform: translateX(-50%); background: {{ t.ink }}; color: {{ t.paper }}; font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: 6px; white-space: nowrap; z-index: 100; box-shadow: 0 8px 24px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.07)">{{ r.crmQtyTip }}</span>
+                            <span style="position: absolute; left: 50%; top: 26px; transform: translateX(-50%); background: {{ t.ink }}; color: {{ t.paper }}; font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: 6px; white-space: nowrap; z-index: 100; box-shadow: {{ t.shadowPop }}">{{ r.crmQtyTip }}</span>
                           </sc-if>
                         </span>
                       </sc-if>
@@ -247,17 +254,17 @@ input,select,textarea{background-color:transparent}
                   </sc-if>
                 </span>
 
-                <span style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start">
-                  <button type="button" onClick="{{ r.toggleStatus }}" aria-pressed="{{ r.on }}" aria-label="Статус: {{ r.statusLabel }}" style="width: 36px; height: 20px; border-radius: 999px; border: 0; background: {{ r.switchBg }}; position: relative; cursor: pointer; padding: 0"><span style="position: absolute; top: 2px; left: {{ r.knobLeft }}; width: 16px; height: 16px; border-radius: 50%; background: {{ t.paper }}; box-shadow: 0 1px 2px rgba(0,0,0,.25)"></span></button>
+                <span role="cell" style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start">
+                  <button type="button" onClick="{{ r.toggleStatus }}" aria-pressed="{{ r.on }}" aria-label="Статус: {{ r.statusLabel }}" style="width: 36px; height: 20px; border-radius: 999px; border: 0; background: {{ r.switchBg }}; position: relative; cursor: pointer; padding: 0"><span style="position: absolute; top: 2px; left: {{ r.knobLeft }}; width: 16px; height: 16px; border-radius: 50%; background: {{ t.paper }}; box-shadow: {{ t.shadowKnob }}"></span></button>
                   <sc-if value="{{ r.sc.saving }}" hint-placeholder-val="{{ false }}"><span style="font-size: 11px; color: {{ t.ink3 }}">Збереження…</span></sc-if>
                   <sc-if value="{{ r.sc.saved }}" hint-placeholder-val="{{ false }}"><span style="font-size: 11px; font-weight: 700; color: {{ t.ok }}">Збережено</span></sc-if>
                 </span>
 
-                <span>
+                <span role="cell">
                   <sc-if value="{{ r.hasSpecial }}" hint-placeholder-val="{{ false }}"><span style="display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: 4px 7px; border-radius: 6px; background: {{ t.ink }}; color: {{ t.paper }}; white-space: nowrap">{{ r.specialBadge }}</span></sc-if>
                 </span>
 
-                <span style="display: flex; gap: 2px">
+                <span role="cell" style="display: flex; gap: 2px">
                   <a href="Product.dc.html" aria-label="Відкрити товар" title="Відкрити товар" style="width: 32px; height: 32px; border-radius: 6px; color: {{ t.ink2 }}; display: inline-flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></a>
                   <button type="button" onClick="{{ r.copy }}" aria-label="Копіювати товар" title="Копіювати товар" style="width: 32px; height: 32px; border-radius: 6px; border: 0; background: transparent; color: {{ t.ink2 }}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></button>
                 </span>
@@ -267,8 +274,29 @@ input,select,textarea{background-color:transparent}
         </div>
       </div>
 
+      <sc-if value="{{ showPager }}" hint-placeholder-val="{{ true }}">
+        <div style="margin-top: 12px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap">
+          <span style="font-size: 13px; color: {{ t.ink3 }}">Показано <strong style="color: {{ t.ink }}; font-weight: 700">{{ rangeText }}</strong> з {{ totalText }}</span>
+          <nav aria-label="Сторінки списку" style="display: flex; align-items: center; gap: 4px; margin-left: auto">
+            <button type="button" onClick="{{ prev }}" disabled="{{ prevDisabled }}" aria-label="Попередня сторінка" style="width: 36px; height: 36px; border-radius: 8px; border: 1px solid {{ t.line }}; background: transparent; color: {{ t.ink2 }}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; opacity: {{ prevOp }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button>
+            <sc-for list="{{ pageItems }}" as="pg" hint-placeholder-count="5">
+              <sc-if value="{{ pg.isGap }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="width: 24px; text-align: center; color: {{ t.ink3 }}">…</span></sc-if>
+              <sc-if value="{{ pg.isNum }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ pg.go }}" aria-current="{{ pg.cur }}" aria-label="Сторінка {{ pg.n }}" style="min-width: 36px; height: 36px; padding: 0 8px; border-radius: 8px; border: 1px solid {{ pg.line }}; background: {{ pg.bg }}; color: {{ pg.fg }}; font-weight: 700; font-size: 13px; cursor: pointer">{{ pg.n }}</button></sc-if>
+            </sc-for>
+            <button type="button" onClick="{{ next }}" disabled="{{ nextDisabled }}" aria-label="Наступна сторінка" style="width: 36px; height: 36px; border-radius: 8px; border: 1px solid {{ t.line }}; background: transparent; color: {{ t.ink2 }}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; opacity: {{ nextOp }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></button>
+          </nav>
+          <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: {{ t.ink3 }}">На сторінці:
+            <span role="group" aria-label="Товарів на сторінці" style="display: inline-flex; border: 1px solid {{ t.line }}; border-radius: 8px; overflow: hidden">
+              <sc-for list="{{ sizes }}" as="sz" hint-placeholder-count="3">
+                <button type="button" onClick="{{ sz.pick }}" aria-pressed="{{ sz.active }}" style="height: 34px; padding: 0 12px; border: 0; background: {{ sz.bg }}; color: {{ sz.fg }}; font-weight: 700; font-size: 13px; cursor: pointer">{{ sz.n }}</button>
+              </sc-for>
+            </span>
+          </span>
+        </div>
+      </sc-if>
+
       <sc-if value="{{ hasSel }}" hint-placeholder-val="{{ true }}">
-        <div style="position: sticky; bottom: 16px; margin-top: 16px; z-index: 200; background: {{ t.ink }}; color: {{ t.paper }}; border-radius: 10px; padding: 10px 12px 10px 18px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; box-shadow: 0 8px 24px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.07)">
+        <div style="position: sticky; bottom: 16px; margin-top: 16px; z-index: 200; background: {{ t.ink }}; color: {{ t.paper }}; border-radius: 10px; padding: 10px 12px 10px 18px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; box-shadow: {{ t.shadowPop }}">
           <strong style="font-size: 14px">Обрано: {{ selCount }}</strong>
           <span aria-hidden="true" style="color: {{ t.ink3 }}">·</span>
           <span style="font-size: 13px; color: {{ t.line3 }}">Масові дії:</span>
@@ -281,7 +309,7 @@ input,select,textarea{background-color:transparent}
       </sc-if>
 
       <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
-        <div role="status" style="position: fixed; top: 68px; right: 24px; z-index: 500; max-width: 420px; background: {{ t.paper }}; border: 1px solid {{ t.line }}; border-radius: 10px; padding: 12px 14px; display: flex; gap: 10px; align-items: flex-start; box-shadow: 0 8px 24px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.07); font-size: 13px; color: {{ t.ink2 }}">
+        <div role="status" style="position: fixed; top: 68px; right: 24px; z-index: 500; max-width: 420px; background: {{ t.paper }}; border: 1px solid {{ t.line }}; border-radius: 10px; padding: 12px 14px; display: flex; gap: 10px; align-items: flex-start; box-shadow: {{ t.shadowPop }}; font-size: 13px; color: {{ t.ink2 }}">
           <span style="color: {{ t.ok }}; display: inline-flex; margin-top: 1px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></span>
           <span>{{ toast }}</span>
         </div>
@@ -290,7 +318,7 @@ input,select,textarea{background-color:transparent}
   </div>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["canon","dark","teal","contrast","darkNavy","darkViolet","darkHybrid"],"default":"darkHybrid"},"scene":{"editor":"enum","options":["default","empty","loading","saveError","crmLoading","crmFailed"],"default":"default"},"$preview":{"width":1440,"height":1180}}'>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["canon","dark","teal","contrast","darkNavy","darkViolet","darkHybrid"],"default":"darkHybrid"},"scene":{"editor":"enum","options":["default","empty","loading","saveError","crmLoading","crmFailed"],"default":"default"},"$preview":{"width":1440,"height":1640}}'>
 const P = [
   { id: 1, name: 'Бустер Pokémon TCG Mega Symphonia (японське видання)', model: 'PKM-JP-MSYM-BST', cat: 'pokemon', mf: 'The Pokémon Company', type: 'BST', price: 170, qty: 11, on: true, special: null, crmPrice: 170, crmQty: 12 },
   { id: 2, name: 'Бустер-бокс Mega Symphonia (японське видання)', model: 'PKM-JP-MSYM-BBX', cat: 'pokemon', mf: 'The Pokémon Company', type: 'BBX', price: 4500, qty: 2, on: true, special: { price: 4200, to: '15.11' }, crmPrice: 4800, crmQty: 3 },
@@ -305,6 +333,41 @@ const P = [
   { id: 11, name: 'Брелок-спінер Ditto', model: 'BR-DITTO-400', cat: '3d', mf: 'Booster Shop 3D', type: '3D', price: 180, qty: 15, on: true, special: null, crmPrice: 180, crmQty: 15 },
   { id: 12, name: 'Брелок 3D Pikachu', model: 'BR-PIKA-300', cat: '3d', mf: 'Booster Shop 3D', type: '3D', price: 140, qty: 0, on: true, special: null, crmPrice: 140, crmQty: 0 }
 ];
+// Sample filler so the list has a realistic size (151 products) for paging and sorting. Not real catalogue data.
+const GEN = (() => {
+  const out = [];
+  const jp = [['Battle Partners', 'BTPT'], ['Clay Burst', 'CLBR'], ['Crimson Haze', 'CRHZ'], ['Cyber Judge', 'CYJG'], ['Mask of Change', 'MSCH'], ['Night Wanderer', 'NTWD'], ['Paradise Dragona', 'PRDR'], ['Pokémon Card 151', 'C151'], ['Raging Surf', 'RGSF'], ['Ruler of the Black Flame', 'RLBF'], ['Scarlet ex', 'SCEX'], ['Shiny Treasure ex', 'SHTR'], ['Snow Hazard', 'SNHZ'], ['Stellar Miracle', 'STMR'], ['Super Electric Breaker', 'SEBR'], ['Triplet Beat', 'TRBT'], ['Violet ex', 'VIEX'], ['Wild Force', 'WDFC'], ['Terastal Festival ex', 'SV8A']];
+  const add = (name, model, cat, type, price) => out.push({ name: name, model: model, cat: cat, type: type, price: price });
+  jp.forEach((s, i) => add('Бустер-бокс Pokémon TCG ' + s[0] + ' (японське видання)', 'PKM-JP-' + s[1] + '-BBX', 'pokemon', 'BBX', 3200 + (i % 7) * 350));
+  jp.forEach((s, i) => add('Набір 10 бустерів Pokémon TCG ' + s[0] + ' (японське видання)', 'PKM-JP-' + s[1] + '-B10', 'pokemon', 'B10', 1500 + (i % 5) * 100));
+  jp.slice(0, 10).forEach((s, i) => add('Бустер-бокс Pokémon TCG ' + s[0] + ' (корейське видання)', 'PKM-KR-' + s[1] + '-BBX', 'pokemon', 'BBX', 2600 + (i % 5) * 200));
+  for (let n = 1; n <= 30; n++) { const c = (n < 10 ? '0' : '') + n; add('Стартова колода One Piece ST-' + c + ' (японське видання)', 'OP-JP-ST' + c + '-STD', 'onepiece', 'STD', 600 + (n % 4) * 50); }
+  for (let n = 1; n <= 12; n++) { const c = (n < 10 ? '0' : '') + n; add('Набір 12 бустерів One Piece OP-' + c + ' (японське видання)', 'OP-JP-OP' + c + '-B12', 'onepiece', 'B12', 1800 + (n % 4) * 100); }
+  ['Bulbasaur', 'Charmander', 'Squirtle', 'Eevee', 'Snorlax', 'Gengar', 'Lapras', 'Mew', 'Psyduck', 'Jigglypuff', 'Togepi', 'Piplup', 'Lucario', 'Sylveon', 'Umbreon', 'Espeon', 'Vaporeon', 'Jolteon', 'Flareon', 'Dragonite'].forEach((m, i) => add('Фігурка 3D ' + m, 'FG-' + m.toUpperCase().slice(0, 6) + '-' + (250 + (i % 6) * 50), '3d', '3D', 250 + (i % 6) * 50));
+  ['Classic', 'Hex', 'Arena', 'Stack', 'Slim', 'Duo', 'Wave', 'Grid', 'Arc', 'Tower'].forEach((m, i) => add('Підставка 3D під бустер-бокс ' + m, 'ST-' + m.toUpperCase() + '-' + (300 + (i % 4) * 40), '3d', '3D', 300 + (i % 4) * 40));
+  ['чорний', 'білий', 'червоний', 'синій', 'жовтий', 'зелений', 'фіолетовий', 'помаранчевий', 'сірий'].forEach((c, i) => add('Тубус 3D для бустерів, ' + c, 'TB-' + (i + 1) + '-220', '3d', '3D', 220));
+  ['чорний', 'білий', 'червоний', 'синій', 'жовтий', 'зелений', 'фіолетовий', 'помаранчевий', 'сірий', 'прозорий'].forEach((c, i) => add('Органайзер 3D для колоди, ' + c, 'OG-' + (i + 1) + '-260', '3d', '3D', 260));
+  const ends = ['05.11', '10.11', '15.11', '30.11'];
+  return out.map((p, i) => {
+    const qty = (i * 7) % 13;
+    const special = i % 9 === 4 ? { price: Math.floor(p.price * 0.9 / 10) * 10, to: ends[i % 4] } : null;
+    return Object.assign(p, {
+      id: 100 + i, mf: p.cat === 'pokemon' ? 'The Pokémon Company' : p.cat === 'onepiece' ? 'Bandai' : 'Booster Shop 3D',
+      qty: qty, on: i % 11 !== 5, special: special,
+      crmPrice: i % 8 === 3 ? p.price + 200 : p.price, crmQty: i % 10 === 6 ? qty + 2 : qty
+    });
+  });
+})();
+const ALL = P.concat(GEN);
+const SORTS = { name: 'Назва', model: 'Модель', price: 'Ціна', qty: 'Кількість' };
+const pageList = (cur, total) => {
+  const set = {};
+  [1, 2, total - 1, total, cur - 1, cur, cur + 1].forEach((n) => { if (n >= 1 && n <= total) set[n] = 1; });
+  const ns = Object.keys(set).map(Number).sort((a, b) => a - b);
+  const out = [];
+  ns.forEach((n, i) => { if (i > 0 && n - ns[i - 1] > 1) out.push({ gap: true }); out.push({ n: n }); });
+  return out;
+};
 const CAT = { pokemon: 'Pokémon TCG', onepiece: 'One Piece Card Game', '3d': '3D-друк' };
 const FL = {
   cat: { label: 'Категорія', opts: CAT },
@@ -318,8 +381,9 @@ const EMPTY_F = { cat: '', mf: '', status: '', stock: '', special: '', pmin: '',
 class Component extends DCLogic {
   state = {
     q: '', f: Object.assign({}, EMPTY_F, { pmin: '150' }), sel: { 1: 1, 2: 1, 3: 1, 4: 1, 8: 1, 9: 1 },
-    data: P.map((p) => Object.assign({}, p)), edit: '', draft: '', cell: {}, msg: {}, pend: {},
-    crm: 'idle', crmTime: '28.10, 09:14', toast: '', tip: '', sc: ''
+    data: ALL.map((p) => Object.assign({}, p)), edit: '', draft: '', cell: {}, msg: {}, pend: {},
+    crm: 'idle', crmTime: '28.10, 09:14', toast: '', tip: '', sc: '',
+    sortKey: 'name', sortDir: 'asc', page: 1, size: 15
   };
   componentDidMount() { this.applyScene(); }
   componentDidUpdate() { if ((this.props.scene || 'default') !== this.state.sc) this.applyScene(); }
@@ -333,7 +397,12 @@ class Component extends DCLogic {
     if (sc === 'crmFailed') s.crm = 'failed';
     this.setState(s);
   }
-  setF(k, v) { this.setState({ f: Object.assign({}, this.state.f, { [k]: v }) }); }
+  setF(k, v) { this.setState({ f: Object.assign({}, this.state.f, { [k]: v }), page: 1 }); }
+  sortBy(k) {
+    const s = this.state;
+    if (s.sortKey === k) this.setState({ sortDir: s.sortDir === 'asc' ? 'desc' : 'asc', page: 1 });
+    else this.setState({ sortKey: k, sortDir: 'asc', page: 1 });
+  }
   setCell(key, st, m) {
     const cell = Object.assign({}, this.state.cell);
     const msg = Object.assign({}, this.state.msg);
@@ -407,7 +476,7 @@ class Component extends DCLogic {
       darkViolet: { scheme: 'dark', paper: '#1B1B20', shell: '#111114', bg: '#25252C', line: '#36363F', line2: '#2C2C34', line3: '#4E4E5A', ink4: '#73737F', ink3: '#A6A6B3', ink3b: '#3C3C46', ink2: '#E2E2E8', ink: '#FAFAFC', blue: '#B79CFF', blueSoft: '#2E2545', sel: '#241F33', danger: '#FF6B81', warnBg: '#2B2513', warnFg: '#F5C451', warnLine: '#7D6420', ok: '#4ADE80', okBg: '#13281C', gold: '#F5C451' },
       darkHybrid: { scheme: 'dark', paper: '#1B1B20', shell: '#111114', bg: '#25252C', line: '#36363F', line2: '#2C2C34', line3: '#4E4E5A', ink4: '#73737F', ink3: '#A6A6B3', ink3b: '#3C3C46', ink2: '#E2E2E8', ink: '#FAFAFC', blue: '#F2B544', blueSoft: '#33291A', sel: '#25221C', danger: '#FF7A7A', warnBg: '#2C1E14', warnFg: '#FDBA74', warnLine: '#9A4F16', ok: '#5EEAD4', okBg: '#12282A', gold: '#F2B544' }
     };
-    const t = THEMES[this.props.theme || 'darkHybrid'] || THEMES.darkHybrid;
+    const t = Object.assign({ hover: 'rgba(127,127,127,.10)', hoverRow: 'rgba(127,127,127,.05)', hoverLine: 'rgba(127,127,127,.35)', backdrop: 'rgba(17,24,39,.28)', backdropModal: 'rgba(17,24,39,.45)', shadowPop: '0 8px 24px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.07)', shadowKnob: '0 1px 2px rgba(0,0,0,.25)', switchOff: '#74747F', warnStrong: '#C2691F' }, THEMES[this.props.theme || 'darkHybrid'] || THEMES.darkHybrid);
     const fix = (x) => {
       if (typeof x === 'string') return x.indexOf('{{ t.') < 0 ? x : x.replace(/\{\{ t\.(\w+) \}\}/g, (m, k) => t[k]);
       if (Array.isArray(x)) return x.map(fix);
@@ -441,8 +510,19 @@ class Component extends DCLogic {
       if (num(f.qmax) != null && p.qty > num(f.qmax)) return false;
       return true;
     });
+    const dirMul = s.sortDir === 'asc' ? 1 : -1;
+    rows.sort((a, b) => {
+      const k = s.sortKey;
+      const r = k === 'price' || k === 'qty' ? a[k] - b[k] : String(a[k]).localeCompare(String(b[k]), 'uk');
+      return (r || a.name.localeCompare(b.name, 'uk')) * dirMul;
+    });
+    const total = rows.length;
+    const pages = Math.max(1, Math.ceil(total / s.size));
+    const page = Math.min(s.page, pages);
+    const startIdx = (page - 1) * s.size;
+    const pageRows = rows.slice(startIdx, startIdx + s.size);
     const flags = (k) => ({ saving: s.cell[k] === 'saving', saved: s.cell[k] === 'saved', error: s.cell[k] === 'error', msg: s.msg[k] || '' });
-    const items = rows.map((p) => {
+    const items = pageRows.map((p) => {
       const kp = p.id + ':price', kq = p.id + ':qty', ks = p.id + ':status';
       const pc = flags(kp), qc = flags(kq);
       return {
@@ -460,7 +540,7 @@ class Component extends DCLogic {
         qtyBorder: qc.error ? '{{ t.danger }}' : 'transparent', qtyColor: p.qty === 0 ? '{{ t.danger }}' : '{{ t.ink }}',
         editQty: () => this.startEdit(p.id, 'qty'), qtyKey: (e) => this.onKey(e, p.id, 'qty'), qtyRetry: () => this.retry(p.id, 'qty'),
         crmQty: p.crmQty !== p.qty, crmQtyTip: 'У CRM: ' + p.crmQty + ' шт', showQtyTip: s.tip === kq, tipQtyOn: () => this.setState({ tip: kq }),
-        on: p.on, sc: flags(ks), switchBg: p.on ? '{{ t.blue }}' : '{{ t.line3 }}', knobLeft: p.on ? '18px' : '2px', statusLabel: p.on ? 'увімкнено' : 'вимкнено',
+        on: p.on, sc: flags(ks), switchBg: p.on ? '{{ t.blue }}' : '{{ t.switchOff }}', knobLeft: p.on ? '18px' : '2px', statusLabel: p.on ? 'увімкнено' : 'вимкнено',
         toggleStatus: () => this.toggleStatus(p.id),
         copy: () => this.showToast('Створено копію «' + p.name + '». Копія вимкнена — змініть у ній назву й модель.')
       };
@@ -473,18 +553,39 @@ class Component extends DCLogic {
     const selCount = Object.keys(s.sel).length;
     return {
       q: s.q, hasQ: s.q.length > 0, f: f, on: on, chips: chips, hasChips: chips.length > 0, chipCount: chips.length,
-      onSearch: (e) => this.setState({ q: e.target.value }), clearQ: () => this.setState({ q: '' }),
-      resetFilters: () => this.setState({ f: Object.assign({}, EMPTY_F) }),
+      onSearch: (e) => this.setState({ q: e.target.value, page: 1 }), clearQ: () => this.setState({ q: '', page: 1 }),
+      resetFilters: () => this.setState({ f: Object.assign({}, EMPTY_F), page: 1 }),
       count: loading ? '…' : rows.length, items: items, loading: loading,
+      sortBy: Object.keys(SORTS).reduce((o, k) => { o[k] = () => this.sortBy(k); return o; }, {}),
+      sh: Object.keys(SORTS).reduce((o, k) => {
+        const act = s.sortKey === k;
+        o[k] = { arrow: act ? (s.sortDir === 'asc' ? '↑' : '↓') : '↕', aria: act ? (s.sortDir === 'asc' ? 'ascending' : 'descending') : 'none', color: act ? '{{ t.ink }}' : '{{ t.ink3 }}', arrowColor: act ? '{{ t.blue }}' : '{{ t.ink4 }}',
+          label: 'Сортувати: ' + SORTS[k] + (act ? (s.sortDir === 'asc' ? ', зараз за зростанням' : ', зараз за спаданням') : '') };
+        return o;
+      }, {}),
+      showPager: !loading && total > 0,
+      rangeText: (startIdx + 1) + '–' + (startIdx + pageRows.length), totalText: String(total),
+      pageItems: pageList(page, pages).map((pg) => ({ isGap: !!pg.gap, isNum: !pg.gap, n: pg.n || '', cur: pg.n === page ? 'page' : 'false',
+        bg: pg.n === page ? '{{ t.blue }}' : 'transparent', fg: pg.n === page ? '{{ t.paper }}' : '{{ t.ink2 }}', line: pg.n === page ? '{{ t.blue }}' : '{{ t.line }}',
+        go: () => this.setState({ page: pg.n }) })),
+      prevDisabled: page <= 1, nextDisabled: page >= pages, prevOp: page <= 1 ? '0.4' : '1', nextOp: page >= pages ? '0.4' : '1',
+      prev: () => this.setState({ page: Math.max(1, page - 1) }), next: () => this.setState({ page: Math.min(pages, page + 1) }),
+      sizes: [15, 25, 50].map((n) => ({ n: n, active: s.size === n, bg: s.size === n ? '{{ t.blueSoft }}' : 'transparent', fg: s.size === n ? '{{ t.blue }}' : '{{ t.ink2 }}', pick: () => this.setState({ size: n, page: 1 }) })),
+      pageAllSel: pageRows.length > 0 && pageRows.every((p) => s.sel[p.id]),
+      allFound: total > 0 && rows.every((p) => s.sel[p.id]),
+      offerAll: pageRows.length > 0 && pageRows.every((p) => s.sel[p.id]) && total > pageRows.length && !rows.every((p) => s.sel[p.id]),
+      foundAllNote: total > pageRows.length && total > 0 && rows.every((p) => s.sel[p.id]),
+      pageCount: String(pageRows.length),
+      selectAllFound: () => { const sel = Object.assign({}, this.state.sel); rows.forEach((p) => { sel[p.id] = 1; }); this.setState({ sel: sel }); },
       skeleton: [{ w: '72%' }, { w: '55%' }, { w: '80%' }, { w: '62%' }, { w: '70%' }, { w: '48%' }, { w: '76%' }, { w: '58%' }],
       showEmpty: !loading && rows.length === 0, showRows: !loading && rows.length > 0,
       draft: s.draft, onDraft: (e) => this.setState({ draft: e.target.value }),
       tipOff: () => this.setState({ tip: '' }),
-      allSel: rows.length > 0 && rows.every((p) => s.sel[p.id]),
+      allSel: pageRows.length > 0 && pageRows.every((p) => s.sel[p.id]),
       toggleAll: () => {
-        const all = rows.length > 0 && rows.every((p) => this.state.sel[p.id]);
+        const all = pageRows.length > 0 && pageRows.every((p) => this.state.sel[p.id]);
         const sel = Object.assign({}, this.state.sel);
-        rows.forEach((p) => { if (all) delete sel[p.id]; else sel[p.id] = 1; });
+        pageRows.forEach((p) => { if (all) delete sel[p.id]; else sel[p.id] = 1; });
         this.setState({ sel: sel });
       },
       hasSel: selCount > 0, selCount: selCount, clearSel: () => this.setState({ sel: {} }),

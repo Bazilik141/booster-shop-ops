@@ -51,9 +51,9 @@ input,select,textarea{background-color:transparent}
     </div>
   </div>
 
-  <div aria-hidden="true" style="position: absolute; inset: 0; background: rgba(17,24,39,.28); z-index: 300"></div>
+  <div aria-hidden="true" style="position: absolute; inset: 0; background: {{ t.backdrop }}; z-index: 300"></div>
 
-  <aside role="dialog" aria-modal="true" aria-labelledby="bulk-title" style="position: absolute; top: 0; right: 0; bottom: 0; width: 900px; max-width: 100%; background: {{ t.paper }}; z-index: 400; display: flex; flex-direction: column; box-shadow: 0 8px 24px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.07)">
+  <aside role="dialog" aria-modal="true" aria-labelledby="bulk-title" style="position: absolute; top: 0; right: 0; bottom: 0; width: 900px; max-width: 100%; background: {{ t.paper }}; z-index: 400; display: flex; flex-direction: column; box-shadow: {{ t.shadowPop }}">
     <div style="padding: 20px 24px 0; display: flex; flex-direction: column; gap: 14px; border-bottom: 1px solid {{ t.line }}">
       <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px">
         <div>
@@ -138,7 +138,7 @@ input,select,textarea{background-color:transparent}
               <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Кінець<input type="date" value="{{ tTo }}" onChange="{{ onTTo }}" style="height: 40px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 10px; font-weight: 500"></label>
             </div>
           </sc-if>
-          <div style="margin-top: 6px; padding: 12px 14px; border-radius: 10px; background: {{ t.bg }}; font-size: 13px; color: {{ t.ink2 }}; line-height: 1.5">Нові пороги <strong>додаються</strong> до тих, що вже є в товарі. Наявні пороги не змінюються і не видаляються. Якщо такий самий поріг уже є, у перевірці буде попередження.</div>
+          <div style="margin-top: 6px; padding: 12px 14px; border-radius: 10px; background: {{ t.bg }}; font-size: 13px; color: {{ t.ink2 }}; line-height: 1.5">Нові пороги <strong>додаються</strong> до тих, що вже є в товарі. Наявні пороги не змінюються і не видаляються. Якщо такий самий поріг уже є, у перевірці можна обрати «Додати» або «Пропустити».</div>
         </div>
       </sc-if>
 
@@ -216,8 +216,8 @@ input,select,textarea{background-color:transparent}
               <span style="color: {{ t.ink2 }}; font-size: 12.5px">{{ r.period }}</span>
               <span>
                 <sc-if value="{{ r.choose }}" hint-placeholder-val="{{ false }}">
-                  <span role="group" aria-label="Що зробити з наявною акцією" style="display: inline-flex; border: 1px solid {{ r.chooseLine }}; border-radius: 8px; overflow: hidden">
-                    <button type="button" onClick="{{ r.replace }}" aria-pressed="{{ r.isReplace }}" style="height: 32px; padding: 0 10px; border: 0; background: {{ r.repBg }}; color: {{ r.repFg }}; font-weight: 700; font-size: 12.5px; cursor: pointer">Замінити</button>
+                  <span role="group" aria-label="{{ r.chooseLabel }}" style="display: inline-flex; border: 1px solid {{ r.chooseLine }}; border-radius: 8px; overflow: hidden">
+                    <button type="button" onClick="{{ r.replace }}" aria-pressed="{{ r.isReplace }}" style="height: 32px; padding: 0 10px; border: 0; background: {{ r.repBg }}; color: {{ r.repFg }}; font-weight: 700; font-size: 12.5px; cursor: pointer">{{ r.optA }}</button>
                     <button type="button" onClick="{{ r.skip }}" aria-pressed="{{ r.isSkip }}" style="height: 32px; padding: 0 10px; border: 0; border-left: 1px solid {{ t.line }}; background: {{ r.skipBg }}; color: {{ r.skipFg }}; font-weight: 700; font-size: 12.5px; cursor: pointer">Пропустити</button>
                   </span>
                 </sc-if>
@@ -255,7 +255,7 @@ input,select,textarea{background-color:transparent}
   </aside>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["canon","dark","teal","contrast","darkNavy","darkViolet","darkHybrid"],"default":"darkHybrid"},"scene":{"editor":"enum","options":["default","preview","result","tiers"],"default":"default"},"$preview":{"width":1440,"height":1180}}'>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["canon","dark","teal","contrast","darkNavy","darkViolet","darkHybrid"],"default":"darkHybrid"},"scene":{"editor":"enum","options":["default","preview","result","tiers","tiersForm","qtyForm","statusForm"],"default":"default"},"$preview":{"width":1440,"height":1180}}'>
 const S = [
   { id: 1, name: 'Бустер Pokémon TCG Mega Symphonia (японське видання)', model: 'PKM-JP-MSYM-BST', price: 170, qty: 11, on: true, special: null, tiers: [] },
   { id: 2, name: 'Бустер-бокс Mega Symphonia (японське видання)', model: 'PKM-JP-MSYM-BBX', price: 4500, qty: 2, on: true, special: { price: 4200, from: '2026-10-25', to: '2026-11-15' }, tiers: [{ q: 3, price: 4300, from: '', to: '' }] },
@@ -280,16 +280,20 @@ class Component extends DCLogic {
   state = {
     tab: 'special', step: 'form', mode: 'pct', minusN: '100', setX: '150', pct: '10', round: '10',
     from: '2026-11-01', to: '2026-11-15', tiers: [{ q: '3', minus: '100' }], tierPeriod: false, tFrom: '2026-11-01', tTo: '2026-11-30',
-    qtyMode: 'set', qtyVal: '10', status: 'off', ov: {}, choice: {}, res: {}, sc: ''
+    qtyMode: 'set', qtyVal: '10', status: 'off', ov: {}, choice: {}, choiceT: {}, res: {}, sc: ''
   };
   componentDidMount() { this.applyScene(); }
   componentDidUpdate() { if ((this.props.scene || 'default') !== this.state.sc) this.applyScene(); }
   applyScene() {
     const sc = this.props.scene || 'default';
-    const s = { sc: sc, tab: 'special', step: 'form', ov: {}, choice: {}, res: {}, tiers: [{ q: '3', minus: '100' }] };
+    const s = { sc: sc, tab: 'special', step: 'form', ov: {}, choice: {}, res: {}, tiers: [{ q: '3', minus: '100' }], tierPeriod: false };
     if (sc === 'preview') s.step = 'preview';
     if (sc === 'result') { s.step = 'result'; s.choice = { 2: 'replace', 9: 'skip' }; s.res = { '1': 'applied', '2': 'applied', '3': 'error', '4': 'applied', '8': 'applied', '9': 'skipped' }; }
     if (sc === 'tiers') { s.tab = 'tiers'; s.step = 'preview'; }
+    if (sc === 'tiersForm') { s.tab = 'tiers'; s.tierPeriod = true; s.tiers = [{ q: '3', minus: '100' }, { q: '5', minus: '200' }]; }
+    if (sc === 'qtyForm') { s.tab = 'qty'; }
+    if (sc === 'statusForm') { s.tab = 'status'; }
+    s.choiceT = {};
     this.setState(s);
   }
   calcSpecial(p) {
@@ -325,7 +329,7 @@ class Component extends DCLogic {
           out.push({ key: key, p: p, val: s.ov[key] != null ? s.ov[key] : String(v), num: true, unit: 'грн/шт', base: p.price + ' грн', hasTier: true, tierLabel: 'від ' + t.q + ' шт',
             cur: p.tiers.length ? p.tiers.map((x) => 'від ' + x.q + ' шт · ' + x.price + ' грн').join('; ') : '—',
             period: s.tierPeriod ? dm(s.tFrom) + '–' + dm(s.tTo) : 'без періоду', conflict: false,
-            warn: !!dup, warnMsg: dup ? 'Уже є знижка від ' + dup.q + ' шт (' + dup.price + ' грн, ' + (dup.from ? dm(dup.from) + '–' + dm(dup.to) : 'без періоду') + ') — вийде дубль.' : '',
+            dupChoice: !!dup, warn: !!dup, warnMsg: dup ? 'Уже є знижка від ' + dup.q + ' шт (' + dup.price + ' грн, ' + (dup.from ? dm(dup.from) + '–' + dm(dup.to) : 'без періоду') + ') — вийде дубль.' : '',
             err: err, errMsg: 'Ціна за штуку має бути більшою за 0.', action: 'Додати поріг' });
         });
       });
@@ -350,6 +354,7 @@ class Component extends DCLogic {
     const res = {};
     rows.forEach((r) => {
       if (r.conflict && this.state.choice[r.p.id] === 'skip') res[r.key] = 'skipped';
+      else if (r.dupChoice && (this.state.choiceT || {})[r.key] === 'skip') res[r.key] = 'skipped';
       else if (r.p.id === 3) res[r.key] = 'error';
       else if (r.action === 'Без змін') res[r.key] = 'skipped';
       else res[r.key] = 'applied';
@@ -377,7 +382,7 @@ class Component extends DCLogic {
       darkViolet: { scheme: 'dark', paper: '#1B1B20', shell: '#111114', bg: '#25252C', line: '#36363F', line2: '#2C2C34', line3: '#4E4E5A', ink4: '#73737F', ink3: '#A6A6B3', ink3b: '#3C3C46', ink2: '#E2E2E8', ink: '#FAFAFC', blue: '#B79CFF', blueSoft: '#2E2545', sel: '#241F33', danger: '#FF6B81', warnBg: '#2B2513', warnFg: '#F5C451', warnLine: '#7D6420', ok: '#4ADE80', okBg: '#13281C', gold: '#F5C451' },
       darkHybrid: { scheme: 'dark', paper: '#1B1B20', shell: '#111114', bg: '#25252C', line: '#36363F', line2: '#2C2C34', line3: '#4E4E5A', ink4: '#73737F', ink3: '#A6A6B3', ink3b: '#3C3C46', ink2: '#E2E2E8', ink: '#FAFAFC', blue: '#F2B544', blueSoft: '#33291A', sel: '#25221C', danger: '#FF7A7A', warnBg: '#2C1E14', warnFg: '#FDBA74', warnLine: '#9A4F16', ok: '#5EEAD4', okBg: '#12282A', gold: '#F2B544' }
     };
-    const t = THEMES[this.props.theme || 'darkHybrid'] || THEMES.darkHybrid;
+    const t = Object.assign({ hover: 'rgba(127,127,127,.10)', hoverRow: 'rgba(127,127,127,.05)', hoverLine: 'rgba(127,127,127,.35)', backdrop: 'rgba(17,24,39,.28)', backdropModal: 'rgba(17,24,39,.45)', shadowPop: '0 8px 24px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.07)', shadowKnob: '0 1px 2px rgba(0,0,0,.25)', switchOff: '#74747F', warnStrong: '#C2691F' }, THEMES[this.props.theme || 'darkHybrid'] || THEMES.darkHybrid);
     const fix = (x) => {
       if (typeof x === 'string') return x.indexOf('{{ t.') < 0 ? x : x.replace(/\{\{ t\.(\w+) \}\}/g, (m, k) => t[k]);
       if (Array.isArray(x)) return x.map(fix);
@@ -398,7 +403,8 @@ class Component extends DCLogic {
     const blocked = unchosen > 0 || errs > 0;
     const willApply = rows.filter((r) => !(r.conflict && s.choice[r.p.id] === 'skip') && r.action !== 'Без змін').length;
     const vRows = rows.map((r) => {
-      const ch = s.choice[r.p.id] || '';
+      const isDup = !!r.dupChoice;
+      const ch = isDup ? ((s.choiceT || {})[r.key] === 'skip' ? 'skip' : 'replace') : (s.choice[r.p.id] || '');
       const st = s.res[r.key] || '';
       return {
         name: r.p.name, model: r.p.model, hasTier: !!r.hasTier, tierLabel: r.tierLabel || '', base: r.base, cur: r.cur, period: r.period,
@@ -408,13 +414,14 @@ class Component extends DCLogic {
         val: r.val, valText: r.num ? r.val + ' ' + r.unit : r.val, unit: r.unit || '', inputLine: r.err ? '{{ t.danger }}' : '{{ t.line }}',
         onVal: (e) => { const ov = Object.assign({}, this.state.ov); ov[r.key] = e.target.value; this.setState({ ov: ov }); },
         flip: () => { const ov = Object.assign({}, this.state.ov); ov[r.key] = r.val === 'Увімкнено' ? 'off' : 'on'; this.setState({ ov: ov }); },
-        choose: isPreview && r.conflict, plain: isPreview && !r.conflict, action: r.action,
-        chooseLine: ch ? '{{ t.line }}' : '{{ t.warnLine }}',
+        choose: isPreview && (r.conflict || isDup), plain: isPreview && !r.conflict && !isDup, action: r.action,
+        optA: isDup ? 'Додати' : 'Замінити', chooseLabel: isDup ? 'Що зробити з дублем порогу' : 'Що зробити з наявною акцією',
+        chooseLine: ch ? '{{ t.line }}' : '{{ t.warnStrong }}',
         isReplace: ch === 'replace', isSkip: ch === 'skip',
         repBg: ch === 'replace' ? '{{ t.blue }}' : '{{ t.paper }}', repFg: ch === 'replace' ? '{{ t.paper }}' : '{{ t.ink2 }}',
         skipBg: ch === 'skip' ? '{{ t.blue }}' : '{{ t.paper }}', skipFg: ch === 'skip' ? '{{ t.paper }}' : '{{ t.ink2 }}',
-        replace: () => this.setState({ choice: Object.assign({}, this.state.choice, { [r.p.id]: 'replace' }) }),
-        skip: () => this.setState({ choice: Object.assign({}, this.state.choice, { [r.p.id]: 'skip' }) }),
+        replace: () => (isDup ? this.setState({ choiceT: Object.assign({}, this.state.choiceT, { [r.key]: 'add' }) }) : this.setState({ choice: Object.assign({}, this.state.choice, { [r.p.id]: 'replace' }) })),
+        skip: () => (isDup ? this.setState({ choiceT: Object.assign({}, this.state.choiceT, { [r.key]: 'skip' }) }) : this.setState({ choice: Object.assign({}, this.state.choice, { [r.p.id]: 'skip' }) })),
         rApplied: isResult && st === 'applied', rSkipped: isResult && st === 'skipped', rError: isResult && st === 'error', rSaving: isResult && st === 'saving',
         retry: () => this.retry([r.key])
       };
@@ -435,7 +442,7 @@ class Component extends DCLogic {
     return {
       bg: BG.map((b) => ({ name: b[0], price: b[1], bg: b[2] ? '{{ t.sel }}' : '{{ t.paper }}', box: b[2] ? '{{ t.blue }}' : '{{ t.ink4 }}', fill: b[2] ? '{{ t.blue }}' : '{{ t.paper }}' })),
       tabs: TABS.map((t) => ({ label: t[1], active: s.tab === t[0], line: s.tab === t[0] ? '{{ t.blue }}' : 'transparent', color: s.tab === t[0] ? '{{ t.blue }}' : '{{ t.ink3 }}',
-        pick: () => this.setState({ tab: t[0], step: 'form', ov: {}, choice: {}, res: {} }) })),
+        pick: () => this.setState({ tab: t[0], step: 'form', ov: {}, choice: {}, choiceT: {}, res: {} }) })),
       steps: steps, isForm: isForm, isPreview: isPreview, isResult: isResult,
       formSpecial: isForm && s.tab === 'special', formTiers: isForm && s.tab === 'tiers', formQty: isForm && s.tab === 'qty', formStatus: isForm && s.tab === 'status',
       isMinus: s.mode === 'minus', isSet: s.mode === 'set', isPct: s.mode === 'pct',

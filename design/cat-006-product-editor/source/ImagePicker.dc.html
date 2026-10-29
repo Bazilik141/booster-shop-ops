@@ -32,9 +32,9 @@ input,select,textarea{background-color:transparent}
       </div>
     </div>
   </div>
-  <div aria-hidden="true" style="position: absolute; inset: 0; background: rgba(17,24,39,.45); z-index: 300"></div>
+  <div aria-hidden="true" style="position: absolute; inset: 0; background: {{ t.backdropModal }}; z-index: 300"></div>
 
-  <div role="dialog" aria-modal="true" aria-labelledby="pick-title" onDragOver="{{ dragOver }}" onDragLeave="{{ dragLeave }}" onDrop="{{ drop }}" style="position: absolute; top: 64px; left: 50%; transform: translateX(-50%); width: 1080px; max-width: calc(100% - 32px); height: 872px; background: {{ t.paper }}; border-radius: 14px; z-index: 400; display: flex; flex-direction: column; box-shadow: 0 8px 24px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.07); overflow: hidden">
+  <div role="dialog" aria-modal="true" aria-labelledby="pick-title" onDragOver="{{ dragOver }}" onDragLeave="{{ dragLeave }}" onDrop="{{ drop }}" style="position: absolute; top: 64px; left: 50%; transform: translateX(-50%); width: 1080px; max-width: calc(100% - 32px); height: 872px; background: {{ t.paper }}; border-radius: 14px; z-index: 400; display: flex; flex-direction: column; box-shadow: {{ t.shadowPop }}; overflow: hidden">
     <div style="padding: 20px 24px 0; display: flex; flex-direction: column; gap: 14px">
       <div style="display: flex; align-items: center; justify-content: space-between">
         <h2 id="pick-title" style="margin: 0; font-size: 20px; font-weight: 800; color: {{ t.ink }}">Додати фото</h2>
@@ -152,7 +152,7 @@ class Component extends DCLogic {
       darkViolet: { scheme: 'dark', paper: '#1B1B20', shell: '#111114', bg: '#25252C', line: '#36363F', line2: '#2C2C34', line3: '#4E4E5A', ink4: '#73737F', ink3: '#A6A6B3', ink3b: '#3C3C46', ink2: '#E2E2E8', ink: '#FAFAFC', blue: '#B79CFF', blueSoft: '#2E2545', sel: '#241F33', danger: '#FF6B81', warnBg: '#2B2513', warnFg: '#F5C451', warnLine: '#7D6420', ok: '#4ADE80', okBg: '#13281C', gold: '#F5C451' },
       darkHybrid: { scheme: 'dark', paper: '#1B1B20', shell: '#111114', bg: '#25252C', line: '#36363F', line2: '#2C2C34', line3: '#4E4E5A', ink4: '#73737F', ink3: '#A6A6B3', ink3b: '#3C3C46', ink2: '#E2E2E8', ink: '#FAFAFC', blue: '#F2B544', blueSoft: '#33291A', sel: '#25221C', danger: '#FF7A7A', warnBg: '#2C1E14', warnFg: '#FDBA74', warnLine: '#9A4F16', ok: '#5EEAD4', okBg: '#12282A', gold: '#F2B544' }
     };
-    const t = THEMES[this.props.theme || 'darkHybrid'] || THEMES.darkHybrid;
+    const t = Object.assign({ hover: 'rgba(127,127,127,.10)', hoverRow: 'rgba(127,127,127,.05)', hoverLine: 'rgba(127,127,127,.35)', backdrop: 'rgba(17,24,39,.28)', backdropModal: 'rgba(17,24,39,.45)', shadowPop: '0 8px 24px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.07)', shadowKnob: '0 1px 2px rgba(0,0,0,.25)', switchOff: '#74747F', warnStrong: '#C2691F' }, THEMES[this.props.theme || 'darkHybrid'] || THEMES.darkHybrid);
     const fix = (x) => {
       if (typeof x === 'string') return x.indexOf('{{ t.') < 0 ? x : x.replace(/\{\{ t\.(\w+) \}\}/g, (m, k) => t[k]);
       if (Array.isArray(x)) return x.map(fix);

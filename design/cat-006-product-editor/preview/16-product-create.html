@@ -1,0 +1,421 @@
+<!doctype html>
+<!-- CAT-006 product admin editor · approved design v0.1 layout + D3 colour scheme (2026-10-28), round 2 (2026-10-29).
+     Static reference rendered from the Claude Design canvas sources in ../source/. Not production code:
+     recreate with Bootstrap 5 + plain JS inside the OpenCart admin shell. Interactions are described in the spec. -->
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CAT-006 · Новий товар (створення) (D3, static reference)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap">
+<style>
+html,body{height:100%;margin:0}#dc-root,#dc-root>.sc-host{height:100%}
+body{margin:0}
+
+body{margin:0}
+a{color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
+input,select,textarea{background-color:transparent}
+:focus-visible{outline:2px solid #3B82F6;outline-offset:2px}
+@keyframes bs-spin{to{transform:rotate(360deg)}}
+html{scroll-behavior:smooth}
+section[id]{scroll-margin-top:110px}
+
+</style>
+</head>
+<body>
+<div><div style="width: 100%;"><div><div style="font-family: Manrope, system-ui, -apple-system, sans-serif; color-scheme: dark; color: #E2E2E8; background: #111114; min-height: 4400px; font-size: 14px;">
+  <header style="height: 52px; background: #1B1B20; border-bottom: 1px solid #36363F; display: flex; align-items: center; justify-content: space-between; padding: 0px 20px; box-sizing: border-box;">
+    <div style="display: flex; align-items: center; gap: 10px; color: #A6A6B3; font-weight: 600; font-size: 13px;"><span aria-hidden="true" style="width: 28px; height: 28px; border-radius: 6px; background: #36363F; display: inline-block;"></span>OpenCart · Адмінпанель</div>
+    <div style="display: flex; gap: 16px; color: #A6A6B3; font-size: 13px;"><span>Raccoon</span><a href="#" style="color: #A6A6B3;">Вийти</a></div>
+  </header>
+  <div style="display: flex; flex-wrap: wrap; align-items: stretch;">
+    <nav aria-label="Меню адмінки" style="flex: 0 0 220px; background: #111114; border-right: 1px solid #36363F; padding: 16px 12px; box-sizing: border-box; display: flex; flex-direction: column; gap: 2px; font-size: 13px; color: #A6A6B3;">
+      <a href="#" style="color: #A6A6B3; text-decoration: none; padding: 8px 10px;">Панель керування</a>
+      <span style="padding: 8px 10px; color: #E2E2E8; font-weight: 700;">Каталог</span>
+      <a href="#" style="color: #A6A6B3; text-decoration: none; padding: 7px 10px 7px 22px;">Категорії</a>
+      <span style="color: #FAFAFC; padding: 7px 10px 7px 22px; border-radius: 6px; background: #1B1B20; border: 1px solid #36363F; font-weight: 700;">Товари Booster</span>
+      <a href="#" style="color: #A6A6B3; text-decoration: none; padding: 7px 10px 7px 22px;">Атрибути</a>
+      <a href="#" style="color: #A6A6B3; text-decoration: none; padding: 7px 10px 7px 22px;">Виробники</a>
+      <a href="#" style="color: #A6A6B3; text-decoration: none; padding: 8px 10px;">Розширення</a>
+      <a href="#" style="color: #A6A6B3; text-decoration: none; padding: 8px 10px;">Продажі</a>
+      <a href="#" style="color: #A6A6B3; text-decoration: none; padding: 8px 10px;">Система</a>
+    </nav>
+    <main style="flex: 999 1 560px; min-width: 0px; background: #1B1B20; padding: 0px 28px 80px; box-sizing: border-box;">
+
+      <div style="position: sticky; top: 0px; z-index: 200; background: #1B1B20; border-bottom: 1px solid #36363F; padding: 14px 0px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px;">
+        
+        
+          <a href="01-list.html" style="height: 36px; padding: 0px 10px; border-radius: 8px; border: 1px solid #36363F; color: #E2E2E8; font-weight: 700; font-size: 13px; display: inline-flex; align-items: center; text-decoration: none;">← До списку</a>
+        
+        <div style="flex: 1 1 360px; min-width: 0px;">
+          <h1 style="margin: 0px; font-size: 20px; font-weight: 800; color: #FAFAFC; line-height: 1.3;"><span class="sc-interp">Новий товар</span></h1>
+          
+          <div style="font-size: 12.5px; color: #A6A6B3;">Ще не збережено · поля з <span style="color: #FF7A7A; font-weight: 700;">*</span> обов’язкові</div>
+        </div>
+        <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600;">
+          <button type="button" aria-pressed="false" aria-label="Статус товару" style="width: 36px; height: 20px; border-radius: 999px; border: 0px; background: #74747F; position: relative; cursor: pointer; padding: 0px;"><span style="position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #1B1B20; box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 2px;"></span></button>
+          <span class="sc-interp">Вимкнено</span>
+        </span>
+        
+        
+        
+        <button type="button" style="height: 44px; padding: 0px 22px; border-radius: 8px; border: 0px; background: #F2B544; color: #1B1B20; font-weight: 700; font-size: 14.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">Зберегти</button>
+      </div>
+
+      <div style="display: flex; gap: 28px; align-items: flex-start; margin-top: 24px;">
+        <nav aria-label="Розділи товару" style="flex: 0 0 180px; position: sticky; top: 96px; display: flex; flex-direction: column; gap: 2px;">
+          
+            <a href="#s-main" aria-current="true" style="padding: 9px 12px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 700; color: #F2B544; background: #33291A; display: flex; justify-content: space-between; align-items: center;"><span class="sc-interp">Основне</span></a>
+          
+            <a href="#s-data" aria-current="false" style="padding: 9px 12px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 500; color: #E2E2E8; background: transparent; display: flex; justify-content: space-between; align-items: center;"><span class="sc-interp">Дані</span></a>
+          
+            <a href="#s-ship" aria-current="false" style="padding: 9px 12px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 500; color: #E2E2E8; background: transparent; display: flex; justify-content: space-between; align-items: center;"><span class="sc-interp">Доставка та зв’язки</span></a>
+          
+            <a href="#s-cat" aria-current="false" style="padding: 9px 12px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 500; color: #E2E2E8; background: transparent; display: flex; justify-content: space-between; align-items: center;"><span class="sc-interp">Категорії та фільтри</span></a>
+          
+            <a href="#s-attr" aria-current="false" style="padding: 9px 12px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 500; color: #E2E2E8; background: transparent; display: flex; justify-content: space-between; align-items: center;"><span class="sc-interp">Атрибути</span></a>
+          
+            <a href="#s-fam" aria-current="false" style="padding: 9px 12px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 500; color: #E2E2E8; background: transparent; display: flex; justify-content: space-between; align-items: center;"><span class="sc-interp">Родина варіантів</span></a>
+          
+            <a href="#s-disc" aria-current="false" style="padding: 9px 12px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 500; color: #E2E2E8; background: transparent; display: flex; justify-content: space-between; align-items: center;"><span class="sc-interp">Знижки</span></a>
+          
+            <a href="#s-photo" aria-current="false" style="padding: 9px 12px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 500; color: #E2E2E8; background: transparent; display: flex; justify-content: space-between; align-items: center;"><span class="sc-interp">Фото</span></a>
+          
+            <a href="#s-seo" aria-current="false" style="padding: 9px 12px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 500; color: #E2E2E8; background: transparent; display: flex; justify-content: space-between; align-items: center;"><span class="sc-interp">SEO</span></a>
+          
+          <div style="display: flex; flex-direction: column; gap: 2px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #2C2C34;">
+            <button type="button" style="height: 34px; padding: 0px 12px; border: 0px; border-radius: 6px; background: transparent; color: #F2B544; font-weight: 700; font-size: 13px; cursor: pointer; text-align: left;">Згорнути всі</button>
+            <button type="button" style="height: 34px; padding: 0px 12px; border: 0px; border-radius: 6px; background: transparent; color: #F2B544; font-weight: 700; font-size: 13px; cursor: pointer; text-align: left;">Розгорнути всі</button>
+          </div>
+        </nav>
+
+        <div style="flex: 1 1 auto; min-width: 0px; display: flex; flex-direction: column; gap: 20px;">
+
+          <section id="s-main" aria-labelledby="h-main" style="border: 1px solid #36363F; border-radius: 10px; padding: 20px 22px; display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+              <h2 id="h-main" style="margin: 0px; font-size: 17px; font-weight: 700; color: #FAFAFC;">Основне</h2>
+              <button type="button" aria-expanded="true" aria-label="Згорнути: Основне" style="width: 32px; height: 32px; border: 1px solid #36363F; border-radius: 8px; background: #1B1B20; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: rotate(0deg);"><path d="m6 9 6 6 6-6"></path></svg></button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+            <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;"><span>Назва товару<span aria-hidden="true" style="color: #FF7A7A;"> *</span></span>
+              <input required="" aria-required="true" placeholder="Напр. Бустер-бокс Mega Symphonia (японське видання)" value="" style="height: 44px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 12px; font-size: 15px; font-weight: 600; color: #FAFAFC;">
+            </label>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 13px; font-weight: 600;">Опис</span>
+                <span role="group" aria-label="Режим опису" style="display: inline-flex; border: 1px solid #36363F; border-radius: 8px; overflow: hidden;">
+                  <button type="button" aria-pressed="true" style="height: 32px; padding: 0px 12px; border: 0px; background: #F2B544; color: #1B1B20; font-weight: 700; font-size: 12.5px; cursor: pointer;">Код HTML</button>
+                  <button type="button" aria-pressed="false" style="height: 32px; padding: 0px 12px; border-width: 0px 0px 0px 1px; border-style: none none none solid; border-color: currentcolor currentcolor currentcolor #36363F; border-image: none; background: #1B1B20; color: #E2E2E8; font-weight: 700; font-size: 12.5px; cursor: pointer;">Перегляд</button>
+                </span>
+              </div>
+              
+                <textarea aria-label="Опис, код HTML" placeholder="Вставте готовий HTML опису" style="height: 220px; border: 1px solid #36363F; border-radius: 6px; padding: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12.5px; line-height: 1.6; color: #E2E2E8; background: #25252C; resize: vertical;"></textarea>
+                <span style="font-size: 12px; color: #A6A6B3;">Вставляйте готовий HTML. Редактор не змінює розмітку.</span>
+              
+              
+            </div>
+            <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;">Meta-заголовок
+              <input value="" style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 12px; font-weight: 500;">
+              <span style="font-size: 12px; color: #A6A6B3; font-weight: 400;"><span class="sc-interp">0 символів · рекомендовано до 60</span></span>
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;">Meta-опис
+              <textarea style="height: 64px; border: 1px solid #36363F; border-radius: 6px; padding: 10px 12px; font-weight: 500; resize: vertical;"></textarea>
+              <span style="font-size: 12px; color: #A6A6B3; font-weight: 400;"><span class="sc-interp">0 символів</span></span>
+            </label>
+            </div>
+          </section>
+
+          <section id="s-data" aria-labelledby="h-data" style="border: 1px solid #36363F; border-radius: 10px; padding: 20px 22px; display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+              <h2 id="h-data" style="margin: 0px; font-size: 17px; font-weight: 700; color: #FAFAFC;">Дані</h2>
+              <button type="button" aria-expanded="true" aria-label="Згорнути: Дані" style="width: 32px; height: 32px; border: 1px solid #36363F; border-radius: 8px; background: #1B1B20; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: rotate(0deg);"><path d="m6 9 6 6 6-6"></path></svg></button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 16px; position: relative;">
+            <div style="display: grid; grid-template-columns: repeat(3, minmax(0px, 1fr)); gap: 16px;">
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;"><span>Модель<span aria-hidden="true" style="color: #FF7A7A;"> *</span></span>
+                <input required="" aria-required="true" placeholder="Напр. PKM-JP-MSYM-BBX" value="" style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13.5px;">
+                <span style="font-size: 12px; color: #A6A6B3; font-weight: 400;">За моделлю товар звіряється з CRM</span>
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;">Артикул
+                <input placeholder="Введіть артикул" style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13.5px;">
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;"><span>Основна ціна, грн<span aria-hidden="true" style="color: #FF7A7A;"> *</span></span>
+                <input required="" aria-required="true" placeholder="0" inputmode="numeric" value="" style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 12px; font-weight: 800;">
+                
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;">Кількість, шт
+                <input inputmode="numeric" value="0" style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 12px; font-weight: 700;">
+                
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;">Мінімальне замовлення, шт
+                <input inputmode="numeric" value="1" style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 12px;">
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;">Коли немає в наявності
+                <select style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 10px; background: #1B1B20;"><option>Немає в наявності</option><option>Передзамовлення</option><option>Очікується</option></select>
+              </label>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(3, minmax(0px, 1fr)); gap: 16px; align-items: end;">
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;">Виробник
+                <select style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 10px; background: #1B1B20;"><option>The Pokémon Company</option><option>Bandai</option><option>Booster Shop 3D</option></select>
+              </label>
+              <div style="grid-column: span 2; display: flex; align-items: center; gap: 12px; min-height: 40px; padding: 6px 14px; border: 1px solid #36363F; border-radius: 8px; box-sizing: border-box;">
+              <button type="button" aria-pressed="true" aria-label="Вираховувати зі складу" style="width: 36px; height: 20px; border-radius: 999px; border: 0px; background: #F2B544; position: relative; cursor: pointer; padding: 0px; flex: 0 0 auto;"><span style="position: absolute; top: 2px; left: 18px; width: 16px; height: 16px; border-radius: 50%; background: #1B1B20; box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 2px;"></span></button>
+              <span style="display: flex; align-items: baseline; flex-wrap: wrap; gap: 2px 10px;">
+                <span style="font-weight: 600; font-size: 14px; color: #FAFAFC;">Вираховувати зі складу</span>
+                <span style="font-size: 12px; color: #A6A6B3;"><span class="sc-interp">Увімкнено: після кожного замовлення кількість зменшується автоматично.</span></span>
+              </span>
+              </div>
+            </div>
+            </div>
+          </section>
+
+          <section id="s-ship" aria-labelledby="h-ship" style="border: 1px solid #36363F; border-radius: 10px; padding: 20px 22px; display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+              <h2 id="h-ship" style="margin: 0px; font-size: 17px; font-weight: 700; color: #FAFAFC;">Доставка та зв’язки</h2>
+              <button type="button" aria-expanded="true" aria-label="Згорнути: Доставка та зв’язки" style="width: 32px; height: 32px; border: 1px solid #36363F; border-radius: 8px; background: #1B1B20; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: rotate(0deg);"><path d="m6 9 6 6 6-6"></path></svg></button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: grid; grid-template-columns: repeat(3, minmax(0px, 1fr)); gap: 16px; align-items: start;">
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+                <label for="p-weight" style="font-size: 13px; font-weight: 600;">Вага</label>
+                <span style="display: flex; gap: 8px;">
+                  <input id="p-weight" inputmode="decimal" placeholder="0" value="" style="height: 40px; width: 120px; box-sizing: border-box; border: 1px solid #36363F; border-radius: 6px; padding: 0px 12px; font-weight: 700;">
+                  <select aria-label="Одиниця ваги" style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 10px; background: #1B1B20;"><option>кг</option><option>г</option></select>
+                </span>
+              </div>
+              <fieldset style="grid-column: span 2; border: 0px; margin: 0px; padding: 0px; display: flex; flex-direction: column; gap: 6px; min-width: 0px;">
+                <legend style="font-size: 13px; font-weight: 600; padding: 0px; margin-bottom: 6px;">Розміри: довжина × ширина × висота</legend>
+                <span style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                  <input aria-label="Довжина" inputmode="decimal" placeholder="Д" value="" style="height: 40px; width: 90px; box-sizing: border-box; border: 1px solid #36363F; border-radius: 6px; padding: 0px 12px; font-weight: 700;">
+                  <span aria-hidden="true" style="color: #A6A6B3;">×</span>
+                  <input aria-label="Ширина" inputmode="decimal" placeholder="Ш" value="" style="height: 40px; width: 90px; box-sizing: border-box; border: 1px solid #36363F; border-radius: 6px; padding: 0px 12px; font-weight: 700;">
+                  <span aria-hidden="true" style="color: #A6A6B3;">×</span>
+                  <input aria-label="Висота" inputmode="decimal" placeholder="В" value="" style="height: 40px; width: 90px; box-sizing: border-box; border: 1px solid #36363F; border-radius: 6px; padding: 0px 12px; font-weight: 700;">
+                  <select aria-label="Одиниця розмірів" style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 10px; background: #1B1B20;"><option>см</option><option>мм</option></select>
+                </span>
+              </fieldset>
+            </div>
+            <span style="font-size: 12px; color: #A6A6B3;">Вага й розміри зберігаються у стандартних полях товару OpenCart.</span>
+            <div style="display: flex; flex-direction: column; gap: 10px; border-top: 1px solid #2C2C34; padding-top: 16px;">
+              <span style="font-size: 13px; font-weight: 600;">Супутні товари</span>
+              
+              <span style="font-size: 13px; color: #A6A6B3;">Супутніх товарів ще немає.</span>
+              <div style="position: relative; max-width: 520px;">
+                <span style="position: absolute; left: 12px; top: 12px; color: #A6A6B3; display: inline-flex;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span>
+                <input aria-label="Додати супутній товар" placeholder="Додати супутній товар: назва або модель" style="width: 100%; box-sizing: border-box; height: 38px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 10px 0px 34px; font-size: 13px; background: #25252C;">
+              </div>
+              <span style="font-size: 12px; color: #A6A6B3;">Зв’язок задається вручну, як у стандартній формі товару.</span>
+            </div>
+            </div>
+          </section>
+
+          <section id="s-cat" aria-labelledby="h-cat" style="border: 1px solid #36363F; border-radius: 10px; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+              <h2 id="h-cat" style="margin: 0px; font-size: 17px; font-weight: 700; color: #FAFAFC;">Категорії та фільтри</h2>
+              <button type="button" aria-expanded="true" aria-label="Згорнути: Категорії та фільтри" style="width: 32px; height: 32px; border: 1px solid #36363F; border-radius: 8px; background: #1B1B20; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: rotate(0deg);"><path d="m6 9 6 6 6-6"></path></svg></button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0px, 1fr)); gap: 24px; align-items: start;">
+              <div style="display: flex; flex-direction: column; gap: 10px; min-width: 0px;">
+                <span style="font-size: 13px; font-weight: 600;">Категорії</span>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                  
+                </div>
+                <div style="position: relative;">
+                  <span style="position: absolute; left: 12px; top: 12px; color: #A6A6B3; display: inline-flex;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span>
+                  <input aria-label="Додати категорію" placeholder="Додати категорію: почніть вводити назву" style="width: 100%; box-sizing: border-box; height: 38px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 10px 0px 34px; font-size: 13px; background: #25252C;">
+                </div>
+                <span style="font-size: 12px; color: #A6A6B3;">Батьківські категорії не додаються автоматично — додайте потрібні вручну.</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 10px; min-width: 0px;">
+                <span style="font-size: 13px; font-weight: 600;">Фільтри</span>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                  
+                </div>
+                <div style="position: relative;">
+                  <span style="position: absolute; left: 12px; top: 12px; color: #A6A6B3; display: inline-flex;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span>
+                  <input aria-label="Додати фільтр" placeholder="Додати фільтр: почніть вводити, напр. «японська»" style="width: 100%; box-sizing: border-box; height: 38px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 10px 0px 34px; font-size: 13px; background: #25252C;">
+                </div>
+                <span style="font-size: 12px; color: #A6A6B3;">Фільтри потрібні, щоб товар знаходився через фільтрацію в категоріях на сайті.</span>
+              </div>
+            </div>
+            </div>
+          </section>
+
+          <section id="s-attr" aria-labelledby="h-attr" style="border: 1px solid #36363F; border-radius: 10px; padding: 20px 22px; display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+              <div>
+                <h2 id="h-attr" style="margin: 0px; font-size: 17px; font-weight: 700; color: #FAFAFC;">Атрибути</h2>
+                <div style="font-size: 12.5px; color: #A6A6B3; margin-top: 4px;">Значення беруться з довідника. Порожні атрибути на сайті не показуються.</div>
+              </div>
+              <span style="position: relative; margin-left: auto;">
+                <button type="button" aria-haspopup="menu" aria-expanded="true" style="height: 40px; padding: 0px 14px; border: 1px solid #F2B544; border-radius: 8px; background: transparent; color: #F2B544; font-weight: 700; font-size: 13.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">Додати шаблон атрибутів<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button>
+                
+                  <div role="menu" aria-label="Шаблони атрибутів" style="position: absolute; right: 0px; top: 46px; z-index: 100; width: 300px; background: #1B1B20; border: 1px solid #36363F; border-radius: 10px; box-shadow: rgba(0, 0, 0, 0.12) 0px 8px 24px, rgba(0, 0, 0, 0.07) 0px 2px 6px; padding: 6px; display: flex; flex-direction: column; gap: 2px;">
+                    
+                      <button type="button" role="menuitem" style="min-height: 36px; padding: 0px 10px; border: 0px; border-radius: 6px; background: transparent; color: #E2E2E8; font-size: 13.5px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; text-align: left;"><span class="sc-interp">Бустер-бокс</span><span style="font-size: 12px; font-weight: 500; color: #A6A6B3;"><span class="sc-interp">10 атрибутів</span></span></button>
+                    
+                      <button type="button" role="menuitem" style="min-height: 36px; padding: 0px 10px; border: 0px; border-radius: 6px; background: transparent; color: #E2E2E8; font-size: 13.5px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; text-align: left;"><span class="sc-interp">Бустер</span><span style="font-size: 12px; font-weight: 500; color: #A6A6B3;"><span class="sc-interp">8 атрибутів</span></span></button>
+                    
+                      <button type="button" role="menuitem" style="min-height: 36px; padding: 0px 10px; border: 0px; border-radius: 6px; background: transparent; color: #E2E2E8; font-size: 13.5px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; text-align: left;"><span class="sc-interp">Стартова колода</span><span style="font-size: 12px; font-weight: 500; color: #A6A6B3;"><span class="sc-interp">8 атрибутів</span></span></button>
+                    
+                      <button type="button" role="menuitem" style="min-height: 36px; padding: 0px 10px; border: 0px; border-radius: 6px; background: transparent; color: #E2E2E8; font-size: 13.5px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; text-align: left;"><span class="sc-interp">Rare Pack</span><span style="font-size: 12px; font-weight: 500; color: #A6A6B3;"><span class="sc-interp">9 атрибутів</span></span></button>
+                    
+                      <button type="button" role="menuitem" style="min-height: 36px; padding: 0px 10px; border: 0px; border-radius: 6px; background: transparent; color: #E2E2E8; font-size: 13.5px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; text-align: left;"><span class="sc-interp">Брелок 3D</span><span style="font-size: 12px; font-weight: 500; color: #A6A6B3;"><span class="sc-interp">4 атрибутів</span></span></button>
+                    
+                    <span style="padding: 8px 10px 4px; margin-top: 4px; border-top: 1px solid #2C2C34; font-size: 12px; line-height: 1.45; color: #A6A6B3;">Додає рядки шаблону, яких ще немає. Наявні значення не змінюються, вибір шаблону не зберігається.</span>
+                  </div>
+                
+              </span>
+              <button type="button" aria-expanded="true" aria-label="Згорнути: Атрибути" style="width: 32px; height: 32px; border: 1px solid #36363F; border-radius: 8px; background: #1B1B20; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; margin-bottom: 4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: rotate(0deg);"><path d="m6 9 6 6 6-6"></path></svg></button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+            
+
+            <div style="border: 1px solid #36363F; border-radius: 10px;">
+              
+                <div style="padding: 16px 14px; border-bottom: 1px solid #2C2C34; font-size: 13px; color: #A6A6B3;">Атрибутів ще немає. Додайте шаблон атрибутів або окремий атрибут нижче.</div>
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              <div style="padding: 10px 14px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <select aria-label="Додати атрибут" style="height: 36px; border: 1px dashed #73737F; border-radius: 6px; padding: 0px 10px; background: #1B1B20; color: #F2B544; font-weight: 700; font-size: 13px;">
+                  <option value="">+ Додати атрибут…</option>
+                  <optgroup label="Характеристики">
+                    <option value="Характеристики|Мова">Мова</option>
+                    <option value="Характеристики|Назва сету">Назва сету</option>
+                    <option value="Характеристики|Рік випуску">Рік випуску</option>
+                    <option value="Характеристики|Кількість карток у бустері">Кількість карток у бустері</option>
+                    <option value="Характеристики|Кількість бустерів у боксі">Кількість бустерів у боксі</option>
+                    <option value="Характеристики|Кількість карток у колоді">Кількість карток у колоді</option>
+                    <option value="Характеристики|Стан">Стан</option>
+                    <option value="Характеристики|Походження товару">Походження товару</option>
+                    <option value="Характеристики|Зважування">Зважування</option>
+                    <option value="Характеристики|Виробник">Виробник</option>
+                    <option value="Характеристики|Тип пакування">Тип пакування</option>
+                    <option value="Характеристики|Додатковий вміст">Додатковий вміст</option>
+                    <option value="Характеристики|Може трапитись у Mystery Box">Може трапитись у Mystery Box</option>
+                  </optgroup>
+                  <optgroup label="Характеристики аксесуарів">
+                    <option value="Характеристики аксесуарів|Тип товару">Тип товару</option>
+                    <option value="Характеристики аксесуарів|Кількість в упаковці">Кількість в упаковці</option>
+                    <option value="Характеристики аксесуарів|Матеріал">Матеріал</option>
+                    <option value="Характеристики аксесуарів|Розмір / Формат">Розмір / Формат</option>
+                    <option value="Характеристики аксесуарів|Товщина матеріалу">Товщина матеріалу</option>
+                    <option value="Характеристики аксесуарів|Без ПВХ">Без ПВХ</option>
+                    <option value="Характеристики аксесуарів|Сумісність з картками">Сумісність з картками</option>
+                    <option value="Характеристики аксесуарів|Кількість кишеньок">Кількість кишеньок</option>
+                    <option value="Характеристики аксесуарів|Отворів для кріплення">Отворів для кріплення</option>
+                  </optgroup>
+                  <optgroup label="Характеристики 3D-виробу">
+                    <option value="Характеристики 3D-виробу|Матеріал">Матеріал</option>
+                    <option value="Характеристики 3D-виробу|Колір">Колір</option>
+                    <option value="Характеристики 3D-виробу|Розміри">Розміри</option>
+                    <option value="Характеристики 3D-виробу|Комплектація">Комплектація</option>
+                    <option value="Характеристики 3D-виробу|Рухомі елементи">Рухомі елементи</option>
+                    <option value="Характеристики 3D-виробу|Вікове позиціонування">Вікове позиціонування</option>
+                    <option value="Характеристики 3D-виробу|Сумісність">Сумісність</option>
+                  </optgroup>
+                </select>
+                <span style="font-size: 12px; color: #A6A6B3;">Можна додати будь-який атрибут магазину, не лише з шаблону типу.</span>
+                <button type="button" style="border: 0px; background: none; color: #F2B544; font-weight: 700; font-size: 12.5px; cursor: pointer;">Повернути прибрані (<span class="sc-interp">11</span>)</button>
+              </div>
+            </div>
+            </div>
+          </section>
+
+          <section id="s-fam" aria-labelledby="h-fam" style="border: 1px solid #36363F; border-radius: 10px; padding: 20px 22px; display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <h2 id="h-fam" style="margin: 0px; font-size: 17px; font-weight: 700; color: #FAFAFC;">Родина варіантів</h2>
+              <span style="display: flex; align-items: center; gap: 12px;"><button type="button" aria-expanded="true" aria-label="Згорнути: Родина варіантів" style="width: 32px; height: 32px; border: 1px solid #36363F; border-radius: 8px; background: #1B1B20; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: rotate(0deg);"><path d="m6 9 6 6 6-6"></path></svg></button></span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+            
+              <div style="padding: 14px 16px; border-radius: 10px; border: 1px dashed #73737F; font-size: 13px; color: #A6A6B3; line-height: 1.5;">Родину варіантів можна призначити після першого збереження товару.</div>
+            
+            
+            </div>
+          </section>
+
+          <section id="s-disc" aria-labelledby="h-disc" style="border: 1px solid #36363F; border-radius: 10px; padding: 20px 22px; display: flex; flex-direction: column; gap: 18px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+              <h2 id="h-disc" style="margin: 0px; font-size: 17px; font-weight: 700; color: #FAFAFC;">Знижки</h2>
+              <button type="button" aria-expanded="true" aria-label="Згорнути: Знижки" style="width: 32px; height: 32px; border: 1px solid #36363F; border-radius: 8px; background: #1B1B20; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: rotate(0deg);"><path d="m6 9 6 6 6-6"></path></svg></button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 18px;">
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                <h3 style="margin: 0px; font-size: 15px; font-weight: 700; color: #FAFAFC;">Акційна ціна <span style="font-weight: 500; color: #A6A6B3; font-size: 13px;">· на період, для 1 шт</span></h3>
+                <button type="button" style="border: 0px; background: none; color: #F2B544; font-weight: 700; font-size: 13px; cursor: pointer;">+ Додати акційну ціну</button>
+              </div>
+              <div style="border: 1px solid #36363F; border-radius: 10px;">
+                <div style="display: grid; grid-template-columns: 110px 170px minmax(0px, 1fr) 170px 76px; gap: 12px; align-items: center; height: 36px; padding: 0px 14px; background: #25252C; border-bottom: 1px solid #36363F; font-size: 12px; font-weight: 700; color: #A6A6B3;">
+                  <span>Група</span><span>Ціна</span><span>Період</span><span>Стан</span><span></span>
+                </div>
+                <div style="padding: 14px; font-size: 13px; color: #A6A6B3;">Акційних цін ще немає.</div>
+                
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                <h3 style="margin: 0px; font-size: 15px; font-weight: 700; color: #FAFAFC;">Від кількості <span style="font-weight: 500; color: #A6A6B3; font-size: 13px;">· ціна за штуку при замовленні від N шт</span></h3>
+                <button type="button" style="border: 0px; background: none; color: #F2B544; font-weight: 700; font-size: 13px; cursor: pointer;">+ Додати поріг</button>
+              </div>
+              <div style="border: 1px solid #36363F; border-radius: 10px;">
+                <div style="display: grid; grid-template-columns: 110px 100px 170px minmax(0px, 1fr) 170px 76px; gap: 12px; align-items: center; height: 36px; padding: 0px 14px; background: #25252C; border-bottom: 1px solid #36363F; font-size: 12px; font-weight: 700; color: #A6A6B3;">
+                  <span>Група</span><span>Від</span><span>Ціна за шт</span><span>Період</span><span>Стан</span><span></span>
+                </div>
+                <div style="padding: 14px; font-size: 13px; color: #A6A6B3;">Порогів ще немає.</div>
+                
+              </div>
+            </div>
+            </div>
+          </section>
+
+          <section id="s-photo" aria-labelledby="h-photo" style="border: 1px solid #36363F; border-radius: 10px; padding: 20px 22px; display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+              <h2 id="h-photo" style="margin: 0px; font-size: 17px; font-weight: 700; color: #FAFAFC;">Фото</h2>
+              <span style="display: flex; align-items: center; gap: 12px;"><span style="font-size: 12.5px; color: #A6A6B3;">Перетягніть або змініть порядок стрілками. Перше фото — головне.</span><button type="button" aria-expanded="true" aria-label="Згорнути: Фото" style="width: 32px; height: 32px; border: 1px solid #36363F; border-radius: 8px; background: #1B1B20; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: rotate(0deg);"><path d="m6 9 6 6 6-6"></path></svg></button></span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: grid; grid-template-columns: repeat(5, minmax(0px, 1fr)); gap: 12px;">
+              
+              <a href="14-image-picker.html" style="border: 2px dashed #73737F; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; min-height: 200px; text-decoration: none; color: #F2B544; font-weight: 700; font-size: 13.5px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Додати фото</a>
+            </div>
+            </div>
+          </section>
+
+          <section id="s-seo" aria-labelledby="h-seo" style="border: 1px solid #36363F; border-radius: 10px; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+              <h2 id="h-seo" style="margin: 0px; font-size: 17px; font-weight: 700; color: #FAFAFC;">SEO</h2>
+              <button type="button" aria-expanded="true" aria-label="Згорнути: SEO" style="width: 32px; height: 32px; border: 1px solid #36363F; border-radius: 8px; background: #1B1B20; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: rotate(0deg);"><path d="m6 9 6 6 6-6"></path></svg></button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+            <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;">Адреса сторінки (SEO URL)
+              <span style="display: flex; align-items: center; max-width: 640px; border: 1px solid #36363F; border-radius: 6px; overflow: hidden;"><span style="padding: 0px 10px; height: 40px; display: flex; align-items: center; background: #25252C; color: #A6A6B3; font-weight: 500; border-right: 1px solid #36363F;">boostershop.website/</span><input aria-label="SEO URL" placeholder="напр. booster-box-mega-symphonia-jp" value="" style="flex: 1 1 0%; min-width: 0px; height: 40px; border: 0px; padding: 0px 10px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px;"></span>
+            </label>
+            
+            </div>
+          </section>
+        </div>
+      </div>
+
+      
+    </main>
+  </div>
+
+  </div></div></div></div>
+</body>
+</html>

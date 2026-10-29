@@ -20,7 +20,7 @@ html{scroll-behavior:smooth}
 section[id]{scroll-margin-top:110px}
 </style>
 </helmet>
-<div style="font-family: Manrope, system-ui, -apple-system, sans-serif; color-scheme: {{ t.scheme }}; color: {{ t.ink2 }}; background: {{ t.shell }}; min-height: 4300px; font-size: 14px">
+<div style="font-family: Manrope, system-ui, -apple-system, sans-serif; color-scheme: {{ t.scheme }}; color: {{ t.ink2 }}; background: {{ t.shell }}; min-height: 4400px; font-size: 14px">
   <header style="height: 52px; background: {{ t.paper }}; border-bottom: 1px solid {{ t.line }}; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box">
     <div style="display: flex; align-items: center; gap: 10px; color: {{ t.ink3 }}; font-weight: 600; font-size: 13px"><span aria-hidden="true" style="width: 28px; height: 28px; border-radius: 6px; background: {{ t.line }}; display: inline-block"></span>OpenCart · Адмінпанель</div>
     <div style="display: flex; gap: 16px; color: {{ t.ink3 }}; font-size: 13px"><span>Raccoon</span><a href="#" style="color: {{ t.ink3 }}">Вийти</a></div>
@@ -47,16 +47,17 @@ section[id]{scroll-margin-top:110px}
           <a href="Main.dc.html" style="height: 36px; padding: 0 10px; border-radius: 8px; border: 1px solid {{ t.line }}; color: {{ t.ink2 }}; font-weight: 700; font-size: 13px; display: inline-flex; align-items: center; text-decoration: none">← До списку</a>
         </sc-if>
         <div style="flex: 1 1 360px; min-width: 0">
-          <h1 style="margin: 0; font-size: 20px; font-weight: 800; color: {{ t.ink }}; line-height: 1.3">{{ name }}</h1>
-          <div style="font-size: 12.5px; color: {{ t.ink3 }}; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">PKM-JP-MSYM-BBX</div>
+          <h1 style="margin: 0; font-size: 20px; font-weight: 800; color: {{ t.ink }}; line-height: 1.3">{{ title }}</h1>
+          <sc-if value="{{ notCreate }}" hint-placeholder-val="{{ true }}"><div style="font-size: 12.5px; color: {{ t.ink3 }}; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">PKM-JP-MSYM-BBX</div></sc-if>
+          <sc-if value="{{ isCreate }}" hint-placeholder-val="{{ false }}"><div style="font-size: 12.5px; color: {{ t.ink3 }}">Ще не збережено · поля з <span style="color: {{ t.danger }}; font-weight: 700">*</span> обов’язкові</div></sc-if>
         </div>
         <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600">
-          <button type="button" onClick="{{ toggleOn }}" aria-pressed="{{ on }}" aria-label="Статус товару" style="width: 36px; height: 20px; border-radius: 999px; border: 0; background: {{ switchBg }}; position: relative; cursor: pointer; padding: 0"><span style="position: absolute; top: 2px; left: {{ knob }}; width: 16px; height: 16px; border-radius: 50%; background: {{ t.paper }}; box-shadow: 0 1px 2px rgba(0,0,0,.25)"></span></button>
+          <button type="button" onClick="{{ toggleOn }}" aria-pressed="{{ on }}" aria-label="Статус товару" style="width: 36px; height: 20px; border-radius: 999px; border: 0; background: {{ switchBg }}; position: relative; cursor: pointer; padding: 0"><span style="position: absolute; top: 2px; left: {{ knob }}; width: 16px; height: 16px; border-radius: 50%; background: {{ t.paper }}; box-shadow: {{ t.shadowKnob }}"></span></button>
           {{ onLabel }}
         </span>
         <sc-if value="{{ dirty }}" hint-placeholder-val="{{ false }}"><span style="font-size: 12.5px; font-weight: 700; padding: 5px 10px; border-radius: 999px; background: {{ t.warnBg }}; border: 1px solid {{ t.warnLine }}; color: {{ t.warnFg }}">Є незбережені зміни</span></sc-if>
         <sc-if value="{{ savedNow }}" hint-placeholder-val="{{ false }}"><span style="display: inline-flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 700; color: {{ t.ok }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg>Усі зміни збережено</span></sc-if>
-        <a href="#" style="font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px">На сайті<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"></path></svg></a>
+        <sc-if value="{{ notCreate }}" hint-placeholder-val="{{ true }}"><a href="#" style="font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; color: {{ t.blue }}">На сайті<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"></path></svg></a></sc-if>
         <button type="button" onClick="{{ save }}" style="height: 44px; padding: 0 22px; border-radius: 8px; border: 0; background: {{ t.blue }}; color: {{ t.paper }}; font-weight: 700; font-size: 14.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px"><sc-if value="{{ saving }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(255,255,255,.4); border-top-color: {{ t.paper }}; animation: bs-spin .8s linear infinite; display: inline-block; box-sizing: border-box"></span></sc-if>Зберегти</button>
       </div>
 
@@ -79,8 +80,8 @@ section[id]{scroll-margin-top:110px}
               <button type="button" onClick="{{ tg.main }}" aria-expanded="{{ open.main }}" aria-label="{{ tgl.main }}" style="width: 32px; height: 32px; border: 1px solid {{ t.line }}; border-radius: 8px; background: {{ t.paper }}; color: {{ t.ink2 }}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: rotate({{ rot.main }})"><path d="m6 9 6 6 6-6"></path></svg></button>
             </div>
             <sc-if value="{{ open.main }}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-direction: column; gap: 16px">
-            <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Назва товару
-              <input value="{{ name }}" onChange="{{ onName }}" style="height: 44px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 12px; font-size: 15px; font-weight: 600; color: {{ t.ink }}">
+            <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600"><span>Назва товару<span aria-hidden="true" style="color: {{ t.danger }}"> *</span></span>
+              <input value="{{ name }}" onChange="{{ onName }}" required="{{ true }}" aria-required="true" placeholder="Напр. Бустер-бокс Mega Symphonia (японське видання)" style="height: 44px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 12px; font-size: 15px; font-weight: 600; color: {{ t.ink }}">
             </label>
             <div style="display: flex; flex-direction: column; gap: 6px">
               <div style="display: flex; align-items: center; justify-content: space-between">
@@ -91,7 +92,7 @@ section[id]{scroll-margin-top:110px}
                 </span>
               </div>
               <sc-if value="{{ isCode }}" hint-placeholder-val="{{ true }}">
-                <textarea aria-label="Опис, код HTML" onInput="{{ touch }}" defaultValue="{{ html }}" style="height: 220px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12.5px; line-height: 1.6; color: {{ t.ink2 }}; background: {{ t.bg }}; resize: vertical"></textarea>
+                <textarea aria-label="Опис, код HTML" onInput="{{ touch }}" defaultValue="{{ v.html }}" placeholder="Вставте готовий HTML опису" style="height: 220px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12.5px; line-height: 1.6; color: {{ t.ink2 }}; background: {{ t.bg }}; resize: vertical"></textarea>
                 <span style="font-size: 12px; color: {{ t.ink3 }}">Вставляйте готовий HTML. Редактор не змінює розмітку.</span>
               </sc-if>
               <sc-if value="{{ isVisual }}" hint-placeholder-val="{{ false }}">
@@ -103,12 +104,12 @@ section[id]{scroll-margin-top:110px}
               </sc-if>
             </div>
             <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Meta-заголовок
-              <input defaultValue="Бустер-бокс Pokémon Mega Symphonia (Японія) — купити | Booster Shop" onInput="{{ touch }}" style="height: 40px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 12px; font-weight: 500">
-              <span style="font-size: 12px; color: {{ t.ink3 }}; font-weight: 400">65 символів · рекомендовано до 60</span>
+              <input defaultValue="{{ v.metaTitle }}" onInput="{{ touch }}" style="height: 40px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 12px; font-weight: 500">
+              <span style="font-size: 12px; color: {{ t.ink3 }}; font-weight: 400">{{ v.metaTitleCount }}</span>
             </label>
             <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Meta-опис
-              <textarea defaultValue="Оригінальний запечатаний бустер-бокс Pokémon TCG Mega Symphonia, японське видання. Доставка Новою поштою." onInput="{{ touch }}" style="height: 64px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 10px 12px; font-weight: 500; resize: vertical"></textarea>
-              <span style="font-size: 12px; color: {{ t.ink3 }}; font-weight: 400">112 символів</span>
+              <textarea defaultValue="{{ v.metaDesc }}" onInput="{{ touch }}" style="height: 64px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 10px 12px; font-weight: 500; resize: vertical"></textarea>
+              <span style="font-size: 12px; color: {{ t.ink3 }}; font-weight: 400">{{ v.metaDescCount }}</span>
             </label>
             </div></sc-if>
           </section>
@@ -120,20 +121,20 @@ section[id]{scroll-margin-top:110px}
             </div>
             <sc-if value="{{ open.data }}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-direction: column; gap: 16px; position: relative">
             <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
-              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Модель
-                <input defaultValue="PKM-JP-MSYM-BBX" onInput="{{ touch }}" style="height: 40px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13.5px">
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600"><span>Модель<span aria-hidden="true" style="color: {{ t.danger }}"> *</span></span>
+                <input defaultValue="{{ v.model }}" required="{{ true }}" aria-required="true" placeholder="Напр. PKM-JP-MSYM-BBX" onInput="{{ touch }}" style="height: 40px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13.5px">
                 <span style="font-size: 12px; color: {{ t.ink3 }}; font-weight: 400">За моделлю товар звіряється з CRM</span>
               </label>
               <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Артикул
                 <input placeholder="Введіть артикул" onInput="{{ touch }}" style="height: 40px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13.5px">
               </label>
-              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Основна ціна, грн
-                <input defaultValue="4500" inputMode="numeric" onInput="{{ touch }}" style="height: 40px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 12px; font-weight: 800">
-                <span style="font-size: 12px; color: {{ t.warnFg }}; font-weight: 600; display: inline-flex; align-items: center; gap: 4px"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"></path></svg>У CRM: 4800 грн (знімок 28.10, 09:14)</span>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600"><span>Основна ціна, грн<span aria-hidden="true" style="color: {{ t.danger }}"> *</span></span>
+                <input defaultValue="{{ v.price }}" required="{{ true }}" aria-required="true" placeholder="0" inputMode="numeric" onInput="{{ touch }}" style="height: 40px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 12px; font-weight: 800">
+                <sc-if value="{{ notCreate }}" hint-placeholder-val="{{ true }}"><span style="font-size: 12px; color: {{ t.warnFg }}; font-weight: 600; display: inline-flex; align-items: center; gap: 4px"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"></path></svg>У CRM: 4800 грн (знімок 28.10, 09:14)</span></sc-if>
               </label>
               <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Кількість, шт
-                <input defaultValue="2" inputMode="numeric" onInput="{{ touch }}" style="height: 40px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 12px; font-weight: 700">
-                <span style="font-size: 12px; color: {{ t.warnFg }}; font-weight: 600">У CRM: 3 шт</span>
+                <input defaultValue="{{ v.qty }}" inputMode="numeric" onInput="{{ touch }}" style="height: 40px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 12px; font-weight: 700">
+                <sc-if value="{{ notCreate }}" hint-placeholder-val="{{ true }}"><span style="font-size: 12px; color: {{ t.warnFg }}; font-weight: 600">У CRM: 3 шт</span></sc-if>
               </label>
               <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Мінімальне замовлення, шт
                 <input defaultValue="1" inputMode="numeric" onInput="{{ touch }}" style="height: 40px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 12px">
@@ -147,12 +148,58 @@ section[id]{scroll-margin-top:110px}
                 <select onChange="{{ touch }}" style="height: 40px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 10px; background: {{ t.paper }}"><option>The Pokémon Company</option><option>Bandai</option><option>Booster Shop 3D</option></select>
               </label>
               <div style="grid-column: span 2; display: flex; align-items: center; gap: 12px; min-height: 40px; padding: 6px 14px; border: 1px solid {{ t.line }}; border-radius: 8px; box-sizing: border-box">
-              <button type="button" onClick="{{ toggleSub }}" aria-pressed="{{ subtract }}" aria-label="Вираховувати зі складу" style="width: 36px; height: 20px; border-radius: 999px; border: 0; background: {{ subBg }}; position: relative; cursor: pointer; padding: 0; flex: 0 0 auto"><span style="position: absolute; top: 2px; left: {{ subKnob }}; width: 16px; height: 16px; border-radius: 50%; background: {{ t.paper }}; box-shadow: 0 1px 2px rgba(0,0,0,.25)"></span></button>
+              <button type="button" onClick="{{ toggleSub }}" aria-pressed="{{ subtract }}" aria-label="Вираховувати зі складу" style="width: 36px; height: 20px; border-radius: 999px; border: 0; background: {{ subBg }}; position: relative; cursor: pointer; padding: 0; flex: 0 0 auto"><span style="position: absolute; top: 2px; left: {{ subKnob }}; width: 16px; height: 16px; border-radius: 50%; background: {{ t.paper }}; box-shadow: {{ t.shadowKnob }}"></span></button>
               <span style="display: flex; align-items: baseline; flex-wrap: wrap; column-gap: 10px; row-gap: 2px">
                 <span style="font-weight: 600; font-size: 14px; color: {{ t.ink }}">Вираховувати зі складу</span>
                 <span style="font-size: 12px; color: {{ t.ink3 }}">{{ subHint }}</span>
               </span>
               </div>
+            </div>
+            </div></sc-if>
+          </section>
+
+          <section id="s-ship" aria-labelledby="h-ship" style="border: 1px solid {{ t.line }}; border-radius: 10px; padding: 20px 22px; display: flex; flex-direction: column; gap: 16px">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
+              <h2 id="h-ship" style="margin: 0; font-size: 17px; font-weight: 700; color: {{ t.ink }}">Доставка та зв’язки</h2>
+              <button type="button" onClick="{{ tg.ship }}" aria-expanded="{{ open.ship }}" aria-label="{{ tgl.ship }}" style="width: 32px; height: 32px; border: 1px solid {{ t.line }}; border-radius: 8px; background: {{ t.paper }}; color: {{ t.ink2 }}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: rotate({{ rot.ship }})"><path d="m6 9 6 6 6-6"></path></svg></button>
+            </div>
+            <sc-if value="{{ open.ship }}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-direction: column; gap: 16px">
+            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start">
+              <div style="display: flex; flex-direction: column; gap: 6px">
+                <label for="p-weight" style="font-size: 13px; font-weight: 600">Вага</label>
+                <span style="display: flex; gap: 8px">
+                  <input id="p-weight" inputMode="decimal" defaultValue="{{ v.weight }}" placeholder="0" onInput="{{ touch }}" style="height: 40px; width: 120px; box-sizing: border-box; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 12px; font-weight: 700">
+                  <select aria-label="Одиниця ваги" onChange="{{ touch }}" style="height: 40px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 10px; background: {{ t.paper }}"><option>кг</option><option>г</option></select>
+                </span>
+              </div>
+              <fieldset style="grid-column: span 2; border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; min-width: 0">
+                <legend style="font-size: 13px; font-weight: 600; padding: 0; margin-bottom: 6px">Розміри: довжина × ширина × висота</legend>
+                <span style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
+                  <input aria-label="Довжина" inputMode="decimal" defaultValue="{{ v.len }}" placeholder="Д" onInput="{{ touch }}" style="height: 40px; width: 90px; box-sizing: border-box; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 12px; font-weight: 700">
+                  <span aria-hidden="true" style="color: {{ t.ink3 }}">×</span>
+                  <input aria-label="Ширина" inputMode="decimal" defaultValue="{{ v.wid }}" placeholder="Ш" onInput="{{ touch }}" style="height: 40px; width: 90px; box-sizing: border-box; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 12px; font-weight: 700">
+                  <span aria-hidden="true" style="color: {{ t.ink3 }}">×</span>
+                  <input aria-label="Висота" inputMode="decimal" defaultValue="{{ v.hei }}" placeholder="В" onInput="{{ touch }}" style="height: 40px; width: 90px; box-sizing: border-box; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 12px; font-weight: 700">
+                  <select aria-label="Одиниця розмірів" onChange="{{ touch }}" style="height: 40px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 10px; background: {{ t.paper }}"><option>см</option><option>мм</option></select>
+                </span>
+              </fieldset>
+            </div>
+            <span style="font-size: 12px; color: {{ t.ink3 }}">Вага й розміри зберігаються у стандартних полях товару OpenCart.</span>
+            <div style="display: flex; flex-direction: column; gap: 10px; border-top: 1px solid {{ t.line2 }}; padding-top: 16px">
+              <span style="font-size: 13px; font-weight: 600">Супутні товари</span>
+              <sc-if value="{{ hasRelated }}" hint-placeholder-val="{{ true }}">
+                <div style="display: flex; flex-wrap: wrap; gap: 8px">
+                  <sc-for list="{{ related }}" as="rl" hint-placeholder-count="2">
+                    <span style="display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 4px 0 12px; border-radius: 999px; background: {{ t.bg }}; border: 1px solid {{ t.line }}; font-size: 13px; font-weight: 600">{{ rl.label }}<span style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11.5px; color: {{ t.ink3 }}; font-weight: 500">{{ rl.model }}</span><button type="button" onClick="{{ rl.remove }}" aria-label="Прибрати супутній товар" style="width: 24px; height: 24px; border: 0; border-radius: 999px; background: transparent; color: {{ t.ink3 }}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg></button></span>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ noRelated }}" hint-placeholder-val="{{ false }}"><span style="font-size: 13px; color: {{ t.ink3 }}">Супутніх товарів ще немає.</span></sc-if>
+              <div style="position: relative; max-width: 520px">
+                <span style="position: absolute; left: 12px; top: 12px; color: {{ t.ink3 }}; display: inline-flex"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span>
+                <input aria-label="Додати супутній товар" placeholder="Додати супутній товар: назва або модель" style="width: 100%; box-sizing: border-box; height: 38px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 10px 0 34px; font-size: 13px; background: {{ t.bg }}">
+              </div>
+              <span style="font-size: 12px; color: {{ t.ink3 }}">Зв’язок задається вручну, як у стандартній формі товару.</span>
             </div>
             </div></sc-if>
           </section>
@@ -200,15 +247,17 @@ section[id]{scroll-margin-top:110px}
                 <h2 id="h-attr" style="margin: 0; font-size: 17px; font-weight: 700; color: {{ t.ink }}">Атрибути</h2>
                 <div style="font-size: 12.5px; color: {{ t.ink3 }}; margin-top: 4px">Значення беруться з довідника. Порожні атрибути на сайті не показуються.</div>
               </div>
-              <label style="display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700">Тип товару
-                <select value="{{ ptype }}" onChange="{{ onType }}" style="height: 40px; min-width: 200px; border: 1px solid {{ t.blue }}; border-radius: 6px; padding: 0 10px; background: {{ t.paper }}; font-weight: 700">
-                  <option value="bbx">Бустер-бокс</option>
-                  <option value="bst">Бустер</option>
-                  <option value="std">Стартова колода</option>
-                  <option value="rare">Rare Pack</option>
-                  <option value="key3d">Брелок 3D</option>
-                </select>
-              </label>
+              <span style="position: relative; margin-left: auto">
+                <button type="button" onClick="{{ toggleTpl }}" aria-haspopup="menu" aria-expanded="{{ tplOpen }}" style="height: 40px; padding: 0 14px; border: 1px solid {{ t.blue }}; border-radius: 8px; background: transparent; color: {{ t.blue }}; font-weight: 700; font-size: 13.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px">Додати шаблон атрибутів<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button>
+                <sc-if value="{{ tplOpen }}" hint-placeholder-val="{{ false }}">
+                  <div role="menu" aria-label="Шаблони атрибутів" style="position: absolute; right: 0; top: 46px; z-index: 100; width: 300px; background: {{ t.paper }}; border: 1px solid {{ t.line }}; border-radius: 10px; box-shadow: {{ t.shadowPop }}; padding: 6px; display: flex; flex-direction: column; gap: 2px">
+                    <sc-for list="{{ tpls }}" as="tp" hint-placeholder-count="5">
+                      <button type="button" role="menuitem" onClick="{{ tp.pick }}" style="min-height: 36px; padding: 0 10px; border: 0; border-radius: 6px; background: transparent; color: {{ t.ink2 }}; font-size: 13.5px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; text-align: left">{{ tp.label }}<span style="font-size: 12px; font-weight: 500; color: {{ t.ink3 }}">{{ tp.count }}</span></button>
+                    </sc-for>
+                    <span style="padding: 8px 10px 4px; margin-top: 4px; border-top: 1px solid {{ t.line2 }}; font-size: 12px; line-height: 1.45; color: {{ t.ink3 }}">Додає рядки шаблону, яких ще немає. Наявні значення не змінюються, вибір шаблону не зберігається.</span>
+                  </div>
+                </sc-if>
+              </span>
               <button type="button" onClick="{{ tg.attr }}" aria-expanded="{{ open.attr }}" aria-label="{{ tgl.attr }}" style="width: 32px; height: 32px; border: 1px solid {{ t.line }}; border-radius: 8px; background: {{ t.paper }}; color: {{ t.ink2 }}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; margin-bottom: 4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: rotate({{ rot.attr }})"><path d="m6 9 6 6 6-6"></path></svg></button>
             </div>
             <sc-if value="{{ open.attr }}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-direction: column; gap: 14px">
@@ -217,6 +266,9 @@ section[id]{scroll-margin-top:110px}
             </sc-if>
 
             <div style="border: 1px solid {{ t.line }}; border-radius: 10px">
+              <sc-if value="{{ attrsEmpty }}" hint-placeholder-val="{{ false }}">
+                <div style="padding: 16px 14px; border-bottom: 1px solid {{ t.line2 }}; font-size: 13px; color: {{ t.ink3 }}">Атрибутів ще немає. Додайте шаблон атрибутів або окремий атрибут нижче.</div>
+              </sc-if>
               <sc-if value="{{ a.lang }}" hint-placeholder-val="{{ true }}">
                 <div style="display: grid; grid-template-columns: 240px minmax(0, 1fr) 40px; gap: 12px; align-items: center; padding: 10px 14px; border-bottom: 1px solid {{ t.line2 }}">
                   <span style="font-weight: 600; font-size: 13.5px">Мова <span style="font-weight: 500; color: {{ t.ink3 }}; font-size: 12px">· список</span></span>
@@ -307,18 +359,6 @@ section[id]{scroll-margin-top:110px}
                   <button type="button" onClick="{{ rm.extra }}" aria-label="Прибрати атрибут Додатковий вміст" style="width: 32px; height: 32px; border: 0; border-radius: 6px; background: transparent; color: {{ t.ink3 }}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg></button>
                 </div>
               </sc-if>
-              <sc-if value="{{ is3d }}" hint-placeholder-val="{{ false }}">
-                <div style="display: grid; grid-template-columns: 240px minmax(0, 1fr) 40px; gap: 12px; align-items: center; padding: 10px 14px; border-bottom: 1px solid {{ t.line2 }}; background: {{ t.sel }}">
-                  <span style="font-weight: 600; font-size: 13.5px">Розміри <span style="font-weight: 500; color: {{ t.ink3 }}; font-size: 12px">· текст · новий</span></span>
-                  <input aria-label="Розміри" placeholder="напр. 45 × 40 × 8 мм" onInput="{{ touch }}" style="height: 38px; max-width: 360px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 10px">
-                  <span></span>
-                </div>
-                <div style="display: grid; grid-template-columns: 240px minmax(0, 1fr) 40px; gap: 12px; align-items: center; padding: 10px 14px; border-bottom: 1px solid {{ t.line2 }}; background: {{ t.sel }}">
-                  <span style="font-weight: 600; font-size: 13.5px">Комплектація <span style="font-weight: 500; color: {{ t.ink3 }}; font-size: 12px">· текст · новий</span></span>
-                  <input aria-label="Комплектація" placeholder="напр. брелок, металеве кільце" onInput="{{ touch }}" style="height: 38px; max-width: 360px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 10px">
-                  <span></span>
-                </div>
-              </sc-if>
               <sc-for list="{{ added }}" as="x" hint-placeholder-count="0">
                 <div style="display: grid; grid-template-columns: 240px minmax(0, 1fr) 40px; gap: 12px; align-items: center; padding: 10px 14px; border-bottom: 1px solid {{ t.line2 }}; background: {{ t.sel }}">
                   <span style="font-weight: 600; font-size: 13.5px">{{ x.name }} <span style="font-weight: 500; color: {{ t.ink3 }}; font-size: 12px">· {{ x.kindLabel }} · {{ x.group }}</span></span>
@@ -384,9 +424,13 @@ section[id]{scroll-margin-top:110px}
           <section id="s-fam" aria-labelledby="h-fam" style="border: 1px solid {{ t.line }}; border-radius: 10px; padding: 20px 22px; display: flex; flex-direction: column; gap: 14px">
             <div style="display: flex; align-items: center; justify-content: space-between">
               <h2 id="h-fam" style="margin: 0; font-size: 17px; font-weight: 700; color: {{ t.ink }}">Родина варіантів</h2>
-              <span style="display: flex; align-items: center; gap: 12px"><a href="Family.dc.html" style="font-size: 13px; font-weight: 700">Відкрити всю родину →</a><button type="button" onClick="{{ tg.fam }}" aria-expanded="{{ open.fam }}" aria-label="{{ tgl.fam }}" style="width: 32px; height: 32px; border: 1px solid {{ t.line }}; border-radius: 8px; background: {{ t.paper }}; color: {{ t.ink2 }}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: rotate({{ rot.fam }})"><path d="m6 9 6 6 6-6"></path></svg></button></span>
+              <span style="display: flex; align-items: center; gap: 12px"><sc-if value="{{ notCreate }}" hint-placeholder-val="{{ true }}"><a href="Family.dc.html" style="font-size: 13px; font-weight: 700; color: {{ t.blue }}">Відкрити всю родину →</a></sc-if><button type="button" onClick="{{ tg.fam }}" aria-expanded="{{ open.fam }}" aria-label="{{ tgl.fam }}" style="width: 32px; height: 32px; border: 1px solid {{ t.line }}; border-radius: 8px; background: {{ t.paper }}; color: {{ t.ink2 }}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: rotate({{ rot.fam }})"><path d="m6 9 6 6 6-6"></path></svg></button></span>
             </div>
             <sc-if value="{{ open.fam }}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-direction: column; gap: 14px">
+            <sc-if value="{{ isCreate }}" hint-placeholder-val="{{ false }}">
+              <div style="padding: 14px 16px; border-radius: 10px; border: 1px dashed {{ t.ink4 }}; font-size: 13px; color: {{ t.ink3 }}; line-height: 1.5">Родину варіантів можна призначити після першого збереження товару.</div>
+            </sc-if>
+            <sc-if value="{{ notCreate }}" hint-placeholder-val="{{ true }}">
             <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
               <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Ключ родини
                 <select onChange="{{ touch }}" style="height: 40px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 10px; background: {{ t.paper }}; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px"><option>PKM-JP-MSYM · 3 товари</option><option>PKM-JP-M5 · 2 товари</option><option>OP-JP-OP13 · 2 товари</option><option>— без родини —</option></select>
@@ -410,6 +454,7 @@ section[id]{scroll-margin-top:110px}
                 </div>
               </sc-for>
             </div>
+            </sc-if>
             </div></sc-if>
           </section>
 
@@ -428,6 +473,8 @@ section[id]{scroll-margin-top:110px}
                 <div style="display: grid; grid-template-columns: 110px 170px minmax(0, 1fr) 170px 76px; gap: 12px; align-items: center; height: 36px; padding: 0 14px; background: {{ t.bg }}; border-bottom: 1px solid {{ t.line }}; font-size: 12px; font-weight: 700; color: {{ t.ink3 }}">
                   <span>Група</span><span>Ціна</span><span>Період</span><span>Стан</span><span></span>
                 </div>
+                <sc-if value="{{ isCreate }}" hint-placeholder-val="{{ false }}"><div style="padding: 14px; font-size: 13px; color: {{ t.ink3 }}">Акційних цін ще немає.</div></sc-if>
+                <sc-if value="{{ notCreate }}" hint-placeholder-val="{{ true }}">
                 <div style="display: grid; grid-template-columns: 110px 170px minmax(0, 1fr) 170px 76px; gap: 12px; align-items: center; min-height: 48px; padding: 0 14px; border-bottom: 1px solid {{ t.line2 }}; font-size: 13.5px">
                   <span>Default</span><span><strong style="color: {{ t.danger }}">4200 грн</strong> <span style="color: {{ t.ink3 }}; font-size: 12px">(−300)</span></span><span>25.10.2026 – 15.11.2026</span>
                   <span><span style="font-size: 12px; font-weight: 700; padding: 4px 8px; border-radius: 6px; background: {{ t.blueSoft }}; color: {{ t.blue }}">Діє зараз</span></span>
@@ -449,11 +496,12 @@ section[id]{scroll-margin-top:110px}
                     <span style="font-size: 12px; font-weight: 700; padding: 3px 8px; border-radius: 6px; background: {{ t.paper }}; border: 1px solid {{ t.warnLine }}; color: {{ t.warnFg }}">Не діє на сайті</span>
                     <button type="button" onMouseEnter="{{ tipOn }}" onMouseLeave="{{ tipOff }}" onFocus="{{ tipOn }}" onBlur="{{ tipOff }}" aria-label="Чому не діє" aria-describedby="legacy-tip" style="width: 26px; height: 26px; border: 0; background: transparent; color: {{ t.warnFg }}; cursor: help; display: inline-flex; align-items: center; justify-content: center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 7.5v.01"></path></svg></button>
                     <sc-if value="{{ tip }}" hint-placeholder-val="{{ false }}">
-                      <span id="legacy-tip" style="position: absolute; right: -60px; top: 32px; width: 320px; background: {{ t.ink }}; color: {{ t.paper }}; font-size: 12.5px; font-weight: 500; line-height: 1.5; padding: 10px 12px; border-radius: 8px; z-index: 100; box-shadow: 0 8px 24px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.07)">Цей рядок збережено як акційну ціну, але для кількості від 2 шт. Сайт показує акційну ціну лише для 1 шт, тому покупці її не бачать. Рядок залишено як є — видаліть його або створіть замість нього знижку від кількості.</span>
+                      <span id="legacy-tip" style="position: absolute; right: -60px; top: 32px; width: 320px; background: {{ t.ink }}; color: {{ t.paper }}; font-size: 12.5px; font-weight: 500; line-height: 1.5; padding: 10px 12px; border-radius: 8px; z-index: 100; box-shadow: {{ t.shadowPop }}">Цей рядок збережено як акційну ціну, але для кількості від 2 шт. Сайт показує акційну ціну лише для 1 шт, тому покупці її не бачать. Рядок залишено як є — видаліть його або створіть замість нього знижку від кількості.</span>
                     </sc-if>
                   </span>
                   <span style="display: flex; gap: 2px"><button type="button" aria-label="Видалити" style="width: 30px; height: 30px; border: 0; background: transparent; color: {{ t.ink3 }}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg></button></span>
                 </div>
+                </sc-if>
               </div>
             </div>
 
@@ -466,11 +514,14 @@ section[id]{scroll-margin-top:110px}
                 <div style="display: grid; grid-template-columns: 110px 100px 170px minmax(0, 1fr) 170px 76px; gap: 12px; align-items: center; height: 36px; padding: 0 14px; background: {{ t.bg }}; border-bottom: 1px solid {{ t.line }}; font-size: 12px; font-weight: 700; color: {{ t.ink3 }}">
                   <span>Група</span><span>Від</span><span>Ціна за шт</span><span>Період</span><span>Стан</span><span></span>
                 </div>
+                <sc-if value="{{ isCreate }}" hint-placeholder-val="{{ false }}"><div style="padding: 14px; font-size: 13px; color: {{ t.ink3 }}">Порогів ще немає.</div></sc-if>
+                <sc-if value="{{ notCreate }}" hint-placeholder-val="{{ true }}">
                 <div style="display: grid; grid-template-columns: 110px 100px 170px minmax(0, 1fr) 170px 76px; gap: 12px; align-items: center; min-height: 48px; padding: 0 14px; font-size: 13.5px">
                   <span>Default</span><strong>3 шт</strong><span><strong style="color: {{ t.ink }}">4300 грн</strong> <span style="color: {{ t.ink3 }}; font-size: 12px">(−200)</span></span><span>без періоду</span>
                   <span><span style="font-size: 12px; font-weight: 700; padding: 4px 8px; border-radius: 6px; background: {{ t.blueSoft }}; color: {{ t.blue }}">Діє зараз</span></span>
                   <span style="display: flex; gap: 2px"><button type="button" aria-label="Змінити" style="width: 30px; height: 30px; border: 0; background: transparent; color: {{ t.ink2 }}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></button><button type="button" aria-label="Видалити" style="width: 30px; height: 30px; border: 0; background: transparent; color: {{ t.ink3 }}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg></button></span>
                 </div>
+                </sc-if>
               </div>
             </div>
             </div></sc-if>
@@ -479,7 +530,7 @@ section[id]{scroll-margin-top:110px}
           <section id="s-photo" aria-labelledby="h-photo" style="border: 1px solid {{ t.line }}; border-radius: 10px; padding: 20px 22px; display: flex; flex-direction: column; gap: 14px">
             <div style="display: flex; justify-content: space-between; align-items: baseline">
               <h2 id="h-photo" style="margin: 0; font-size: 17px; font-weight: 700; color: {{ t.ink }}">Фото</h2>
-              <span style="display: flex; align-items: center; gap: 12px"><span style="font-size: 12.5px; color: {{ t.ink3 }}">Перетягніть, щоб змінити порядок. Перше фото — головне.</span><button type="button" onClick="{{ tg.photo }}" aria-expanded="{{ open.photo }}" aria-label="{{ tgl.photo }}" style="width: 32px; height: 32px; border: 1px solid {{ t.line }}; border-radius: 8px; background: {{ t.paper }}; color: {{ t.ink2 }}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: rotate({{ rot.photo }})"><path d="m6 9 6 6 6-6"></path></svg></button></span>
+              <span style="display: flex; align-items: center; gap: 12px"><span style="font-size: 12.5px; color: {{ t.ink3 }}">Перетягніть або змініть порядок стрілками. Перше фото — головне.</span><button type="button" onClick="{{ tg.photo }}" aria-expanded="{{ open.photo }}" aria-label="{{ tgl.photo }}" style="width: 32px; height: 32px; border: 1px solid {{ t.line }}; border-radius: 8px; background: {{ t.paper }}; color: {{ t.ink2 }}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: rotate({{ rot.photo }})"><path d="m6 9 6 6 6-6"></path></svg></button></span>
             </div>
             <sc-if value="{{ open.photo }}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-direction: column; gap: 14px">
             <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px">
@@ -489,6 +540,10 @@ section[id]{scroll-margin-top:110px}
                     <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"></rect><circle cx="9" cy="10" r="2"></circle><path d="m21 17-5-5-9 8"></path></svg>
                     <sc-if value="{{ ph.main }}" hint-placeholder-val="{{ false }}"><span style="position: absolute; top: 8px; left: 8px; font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: 4px 7px; border-radius: 6px; background: {{ t.blue }}; color: {{ t.paper }}">Головне</span></sc-if>
                     <span style="position: absolute; top: 8px; right: 8px; font-size: 11px; font-weight: 800; color: {{ t.ink3 }}; background: {{ t.paper }}; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 2px 6px">{{ ph.n }}</span>
+                    <span style="position: absolute; left: 8px; bottom: 8px; display: flex; gap: 4px">
+                      <button type="button" onClick="{{ ph.left }}" disabled="{{ ph.first }}" aria-label="Перемістити ліворуч: {{ ph.name }}" style="width: 28px; height: 28px; border: 1px solid {{ t.line }}; border-radius: 6px; background: {{ t.paper }}; color: {{ t.ink2 }}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; opacity: {{ ph.leftOp }}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button>
+                      <button type="button" onClick="{{ ph.right }}" disabled="{{ ph.last }}" aria-label="Перемістити праворуч: {{ ph.name }}" style="width: 28px; height: 28px; border: 1px solid {{ t.line }}; border-radius: 6px; background: {{ t.paper }}; color: {{ t.ink2 }}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; opacity: {{ ph.rightOp }}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></button>
+                    </span>
                   </div>
                   <div style="padding: 8px 10px; display: flex; flex-direction: column; gap: 6px">
                     <span style="font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{ ph.name }}</span>
@@ -511,10 +566,10 @@ section[id]{scroll-margin-top:110px}
             </div>
             <sc-if value="{{ open.seo }}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-direction: column; gap: 12px">
             <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Адреса сторінки (SEO URL)
-              <span style="display: flex; align-items: center; max-width: 640px; border: 1px solid {{ t.line }}; border-radius: 6px; overflow: hidden"><span style="padding: 0 10px; height: 40px; display: flex; align-items: center; background: {{ t.bg }}; color: {{ t.ink3 }}; font-weight: 500; border-right: 1px solid {{ t.line }}">boostershop.website/</span><input defaultValue="booster-box-mega-symphonia-jp" onInput="{{ seoTouch }}" style="flex: 1; min-width: 0; height: 40px; border: 0; padding: 0 10px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px"></span>
+              <span style="display: flex; align-items: center; max-width: 640px; border: 1px solid {{ t.line }}; border-radius: 6px; overflow: hidden"><span style="padding: 0 10px; height: 40px; display: flex; align-items: center; background: {{ t.bg }}; color: {{ t.ink3 }}; font-weight: 500; border-right: 1px solid {{ t.line }}">boostershop.website/</span><input aria-label="SEO URL" defaultValue="{{ v.slug }}" placeholder="напр. booster-box-mega-symphonia-jp" onInput="{{ seoTouch }}" style="flex: 1; min-width: 0; height: 40px; border: 0; padding: 0 10px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px"></span>
             </label>
             <sc-if value="{{ seoChanged }}" hint-placeholder-val="{{ false }}">
-              <div role="alert" style="padding: 10px 14px; border-radius: 10px; background: {{ t.warnBg }}; border: 1px solid {{ t.warnLine }}; color: {{ t.warnFg }}; font-size: 13px; font-weight: 600; max-width: 640px; line-height: 1.5">Сторінка вже індексується. Після зміни адреси старе посилання перестане працювати, якщо не налаштувати переадресацію.</div>
+              <div role="alert" style="padding: 10px 14px; border-radius: 10px; background: {{ t.warnBg }}; border: 1px solid {{ t.warnLine }}; color: {{ t.warnFg }}; font-size: 13px; font-weight: 600; max-width: 640px; line-height: 1.5">Стара адреса вже може бути в Google, у закладках і в посиланнях. Після збереження вона перестане відкриватися, якщо не налаштувати переадресацію (301) на нову.</div>
             </sc-if>
             </div></sc-if>
           </section>
@@ -522,16 +577,16 @@ section[id]{scroll-margin-top:110px}
       </div>
 
       <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
-        <div role="status" style="position: fixed; top: 68px; right: 24px; z-index: 500; background: {{ t.paper }}; border: 1px solid {{ t.line }}; border-radius: 10px; padding: 12px 14px; display: flex; gap: 10px; align-items: center; box-shadow: 0 8px 24px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.07); font-size: 13px"><span style="color: {{ t.ok }}; display: inline-flex"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></span>Товар збережено.</div>
+        <div role="status" style="position: fixed; top: 68px; right: 24px; z-index: 500; background: {{ t.paper }}; border: 1px solid {{ t.line }}; border-radius: 10px; padding: 12px 14px; display: flex; gap: 10px; align-items: center; box-shadow: {{ t.shadowPop }}; font-size: 13px"><span style="color: {{ t.ok }}; display: inline-flex"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></span>Товар збережено.</div>
       </sc-if>
     </main>
   </div>
 
   <sc-if value="{{ leave }}" hint-placeholder-val="{{ false }}">
-    <div style="position: fixed; inset: 0; z-index: 400; background: rgba(17,24,39,.45); display: flex; align-items: flex-start; justify-content: center; padding-top: 180px">
-      <div role="alertdialog" aria-modal="true" aria-labelledby="leave-h" aria-describedby="leave-d" style="width: 480px; max-width: calc(100% - 32px); background: {{ t.paper }}; border-radius: 14px; padding: 24px; box-shadow: 0 8px 24px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.07); display: flex; flex-direction: column; gap: 12px">
+    <div style="position: fixed; inset: 0; z-index: 400; background: {{ t.backdropModal }}; display: flex; align-items: flex-start; justify-content: center; padding-top: 180px">
+      <div role="alertdialog" aria-modal="true" aria-labelledby="leave-h" aria-describedby="leave-d" style="width: 480px; max-width: calc(100% - 32px); background: {{ t.paper }}; border-radius: 14px; padding: 24px; box-shadow: {{ t.shadowPop }}; display: flex; flex-direction: column; gap: 12px">
         <h2 id="leave-h" style="margin: 0; font-size: 18px; font-weight: 700; color: {{ t.ink }}">Вийти без збереження?</h2>
-        <p id="leave-d" style="margin: 0; font-size: 14px; line-height: 1.6; color: {{ t.ink2 }}">У товарі «{{ name }}» є незбережені зміни. Якщо вийти зараз, їх буде втрачено.</p>
+        <p id="leave-d" style="margin: 0; font-size: 14px; line-height: 1.6; color: {{ t.ink2 }}">У товарі «{{ title }}» є незбережені зміни. Якщо вийти зараз, їх буде втрачено.</p>
         <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px; flex-wrap: wrap">
           <button type="button" onClick="{{ stay }}" style="height: 44px; padding: 0 16px; border-radius: 8px; border: 1px solid {{ t.line }}; background: {{ t.paper }}; font-weight: 700; font-size: 14.5px; cursor: pointer">Залишитися</button>
           <a href="Main.dc.html" style="height: 44px; padding: 0 16px; border-radius: 8px; border: 1px solid {{ t.danger }}; color: {{ t.danger }}; font-weight: 700; font-size: 14.5px; display: inline-flex; align-items: center; text-decoration: none">Вийти без збереження</a>
@@ -542,45 +597,69 @@ section[id]{scroll-margin-top:110px}
   </sc-if>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["canon","dark","teal","contrast","darkNavy","darkViolet","darkHybrid"],"default":"darkHybrid"},"scene":{"editor":"enum","options":["default","dirty"],"default":"default"},"$preview":{"width":1440,"height":4300}}'>
-const NAV = [['s-main', 'Основне'], ['s-data', 'Дані'], ['s-cat', 'Категорії та фільтри'], ['s-attr', 'Атрибути'], ['s-fam', 'Родина варіантів'], ['s-disc', 'Знижки'], ['s-photo', 'Фото'], ['s-seo', 'SEO']];
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["canon","dark","teal","contrast","darkNavy","darkViolet","darkHybrid"],"default":"darkHybrid"},"scene":{"editor":"enum","options":["default","dirty","create","seo"],"default":"default"},"$preview":{"width":1440,"height":4400}}'>
+const NAV = [['s-main', 'Основне'], ['s-data', 'Дані'], ['s-ship', 'Доставка та зв’язки'], ['s-cat', 'Категорії та фільтри'], ['s-attr', 'Атрибути'], ['s-fam', 'Родина варіантів'], ['s-disc', 'Знижки'], ['s-photo', 'Фото'], ['s-seo', 'SEO']];
 const ATTRS = ['lang', 'set', 'year', 'packs', 'cards', 'cond', 'mf', 'pack', 'weigh', 'mystery', 'extra'];
 const HTML = '<h3>Бустер-бокс Mega Symphonia — японське видання</h3>\n<p>Оригінальний запечатаний бустер-бокс японського видання від The Pokémon Company.</p>\n<ul>\n  <li>Мова карток: японська</li>\n  <li>Стан: новий, у заводській плівці</li>\n  <li>Без зважування й відбору</li>\n</ul>';
-const TYPES = { bbx: 'Бустер-бокс', bst: 'Бустер', std: 'Стартова колода', rare: 'Rare Pack', key3d: 'Брелок 3D' };
-const SECS = ['main', 'data', 'cat', 'attr', 'fam', 'disc', 'photo', 'seo'];
-const SEC_NAMES = { main: 'Основне', data: 'Дані', cat: 'Категорії та фільтри', attr: 'Атрибути', fam: 'Родина варіантів', disc: 'Знижки', photo: 'Фото', seo: 'SEO' };
+const TPLS = [
+  ['Бустер-бокс', ['lang', 'set', 'year', 'packs', 'cards', 'cond', 'mf', 'pack', 'weigh', 'mystery'], []],
+  ['Бустер', ['lang', 'set', 'year', 'cards', 'cond', 'mf', 'pack', 'weigh'], []],
+  ['Стартова колода', ['lang', 'set', 'year', 'cond', 'mf', 'pack', 'extra'], ['Характеристики|Кількість карток у колоді']],
+  ['Rare Pack', ['lang', 'set', 'year', 'cards', 'cond', 'mf', 'pack', 'weigh'], ['Характеристики|Походження товару']],
+  ['Брелок 3D', [], ['Характеристики 3D-виробу|Матеріал', 'Характеристики 3D-виробу|Колір', 'Характеристики 3D-виробу|Розміри', 'Характеристики 3D-виробу|Комплектація']]
+];
+const isCreate = (p) => !!p && p.scene === 'create';
+const ALL_REMOVED = () => { const o = {}; ['lang', 'set', 'year', 'packs', 'cards', 'cond', 'mf', 'pack', 'weigh', 'mystery', 'extra'].forEach((k) => { o[k] = 1; }); return o; };
+const SECS = ['main', 'data', 'ship', 'cat', 'attr', 'fam', 'disc', 'photo', 'seo'];
+const SEC_NAMES = { main: 'Основне', data: 'Дані', ship: 'Доставка та зв’язки', cat: 'Категорії та фільтри', attr: 'Атрибути', fam: 'Родина варіантів', disc: 'Знижки', photo: 'Фото', seo: 'SEO' };
 const KEYMAP = { 'Мова': 'lang', 'Назва сету': 'set', 'Рік випуску': 'year', 'Кількість бустерів у боксі': 'packs', 'Кількість карток у бустері': 'cards', 'Стан': 'cond', 'Виробник': 'mf', 'Тип пакування': 'pack', 'Зважування': 'weigh', 'Може трапитись у Mystery Box': 'mystery', 'Додатковий вміст': 'extra' };
 const NUMS = { 'Кількість карток у колоді': 'карт', 'Кількість в упаковці': 'шт', 'Кількість кишеньок': 'шт', 'Отворів для кріплення': 'шт' };
 const BOOLS = { 'Без ПВХ': 1, 'Рухомі елементи': 1 };
 const allOpen = () => { const o = {}; SECS.forEach((k) => { o[k] = true; }); return o; };
 class Component extends DCLogic {
   state = {
-    name: 'Бустер-бокс Mega Symphonia (японське видання)', on: true, dirty: false, saving: false, savedNow: false, toast: false, leave: false,
-    sec: 's-main', code: true, removed: {}, packFixed: false, mystery: false, ptype: 'bbx', typeNote: '', tip: false, seoChanged: false,
-    cats: ['Pokémon TCG', 'Бустер-бокси', 'Японські видання'],
-    photos: ['msym-bbx-front.webp', 'msym-bbx-back.webp', 'msym-bbx-side.webp'], drag: -1, over: -1, sc: '',
-    open: allOpen(), added: [], subtract: true, filters: ['Мова видання › Японська', 'Тип товару › Бустер-бокс']
+    name: isCreate(this.props) ? '' : 'Бустер-бокс Mega Symphonia (японське видання)', on: !isCreate(this.props), dirty: false, saving: false, savedNow: false, toast: false, leave: false,
+    sec: 's-main', code: true, removed: isCreate(this.props) ? ALL_REMOVED() : {}, packFixed: isCreate(this.props), mystery: false, typeNote: '', tip: false, seoChanged: false,
+    cats: isCreate(this.props) ? [] : ['Pokémon TCG', 'Бустер-бокси', 'Японські видання'],
+    photos: isCreate(this.props) ? [] : ['msym-bbx-front.webp', 'msym-bbx-back.webp', 'msym-bbx-side.webp'], drag: -1, over: -1, sc: '',
+    open: allOpen(), added: [], subtract: true, filters: isCreate(this.props) ? [] : ['Мова видання › Японська', 'Тип товару › Бустер-бокс'],
+    related: isCreate(this.props) ? [] : [['Бустер Pokémon TCG Mega Symphonia (японське видання)', 'PKM-JP-MSYM-BST'], ['Набір 10 бустерів Mega Symphonia (японське видання)', 'PKM-JP-MSYM-B10']],
+    tplOpen: isCreate(this.props)
   };
-  addAttr(e) {
-    const v = e.target.value;
-    if (!v) return;
+  addAttrValue(v, st) {
     const parts = v.split('|');
     const grp = parts[0], name = parts[1];
     const key = grp === 'Характеристики' ? KEYMAP[name] : null;
     if (key) {
-      if (this.state.removed[key]) { const r = Object.assign({}, this.state.removed); delete r[key]; this.setState({ removed: r, dirty: true, savedNow: false }); }
-      return;
+      if (!st.removed[key]) return false;
+      st.removed = Object.assign({}, st.removed); delete st.removed[key];
+      return true;
     }
-    if (this.state.added.some((x) => x.id === v)) return;
+    if (st.added.some((x) => x.id === v)) return false;
     const kind = NUMS[name] ? 'num' : BOOLS[name] ? 'bool' : 'text';
-    this.setState({ added: this.state.added.concat([{ id: v, name: name, group: grp, kind: kind, yes: false }]), dirty: true, savedNow: false });
+    st.added = st.added.concat([{ id: v, name: name, group: grp, kind: kind, yes: false }]);
+    return true;
+  }
+  addAttr(e) {
+    const v = e.target.value;
+    if (!v) return;
+    const st = { removed: this.state.removed, added: this.state.added };
+    if (this.addAttrValue(v, st)) this.setState({ removed: st.removed, added: st.added, dirty: true, savedNow: false });
+  }
+  applyTemplate(tpl) {
+    const st = { removed: this.state.removed, added: this.state.added };
+    let n = 0;
+    tpl[1].forEach((k) => { if (st.removed[k]) { st.removed = Object.assign({}, st.removed); delete st.removed[k]; n++; } });
+    tpl[2].forEach((v) => { if (this.addAttrValue(v, st)) n++; });
+    const note = n > 0 ? 'Шаблон «' + tpl[0] + '»: додано рядків — ' + n + '. Наявні значення не змінено.' : 'Шаблон «' + tpl[0] + '»: усі його рядки вже є.';
+    this.setState({ removed: st.removed, added: st.added, tplOpen: false, typeNote: note, dirty: this.state.dirty || n > 0, savedNow: false });
   }
   setOpen(k, val) { this.setState({ open: Object.assign({}, this.state.open, { [k]: val }) }); }
   componentDidMount() { this.applyScene(); }
   componentDidUpdate() { if ((this.props.scene || 'default') !== this.state.sc) this.applyScene(); }
   applyScene() {
     const sc = this.props.scene || 'default';
-    this.setState({ sc: sc, dirty: sc === 'dirty', leave: sc === 'dirty', savedNow: false });
+    this.setState({ sc: sc, dirty: sc === 'dirty' || sc === 'seo', leave: sc === 'dirty', savedNow: false, seoChanged: sc === 'seo' });
   }
   touch() { if (!this.state.dirty) this.setState({ dirty: true, savedNow: false }); }
   save() {
@@ -607,7 +686,7 @@ class Component extends DCLogic {
       darkViolet: { scheme: 'dark', paper: '#1B1B20', shell: '#111114', bg: '#25252C', line: '#36363F', line2: '#2C2C34', line3: '#4E4E5A', ink4: '#73737F', ink3: '#A6A6B3', ink3b: '#3C3C46', ink2: '#E2E2E8', ink: '#FAFAFC', blue: '#B79CFF', blueSoft: '#2E2545', sel: '#241F33', danger: '#FF6B81', warnBg: '#2B2513', warnFg: '#F5C451', warnLine: '#7D6420', ok: '#4ADE80', okBg: '#13281C', gold: '#F5C451' },
       darkHybrid: { scheme: 'dark', paper: '#1B1B20', shell: '#111114', bg: '#25252C', line: '#36363F', line2: '#2C2C34', line3: '#4E4E5A', ink4: '#73737F', ink3: '#A6A6B3', ink3b: '#3C3C46', ink2: '#E2E2E8', ink: '#FAFAFC', blue: '#F2B544', blueSoft: '#33291A', sel: '#25221C', danger: '#FF7A7A', warnBg: '#2C1E14', warnFg: '#FDBA74', warnLine: '#9A4F16', ok: '#5EEAD4', okBg: '#12282A', gold: '#F2B544' }
     };
-    const t = THEMES[this.props.theme || 'darkHybrid'] || THEMES.darkHybrid;
+    const t = Object.assign({ hover: 'rgba(127,127,127,.10)', hoverRow: 'rgba(127,127,127,.05)', hoverLine: 'rgba(127,127,127,.35)', backdrop: 'rgba(17,24,39,.28)', backdropModal: 'rgba(17,24,39,.45)', shadowPop: '0 8px 24px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.07)', shadowKnob: '0 1px 2px rgba(0,0,0,.25)', switchOff: '#74747F', warnStrong: '#C2691F' }, THEMES[this.props.theme || 'darkHybrid'] || THEMES.darkHybrid);
     const fix = (x) => {
       if (typeof x === 'string') return x.indexOf('{{ t.') < 0 ? x : x.replace(/\{\{ t\.(\w+) \}\}/g, (m, k) => t[k]);
       if (Array.isArray(x)) return x.map(fix);
@@ -628,17 +707,29 @@ class Component extends DCLogic {
     });
     const removedCount = Object.keys(s.removed).length;
     const packBad = !s.packFixed;
+    const cr = isCreate(this.props);
+    const np = s.photos.length;
     return {
+      isCreate: cr, notCreate: !cr,
+      title: cr ? 'Новий товар' : (s.name || 'Без назви'),
+      v: cr
+        ? { model: '', price: '', qty: '0', html: '', metaTitle: '', metaTitleCount: '0 символів · рекомендовано до 60', metaDesc: '', metaDescCount: '0 символів', weight: '', len: '', wid: '', hei: '', slug: '' }
+        : { model: 'PKM-JP-MSYM-BBX', price: '4500', qty: '2', html: HTML, metaTitle: 'Бустер-бокс Pokémon Mega Symphonia (Японія) — купити | Booster Shop', metaTitleCount: '65 символів · рекомендовано до 60', metaDesc: 'Оригінальний запечатаний бустер-бокс Pokémon TCG Mega Symphonia, японське видання. Доставка Новою поштою.', metaDescCount: '112 символів', weight: '1.2', len: '30', wid: '21', hei: '8', slug: 'booster-box-mega-symphonia-jp' },
+      attrsEmpty: ATTRS.every((k) => s.removed[k]) && s.added.length === 0,
+      tplOpen: s.tplOpen, toggleTpl: () => this.setState({ tplOpen: !this.state.tplOpen }),
+      tpls: TPLS.map((tp) => ({ label: tp[0], count: (tp[1].length + tp[2].length) + ' атрибутів', pick: () => this.applyTemplate(tp) })),
+      related: s.related.map((r) => ({ label: r[0], model: r[1], remove: () => this.setState({ related: this.state.related.filter((x) => x[1] !== r[1]), dirty: true, savedNow: false }) })),
+      hasRelated: s.related.length > 0, noRelated: s.related.length === 0,
       name: s.name, onName: (e) => this.setState({ name: e.target.value, dirty: true, savedNow: false }),
       dirty: s.dirty, clean: !s.dirty, savedNow: s.savedNow && !s.dirty, saving: s.saving, toast: s.toast,
       save: () => this.save(), touch: () => this.touch(),
-      on: s.on, onLabel: s.on ? 'Увімкнено' : 'Вимкнено', switchBg: s.on ? '{{ t.blue }}' : '{{ t.line3 }}', knob: s.on ? '18px' : '2px',
+      on: s.on, onLabel: s.on ? 'Увімкнено' : 'Вимкнено', switchBg: s.on ? '{{ t.blue }}' : '{{ t.switchOff }}', knob: s.on ? '18px' : '2px',
       toggleOn: () => this.setState({ on: !this.state.on, dirty: true, savedNow: false }),
       askLeave: () => this.setState({ leave: true }), stay: () => this.setState({ leave: false }), leave: s.leave,
       nav: NAV.map((n) => ({ href: '#' + n[0], label: n[1], cur: s.sec === n[0] ? 'true' : 'false', flag: n[0] === 's-attr' && packBad,
         weight: s.sec === n[0] ? '700' : '500', color: s.sec === n[0] ? '{{ t.blue }}' : '{{ t.ink2 }}', bg: s.sec === n[0] ? '{{ t.blueSoft }}' : 'transparent',
         pick: () => this.setState({ sec: n[0], open: Object.assign({}, this.state.open, { [n[0].slice(2)]: true }) }) })),
-      isCode: s.code, isVisual: !s.code, html: HTML,
+      isCode: s.code, isVisual: !s.code,
       codeOn: () => this.setState({ code: true }), visualOn: () => this.setState({ code: false }),
       codeBg: s.code ? '{{ t.blue }}' : '{{ t.paper }}', codeFg: s.code ? '{{ t.paper }}' : '{{ t.ink2 }}', visBg: s.code ? '{{ t.paper }}' : '{{ t.blue }}', visFg: s.code ? '{{ t.ink2 }}' : '{{ t.paper }}',
       cats: s.cats.map((c) => ({ label: c, remove: () => this.setState({ cats: this.state.cats.filter((x) => x !== c), dirty: true, savedNow: false }) })),
@@ -650,10 +741,7 @@ class Component extends DCLogic {
       myYesBg: s.mystery ? '{{ t.blue }}' : '{{ t.paper }}', myYesFg: s.mystery ? '{{ t.paper }}' : '{{ t.ink2 }}',
       myNoBg: s.mystery ? '{{ t.paper }}' : '{{ t.blue }}', myNoFg: s.mystery ? '{{ t.ink2 }}' : '{{ t.paper }}',
       mysteryYes: () => this.setState({ mystery: true, dirty: true, savedNow: false }), mysteryNo: () => this.setState({ mystery: false, dirty: true, savedNow: false }),
-      ptype: s.ptype,
-      onType: (e) => { const v = e.target.value; this.setState({ ptype: v, dirty: true, savedNow: false,
-        typeNote: v === 'key3d' ? 'Тип змінено на «Брелок 3D». Додано поля цього типу: Розміри, Комплектація. Наявні значення не видалено — приберіть зайві вручну.' : 'Тип змінено на «' + TYPES[v] + '». Набір полів оновлено; наявні значення не видалено.' }); },
-      typeNote: !!s.typeNote, typeNoteText: s.typeNote, is3d: s.ptype === 'key3d',
+      typeNote: !!s.typeNote, typeNoteText: s.typeNote,
       fam: [
         { label: 'Бустер', name: 'Бустер Pokémon TCG Mega Symphonia (японське видання)', model: 'PKM-JP-MSYM-BST', price: '170 грн', qty: '11 шт', bg: '{{ t.paper }}', color: '{{ t.ink2 }}' },
         { label: 'Бустер-бокс', name: 'Цей товар', model: 'PKM-JP-MSYM-BBX', price: '4500 грн', qty: '2 шт', bg: '{{ t.sel }}', color: '{{ t.blue }}' },
@@ -664,6 +752,8 @@ class Component extends DCLogic {
         name: p, n: String(i + 1), main: i === 0, notMain: i !== 0,
         line: i === 0 ? '{{ t.blue }}' : s.over === i && s.drag !== i ? '{{ t.blue }}' : '{{ t.line }}', op: s.drag === i ? '0.5' : '1',
         makeMain: () => this.movePhoto(i, 0),
+        first: i === 0, last: i === np - 1, leftOp: i === 0 ? '0.4' : '1', rightOp: i === np - 1 ? '0.4' : '1',
+        left: () => this.movePhoto(i, i - 1), right: () => { if (i < this.state.photos.length - 1) this.movePhoto(i, i + 1); },
         remove: () => this.setState({ photos: this.state.photos.filter((_, j) => j !== i), dirty: true, savedNow: false }),
         dragStart: (e) => { try { e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', String(i)); } catch (x) {} this.setState({ drag: i }); },
         dragOver: (e) => { e.preventDefault(); if (this.state.over !== i) this.setState({ over: i }); },
@@ -676,7 +766,7 @@ class Component extends DCLogic {
       rot: SECS.reduce((o, k) => { o[k] = s.open[k] ? '0deg' : '-90deg'; return o; }, {}),
       collapseAll: () => { const o = {}; SECS.forEach((k) => { o[k] = false; }); this.setState({ open: o }); },
       expandAll: () => this.setState({ open: allOpen() }),
-      subtract: s.subtract, subBg: s.subtract ? '{{ t.blue }}' : '{{ t.line3 }}', subKnob: s.subtract ? '18px' : '2px',
+      subtract: s.subtract, subBg: s.subtract ? '{{ t.blue }}' : '{{ t.switchOff }}', subKnob: s.subtract ? '18px' : '2px',
       subHint: s.subtract ? 'Увімкнено: після кожного замовлення кількість зменшується автоматично.' : 'Вимкнено: кількість не змінюється після замовлень — стежте за залишком вручну.',
       toggleSub: () => this.setState({ subtract: !this.state.subtract, dirty: true, savedNow: false }),
       filters: s.filters.map((f) => ({ label: f, remove: () => this.setState({ filters: this.state.filters.filter((x) => x !== f), dirty: true, savedNow: false }) })),
@@ -690,7 +780,7 @@ class Component extends DCLogic {
         setNo: () => { const l = this.state.added.slice(); l[i] = Object.assign({}, l[i], { yes: false }); this.setState({ added: l, dirty: true, savedNow: false }); },
         remove: () => this.setState({ added: this.state.added.filter((_, j) => j !== i), dirty: true, savedNow: false })
       })),
-      seoChanged: s.seoChanged, seoTouch: () => this.setState({ seoChanged: true, dirty: true, savedNow: false })
+      seoChanged: s.seoChanged && !cr, seoTouch: () => this.setState({ seoChanged: !cr, dirty: true, savedNow: false })
     };
   }
 }

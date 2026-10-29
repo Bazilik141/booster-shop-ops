@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- CAT-006 product admin editor · approved design v0.1 layout + D3 colour scheme (2026-10-28).
+<!-- CAT-006 product admin editor · approved design v0.1 layout + D3 colour scheme (2026-10-28), round 2 (2026-10-29).
      Static reference rendered from the Claude Design canvas sources in ../source/. Not production code:
      recreate with Bootstrap 5 + plain JS inside the OpenCart admin shell. Interactions are described in the spec. -->
 <html lang="uk">
@@ -19,13 +19,13 @@ input,select,textarea{background-color:transparent}
 :focus-visible{outline:2px solid #3B82F6;outline-offset:2px}
 @keyframes bs-spin{to{transform:rotate(360deg)}}
 @keyframes bs-pulse{0%,100%{opacity:1}50%{opacity:.45}}
-.bs-cell:hover{border-color:rgba(127,127,127,.35) !important;background:rgba(127,127,127,.10) !important}
-.bs-row:hover{background:rgba(127,127,127,.05)}
+.bs-cell:hover{border-color:var(--bse-hover-line) !important;background:var(--bse-hover) !important}
+.bs-row:hover{background:var(--bse-hover-row)}
 
 </style>
 </head>
 <body>
-<div><div style="width: 100%;"><div><div style="font-family: Manrope, system-ui, -apple-system, sans-serif; color-scheme: dark; color: #E2E2E8; background: #111114; min-height: 1180px; font-size: 14px;">
+<div><div style="width: 100%;"><div><div style="--bse-hover: rgba(127,127,127,.10); --bse-hover-row: rgba(127,127,127,.05); --bse-hover-line: rgba(127,127,127,.35); font-family: Manrope, system-ui, -apple-system, sans-serif; color-scheme: dark; color: #E2E2E8; background: #111114; min-height: 1640px; font-size: 14px;">
   <header style="height: 52px; background: #1B1B20; border-bottom: 1px solid #36363F; display: flex; align-items: center; justify-content: space-between; padding: 0px 20px; box-sizing: border-box;">
     <div style="display: flex; align-items: center; gap: 10px; color: #A6A6B3; font-weight: 600; font-size: 13px;"><span aria-hidden="true" style="width: 28px; height: 28px; border-radius: 6px; background: #36363F; display: inline-block;"></span>OpenCart · Адмінпанель</div>
     <div style="display: flex; gap: 16px; color: #A6A6B3; font-size: 13px;"><span>Raccoon</span><a href="#" style="color: #A6A6B3;">Вийти</a></div>
@@ -62,7 +62,7 @@ input,select,textarea{background-color:transparent}
             
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"></path><path d="M21 3v6h-6"></path></svg>Оновити з CRM
           </button>
-          <a href="11-product-page.html" style="height: 40px; padding: 0px 16px; border-radius: 8px; background: #F2B544; color: #1B1B20; font-weight: 700; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; text-decoration: none;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Новий товар</a>
+          <a href="16-product-create.html" style="height: 40px; padding: 0px 16px; border-radius: 8px; background: #F2B544; color: #1B1B20; font-weight: 700; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; text-decoration: none;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Новий товар</a>
         </div>
       </div>
 
@@ -129,7 +129,7 @@ input,select,textarea{background-color:transparent}
         </div>
 
         <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-height: 30px;">
-          <span style="font-size: 13px; font-weight: 700; color: #FAFAFC;">Знайдено: <span class="sc-interp">11</span></span>
+          <span style="font-size: 13px; font-weight: 700; color: #FAFAFC;">Знайдено: <span class="sc-interp">150</span></span>
           
             <span aria-hidden="true" style="color: #4E4E5A;">|</span>
             
@@ -145,18 +145,21 @@ input,select,textarea{background-color:transparent}
         </div>
       </div>
 
+      
+      
+
       <div style="margin-top: 8px; border: 1px solid #36363F; border-radius: 10px; overflow-x: auto;">
-        <div style="min-width: 1100px;">
-          <div style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; height: 40px; background: #25252C; border-bottom: 1px solid #36363F; font-size: 12px; font-weight: 700; color: #A6A6B3;">
-            <span style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати всі знайдені" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
-            <span></span>
-            <span>Назва</span>
-            <span>Модель</span>
-            <span style="padding-left: 9px;">Ціна на сайті</span>
-            <span style="padding-left: 9px;">Кількість</span>
-            <span>Статус</span>
-            <span>Акція</span>
-            <span></span>
+        <div role="table" aria-label="Товари" aria-rowcount="150" style="min-width: 1100px;">
+          <div role="row" style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; height: 40px; background: #25252C; border-bottom: 1px solid #36363F; font-size: 12px; font-weight: 700; color: #A6A6B3;">
+            <span role="columnheader" style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати всі на цій сторінці" title="Обрати всі на цій сторінці" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
+            <span role="columnheader"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px);">Фото</span></span>
+            <span role="columnheader" aria-sort="ascending"><button type="button" aria-label="Сортувати: Назва, зараз за зростанням" style="border: 0px; background: none; padding: 4px 0px; font-size: 12px; font-weight: 700; color: #FAFAFC; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">Назва<span aria-hidden="true" style="color: #F2B544;"><span class="sc-interp">↑</span></span></button></span>
+            <span role="columnheader" aria-sort="none"><button type="button" aria-label="Сортувати: Модель" style="border: 0px; background: none; padding: 4px 0px; font-size: 12px; font-weight: 700; color: #A6A6B3; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">Модель<span aria-hidden="true" style="color: #73737F;"><span class="sc-interp">↕</span></span></button></span>
+            <span role="columnheader" aria-sort="none" style="padding-left: 9px;"><button type="button" aria-label="Сортувати: Ціна" style="border: 0px; background: none; padding: 4px 0px; font-size: 12px; font-weight: 700; color: #A6A6B3; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">Ціна на сайті<span aria-hidden="true" style="color: #73737F;"><span class="sc-interp">↕</span></span></button></span>
+            <span role="columnheader" aria-sort="none" style="padding-left: 9px;"><button type="button" aria-label="Сортувати: Кількість" style="border: 0px; background: none; padding: 4px 0px; font-size: 12px; font-weight: 700; color: #A6A6B3; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">Кількість<span aria-hidden="true" style="color: #73737F;"><span class="sc-interp">↕</span></span></button></span>
+            <span role="columnheader">Статус</span>
+            <span role="columnheader">Акція</span>
+            <span role="columnheader"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px);">Дії</span></span>
           </div>
 
           
@@ -165,301 +168,16 @@ input,select,textarea{background-color:transparent}
 
           
             
-              <div class="bs-row" style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; min-height: 64px; padding: 8px 0px; box-sizing: border-box; border-bottom: 1px solid #2C2C34; background: #25221C;">
-                <span style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати: Бустер Pokémon TCG Mega Symphonia (японське видання)" checked="" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
-                <span aria-hidden="true" style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: #A6A6B3; opacity: 1;"><span class="sc-interp">BST</span></span>
-                <span style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px; min-width: 0px;">
-                  <a href="11-product-page.html" style="color: #FAFAFC; font-weight: 600; font-size: 13.5px; line-height: 1.35; text-decoration: none;"><span class="sc-interp">Бустер Pokémon TCG Mega Symphonia (японське видання)</span></a>
-                  <span style="font-size: 12px; color: #A6A6B3; display: flex; gap: 8px; align-items: center;"><span class="sc-interp">Pokémon TCG · The Pokémon Company</span></span>
+              <div role="row" class="bs-row" style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; min-height: 64px; padding: 8px 0px; box-sizing: border-box; border-bottom: 1px solid #2C2C34; background: transparent;">
+                <span role="cell" style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати: Брелок-спінер Ditto" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
+                <span role="cell" aria-hidden="true" style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: #A6A6B3; opacity: 1;"><span class="sc-interp">3D</span></span>
+                <span role="cell" style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px; min-width: 0px;">
+                  <a href="11-product-page.html" style="color: #FAFAFC; font-weight: 600; font-size: 13.5px; line-height: 1.35; text-decoration: none;"><span class="sc-interp">Брелок-спінер Ditto</span></a>
+                  <span style="font-size: 12px; color: #A6A6B3; display: flex; gap: 8px; align-items: center;"><span class="sc-interp">3D-друк · Booster Shop 3D</span></span>
                 </span>
-                <span style="font-size: 12.5px; color: #E2E2E8; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"><span class="sc-interp">PKM-JP-MSYM-BST</span></span>
+                <span role="cell" style="font-size: 12.5px; color: #E2E2E8; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"><span class="sc-interp">BR-DITTO-400</span></span>
 
-                <span style="position: relative; display: flex; flex-direction: column; gap: 2px;">
-                  
-                  
-                    <span style="display: flex; align-items: center; gap: 2px;">
-                      <button type="button" class="bs-cell" aria-label="Змінити ціну: 170 грн" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 800; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">170 грн</span></button>
-                      
-                    </span>
-                    
-                    
-                    
-                    
-                  
-                </span>
-
-                <span style="position: relative; display: flex; flex-direction: column; gap: 2px;">
-                  
-                  
-                    <span style="display: flex; align-items: center; gap: 2px;">
-                      <button type="button" class="bs-cell" aria-label="Змінити кількість: 11 шт" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 700; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">11 шт</span></button>
-                      
-                        <span style="position: relative; display: inline-flex;">
-                          <button type="button" aria-label="У CRM: 12 шт" style="border: 0px; background: transparent; padding: 3px; cursor: help; display: inline-flex;"><span style="font-size: 9.5px; font-weight: 800; padding: 1px 4px; border-radius: 4px; background: #2C1E14; border: 1px solid #9A4F16; color: #FDBA74;">CRM</span></button>
-                          
-                        </span>
-                      
-                    </span>
-                    
-                    
-                    
-                    
-                  
-                </span>
-
-                <span style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
-                  <button type="button" aria-pressed="true" aria-label="Статус: увімкнено" style="width: 36px; height: 20px; border-radius: 999px; border: 0px; background: #F2B544; position: relative; cursor: pointer; padding: 0px;"><span style="position: absolute; top: 2px; left: 18px; width: 16px; height: 16px; border-radius: 50%; background: #1B1B20; box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 2px;"></span></button>
-                  
-                  
-                </span>
-
-                <span>
-                  
-                </span>
-
-                <span style="display: flex; gap: 2px;">
-                  <a href="11-product-page.html" aria-label="Відкрити товар" title="Відкрити товар" style="width: 32px; height: 32px; border-radius: 6px; color: #E2E2E8; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></a>
-                  <button type="button" aria-label="Копіювати товар" title="Копіювати товар" style="width: 32px; height: 32px; border-radius: 6px; border: 0px; background: transparent; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></button>
-                </span>
-              </div>
-            
-              <div class="bs-row" style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; min-height: 64px; padding: 8px 0px; box-sizing: border-box; border-bottom: 1px solid #2C2C34; background: #25221C;">
-                <span style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати: Бустер-бокс Mega Symphonia (японське видання)" checked="" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
-                <span aria-hidden="true" style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: #A6A6B3; opacity: 1;"><span class="sc-interp">BBX</span></span>
-                <span style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px; min-width: 0px;">
-                  <a href="11-product-page.html" style="color: #FAFAFC; font-weight: 600; font-size: 13.5px; line-height: 1.35; text-decoration: none;"><span class="sc-interp">Бустер-бокс Mega Symphonia (японське видання)</span></a>
-                  <span style="font-size: 12px; color: #A6A6B3; display: flex; gap: 8px; align-items: center;"><span class="sc-interp">Pokémon TCG · The Pokémon Company</span></span>
-                </span>
-                <span style="font-size: 12.5px; color: #E2E2E8; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"><span class="sc-interp">PKM-JP-MSYM-BBX</span></span>
-
-                <span style="position: relative; display: flex; flex-direction: column; gap: 2px;">
-                  
-                  
-                    <span style="display: flex; align-items: center; gap: 2px;">
-                      <button type="button" class="bs-cell" aria-label="Змінити ціну: 4500 грн" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 800; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">4500 грн</span></button>
-                      
-                        <span style="position: relative; display: inline-flex;">
-                          <button type="button" aria-label="У CRM: 4800 грн" style="border: 0px; background: transparent; padding: 3px; color: #FDBA74; cursor: help; display: inline-flex;"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"></path></svg></button>
-                          
-                        </span>
-                      
-                    </span>
-                    <span style="font-size: 12px; font-weight: 700; color: #FF7A7A; padding-left: 9px;"><span class="sc-interp">акц. 4200 грн</span></span>
-                    
-                    
-                    
-                  
-                </span>
-
-                <span style="position: relative; display: flex; flex-direction: column; gap: 2px;">
-                  
-                  
-                    <span style="display: flex; align-items: center; gap: 2px;">
-                      <button type="button" class="bs-cell" aria-label="Змінити кількість: 2 шт" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 700; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">2 шт</span></button>
-                      
-                        <span style="position: relative; display: inline-flex;">
-                          <button type="button" aria-label="У CRM: 3 шт" style="border: 0px; background: transparent; padding: 3px; cursor: help; display: inline-flex;"><span style="font-size: 9.5px; font-weight: 800; padding: 1px 4px; border-radius: 4px; background: #2C1E14; border: 1px solid #9A4F16; color: #FDBA74;">CRM</span></button>
-                          
-                        </span>
-                      
-                    </span>
-                    
-                    
-                    
-                    
-                  
-                </span>
-
-                <span style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
-                  <button type="button" aria-pressed="true" aria-label="Статус: увімкнено" style="width: 36px; height: 20px; border-radius: 999px; border: 0px; background: #F2B544; position: relative; cursor: pointer; padding: 0px;"><span style="position: absolute; top: 2px; left: 18px; width: 16px; height: 16px; border-radius: 50%; background: #1B1B20; box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 2px;"></span></button>
-                  
-                  
-                </span>
-
-                <span>
-                  <span style="display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 4px 7px; border-radius: 6px; background: #FAFAFC; color: #1B1B20; white-space: nowrap;"><span class="sc-interp">Акція до 15.11</span></span>
-                </span>
-
-                <span style="display: flex; gap: 2px;">
-                  <a href="11-product-page.html" aria-label="Відкрити товар" title="Відкрити товар" style="width: 32px; height: 32px; border-radius: 6px; color: #E2E2E8; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></a>
-                  <button type="button" aria-label="Копіювати товар" title="Копіювати товар" style="width: 32px; height: 32px; border-radius: 6px; border: 0px; background: transparent; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></button>
-                </span>
-              </div>
-            
-              <div class="bs-row" style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; min-height: 64px; padding: 8px 0px; box-sizing: border-box; border-bottom: 1px solid #2C2C34; background: #25221C;">
-                <span style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати: Бустер-бокс Hot Wind Arena (корейське видання)" checked="" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
-                <span aria-hidden="true" style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: #A6A6B3; opacity: 0.45;"><span class="sc-interp">BBX</span></span>
-                <span style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px; min-width: 0px;">
-                  <a href="11-product-page.html" style="color: #FAFAFC; font-weight: 600; font-size: 13.5px; line-height: 1.35; text-decoration: none;"><span class="sc-interp">Бустер-бокс Hot Wind Arena (корейське видання)</span></a>
-                  <span style="font-size: 12px; color: #A6A6B3; display: flex; gap: 8px; align-items: center;"><span class="sc-interp">Pokémon TCG · The Pokémon Company</span></span>
-                </span>
-                <span style="font-size: 12.5px; color: #E2E2E8; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"><span class="sc-interp">PKM-KR-HWAK-BBX</span></span>
-
-                <span style="position: relative; display: flex; flex-direction: column; gap: 2px;">
-                  
-                  
-                    <span style="display: flex; align-items: center; gap: 2px;">
-                      <button type="button" class="bs-cell" aria-label="Змінити ціну: 3000 грн" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 800; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">3000 грн</span></button>
-                      
-                    </span>
-                    
-                    
-                    
-                    
-                  
-                </span>
-
-                <span style="position: relative; display: flex; flex-direction: column; gap: 2px;">
-                  
-                  
-                    <span style="display: flex; align-items: center; gap: 2px;">
-                      <button type="button" class="bs-cell" aria-label="Змінити кількість: 0 шт" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 700; font-size: 14px; color: #FF7A7A; cursor: text;"><span class="sc-interp">0 шт</span></button>
-                      
-                    </span>
-                    <span style="font-size: 11.5px; color: #FF7A7A; padding-left: 9px;">немає в наявності</span>
-                    
-                    
-                    
-                  
-                </span>
-
-                <span style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
-                  <button type="button" aria-pressed="true" aria-label="Статус: увімкнено" style="width: 36px; height: 20px; border-radius: 999px; border: 0px; background: #F2B544; position: relative; cursor: pointer; padding: 0px;"><span style="position: absolute; top: 2px; left: 18px; width: 16px; height: 16px; border-radius: 50%; background: #1B1B20; box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 2px;"></span></button>
-                  
-                  
-                </span>
-
-                <span>
-                  
-                </span>
-
-                <span style="display: flex; gap: 2px;">
-                  <a href="11-product-page.html" aria-label="Відкрити товар" title="Відкрити товар" style="width: 32px; height: 32px; border-radius: 6px; color: #E2E2E8; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></a>
-                  <button type="button" aria-label="Копіювати товар" title="Копіювати товар" style="width: 32px; height: 32px; border-radius: 6px; border: 0px; background: transparent; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></button>
-                </span>
-              </div>
-            
-              <div class="bs-row" style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; min-height: 64px; padding: 8px 0px; box-sizing: border-box; border-bottom: 1px solid #2C2C34; background: #25221C;">
-                <span style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати: Бустер Pokémon TCG Terastal Festival ex (японське видання)" checked="" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
-                <span aria-hidden="true" style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: #A6A6B3; opacity: 1;"><span class="sc-interp">BST</span></span>
-                <span style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px; min-width: 0px;">
-                  <a href="11-product-page.html" style="color: #FAFAFC; font-weight: 600; font-size: 13.5px; line-height: 1.35; text-decoration: none;"><span class="sc-interp">Бустер Pokémon TCG Terastal Festival ex (японське видання)</span></a>
-                  <span style="font-size: 12px; color: #A6A6B3; display: flex; gap: 8px; align-items: center;"><span class="sc-interp">Pokémon TCG · The Pokémon Company</span></span>
-                </span>
-                <span style="font-size: 12.5px; color: #E2E2E8; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"><span class="sc-interp">PKM-JP-SV8A-BST</span></span>
-
-                <span style="position: relative; display: flex; flex-direction: column; gap: 2px;">
-                  
-                  
-                    <span style="display: flex; align-items: center; gap: 2px;">
-                      <button type="button" class="bs-cell" aria-label="Змінити ціну: 290 грн" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 800; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">290 грн</span></button>
-                      
-                        <span style="position: relative; display: inline-flex;">
-                          <button type="button" aria-label="У CRM: 320 грн" style="border: 0px; background: transparent; padding: 3px; color: #FDBA74; cursor: help; display: inline-flex;"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"></path></svg></button>
-                          
-                        </span>
-                      
-                    </span>
-                    <span style="font-size: 12px; font-weight: 700; color: #FF7A7A; padding-left: 9px;"><span class="sc-interp">акц. 260 грн</span></span>
-                    
-                    
-                    
-                  
-                </span>
-
-                <span style="position: relative; display: flex; flex-direction: column; gap: 2px;">
-                  
-                  
-                    <span style="display: flex; align-items: center; gap: 2px;">
-                      <button type="button" class="bs-cell" aria-label="Змінити кількість: 8 шт" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 700; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">8 шт</span></button>
-                      
-                    </span>
-                    
-                    
-                    
-                    
-                  
-                </span>
-
-                <span style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
-                  <button type="button" aria-pressed="true" aria-label="Статус: увімкнено" style="width: 36px; height: 20px; border-radius: 999px; border: 0px; background: #F2B544; position: relative; cursor: pointer; padding: 0px;"><span style="position: absolute; top: 2px; left: 18px; width: 16px; height: 16px; border-radius: 50%; background: #1B1B20; box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 2px;"></span></button>
-                  
-                  
-                </span>
-
-                <span>
-                  <span style="display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 4px 7px; border-radius: 6px; background: #FAFAFC; color: #1B1B20; white-space: nowrap;"><span class="sc-interp">Акція до 31.10</span></span>
-                </span>
-
-                <span style="display: flex; gap: 2px;">
-                  <a href="11-product-page.html" aria-label="Відкрити товар" title="Відкрити товар" style="width: 32px; height: 32px; border-radius: 6px; color: #E2E2E8; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></a>
-                  <button type="button" aria-label="Копіювати товар" title="Копіювати товар" style="width: 32px; height: 32px; border-radius: 6px; border: 0px; background: transparent; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></button>
-                </span>
-              </div>
-            
-              <div class="bs-row" style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; min-height: 64px; padding: 8px 0px; box-sizing: border-box; border-bottom: 1px solid #2C2C34; background: transparent;">
-                <span style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати: Бустер-бокс Abyss Eye (японське видання)" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
-                <span aria-hidden="true" style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: #A6A6B3; opacity: 1;"><span class="sc-interp">BBX</span></span>
-                <span style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px; min-width: 0px;">
-                  <a href="11-product-page.html" style="color: #FAFAFC; font-weight: 600; font-size: 13.5px; line-height: 1.35; text-decoration: none;"><span class="sc-interp">Бустер-бокс Abyss Eye (японське видання)</span></a>
-                  <span style="font-size: 12px; color: #A6A6B3; display: flex; gap: 8px; align-items: center;"><span class="sc-interp">Pokémon TCG · The Pokémon Company</span></span>
-                </span>
-                <span style="font-size: 12.5px; color: #E2E2E8; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"><span class="sc-interp">PKM-JP-M5-BBX</span></span>
-
-                <span style="position: relative; display: flex; flex-direction: column; gap: 2px;">
-                  
-                  
-                    <span style="display: flex; align-items: center; gap: 2px;">
-                      <button type="button" class="bs-cell" aria-label="Змінити ціну: 5200 грн" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 800; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">5200 грн</span></button>
-                      
-                    </span>
-                    
-                    
-                    
-                    
-                  
-                </span>
-
-                <span style="position: relative; display: flex; flex-direction: column; gap: 2px;">
-                  
-                  
-                    <span style="display: flex; align-items: center; gap: 2px;">
-                      <button type="button" class="bs-cell" aria-label="Змінити кількість: 3 шт" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 700; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">3 шт</span></button>
-                      
-                    </span>
-                    
-                    
-                    
-                    
-                  
-                </span>
-
-                <span style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
-                  <button type="button" aria-pressed="true" aria-label="Статус: увімкнено" style="width: 36px; height: 20px; border-radius: 999px; border: 0px; background: #F2B544; position: relative; cursor: pointer; padding: 0px;"><span style="position: absolute; top: 2px; left: 18px; width: 16px; height: 16px; border-radius: 50%; background: #1B1B20; box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 2px;"></span></button>
-                  
-                  
-                </span>
-
-                <span>
-                  
-                </span>
-
-                <span style="display: flex; gap: 2px;">
-                  <a href="11-product-page.html" aria-label="Відкрити товар" title="Відкрити товар" style="width: 32px; height: 32px; border-radius: 6px; color: #E2E2E8; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></a>
-                  <button type="button" aria-label="Копіювати товар" title="Копіювати товар" style="width: 32px; height: 32px; border-radius: 6px; border: 0px; background: transparent; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></button>
-                </span>
-              </div>
-            
-              <div class="bs-row" style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; min-height: 64px; padding: 8px 0px; box-sizing: border-box; border-bottom: 1px solid #2C2C34; background: transparent;">
-                <span style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати: Бустер Pokémon TCG Abyss Eye (японське видання)" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
-                <span aria-hidden="true" style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: #A6A6B3; opacity: 0.45;"><span class="sc-interp">BST</span></span>
-                <span style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px; min-width: 0px;">
-                  <a href="11-product-page.html" style="color: #A6A6B3; font-weight: 600; font-size: 13.5px; line-height: 1.35; text-decoration: none;"><span class="sc-interp">Бустер Pokémon TCG Abyss Eye (японське видання)</span></a>
-                  <span style="font-size: 12px; color: #A6A6B3; display: flex; gap: 8px; align-items: center;"><span class="sc-interp">Pokémon TCG · The Pokémon Company</span><span style="font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 2px 6px; border-radius: 6px; background: #2C2C34; color: #E2E2E8;">Вимкнено</span></span>
-                </span>
-                <span style="font-size: 12.5px; color: #E2E2E8; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"><span class="sc-interp">PKM-JP-M5-BST</span></span>
-
-                <span style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
                   
                   
                     <span style="display: flex; align-items: center; gap: 2px;">
@@ -473,99 +191,46 @@ input,select,textarea{background-color:transparent}
                   
                 </span>
 
-                <span style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
                   
                   
                     <span style="display: flex; align-items: center; gap: 2px;">
-                      <button type="button" class="bs-cell" aria-label="Змінити кількість: 0 шт" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 700; font-size: 14px; color: #FF7A7A; cursor: text;"><span class="sc-interp">0 шт</span></button>
+                      <button type="button" class="bs-cell" aria-label="Змінити кількість: 15 шт" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 700; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">15 шт</span></button>
                       
                     </span>
-                    <span style="font-size: 11.5px; color: #FF7A7A; padding-left: 9px;">немає в наявності</span>
+                    
                     
                     
                     
                   
                 </span>
 
-                <span style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
-                  <button type="button" aria-pressed="false" aria-label="Статус: вимкнено" style="width: 36px; height: 20px; border-radius: 999px; border: 0px; background: #4E4E5A; position: relative; cursor: pointer; padding: 0px;"><span style="position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #1B1B20; box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 2px;"></span></button>
+                <span role="cell" style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
+                  <button type="button" aria-pressed="true" aria-label="Статус: увімкнено" style="width: 36px; height: 20px; border-radius: 999px; border: 0px; background: #F2B544; position: relative; cursor: pointer; padding: 0px;"><span style="position: absolute; top: 2px; left: 18px; width: 16px; height: 16px; border-radius: 50%; background: #1B1B20; box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 2px;"></span></button>
                   
                   
                 </span>
 
-                <span>
+                <span role="cell">
                   
                 </span>
 
-                <span style="display: flex; gap: 2px;">
+                <span role="cell" style="display: flex; gap: 2px;">
                   <a href="11-product-page.html" aria-label="Відкрити товар" title="Відкрити товар" style="width: 32px; height: 32px; border-radius: 6px; color: #E2E2E8; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></a>
                   <button type="button" aria-label="Копіювати товар" title="Копіювати товар" style="width: 32px; height: 32px; border-radius: 6px; border: 0px; background: transparent; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></button>
                 </span>
               </div>
             
-              <div class="bs-row" style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; min-height: 64px; padding: 8px 0px; box-sizing: border-box; border-bottom: 1px solid #2C2C34; background: transparent;">
-                <span style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати: Стартова колода Pokémon ex Start Deck — випадкова (японське видання)" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
-                <span aria-hidden="true" style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: #A6A6B3; opacity: 1;"><span class="sc-interp">RND</span></span>
-                <span style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px; min-width: 0px;">
-                  <a href="11-product-page.html" style="color: #A6A6B3; font-weight: 600; font-size: 13.5px; line-height: 1.35; text-decoration: none;"><span class="sc-interp">Стартова колода Pokémon ex Start Deck — випадкова (японське видання)</span></a>
-                  <span style="font-size: 12px; color: #A6A6B3; display: flex; gap: 8px; align-items: center;"><span class="sc-interp">Pokémon TCG · The Pokémon Company</span><span style="font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 2px 6px; border-radius: 6px; background: #2C2C34; color: #E2E2E8;">Вимкнено</span></span>
-                </span>
-                <span style="font-size: 12.5px; color: #E2E2E8; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"><span class="sc-interp">PKM-JP-EXSD-RND</span></span>
-
-                <span style="position: relative; display: flex; flex-direction: column; gap: 2px;">
-                  
-                  
-                    <span style="display: flex; align-items: center; gap: 2px;">
-                      <button type="button" class="bs-cell" aria-label="Змінити ціну: 520 грн" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 800; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">520 грн</span></button>
-                      
-                    </span>
-                    
-                    
-                    
-                    
-                  
-                </span>
-
-                <span style="position: relative; display: flex; flex-direction: column; gap: 2px;">
-                  
-                  
-                    <span style="display: flex; align-items: center; gap: 2px;">
-                      <button type="button" class="bs-cell" aria-label="Змінити кількість: 6 шт" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 700; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">6 шт</span></button>
-                      
-                    </span>
-                    
-                    
-                    
-                    
-                  
-                </span>
-
-                <span style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
-                  <button type="button" aria-pressed="false" aria-label="Статус: вимкнено" style="width: 36px; height: 20px; border-radius: 999px; border: 0px; background: #4E4E5A; position: relative; cursor: pointer; padding: 0px;"><span style="position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #1B1B20; box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 2px;"></span></button>
-                  
-                  
-                </span>
-
-                <span>
-                  
-                </span>
-
-                <span style="display: flex; gap: 2px;">
-                  <a href="11-product-page.html" aria-label="Відкрити товар" title="Відкрити товар" style="width: 32px; height: 32px; border-radius: 6px; color: #E2E2E8; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></a>
-                  <button type="button" aria-label="Копіювати товар" title="Копіювати товар" style="width: 32px; height: 32px; border-radius: 6px; border: 0px; background: transparent; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></button>
-                </span>
-              </div>
-            
-              <div class="bs-row" style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; min-height: 64px; padding: 8px 0px; box-sizing: border-box; border-bottom: 1px solid #2C2C34; background: #25221C;">
-                <span style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати: Бустер One Piece Card Game OP-13 Carrying On His Will (японське видання)" checked="" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
-                <span aria-hidden="true" style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: #A6A6B3; opacity: 1;"><span class="sc-interp">BST</span></span>
-                <span style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px; min-width: 0px;">
+              <div role="row" class="bs-row" style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; min-height: 64px; padding: 8px 0px; box-sizing: border-box; border-bottom: 1px solid #2C2C34; background: #25221C;">
+                <span role="cell" style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати: Бустер One Piece Card Game OP-13 Carrying On His Will (японське видання)" checked="" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
+                <span role="cell" aria-hidden="true" style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: #A6A6B3; opacity: 1;"><span class="sc-interp">BST</span></span>
+                <span role="cell" style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px; min-width: 0px;">
                   <a href="11-product-page.html" style="color: #FAFAFC; font-weight: 600; font-size: 13.5px; line-height: 1.35; text-decoration: none;"><span class="sc-interp">Бустер One Piece Card Game OP-13 Carrying On His Will (японське видання)</span></a>
                   <span style="font-size: 12px; color: #A6A6B3; display: flex; gap: 8px; align-items: center;"><span class="sc-interp">One Piece Card Game · Bandai</span></span>
                 </span>
-                <span style="font-size: 12.5px; color: #E2E2E8; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"><span class="sc-interp">OP-JP-OP13-BST</span></span>
+                <span role="cell" style="font-size: 12.5px; color: #E2E2E8; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"><span class="sc-interp">OP-JP-OP13-BST</span></span>
 
-                <span style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
                   
                   
                     <span style="display: flex; align-items: center; gap: 2px;">
@@ -579,7 +244,7 @@ input,select,textarea{background-color:transparent}
                   
                 </span>
 
-                <span style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
                   
                   
                     <span style="display: flex; align-items: center; gap: 2px;">
@@ -598,138 +263,32 @@ input,select,textarea{background-color:transparent}
                   
                 </span>
 
-                <span style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
+                <span role="cell" style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
                   <button type="button" aria-pressed="true" aria-label="Статус: увімкнено" style="width: 36px; height: 20px; border-radius: 999px; border: 0px; background: #F2B544; position: relative; cursor: pointer; padding: 0px;"><span style="position: absolute; top: 2px; left: 18px; width: 16px; height: 16px; border-radius: 50%; background: #1B1B20; box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 2px;"></span></button>
                   
                   
                 </span>
 
-                <span>
+                <span role="cell">
                   
                 </span>
 
-                <span style="display: flex; gap: 2px;">
+                <span role="cell" style="display: flex; gap: 2px;">
                   <a href="11-product-page.html" aria-label="Відкрити товар" title="Відкрити товар" style="width: 32px; height: 32px; border-radius: 6px; color: #E2E2E8; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></a>
                   <button type="button" aria-label="Копіювати товар" title="Копіювати товар" style="width: 32px; height: 32px; border-radius: 6px; border: 0px; background: transparent; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></button>
                 </span>
               </div>
             
-              <div class="bs-row" style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; min-height: 64px; padding: 8px 0px; box-sizing: border-box; border-bottom: 1px solid #2C2C34; background: #25221C;">
-                <span style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати: Бустер-бокс One Piece OP-13 Carrying On His Will (японське видання)" checked="" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
-                <span aria-hidden="true" style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: #A6A6B3; opacity: 1;"><span class="sc-interp">BBX</span></span>
-                <span style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px; min-width: 0px;">
-                  <a href="11-product-page.html" style="color: #FAFAFC; font-weight: 600; font-size: 13.5px; line-height: 1.35; text-decoration: none;"><span class="sc-interp">Бустер-бокс One Piece OP-13 Carrying On His Will (японське видання)</span></a>
-                  <span style="font-size: 12px; color: #A6A6B3; display: flex; gap: 8px; align-items: center;"><span class="sc-interp">One Piece Card Game · Bandai</span></span>
+              <div role="row" class="bs-row" style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; min-height: 64px; padding: 8px 0px; box-sizing: border-box; border-bottom: 1px solid #2C2C34; background: transparent;">
+                <span role="cell" style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати: Бустер Pokémon TCG Abyss Eye (японське видання)" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
+                <span role="cell" aria-hidden="true" style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: #A6A6B3; opacity: 0.45;"><span class="sc-interp">BST</span></span>
+                <span role="cell" style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px; min-width: 0px;">
+                  <a href="11-product-page.html" style="color: #A6A6B3; font-weight: 600; font-size: 13.5px; line-height: 1.35; text-decoration: none;"><span class="sc-interp">Бустер Pokémon TCG Abyss Eye (японське видання)</span></a>
+                  <span style="font-size: 12px; color: #A6A6B3; display: flex; gap: 8px; align-items: center;"><span class="sc-interp">Pokémon TCG · The Pokémon Company</span><span style="font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 2px 6px; border-radius: 6px; background: #2C2C34; color: #E2E2E8;">Вимкнено</span></span>
                 </span>
-                <span style="font-size: 12.5px; color: #E2E2E8; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"><span class="sc-interp">OP-JP-OP13-BBX</span></span>
+                <span role="cell" style="font-size: 12.5px; color: #E2E2E8; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"><span class="sc-interp">PKM-JP-M5-BST</span></span>
 
-                <span style="position: relative; display: flex; flex-direction: column; gap: 2px;">
-                  
-                  
-                    <span style="display: flex; align-items: center; gap: 2px;">
-                      <button type="button" class="bs-cell" aria-label="Змінити ціну: 3800 грн" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 800; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">3800 грн</span></button>
-                      
-                    </span>
-                    <span style="font-size: 12px; font-weight: 700; color: #FF7A7A; padding-left: 9px;"><span class="sc-interp">акц. 3600 грн</span></span>
-                    
-                    
-                    
-                  
-                </span>
-
-                <span style="position: relative; display: flex; flex-direction: column; gap: 2px;">
-                  
-                  
-                    <span style="display: flex; align-items: center; gap: 2px;">
-                      <button type="button" class="bs-cell" aria-label="Змінити кількість: 1 шт" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 700; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">1 шт</span></button>
-                      
-                    </span>
-                    
-                    
-                    
-                    
-                  
-                </span>
-
-                <span style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
-                  <button type="button" aria-pressed="true" aria-label="Статус: увімкнено" style="width: 36px; height: 20px; border-radius: 999px; border: 0px; background: #F2B544; position: relative; cursor: pointer; padding: 0px;"><span style="position: absolute; top: 2px; left: 18px; width: 16px; height: 16px; border-radius: 50%; background: #1B1B20; box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 2px;"></span></button>
-                  
-                  
-                </span>
-
-                <span>
-                  <span style="display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 4px 7px; border-radius: 6px; background: #FAFAFC; color: #1B1B20; white-space: nowrap;"><span class="sc-interp">Акція до 10.11</span></span>
-                </span>
-
-                <span style="display: flex; gap: 2px;">
-                  <a href="11-product-page.html" aria-label="Відкрити товар" title="Відкрити товар" style="width: 32px; height: 32px; border-radius: 6px; color: #E2E2E8; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></a>
-                  <button type="button" aria-label="Копіювати товар" title="Копіювати товар" style="width: 32px; height: 32px; border-radius: 6px; border: 0px; background: transparent; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></button>
-                </span>
-              </div>
-            
-              <div class="bs-row" style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; min-height: 64px; padding: 8px 0px; box-sizing: border-box; border-bottom: 1px solid #2C2C34; background: transparent;">
-                <span style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати: Стартова колода One Piece ST-32 (японське видання)" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
-                <span aria-hidden="true" style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: #A6A6B3; opacity: 1;"><span class="sc-interp">STD</span></span>
-                <span style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px; min-width: 0px;">
-                  <a href="11-product-page.html" style="color: #FAFAFC; font-weight: 600; font-size: 13.5px; line-height: 1.35; text-decoration: none;"><span class="sc-interp">Стартова колода One Piece ST-32 (японське видання)</span></a>
-                  <span style="font-size: 12px; color: #A6A6B3; display: flex; gap: 8px; align-items: center;"><span class="sc-interp">One Piece Card Game · Bandai</span></span>
-                </span>
-                <span style="font-size: 12.5px; color: #E2E2E8; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"><span class="sc-interp">OP-JP-ST32-STD</span></span>
-
-                <span style="position: relative; display: flex; flex-direction: column; gap: 2px;">
-                  
-                  
-                    <span style="display: flex; align-items: center; gap: 2px;">
-                      <button type="button" class="bs-cell" aria-label="Змінити ціну: 750 грн" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 800; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">750 грн</span></button>
-                      
-                    </span>
-                    
-                    
-                    
-                    
-                  
-                </span>
-
-                <span style="position: relative; display: flex; flex-direction: column; gap: 2px;">
-                  
-                  
-                    <span style="display: flex; align-items: center; gap: 2px;">
-                      <button type="button" class="bs-cell" aria-label="Змінити кількість: 4 шт" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 700; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">4 шт</span></button>
-                      
-                    </span>
-                    
-                    
-                    
-                    
-                  
-                </span>
-
-                <span style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
-                  <button type="button" aria-pressed="true" aria-label="Статус: увімкнено" style="width: 36px; height: 20px; border-radius: 999px; border: 0px; background: #F2B544; position: relative; cursor: pointer; padding: 0px;"><span style="position: absolute; top: 2px; left: 18px; width: 16px; height: 16px; border-radius: 50%; background: #1B1B20; box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 2px;"></span></button>
-                  
-                  
-                </span>
-
-                <span>
-                  
-                </span>
-
-                <span style="display: flex; gap: 2px;">
-                  <a href="11-product-page.html" aria-label="Відкрити товар" title="Відкрити товар" style="width: 32px; height: 32px; border-radius: 6px; color: #E2E2E8; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></a>
-                  <button type="button" aria-label="Копіювати товар" title="Копіювати товар" style="width: 32px; height: 32px; border-radius: 6px; border: 0px; background: transparent; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></button>
-                </span>
-              </div>
-            
-              <div class="bs-row" style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; min-height: 64px; padding: 8px 0px; box-sizing: border-box; border-bottom: 1px solid #2C2C34; background: transparent;">
-                <span style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати: Брелок-спінер Ditto" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
-                <span aria-hidden="true" style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: #A6A6B3; opacity: 1;"><span class="sc-interp">3D</span></span>
-                <span style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px; min-width: 0px;">
-                  <a href="11-product-page.html" style="color: #FAFAFC; font-weight: 600; font-size: 13.5px; line-height: 1.35; text-decoration: none;"><span class="sc-interp">Брелок-спінер Ditto</span></a>
-                  <span style="font-size: 12px; color: #A6A6B3; display: flex; gap: 8px; align-items: center;"><span class="sc-interp">3D-друк · Booster Shop 3D</span></span>
-                </span>
-                <span style="font-size: 12.5px; color: #E2E2E8; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"><span class="sc-interp">BR-DITTO-400</span></span>
-
-                <span style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
                   
                   
                     <span style="display: flex; align-items: center; gap: 2px;">
@@ -743,11 +302,50 @@ input,select,textarea{background-color:transparent}
                   
                 </span>
 
-                <span style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
                   
                   
                     <span style="display: flex; align-items: center; gap: 2px;">
-                      <button type="button" class="bs-cell" aria-label="Змінити кількість: 15 шт" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 700; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">15 шт</span></button>
+                      <button type="button" class="bs-cell" aria-label="Змінити кількість: 0 шт" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 700; font-size: 14px; color: #FF7A7A; cursor: text;"><span class="sc-interp">0 шт</span></button>
+                      
+                    </span>
+                    <span style="font-size: 11.5px; color: #FF7A7A; padding-left: 9px;">немає в наявності</span>
+                    
+                    
+                    
+                  
+                </span>
+
+                <span role="cell" style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
+                  <button type="button" aria-pressed="false" aria-label="Статус: вимкнено" style="width: 36px; height: 20px; border-radius: 999px; border: 0px; background: #74747F; position: relative; cursor: pointer; padding: 0px;"><span style="position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #1B1B20; box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 2px;"></span></button>
+                  
+                  
+                </span>
+
+                <span role="cell">
+                  
+                </span>
+
+                <span role="cell" style="display: flex; gap: 2px;">
+                  <a href="11-product-page.html" aria-label="Відкрити товар" title="Відкрити товар" style="width: 32px; height: 32px; border-radius: 6px; color: #E2E2E8; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></a>
+                  <button type="button" aria-label="Копіювати товар" title="Копіювати товар" style="width: 32px; height: 32px; border-radius: 6px; border: 0px; background: transparent; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></button>
+                </span>
+              </div>
+            
+              <div role="row" class="bs-row" style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; min-height: 64px; padding: 8px 0px; box-sizing: border-box; border-bottom: 1px solid #2C2C34; background: #25221C;">
+                <span role="cell" style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати: Бустер Pokémon TCG Mega Symphonia (японське видання)" checked="" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
+                <span role="cell" aria-hidden="true" style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: #A6A6B3; opacity: 1;"><span class="sc-interp">BST</span></span>
+                <span role="cell" style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px; min-width: 0px;">
+                  <a href="11-product-page.html" style="color: #FAFAFC; font-weight: 600; font-size: 13.5px; line-height: 1.35; text-decoration: none;"><span class="sc-interp">Бустер Pokémon TCG Mega Symphonia (японське видання)</span></a>
+                  <span style="font-size: 12px; color: #A6A6B3; display: flex; gap: 8px; align-items: center;"><span class="sc-interp">Pokémon TCG · The Pokémon Company</span></span>
+                </span>
+                <span role="cell" style="font-size: 12.5px; color: #E2E2E8; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"><span class="sc-interp">PKM-JP-MSYM-BST</span></span>
+
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                  
+                  
+                    <span style="display: flex; align-items: center; gap: 2px;">
+                      <button type="button" class="bs-cell" aria-label="Змінити ціну: 170 грн" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 800; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">170 грн</span></button>
                       
                     </span>
                     
@@ -757,17 +355,634 @@ input,select,textarea{background-color:transparent}
                   
                 </span>
 
-                <span style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                  
+                  
+                    <span style="display: flex; align-items: center; gap: 2px;">
+                      <button type="button" class="bs-cell" aria-label="Змінити кількість: 11 шт" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 700; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">11 шт</span></button>
+                      
+                        <span style="position: relative; display: inline-flex;">
+                          <button type="button" aria-label="У CRM: 12 шт" style="border: 0px; background: transparent; padding: 3px; cursor: help; display: inline-flex;"><span style="font-size: 9.5px; font-weight: 800; padding: 1px 4px; border-radius: 4px; background: #2C1E14; border: 1px solid #9A4F16; color: #FDBA74;">CRM</span></button>
+                          
+                        </span>
+                      
+                    </span>
+                    
+                    
+                    
+                    
+                  
+                </span>
+
+                <span role="cell" style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
                   <button type="button" aria-pressed="true" aria-label="Статус: увімкнено" style="width: 36px; height: 20px; border-radius: 999px; border: 0px; background: #F2B544; position: relative; cursor: pointer; padding: 0px;"><span style="position: absolute; top: 2px; left: 18px; width: 16px; height: 16px; border-radius: 50%; background: #1B1B20; box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 2px;"></span></button>
                   
                   
                 </span>
 
-                <span>
+                <span role="cell">
                   
                 </span>
 
-                <span style="display: flex; gap: 2px;">
+                <span role="cell" style="display: flex; gap: 2px;">
+                  <a href="11-product-page.html" aria-label="Відкрити товар" title="Відкрити товар" style="width: 32px; height: 32px; border-radius: 6px; color: #E2E2E8; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></a>
+                  <button type="button" aria-label="Копіювати товар" title="Копіювати товар" style="width: 32px; height: 32px; border-radius: 6px; border: 0px; background: transparent; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></button>
+                </span>
+              </div>
+            
+              <div role="row" class="bs-row" style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; min-height: 64px; padding: 8px 0px; box-sizing: border-box; border-bottom: 1px solid #2C2C34; background: #25221C;">
+                <span role="cell" style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати: Бустер Pokémon TCG Terastal Festival ex (японське видання)" checked="" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
+                <span role="cell" aria-hidden="true" style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: #A6A6B3; opacity: 1;"><span class="sc-interp">BST</span></span>
+                <span role="cell" style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px; min-width: 0px;">
+                  <a href="11-product-page.html" style="color: #FAFAFC; font-weight: 600; font-size: 13.5px; line-height: 1.35; text-decoration: none;"><span class="sc-interp">Бустер Pokémon TCG Terastal Festival ex (японське видання)</span></a>
+                  <span style="font-size: 12px; color: #A6A6B3; display: flex; gap: 8px; align-items: center;"><span class="sc-interp">Pokémon TCG · The Pokémon Company</span></span>
+                </span>
+                <span role="cell" style="font-size: 12.5px; color: #E2E2E8; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"><span class="sc-interp">PKM-JP-SV8A-BST</span></span>
+
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                  
+                  
+                    <span style="display: flex; align-items: center; gap: 2px;">
+                      <button type="button" class="bs-cell" aria-label="Змінити ціну: 290 грн" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 800; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">290 грн</span></button>
+                      
+                        <span style="position: relative; display: inline-flex;">
+                          <button type="button" aria-label="У CRM: 320 грн" style="border: 0px; background: transparent; padding: 3px; color: #FDBA74; cursor: help; display: inline-flex;"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"></path></svg></button>
+                          
+                        </span>
+                      
+                    </span>
+                    <span style="font-size: 12px; font-weight: 700; color: #FF7A7A; padding-left: 9px;"><span class="sc-interp">акц. 260 грн</span></span>
+                    
+                    
+                    
+                  
+                </span>
+
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                  
+                  
+                    <span style="display: flex; align-items: center; gap: 2px;">
+                      <button type="button" class="bs-cell" aria-label="Змінити кількість: 8 шт" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 700; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">8 шт</span></button>
+                      
+                    </span>
+                    
+                    
+                    
+                    
+                  
+                </span>
+
+                <span role="cell" style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
+                  <button type="button" aria-pressed="true" aria-label="Статус: увімкнено" style="width: 36px; height: 20px; border-radius: 999px; border: 0px; background: #F2B544; position: relative; cursor: pointer; padding: 0px;"><span style="position: absolute; top: 2px; left: 18px; width: 16px; height: 16px; border-radius: 50%; background: #1B1B20; box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 2px;"></span></button>
+                  
+                  
+                </span>
+
+                <span role="cell">
+                  <span style="display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 4px 7px; border-radius: 6px; background: #FAFAFC; color: #1B1B20; white-space: nowrap;"><span class="sc-interp">Акція до 31.10</span></span>
+                </span>
+
+                <span role="cell" style="display: flex; gap: 2px;">
+                  <a href="11-product-page.html" aria-label="Відкрити товар" title="Відкрити товар" style="width: 32px; height: 32px; border-radius: 6px; color: #E2E2E8; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></a>
+                  <button type="button" aria-label="Копіювати товар" title="Копіювати товар" style="width: 32px; height: 32px; border-radius: 6px; border: 0px; background: transparent; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></button>
+                </span>
+              </div>
+            
+              <div role="row" class="bs-row" style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; min-height: 64px; padding: 8px 0px; box-sizing: border-box; border-bottom: 1px solid #2C2C34; background: transparent;">
+                <span role="cell" style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати: Бустер-бокс Abyss Eye (японське видання)" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
+                <span role="cell" aria-hidden="true" style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: #A6A6B3; opacity: 1;"><span class="sc-interp">BBX</span></span>
+                <span role="cell" style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px; min-width: 0px;">
+                  <a href="11-product-page.html" style="color: #FAFAFC; font-weight: 600; font-size: 13.5px; line-height: 1.35; text-decoration: none;"><span class="sc-interp">Бустер-бокс Abyss Eye (японське видання)</span></a>
+                  <span style="font-size: 12px; color: #A6A6B3; display: flex; gap: 8px; align-items: center;"><span class="sc-interp">Pokémon TCG · The Pokémon Company</span></span>
+                </span>
+                <span role="cell" style="font-size: 12.5px; color: #E2E2E8; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"><span class="sc-interp">PKM-JP-M5-BBX</span></span>
+
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                  
+                  
+                    <span style="display: flex; align-items: center; gap: 2px;">
+                      <button type="button" class="bs-cell" aria-label="Змінити ціну: 5200 грн" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 800; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">5200 грн</span></button>
+                      
+                    </span>
+                    
+                    
+                    
+                    
+                  
+                </span>
+
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                  
+                  
+                    <span style="display: flex; align-items: center; gap: 2px;">
+                      <button type="button" class="bs-cell" aria-label="Змінити кількість: 3 шт" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 700; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">3 шт</span></button>
+                      
+                    </span>
+                    
+                    
+                    
+                    
+                  
+                </span>
+
+                <span role="cell" style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
+                  <button type="button" aria-pressed="true" aria-label="Статус: увімкнено" style="width: 36px; height: 20px; border-radius: 999px; border: 0px; background: #F2B544; position: relative; cursor: pointer; padding: 0px;"><span style="position: absolute; top: 2px; left: 18px; width: 16px; height: 16px; border-radius: 50%; background: #1B1B20; box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 2px;"></span></button>
+                  
+                  
+                </span>
+
+                <span role="cell">
+                  
+                </span>
+
+                <span role="cell" style="display: flex; gap: 2px;">
+                  <a href="11-product-page.html" aria-label="Відкрити товар" title="Відкрити товар" style="width: 32px; height: 32px; border-radius: 6px; color: #E2E2E8; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></a>
+                  <button type="button" aria-label="Копіювати товар" title="Копіювати товар" style="width: 32px; height: 32px; border-radius: 6px; border: 0px; background: transparent; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></button>
+                </span>
+              </div>
+            
+              <div role="row" class="bs-row" style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; min-height: 64px; padding: 8px 0px; box-sizing: border-box; border-bottom: 1px solid #2C2C34; background: #25221C;">
+                <span role="cell" style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати: Бустер-бокс Hot Wind Arena (корейське видання)" checked="" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
+                <span role="cell" aria-hidden="true" style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: #A6A6B3; opacity: 0.45;"><span class="sc-interp">BBX</span></span>
+                <span role="cell" style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px; min-width: 0px;">
+                  <a href="11-product-page.html" style="color: #FAFAFC; font-weight: 600; font-size: 13.5px; line-height: 1.35; text-decoration: none;"><span class="sc-interp">Бустер-бокс Hot Wind Arena (корейське видання)</span></a>
+                  <span style="font-size: 12px; color: #A6A6B3; display: flex; gap: 8px; align-items: center;"><span class="sc-interp">Pokémon TCG · The Pokémon Company</span></span>
+                </span>
+                <span role="cell" style="font-size: 12.5px; color: #E2E2E8; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"><span class="sc-interp">PKM-KR-HWAK-BBX</span></span>
+
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                  
+                  
+                    <span style="display: flex; align-items: center; gap: 2px;">
+                      <button type="button" class="bs-cell" aria-label="Змінити ціну: 3000 грн" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 800; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">3000 грн</span></button>
+                      
+                    </span>
+                    
+                    
+                    
+                    
+                  
+                </span>
+
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                  
+                  
+                    <span style="display: flex; align-items: center; gap: 2px;">
+                      <button type="button" class="bs-cell" aria-label="Змінити кількість: 0 шт" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 700; font-size: 14px; color: #FF7A7A; cursor: text;"><span class="sc-interp">0 шт</span></button>
+                      
+                    </span>
+                    <span style="font-size: 11.5px; color: #FF7A7A; padding-left: 9px;">немає в наявності</span>
+                    
+                    
+                    
+                  
+                </span>
+
+                <span role="cell" style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
+                  <button type="button" aria-pressed="true" aria-label="Статус: увімкнено" style="width: 36px; height: 20px; border-radius: 999px; border: 0px; background: #F2B544; position: relative; cursor: pointer; padding: 0px;"><span style="position: absolute; top: 2px; left: 18px; width: 16px; height: 16px; border-radius: 50%; background: #1B1B20; box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 2px;"></span></button>
+                  
+                  
+                </span>
+
+                <span role="cell">
+                  
+                </span>
+
+                <span role="cell" style="display: flex; gap: 2px;">
+                  <a href="11-product-page.html" aria-label="Відкрити товар" title="Відкрити товар" style="width: 32px; height: 32px; border-radius: 6px; color: #E2E2E8; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></a>
+                  <button type="button" aria-label="Копіювати товар" title="Копіювати товар" style="width: 32px; height: 32px; border-radius: 6px; border: 0px; background: transparent; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></button>
+                </span>
+              </div>
+            
+              <div role="row" class="bs-row" style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; min-height: 64px; padding: 8px 0px; box-sizing: border-box; border-bottom: 1px solid #2C2C34; background: #25221C;">
+                <span role="cell" style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати: Бустер-бокс Mega Symphonia (японське видання)" checked="" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
+                <span role="cell" aria-hidden="true" style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: #A6A6B3; opacity: 1;"><span class="sc-interp">BBX</span></span>
+                <span role="cell" style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px; min-width: 0px;">
+                  <a href="11-product-page.html" style="color: #FAFAFC; font-weight: 600; font-size: 13.5px; line-height: 1.35; text-decoration: none;"><span class="sc-interp">Бустер-бокс Mega Symphonia (японське видання)</span></a>
+                  <span style="font-size: 12px; color: #A6A6B3; display: flex; gap: 8px; align-items: center;"><span class="sc-interp">Pokémon TCG · The Pokémon Company</span></span>
+                </span>
+                <span role="cell" style="font-size: 12.5px; color: #E2E2E8; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"><span class="sc-interp">PKM-JP-MSYM-BBX</span></span>
+
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                  
+                  
+                    <span style="display: flex; align-items: center; gap: 2px;">
+                      <button type="button" class="bs-cell" aria-label="Змінити ціну: 4500 грн" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 800; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">4500 грн</span></button>
+                      
+                        <span style="position: relative; display: inline-flex;">
+                          <button type="button" aria-label="У CRM: 4800 грн" style="border: 0px; background: transparent; padding: 3px; color: #FDBA74; cursor: help; display: inline-flex;"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"></path></svg></button>
+                          
+                        </span>
+                      
+                    </span>
+                    <span style="font-size: 12px; font-weight: 700; color: #FF7A7A; padding-left: 9px;"><span class="sc-interp">акц. 4200 грн</span></span>
+                    
+                    
+                    
+                  
+                </span>
+
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                  
+                  
+                    <span style="display: flex; align-items: center; gap: 2px;">
+                      <button type="button" class="bs-cell" aria-label="Змінити кількість: 2 шт" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 700; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">2 шт</span></button>
+                      
+                        <span style="position: relative; display: inline-flex;">
+                          <button type="button" aria-label="У CRM: 3 шт" style="border: 0px; background: transparent; padding: 3px; cursor: help; display: inline-flex;"><span style="font-size: 9.5px; font-weight: 800; padding: 1px 4px; border-radius: 4px; background: #2C1E14; border: 1px solid #9A4F16; color: #FDBA74;">CRM</span></button>
+                          
+                        </span>
+                      
+                    </span>
+                    
+                    
+                    
+                    
+                  
+                </span>
+
+                <span role="cell" style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
+                  <button type="button" aria-pressed="true" aria-label="Статус: увімкнено" style="width: 36px; height: 20px; border-radius: 999px; border: 0px; background: #F2B544; position: relative; cursor: pointer; padding: 0px;"><span style="position: absolute; top: 2px; left: 18px; width: 16px; height: 16px; border-radius: 50%; background: #1B1B20; box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 2px;"></span></button>
+                  
+                  
+                </span>
+
+                <span role="cell">
+                  <span style="display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 4px 7px; border-radius: 6px; background: #FAFAFC; color: #1B1B20; white-space: nowrap;"><span class="sc-interp">Акція до 15.11</span></span>
+                </span>
+
+                <span role="cell" style="display: flex; gap: 2px;">
+                  <a href="11-product-page.html" aria-label="Відкрити товар" title="Відкрити товар" style="width: 32px; height: 32px; border-radius: 6px; color: #E2E2E8; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></a>
+                  <button type="button" aria-label="Копіювати товар" title="Копіювати товар" style="width: 32px; height: 32px; border-radius: 6px; border: 0px; background: transparent; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></button>
+                </span>
+              </div>
+            
+              <div role="row" class="bs-row" style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; min-height: 64px; padding: 8px 0px; box-sizing: border-box; border-bottom: 1px solid #2C2C34; background: #25221C;">
+                <span role="cell" style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати: Бустер-бокс One Piece OP-13 Carrying On His Will (японське видання)" checked="" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
+                <span role="cell" aria-hidden="true" style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: #A6A6B3; opacity: 1;"><span class="sc-interp">BBX</span></span>
+                <span role="cell" style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px; min-width: 0px;">
+                  <a href="11-product-page.html" style="color: #FAFAFC; font-weight: 600; font-size: 13.5px; line-height: 1.35; text-decoration: none;"><span class="sc-interp">Бустер-бокс One Piece OP-13 Carrying On His Will (японське видання)</span></a>
+                  <span style="font-size: 12px; color: #A6A6B3; display: flex; gap: 8px; align-items: center;"><span class="sc-interp">One Piece Card Game · Bandai</span></span>
+                </span>
+                <span role="cell" style="font-size: 12.5px; color: #E2E2E8; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"><span class="sc-interp">OP-JP-OP13-BBX</span></span>
+
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                  
+                  
+                    <span style="display: flex; align-items: center; gap: 2px;">
+                      <button type="button" class="bs-cell" aria-label="Змінити ціну: 3800 грн" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 800; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">3800 грн</span></button>
+                      
+                    </span>
+                    <span style="font-size: 12px; font-weight: 700; color: #FF7A7A; padding-left: 9px;"><span class="sc-interp">акц. 3600 грн</span></span>
+                    
+                    
+                    
+                  
+                </span>
+
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                  
+                  
+                    <span style="display: flex; align-items: center; gap: 2px;">
+                      <button type="button" class="bs-cell" aria-label="Змінити кількість: 1 шт" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 700; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">1 шт</span></button>
+                      
+                    </span>
+                    
+                    
+                    
+                    
+                  
+                </span>
+
+                <span role="cell" style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
+                  <button type="button" aria-pressed="true" aria-label="Статус: увімкнено" style="width: 36px; height: 20px; border-radius: 999px; border: 0px; background: #F2B544; position: relative; cursor: pointer; padding: 0px;"><span style="position: absolute; top: 2px; left: 18px; width: 16px; height: 16px; border-radius: 50%; background: #1B1B20; box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 2px;"></span></button>
+                  
+                  
+                </span>
+
+                <span role="cell">
+                  <span style="display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 4px 7px; border-radius: 6px; background: #FAFAFC; color: #1B1B20; white-space: nowrap;"><span class="sc-interp">Акція до 10.11</span></span>
+                </span>
+
+                <span role="cell" style="display: flex; gap: 2px;">
+                  <a href="11-product-page.html" aria-label="Відкрити товар" title="Відкрити товар" style="width: 32px; height: 32px; border-radius: 6px; color: #E2E2E8; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></a>
+                  <button type="button" aria-label="Копіювати товар" title="Копіювати товар" style="width: 32px; height: 32px; border-radius: 6px; border: 0px; background: transparent; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></button>
+                </span>
+              </div>
+            
+              <div role="row" class="bs-row" style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; min-height: 64px; padding: 8px 0px; box-sizing: border-box; border-bottom: 1px solid #2C2C34; background: transparent;">
+                <span role="cell" style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати: Бустер-бокс Pokémon TCG Battle Partners (корейське видання)" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
+                <span role="cell" aria-hidden="true" style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: #A6A6B3; opacity: 1;"><span class="sc-interp">BBX</span></span>
+                <span role="cell" style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px; min-width: 0px;">
+                  <a href="11-product-page.html" style="color: #A6A6B3; font-weight: 600; font-size: 13.5px; line-height: 1.35; text-decoration: none;"><span class="sc-interp">Бустер-бокс Pokémon TCG Battle Partners (корейське видання)</span></a>
+                  <span style="font-size: 12px; color: #A6A6B3; display: flex; gap: 8px; align-items: center;"><span class="sc-interp">Pokémon TCG · The Pokémon Company</span><span style="font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 2px 6px; border-radius: 6px; background: #2C2C34; color: #E2E2E8;">Вимкнено</span></span>
+                </span>
+                <span role="cell" style="font-size: 12.5px; color: #E2E2E8; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"><span class="sc-interp">PKM-KR-BTPT-BBX</span></span>
+
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                  
+                  
+                    <span style="display: flex; align-items: center; gap: 2px;">
+                      <button type="button" class="bs-cell" aria-label="Змінити ціну: 2600 грн" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 800; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">2600 грн</span></button>
+                      
+                    </span>
+                    
+                    
+                    
+                    
+                  
+                </span>
+
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                  
+                  
+                    <span style="display: flex; align-items: center; gap: 2px;">
+                      <button type="button" class="bs-cell" aria-label="Змінити кількість: 6 шт" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 700; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">6 шт</span></button>
+                      
+                    </span>
+                    
+                    
+                    
+                    
+                  
+                </span>
+
+                <span role="cell" style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
+                  <button type="button" aria-pressed="false" aria-label="Статус: вимкнено" style="width: 36px; height: 20px; border-radius: 999px; border: 0px; background: #74747F; position: relative; cursor: pointer; padding: 0px;"><span style="position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #1B1B20; box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 2px;"></span></button>
+                  
+                  
+                </span>
+
+                <span role="cell">
+                  
+                </span>
+
+                <span role="cell" style="display: flex; gap: 2px;">
+                  <a href="11-product-page.html" aria-label="Відкрити товар" title="Відкрити товар" style="width: 32px; height: 32px; border-radius: 6px; color: #E2E2E8; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></a>
+                  <button type="button" aria-label="Копіювати товар" title="Копіювати товар" style="width: 32px; height: 32px; border-radius: 6px; border: 0px; background: transparent; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></button>
+                </span>
+              </div>
+            
+              <div role="row" class="bs-row" style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; min-height: 64px; padding: 8px 0px; box-sizing: border-box; border-bottom: 1px solid #2C2C34; background: transparent;">
+                <span role="cell" style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати: Бустер-бокс Pokémon TCG Battle Partners (японське видання)" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
+                <span role="cell" aria-hidden="true" style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: #A6A6B3; opacity: 0.45;"><span class="sc-interp">BBX</span></span>
+                <span role="cell" style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px; min-width: 0px;">
+                  <a href="11-product-page.html" style="color: #FAFAFC; font-weight: 600; font-size: 13.5px; line-height: 1.35; text-decoration: none;"><span class="sc-interp">Бустер-бокс Pokémon TCG Battle Partners (японське видання)</span></a>
+                  <span style="font-size: 12px; color: #A6A6B3; display: flex; gap: 8px; align-items: center;"><span class="sc-interp">Pokémon TCG · The Pokémon Company</span></span>
+                </span>
+                <span role="cell" style="font-size: 12.5px; color: #E2E2E8; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"><span class="sc-interp">PKM-JP-BTPT-BBX</span></span>
+
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                  
+                  
+                    <span style="display: flex; align-items: center; gap: 2px;">
+                      <button type="button" class="bs-cell" aria-label="Змінити ціну: 3200 грн" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 800; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">3200 грн</span></button>
+                      
+                    </span>
+                    
+                    
+                    
+                    
+                  
+                </span>
+
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                  
+                  
+                    <span style="display: flex; align-items: center; gap: 2px;">
+                      <button type="button" class="bs-cell" aria-label="Змінити кількість: 0 шт" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 700; font-size: 14px; color: #FF7A7A; cursor: text;"><span class="sc-interp">0 шт</span></button>
+                      
+                    </span>
+                    <span style="font-size: 11.5px; color: #FF7A7A; padding-left: 9px;">немає в наявності</span>
+                    
+                    
+                    
+                  
+                </span>
+
+                <span role="cell" style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
+                  <button type="button" aria-pressed="true" aria-label="Статус: увімкнено" style="width: 36px; height: 20px; border-radius: 999px; border: 0px; background: #F2B544; position: relative; cursor: pointer; padding: 0px;"><span style="position: absolute; top: 2px; left: 18px; width: 16px; height: 16px; border-radius: 50%; background: #1B1B20; box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 2px;"></span></button>
+                  
+                  
+                </span>
+
+                <span role="cell">
+                  
+                </span>
+
+                <span role="cell" style="display: flex; gap: 2px;">
+                  <a href="11-product-page.html" aria-label="Відкрити товар" title="Відкрити товар" style="width: 32px; height: 32px; border-radius: 6px; color: #E2E2E8; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></a>
+                  <button type="button" aria-label="Копіювати товар" title="Копіювати товар" style="width: 32px; height: 32px; border-radius: 6px; border: 0px; background: transparent; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></button>
+                </span>
+              </div>
+            
+              <div role="row" class="bs-row" style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; min-height: 64px; padding: 8px 0px; box-sizing: border-box; border-bottom: 1px solid #2C2C34; background: transparent;">
+                <span role="cell" style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати: Бустер-бокс Pokémon TCG Clay Burst (корейське видання)" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
+                <span role="cell" aria-hidden="true" style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: #A6A6B3; opacity: 0.45;"><span class="sc-interp">BBX</span></span>
+                <span role="cell" style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px; min-width: 0px;">
+                  <a href="11-product-page.html" style="color: #FAFAFC; font-weight: 600; font-size: 13.5px; line-height: 1.35; text-decoration: none;"><span class="sc-interp">Бустер-бокс Pokémon TCG Clay Burst (корейське видання)</span></a>
+                  <span style="font-size: 12px; color: #A6A6B3; display: flex; gap: 8px; align-items: center;"><span class="sc-interp">Pokémon TCG · The Pokémon Company</span></span>
+                </span>
+                <span role="cell" style="font-size: 12.5px; color: #E2E2E8; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"><span class="sc-interp">PKM-KR-CLBR-BBX</span></span>
+
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                  
+                  
+                    <span style="display: flex; align-items: center; gap: 2px;">
+                      <button type="button" class="bs-cell" aria-label="Змінити ціну: 2800 грн" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 800; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">2800 грн</span></button>
+                      
+                    </span>
+                    
+                    
+                    
+                    
+                  
+                </span>
+
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                  
+                  
+                    <span style="display: flex; align-items: center; gap: 2px;">
+                      <button type="button" class="bs-cell" aria-label="Змінити кількість: 0 шт" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 700; font-size: 14px; color: #FF7A7A; cursor: text;"><span class="sc-interp">0 шт</span></button>
+                      
+                    </span>
+                    <span style="font-size: 11.5px; color: #FF7A7A; padding-left: 9px;">немає в наявності</span>
+                    
+                    
+                    
+                  
+                </span>
+
+                <span role="cell" style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
+                  <button type="button" aria-pressed="true" aria-label="Статус: увімкнено" style="width: 36px; height: 20px; border-radius: 999px; border: 0px; background: #F2B544; position: relative; cursor: pointer; padding: 0px;"><span style="position: absolute; top: 2px; left: 18px; width: 16px; height: 16px; border-radius: 50%; background: #1B1B20; box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 2px;"></span></button>
+                  
+                  
+                </span>
+
+                <span role="cell">
+                  
+                </span>
+
+                <span role="cell" style="display: flex; gap: 2px;">
+                  <a href="11-product-page.html" aria-label="Відкрити товар" title="Відкрити товар" style="width: 32px; height: 32px; border-radius: 6px; color: #E2E2E8; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></a>
+                  <button type="button" aria-label="Копіювати товар" title="Копіювати товар" style="width: 32px; height: 32px; border-radius: 6px; border: 0px; background: transparent; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></button>
+                </span>
+              </div>
+            
+              <div role="row" class="bs-row" style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; min-height: 64px; padding: 8px 0px; box-sizing: border-box; border-bottom: 1px solid #2C2C34; background: transparent;">
+                <span role="cell" style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати: Бустер-бокс Pokémon TCG Clay Burst (японське видання)" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
+                <span role="cell" aria-hidden="true" style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: #A6A6B3; opacity: 1;"><span class="sc-interp">BBX</span></span>
+                <span role="cell" style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px; min-width: 0px;">
+                  <a href="11-product-page.html" style="color: #FAFAFC; font-weight: 600; font-size: 13.5px; line-height: 1.35; text-decoration: none;"><span class="sc-interp">Бустер-бокс Pokémon TCG Clay Burst (японське видання)</span></a>
+                  <span style="font-size: 12px; color: #A6A6B3; display: flex; gap: 8px; align-items: center;"><span class="sc-interp">Pokémon TCG · The Pokémon Company</span></span>
+                </span>
+                <span role="cell" style="font-size: 12.5px; color: #E2E2E8; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"><span class="sc-interp">PKM-JP-CLBR-BBX</span></span>
+
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                  
+                  
+                    <span style="display: flex; align-items: center; gap: 2px;">
+                      <button type="button" class="bs-cell" aria-label="Змінити ціну: 3550 грн" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 800; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">3550 грн</span></button>
+                      
+                    </span>
+                    
+                    
+                    
+                    
+                  
+                </span>
+
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                  
+                  
+                    <span style="display: flex; align-items: center; gap: 2px;">
+                      <button type="button" class="bs-cell" aria-label="Змінити кількість: 7 шт" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 700; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">7 шт</span></button>
+                      
+                    </span>
+                    
+                    
+                    
+                    
+                  
+                </span>
+
+                <span role="cell" style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
+                  <button type="button" aria-pressed="true" aria-label="Статус: увімкнено" style="width: 36px; height: 20px; border-radius: 999px; border: 0px; background: #F2B544; position: relative; cursor: pointer; padding: 0px;"><span style="position: absolute; top: 2px; left: 18px; width: 16px; height: 16px; border-radius: 50%; background: #1B1B20; box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 2px;"></span></button>
+                  
+                  
+                </span>
+
+                <span role="cell">
+                  
+                </span>
+
+                <span role="cell" style="display: flex; gap: 2px;">
+                  <a href="11-product-page.html" aria-label="Відкрити товар" title="Відкрити товар" style="width: 32px; height: 32px; border-radius: 6px; color: #E2E2E8; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></a>
+                  <button type="button" aria-label="Копіювати товар" title="Копіювати товар" style="width: 32px; height: 32px; border-radius: 6px; border: 0px; background: transparent; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></button>
+                </span>
+              </div>
+            
+              <div role="row" class="bs-row" style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; min-height: 64px; padding: 8px 0px; box-sizing: border-box; border-bottom: 1px solid #2C2C34; background: transparent;">
+                <span role="cell" style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати: Бустер-бокс Pokémon TCG Crimson Haze (корейське видання)" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
+                <span role="cell" aria-hidden="true" style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: #A6A6B3; opacity: 1;"><span class="sc-interp">BBX</span></span>
+                <span role="cell" style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px; min-width: 0px;">
+                  <a href="11-product-page.html" style="color: #FAFAFC; font-weight: 600; font-size: 13.5px; line-height: 1.35; text-decoration: none;"><span class="sc-interp">Бустер-бокс Pokémon TCG Crimson Haze (корейське видання)</span></a>
+                  <span style="font-size: 12px; color: #A6A6B3; display: flex; gap: 8px; align-items: center;"><span class="sc-interp">Pokémon TCG · The Pokémon Company</span></span>
+                </span>
+                <span role="cell" style="font-size: 12.5px; color: #E2E2E8; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"><span class="sc-interp">PKM-KR-CRHZ-BBX</span></span>
+
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                  
+                  
+                    <span style="display: flex; align-items: center; gap: 2px;">
+                      <button type="button" class="bs-cell" aria-label="Змінити ціну: 3000 грн" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 800; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">3000 грн</span></button>
+                      
+                    </span>
+                    <span style="font-size: 12px; font-weight: 700; color: #FF7A7A; padding-left: 9px;"><span class="sc-interp">акц. 2700 грн</span></span>
+                    
+                    
+                    
+                  
+                </span>
+
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                  
+                  
+                    <span style="display: flex; align-items: center; gap: 2px;">
+                      <button type="button" class="bs-cell" aria-label="Змінити кількість: 7 шт" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 700; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">7 шт</span></button>
+                      
+                    </span>
+                    
+                    
+                    
+                    
+                  
+                </span>
+
+                <span role="cell" style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
+                  <button type="button" aria-pressed="true" aria-label="Статус: увімкнено" style="width: 36px; height: 20px; border-radius: 999px; border: 0px; background: #F2B544; position: relative; cursor: pointer; padding: 0px;"><span style="position: absolute; top: 2px; left: 18px; width: 16px; height: 16px; border-radius: 50%; background: #1B1B20; box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 2px;"></span></button>
+                  
+                  
+                </span>
+
+                <span role="cell">
+                  <span style="display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 4px 7px; border-radius: 6px; background: #FAFAFC; color: #1B1B20; white-space: nowrap;"><span class="sc-interp">Акція до 05.11</span></span>
+                </span>
+
+                <span role="cell" style="display: flex; gap: 2px;">
+                  <a href="11-product-page.html" aria-label="Відкрити товар" title="Відкрити товар" style="width: 32px; height: 32px; border-radius: 6px; color: #E2E2E8; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></a>
+                  <button type="button" aria-label="Копіювати товар" title="Копіювати товар" style="width: 32px; height: 32px; border-radius: 6px; border: 0px; background: transparent; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></button>
+                </span>
+              </div>
+            
+              <div role="row" class="bs-row" style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; min-height: 64px; padding: 8px 0px; box-sizing: border-box; border-bottom: 1px solid #2C2C34; background: transparent;">
+                <span role="cell" style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати: Бустер-бокс Pokémon TCG Crimson Haze (японське видання)" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
+                <span role="cell" aria-hidden="true" style="width: 40px; height: 40px; border-radius: 6px; background: #25252C; border: 1px solid #36363F; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: #A6A6B3; opacity: 1;"><span class="sc-interp">BBX</span></span>
+                <span role="cell" style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px; min-width: 0px;">
+                  <a href="11-product-page.html" style="color: #FAFAFC; font-weight: 600; font-size: 13.5px; line-height: 1.35; text-decoration: none;"><span class="sc-interp">Бустер-бокс Pokémon TCG Crimson Haze (японське видання)</span></a>
+                  <span style="font-size: 12px; color: #A6A6B3; display: flex; gap: 8px; align-items: center;"><span class="sc-interp">Pokémon TCG · The Pokémon Company</span></span>
+                </span>
+                <span role="cell" style="font-size: 12.5px; color: #E2E2E8; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"><span class="sc-interp">PKM-JP-CRHZ-BBX</span></span>
+
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                  
+                  
+                    <span style="display: flex; align-items: center; gap: 2px;">
+                      <button type="button" class="bs-cell" aria-label="Змінити ціну: 3900 грн" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 800; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">3900 грн</span></button>
+                      
+                    </span>
+                    
+                    
+                    
+                    
+                  
+                </span>
+
+                <span role="cell" style="position: relative; display: flex; flex-direction: column; gap: 2px;">
+                  
+                  
+                    <span style="display: flex; align-items: center; gap: 2px;">
+                      <button type="button" class="bs-cell" aria-label="Змінити кількість: 1 шт" style="border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 4px 8px; font-weight: 700; font-size: 14px; color: #FAFAFC; cursor: text;"><span class="sc-interp">1 шт</span></button>
+                      
+                    </span>
+                    
+                    
+                    
+                    
+                  
+                </span>
+
+                <span role="cell" style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
+                  <button type="button" aria-pressed="true" aria-label="Статус: увімкнено" style="width: 36px; height: 20px; border-radius: 999px; border: 0px; background: #F2B544; position: relative; cursor: pointer; padding: 0px;"><span style="position: absolute; top: 2px; left: 18px; width: 16px; height: 16px; border-radius: 50%; background: #1B1B20; box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 2px;"></span></button>
+                  
+                  
+                </span>
+
+                <span role="cell">
+                  
+                </span>
+
+                <span role="cell" style="display: flex; gap: 2px;">
                   <a href="11-product-page.html" aria-label="Відкрити товар" title="Відкрити товар" style="width: 32px; height: 32px; border-radius: 6px; color: #E2E2E8; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></a>
                   <button type="button" aria-label="Копіювати товар" title="Копіювати товар" style="width: 32px; height: 32px; border-radius: 6px; border: 0px; background: transparent; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></button>
                 </span>
@@ -776,6 +991,43 @@ input,select,textarea{background-color:transparent}
           
         </div>
       </div>
+
+      
+        <div style="margin-top: 12px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+          <span style="font-size: 13px; color: #A6A6B3;">Показано <strong style="color: #FAFAFC; font-weight: 700;"><span class="sc-interp">1–15</span></strong> з <span class="sc-interp">150</span></span>
+          <nav aria-label="Сторінки списку" style="display: flex; align-items: center; gap: 4px; margin-left: auto;">
+            <button type="button" disabled="" aria-label="Попередня сторінка" style="width: 36px; height: 36px; border-radius: 8px; border: 1px solid #36363F; background: transparent; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; opacity: 0.4;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button>
+            
+              
+              <button type="button" aria-current="page" aria-label="Сторінка 1" style="min-width: 36px; height: 36px; padding: 0px 8px; border-radius: 8px; border: 1px solid #F2B544; background: #F2B544; color: #1B1B20; font-weight: 700; font-size: 13px; cursor: pointer;"><span class="sc-interp">1</span></button>
+            
+              
+              <button type="button" aria-current="false" aria-label="Сторінка 2" style="min-width: 36px; height: 36px; padding: 0px 8px; border-radius: 8px; border: 1px solid #36363F; background: transparent; color: #E2E2E8; font-weight: 700; font-size: 13px; cursor: pointer;"><span class="sc-interp">2</span></button>
+            
+              <span aria-hidden="true" style="width: 24px; text-align: center; color: #A6A6B3;">…</span>
+              
+            
+              
+              <button type="button" aria-current="false" aria-label="Сторінка 9" style="min-width: 36px; height: 36px; padding: 0px 8px; border-radius: 8px; border: 1px solid #36363F; background: transparent; color: #E2E2E8; font-weight: 700; font-size: 13px; cursor: pointer;"><span class="sc-interp">9</span></button>
+            
+              
+              <button type="button" aria-current="false" aria-label="Сторінка 10" style="min-width: 36px; height: 36px; padding: 0px 8px; border-radius: 8px; border: 1px solid #36363F; background: transparent; color: #E2E2E8; font-weight: 700; font-size: 13px; cursor: pointer;"><span class="sc-interp">10</span></button>
+            
+            <button type="button" aria-label="Наступна сторінка" style="width: 36px; height: 36px; border-radius: 8px; border: 1px solid #36363F; background: transparent; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; opacity: 1;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></button>
+          </nav>
+          <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: #A6A6B3;">На сторінці:
+            <span role="group" aria-label="Товарів на сторінці" style="display: inline-flex; border: 1px solid #36363F; border-radius: 8px; overflow: hidden;">
+              
+                <button type="button" aria-pressed="true" style="height: 34px; padding: 0px 12px; border: 0px; background: #33291A; color: #F2B544; font-weight: 700; font-size: 13px; cursor: pointer;"><span class="sc-interp">15</span></button>
+              
+                <button type="button" aria-pressed="false" style="height: 34px; padding: 0px 12px; border: 0px; background: transparent; color: #E2E2E8; font-weight: 700; font-size: 13px; cursor: pointer;"><span class="sc-interp">25</span></button>
+              
+                <button type="button" aria-pressed="false" style="height: 34px; padding: 0px 12px; border: 0px; background: transparent; color: #E2E2E8; font-weight: 700; font-size: 13px; cursor: pointer;"><span class="sc-interp">50</span></button>
+              
+            </span>
+          </span>
+        </div>
+      
 
       
         <div style="position: sticky; bottom: 16px; margin-top: 16px; z-index: 200; background: #FAFAFC; color: #1B1B20; border-radius: 10px; padding: 10px 12px 10px 18px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; box-shadow: rgba(0, 0, 0, 0.12) 0px 8px 24px, rgba(0, 0, 0, 0.07) 0px 2px 6px;">

@@ -110,7 +110,7 @@ input,select,textarea{background-color:transparent}
       </div>
 
       <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
-        <div role="status" style="position: fixed; top: 68px; right: 24px; z-index: 500; background: {{ t.paper }}; border: 1px solid {{ t.line }}; border-radius: 10px; padding: 12px 14px; display: flex; gap: 10px; align-items: center; box-shadow: 0 8px 24px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.07); font-size: 13px"><span style="color: {{ t.ok }}; display: inline-flex"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></span>Родину збережено: порядок і підписи оновлено для 3 товарів.</div>
+        <div role="status" style="position: fixed; top: 68px; right: 24px; z-index: 500; background: {{ t.paper }}; border: 1px solid {{ t.line }}; border-radius: 10px; padding: 12px 14px; display: flex; gap: 10px; align-items: center; box-shadow: {{ t.shadowPop }}; font-size: 13px"><span style="color: {{ t.ok }}; display: inline-flex"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></span>Родину збережено: порядок і підписи оновлено для 3 товарів.</div>
       </sc-if>
     </main>
   </div>
@@ -143,7 +143,7 @@ class Component extends DCLogic {
       canon: { scheme: 'light', paper: '#FFFFFF', shell: '#F3F4F6', bg: '#F7F7F5', line: '#E5E7EB', line2: '#EEF0F2', line3: '#D1D5DB', ink4: '#9CA3AF', ink3: '#6B7280', ink3b: '#4B5563', ink2: '#1F2937', ink: '#111827', blue: '#1E3A8A', blueSoft: '#E8EEFB', sel: '#F5F8FE', danger: '#DC2626', warnBg: '#FFFBEA', warnFg: '#92400E', warnLine: '#FCD34D', ok: '#15803D', okBg: '#F3FBF6', gold: '#C68A00' },
       darkHybrid: { scheme: 'dark', paper: '#1B1B20', shell: '#111114', bg: '#25252C', line: '#36363F', line2: '#2C2C34', line3: '#4E4E5A', ink4: '#73737F', ink3: '#A6A6B3', ink3b: '#3C3C46', ink2: '#E2E2E8', ink: '#FAFAFC', blue: '#F2B544', blueSoft: '#33291A', sel: '#25221C', danger: '#FF7A7A', warnBg: '#2C1E14', warnFg: '#FDBA74', warnLine: '#9A4F16', ok: '#5EEAD4', okBg: '#12282A', gold: '#F2B544' }
     };
-    const t = THEMES[this.props.theme || 'darkHybrid'] || THEMES.darkHybrid;
+    const t = Object.assign({ hover: 'rgba(127,127,127,.10)', hoverRow: 'rgba(127,127,127,.05)', hoverLine: 'rgba(127,127,127,.35)', backdrop: 'rgba(17,24,39,.28)', backdropModal: 'rgba(17,24,39,.45)', shadowPop: '0 8px 24px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.07)', shadowKnob: '0 1px 2px rgba(0,0,0,.25)', switchOff: '#74747F', warnStrong: '#C2691F' }, THEMES[this.props.theme || 'darkHybrid'] || THEMES.darkHybrid);
     const fix = (x) => {
       if (typeof x === 'string') return x.indexOf('{{ t.') < 0 ? x : x.replace(/\{\{ t\.(\w+) \}\}/g, (m, k) => t[k]);
       if (Array.isArray(x)) return x.map(fix);

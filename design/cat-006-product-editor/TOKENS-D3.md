@@ -12,7 +12,7 @@ Implement as CSS custom properties on the editor root (see `SPEC.md` §1). Names
 | `--bse-bg` | `#25252C` | Fills: search field, table header row, thumbnails placeholder, code editor, field-like plates. |
 | `--bse-line` | `#36363F` | Borders of cards, fields, buttons, table frame. |
 | `--bse-line-2` | `#2C2C34` | Row dividers; fill of the «ВИМКНЕНО» / «Завершено» badges. |
-| `--bse-line-3` | `#4E4E5A` | Switch track when off; spinner track; dashed «+ Додати» borders use `--bse-ink-4`. |
+| `--bse-line-3` | `#4E4E5A` | Spinner track, secondary text on the inverse selection bar. Dashed «+ Додати» borders use `--bse-ink-4`. |
 | `--bse-ink` | `#FAFAFC` | Headings, prices, values. Also the fill of inverse surfaces: selection bar, tooltips, «АКЦІЯ ДО …» badge, «УЖЕ В ТОВАРІ» badge. |
 | `--bse-ink-2` | `#E2E2E8` | Body text, field text. |
 | `--bse-ink-3` | `#A6A6B3` | Secondary text, captions, hints, inactive tabs, icons. |
@@ -24,11 +24,22 @@ Implement as CSS custom properties on the editor root (see `SPEC.md` §1). Names
 | `--bse-danger` | `#FF7A7A` | Errors, invalid field border, out-of-stock quantity, special price text, «Вийти без збереження». |
 | `--bse-warn-bg` | `#2C1E14` | Conflict rows, non-dictionary attribute row, «Не діє на сайті» row, unsaved-changes pill. |
 | `--bse-warn-fg` | `#FDBA74` | Warning text, CRM star, «CRM» marker text. |
-| `--bse-warn-line` | `#9A4F16` | Warning borders: unsaved pill, CRM marker, unresolved conflict segmented control. |
+| `--bse-warn-line` | `#9A4F16` | Decorative warning borders: unsaved pill, CRM marker, warning plates. |
 | `--bse-ok` | `#5EEAD4` | Success only: «Збережено», «Застосовано», success toast icon. |
 | `--bse-ok-bg` | `#12282A` | «Застосовано: N» summary chip. |
+| `--bse-accent-hover` | `#F6C561` | Hover of primary (accent-filled) buttons. |
+| `--bse-switch-off` | `#74747F` | Switch track when off (non-text contrast ≥ 3:1). |
+| `--bse-warn-strong` | `#C2691F` | Border of an unresolved conflict control (non-text contrast ≥ 3:1). |
+| `--bse-hover` | `rgba(127,127,127,.10)` | Hover fill of an editable list value and icon-only ghost buttons. |
+| `--bse-hover-row` | `rgba(127,127,127,.05)` | Hover fill of a table row. |
+| `--bse-hover-line` | `rgba(127,127,127,.35)` | Hover border of an editable list value. |
+| `--bse-backdrop` | `rgba(17,24,39,.28)` | Side-panel (offcanvas) backdrop. |
+| `--bse-backdrop-modal` | `rgba(17,24,39,.45)` | Modal and dialog backdrop. |
+| `--bse-shadow-pop` | `0 8px 24px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.07)` | Popovers, menus, tooltips, toasts, side panel, modal, selection bar. |
+| `--bse-shadow-knob` | `0 1px 2px rgba(0,0,0,.25)` | Switch knob. |
 | Focus ring | `#3B82F6` | `outline: 2px solid; outline-offset: 2px` on `:focus-visible` for every control. |
-| Modal / panel overlay | `rgba(17,24,39,.28)` side panel, `rgba(17,24,39,.45)` modal | Backdrop. |
+
+Backdrops live outside `.bse` (Bootstrap appends them to `<body>`): define them on `body.bse-page .offcanvas-backdrop` / `.modal-backdrop` with the literal values above (see `SPEC.md` §1).
 
 Rules:
 - Accent is the only action colour. Success uses `--bse-ok`, never the accent; errors never use accent or ok.
@@ -51,6 +62,19 @@ Rules:
 | `--bse-paper` on `--bse-ink` (inverse bar, tooltip) | 16.45:1 |
 | `--bse-ink-4` on `--bse-bg` (placeholders only) | 3.25:1 |
 | Focus ring `#3B82F6` on `--bse-paper` | 4.66:1 |
+| `--bse-paper` text on `--bse-accent-hover` | 10.68:1 |
+
+Non-text contrast (WCAG 1.4.11, target 3:1)
+
+| Element | Ratio | Status |
+|---|---|---|
+| Switch track off `--bse-switch-off` on `--bse-paper` / `--bse-sel` | 3.71:1 / 3.43:1 | passes |
+| Unresolved conflict border `--bse-warn-strong` on `--bse-paper` / `--bse-warn-bg` | 4.36:1 / 4.09:1 | passes |
+| Dashed «+ Додати» / empty-attribute border `--bse-ink-4` on `--bse-paper` | 3.67:1 | passes |
+| Checked checkbox / radio `--bse-accent` on `--bse-sel` | 8.66:1 | passes |
+| Field and card borders `--bse-line` on `--bse-paper` | 1.43:1 | **below 3:1 — open owner decision** (see below) |
+
+Field borders: raising `--bse-line` to ≥ 3:1 (≈ `#70707D`) would also brighten every card, table and divider line and change the approved look. Options for the owner: keep (fields are identified by their labels and placement), or add a separate `--bse-field-line` `#70707D` for inputs/selects only.
 
 ## Type
 
@@ -75,8 +99,8 @@ Family: Manrope 400/500/600/700/800 (the admin may load it from Google Fonts or 
 |---|---|
 | Radii | badge, field, small button, chip-in-field 6; button 8; card / tile / table frame 10; modal 14; pill chips 999 |
 | Heights | primary action 44; toolbar button and filter field 40 / 36; search 44; inline cell input 32; segmented 32–42; table row min 64 |
-| Switch | 36 × 20, knob 16, knob offset 2 / 18 |
+| Switch | 36 × 20, knob 16, knob offset 2 / 18; off track `--bse-switch-off`, on track `--bse-accent` |
 | Checkbox | 16 × 16, `accent-color: var(--bse-accent)` |
 | Spacing | 4 px grid; card padding 20 × 22; section gap 20; page padding 24 × 28 |
-| Shadows | Popovers, toasts, side panel, modal only: `0 8px 24px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.07)`. Cards have none. |
+| Shadows | `--bse-shadow-pop` for popovers, menus, toasts, side panel, modal, selection bar; `--bse-shadow-knob` for switch knobs. Cards have none. |
 | Icons | Inline stroke SVG, 1.75–2.4 stroke, 12–18 px, `aria-hidden="true"`. No icon font, no emoji. |
