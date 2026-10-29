@@ -12,10 +12,12 @@ Source: designer package `Booster Shop logo.zip` (repository root, gitignored; o
 | `logo-mark-color.svg` / `.png` / `.webp` | Mark only: card with lightning bolt and wings, full colour | viewBox 500×440; PNG 2501×2200 |
 | `logo-mark-monochrome.svg` / `.png` / `.webp` | Mark only, one colour `#004A9E` | viewBox 500×440; PNG 2501×2200 |
 | `logo-mark-favicon.png` | Favicon source, colour mark | 513×512 |
+| `logo-unit-booster-shop-header.svg` | Full lockup, same file with the empty margins cropped (viewBox `110 90 1008 307`, ratio ≈3.28:1). Use this one in the site header: 42px tall desktop (≈138px wide), 32px mobile (≈105px wide). Derived 2026-10-29. | viewBox 1008×307 |
 
 Rules:
 - Always place the file. Never re-typeset the wordmark in a font and never redraw the mark. The wordmark is outlined paths; its typeface is not named in the package.
-- SVG for the web header and anything scalable; PNG/WebP where SVG is not accepted.
+- SVG for the web header and anything scalable; PNG/WebP where SVG is not accepted. The original lockup SVG has wide empty margins (art fills ~82%×62% of its viewBox), so the header uses `logo-unit-booster-shop-header.svg`.
+- Owner 2026-10-29: only the designer package logo is used on every site page and in every mockup; `bs-logo-crop.png` and the live `BS Big logo.png` are retired.
 - Small sizes, avatars, favicons, social profile images: the mark, not the full lockup.
 - One colour (stamp, engraving, single-ink print): `logo-mark-monochrome`.
 - Logo colours (from the SVGs; for reference only, the files carry them): mark blue `#004A9E` → `#2290C9` (gradient), bolt `#FDE634` → `#F58124`, wordmark gold gradient `#FFD373` / `#FFB92C` → `#D18B0A`, dark edge `#8D5E07`. The designer defined no flat logo gold; do not invent one.

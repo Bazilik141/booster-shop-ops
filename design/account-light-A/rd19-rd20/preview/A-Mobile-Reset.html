@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A · Новий пароль, мобільний — RD-19/RD-20 approved board (static preview)</title>
+<!-- Static preview of the approved Claude Design board A-Mobile-Reset.dc.html (canvas d5fbf671…, version 1793293749-fa9d).
+     Design reference only: inline mock markup, not Twig. Open at 390px width. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #1E3A8A;outline-offset:2px}
+.card{background:#FFFFFF;border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);box-sizing:border-box}
+.f{display:flex;flex-direction:column;gap:6px}
+.lb{font-size:14px;font-weight:600;color:#111827}
+.in{height:48px;padding:0 14px;border:1px solid #E5E7EB;border-radius:8px;background:#F7F7F5;font-family:inherit;font-size:16px;color:#1F2937;box-sizing:border-box;width:100%}
+.in-err{border-color:#DC2626;background:#FEF2F2}
+.hint{font-size:13px;line-height:1.45;color:#6B7280}
+.err{display:flex;gap:6px;align-items:flex-start;font-size:13px;line-height:1.45;color:#B91C1C;font-weight:600}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 28px;border:0;border-radius:8px;background:#1E3A8A;color:#FFFFFF;font-family:inherit;font-size:14.5px;font-weight:700;text-decoration:none;cursor:pointer;box-sizing:border-box}
+.pw{position:relative}
+.pw .in{padding-right:52px}
+.eye{position:absolute;right:2px;top:2px;width:44px;height:44px;border:0;border-radius:8px;background:transparent;color:#6B7280;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.st{margin:0;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#6B7280}
+.ph{display:flex;align-items:center;justify-content:center;background:#FFFFFF;font-size:13px;color:#6B7280}
+.note{padding:16px 20px;border:1px dashed #C68A00;border-radius:14px;background:#FFFBEB;color:#1F2937;font-size:13.5px;line-height:1.55;box-sizing:border-box}
+.note strong{display:block;margin-bottom:8px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#7A4F00}
+.note ul{margin:0;padding-left:18px}
+.note li{margin:0 0 6px}
+
+.bsh{position:relative;z-index:2;background:#FFFFFF;border-bottom:1px solid #E5E7EB;box-sizing:border-box}
+.bsh-in{display:flex;align-items:center}
+.bsh-burger{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid #E5E7EB;border-radius:6px;background:#FFFFFF;color:#374151;font-family:inherit;font-weight:600;cursor:pointer;box-sizing:border-box;flex:0 0 auto}
+.bsh-logo{display:inline-flex;flex:0 0 auto}
+.bsh-logo img{display:block;width:auto}
+.bsh-search{display:flex;align-items:center;gap:8px;border:1px solid #E5E7EB;border-radius:6px;background:#F7F7F5;color:#6B7280;box-sizing:border-box;min-width:0}
+.bsh-search input{flex:1 1 auto;min-width:0;height:100%;border:0;background:transparent;font-family:inherit;font-size:14px;color:#111827;outline-offset:-2px}
+.bsh-act{display:flex;align-items:center;gap:8px;margin-left:auto}
+.bsh-wish{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px;border:1px solid #E5E7EB;border-radius:8px;background:#FFFFFF;color:#1E3A8A;font-size:13px;font-weight:700;text-decoration:none;box-sizing:border-box}
+.bsh-ghost{display:inline-flex;align-items:center;gap:7px;padding:8px 10px;border-radius:6px;color:#1E3A8A;font-size:13.5px;font-weight:600;text-decoration:none}
+.bsh-cart{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;border:1px solid #12883E;border-radius:8px;background:#12883E;color:#FFFFFF;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;box-sizing:border-box;flex:0 0 auto}
+.bsc ol{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.bsc li{display:flex;align-items:center;gap:6px}
+.bsc a,.bsc span.cur{display:inline-flex;align-items:center;justify-content:center;min-height:26px;padding:0 10px;border:1px solid #E5E7EB;border-radius:999px;background:#F7F7F5;color:#4B5563;font-size:12px;font-weight:500;text-decoration:none;box-sizing:border-box}
+.bsc a.home{width:26px;padding:0;color:#6B7280}
+.bsc span.cur{border-color:#D4A017;background:#FBF4DC;color:#6B3A00;font-weight:600}
+.bsc .sep{color:#9CA3AF;font-size:12px}
+.bsf{background:#0F1115;color:#9CA3AF;box-sizing:border-box}
+.bsf-in{display:grid}
+.bsf-logo{display:inline-flex;color:#FFFFFF;font-weight:800;font-size:18px;text-decoration:none}
+.bsf p{margin:10px 0 0;max-width:280px;font-size:13px;line-height:1.6}
+.bsf h4{margin:0 0 14px;color:#F3F4F6;font-size:12px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase}
+.bsf-col a{display:flex;align-items:center;gap:8px;margin:0 0 10px;color:#9CA3AF;font-size:13px;line-height:1.7;text-decoration:none}
+.bsf-col a:hover{color:#FFFFFF}
+.bsf-bot{display:flex;border-top:1px solid #1F2937;padding-top:18px;font-size:12px;line-height:1.7}
+.ann{background:#E5E7EB;border-top:2px dashed #9CA3AF;box-sizing:border-box}
+.ann-in{display:flex;flex-direction:column;gap:28px}
+.ann-h{margin:0;font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#374151}
+
+.bsh{padding:8px 10px}
+.bsh-in{gap:8px;height:44px}
+.bsh-burger{width:40px;height:40px;padding:0}
+.bsh-logo img{height:32px}
+.bsh-search{flex:1 1 auto;height:40px;padding:0 10px}
+.bsh-cart{width:44px;padding:0}
+.bsc{padding:10px 12px 8px;box-sizing:border-box}
+.bsf{padding:32px 16px 20px}
+.bsf-in{grid-template-columns:134fr 210fr;gap:32px 12px;padding-bottom:32px}
+.bsf-brand{grid-column:1 / -1}
+.bsf-bot{flex-direction:column;gap:6px}
+.ann{padding:28px 16px 48px}
+</style>
+</head>
+<body>
+<div style="background:#F7F7F5;font-family:'Manrope',system-ui,-apple-system,sans-serif;color:#1F2937;display:flex;flex-direction:column">
+  <header class="bsh">
+    <div class="bsh-in">
+      <button type="button" class="bsh-burger" aria-label="Каталог"><svg width="20" height="20" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M2 4.5h14M2 9h14M2 13.5h14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path></svg></button>
+      <a href="#" class="bsh-logo" aria-label="Booster Shop — на головну"><img src="../../../assets/logo/logo-unit-booster-shop-header.svg" alt="Booster Shop"></a>
+      <form class="bsh-search" role="search"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.6"></circle><path d="M14 14l4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg><input type="search" aria-label="Пошук" placeholder="Пошук"></form>
+      <button type="button" class="bsh-cart" aria-label="Кошик порожній"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4H6Z" stroke="currentColor" stroke-width="1.6"></path><path d="M3 6h18M16 10a4 4 0 0 1-8 0" stroke="currentColor" stroke-width="1.6"></path></svg></button>
+    </div>
+  </header>
+  <nav class="bsc" aria-label="Хлібні крихти">
+    <ol>
+      <li><a href="#" class="home" aria-label="Головна"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"></path><path d="M5 10v10h14V10"></path></svg></a><span class="sep" aria-hidden="true">›</span></li>
+      <li><a href="A-Mobile-Hub.html">Особистий кабінет</a><span class="sep" aria-hidden="true">›</span></li>
+      <li><span class="cur" aria-current="page">Новий пароль</span></li>
+    </ol>
+  </nav>
+  <div style="flex:1 1 auto;padding:8px 16px 40px;display:flex;flex-direction:column;gap:16px;box-sizing:border-box">
+    <main class="card" style="padding:20px 16px;display:flex;flex-direction:column;gap:20px">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <h1 style="margin:0;font-size:24px;line-height:1.2;font-weight:800;color:#111827">Новий пароль</h1>
+        <p style="margin:0;font-size:14.5px;line-height:1.6;color:#6B7280">Придумайте новий пароль для свого акаунта.</p>
+      </div>
+      <form style="display:flex;flex-direction:column;gap:18px">
+        <div class="f">
+          <label for="mrs-pass" class="lb">Новий пароль</label>
+          <div class="pw">
+            <input id="mrs-pass" class="in" type="password" autocomplete="new-password" aria-describedby="mrs-rule">
+            <button type="button" class="eye" aria-label="Показати пароль" aria-pressed="false"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
+          </div>
+          <span id="mrs-rule" class="hint">Від 4 до 40 символів: латинські літери та цифри.</span>
+        </div>
+        <div class="f">
+          <label for="mrs-conf" class="lb">Повторіть пароль</label>
+          <div class="pw">
+            <input id="mrs-conf" class="in" type="password" autocomplete="new-password">
+            <button type="button" class="eye" aria-label="Показати пароль" aria-pressed="false"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
+          </div>
+        </div>
+        <button type="submit" class="btn" style="width:100%">Зберегти пароль</button>
+      </form>
+    </main>
+
+  </div>
+  <footer class="bsf">
+    <div class="bsf-in">
+      <div class="bsf-brand">
+        <a href="#" class="bsf-logo" aria-label="Booster Shop — на головну">Booster Shop</a>
+        <p>Оригінальні бустери, дисплеї Pokémon TCG, One Piece Card Game та інших TCG.</p>
+        <p>ФОП Леусенко Євгеній Андрійович</p>
+      </div>
+      <div class="bsf-col"><h4>Каталог</h4><a href="#">Pokémon TCG</a><a href="#">One Piece Card Game</a><a href="#">Акції</a></div>
+      <div class="bsf-col"><h4>Інформація</h4><a href="#">Оплата і доставка</a><a href="#">Обмін і повернення</a><a href="#">Публічна оферта</a></div>
+      <div class="bsf-col"><h4>Покупцю</h4><a href="#">Гарантія оригінальності</a><a href="#">Про магазин</a><a href="https://telegram.me/boostershop_tcg" target="_blank" rel="noopener">Telegram-канал</a></div>
+      <div class="bsf-col"><h4>Контакти</h4><a href="https://telegram.me/BoosterShop_Support_bot" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21.5 4.5 2.8 11.7c-1 .4-1 1.8.1 2.1l4.7 1.5 1.8 5.5c.3.9 1.5 1 2 .2l2.6-3.4 4.8 3.5c.8.6 1.9.1 2.1-.9l3.1-14.4c.2-1-.8-1.8-1.8-1.3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"></path></svg>@BoosterShop_Support_bot</a><a href="mailto:helpbs@boostershop.website"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.5"></rect><path d="m2 7 10 7 10-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path></svg>helpbs@boostershop.website</a><a href="tel:+380636743252"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.2c1.1.4 2.3.6 3.6.6a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.3.2 2.5.6 3.6a1 1 0 0 1-.2 1L6.6 10.8Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"></path></svg>+38 063 674 32 52</a></div>
+    </div>
+    <div class="bsf-bot"><span>© 2026 Booster Shop. Усі права захищено.</span><span>Лінія підтримки: 10:00-18:00 (UA)</span></div>
+  </footer>
+  <div class="ann" aria-label="Примітки до макета, не частина сторінки">
+    <div class="ann-in">
+      <p class="ann-h">Нижче — не частина сторінки: стани та примітки до макета</p>
+    <section aria-label="Стани сторінки" style="display:flex;flex-direction:column;gap:12px;padding-top:16px">
+      <p class="st">Стан 2 · Паролі не збігаються</p>
+      <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:6px">
+        <label for="mrs2-conf" class="lb">Повторіть пароль</label>
+        <input id="mrs2-conf" class="in in-err" type="password" value="abcd" aria-invalid="true" aria-describedby="mrs2-e">
+        <span id="mrs2-e" class="err"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="flex:0 0 auto;margin-top:1px"><circle cx="12" cy="12" r="9"></circle><path d="M12 7.5v5.5M12 16.5v.01"></path></svg>Паролі не збігаються.</span>
+      </div>
+      <p class="st" style="margin-top:8px">Стан 3 · Пароль змінено</p>
+      <div class="card" role="status" style="padding:16px;display:flex;flex-direction:column;gap:12px">
+        <h3 style="margin:0;font-size:18px;font-weight:700;color:#111827">Пароль змінено</h3>
+        <p style="margin:0;font-size:14.5px;line-height:1.6">Тепер увійдіть з новим паролем.</p>
+        <a href="A-Mobile-Login.html" class="btn" style="width:100%">Увійти</a>
+      </div>
+      <p class="st" style="margin-top:8px">Стан 4 · Посилання недійсне</p>
+      <div class="card" role="alert" style="padding:16px;display:flex;flex-direction:column;gap:12px">
+        <h3 style="margin:0;font-size:18px;font-weight:700;color:#111827">Посилання недійсне</h3>
+        <p style="margin:0;font-size:14.5px;line-height:1.6">Термін дії посилання минув, або ним уже скористалися. Запросіть нове — це займе хвилину.</p>
+        <a href="A-Mobile-Forgotten.html" class="btn" style="width:100%">Надіслати нове посилання</a>
+      </div>
+    </section>
+
+    <aside class="note" aria-label="Примітка до макета">
+      <strong>Примітка до макета · Новий пароль, мобільний</strong>
+      <ul>
+        <li>Стани 3 і 4 — як на десктопі: де їх показувати (окремо чи повідомленням на вході), вирішує перевірка живої поведінки.</li>
+      </ul>
+    </aside>
+    </div>
+  </div>
+</div>
+</body>
+</html>
