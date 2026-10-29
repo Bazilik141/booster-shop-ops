@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- CAT-006 product admin editor · approved design v0.1 layout + D3 colour scheme (2026-10-28), round 2 (2026-10-29).
+<!-- CAT-006 product admin editor · approved design v0.1 layout + D3 colour scheme (2026-10-28), rounds 2–3 (2026-10-29).
      Static reference rendered from the Claude Design canvas sources in ../source/. Not production code:
      recreate with Bootstrap 5 + plain JS inside the OpenCart admin shell. Interactions are described in the spec. -->
 <html lang="uk">
@@ -84,6 +84,8 @@ section[id]{scroll-margin-top:110px}
           
             <a href="#s-seo" aria-current="false" style="padding: 9px 12px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 500; color: #E2E2E8; background: transparent; display: flex; justify-content: space-between; align-items: center;"><span class="sc-interp">SEO</span></a>
           
+            <a href="#s-more" aria-current="false" style="padding: 9px 12px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 500; color: #E2E2E8; background: transparent; display: flex; justify-content: space-between; align-items: center;"><span class="sc-interp">Інші поля OpenCart</span></a>
+          
           <div style="display: flex; flex-direction: column; gap: 2px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #2C2C34;">
             <button type="button" style="height: 34px; padding: 0px 12px; border: 0px; border-radius: 6px; background: transparent; color: #F2B544; font-weight: 700; font-size: 13px; cursor: pointer; text-align: left;">Згорнути всі</button>
             <button type="button" style="height: 34px; padding: 0px 12px; border: 0px; border-radius: 6px; background: transparent; color: #F2B544; font-weight: 700; font-size: 13px; cursor: pointer; text-align: left;">Розгорнути всі</button>
@@ -115,8 +117,8 @@ section[id]{scroll-margin-top:110px}
               
               
             </div>
-            <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;">Meta-заголовок
-              <input value="" style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 12px; font-weight: 500;">
+            <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;"><span>Meta-заголовок<span aria-hidden="true" style="color: #FF7A7A;"> *</span></span>
+              <input required="" aria-required="true" value="" style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 12px; font-weight: 500;">
               <span style="font-size: 12px; color: #A6A6B3; font-weight: 400;"><span class="sc-interp">0 символів · рекомендовано до 60</span></span>
             </label>
             <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;">Meta-опис
@@ -137,8 +139,8 @@ section[id]{scroll-margin-top:110px}
                 <input required="" aria-required="true" placeholder="Напр. PKM-JP-MSYM-BBX" value="" style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13.5px;">
                 <span style="font-size: 12px; color: #A6A6B3; font-weight: 400;">За моделлю товар звіряється з CRM</span>
               </label>
-              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;">Артикул
-                <input placeholder="Введіть артикул" style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13.5px;">
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;">Артикул (SKU)
+                <input placeholder="Введіть артикул" value="" style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13.5px;">
               </label>
               <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;"><span>Основна ціна, грн<span aria-hidden="true" style="color: #FF7A7A;"> *</span></span>
                 <input required="" aria-required="true" placeholder="0" inputmode="numeric" value="" style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 12px; font-weight: 800;">
@@ -262,7 +264,7 @@ section[id]{scroll-margin-top:110px}
                     
                       <button type="button" role="menuitem" style="min-height: 36px; padding: 0px 10px; border: 0px; border-radius: 6px; background: transparent; color: #E2E2E8; font-size: 13.5px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; text-align: left;"><span class="sc-interp">Rare Pack</span><span style="font-size: 12px; font-weight: 500; color: #A6A6B3;"><span class="sc-interp">9 атрибутів</span></span></button>
                     
-                      <button type="button" role="menuitem" style="min-height: 36px; padding: 0px 10px; border: 0px; border-radius: 6px; background: transparent; color: #E2E2E8; font-size: 13.5px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; text-align: left;"><span class="sc-interp">Брелок 3D</span><span style="font-size: 12px; font-weight: 500; color: #A6A6B3;"><span class="sc-interp">4 атрибутів</span></span></button>
+                      <button type="button" role="menuitem" style="min-height: 36px; padding: 0px 10px; border: 0px; border-radius: 6px; background: transparent; color: #E2E2E8; font-size: 13.5px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; text-align: left;"><span class="sc-interp">Брелок 3D</span><span style="font-size: 12px; font-weight: 500; color: #A6A6B3;"><span class="sc-interp">4 атрибути</span></span></button>
                     
                     <span style="padding: 8px 10px 4px; margin-top: 4px; border-top: 1px solid #2C2C34; font-size: 12px; line-height: 1.45; color: #A6A6B3;">Додає рядки шаблону, яких ще немає. Наявні значення не змінюються, вибір шаблону не зберігається.</span>
                   </div>
@@ -329,7 +331,7 @@ section[id]{scroll-margin-top:110px}
                   </optgroup>
                 </select>
                 <span style="font-size: 12px; color: #A6A6B3;">Можна додати будь-який атрибут магазину, не лише з шаблону типу.</span>
-                <button type="button" style="border: 0px; background: none; color: #F2B544; font-weight: 700; font-size: 12.5px; cursor: pointer;">Повернути прибрані (<span class="sc-interp">11</span>)</button>
+                
               </div>
             </div>
             </div>
@@ -403,10 +405,80 @@ section[id]{scroll-margin-top:110px}
               <button type="button" aria-expanded="true" aria-label="Згорнути: SEO" style="width: 32px; height: 32px; border: 1px solid #36363F; border-radius: 8px; background: #1B1B20; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: rotate(0deg);"><path d="m6 9 6 6 6-6"></path></svg></button>
             </div>
             <div style="display: flex; flex-direction: column; gap: 12px;">
-            <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;">Адреса сторінки (SEO URL)
-              <span style="display: flex; align-items: center; max-width: 640px; border: 1px solid #36363F; border-radius: 6px; overflow: hidden;"><span style="padding: 0px 10px; height: 40px; display: flex; align-items: center; background: #25252C; color: #A6A6B3; font-weight: 500; border-right: 1px solid #36363F;">boostershop.website/</span><input aria-label="SEO URL" placeholder="напр. booster-box-mega-symphonia-jp" value="" style="flex: 1 1 0%; min-width: 0px; height: 40px; border: 0px; padding: 0px 10px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px;"></span>
-            </label>
+            <div style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;">
+              <label for="p-slug"><span>Адреса сторінки (SEO URL)<span aria-hidden="true" style="color: #FF7A7A;"> *</span></span></label>
+              <span style="display: flex; align-items: center; max-width: 640px; border: 1px solid #36363F; border-radius: 6px; overflow: hidden;"><span style="padding: 0px 10px; height: 40px; display: flex; align-items: center; background: #25252C; color: #A6A6B3; font-weight: 500; border-right: 1px solid #36363F;"><span class="sc-interp">boostershop.website/</span></span><input id="p-slug" required="" aria-required="true" aria-invalid="false" aria-describedby="p-slug-msg" placeholder="напр. booster-box-mega-symphonia-jp" value="" style="flex: 1 1 0%; min-width: 0px; height: 40px; border: 0px; padding: 0px 10px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px;"></span>
+              
+              <span id="p-slug-msg" style="font-size: 12px; color: #A6A6B3; font-weight: 400;">Латинські літери, цифри й дефіс, до 64 символів.</span>
+            </div>
             
+            </div>
+          </section>
+
+          <section id="s-more" aria-labelledby="h-more" style="border: 1px solid #36363F; border-radius: 10px; padding: 20px 22px; display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+              <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0px;">
+                <h2 id="h-more" style="margin: 0px; font-size: 17px; font-weight: 700; color: #FAFAFC;">Інші поля OpenCart</h2>
+                <span style="font-size: 12.5px; color: #A6A6B3;">Рідко потрібні поля стандартної форми товару. Товар завжди прив’язаний до поточного магазину автоматично.</span>
+              </div>
+              <button type="button" aria-expanded="true" aria-label="Згорнути: Інші поля OpenCart" style="width: 32px; height: 32px; border: 1px solid #36363F; border-radius: 8px; background: #1B1B20; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: rotate(0deg);"><path d="m6 9 6 6 6-6"></path></svg></button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div style="padding: 10px 14px; border-radius: 8px; background: #25252C; font-size: 13px; color: #E2E2E8;">Для нового товару підставлено стандартні значення OpenCart. Змінюйте лише за потреби.</div>
+            <div style="display: grid; grid-template-columns: repeat(3, minmax(0px, 1fr)); gap: 16px; align-items: start;">
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;">Розташування
+                <input placeholder="Напр. стелаж A, полиця 3" value="" style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 12px; font-weight: 500;">
+                <span style="font-size: 12px; color: #A6A6B3; font-weight: 400;">Лише для адмінки, покупці не бачать.</span>
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;">Податковий клас
+                <select style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 10px; background: #1B1B20;"><option>Немає</option></select>
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;">Дата надходження в продаж
+                <span style="position: relative; display: flex;"><input placeholder="дд.мм.рррр" inputmode="numeric" value="29.10.2026" style="flex: 1 1 0%; min-width: 0px; height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 40px 0px 12px; font-weight: 500; box-sizing: border-box;"><button type="button" aria-label="Обрати дату" style="position: absolute; right: 4px; top: 4px; width: 32px; height: 32px; border: 0px; border-radius: 6px; background: transparent; color: #A6A6B3; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg></button></span>
+                <span style="font-size: 12px; color: #A6A6B3; font-weight: 400;">До цієї дати товар не показується на сайті.</span>
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;">Порядок сортування
+                <input inputmode="numeric" value="0" style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 12px; font-weight: 500;">
+                <span style="font-size: 12px; color: #A6A6B3; font-weight: 400;">Позиція в категорії, менше число — вище.</span>
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;">Бонусні бали
+                <input inputmode="numeric" value="0" style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 12px; font-weight: 500;">
+                <span style="font-size: 12px; color: #A6A6B3; font-weight: 400;">Скільки балів потрібно, щоб купити товар за бали.</span>
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;">Макет сторінки
+                <select style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 10px; background: #1B1B20;"><option>За замовчуванням</option><option>Product</option><option>Default</option></select>
+              </label>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; min-height: 40px; padding: 6px 14px; border: 1px solid #36363F; border-radius: 8px; box-sizing: border-box;">
+              <button type="button" aria-pressed="true" aria-label="Потрібна доставка" style="width: 36px; height: 20px; border-radius: 999px; border: 0px; background: #F2B544; position: relative; cursor: pointer; padding: 0px; flex: 0 0 auto;"><span style="position: absolute; top: 2px; left: 18px; width: 16px; height: 16px; border-radius: 50%; background: #1B1B20; box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 2px;"></span></button>
+              <span style="display: flex; align-items: baseline; flex-wrap: wrap; gap: 2px 10px;">
+                <span style="font-weight: 600; font-size: 14px; color: #FAFAFC;">Потрібна доставка</span>
+                <span style="font-size: 12px; color: #A6A6B3;"><span class="sc-interp">Увімкнено: у кошику пропонуються способи доставки.</span></span>
+              </span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px; border-top: 1px solid #2C2C34; padding-top: 16px;">
+              <span style="font-size: 13px; font-weight: 600;">Лише перегляд — змінюються в стандартній формі товару</span>
+              <dl style="margin: 0px; display: grid; grid-template-columns: 260px minmax(0px, 1fr); max-width: 640px; border: 1px solid #36363F; border-radius: 8px; overflow: hidden; font-size: 13px;">
+                
+                  <dt style="padding: 9px 14px; border-top: 1px solid transparent; color: #E2E2E8; font-weight: 600;"><span class="sc-interp">Опції</span></dt>
+                  <dd style="margin: 0px; padding: 9px 14px; border-top: 1px solid transparent; color: #A6A6B3;"><span class="sc-interp">немає</span></dd>
+                
+                  <dt style="padding: 9px 14px; border-top: 1px solid #2C2C34; color: #E2E2E8; font-weight: 600;"><span class="sc-interp">Підписки</span></dt>
+                  <dd style="margin: 0px; padding: 9px 14px; border-top: 1px solid #2C2C34; color: #A6A6B3;"><span class="sc-interp">немає</span></dd>
+                
+                  <dt style="padding: 9px 14px; border-top: 1px solid #2C2C34; color: #E2E2E8; font-weight: 600;"><span class="sc-interp">Бонусні бали за групами</span></dt>
+                  <dd style="margin: 0px; padding: 9px 14px; border-top: 1px solid #2C2C34; color: #A6A6B3;"><span class="sc-interp">немає</span></dd>
+                
+                  <dt style="padding: 9px 14px; border-top: 1px solid #2C2C34; color: #E2E2E8; font-weight: 600;"><span class="sc-interp">Завантаження</span></dt>
+                  <dd style="margin: 0px; padding: 9px 14px; border-top: 1px solid #2C2C34; color: #A6A6B3;"><span class="sc-interp">немає</span></dd>
+                
+                  <dt style="padding: 9px 14px; border-top: 1px solid #2C2C34; color: #E2E2E8; font-weight: 600;"><span class="sc-interp">Нативні варіанти OpenCart</span></dt>
+                  <dd style="margin: 0px; padding: 9px 14px; border-top: 1px solid #2C2C34; color: #A6A6B3;"><span class="sc-interp">не використовуються</span></dd>
+                
+              </dl>
+              
+              <span style="font-size: 12.5px; color: #A6A6B3;">Стандартна форма буде доступна після першого збереження товару.</span>
+            </div>
             </div>
           </section>
         </div>

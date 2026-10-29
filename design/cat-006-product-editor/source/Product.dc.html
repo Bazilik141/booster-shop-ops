@@ -103,8 +103,8 @@ section[id]{scroll-margin-top:110px}
                 </div>
               </sc-if>
             </div>
-            <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Meta-заголовок
-              <input defaultValue="{{ v.metaTitle }}" onInput="{{ touch }}" style="height: 40px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 12px; font-weight: 500">
+            <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600"><span>Meta-заголовок<span aria-hidden="true" style="color: {{ t.danger }}"> *</span></span>
+              <input defaultValue="{{ v.metaTitle }}" required="{{ true }}" aria-required="true" onInput="{{ touch }}" style="height: 40px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 12px; font-weight: 500">
               <span style="font-size: 12px; color: {{ t.ink3 }}; font-weight: 400">{{ v.metaTitleCount }}</span>
             </label>
             <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Meta-опис
@@ -125,8 +125,8 @@ section[id]{scroll-margin-top:110px}
                 <input defaultValue="{{ v.model }}" required="{{ true }}" aria-required="true" placeholder="Напр. PKM-JP-MSYM-BBX" onInput="{{ touch }}" style="height: 40px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13.5px">
                 <span style="font-size: 12px; color: {{ t.ink3 }}; font-weight: 400">За моделлю товар звіряється з CRM</span>
               </label>
-              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Артикул
-                <input placeholder="Введіть артикул" onInput="{{ touch }}" style="height: 40px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13.5px">
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Артикул (SKU)
+                <input defaultValue="{{ v.sku }}" placeholder="Введіть артикул" onInput="{{ touch }}" style="height: 40px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13.5px">
               </label>
               <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600"><span>Основна ціна, грн<span aria-hidden="true" style="color: {{ t.danger }}"> *</span></span>
                 <input defaultValue="{{ v.price }}" required="{{ true }}" aria-required="true" placeholder="0" inputMode="numeric" onInput="{{ touch }}" style="height: 40px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 12px; font-weight: 800">
@@ -565,12 +565,70 @@ section[id]{scroll-margin-top:110px}
               <button type="button" onClick="{{ tg.seo }}" aria-expanded="{{ open.seo }}" aria-label="{{ tgl.seo }}" style="width: 32px; height: 32px; border: 1px solid {{ t.line }}; border-radius: 8px; background: {{ t.paper }}; color: {{ t.ink2 }}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: rotate({{ rot.seo }})"><path d="m6 9 6 6 6-6"></path></svg></button>
             </div>
             <sc-if value="{{ open.seo }}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-direction: column; gap: 12px">
-            <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Адреса сторінки (SEO URL)
-              <span style="display: flex; align-items: center; max-width: 640px; border: 1px solid {{ t.line }}; border-radius: 6px; overflow: hidden"><span style="padding: 0 10px; height: 40px; display: flex; align-items: center; background: {{ t.bg }}; color: {{ t.ink3 }}; font-weight: 500; border-right: 1px solid {{ t.line }}">boostershop.website/</span><input aria-label="SEO URL" defaultValue="{{ v.slug }}" placeholder="напр. booster-box-mega-symphonia-jp" onInput="{{ seoTouch }}" style="flex: 1; min-width: 0; height: 40px; border: 0; padding: 0 10px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px"></span>
-            </label>
+            <div style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">
+              <label for="p-slug"><span>Адреса сторінки (SEO URL)<span aria-hidden="true" style="color: {{ t.danger }}"> *</span></span></label>
+              <span style="display: flex; align-items: center; max-width: 640px; border: 1px solid {{ seoLine }}; border-radius: 6px; overflow: hidden"><span style="padding: 0 10px; height: 40px; display: flex; align-items: center; background: {{ t.bg }}; color: {{ t.ink3 }}; font-weight: 500; border-right: 1px solid {{ t.line }}">{{ storeUrl }}</span><input id="p-slug" defaultValue="{{ v.slug }}" required="{{ true }}" aria-required="true" aria-invalid="{{ seoInvalid }}" aria-describedby="p-slug-msg" placeholder="напр. booster-box-mega-symphonia-jp" onInput="{{ seoTouch }}" style="flex: 1; min-width: 0; height: 40px; border: 0; padding: 0 10px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px"></span>
+              <sc-if value="{{ seoHasErr }}" hint-placeholder-val="{{ false }}"><span id="p-slug-msg" style="font-size: 12.5px; color: {{ t.danger }}; font-weight: 600">{{ seoErr }}</span></sc-if>
+              <sc-if value="{{ seoNoErr }}" hint-placeholder-val="{{ true }}"><span id="p-slug-msg" style="font-size: 12px; color: {{ t.ink3 }}; font-weight: 400">Латинські літери, цифри й дефіс, до 64 символів.</span></sc-if>
+            </div>
             <sc-if value="{{ seoChanged }}" hint-placeholder-val="{{ false }}">
               <div role="alert" style="padding: 10px 14px; border-radius: 10px; background: {{ t.warnBg }}; border: 1px solid {{ t.warnLine }}; color: {{ t.warnFg }}; font-size: 13px; font-weight: 600; max-width: 640px; line-height: 1.5">Стара адреса вже може бути в Google, у закладках і в посиланнях. Після збереження вона перестане відкриватися, якщо не налаштувати переадресацію (301) на нову.</div>
             </sc-if>
+            </div></sc-if>
+          </section>
+
+          <section id="s-more" aria-labelledby="h-more" style="border: 1px solid {{ t.line }}; border-radius: 10px; padding: 20px 22px; display: flex; flex-direction: column; gap: 16px">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
+              <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0">
+                <h2 id="h-more" style="margin: 0; font-size: 17px; font-weight: 700; color: {{ t.ink }}">Інші поля OpenCart</h2>
+                <span style="font-size: 12.5px; color: {{ t.ink3 }}">Рідко потрібні поля стандартної форми товару. Товар завжди прив’язаний до поточного магазину автоматично.</span>
+              </div>
+              <button type="button" onClick="{{ tg.more }}" aria-expanded="{{ open.more }}" aria-label="{{ tgl.more }}" style="width: 32px; height: 32px; border: 1px solid {{ t.line }}; border-radius: 8px; background: {{ t.paper }}; color: {{ t.ink2 }}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: rotate({{ rot.more }})"><path d="m6 9 6 6 6-6"></path></svg></button>
+            </div>
+            <sc-if value="{{ open.more }}" hint-placeholder-val="{{ false }}"><div style="display: flex; flex-direction: column; gap: 16px">
+            <sc-if value="{{ isCreate }}" hint-placeholder-val="{{ false }}"><div style="padding: 10px 14px; border-radius: 8px; background: {{ t.bg }}; font-size: 13px; color: {{ t.ink2 }}">Для нового товару підставлено стандартні значення OpenCart. Змінюйте лише за потреби.</div></sc-if>
+            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start">
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Розташування
+                <input defaultValue="{{ v.location }}" placeholder="Напр. стелаж A, полиця 3" onInput="{{ touch }}" style="height: 40px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 12px; font-weight: 500">
+                <span style="font-size: 12px; color: {{ t.ink3 }}; font-weight: 400">Лише для адмінки, покупці не бачать.</span>
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Податковий клас
+                <select onChange="{{ touch }}" style="height: 40px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 10px; background: {{ t.paper }}"><option>Немає</option></select>
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Дата надходження в продаж
+                <span style="position: relative; display: flex"><input defaultValue="{{ v.dateAvail }}" placeholder="дд.мм.рррр" inputMode="numeric" onInput="{{ touch }}" style="flex: 1; min-width: 0; height: 40px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 40px 0 12px; font-weight: 500; box-sizing: border-box"><button type="button" aria-label="Обрати дату" style="position: absolute; right: 4px; top: 4px; width: 32px; height: 32px; border: 0; border-radius: 6px; background: transparent; color: {{ t.ink3 }}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg></button></span>
+                <span style="font-size: 12px; color: {{ t.ink3 }}; font-weight: 400">До цієї дати товар не показується на сайті.</span>
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Порядок сортування
+                <input defaultValue="{{ v.sortOrder }}" inputMode="numeric" onInput="{{ touch }}" style="height: 40px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 12px; font-weight: 500">
+                <span style="font-size: 12px; color: {{ t.ink3 }}; font-weight: 400">Позиція в категорії, менше число — вище.</span>
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Бонусні бали
+                <input defaultValue="{{ v.points }}" inputMode="numeric" onInput="{{ touch }}" style="height: 40px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 12px; font-weight: 500">
+                <span style="font-size: 12px; color: {{ t.ink3 }}; font-weight: 400">Скільки балів потрібно, щоб купити товар за бали.</span>
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Макет сторінки
+                <select onChange="{{ touch }}" style="height: 40px; border: 1px solid {{ t.line }}; border-radius: 6px; padding: 0 10px; background: {{ t.paper }}"><option>За замовчуванням</option><option>Product</option><option>Default</option></select>
+              </label>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; min-height: 40px; padding: 6px 14px; border: 1px solid {{ t.line }}; border-radius: 8px; box-sizing: border-box">
+              <button type="button" onClick="{{ toggleShip }}" aria-pressed="{{ shipOn }}" aria-label="Потрібна доставка" style="width: 36px; height: 20px; border-radius: 999px; border: 0; background: {{ shipBg }}; position: relative; cursor: pointer; padding: 0; flex: 0 0 auto"><span style="position: absolute; top: 2px; left: {{ shipKnob }}; width: 16px; height: 16px; border-radius: 50%; background: {{ t.paper }}; box-shadow: {{ t.shadowKnob }}"></span></button>
+              <span style="display: flex; align-items: baseline; flex-wrap: wrap; column-gap: 10px; row-gap: 2px">
+                <span style="font-weight: 600; font-size: 14px; color: {{ t.ink }}">Потрібна доставка</span>
+                <span style="font-size: 12px; color: {{ t.ink3 }}">{{ shipHint }}</span>
+              </span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px; border-top: 1px solid {{ t.line2 }}; padding-top: 16px">
+              <span style="font-size: 13px; font-weight: 600">Лише перегляд — змінюються в стандартній формі товару</span>
+              <dl style="margin: 0; display: grid; grid-template-columns: 260px minmax(0, 1fr); max-width: 640px; border: 1px solid {{ t.line }}; border-radius: 8px; overflow: hidden; font-size: 13px">
+                <sc-for list="{{ ro }}" as="r" hint-placeholder-count="5">
+                  <dt style="padding: 9px 14px; border-top: 1px solid {{ r.line }}; color: {{ t.ink2 }}; font-weight: 600">{{ r.label }}</dt>
+                  <dd style="margin: 0; padding: 9px 14px; border-top: 1px solid {{ r.line }}; color: {{ r.color }}">{{ r.value }}</dd>
+                </sc-for>
+              </dl>
+              <sc-if value="{{ notCreate }}" hint-placeholder-val="{{ true }}"><a href="#" style="align-self: flex-start; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; color: {{ t.blue }}">Відкрити в стандартній формі<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"></path></svg></a></sc-if>
+              <sc-if value="{{ isCreate }}" hint-placeholder-val="{{ false }}"><span style="font-size: 12.5px; color: {{ t.ink3 }}">Стандартна форма буде доступна після першого збереження товару.</span></sc-if>
+            </div>
             </div></sc-if>
           </section>
         </div>
@@ -597,8 +655,8 @@ section[id]{scroll-margin-top:110px}
   </sc-if>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["canon","dark","teal","contrast","darkNavy","darkViolet","darkHybrid"],"default":"darkHybrid"},"scene":{"editor":"enum","options":["default","dirty","create","seo"],"default":"default"},"$preview":{"width":1440,"height":4400}}'>
-const NAV = [['s-main', 'Основне'], ['s-data', 'Дані'], ['s-ship', 'Доставка та зв’язки'], ['s-cat', 'Категорії та фільтри'], ['s-attr', 'Атрибути'], ['s-fam', 'Родина варіантів'], ['s-disc', 'Знижки'], ['s-photo', 'Фото'], ['s-seo', 'SEO']];
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["canon","dark","teal","contrast","darkNavy","darkViolet","darkHybrid"],"default":"darkHybrid"},"scene":{"editor":"enum","options":["default","dirty","create","seo","seoError","more"],"default":"default"},"$preview":{"width":1440,"height":4400}}'>
+const NAV = [['s-main', 'Основне'], ['s-data', 'Дані'], ['s-ship', 'Доставка та зв’язки'], ['s-cat', 'Категорії та фільтри'], ['s-attr', 'Атрибути'], ['s-fam', 'Родина варіантів'], ['s-disc', 'Знижки'], ['s-photo', 'Фото'], ['s-seo', 'SEO'], ['s-more', 'Інші поля OpenCart']];
 const ATTRS = ['lang', 'set', 'year', 'packs', 'cards', 'cond', 'mf', 'pack', 'weigh', 'mystery', 'extra'];
 const HTML = '<h3>Бустер-бокс Mega Symphonia — японське видання</h3>\n<p>Оригінальний запечатаний бустер-бокс японського видання від The Pokémon Company.</p>\n<ul>\n  <li>Мова карток: японська</li>\n  <li>Стан: новий, у заводській плівці</li>\n  <li>Без зважування й відбору</li>\n</ul>';
 const TPLS = [
@@ -610,19 +668,23 @@ const TPLS = [
 ];
 const isCreate = (p) => !!p && p.scene === 'create';
 const ALL_REMOVED = () => { const o = {}; ['lang', 'set', 'year', 'packs', 'cards', 'cond', 'mf', 'pack', 'weigh', 'mystery', 'extra'].forEach((k) => { o[k] = 1; }); return o; };
-const SECS = ['main', 'data', 'ship', 'cat', 'attr', 'fam', 'disc', 'photo', 'seo'];
-const SEC_NAMES = { main: 'Основне', data: 'Дані', ship: 'Доставка та зв’язки', cat: 'Категорії та фільтри', attr: 'Атрибути', fam: 'Родина варіантів', disc: 'Знижки', photo: 'Фото', seo: 'SEO' };
+const SECS = ['main', 'data', 'ship', 'cat', 'attr', 'fam', 'disc', 'photo', 'seo', 'more'];
+const SEC_NAMES = { main: 'Основне', data: 'Дані', ship: 'Доставка та зв’язки', cat: 'Категорії та фільтри', attr: 'Атрибути', fam: 'Родина варіантів', disc: 'Знижки', photo: 'Фото', seo: 'SEO', more: 'Інші поля OpenCart' };
 const KEYMAP = { 'Мова': 'lang', 'Назва сету': 'set', 'Рік випуску': 'year', 'Кількість бустерів у боксі': 'packs', 'Кількість карток у бустері': 'cards', 'Стан': 'cond', 'Виробник': 'mf', 'Тип пакування': 'pack', 'Зважування': 'weigh', 'Може трапитись у Mystery Box': 'mystery', 'Додатковий вміст': 'extra' };
 const NUMS = { 'Кількість карток у колоді': 'карт', 'Кількість в упаковці': 'шт', 'Кількість кишеньок': 'шт', 'Отворів для кріплення': 'шт' };
 const BOOLS = { 'Без ПВХ': 1, 'Рухомі елементи': 1 };
 const allOpen = () => { const o = {}; SECS.forEach((k) => { o[k] = true; }); return o; };
+const initOpen = (more) => Object.assign(allOpen(), { more: !!more });
+const plural = (n, one, few, many) => { const m10 = n % 10, m100 = n % 100; return n + ' ' + (m10 === 1 && m100 !== 11 ? one : m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14) ? few : many); };
+const SLUG_TAKEN = 'booster-box-pokemon-mega-symphonia';
+const slugErr = (v) => { if (!v) return 'Заповніть це поле'; if (v.length > 64) return 'Задовга адреса: ' + v.length + ' символів, можна до 64.'; if (!/^[A-Za-z0-9-]+$/.test(v)) return 'Можна лише латинські літери, цифри й дефіс.'; return ''; };
 class Component extends DCLogic {
   state = {
     name: isCreate(this.props) ? '' : 'Бустер-бокс Mega Symphonia (японське видання)', on: !isCreate(this.props), dirty: false, saving: false, savedNow: false, toast: false, leave: false,
     sec: 's-main', code: true, removed: isCreate(this.props) ? ALL_REMOVED() : {}, packFixed: isCreate(this.props), mystery: false, typeNote: '', tip: false, seoChanged: false,
     cats: isCreate(this.props) ? [] : ['Pokémon TCG', 'Бустер-бокси', 'Японські видання'],
     photos: isCreate(this.props) ? [] : ['msym-bbx-front.webp', 'msym-bbx-back.webp', 'msym-bbx-side.webp'], drag: -1, over: -1, sc: '',
-    open: allOpen(), added: [], subtract: true, filters: isCreate(this.props) ? [] : ['Мова видання › Японська', 'Тип товару › Бустер-бокс'],
+    open: initOpen(isCreate(this.props)), added: [], userRemoved: {}, shipOn: true, seoErr: '', subtract: true, filters: isCreate(this.props) ? [] : ['Мова видання › Японська', 'Тип товару › Бустер-бокс'],
     related: isCreate(this.props) ? [] : [['Бустер Pokémon TCG Mega Symphonia (японське видання)', 'PKM-JP-MSYM-BST'], ['Набір 10 бустерів Mega Symphonia (японське видання)', 'PKM-JP-MSYM-B10']],
     tplOpen: isCreate(this.props)
   };
@@ -659,7 +721,7 @@ class Component extends DCLogic {
   componentDidUpdate() { if ((this.props.scene || 'default') !== this.state.sc) this.applyScene(); }
   applyScene() {
     const sc = this.props.scene || 'default';
-    this.setState({ sc: sc, dirty: sc === 'dirty' || sc === 'seo', leave: sc === 'dirty', savedNow: false, seoChanged: sc === 'seo' });
+    this.setState({ sc: sc, dirty: sc === 'dirty' || sc === 'seo' || sc === 'seoError', leave: sc === 'dirty', savedNow: false, seoChanged: sc === 'seo' || sc === 'seoError', seoErr: sc === 'seoError' ? 'Ця адреса вже зайнята іншою сторінкою.' : '', open: initOpen(sc === 'more' || isCreate(this.props)) });
   }
   touch() { if (!this.state.dirty) this.setState({ dirty: true, savedNow: false }); }
   save() {
@@ -703,9 +765,9 @@ class Component extends DCLogic {
     const rm = {};
     ATTRS.forEach((k) => {
       a[k] = !s.removed[k];
-      rm[k] = () => this.setState({ removed: Object.assign({}, this.state.removed, { [k]: 1 }), dirty: true, savedNow: false });
+      rm[k] = () => this.setState({ removed: Object.assign({}, this.state.removed, { [k]: 1 }), userRemoved: Object.assign({}, this.state.userRemoved, { [k]: 1 }), dirty: true, savedNow: false });
     });
-    const removedCount = Object.keys(s.removed).length;
+    const removedCount = Object.keys(s.userRemoved).filter((k) => s.removed[k]).length;
     const packBad = !s.packFixed;
     const cr = isCreate(this.props);
     const np = s.photos.length;
@@ -713,11 +775,11 @@ class Component extends DCLogic {
       isCreate: cr, notCreate: !cr,
       title: cr ? 'Новий товар' : (s.name || 'Без назви'),
       v: cr
-        ? { model: '', price: '', qty: '0', html: '', metaTitle: '', metaTitleCount: '0 символів · рекомендовано до 60', metaDesc: '', metaDescCount: '0 символів', weight: '', len: '', wid: '', hei: '', slug: '' }
-        : { model: 'PKM-JP-MSYM-BBX', price: '4500', qty: '2', html: HTML, metaTitle: 'Бустер-бокс Pokémon Mega Symphonia (Японія) — купити | Booster Shop', metaTitleCount: '65 символів · рекомендовано до 60', metaDesc: 'Оригінальний запечатаний бустер-бокс Pokémon TCG Mega Symphonia, японське видання. Доставка Новою поштою.', metaDescCount: '112 символів', weight: '1.2', len: '30', wid: '21', hei: '8', slug: 'booster-box-mega-symphonia-jp' },
+        ? { model: '', price: '', qty: '0', html: '', metaTitle: '', metaTitleCount: '0 символів · рекомендовано до 60', metaDesc: '', metaDescCount: '0 символів', weight: '', len: '', wid: '', hei: '', slug: '', sku: '', location: '', dateAvail: '29.10.2026', sortOrder: '0', points: '0' }
+        : { model: 'PKM-JP-MSYM-BBX', price: '4500', qty: '2', html: HTML, metaTitle: 'Бустер-бокс Pokémon Mega Symphonia (Японія) — купити | Booster Shop', metaTitleCount: '65 символів · рекомендовано до 60', metaDesc: 'Оригінальний запечатаний бустер-бокс Pokémon TCG Mega Symphonia, японське видання. Доставка Новою поштою.', metaDescCount: '112 символів', weight: '1.2', len: '30', wid: '21', hei: '8', slug: this.props.scene === 'seoError' ? SLUG_TAKEN : 'booster-box-mega-symphonia-jp', sku: 'PKM-JP-MSYM-BBX', location: '', dateAvail: '01.04.2026', sortOrder: '1', points: '0' },
       attrsEmpty: ATTRS.every((k) => s.removed[k]) && s.added.length === 0,
       tplOpen: s.tplOpen, toggleTpl: () => this.setState({ tplOpen: !this.state.tplOpen }),
-      tpls: TPLS.map((tp) => ({ label: tp[0], count: (tp[1].length + tp[2].length) + ' атрибутів', pick: () => this.applyTemplate(tp) })),
+      tpls: TPLS.map((tp) => ({ label: tp[0], count: plural(tp[1].length + tp[2].length, 'атрибут', 'атрибути', 'атрибутів'), pick: () => this.applyTemplate(tp) })),
       related: s.related.map((r) => ({ label: r[0], model: r[1], remove: () => this.setState({ related: this.state.related.filter((x) => x[1] !== r[1]), dirty: true, savedNow: false }) })),
       hasRelated: s.related.length > 0, noRelated: s.related.length === 0,
       name: s.name, onName: (e) => this.setState({ name: e.target.value, dirty: true, savedNow: false }),
@@ -734,7 +796,7 @@ class Component extends DCLogic {
       codeBg: s.code ? '{{ t.blue }}' : '{{ t.paper }}', codeFg: s.code ? '{{ t.paper }}' : '{{ t.ink2 }}', visBg: s.code ? '{{ t.paper }}' : '{{ t.blue }}', visFg: s.code ? '{{ t.ink2 }}' : '{{ t.paper }}',
       cats: s.cats.map((c) => ({ label: c, remove: () => this.setState({ cats: this.state.cats.filter((x) => x !== c), dirty: true, savedNow: false }) })),
       a: a, rm: rm, hasRemoved: removedCount > 0, removedCount: removedCount,
-      restore: () => this.setState({ removed: {} }),
+      restore: () => { const r = Object.assign({}, this.state.removed); Object.keys(this.state.userRemoved).forEach((k) => { delete r[k]; }); this.setState({ removed: r, userRemoved: {} }); },
       packBad: packBad, packOk: !packBad, packBg: packBad ? '{{ t.warnBg }}' : 'transparent',
       fixPack: () => this.setState({ packFixed: true, dirty: true, savedNow: false }),
       mystery: s.mystery, notMystery: !s.mystery,
@@ -780,7 +842,13 @@ class Component extends DCLogic {
         setNo: () => { const l = this.state.added.slice(); l[i] = Object.assign({}, l[i], { yes: false }); this.setState({ added: l, dirty: true, savedNow: false }); },
         remove: () => this.setState({ added: this.state.added.filter((_, j) => j !== i), dirty: true, savedNow: false })
       })),
-      seoChanged: s.seoChanged && !cr, seoTouch: () => this.setState({ seoChanged: !cr, dirty: true, savedNow: false })
+      seoChanged: s.seoChanged && !cr, seoTouch: (e) => this.setState({ seoChanged: !cr, seoErr: slugErr(e.target.value.trim()), dirty: true, savedNow: false }),
+      seoHasErr: !!s.seoErr, seoNoErr: !s.seoErr, seoErr: s.seoErr, seoInvalid: s.seoErr ? 'true' : 'false', seoLine: s.seoErr ? '{{ t.danger }}' : '{{ t.line }}',
+      storeUrl: 'boostershop.website/',
+      shipOn: s.shipOn, shipBg: s.shipOn ? '{{ t.blue }}' : '{{ t.switchOff }}', shipKnob: s.shipOn ? '18px' : '2px',
+      shipHint: s.shipOn ? 'Увімкнено: у кошику пропонуються способи доставки.' : 'Вимкнено: доставка для товару не потрібна (напр. цифровий товар).',
+      toggleShip: () => this.setState({ shipOn: !this.state.shipOn, dirty: true, savedNow: false }),
+      ro: [['Опції', 'немає'], ['Підписки', 'немає'], ['Бонусні бали за групами', 'немає'], ['Завантаження', 'немає'], ['Нативні варіанти OpenCart', 'не використовуються']].map((r, i) => ({ label: r[0], value: r[1], color: '{{ t.ink3 }}', line: i === 0 ? 'transparent' : '{{ t.line2 }}' }))
     };
   }
 }

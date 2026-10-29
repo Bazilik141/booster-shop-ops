@@ -146,16 +146,16 @@ input,select,textarea{background-color:transparent}
       </div>
 
       <sc-if value="{{ offerAll }}" hint-placeholder-val="{{ false }}">
-        <div role="status" style="margin-top: 8px; padding: 10px 14px; border-radius: 10px; background: {{ t.blueSoft }}; color: {{ t.ink2 }}; font-size: 13px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap">Обрано всі {{ pageCount }} на цій сторінці.<button type="button" onClick="{{ selectAllFound }}" style="border: 0; background: none; padding: 0; color: {{ t.blue }}; font-weight: 700; font-size: 13px; cursor: pointer; text-decoration: underline">Обрати всі {{ totalText }} знайдених</button></div>
+        <div role="status" style="margin-top: 8px; padding: 10px 14px; border-radius: 10px; background: {{ t.blueSoft }}; color: {{ t.ink2 }}; font-size: 13px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap"><span>Обрано всі {{ pageCount }} на цій сторінці.</span><button type="button" onClick="{{ selectAllFound }}" style="border: 0; background: none; padding: 0; color: {{ t.blue }}; font-weight: 700; font-size: 13px; cursor: pointer; text-decoration: underline">Обрати всі {{ totalText }} знайдених</button></div>
       </sc-if>
       <sc-if value="{{ foundAllNote }}" hint-placeholder-val="{{ false }}">
-        <div role="status" style="margin-top: 8px; padding: 10px 14px; border-radius: 10px; background: {{ t.blueSoft }}; color: {{ t.ink2 }}; font-size: 13px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap">Обрано всі {{ totalText }} знайдених товарів.<button type="button" onClick="{{ clearSel }}" style="border: 0; background: none; padding: 0; color: {{ t.blue }}; font-weight: 700; font-size: 13px; cursor: pointer; text-decoration: underline">Зняти вибір</button></div>
+        <div role="status" style="margin-top: 8px; padding: 10px 14px; border-radius: 10px; background: {{ t.blueSoft }}; color: {{ t.ink2 }}; font-size: 13px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap"><span>Обрано всі {{ totalText }} знайдених товарів.</span><button type="button" onClick="{{ clearSel }}" style="border: 0; background: none; padding: 0; color: {{ t.blue }}; font-weight: 700; font-size: 13px; cursor: pointer; text-decoration: underline">Зняти вибір</button></div>
       </sc-if>
 
       <div style="margin-top: 8px; border: 1px solid {{ t.line }}; border-radius: 10px; overflow-x: auto">
         <div role="table" aria-label="Товари" aria-rowcount="{{ totalText }}" style="min-width: 1100px">
           <div role="row" style="display: grid; grid-template-columns: 40px 52px minmax(0, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; height: 40px; background: {{ t.bg }}; border-bottom: 1px solid {{ t.line }}; font-size: 12px; font-weight: 700; color: {{ t.ink3 }}">
-            <span role="columnheader" style="display: flex; justify-content: center"><input type="checkbox" checked="{{ allSel }}" onChange="{{ toggleAll }}" aria-label="Обрати всі на цій сторінці" title="Обрати всі на цій сторінці" style="width: 16px; height: 16px; accent-color: {{ t.blue }}"></span>
+            <span role="columnheader" style="display: flex; justify-content: center"><button type="button" role="checkbox" aria-checked="{{ hdr.aria }}" onClick="{{ toggleAll }}" aria-label="Обрати всі на цій сторінці" title="Обрати всі на цій сторінці" style="width: 16px; height: 16px; padding: 0; border-radius: 3px; box-sizing: border-box; border: 1.5px solid {{ hdr.line }}; background: {{ hdr.bg }}; color: {{ t.paper }}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center"><sc-if value="{{ hdr.all }}" hint-placeholder-val="{{ false }}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></sc-if><sc-if value="{{ hdr.mixed }}" hint-placeholder-val="{{ false }}"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path></svg></sc-if></button></span>
             <span role="columnheader"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Фото</span></span>
             <span role="columnheader" aria-sort="{{ sh.name.aria }}"><button type="button" onClick="{{ sortBy.name }}" aria-label="{{ sh.name.label }}" style="border: 0; background: none; padding: 4px 0; font-size: 12px; font-weight: 700; color: {{ sh.name.color }}; cursor: pointer; display: inline-flex; align-items: center; gap: 4px">Назва<span aria-hidden="true" style="color: {{ sh.name.arrowColor }}">{{ sh.name.arrow }}</span></button></span>
             <span role="columnheader" aria-sort="{{ sh.model.aria }}"><button type="button" onClick="{{ sortBy.model }}" aria-label="{{ sh.model.label }}" style="border: 0; background: none; padding: 4px 0; font-size: 12px; font-weight: 700; color: {{ sh.model.color }}; cursor: pointer; display: inline-flex; align-items: center; gap: 4px">Модель<span aria-hidden="true" style="color: {{ sh.model.arrowColor }}">{{ sh.model.arrow }}</span></button></span>
@@ -318,7 +318,7 @@ input,select,textarea{background-color:transparent}
   </div>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["canon","dark","teal","contrast","darkNavy","darkViolet","darkHybrid"],"default":"darkHybrid"},"scene":{"editor":"enum","options":["default","empty","loading","saveError","crmLoading","crmFailed"],"default":"default"},"$preview":{"width":1440,"height":1640}}'>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["canon","dark","teal","contrast","darkNavy","darkViolet","darkHybrid"],"default":"darkHybrid"},"scene":{"editor":"enum","options":["default","empty","loading","saveError","crmLoading","crmFailed","allPage"],"default":"default"},"$preview":{"width":1440,"height":1640}}'>
 const P = [
   { id: 1, name: 'Бустер Pokémon TCG Mega Symphonia (японське видання)', model: 'PKM-JP-MSYM-BST', cat: 'pokemon', mf: 'The Pokémon Company', type: 'BST', price: 170, qty: 11, on: true, special: null, crmPrice: 170, crmQty: 12 },
   { id: 2, name: 'Бустер-бокс Mega Symphonia (японське видання)', model: 'PKM-JP-MSYM-BBX', cat: 'pokemon', mf: 'The Pokémon Company', type: 'BBX', price: 4500, qty: 2, on: true, special: { price: 4200, to: '15.11' }, crmPrice: 4800, crmQty: 3 },
@@ -395,9 +395,12 @@ class Component extends DCLogic {
     if (sc === 'saveError') { s.cell = { '2:price': 'error' }; s.msg = { '2:price': 'Не збережено (4400 грн): сервер не відповів' }; s.pend = { '2:price': 4400 }; }
     if (sc === 'crmLoading') s.crm = 'loading';
     if (sc === 'crmFailed') s.crm = 'failed';
+    if (sc === 'allPage') { s.sel = {}; s.foundMode = false; }
     this.setState(s);
+    if (sc === 'allPage') setTimeout(() => { const sel = {}; (this._pageIds || []).forEach((id) => { sel[id] = 1; }); this.setState({ sel: sel }); }, 0);
   }
-  setF(k, v) { this.setState({ f: Object.assign({}, this.state.f, { [k]: v }), page: 1 }); }
+  setF(k, v) { this.setState(Object.assign({ f: Object.assign({}, this.state.f, { [k]: v }), page: 1 }, this.dropFound())); }
+  dropFound() { return this.state.foundMode ? { sel: {}, foundMode: false } : {}; }
   sortBy(k) {
     const s = this.state;
     if (s.sortKey === k) this.setState({ sortDir: s.sortDir === 'asc' ? 'desc' : 'asc', page: 1 });
@@ -521,6 +524,9 @@ class Component extends DCLogic {
     const page = Math.min(s.page, pages);
     const startIdx = (page - 1) * s.size;
     const pageRows = rows.slice(startIdx, startIdx + s.size);
+    this._pageIds = pageRows.map((p) => p.id);
+    const pageSelN = pageRows.filter((p) => s.sel[p.id]).length;
+    const hdrAll = pageRows.length > 0 && pageSelN === pageRows.length, hdrMixed = pageSelN > 0 && !hdrAll;
     const flags = (k) => ({ saving: s.cell[k] === 'saving', saved: s.cell[k] === 'saved', error: s.cell[k] === 'error', msg: s.msg[k] || '' });
     const items = pageRows.map((p) => {
       const kp = p.id + ':price', kq = p.id + ':qty', ks = p.id + ':status';
@@ -553,8 +559,8 @@ class Component extends DCLogic {
     const selCount = Object.keys(s.sel).length;
     return {
       q: s.q, hasQ: s.q.length > 0, f: f, on: on, chips: chips, hasChips: chips.length > 0, chipCount: chips.length,
-      onSearch: (e) => this.setState({ q: e.target.value, page: 1 }), clearQ: () => this.setState({ q: '', page: 1 }),
-      resetFilters: () => this.setState({ f: Object.assign({}, EMPTY_F), page: 1 }),
+      onSearch: (e) => this.setState(Object.assign({ q: e.target.value, page: 1 }, this.dropFound())), clearQ: () => this.setState(Object.assign({ q: '', page: 1 }, this.dropFound())),
+      resetFilters: () => this.setState(Object.assign({ f: Object.assign({}, EMPTY_F), page: 1 }, this.dropFound())),
       count: loading ? '…' : rows.length, items: items, loading: loading,
       sortBy: Object.keys(SORTS).reduce((o, k) => { o[k] = () => this.sortBy(k); return o; }, {}),
       sh: Object.keys(SORTS).reduce((o, k) => {
@@ -576,19 +582,20 @@ class Component extends DCLogic {
       offerAll: pageRows.length > 0 && pageRows.every((p) => s.sel[p.id]) && total > pageRows.length && !rows.every((p) => s.sel[p.id]),
       foundAllNote: total > pageRows.length && total > 0 && rows.every((p) => s.sel[p.id]),
       pageCount: String(pageRows.length),
-      selectAllFound: () => { const sel = Object.assign({}, this.state.sel); rows.forEach((p) => { sel[p.id] = 1; }); this.setState({ sel: sel }); },
+      selectAllFound: () => { const sel = Object.assign({}, this.state.sel); rows.forEach((p) => { sel[p.id] = 1; }); this.setState({ sel: sel, foundMode: true }); },
       skeleton: [{ w: '72%' }, { w: '55%' }, { w: '80%' }, { w: '62%' }, { w: '70%' }, { w: '48%' }, { w: '76%' }, { w: '58%' }],
       showEmpty: !loading && rows.length === 0, showRows: !loading && rows.length > 0,
       draft: s.draft, onDraft: (e) => this.setState({ draft: e.target.value }),
       tipOff: () => this.setState({ tip: '' }),
-      allSel: pageRows.length > 0 && pageRows.every((p) => s.sel[p.id]),
+      allSel: hdrAll,
+      hdr: { all: hdrAll, mixed: hdrMixed, aria: hdrAll ? 'true' : hdrMixed ? 'mixed' : 'false', bg: hdrAll || hdrMixed ? '{{ t.blue }}' : 'transparent', line: hdrAll || hdrMixed ? '{{ t.blue }}' : '{{ t.ink4 }}' },
       toggleAll: () => {
         const all = pageRows.length > 0 && pageRows.every((p) => this.state.sel[p.id]);
         const sel = Object.assign({}, this.state.sel);
         pageRows.forEach((p) => { if (all) delete sel[p.id]; else sel[p.id] = 1; });
         this.setState({ sel: sel });
       },
-      hasSel: selCount > 0, selCount: selCount, clearSel: () => this.setState({ sel: {} }),
+      hasSel: selCount > 0, selCount: selCount, clearSel: () => this.setState({ sel: {}, foundMode: false }),
       crmLoading: s.crm === 'loading', crmIdle: s.crm !== 'loading', crmFailed: s.crm === 'failed', crmTime: s.crmTime,
       refreshCrm: () => this.refreshCrm(), dismissCrm: () => this.setState({ crm: 'idle' }),
       hasToast: !!s.toast, toast: s.toast

@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- CAT-006 product admin editor · approved design v0.1 layout + D3 colour scheme (2026-10-28), round 2 (2026-10-29).
+<!-- CAT-006 product admin editor · approved design v0.1 layout + D3 colour scheme (2026-10-28), rounds 2–3 (2026-10-29).
      Static reference rendered from the Claude Design canvas sources in ../source/. Not production code:
      recreate with Bootstrap 5 + plain JS inside the OpenCart admin shell. Interactions are described in the spec. -->
 <html lang="uk">
@@ -84,6 +84,8 @@ section[id]{scroll-margin-top:110px}
           
             <a href="#s-seo" aria-current="false" style="padding: 9px 12px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 500; color: #E2E2E8; background: transparent; display: flex; justify-content: space-between; align-items: center;"><span class="sc-interp">SEO</span></a>
           
+            <a href="#s-more" aria-current="false" style="padding: 9px 12px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 500; color: #E2E2E8; background: transparent; display: flex; justify-content: space-between; align-items: center;"><span class="sc-interp">Інші поля OpenCart</span></a>
+          
           <div style="display: flex; flex-direction: column; gap: 2px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #2C2C34;">
             <button type="button" style="height: 34px; padding: 0px 12px; border: 0px; border-radius: 6px; background: transparent; color: #F2B544; font-weight: 700; font-size: 13px; cursor: pointer; text-align: left;">Згорнути всі</button>
             <button type="button" style="height: 34px; padding: 0px 12px; border: 0px; border-radius: 6px; background: transparent; color: #F2B544; font-weight: 700; font-size: 13px; cursor: pointer; text-align: left;">Розгорнути всі</button>
@@ -121,8 +123,8 @@ section[id]{scroll-margin-top:110px}
               
               
             </div>
-            <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;">Meta-заголовок
-              <input value="Бустер-бокс Pokémon Mega Symphonia (Японія) — купити | Booster Shop" style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 12px; font-weight: 500;">
+            <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;"><span>Meta-заголовок<span aria-hidden="true" style="color: #FF7A7A;"> *</span></span>
+              <input required="" aria-required="true" value="Бустер-бокс Pokémon Mega Symphonia (Японія) — купити | Booster Shop" style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 12px; font-weight: 500;">
               <span style="font-size: 12px; color: #A6A6B3; font-weight: 400;"><span class="sc-interp">65 символів · рекомендовано до 60</span></span>
             </label>
             <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;">Meta-опис
@@ -143,8 +145,8 @@ section[id]{scroll-margin-top:110px}
                 <input required="" aria-required="true" placeholder="Напр. PKM-JP-MSYM-BBX" value="PKM-JP-MSYM-BBX" style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13.5px;">
                 <span style="font-size: 12px; color: #A6A6B3; font-weight: 400;">За моделлю товар звіряється з CRM</span>
               </label>
-              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;">Артикул
-                <input placeholder="Введіть артикул" style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13.5px;">
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;">Артикул (SKU)
+                <input placeholder="Введіть артикул" value="PKM-JP-MSYM-BBX" style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13.5px;">
               </label>
               <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;"><span>Основна ціна, грн<span aria-hidden="true" style="color: #FF7A7A;"> *</span></span>
                 <input required="" aria-required="true" placeholder="0" inputmode="numeric" value="4500" style="height: 40px; border: 1px solid #36363F; border-radius: 6px; padding: 0px 12px; font-weight: 800;">
@@ -613,11 +615,25 @@ section[id]{scroll-margin-top:110px}
               <button type="button" aria-expanded="true" aria-label="Згорнути: SEO" style="width: 32px; height: 32px; border: 1px solid #36363F; border-radius: 8px; background: #1B1B20; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: rotate(0deg);"><path d="m6 9 6 6 6-6"></path></svg></button>
             </div>
             <div style="display: flex; flex-direction: column; gap: 12px;">
-            <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;">Адреса сторінки (SEO URL)
-              <span style="display: flex; align-items: center; max-width: 640px; border: 1px solid #36363F; border-radius: 6px; overflow: hidden;"><span style="padding: 0px 10px; height: 40px; display: flex; align-items: center; background: #25252C; color: #A6A6B3; font-weight: 500; border-right: 1px solid #36363F;">boostershop.website/</span><input aria-label="SEO URL" placeholder="напр. booster-box-mega-symphonia-jp" value="booster-box-mega-symphonia-jp" style="flex: 1 1 0%; min-width: 0px; height: 40px; border: 0px; padding: 0px 10px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px;"></span>
-            </label>
+            <div style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600;">
+              <label for="p-slug"><span>Адреса сторінки (SEO URL)<span aria-hidden="true" style="color: #FF7A7A;"> *</span></span></label>
+              <span style="display: flex; align-items: center; max-width: 640px; border: 1px solid #36363F; border-radius: 6px; overflow: hidden;"><span style="padding: 0px 10px; height: 40px; display: flex; align-items: center; background: #25252C; color: #A6A6B3; font-weight: 500; border-right: 1px solid #36363F;"><span class="sc-interp">boostershop.website/</span></span><input id="p-slug" required="" aria-required="true" aria-invalid="false" aria-describedby="p-slug-msg" placeholder="напр. booster-box-mega-symphonia-jp" value="booster-box-mega-symphonia-jp" style="flex: 1 1 0%; min-width: 0px; height: 40px; border: 0px; padding: 0px 10px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px;"></span>
+              
+              <span id="p-slug-msg" style="font-size: 12px; color: #A6A6B3; font-weight: 400;">Латинські літери, цифри й дефіс, до 64 символів.</span>
+            </div>
             
             </div>
+          </section>
+
+          <section id="s-more" aria-labelledby="h-more" style="border: 1px solid #36363F; border-radius: 10px; padding: 20px 22px; display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+              <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0px;">
+                <h2 id="h-more" style="margin: 0px; font-size: 17px; font-weight: 700; color: #FAFAFC;">Інші поля OpenCart</h2>
+                <span style="font-size: 12.5px; color: #A6A6B3;">Рідко потрібні поля стандартної форми товару. Товар завжди прив’язаний до поточного магазину автоматично.</span>
+              </div>
+              <button type="button" aria-expanded="false" aria-label="Розгорнути: Інші поля OpenCart" style="width: 32px; height: 32px; border: 1px solid #36363F; border-radius: 8px; background: #1B1B20; color: #E2E2E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: rotate(-90deg);"><path d="m6 9 6 6 6-6"></path></svg></button>
+            </div>
+            
           </section>
         </div>
       </div>

@@ -1,6 +1,6 @@
 # CAT-006 editor — design spec for the executor
 
-Approved 2026-10-28 (layout v0.1 + colours D3); round 2 applied 2026-10-29 (`handoffs/handoff_CAT-006_claude-design-round2_20261029.md`, review `diagnostics/CAT-006_design-package_review_20261028.md`).
+Approved 2026-10-28 (layout v0.1 + colours D3); rounds 2–3 applied 2026-10-29 (`handoffs/handoff_CAT-006_claude-design-round2_20261029.md`, `handoffs/handoff_CAT-006_claude-design-round3_20261029.md`; reviews `diagnostics/CAT-006_design-package_review_20261028.md`, `diagnostics/CAT-006_design-package_round2_review_20261029.md`; owner decisions D3–D12 in requirements §9).
 Values: `TOKENS-D3.md`. Exact pixels and copy: `preview/*.html`.
 Data behaviour (what is written where, specials vs tiers, CRM source, partial-save path): `plans/CAT-006_product-admin-editor_requirements_20261028.md`. This spec does not override it.
 
@@ -22,24 +22,21 @@ Hover states (all scoped to `.bse`)
 
 ### Stock fields the editor does not show
 
-Saving from the editor (whole product or any partial save) **never clears, resets or rewrites** these fields; they keep their current values. They remain editable only in the stock form (hidden fallback). Source: stock `product_form.twig` of OpenCart 4.1.0.3 (backup 07.09.2026).
+Every stock field is either in a visible tile, in «Інші поля OpenCart» (§4.2, editable or read-only summary), or in the table below. Saving from the editor (whole product or any partial save) **never clears, resets or rewrites** the fields below; they keep their current values. Source: field names in the admin `product_form.twig` of backup 09.10.2026 (post CAT-004), diffed against backup 07.09.2026: the only additions are the CAT-004 variant-family fields (`variant_family_key`, `variant_axis_label`, `variant_value_label`, `variant_sort_order`), shown in «Родина варіантів». Column list cross-checked with `ocp5_product` in the DB extract of backup 15.10.2026 (`live-snapshots/20261018_cat005-audit-inputs/`). No admin code backup newer than 09.10 is in the repo.
 
-| Stock tab | Fields not shown in the editor |
+| Field | Rule |
 |---|---|
-| Загальне | meta keywords (`meta_keyword`), tags (`tag`) |
-| Дані | product codes other than the one shown as «Артикул» (`product_code[]`: UPC, EAN, JAN, ISBN, MPN …), location, tax class, date available, requires shipping (`shipping`), sort order, reward points (`points`) |
-| Зв’язки | stores (`product_store[]`), downloads (`product_download[]`) |
-| Опції | all product options (`product_option[]`) |
-| Підписка | all subscription plans (`product_subscription[]`) |
-| Знижки | `priority` and `type` of existing discount rows (shown rows keep them; new rows get the stock defaults) |
-| Бонусні бали | `product_reward[]` |
-| SEO | SEO URLs for other stores / languages (`product_seo_url[store][language]`; the editor shows the default store, Ukrainian) |
-| Дизайн | layout override (`product_layout[]`) |
-| Native variants | `master_id`, `variant[]`, `override[...]` |
+| Meta keywords (`product_description[][meta_keyword]`) | Never shown, never written (D10). Existing values stay. |
+| Tags (`product_description[][tag]`) | Never shown, never written (D10). Existing values stay. |
+| Identifier codes other than SKU (`product_code[]` rows UPC, EAN, JAN, ISBN, MPN; disabled in `ocp5_identifier`) | Never shown; preserved (D12). |
+| Stores (`product_store[]`) | Not shown. Edit mode: preserved. Create mode: the current store is linked automatically (D9). |
+| SEO URLs for other stores / languages (`product_seo_url[store][language]`) | Not shown; preserved. The editor shows the current store, Ukrainian. |
+| `priority` and `type` of existing discount rows | Not shown; shown rows keep them; new rows get the stock defaults. |
+| Legacy `oc_product` columns `sku`, `upc`, `ean`, `jan`, `isbn`, `mpn` (not in the stock 4.1 form) | Never written. |
 
-«Артикул» maps to one entry of `product_code[]`; which identifier code it uses (e.g. SKU) is an executor diagnosis item. The main photo is the stock `image` field; the other photos are `product_image[]` with `sort_order`.
+«Артикул (SKU)» is the `product_code[]` row with `code = 'SKU'` (per `diagnostics/CAT-006_design-package_round2_review_20261029.md`, backup 15.10: SKU is the only enabled identifier and every row is `SKU`; not re-checked here — `ocp5_product_code` is not in the repo extract). Empty field = no SKU row; other rows untouched. The main photo is the stock `image` field; the other photos are `product_image[]` with `sort_order`.
 
-## 2. Product list (`01`–`06`)
+## 2. Product list (`01`–`06`, `21`)
 
 Structure top to bottom: title row (H1 + one-line hint; right: CRM snapshot time, «Оновити з CRM», primary «Новий товар») → optional CRM error banner → search (44 px, max-width 560) → filter row → chips row → optional select-all banner → table → pager → sticky selection bar.
 
@@ -56,15 +53,16 @@ Filters
 - Legend at the right of the chips row explains the two CRM markers.
 
 Sorting
-- Sortable headers: Назва (default, ascending), Модель, Ціна на сайті, Кількість. Header = button with text + arrow: active column `--bse-ink` text and accent arrow «↑» / «↓»; inactive columns `--bse-ink-3` text and neutral «↕». First click on a column sorts ascending, next click toggles. The header cell carries `aria-sort="ascending|descending|none"`; the button `aria-label` «Сортувати: <колонка>[, зараз за зростанням|спаданням]». Ties fall back to name ascending. Changing the sort returns to page 1.
+- Sortable headers: Назва (default, ascending), Модель, Ціна на сайті (sorts by base price, not by an active special), Кількість. Header = button with text + arrow: active column `--bse-ink` text and accent arrow «↑» / «↓»; inactive columns `--bse-ink-3` text and neutral «↕». First click on a column sorts ascending, next click toggles. The header cell carries `aria-sort="ascending|descending|none"`; the button `aria-label` «Сортувати: <колонка>[, зараз за зростанням|спаданням]». Ties fall back to name ascending. Changing the sort returns to page 1.
 
 Paging
 - Pager under the table: left «Показано 1–15 з 151»; centre page buttons (previous, 1, 2, …, current ±1, …, last two, next; current page filled accent with `aria-current="page"`); right «На сторінці:» segmented 15 / 25 / 50 (default 15). Changing page size returns to page 1.
 
 Selection
-- Header checkbox = **current page only** (`aria-label` «Обрати всі на цій сторінці»).
+- Header checkbox = **current page only** (`aria-label` «Обрати всі на цій сторінці»). States: unchecked (no row of the page selected), checked (all rows of the page), **indeterminate** (some rows of the page; `indeterminate` property / `aria-checked="mixed"`, accent fill with a dash, `01`). Clicking it in the indeterminate state selects the whole page.
 - When every row of the page is selected and more products match, a banner above the table offers «Обрано всі 15 на цій сторінці. Обрати всі 151 знайдених»; after that it reads «Обрано всі 151 знайдених товарів. Зняти вибір».
 - Selection survives paging and sorting; «Обрано: N» counts all selected products, also those on other pages.
+- After «Обрати всі N знайдених» (`21` shows the banner before it), changing the search or any filter clears the selection. Explicit per-row selections without that step survive search and filter changes.
 
 Table (columns: checkbox · thumbnail 40 · name + meta · model · site price · quantity · status · special · actions)
 - Semantics: `role="table"`, `row`, `columnheader`, `cell` (or a real `<table>`).
@@ -123,36 +121,63 @@ Preview (step 2, `08`, `10`)
 Result (step 3, `09`)
 - Summary chips «Застосовано: N», «Пропущено: N», «Помилка: N». Per row «Застосовано» / «Пропущено» / «Помилка: сервер не відповів. Цей товар не змінено.» + «Повторити». Each product is applied atomically.
 
-## 4. Product page (`11`, `12`, `16`, `17`)
+## 4. Product page (`11`, `12`, `16`, `17`, `22`, `23`)
 
 - Separate page. Sticky header: «← До списку», title (20/800) + model (mono), status switch + label, «Є незбережені зміни» pill (only when dirty), «Усі зміни збережено» (after save), «На сайті ↗» (edit mode only), primary «Зберегти» (spinner while saving; toast «Товар збережено.»).
-- Left sub-nav 180 px, sticky: Основне · Дані · Доставка та зв’язки · Категорії та фільтри · Атрибути · Родина варіантів · Знижки · Фото · SEO. Active item on `--bse-accent-soft`. Accent dot = section needs attention (non-dictionary attribute value). Below a divider: «Згорнути всі», «Розгорнути всі».
-- Every section is a collapsible tile (chevron button, rotated −90° when collapsed, `aria-expanded`). Default: all expanded. Clicking a sub-nav item expands its tile and scrolls to it.
+- Left sub-nav 180 px, sticky: Основне · Дані · Доставка та зв’язки · Категорії та фільтри · Атрибути · Родина варіантів · Знижки · Фото · SEO · Інші поля OpenCart. Active item on `--bse-accent-soft`. Accent dot = section needs attention (non-dictionary attribute value). Below a divider: «Згорнути всі», «Розгорнути всі».
+- Every section is a collapsible tile (chevron button, rotated −90° when collapsed, `aria-expanded`). Default: all expanded except «Інші поля OpenCart» (collapsed; expanded in create mode). «Розгорнути всі» / «Згорнути всі» include it. Clicking a sub-nav item expands its tile and scrolls to it.
 - Leaving with unsaved changes (`12`): dialog «Вийти без збереження?» — «У товарі «<назва>» є незбережені зміни. Якщо вийти зараз, їх буде втрачено.» — «Залишитися», «Вийти без збереження» (danger outline), «Зберегти й вийти» (primary). Also `beforeunload`.
-- Required fields: Назва товару, Модель, Основна ціна — label suffix «*» in `--bse-danger`, `required` + `aria-required`. Save with an empty required field: field border `--bse-danger`, message under it «Заповніть це поле», focus moves to the first such field, nothing is saved.
+- Required fields (D8): Назва товару, Модель, Основна ціна (editor rule), Meta-заголовок, «Адреса сторінки (SEO URL)» (OpenCart save validation). Meta-опис is optional. Label suffix «*» in `--bse-danger`, `required` + `aria-required`. Save with an empty required field: field border `--bse-danger`, message under it «Заповніть це поле», focus moves to the first such field, nothing is saved.
 
 ### 4.1 Create mode (`16`)
 
+Create-mode defaults (written on the first save; shown in «Інші поля OpenCart» where editable):
+
+| Field | Default |
+|---|---|
+| Store (`product_store[]`) | current store (not shown) |
+| Дата надходження в продаж (`date_available`) | today |
+| Потрібна доставка (`shipping`) | on (1) |
+| Податковий клас (`tax_class_id`) | «Немає» (0) |
+| Порядок сортування (`sort_order`) | 0 |
+| Бонусні бали (`points`) | 0 |
+| Макет сторінки (`product_layout[]`) | «За замовчуванням» (no override) |
+| Розташування (`location`) | empty |
+| Weight class / length class | кг / см, unless set in «Доставка та зв’язки» |
+| Status | «Вимкнено» |
+| Кількість / Мінімальне замовлення / Вираховувати зі складу | 0 / 1 / on |
+
+
 - Opened by «Новий товар». Title «Новий товар», subtitle «Ще не збережено · поля з * обов’язкові». No model line, no «На сайті», no CRM lines. Status defaults to «Вимкнено».
 - All fields empty (Кількість 0, Мінімальне замовлення 1). Attributes start empty with «Атрибутів ще немає. Додайте шаблон атрибутів або окремий атрибут нижче.» and the template menu open.
-- Родина варіантів shows only «Родину варіантів можна призначити після першого збереження товару.» (dashed box). Знижки shows «Акційних цін ще немає.» / «Порогів ще немає.» with the add buttons. Фото works before the first save (images are attached on save). SEO slug empty with placeholder; no URL-change warning.
+- Родина варіантів shows only «Родину варіантів можна призначити після першого збереження товару.» (dashed box). Знижки shows «Акційних цін ще немає.» / «Порогів ще немає.» with the add buttons. Фото works before the first save (images are attached on save). SEO slug empty with placeholder; no URL-change warning. «Інші поля OpenCart» is expanded with the defaults above and the note «Для нового товару підставлено стандартні значення OpenCart. Змінюйте лише за потреби.»; instead of the stock-form link: «Стандартна форма буде доступна після першого збереження товару.»
 - First successful save switches the page to edit mode for the new product (URL changes to the product's edit route).
 
 ### 4.2 Sections
 
-- Основне: Назва*; Опис with «Код HTML / Перегляд» (code view: mono textarea on `--bse-bg`, placeholder «Вставте готовий HTML опису»; the editor must not alter pasted markup); Meta-заголовок full width with live counter («N символів · рекомендовано до 60»); Meta-опис with counter. No meta keywords field (preserved, §1).
-- Дані: grid of three: Модель* (hint «За моделлю товар звіряється з CRM»), Артикул, Основна ціна* (CRM line with star when different), Кількість (CRM line when different), Мінімальне замовлення, Коли немає в наявності. Next row: Виробник (1/3) + «Вираховувати зі складу» switch box (2/3) with a state-dependent hint.
+- Основне: Назва*; Опис with «Код HTML / Перегляд» (code view: mono textarea on `--bse-bg`, placeholder «Вставте готовий HTML опису»; the editor must not alter pasted markup); Meta-заголовок* full width with live counter («N символів · рекомендовано до 60»); Meta-опис with counter. No meta keywords and no tags (§1).
+- Дані: grid of three: Модель* (hint «За моделлю товар звіряється з CRM»), «Артикул (SKU)» (one text field, no code-type selector; §1), Основна ціна* (CRM line with star when different), Кількість (CRM line when different), Мінімальне замовлення, Коли немає в наявності. Next row: Виробник (1/3) + «Вираховувати зі складу» switch box (2/3) with a state-dependent hint.
 - Доставка та зв’язки: Вага (number + кг / г), Розміри: довжина × ширина × висота (three numbers + см / мм) — stock weight / length fields and classes; hint «Вага й розміри зберігаються у стандартних полях товару OpenCart.». Divider. Супутні товари: chips (name + model, remove), type-ahead «Додати супутній товар: назва або модель», empty state «Супутніх товарів ще немає.», hint «Зв’язок задається вручну, як у стандартній формі товару.» (stock `product_related[]`).
 - Категорії та фільтри: two equal columns. Categories: chips + type-ahead + note about parent categories. Filters: chips «Група › Значення» + type-ahead + hint.
-- Атрибути: header button «Додати шаблон атрибутів ▾» (menu: Бустер-бокс, Бустер, Стартова колода, Rare Pack, Брелок 3D, each with its attribute count; footer «Додає рядки шаблону, яких ще немає. Наявні значення не змінюються, вибір шаблону не зберігається.»). Choosing a template only adds missing rows and shows «Шаблон «<назва>»: додано рядків — N. Наявні значення не змінено.» (or «… усі його рядки вже є.»). Nothing about the template is stored.
+- Атрибути: header button «Додати шаблон атрибутів ▾» (menu: Бустер-бокс, Бустер, Стартова колода, Rare Pack, Брелок 3D, each with its attribute count in Ukrainian plural: 1, 21, 31 … «атрибут»; 2–4, 22–24 … «атрибути»; 0, 5–20, 25–30 … «атрибутів» (11–14 always «атрибутів»); footer «Додає рядки шаблону, яких ще немає. Наявні значення не змінюються, вибір шаблону не зберігається.»). Choosing a template only adds missing rows and shows «Шаблон «<назва>»: додано рядків — N. Наявні значення не змінено.» (or «… усі його рядки вже є.»). Nothing about the template is stored.
   - Each row: name + field-type caption · typed control · remove (×). Types: list, year («Залежно від сету», 2030 … 1995), number + unit, yes/no (Так / Ні), free text.
   - Value not in the dictionary: row on `--bse-warn-bg`, read-only value, «Значення немає в довіднику. Стандартне: «…».» + «Замінити на стандартне».
   - Empty attribute: dashed field + «Прибрати порожній».
-  - «+ Додати атрибут…»: grouped select with every attribute in the store; present ones disabled; a removed one is restored; new rows highlighted `--bse-sel`. «Повернути прибрані (N)» undoes removals before save.
+  - «+ Додати атрибут…»: grouped select with every attribute in the store; present ones disabled; a removed one is restored; new rows highlighted `--bse-sel`. «Повернути прибрані (N)» undoes removals before save; shown only when N ≥ 1 (never on a new product before the owner removes a row).
 - Родина варіантів: Ключ родини, Підпис осі (shared), Значення цього товару; compact member list; «Відкрити всю родину →». Create mode: hint only (§4.1).
 - Знижки: two tables (Акційна ціна · на період, для 1 шт / Від кількості · ціна за штуку при замовленні від N шт). Badges «Діє зараз», «Заплановано», «Завершено», «Не діє на сайті» (+ tooltip text from `11`). Legacy rows shown as they are.
 - Фото: 5-column grid. First image = main (stock `image`): accent border + «ГОЛОВНЕ». Each tile: position number; move ← / → buttons over the image (keyboard reorder; disabled at the ends); file name; «Зробити головним» (non-main); remove. Drag-and-drop reorder with drop indicator. Last tile «Додати фото» opens the picker.
-- SEO: «Адреса сторінки (SEO URL)» with prefix `boostershop.website/`. After the slug is edited on an existing product (`17`): warning «Стара адреса вже може бути в Google, у закладках і в посиланнях. Після збереження вона перестане відкриватися, якщо не налаштувати переадресацію (301) на нову.»
+- SEO: «Адреса сторінки (SEO URL)»* with a prefix = the store URL from settings (`config_url` of the current store, without the scheme; `boostershop.website/` in the previews is that value, not a literal). Hint under the field «Латинські літери, цифри й дефіс, до 64 символів.» Errors replace the hint, field border `--bse-danger`, `aria-invalid`, focus moves to the field on save (`23`):
+  - empty → «Заповніть це поле»;
+  - longer than 64 → «Задовга адреса: N символів, можна до 64.» (checked while typing);
+  - other characters → «Можна лише латинські літери, цифри й дефіс.» (checked while typing);
+  - used by another page of the store (server check on save, same rule as stock `oc_validate_path` + uniqueness) → «Ця адреса вже зайнята іншою сторінкою.»
+  After the slug is edited on an existing product (`17`): warning «Стара адреса вже може бути в Google, у закладках і в посиланнях. Після збереження вона перестане відкриватися, якщо не налаштувати переадресацію (301) на нову.»
+
+- Інші поля OpenCart (last tile, collapsed by default; `22`; D9, D11). Under the title, always visible: «Рідко потрібні поля стандартної форми товару. Товар завжди прив’язаний до поточного магазину автоматично.» Expanded:
+  - Editable, grid of three: Розташування (`location`, hint «Лише для адмінки, покупці не бачать.»), Податковий клас (`tax_class_id`; options from the store, «Немає» = 0), Дата надходження в продаж (`date_available`, `дд.мм.рррр` + calendar button; hint «До цієї дати товар не показується на сайті.»), Порядок сортування (`sort_order`, hint «Позиція в категорії, менше число — вище.»), Бонусні бали (`points`, hint «Скільки балів потрібно, щоб купити товар за бали.»), Макет сторінки (`product_layout[]` for the current store; «За замовчуванням» = no override, then the store's layouts by name). Then a full-width switch box «Потрібна доставка» (`shipping`) with hint «Увімкнено: у кошику пропонуються способи доставки.» / «Вимкнено: доставка для товару не потрібна (напр. цифровий товар).»
+  - Read-only, under «Лише перегляд — змінюються в стандартній формі товару»: rows Опції (`product_option[]`), Підписки (`product_subscription[]`), Бонусні бали за групами (`product_reward[]`), Завантаження (`product_download[]`), Нативні варіанти OpenCart (`master_id` / `variant` / `override`). Value = count with a Ukrainian plural noun («1 опція», «3 опції»…), «немає» for 0; native variants: «не використовуються» / «основний товар варіантів» / «варіант товару <назва>». One link «Відкрити в стандартній формі ↗» to the stock edit form of this product (edit mode only).
+  - The editor writes the editable fields only; the read-only blocks are preserved unchanged on every save.
 
 ## 5. Variant family view (`13`)
 
@@ -178,4 +203,5 @@ Result (step 3, `09`)
 - [ ] At 1920 px the content stretches without broken alignment.
 - [ ] Keyboard: every control reachable with Tab, visible focus ring, Enter/Tab/Esc in inline edit, Esc closes panel/modal/dialog (with the discard confirm of §3), tooltips open on focus, photos reorder with ← / → buttons.
 - [ ] Every state in the snapshot index can be reproduced in the running editor.
-- [ ] Saving from the editor leaves every field in §1 «Stock fields the editor does not show» unchanged (compare DB rows before/after).
+- [ ] Saving from the editor leaves every field in §1 «Stock fields the editor does not show» and every read-only block of «Інші поля OpenCart» unchanged (compare DB rows before/after).
+- [ ] A product created in the editor has every create-mode default of §4.1 and opens on the storefront once enabled.

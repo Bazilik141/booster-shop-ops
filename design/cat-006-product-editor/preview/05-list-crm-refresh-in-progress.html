@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- CAT-006 product admin editor · approved design v0.1 layout + D3 colour scheme (2026-10-28), round 2 (2026-10-29).
+<!-- CAT-006 product admin editor · approved design v0.1 layout + D3 colour scheme (2026-10-28), rounds 2–3 (2026-10-29).
      Static reference rendered from the Claude Design canvas sources in ../source/. Not production code:
      recreate with Bootstrap 5 + plain JS inside the OpenCart admin shell. Interactions are described in the spec. -->
 <html lang="uk">
@@ -143,7 +143,7 @@ input,select,textarea{background-color:transparent}
       <div style="margin-top: 8px; border: 1px solid #36363F; border-radius: 10px; overflow-x: auto;">
         <div role="table" aria-label="Товари" aria-rowcount="150" style="min-width: 1100px;">
           <div role="row" style="display: grid; grid-template-columns: 40px 52px minmax(0px, 1fr) 150px 160px 120px 96px 116px 72px; align-items: center; height: 40px; background: #25252C; border-bottom: 1px solid #36363F; font-size: 12px; font-weight: 700; color: #A6A6B3;">
-            <span role="columnheader" style="display: flex; justify-content: center;"><input type="checkbox" aria-label="Обрати всі на цій сторінці" title="Обрати всі на цій сторінці" style="width: 16px; height: 16px; accent-color: #F2B544;"></span>
+            <span role="columnheader" style="display: flex; justify-content: center;"><button type="button" role="checkbox" aria-checked="mixed" aria-label="Обрати всі на цій сторінці" title="Обрати всі на цій сторінці" style="width: 16px; height: 16px; padding: 0px; border-radius: 3px; box-sizing: border-box; border: 1.5px solid #F2B544; background: #F2B544; color: #1B1B20; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path></svg></button></span>
             <span role="columnheader"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px);">Фото</span></span>
             <span role="columnheader" aria-sort="ascending"><button type="button" aria-label="Сортувати: Назва, зараз за зростанням" style="border: 0px; background: none; padding: 4px 0px; font-size: 12px; font-weight: 700; color: #FAFAFC; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">Назва<span aria-hidden="true" style="color: #F2B544;"><span class="sc-interp">↑</span></span></button></span>
             <span role="columnheader" aria-sort="none"><button type="button" aria-label="Сортувати: Модель" style="border: 0px; background: none; padding: 4px 0px; font-size: 12px; font-weight: 700; color: #A6A6B3; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">Модель<span aria-hidden="true" style="color: #73737F;"><span class="sc-interp">↕</span></span></button></span>
