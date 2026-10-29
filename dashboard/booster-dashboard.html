@@ -4150,8 +4150,8 @@ const ROADMAP_TASKS = [
     subtasks: [
       { id: '1', title: 'RD-16 — Загальний каркас і сторінка особистих даних', status: 'done', desc: 'Каркас, головна кабінету й особисті дані застосовані; WP1/WP2 QA власника OK 26.10.2026. Інші сторінки приймають каркас у своїх задачах.' },
       { id: '2', title: 'RD-17 — Збережені адреси', status: 'done', desc: 'Адреси, основна адреса та checkout готові; деплой і QA власника прийнято до RD-18.' },
-      { id: '3', title: 'RD-19 — Вхід і відновлення пароля', status: 'todo', desc: 'Сторінка входу в акаунт і форма відновлення пароля.' },
-      { id: '4', title: 'RD-20 — Реєстрація (2 кроки)', status: 'todo', desc: 'Крок 1: контакти. Крок 2: адреса. Знижка -15% для нових — не чіпати.' }
+      { id: '3', title: 'RD-19 — Вхід і відновлення пароля', status: 'active', desc: 'Сторінка входу в акаунт і форма відновлення пароля.' },
+      { id: '4', title: 'RD-20 — Реєстрація (2 кроки)', status: 'active', desc: 'Крок 1: контакти. Крок 2: адреса. Знижка -15% для нових — не чіпати.' }
     ]
   },
   { id: 'RD-21', title: 'Інформаційні сторінки — новий дизайн', status: 'done', tool: 'Codex', priority: 'Low',
@@ -4752,15 +4752,17 @@ const ROADMAP_TASKS = [
     subtasks: []
   },
   {
-    id: 'RD-19', title: 'Authorization (login + forgotten)', status: 'todo', tool: 'Codex', priority: 'Low',
-    lastUpdated: '', blockedBy: [],
+    id: 'RD-19', title: 'Authorization (login + forgotten)', status: 'active', tool: 'Claude Code', priority: 'Low',
+    lastUpdated: '2026-10-29', blockedBy: [],
     simple: 'Категорія: Redesign (RD).',
+    warn: 'Notion: https://app.notion.com/p/3706bf20bdb481768f6ef9cd80cbbb9c. 2026-10-29: етап дизайну — бриф для Claude Design готовий (handoffs/handoff_RD-19-RD-20_auth-registration_design-brief_20261029.md), реалізація разом з RD-20 — Claude Code після погодження макетів. Дизайн погоджено 29.10 (design/account-light-A/rd19-rd20/SPEC.md); хендоф для Claude Code (локально) готовий — handoffs/handoff_RD-19-RD-20_auth-registration_20261029.md.',
     subtasks: []
   },
   {
-    id: 'RD-20', title: 'Registration (step 1 + step 2)', status: 'todo', tool: 'Codex', priority: 'Medium',
-    lastUpdated: '', blockedBy: [],
+    id: 'RD-20', title: 'Registration (step 1 + step 2)', status: 'active', tool: 'Claude Code', priority: 'Medium',
+    lastUpdated: '2026-10-29', blockedBy: [],
     simple: 'Категорія: Redesign (RD).',
+    warn: 'Notion: https://app.notion.com/p/3706bf20bdb481e197cce7b6b2f71fb0. 2026-10-29: етап дизайну — спільний бриф з RD-19 для Claude Design, реалізація разом з RD-19 — Claude Code. Відкрите питання: як показувати знижку для нових покупців. Дизайн погоджено 29.10; спільний хендоф з RD-19 для Claude Code (локально). Рішення власника: у кроці 1 необовʼязкові Telegram і Viber; крок 2 (адреса) можна пропустити; після реєстрації — разовий тост у кабінеті; блок знижки −15% лише якщо виконавець підтвердить, що вона діє.',
     subtasks: []
   },
   {
